@@ -284,9 +284,11 @@ export default {
       return this.$store.state.vendorDashboard.proposalRequests;
     },
     yearlyRevenue() {
-      return this.monthlyReport.reduce((s, item) => {
-        return s + item.amount;
-      }, 0);
+      return (
+        this.monthlyReport.reduce((s, item) => {
+          return s + item.amount;
+        }, 0) / 100
+      );
     },
   },
   watch: {

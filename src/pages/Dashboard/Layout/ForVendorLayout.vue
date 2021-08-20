@@ -164,7 +164,7 @@ export default {
     this.getProposalRequest(this.$route.params.rfpId).then((proposalRequest) => {
       this.proposalRequest = proposalRequest;
       this.event = this.proposalRequest.eventData;
-      if (this.proposalRequest.componentInstance.proposalAccepted) {
+      if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {
         this.showCloseProposalModal = true;
       }
     });

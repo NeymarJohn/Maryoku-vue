@@ -11,7 +11,7 @@
         rx="8"
         :style="`fill: ${chartDataItem.future ? '#9F6B90' : 'white'}`"
       >
-         <title>{{ chartDataItem.value | withComma }}</title>
+        <!-- <title>{{ chartDataItem.value | withComma }}</title> -->
 
         <!-- <text
           id="tooltip"

@@ -124,6 +124,7 @@ import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
 import _ from "underscore";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 export default {
     components: {
@@ -168,10 +169,13 @@ export default {
         async getVendorEvent(){
             let res = await getReq(`/1/userEvent?email=${this.user.email}`);
             console.log('getVendorEvent', res);
-            this.vendorEvent = res.data;
+            if (res.data) {
+                this.vendorEvent = Array.isArray(res.data) && !res.data.length ? null : res.data;
+            }
+
         },
         async createEvent(){
-            console.log('createEvent', moment(new Date(this.vendorEvent.startTime)).unix() * 1000)
+
             await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
                 eventStartMillis: moment(new Date(this.vendorEvent.startTime)).unix() * 1000,
                 eventEndMillis: moment(new Date(this.vendorEvent.endTime)).unix() * 1000,
@@ -228,24 +232,35 @@ export default {
             this.subCategory = requirements;
         },
         setServiceStyles({category, services, type}){
-            console.log('setServiceStyles', services, this.requirements.hasOwnProperty(category.serviceCategory), this.requirements[category.serviceCategory]);
             let requirement = this.requirements[category.serviceCategory];
             if(!requirement) {
-                // requirement = {event: {id: this.event.id}, category: category.serviceCategory, types: { [type]: services }}
-                requirement = {event: {id: '611bce005e64fb28b8ef6886'}, category: category.serviceCategory, types: { [type]: services }}
+                requirement = {event: {id: this.event.id}, category: category.serviceCategory, types: { [type]: services }}
             } else {
-                requirement = {...requirement, types: { [type]: services }, event: {id: '611bce005e64fb28b8ef6886'}};
+                requirement = {...requirement, types: { [type]: services }, event: {id: this.event.id}};
             }
             this.saveRequirements(requirement)
         },
         saveAdditionalRequest({ category, requirements }) {
-            console.log('save', requirements, category, this.requirements);
-            this.isOpenedAdditionalModal = false;
 
-            this.saveRequirements({...this.requirements[category], ...requirements, event: {id: '611bce005e64fb28b8ef6886'}})
+            this.isOpenedAdditionalModal = false;
+            this.saveRequirements({...this.requirements[category], ...requirements, event: {id: this.event.id}})
         },
         async saveRequirements(requirement){
-            console.log('saveRequirements', requirement);
+            if (!this.vendorEvent) {
+                Swal.fire({
+                    title: "Event Info",
+                    text: `It looks the event info doesn't exist`,
+                    showCancelButton: true,
+                    confirmButtonClass: "md-button md-success btn-fill",
+                    cancelButtonClass: "md-button md-danger btn-fill",
+                    confirmButtonText: "Yes, I am sure",
+                    buttonsStyling: false,
+                }).then((result) => {
+                    console.log('saveRequirements', result);
+                });
+                return
+            }
+
             new ProposalRequestRequirement(requirement)
                 .for(new CalendarEvent({ id: requirement.event.id }))
                 .save()
@@ -287,7 +302,7 @@ export default {
         async loadData(){
             await this.getVendorEvent();
             if (typeof this.vendorEvent === 'object'  && Object.keys(this.vendorEvent).length) {
-                // await this.createEvent();
+                await this.createEvent();
             }
             await this.getAllRequirements();
             await this.getSavedRequirements();
@@ -295,7 +310,7 @@ export default {
         },
         async getSavedRequirements(){
             let req =  new ProposalRequestRequirement()
-            let res = await req.for(new CalendarEvent({ id: '611bce005e64fb28b8ef6886' })).get();
+            let res = await req.for(new CalendarEvent({ id: this.event.id })).get();
             console.log('getSavedRequirements', res)
             if (res && res.length){
                 res.map(it => {
@@ -305,15 +320,15 @@ export default {
         },
         findVendors(){
             this.expiredTime = moment(new Date()).add(3, "days").valueOf();
-            postReq(`/1/events/611bce005e64fb28b8ef6886/find-vendors`, {
+            postReq(`/1/events/${this.event.id}/find-vendors`, {
                 issuedTime: new Date().getTime(),
                 expiredBusinessTime: this.expiredTime,
             }).then((res) => {
                 console.log('findVendors', res);
-                // this.$store.dispatch(
-                //     "event/saveEventAction",
-                //     new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
-                // );
+                this.$store.dispatch(
+                    "event/saveEventAction",
+                    new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
+                );
             });
         },
         changePage(){

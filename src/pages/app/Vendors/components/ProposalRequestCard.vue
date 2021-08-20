@@ -18,7 +18,7 @@
       <div class="pr-10 mr-10 font-bold" style="border-right: 1px solid rgba(0, 0, 0, 0.2)">
         {{ $dateUtil.formatScheduleDay(proposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
       </div>
-      $ {{ (proposalRequest.proposal ? proposalRequest.proposal.cost : proposalRequest.componentInstance.allocatedBudget) | withComma }}
+      $ {{ (proposalRequest.proposal ? proposalRequest.proposal.cost : proposalRequest.componentInstance ? proposalRequest.componentInstance.allocatedBudget : 0) | withComma }}
     </div>
     <div v-if="expanded" :class="getFontSize('subTitle')">
       <div class="d-flex align-center mt-1">
