@@ -170,7 +170,7 @@ export default {
     this.vendor = await this.getVendor(this.$route.params.vendorId);
 
     this.proposalRequest = await this.getProposalRequest(this.$route.params.id)
-    if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {
+    if (this.proposalRequest.componentInstance.proposalAccepted) {
       this.showCloseProposalModal = true;
     }
 

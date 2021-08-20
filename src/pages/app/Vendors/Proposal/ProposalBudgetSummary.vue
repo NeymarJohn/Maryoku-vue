@@ -63,7 +63,8 @@
                 <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
                 <span>
                   ${{
-                    getAllocatedBudget(vendor.eventCategory.key) | withComma
+                    event.components.find((item) => item.componentId == vendor.eventCategory.key).allocatedBudget
+                      | withComma
                   }}</span
                 >
               </li>
@@ -137,16 +138,16 @@
               </li>
               <li>
                 <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-                <span> ${{ getAllocatedBudget(a) | withComma }}</span>
+                <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
               </li>
               <li
-                v-if="pricesByCategory[a] - getAllocatedBudget(a) > 0"
+                v-if="pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget > 0"
               >
                 <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
 
                 <span>
                   Your proposal is ${{
-                    (pricesByCategory[a] - getAllocatedBudget(a))
+                    (pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget)
                       | withComma
                   }}
                   more than the budget
@@ -290,7 +291,16 @@ export default {
         : arr.slice();
     },
     servicesByCategory(category) {
+      // const services = this.services.filter((s) => s.name == category);
 
+      // if (services.length > 0) {
+      //   return this.flatDeep(
+      //     services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+      //     Infinity,
+      //   );
+      // } else {
+      //   return [];
+      // }
       return this.$store.state.vendorProposal.proposalServices[category] || [];
     },
     getIconUrlByCategory(category) {
@@ -376,11 +386,10 @@ export default {
       return this.serviceCategories.find((item) => item.key === category);
     },
     getAllocatedBudget(category) {
-      if (!this.proposalRequest.eventData.components) return 0;
       const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
         (item) => item.componentId === category,
       );
-      return allocatedBudgetItem ? allocatedBudgetItem.allocatedBudget : 0;
+      return allocatedBudgetItem.allocatedBudget;
     },
     saveDiscount(categoryKey, discount) {
       this.$store.commit("vendorProposal/setDiscount", { category: "total", discount: discount });

@@ -30,12 +30,12 @@
           <div class="font-size-20 font-bold">
             <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28" />
             Time Slot</div>
-          <md-switch v-if="page === 'planner'" class="md-switch-rose large-switch ml-100" v-model="isEntire">
+          <md-switch class="md-switch-rose large-switch ml-100" v-model="isEntire">
             <span class="color-black font-bold font-size-16">Entire Event</span>
           </md-switch>
         </div>
         <template v-if="!isEntire">
-            <div v-if="page === 'planner'" class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
+            <div class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
                 <div class="check-item" @click="checkTimeline(true)">
                     <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
                     <span class="unchecked" v-else></span>
@@ -263,10 +263,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    page: {
-      type: String,
-      default: 'planner',
-    }
   },
   created() {
     this.subCategorySections = Object.keys(this.subCategory);
