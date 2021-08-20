@@ -10,8 +10,8 @@ module.exports = merge(prodEnv, {
     GOOGLE_API_KEY: '"AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8"',
     S3_BUCKET_NAME: '"maryoku"',
     AWS_REGION: '"us-east-1"',
-    AWS_ACCESSKEY: '"AKIAT5QXLXDJKEP27SUQ"',
-    AWS_SECRETKEY: '"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"',
+    AWS_ACCESSKEY: '"AKIAT5QXLXDJDLKXRNU7"',
+    AWS_SECRETKEY: '"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"',
     S3_URL: '"https://maryoku.s3.amazonaws.com/"',
     // RESOURCE_URL: '"http://static.maryoku.com/"'
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'

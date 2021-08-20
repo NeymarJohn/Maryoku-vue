@@ -416,14 +416,6 @@ export default {
           this.showStripeCheckout = true;
           // this.loadingPayment = false;
           this.stripePriceData = priceData;
-
-          // redirect to the page for offering vendors for non-registered customer
-          if(this.pageType === VENDOR && this.proposal.nonMaryoku) {
-            this.$router.push({
-                name: 'OfferVendors',
-            });
-          }
-
         });
       // if (this.paymentMethod === "stripe") {
 

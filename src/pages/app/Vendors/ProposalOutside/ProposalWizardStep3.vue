@@ -186,7 +186,7 @@
           </template>
       </div>
     </div>
-    <div class="white-card mt-20 additional-requirements">
+    <div class="white-card mt-20 additional-requirements" v-if="vendor.vendorCategory === 'venuerental'">
       <div class="p-40">
         <div>
           <img :src="`${$iconURL}common/seating-purple.png`" />

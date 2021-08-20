@@ -34,7 +34,7 @@
         <proposal-inspirational-photos></proposal-inspirational-photos>
       </div>
     </div>
-    <div class="mt-40 white-card p-40">
+    <div class="mt-40 white-card p-40" v-if="vendor.vendorCategory === 'venuerental'">
       <div class="d-flex justify-content-start align-center">
         <img :src="`${$iconURL}common/seating-purple.png`" />
         <div class="ml-20">
@@ -128,6 +128,9 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setValue", { key: "eventVision", value });
       },
     },
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    }
   },
 };
 </script>

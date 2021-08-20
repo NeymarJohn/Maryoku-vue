@@ -75,7 +75,7 @@
                   Your proposal is ${{
                     (finalPriceOfMainCategory - averageBudget(vendor.eventCategory.key)) | withComma
                   }}
-                  more than budget
+                  more than average budget
                 </span>
               </li>
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
@@ -352,7 +352,7 @@ export default {
     },
     averageBudget(category){
       let service = this.getServiceCategory(category);
-      // console.log('averageBudget', service);
+      console.log('averageBudget', service);
       let budget = this.event.numberOfParticipants * service.basicCostPerGuest;
       if (service.minCost && budget < service.minCost) {
         return service.minCost;

@@ -174,10 +174,9 @@
     </modal>
     <ShareProposal
       v-if="showShareProposalModal"
+      :link="proposalLink"
       @close="showShareProposalModal = false"
       @submit="shareProposal"
-      :email="customerEmail"
-      :link="proposalLink"
     ></ShareProposal>
   </div>
 </template>
@@ -361,7 +360,6 @@ export default {
 
         this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       } else if (action === this.proposalStatus.share) {
-        console.log('shareProposal', this.selectedProposal);
         this.showShareProposalModal = true;
       } else if(action === this.proposalStatus.negotiation) {
         this.selectedProposalRequest = this.proposalRequests.find(it => it.proposal && it.proposal.id === id);
