@@ -8,7 +8,10 @@
         {{ proposal.vendor.companyName }}
       </div>
       <div>
-        <header-actions></header-actions>
+        <header-actions
+            @toggleCommentMode="toggleCommentMode"
+            @export="downProposal"
+        ></header-actions>
       </div>
     </div>
     <div class="proposal-content mt-40">
@@ -57,6 +60,7 @@
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
+    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <modal :containerClass="`modal-container xl`" v-if="showDetailModal">
       <template slot="header">
         <div class="add-category-model__header">
@@ -92,6 +96,7 @@
 </template>
 <script>
 import Proposal from "@/models/Proposal";
+import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import HeaderActions from "../../../components/HeaderActions.vue";
@@ -101,6 +106,7 @@ import EventDetail from "./components/EventDetail.vue";
 export default {
   components: {
     EventProposalDetails,
+    CommentEditorPanel,
     PlannerHeader,
     HeaderActions,
     Modal,
@@ -111,6 +117,7 @@ export default {
       proposal: null,
       showDetailModal: false,
       showUpdateSuccessModal: false,
+      showCommentEditorPanel: false,
     };
   },
   created() {
@@ -141,6 +148,13 @@ export default {
     saveProposal(proposal) {
       new Proposal();
     },
+    downProposal(){
+        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
+    },
+    toggleCommentMode(mode){
+      console.log('toggleCommentMode', mode)
+      this.showCommentEditorPanel = mode;
+    },
     remindMeLater() {},
     negotiateRate() {},
     askQuestion() {},
@@ -150,6 +164,9 @@ export default {
     updateEvent() {
       this.showDetailModal = false;
       this.showUpdateSuccessModal = true;
+    },
+    openNewTab(link) {
+      window.open(link, "_blank");
     },
   },
 };

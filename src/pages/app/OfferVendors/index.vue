@@ -72,7 +72,7 @@
             </div>
         </template>
 
-        <modal v-if="showBookedVendorModal" container-class="modal-container bg-white offer-vendors">
+        <modal v-if="showBookedVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
             <template slot="body">
                 <vendor-booked
                     @show="showVendors" @close="showBookedVendorModal = false" />
@@ -90,15 +90,17 @@
             @cancel="isOpenedAdditionalModal = false"
             @close="isOpenedAdditionalModal = false"
         ></additional-request-modal>
-        <md-dialog :md-active.sync="showSignupModal" class="singin-form">
-            <sign-in-content
-              :page="page"
-              @signIn="signIn"
-              @signUp="signUp"
-              @changePage="changePage"
-            >
-            </sign-in-content>
-        </md-dialog>
+        <modal v-if="showSignupModal" container-class="modal-container offer-vendors bg-white w-max-450">
+            <template slot="body">
+                <sign-in-content
+                    :page="page"
+                    @signIn="signIn"
+                    @signUp="signUp"
+                    @changePage="changePage"
+                >
+                </sign-in-content>
+            </template>
+        </modal>
         <transition name="slide-fade">
             <requirements-cart
                 v-if="showRequirementCart"
@@ -146,7 +148,7 @@ export default {
             showBookedVendorModal: true,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
-            showOffers: false,
+            showOffers: true,
             serviceCards: serviceCards,
             allRequirements: [],
             subCategory: null,
