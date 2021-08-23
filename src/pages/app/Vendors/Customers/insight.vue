@@ -1,11 +1,11 @@
 <template>
   <div class="bg-purple">
     <div class="pl-40 pr-40 pt-40 pb-20">
-      <div class="font-size-16 color-white text-transform-capitalize">Total Incomes - {{customer.companyName}}</div>
+      <div class="font-size-16 color-white">Total Incomes - Frog Design</div>
       <div class="d-flex align-center">
         <div>
-          <h2 class="font-size-28 color-white my-10">${{totalPrice | withComma(Number)}}</h2>
-          <p class="font-size-14 color-white">{{`${wonProposals.length}/${customer.proposals.length}`}} Successful proposals</p>
+          <h2 class="font-size-56 color-white my-10">$0</h2>
+          <p class="font-size-14 color-white">4/5 Successful proposals</p>
         </div>
         <ServiceBarChart class="ml-auto pt-10" :chart-data="serviceChartData"> </ServiceBarChart>
         <div class="ml-10">
@@ -43,24 +43,15 @@
             <h5 class="color-white text-center">How to increase Success And Profit</h5>
             <div class="d-flex align-center w-max-350 mx-auto">
               <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px" />
-              <p class="color-white font-size-14">
-                  {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
-                  (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
-              </p>
+              <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</p>
             </div>
             <div class="d-flex align-center w-max-350 mx-auto">
               <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px" />
-              <p class="color-white font-size-14">
-                When customer has transaction with the vendor: You most recent transaction with his customer was on
-                  {{wonProposals[0].transactions[0].dateCreated | date}} OR if customer don't have any transaction "This will be your first transaction with his
-                customer"
-              </p>
+              <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</p>
             </div>
             <div class="d-flex align-center w-max-350 mx-auto">
               <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px" />
-              <p class="color-white font-size-14">
-                Overall average deal size for this customer is $##,### (X% lower/higher than your average)
-              </p>
+              <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</p>
             </div>
             <div class="d-flex my-40">
               <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
@@ -69,7 +60,54 @@
             </div>
           </template>
           <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
-
+          <carousel :items="1" :margin="0" :nav="false" class="d-flex">
+            <template slot="prev">
+              <span class="prev d-none" ref="prevButton"> Prev </span>
+            </template>
+            <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+              <template v-if="incomeList.length > 1">
+                <h5 class="color-white text-center">Income From Past And Future Events</h5>
+                <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+                <div class="d-flex justify-content-center my-40">
+                  <div class="flex-1 font-size-14 color-white text-center">2021</div>
+                  <div class="flex-1 font-size-14 color-white text-center">Past events</div>
+                  <div class="flex-1 font-size-14 color-white text-center">Future events</div>
+                </div>
+              </template>
+              <template v-else>
+                <h5 class="color-white text-center">Increasing Your Success Rate</h5>
+                <div class="d-flex align-center w-max-350 mx-auto">
+                  <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                  <p class="color-white font-size-14">
+                    You have won [x] out of [y] opportunities with his customer(X% win rate)
+                  </p>
+                </div>
+                <div class="d-flex align-center w-max-350 mx-auto">
+                  <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                  <p class="color-white font-size-14">
+                    When customer has transaction with the vendor: You most recent transaction with his customer was on
+                    dd/mm/yyyy OR if customer don't have any transaction "This will be your first transaction with his
+                    customer"
+                  </p>
+                </div>
+                <div class="d-flex align-center w-max-350 mx-auto">
+                  <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                  <p class="color-white font-size-14">
+                    Overall average deal size for this customer is $##,### (X% lower/higher than your average)
+                  </p>
+                </div>
+                <div class="d-flex my-40">
+                  <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
+                    >Update Your Prices</md-button
+                  >
+                </div>
+              </template>
+              <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
+            </div>
+            <template slot="next">
+              <span class="next d-none" ref="nextButton"> Next </span>
+            </template>
+          </carousel>
         </div>
         <template slot="next">
           <span class="next d-none" ref="nextButton"> Next </span>
@@ -92,8 +130,12 @@ export default {
     carousel,
   },
   props: {
-    customer: {
-      type: Object,
+    total: {
+      type: Number,
+      required: true,
+    },
+    won: {
+      type: Number,
       required: true,
     },
   },
@@ -133,20 +175,10 @@ export default {
       this.$refs.prevButton.click();
     },
   },
-  computed:{
-    wonProposals(){
-      if(!this.customer.proposals.length) []
-      return this.customer.proposals.filter(p => {
-          return p.transactions && p.transactions.length && p.transactions.every(t => t.status.name === 'PENDING')
-      })
-    },
-    totalPrice(){
-        return this.wonProposals.reduce((sum, p) => {
-            return sum + p.transactions[0].cost
-        }, 0)
-    }
+  watch: {
+    total(newVal) {},
+    won(newVal) {},
   },
-  watch: {},
 };
 </script>
 <style type="scss">

@@ -300,7 +300,9 @@ export default {
     this.loading = false;
 
     if (this.$route.query.checkout === "success") {
-      this.showSuccessModal = true;
+      // this.showSuccessModal = true;
+      //  redirect to the page for offering vendors for non-registered customer
+      this.toOfferPage();
     }
   },
   computed: {
@@ -417,13 +419,6 @@ export default {
           // this.loadingPayment = false;
           this.stripePriceData = priceData;
 
-          // redirect to the page for offering vendors for non-registered customer
-          if(this.pageType === VENDOR && this.proposal.nonMaryoku) {
-            this.$router.push({
-                name: 'OfferVendors',
-            });
-          }
-
         });
       // if (this.paymentMethod === "stripe") {
 
@@ -432,6 +427,13 @@ export default {
     back() {
       this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
     },
+    toOfferPage(){
+        if(this.pageType === VENDOR && this.proposal.nonMaryoku) {
+          this.$router.push({
+              name: 'OfferVendors',
+          });
+        }
+    }
   },
 };
 </script>

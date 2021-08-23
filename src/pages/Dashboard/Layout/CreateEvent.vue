@@ -24,21 +24,6 @@
             <md-button class="md-simple md-just-icon question" @click="showSingupDialog">
               <img :src="`${$iconURL}Onboarding/question-dark.svg`" />
             </md-button>
-            <!-- <template v-if="$auth.user.a
-                uthenticated === false">
-
-                </template>
-
-                <template v-else-if="$auth.user.authenticated === true">
-
-                    <li class="user-info">
-                        <span>Hello {{$auth.user.displayName}}</span>
-                    </li>
-
-                    <li class="action-item" >
-                        <md-button @click="logout">Sing out</md-button>
-                    </li>
-            </template>-->
           </ul>
         </div>
       </div>
@@ -60,10 +45,39 @@
         </button>
       </md-dialog-title>
       <md-dialog-content>
-        <sign-in-content
-            @signIn="singup"
-            @authenticate="authenticate"
-        ></sign-in-content>
+          <div class="social-line text-center">
+              <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+                  <img :src="`${$iconURL}Signup/google-icon.jpg`" />
+                  <span>Sign in with Google</span>
+              </md-button>
+              <div>Or</div>
+          </div>
+          <maryoku-input
+              class="form-input"
+              data-vv-name="email"
+              v-validate="modelValidations.email"
+              inputStyle="email"
+              v-model="email"
+              placeholder="Type email address here..."
+          ></maryoku-input>
+          <maryoku-input
+              class="form-input"
+              data-vv-name="password"
+              v-validate="modelValidations.password"
+              type="password"
+              inputStyle="password"
+              v-model="password"
+              placeholder="Type password here..."
+          ></maryoku-input>
+          <div class="terms-and-conditions">
+              <md-checkbox v-model="keepMe">Keep me signed in</md-checkbox>
+          </div>
+          <div class="md-error">{{ error }}</div>
+          <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
+          <div class="text-center">
+              <!-- <a href class="forget-password">Forgot your password ?</a> -->
+              <md-button class="md-black md-maryoku mt-4 md-simple mt-4">Forgot my password?</md-button>
+          </div>
       </md-dialog-content>
     </md-dialog>
   </div>
