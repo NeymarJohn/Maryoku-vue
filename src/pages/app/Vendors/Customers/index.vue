@@ -69,8 +69,7 @@
         </div>
         <div class="md-layout-item md-size-30 mt-30">
           <insight
-            :total="pagination.total"
-            :won="0"
+            :customer="selectedCustomer"
           ></insight>
         </div>
       </div>
@@ -184,6 +183,7 @@ export default {
       });
 
       this.pagination.total = data.total;
+      this.selectedCustomer = data.customers[0];
       this.customerTabs.map((t) => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });

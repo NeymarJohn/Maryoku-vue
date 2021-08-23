@@ -418,11 +418,11 @@ export default {
           this.stripePriceData = priceData;
 
           // redirect to the page for offering vendors for non-registered customer
-          // if(this.pageType === VENDOR && this.proposal.nonMaryoku) {
-          //   this.$router.push({
-          //       name: 'OfferVendors',
-          //   });
-          // }
+          if(this.pageType === VENDOR && this.proposal.nonMaryoku) {
+            this.$router.push({
+                name: 'OfferVendors',
+            });
+          }
 
         });
       // if (this.paymentMethod === "stripe") {

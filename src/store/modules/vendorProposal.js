@@ -373,7 +373,7 @@ const actions = {
         inspirationalPhotos: state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,
-        eventComponentId: state.proposalRequest.eventComponentInstance ? state.proposalRequest.eventComponentInstance.id : null,
+        eventComponentId: state.proposalRequest.eventComponentInstance.id,
         vendorId: state.vendor.id,
         costServices: state.proposalCostServices,
         includedServices: state.proposalIncludedServices,
