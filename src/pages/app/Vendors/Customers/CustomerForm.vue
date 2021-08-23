@@ -57,12 +57,9 @@
                     <label>Email:</label>
                     <md-input
                         class="form-input"
-                        data-vv-name="email"
-                        v-validate="'required|email|unique'"
                         v-model="customerModel.email"
                     ></md-input>
                 </md-field>
-                <div class="md-error color-red font-size-14" v-if="errors.has('email')">{{ errors.first('email') }}</div>
                 <div class="d-flex align-center mt-20 width-100">
                     <md-button class="md-simple md-black ml-auto mr-20" @click="$emit('close')">Cancel</md-button>
                     <md-button class="md-vendor" @click="save">Save Changes</md-button>
@@ -73,8 +70,6 @@
 </template>
 <script>
     import { Loader, Modal, MaryokuInput } from "@/components";
-    import { postReq, getReq } from "@/utils/token";
-    import {Validator} from "vee-validate";
 
     export default {
         components: {
@@ -102,33 +97,9 @@
                 },
             }
         },
-        mounted() {
-            const isUnique = async value => {
-                let customer = await getReq(`/1/customers?email=${value}`);
-
-                if (!customer || Array.isArray(customer) && !customer.length) {
-                    return {valid: true}
-                } else {
-                    return {
-                        valid: false,
-                        data: {message: `Email already exists.`}
-                    }
-                }
-            }
-            Validator.extend("unique", {
-                validate: isUnique,
-                getMessage: (field, params, data) => data.message
-            });
-        },
         methods:{
             save(){
-                this.$validator.validateAll().then((isValid) => {
-                    if (isValid) {
-                        console.log('validate');
-                        this.$emit('save', this.customerModel);
-                    }
-                })
-
+                this.$emit('save', this.customerModel);
             }
         }
     }
