@@ -69,8 +69,9 @@
         </div>
         <div class="md-layout-item md-size-30 mt-30">
           <insight
-            :total="pagination.total"
-            :won="0"
+            v-if="customers.length"
+            :customer="selectedCustomer"
+            :average="averagePrice"
           ></insight>
         </div>
       </div>
@@ -184,6 +185,7 @@ export default {
       });
 
       this.pagination.total = data.total;
+      this.selectedCustomer = data.customers[0];
       this.customerTabs.map((t) => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
@@ -295,8 +297,24 @@ export default {
           return r;
       }, {})
     },
-    expiredTime(){
+    transactionCustomers(){
+      if(!this.customers.length) return [];
+      return this.customers.filter(customer => {
+        return customer.proposals && customer.proposals.length && customer.proposals.some(p => p.transactions && p.transactions.length)
+      })
     },
+    averagePrice(){
+      let averageTotal = 0;
+      this.transactionCustomers.map(c => {
+        let transactionProposals = 0;
+        let costPerCustomer = c.proposals.reduce((cost, p)=> {
+            transactionProposals ++;
+            return p.transactions && p.transactions.length ? cost + p.transactions[0].cost : cost;
+        }, 0)
+        averageTotal += costPerCustomer / transactionProposals
+      })
+      return averageTotal / this.transactionCustomers.length
+    }
   },
   watch: {
   },
