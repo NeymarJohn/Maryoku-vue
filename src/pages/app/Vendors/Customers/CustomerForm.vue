@@ -58,7 +58,7 @@
                     <md-input
                         class="form-input"
                         data-vv-name="email"
-                        v-validate="'required|email'"
+                        v-validate="'required|email|unique'"
                         v-model="customerModel.email"
                     ></md-input>
                 </md-field>

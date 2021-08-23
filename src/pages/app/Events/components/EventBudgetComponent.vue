@@ -10,11 +10,11 @@
                 <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`" />
                 {{ component.title }}
                 <span v-if="component.eventCategory">
-        <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
-        <md-tooltip>
-          <div class="font-size-14 tab-tooltip">{{ component.eventCategory.tooltipText }}</div>
-        </md-tooltip>
-      </span>
+                    <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
+                    <md-tooltip>
+                      <div class="font-size-14 tab-tooltip">{{ component.eventCategory.tooltipText }}</div>
+                    </md-tooltip>
+                </span>
             </div>
 
             <template v-if="!isEditing">
@@ -208,7 +208,7 @@ export default {
   padding: 10px 10px 10px 20px;
   cursor: pointer;
   .name {
-    width: 60%;
+    width: 50%;
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -220,7 +220,7 @@ export default {
 
   .actions {
     opacity: 0;
-    width: 100px;
+    width: 160px;
     margin-left: 30px;
     img {
       max-width: 22px;

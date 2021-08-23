@@ -235,7 +235,11 @@
               <img :src="`${$iconURL}PaymentPage/Stripe.png`" />
             </md-button>
           </div> -->
-          <stripe-checkout v-if="showStripeCheckout" :price="stripePriceData"></stripe-checkout>
+          <stripe-checkout
+              v-if="showStripeCheckout"
+              :price="stripePriceData"
+              :non-maryoku="pageType === VENDOR && proposal.nonMaryoku"
+          ></stripe-checkout>
           <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>
       </div>
@@ -301,8 +305,6 @@ export default {
 
     if (this.$route.query.checkout === "success") {
       // this.showSuccessModal = true;
-      //  redirect to the page for offering vendors for non-registered customer
-      this.toOfferPage();
     }
   },
   computed: {
@@ -427,13 +429,6 @@ export default {
     back() {
       this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
     },
-    toOfferPage(){
-        if(this.pageType === VENDOR && this.proposal.nonMaryoku) {
-          this.$router.push({
-              name: 'OfferVendors',
-          });
-        }
-    }
   },
 };
 </script>

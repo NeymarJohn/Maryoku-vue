@@ -42,24 +42,24 @@
           <template v-else>
             <h5 class="color-white text-center">How to increase Success And Profit</h5>
             <div class="d-flex align-center w-max-350 mx-auto">
-              <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+              <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px" />
               <p class="color-white font-size-14">
                   {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
                   (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
               </p>
             </div>
             <div class="d-flex align-center w-max-350 mx-auto">
-              <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+              <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px" />
               <p class="color-white font-size-14">
                 When customer has transaction with the vendor: You most recent transaction with his customer was on
-                  {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}} OR if customer don't have any transaction "This will be your first transaction with his
+                  {{wonProposals[0].transactions[0].dateCreated | date}} OR if customer don't have any transaction "This will be your first transaction with his
                 customer"
               </p>
             </div>
             <div class="d-flex align-center w-max-350 mx-auto">
-              <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+              <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px" />
               <p class="color-white font-size-14">
-                Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} {{compareWithTotal}} than your average
+                Overall average deal size for this customer is $##,### (X% lower/higher than your average)
               </p>
             </div>
             <div class="d-flex my-40">
@@ -93,13 +93,9 @@ export default {
   },
   props: {
     customer: {
-      type: [Object],
+      type: Object,
       required: true,
     },
-    average:{
-      type: Number,
-      required: true,
-    }
   },
   data() {
     return {
@@ -129,7 +125,7 @@ export default {
     this.init();
   },
   methods: {
-    init() {console.log('customer.insight', this.average)},
+    init() {},
     next() {
       this.$refs.nextButton.click();
     },
@@ -144,25 +140,10 @@ export default {
           return p.transactions && p.transactions.length && p.transactions.every(t => t.status.name === 'PENDING')
       })
     },
-    averageOfProposal(){
-        if(!this.wonProposals.length) return 0;
-        return this.totalPrice / this.wonProposals.length;
-
-    },
     totalPrice(){
         return this.wonProposals.reduce((sum, p) => {
             return sum + p.transactions[0].cost
         }, 0)
-    },
-    compareWithTotal(){
-        if (this.average <= 0 || this.averageOfProposal <= 0) return 0
-        let percent
-        if (this.average > 0 && this.averageOfProposal > this.average ){
-            percent =  Math.floor((this.averageOfProposal - this.average) / this.average * 100)
-        } else if(this.averageOfProposal > 0 && this.averageOfProposal < this.average ){
-            percent =  Math.floor((this.average - this.averageOfProposal) / this.averageOfProposal * 100)
-        }
-        return this.averageOfProposal > this.average ? `${percent}% higher` : `${percent}% lower`;
     }
   },
   watch: {},

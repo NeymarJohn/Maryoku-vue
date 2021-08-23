@@ -23,12 +23,19 @@ export default {
       type: Object,
       default: () => {},
     },
+    nonMaryoku: {
+      type: Boolean,
+      default: false,
+    }
   },
   mounted() {
     this.$refs.checkoutRef.redirectToCheckout();
   },
   data() {
     this.publishableKey = process.env.STRIPE_PK;
+    let link =  this.$router.resolve({
+          name: 'OfferVendors',
+      });
     return {
       loading: false,
       lineItems: [
@@ -37,7 +44,7 @@ export default {
           quantity: 1,
         },
       ],
-      successURL: `${window.location.href}?checkout=success`,
+      successURL: this.nonMaryoku ? link.href : `${window.location.href}?checkout=success`,
       cancelURL: `${window.location.href}?checkout=cancel`,
     };
   },

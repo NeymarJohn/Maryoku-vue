@@ -97,6 +97,7 @@
                     @signIn="signIn"
                     @signUp="signUp"
                     @changePage="changePage"
+                    @authenticate="authenticate"
                 >
                 </sign-in-content>
             </template>
@@ -141,11 +142,11 @@ export default {
     },
     data(){
         return {
-            isLoading: false,
+            isLoading: true,
             step: 1,
             page: 'signup',
             showSignupModal: false,
-            showBookedVendorModal: true,
+            showBookedVendorModal: false,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
             showOffers: true,
@@ -160,13 +161,11 @@ export default {
     methods: {
         async showVendors(){
             this.showBookedVendorModal = false;
-            this.showSignupModal = true;
-
         },
         async getAllRequirements(){
           let res = await getReq(`/1/vendor/property`);
           this.allRequirements = res.data;
-          console.log('requirements', this.allRequirements, this.requirements);
+          localStorage.setItem('all_requirements', JSON.stringify(this.allRequirements));
         },
         async getVendorEvent(){
             let res = await getReq(`/1/userEvent?email=${this.user.email}`);
@@ -238,38 +237,19 @@ export default {
             if(!requirement) {
                 requirement = {event: {id: this.event.id}, category: category.serviceCategory, types: { [type]: services }}
             } else {
-                requirement = {...requirement, types: { [type]: services }, event: {id: this.event.id}};
+                requirement = {...requirement, types: { [type]: services }};
             }
             this.saveRequirements(requirement)
         },
         saveAdditionalRequest({ category, requirements }) {
 
             this.isOpenedAdditionalModal = false;
-            this.saveRequirements({...this.requirements[category], ...requirements, event: {id: this.event.id}})
+            this.saveRequirements({...this.requirements[category], ...requirements})
         },
         async saveRequirements(requirement){
-            if (!this.vendorEvent) {
-                Swal.fire({
-                    title: "Event Info",
-                    text: `It looks the event info doesn't exist`,
-                    showCancelButton: true,
-                    confirmButtonClass: "md-button md-success btn-fill",
-                    cancelButtonClass: "md-button md-danger btn-fill",
-                    confirmButtonText: "Yes, I am sure",
-                    buttonsStyling: false,
-                }).then((result) => {
-                    console.log('saveRequirements', result);
-                });
-                return
-            }
 
-            new ProposalRequestRequirement(requirement)
-                .for(new CalendarEvent({ id: requirement.event.id }))
-                .save()
-                .then(res => {
-                    this.$set(this.requirements, requirement.category, res)
-                    console.log('result', this.requirements);
-                })
+            this.$set(this.requirements, requirement.category, requirement)
+            localStorage.setItem('requirements', JSON.stringify(this.requirements));
         },
         async signIn({email, password}){
             console.log('signIn', email, password)
@@ -278,9 +258,9 @@ export default {
                     password,
                 })
             this.showSignupModal =  false;
-            this.showOffers = true;
+
             this.isLoading = true;
-            await this.loadData();
+            await this.save();
             this.isLoading = false;
         },
         async signUp({email, password, name, company}){
@@ -295,46 +275,52 @@ export default {
             await this.$store.dispatch('auth/login', {email, password});
 
             this.showSignupModal =  false;
-            this.showOffers = true;
 
             this.isLoading = true;
-            await this.loadData()
+            await this.save();
             this.isLoading = false;
         },
         async loadData(){
+        },
+
+        async findVendors(){
+            if(!this.$store.state.auth.status.loggedIn) {
+                this.showSignupModal = true;
+            } else {
+                this.loading = true;
+                await this.save();
+                this.loading = false;
+            }
+
+        },
+        async save(){
             await this.getVendorEvent();
-            if (typeof this.vendorEvent === 'object'  && Object.keys(this.vendorEvent).length) {
+            if (typeof this.vendorEvent === 'object' ||  Array.isArray(this.vendorEvent) && !this.vendorEvent.length) {
                 await this.createEvent();
-            }
-            await this.getAllRequirements();
-            await this.getSavedRequirements();
-            console.log('requirements', this.requirements);
-        },
-        async getSavedRequirements(){
-            let req =  new ProposalRequestRequirement()
-            let res = await req.for(new CalendarEvent({ id: this.event.id })).get();
-            console.log('getSavedRequirements', res)
-            if (res && res.length){
-                res.map(it => {
-                    this.$set(this.requirements, it.category, it);
-                })
-            }
-        },
-        findVendors(){
-            this.expiredTime = moment(new Date()).add(3, "days").valueOf();
-            postReq(`/1/events/${this.event.id}/find-vendors`, {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-            }).then((res) => {
-                console.log('findVendors', res);
-                this.$store.dispatch(
+
+                this.expiredTime = moment(new Date()).add(3, "days").valueOf();
+                let res = await postReq(`/1/events/${this.event.id}/offVendors/find-vendors`, {
+                    issuedTime: new Date().getTime(),
+                    expiredBusinessTime: this.expiredTime,
+                    requirements: this.requirements,
+                });
+                await this.$store.dispatch(
                     "event/saveEventAction",
                     new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
                 );
-            });
+            }
+
         },
         changePage(){
             this.page = this.page === 'signin' ? 'signup' : 'signin';
+        },
+        authenticate(provider){
+            let tenantId = this.$authService.resolveTenantId();
+            let callback = btoa(
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors?token=`,
+            );
+            console.log(`${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
+            document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
         }
     },
     computed:{
@@ -348,7 +334,23 @@ export default {
             return this.$store.state.common.serviceCategories;
         }
     },
-    async mounted() {
+    async created() {
+        let tenantUser = null;
+        const givenToken = this.$route.query.token;
+        if (givenToken) {
+            tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
+            this.requirements = JSON.parse(localStorage.getItem('requirements'));
+            await this.loadData();
+            await this.save();
+            this.isLoading = false;
+        } else {
+            this.showBookedVendorModal = true;
+            this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
+            if (!this.allRequirements) {
+                await this.getAllRequirements()
+            }
+            this.isLoading = false;
+        }
 
     }
 
