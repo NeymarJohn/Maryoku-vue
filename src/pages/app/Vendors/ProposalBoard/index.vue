@@ -497,6 +497,7 @@ export default {
       return this.selectedProposal.nonMaryoku ?
           `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}` :
           `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequestId}/form/edit`;
+      return `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`;
     },
     proposalRequests(){
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;

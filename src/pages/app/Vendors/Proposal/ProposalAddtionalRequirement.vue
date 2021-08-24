@@ -2,8 +2,8 @@
   <div class="white-card mt-20 additional-requirements" v-if="sittingArrangement">
     <div class="p-40" :class="{ 'd-none': getSelectedOption(sittingArrangement.options).length == 0 }">
       <div>
-        <img :src="`${$iconURL}Submit+Proposal/request arrangement.png`" />
-        <span class="font-size-30 font-bold">
+        <img :src="`${$iconURL}common/seating-purple.png`" />
+        <span class="ml-20 font-size-30 font-bold">
           {{ sittingArrangement.item || sittingArrangement.subCategory }}
         </span>
       </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div v-if="!editingNewSeating" class="d-flex align-center">
-                <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
+                <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="editingNewSeating = true">
                     Suggest new seating arrangement
                 </md-button>
             </div>

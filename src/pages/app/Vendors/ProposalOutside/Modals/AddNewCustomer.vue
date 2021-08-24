@@ -29,7 +29,7 @@
           <maryoku-input
               inputStyle="email"
               data-vv-name="email"
-              v-validate="'required|email|unique'"
+              v-validate="'required|email'"
               class="width-80 mt-5 form-input"
               v-model="email"></maryoku-input>
         </div>
