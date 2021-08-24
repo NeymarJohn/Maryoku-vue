@@ -225,6 +225,32 @@ export default {
     TimeSlot,
     TimelineItem,
   },
+  props: {
+    subCategory: {
+        type: Object,
+        default: () => {},
+    },
+    selectedCategory: {
+        type: Object,
+        default: () => {},
+    },
+    defaultData: {
+        type: Object,
+        default: () => {},
+    },
+    selectedTypes: {
+        type: Array,
+        default: () => [],
+    },
+    proposal: {
+        type: Object,
+        default: null,
+    },
+    page: {
+        type: String,
+        default: 'planner',
+    }
+  },
   data() {
     return {
       isEntire: false,
@@ -246,28 +272,6 @@ export default {
       timeSlotIdx: [],
     };
   },
-  props: {
-    subCategory: {
-      type: Object,
-      default: () => {},
-    },
-    selectedCategory: {
-      type: Object,
-      default: () => {},
-    },
-    defaultData: {
-      type: Object,
-      default: () => {},
-    },
-    selectedTypes: {
-      type: Array,
-      default: () => [],
-    },
-    page: {
-      type: String,
-      default: 'planner',
-    }
-  },
   created() {
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
@@ -288,7 +292,6 @@ export default {
   },
   methods: {
     setTimeSlot(){
-      console.log('setTimeSlot', this.assignTimeline, this.timeslots, this.defaultData);
 
       if(this.assignTimeline && this.timeslots.length && this.defaultData.period && this.defaultData.period.length) {
         this.timeslots.map((timeslot, idx) => {
@@ -361,6 +364,7 @@ export default {
           mainRequirements: requirements,
           isEntireEvent: this.isEntire,
           period: this.period,
+          period1: this.period,
           additionalDescription: this.anythingElse,
         },
       });
@@ -460,9 +464,10 @@ export default {
       return moment(time, format).unix() * 1000;
     },
     setTime(time) {
-      console.log('setTime', this.event, time);
       this.period = [];
-      let eventDate = moment(this.event.eventStartMillis).format('YYYY-MM-DD');
+      let eventDate = moment(this.page === 'customer' ? this.proposal.eventData.startTime * 1000 : this.event.eventStartMillis).format('YYYY-MM-DD');
+      if(this.page === 'planner') console.log('setTime.eventData', this.event.eventStartMillis,  eventDate);
+      if(this.page === 'customer') console.log('setTime.eventData', this.proposal.eventData.startTime,  eventDate);
       Vue.set(this.period, 0, {
           startTime: this.getTimeStampFromFormat (`${eventDate} ${time.startTime.time.hh}:${time.startTime.time.mm} ${time.startTime.ampm}`, 'YYYY-MM-DD hh:mm A').toString(),
           endTime: this.getTimeStampFromFormat(`${eventDate} ${time.endTime.time.hh}:${time.endTime.time.mm} ${time.endTime.ampm}`, 'YYYY-MM-DD hh:mm A').toString(),
@@ -477,23 +482,23 @@ export default {
     timeslots(){
       let slots = [];
       // classify and get timeslots by service type
-      // this.$store.state.event.eventData.timelineDates.map(date => {
-      //   date.timelineItems.map(item => {
-      //     if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
-      //       this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     } else if (this.selectedCategory.key === 'transportation' && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     } else if ((this.selectedCategory.key === 'entertainment' || this.selectedCategory.key === 'videographyandphotography' ||
-      //       this.selectedCategory.key === 'audiovisualstagingservices') && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-      //       slots.push(item)
-      //     } else if (this.selectedCategory.key === 'administration' && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     } else if (this.selectedCategory.key === 'foodandbeverage'&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     }
-      //   })
-      // })
+      this.$store.state.event.eventData.timelineDates.map(date => {
+        date.timelineItems.map(item => {
+          if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
+            this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === 'transportation' && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if ((this.selectedCategory.key === 'entertainment' || this.selectedCategory.key === 'videographyandphotography' ||
+            this.selectedCategory.key === 'audiovisualstagingservices') && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
+            slots.push(item)
+          } else if (this.selectedCategory.key === 'administration' && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === 'foodandbeverage'&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
+            slots.push(item);
+          }
+        })
+      })
       return slots;
     }
   }

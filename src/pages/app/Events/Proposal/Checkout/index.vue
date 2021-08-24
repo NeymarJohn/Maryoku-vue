@@ -238,7 +238,8 @@
           <stripe-checkout
               v-if="showStripeCheckout"
               :price="stripePriceData"
-              :non-maryoku="pageType === VENDOR && proposal.nonMaryoku"
+              :proposal="proposal"
+              :non-maryoku="pageType === 0 && proposal.nonMaryoku"
           ></stripe-checkout>
           <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>

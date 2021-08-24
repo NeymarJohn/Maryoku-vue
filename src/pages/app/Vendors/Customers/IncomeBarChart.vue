@@ -1,21 +1,21 @@
 <template>
-  <svg class="chart" width="450" height="300" aria-labelledby="title desc" role="img">
+  <svg class="chart" width="430" height="300" aria-labelledby="title desc" role="img">
     <title id="title">A bar chart showing information</title>
     <desc id="desc">4 apples; 8 bananas; 15 kiwis; 16 oranges; 23 lemons</desc>
     <g v-for="(chartDataItem, index) in chartData" transform="translate(0,300) scale(1, -1)">
       <rect
-        :x="25 + 36 * index"
+        :x="25 + 33 * index"
         y="40"
-        width="18"
+        width="13"
         :height="chartDataItem.value"
-        rx="10"
+        rx="8"
         :style="`fill: ${chartDataItem.future ? '#9F6B90' : 'white'}`"
       ></rect>
     </g>
     <g v-for="(chartDataItem, index) in chartData" :key="`chartItem-${index}`">
-      <text :x="25 + 36 * index"
+      <text :x="25 + 33 * index"
             y="280" fill="#a3809d"
-            :transform="`rotate(30 ${25 + 36 * index},280)`"
+            :transform="`rotate(30 ${25 + 33 * index},280)`"
             font-size="12px"
             style="fill:white"
       >
@@ -35,7 +35,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    .chart{
-        margin-left: 20px;
+    .bar{
     }
 </style>
