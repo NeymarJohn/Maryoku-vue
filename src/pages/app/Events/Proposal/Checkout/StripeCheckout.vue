@@ -19,10 +19,6 @@ export default {
     StripeCheckout,
   },
   props: {
-    proposal:{
-      type: Object,
-      required: true,
-    },
     price: {
       type: Object,
       default: () => {},
@@ -38,10 +34,7 @@ export default {
   data() {
     this.publishableKey = process.env.STRIPE_PK;
     let link =  this.$router.resolve({
-      name: 'OfferVendors',
-        params: {
-          proposalId: this.proposal.id,
-        }
+          name: 'OfferVendors',
       });
     return {
       loading: false,

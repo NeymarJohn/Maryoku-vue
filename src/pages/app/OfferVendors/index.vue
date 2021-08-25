@@ -85,7 +85,6 @@
             :selectedCategory="selectedCategory"
             :defaultData="getRequirements(selectedCategory.key) || {}"
             :selectedTypes="getSelectedTypes(selectedCategory.key)"
-            :proposal="proposal"
             page="customer"
             @save="saveAdditionalRequest"
             @cancel="isOpenedAdditionalModal = false"
@@ -157,7 +156,6 @@ export default {
             selectedCategory: null,
             vendorEvent : null,
             requirements: {},
-            proposal: null,
         }
     },
     methods: {
@@ -169,26 +167,29 @@ export default {
           this.allRequirements = res.data;
           localStorage.setItem('all_requirements', JSON.stringify(this.allRequirements));
         },
-        async getProposal(){
-            let res = await getReq(`/1/proposals/${this.$route.params.proposalId}`);
-            this.proposal = res.data;
-            localStorage.setItem('proposal', JSON.stringify(this.proposal));
+        async getVendorEvent(){
+            let res = await getReq(`/1/userEvent?email=${this.user.email}`);
+            console.log('getVendorEvent', res);
+            if (res.data) {
+                this.vendorEvent = Array.isArray(res.data) && !res.data.length ? null : res.data;
+            }
+
         },
         async createEvent(){
 
             await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
-                eventStartMillis: this.proposal.eventData.startTime,
-                eventEndMillis: this.proposal.eventData.endTime,
+                eventStartMillis: moment(new Date(this.vendorEvent.startTime)).unix() * 1000,
+                eventEndMillis: moment(new Date(this.vendorEvent.endTime)).unix() * 1000,
                 status: 'draft',
-                numberOfParticipants: this.proposal.eventData.numberOfParticipants,
+                numberOfParticipants: this.vendorEvent.guests,
                 flexibleWithDates: 0,
                 guestType: {
                     name: "Employees",
                     selected: false,
                     value: "employees",
                 },
-                location: this.proposal.eventData.location,
-                eventType: this.proposal.eventData.eventType,
+                location: this.vendorEvent.location,
+                eventType: this.vendorEvent.eventType,
                 places: ['OUTDOORS'],
             }));
         },
@@ -279,32 +280,35 @@ export default {
             await this.save();
             this.isLoading = false;
         },
+        async loadData(){
+        },
 
         async findVendors(){
-            // if(!this.$store.state.auth.status.loggedIn) {
+            if(!this.$store.state.auth.status.loggedIn) {
                 this.showSignupModal = true;
-            // } else {
-            //     this.loading = true;
-            //     await this.save();
-            //     this.loading = false;
-            // }
+            } else {
+                this.loading = true;
+                await this.save();
+                this.loading = false;
+            }
 
         },
         async save(){
+            await this.getVendorEvent();
+            if (typeof this.vendorEvent === 'object' ||  Array.isArray(this.vendorEvent) && !this.vendorEvent.length) {
+                await this.createEvent();
 
-            await this.createEvent();
-
-            this.expiredTime = moment(new Date()).add(3, "days").valueOf();
-            let res = await postReq(`/1/events/${this.event.id}/offer-vendors/find-vendors`, {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-                requirements: this.requirements,
-            });
-            await this.$store.dispatch(
-                "event/saveEventAction",
-                new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
-            );
-
+                this.expiredTime = moment(new Date()).add(3, "days").valueOf();
+                let res = await postReq(`/1/events/${this.event.id}/offVendors/find-vendors`, {
+                    issuedTime: new Date().getTime(),
+                    expiredBusinessTime: this.expiredTime,
+                    requirements: this.requirements,
+                });
+                await this.$store.dispatch(
+                    "event/saveEventAction",
+                    new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
+                );
+            }
 
         },
         changePage(){
@@ -313,7 +317,7 @@ export default {
         authenticate(provider){
             let tenantId = this.$authService.resolveTenantId();
             let callback = btoa(
-                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}?token=`,
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors?token=`,
             );
             console.log(`${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
             document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
@@ -335,21 +339,15 @@ export default {
         const givenToken = this.$route.query.token;
         if (givenToken) {
             tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
-            this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
             this.requirements = JSON.parse(localStorage.getItem('requirements'));
-            this.proposal = JSON.parse(localStorage.getItem('proposal'));
+            await this.loadData();
             await this.save();
             this.isLoading = false;
         } else {
             this.showBookedVendorModal = true;
             this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
-            console.log('created', this.allRequirements);
             if (!this.allRequirements) {
                 await this.getAllRequirements()
-            }
-            this.proposal = JSON.parse(localStorage.getItem('proposal'));
-            if(!this.proposal){
-                await this.getProposal();
             }
             this.isLoading = false;
         }
