@@ -22,6 +22,7 @@ const state = {
   bundleDiscount: {},
   discounts: {},
   taxes: {},
+  coverImage: [],
   proposalServices: {},
   inspirationalPhotos: new Array(15),
 };
@@ -164,6 +165,7 @@ const mutations = {
     state.tax = proposal.tax;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
+    state.coverImage = proposal.coverImage || [],
     // state.inspirationalPhotos = proposal.inspirationalPhotos
     state.initialized = true;
     // state.wizardStep = proposal.step
@@ -305,6 +307,7 @@ const actions = {
         personalMessage: state.personalMessage,
         additionalServices: state.additionalServices,
         images: state.images,
+        coverImage: state.coverImage,
         eventVision: state.eventVision,
         vendorId: state.vendor.id,
         costServices: state.costServices,

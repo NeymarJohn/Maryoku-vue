@@ -153,7 +153,14 @@ export default {
 
     this.vendor = await this.getVendor(this.$route.params.vendorId);
     if (this.$route.params.id) await this.getProposal(this.$route.params.id);
+    if (!this.$store.state.vendorProposal.coverImage.length){
+      this.$store.commit("proposalForNonMaryoku/setValue", {
+          key: "coverImage",
+          value: this.vendor.images,
+      });
+    }
     this.loading = false;
+
   },
 
   beforeCreate() {

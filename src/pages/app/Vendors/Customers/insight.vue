@@ -34,65 +34,91 @@
       <div class="position-absolute" style="right: 0; top: 0;z-index: 100">
         <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="90px" @click="next" />
       </div>
-      <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
-          <template slot="prev">
-            <span class="prev handle-btn" ref="prevButton">
-              <md-icon>keyboard_arrow_left</md-icon>
-            </span>
-          </template>
-        <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
-          <template v-if="customer && incomeList.length == 1">
-                <div class="color-white font-size-20 font-bold-extra text-center mt-30">How to increase Success And Profit</div>
-                <div class="d-flex align-center w-max-400 mx-auto mt-20">
-                    <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
-                    <p class="color-white font-size-14">
-                        {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
-                        (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
-                    </p>
-                </div>
-                <div class="d-flex align-center w-max-400 mx-auto mt-20">
-                    <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
-                    <p v-if="wonProposals.length" class="color-white font-size-14">
-                        You most recent transaction with his customer was on
-                        {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}}  if customer don't have any transaction
-                    </p>
-                    <p class="color-white font-size-14" v-else>This will be your first transaction with this customer</p>
-                </div>
-                <div class="d-flex align-center w-max-400 mx-auto mt-20">
-                    <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
-                    <p class="color-white font-size-14">
-                        Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} {{compareWithTotal}} than your average
-                    </p>
-                </div>
-                <div class="d-flex my-40">
-                    <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
-                    >Update Your Prices</md-button
-                    >
-                </div>
-            </template>
-          <template v-if="incomeList.length > 1">
-            <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
-            <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
-            <div class="d-flex justify-content-center my-40">
-              <div class="flex-1 font-size-16 color-white text-center">2021
-                  <md-icon style="color: white">keyboard_arrow_down</md-icon>
-              </div>
-              <template v-if="customer">
-                  <div class="flex-1 font-size-16 color-white text-center">Past events</div>
-                  <div class="flex-1 font-size-16 color-white text-center">Future events</div>
+      <template v-if="customer">
+          <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
+              <template slot="prev">
+                  <span class="prev handle-btn" ref="prevButton"></span>
               </template>
-              <div v-else class="flex-1 font-size-16 color-white text-center">No event incomes</div>
-            </div>
-          </template>
-          <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
+              <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+                  <template v-if="index == 1">
+                      <div class="color-white font-size-20 font-bold-extra text-center mt-30">How to increase Success And Profit</div>
+                      <div class="d-flex align-center w-max-400 mx-auto mt-20">
+                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                          <p class="color-white font-size-14">
+                              {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
+                              (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
+                          </p>
+                      </div>
+                      <div class="d-flex align-center w-max-400 mx-auto mt-20">
+                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                          <p v-if="wonProposals.length" class="color-white font-size-14">
+                              You most recent transaction with his customer was on
+                              {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}}  if customer don't have any transaction
+                          </p>
+                          <p class="color-white font-size-14" v-else>This will be your first transaction with this customer</p>
+                      </div>
+                      <div class="d-flex align-center w-max-400 mx-auto mt-20">
+                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                          <p class="color-white font-size-14">
+                              Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} {{compareWithTotal}} than your average
+                          </p>
+                      </div>
+                      <div class="d-flex my-40">
+                          <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
+                          >Update Your Prices</md-button
+                          >
+                      </div>
+                  </template>
+                  <template v-if="index == 0">
+                      <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
+                      <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+                      <div class="md-layout my-40">
+                          <div class="md-layout-item font-size-16 color-white md-size-33 text-center">2021
+                              <md-icon style="color: white">keyboard_arrow_down</md-icon>
+                          </div>
+                          <div class="md-layout-item md-size-33 d-flex align-center font-size-16 color-white text-center">
+                              <span :style="`background-color: #ffffff;`" class="icon mr-10"></span>
+                              Past events</div>
+                          <div class="md-layout-item md-size-33 d-flex align-center font-size-16 color-white text-center" style="white-space: nowrap">
+                              <span :style="`background-color: #9b6a92;`" class="icon mr-10"></span>
+                              Future events</div>
+                      </div>
+                  </template>
+                  <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
 
-        </div>
-        <template slot="next">
+              </div>
+              <template slot="next">
           <span class="next handle-btn d-none" ref="nextButton">
-            <md-icon>keyboard_arrow_right</md-icon>
           </span>
-        </template>
-      </carousel>
+              </template>
+          </carousel>
+      </template>
+      <template v-else>
+          <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
+              <template slot="prev">
+                  <span class="prev handle-btn" ref="prevButton"></span>
+              </template>
+              <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+
+                  <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
+                  <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+                  <div class="md-layout my-40">
+                      <div class="md-layout-item font-size-16 color-white md-size-50 text-left pl-50">2021
+                          <md-icon style="color: white">keyboard_arrow_down</md-icon>
+                      </div>
+                      <div class="md-layout-item md-size-50 d-flex align-center font-size-16 color-white text-right pr-50">
+                          <span :style="`background-color: #ffffff;`" class="icon mr-10"></span>
+                          No event incomes</div>
+                  </div>
+
+                  <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
+              </div>
+              <template slot="next">
+          <span class="next handle-btn d-none" ref="nextButton">
+          </span>
+              </template>
+          </carousel>
+      </template>
     </div>
   </div>
 </template>
@@ -111,8 +137,8 @@ export default {
   },
   props: {
     customer: {
-      type: [Object],
-      required: true,
+      type: Object,
+      default: null,
     },
     average:{
       type: Number,
@@ -136,7 +162,7 @@ export default {
         { label: "Nov", value: 60, future: true },
         { label: "Dec", value: 20, future: true },
       ],
-      incomeList: this.customer ? [""] : ["", ""],
+      incomeList: this.customer ? ["", ""] : [""],
     };
   },
   mounted() {
@@ -145,6 +171,7 @@ export default {
   methods: {
     init() {
         console.log('customer.insight', this.average, this.customer)
+        this.$forceUpdate();
         this.serviceChartData = this.customer ? [
             { label: "", value: 44, color: "#ffffff", icon: "Budget+Elements/venuerental-white.svg", price: "15000" },
             { label: "", value: 35, color: "#22cfe0", icon: "Budget+Elements/foodandbeverage-white.svg", price: "4800" },
@@ -154,6 +181,8 @@ export default {
             { label: "Catering", value: 35, color: "#915a87", icon: "Budget+Elements/foodandbeverage-white.svg", price: 0 },
             { label: "Signage & Printing", value: 20, color: "#4e0841", icon: "Budget+Elements/entertainment-white.svg", price: 0 },
         ];
+
+        this.incomeList = this.customer ? ["", ""] : [""];
     },
     next() {
       this.$refs.nextButton.click();
@@ -177,7 +206,7 @@ export default {
     },
     totalPrice(){
         return this.wonProposals.reduce((sum, p) => {
-            return sum + p.transactions[0].cost / 100
+            return sum + Math.floor(p.transactions[0].cost / 100)
         }, 0)
     },
     compareWithTotal(){
@@ -192,7 +221,10 @@ export default {
     }
   },
   watch: {
-    customer(newVal){this.init()}
+    customer(newVal){
+        console.log('customer.watch', newVal);
+        this.init()
+    }
   },
 };
 </script>
