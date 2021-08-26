@@ -121,7 +121,7 @@
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-          <insight :total="pagination.total" :won="pagination.won"></insight>
+          <insight v-if="!loading" :total="pagination.total" :won="pagination.won"></insight>
         </div>
       </div>
       <div class="md-layout">
