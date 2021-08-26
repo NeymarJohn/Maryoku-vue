@@ -1,9 +1,8 @@
 <template>
     <svg
-        :width="50"
-        :height="150"
+        :width="35"
+        :height="100"
         :class="customClass"
-        :style="{'paddingTop': `${5  * chartData.length}px`}"
     >
         <g
             v-for="(item, idx) in chartData"
@@ -13,12 +12,12 @@
             <rect
                 :x="10"
                 :y="chartData.reduce((sum, it, index) => {
-                      return index < idx ? sum + it.value * 1.5 - (idx > 0 ? 14 : 0) : sum
+                      return index < idx ? sum + it.value - (idx > 0 ? 9 : 0) : sum
                       }, 0)"
-                width="18"
-                :rx="10"
-                :ry="10"
-                :height="item.value * 1.5"
+                width="12"
+                :rx="8"
+                :ry="8"
+                :height="item.value"
                 :style="`
                     fill: ${item.color}
                   `"

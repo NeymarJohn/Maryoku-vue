@@ -3,7 +3,6 @@
     <md-autocomplete
       v-model="selectedLocation"
       :md-options="locations"
-      :md-input-placeholder="placeholder"
       class="location"
       :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
     ></md-autocomplete>
@@ -45,15 +44,10 @@ export default {
     };
   },
   methods: {
-    init(){
-       this.locationService = new google.maps.places.AutocompleteService();
-       this.geocoder = new google.maps.Geocoder();
-    },
     handleInput(e) {
       this.$emit("input", this.content);
     },
     addressSuggestions(predictions, status) {
-      console.log('addressSuggestions', predictions, status);
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         return;
       }
@@ -70,20 +64,18 @@ export default {
     },
   },
   mounted() {
-    console.log('location.mounted')
-    this.init();
+    this.locationService = new google.maps.places.AutocompleteService();
+    this.geocoder = new google.maps.Geocoder();
   },
   watch: {
     content: function (newValue) {
       this.$emit("input", this.content);
     },
     selectedLocation: function (newValue) {
-      console.log('selectedLocation', newValue);
       if (newValue.length < 3) {
         // this.locations = [];
         return;
       }
-      this.init();
       this.$emit("input", newValue);
       const locationObject = this.places.find((item) => item.name === newValue);
       this.$emit("change", locationObject);

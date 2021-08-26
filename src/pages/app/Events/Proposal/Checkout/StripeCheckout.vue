@@ -19,11 +19,15 @@ export default {
     StripeCheckout,
   },
   props: {
+    proposal:{
+      type: Object,
+      required: true,
+    },
     price: {
       type: Object,
       default: () => {},
     },
-    nonMaryoku: {
+    successURL: {
       type: Boolean,
       default: false,
     }
@@ -33,9 +37,8 @@ export default {
   },
   data() {
     this.publishableKey = process.env.STRIPE_PK;
-    let link =  this.$router.resolve({
-          name: 'OfferVendors',
-      });
+
+    console.log('success.link', this.nonMaryoku, link.href, `${window.location.href}?checkout=success`);
     return {
       loading: false,
       lineItems: [
@@ -44,7 +47,6 @@ export default {
           quantity: 1,
         },
       ],
-      successURL: this.nonMaryoku ? link.href : `${window.location.href}?checkout=success`,
       cancelURL: `${window.location.href}?checkout=cancel`,
     };
   },

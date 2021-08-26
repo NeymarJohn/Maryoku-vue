@@ -631,7 +631,7 @@ let others = {
 };
 
 let offerVendorsPage = {
-    path: "/offervendors",
+    path: "/offervendors/:proposalId",
     name: "OfferVendors",
     component: OfferVendors,
     meta: {

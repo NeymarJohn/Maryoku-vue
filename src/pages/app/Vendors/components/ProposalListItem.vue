@@ -57,7 +57,7 @@
               Download
             </span>
           </md-menu-item>
-            <md-menu-item v-if="proposal.nonMaryoku" @click="edit(proposalStatus.share)" class="md-purple">
+            <md-menu-item @click="edit(proposalStatus.share)" class="md-purple">
             <span>
               <img :src="`${$iconURL}Share/link-dark.svg`" class="label-icon mr-10" />
               Copy Link

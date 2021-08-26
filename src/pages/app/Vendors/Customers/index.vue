@@ -8,7 +8,7 @@
     </div>
     <div class="customer-table pl-50">
       <div class="md-layout mt-10">
-        <div class="md-layout-item md-size-65 pr-30 d-flex flex-column">
+        <div class="md-layout-item md-size-70 pr-30 d-flex flex-column">
           <div class="filter-bar mt-30 mb-20">
             <md-button
               v-for="tab in customerTabs"
@@ -16,7 +16,7 @@
               class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
               @click="selectTab(tab.value)"
             >
-              <div class="d-flex align-center px-20 pt-10 pb-10 font-size-16" :class="tab.class">
+              <div class="d-flex align-center px-30 py-10 font-size-16" :class="tab.class">
                 <img
                     class="mr-10"
                     :src="`${$iconURL}${tab.icon}`"
@@ -31,16 +31,21 @@
           <div class="sort-bar px-40">
             <span
               v-for="it in customerHeaders"
-              class="sort-item font-size-18"
+              class="sort-item font-size-16"
             >
               {{ it.title }}
+<!--              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">-->
+<!--                {{ sortFields["order"] == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon-->
+<!--              >-->
+<!--              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] != it.key" class="color-black-middle">-->
+<!--                keyboard_arrow_down-->
+<!--              </md-icon>-->
             </span>
           </div>
-
           <div v-if="!loading">
-              <div class="md-20 customer-list">
-                  <template v-for="(object, key) in customerObject">
-                      <div class="customer-mark font-size-24 font-bold-extra mb-1">{{object.group.toUpperCase()}}</div>
+            <div class="md-20 customer-list">
+              <template v-for="(object, key) in customerObject">
+                  <div class="customer-mark font-size-20 font-bold-extra mb-1">{{object.group.toUpperCase()}}</div>
 
                       <customer-list-item
                           v-for="customer in object.children"
@@ -53,18 +58,18 @@
                           @click="selectCustomer(customer)"
                       ></customer-list-item>
 
-                  </template>
-              </div>
+              </template>
+            </div>
           </div>
           <div v-if="customers.length < 2" class="my-auto d-flex flex-column align-center">
-              <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px"/>
-              <p class="text-transform-uppercase font-size-14">No More CUSTOMERS To Show</p>
-              <md-button class="md-vendor" @click="createNewCustomer">Add New CUSTOMERS</md-button>
+            <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px"/>
+            <p class="text-transform-uppercase font-size-14">No More CUSTOMERS To Show</p>
+            <md-button class="md-vendor" @click="createNewCustomer">Add New CUSTOMERS</md-button>
           </div>
-
         </div>
-        <div class="md-layout-item md-size-35 mt-30">
+        <div class="md-layout-item md-size-30 mt-30">
           <insight
+            v-if="customers.length"
             :customer="selectedCustomer"
             :average="averagePrice"
           ></insight>
@@ -82,7 +87,6 @@
           <template slot="body">
               <customer-form
                   :customer="selectedCustomer"
-                  :action="customerAction"
                   @save="saveCustomer" @close="showNewCustomerModal = false" />
           </template>
       </modal>
@@ -164,7 +168,6 @@ export default {
         page: 0,
         limit: 6,
       },
-      customerAction: 'create',
       sortFields: { sort: "", order: "" },
     };
   },
@@ -207,7 +210,6 @@ export default {
 
     handleCustomer(customer, action) {
         if(action === this.customerStatus.edit){
-            this.customerAction = 'edit';
             this.selectedCustomer = customer;
             this.showNewCustomerModal = true;
         } else if(action === this.customerStatus.download) {
@@ -245,7 +247,6 @@ export default {
 
     },
     createNewCustomer() {
-      this.customerAction = 'create';
       this.showNewCustomerModal = true;
     },
     async saveCustomer(customer){
@@ -308,7 +309,7 @@ export default {
         let transactionProposals = 0;
         let costPerCustomer = c.proposals.reduce((cost, p)=> {
             transactionProposals ++;
-            return p.transactions && p.transactions.length ? cost + p.transactions[0].cost / 100 : cost;
+            return p.transactions && p.transactions.length ? cost + p.transactions[0].cost : cost;
         }, 0)
         averageTotal += costPerCustomer / transactionProposals
       })
