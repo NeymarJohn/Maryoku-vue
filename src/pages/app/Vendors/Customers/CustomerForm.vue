@@ -11,59 +11,60 @@
             <h3 class="font-size-24 font-bold-extra m-0">Customer Details</h3>
             <p class="font-size-14">You can input the information by clicking on it</p>
             <div class="md-layout">
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20">
+                <div class="md-layout-item pl-0 md-size-45 mt-30">
                     <label>Company Name</label>
-                    <md-input
-                        class="form-input"
-                        v-model="customerModel.companyName"
-                    ></md-input>
-                </md-field>
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20 ml-auto">
-                    <label>EIN:</label>
-                    <md-input
-                        class="form-input"
-                        v-model="customerModel.ein"
-                    ></md-input>
-                </md-field>
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20">
-                    <label>Address</label>
-                    <md-input
-                        class="form-input"
-                        v-model="customerModel.address"
-                    ></md-input>
-                </md-field>
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20 ml-auto">
-                    <label>Country</label>
-                    <md-input
-                        class="form-input"
-                        v-model="customerModel.country"
-                    ></md-input>
-                </md-field>
-                <md-field class="md-layout-item pl-0 md-size-100 mt-20">
+                    <maryoku-input
+                        class="mt-5 form-input"
+                        placeholder="Type the company name here..."
+                        v-model="customerModel.companyName"></maryoku-input>
+                </div>
+                <div class="md-layout-item pl-0 md-size-45 mt-30 ml-auto">
                     <label>Contact Name</label>
-                    <md-input
-                        class="form-input"
+                    <maryoku-input
+                        placeholder="Type the contact name here..."
+                        class="mt-5 form-input"
                         v-model="customerModel.name"
-                    ></md-input>
-                </md-field>
-                <md-field class="md-layout-item pl-0 md-size-100 mt-20">
-                    <label>Phone</label>
-                    <md-input
-                        class="form-input"
+                    ></maryoku-input>
+                </div>
+                <div class="md-layout-item pl-0 md-size-45 mt-30">
+                    <label>Location</label>
+                    <location-input
+                        class="mt-5"
+                        placeholder="Type the location here..."
+                        :value="customerModel.location"
+                        v-model="customerModel.location">
+                    </location-input>
+                </div>
+                <div class="md-layout-item pl-0 md-size-45 mt-30 ml-auto">
+                    <label>EIN:</label>
+                    <maryoku-input
+                        placeholder="Type the EIN here..."
+                        class="mt-5 form-input"
+                        v-model="customerModel.ein"></maryoku-input>
+                </div>
+
+                <div class="md-layout-item pl-0 md-size-100 mt-30">
+                    <label>Phone Number</label>
+                    <maryoku-input
+                        inputStyle="phone"
+                        placeholder="Type the phone number here..."
+                        class="mt-5"
                         v-model="customerModel.phone"
-                    ></md-input>
-                </md-field>
-                <md-field class="md-layout-item pl-0 md-size-100 mt-20">
+                    ></maryoku-input>
+                </div>
+                <div class="md-layout-item pl-0 md-size-100 mt-30">
                     <label>Email:</label>
-                    <md-input
-                        class="form-input"
+                    <maryoku-input
+                        class="mt-5"
+                        inputStyle="email"
                         data-vv-name="email"
+                        placeholder="Type the email address here..."
                         v-validate="'required|email'"
                         v-model="customerModel.email"
-                    ></md-input>
-                </md-field>
+                    ></maryoku-input>
+                </div>
                 <div class="md-error color-red font-size-14" v-if="errors.has('email')">{{ errors.first('email') }}</div>
-                <div class="d-flex align-center mt-20 width-100">
+                <div class="d-flex align-center mt-30 width-100">
                     <md-button class="md-simple md-black ml-auto mr-20" @click="$emit('close')">Cancel</md-button>
                     <md-button class="md-vendor" @click="save">Save Changes</md-button>
                 </div>
@@ -72,7 +73,7 @@
     </div>
 </template>
 <script>
-    import { Loader, Modal, MaryokuInput } from "@/components";
+    import { Loader, Modal, MaryokuInput, LocationInput } from "@/components";
     import { postReq, getReq } from "@/utils/token";
     import {Validator} from "vee-validate";
 
@@ -80,22 +81,26 @@
         components: {
             Loader,
             Modal,
-            MaryokuInput
+            MaryokuInput,
+            LocationInput,
         },
         props:{
             customer:{
                 type: Object,
                 default: null,
+            },
+            action:{
+                type: String,
+                default: 'create',
             }
         },
         data(){
             return {
                 showBookedVendorModal: true,
-                customerModel: this.customer ? this.customer : {
+                customerModel: this.action === 'edit' ? this.customer : {
                     companyName: null,
                     ein: null,
-                    address : null,
-                    country: null,
+                    location : null,
                     name: null,
                     phone: null,
                     email: null,
@@ -121,6 +126,10 @@
             });
         },
         methods:{
+            changeAddress(address){
+                console.log('changeAddress', address);
+                this.customerModel.location = address;
+            },
             save(){
                 this.$validator.validateAll().then((isValid) => {
                     if (isValid) {

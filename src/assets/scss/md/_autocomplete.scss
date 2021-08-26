@@ -1,3 +1,6 @@
+.md-menu-content{
+    z-index: 1000;
+}
 .md-menu-content:not(.md-select-menu) .md-menu-content-container .md-list {
   .md-list-item {
     margin: 0 .3125rem;
@@ -14,14 +17,14 @@
           @include shadow-big-color($vendorColor);
         }
       }
-      
+
     }
     .md-list-item-button {
       background-color: transparent;
       color: $gray-dark !important;
       border-radius: 3px;
 
-      
+
       &:hover {
         background-color: $brand-primary !important;
         @include shadow-big-color($brand-primary);
