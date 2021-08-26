@@ -96,6 +96,7 @@ const actions = {
   saveMainRequirements({ commit, state }, { event, category, requirements }) {
     let originalRequirements = state.requirements[category];
     if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
+    // originalRequirements.mainRequirements = requirements
     originalRequirements = { ...originalRequirements, ...requirements }
     return new Promise((resolve, reject) => {
       new ProposalRequestRequirement(originalRequirements)

@@ -1,8 +1,7 @@
 <template>
   <div class="customer-list-item mb-20">
 
-<!--    <div>-->
-        <div class="customer-group-item white-card cursor-pointer" @click="select">
+      <div class="customer-group-item white-card cursor-pointer" @click="select">
             <div class="avatar bg-white color-blue mr-40">
                 {{customer.name.charAt(0).toUpperCase()}}{{customer.companyName.charAt(0).toUpperCase()}}
             </div>
@@ -46,7 +45,7 @@
                 </md-menu>
             </div>
         </div>
-<!--    </div>-->
+
       <fade-transition v-if="isToggle">
           <div>
               <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
@@ -200,7 +199,7 @@ export default {
 
 }
 .customer-group-item {
-  padding: 20px 40px;
+  padding: 25px 40px;
   display: grid;
   align-items: center;
   text-align: left;

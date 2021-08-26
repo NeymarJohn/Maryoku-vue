@@ -25,7 +25,13 @@
         v-for="(proposalRequest, idx) in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
-        :hasNegotiation="!!(proposalRequest.proposal && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.filter(it => it.status == 0).length)"
+        :hasNegotiation="
+          !!(
+            proposalRequest.proposal &&
+            proposalRequest.proposal.negotiations &&
+            proposalRequest.proposal.negotiations.filter((it) => it.status == 0).length
+          )
+        "
         @handle="handleRequestCard(idx)"
         @dismiss="dismiss"
       >
@@ -99,7 +105,9 @@
               <proposal-list-item
                 v-for="proposal in proposals"
                 :proposal="proposal"
-                :hasNegotiation="!!(proposal.negotiations && proposal.negotiations.filter(it => it.status == 0).length)"
+                :hasNegotiation="
+                  !!(proposal.negotiations && proposal.negotiations.filter((it) => it.status == 0).length)
+                "
                 :key="proposal.id"
                 class="row"
                 @action="handleProposal"
@@ -113,10 +121,7 @@
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-          <insight
-            :total="pagination.total"
-            :won="pagination.won"
-          ></insight>
+          <insight v-if="!loading" :total="pagination.total" :won="pagination.won"></insight>
         </div>
       </div>
       <div class="md-layout">
@@ -135,41 +140,64 @@
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
       <template slot="body">
-        <proposal-content
-            :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
+        <proposal-content :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header">
         <div class="border-right font-bold-extra text-center pr-10 mr-10">
-          <div v-if="selectedProposalRequest.eventData.concept">{{selectedProposalRequest.eventData.concept.name}}</div>
-          <div v-else-if="selectedProposalRequest.eventData.title">{{selectedProposalRequest.eventData.title}}</div>
-          <div v-else >New Event</div>
+          <div v-if="selectedProposalRequest.eventData.concept">
+            {{ selectedProposalRequest.eventData.concept.name }}
+          </div>
+          <div v-else-if="selectedProposalRequest.eventData.title">{{ selectedProposalRequest.eventData.title }}</div>
+          <div v-else>New Event</div>
         </div>
 
-        <div class="border-right font-bold-extra text-center pr-10 mr-10">{{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}</div>
-        <div class="text-center font-bold-extra">
-            $ {{ (selectedProposalRequest.proposal ? selectedProposalRequest.proposal.cost :
-            selectedProposalRequest.componentInstance.allocatedBudget) | withComma }}
+        <div class="border-right font-bold-extra text-center pr-10 mr-10">
+          {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
         </div>
-        <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
-           @click="showRequestNegotiationModal=false"><md-icon>close</md-icon></md-button>
+        <div class="text-center font-bold-extra">
+          $
+          {{
+            (selectedProposalRequest.proposal
+              ? selectedProposalRequest.proposal.cost
+              : selectedProposalRequest.componentInstance.allocatedBudget) | withComma
+          }}
+        </div>
+        <md-button
+          class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
+          @click="showRequestNegotiationModal = false"
+          ><md-icon>close</md-icon></md-button
+        >
       </template>
       <template slot="body">
-          <negotiation-request
-              :expiredTime="expiredTime"
-              :processed="negotiationProcessed"
-              @close="showRequestNegotiationModal = false" />
+        <negotiation-request
+          :expiredTime="expiredTime"
+          :processed="negotiationProcessed"
+          @close="showRequestNegotiationModal = false"
+        />
       </template>
       <template slot="footer">
-          <md-button v-if="negotiationProcessed === 0" class="md-simple md-vendor-text md-black p-0"
-                     @click="handleNegotiation(negotiationRequestStatus.decline)">Decline</md-button>
-          <md-button class="md-simple md-outlined md-vendor ml-auto"
-                     @click="handleNegotiation(negotiationRequestStatus.review)">Review proposal</md-button>
-          <md-button v-if="negotiationProcessed === 0" class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.approve)">Approve</md-button>
-          <md-button v-else class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
+        <md-button
+          v-if="negotiationProcessed === 0"
+          class="md-simple md-vendor-text md-black p-0"
+          @click="handleNegotiation(negotiationRequestStatus.decline)"
+          >Decline</md-button
+        >
+        <md-button
+          class="md-simple md-outlined md-vendor ml-auto"
+          @click="handleNegotiation(negotiationRequestStatus.review)"
+          >Review proposal</md-button
+        >
+        <md-button
+          v-if="negotiationProcessed === 0"
+          class="md-vendor ml-10"
+          @click="handleNegotiation(negotiationRequestStatus.approve)"
+          >Approve</md-button
+        >
+        <md-button v-else class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.done)"
+          >Done</md-button
+        >
       </template>
     </modal>
     <ShareProposal
@@ -244,13 +272,13 @@ export default {
       selectedProposalRequest: null,
 
       showRequestNegotiationModal: false,
-      negotiationRequestStatus:{
+      negotiationRequestStatus: {
         review: 0,
         approve: 1,
         decline: 2,
-        done: 3
+        done: 3,
       },
-      proposalStatus:{
+      proposalStatus: {
         show: 0,
         edit: 1,
         download: 2,
@@ -285,11 +313,11 @@ export default {
     async getProposal() {
       const { pagination } = this;
       const params = { status: this.tab, ...this.sortFields };
-        const data = await this.$store.dispatch("vendorDashboard/getProposals", {
-            vendorId: this.vendorData.id,
-            pagination,
-            params
-       });
+      const data = await this.$store.dispatch("vendorDashboard/getProposals", {
+        vendorId: this.vendorData.id,
+        pagination,
+        params,
+      });
 
       this.pagination.total = data.total;
       this.proposalTabs.map((t) => {
@@ -335,11 +363,9 @@ export default {
 
       if (action === this.proposalStatus.show) {
         this.showProposalDetail = true;
-
       } else if (action === this.proposalStatus.edit) {
-
         let routeData = this.$router.resolve({
-          name: this.selectedProposal.nonMaryoku ? 'outsideProposalEdit' : 'proposalEdit',
+          name: this.selectedProposal.nonMaryoku ? "outsideProposalEdit" : "proposalEdit",
           params: {
             vendorId: this.selectedProposal.vendor.id,
             id: this.selectedProposal.nonMaryoku ? this.selectedProposal.id : this.selectedProposal.proposalRequest.id,
@@ -348,7 +374,6 @@ export default {
         });
         this.openNewTab(routeData.href);
       } else if (action === this.proposalStatus.delete) {
-
         this.loading = true;
         const proposal = await Proposal.find(id);
         await proposal.delete();
@@ -357,66 +382,72 @@ export default {
 
         this.loading = false;
       } else if (action === this.proposalStatus.download) {
-
         this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       } else if (action === this.proposalStatus.share) {
         this.showShareProposalModal = true;
-      } else if(action === this.proposalStatus.negotiation) {
-        this.selectedProposalRequest = this.proposalRequests.find(it => it.proposal && it.proposal.id === id);
+      } else if (action === this.proposalStatus.negotiation) {
+        this.selectedProposalRequest = this.proposalRequests.find((it) => it.proposal && it.proposal.id === id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NONE;
       }
     },
-    handleRequestCard(idx){
-      console.log('handleRequestCard', idx);
+    handleRequestCard(idx) {
+      console.log("handleRequestCard", idx);
       let proposalRequest = this.proposalRequests[idx];
-      if(proposalRequest.proposal && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length){
-          this.selectedProposalRequest = proposalRequest;
-          this.showRequestNegotiationModal = true;
-          this.negotiationProcessed = NONE;
+      if (
+        proposalRequest.proposal &&
+        proposalRequest.proposal.negotiations &&
+        proposalRequest.proposal.negotiations.length
+      ) {
+        this.selectedProposalRequest = proposalRequest;
+        this.showRequestNegotiationModal = true;
+        this.negotiationProcessed = NONE;
       } else {
-          let params = proposalRequest.proposal ? {id: proposalRequest.id, type: 'edit'} : {rfpId: proposalRequest.id}
-          let routeData = this.$router.resolve({
-              name: proposalRequest.proposal ? 'proposalEdit' : 'VendorProposal',
-              params: {...params, vendorId: this.vendorData.id},
-          });
-          this.openNewTab(routeData.href);
+        let params = proposalRequest.proposal
+          ? { id: proposalRequest.id, type: "edit" }
+          : { rfpId: proposalRequest.id };
+        let routeData = this.$router.resolve({
+          name: proposalRequest.proposal ? "proposalEdit" : "VendorProposal",
+          params: { ...params, vendorId: this.vendorData.id },
+        });
+        this.openNewTab(routeData.href);
       }
     },
-    async handleNegotiation(status){
-      if(status === this.negotiationRequestStatus.review) {
+    async handleNegotiation(status) {
+      if (status === this.negotiationRequestStatus.review) {
         this.showRequestNegotiationModal = false;
-        this.selectedProposal = this.proposals.find(p => p.id === this.selectedProposalRequest.proposal.id);
+        this.selectedProposal = this.proposals.find((p) => p.id === this.selectedProposalRequest.proposal.id);
         this.showProposalDetail = true;
-
-      } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
-        let expiredTime = this.selectedProposalRequest.expiredTime -
-            (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
+      } else if (status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline) {
+        let expiredTime =
+          this.selectedProposalRequest.expiredTime -
+          (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
 
         new ProposalNegotiationRequest({
           id: this.selectedProposalRequest.proposal.negotiations[0].id,
           expiredTime,
-          status
+          status,
         })
-        .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
-        .save()
-        .then(async res => {
-            let proposal = this.proposals.find(it => it.id === this.selectedProposalRequest.proposal.id);
+          .for(new Proposal({ id: this.selectedProposalRequest.proposal.id }))
+          .save()
+          .then(async (res) => {
+            let proposal = this.proposals.find((it) => it.id === this.selectedProposalRequest.proposal.id);
             proposal.negotiations[0] = res;
             this.selectedProposalRequest.proposal.negotiations[0] = res;
 
-            if(status === this.negotiationRequestStatus.decline) this.selectedProposalRequest.expiredTime = expiredTime;
-            if(status === this.negotiationRequestStatus.approve) proposal.expiredDate = new Date(expiredTime);
+            if (status === this.negotiationRequestStatus.decline)
+              this.selectedProposalRequest.expiredTime = expiredTime;
+            if (status === this.negotiationRequestStatus.approve) proposal.expiredDate = new Date(expiredTime);
 
             this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
             this.$store.commit("vendorDashboard/setProposal", proposal);
-            if(status === this.negotiationRequestStatus.decline){
-                this.negotiationProcessed = DECLINED
+            if (status === this.negotiationRequestStatus.decline) {
+              this.negotiationProcessed = DECLINED;
             } else {
-                this.negotiationProcessed = APPROVED;
+              this.negotiationProcessed = APPROVED;
             }
-        })
-      } else if(status === this.negotiationRequestStatus.done) {
+          });
+      } else if (status === this.negotiationRequestStatus.done) {
         this.showRequestNegotiationModal = false;
         this.negotiationProcessed = NONE;
       }
@@ -469,14 +500,14 @@ export default {
     shareProposal() {
       this.showShareProposalModal = false;
       this.$http
-          .post(
-              `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
-              {},
-              { headers: this.$auth.getAuthHeader() },
-          )
-          .then((res) => {
-            console.log('shareProposal', res);
-          });
+        .post(
+          `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
+          {},
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          console.log("shareProposal", res);
+        });
     },
     async init() {
       await this.getProposal();
@@ -487,42 +518,46 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
-    customerEmail(){
-      if(!this.selectedProposal) return null;
-      return this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData.customer.email :
-          this.selectedProposal.proposalRequest.eventData.owner.emailAddress
+    customerEmail() {
+      if (!this.selectedProposal) return null;
+      return this.selectedProposal.nonMaryoku
+        ? this.selectedProposal.eventData.customer.email
+        : this.selectedProposal.proposalRequest.eventData.owner.emailAddress;
     },
-    proposalLink(){
-      if(!this.selectedProposal) return null;
-      return this.selectedProposal.nonMaryoku ?
-          `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}` :
-          `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequestId}/form/edit`;
+    proposalLink() {
+      if (!this.selectedProposal) return null;
+      return this.selectedProposal.nonMaryoku
+        ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+        : `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequestId}/form/edit`;
+      return `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`;
     },
-    proposalRequests(){
+    proposalRequests() {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
       return proposalRequests.filter((p) => {
-          return p.proposal
-              ? p.declineMessage !== "decline" && p.proposal.status !== 'submit' && p.remainingTime > 0 ||
-              p.proposal.status === 'submit' && p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0 && it.remainingTime > 0).length
-              : p.remainingTime > 0 && p.declineMessage !== "decline";
+        return p.proposal
+          ? (p.declineMessage !== "decline" && p.proposal.status !== "submit" && p.remainingTime > 0) ||
+              (p.proposal.status === "submit" &&
+                p.proposal.negotiations &&
+                p.proposal.negotiations.filter((it) => it.status == 0 && it.remainingTime > 0).length)
+          : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },
-    proposals(){
+    proposals() {
       return this.$store.state.vendorDashboard.proposals;
     },
-    expiredTime(){
-      if(!this.selectedProposalRequest) return null;
-      if(this.negotiationProcessed === NONE || this.negotiationProcessed === DECLINED){
-          return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime()
-      } else if(this.negotiationProcessed === APPROVED) {
-          return this.selectedProposalRequest.expiredTime;
+    expiredTime() {
+      if (!this.selectedProposalRequest) return null;
+      if (this.negotiationProcessed === NONE || this.negotiationProcessed === DECLINED) {
+        return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime();
+      } else if (this.negotiationProcessed === APPROVED) {
+        return this.selectedProposalRequest.expiredTime;
       }
     },
   },
   watch: {
-    proposalRequests(newVal){
-      console.log('proposalRequests.watch', newVal);
-    }
+    proposalRequests(newVal) {
+      console.log("proposalRequests.watch", newVal);
+    },
   },
   updated() {
     // remove empty item in proposal-request carousel
@@ -582,8 +617,8 @@ export default {
       height: 20px;
     }
   }
-  .border-right{
-   border-right: 1px solid #050505;
+  .border-right {
+    border-right: 1px solid #050505;
   }
 }
 </style>

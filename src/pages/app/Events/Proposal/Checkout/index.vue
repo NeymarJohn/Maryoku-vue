@@ -238,8 +238,7 @@
           <stripe-checkout
               v-if="showStripeCheckout"
               :price="stripePriceData"
-              :proposal="proposal"
-              :successURL="successURL"
+              :non-maryoku="pageType === VENDOR && proposal.nonMaryoku"
           ></stripe-checkout>
           <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>
@@ -288,27 +287,20 @@ export default {
       onDayCordinator: false,
       feePercentail: 3.2,
       pageType: VENDOR,
-      successURL: null,
     };
   },
   async created() {
-
     if (this.$route.params.hasOwnProperty("proposalId")) {
       const proposalId = this.$route.params.proposalId;
       this.proposal = await Proposal.find(proposalId);
       this.vendor = this.proposal.vendor;
       this.pageType = VENDOR;
-
-      this.successURL = this.proposal.nonMaryoku ?
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}` :
-          `${window.location.href}?checkout=success`
-
     } else if (this.$route.params.hasOwnProperty("eventId")) {
       const eventId = this.$route.params.eventId;
       this.cart = await this.getCartItems(eventId);
       this.pageType = CART;
     }
-    console.log("checkout.proposal", this.successURL);
+    console.log("checkout.proposal", this.proposal);
     this.loading = false;
 
     if (this.$route.query.checkout === "success") {
