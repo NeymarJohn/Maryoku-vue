@@ -354,9 +354,10 @@ export default {
         id,
         declineMessage: "decline",
       }).save();
-      this.proposalRequests = this.proposalRequests.filter((p) => {
+      let proposalRequests = this.proposalRequests.filter((p) => {
         return p.id !== id;
       });
+      await this.$store.commit('vendorDashboard/setProposalRequests', proposalRequests);
     },
     async handleProposal(action, id) {
       this.selectedProposal = this.proposals.find((it) => it.id == id);
