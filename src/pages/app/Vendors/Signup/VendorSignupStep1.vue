@@ -40,7 +40,7 @@
               <div class="title-cont">
                 <div class="top">
                   <h5>
-                    <img :src="`${getCategoryIconbyValue(vendor.vendorCategory)}`" style="width: 32px"/>
+                    <img :src="`${iconUrl}Asset 543.svg`" />
                     about your {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </h5>
                 </div>
@@ -270,7 +270,6 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import { Drop } from "vue-drag-drop";
-import { VendorCategories } from "@/constants/vendor";
 
 //COMPONENTS
 import VendorServiceItem from "../components/VendorServiceItem.vue";
@@ -505,9 +504,6 @@ export default {
     getCategoryNameByValue(value) {
       return this.categoryNames.filter((c) => c.value == value)[0].name;
     },
-    getCategoryIconbyValue(value){
-      return VendorCategories.find(it => it.value === value).icon;
-    },
     checkBlank(e) {
       if (!e.target.value || !this.reg.test(e.target.value)) {
         e.target.style.border = "1px solid #ff0000";
@@ -548,7 +544,6 @@ export default {
   },
   filters: {},
   created() {
-    console.log('step2.created');
     this.$store.dispatch("vendorSignup/checkImages");
     // refactoring vendor data in vuex
     const vendorData = Object.assign({}, this.vendor);

@@ -253,20 +253,6 @@ export default {
       if (!this.isLoading) {
         this.isLoading = true;
 
-        if(!this.customer){
-          let newCustomer =  await this.$store.dispatch("vendorProposal/saveCustomer", {
-            name: this.event.owner.displayName,
-            companyName: this.event.owner.company,
-            email: this.event.owner.emailAddress,
-            vendorId: this.proposalRequest.vendorId,
-            phone: null,
-            ein: null,
-            country: null,
-            type: 0
-          });
-          console.log('saveCustomer', newCustomer);
-        }
-
         let proposal = await this.saveProposal(type);
         this.isUpdating = false;
         this.isLoading = false;
