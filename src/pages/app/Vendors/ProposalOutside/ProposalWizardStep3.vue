@@ -8,7 +8,7 @@
           :dots="false"
           :nav="false"
           class="header-carousel"
-          :key="`carousel-${coverImage.length}`"
+          :key="`carousel-${vendor.images.length}`"
         >
           <template slot="prev">
             <span class="prev handle-btn">
@@ -17,11 +17,11 @@
           </template>
           <img
             :src="item"
-            v-for="(item, index) in coverImage"
+            v-for="(item, index) in vendor.images.filter((it) => !!it)"
             :key="`carousel-item-${index}`"
             class="carousel-image"
           />
-          <template slot="next" v-if="coverImage.length > 1">
+          <template slot="next" v-if="vendor.images.length > 1">
             <span class="next handle-btn">
               <md-icon>keyboard_arrow_right</md-icon>
             </span>
@@ -551,8 +551,7 @@ export default {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
     async onFileChange(event) {
-      let image = await getBase64(event.target.files[0]);
-      this.coverImage = [image, ...this.coverImage];
+      this.coverImage = await getBase64(event.target.files[0]);
     },
     addNewAttachment(file) {
       S3Service.fileUpload(file, file.name, `${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}`).then((res) => {

@@ -302,3 +302,15 @@
         max-width: 500px;
     }
 }
+
+.guest-signup{
+    .modal-header{
+        padding: 0;
+    }
+    .modal-body{
+      padding: 0;
+    }
+    .modal-footer{
+        padding: 0;
+    }
+}

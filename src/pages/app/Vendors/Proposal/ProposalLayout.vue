@@ -175,19 +175,14 @@ export default {
     }
 
     this.event = this.proposalRequest.eventData;
-
+    // await this.$store.dispatch('vendorProposal/getCustomers', this.proposalRequest.vendorId)
+    await this.$store.dispatch('vendorProposal/getCustomer', this.event.owner.emailAddress)
     this.$store.commit("vendorProposal/setWizardStep", 0);
     this.$store.commit("vendorProposal/setInitStep", 0);
     if (this.proposalRequest.proposal) {
       this.$store.commit("vendorProposal/setValue", {
           key: "suggestionDate",
           value: this.proposalRequest.proposal.suggestionDate,
-      });
-    }
-    if (!this.$store.state.vendorProposal.coverImage.length){
-      this.$store.commit("vendorProposal/setValue", {
-        key: "coverImage",
-        value: this.vendor.images,
       });
     }
   },

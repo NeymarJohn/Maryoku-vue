@@ -367,8 +367,6 @@ export default {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
     headerBackgroundImage() {
-      if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0])
-        return this.vendorProposal.coverImage[0];
       if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
         return this.vendorProposal.inspirationalPhotos[0].url;
       if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])

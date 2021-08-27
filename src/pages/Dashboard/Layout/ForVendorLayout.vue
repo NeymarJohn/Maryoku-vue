@@ -114,8 +114,6 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
 
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";

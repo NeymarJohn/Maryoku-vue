@@ -65,7 +65,6 @@
         </div>
         <div class="md-layout-item md-size-35 mt-30">
           <insight
-            v-if="renderInsight"
             :customer="selectedCustomer"
             :average="averagePrice"
           ></insight>
@@ -167,8 +166,6 @@ export default {
       },
       customerAction: 'create',
       sortFields: { sort: "", order: "" },
-
-      renderInsight: false,
     };
   },
   async mounted() {
@@ -278,10 +275,6 @@ export default {
     async init() {
       await this.getCustomer();
       this.loading = false;
-
-        this.$nextTick(_ => {
-            this.renderInsight = true
-        })
     },
   },
   computed: {

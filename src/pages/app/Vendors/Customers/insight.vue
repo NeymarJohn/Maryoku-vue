@@ -34,91 +34,71 @@
       <div class="position-absolute" style="right: 0; top: 0;z-index: 100">
         <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="90px" @click="next" />
       </div>
-      <template v-if="customer">
-          <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
-              <template slot="prev">
-                  <span class="prev handle-btn" ref="prevButton"></span>
-              </template>
-              <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
-                  <template v-if="index == 1">
-                      <div class="color-white font-size-20 font-bold-extra text-center mt-30">How to increase Success And Profit</div>
-                      <div class="d-flex align-center w-max-400 mx-auto mt-20">
-                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
-                          <p class="color-white font-size-14">
-                              {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
-                              (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
-                          </p>
-                      </div>
-                      <div class="d-flex align-center w-max-400 mx-auto mt-20">
-                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
-                          <p v-if="wonProposals.length" class="color-white font-size-14">
-                              You most recent transaction with his customer was on
-                              {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}}  if customer don't have any transaction
-                          </p>
-                          <p class="color-white font-size-14" v-else>This will be your first transaction with this customer</p>
-                      </div>
-                      <div class="d-flex align-center w-max-400 mx-auto mt-20">
-                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
-                          <p class="color-white font-size-14">
-                              Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} {{compareWithTotal}} than your average
-                          </p>
-                      </div>
-                      <div class="d-flex my-40">
-                          <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
-                          >Update Your Prices</md-button
-                          >
-                      </div>
-                  </template>
-                  <template v-if="index == 0">
-                      <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
-                      <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
-                      <div class="md-layout my-40">
-                          <div class="md-layout-item font-size-16 color-white md-size-33 text-center">2021
-                              <md-icon style="color: white">keyboard_arrow_down</md-icon>
-                          </div>
-                          <div class="md-layout-item md-size-33 d-flex align-center font-size-16 color-white text-center">
-                              <span :style="`background-color: #ffffff;`" class="icon mr-10"></span>
-                              Past events</div>
-                          <div class="md-layout-item md-size-33 d-flex align-center font-size-16 color-white text-center" style="white-space: nowrap">
-                              <span :style="`background-color: #9b6a92;`" class="icon mr-10"></span>
-                              Future events</div>
-                      </div>
-                  </template>
-                  <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
-
+      <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
+          <template slot="prev">
+            <span class="prev handle-btn" ref="prevButton">
+              <md-icon>keyboard_arrow_left</md-icon>
+            </span>
+          </template>
+        <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+          <template v-if="customer && index == 1">
+                <div class="color-white font-size-20 font-bold-extra text-center mt-30">How to increase Success And Profit</div>
+                <div class="d-flex align-center w-max-400 mx-auto mt-20">
+                    <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                    <p class="color-white font-size-14">
+                        {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
+                        (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
+                    </p>
+                </div>
+                <div class="d-flex align-center w-max-400 mx-auto mt-20">
+                    <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                    <p v-if="wonProposals.length" class="color-white font-size-14">
+                        You most recent transaction with his customer was on
+                        {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}}  if customer don't have any transaction
+                    </p>
+                    <p class="color-white font-size-14" v-else>This will be your first transaction with this customer</p>
+                </div>
+                <div class="d-flex align-center w-max-400 mx-auto mt-20">
+                    <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                    <p class="color-white font-size-14">
+                        Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} {{compareWithTotal}} than your average
+                    </p>
+                </div>
+                <div class="d-flex my-40">
+                    <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
+                    >Update Your Prices</md-button
+                    >
+                </div>
+          </template>
+          <template v-if="index == 0">
+            <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
+            <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+            <div class="md-layout my-40">
+              <div class="md-layout-item font-size-16 color-white" :class="customer ? 'md-size-33 text-center' : 'md-size-50 text-left pl-50'">2021
+                  <md-icon style="color: white">keyboard_arrow_down</md-icon>
               </div>
-              <template slot="next">
-          <span class="next handle-btn d-none" ref="nextButton">
-          </span>
+              <template v-if="customer">
+                  <div class="md-layout-item md-size-33 d-flex align-center font-size-16 color-white text-center">
+                      <span :style="`background-color: #ffffff;`" class="icon ml-15"></span>
+                      Past events</div>
+                  <div class="md-layout-item md-size-33 d-flex align-center font-size-16 color-white text-center">
+                      <span :style="`background-color: #9b6a92;`" class="icon ml-15"></span>
+                      Future events</div>
               </template>
-          </carousel>
-      </template>
-      <template v-else>
-          <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
-              <template slot="prev">
-                  <span class="prev handle-btn" ref="prevButton"></span>
-              </template>
-              <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+              <div v-else class="md-layout-item md-size-50 d-flex align-center font-size-16 color-white text-right pr-50">
+                  <span :style="`background-color: #ffffff;`" class="icon ml-15"></span>
+                  No event incomes</div>
+            </div>
+          </template>
+          <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
 
-                  <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
-                  <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
-                  <div class="md-layout my-40">
-                      <div class="md-layout-item font-size-16 color-white md-size-50 text-left pl-50">2021
-                          <md-icon style="color: white">keyboard_arrow_down</md-icon>
-                      </div>
-                      <div class="md-layout-item md-size-50 d-flex align-center font-size-16 color-white text-right pr-50">
-                          <span :style="`background-color: #ffffff;`" class="icon mr-10"></span>
-                          No event incomes</div>
-                  </div>
-
-                  <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
-              </div>
-              <template slot="next">
+        </div>
+        <template slot="next">
           <span class="next handle-btn d-none" ref="nextButton">
+            <md-icon>keyboard_arrow_right</md-icon>
           </span>
-              </template>
-          </carousel>
-      </template>
+        </template>
+      </carousel>
     </div>
   </div>
 </template>
@@ -182,7 +162,7 @@ export default {
             { label: "Signage & Printing", value: 20, color: "#4e0841", icon: "Budget+Elements/entertainment-white.svg", price: 0 },
         ];
 
-        this.incomeList = this.customer ? ["", ""] : [""];
+        this.incomeList = [""]
     },
     next() {
       this.$refs.nextButton.click();

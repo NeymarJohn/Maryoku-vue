@@ -1,8 +1,9 @@
 <template>
   <div class="non-maryoku-proposal">
     <!-- <planner-header></planner-header> -->
+    <loader :active="loading" :isFullScreen="true"></loader>
     <div class="proposal-header d-flex align-center justify-content-between">
-      <div class="font-size-30">
+      <div class="font-size-30" v-if="proposal">
         <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
         <b>{{ proposal.vendor.eventCategory.fullTitle }}</b>
         {{ proposal.vendor.companyName }}
@@ -92,10 +93,17 @@
         </div>
       </template>
     </modal>
+    <guest-sign-up-modal
+        v-if="showGuestSignupModal"
+        @cancel="showGuestSignupModal = false"
+    >
+    </guest-sign-up-modal>
   </div>
 </template>
 <script>
 import Proposal from "@/models/Proposal";
+import {Loader} from "@/components";
+import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
@@ -107,27 +115,34 @@ export default {
   components: {
     EventProposalDetails,
     CommentEditorPanel,
+    GuestSignUpModal,
     PlannerHeader,
     HeaderActions,
+    Loader,
     Modal,
     EventDetail,
   },
   data() {
     return {
+      loading: true,
       proposal: null,
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
+      showGuestSignupModal: true,
     };
   },
-  created() {
+  async created() {
+
     const proposalId = this.$route.params.proposalId;
-    Proposal.find(proposalId).then((proposal) => {
-      if (!proposal.inspirationalPhotos) proposal.inspirationalPhotos = [];
-      if (!proposal.bundleDiscount.services) proposal.bundleDiscount.services = [];
-      this.proposal = proposal;
-    });
-    this.$store.dispatch("common/getEventTypes");
+    let proposal = await Proposal.find(proposalId);
+    console.log('non-maryoku-proposal.created', proposal);
+
+    if (!proposal.inspirationalPhotos) proposal.inspirationalPhotos = [];
+    if (!proposal.bundleDiscount.services) proposal.bundleDiscount.services = [];
+    this.proposal = proposal;
+    await this.$store.dispatch("common/getEventTypes");
+    this.loading = false;
   },
   methods: {
     bookProposal() {

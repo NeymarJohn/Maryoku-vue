@@ -36,7 +36,7 @@ const state = {
   additionalServices: [],
   attachments: [],
   inspirationalPhotos: new Array(15),
-  coverImage: [],
+  coverImage: "",
   bundleDiscount: {
     isApplied: false,
     services: [],
@@ -191,7 +191,6 @@ const mutations = {
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
     state.wizardStep = proposal.step
-    state.coverImage = proposal.coverImage || []
     state.bookedServices = []
     // state.bookedServices = proposal.bookedServices
   },
@@ -385,7 +384,6 @@ const actions = {
         pricesByCategory: getters.pricesByCategory,
         bundleDiscount: state.bundleDiscount,
         attachments: state.attachments,
-        coverImage: state.coverImage,
         status,
         step: state.wizardStep,
         progress: state.progress,
