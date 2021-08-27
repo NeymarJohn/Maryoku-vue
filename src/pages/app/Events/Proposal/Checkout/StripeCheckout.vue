@@ -28,7 +28,7 @@ export default {
       default: () => {},
     },
     successURL: {
-      type: String,
+      type: Boolean,
       default: false,
     }
   },
@@ -38,6 +38,7 @@ export default {
   data() {
     this.publishableKey = process.env.STRIPE_PK;
 
+    console.log('success.link', this.nonMaryoku, link.href, `${window.location.href}?checkout=success`);
     return {
       loading: false,
       lineItems: [

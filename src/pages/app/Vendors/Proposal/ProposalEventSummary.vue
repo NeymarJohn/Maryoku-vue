@@ -8,7 +8,7 @@
           :dots="false"
           :nav="false"
           class="header-carousel"
-          :key="`carousel-${vendor.images.length}`"
+          :key="`carousel-${coverImage.length}`"
         >
           <template slot="prev">
             <span class="prev handle-btn">
@@ -17,11 +17,11 @@
           </template>
           <img
             :src="item"
-            v-for="(item, index) in vendor.images.filter(it => it !== null)"
+            v-for="(item, index) in coverImage"
             :key="`carousel-item-${index}`"
             class="carousel-image"
           />
-          <template slot="next" v-if="vendor.images.length > 1">
+          <template slot="next" v-if="coverImage.length > 1">
             <span class="next handle-btn">
               <md-icon>keyboard_arrow_right</md-icon>
             </span>
@@ -51,7 +51,7 @@
             </ul>
           </div>
         </div>
-        <md-button class="md-color maryoku-btn change-cover-btn" @click="chooseFiles">
+        <md-button class="maryoku-btn md-vendor change-cover-btn" @click="chooseFiles">
           <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
           <span>Change Cover</span>
         </md-button>
@@ -461,7 +461,8 @@ export default {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
     async onFileChange(event) {
-      this.coverImage = await getBase64(event.target.files[0]);
+        let image = await getBase64(event.target.files[0]);
+        this.coverImage = [image, ...this.coverImage];
     },
     addNewAttachment(file) {
       S3Service.fileUpload(file, file.name, `${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}`).then((res) => {
