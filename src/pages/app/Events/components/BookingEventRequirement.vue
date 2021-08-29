@@ -1,6 +1,14 @@
 <template>
   <div v-if="component" class="booking-event-requirement">
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="booking-header md-layout-item md-size-100">
       <div class="d-flex justify-content-between">
         <div>
@@ -96,6 +104,7 @@ import { Modal, Loader } from "@/components";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -128,6 +137,7 @@ export default {
       default: {},
     },
   },
+  mixins: [CommentMixins],
   data: () => ({
     // auth: auth,
     calendar: null,

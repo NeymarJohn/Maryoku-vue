@@ -127,7 +127,6 @@ import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
 import _ from "underscore";
 import moment from "moment";
-import Swal from "sweetalert2";
 
 export default {
     components: {

@@ -1,7 +1,15 @@
 <template>
   <div class="md-layout event-concept-section booking-section">
     <loader :active="isLoading"/>
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="concept-content" v-if="showConceptList && !isLoading">
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-name">
@@ -262,6 +270,7 @@ import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import ConceptBox from "../../../../components/ConceptBox.vue";
 
@@ -287,6 +296,7 @@ export default {
     VueHtml2pdf,
   },
   props: {},
+  mixins: [CommentMixins],
   computed: {
     ...mapState("event", ["eventData"]),
     currentUser() {

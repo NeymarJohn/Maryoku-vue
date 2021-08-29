@@ -61,7 +61,15 @@
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <modal :containerClass="`modal-container xl`" v-if="showDetailModal">
       <template slot="header">
         <div class="add-category-model__header">
@@ -93,8 +101,22 @@
         </div>
       </template>
     </modal>
+    <modal v-if="showSignupModal" container-class="modal-container offer-vendors bg-white w-max-450">
+      <template slot="body">
+          <sign-in-content
+              :page="page"
+              @signIn="signIn"
+              @signUp="signUp"
+              @changePage="changePage"
+              @authenticate="authenticate"
+          >
+          </sign-in-content>
+      </template>
+    </modal>
     <guest-sign-up-modal
         v-if="showGuestSignupModal"
+        @auth="authenticate"
+        @handle="handleComment"
         @cancel="showGuestSignupModal = false"
     >
     </guest-sign-up-modal>
@@ -106,7 +128,9 @@ import {Loader} from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
+import CommentMixins from "@/mixins/comment"
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
+import { SignInContent } from "@/components";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
@@ -121,11 +145,15 @@ export default {
     Loader,
     Modal,
     EventDetail,
+    SignInContent,
   },
+  mixins: [CommentMixins],
   data() {
     return {
+      page: 'signin',
       loading: true,
       proposal: null,
+      showSignupModal: false,
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
@@ -182,6 +210,36 @@ export default {
     },
     openNewTab(link) {
       window.open(link, "_blank");
+    },
+    handleComment(){
+
+    },
+    authenticate(action){
+       this.showSignupModal = true;
+       this.page = action
+       this.showGuestSignupModal = false;
+    },
+    async signIn({email, password}){
+      await this.$store.dispatch("auth/login", {
+          email,
+          password,
+      })
+      this.showSignupModal = false;
+    },
+    async signUp({email, password, name, company}){
+    await this.$store.dispatch("auth/register", {
+          email,
+          password,
+          name,
+          company,
+          role: 'administrator',
+    });
+    this.showSignupModal = false;
+    await this.$store.dispatch('auth/login', {email, password});
+
+    },
+    changePage(){
+      this.page = this.page === 'signin' ? 'signup' : 'signin';
     },
   },
 };

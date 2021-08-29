@@ -1,7 +1,15 @@
 <template>
   <div class="event-proposal-comparison-panel booking-section">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee" />
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-title">
         <h3>
@@ -145,6 +153,7 @@ import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 import { businessCategories, VendorPolicy } from "@/constants/vendor";
 import { camelize } from "@/utils/string.util";
 export default {
@@ -154,6 +163,7 @@ export default {
     CommentEditorPanel,
     HeaderActions,
   },
+  mixins: [CommentMixins],
   data() {
     return {
       isLoading: false,

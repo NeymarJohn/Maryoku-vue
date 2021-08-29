@@ -406,6 +406,7 @@ import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
@@ -455,6 +456,7 @@ export default {
       default: "red",
     },
   },
+  mixins: [CommentMixins],
   data() {
     return {
       // auth: auth,

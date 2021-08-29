@@ -45,7 +45,7 @@
                       <div class="d-flex align-center w-max-400 mx-auto mt-20">
                           <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
                           <p class="color-white font-size-14">
-                              {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with his customer
+                              {{`You have won ${wonProposals.length} out of ${customer.proposals.length} opportunities with this customer
                               (${Math.floor(wonProposals.length / customer.proposals.length * 100)}% win rate)`}}
                           </p>
                       </div>
@@ -53,14 +53,14 @@
                           <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
                           <p v-if="wonProposals.length" class="color-white font-size-14">
                               You most recent transaction with his customer was on
-                              {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}}  if customer don't have any transaction
+                              {{wonProposals[0].transactions[0].dateCreated | date('MMM DD YYYY')}}
                           </p>
                           <p class="color-white font-size-14" v-else>This will be your first transaction with this customer</p>
                       </div>
                       <div class="d-flex align-center w-max-400 mx-auto mt-20">
                           <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
                           <p class="color-white font-size-14">
-                              Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} {{compareWithTotal}} than your average
+                              Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} ( {{compareWithTotal}} than your average)
                           </p>
                       </div>
                       <div class="d-flex my-40">
