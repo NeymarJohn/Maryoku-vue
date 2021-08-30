@@ -25,7 +25,15 @@
   <div v-else class="md-layout event-budget-section booking-section">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <budget-notifications></budget-notifications>
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="event-page-header">
       <div class="md-layout-item md-size-100 event-header d-flex justify-content-between">
         <div class="header-name" style="width: max-content">
@@ -189,6 +197,7 @@ import RadialProgressBar from "vue-radial-progress";
 
 import CommentEditorPanel from "./CommentEditorPanel";
 import VueElementLoading from "vue-element-loading";
+import CommentMixins from "@/mixins/comment"
 import HeaderActions from "@/components/HeaderActions";
 import EventBudgetRequirementStep1 from "./EventBudgetRequirementStep1";
 import EventBudgetRequirementStep2 from "./EventBudgetRequirementStep2";
@@ -217,6 +226,7 @@ export default {
     PieChartRound,
     VueHtml2pdf
   },
+  mixins: [CommentMixins],
   data() {
     return {
       editingEvent: {},

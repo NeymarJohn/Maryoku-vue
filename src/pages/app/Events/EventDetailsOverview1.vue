@@ -1,6 +1,14 @@
 <template>
   <div class="md-layout event-details-overview edit-event-details" v-if="event">
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="event-details-header md-layout-item md-size-100">
       <div class="event-details-info d-flex justify-content-start">
         <div
@@ -419,7 +427,7 @@
                 <md-button class="md-rose md-simple md-flat btn-outlined">Create Campaign</md-button>
               </div>
             </div>
-            <!-- 
+            <!--
             <div class="campaigns-section">
               <div class="section-title">Campaigns</div>
               <div class="campaigns-section__list">
@@ -614,6 +622,7 @@ import TimeCounter from "./components/TimeCounter";
 import Popup from "../../../components/Popup";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 import vSelect from "vue-select";
 
 export default {
@@ -643,6 +652,7 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
+  mixins: [CommentMixins],
   data() {
     return {
       // auth: auth,

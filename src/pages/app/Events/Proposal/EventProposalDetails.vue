@@ -50,6 +50,7 @@
           <timer-panel
             class="time-counter"
             :target="targetTime"
+            :pending="negotiationPending"
             :approved="negotiationProcessed"
             @updateExpireDate="updateExpireDate"
             :theme="theme"
@@ -402,10 +403,12 @@ import Proposal from "@/models/Proposal";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
 import { GuaranteedOptions } from "@/constants/options";
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
 import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
@@ -455,6 +458,7 @@ export default {
       default: "red",
     },
   },
+  mixins: [CommentMixins],
   data() {
     return {
       // auth: auth,
@@ -652,13 +656,16 @@ export default {
       components: "event/getComponentsList",
     }),
     targetTime() {
-      if (this.vendorProposal.expiredDate) {
-        return new Date(this.vendorProposal.expiredDate);
-      }
-      return new Date(this.vendorProposal.dateCreated + 7 * 3600 * 24 * 1000);
+      return new Date(this.vendorProposal.expiredDate);
     },
     negotiationProcessed(){
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it => it.status === 3)
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+    },
+    negotiationPending(){
+      console.log('negotiationPending', this.vendorProposal);
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.some(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
     },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);

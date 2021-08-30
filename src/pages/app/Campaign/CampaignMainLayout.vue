@@ -1,6 +1,14 @@
 <template>
   <div class="md-layout event-campaign-section booking-section">
-    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
@@ -291,6 +299,7 @@ import { mapActions, mapGetters } from "vuex";
 import { Tabs, Modal } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 const SaveDate = () => import("./SaveDate");
 const Rsvp = () => import("./Rsvp");
 const Countdown = () => import("./Countdown");
@@ -355,6 +364,7 @@ export default {
     FeedbackAnalytics,
     FeedbackList,
   },
+  mixins: [CommentMixins],
   data() {
     return {
       isLoading: false,

@@ -4,7 +4,15 @@
     <!-- todo show event checklist temp-->
     <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
     <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important">
-      <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+        <comment-editor-panel
+            v-if="showCommentEditorPanel"
+            :commentComponents="commentComponents"
+            @saveComment="saveComment"
+            @updateComment="updateComment"
+            @deleteComment="deleteComment"
+            @updateCommentComponent="updateCommentComponent"
+        >
+        </comment-editor-panel>
       <!-- Event Header -->
       <div class="event-header d-flex justify-content-between">
         <div class="header-title">
@@ -277,6 +285,7 @@ import PieChartRound from "./components/PieChartRound.vue";
 import BudgetHandleMinusModal from "../../../components/Modals/BudgetHandleMinusModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 
 import BudgetEditModal from "@/components/Modals/BudgetEditModal";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
@@ -301,7 +310,7 @@ export default {
     AddNewCategoryModal,
     VueHtml2pdf,
   },
-
+  mixins: [CommentMixins],
   data() {
     return {
       // auth: auth,

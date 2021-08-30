@@ -1,7 +1,15 @@
 <template>
   <div class="md-layout booking-section position-relative">
     <template v-if="showProposals">
-      <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+        <comment-editor-panel
+            v-if="showCommentEditorPanel"
+            :commentComponents="commentComponents"
+            @saveComment="saveComment"
+            @updateComment="updateComment"
+            @deleteComment="deleteComment"
+            @updateCommentComponent="updateCommentComponent"
+        >
+        </comment-editor-panel>
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-title">
           <h3>
@@ -171,6 +179,7 @@ import PendingForVendors from "../components/PendingForVendors";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
+import CommentMixins from "@/mixins/comment"
 
 import { postReq, getReq } from "@/utils/token";
 export default {
@@ -189,6 +198,7 @@ export default {
     MaryokuInput,
   },
   props: {},
+  mixins: [CommentMixins],
   data: () => ({
     // auth: auth,
     calender: null,

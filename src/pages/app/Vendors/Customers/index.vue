@@ -84,7 +84,8 @@
               <customer-form
                   :customer="selectedCustomer"
                   :action="customerAction"
-                  @save="saveCustomer" @close="showNewCustomerModal = false" />
+                  @save="saveCustomer"
+                  @close="showNewCustomerModal = false" />
           </template>
       </modal>
   </div>
@@ -94,10 +95,9 @@ import Customer from "@/models/Customer"
 import ProposalListItem from "../components/ProposalListItem.vue";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
-import _ from "underscore";
 const CustomerListItem = () => import("../components/CustomerListItem");
 const ProposalContent = () => import("../components/ProposalDetail");
-const CustomerForm = () => import("./CustomerForm");
+const CustomerForm = () => import("../Form/CustomerForm");
 import { VsaList } from "vue-simple-accordion";
 const Insight = () => import("./insight");
 
