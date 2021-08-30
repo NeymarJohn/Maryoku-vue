@@ -1,14 +1,6 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
-    <comment-editor-panel
-        v-if="showCommentEditorPanel"
-        :commentComponents="commentComponents"
-        @saveComment="saveComment"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent"
-    >
-    </comment-editor-panel>
+    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
@@ -130,6 +122,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
 import { extendMoment } from "moment-range";
@@ -161,7 +154,7 @@ import { timelineBlockItems } from "@/constants/event";
 import TimelineGapModal from "./Modals/TimelineGapModal";
 
 import { timelineTempates } from "@/constants/event.js";
-import CommentMixins from "@/mixins/comment"
+
 import { postReq, getReq } from "@/utils/token";
 export default {
   name: "event-details-timeline",
@@ -191,7 +184,6 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  mixins: [CommentMixins],
   data: () => ({
     // auth: auth,
     editingMode: "template",
@@ -797,7 +789,6 @@ export default {
     },
   },
   created() {
-    console.log('timeline.created');
     [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
     [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
     [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));

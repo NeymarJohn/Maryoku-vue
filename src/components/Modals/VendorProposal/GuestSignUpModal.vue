@@ -25,7 +25,7 @@
                                 class="font-size-18 font-bold-extra color-black ml-5">Terms & Conditions</a>
                         </div></md-checkbox>
                 </div>
-                <md-button class="md-red md-maryoku px-40 mt-20" @click="handle">Continue</md-button>
+                <md-button class="md-red md-maryoku px-40 mt-20">Continue</md-button>
             </div>
 
         </div>
@@ -33,14 +33,11 @@
             <div class="d-flex flex-column align-center py-100">
                 <h2 class="font-size-30 font-bold-extra my-40">Member Login</h2>
                 <md-button class="md-simple md-outlined md-red md-white-back mx-auto py-5 mt-10"
-                           style="width: 250px;background-color: white!important;"
-                           @click="auth('singin')">Sign in</md-button>
+                           style="width: 250px;background-color: white!important;">Sign in</md-button>
                 <div class="line d-flex text-center mt-30 mb-10 py-10">
                    <span class="px-15">Or</span>
                 </div>
-                <md-button class="md-simple md-red py-5"
-                           style="width: 250px"
-                           @click="auth('signup')">Sign Up</md-button>
+                <md-button class="md-simple md-red py-5" style="width: 250px">Sign Up</md-button>
                 <p class="font-size-16">Create a new account, free of charge, to enjoy special offers & discounts!</p>
             </div>
         </div>
@@ -73,12 +70,6 @@ export default {
       this.$emit("cancel");
     },
     addMoreMoney() {},
-    auth(action){
-      this.$emit('auth', action);
-    },
-    handle(){
-      this.$emit('handle', this.name);
-    }
   },
   computed: {
   },

@@ -303,23 +303,23 @@ export default {
           return r;
       }, {})
     },
-    transactionCustomers(){
+    wonCustomers(){
       if(!this.customers.length) return [];
       return this.customers.filter(customer => {
-        return customer.proposals && customer.proposals.length && customer.proposals.some(p => p.transactions && p.transactions.length)
+        return customer.proposals && customer.proposals.length && customer.proposals.some(p => p.accepted)
       })
     },
     averagePrice(){
       let averageTotal = 0;
-      this.transactionCustomers.map(c => {
-        let transactionProposals = 0;
+      this.wonCustomers.map(c => {
+        let wonProposals = 0;
         let costPerCustomer = c.proposals.reduce((cost, p)=> {
-            transactionProposals ++;
+            wonProposals ++;
             return p.transactions && p.transactions.length ? cost + p.transactions[0].cost / 100 : cost;
         }, 0)
-        averageTotal += costPerCustomer / transactionProposals
+        averageTotal += costPerCustomer / wonProposals
       })
-      return averageTotal / this.transactionCustomers.length
+      return averageTotal / this.wonCustomers.length
     }
   },
   watch: {

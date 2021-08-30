@@ -1,14 +1,6 @@
 <template>
   <div class="vendor-detail-page">
-      <comment-editor-panel
-          v-if="showCommentEditorPanel"
-          :commentComponents="commentComponents"
-          @saveComment="saveComment"
-          @updateComment="updateComment"
-          @deleteComment="deleteComment"
-          @updateCommentComponent="updateCommentComponent"
-      >
-      </comment-editor-panel>
+    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="vendor-detail-header">
       <div class="vendor-detail-title">
         <span style="vertical-align: middle" class="font-size-40 font-bold">{{ vendor.companyName }}</span>
@@ -66,7 +58,6 @@
 <script>
 import Vendors from "@/models/Vendors";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import CommentMixins from "@/mixins/comment"
 import { socialIcons } from "@/constants/links.js";
 import { Tabs, Modal } from "@/components";
 import VendorDetailContent from "./VendorDetailContent";
@@ -78,7 +69,6 @@ export default {
     VendorDetailContent,
     HeaderActions,
   },
-  mixins: [CommentMixins],
   data() {
     return {
       showCommentEditorPanel: false,

@@ -1,14 +1,6 @@
 <template>
   <div class="md-layout event-details-overview edit-event-details" v-if="!isLoading">
-      <comment-editor-panel
-          v-if="showCommentEditorPanel"
-          :commentComponents="commentComponents"
-          @saveComment="saveComment"
-          @updateComment="updateComment"
-          @deleteComment="deleteComment"
-          @updateCommentComponent="updateCommentComponent"
-      >
-      </comment-editor-panel>
+    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-title">
         <div class="d-flex align-center">
@@ -78,7 +70,6 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import CommentMixins from "@/mixins/comment"
 import Multiselect from "vue-multiselect";
 import EventOverviewSection from "./EventOverviewSection";
 import EventOverviewDate from "./EventOverviewDate";
@@ -100,7 +91,6 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  mixins: [CommentMixins],
   data() {
     return {
       // auth: auth,

@@ -1,5 +1,5 @@
 <template>
-  <dragging-component class="maryoku-component color-select-button"
+  <dragging-component class="maryoku-component color-select-button" 
     :class="{topIcon:showEditPane, dragging:isDragging}" ref="draggingComp"
     @dropped="onDropped(commentComponent)"
     @dragging="onDragging(commentComponent)"
@@ -57,7 +57,7 @@ export default {
     updateValue: function(value) {
     },
     toggleEditPane: function(event) {
-      console.log("click Button", this.commentComponent)
+      console.log("click Button")
       event.stopPropagation();
       event.preventDefault();
       if (this.isDragging) return;
@@ -65,15 +65,15 @@ export default {
       this.$emit("toggleEditPane", this.commentComponent, this.showEditPane)
 
     },
-
+    
     showComments: function(event) {
-
+       
       setTimeout(()=>{
         if (this.isDragging) return;
         this.$emit("show", this.commentComponent)
         this.showCommentList = true
       },500)
-
+      
     },
     onDropped(component) {
       console.log("left", this.$refs.draggingComp);
@@ -82,7 +82,7 @@ export default {
         component.positionX = this.$refs.draggingComp.left
         component.positionY = this.$refs.draggingComp.top
         setTimeout(()=>{this.isDragging = false}, 200);
-        this.$emit("onDropped",component)
+        this.$emit("onDropped",component)  
       } else {
 
       }
@@ -98,7 +98,7 @@ export default {
       console.log(this.$refs.draggingComp)
       console.log("started dragging")
       //this.isDragging = true
-      // this.$emit("onDragginStart",component)
+      // this.$emit("onDragginStart",component)  
     }
   },
   created() {
