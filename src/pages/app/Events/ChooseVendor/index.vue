@@ -123,6 +123,20 @@
       @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
     ></event-change-proposal-modal>
+<!--    <Modal v-if="showNegotiationNotification" container-class="modal-container negotiation-notification w-max-700">-->
+<!--        <div slot="header">-->
+<!--            <div class="font-size-28 font-bold-extra text-left">Timing is everything</div>-->
+<!--            <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"-->
+<!--                       @click="processNotification"><md-icon>close</md-icon></md-button>-->
+<!--        </div>-->
+
+<!--        <template slot="body">-->
+<!--            <negotiation-notification-->
+<!--                :proposals="negotiationProposals"-->
+<!--                :serviceCategories="serviceCategories"-->
+<!--            />-->
+<!--        </template>-->
+<!--    </Modal>-->
   </div>
 </template>
 <script>
@@ -138,7 +152,6 @@ import EventComponent from "@/models/EventComponent";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 
 import { Modal, MaryokuInput, Loader } from "@/components";
-import {NEGOTIATION_REQUEST_STATUS} from "@/constants/status";
 import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import ProposalCard from "../components/ProposalCard";
@@ -356,7 +369,7 @@ export default {
       this.showCart = true;
     },
     async processNotification(){
-      console.log('processNotification');
+        console.log('processNotification');
       let proposals = this.negotiationProposals;
       this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
@@ -468,9 +481,8 @@ export default {
       Object.keys(proposals).map(key => {
           let subProposals = [];
           proposals[key].map(p => {
-              let negotiations = p.negotiations.filter(n =>
-                  n.status === NEGOTIATION_REQUEST_STATUS.APPROVED || n.status === NEGOTIATION_REQUEST_STATUS.DECLINE);
-              if(negotiations.length) {
+              let negotiaotins = p.negotiations.filter(n => n.status === 1 || n.status === 2);
+              if(negotiaotins.length) {
                   subProposals.push(p);
               }
           })

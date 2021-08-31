@@ -123,14 +123,11 @@
         </div>
       </div>
     </div>
-    <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
-      <template slot="body">
-          <customer-form
-              v-if="showNewCustomerModal"
-              @save="saveCustomer"
-              @close="showNewCustomerModal = false" />
-      </template>
-    </modal>
+    <add-new-customer-modal
+      v-if="showNewCustomerModal"
+      @cancel="showNewCustomerModal = false"
+      @save="handleSaveCustomer"
+    ></add-new-customer-modal>
   </div>
 </template>
 <script>
@@ -144,10 +141,7 @@ import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import SelectableCard from "@/components/SelectableCard.vue";
-// import AddNewCustomerModal from "./Modals/AddNewCustomer";
-import { Modal } from "@/components";
-import Customer from "@/models/Customer"
-const CustomerForm = () => import("../Form/CustomerForm");
+import AddNewCustomerModal from "./Modals/AddNewCustomer";
 
 export default {
   components: {
@@ -158,8 +152,7 @@ export default {
     VueGoogleAutocomplete,
     vueDropzone: vue2Dropzone,
     SelectableCard,
-    CustomerForm,
-    Modal,
+    AddNewCustomerModal,
   },
   props: {
     defaultData: {
@@ -208,10 +201,7 @@ export default {
     this.$store.dispatch("common/getEventTypes");
   },
   methods: {
-    async saveCustomer(customer) {
-      let customerInstance  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
-      await customerInstance.save();
-
+    handleSaveCustomer(customer) {
       this.customers.push(customer);
       this.selectCustomer(customer);
         this.$store.commit('proposalForNonMaryoku/setValue', {
@@ -300,9 +290,6 @@ export default {
     }
   },
   computed: {
-    vendorData() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
-    },
     eventTypes() {
       return this.$store.state.common.eventTypes;
     },

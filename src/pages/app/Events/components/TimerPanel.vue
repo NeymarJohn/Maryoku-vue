@@ -4,22 +4,20 @@
     <div class="font-bold" v-else>This offer will expire in</div>
     <hr />
     <timer size="big" :target="target"></timer>
-    <template v-if="approved">
-      <hr />
-      <div class="font-bold font-size-14">Your Request has been Approved</div>
-    </template>
-    <template v-else-if="pending">
-      <hr />
-      <div class="font-bold font-size-14">Waiting reply</div>
-    </template>
-    <div v-else class="button-wrapper">
+    <div class="button-wrapper">
       <md-button
+        v-if="!approved"
         class="maryoku-btn md-simple"
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
         @click="updateExpireTime"
         >Ask for more time</md-button
       >
     </div>
+    <template v-if="approved">
+      <hr />
+      <div class="font-bold font-size-14">Your Request has been Approved</div>
+    </template>
+
   </div>
 </template>
 <script>
@@ -35,10 +33,6 @@ export default {
       default: new Date(),
     },
     approved:{
-      type: Boolean,
-      default: false,
-    },
-    pending:{
       type: Boolean,
       default: false,
     },

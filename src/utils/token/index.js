@@ -23,10 +23,16 @@ export const getReq = (endpoint, withoutToken = false) => {
     return axios(getRequest);
 };
 export const postReq = (endpoint, data) => {
-    return axios({
+    const postRequest = {
         method: "post",
         url: `${process.env.SERVER_URL}${endpoint}`,
-        headers: { Authorization: `Bearer ${window.localStorage.getItem("manage_id_token")}` },
         data,
-    });
+    }
+    if (
+        window.localStorage.getItem("manage_id_token") &&
+        window.localStorage.getItem("manage_id_token") !== "undefined"
+    ) {
+        postRequest["headers"] = { Authorization: `Bearer ${window.localStorage.getItem("manage_id_token")}` };
+    }
+    return axios(postRequest);
 };

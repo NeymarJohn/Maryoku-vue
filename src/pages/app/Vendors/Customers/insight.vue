@@ -60,8 +60,7 @@
                       <div class="d-flex align-center w-max-400 mx-auto mt-20">
                           <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
                           <p class="color-white font-size-14">
-                              Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}}
-                              <span v-if="averageOfProposal != average">( {{compareWithTotal}} than your average)</span>
+                              Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}} ( {{compareWithTotal}} than your average)
                           </p>
                       </div>
                       <div class="d-flex my-40">
@@ -197,7 +196,7 @@ export default {
     wonProposals(){
       if(!this.customer || !this.customer.proposals.length) return []
       return this.customer.proposals.filter(p => {
-          return p.accepted
+          return p.transactions && p.transactions.length && p.transactions.every(t => t.status.name === 'PENDING')
       })
     },
     averageOfProposal(){

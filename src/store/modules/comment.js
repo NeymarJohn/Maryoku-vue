@@ -8,6 +8,9 @@ import { postReq, getReq } from '@/utils/token'
 import { reject } from 'promise-polyfill'
 const state = {
   index: 0,
+  action: null,
+  comment: null,
+  component: null,
   commentComponents: []
 }
 
@@ -18,6 +21,18 @@ const getters = {
 }
 
 const mutations = {
+  setIndex(state, index){
+    state.index = index;
+  },
+  setAction(state, action){
+    state.action = action;
+  },
+  setComment(state, comment){
+    state.comment = comment;
+  },
+  setComponent(state, component){
+    state.component = component;
+  },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
   },
@@ -57,7 +72,7 @@ const mutations = {
     state.commentComponents[index].comments.push(comment)
   },
   updateComment(state, comment) {
-  }
+  },
 }
 
 const actions = {
