@@ -84,7 +84,8 @@
               <customer-form
                   :customer="selectedCustomer"
                   :action="customerAction"
-                  @save="saveCustomer" @close="showNewCustomerModal = false" />
+                  @save="saveCustomer"
+                  @close="showNewCustomerModal = false" />
           </template>
       </modal>
   </div>
@@ -94,10 +95,9 @@ import Customer from "@/models/Customer"
 import ProposalListItem from "../components/ProposalListItem.vue";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
-import _ from "underscore";
 const CustomerListItem = () => import("../components/CustomerListItem");
 const ProposalContent = () => import("../components/ProposalDetail");
-const CustomerForm = () => import("./CustomerForm");
+const CustomerForm = () => import("../Form/CustomerForm");
 import { VsaList } from "vue-simple-accordion";
 const Insight = () => import("./insight");
 
@@ -303,23 +303,23 @@ export default {
           return r;
       }, {})
     },
-    transactionCustomers(){
+    wonCustomers(){
       if(!this.customers.length) return [];
       return this.customers.filter(customer => {
-        return customer.proposals && customer.proposals.length && customer.proposals.some(p => p.transactions && p.transactions.length)
+        return customer.proposals && customer.proposals.length && customer.proposals.some(p => p.accepted)
       })
     },
     averagePrice(){
       let averageTotal = 0;
-      this.transactionCustomers.map(c => {
-        let transactionProposals = 0;
+      this.wonCustomers.map(c => {
+        let wonProposals = 0;
         let costPerCustomer = c.proposals.reduce((cost, p)=> {
-            transactionProposals ++;
+            wonProposals ++;
             return p.transactions && p.transactions.length ? cost + p.transactions[0].cost / 100 : cost;
         }, 0)
-        averageTotal += costPerCustomer / transactionProposals
+        averageTotal += costPerCustomer / wonProposals
       })
-      return averageTotal / this.transactionCustomers.length
+      return averageTotal / this.wonCustomers.length
     }
   },
   watch: {

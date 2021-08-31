@@ -108,6 +108,7 @@ import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
 import ProposalRequestSection from "./Components/ProposalRequestSection.vue";
+
 export default {
   components: {
     IncomeChart,

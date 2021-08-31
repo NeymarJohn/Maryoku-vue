@@ -215,6 +215,7 @@ import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
 import _ from "underscore";
@@ -222,11 +223,6 @@ const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");
 const ShareProposal = () => import("./ShareProposal");
-
-// result of processed on negotiation request
-const NONE = 0;
-const APPROVED = 1;
-const DECLINED = 2;
 
 export default {
   components: {
@@ -286,7 +282,7 @@ export default {
         share: 4,
         negotiation: 5,
       },
-      negotiationProcessed: NONE,
+      negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
       socialMediaBlocks,
       pagination: {
         total: 0,
@@ -389,7 +385,7 @@ export default {
       } else if (action === this.proposalStatus.negotiation) {
         this.selectedProposalRequest = this.proposalRequests.find((it) => it.proposal && it.proposal.id === id);
         this.showRequestNegotiationModal = true;
-        this.negotiationProcessed = NONE;
+        this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
       }
     },
     handleRequestCard(idx) {
@@ -402,7 +398,7 @@ export default {
       ) {
         this.selectedProposalRequest = proposalRequest;
         this.showRequestNegotiationModal = true;
-        this.negotiationProcessed = NONE;
+        this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
       } else {
         let params = proposalRequest.proposal
           ? { id: proposalRequest.id, type: "edit" }
@@ -421,8 +417,8 @@ export default {
         this.showProposalDetail = true;
       } else if (status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline) {
         let expiredTime =
-          this.selectedProposalRequest.expiredTime -
-          (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
+          new Date(this.selectedProposalRequest.proposal.expiredDate).getTime() +
+          (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
         new ProposalNegotiationRequest({
           id: this.selectedProposalRequest.proposal.negotiations[0].id,
@@ -432,25 +428,21 @@ export default {
           .for(new Proposal({ id: this.selectedProposalRequest.proposal.id }))
           .save()
           .then(async (res) => {
-            let proposal = this.proposals.find((it) => it.id === this.selectedProposalRequest.proposal.id);
-            proposal.negotiations[0] = res;
+
             this.selectedProposalRequest.proposal.negotiations[0] = res;
 
-            if (status === this.negotiationRequestStatus.decline)
-              this.selectedProposalRequest.expiredTime = expiredTime;
-            if (status === this.negotiationRequestStatus.approve) proposal.expiredDate = new Date(expiredTime);
+            if (status === this.negotiationRequestStatus.approve) this.selectedProposalRequest.proposal.expiredDate = new Date(expiredTime);
 
-            this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
-            this.$store.commit("vendorDashboard/setProposal", proposal);
+            // this.$store.commit("vendorDashboard/setProposal", proposal);
             if (status === this.negotiationRequestStatus.decline) {
-              this.negotiationProcessed = DECLINED;
+              this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE;
             } else {
-              this.negotiationProcessed = APPROVED;
+              this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.APPROVED;
             }
           });
       } else if (status === this.negotiationRequestStatus.done) {
         this.showRequestNegotiationModal = false;
-        this.negotiationProcessed = NONE;
+        this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
       }
     },
     createNewProposal() {
@@ -539,7 +531,7 @@ export default {
           ? (p.declineMessage !== "decline" && p.proposal.status !== "submit" && p.remainingTime > 0) ||
               (p.proposal.status === "submit" &&
                 p.proposal.negotiations &&
-                p.proposal.negotiations.filter((it) => it.status == 0 && it.remainingTime > 0).length)
+                p.proposal.negotiations.filter((it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0).length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },
@@ -548,11 +540,8 @@ export default {
     },
     expiredTime() {
       if (!this.selectedProposalRequest) return null;
-      if (this.negotiationProcessed === NONE || this.negotiationProcessed === DECLINED) {
-        return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime();
-      } else if (this.negotiationProcessed === APPROVED) {
-        return this.selectedProposalRequest.expiredTime;
-      }
+      console.log('expiredTime', this.selectedProposalRequest.proposal.expiredDate);
+      return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime();
     },
   },
   watch: {
