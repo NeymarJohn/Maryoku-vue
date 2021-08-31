@@ -106,7 +106,7 @@
         v-if="showGuestSignupModal"
         @signIn="signIn"
         @signUp="signUp"
-        @handle="handleComment"
+        @save="saveGuestComment"
         @authenticate="auth"
         @cancel="showGuestSignupModal = false"
     >
@@ -125,7 +125,7 @@ import { SignInContent } from "@/components";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
-import {mapMutations} from "vuex";
+import {mapActions, mapMutations} from "vuex";
 
 export default {
   components: {
@@ -173,6 +173,7 @@ export default {
 
   },
   methods: {
+    ...mapMutations("comment", ["setGuestName"]),
     bookProposal() {
       new Proposal({
         id: this.proposal.id,
@@ -211,8 +212,14 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    handleComment(){
-
+    saveGuestComment(name){
+      this.showGuestSignupModal = false;
+      this.setGuestName(name);
+      let data = JSON.parse(localStorage.getItem('nonMaryokuAction'));
+      if(data.action === 'saveComment') this.saveComment({index: data.index, comment: data.comment, component: data.component});
+      if(data.action === 'updateComment') this.updateComment({comment: data.comment, component: data.component});
+      if(data.action === 'deleteComment') this.deleteComment({index: data.index, comment: data.comment});
+      if(data.action === 'updateCommentComponent') this.saveComment({component: data.component});
     },
     async signIn({email, password}){
       await this.$store.dispatch("auth/login", {

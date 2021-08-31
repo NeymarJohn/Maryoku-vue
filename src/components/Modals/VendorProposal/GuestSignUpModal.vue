@@ -101,7 +101,9 @@ export default {
         this.$emit('signUp', {email, password, name, company});
     },
     handle(){
-      this.$emit('handle', this.name);
+        console.log('save', this.terms, this.name)
+        if(!this.terms || !this.name) return;
+        this.$emit('save', this.name);
     },
     authenticate(provider){
       this.$emit('authenticate', provider);

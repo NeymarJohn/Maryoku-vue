@@ -216,8 +216,6 @@ import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
-import {PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS} from "@/constants/list";
-import {PROPOSAL_PAGE_PAGINATION} from "@/constants/pagination";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
 import _ from "underscore";
@@ -243,8 +241,25 @@ export default {
     return {
       loading: true,
       iconUrl: `${this.$iconURL}`,
-      proposalTabs: PROPOSAL_PAGE_TABS,
-      proposalHeaders: PROPOSAL_TABLE_HEADERS,
+      proposalTabs: [
+        { key: "all", title: "All Proposal", icon: "proposal-active.svg", class: "color-vendor" },
+        { key: "won", title: "I won", icon: "filter-won.svg", class: "color-won" },
+        { key: "draft", title: "Drafts", icon: "filter-draft.svg" },
+        { key: "submit", title: "Pending", icon: "filter-pending.svg" },
+        { key: "top", title: "Made Top3", icon: "filter-top3.svg" },
+        { key: "lost", title: "Lost Bids", icon: "filter-reject.svg" },
+      ],
+      proposalHeaders: [
+        { key: "", title: "" },
+        { key: "name", title: "Name" },
+        { key: "date", title: "Date" },
+        { key: "cost", title: "Proposal Value" },
+        { key: "modified", title: "Modified" },
+        { key: "status", title: "Status" },
+        { key: "owner", title: "Owner" },
+        { key: "update", title: "Update", class: "text-center" },
+        { key: "", title: "" },
+      ],
       tab: "all",
       showProposalDetail: false,
       showShareProposalModal: false,
@@ -269,7 +284,17 @@ export default {
       },
       negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
       socialMediaBlocks,
-      pagination: PROPOSAL_PAGE_PAGINATION,
+      pagination: {
+        total: 0,
+        won: 0,
+        draft: 0,
+        submit: 0,
+        top: 0,
+        lost: 0,
+        pageCount: 0,
+        page: 0,
+        limit: 6,
+      },
       sortFields: { sort: "", order: "" },
       renderRender: true,
     };
@@ -321,7 +346,6 @@ export default {
       this.loading = false;
     },
     async dismiss(id) {
-      this.loading = true;
       const res = await new ProposalRequest({
         id,
         declineMessage: "decline",
@@ -330,7 +354,6 @@ export default {
         return p.id !== id;
       });
       await this.$store.commit('vendorDashboard/setProposalRequests', proposalRequests);
-      this.loading = false;
     },
     async handleProposal(action, id) {
       this.selectedProposal = this.proposals.find((it) => it.id == id);
@@ -488,6 +511,12 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
+    customerEmail() {
+      if (!this.selectedProposal) return null;
+      return this.selectedProposal.nonMaryoku
+        ? this.selectedProposal.eventData.customer.email
+        : this.selectedProposal.proposalRequest.eventData.owner.emailAddress;
+    },
     proposalLink() {
       if (!this.selectedProposal) return null;
       return this.selectedProposal.nonMaryoku
@@ -511,6 +540,7 @@ export default {
     },
     expiredTime() {
       if (!this.selectedProposalRequest) return null;
+      console.log('expiredTime', this.selectedProposalRequest.proposal.expiredDate);
       return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime();
     },
   },
