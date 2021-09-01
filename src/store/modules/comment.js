@@ -11,8 +11,7 @@ const state = {
   action: null,
   comment: null,
   component: null,
-  commentComponents: [],
-  guestName: null,
+  commentComponents: []
 }
 
 const getters = {
@@ -33,9 +32,6 @@ const mutations = {
   },
   setComponent(state, component){
     state.component = component;
-  },
-  setGuestName(state, name){
-        state.guestName = name;
   },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
@@ -82,7 +78,6 @@ const mutations = {
 const actions = {
   addCommentComponent({ commit, state }, commentComponent) {
     return new Promise((resolve, reject)=> {
-      if (state.guestName) commentComponent = {...commentComponent, name: state.guestName};
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
@@ -115,8 +110,8 @@ const actions = {
   },
 
   addComment({ commit, state }, comment) {
+    console.log(comment)
     const commentComponent = new EventCommentComponent({ id: comment.commentComponent.id })
-    if (state.guestName) comment = {...comment, name: state.guestName};
     return new Promise((resolve, reject) => {
       new EventComment(comment)
         .for(commentComponent)
