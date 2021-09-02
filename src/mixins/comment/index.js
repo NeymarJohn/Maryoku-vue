@@ -21,7 +21,7 @@ export default {
             "deleteCommentAction"
         ]),
         async saveComment({component, comment, index}) {
-            console.log('saveComment', component, comment, index);
+            console.log('saveComment', comment);
             if(!component.comments || !component.comments.length){
                 const savedComponent = await this.addCommentComponent(component);
                 this.commentComponents[index] = savedComponent;
@@ -59,10 +59,8 @@ export default {
         return this.$store.state.comment.error;
       }
     },
-    created(){
+    async created(){
         console.log('comment.mixin.created');
-        this.getCommentComponents(this.$route.path).then(commentComponents => {
-            this.commentComponents = commentComponents
-        });
+        this.commentComponents = await this.getCommentComponents(this.$route.path);
     }
 }

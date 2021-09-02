@@ -90,9 +90,9 @@ const actions = {
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
-          commit('addCommentComponent', res.item)
+          commit('addCommentComponent', res.data)
           console.log(res)
-          resolve(res.item)
+          resolve(res.data)
         });
     })
   },
@@ -163,7 +163,7 @@ const actions = {
         .save()
         .then(res => {
           if(res.success){
-              commit('updateCommentComponent', res.item)
+              commit('updateCommentComponent', res.data)
               resolve(res.data)
           } else {
               commit('setError', res.message);
