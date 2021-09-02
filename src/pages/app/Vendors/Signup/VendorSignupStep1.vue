@@ -204,7 +204,7 @@
               <!-- <p>suggested</p> -->
             </div>
             <div class="bottom">
-              <p>*Customers tend to better trust brands after viewing them online</p>
+              <p>*Constumers tend to better trust brands after viewing them online</p>
             </div>
           </div>
           <div class="card">

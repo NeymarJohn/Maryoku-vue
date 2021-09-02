@@ -8,11 +8,7 @@ import { postReq, getReq } from '@/utils/token'
 import { reject } from 'promise-polyfill'
 const state = {
   index: 0,
-  action: null,
-  comment: null,
-  component: null,
-  commentComponents: [],
-  guestName: null,
+  commentComponents: []
 }
 
 const getters = {
@@ -22,21 +18,6 @@ const getters = {
 }
 
 const mutations = {
-  setIndex(state, index){
-    state.index = index;
-  },
-  setAction(state, action){
-    state.action = action;
-  },
-  setComment(state, comment){
-    state.comment = comment;
-  },
-  setComponent(state, component){
-    state.component = component;
-  },
-  setGuestName(state, name){
-        state.guestName = name;
-  },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
   },
@@ -76,13 +57,12 @@ const mutations = {
     state.commentComponents[index].comments.push(comment)
   },
   updateComment(state, comment) {
-  },
+  }
 }
 
 const actions = {
   addCommentComponent({ commit, state }, commentComponent) {
     return new Promise((resolve, reject)=> {
-      if (state.guestName) commentComponent = {...commentComponent, name: state.guestName};
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
@@ -115,8 +95,8 @@ const actions = {
   },
 
   addComment({ commit, state }, comment) {
+    console.log(comment)
     const commentComponent = new EventCommentComponent({ id: comment.commentComponent.id })
-    if (state.guestName) comment = {...comment, name: state.guestName};
     return new Promise((resolve, reject) => {
       new EventComment(comment)
         .for(commentComponent)

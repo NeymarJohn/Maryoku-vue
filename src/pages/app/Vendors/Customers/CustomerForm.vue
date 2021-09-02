@@ -66,7 +66,7 @@
                 <div class="md-error color-red font-size-14" v-if="errors.has('email')">{{ errors.first('email') }}</div>
                 <div class="d-flex align-center mt-30 width-100">
                     <md-button class="md-simple md-black ml-auto mr-20" @click="$emit('close')">Cancel</md-button>
-                    <md-button class="md-vendor" @click="save">{{action === 'create' ? 'Save' : 'Save Changes'}} </md-button>
+                    <md-button class="md-vendor" @click="save">Save Changes</md-button>
                 </div>
             </div>
         </div>

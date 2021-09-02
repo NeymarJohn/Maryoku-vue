@@ -14,6 +14,9 @@
   </div>
 </template>
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import CalendarEvent from "@/models/CalendarEvent";
+
 import moment from "moment";
 import Swal from "sweetalert2";
 import { MaryokuInput } from "@/components";
@@ -23,6 +26,7 @@ import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput }
 import Multiselect from "vue-multiselect";
 import EventOverviewSection from "./EventOverviewSection";
 import EventOverviewDate from "./EventOverviewDate";
+import Calendar from "@/models/Calendar";
 export default {
   name: "event-detail",
   components: {

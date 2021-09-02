@@ -27,18 +27,18 @@
                         <md-menu-item @click="edit(customerStatus.edit)" class="md-purple">
                             <span>
                               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
-                              Customer Details</span
+                              Edit</span
                             >
                         </md-menu-item>
                         <md-menu-item v-if="customer.proposals.length" @click="edit(customerStatus.download)" class="md-purple">
                             <span>
                               <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
-                              Make New Proposal
+                              Download
                             </span>
                         </md-menu-item>
                         <md-menu-item @click="edit(customerStatus.delete)" class="md-purple">
                             <span>
-                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Customer
+                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete
                             </span>
                         </md-menu-item>
                     </md-menu-content>
@@ -116,8 +116,8 @@ export default {
       ],
       customerStatus:{
             show: 0,
-            detail: 1,
-            proposal: 2,
+            edit: 1,
+            download: 2,
             delete: 3,
             negotiation: 4,
       },

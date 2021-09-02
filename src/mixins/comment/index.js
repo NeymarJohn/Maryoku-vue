@@ -25,7 +25,6 @@ export default {
             if(!component.comments || component.comments.length){
                 const savedComponent = await this.addCommentComponent(component);
                 this.commentComponents[index] = savedComponent;
-                comment.commentComponent.id = savedComponent.id
             }
 
             const addedComment = await this.addComment(comment);
