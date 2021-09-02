@@ -5,8 +5,7 @@
         <img class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
       </div>
       <div class="comment-item-description">
-        <div v-if="comment.planner">{{comment.planner.name}}</div>
-        <div v-if="comment.customer">{{comment.customer.name}}</div>
+        <div>{{comment.author.displayName}}</div>
         <div class="post-date">
           <timeago :datetime="comment.dateCreated"></timeago>
         </div>

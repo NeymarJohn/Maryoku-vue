@@ -106,7 +106,6 @@ export default {
         this.$emit('save', this.name);
     },
     authenticate(provider){
-      console.log('authenticate', provider);
       this.$emit('authenticate', provider);
     }
   },

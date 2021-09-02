@@ -13,7 +13,6 @@ const state = {
   component: null,
   commentComponents: [],
   guestName: null,
-  error: null
 }
 
 const getters = {
@@ -34,9 +33,6 @@ const mutations = {
   },
   setComponent(state, component){
     state.component = component;
-  },
-  setError(state, message){
-    state.error = message;
   },
   setGuestName(state, name){
         state.guestName = name;
@@ -90,25 +86,17 @@ const actions = {
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
-          commit('addCommentComponent', res.data)
+          commit('addCommentComponent', res.item)
           console.log(res)
-          resolve(res.data)
+          resolve(res.item)
         });
     })
   },
   getCommentComponents({ commit, state }, url) {
-
     return new Promise( async (resolve, reject) => {
-      // const commentComponents = await postReq(`/1/commentComponents/get`, { url })
-      let query = new EventCommentComponent();
-      const res = await query.params({url}).get();
-      if (res.success) {
-          commit('setCommentComponents', res.data)
-          resolve(res.data)
-      }else {
-          commit('setError', res.message);
-          resolve([]);
-      }
+      const commentComponents = await postReq(`/1/commentComponents/get`, { url })
+      commit('setCommentComponents', commentComponents.data)
+      resolve(commentComponents.data)
     });
   },
 
@@ -134,12 +122,8 @@ const actions = {
         .for(commentComponent)
         .save()
         .then(res => {
-          if (res.success) {
-              resolve(res.data)
-          } else {
-              commit('setError', res.message);
-          }
-
+          // commit('addComment', { commentComponentId: comment.commentComponent.id, res });
+          resolve(res.item)
         })
     })
 
@@ -162,14 +146,8 @@ const actions = {
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
-          if(res.success){
-              commit('updateCommentComponent', res.data)
-              resolve(res.data)
-          } else {
-              commit('setError', res.message);
-              resolve(null)
-          }
-
+          commit('updateCommentComponent', res.item)
+          resolve(res)
         })
     })
   },
@@ -195,12 +173,7 @@ const actions = {
         .for(eventCommentComponent)
         .delete()
         .then(res => {
-          if(res.success) {
-              resolve(res.data)
-          } else {
-              commit('setError', res.message);
-          }
-
+          resolve(res)
         })
     })
   }
