@@ -258,7 +258,7 @@
         <div class="not-bidding-modal__footer">
           <button class="cancel" @click="hideModal()">Cancel</button>
           <div class="refer-another-vendor-cont">
-            <img class="hand" :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
+            <img class="hand" :src="`${iconsUrl}Group 5649 (2).svg`" />
             <a @click="showReferModal()">Refer Another Vendor</a>
             <img class="question" :src="`${iconsUrl}Group 5522.svg`" />
           </div>

@@ -22,7 +22,7 @@ export default {
         ]),
         async saveComment({component, comment, index}) {
             console.log('saveComment', component, comment, index);
-            if(!component.comments || component.comments.length){
+            if(!component.comments || !component.comments.length){
                 const savedComponent = await this.addCommentComponent(component);
                 this.commentComponents[index] = savedComponent;
                 comment.commentComponent.id = savedComponent.id
@@ -48,17 +48,16 @@ export default {
             this.editingCommentId = "";
             await this.updateCommentComponent(component);
         },
-        deleteComment({comment, index}) {
-            this.deleteCommentAction(comment)
-                .then(() => {
-                    const commentIndex = this.commentComponents[index].comments.findIndex(item=>item.id == comment.id)
-                    this.commentComponents[index].comments.splice(commentIndex, 1)
-                })
-                .catch(()=>{
-                    const commentIndex = this.commentComponents[index].comments.findIndex(item=>item.id == comment.id)
-                    this.commentComponents[this.index].comments.splice(commentIndex, 1)
-                });
+        async deleteComment({comment, index}) {
+            let res = await this.deleteCommentAction(comment)
+            const commentIndex = this.commentComponents[index].comments.findIndex(item=>item.id === res.id)
+            this.commentComponents[index].comments.splice(commentIndex, 1)
         },
+    },
+    computed: {
+      commentError(){
+        return this.$store.state.comment.error;
+      }
     },
     created(){
         console.log('comment.mixin.created');

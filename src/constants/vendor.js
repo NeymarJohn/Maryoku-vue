@@ -534,7 +534,25 @@ export const businessCategories = [
             name: "Inclusion",
             items: [
               {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
                 name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -545,7 +563,7 @@ export const businessCategories = [
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 value: false,
                 xIncluded: true,
@@ -962,6 +980,30 @@ export const businessCategories = [
             name: "Inclusion",
             items: [
               {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
                 name: "vegetarian",
                 type: 'Boolean',
                 xIncluded: true,
@@ -1003,7 +1045,7 @@ export const businessCategories = [
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -1198,6 +1240,30 @@ export const businessCategories = [
             name: "Inclusion",
             items: [
               {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
                 name: "hypoallergenic flowers",
                 type: 'Boolean',
                 xIncluded: true,
@@ -1215,7 +1281,7 @@ export const businessCategories = [
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -1400,13 +1466,37 @@ export const businessCategories = [
           {
             name: "Inclusion",
             items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
             ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -1599,13 +1689,40 @@ export const businessCategories = [
           },
           {
             name: "Inclusion",
-            items: [],
+            items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+
+              },
+            ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 value: false,
                 xIncluded: true,
@@ -1913,13 +2030,37 @@ export const businessCategories = [
           {
             name: "Inclusion",
             items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                value: false,
+                xIncluded: true,
+              },
             ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 value: false,
                 xIncluded: true,
@@ -2104,13 +2245,38 @@ export const businessCategories = [
           },
           {
             name: "Inclusion",
-            items: [],
+            items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+            ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -2415,13 +2581,38 @@ export const businessCategories = [
           },
           {
             name: "Inclusion",
-            items: [],
+            items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+            ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -2640,7 +2831,7 @@ export const businessCategories = [
             name: "Inclusion",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -2854,13 +3045,37 @@ export const businessCategories = [
           {
             name: "Inclusion",
             items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
             ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 value: false,
                 xIncluded: true,
@@ -3054,6 +3269,30 @@ export const businessCategories = [
             name: "Inclusion",
             items: [
               {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
                 name: "provide sample",
                 type: 'Boolean',
                 xIncluded: true,
@@ -3071,7 +3310,7 @@ export const businessCategories = [
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,
@@ -3288,13 +3527,38 @@ export const businessCategories = [
           },
           {
             name: "Inclusion",
-            items: [],
+            items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: 'Boolean',
+                xIncluded: true,
+                value: false,
+              },
+            ],
           },
           {
             name: "Diversity",
             items: [
               {
-                name: "Prioritizing diversity and inclusion",
+                name: "Prioritizing diversity and inclution",
                 type: 'Boolean',
                 xIncluded: true,
                 value: false,

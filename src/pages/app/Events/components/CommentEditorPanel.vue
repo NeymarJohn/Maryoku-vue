@@ -135,7 +135,7 @@ export default {
     }
   },
   created() {
-    console.log('commentPanel.created');
+    console.log('commentPanel.created', this.$auth);
   },
   methods: {
     ...mapActions("comment", [
@@ -283,18 +283,6 @@ export default {
       this.$emit('saveComment', {component: selectedComponent, comment, index: this.selectedComponentIndex})
 
       this.editingComment = ""
-      //   console.log(this.commentComponents)
-      //   this.clearStatus();
-      //   this.editingComment = "";
-      // });
-      // if (!this.commentComponents[this.selectedComponentIndex].comments) {
-      //     this.commentComponents[this.selectedComponentIndex].comments = []
-      //   }
-      //   console.log(comment)
-      //   this.commentComponents[this.selectedComponentIndex].comments.push(comment)
-      //   console.log(this.commentComponents)
-        // this.clearStatus();
-        // this.editingComment = "";
       event.stopPropagation();
     },
     resolveCommentComponent() {
@@ -337,19 +325,9 @@ export default {
     },
     updateComment(comment) {
       this.editingCommentId = "";
+
       const selectedComponent = this.commentComponents[this.selectedComponentIndex];
-      return new Promise((resolve, reject) => {
-        const commentComponent = new EventCommentComponent({
-          id: selectedComponent.id
-        });
-        new EventComment(comment)
-          .for(commentComponent)
-          .save()
-          .then(() => {
-            console.log(comment);
-          });
-        resolve(comment);
-      });
+      this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
     },
     movedCommentComponent(movedCommentComponent) {
       const commentComponent = new EventCommentComponent({

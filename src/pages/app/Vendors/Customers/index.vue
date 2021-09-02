@@ -67,7 +67,7 @@
           <insight
             v-if="renderInsight"
             :customer="selectedCustomer"
-            :aggregate="aggregate"
+            :average="averagePrice"
           ></insight>
         </div>
       </div>
@@ -92,8 +92,6 @@
 </template>
 <script>
 import Customer from "@/models/Customer"
-import {CUSTOMER_PAGE_TABS, CUSTOMER_TABLE_HEADERS} from "@/constants/list"
-import {CUSTOMER_PAGE_PAGINATION} from "@/constants/pagination";
 import ProposalListItem from "../components/ProposalListItem.vue";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
@@ -120,8 +118,22 @@ export default {
     return {
       loading: true,
       iconUrl: `${this.$iconURL}`,
-      customerTabs: CUSTOMER_PAGE_TABS,
-      customerHeaders: CUSTOMER_TABLE_HEADERS,
+      customerTabs: [
+        { key: "all", value: 0, title: "All customers", icon: "Group 19735.svg", class: "color-purple" },
+        { key: "returning", value: 1, title: "Returning", icon: "Path 3984.svg", class: "color-black-middle" },
+        { key: "new", value: 2, title: "New", icon: "Group 19776.svg", class:"color-black-middle" },
+        { key: "potential", value: 3, title: "Potential", icon: "Group 19780.svg", class: "color-blue" },
+      ],
+      customerHeaders: [
+        { key: "", title: "" },
+        { key: "name", title: "Name" },
+        { key: "ein", title: "EIN" },
+        { key: "incomes", title: "Incomes" },
+        { key: "contact", title: "Contact" },
+        { key: "bids", title: "Bids" },
+        { key: "status", title: "Status" },
+        { key: "", title: "" },
+      ],
       tab: 0,
       showProposalDetail: false,
       selectedProposal: null,
@@ -144,13 +156,23 @@ export default {
           duplicate: 6,
           sort: 7,
       },
-      pagination: CUSTOMER_PAGE_PAGINATION,
+      pagination: {
+        total: 0,
+        returning: 0,
+        new: 0,
+        potential: 0,
+        pageCount: 0,
+        page: 0,
+        limit: 6,
+      },
       customerAction: 'create',
       sortFields: { sort: "", order: "" },
+
       renderInsight: false,
     };
   },
   async mounted() {
+    // console.log('mounted', this.vendorData.id);
     await this.init();
   },
   methods: {
@@ -163,6 +185,7 @@ export default {
       });
 
       this.pagination.total = data.total;
+      this.selectedCustomer = data.customers[0];
       this.customerTabs.map((t) => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
@@ -280,32 +303,24 @@ export default {
           return r;
       }, {})
     },
-    aggregate(){
-      let totalPrice = 0;
-      let totalProposals = 0;
-      let wonProposals = 0;
-      let averagePrice = 0;
-
-      if (!this.customers.length) return {totalPrice, totalProposals, wonProposals, averagePrice}
-
-      this.customers.map(c => {
-          let wonProposalsOfCustomer = c.proposals.filter(p => p.accepted);
-
-          wonProposals += wonProposalsOfCustomer.length;
-          totalProposals += c.proposals.length;
-
-          if(wonProposalsOfCustomer.length) {
-              let costOfCustomer = c.proposals.reduce((cost, p) => {
-                  return p.accepted ? cost + p.transactions[0].cost / 100 : cost;
-              }, 0)
-              totalPrice += costOfCustomer;
-              averagePrice += costOfCustomer / wonProposals
-          }
+    wonCustomers(){
+      if(!this.customers.length) return [];
+      return this.customers.filter(customer => {
+        return customer.proposals && customer.proposals.length && customer.proposals.some(p => p.accepted)
       })
-      averagePrice /= this.customers.length;
-
-      return {totalPrice, totalProposals, wonProposals, averagePrice}
     },
+    averagePrice(){
+      let averageTotal = 0;
+      this.wonCustomers.map(c => {
+        let wonProposals = 0;
+        let costPerCustomer = c.proposals.reduce((cost, p)=> {
+            wonProposals ++;
+            return p.transactions && p.transactions.length ? cost + p.transactions[0].cost / 100 : cost;
+        }, 0)
+        averageTotal += costPerCustomer / wonProposals
+      })
+      return averageTotal / this.wonCustomers.length
+    }
   },
   watch: {
   },

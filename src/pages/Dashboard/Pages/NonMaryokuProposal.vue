@@ -106,7 +106,7 @@
         v-if="showGuestSignupModal"
         @signIn="signIn"
         @signUp="signUp"
-        @handle="handleComment"
+        @save="saveGuestComment"
         @authenticate="auth"
         @cancel="showGuestSignupModal = false"
     >
@@ -125,7 +125,7 @@ import { SignInContent } from "@/components";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
-import {mapMutations} from "vuex";
+import {mapActions, mapMutations} from "vuex";
 
 export default {
   components: {
@@ -152,6 +152,7 @@ export default {
     };
   },
   async created() {
+    console.log('non-maryokuProposal.created', this.loggedInUser);
     let tenantUser = null;
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
@@ -173,6 +174,7 @@ export default {
 
   },
   methods: {
+    ...mapMutations("comment", ["setGuestName"]),
     bookProposal() {
       new Proposal({
         id: this.proposal.id,
@@ -211,8 +213,18 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    handleComment(){
-
+    showGuestSignUpModal() {
+      if(!this.loggedInUser) this.showGuestSignupModal = true;
+    },
+    saveGuestComment(name){
+      this.showGuestSignupModal = false;
+      this.setGuestName(name);
+      let data = JSON.parse(localStorage.getItem('nonMaryokuAction'));
+      if(data.action === 'saveComment') this.saveComment({index: data.index, comment: data.comment, component: data.component});
+      if(data.action === 'updateComment') this.updateComment({comment: data.comment, component: data.component});
+      if(data.action === 'deleteComment') this.deleteComment({index: data.index, comment: data.comment});
+      if(data.action === 'updateCommentComponent') this.saveComment({component: data.component});
+      this.showCommentEditorPanel = true;
     },
     async signIn({email, password}){
       await this.$store.dispatch("auth/login", {
@@ -237,6 +249,7 @@ export default {
       this.handleAction();
     },
     auth(provider){
+      console.log('auth', provider);
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(
@@ -247,10 +260,10 @@ export default {
     handleAction(){
       let data = JSON.parse(localStorage.getItem('nonMaryokuAction'));
       if (data) {
-          if(data.action === 'saveComment') this.saveComment({index: data.index, comment: data.comment, component: data.component});
-          if(data.action === 'updateComment') this.updateComment({comment: data.comment, component: data.component});
-          if(data.action === 'deleteComment') this.deleteComment({index: data.index, comment: data.comment});
-          if(data.action === 'updateCommentComponent') this.saveComment({component: data.component});
+          if(data.action === 'saveComment') this.saveComment(data);
+          if(data.action === 'updateComment') this.updateComment(data);
+          if(data.action === 'deleteComment') this.deleteComment(data);
+          if(data.action === 'updateCommentComponent') this.saveComment(data);
 
           localStorage.removeItem('nonMaryokuAction')
           this.showCommentEditorPanel = true
@@ -258,39 +271,64 @@ export default {
 
     },
     saveCommentWithAuth(params){
-      this.showCommentEditorPanel = false
-      this.showGuestSignupModal = true;
-      localStorage.setItem('nonMaryokuAction', JSON.stringify({
-          action: 'saveComment',
-          ...params,
-      }));
+      console.log('saveComment');
+      if(this.loggedInUser) {
+        this.saveComment(params)
+      } else {
+          localStorage.setItem('nonMaryokuAction', JSON.stringify({
+              action: 'saveComment',
+              ...params,
+          }));
+          this.showCommentEditorPanel = false;
+          this.showGuestSignupModal = true;
+      }
     },
     updateCommentWithAuth(params){
-      this.showCommentEditorPanel = false
-      this.showGuestSignupModal = true;
-        localStorage.setItem('nonMaryokuAction', JSON.stringify({
-            action: 'updateComment',
-            ...params,
-        }));
+        console.log('updateComment')
+        if(this.loggedInUser){
+            this.updateComment(params)
+        }else{
+            localStorage.setItem('nonMaryokuAction', JSON.stringify({
+                action: 'updateComment',
+                ...params,
+            }));
+            this.showCommentEditorPanel = false
+            this.showGuestSignupModal = true;
+        }
+
     },
     deleteCommentWithAuth(params){
-      this.showCommentEditorPanel = false
-      this.showGuestSignupModal = true;
-        localStorage.setItem('nonMaryokuAction', JSON.stringify({
-            action: 'deleteComment',
-            ...params,
-        }));
+        console.log('deleteComment')
+        if(this.loggedInUser){
+            this.deleteComment(params)
+        } else {
+            localStorage.setItem('nonMaryokuAction', JSON.stringify({
+                action: 'deleteComment',
+                ...params,
+            }));
+            this.showCommentEditorPanel = false
+            this.showGuestSignupModal = true;
+        }
     },
     updateCommentComponentWithAuth(component){
-      this.showCommentEditorPanel = false
-      this.showGuestSignupModal = true;
-        localStorage.setItem('nonMaryokuAction', JSON.stringify({
-            action: 'deleteComment',
-            component: component,
-        }));
+        console.log('updateCommentComponent')
+        if(this.loggedInUser) {
+            this.updateCommentComponent(component);
+        } else {
+            localStorage.setItem('nonMaryokuAction', JSON.stringify({
+                action: 'updateCommentComponent',
+                component: component,
+            }));
+            this.showCommentEditorPanel = false
+            this.showGuestSignupModal = true;
+        }
+
     }
   },
   computed:{
+    loggedInUser(){
+        return this.$store.state.auth.user
+    },
   }
 };
 </script>
