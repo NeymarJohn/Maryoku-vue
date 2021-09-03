@@ -17,13 +17,9 @@
 </template>
 <script>
 
-    import moment from "moment"
+    import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
     import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 
-    // result of processed on negotiation request
-    const NONE = 0;
-    const APPROVED = 1;
-    const DECLINED = 2;
 
     export default {
         components: {
@@ -33,7 +29,7 @@
           expiredTime: Number,
           processed: {
             type: Number,
-            default: NONE,
+            default: NEGOTIATION_REQUEST_STATUS.NONE,
           },
         },
         data() {
@@ -63,17 +59,17 @@
         },
         computed: {
           title(){
-            if (this.processed === APPROVED) return 'Time added successfully';
-            else if(this.processed === DECLINED) return 'Time extension Declined';
+            if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return 'Time added successfully';
+            else if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return 'Time extension Declined';
             else return 'Planner needs extra time';
           },
           subTitle(){
-            if (this.processed === APPROVED) return 'You successfully extended the offer expiration by 2 days';
-            else if(this.processed === DECLINED) return 'We will make sure to inform the planner';
+            if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return 'You successfully extended the offer expiration by 2 days';
+            else if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return 'We will make sure to inform the planner';
             else return 'You can extend the offer expiration by 2 days';
           },
           icon(){
-            if(this.processed === DECLINED) return 'VendorsProposalPage/group-20091.svg';
+            if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return 'VendorsProposalPage/group-20091.svg';
             else return 'VendorsProposalPage/group-18823.svg';
           }
         },

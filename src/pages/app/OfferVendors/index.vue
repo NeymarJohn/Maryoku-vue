@@ -279,14 +279,7 @@ export default {
         },
 
         async findVendors(){
-            // if(!this.$store.state.auth.status.loggedIn) {
-                this.showSignupModal = true;
-            // } else {
-            //     this.loading = true;
-            //     await this.save();
-            //     this.loading = false;
-            // }
-
+          this.showSignupModal = true;
         },
         async save(){
 
@@ -340,7 +333,7 @@ export default {
             this.isLoading = false;
         } else {
             this.showBookedVendorModal = true;
-            this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
+
             console.log('created', this.allRequirements);
             if (!this.allRequirements) {
                 await this.getAllRequirements()

@@ -8,7 +8,12 @@ import { postReq, getReq } from '@/utils/token'
 import { reject } from 'promise-polyfill'
 const state = {
   index: 0,
-  commentComponents: []
+  action: null,
+  comment: null,
+  component: null,
+  commentComponents: [],
+  guestName: null,
+  error: null
 }
 
 const getters = {
@@ -18,6 +23,24 @@ const getters = {
 }
 
 const mutations = {
+  setIndex(state, index){
+    state.index = index;
+  },
+  setAction(state, action){
+    state.action = action;
+  },
+  setComment(state, comment){
+    state.comment = comment;
+  },
+  setComponent(state, component){
+    state.component = component;
+  },
+  setError(state, message){
+    state.error = message;
+  },
+  setGuestName(state, name){
+        state.guestName = name;
+  },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
   },
@@ -57,26 +80,35 @@ const mutations = {
     state.commentComponents[index].comments.push(comment)
   },
   updateComment(state, comment) {
-  }
+  },
 }
 
 const actions = {
   addCommentComponent({ commit, state }, commentComponent) {
     return new Promise((resolve, reject)=> {
+      if (state.guestName) commentComponent = {...commentComponent, name: state.guestName};
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
-          commit('addCommentComponent', res.item)
+          commit('addCommentComponent', res.data)
           console.log(res)
-          resolve(res.item)
+          resolve(res.data)
         });
     })
   },
   getCommentComponents({ commit, state }, url) {
+
     return new Promise( async (resolve, reject) => {
-      const commentComponents = await postReq(`/1/commentComponents/get`, { url })
-      commit('setCommentComponents', commentComponents.data)
-      resolve(commentComponents.data)
+      // const commentComponents = await postReq(`/1/commentComponents/get`, { url })
+      let query = new EventCommentComponent();
+      const res = await query.params({url}).get();
+      if (res.success) {
+          commit('setCommentComponents', res.data)
+          resolve(res.data)
+      }else {
+          commit('setError', res.message);
+          resolve([]);
+      }
     });
   },
 
@@ -95,15 +127,19 @@ const actions = {
   },
 
   addComment({ commit, state }, comment) {
-    console.log(comment)
     const commentComponent = new EventCommentComponent({ id: comment.commentComponent.id })
+    if (state.guestName) comment = {...comment, name: state.guestName};
     return new Promise((resolve, reject) => {
       new EventComment(comment)
         .for(commentComponent)
         .save()
         .then(res => {
-          // commit('addComment', { commentComponentId: comment.commentComponent.id, res });
-          resolve(res.item)
+          if (res.success) {
+              resolve(res.data)
+          } else {
+              commit('setError', res.message);
+          }
+
         })
     })
 
@@ -126,8 +162,14 @@ const actions = {
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
-          commit('updateCommentComponent', res.item)
-          resolve(res)
+          if(res.success){
+              commit('updateCommentComponent', res.data)
+              resolve(res.data)
+          } else {
+              commit('setError', res.message);
+              resolve(null)
+          }
+
         })
     })
   },
@@ -153,7 +195,12 @@ const actions = {
         .for(eventCommentComponent)
         .delete()
         .then(res => {
-          resolve(res)
+          if(res.success) {
+              resolve(res.data)
+          } else {
+              commit('setError', res.message);
+          }
+
         })
     })
   }

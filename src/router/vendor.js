@@ -277,7 +277,7 @@ export default [
                 name: "outsideProposalCreate",
                 component: ProposalForOutsideClientContent,
                 meta: {
-                    requiresAuth: true,
+                    requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
                     isVendor: true

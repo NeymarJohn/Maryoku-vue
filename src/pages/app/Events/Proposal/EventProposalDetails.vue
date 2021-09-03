@@ -50,6 +50,7 @@
           <timer-panel
             class="time-counter"
             :target="targetTime"
+            :pending="negotiationPending"
             :approved="negotiationProcessed"
             @updateExpireDate="updateExpireDate"
             :theme="theme"
@@ -402,6 +403,7 @@ import Proposal from "@/models/Proposal";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
 import { GuaranteedOptions } from "@/constants/options";
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
 import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
@@ -614,14 +616,15 @@ export default {
       this.$emit("close");
     },
     updateExpireDate() {
+        console.log('updateExpireDate', this.eventData);
+        console.log('updateExpireDate', this.proposal);
       let expiredTime = moment().add(2, 'days').unix() * 1000;
 
       new ProposalNegotiationRequest({
-        eventId: this.eventData.id,
+        eventId: this.nonMaryoku ? null : this.eventData.id,
         proposalId: this.vendorProposal.id,
         proposal: new Proposal({id: this.vendorProposal.id}),
         expiredTime,
-        tenantId: this.$authService.resolveTenantId(),
       })
         .for(new Proposal({ id: this.vendorProposal.id }))
         .save()
@@ -654,13 +657,16 @@ export default {
       components: "event/getComponentsList",
     }),
     targetTime() {
-      if (this.vendorProposal.expiredDate) {
-        return new Date(this.vendorProposal.expiredDate);
-      }
-      return new Date(this.vendorProposal.dateCreated + 7 * 3600 * 24 * 1000);
+      return new Date(this.vendorProposal.expiredDate);
     },
     negotiationProcessed(){
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it => it.status === 3)
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+    },
+    negotiationPending(){
+      console.log('negotiationPending', this.vendorProposal);
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.some(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
     },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);

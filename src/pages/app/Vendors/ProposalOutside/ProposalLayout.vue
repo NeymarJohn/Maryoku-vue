@@ -103,7 +103,6 @@ import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
-import UserEvent from "@/models/UserEvent";
 
 export default {
   components: {
@@ -154,13 +153,14 @@ export default {
 
     this.vendor = await this.getVendor(this.$route.params.vendorId);
     if (this.$route.params.id) await this.getProposal(this.$route.params.id);
-    if (!this.$store.state.vendorProposal.coverImage.length) {
+    if (!this.$store.state.vendorProposal.coverImage.length){
       this.$store.commit("proposalForNonMaryoku/setValue", {
-        key: "coverImage",
-        value: this.vendor.images,
+          key: "coverImage",
+          value: this.vendor.images,
       });
     }
     this.loading = false;
+
   },
 
   beforeCreate() {
@@ -173,15 +173,8 @@ export default {
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal"]),
     gotoNext() {
-      if (this.step === 0) {
-        // create vendor event when
-        this.createEvent().then(() => {
-          this.step = this.step + 1;
-          this.scrollToTop();
-        });
-      } else {
-        this.step = this.step + 1;
-      }
+      this.step = this.step + 1;
+      this.scrollToTop();
     },
     hideModal() {
       this.fullDetailsModal = false;
@@ -235,24 +228,6 @@ export default {
       });
     },
 
-    createEvent() {
-      const userEvent = {
-        company: this.event.company,
-        date: new Date(this.event.startTime * 1000).toISOString(),
-        startTime: new Date(this.event.startTime * 1000).toISOString(),
-        endTime: new Date(this.event.endTime * 1000).toISOString(),
-        eventType: { id: this.event.eventType.id },
-        companyName: this.event.customer.companyName,
-        location: this.event.location,
-      };
-      if (this.event.customer) {
-        userEvent.customer = { id: this.event.customer.id };
-        userEvent.isRegisteredCustomer = true;
-      } else {
-        userEvent.isRegisteredCustomer = false;
-      }
-      return new UserEvent(userEvent).save();
-    },
     back() {
       this.step = this.step - 1;
       this.scrollToTop();

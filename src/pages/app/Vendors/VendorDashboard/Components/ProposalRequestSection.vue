@@ -120,11 +120,7 @@ import Proposal from "@/models/Proposal";
 import { Modal } from "@/components";
 const NegotiationRequest = () => import("../../components/NegotiationRequest");
 const ProposalContent = () => import("../../components/ProposalDetail");
-
-// result of processed on negotiation request
-const NONE = 0;
-const APPROVED = 1;
-const DECLINED = 2;
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
 
 export default {
   components: {
@@ -144,7 +140,7 @@ export default {
     return {
         currentIndex: 0,
         selectedProposalRequest: null,
-        negotiationProcessed: NONE,
+        negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
         showRequestNegotiationModal: false,
         selectedProposal: null,
         negotiationRequestStatus:{
@@ -171,7 +167,7 @@ export default {
       if (!this.$store.state.vendorDashboard.proposalRequests) return [];
       return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
             return p.proposal && p.proposal.status === 'submit' && p.proposal.negotiations &&
-                p.proposal.negotiations.filter(it => it.status === 0 && it.remainingTime > 0).length
+                p.proposal.negotiations.filter(it => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0).length
         });
     },
     vendorData() {
@@ -179,11 +175,7 @@ export default {
     },
     expiredTime(){
       if(!this.selectedProposalRequest) return null;
-      if(this.negotiationProcessed === NONE || this.negotiationProcessed === DECLINED){
-          return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime() ;
-      } else if(this.negotiationProcessed === APPROVED) {
-          return this.selectedProposalRequest.expiredTime;
-      }
+      return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime() ;
     }
   },
   methods: {
@@ -218,8 +210,8 @@ export default {
           this.selectedProposal = {...this.selectedProposalRequest.proposal, proposalRequest: this.selectedProposalRequest};
           this.showRequestNegotiationModal = false;
       } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
-          let expiredTime = this.selectedProposalRequest.expiredTime -
-              (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
+          let expiredTime = new Date(this.selectedProposalRequest.proposal.expiredDate).getTime()  +
+              (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
           new ProposalNegotiationRequest({
               id: this.selectedProposalRequest.proposal.negotiations[0].id,
               expiredTime,
@@ -229,18 +221,17 @@ export default {
               .save()
               .then(async res => {
                   this.selectedProposalRequest.proposal.negotiations[0] = res;
-                  if(status === this.negotiationRequestStatus.decline) this.selectedProposalRequest.expiredTime = expiredTime;
+                  this.selectedProposalRequest.proposal.expiredDate = new Date(expiredTime);
 
-                  this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
                   if(status === this.negotiationRequestStatus.decline){
-                      this.negotiationProcessed = DECLINED
+                      this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE
                   } else {
-                      this.negotiationProcessed = APPROVED;
+                      this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.APPROVED;
                   }
               })
       } else if(status === this.negotiationRequestStatus.done) {
           this.showRequestNegotiationModal = false;
-          this.negotiationProcessed = NONE;
+          this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
           this.currentIndex = 0;
       }
     },
