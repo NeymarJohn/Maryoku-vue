@@ -14,8 +14,8 @@
 
         <div class="row">
           <maryoku-input
-            :value="section.datetime"
             v-if="isEdit && section.hasOwnProperty('datetime')"
+            :value="section.datetime"
             class="form-input"
             placeholder="Choose date…"
             inputStyle="date"
@@ -68,10 +68,10 @@
         <img v-if="this.section.occasion" :src="getIconUrl('occasion')" />
         {{ section.occasion }}
       </div>
-      <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center">
+      <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center ml-50">
         <md-checkbox
           v-model="section.inOutDoor"
-          class="md-checkbox-circle md-red"
+          class="md-checkbox-circle md-red mb-30"
           @change="inOutDoorChange"
           :value="item.value"
           v-for="(item, index) in inOutDoorTypes"
@@ -118,13 +118,13 @@
       <div v-if="isEdit && section.hasOwnProperty('datetime')" class="value">
         <div class="md-layout">
           <div class="md-layout-item md-size-50 p-0">
-            <span class="title font-size-26 mr-30">From</span>
+            <span class="title mr-30">From</span>
             <div class="event-time d-flex align-center">
               <time-picker v-model="section.datetime"></time-picker>
             </div>
           </div>
           <div class="md-layout-item md-size-50 p-0">
-            <span class="title font-size-26 mr-30">To</span>
+            <span class="title mr-30">To</span>
             <div class="event-time d-flex align-center">
               <time-picker v-model="section.datetime"></time-picker>
             </div>
@@ -153,7 +153,7 @@ import { mapState } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import EventOverviewDate from "./EventOverviewDate";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import TimePicker from "../../../../components/Inputs/TimePicker.vue";
+import TimePicker from "@/components/Inputs/TimePicker.vue";
 
 export default {
   name: "event-overview-section",
@@ -395,7 +395,7 @@ export default {
 
     .title {
       margin: 0;
-      font: 800 24px Manrope-Regular, sans-serif;
+      font: 500 24px Manrope-Regular, sans-serif;
       text-align: left;
     }
 

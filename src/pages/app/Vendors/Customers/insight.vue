@@ -4,8 +4,10 @@
       <div class="font-size-20 font-bold-extra color-white text-transform-capitalize">Total Incomes{{customer ? ` - ${customer.companyName}` : ''}}</div>
       <div class="d-flex align-center mt-20">
         <div>
-          <h2 class="font-size-50 color-white m-0">${{totalPrice | withComma(Number)}}</h2>
+          <h2 class="font-size-50 color-white m-0" v-if="customer">${{totalPrice | withComma(Number)}}</h2>
+          <h2 class="font-size-50 color-white m-0" v-else>${{aggregate.totalPrice | withComma(Number)}}</h2>
           <div v-if="customer" class="font-size-16 color-white py-20">{{`${wonProposals.length}/${customer.proposals.length}`}} Successful proposals</div>
+          <div v-else class="font-size-16 color-white py-20">{{`${aggregate.wonProposals}/${aggregate.totalProposals}`}} Successful proposals</div>
           <div v-else>
               <md-button class="md-white mt-10 font-size-16 text-transform-capitalize md-simple md-outlined">Create New Proposal</md-button>
           </div>
@@ -61,7 +63,7 @@
                           <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
                           <p class="color-white font-size-14">
                               Overall average deal size for this customer is ${{averageOfProposal | withComma(Number)}}
-                              <span v-if="averageOfProposal != average">( {{compareWithTotal}} than your average)</span>
+                              <span v-if="averageOfProposal !== aggregate.averagePrice">( {{compareWithTotal}} than your average)</span>
                           </p>
                       </div>
                       <div class="d-flex my-40">
@@ -94,32 +96,7 @@
               </template>
           </carousel>
       </template>
-      <template v-else>
-          <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
-              <template slot="prev">
-                  <span class="prev handle-btn" ref="prevButton"></span>
-              </template>
-              <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
-
-                  <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
-                  <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
-                  <div class="md-layout my-40">
-                      <div class="md-layout-item font-size-16 color-white md-size-50 text-left pl-50">2021
-                          <md-icon style="color: white">keyboard_arrow_down</md-icon>
-                      </div>
-                      <div class="md-layout-item md-size-50 d-flex align-center font-size-16 color-white text-right pr-50">
-                          <span :style="`background-color: #ffffff;`" class="icon mr-10"></span>
-                          No event incomes</div>
-                  </div>
-
-                  <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
-              </div>
-              <template slot="next">
-          <span class="next handle-btn d-none" ref="nextButton">
-          </span>
-              </template>
-          </carousel>
-      </template>
+      <analytics v-else/>
     </div>
   </div>
 </template>
@@ -127,6 +104,7 @@
 import { PieChart } from "@/components";
 import IncomeBarChart from "./IncomeBarChart.vue";
 import ServiceBarChart from "./ServiceBarChart";
+import Analytics from "./Analytics";
 import carousel from "vue-owl-carousel";
 
 export default {
@@ -134,6 +112,7 @@ export default {
     PieChart,
     IncomeBarChart,
     ServiceBarChart,
+    Analytics,
     carousel,
   },
   props: {
@@ -141,10 +120,10 @@ export default {
       type: Object,
       default: null,
     },
-    average:{
-      type: Number,
+    aggregate:{
+      type: Object,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -163,7 +142,8 @@ export default {
         { label: "Nov", value: 60, future: true },
         { label: "Dec", value: 20, future: true },
       ],
-      incomeList: this.customer ? ["", ""] : [""],
+      incomeList: ["", ""],
+      renderCustomer: false,
     };
   },
   mounted() {
@@ -171,8 +151,7 @@ export default {
   },
   methods: {
     init() {
-        console.log('customer.insight', this.average, this.customer)
-        this.$forceUpdate();
+        console.log('customer.insight', this.aggregate, this.customer)
         this.serviceChartData = this.customer ? [
             { label: "", value: 44, color: "#ffffff", icon: "Budget+Elements/venuerental-white.svg", price: "15000" },
             { label: "", value: 35, color: "#22cfe0", icon: "Budget+Elements/foodandbeverage-white.svg", price: "4800" },
@@ -182,8 +161,6 @@ export default {
             { label: "Catering", value: 35, color: "#915a87", icon: "Budget+Elements/foodandbeverage-white.svg", price: 0 },
             { label: "Signage & Printing", value: 20, color: "#4e0841", icon: "Budget+Elements/entertainment-white.svg", price: 0 },
         ];
-
-        this.incomeList = this.customer ? ["", ""] : [""];
     },
     next() {
       this.$refs.nextButton.click();
@@ -211,14 +188,14 @@ export default {
         }, 0)
     },
     compareWithTotal(){
-        if (this.average <= 0 || this.averageOfProposal <= 0) return 0
+        if (this.aggregate.averagePrice <= 0 || this.averageOfProposal <= 0) return 0
         let percent
-        if (this.average > 0 && this.averageOfProposal > this.average ){
-            percent =  Math.floor((this.averageOfProposal - this.average) / this.average * 100)
-        } else if(this.averageOfProposal > 0 && this.averageOfProposal < this.average ){
-            percent =  Math.floor((this.average - this.averageOfProposal) / this.averageOfProposal * 100)
+        if (this.aggregate.averagePrice > 0 && this.averageOfProposal > this.aggregate.averagePrice ){
+            percent =  Math.floor((this.averageOfProposal - this.aggregate.averagePrice) / this.aggregate.averagePrice * 100)
+        } else if(this.averageOfProposal > 0 && this.averageOfProposal < this.aggregate.averagePrice ){
+            percent =  Math.floor((this.aggregate.averagePrice - this.averageOfProposal) / this.averageOfProposal * 100)
         }
-        return this.averageOfProposal > this.average ? `${percent}% higher` : `${percent}% lower`;
+        return this.averageOfProposal > this.aggregate.averagePrice ? `${percent}% higher` : `${percent}% lower`;
     }
   },
   watch: {

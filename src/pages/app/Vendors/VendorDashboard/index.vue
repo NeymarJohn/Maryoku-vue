@@ -12,7 +12,7 @@
           <label>Yearly Revenue By Segment</label>
           <div class="md-layout my-20">
             <div class="md-layout-item md-size-40 pl-0">
-              <div class="font-size-50 total-revenue">${{ yearlyRevenue | withComma }}</div>
+              <div class="font-size-50 total-revenue">${{ Math.round(yearlyRevenue) | formatQty }}</div>
             </div>
             <div class="md-layout-item md-size-60">
               <div>

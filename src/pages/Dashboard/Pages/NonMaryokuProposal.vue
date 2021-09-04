@@ -1,6 +1,5 @@
 <template>
   <div class="non-maryoku-proposal">
-    <!-- <planner-header></planner-header> -->
     <loader :active="loading" :isFullScreen="true"></loader>
     <div class="proposal-header d-flex align-center justify-content-between">
       <div class="font-size-30" v-if="proposal">
@@ -9,10 +8,7 @@
         {{ proposal.vendor.companyName }}
       </div>
       <div>
-        <header-actions
-            @toggleCommentMode="toggleCommentMode"
-            @export="downProposal"
-        ></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @export="downProposal"></header-actions>
       </div>
     </div>
     <div class="proposal-content mt-40">
@@ -61,15 +57,15 @@
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
-      <comment-editor-panel
-          v-if="showCommentEditorPanel"
-          :commentComponents="commentComponents"
-          @saveComment="saveCommentWithAuth"
-          @updateComment="updateCommentWithAuth"
-          @deleteComment="deleteCommentWithAuth"
-          @updateCommentComponent="updateCommentComponentWithAuth"
-      >
-      </comment-editor-panel>
+    <comment-editor-panel
+      v-if="showCommentEditorPanel"
+      :commentComponents="commentComponents"
+      @saveComment="saveCommentWithAuth"
+      @updateComment="updateCommentWithAuth"
+      @deleteComment="deleteCommentWithAuth"
+      @updateCommentComponent="updateCommentComponentWithAuth"
+    >
+    </comment-editor-panel>
     <modal :containerClass="`modal-container xl`" v-if="showDetailModal">
       <template slot="header">
         <div class="add-category-model__header">
@@ -103,29 +99,29 @@
     </modal>
 
     <guest-sign-up-modal
-        v-if="showGuestSignupModal"
-        @signIn="signIn"
-        @signUp="signUp"
-        @save="saveGuestComment"
-        @authenticate="auth"
-        @cancel="showGuestSignupModal = false"
+      v-if="showGuestSignupModal"
+      @signIn="signIn"
+      @signUp="signUp"
+      @save="saveGuestComment"
+      @authenticate="auth"
+      @cancel="showGuestSignupModal = false"
     >
     </guest-sign-up-modal>
   </div>
 </template>
 <script>
 import Proposal from "@/models/Proposal";
-import {Loader} from "@/components";
+import { Loader } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
-import CommentMixins from "@/mixins/comment"
+import CommentMixins from "@/mixins/comment";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import { SignInContent } from "@/components";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
-import {mapActions, mapMutations} from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -142,7 +138,7 @@ export default {
   mixins: [CommentMixins],
   data() {
     return {
-      page: 'signin',
+      page: "signin",
       loading: true,
       proposal: null,
       showDetailModal: false,
@@ -152,27 +148,25 @@ export default {
     };
   },
   async created() {
-    console.log('non-maryokuProposal.created', this.loggedInUser);
+    console.log("non-maryokuProposal.created", this.loggedInUser);
     let tenantUser = null;
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
     if (givenToken) {
-        tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
-        this.loading = false;
-        this.proposal = JSON.parse(localStorage.getItem('non-maryoku-proposa'));
-        this.handleAction();
+      tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
+      this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposa"));
+      this.handleAction();
     } else {
-        this.proposal = JSON.parse(localStorage.getItem('non-maryoku-proposal'));
-        if(!this.proposal){
-            this.proposal = await Proposal.find(proposalId);
-            if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
-            if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
-            localStorage.setItem('non-maryoku-proposal', JSON.stringify(this.proposal))
-        }
-        this.loading = false;
+      this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposal"));
+      if (!this.proposal) {
+        this.proposal = await Proposal.find(proposalId);
+        if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
+        if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
+        localStorage.setItem("non-maryoku-proposal", JSON.stringify(this.proposal));
+      }
+      this.loading = false;
     }
     await this.$store.dispatch("common/getEventTypes");
-
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
@@ -194,11 +188,11 @@ export default {
     saveProposal(proposal) {
       new Proposal();
     },
-    downProposal(){
-        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
+    downProposal() {
+      this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
     },
-    toggleCommentMode(mode){
-      console.log('toggleCommentMode', mode)
+    toggleCommentMode(mode) {
+      console.log("toggleCommentMode", mode);
       this.showCommentEditorPanel = mode;
     },
     remindMeLater() {},
@@ -215,122 +209,130 @@ export default {
       window.open(link, "_blank");
     },
     showGuestSignUpModal() {
-      if(!this.loggedInUser) this.showGuestSignupModal = true;
+      if (!this.loggedInUser) this.showGuestSignupModal = true;
     },
-    saveGuestComment(name){
+    saveGuestComment(name) {
       this.showGuestSignupModal = false;
       this.setGuestName(name);
-      let data = JSON.parse(localStorage.getItem('nonMaryokuAction'));
-      if(data.action === 'saveComment') this.saveComment({index: data.index, comment: data.comment, component: data.component});
-      if(data.action === 'updateComment') this.updateComment({comment: data.comment, component: data.component});
-      if(data.action === 'deleteComment') this.deleteComment({index: data.index, comment: data.comment});
-      if(data.action === 'updateCommentComponent') this.saveComment({component: data.component});
+      let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
+      if (data.action === "saveComment")
+        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+      if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
+      if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
+      if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
       this.showCommentEditorPanel = true;
     },
-    async signIn({email, password}){
+    async signIn({ email, password }) {
       await this.$store.dispatch("auth/login", {
-          email,
-          password,
-      })
-      this.showGuestSignupModal = false;
-      console.log('logged in');
-      this.handleAction();
-    },
-    async signUp({email, password, name, company}){
-      await this.$store.dispatch("auth/register", {
-          email,
-          password,
-          name,
-          company,
-          role: 'administrator',
+        email,
+        password,
       });
       this.showGuestSignupModal = false;
-      await this.$store.dispatch('auth/login', {email, password});
-      console.log('logged out');
+      console.log("logged in");
       this.handleAction();
     },
-    auth(provider){
-      console.log('auth', provider);
+    async signUp({ email, password, name, company }) {
+      await this.$store.dispatch("auth/register", {
+        email,
+        password,
+        name,
+        company,
+        role: "administrator",
+      });
+      this.showGuestSignupModal = false;
+      await this.$store.dispatch("auth/login", { email, password });
+      console.log("logged out");
+      this.handleAction();
+    },
+    auth(provider) {
+      console.log("auth", provider);
       let tenantId = this.$authService.resolveTenantId();
 
-      let callback = btoa(
-          `${document.location.href}?token=`,
-      );
+      let callback = btoa(`${document.location.href}?token=`);
       document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
-    handleAction(){
-      let data = JSON.parse(localStorage.getItem('nonMaryokuAction'));
+    handleAction() {
+      let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
       if (data) {
-          if(data.action === 'saveComment') this.saveComment(data);
-          if(data.action === 'updateComment') this.updateComment(data);
-          if(data.action === 'deleteComment') this.deleteComment(data);
-          if(data.action === 'updateCommentComponent') this.saveComment(data);
+        if (data.action === "saveComment") this.saveComment(data);
+        if (data.action === "updateComment") this.updateComment(data);
+        if (data.action === "deleteComment") this.deleteComment(data);
+        if (data.action === "updateCommentComponent") this.saveComment(data);
 
-          localStorage.removeItem('nonMaryokuAction')
-          this.showCommentEditorPanel = true
+        localStorage.removeItem("nonMaryokuAction");
+        this.showCommentEditorPanel = true;
       }
-
     },
-    saveCommentWithAuth(params){
-      console.log('saveComment');
-      if(this.loggedInUser) {
-        this.saveComment(params)
+    saveCommentWithAuth(params) {
+      console.log("saveComment");
+      if (this.loggedInUser) {
+        this.saveComment(params);
       } else {
-          localStorage.setItem('nonMaryokuAction', JSON.stringify({
-              action: 'saveComment',
-              ...params,
-          }));
-          this.showCommentEditorPanel = false;
-          this.showGuestSignupModal = true;
+        localStorage.setItem(
+          "nonMaryokuAction",
+          JSON.stringify({
+            action: "saveComment",
+            ...params,
+          }),
+        );
+        this.showCommentEditorPanel = false;
+        this.showGuestSignupModal = true;
       }
     },
-    updateCommentWithAuth(params){
-        console.log('updateComment')
-        if(this.loggedInUser){
-            this.updateComment(params)
-        }else{
-            localStorage.setItem('nonMaryokuAction', JSON.stringify({
-                action: 'updateComment',
-                ...params,
-            }));
-            this.showCommentEditorPanel = false
-            this.showGuestSignupModal = true;
-        }
-
+    updateCommentWithAuth(params) {
+      console.log("updateComment");
+      if (this.loggedInUser) {
+        this.updateComment(params);
+      } else {
+        localStorage.setItem(
+          "nonMaryokuAction",
+          JSON.stringify({
+            action: "updateComment",
+            ...params,
+          }),
+        );
+        this.showCommentEditorPanel = false;
+        this.showGuestSignupModal = true;
+      }
     },
-    deleteCommentWithAuth(params){
-        console.log('deleteComment')
-        if(this.loggedInUser){
-            this.deleteComment(params)
-        } else {
-            localStorage.setItem('nonMaryokuAction', JSON.stringify({
-                action: 'deleteComment',
-                ...params,
-            }));
-            this.showCommentEditorPanel = false
-            this.showGuestSignupModal = true;
-        }
+    deleteCommentWithAuth(params) {
+      console.log("deleteComment");
+      if (this.loggedInUser) {
+        this.deleteComment(params);
+      } else {
+        localStorage.setItem(
+          "nonMaryokuAction",
+          JSON.stringify({
+            action: "deleteComment",
+            ...params,
+          }),
+        );
+        this.showCommentEditorPanel = false;
+        this.showGuestSignupModal = true;
+      }
     },
-    updateCommentComponentWithAuth(component){
-        console.log('updateCommentComponent')
-        if(this.loggedInUser) {
-            this.updateCommentComponent(component);
-        } else {
-            localStorage.setItem('nonMaryokuAction', JSON.stringify({
-                action: 'updateCommentComponent',
-                component: component,
-            }));
-            this.showCommentEditorPanel = false
-            this.showGuestSignupModal = true;
-        }
-
-    }
+    updateCommentComponentWithAuth(component) {
+      console.log("updateCommentComponent");
+      if (this.loggedInUser) {
+        this.updateCommentComponent(component);
+      } else {
+        localStorage.setItem(
+          "nonMaryokuAction",
+          JSON.stringify({
+            action: "updateCommentComponent",
+            component: component,
+          }),
+        );
+        this.showCommentEditorPanel = false;
+        this.showGuestSignupModal = true;
+      }
+    },
   },
-  computed:{
-    loggedInUser(){
-        return this.$store.state.auth.user
+  computed: {
+    loggedInUser() {
+      return this.$store.state.auth.user;
     },
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

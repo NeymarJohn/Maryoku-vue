@@ -616,15 +616,14 @@ export default {
       this.$emit("close");
     },
     updateExpireDate() {
-        console.log('updateExpireDate', this.eventData);
-        console.log('updateExpireDate', this.proposal);
       let expiredTime = moment().add(2, 'days').unix() * 1000;
 
       new ProposalNegotiationRequest({
-        eventId: this.nonMaryoku ? null : this.eventData.id,
+        eventId: this.eventData.id,
         proposalId: this.vendorProposal.id,
         proposal: new Proposal({id: this.vendorProposal.id}),
         expiredTime,
+        tenantId: this.$authService.resolveTenantId(),
       })
         .for(new Proposal({ id: this.vendorProposal.id }))
         .save()
