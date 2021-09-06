@@ -156,6 +156,9 @@ export default {
   async created() {
     console.log("non-maryokuProposal.created", this.loggedInUser);
     let tenantUser = null;
+    if(this.loggedInUser){
+        tenantUser =  await this.$store.dispatch("auth/checkToken");
+    }
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
       this.proposal = await Proposal.find(proposalId);
@@ -202,13 +205,12 @@ export default {
             }
         }
     },
-    async saveNegotiation({expiredTime}){
+    async saveNegotiation(expiredTime){
         console.log('saveNegotiation');
         let query = new ProposalNegotiationRequest({
             proposalId: this.proposal.id,
             proposal: new Proposal({id: this.proposal.id}),
             expiredTime,
-            name: this.$store.state.comment.name
         });
         let res = await query.for(new Proposal({ id: this.proposal.id })).save()
         this.proposal.negotiations.push(res);
@@ -251,7 +253,7 @@ export default {
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
-      if (data.action === "saveNegotiation") this.saveNegotiation(data);
+      if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
       this.showCommentEditorPanel = true;
     },
     async signIn({ email, password }) {
@@ -293,7 +295,7 @@ export default {
         if (data.action === 'saveNegotiation') this.saveNegotiation(data);
 
         localStorage.removeItem("nonMaryokuAction");
-        this.showCommentEditorPanel = true;
+
       }
     },
     saveCommentWithAuth(params) {
