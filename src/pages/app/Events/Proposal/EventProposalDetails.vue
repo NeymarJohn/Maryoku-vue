@@ -395,6 +395,7 @@ import { Tabs, Modal, Loader } from "@/components";
 
 import EventBudgetVendors from "../components/EventBudgetVendors";
 import EditEventBlocksBudget from "../components/EditEventBlocksBudget";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import Proposal from "@/models/Proposal";
 
 //COMPONENTS
@@ -615,8 +616,28 @@ export default {
       this.$emit("close");
     },
     updateExpireDate() {
-      console.log('updateExpireDate');
-      this.$emit('ask', 'expiredDate');
+      let expiredTime = moment().add(2, 'days').unix() * 1000;
+
+      new ProposalNegotiationRequest({
+        eventId: this.eventData.id,
+        proposalId: this.vendorProposal.id,
+        proposal: new Proposal({id: this.vendorProposal.id}),
+        expiredTime,
+        tenantId: this.$authService.resolveTenantId(),
+      })
+        .for(new Proposal({ id: this.vendorProposal.id }))
+        .save()
+        .then((res) => {
+          Swal.fire({
+            title: "We received your request!",
+            text: `Vendor will contact you!`,
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success btn-fill",
+            cancelButtonClass: "md-button md-danger btn-fill",
+            confirmButtonText: "OK",
+            buttonsStyling: false,
+          }).then((result) => {});
+        });
     },
     async changeBookedServices() {
 
@@ -638,9 +659,8 @@ export default {
       return new Date(this.vendorProposal.expiredDate);
     },
     negotiationProcessed(){
-      // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
-      //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-      return false
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
     },
     negotiationPending(){
       console.log('negotiationPending', this.vendorProposal);
@@ -651,16 +671,13 @@ export default {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
     headerBackgroundImage() {
-        if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0])
-            return this.vendorProposal.coverImage[0];
-        if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
-            return this.vendorProposal.inspirationalPhotos[0].url;
-        if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
-            return this.vendorProposal.vendor.images[0];
-        if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
-            return this.vendorProposal.vendor.vendorImages[0];
-
-        return "";
+      if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
+        return this.vendorProposal.inspirationalPhotos[0].url;
+      if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
+        return this.vendorProposal.vendor.images[0];
+      if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
+        return this.vendorProposal.vendor.vendorImages[0];
+      return "";
     },
     attachments() {
       if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
@@ -1247,6 +1264,7 @@ export default {
               align-items: center;
               justify-content: space-between;
               padding: 15px 0px;
+              padding-right: 50%;
               &:last-child {
                 border-bottom: solid 1px #ddd;
               }

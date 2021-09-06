@@ -146,22 +146,23 @@
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header">
         <div class="border-right font-bold-extra text-center pr-10 mr-10">
-          <div v-if="selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.concept">
+          <div v-if="selectedProposalRequest.eventData.concept">
             {{ selectedProposalRequest.eventData.concept.name }}
           </div>
-          <div v-else-if="selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.title">{{ selectedProposalRequest.eventData.title }}</div>
+          <div v-else-if="selectedProposalRequest.eventData.title">{{ selectedProposalRequest.eventData.title }}</div>
           <div v-else>New Event</div>
         </div>
 
-        <div v-if="selectedProposal.nonMaryoku" class="border-right font-bold-extra text-center pr-10 mr-10">
-          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime, "MM/DD/YY") }}
-        </div>
-        <div v-else class="border-right font-bold-extra text-center pr-10 mr-10">
+        <div class="border-right font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
         </div>
         <div class="text-center font-bold-extra">
           $
-          {{selectedProposal.cost | withComma}}
+          {{
+            (selectedProposalRequest.proposal
+              ? selectedProposalRequest.proposal.cost
+              : selectedProposalRequest.componentInstance.allocatedBudget) | withComma
+          }}
         </div>
         <md-button
           class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
@@ -373,7 +374,6 @@ export default {
         proposalRequest.proposal.negotiations.length
       ) {
         this.selectedProposalRequest = proposalRequest;
-        this.selectedProposal = proposalRequest.proposal;
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
       } else {
@@ -388,37 +388,29 @@ export default {
       }
     },
     async handleNegotiation(status) {
-      console.log('handleNegotiationREqeust', this.selectedProposal);
       if (status === this.negotiationRequestStatus.review) {
         this.showRequestNegotiationModal = false;
+        this.selectedProposal = this.proposals.find((p) => p.id === this.selectedProposalRequest.proposal.id);
         this.showProposalDetail = true;
       } else if (status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline) {
         let expiredTime =
-          new Date(this.selectedProposal.expiredDate).getTime() +
+          new Date(this.selectedProposalRequest.proposal.expiredDate).getTime() +
           (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
-        let url = this.selectedProposal.nonMaryoku ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
-            : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
         new ProposalNegotiationRequest({
-          id: this.selectedProposal.negotiations[0].id,
+          id: this.selectedProposalRequest.proposal.negotiations[0].id,
           expiredTime,
           status,
-          url
         })
-          .for(new Proposal({ id: this.selectedProposal.id }))
+          .for(new Proposal({ id: this.selectedProposalRequest.proposal.id }))
           .save()
           .then(async (res) => {
 
-            this.selectedProposal.negotiations[0] = res;
+            this.selectedProposalRequest.proposal.negotiations[0] = res;
 
-            if (status === this.negotiationRequestStatus.approve) this.selectedProposal.expiredDate = new Date(expiredTime);
-            this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
+            if (status === this.negotiationRequestStatus.approve) this.selectedProposalRequest.proposal.expiredDate = new Date(expiredTime);
 
-            if (!this.selectedProposal.nonMaryoku) {
-                this.selectedProposalRequest.proposal = this.selectedProposal;
-                this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
-            }
-
+            // this.$store.commit("vendorDashboard/setProposal", proposal);
             if (status === this.negotiationRequestStatus.decline) {
               this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE;
             } else {
@@ -437,7 +429,6 @@ export default {
           vendorId: this.vendorData.id,
         },
       });
-
       this.openNewTab(routeData.href);
     },
     openNewTab(link) {
@@ -519,8 +510,8 @@ export default {
       return this.$store.state.vendorDashboard.proposals;
     },
     expiredTime() {
-      if (!this.selectedProposal) return null;
-      return new Date(this.selectedProposal.expiredDate).getTime();
+      if (!this.selectedProposalRequest) return null;
+      return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime();
     },
   },
   watch: {

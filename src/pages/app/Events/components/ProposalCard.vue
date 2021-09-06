@@ -82,8 +82,6 @@ import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest"
 import Proposal from "@/models/Proposal"
 import TimerPanel from "./TimerPanel";
 import Swal from "sweetalert2";
-import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
-
 export default {
   components: { Timer, TimerPanel },
   props: {
@@ -145,6 +143,7 @@ export default {
             proposalId: this.proposal.id,
             proposalRequestId: this.proposal.proposalRequestId,
             expiredDate: newExpiredDate,
+            tenantId: this.$authService.resolveTenantId(),
         })
             .for(new Proposal({ id: this.proposal.id }))
             .save()
@@ -164,16 +163,13 @@ export default {
   },
   computed: {
     backgroundImage() {
-        if (this.proposal.coverImage && this.proposal.coverImage[0])
-            return this.proposal.coverImage[0];
-        if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
-            return this.proposal.inspirationalPhotos[0].url;
-        if (this.proposal.vendor.images && this.proposal.vendor.images[0])
-            return this.proposal.vendor.images[0];
-        if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
-            return this.proposal.vendor.vendorImages[0];
-
-        return "";
+      let link = "";
+      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0]) {
+        link = this.proposal.inspirationalPhotos[0].url;
+        return link;
+      }
+      if (this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
+      return link;
     },
     categories() {
       return this.$store.state.common.serviceCategories;
@@ -220,17 +216,7 @@ export default {
       let today = new Date()
       let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
       return expiredDate - today
-    },
-    negotiationProcessed(){
-      // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
-      //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-      return false
-    },
-    negotiationPending(){
-      console.log('negotiationPending', this.proposal.id);
-      return !!this.proposal.negotiations.length && this.proposal.negotiations.some(it =>
-          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-    },
+    }
   },
 };
 </script>

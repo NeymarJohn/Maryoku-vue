@@ -9,8 +9,17 @@
       :img="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`"
       :serviceCategory="vendor.eventCategory.key"
     />
-
-    <!-- <refer-new-vendor :event="event" :vendor="vendor" /> -->
+    <proposal-item-secondary-service
+      v-for="service in vendor.secondaryServices"
+      :key="service.id"
+      :category="service.eventCategory.title"
+      :services="[]"
+      :isCollapsed="true"
+      :isDropdown="true"
+      :proposalRange="true"
+      :img="`${$iconURL}Budget Elements/${service.eventCategory.icon}`"
+      :serviceCategory="service.vendorCategory"
+    />
   </div>
 </template>
 <script>
@@ -44,7 +53,7 @@ export default {
       if (this.vendor.services) {
         _.each(this.vendor.services, (vendorService) => {
           // Set included services from vendor profile
-            if (!vendorService.xIncluded && vendorService.checked && vendorService.included) {
+          if (!vendorService.xIncluded && vendorService.checked && vendorService.included) {
             includedVendorServices.push(vendorService);
             const service = {
               comments: [],
@@ -131,26 +140,31 @@ export default {
     costServiceItems() {
       return this.$store.state.proposalForNonMaryoku.costServices[this.vendor.eventCategory.key];
     },
-    includedServiceItems(){
+    includedServiceItems() {
       return this.$store.state.proposalForNonMaryoku.includedServices[this.vendor.eventCategory.key];
-    }
+    },
   },
-    watch: {
-      // remove costServiceItem already in included section
-      costServiceItems: {
-        handler(newVal) {
-            console.log('handler', this.costServiceItems)
-            let includeItems = this.includedServiceItems;
-            if(newVal.length) {
-                newVal.map(costItem => {
-                    includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
-                })
-            }
-            console.log('costServiceItems', includeItems);
-            this.$store.commit("proposalForNonMaryoku/setIncludedServices", { category: this.vendor.eventCategory.key, services: includeItems });
-        },
-        deep: true,
-      }
-    }
+  watch: {
+    // remove costServiceItem already in included section
+    costServiceItems: {
+      handler(newVal) {
+        console.log("handler", this.costServiceItems);
+        let includeItems = this.includedServiceItems;
+        if (newVal.length) {
+          newVal.map((costItem) => {
+            includeItems = includeItems.filter(
+              (it) => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase(),
+            );
+          });
+        }
+        console.log("costServiceItems", includeItems);
+        this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
+          category: this.vendor.eventCategory.key,
+          services: includeItems,
+        });
+      },
+      deep: true,
+    },
+  },
 };
 </script>

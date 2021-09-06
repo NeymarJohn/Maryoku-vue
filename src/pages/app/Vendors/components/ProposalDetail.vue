@@ -23,11 +23,8 @@
             </li>
             <li class="event-details__item">
               <label>Date</label>
-              <div class="info-text" v-if="vendorProposal.nonMaryoku">
-                    {{ eventData.startTime * 1000 | date("MMM Do YYYY") }}
-              </div>
-              <div class="info-text" v-else-if="!vendorProposal.suggestionDate">
-                {{ eventData.eventStartMillis * 1000 | date("MMM Do YYYY") }}
+              <div class="info-text" v-if="!vendorProposal.suggestionDate">
+                {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
               </div>
               <div v-else>
                 {{ eventDate() }}
@@ -36,11 +33,8 @@
             </li>
             <li class="event-details__item">
               <label>Guest Arrival Time</label>
-              <div class="info-text" v-if="vendorProposal.nonMaryoku">
-                {{ eventData.startTime * 1000 | date("MMM Do YYYY") }}
-              </div>
-              <div class="info-text" v-else>
-                {{ eventData.eventStartMillis * 1000 | date("MMM Do YYYY") }}
+              <div class="info-text">
+                {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
               </div>
             </li>
           </ul>
@@ -48,7 +42,7 @@
       </section>
 
       <section class="proposal-body">
-        <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner') && eventData.owner">Dear {{ eventData.owner.displayName }},</h1>
+        <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner')">Dear {{ eventData.owner.displayName }},</h1>
         <h1 class="font-size-30 text-capitalize" v-else-if="eventData.hasOwnProperty('customer')">Dear {{ eventData.customer.name }},</h1>
         <p class="mt-10">
           {{ vendorProposal.personalMessage }}
@@ -359,11 +353,12 @@ export default {
   },
   mounted() {
     console.log("detail.mounted", this.vendorProposal);
-    if (this.vendorProposal.nonMaryoku) {
-      this.eventData = this.vendorProposal.eventData;
-
+    if (this.vendorProposal.proposalRequest) {
+      this.eventData = this.vendorProposal.proposalRequest
+        ? this.vendorProposal.proposalRequest.eventData
+        : this.vendorProposal.eventDate;
     } else {
-      this.eventData = this.vendorProposal.proposalRequest.eventData;
+      this.eventData = this.vendorProposal.eventData;
     }
       console.log("detail.mounted", this.eventData);
   },
