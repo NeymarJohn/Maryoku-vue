@@ -391,7 +391,6 @@ export default {
       console.log('handleNegotiationREqeust', this.selectedProposal);
       if (status === this.negotiationRequestStatus.review) {
         this.showRequestNegotiationModal = false;
-        this.selectedProposal = this.proposals.find((p) => p.id === this.selectedProposalRequest.proposal.id);
         this.showProposalDetail = true;
       } else if (status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline) {
         let expiredTime =
@@ -410,8 +409,13 @@ export default {
             this.selectedProposal.negotiations[0] = res;
 
             if (status === this.negotiationRequestStatus.approve) this.selectedProposal.expiredDate = new Date(expiredTime);
+            this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
-            // this.$store.commit("vendorDashboard/setProposal", proposal);
+            if (!this.selectedProposal.nonMaryoku) {
+                this.selectedProposalRequest.proposal = this.selectedProposal;
+                this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
+            }
+
             if (status === this.negotiationRequestStatus.decline) {
               this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE;
             } else {
