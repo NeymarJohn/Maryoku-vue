@@ -158,23 +158,19 @@ export default {
     let tenantUser = null;
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
+      this.proposal = await Proposal.find(proposalId);
+      if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
+      if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
     if (givenToken) {
 
         tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
         this.loading = false;
-        this.proposal = JSON.parse(localStorage.getItem('non-maryoku-proposa'));
         this.handleAction();
 
     } else {
-      this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposal"));
-      if (!this.proposal) {
-        this.proposal = await Proposal.find(proposalId);
-        if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
-        if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
-        localStorage.setItem("non-maryoku-proposal", JSON.stringify(this.proposal));
-      }
       this.loading = false;
     }
+
     // await this.$store.dispatch("common/getEventTypes");
   },
   methods: {
