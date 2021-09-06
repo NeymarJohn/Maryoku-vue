@@ -8,7 +8,7 @@
       </div>
       <div class="d-flex justify-content-center">
         <span>{{ selectedServices }}</span
-        ><span v-if="serviceTime" class="seperator"></span><span>{{ serviceTime }}</span>
+        ><span class="seperator"></span><span>{{ serviceTime }}</span>
       </div>
     </div>
     <div class="steps-cont">
@@ -62,8 +62,12 @@ export default {
   },
   created() {},
   mounted() {
-    this.lookingFor = this.proposalRequest.plannerRequirement.types[this.vendor.eventCategory.key];
-
+    const types = this.proposalRequest.plannerRequirement.types[this.vendor.eventCategory.key];
+    let selectedTypes = [];
+    for (let key in types) {
+      selectedTypes = [...selectedTypes, ...types[key]];
+    }
+    this.lookingFor = selectedTypes;
     console.log("this.lookingFor", this.lookingFor);
   },
   computed: {

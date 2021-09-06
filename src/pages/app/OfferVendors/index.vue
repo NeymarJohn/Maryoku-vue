@@ -335,7 +335,7 @@ export default {
             this.showBookedVendorModal = true;
 
             console.log('created', this.allRequirements);
-            if (!this.allRequirements || !this.allRequirements.length) {
+            if (!this.allRequirements) {
                 await this.getAllRequirements()
             }
             this.proposal = JSON.parse(localStorage.getItem('proposal'));

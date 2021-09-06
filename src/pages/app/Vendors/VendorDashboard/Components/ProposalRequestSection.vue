@@ -222,7 +222,7 @@ export default {
               .then(async res => {
                   this.selectedProposalRequest.proposal.negotiations[0] = res;
                   this.selectedProposalRequest.proposal.expiredDate = new Date(expiredTime);
-                  this.$store.commit('vendorDashboard/setProposalRequest', this.selectedProposalRequest);
+
                   if(status === this.negotiationRequestStatus.decline){
                       this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE
                   } else {
