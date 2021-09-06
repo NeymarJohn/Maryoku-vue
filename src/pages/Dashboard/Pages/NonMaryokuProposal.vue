@@ -18,6 +18,7 @@
         :nonMaryoku="true"
         v-if="proposal"
         @updateProposal="updateProposal"
+        @ask="handleAsk"
       ></event-proposal-details>
     </div>
     <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
@@ -100,6 +101,7 @@
 
     <guest-sign-up-modal
       v-if="showGuestSignupModal"
+      :onlyAuth="onlyAuth"
       @signIn="signIn"
       @signUp="signUp"
       @save="saveGuestComment"
@@ -118,10 +120,13 @@ import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails
 import CommentMixins from "@/mixins/comment";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import { SignInContent } from "@/components";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
+import moment from "moment";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -141,6 +146,7 @@ export default {
       page: "signin",
       loading: true,
       proposal: null,
+      onlyAuth: false,
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
@@ -150,23 +156,25 @@ export default {
   async created() {
     console.log("non-maryokuProposal.created", this.loggedInUser);
     let tenantUser = null;
+    if(this.loggedInUser){
+        tenantUser =  await this.$store.dispatch("auth/checkToken");
+    }
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
+      this.proposal = await Proposal.find(proposalId);
+      if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
+      if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
     if (givenToken) {
-      tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
-      this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposa"));
-      this.handleAction();
+
+        tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
+        this.loading = false;
+        this.handleAction();
+
     } else {
-      this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposal"));
-      if (!this.proposal) {
-        this.proposal = await Proposal.find(proposalId);
-        if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
-        if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
-        localStorage.setItem("non-maryoku-proposal", JSON.stringify(this.proposal));
-      }
       this.loading = false;
     }
-    await this.$store.dispatch("common/getEventTypes");
+
+    // await this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
@@ -180,6 +188,32 @@ export default {
         .then((res) => {
           window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
         });
+    },
+    async handleAsk(ask){
+        console.log('ask', ask);
+        if (ask === 'expiredDate') {
+            let expiredTime = moment().add(2, 'days').unix() * 1000;
+            if (this.loggedInUser) {
+                await this.saveNegotiation(expiredTime);
+            } else {
+                localStorage.setItem('nonMaryokuAction', JSON.stringify({
+                    action: 'saveNegotiation',
+                    expiredTime
+                }));
+                this.onlyAuth = true;
+                this.showGuestSignupModal = true;
+            }
+        }
+    },
+    async saveNegotiation(expiredTime){
+        console.log('saveNegotiation');
+        let query = new ProposalNegotiationRequest({
+            proposalId: this.proposal.id,
+            proposal: new Proposal({id: this.proposal.id}),
+            expiredTime,
+        });
+        let res = await query.for(new Proposal({ id: this.proposal.id })).save()
+        this.proposal.negotiations.push(res);
     },
     updateProposal(proposal) {
       console.log(proposal);
@@ -215,11 +249,11 @@ export default {
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
-      if (data.action === "saveComment")
-        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
+      if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
       this.showCommentEditorPanel = true;
     },
     async signIn({ email, password }) {
@@ -258,9 +292,10 @@ export default {
         if (data.action === "updateComment") this.updateComment(data);
         if (data.action === "deleteComment") this.deleteComment(data);
         if (data.action === "updateCommentComponent") this.saveComment(data);
+        if (data.action === 'saveNegotiation') this.saveNegotiation(data);
 
         localStorage.removeItem("nonMaryokuAction");
-        this.showCommentEditorPanel = true;
+
       }
     },
     saveCommentWithAuth(params) {

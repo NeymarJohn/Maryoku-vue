@@ -82,6 +82,8 @@ import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest"
 import Proposal from "@/models/Proposal"
 import TimerPanel from "./TimerPanel";
 import Swal from "sweetalert2";
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
+
 export default {
   components: { Timer, TimerPanel },
   props: {
@@ -216,7 +218,17 @@ export default {
       let today = new Date()
       let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
       return expiredDate - today
-    }
+    },
+    negotiationProcessed(){
+      // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
+      //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+      return false
+    },
+    negotiationPending(){
+      console.log('negotiationPending', this.proposal.id);
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.some(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+    },
   },
 };
 </script>

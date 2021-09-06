@@ -140,6 +140,14 @@ export default {
     };
   },
   async created() {
+    console.log("non-maryoku.proposal.created");
+    if (this.$store.state.auth.status.loggedIn) {
+      console.log("checkToken");
+      await this.$store.dispatch("auth/checkToken");
+    } else {
+      this.$router.push({ path: `/signin` });
+    }
+
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -173,6 +181,7 @@ export default {
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal"]),
     gotoNext() {
+      // if (this.step === 0 && !this.event.hasOwnProperty("customer")) {
       if (this.step === 0) {
         // create vendor event when
         this.createEvent().then(() => {
