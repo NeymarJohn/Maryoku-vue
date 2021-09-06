@@ -4,8 +4,8 @@
       <div class="font-size-20 font-bold-extra color-white text-transform-capitalize">Total Incomes{{customer ? ` - ${customer.companyName}` : ''}}</div>
       <div class="d-flex align-center mt-20">
         <div>
-          <h2 class="font-size-50 color-white m-0" v-if="customer">${{Math.floor(totalPrice) | withComma(Number)}}</h2>
-          <h2 class="font-size-50 color-white m-0" v-else>${{Math.floor(aggregate.totalPrice) | withComma(Number)}}</h2>
+          <h2 class="font-size-50 color-white m-0" v-if="customer">${{totalPrice | withComma(Number)}}</h2>
+          <h2 class="font-size-50 color-white m-0" v-else>${{aggregate.totalPrice | withComma(Number)}}</h2>
           <div v-if="customer" class="font-size-16 color-white py-20">{{`${wonProposals.length}/${customer.proposals.length}`}} Successful proposals</div>
           <div v-else class="font-size-16 color-white py-20">{{`${aggregate.wonProposals}/${aggregate.totalProposals}`}} Successful proposals</div>
           <div v-else>
