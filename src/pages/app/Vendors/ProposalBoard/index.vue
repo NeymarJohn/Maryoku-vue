@@ -410,7 +410,8 @@ export default {
 
             if (status === this.negotiationRequestStatus.approve) this.selectedProposalRequest.proposal.expiredDate = new Date(expiredTime);
 
-            // this.$store.commit("vendorDashboard/setProposal", proposal);
+            this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
+            this.$store.commit("vendorDashboard/setProposal", this.selectedProposalRequest.proposal);
             if (status === this.negotiationRequestStatus.decline) {
               this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE;
             } else {

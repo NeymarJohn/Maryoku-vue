@@ -18,7 +18,6 @@
         :nonMaryoku="true"
         v-if="proposal"
         @updateProposal="updateProposal"
-        @ask="handleAsk"
       ></event-proposal-details>
     </div>
     <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
@@ -119,13 +118,10 @@ import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails
 import CommentMixins from "@/mixins/comment";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import { SignInContent } from "@/components";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
-import moment from "moment";
-import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -157,12 +153,9 @@ export default {
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
     if (givenToken) {
-
-        tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
-        this.loading = false;
-        this.proposal = JSON.parse(localStorage.getItem('non-maryoku-proposa'));
-        this.handleAction();
-
+      tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
+      this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposa"));
+      this.handleAction();
     } else {
       this.proposal = JSON.parse(localStorage.getItem("non-maryoku-proposal"));
       if (!this.proposal) {
@@ -187,31 +180,6 @@ export default {
         .then((res) => {
           window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
         });
-    },
-    handleAsk(ask){
-        console.log('ask', ask);
-        if (ask === 'expiredDate') {
-            let expiredTime = moment().add(2, 'days').unix() * 1000;
-
-            new ProposalNegotiationRequest({
-                proposalId: this.proposal.id,
-                proposal: new Proposal({id: this.proposal.id}),
-                expiredTime,
-            })
-                .for(new Proposal({ id: this.proposal.id }))
-                .save()
-                .then((res) => {
-                    Swal.fire({
-                        title: "We received your request!",
-                        text: `Vendor will contact you!`,
-                        showCancelButton: false,
-                        confirmButtonClass: "md-button md-success btn-fill",
-                        cancelButtonClass: "md-button md-danger btn-fill",
-                        confirmButtonText: "OK",
-                        buttonsStyling: false,
-                    }).then((result) => {});
-                });
-        }
     },
     updateProposal(proposal) {
       console.log(proposal);

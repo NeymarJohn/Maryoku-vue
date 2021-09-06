@@ -176,13 +176,13 @@ export default {
     async selectTab(tab) {
       this.loading = true;
       this.tab = tab;
+      if(tab === 0) this.selectedCustomer = null
       await this.getCustomer();
       this.loading = false;
     },
 
     selectCustomer(customer){
       console.log('selectCustomer', customer);
-      this.renderInsight = false;
       this.selectedCustomer = customer;
     },
 

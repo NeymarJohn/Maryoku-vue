@@ -71,7 +71,6 @@
                   :key="selectedProposal.id"
                   @favorite="favoriteProposal"
                   @close="closeProposal"
-                  @ask="handleAsk"
                 ></event-proposal-details>
               </transition>
             </template>
@@ -137,7 +136,6 @@ import { postReq, getReq } from "@/utils/token";
 import Proposal from "@/models/Proposal";
 import EventComponent from "@/models/EventComponent";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
 import { Modal, MaryokuInput, Loader } from "@/components";
 import {NEGOTIATION_REQUEST_STATUS} from "@/constants/status";
@@ -152,7 +150,6 @@ import AdditionalRequestModal from "../PlanningBoard/components/modals/Additiona
 import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
 import ServicesCart from "./ServicesCart";
 import NegotiationNotification from "./components/NegotiationNotification";
-import Swal from "sweetalert2";
 
 export default {
   name: "event-booking",
@@ -342,21 +339,6 @@ export default {
           category: this.selectedCategory.componentId,
           item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.selectedProposal, isFavorite}}
       });
-    },
-    async handleAsk(ask){
-        if (ask === 'expiredDate') {
-            let expiredTime = moment().add(2, 'days').unix() * 1000;
-            let query = new ProposalNegotiationRequest({
-                eventId: this.event.id,
-                proposalId: this.selectedProposal.id,
-                proposal: new Proposal({id: this.selectedProposal.id}),
-                expiredTime,
-            });
-
-            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save()
-            console.log('ask.result', res);
-            this.selectedProposal.negotiations.push(res);
-        }
     },
     async addToCart() {
       if(!this.selectedProposal) return;
