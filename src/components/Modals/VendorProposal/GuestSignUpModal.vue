@@ -71,6 +71,10 @@ export default {
     MaryokuInput,
   },
   props: {
+    onlyAuth: {
+      type: Boolean,
+      default: false,
+    }
   },
   created() {
   },
@@ -79,7 +83,7 @@ export default {
       name: null,
       terms: false,
       page: '',
-      showSignupModal: false,
+      showSignupModal: this.onlyAuth,
     }
   },
   methods: {
