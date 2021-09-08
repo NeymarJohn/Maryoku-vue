@@ -132,7 +132,6 @@ import EventComponent from "@/models/EventComponent";
 import Vendors from "@/models/Vendors";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import VueElementLoading from "vue-element-loading";
-import { paginationMixin } from "@/mixins/pagination";
 import { Pagination } from "@/components";
 import _ from "underscore";
 import moment from "moment";

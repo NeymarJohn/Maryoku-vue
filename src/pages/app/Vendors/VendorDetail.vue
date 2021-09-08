@@ -41,7 +41,7 @@
           </template>
         </ul>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
     </div>
     <div class="vendor-detail-tab-wrapper">
       <div class="tabs">
@@ -66,7 +66,7 @@
 <script>
 import Vendors from "@/models/Vendors";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import CommentMixins from "@/mixins/comment"
+import {CommentMixins, ShareMixins} from "@/mixins";
 import { socialIcons } from "@/constants/links.js";
 import { Tabs, Modal } from "@/components";
 import VendorDetailContent from "./VendorDetailContent";
@@ -78,7 +78,7 @@ export default {
     VendorDetailContent,
     HeaderActions,
   },
-  mixins: [CommentMixins],
+  mixins: [CommentMixins, ShareMixins],
   data() {
     return {
       showCommentEditorPanel: false,

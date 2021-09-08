@@ -145,7 +145,6 @@ export default {
             proposalId: this.proposal.id,
             proposalRequestId: this.proposal.proposalRequestId,
             expiredDate: newExpiredDate,
-            tenantId: this.$authService.resolveTenantId(),
         })
             .for(new Proposal({ id: this.proposal.id }))
             .save()
@@ -165,13 +164,16 @@ export default {
   },
   computed: {
     backgroundImage() {
-      let link = "";
-      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0]) {
-        link = this.proposal.inspirationalPhotos[0].url;
-        return link;
-      }
-      if (this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
-      return link;
+        if (this.proposal.coverImage && this.proposal.coverImage[0])
+            return this.proposal.coverImage[0];
+        if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
+            return this.proposal.inspirationalPhotos[0].url;
+        if (this.proposal.vendor.images && this.proposal.vendor.images[0])
+            return this.proposal.vendor.images[0];
+        if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
+            return this.proposal.vendor.vendorImages[0];
+
+        return "";
     },
     categories() {
       return this.$store.state.common.serviceCategories;
@@ -226,7 +228,7 @@ export default {
     },
     negotiationPending(){
       console.log('negotiationPending', this.proposal.id);
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.some(it =>
+      return !!this.proposal.negotiations.length && this.proposal.negotiations.some(it =>
           it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
     },
   },

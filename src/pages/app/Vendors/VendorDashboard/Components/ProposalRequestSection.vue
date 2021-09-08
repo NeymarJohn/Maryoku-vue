@@ -212,10 +212,14 @@ export default {
       } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
           let expiredTime = new Date(this.selectedProposalRequest.proposal.expiredDate).getTime()  +
               (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
+
+          let url = this.selectedProposal.nonMaryoku ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+              : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
           new ProposalNegotiationRequest({
               id: this.selectedProposalRequest.proposal.negotiations[0].id,
               expiredTime,
-              status
+              status,
+              url
           })
               .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
               .save()

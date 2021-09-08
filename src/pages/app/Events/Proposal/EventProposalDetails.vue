@@ -407,7 +407,7 @@ import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
-import CommentMixins from "@/mixins/comment"
+import {CommentMixins, ShareMixins} from "@/mixins";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
@@ -457,7 +457,7 @@ export default {
       default: "red",
     },
   },
-  mixins: [CommentMixins],
+  mixins: [CommentMixins, ShareMixins],
   data() {
     return {
       // auth: auth,
@@ -651,13 +651,16 @@ export default {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
     headerBackgroundImage() {
-      if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
-        return this.vendorProposal.inspirationalPhotos[0].url;
-      if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
-        return this.vendorProposal.vendor.images[0];
-      if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
-        return this.vendorProposal.vendor.vendorImages[0];
-      return "";
+        if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0])
+            return this.vendorProposal.coverImage[0];
+        if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
+            return this.vendorProposal.inspirationalPhotos[0].url;
+        if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
+            return this.vendorProposal.vendor.images[0];
+        if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
+            return this.vendorProposal.vendor.vendorImages[0];
+
+        return "";
     },
     attachments() {
       if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
@@ -1244,7 +1247,6 @@ export default {
               align-items: center;
               justify-content: space-between;
               padding: 15px 0px;
-              padding-right: 50%;
               &:last-child {
                 border-bottom: solid 1px #ddd;
               }

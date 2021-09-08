@@ -31,7 +31,7 @@
           YOUR EVENT
         </h3>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
     </div>
     <div class="md-layout">
       <div id="control-panel" style="width: 1px; height: 100%; float: left; margin-left: -1px"></div>
@@ -78,7 +78,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import CommentMixins from "@/mixins/comment"
+import {CommentMixins, ShareMixins} from "@/mixins";
 import Multiselect from "vue-multiselect";
 import EventOverviewSection from "./EventOverviewSection";
 import EventOverviewDate from "./EventOverviewDate";
@@ -100,7 +100,7 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  mixins: [CommentMixins],
+  mixins: [CommentMixins, ShareMixins],
   data() {
     return {
       // auth: auth,

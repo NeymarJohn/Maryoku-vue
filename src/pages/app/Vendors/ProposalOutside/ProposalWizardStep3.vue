@@ -186,11 +186,11 @@
           </template>
       </div>
     </div>
-    <div class="white-card mt-20 additional-requirements" v-if="vendor.vendorCategory === 'venuerental'">
+    <div class="white-card mt-20 additional-requirements" v-if="vendor.vendorCategory === 'venuerental' && sittingArrangement && Object.keys(sittingArrangement).length">
       <div class="p-40">
         <div>
           <img :src="`${$iconURL}common/seating-purple.png`" />
-          <span class="font-size-30 font-bold"> Seating Arrangement </span>
+          <span class="font-size-30 font-bold ml-20"> Seating Arrangement </span>
         </div>
         <div class="mt-40">
           <div class="d-flex align-stretch seats-list">

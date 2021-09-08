@@ -1,6 +1,6 @@
 import PaginationConstants from '@/constants/pagination'
 
-export const paginationMixin = {
+export default {
   components: {
     PaginationConstants
   },

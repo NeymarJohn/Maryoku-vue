@@ -117,7 +117,7 @@
             </ul>
           </div>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
       </div>
     </div>
     <div class="md-layout justify-content-between notes" style="margin: 2em 50px">
@@ -622,7 +622,7 @@ import TimeCounter from "./components/TimeCounter";
 import Popup from "../../../components/Popup";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
-import CommentMixins from "@/mixins/comment"
+import {CommentMixins, ShareMixins} from "@/mixins";
 import vSelect from "vue-select";
 
 export default {
@@ -652,7 +652,7 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  mixins: [CommentMixins],
+  mixins: [CommentMixins, ShareMixins],
   data() {
     return {
       // auth: auth,
