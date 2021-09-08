@@ -19,7 +19,7 @@
             <br />Got some cool ideas of your own? &nbsp;&nbsp;Scroll down to create a brilliant new concept.
           </p>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
@@ -145,7 +145,7 @@
           <h3>Great Choice!</h3>
           <p>This theme will inspire us when planning our next steps.</p>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
@@ -270,7 +270,7 @@ import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment"
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import ConceptBox from "../../../../components/ConceptBox.vue";
 
@@ -296,7 +296,7 @@ export default {
     VueHtml2pdf,
   },
   props: {},
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   computed: {
     ...mapState("event", ["eventData"]),
     currentUser() {

@@ -22,11 +22,7 @@
         </md-button>
       </li>
     </ul>
-    <sharing-modal
-        v-if="isSharing"
-        :page="page"
-        @share="shareLink"
-        @cancel="isSharing = false"/>
+    <sharing-Modal v-if="isSharing" @cancel="isSharing = false"></sharing-Modal>
   </div>
 </template>
 <script>
@@ -41,15 +37,12 @@ export default {
       type: Boolean,
       default: false,
     },
-    page: {
-      type: String,
-      default: 'event',
-    }
   },
   data() {
     return {
       isCommentMode: false,
       isSharing: false,
+      shareLink: "",
     };
   },
   created() {
@@ -63,12 +56,15 @@ export default {
     toggleSharingMode() {
       this.isSharing = !this.isSharing;
     },
+    genearteShareLink() {
+      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&url=${
+        this.$route.path
+      }`;
+      return this.shareLink;
+    },
     startDownload() {
       this.$emit("export", { type: "pdf" });
     },
-    shareLink(args){
-      this.$emit("share", args)
-    }
   },
   computed: {
     permission() {

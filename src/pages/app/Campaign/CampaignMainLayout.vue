@@ -17,7 +17,7 @@
         </div>
         <p class="font-size-16">Get your guests super exited by giving them a taste of what's waiting for them</p>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="campaign-content md-layout-item md-size-100 mt-30">
       <loader :active="isLoading"/>
@@ -299,7 +299,7 @@ import { mapActions, mapGetters } from "vuex";
 import { Tabs, Modal } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment"
 const SaveDate = () => import("./SaveDate");
 const Rsvp = () => import("./Rsvp");
 const Countdown = () => import("./Countdown");
@@ -364,7 +364,7 @@ export default {
     FeedbackAnalytics,
     FeedbackList,
   },
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   data() {
     return {
       isLoading: false,

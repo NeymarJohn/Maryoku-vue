@@ -179,7 +179,7 @@ import PendingForVendors from "../components/PendingForVendors";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment"
 
 import { postReq, getReq } from "@/utils/token";
 export default {
@@ -198,7 +198,7 @@ export default {
     MaryokuInput,
   },
   props: {},
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   data: () => ({
     // auth: auth,
     calender: null,

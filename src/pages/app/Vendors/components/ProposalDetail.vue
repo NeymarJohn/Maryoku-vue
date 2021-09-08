@@ -359,11 +359,10 @@ export default {
   },
   mounted() {
     console.log("detail.mounted", this.vendorProposal);
-    if (this.vendorProposal.nonMaryoku) {
-      this.eventData = this.vendorProposal.eventData;
-
-    } else {
+    if (!this.vendorProposal.nonMaryoku) {
       this.eventData = this.vendorProposal.proposalRequest.eventData;
+    } else {
+      this.eventData = this.vendorProposal.eventData;
     }
       console.log("detail.mounted", this.eventData);
   },

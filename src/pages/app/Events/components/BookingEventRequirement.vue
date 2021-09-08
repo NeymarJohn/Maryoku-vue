@@ -23,7 +23,7 @@
           Our job is to bring you the most accurate offers for your event.
           <br />This is what we know about your event so far, let us know if there is anything we missed.
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" hideDownload></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
       </div>
     </div>
 
@@ -104,7 +104,7 @@ import { Modal, Loader } from "@/components";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment"
 
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -137,7 +137,7 @@ export default {
       default: {},
     },
   },
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   data: () => ({
     // auth: auth,
     calendar: null,

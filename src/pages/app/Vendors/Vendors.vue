@@ -83,7 +83,7 @@ import Vendors from "@/models/Vendors";
 import EventComponent from "@/models/EventComponent";
 import VendorCategories from "@/models/VendorCategories";
 // import auth from '@/auth';
-import { paginationMixins } from "@/mixins";
+import { paginationMixin } from "@/mixins/pagination";
 
 export default {
   components: {
@@ -94,7 +94,7 @@ export default {
     Pagination,
     companyForm,
   },
-  mixins: [paginationMixins],
+  mixins: [paginationMixin],
   data() {
     return {
       // auth: auth,

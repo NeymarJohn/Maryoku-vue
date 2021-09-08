@@ -8,11 +8,7 @@
         {{ proposal.vendor.companyName }}
       </div>
       <div>
-        <header-actions
-            page="proposal"
-            @toggleCommentMode="toggleCommentMode"
-            @share="shareWithAuth"
-            @export="downProposal"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @export="downProposal"></header-actions>
       </div>
     </div>
     <div class="proposal-content mt-40">
@@ -121,7 +117,7 @@ import { Loader } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import { SignInContent } from "@/components";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
@@ -130,6 +126,7 @@ import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -143,7 +140,7 @@ export default {
     EventDetail,
     SignInContent,
   },
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   data() {
     return {
       page: "signin",
@@ -193,6 +190,7 @@ export default {
         });
     },
     async handleAsk(ask){
+        console.log('ask', ask);
         if (ask === 'expiredDate') {
             let expiredTime = moment().add(2, 'days').unix() * 1000;
             if (this.loggedInUser) {
@@ -213,22 +211,9 @@ export default {
             proposalId: this.proposal.id,
             proposal: new Proposal({id: this.proposal.id}),
             expiredTime,
-            url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`
         });
         let res = await query.for(new Proposal({ id: this.proposal.id })).save()
         this.proposal.negotiations.push(res);
-    },
-    async shareWithAuth(args){
-      if(this.loggedInUser){
-          await this.share(args);
-      } else {
-          localStorage.setItem('nonMaryokuAction', JSON.stringify({
-              action: 'saveShare',
-              ...args
-          }));
-          this.onlyAuth = true;
-          this.showGuestSignupModal = true;
-      }
     },
     updateProposal(proposal) {
       console.log(proposal);
@@ -257,6 +242,9 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
+    showGuestSignUpModal() {
+      if (!this.loggedInUser) this.showGuestSignupModal = true;
+    },
     saveGuestComment(name) {
       this.showGuestSignupModal = false;
       this.setGuestName(name);
@@ -266,7 +254,6 @@ export default {
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
       if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
-      if (data.action === "saveShare") this.saveNegotiation(data);
       this.showCommentEditorPanel = true;
     },
     async signIn({ email, password }) {
@@ -275,6 +262,7 @@ export default {
         password,
       });
       this.showGuestSignupModal = false;
+      console.log("logged in");
       this.handleAction();
     },
     async signUp({ email, password, name, company }) {
@@ -287,6 +275,7 @@ export default {
       });
       this.showGuestSignupModal = false;
       await this.$store.dispatch("auth/login", { email, password });
+      console.log("logged out");
       this.handleAction();
     },
     auth(provider) {

@@ -20,7 +20,7 @@
           {{ selectedBlock.bookTitle }}
         </h3>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @share="share" hideDownload></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
     </div>
     <div class="booking-header md-layout-item md-size-100">
       <div class="header-title w-100">
@@ -153,7 +153,7 @@ import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment"
 import { businessCategories, VendorPolicy } from "@/constants/vendor";
 import { camelize } from "@/utils/string.util";
 export default {
@@ -163,7 +163,7 @@ export default {
     CommentEditorPanel,
     HeaderActions,
   },
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   data() {
     return {
       isLoading: false,

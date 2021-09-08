@@ -21,7 +21,7 @@
             Budget
           </h3>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
       </div>
       <div class="md-layout justify-content-between">
         <div class="md-layout-item md-size-40">
@@ -285,7 +285,7 @@ import PieChartRound from "./components/PieChartRound.vue";
 import BudgetHandleMinusModal from "../../../components/Modals/BudgetHandleMinusModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import CommentMixins from "@/mixins/comment"
 
 import BudgetEditModal from "@/components/Modals/BudgetEditModal";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
@@ -310,7 +310,7 @@ export default {
     AddNewCategoryModal,
     VueHtml2pdf,
   },
-  mixins: [CommentMixins, ShareMixins],
+  mixins: [CommentMixins],
   data() {
     return {
       // auth: auth,
