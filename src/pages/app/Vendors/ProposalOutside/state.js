@@ -162,13 +162,15 @@ const mutations = {
     state.extraServices = proposal.extraServices;
     state.images = proposal.images;
     state.personalMessage = proposal.personalMessage;
-    state.tax = proposal.tax;
+    state.taxs = proposal.taxs;
+    state.discounts = proposal.discounts;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
     state.coverImage = proposal.coverImage || [],
     // state.inspirationalPhotos = proposal.inspirationalPhotos
     state.initialized = true;
     // state.wizardStep = proposal.step
+    console.log('setProposal', state.coverImage);
   },
   setWizardStep: (state, step) => {
     console.log('setWizardStep', step);

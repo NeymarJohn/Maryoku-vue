@@ -351,6 +351,7 @@ export default {
                 proposalId: this.selectedProposal.id,
                 proposal: new Proposal({id: this.selectedProposal.id}),
                 expiredTime,
+                url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
             });
 
             let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save()

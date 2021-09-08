@@ -213,6 +213,7 @@ export default {
             proposalId: this.proposal.id,
             proposal: new Proposal({id: this.proposal.id}),
             expiredTime,
+            url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`
         });
         let res = await query.for(new Proposal({ id: this.proposal.id })).save()
         this.proposal.negotiations.push(res);
@@ -256,9 +257,6 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    showGuestSignUpModal() {
-      if (!this.loggedInUser) this.showGuestSignupModal = true;
-    },
     saveGuestComment(name) {
       this.showGuestSignupModal = false;
       this.setGuestName(name);
@@ -277,7 +275,6 @@ export default {
         password,
       });
       this.showGuestSignupModal = false;
-      console.log("logged in");
       this.handleAction();
     },
     async signUp({ email, password, name, company }) {
@@ -290,7 +287,6 @@ export default {
       });
       this.showGuestSignupModal = false;
       await this.$store.dispatch("auth/login", { email, password });
-      console.log("logged out");
       this.handleAction();
     },
     auth(provider) {
