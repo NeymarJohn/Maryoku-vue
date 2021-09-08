@@ -29,7 +29,7 @@
           @click="isBundleDiscount = !isBundleDiscount"
           v-if="additionalServices.length > 0 && step === 2"
         >
-          <img :src="`${iconUrl}Asset 579.svg`" />
+          <img class="black" :src="`${iconUrl}Asset 579.svg`" />
           <span>
             Add Bundle Discount
             <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
@@ -43,7 +43,7 @@
           <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
             <md-checkbox
               v-if="isBundleDiscount"
-              class="no-margin"
+              class="no-margin md-vendor"
               :value="vendor.eventCategory.key"
               v-model="bundleDiscountServices"
             />
@@ -53,29 +53,26 @@
                 {{ vendor.eventCategory.title }}
               </li>
               <li>
-                <a class="color-vendor" :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
               </li>
               <li>
                 <span>Your proposal</span>
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
               <li>
-                <span>Average Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                 <span>
-                  ${{averageBudget(vendor.eventCategory.key) | withComma
-                  }}</span
-                >
+                <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
+                <span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
               </li>
               <li
-                v-if="finalPriceOfMainCategory - averageBudget(vendor.eventCategory.key) > 0"
+                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
                 class="color-black"
               >
                 <span>
                   <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
                   Your proposal is ${{
-                    (finalPriceOfMainCategory - averageBudget(vendor.eventCategory.key)) | withComma
+                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma
                   }}
-                  more than average budget
+                  more than budget
                 </span>
               </li>
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
@@ -89,7 +86,7 @@
                   </div>
                 </template>
               </li>
-              <!-- <li
+              <li
                 v-if="
                   calculatedTotal(getRequirementsByCategory('venuerental')) -
                     newProposalRequest.eventData.allocatedBudget >
@@ -106,7 +103,7 @@
                   }}
                   more than the budget
                 </span>
-              </li> -->
+              </li>
             </ul>
           </div>
         </div>
@@ -118,7 +115,12 @@
             :key="aIndex"
           >
             <h3 class="width-100" v-if="aIndex === 0">Additional Services</h3>
-            <md-checkbox v-if="isBundleDiscount" class="no-margin" v-model="bundleDiscountServices" :value="a" />
+            <md-checkbox
+              v-if="isBundleDiscount"
+              class="no-margin md-vendor"
+              v-model="bundleDiscountServices"
+              :value="a"
+            />
             <ul>
               <li>
                 <img :src="getIconUrlByCategory(a)" />
@@ -133,18 +135,13 @@
               </li>
               <li>
                 <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-                <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
+                <span> ${{ getAllocatedBudget(a) | withComma }}</span>
               </li>
-              <li
-                v-if="pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget > 0"
-              >
+              <li v-if="pricesByCategory[a] - getAllocatedBudget(a) > 0">
                 <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
 
                 <span>
-                  Your proposal is ${{
-                    (pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget)
-                      | withComma
-                  }}
+                  Your proposal is ${{ (pricesByCategory[a] - getAllocatedBudget(a)) | withComma }}
                   more than the budget
                 </span>
               </li>
@@ -155,7 +152,7 @@
           :totalPrice="totalPriceBeforeDiscount"
           :defaultTax="defaultTax"
           :defaultDiscount="defaultDiscount"
-          :non-maryoku="true"
+          :nonMaryoku="true"
           @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
           @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
         ></discount-form>
@@ -297,6 +294,27 @@ export default {
     getRequirementsByCategory(category) {
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
     },
+    getRequirementsBySelectedCategory() {
+      let selectedCategories = [];
+      let selectedServices = [];
+
+      selectedCategories = this.additionalServices.map((as) => as.value);
+      selectedCategories.push("venuerental");
+
+      this.services
+        .filter((s) => selectedCategories.includes(s.name))
+        .map(function (cs) {
+          cs.categories.map(function (scs) {
+            scs.subCategories.map(function (sscs) {
+              sscs.items.map(function (ssscs) {
+                selectedServices.push(ssscs.name);
+              });
+            });
+          });
+        });
+
+      return this.newProposalRequest.requirements.filter((r) => selectedServices.includes(r.requirementTitle));
+    },
     total(requirements, category = null) {
       let total = 0;
       let vm = this;
@@ -350,23 +368,7 @@ export default {
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category);
     },
-    averageBudget(category){
-      let service = this.getServiceCategory(category);
-      // console.log('averageBudget', service);
-      let budget = this.event.numberOfParticipants * service.basicCostPerGuest;
-      if (service.minCost && budget < service.minCost) {
-        return service.minCost;
-      } else if (service.maxCost && budget > service.maxCost) {
-        return service.maxCost;
-      } else {
-        return budget;
-      }
-    },
     getAllocatedBudget(category) {
-      // const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
-      //   (item) => item.componentId === category,
-      // );
-      // return allocatedBudgetItem.allocatedBudget;
       return 0;
     },
     saveDiscount(categoryKey, discount) {
@@ -412,9 +414,15 @@ export default {
       "totalBeforeDiscount",
       "totalBeforeBundle",
     ]),
-
+    proposalRequest() {
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+    },
+    proposal() {
+      return this.$store.state.proposalForNonMaryoku;
+    },
     event() {
-      return this.$store.state.proposalForNonMaryoku.event;
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
     },
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;
@@ -553,6 +561,10 @@ export default {
       img {
         width: 30px;
         margin-right: 1em;
+
+        &.black {
+          filter: brightness(0) invert(0);
+        }
       }
       span {
         font-size: 16px;
@@ -602,6 +614,10 @@ export default {
             display: flex;
             justify-content: space-between;
             margin-bottom: 14px;
+
+            a {
+              color: #641856;
+            }
 
             &:first-child {
               display: block;
