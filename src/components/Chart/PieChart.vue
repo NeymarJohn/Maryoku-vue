@@ -35,7 +35,13 @@
         />
       </g>
 
-      <g :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`" ref="tooltip">
+      <g
+        :transform="`translate(${x},${y})`"
+        class="tooltip"
+        :visibility="`${toolTipStatus}`"
+        ref="tooltip"
+        v-if="showTooltip"
+      >
         <path
           id="svgMask"
           d="M3,92 L182,92 182,43 190,38 182,33 182,3 3,3 z"
@@ -124,6 +130,10 @@ export default {
     theme: {
       type: String,
       default: "",
+    },
+    showTooltip: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
