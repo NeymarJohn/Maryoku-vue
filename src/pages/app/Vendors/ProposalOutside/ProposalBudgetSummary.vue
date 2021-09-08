@@ -59,7 +59,7 @@
                 <span>Your proposal</span>
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
                 <span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
               </li>
@@ -74,7 +74,7 @@
                   }}
                   more than budget
                 </span>
-              </li>
+              </li> -->
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">
@@ -133,7 +133,7 @@
                 <span>Your proposal</span>
                 <span>${{ pricesByCategory[a] | withComma }}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
                 <span> ${{ getAllocatedBudget(a) | withComma }}</span>
               </li>
@@ -144,7 +144,8 @@
                   Your proposal is ${{ (pricesByCategory[a] - getAllocatedBudget(a)) | withComma }}
                   more than the budget
                 </span>
-              </li>
+              </li> -->
+              <li></li>
             </ul>
           </div>
         </div>
