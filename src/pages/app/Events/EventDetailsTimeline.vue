@@ -24,7 +24,10 @@
           that your invitees will know what to expect!
         </div>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
+      <header-actions
+          @toggleCommentMode="toggleCommentMode"
+          @share="share"
+          @export="exportToPdf"></header-actions>
     </div>
     <div class="md-layout">
       <div
@@ -161,7 +164,7 @@ import { timelineBlockItems } from "@/constants/event";
 import TimelineGapModal from "./Modals/TimelineGapModal";
 
 import { timelineTempates } from "@/constants/event.js";
-import CommentMixins from "@/mixins/comment"
+import {CommentMixins, ShareMixins} from "@/mixins";
 import { postReq, getReq } from "@/utils/token";
 export default {
   name: "event-details-timeline",
@@ -191,7 +194,7 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  mixins: [CommentMixins],
+  mixins: [CommentMixins, ShareMixins],
   data: () => ({
     // auth: auth,
     editingMode: "template",

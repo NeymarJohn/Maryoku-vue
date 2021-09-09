@@ -26,7 +26,6 @@
                     direction: 'row',
                   }"
                   theme="white"
-                  :showTooltip="false"
                 ></pie-chart>
               </div>
               <div class="d-flex">

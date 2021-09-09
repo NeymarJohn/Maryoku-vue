@@ -92,8 +92,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import Vendors from "@/models/Vendors";
+import { mapActions } from "vuex";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
@@ -181,8 +180,9 @@ export default {
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal"]),
     gotoNext() {
-      // if (this.step === 0 && !this.event.hasOwnProperty("customer")) {
-      if (this.step === 0) {
+      // create event only when the proposal is created
+      if (this.step === 0 && !this.$route.params.id) {
+      // if(this.step === 0){
         // create vendor event when
         this.createEvent().then(() => {
           this.step = this.step + 1;
@@ -306,7 +306,7 @@ export default {
       this.$http
         .post(
           `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
-          {},
+          {type: 'created'},
           { headers: this.$auth.getAuthHeader() },
         )
         .then((res) => {

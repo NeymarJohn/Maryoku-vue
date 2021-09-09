@@ -166,8 +166,8 @@ const mutations = {
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
     state.coverImage = proposal.coverImage || [],
-      // state.inspirationalPhotos = proposal.inspirationalPhotos
-      state.initialized = true;
+    // state.inspirationalPhotos = proposal.inspirationalPhotos
+    state.initialized = true;
     // state.wizardStep = proposal.step
   },
   setWizardStep: (state, step) => {
@@ -181,10 +181,6 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setCostServices: (state, { category, services }) => {
-    // Add this category for the secondary servicesList
-    if (category !== state.vendor.eventCategory.key && !state.additionalServices.includes(category)) {
-      Vue.set(state, "additionalServices", [...state.additionalServices, category]);
-    }
     Vue.set(state.costServices, category, services);
   },
   setIncludedServices: (state, { category, services }) => {

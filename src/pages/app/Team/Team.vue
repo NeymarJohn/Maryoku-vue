@@ -50,7 +50,7 @@ import Team from '@/models/Team'
 import teamVuexModule from './team.vuex'
 import VueElementLoading from 'vue-element-loading'
 import { Pagination } from '@/components'
-import { paginationMixin } from '@/mixins/pagination'
+import { paginationMixins } from '@/mixins'
 
 export default {
   components: {
@@ -60,7 +60,7 @@ export default {
     VueElementLoading,
     Pagination
   },
-  mixins: [paginationMixin],
+  mixins: [paginationMixins],
   data () {
     return {
       // auth: auth,

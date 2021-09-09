@@ -397,10 +397,13 @@ export default {
           new Date(this.selectedProposal.expiredDate).getTime() +
           (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
+        let url = this.selectedProposal.nonMaryoku ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+            : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
         new ProposalNegotiationRequest({
           id: this.selectedProposal.negotiations[0].id,
           expiredTime,
           status,
+          url
         })
           .for(new Proposal({ id: this.selectedProposal.id }))
           .save()
@@ -434,6 +437,7 @@ export default {
           vendorId: this.vendorData.id,
         },
       });
+
       this.openNewTab(routeData.href);
     },
     openNewTab(link) {
@@ -477,7 +481,7 @@ export default {
       this.$http
         .post(
           `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
-          {},
+          {type:'created'},
           { headers: this.$auth.getAuthHeader() },
         )
         .then((res) => {

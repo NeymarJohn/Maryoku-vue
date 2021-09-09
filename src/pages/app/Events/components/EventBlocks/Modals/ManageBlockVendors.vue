@@ -70,7 +70,7 @@ import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
 import Vendors from "@/models/Vendors";
 import EventComponentVendor from "@/models/EventComponentVendor";
-import { paginationMixin } from "@/mixins/pagination";
+import { paginationMixins } from "@/mixins";
 import { Pagination } from "@/components";
 
 import VendorsTable from "../../../../Vendors/Table/vendorsList";
@@ -106,7 +106,7 @@ export default {
     },
     tooltipModels: [],
   }),
-  mixins: [paginationMixin],
+  mixins: [paginationMixins],
 
   created() {
     this.$auth.currentUser(

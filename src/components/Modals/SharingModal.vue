@@ -2,7 +2,8 @@
   <modal class="sharing-model">
     <template slot="header">
       <div class="maryoku-modal-header">
-        <h2>Share 'Venue Proposals' With Your Colleague</h2>
+        <h2 v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</h2>
+        <h2 v-if="page === 'proposal'">Share 'Proposal' With Your Colleague</h2>
       </div>
     </template>
     <template slot="body">
@@ -11,7 +12,7 @@
           <label class="font-size-16 font-bold-extra color-black mt-40">Link sharing on</label>
           <div class="d-flex align-center mt-10 mb-10">
             <span style="padding-bottom: 5px">Anyone with this link </span>
-            <div class="sharing-role">
+            <div v-if="page === 'event'" class="sharing-role">
               <md-button class="md-simple md-red edit-btn" @click="showLinkRoleEditor = !showLinkRoleEditor">
                 Can {{ role }}
                 <md-icon v-if="showLinkRoleEditor">keyboard_arrow_down</md-icon>
@@ -29,7 +30,7 @@
           <div class="d-flex">
             <!-- <maryoku-input class="flex-1" inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input> -->
             <input-tag v-model="emails" class="flex-1"></input-tag>
-            <div class="email-role-button">
+            <div v-if="page === 'event'" class="email-role-button">
               <md-button
                 class="md-simple md-red role-editor"
                 @click="showEmailRoleEditor = !showEmailRoleEditor"
@@ -42,7 +43,7 @@
               <sharing-role-options v-if="showEmailRoleEditor" align="right"></sharing-role-options>
             </div>
           </div>
-          <div v-if="emails.length > 0">
+          <div v-if="page === 'event' && emails.length > 0">
             <div class="form-group mt-4">
               <textarea rows="8" class="form-control" placeholder="Add message" v-model="message"></textarea>
             </div>
@@ -85,6 +86,10 @@ export default {
     InputTag,
   },
   props: {
+    page: {
+      type: String,
+      default: 'event',
+    },
     show: [Boolean],
     value: [Number],
   },
@@ -114,14 +119,19 @@ export default {
     };
   },
   created() {
+    console.log('sharing.modal.created', this.page);
     this.generateShareLink();
   },
   methods: {
     generateShareLink() {
       const tenantId = this.$authService.resolveTenantId();
-      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&event=${
-        this.$route.params.id
-      }`;
+      if (this.page === 'event') {
+          this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&event=${
+              this.$route.params.id
+          }`;
+      } else if(this.page === 'proposal') {
+          this.shareLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${this.$route.params.proposalId}`
+      }
       return this.shareLink;
     },
     selectOption() {
@@ -132,25 +142,20 @@ export default {
     },
     removeSelectedAttachment(index) {},
     sendEmail() {
-      this.$emit("sendEmail", this.editingVendor);
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/1/eventShare`,
-          {
-            emails: this.emails,
-            message: this.message,
-            link: this.generateShareLink(),
-            eventId: this.$route.params.id,
-          },
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          if (res.data.status) {
-            this.statusMessage = "We have sent an email to the invited users.";
-          } else {
-            this.statusMessage = "Something is wrong. Please try again later.";
-          }
-        });
+
+      let params = {page: this.page};
+      if (this.page === 'event') {
+
+          params.emails = this.emails;
+          params.message = this.message;
+          params.link = this.generateShareLink();
+          params.eventId = this.$route.params.id;
+
+      } else if(this.page === 'proposal') {
+          params.emails = this.emails;
+          params.proposalId = this.$route.params.proposalId;
+      }
+      this.$emit('share', params);
     },
 
     onCancel: function (e) {

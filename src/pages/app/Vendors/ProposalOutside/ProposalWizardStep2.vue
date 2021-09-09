@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10">
+  <div class="white-card mt-10">
     <proposal-item-secondary-service
       :category="vendor.eventCategory.title"
       :services="[]"
@@ -9,8 +9,6 @@
       :img="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`"
       :serviceCategory="vendor.eventCategory.key"
     />
-    <h3>Would you like to change or add services to this offer?</h3>
-    <p>Select additional services you offer as part of this proposal.</p>
     <proposal-item-secondary-service
       v-for="service in vendor.secondaryServices"
       :key="service.id"
