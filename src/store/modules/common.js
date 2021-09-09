@@ -1,12 +1,18 @@
 import { postReq, getReq } from "@/utils/token";
 const state = {
     serviceCategories: [],
+    serviceCategoriesMap: {},
     companies: [],
     eventTypes: []
 };
 const mutations = {
     setCategories: (state, categories) => {
         state.serviceCategories = categories;
+        const categoriesMap = categories.reduce((m, item) => {
+            return { ...m, [item.key]: item }
+        }, {})
+        console.log("categoriesMap", categoriesMap)
+        state.serviceCategoriesMap = categoriesMap;
     },
     setCampanies: (state, companies) => {
         state.companies = companies
