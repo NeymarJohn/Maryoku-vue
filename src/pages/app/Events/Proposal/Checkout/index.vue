@@ -175,12 +175,14 @@
           </template>
         </collapse-panel>
         <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
-          <div class="discount-row">
-            <span class="font-bold">Discount </span>
-            <span class="font-bold">-{{ discount(this.proposal).percentage }}%</span>
-            <span class="text-right">-${{ discount(this.proposal).price | withComma }}</span>
-          </div>
-          <hr />
+          <template v-if="discount(this.proposal).percentage">
+            <div class="discount-row">
+              <span class="font-bold">Discount </span>
+              <span class="font-bold">-{{ discount(this.proposal).percentage }}%</span>
+              <span class="text-right">-${{ discount(this.proposal).price | withComma }}</span>
+            </div>
+            <hr />
+          </template>
           <div class="discount-row">
             <span class="font-bold">Tax </span>
             <span class="font-bold">{{ tax(this.proposal).percentage }}%</span>
