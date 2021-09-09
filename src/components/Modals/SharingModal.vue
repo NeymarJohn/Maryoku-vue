@@ -5,6 +5,11 @@
         <h2 v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</h2>
         <h2 v-if="page === 'proposal'">Share 'Proposal' With Your Colleague</h2>
       </div>
+      <md-button
+            class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
+            @click="$emit('cancel')"
+      ><md-icon>close</md-icon>
+      </md-button>
     </template>
     <template slot="body">
       <div class="md-layout maryoku-modal-body">

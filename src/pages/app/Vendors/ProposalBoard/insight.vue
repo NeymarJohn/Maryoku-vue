@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     init() {
-      this.chartData[0].value = this.total;
+      this.chartData[0].value = this.total - this.won;
       this.chartData[1].value = this.won;
       if (this.won > 0) this.chartData[1].color = "#2cde6b";
       this.chartData = [...this.chartData];

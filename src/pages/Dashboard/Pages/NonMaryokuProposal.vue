@@ -208,11 +208,12 @@ export default {
         }
     },
     async saveNegotiation(expiredTime){
-        console.log('saveNegotiation');
+        console.log('saveNegotiation', expiredTime);
         let query = new ProposalNegotiationRequest({
             proposalId: this.proposal.id,
             proposal: new Proposal({id: this.proposal.id}),
             expiredTime,
+            url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`
         });
         let res = await query.for(new Proposal({ id: this.proposal.id })).save()
         this.proposal.negotiations.push(res);
@@ -256,19 +257,15 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    showGuestSignUpModal() {
-      if (!this.loggedInUser) this.showGuestSignupModal = true;
-    },
     saveGuestComment(name) {
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
+      console.log('saveGuestComment.data', data);
       if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
-      if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
-      if (data.action === "saveShare") this.save(data);
       this.showCommentEditorPanel = true;
     },
     async signIn({ email, password }) {
@@ -277,7 +274,6 @@ export default {
         password,
       });
       this.showGuestSignupModal = false;
-      console.log("logged in");
       this.handleAction();
     },
     async signUp({ email, password, name, company }) {
@@ -290,7 +286,6 @@ export default {
       });
       this.showGuestSignupModal = false;
       await this.$store.dispatch("auth/login", { email, password });
-      console.log("logged out");
       this.handleAction();
     },
     auth(provider) {
@@ -307,7 +302,8 @@ export default {
         if (data.action === "updateComment") this.updateComment(data);
         if (data.action === "deleteComment") this.deleteComment(data);
         if (data.action === "updateCommentComponent") this.saveComment(data);
-        if (data.action === 'saveNegotiation') this.saveNegotiation(data);
+        if (data.action === 'saveNegotiation') this.saveNegotiation(data.expiredTime);
+        if (data.action === 'saveShare') this.share(data);
 
         localStorage.removeItem("nonMaryokuAction");
 

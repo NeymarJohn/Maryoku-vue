@@ -162,13 +162,15 @@ const mutations = {
     state.extraServices = proposal.extraServices;
     state.images = proposal.images;
     state.personalMessage = proposal.personalMessage;
-    state.tax = proposal.tax;
+    state.taxs = proposal.taxs;
+    state.discounts = proposal.discounts;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
     state.coverImage = proposal.coverImage || [],
-    // state.inspirationalPhotos = proposal.inspirationalPhotos
-    state.initialized = true;
+      // state.inspirationalPhotos = proposal.inspirationalPhotos
+      state.initialized = true;
     // state.wizardStep = proposal.step
+    console.log('setProposal', state.coverImage);
   },
   setWizardStep: (state, step) => {
     console.log('setWizardStep', step);
@@ -181,6 +183,10 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setCostServices: (state, { category, services }) => {
+    // Add this category for the secondary servicesList
+    if (category !== state.vendor.eventCategory.key && !state.additionalServices.includes(category)) {
+      Vue.set(state, "additionalServices", [...state.additionalServices, category]);
+    }
     Vue.set(state.costServices, category, services);
   },
   setIncludedServices: (state, { category, services }) => {
