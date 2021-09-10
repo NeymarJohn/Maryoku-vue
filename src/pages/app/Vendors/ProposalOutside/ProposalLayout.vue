@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader :active="isLoading"></loader>
+    <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading>
 
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
     <div class="main-cont">
@@ -103,7 +103,6 @@ import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 import UserEvent from "@/models/UserEvent";
-import { Loader } from "@/components";
 
 export default {
   components: {
@@ -113,7 +112,6 @@ export default {
     VueElementLoading,
     SendProposalModal,
     ProposalSubmitted,
-    Loader,
   },
   props: {
     newProposalRequest: Object,
@@ -184,7 +182,7 @@ export default {
     gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
-        // if(this.step === 0){
+      // if(this.step === 0){
         // create vendor event when
         this.createEvent().then(() => {
           this.step = this.step + 1;
@@ -308,7 +306,7 @@ export default {
       this.$http
         .post(
           `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
-          { type: "created" },
+          {type: 'created'},
           { headers: this.$auth.getAuthHeader() },
         )
         .then((res) => {

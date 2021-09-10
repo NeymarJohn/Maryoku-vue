@@ -333,7 +333,7 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
-        bookedServices: Object.keys(state.costServices) // Set all secondary services as booked services
+        bookedServices: []
       });
       proposal
         .save()
