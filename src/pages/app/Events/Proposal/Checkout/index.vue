@@ -422,6 +422,7 @@ export default {
               proposalId: this.proposal.id,
               vendorId: this.proposal.vendor.id,
               eventId: this.proposal.vendor.id, ///proposal.event.id,  //not defined yet for the non maryoku
+              serviceCategory,
             },
             { headers: this.$auth.getAuthHeader() },
           ),
