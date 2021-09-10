@@ -59,7 +59,7 @@
                         inputStyle="email"
                         data-vv-name="email"
                         placeholder="Type the email address here..."
-                        v-validate="'required|email|unique'"
+                        v-validate="'required|email'"
                         v-model="customerModel.email"
                     ></maryoku-input>
                 </div>

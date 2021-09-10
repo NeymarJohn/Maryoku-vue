@@ -175,12 +175,14 @@
           </template>
         </collapse-panel>
         <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
-          <div class="discount-row">
-            <span class="font-bold">Discount </span>
-            <span class="font-bold">-{{ discount(this.proposal).percentage }}%</span>
-            <span class="text-right">-${{ discount(this.proposal).price | withComma }}</span>
-          </div>
-          <hr />
+          <template v-if="discount(this.proposal).percentage">
+            <div class="discount-row">
+              <span class="font-bold">Discount </span>
+              <span class="font-bold">-{{ discount(this.proposal).percentage }}%</span>
+              <span class="text-right">-${{ discount(this.proposal).price | withComma }}</span>
+            </div>
+            <hr />
+          </template>
           <div class="discount-row">
             <span class="font-bold">Tax </span>
             <span class="font-bold">{{ tax(this.proposal).percentage }}%</span>
@@ -236,10 +238,10 @@
             </md-button>
           </div> -->
           <stripe-checkout
-              v-if="showStripeCheckout"
-              :price="stripePriceData"
-              :proposal="proposal"
-              :successURL="successURL"
+            v-if="showStripeCheckout"
+            :items="stripePriceData"
+            :proposal="proposal"
+            :successURL="successURL"
           ></stripe-checkout>
           <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>
@@ -292,17 +294,15 @@ export default {
     };
   },
   async created() {
-
     if (this.$route.params.hasOwnProperty("proposalId")) {
       const proposalId = this.$route.params.proposalId;
       this.proposal = await Proposal.find(proposalId);
       this.vendor = this.proposal.vendor;
       this.pageType = VENDOR;
 
-      this.successURL = this.proposal.nonMaryoku ?
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}` :
-          `${window.location.href}?checkout=success`
-
+      this.successURL = this.proposal.nonMaryoku
+        ? `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}`
+        : `${window.location.href}?checkout=success`;
     } else if (this.$route.params.hasOwnProperty("eventId")) {
       const eventId = this.$route.params.eventId;
       this.cart = await this.getCartItems(eventId);
@@ -411,28 +411,29 @@ export default {
 
     pay() {
       this.loadingPayment = true;
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-          {
-            name: this.vendor.companyName,
-            price: Math.floor(this.finalPrice * 100),
-            proposalId: this.proposal.id,
-            vendorId: this.proposal.vendor.id,
-            eventId: this.proposal.vendor.id, ///proposal.event.id,  //not defined yet for the non maryoku
-          },
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          const priceData = res.data;
-          this.showStripeCheckout = true;
-          // this.loadingPayment = false;
-          this.stripePriceData = priceData;
+      const promises = [];
+      for (const serviceCategory in this.proposal.pricesByCategory) {
+        promises.push(
+          this.$http.post(
+            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+            {
+              name: this.$store.state.common.serviceCategoriesMap[serviceCategory].title,
+              price: Math.floor(this.proposal.pricesByCategory[serviceCategory] * 100),
+              proposalId: this.proposal.id,
+              vendorId: this.proposal.vendor.id,
+              eventId: this.proposal.vendor.id, ///proposal.event.id,  //not defined yet for the non maryoku
+            },
+            { headers: this.$auth.getAuthHeader() },
+          ),
+        );
+      }
+      Promise.all(promises).then((responses) => {
+        console.log(responses);
 
-        });
-      // if (this.paymentMethod === "stripe") {
-
-      // }
+        const priceData = responses;
+        this.showStripeCheckout = true;
+        this.stripePriceData = responses.map((res) => res.data);
+      });
     },
     back() {
       this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
