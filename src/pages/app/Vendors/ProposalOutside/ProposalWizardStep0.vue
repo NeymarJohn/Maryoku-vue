@@ -1,7 +1,6 @@
 <template>
   <div class="white-card p-40">
     <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
-
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
@@ -71,7 +70,7 @@
     <div class="text-left mt-30">
       <label class="font-bold">Event location</label>
       <div class="width-50 location-input">
-        <location-input v-model="location" :value="location"></location-input>
+        <location-input v-model="location"></location-input>
       </div>
     </div>
 
@@ -122,10 +121,7 @@
     </div>
     <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
       <template slot="body">
-          <customer-form
-              v-if="showNewCustomerModal"
-              @save="saveCustomer"
-              @close="showNewCustomerModal = false" />
+        <customer-form v-if="showNewCustomerModal" @save="saveCustomer" @close="showNewCustomerModal = false" />
       </template>
     </modal>
   </div>
@@ -143,7 +139,7 @@ import S3Service from "@/services/s3.service";
 import SelectableCard from "@/components/SelectableCard.vue";
 // import AddNewCustomerModal from "./Modals/AddNewCustomer";
 import { Modal } from "@/components";
-import Customer from "@/models/Customer"
+import Customer from "@/models/Customer";
 const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {
@@ -208,7 +204,7 @@ export default {
   },
   methods: {
     async saveCustomer(customer) {
-      let customerInstance  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
+      let customerInstance = new Customer({ ...customer, vendorId: this.vendorData.id, type: 1 });
       await customerInstance.save();
 
       this.customers.push(customer);
