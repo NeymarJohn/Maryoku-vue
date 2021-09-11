@@ -172,10 +172,12 @@ export default {
     },
   },
   created() {
-    console.log('vendorCreateEvent.created');
-    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${this.vendor.id}/customers?status=0&sort=&order=`).then((res) => {
-      this.customers = res.data.customers;
-    });
+    console.log("vendorCreateEvent.created");
+    this.$http
+      .get(`${process.env.SERVER_URL}/1/vendors/${this.vendor.id}/customers?status=0&sort=&order=`)
+      .then((res) => {
+        this.customers = res.data.customers;
+      });
     this.companyName = this.defaultData.company;
     this.company = this.defaultData.companyName;
     this.location = this.defaultData.location;
@@ -279,17 +281,17 @@ export default {
       }
       const startDate = moment(
         `${this.date} ${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
-        "MM.DD.YYYY hh:mm a",
+        "DD.MM.YYYY hh:mm a",
       );
       const endDate = moment(
         `${this.date} ${this.endTime.hh}:${this.endTime.mm} ${this.amPack.end}`,
-        "MM.DD.YYYY hh:mm a",
+        "DD.MM.YYYY hh:mm a",
       );
       var dt = new Date();
       var tz = dt.getTimezoneOffset();
       const userEvent = {
         company: this.company,
-        date: moment(this.date, "MM.DD.YYYY").format("YYYY-MM-DD"),
+        date: moment(this.date, "DD.MM.YYYY").format("YYYY-MM-DD"),
         startTime: startDate,
         endTime: endDate,
         companyName: this.company,
@@ -306,7 +308,8 @@ export default {
       };
       if (this.selectedCustomer) {
         userEvent.customer = { id: this.selectedCustomer.id };
-        userEvent.companyName = this.selectedCustomer.company;
+        userEvent.companyName = this.selectedCustomer.companyName;
+        userEvent.customerName = this.selectedCustomer.name;
       }
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);
@@ -328,9 +331,9 @@ export default {
     },
   },
   computed: {
-    vendor(){
+    vendor() {
       return this.$store.state.vendor.profile;
-    }
+    },
   },
 };
 </script>

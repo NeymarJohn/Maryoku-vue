@@ -59,7 +59,11 @@
 
         <div class="proposal-body">
           <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
-            <img :src="`${$iconURL}${vendorProposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`" />
+            <img
+              :src="`${$iconURL}${
+                vendorProposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'
+              }`"
+            />
           </md-button>
 
           <h1 class="font-size-30">
@@ -178,7 +182,7 @@
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
-          :mandatory="!this.vendorProposal.additionalServices.length"
+          :mandatory="true"
         ></event-proposal-price>
         <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"
@@ -208,36 +212,41 @@
         </div>
       </div>
 
-      <div v-if="vendorProposal.vendor.healthPolicy || vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length"
+      <div
+        v-if="
+          vendorProposal.vendor.healthPolicy ||
+          (vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length)
+        "
         class="proposal-section policy-section"
       >
-        <div class="proposal-section__title">
-            <img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy
-        </div>
+        <div class="proposal-section__title"><img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy</div>
 
         <div class="policy-content">
           <template v-if="vendorProposal.vendor.healthPolicy">
-              <div class="mt-20 font-bold-extra">
-                  <span class="color-red">COVID 19</span>
-                  - Exceptional Policy
-              </div>
-              <p class="my-10">
-                  {{vendorProposal.vendor.healthPolicy}}
-              </p>
+            <div class="mt-20 font-bold-extra">
+              <span class="color-red">COVID 19</span>
+              - Exceptional Policy
+            </div>
+            <p class="my-10">
+              {{ vendorProposal.vendor.healthPolicy }}
+            </p>
           </template>
           <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
             <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
             <div class="md-layout mt-20">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                   :style="{display: vendorProposal.vendor.guaranteed.includes(option.value)? '': 'none'}">
+              <div
+                v-for="option in guaranteedOptions"
+                class="md-layout-item md-size-30 py-10"
+                :key="option.value"
+                :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+              >
                 <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                  <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
-                  {{option.label}}
+                  <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
+                  {{ option.label }}
                 </div>
               </div>
             </div>
           </template>
-
         </div>
       </div>
 
@@ -402,12 +411,12 @@ import Proposal from "@/models/Proposal";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
 import { GuaranteedOptions } from "@/constants/options";
-import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
+import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import { CommentMixins, ShareMixins } from "@/mixins";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
@@ -491,7 +500,6 @@ export default {
     };
   },
   created() {
-
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -521,7 +529,7 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-      this.$router.push({
+        this.$router.push({
           name: "CheckoutWithVendor",
           params: {
             proposalId: this.vendorProposal.id,
@@ -615,19 +623,18 @@ export default {
       this.$emit("close");
     },
     updateExpireDate() {
-      console.log('updateExpireDate');
-      this.$emit('ask', 'expiredDate');
+      console.log("updateExpireDate");
+      this.$emit("ask", "expiredDate");
     },
     async changeBookedServices() {
-
       await this.$store.dispatch("event/updateProposal", {
         category: this.category.componentId,
-        proposal: this.vendorProposal
+        proposal: this.vendorProposal,
       });
     },
-    favorite(){
-      this.$emit('favorite', !this.vendorProposal.isFavorite);
-    }
+    favorite() {
+      this.$emit("favorite", !this.vendorProposal.isFavorite);
+    },
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -637,30 +644,33 @@ export default {
     targetTime() {
       return new Date(this.vendorProposal.expiredDate);
     },
-    negotiationProcessed(){
+    negotiationProcessed() {
       // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
       //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-      return false
+      return false;
     },
-    negotiationPending(){
-      console.log('negotiationPending', this.vendorProposal);
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.some(it =>
-          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+    negotiationPending() {
+      console.log("negotiationPending", this.vendorProposal);
+      return (
+        !!this.vendorProposal.negotiations.length &&
+        this.vendorProposal.negotiations.some(
+          (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
+        )
+      );
     },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
     headerBackgroundImage() {
-        if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0])
-            return this.vendorProposal.coverImage[0];
-        if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
-            return this.vendorProposal.inspirationalPhotos[0].url;
-        if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
-            return this.vendorProposal.vendor.images[0];
-        if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
-            return this.vendorProposal.vendor.vendorImages[0];
+      if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0]) return this.vendorProposal.coverImage[0];
+      if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
+        return this.vendorProposal.inspirationalPhotos[0].url;
+      if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
+        return this.vendorProposal.vendor.images[0];
+      if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
+        return this.vendorProposal.vendor.vendorImages[0];
 
-        return "";
+      return "";
     },
     attachments() {
       if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
@@ -682,10 +692,13 @@ export default {
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-    checkedAllBundledOffers(){
-        return this.vendorProposal.bundleDiscount.services && this.vendorProposal.bundleDiscount.services.length &&
-            this.vendorProposal.bookedServices.length &&
-            this.vendorProposal.bundleDiscount.services.every(it => this.vendorProposal.bookedServices.includes(it))
+    checkedAllBundledOffers() {
+      return (
+        this.vendorProposal.bundleDiscount.services &&
+        this.vendorProposal.bundleDiscount.services.length &&
+        this.vendorProposal.bookedServices.length &&
+        this.vendorProposal.bundleDiscount.services.every((it) => this.vendorProposal.bookedServices.includes(it))
+      );
     },
     tax() {
       if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
@@ -707,8 +720,7 @@ export default {
       let bundledServicePrice = 0;
 
       if (!this.checkedAllBundledOffers) return 0;
-        this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
-
+      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
@@ -716,7 +728,7 @@ export default {
         bundledServicePrice += sumOfService;
         if (this.addedServices[serviceCategory]) {
           const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+            return service.isComplimentary ? s : s + service.requirementValue * service.price;
           }, 0);
           bundledServicePrice += sumOfService;
         }
@@ -726,14 +738,12 @@ export default {
 
     totalPriceOfProposal() {
       let totalPrice = 0;
-      let services = this.vendorProposal.additionalServices.length ? this.vendorProposal.bookedServices :
-          Object.keys(this.vendorProposal.costServices);
-        services.map(serviceCategory => {
-            const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-                return service.isComplimentary ? s : s + service.requirementValue * service.price;
-            }, 0);
-            totalPrice += sumOfService;
-        })
+      this.vendorProposal.bookedServices.forEach((serviceCategory) => {
+        const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+        }, 0);
+        totalPrice += sumOfService;
+      });
 
       // added service item price
       Object.keys(this.addedServices).forEach((serviceCategory) => {
@@ -765,8 +775,7 @@ export default {
     },
   },
   watch: {
-    proposal(newVal){
-    }
+    proposal(newVal) {},
   },
 };
 </script>

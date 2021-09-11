@@ -19,18 +19,18 @@ export default {
     StripeCheckout,
   },
   props: {
-    proposal:{
+    proposal: {
       type: Object,
       required: true,
     },
-    price: {
-      type: Object,
-      default: () => {},
+    items: {
+      type: Array,
+      default: () => [],
     },
     successURL: {
       type: String,
       default: false,
-    }
+    },
   },
   mounted() {
     this.$refs.checkoutRef.redirectToCheckout();
@@ -40,12 +40,12 @@ export default {
 
     return {
       loading: false,
-      lineItems: [
-        {
-          price: this.price.id, // The id of the one-time price you created in your Stripe dashboard
+      lineItems: this.items.map((it) => {
+        return {
+          price: it.id,
           quantity: 1,
-        },
-      ],
+        };
+      }),
       cancelURL: `${window.location.href}?checkout=cancel`,
     };
   },
