@@ -46,63 +46,52 @@ export default {
     }
 
     if (!this.$store.state.proposalForNonMaryoku.initialized) {
-      this.setInitServices(
-        this.vendor.eventCategory.key,
-        this.vendor.services || [],
-        this.vendor.pricingPolicies || [],
-      );
-
-      if (this.vendor.secondaryServices) {
-        this.vendor.secondaryServices.forEach((secondaryService) => {
-          this.setInitServices(
-            secondaryService.vendorCategory,
-            secondaryService.services,
-            secondaryService.pricingPolicies,
-          );
-        });
-      }
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "initialized", value: true });
-    }
-  },
-  methods: {
-    setInitServices(serviceName, services, pricingPolicies) {
       let includedVendorServices = [];
       let costVendorServices = [];
+
       const includedSevices = [];
-      _.each(services, (vendorService) => {
-        // Set included services from vendor profile
-        if (!vendorService.xIncluded && vendorService.checked && vendorService.included) {
-          includedVendorServices.push(vendorService);
-          const service = {
-            comments: [],
-            dateCreated: "",
-            includedInPrice: true,
-            itemNotAvailable: false,
-            price: 0,
-            priceUnit: "qty",
-            requirementComment: null,
-            requirementId: "",
-            requirementMandatory: false,
-            requirementPriority: null,
-            requirementTitle: vendorService.label,
-            requirementsCategory: vendorService.category,
-            requirementValue: vendorService.defaultQty ? vendorService.defaultQty : 1,
-            requirementSize: vendorService.defaultSize ? vendorService.defaultSize : "",
-            requirementNote: vendorService.desc,
-            plannerOptions: [],
-            isMandatory: true,
-            isComplementary: false,
-            isComplimentary: false,
-          };
-          includedSevices.push(service);
-        } else if (!vendorService.included) {
-          costVendorServices.push(vendorService);
-        }
-      });
+      const costServices = [];
+
+      if (this.vendor.services) {
+        _.each(this.vendor.services, (vendorService) => {
+          // Set included services from vendor profile
+          if (!vendorService.xIncluded && vendorService.checked && vendorService.included) {
+            includedVendorServices.push(vendorService);
+            const service = {
+              comments: [],
+              dateCreated: "",
+              includedInPrice: true,
+              itemNotAvailable: false,
+              price: 0,
+              priceUnit: "qty",
+              requirementComment: null,
+              requirementId: "",
+              requirementMandatory: false,
+              requirementPriority: null,
+              requirementTitle: vendorService.label,
+              requirementsCategory: vendorService.category,
+              requirementValue: vendorService.defaultQty ? vendorService.defaultQty : 1,
+              requirementSize: vendorService.defaultSize ? vendorService.defaultSize : "",
+              requirementNote: vendorService.desc,
+              plannerOptions: [],
+              isMandatory: true,
+              isComplementary: false,
+              isComplimentary: false,
+            };
+            includedSevices.push(service);
+          } else if (!vendorService.included) {
+            costVendorServices.push(vendorService);
+          }
+        });
+      }
+
       const extraServices = [];
-      if (pricingPolicies) {
-        pricingPolicies.forEach((item) => {
+      const hiddenValues = ["Discount for large quantities", "Tax rate", "Suggested Gratuity"];
+
+      if (this.vendor.pricingPolicies) {
+        this.vendor.pricingPolicies.forEach((item) => {
           if (item.isExtraService || !item.hideOnProposal) {
+            console.log("extra SErvce", item.extraService);
             extraServices.push({
               comments: [],
               dateCreated: "",
@@ -124,20 +113,27 @@ export default {
           }
         });
       }
+      this.$store.commit("proposalForNonMaryoku/setValue", { key: "vendorCostServices", value: costVendorServices });
+      this.$store.commit("proposalForNonMaryoku/setValue", {
+        key: "vendorIncludedServices",
+        value: includedVendorServices || [],
+      });
+
       this.$store.commit("proposalForNonMaryoku/setCostServices", {
-        category: serviceName,
+        category: this.vendor.eventCategory.key,
         services: [],
       });
       this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
-        category: serviceName,
+        category: this.vendor.eventCategory.key,
         services: includedSevices,
       });
 
       this.$store.commit("proposalForNonMaryoku/setExtraServices", {
-        category: serviceName,
+        category: this.vendor.eventCategory.key,
         services: extraServices,
       });
-    },
+      this.$store.commit("proposalForNonMaryoku/setValue", { key: "initialized", value: true });
+    }
   },
   computed: {
     vendor() {

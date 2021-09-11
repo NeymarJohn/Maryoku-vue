@@ -89,6 +89,7 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
+    console.log("prices", prices);
     return prices;
   },
   sumOfPrices(state, getters) {
@@ -169,8 +170,10 @@ const mutations = {
       // state.inspirationalPhotos = proposal.inspirationalPhotos
       state.initialized = true;
     // state.wizardStep = proposal.step
+    console.log('setProposal', state.coverImage);
   },
   setWizardStep: (state, step) => {
+    console.log('setWizardStep', step);
     state.wizardStep = step;
   },
   setInitStep: (state, step) => {
@@ -326,11 +329,11 @@ const actions = {
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
-        customerId: state.event.customer.id,
+        customerId: state.customer.id,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
-        bookedServices: Object.keys(state.costServices) // Set all secondary services as booked services
+        bookedServices: []
       });
       proposal
         .save()

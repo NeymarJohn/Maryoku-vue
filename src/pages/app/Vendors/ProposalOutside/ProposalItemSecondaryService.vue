@@ -383,6 +383,10 @@ export default {
     this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
+      // if (
+      //   this.newProposalRequest.requirements.length == 0 ||
+      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
+      // )
       this.newProposalRequest.requirements.push({
         comments: [],
         dateCreated: "",

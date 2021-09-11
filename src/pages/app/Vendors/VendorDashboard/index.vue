@@ -151,7 +151,6 @@ export default {
       upcomingEvents: [],
       eventLimit: 3,
       defaultEventData: {},
-      serviceReportData: null,
     };
   },
   mounted() {
@@ -171,19 +170,11 @@ export default {
           this.incomeChartData = [...this.incomeChartData];
         }
       });
-    this.getServiceReport();
     this.getMarkedDates();
     this.getComingEvents();
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
-    getServiceReport() {
-      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then((res) => {
-        if (res.data.length) {
-          this.serviceReportData = res.data;
-        }
-      });
-    },
     gotoProposalWizard() {
       let routeData = this.$router.resolve({
         name: "outsideProposalCreate",
@@ -274,19 +265,21 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     serviceChart() {
-      if (!this.serviceReportData) return [];
+      if (!this.vendorData || !this.serviceCategories.length) return [];
       let services = [this.vendorData.vendorCategories[0]];
       this.vendorData.secondaryServices.map((s) => {
         services.push(s.vendorCategory);
       });
       return services.map((vc, idx) => {
-        let cat = this.serviceReportData.find((c) => c._id == vc);
-        return {
-          title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
-          value: cat.amount,
-          color: this.categoryColors[idx],
-          image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
-        };
+        let cat = this.serviceCategories.find((c) => c.key == vc);
+        if (cat)
+          return {
+            title: cat.title,
+            value: 12 / this.vendorData.vendorCategories.length,
+            color: this.categoryColors[idx],
+            image: `${this.$iconURL}Budget+Elements/${cat.key}-white.svg`,
+          };
+        return null;
       });
     },
     proposalRequests() {
