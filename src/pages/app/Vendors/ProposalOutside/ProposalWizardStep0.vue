@@ -121,7 +121,11 @@
     </div>
     <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
       <template slot="body">
-        <customer-form v-if="showNewCustomerModal" @save="saveCustomer" @close="showNewCustomerModal = false" />
+          <customer-form
+              v-if="showNewCustomerModal"
+              :vendorId="vendorData.id"
+              @save="saveCustomer"
+              @close="showNewCustomerModal = false" />
       </template>
     </modal>
   </div>
@@ -204,14 +208,17 @@ export default {
   },
   methods: {
     async saveCustomer(customer) {
-      let customerInstance = new Customer({ ...customer, vendorId: this.vendorData.id, type: 1 });
-      await customerInstance.save();
 
-      this.customers.push(customer);
-      this.selectCustomer(customer);
+      let query  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
+      let res = await query.save();
+      console.log('saveCustomer', res);
+
+
+      this.customers.push(res);
+      this.selectCustomer(res);
       this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "customer",
-        value: customer,
+        value: res,
       });
       this.showNewCustomerModal = false;
     },

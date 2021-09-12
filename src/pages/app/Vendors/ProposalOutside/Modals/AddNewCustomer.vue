@@ -80,7 +80,7 @@ export default {
     const isUnique = async value => {
       let customer = await getReq(`/1/customers?email=${value}`);
 
-      if (!customer || Array.isArray(customer) && !customer.length) {
+      if (!customer.data || Array.isArray(customer.data) && !customer.data.length) {
           return {valid: true}
       } else {
           return {
