@@ -9,19 +9,21 @@
       :img="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`"
       :serviceCategory="vendor.eventCategory.key"
     />
-    <h3>Would you like to change or add services to this offer?</h3>
-    <p>Select additional services you offer as part of this proposal.</p>
-    <proposal-item-secondary-service
-      v-for="service in vendor.secondaryServices"
-      :key="service.id"
-      :category="service.eventCategory.title"
-      :services="[]"
-      :isCollapsed="true"
-      :isDropdown="true"
-      :proposalRange="true"
-      :img="`${$iconURL}Budget Elements/${service.eventCategory.icon}`"
-      :serviceCategory="service.vendorCategory"
-    />
+    <template v-if="vendor.secondaryServices && vendor.secondaryServices.length">
+      <h3>Would you like to change or add services to this offer?</h3>
+      <p>Select additional services you offer as part of this proposal.</p>
+      <proposal-item-secondary-service
+        v-for="service in vendor.secondaryServices"
+        :key="service.id"
+        :category="service.eventCategory.title"
+        :services="[]"
+        :isCollapsed="true"
+        :isDropdown="true"
+        :proposalRange="true"
+        :img="`${$iconURL}Budget Elements/${service.eventCategory.icon}`"
+        :serviceCategory="service.vendorCategory"
+      />
+    </template>
   </div>
 </template>
 <script>

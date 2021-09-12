@@ -12,7 +12,10 @@
           <label>Yearly Revenue By Segment</label>
           <div class="md-layout my-20">
             <div class="md-layout-item md-size-40 pl-0">
-              <div class="font-size-50 total-revenue">${{ Math.round(yearlyRevenue) | formatQty }}</div>
+              <div class="font-size-50 total-revenue" v-if="yearlyRevenue">
+                ${{ Math.round(yearlyRevenue) | formatQty }}
+              </div>
+              <div class="font-size-50 total-revenue" v-else>$0</div>
             </div>
             <div class="md-layout-item md-size-60">
               <div>
@@ -166,7 +169,12 @@ export default {
         if (res.data.length) {
           this.monthlyReport = res.data;
           res.data.forEach((item) => {
-            this.incomeChartData[Number(item._id) - 1].value = item.amount;
+            this.incomeChartData[Number(item._id) - 1].value = item.amount / 100;
+          });
+          this.incomeChartData = [...this.incomeChartData];
+        } else {
+          this.incomeChartData.forEach((item, index) => {
+            this.incomeChartData[index].value = 1000 * Math.random() + 200;
           });
           this.incomeChartData = [...this.incomeChartData];
         }
@@ -274,25 +282,30 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     serviceChart() {
-      if (!this.serviceReportData) return [];
       let services = [this.vendorData.vendorCategories[0]];
       this.vendorData.secondaryServices.map((s) => {
         services.push(s.vendorCategory);
       });
       return services.map((vc, idx) => {
-        let cat = this.serviceReportData.find((c) => c._id == vc);
-        return {
+        const item = {
           title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
-          value: cat.amount,
+          value: 0,
           color: this.categoryColors[idx],
           image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
+        if (this.serviceReportData) {
+          let cat = this.serviceReportData.find((c) => c._id == vc);
+          if (cat) item.value = cat.amount;
+        }
+        return item;
       });
     },
     proposalRequests() {
       return this.$store.state.vendorDashboard.proposalRequests;
     },
     yearlyRevenue() {
+      console.log("this.consoe", this.monthlyReport);
+      if (this.monthlyReport.length === 0) return 0;
       return (
         this.monthlyReport.reduce((s, item) => {
           return s + item.amount;
