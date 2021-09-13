@@ -92,7 +92,7 @@
             <div class="d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
-              On Day Cordinator($1,000 Per Day)
+              On Day Coordinator($1,000 Per Day)
             </div>
           </template>
           <template slot="content">
@@ -422,11 +422,26 @@ export default {
               proposalId: this.proposal.id,
               vendorId: this.proposal.vendor.id,
               eventId: this.proposal.vendor.id, ///proposal.event.id,  //not defined yet for the non maryoku
+              serviceCategory,
             },
             { headers: this.$auth.getAuthHeader() },
           ),
         );
       }
+      promises.push(
+        this.$http.post(
+          `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+          {
+            name: "Service Fee",
+            price: Math.floor(this.feePrice(this.proposal) * 100),
+            proposalId: this.proposal.id,
+            vendorId: this.proposal.vendor.id,
+            eventId: this.proposal.vendor.id, ///proposal.event.id,  //not defined yet for the non maryoku
+            serviceCategory: "serviceFee",
+          },
+          { headers: this.$auth.getAuthHeader() },
+        ),
+      );
       Promise.all(promises).then((responses) => {
         console.log(responses);
 

@@ -20,6 +20,12 @@ export default {
   components: {
     VueTimepicker,
   },
+  props: {
+    value: {
+      type: String,
+      default: "00:00 AM",
+    },
+  },
   data() {
     return {
       ampm: "AM",
@@ -36,11 +42,13 @@ export default {
       } else {
         this.ampm = "AM";
       }
+      this.$emit("input", `${this.startTime.hh}:${this.startTime.mm} ${this.ampm}`);
       this.$emit("change", `${this.startTime.hh}:${this.startTime.mm} ${this.ampm}`);
     },
     changeTime(event) {
       this.startTime.hh = event.data.hh;
       this.startTime.mm = event.data.mm;
+      this.$emit("input", `${this.startTime.hh}:${this.startTime.mm} ${this.ampm}`);
       this.$emit("change", `${this.startTime.hh}:${this.startTime.mm} ${this.ampm}`);
     },
   },

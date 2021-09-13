@@ -9,10 +9,11 @@
       </div>
       <div>
         <header-actions
-            page="proposal"
-            @toggleCommentMode="toggleCommentMode"
-            @share="shareWithAuth"
-            @export="downProposal"></header-actions>
+          page="proposal"
+          @toggleCommentMode="toggleCommentMode"
+          @share="shareWithAuth"
+          @export="downProposal"
+        ></header-actions>
       </div>
     </div>
     <div class="proposal-content mt-40">
@@ -113,23 +114,38 @@
       @cancel="showGuestSignupModal = false"
     >
     </guest-sign-up-modal>
+    <reminding-time-modal
+      v-if="showRemindingTimeModal"
+      @close="showRemindingTimeModal = false"
+      @save="saveRemindingTime"
+    ></reminding-time-modal>
+    <negotiation-request-modal
+      v-if="showNegotiationRequestModal"
+      @close="showNegotiationRequestModal = false"
+      @save="sendNegotiationRequest"
+    ></negotiation-request-modal>
   </div>
 </template>
 <script>
 import Proposal from "@/models/Proposal";
+import Reminder from "@/models/Reminder";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+
 import { Loader } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import { CommentMixins, ShareMixins } from "@/mixins";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import { SignInContent } from "@/components";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
 import moment from "moment";
+import RemindingTimeModal from "../../../components/Modals/VendorProposal/RemindingTimeModal.vue";
+import NegotiationRequestModal from "../../../components/Modals/VendorProposal/NegotiationRequestModal.vue";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -142,6 +158,8 @@ export default {
     Modal,
     EventDetail,
     SignInContent,
+    RemindingTimeModal,
+    NegotiationRequestModal,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -154,25 +172,25 @@ export default {
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
       showGuestSignupModal: false,
+      showRemindingTimeModal: false,
+      showNegotiationRequestModal: false,
     };
   },
   async created() {
     console.log("non-maryokuProposal.created", this.loggedInUser);
     let tenantUser = null;
-    if(this.loggedInUser){
-        tenantUser =  await this.$store.dispatch("auth/checkToken");
+    if (this.loggedInUser) {
+      tenantUser = await this.$store.dispatch("auth/checkToken");
     }
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
-      this.proposal = await Proposal.find(proposalId);
-      if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
-      if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
+    this.proposal = await Proposal.find(proposalId);
+    if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
+    if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
     if (givenToken) {
-
-        tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
-        this.loading = false;
-        this.handleAction();
-
+      tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
+      this.loading = false;
+      this.handleAction();
     } else {
       this.loading = false;
     }
@@ -192,42 +210,48 @@ export default {
           window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
         });
     },
-    async handleAsk(ask){
-        if (ask === 'expiredDate') {
-            let expiredTime = moment().add(2, 'days').unix() * 1000;
-            if (this.loggedInUser) {
-                await this.saveNegotiation(expiredTime);
-            } else {
-                localStorage.setItem('nonMaryokuAction', JSON.stringify({
-                    action: 'saveNegotiation',
-                    expiredTime
-                }));
-                this.onlyAuth = true;
-                this.showGuestSignupModal = true;
-            }
-        }
-    },
-    async saveNegotiation(expiredTime){
-        console.log('saveNegotiation', expiredTime);
-        let query = new ProposalNegotiationRequest({
-            proposalId: this.proposal.id,
-            proposal: new Proposal({id: this.proposal.id}),
-            expiredTime,
-            url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`
-        });
-        let res = await query.for(new Proposal({ id: this.proposal.id })).save()
-        this.proposal.negotiations.push(res);
-    },
-    async shareWithAuth(args){
-      if(this.loggedInUser){
-          await this.share(args);
-      } else {
-          localStorage.setItem('nonMaryokuAction', JSON.stringify({
-              action: 'saveShare',
-              ...args
-          }));
+    async handleAsk(ask) {
+      if (ask === "expiredDate") {
+        let expiredTime = moment().add(2, "days").unix() * 1000;
+        if (this.loggedInUser) {
+          await this.saveNegotiation(expiredTime);
+        } else {
+          localStorage.setItem(
+            "nonMaryokuAction",
+            JSON.stringify({
+              action: "saveNegotiation",
+              expiredTime,
+            }),
+          );
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
+        }
+      }
+    },
+    async saveNegotiation(expiredTime) {
+      console.log("saveNegotiation", expiredTime);
+      let query = new ProposalNegotiationRequest({
+        proposalId: this.proposal.id,
+        proposal: new Proposal({ id: this.proposal.id }),
+        expiredTime,
+        url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
+      });
+      let res = await query.for(new Proposal({ id: this.proposal.id })).save();
+      this.proposal.negotiations.push(res);
+    },
+    async shareWithAuth(args) {
+      if (this.loggedInUser) {
+        await this.share(args);
+      } else {
+        localStorage.setItem(
+          "nonMaryokuAction",
+          JSON.stringify({
+            action: "saveShare",
+            ...args,
+          }),
+        );
+        this.onlyAuth = true;
+        this.showGuestSignupModal = true;
       }
     },
     updateProposal(proposal) {
@@ -244,8 +268,12 @@ export default {
       console.log("toggleCommentMode", mode);
       this.showCommentEditorPanel = mode;
     },
-    remindMeLater() {},
-    negotiateRate() {},
+    remindMeLater() {
+      this.showRemindingTimeModal = true;
+    },
+    negotiateRate() {
+      this.showNegotiationRequestModal = true;
+    },
     askQuestion() {},
     changeEvent() {
       this.showDetailModal = true;
@@ -258,12 +286,12 @@ export default {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
-      console.log('saveGuestComment', name)
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
-
-      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+      console.log("saveGuestComment.data", data);
+      if (data.action === "saveComment")
+        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
@@ -303,16 +331,15 @@ export default {
         if (data.action === "updateComment") this.updateComment(data);
         if (data.action === "deleteComment") this.deleteComment(data);
         if (data.action === "updateCommentComponent") this.saveComment(data);
-        if (data.action === 'saveNegotiation') this.saveNegotiation(data.expiredTime);
-        if (data.action === 'saveShare') this.share(data);
+        if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
+        if (data.action === "saveShare") this.share(data);
 
         localStorage.removeItem("nonMaryokuAction");
-
       }
     },
     saveCommentWithAuth(params) {
       console.log("saveComment");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.saveComment(params);
       } else {
         localStorage.setItem(
@@ -327,8 +354,8 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateCommentWithAuth", params);
-      if (this.loggedInUser || this.guestName) {
+      console.log("updateComment");
+      if (this.loggedInUser) {
         this.updateComment(params);
       } else {
         localStorage.setItem(
@@ -344,7 +371,7 @@ export default {
     },
     deleteCommentWithAuth(params) {
       console.log("deleteComment");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.deleteComment(params);
       } else {
         localStorage.setItem(
@@ -360,7 +387,7 @@ export default {
     },
     updateCommentComponentWithAuth(component) {
       console.log("updateCommentComponent");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.updateCommentComponent(component);
       } else {
         localStorage.setItem(
@@ -374,17 +401,52 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
+    sendNegotiationRequest() {
+      this.showNegotiationRequestModal = false;
+
+      Swal.fire({
+        title: "Negotiation Sent successfully",
+        text: `Negotiation request has been successfully sent to the vendor and he will respond as soon as possible`,
+        showCancelButton: false,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Done",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+        }
+      });
+    },
+    saveRemindingTime(remindingTime) {
+      const remindingData = {
+        reminder: "email",
+        phoneNumber: "",
+        email: this.proposal.eventData.customer.email,
+        remindingTime: remindingTime,
+        type: "proposal",
+        emailParams: {},
+        emailTransactionId: "",
+        phoneTransactionId: "",
+      };
+      new Reminder(remindingData).save().then((res) => {
+        Swal.fire({
+          title: "Reminder set successfully",
+          text: `You will receive the reminder in your email`,
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success btn-fill",
+          cancelButtonClass: "md-button md-danger btn-fill",
+          confirmButtonText: "Done",
+          buttonsStyling: false,
+        }).then((result) => {});
+      });
+
+      this.showRemindingTimeModal = false;
+    },
   },
   computed: {
     loggedInUser() {
       return this.$store.state.auth.user;
     },
-    customer(){
-      return this.$store.state.comment.customer
-    },
-    guestName(){
-      return this.$store.state.comment.guestName
-    }
   },
 };
 </script>

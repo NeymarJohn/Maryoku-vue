@@ -146,10 +146,20 @@
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header">
         <div class="border-right font-bold-extra text-center pr-10 mr-10">
-          <div v-if="selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.concept">
+          <div
+            v-if="
+              selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.concept
+            "
+          >
             {{ selectedProposalRequest.eventData.concept.name }}
           </div>
-          <div v-else-if="selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.title">{{ selectedProposalRequest.eventData.title }}</div>
+          <div
+            v-else-if="
+              selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.title
+            "
+          >
+            {{ selectedProposalRequest.eventData.title }}
+          </div>
           <div v-else>New Event</div>
         </div>
 
@@ -161,7 +171,7 @@
         </div>
         <div class="text-center font-bold-extra">
           $
-          {{selectedProposal.cost | withComma}}
+          {{ selectedProposal.cost | withComma }}
         </div>
         <md-button
           class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
@@ -214,9 +224,9 @@ import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
-import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
-import {PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS} from "@/constants/list";
-import {PROPOSAL_PAGE_PAGINATION} from "@/constants/pagination";
+import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
+import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
+import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
 import _ from "underscore";
@@ -274,7 +284,6 @@ export default {
     };
   },
   async mounted() {
-    // console.log('mounted', this.vendorData.id);
     this.$root.$emit("proposalTab");
 
     await this.init();
@@ -296,7 +305,6 @@ export default {
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
     gotoPage(selectedPage) {
-      console.log(selectedPage);
       this.pagination.page = selectedPage;
       this.getProposal();
     },
@@ -307,7 +315,6 @@ export default {
       this.loading = false;
     },
     async selectSort(sortField) {
-      console.log(sortField);
       if (!sortField || sortField == "update") return;
       this.loading = true;
       if (this.sortFields.sort !== sortField) {
@@ -328,7 +335,7 @@ export default {
       let proposalRequests = this.proposalRequests.filter((p) => {
         return p.id !== id;
       });
-      await this.$store.commit('vendorDashboard/setProposalRequests', proposalRequests);
+      await this.$store.commit("vendorDashboard/setProposalRequests", proposalRequests);
       this.loading = false;
     },
     async handleProposal(action, id) {
@@ -365,7 +372,6 @@ export default {
       }
     },
     handleRequestCard(idx) {
-      console.log("handleRequestCard", idx);
       let proposalRequest = this.proposalRequests[idx];
       if (
         proposalRequest.proposal &&
@@ -373,7 +379,7 @@ export default {
         proposalRequest.proposal.negotiations.length
       ) {
         this.selectedProposalRequest = proposalRequest;
-        this.selectedProposal = this.proposals.find(p => p.id === proposalRequest.proposal.id);
+        this.selectedProposal = proposalRequest.proposal;
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
       } else {
@@ -388,7 +394,6 @@ export default {
       }
     },
     async handleNegotiation(status) {
-
       if (status === this.negotiationRequestStatus.review) {
         this.showRequestNegotiationModal = false;
         this.showProposalDetail = true;
@@ -397,26 +402,27 @@ export default {
           new Date(this.selectedProposal.expiredDate).getTime() +
           (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
-        let url = this.selectedProposal.nonMaryoku ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
-            : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
+        let url = this.selectedProposal.nonMaryoku
+          ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+          : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
         new ProposalNegotiationRequest({
           id: this.selectedProposal.negotiations[0].id,
           expiredTime,
           status,
-          url
+          url,
         })
           .for(new Proposal({ id: this.selectedProposal.id }))
           .save()
           .then(async (res) => {
-
             this.selectedProposal.negotiations[0] = res;
 
-            if (status === this.negotiationRequestStatus.approve) this.selectedProposal.expiredDate = new Date(expiredTime);
+            if (status === this.negotiationRequestStatus.approve)
+              this.selectedProposal.expiredDate = new Date(expiredTime);
             this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
             if (!this.selectedProposal.nonMaryoku) {
-                this.selectedProposalRequest.proposal = this.selectedProposal;
-                this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
+              this.selectedProposalRequest.proposal = this.selectedProposal;
+              this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
             }
 
             if (status === this.negotiationRequestStatus.decline) {
@@ -481,12 +487,10 @@ export default {
       this.$http
         .post(
           `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
-          {type:'created'},
+          { type: "created" },
           { headers: this.$auth.getAuthHeader() },
         )
-        .then((res) => {
-          console.log("shareProposal", res);
-        });
+        .then((res) => {});
     },
     async init() {
       await this.getProposal();
@@ -511,7 +515,9 @@ export default {
           ? (p.declineMessage !== "decline" && p.proposal.status !== "submit" && p.remainingTime > 0) ||
               (p.proposal.status === "submit" &&
                 p.proposal.negotiations &&
-                p.proposal.negotiations.filter((it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0).length)
+                p.proposal.negotiations.filter(
+                  (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0,
+                ).length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },

@@ -82,7 +82,6 @@ export default {
       this.chartData[1].value = this.won;
       if (this.won > 0) this.chartData[1].color = "#2cde6b";
       this.chartData = [...this.chartData];
-      console.log(this.chartData);
     },
   },
   watch: {

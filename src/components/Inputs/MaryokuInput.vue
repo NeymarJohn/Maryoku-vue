@@ -43,7 +43,7 @@
       <div class="time-picker-mask" @click="showTimePicker = false" ref="timePickerMask" v-if="showTimePicker"></div>
     </div>
 
-    <div ref="timePickerElements" v-if="showDatePicker">
+    <div ref="datePicker" v-if="showDatePicker">
       <div class="date-picker picker-panel" ref="timePickerPanel" style="z-index: 200 !important">
         <div class="d-flex pl-10">
           <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
@@ -116,10 +116,10 @@ export default {
       type: String,
       default: "red",
     },
-    refName:{
+    refName: {
       type: String,
       required: false,
-      default: 'input',
+      default: "input",
     },
   },
   beforeDestroy() {
@@ -162,6 +162,7 @@ export default {
       }
       if (this.inputStyle == "date") {
         this.showDatePicker = true;
+        // this.$refs.timePickerElements.style.transform = "translateY(100%)";
       }
       if (this.inputStyle == "time" || this.inputStyle == "date") {
         // setTimeout(() => {
