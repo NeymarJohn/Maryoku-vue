@@ -373,7 +373,7 @@ export default {
         proposalRequest.proposal.negotiations.length
       ) {
         this.selectedProposalRequest = proposalRequest;
-        this.selectedProposal = proposalRequest.proposal;
+        this.selectedProposal = this.proposals.find(p => p.id === proposalRequest.proposal.id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
       } else {
@@ -388,7 +388,7 @@ export default {
       }
     },
     async handleNegotiation(status) {
-      console.log('handleNegotiationREqeust', this.selectedProposal);
+
       if (status === this.negotiationRequestStatus.review) {
         this.showRequestNegotiationModal = false;
         this.showProposalDetail = true;

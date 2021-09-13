@@ -107,10 +107,6 @@ export default {
         type: Array,
         required: true,
       },
-      addresses:{
-        type: Array,
-        default: [],
-      }
   },
   data() {
     return {
@@ -300,7 +296,7 @@ export default {
             commentComponent: { id: selectedComponent.id },
             description: this.editingComment,
             parentId: this.mainComment ? this.mainComment.id : null,
-            email: this.selectedCustomer.email,
+            email: this.selectedCustomer ? this.selectedCustomer.email : null,
       };
       this.$emit('saveComment', {component: selectedComponent, comment, index: this.selectedComponentIndex})
 
@@ -382,7 +378,6 @@ export default {
       }
     },
     async getMessage(e){
-      console.log('input', e.target.value);
       if(e.target.value.includes('@')){
         let queryArray = e.target.value.split('@')
 
