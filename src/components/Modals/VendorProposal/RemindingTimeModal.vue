@@ -13,17 +13,20 @@
           <div><md-radio v-model="remindTimeOption" value="tomorrow">Tomorrow</md-radio></div>
           <div><md-radio v-model="remindTimeOption" value="specific">Specific Time</md-radio></div>
         </div>
-        <div class="pl-40 time-selector" v-if="remindTimeOption === 'specific'">
+        <div class="pl-40 time-selector">
           <div class="text-left mb-20 d-flex">
-            <div class="width-50">
-              <maryoku-input
-                class="form-input mr-10"
-                placeholder="Choose date…"
-                inputStyle="date"
-                v-model="selectedDate"
-              ></maryoku-input>
-            </div>
-            <time-picker v-model="selectedTime"></time-picker>
+            <multiselect
+              v-model="selectedDays"
+              :options="days"
+              :close-on-select="true"
+              :clear-on-select="true"
+              tag-placeholder="Add this as new tag"
+              placeholder="Days"
+              label="title"
+              track-by="id"
+              class="mr-10"
+            ></multiselect>
+            <time-picker></time-picker>
           </div>
           <warning-message class="mb-50" label="This offer is valid for 4 days"></warning-message>
         </div>
@@ -50,15 +53,20 @@ export default {
     TimePicker,
     WarningMessage,
   },
-  props: {},
+  props: {
+    rsvpRequest: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       screen: 2,
       remindingEmail: "",
       remindingPhone: "",
       remindTimeOption: "today",
-      selectedDate: "",
-      selectedTime: "",
+      remindTime: "tomorrow",
+      selectedDays: 1,
       days: [
         { id: "1", title: "Tomorrow" },
         { id: "2", title: "2 days later" },
@@ -67,7 +75,9 @@ export default {
       ],
     };
   },
-  created() {},
+  created() {
+    this.remindingEmail = this.rsvpRequest.email;
+  },
   methods: {
     cancel() {
       this.$emit("close");
@@ -76,19 +86,36 @@ export default {
       this.$emit("close");
     },
     setRemind() {
-      // this.$emit("save");
-      let remindingTime = 0;
-      if (this.remindTimeOption === "tomorrow") {
-        remindingTime = moment(new Date()).add(1, "day").valueOf();
-      } else if (this.remindTimeOption === "today") {
-        remindingTime = moment(new Date()).hours(21).valueOf();
-        if (remindingTime < new Date().getTime()) {
-          remindingTime = moment(new Date()).add(1, "hour").valueOf();
-        }
-      } else if (this.remindTimeOption === "specific") {
-        remindingTime = moment(`${this.selectedDate} ${this.selectedTime}`, "DD.MM.YYYY hh:mm a").valueOf();
-      }
-      this.$emit("save", remindingTime);
+      this.$emit("save");
+      // let remindingTime = 0;
+      // if (this.remindTime === "week") {
+      //   remindingTime = moment(new Date()).add(1, "week").valueOf();
+      // } else if (this.remindTime === "tomorrow") {
+      //   remindingTime = moment(new Date()).add(1, "day").valueOf();
+      // } else if (this.remindTime === "tonight") {
+      //   remindingTime = moment(new Date()).hours(21).valueOf();
+      //   if (remindingTime < new Date().getTime()) {
+      //     remindingTime = moment(new Date()).add(1, "hour").valueOf();
+      //   }
+      // }
+      // const remindingData = {
+      //   reminder: this.remindTimeOption,
+      //   phoneNumber: this.remindingPhone,
+      //   email: this.remindingEmail,
+      //   remindingTime: remindingTime,
+      //   type: "rsvp",
+      //   emailParams: {
+      //     guestName: this.remindingEmail,
+      //     eventDate: this.$dateUtil.formatScheduleDay(this.rsvpRequest.event.eventStartMillis, "MMM DD, YYYY"),
+      //     plannerName: this.rsvpRequest.event.owner.display,
+      //   },
+      //   emailTransactionId: this.rsvpRequest.emailTransactionId,
+      //   phoneTransactionId: this.rsvpRequest.phoneTransactionId,
+      // };
+      // new Reminder(remindingData).save().then((res) => {
+      //   this.$emit("setRemind", res);
+      //   this.screen = 3;
+      // });
     },
   },
   computed: {

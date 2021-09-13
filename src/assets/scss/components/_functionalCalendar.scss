@@ -13,7 +13,7 @@
 .vfc-calendars-container {
   & > .vfc-navigation-buttons div, .vfc-separately-navigation-buttons div {
     color: #f51355 !important;
-    margin: 10px 20px !important;
+    margin: 20px 30px !important;
     border-color: #f51355 !important;
   }
 }
@@ -48,7 +48,6 @@
   max-width: 100%;
   .vfc-content {
     max-width: 100%;
-    margin-bottom: 0px;
   }
   .vfc-arrow-left, .vfc-arrow-right {
     border-color: #fff;
@@ -62,9 +61,6 @@
 
 .vfc-space-between {
   margin-top: 10px !important;
-}
-.vfc-separately-navigation-buttons {
-  margin-bottom: -60px !important;
 }
 .vfc-separately-navigation-buttons div {
   // margin: 20px 50px !important;
@@ -103,7 +99,7 @@ span.vfc-span-day.vfc-hide {
 .picker-panel {
   display: block;
   position: relative;
-  padding: 20px;
+  padding: 40px 10px 0px;
   border: solid 1px #bec0c2;
   border-radius: 3px;
 }
@@ -114,9 +110,7 @@ span.vfc-span-day.vfc-hide {
 .vfc-week .vfc-day span.vfc-span-day.vfc-disabled {
   color: rgba(0, 0, 0, 0.2) !important;
 }
-.vfc-top-date {
-  margin: 15px;
-}
+
 .vendor-dashboard-calendar{
    display: flex;
    justify-content: center;

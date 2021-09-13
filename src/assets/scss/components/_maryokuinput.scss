@@ -340,11 +340,10 @@
   top: 0;
 }
 .date-picker {
-  min-width: 400px;
-  height: max-content;
-  // position: absolute !important;
+  width: 400px;
+  height: 550px;
+  position: absolute;
   max-width: 100%;
-  // margin-top: 55px;
   &.md-datepicker {
     margin-top: -55px;
     opacity: 0;
