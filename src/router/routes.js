@@ -637,7 +637,7 @@ let offerVendorsPage = {
     meta: {
         requiredAuth: false,
         title: "Offer Vendors",
-        gtm:"OfferVendors"
+        gtm: "OfferVendors"
     }
 
 }
@@ -659,7 +659,7 @@ let checkoutPageWithVendor = {
         title: "Plan Event",
         gtm: "Plan Event",
         opaque: false,
-        requiresAuth: true,
+        requiresAuth: false,
     },
 }
 

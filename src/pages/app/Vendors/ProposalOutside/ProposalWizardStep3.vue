@@ -15,12 +15,7 @@
               <md-icon>keyboard_arrow_left</md-icon>
             </span>
           </template>
-          <img
-            :src="item"
-            v-for="(item, index) in coverImage"
-            :key="`carousel-item-${index}`"
-            class="carousel-image"
-          />
+          <img :src="item" v-for="(item, index) in coverImage" :key="`carousel-item-${index}`" class="carousel-image" />
           <template slot="next" v-if="coverImage.length > 1">
             <span class="next handle-btn">
               <md-icon>keyboard_arrow_right</md-icon>
@@ -134,7 +129,7 @@
         :categoryIcon="`${iconUrl}Asset 614.svg`"
         :itemType="`price`"
         :category="c"
-        v-for="(c, cIndex) in categories"
+        v-for="(c, cIndex) in categories.filter((category) => this.pricesByCategory[category] > 0)"
         :key="cIndex"
       />
       <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
@@ -157,36 +152,43 @@
       </div>
     </div>
 
-    <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-           class="policy-cont" >
+    <div v-if="vendor.healthPolicy || (vendor.guaranteed && vendor.guaranteed.length)" class="policy-cont">
       <div class="title">
-          <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-          Health policy</div>
+        <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px" />
+        Health policy
+      </div>
       <div class="policy-wrapper">
-          <template v-if="vendor.healthPolicy">
-              <div class="rule font-bold-extra my-20">
-                  <span class="color-vendor">COVID 19</span>
-                  - Exceptional Policy
+        <template v-if="vendor.healthPolicy">
+          <div class="rule font-bold-extra my-20">
+            <span class="color-vendor">COVID 19</span>
+            - Exceptional Policy
+          </div>
+          <p class="width-66">
+            {{ vendor.healthPolicy }}
+          </p>
+        </template>
+        <template v-if="vendor.guaranteed && vendor.guaranteed.length">
+          <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+          <div class="md-layout mt-20">
+            <div
+              v-for="option in guaranteedOptions"
+              class="md-layout-item md-size-30 py-10"
+              :key="option.value"
+              :style="{ display: vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+            >
+              <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px" />
+                {{ option.label }}
               </div>
-              <p class="width-66">
-                  {{vendor.healthPolicy}}
-              </p>
-          </template>
-          <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-              <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-              <div class="md-layout mt-20">
-                  <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                       :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                      <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                          <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px">
-                          {{option.label}}
-                      </div>
-                  </div>
-              </div>
-          </template>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
-    <div class="white-card mt-20 additional-requirements" v-if="vendor.vendorCategory === 'venuerental' && sittingArrangement && Object.keys(sittingArrangement).length">
+    <div
+      class="white-card mt-20 additional-requirements"
+      v-if="vendor.vendorCategory === 'venuerental' && sittingArrangement && Object.keys(sittingArrangement).length"
+    >
       <div class="p-40">
         <div>
           <img :src="`${$iconURL}common/seating-purple.png`" />
@@ -211,7 +213,7 @@
               </div>
             </div>
             <div v-if="!editingNewSeating" class="d-flex align-center">
-              <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
+              <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="editingNewSeating = true">
                 Suggest new seating arrangement
               </md-button>
             </div>
@@ -466,7 +468,6 @@ export default {
       },
       guaranteedOptions: GuaranteedOptions,
       editingNewSeating: false,
-
     };
   },
   methods: {
@@ -586,7 +587,12 @@ export default {
     });
   },
   computed: {
-    ...mapGetters("proposalForNonMaryoku", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),
+    ...mapGetters("proposalForNonMaryoku", [
+      "totalPriceOfProposal",
+      "totalBeforeDiscount",
+      "totalBeforeBundle",
+      "pricesByCategory",
+    ]),
     personalMessage: {
       get() {
         return this.$store.state.proposalForNonMaryoku.personalMessage;

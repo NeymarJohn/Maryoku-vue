@@ -1,11 +1,18 @@
-
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventComponent from '@/models/EventComponent'
 import EventComment from '@/models/EventComment'
 import EventCommentComponent from '@/models/EventCommentComponent'
+import Model from '@/models/Model'
+import { postReq, getReq } from '@/utils/token'
 import { reject } from 'promise-polyfill'
 const state = {
+  index: 0,
+  action: null,
+  comment: null,
+  component: null,
   commentComponents: [],
   guestName: null,
-  customer: null,
   error: null
 }
 
@@ -16,14 +23,23 @@ const getters = {
 }
 
 const mutations = {
+  setIndex(state, index){
+    state.index = index;
+  },
+  setAction(state, action){
+    state.action = action;
+  },
+  setComment(state, comment){
+    state.comment = comment;
+  },
+  setComponent(state, component){
+    state.component = component;
+  },
   setError(state, message){
     state.error = message;
   },
   setGuestName(state, name){
-    state.guestName = name;
-  },
-  setCustomer(state, customer){
-    state.customer = customer;
+        state.guestName = name;
   },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
@@ -75,8 +91,6 @@ const actions = {
         .save()
         .then(res => {
           commit('addCommentComponent', res.data)
-          // save customer when user comment as guest
-          if(res.customer) commit('setCustomer', res.customer);
           console.log(res)
           resolve(res.data)
         });
@@ -85,12 +99,11 @@ const actions = {
   getCommentComponents({ commit, state }, url) {
 
     return new Promise( async (resolve, reject) => {
+      // const commentComponents = await postReq(`/1/commentComponents/get`, { url })
       let query = new EventCommentComponent();
       const res = await query.params({url}).get();
       if (res.success) {
           commit('setCommentComponents', res.data)
-          // save customer when user comment as guest
-          if(res.customer) commit('setCustomer', res.customer);
           resolve(res.data)
       }else {
           commit('setError', res.message);
@@ -122,8 +135,6 @@ const actions = {
         .save()
         .then(res => {
           if (res.success) {
-              // save customer when user comment as guest
-              if(res.customer) commit('setCustomer', res.customer);
               resolve(res.data)
           } else {
               commit('setError', res.message);
@@ -135,7 +146,7 @@ const actions = {
   },
 
   deleteCommentComponent({ commit, state }, commentComponent) {
-    if (state.guestName) commentComponent = {...commentComponent, name: state.guestName};
+    console.log(commentComponent)
     return new Promise((resolve, reject) => {
       new EventCommentComponent(commentComponent)
         .delete()
@@ -148,14 +159,11 @@ const actions = {
 
   updateCommentComponent({ commit, state }, commentComponent) {
     return new Promise((resolve, reject) => {
-      if (state.guestName) commentComponent = {...commentComponent, name: state.guestName};
       new EventCommentComponent(commentComponent)
         .save()
         .then(res => {
           if(res.success){
               commit('updateCommentComponent', res.data)
-              // save customer when user comment as guest
-              if(res.customer) commit('setCustomer', res.customer);
               resolve(res.data)
           } else {
               commit('setError', res.message);
@@ -169,32 +177,31 @@ const actions = {
   updateCommentAction({commit, state}, comment) {
     return new Promise((resolve, reject) => {
       const commentComponent = new EventCommentComponent({id: comment.eventCommentComponent.id})
-      if (state.guestName) comment = {...comment, name: state.guestName};
       new EventComment(comment)
         .for(commentComponent)
         .save()
         .then(res => {
           console.log(res)
-          // save customer when user comment as guest
-          if(res.customer) commit('setCustomer', res.customer);
+          // commit('updateCommentComponent', res.item)
           resolve(res)
         })
     })
   },
   deleteCommentAction({commit, state}, comment) {
-    return new Promise(async(resolve, reject) => {
+    console.log(comment)
+    return new Promise((resolve, reject) => {
       const eventCommentComponent = new EventCommentComponent({id: comment.id})
-      if (state.guestName) comment = {...comment, name: state.guestName};
-      let query = new EventComment(comment);
-      let res = await query.for(eventCommentComponent).delete();
-      console.log('deleteCommentAction', res);
-        if(res.data.success) {
-            // save customer when user comment as guest
-            if(res.data.customer) commit('setCustomer', res.data.customer);
-            resolve(res.data.data)
-        } else {
-            commit('setError', res.data.message);
-        }
+      new EventComment(comment)
+        .for(eventCommentComponent)
+        .delete()
+        .then(res => {
+          if(res.success) {
+              resolve(res.data)
+          } else {
+              commit('setError', res.message);
+          }
+
+        })
     })
   }
 

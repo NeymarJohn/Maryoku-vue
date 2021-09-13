@@ -111,7 +111,7 @@
           <div
             class="service-item"
             :class="{ 'with-check': isBundleDiscount }"
-            v-for="(a, aIndex) in additionalServices"
+            v-for="(a, aIndex) in additionalServices.filter((item) => pricesByCategory[item] > 0)"
             :key="aIndex"
           >
             <h3 class="width-100" v-if="aIndex === 0">Additional Services</h3>
@@ -429,7 +429,9 @@ export default {
       return this.$store.state.proposalForNonMaryoku.vendor;
     },
     additionalServices() {
-      return this.$store.state.proposalForNonMaryoku.additionalServices;
+      return this.$store.state.proposalForNonMaryoku.additionalServices.filter(
+        (category) => this.pricesByCategory[category] > 0,
+      );
     },
     mainService() {
       const category = this.$store.state.proposalForNonMaryoku.vendor.eventCategory.key;

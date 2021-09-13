@@ -166,8 +166,8 @@ const mutations = {
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
     state.coverImage = proposal.coverImage || [],
-    state.inspirationalPhotos = proposal.inspirationalPhotos
-    state.initialized = true;
+      // state.inspirationalPhotos = proposal.inspirationalPhotos
+      state.initialized = true;
     // state.wizardStep = proposal.step
   },
   setWizardStep: (state, step) => {
@@ -304,11 +304,13 @@ const actions = {
   },
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
+      const additionalServices = state.additionalServices || [];
+      const availableAdditionalSerivces = additionalServices.filter(category => getters.pricesByCategory[category] > 0);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
         eventData: state.event,
         personalMessage: state.personalMessage,
-        additionalServices: state.additionalServices,
+        additionalServices: availableAdditionalSerivces,
         images: state.images,
         coverImage: state.coverImage,
         eventVision: state.eventVision,

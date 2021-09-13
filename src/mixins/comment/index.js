@@ -1,4 +1,6 @@
 import {mapActions} from "vuex";
+import EventCommentComponent from "@/models/EventCommentComponent";
+import EventComment from "@/models/EventComment";
 
 export default {
     data(){
@@ -35,18 +37,19 @@ export default {
             this.commentComponents = this.commentComponents.slice(0)
         },
         async updateComment({comment, component}){
-            console.log('comment.updateCommentAction', comment, component)
-            let updatedComment = await this.updateCommentAction(comment);
-            console.log('updateComment', updatedComment);
+            new EventComment(comment)
+                .for(component)
+                .save()
+                .then(() => {
+
+                });
         },
         async updateCommentComponent(component) {
             this.editingCommentId = "";
             await this.updateCommentComponent(component);
         },
         async deleteComment({comment, index}) {
-            console.log('deleteComment', this.commentComponents[index].comments);
             let res = await this.deleteCommentAction(comment)
-            console.log('deleteComment.result', res);
             const commentIndex = this.commentComponents[index].comments.findIndex(item=>item.id === res.id)
             this.commentComponents[index].comments.splice(commentIndex, 1)
         },

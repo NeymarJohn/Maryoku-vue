@@ -128,6 +128,9 @@
 </template>
 <script>
 import Proposal from "@/models/Proposal";
+import Reminder from "@/models/Reminder";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+
 import { Loader } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
@@ -135,7 +138,6 @@ import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails
 import { CommentMixins, ShareMixins } from "@/mixins";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import { SignInContent } from "@/components";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import HeaderActions from "../../../components/HeaderActions.vue";
 import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
@@ -143,6 +145,7 @@ import { mapActions, mapMutations } from "vuex";
 import moment from "moment";
 import RemindingTimeModal from "../../../components/Modals/VendorProposal/RemindingTimeModal.vue";
 import NegotiationRequestModal from "../../../components/Modals/VendorProposal/NegotiationRequestModal.vue";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -283,13 +286,12 @@ export default {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
-      console.log('saveGuestComment', name)
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
-
-
-      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+      console.log("saveGuestComment.data", data);
+      if (data.action === "saveComment")
+        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
@@ -337,7 +339,7 @@ export default {
     },
     saveCommentWithAuth(params) {
       console.log("saveComment");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.saveComment(params);
       } else {
         localStorage.setItem(
@@ -352,8 +354,8 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateCommentWithAuth", params);
-      if (this.loggedInUser || this.guestName) {
+      console.log("updateComment");
+      if (this.loggedInUser) {
         this.updateComment(params);
       } else {
         localStorage.setItem(
@@ -369,7 +371,7 @@ export default {
     },
     deleteCommentWithAuth(params) {
       console.log("deleteComment");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.deleteComment(params);
       } else {
         localStorage.setItem(
@@ -385,7 +387,7 @@ export default {
     },
     updateCommentComponentWithAuth(component) {
       console.log("updateCommentComponent");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.updateCommentComponent(component);
       } else {
         localStorage.setItem(
@@ -401,8 +403,43 @@ export default {
     },
     sendNegotiationRequest() {
       this.showNegotiationRequestModal = false;
+
+      Swal.fire({
+        title: "Negotiation Sent successfully",
+        text: `Negotiation request has been successfully sent to the vendor and he will respond as soon as possible`,
+        showCancelButton: false,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Done",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+        }
+      });
     },
-    saveRemindingTime() {
+    saveRemindingTime(remindingTime) {
+      const remindingData = {
+        reminder: "email",
+        phoneNumber: "",
+        email: this.proposal.eventData.customer.email,
+        remindingTime: remindingTime,
+        type: "proposal",
+        emailParams: {},
+        emailTransactionId: "",
+        phoneTransactionId: "",
+      };
+      new Reminder(remindingData).save().then((res) => {
+        Swal.fire({
+          title: "Reminder set successfully",
+          text: `You will receive the reminder in your email`,
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success btn-fill",
+          cancelButtonClass: "md-button md-danger btn-fill",
+          confirmButtonText: "Done",
+          buttonsStyling: false,
+        }).then((result) => {});
+      });
+
       this.showRemindingTimeModal = false;
     },
   },
@@ -410,12 +447,6 @@ export default {
     loggedInUser() {
       return this.$store.state.auth.user;
     },
-    customer(){
-      return this.$store.state.comment.customer
-    },
-    guestName(){
-      return this.$store.state.comment.guestName
-    }
   },
 };
 </script>
