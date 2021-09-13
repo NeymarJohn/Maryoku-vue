@@ -1,6 +1,7 @@
 <template>
   <div class="white-card p-40">
     <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
+
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
@@ -70,7 +71,7 @@
     <div class="text-left mt-30">
       <label class="font-bold">Event location</label>
       <div class="width-50 location-input">
-        <location-input v-model="location"></location-input>
+        <location-input v-model="location" :value="location"></location-input>
       </div>
     </div>
 
@@ -123,7 +124,6 @@
       <template slot="body">
           <customer-form
               v-if="showNewCustomerModal"
-              :vendorId="vendorData.id"
               @save="saveCustomer"
               @close="showNewCustomerModal = false" />
       </template>
@@ -143,7 +143,7 @@ import S3Service from "@/services/s3.service";
 import SelectableCard from "@/components/SelectableCard.vue";
 // import AddNewCustomerModal from "./Modals/AddNewCustomer";
 import { Modal } from "@/components";
-import Customer from "@/models/Customer";
+import Customer from "@/models/Customer"
 const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {
@@ -208,17 +208,14 @@ export default {
   },
   methods: {
     async saveCustomer(customer) {
+      let customerInstance  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
+      await customerInstance.save();
 
-      let query  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
-      let res = await query.save();
-      console.log('saveCustomer', res);
-
-
-      this.customers.push(res);
-      this.selectCustomer(res);
+      this.customers.push(customer);
+      this.selectCustomer(customer);
       this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "customer",
-        value: res,
+        value: customer,
       });
       this.showNewCustomerModal = false;
     },

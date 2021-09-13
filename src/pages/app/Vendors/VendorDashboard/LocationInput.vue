@@ -4,7 +4,7 @@
       class="location md-vendor"
       v-model="selectedLocation"
       :md-options="locations"
-      :class="{ active: !!selectedLocation, 'md-purple': theme === 'purple' }"
+      :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
     >
     </md-autocomplete>
   </div>
@@ -90,11 +90,6 @@ export default {
         },
         this.addressSuggestions,
       );
-    },
-    value: function (newValue, oldValue) {
-      if (newValue !== oldValue) {
-        this.selectedLocation = newValue;
-      }
     },
   },
 };

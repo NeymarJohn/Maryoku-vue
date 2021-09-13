@@ -213,6 +213,8 @@ export default {
           this.totalValue += parseFloat(item.value);
         }
       });
+      console.log(this.totalValue);
+
       // remove duplicated categories
       this.categories = [...new Set(this.categories)];
       // sort data with updated categories
@@ -256,10 +258,12 @@ export default {
       var img = document.querySelector("#pie_chart_image");
 
       var xml = new XMLSerializer().serializeToString(svgElement);
+      // console.log(xml);
       var svg64 = btoa(xml);
       var b64Start = "data:image/svg+xml;base64,";
       this.blobURL = b64Start + svg64;
 
+      // console.log(img);
       setTimeout(() => {
         var canvas = document.querySelector("#pie-chart-canvas");
         if (canvas) {

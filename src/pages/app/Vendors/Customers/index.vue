@@ -283,15 +283,12 @@ export default {
     },
     customerObject(){
       if(!this.customers) return {}
-      let object = this.customers.reduce((r, e) => {
+      return this.customers.reduce((r, e) => {
           let group = e.companyName[0];
           if(!r[group]) r[group] = {group, children: [e]}
           else r[group].children.push(e);
           return r;
       }, {})
-
-      // sort customer object with alphabetical order
-      return Object.keys(object).sort().reduce((res, key) => (res[key] = object[key], res), {});
     },
     aggregate(){
       let totalPrice = 0;

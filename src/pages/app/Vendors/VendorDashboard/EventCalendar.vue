@@ -27,9 +27,7 @@
                       {{ $dateUtil.formatScheduleDay(event.endTime, "HH:mm") }}
                     </div>
                     <div>
-                      <template v-if="event.customerName">
-                        <span class="font-bold">{{ event.customerName }} </span> |
-                      </template>
+                      <span class="font-bold">{{ event.customerName }}</span> |
                       {{ event.companyName }}
                     </div>
                     <hr v-if="index < eventsForDate[Number(item.number)].length - 1" />
