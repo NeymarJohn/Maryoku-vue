@@ -289,16 +289,13 @@ export default {
       return services.map((vc, idx) => {
         const item = {
           title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
-          value: 1,
+          value: 0,
           color: this.categoryColors[idx],
           image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
         if (this.serviceReportData) {
           let cat = this.serviceReportData.find((c) => c._id == vc);
-          if (cat) {
-            item.value = cat.amount;
-            item.color = this.$store.state.common.serviceCategoriesMap[vc].color;
-          }
+          if (cat) item.value = cat.amount;
         }
         return item;
       });

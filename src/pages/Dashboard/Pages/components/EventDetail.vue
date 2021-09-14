@@ -1,8 +1,7 @@
 <template>
-  <div class="md-layout event-details-component" v-if="!isLoading">
+  <div class="md-layout event-details-component">
     <div class="md-layout">
       <div class="md-layout-item md-size-100">
-        <event-overview-section :section="eventDateSection" @change="changeEvent"></event-overview-section>
         <event-overview-section
           v-for="(section, index) in sections"
           :key="index"
@@ -14,117 +13,67 @@
   </div>
 </template>
 <script>
-import moment from "moment";
-import Swal from "sweetalert2";
-import { MaryokuInput } from "@/components";
-import VueElementLoading from "vue-element-loading";
-import { FunctionalCalendar } from "vue-functional-calendar";
-import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
-import Multiselect from "vue-multiselect";
+
 import EventOverviewSection from "./EventOverviewSection";
-import EventOverviewDate from "./EventOverviewDate";
+
 export default {
   name: "event-detail",
   components: {
-    VueElementLoading,
-    FunctionalCalendar,
-    LocationInput,
-    MaryokuInput,
-    Multiselect,
     EventOverviewSection,
-    EventOverviewDate,
   },
   props: {
     event: Object,
-    // eventComponents: [Array, Function]
   },
   data() {
     return {
       // auth: auth,
-      calendar: null,
-      editEvent: null,
-      eventId: null,
-      percentage: 0,
-      isLoading: true,
-      iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
-      timlineIconsURL: `${this.$iconURL}Timeline-New/`,
-      menuIconsURL: `${this.$iconURL}menu%20_%20checklist/SVG/`,
-      isEdit: false,
-      showEditDetailModal: false,
-      showCommentEditorPanel: false,
-      reCalculate: false,
-      reSchedule: false,
-      eventDateSection: null,
       sections: [],
     };
   },
   methods: {
     changeEvent(e) {
       if (e.hasOwnProperty("dateData")) {
-        this.event.eventStartMillis = new Date(e.dateData.started_at).getTime();
-        this.event.eventEndMillis = new Date(e.dateData.ended_at).getTime();
-        this.event.timeline = e.timeline;
-        this.event.timelineDates = e.timelineDates;
-        this.reSchedule = true;
+        this.event.startTime = e.dateData.startTime;
+        this.event.endTime = e.dateData.endTime;
       } else if (e.hasOwnProperty("location")) {
         this.event.location = e.location.name;
         this.event.locationId = e.location.id;
-      } else if (e.hasOwnProperty("inOutDoor")) {
-        this.event.places = e.inOutDoor;
-        this.reCalculate = true;
       } else if (e.hasOwnProperty("numberOfParticipants")) {
-        this.reCalculate = true;
         this.event.numberOfParticipants = e.numberOfParticipants;
-      } else if (e.hasOwnProperty("guestType")) {
-        this.event.guestType = e.guestType;
       } else if (e.hasOwnProperty("eventType")) {
         let eventType = this.eventTypeList.find((it) => it.name === e.eventType);
         if (!this.event.eventType) this.event.eventType = {};
         this.event.eventType.name = eventType.name;
         this.event.eventType.key = eventType.key;
         this.event.eventType.id = eventType.id;
-        this.reCalculate = true;
-      } else if (e.hasOwnProperty("occasion")) {
-        this.event.occasion = e.occasion;
-      } else if (e.hasOwnProperty("holiday")) {
-        this.event.holiday = e.holiday;
       }
-
+      this.$emit('change', this.event);
       this.setSection();
     },
-    cancelEvent() {
-      console.log("cancelEvent");
-    },
     setSection() {
-      let places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];
 
-      this.eventDateSection = {
-        title: "Date",
-        key: "date",
-        img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
-        warning: "Changing the time on your status might cause price changes",
-        started_at: this.event.eventStartMillis,
-        ended_at: this.event.eventEndMillis,
-        timelineDates: this.$store.state.event.timelineDates,
-        more_one_day: null,
-        datetime: this.event.eventStartMillis,
-      };
       this.sections = [
+        {
+           title: "Date",
+           key: "date",
+           img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
+           warning: "",
+           startTime: this.event.startTime,
+           endTime: this.event.endTime,
+        },
         {
           title: "Location",
           key: "location",
           img_src: `${this.$secondIconURL}Event Page/Group 10492.svg`,
           warning: "Changing the address on your status might cause price changes",
           location: this.event.location,
-          inOutDoor: places,
         },
         {
           title: "Number OF Guests",
           key: "number_of_guest",
           img_src: `${this.$secondIconURL}Event Page/Group 10482.svg`,
-          warning: "Changing the number of guests on your status might cause price changes",
+          warning: null,
           numberOfParticipants: this.event.numberOfParticipants,
-          guestType: this.event.guestType ? this.event.guestType : "",
         },
         {
           title: "Event type",
@@ -132,8 +81,6 @@ export default {
           img_src: `${this.$secondIconURL}Event Page/Group 10495.svg`,
           warning: null,
           eventType: this.event.eventType ? this.event.eventType.name : "",
-          occasion: this.event.occasion ? this.event.occasion : "",
-          holiday: this.event.holiday ? this.event.holiday : "",
         },
       ];
     },
@@ -148,12 +95,17 @@ export default {
   watch: {
     event(newVal, oldVal) {
       this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      console.log('event.detail.watch', newVal);
     },
     eventTypeList(newVal) {
       this.init();
     },
   },
-  computed: {},
+  computed: {
+    eventTypeList() {
+      return this.$store.state.common.eventTypes;
+    },
+  },
 };
 </script>
 <style lang="scss">

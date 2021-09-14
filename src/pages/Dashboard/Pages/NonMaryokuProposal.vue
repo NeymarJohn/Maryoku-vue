@@ -87,11 +87,14 @@
       </template>
       <template slot="body">
         <!-- <div>{{ proposal.eventData }}</div> -->
-        <event-detail :event="proposal.eventData"></event-detail>
+        <event-detail
+            :event="proposal.eventData"
+            @change="handleEventChange"
+        ></event-detail>
       </template>
       <template slot="footer">
         <md-button class="md-simple md-black">Cancel</md-button>
-        <md-button class="md-red" @click="updateEvent">Update Vendor</md-button>
+        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
       </template>
     </modal>
     <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
@@ -184,6 +187,7 @@ export default {
     }
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
+    await this.$store.dispatch("common/getEventTypes");
     this.proposal = await Proposal.find(proposalId);
     if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
     if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
@@ -214,27 +218,52 @@ export default {
       if (ask === "expiredDate") {
         let expiredTime = moment().add(2, "days").unix() * 1000;
         if (this.loggedInUser) {
-          await this.saveNegotiation(expiredTime);
+          await this.saveNegotiation({expiredTime});
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              expiredTime,
+                params: {expiredTime},
             }),
           );
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
+      }else if (ask === 'event') {
+          this.showDetailModal = false;
+          let event = {
+              startTime: this.proposal.eventData.startTime,
+              endTime: this.proposal.eventData.endTime,
+              location: this.proposal.eventData.location,
+              numberOfParticipants: this.proposal.eventData.numberOfParticipants,
+          }
+          if (this.loggedInUser) {
+              await this.saveNegotiation({event});
+          } else {
+              localStorage.setItem(
+                  "nonMaryokuAction",
+                  JSON.stringify({
+                      action: "saveNegotiation",
+                      params: {event},
+                  }),
+              );
+              this.onlyAuth = true;
+              this.showGuestSignupModal = true;
+          }
+
       }
     },
-    async saveNegotiation(expiredTime) {
-      console.log("saveNegotiation", expiredTime);
+    handleEventChange(e){
+      console.log('handleEventChange', e);
+      this.proposal.eventData = e;
+    },
+    async saveNegotiation(params) {
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
-        expiredTime,
         url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
+        ...params,
       });
       let res = await query.for(new Proposal({ id: this.proposal.id })).save();
       this.proposal.negotiations.push(res);
@@ -274,24 +303,20 @@ export default {
     negotiateRate() {
       this.showNegotiationRequestModal = true;
     },
-    askQuestion() {},
     changeEvent() {
       this.showDetailModal = true;
-    },
-    updateEvent() {
-      this.showDetailModal = false;
-      this.showUpdateSuccessModal = true;
     },
     openNewTab(link) {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
+      console.log('saveGuestComment', name)
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
-      console.log("saveGuestComment.data", data);
-      if (data.action === "saveComment")
-        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+
+
+      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
@@ -331,7 +356,7 @@ export default {
         if (data.action === "updateComment") this.updateComment(data);
         if (data.action === "deleteComment") this.deleteComment(data);
         if (data.action === "updateCommentComponent") this.saveComment(data);
-        if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
+        if (data.action === "saveNegotiation") this.saveNegotiation(data.params);
         if (data.action === "saveShare") this.share(data);
 
         localStorage.removeItem("nonMaryokuAction");
@@ -339,7 +364,7 @@ export default {
     },
     saveCommentWithAuth(params) {
       console.log("saveComment");
-      if (this.loggedInUser) {
+      if (this.loggedInUser || this.guestName) {
         this.saveComment(params);
       } else {
         localStorage.setItem(
@@ -354,8 +379,8 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateComment");
-      if (this.loggedInUser) {
+      console.log("updateCommentWithAuth", params);
+      if (this.loggedInUser || this.guestName) {
         this.updateComment(params);
       } else {
         localStorage.setItem(
@@ -371,7 +396,7 @@ export default {
     },
     deleteCommentWithAuth(params) {
       console.log("deleteComment");
-      if (this.loggedInUser) {
+      if (this.loggedInUser || this.guestName) {
         this.deleteComment(params);
       } else {
         localStorage.setItem(
@@ -387,7 +412,7 @@ export default {
     },
     updateCommentComponentWithAuth(component) {
       console.log("updateCommentComponent");
-      if (this.loggedInUser) {
+      if (this.loggedInUser || this.guestName) {
         this.updateCommentComponent(component);
       } else {
         localStorage.setItem(
@@ -447,6 +472,12 @@ export default {
     loggedInUser() {
       return this.$store.state.auth.user;
     },
+    customer(){
+      return this.$store.state.comment.customer
+    },
+    guestName(){
+      return this.$store.state.comment.guestName
+    }
   },
 };
 </script>
