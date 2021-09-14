@@ -87,14 +87,11 @@
       </template>
       <template slot="body">
         <!-- <div>{{ proposal.eventData }}</div> -->
-        <event-detail
-            :event="proposal.eventData"
-            @change="handleEventChange"
-        ></event-detail>
+        <event-detail :event="proposal.eventData"></event-detail>
       </template>
       <template slot="footer">
         <md-button class="md-simple md-black">Cancel</md-button>
-        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
+        <md-button class="md-red" @click="updateEvent">Update Vendor</md-button>
       </template>
     </modal>
     <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
@@ -187,7 +184,6 @@ export default {
     }
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
-    await this.$store.dispatch("common/getEventTypes");
     this.proposal = await Proposal.find(proposalId);
     if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
     if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
@@ -218,52 +214,27 @@ export default {
       if (ask === "expiredDate") {
         let expiredTime = moment().add(2, "days").unix() * 1000;
         if (this.loggedInUser) {
-          await this.saveNegotiation({expiredTime});
+          await this.saveNegotiation(expiredTime);
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-                params: {expiredTime},
+              expiredTime,
             }),
           );
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
-      }else if (ask === 'event') {
-          this.showDetailModal = false;
-          let event = {
-              startTime: this.proposal.eventData.startTime,
-              endTime: this.proposal.eventData.endTime,
-              location: this.proposal.eventData.location,
-              numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          }
-          if (this.loggedInUser) {
-              await this.saveNegotiation({event});
-          } else {
-              localStorage.setItem(
-                  "nonMaryokuAction",
-                  JSON.stringify({
-                      action: "saveNegotiation",
-                      params: {event},
-                  }),
-              );
-              this.onlyAuth = true;
-              this.showGuestSignupModal = true;
-          }
-
       }
     },
-    handleEventChange(e){
-      console.log('handleEventChange', e);
-      this.proposal.eventData = e;
-    },
-    async saveNegotiation(params) {
+    async saveNegotiation(expiredTime) {
+      console.log("saveNegotiation", expiredTime);
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
+        expiredTime,
         url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
-        ...params,
       });
       let res = await query.for(new Proposal({ id: this.proposal.id })).save();
       this.proposal.negotiations.push(res);
@@ -303,8 +274,13 @@ export default {
     negotiateRate() {
       this.showNegotiationRequestModal = true;
     },
+    askQuestion() {},
     changeEvent() {
       this.showDetailModal = true;
+    },
+    updateEvent() {
+      this.showDetailModal = false;
+      this.showUpdateSuccessModal = true;
     },
     openNewTab(link) {
       window.open(link, "_blank");
@@ -356,7 +332,7 @@ export default {
         if (data.action === "updateComment") this.updateComment(data);
         if (data.action === "deleteComment") this.deleteComment(data);
         if (data.action === "updateCommentComponent") this.saveComment(data);
-        if (data.action === "saveNegotiation") this.saveNegotiation(data.params);
+        if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
         if (data.action === "saveShare") this.share(data);
 
         localStorage.removeItem("nonMaryokuAction");

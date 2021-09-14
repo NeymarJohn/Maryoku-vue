@@ -99,6 +99,17 @@ let authPages = {
             },
         },
         {
+            path: "/guest/signin",
+            name: "Guest Signin",
+            component: SignInSignUp,
+            meta: {
+                requiresAuth: false,
+                title: "Guest Signin",
+                gtm: "Guest Signin",
+                isVendor: true
+            },
+        },
+        {
             path: "/signup",
             name: "SignUp",
             component: SignUp,

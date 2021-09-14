@@ -62,6 +62,7 @@ import { SignupCard, MaryokuInput, Modal, Loader } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
 import TenantUser from "@/models/TenantUser";
 import CalendarEvent from "@/models/CalendarEvent";
+import UserEvent from "@/models/UserEvent";
 import eventService from "@/services/event.service";
 export default {
   name: "SignIn",
@@ -135,7 +136,7 @@ export default {
     toForgotPassword() {
       this.$router.push({ path: "/forgot-password" });
     },
-    redirectPage() {
+    async redirectPage() {
       console.log("redirect.page", this.$route.query.action, this.currentUser);
       let action = this.$route.query.action;
       if (this.currentUser) {
@@ -149,13 +150,17 @@ export default {
         } else {
           if (this.currentUser.currentTenant) {
             console.log("redirect.events");
-            // Gettin last event
-            CalendarEvent.get().then((events) => {
-              if (events.length > 0) {
-                const gotoLink = eventService.getFirstTaskLink(events[0]);
-                this.$router.push({ path: gotoLink });
-              } else this.$router.push({ path: `/create-event-wizard` });
-            });
+            if(this.currentUser.currentUserType === 'planner') { // get last event
+                CalendarEvent.get().then((events) => {
+                    if (events.length > 0) {
+                        const gotoLink = eventService.getFirstTaskLink(events[0]);
+                        this.$router.push({path: gotoLink});
+                    } else this.$router.push({path: `/create-event-wizard`});
+                });
+            } else if (this.currentUser.currentUserType === 'guest') { // get last customer event
+                let userEvents = await UserEvent.get();
+                console.log('userEvents', userEvents);
+            }
           } else if (this.currentUser.tenants.length === 0) {
             console.log("redirect.create-event-wizard");
             const callback = btoa("/create-event-wizard");

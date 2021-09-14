@@ -378,6 +378,7 @@ export default {
       }
     },
     async getMessage(e){
+      console.log('getMessage', e.target.value);
       if(e.target.value.includes('@')){
         let queryArray = e.target.value.split('@')
 
@@ -395,7 +396,7 @@ export default {
       let queryArray = this.editingComment.split('@');
       queryArray[1] = customer.name;
 
-      this.editingComment = queryArray.join('@')
+      this.editingComment = queryArray.join('@') + ' ';
       this.showAddress = false
     }
   },

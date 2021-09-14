@@ -49,6 +49,7 @@ import Loader from './loader';
 import TablePagination from './TablePagination'
 import PieChart  from "./Chart/PieChart.vue";
 import Calendar from './Calendar';
+import CommentInput from "./Inputs/CommentInput";
 export {
     IconCheckbox,
     InputText,
@@ -93,4 +94,5 @@ export {
     TablePagination,
     PieChart,
     SignInContent,
+    CommentInput,
 };

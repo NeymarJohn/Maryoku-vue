@@ -15,11 +15,13 @@ export default {
                     ...args
                 })
             } else if(args.page === 'proposal'){
-                res = await postReq(`/1/proposals/${args.proposalId}/sendEmail`, {
-                    proposalId: args.proposalId,
-                    emails: args.emails,
+                let { proposalId, emails, cb } = args;
+                res = await postReq(`/1/proposals/${proposalId}/sendEmail`, {
+                    proposalId: proposalId,
+                    emails: emails,
                     type: 'share'
                 })
+                cb({success: true});
             }
             console.log('res', res);
 
