@@ -156,7 +156,7 @@ export default {
   },
   data() {
     return {
-      serviceChartData: [],
+      // serviceChartData: [],
       incomeChartData: [
         { label: "Jan", value: 0, future: false },
         { label: "Feb", value: 120, future: false },
@@ -181,18 +181,39 @@ export default {
   methods: {
     init() {
       console.log("customer.insight", this.aggregate, this.customer);
-      this.serviceChartData = this.customer
-        ? [
-            { label: "", value: 44, color: "#ffffff", icon: "Budget+Elements/venuerental-white.svg", price: "15000" },
-            {
-              label: "",
-              value: 35,
-              color: "#22cfe0",
-              icon: "Budget+Elements/foodandbeverage-white.svg",
-              price: "4800",
-            },
-            { label: "", value: 20, color: "#fec02d", icon: "Budget+Elements/entertainment-white.svg", price: "2200" },
-          ]
+    },
+    next() {
+      this.$refs.nextButton.click();
+    },
+    prev() {
+      console.log("prev");
+      this.$refs.prevButton.click();
+    },
+  },
+  computed: {
+    sumPricesByCategory() {
+      const data = {};
+      this.wonProposals.forEach((p) => {
+        for (let category in p.pricesByCategory) {
+          if (!data[category]) data[category] = 0;
+          data[category] += p.pricesByCategory[category];
+        }
+      });
+      return data;
+    },
+    serviceChartData() {
+      const chartData = [];
+      for (let category in this.sumPricesByCategory) {
+        chartData.push({
+          label: "",
+          value: Math.round((this.sumPricesByCategory[category] / this.totalPrice) * 100),
+          color: this.$store.state.common.serviceCategoriesMap[category].color,
+          icon: `Budget+Elements/${this.$store.state.common.serviceCategoriesMap[category].icon}`,
+          price: this.sumPricesByCategory[category],
+        });
+      }
+      return this.customer
+        ? chartData
         : [
             { label: "Venue", value: 44, color: "#a3809d", icon: "Budget+Elements/venuerental-white.svg", price: 0 },
             {
@@ -211,15 +232,6 @@ export default {
             },
           ];
     },
-    next() {
-      this.$refs.nextButton.click();
-    },
-    prev() {
-      console.log("prev");
-      this.$refs.prevButton.click();
-    },
-  },
-  computed: {
     wonProposals() {
       if (!this.customer || !this.customer.proposals.length) return [];
       return this.customer.proposals.filter((p) => {
