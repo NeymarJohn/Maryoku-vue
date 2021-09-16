@@ -1,13 +1,20 @@
 <template>
   <modal class="reminder-time-modal" containerClass="modal-container sm">
     <template slot="header">
-      <div class="font-size-30 font-bold header-text">Set a reminder</div>
+      <div>
+        <div class="font-size-30 font-bold header-text">Set a reminder</div>
+        <div class="mt-20">
+          Want to come back to this later? We’ll send you a reminder so you never miss a deadline.
+        </div>
+      </div>
+
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
       </md-button>
     </template>
     <template slot="body">
       <div class="text-left">
+        <label>Just select the best time for you: </label>
         <div class="text-left">
           <div><md-radio v-model="remindTimeOption" value="today">Later today</md-radio></div>
           <div><md-radio v-model="remindTimeOption" value="tomorrow">Tomorrow</md-radio></div>

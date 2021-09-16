@@ -73,7 +73,10 @@ export default {
     Loader,
     MaryokuInput,
   },
-  methods: {
+  mounted() {
+    // console.log('mounted', this.$router.currentRoute);
+  },
+    methods: {
     authenticate(provider) {
       let action = this.$route.query.action;
       this.loading = true;
@@ -94,18 +97,18 @@ export default {
     },
     signIn() {
       this.loading = true;
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
       let that = this;
       this.$validator.validateAll().then((isValid) => {
         console.log(this.$validator);
         if (isValid) {
           if (this.user.email && this.user.password) {
             const userData = {
-              email: `${this.user.email}/planner`,
+              email: `${this.user.email}/${isGuest ? 'guest' : 'planner'}`,
               password: this.user.password,
             };
             this.$store.dispatch("auth/login", userData).then(
               () => {
-                console.log("after.signin");
                 if (this.keepMe) {
                   document.cookie = `rememberMe=true; path=/;`;
                 }
