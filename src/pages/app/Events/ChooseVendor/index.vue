@@ -391,6 +391,7 @@ export default {
     }
   },
   async created() {
+    console.log('choose-vendors.created');
     await this.$store.dispatch('planningBoard/resetCartItems');
     this.isLoadingProposal = true;
     const tenantId = this.$authService.resolveTenantId()

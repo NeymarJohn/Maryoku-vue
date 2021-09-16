@@ -3,6 +3,7 @@ import DashboardLayout from "@/pages/Dashboard/Layout/DashboardLayout.vue";
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 import CreateEvent from "@/pages/Dashboard/Layout/CreateEvent.vue";
 import HomeLayout from "@/pages/Dashboard/Layout/HomeLayout.vue";
+import CustomerEventLayout from "@/pages/Dashboard/Layout/CustomerEventLayout.vue";
 import NewEventLayout from "@/pages/Dashboard/Layout/NewEventLayout.vue";
 import WorkspaceLayout from "@/pages/Dashboard/Layout/WorkspaceLayout.vue";
 import LandingPageLayout from "@/pages/Dashboard/Layout/LandingPageLayout.vue";
@@ -27,6 +28,7 @@ const ProfileOverview = () => import("@/pages/app/Planner/Profile");
 // Event Pages
 const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
 const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
+const UserEventPlan = () => import("@/pages/app/Guest/UserEventPlan.vue");
 const EventDetailsOverview = () => import("@/pages/app/Events/components/EventDetailsOverview");
 const EventProposalDetails = () => import("@/pages/app/Events/Proposal/EventProposalDetails.vue");
 const EventProposalCompare = () => import("@/pages/app/Events/Proposal/ProposalCompare.vue")
@@ -37,6 +39,7 @@ const EventBudgetRequirement = () => import("@/pages/app/Events/components/Event
 const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 const PlanningBoard = () => import("@/pages/app/Events/PlanningBoard/PlanningBoardLayout.vue");
 const ChooseVendor = () => import("@/pages/app/Events/ChooseVendor");
+const ChooseGuestVendor = () => import("@/pages/app/Guest/ChooseVendor");
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
 
@@ -96,6 +99,17 @@ let authPages = {
             meta: {
                 requiresAuth: false,
                 gtm: "SignIn",
+            },
+        },
+        {
+            path: "/guest/signin",
+            name: "Guest Signin",
+            component: SignInSignUp,
+            meta: {
+                requiresAuth: false,
+                title: "Guest Signin",
+                gtm: "Guest Signin",
+                isVendor: true
             },
         },
         {
@@ -412,6 +426,133 @@ let EventPages = {
 
     ],
 };
+
+let UserEventPages = {
+    path: "/user-events",
+    component: CustomerEventLayout,
+    name: "Events",
+    children: [{
+            path: "/user-events/:id/booking",
+            name: "Plan Event",
+            component: UserEventPlan,
+            children: [
+                {
+                    path: "overview",
+                    name: "EventPlan",
+                    component: EventDetailsOverview,
+                    meta: {
+                        title: "Event Details",
+                        gtm: "Event Details",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "concept",
+                    name: "EventPlan",
+                    component: EventConceptChoose,
+                    meta: {
+                        title: "Event Concept",
+                        gtm: "Event Concept",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "budget",
+                    name: "EventPlan",
+                    component: EventBudgetRequirement,
+                    meta: {
+                        title: "Event Concept",
+                        gtm: "Event Concept",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "campaign",
+                    name: "Campaign",
+                    component: EventCampaign,
+                    meta: {
+                        title: "Event Campaign",
+                        gtm: "Event Campaign",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "timeline",
+                    name: "Timeline",
+                    component: EventDetailsTimeline,
+                    meta: {
+                        title: "Event Timeline",
+                        gtm: "Event Timeline",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "planningboard",
+                    name: "Plan Event",
+                    component: PlanningBoard,
+                    meta: {
+                        title: "Plan Event",
+                        gtm: "Plan Event",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "choose-vendor",
+                    name: "Choose Vendor",
+                    component: ChooseGuestVendor,
+                    meta: {
+                        title: "Choose Vendor",
+                        gtm: "Choose Vendor",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: ":blockId",
+                    name: "EventPlan",
+                    component: BookingEvent,
+                    meta: {
+                        title: "Plan Event",
+                        gtm: "Plan Event",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: ":blockId/proposals/compare",
+                    name: "EventProposalCompare",
+                    component: EventProposalCompare,
+                    meta: {
+                        title: "EventProposalCompare",
+                        gtm: "Event Proposal Compare",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: ":blockId/proposals/:proposalId",
+                    name: "EventProposalDetails",
+                    component: EventProposalDetails,
+                    meta: {
+                        title: "EventProposalDetails",
+                        gtm: "Event Proposal Details",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+
+            ]
+        },
+
+    ],
+};
+
 let PublicCreateEvent = {
     path: "/app-public",
     component: CreateEvent,
@@ -733,6 +874,7 @@ const routes = [
     HomePages,
     ProfilePages,
     EventPages,
+    UserEventPages,
     landingPages,
     vendorListPage,
     feedbackPages,

@@ -286,12 +286,13 @@ export default {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
+      console.log('saveGuestComment', name)
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
-      console.log("saveGuestComment.data", data);
-      if (data.action === "saveComment")
-        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+
+
+      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
@@ -339,7 +340,7 @@ export default {
     },
     saveCommentWithAuth(params) {
       console.log("saveComment");
-      if (this.loggedInUser) {
+      if (this.loggedInUser || this.guestName) {
         this.saveComment(params);
       } else {
         localStorage.setItem(
@@ -354,8 +355,8 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateComment");
-      if (this.loggedInUser) {
+      console.log("updateCommentWithAuth", params);
+      if (this.loggedInUser || this.guestName) {
         this.updateComment(params);
       } else {
         localStorage.setItem(
@@ -371,7 +372,7 @@ export default {
     },
     deleteCommentWithAuth(params) {
       console.log("deleteComment");
-      if (this.loggedInUser) {
+      if (this.loggedInUser || this.guestName) {
         this.deleteComment(params);
       } else {
         localStorage.setItem(
@@ -387,7 +388,7 @@ export default {
     },
     updateCommentComponentWithAuth(component) {
       console.log("updateCommentComponent");
-      if (this.loggedInUser) {
+      if (this.loggedInUser || this.guestName) {
         this.updateCommentComponent(component);
       } else {
         localStorage.setItem(
@@ -447,6 +448,12 @@ export default {
     loggedInUser() {
       return this.$store.state.auth.user;
     },
+    customer(){
+      return this.$store.state.comment.customer
+    },
+    guestName(){
+      return this.$store.state.comment.guestName
+    }
   },
 };
 </script>

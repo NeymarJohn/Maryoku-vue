@@ -33,7 +33,7 @@
             :class="idx > 0 ? 'mt-20' : ''"
           >
             <img :src="`${$iconURL}${it.icon}`" width="23px" />
-            <template v-if="customer || serviceReportData">
+            <template v-if="customer">
               <span class="ml-10 font-size-13" :style="{ color: it.color }">{{ it.value }}%</span>
               <span class="ml-10 font-size-13 color-white">${{ it.price | withComma(Number) }}</span>
             </template>
@@ -153,10 +153,6 @@ export default {
       type: Object,
       required: true,
     },
-    vendor: {
-      type: Object,
-      required: true,
-    },
   },
   data() {
     return {
@@ -177,22 +173,13 @@ export default {
       ],
       incomeList: ["", ""],
       renderCustomer: false,
-      serviceReportData: null,
     };
   },
   mounted() {
     this.init();
   },
   methods: {
-    getServiceReport() {
-      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendor.id}`).then((res) => {
-        if (res.data.length) {
-          this.serviceReportData = res.data;
-        }
-      });
-    },
     init() {
-      this.getServiceReport();
       console.log("customer.insight", this.aggregate, this.customer);
     },
     next() {
@@ -215,52 +202,35 @@ export default {
       return data;
     },
     serviceChartData() {
-      let chartData = [];
-      if (this.customer) {
-        for (let category in this.sumPricesByCategory) {
-          chartData.push({
-            label: "",
-            value: Math.round((this.sumPricesByCategory[category] / this.totalPrice) * 100),
-            color: this.$store.state.common.serviceCategoriesMap[category].color,
-            icon: `Budget+Elements/${category}-white.svg`,
-            price: this.sumPricesByCategory[category],
-          });
-        }
-      } else if (this.serviceReportData) {
-        console.log("this.serviceReportData", this.serviceReportData);
-
-        for (let i = 0; i < this.serviceReportData.length; i++) {
-          const categoryData = this.serviceReportData[i];
-          console.log("categoryData", categoryData);
-          chartData.push({
-            label: "",
-            value: Math.round((categoryData.amount / 100 / this.aggregate.totalPrice) * 100),
-            color: this.$store.state.common.serviceCategoriesMap[categoryData._id].color,
-            icon: `Budget+Elements/${categoryData._id}-white.svg`,
-            price: categoryData.amount / 100,
-          });
-        }
-      } else {
-        chartData = [
-          { label: "Venue", value: 44, color: "#a3809d", icon: "Budget+Elements/venuerental-white.svg", price: 0 },
-          {
-            label: "Catering",
-            value: 35,
-            color: "#915a87",
-            icon: "Budget+Elements/foodandbeverage-white.svg",
-            price: 0,
-          },
-          {
-            label: "Signage & Printing",
-            value: 20,
-            color: "#4e0841",
-            icon: "Budget+Elements/entertainment-white.svg",
-            price: 0,
-          },
-        ];
+      const chartData = [];
+      for (let category in this.sumPricesByCategory) {
+        chartData.push({
+          label: "",
+          value: Math.round((this.sumPricesByCategory[category] / this.totalPrice) * 100),
+          color: this.$store.state.common.serviceCategoriesMap[category].color,
+          icon: `Budget+Elements/${this.$store.state.common.serviceCategoriesMap[category].icon}`,
+          price: this.sumPricesByCategory[category],
+        });
       }
-      console.log("chartData", chartData);
-      return chartData;
+      return this.customer
+        ? chartData
+        : [
+            { label: "Venue", value: 44, color: "#a3809d", icon: "Budget+Elements/venuerental-white.svg", price: 0 },
+            {
+              label: "Catering",
+              value: 35,
+              color: "#915a87",
+              icon: "Budget+Elements/foodandbeverage-white.svg",
+              price: 0,
+            },
+            {
+              label: "Signage & Printing",
+              value: 20,
+              color: "#4e0841",
+              icon: "Budget+Elements/entertainment-white.svg",
+              price: 0,
+            },
+          ];
     },
     wonProposals() {
       if (!this.customer || !this.customer.proposals.length) return [];

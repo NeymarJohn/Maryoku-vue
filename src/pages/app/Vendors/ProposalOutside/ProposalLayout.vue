@@ -184,8 +184,6 @@ export default {
     gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
-        // if(this.step === 0){
-        // create vendor event when
         this.createEvent().then(() => {
           this.step = this.step + 1;
           this.scrollToTop();
@@ -255,6 +253,7 @@ export default {
         eventType: { id: this.event.eventType.id },
         companyName: this.event.customer.companyName,
         location: this.event.location,
+        guests: this.event.numberOfParticipants,
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };

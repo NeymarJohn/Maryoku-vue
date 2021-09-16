@@ -62,6 +62,7 @@ import { SignupCard, MaryokuInput, Modal, Loader } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
 import TenantUser from "@/models/TenantUser";
 import CalendarEvent from "@/models/CalendarEvent";
+import UserEvent from "@/models/UserEvent";
 import eventService from "@/services/event.service";
 export default {
   name: "SignIn",
@@ -72,7 +73,10 @@ export default {
     Loader,
     MaryokuInput,
   },
-  methods: {
+  mounted() {
+    // console.log('mounted', this.$router.currentRoute);
+  },
+    methods: {
     authenticate(provider) {
       let action = this.$route.query.action;
       this.loading = true;
@@ -93,18 +97,18 @@ export default {
     },
     signIn() {
       this.loading = true;
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
       let that = this;
       this.$validator.validateAll().then((isValid) => {
         console.log(this.$validator);
         if (isValid) {
           if (this.user.email && this.user.password) {
             const userData = {
-              email: `${this.user.email}/planner`,
+              email: `${this.user.email}/${isGuest ? 'guest' : 'planner'}`,
               password: this.user.password,
             };
             this.$store.dispatch("auth/login", userData).then(
               () => {
-                console.log("after.signin");
                 if (this.keepMe) {
                   document.cookie = `rememberMe=true; path=/;`;
                 }
@@ -135,7 +139,7 @@ export default {
     toForgotPassword() {
       this.$router.push({ path: "/forgot-password" });
     },
-    redirectPage() {
+    async redirectPage() {
       console.log("redirect.page", this.$route.query.action, this.currentUser);
       let action = this.$route.query.action;
       if (this.currentUser) {
@@ -149,13 +153,24 @@ export default {
         } else {
           if (this.currentUser.currentTenant) {
             console.log("redirect.events");
-            // Gettin last event
-            CalendarEvent.get().then((events) => {
-              if (events.length > 0) {
-                const gotoLink = eventService.getFirstTaskLink(events[0]);
-                this.$router.push({ path: gotoLink });
-              } else this.$router.push({ path: `/create-event-wizard` });
-            });
+            if(this.currentUser.currentUserType === 'planner') { // get last event
+                CalendarEvent.get().then((events) => {
+                    if (events.length > 0) {
+                        const gotoLink = eventService.getFirstTaskLink(events[0]);
+                        this.$router.push({path: gotoLink});
+                    } else this.$router.push({path: `/create-event-wizard`});
+                });
+            } else if (this.currentUser.currentUserType === 'guest') { // get last customer event
+                let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
+                        params: {filters:{myEvents: true}},
+                    })
+                let events = res.data;
+                console.log('events', events);
+                if (events.length > 0) {
+                    this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
+                }
+
+            }
           } else if (this.currentUser.tenants.length === 0) {
             console.log("redirect.create-event-wizard");
             const callback = btoa("/create-event-wizard");

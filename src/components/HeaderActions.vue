@@ -67,7 +67,10 @@ export default {
       this.$emit("export", { type: "pdf" });
     },
     shareLink(args){
-      this.$emit("share", args)
+      this.$emit("share", {...args, cb: params => {
+          console.log('shareLink', params);
+          this.isSharing = false;
+        }})
     }
   },
   computed: {
