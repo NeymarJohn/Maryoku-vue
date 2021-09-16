@@ -5,6 +5,7 @@
       <div class="mr-30 flex-1">
         <div class="text-left">
           <span class="title font-size-26 mr-30">{{ section.title }}</span>
+          <span class="content" v-if="!isEdit && section.startTime">{{ section.startTime * 1000 | formatDate }}</span>
           <span class="content" v-if="!isEdit && section.location">{{ section.location }}</span>
           <span v-if="!isEdit && section.numberOfParticipants" class="content">
             {{ section.numberOfParticipants | formatQty }} Guests
@@ -14,25 +15,27 @@
 
         <div class="row">
           <maryoku-input
-            v-if="isEdit && section.hasOwnProperty('datetime')"
-            :value="section.datetime"
-            class="form-input"
+            v-if="isEdit && section.key === 'date'"
+            :value="eventDate"
+            class="form-input w-max-400"
             placeholder="Choose date…"
             inputStyle="date"
+            v-model="eventDate"
+            @input="changeDate"
           ></maryoku-input>
         </div>
         <location-input
-          v-if="isEdit && section.hasOwnProperty('location')"
+          v-if="isEdit && section.key === 'location'"
           v-model="section.location"
           placeholder="Type city / region or specific address here…"
-          class="my-10"
+          class="my-10 w-max-450"
           @change="changeLocation"
         >
         </location-input>
 
         <maryoku-input
-          v-if="isEdit && section.hasOwnProperty('numberOfParticipants')"
-          class="form-input my-10"
+          v-if="isEdit && section.key === 'number_of_guest'"
+          class="form-input w-max-250 my-10"
           placeholder="Type number…..."
           inputStyle="users"
           @change="guestNumberChange"
@@ -40,11 +43,11 @@
         ></maryoku-input>
 
         <category-selector
-          v-if="isEdit && section.hasOwnProperty('eventType')"
+          v-if="isEdit && section.key === 'event_type'"
           :value="section.eventType"
           :categories="eventTypes"
           trackBy="name"
-          class="my-10"
+          class="my-10 w-max-450"
           @change="eventTypeChange"
         ></category-selector>
 
@@ -54,82 +57,43 @@
         </div>
       </div>
 
-      <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value sub-info">
-        <div class="mr-20 d-inline-block" v-for="item in section.inOutDoor">
-          <img :src="getIconUrl(item.toLowerCase())" style="width: 1.5rem" />
-          {{ item.toLowerCase() }}
-        </div>
-      </div>
-      <div v-if="!isEdit && section.hasOwnProperty('guestType')" class="value sub-info align-self-center d-flex">
-        <img v-if="this.section.guestType" :src="getIconUrl('guestType')" />
-        {{ section.guestType }}
-      </div>
-      <div v-if="!isEdit && section.hasOwnProperty('occasion')" class="value sub-info align-self-center d-flex">
-        <img v-if="this.section.occasion" :src="getIconUrl('occasion')" />
-        {{ section.occasion }}
-      </div>
-      <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center ml-50">
-        <md-checkbox
-          v-model="section.inOutDoor"
-          class="md-checkbox-circle md-red mb-30"
-          @change="inOutDoorChange"
-          :value="item.value"
-          v-for="(item, index) in inOutDoorTypes"
-          :key="index"
-        >
-          <div class="checkbox-label-wrapper">
-            <img :src="getIconUrl(item.value)" style="width: 1.5rem" />
-            {{ item.label }}
+      <div v-if="isEdit && section.key === 'date'" class="value">
+          <div class="md-layout">
+              <div class="md-layout-item md-size-50 p-0">
+                  <p class="title font-size-20 my-5">From</p>
+                  <div class="event-time d-flex align-center">
+                      <vue-timepicker
+                          manual-input
+                          input-class="time-class"
+                          hide-dropdown
+                          format="hh:mm"
+                          v-model="startTime"
+                          hide-clear-button
+                          @change="changeDate"
+                      />
+                      <div class="am-field" @click="changeDate('start')">
+                          <input type="text" v-model="amPack.start" readonly />
+                      </div>
+                  </div>
+              </div>
+              <div class="md-layout-item md-size-50 p-0">
+                  <p class="title font-size-20 my-5">To</p>
+                  <div class="event-time d-flex align-center">
+                      <vue-timepicker
+                          manual-input
+                          input-class="time-class"
+                          hide-dropdown
+                          format="hh:mm"
+                          v-model="endTime"
+                          hide-clear-button
+                          @change="changeDate"
+                      />
+                      <div class="am-field" @click="changeDate('end')">
+                          <input type="text" v-model="amPack.end" readonly />
+                      </div>
+                  </div>
+              </div>
           </div>
-        </md-checkbox>
-      </div>
-
-      <div v-if="isEdit && section.hasOwnProperty('guestType')" class="value">
-        <h3>Who's invited</h3>
-        <category-selector
-          :value="section.guestType"
-          column="1"
-          :categories="guestsTypes"
-          :additional="additional"
-          trackBy="name"
-          @change="guestTypeChange"
-          @input="inputQuestType"
-        ></category-selector>
-      </div>
-
-      <div v-if="isEdit && section.hasOwnProperty('occasion')" class="value">
-        <h3>Celebrating</h3>
-        <category-selector
-          :value="section.occasion"
-          :categories="occasions"
-          trackBy="name"
-          @change="occasionChange"
-        ></category-selector>
-
-        <HolidayInput
-          v-if="section.occasion === 'Holiday'"
-          :value="section.holiday"
-          :options="holidays"
-          @change="holidayChange"
-        >
-        </HolidayInput>
-      </div>
-
-      <div v-if="isEdit && section.hasOwnProperty('datetime')" class="value">
-        <div class="md-layout">
-          <div class="md-layout-item md-size-50 p-0">
-            <span class="title mr-30">From</span>
-            <div class="event-time d-flex align-center">
-              <time-picker v-model="section.datetime"></time-picker>
-            </div>
-          </div>
-          <div class="md-layout-item md-size-50 p-0">
-            <span class="title mr-30">To</span>
-            <div class="event-time d-flex align-center">
-              <time-picker v-model="section.datetime"></time-picker>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="right">
@@ -180,105 +144,13 @@ export default {
       isEdit: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       additional: true,
-      markedDates: {},
-      dateData: {
-        currentDate: null,
-        dateRange: {
-          start: {
-            date: moment(this.section.started_at).subtract(1, "days").format("YYYY-MM-DD"),
-            // date: null,
-            dateTime: false,
-            hour: "00",
-            mintue: "00",
-          },
-          end: {
-            date: moment(this.section.ended_at).format("YYYY-MM-DD"),
-            // date: null,
-            dateTime: false,
-            hour: "00",
-            mintue: "00",
-          },
-        },
-        selectedDate: null,
-        selectedDatesItem: "",
-        selectedHour: "00",
-        selectedMinute: "00",
-        selectedDates: [],
-      },
-      dateRange: {},
-      started_at: null,
-      dateClick: false,
-      ended_at: null,
+      startTime: { hh: "12", mm: "00" },
+      endTime: { hh: "12", mm: "00" },
+      eventDate: null,
+      amPack:{ start: "am", end: "am" },
       location: null,
-      inOutdoors: null,
-      inOutDoorTypes: [
-        { label: "Outdoors event", value: "outdoors", icon: "outdoors" },
-        { label: "Indoors event", value: "indoors", icon: "indoors" },
-        { label: "Virtual event", value: "virtual", icon: "virtual" },
-      ],
-      guestsTypes: [
-        {
-          value: "Employees",
-          name: "Employees",
-          icon: `${this.$iconURL}Onboarding/employees-dark.svg`,
-        },
-        {
-          value: "Employees & Spouses",
-          name: "Employees & Spouses",
-          icon: `${this.$iconURL}Onboarding/employees-spouses-dark.svg`,
-        },
-        {
-          value: "Familes",
-          name: "Familes",
-          icon: `${this.$iconURL}Onboarding/families-dark.svg`,
-        },
-        {
-          value: "Business Associates",
-          name: "Business Associates",
-          icon: `${this.$iconURL}Onboarding/business-associates-dark.svg`,
-        },
-        {
-          value: "Customers",
-          name: "Customers",
-          icon: `${this.$iconURL}Onboarding/customers-dark.svg`,
-        },
-        {
-          value: "Board Members",
-          name: "Board Members",
-          icon: `${this.$iconURL}Onboarding/board-members-dark.svg`,
-        },
-      ],
       eventType: null,
       eventTypes: [],
-      occasions: [
-        {
-          value: "National Day",
-          name: "National Day",
-          icon: `${this.$iconURL}Onboarding/ballons-dark.svg`,
-        },
-        {
-          value: "Holiday",
-          name: "Holiday",
-          icon: `${this.$iconURL}Onboarding/gift-dark.svg`,
-        },
-        {
-          value: "Milestone",
-          name: "Milestone",
-          icon: `${this.$iconURL}Onboarding/flag-dark.svg`,
-        },
-        {
-          value: "Company Day",
-          name: "Company Day",
-          icon: `${this.$iconURL}Onboarding/champaign-dark.svg`,
-        },
-        {
-          value: "Season",
-          name: "Season",
-          icon: `${this.$iconURL}Onboarding/beach.svg`,
-        },
-      ],
-      occasion: null,
-      holidays: [],
     };
   },
   methods: {
@@ -300,51 +172,42 @@ export default {
       if (!loc) return;
       this.$emit("change", { location: loc });
     },
-    inOutDoorChange() {
-      this.$emit("change", { inOutDoor: this.section.inOutDoor });
-    },
     guestNumberChange(e) {
+      console.log('guestNumberChange', e);
       this.$emit("change", { numberOfParticipants: parseInt(e) });
     },
-    inputQuestType(e) {
-      // console.log('inputQuestType', e);
-    },
-    guestTypeChange(e) {
-      // console.log('guestTypeChange', e);
-      this.$emit("change", { guestType: e });
-    },
     eventTypeChange(e) {
-      // console.log('eventTypeChange', e);
+      console.log('eventTypeChange', e);
       this.$emit("change", { eventType: e });
     },
-    occasionChange(e) {
-      // console.log('occasionChange', e);
-      this.$emit("change", { occasion: e });
+    changeDate(field = null){
+        console.log('changeDate', this.eventDate, this.startTime, this.endTime, this.amPack);
+        if(field == 'start') this.amPack.start = this.amPack.start === 'am' ? 'pm' : 'am'
+        if(field == 'end') this.amPack.end = this.amPack.end === 'am' ? 'pm' : 'am'
+        this.$emit('change', {dateData: {
+            startTime: this.getTimeFromFormat(this.eventDate, this.startTime, this.amPack.start, "DD.MM.YYYY hh:mm a"),
+            endTime: this.getTimeFromFormat(this.eventDate, this.endTime, this.amPack.start, "DD.MM.YYYY hh:mm a"),
+        }})
     },
-    holidayChange(e) {
-      // console.log('holidayChange', e);
-      this.$emit("change", { holiday: e });
+    getTimeFromFormat(date, time, a, format) {
+      return moment(`${date} ${time.hh}:${time.mm} ${a}`, format).unix();
     },
     init: async function () {
-      let religions = JSON.parse(localStorage.getItem("two62-app.holidays"));
-      // get holidays from server
-      if (this.section.key === "event_type" && (!this.holidays || !this.holidays.length)) {
-        let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
-        localStorage.setItem("two62-app.holidays", JSON.stringify(res.data));
-        religions = res.data;
-      }
-
-      religions.map((rel) => {
-        let holidays = [];
-        rel.holidays.map((h) => {
-          holidays.push(h.holiday);
-        });
-        this.holidays.push({ name: rel.name, holidays });
-      });
 
       this.eventTypes = this.eventTypesList.map((it) => {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
       });
+
+      this.eventDate = moment(this.section.startTime * 1000).format("DD.MM.YYYY")
+      this.startTime = {
+          hh: moment(this.section.startTime * 1000).format("hh"),
+          mm: moment(this.section.startTime * 1000).format("mm"),
+      }
+      this.endTime = {
+          hh: moment(this.section.endTime * 1000).format("hh"),
+          mm: moment(this.section.endTime * 1000).format("mm"),
+      }
+
     },
   },
   filters: {
@@ -355,10 +218,6 @@ export default {
   computed: {
     eventTypesList() {
       return this.$store.state.common.eventTypes;
-    },
-    inOutDoorValue() {
-      let inOutDoor = this.inOutDoorTypes.find((it) => it.value === this.section.inOutDoor);
-      return inOutDoor ? inOutDoor["label"] : "";
     },
   },
   mounted() {
@@ -448,6 +307,48 @@ export default {
       }
       margin-left: 10px;
       margin-right: 50px;
+    }
+  }
+  .event-time {
+    /deep/ .time-picker {
+        width: unset;
+        input {
+            text-align: center;
+            width: 110px;
+            height: 55px;
+            border-radius: 3px;
+            font: normal 18px Manrope-Regular, sans-serif;
+            border: solid 0.5px #bcbcbc !important;
+        }
+        .dropdown ul li:not([disabled]).active,
+        .dropdown ul li:not([disabled]).active:hover,
+        .dropdown ul li:not([disabled]).active:focus {
+            background: #f51355;
+            color: #fff;
+        }
+    }
+  }
+  .am-field {
+    position: relative;
+    cursor: pointer;
+
+    &:before {
+        position: absolute;
+        content: ">";
+        transform: translateX(50%) translateY(calc(100% + 1.8rem)) rotate(90deg);
+        left: 40%;
+        font-size: 28px;
+        font-weight: 800;
+    }
+    input {
+        width: 80px;
+        height: 55px;
+        cursor: pointer;
+        border-radius: 3px;
+        font: normal 18px Manrope-Regular, sans-serif;
+        margin-left: 0.5rem;
+        border: solid 0.5px #bcbcbc !important;
+        text-align: center;
     }
   }
 }

@@ -266,7 +266,7 @@ export const serviceCards = [
         ],
         [
             {
-                name: "Cuisine Speciality",
+                name: "Cuisne Speciality",
                 serviceCategory: "foodandbeverage",
                 script:
                 "requirements['multi-selection'][0]['options'][0]['selected'] = true;requirements['multi-selection'][0]['options'][1]['selected'] = false",
