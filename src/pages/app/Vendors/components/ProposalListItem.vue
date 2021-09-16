@@ -30,7 +30,7 @@
     <div class="text-center" v-if="hasNegotiation">
       <md-button class="md-simple md-red md-vendor-text">
         <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" />
-          {{proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
+          {{proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Request for change'}}
       </md-button>
       <md-button class="md-vendor" @click="edit(proposalStatus.negotiation)"> Respond </md-button>
     </div>
