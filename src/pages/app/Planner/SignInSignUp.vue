@@ -161,8 +161,15 @@ export default {
                     } else this.$router.push({path: `/create-event-wizard`});
                 });
             } else if (this.currentUser.currentUserType === 'guest') { // get last customer event
-                let userEvents = await UserEvent.get();
-                console.log('userEvents', userEvents);
+                let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
+                        params: {filters:{myEvents: true}},
+                    })
+                let events = res.data;
+                console.log('events', events);
+                if (events.length > 0) {
+                    this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
+                }
+
             }
           } else if (this.currentUser.tenants.length === 0) {
             console.log("redirect.create-event-wizard");
