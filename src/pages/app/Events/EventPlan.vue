@@ -31,9 +31,6 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
-    user(){
-      return this.$store.state.auth.user;
-    },
     barItems() {
       // if (!this.event.checkList) {
       const overview = {
@@ -100,25 +97,17 @@ export default {
         id: "bookingboard-item",
       };
       const elements = [];
-
-      console.log('user', this.user);
-      if (this.user.currentUserType === 'planner') {
-          elements.push(overview);
-          elements.push(concept);
-          elements.push(budget);
-          elements.push(timeline);
-          elements.push(campaign);
-          elements.push(planningBoard);
-          if (this.event.processingStatus === "accept-proposal") {
-              elements.push(chooseVendor);
-          }
-      } else if(this.user.currentUserType === 'guest') {
-          elements.push(overview);
-          elements.push(planningBoard);
-          elements.push(chooseVendor);
+      elements.push(overview);
+      // if (this.event.eventType.hasConcept) {
+      elements.push(concept);
+      // }
+      elements.push(budget);
+      elements.push(timeline);
+      elements.push(campaign);
+      elements.push(planningBoard);
+      if (this.event.processingStatus === "accept-proposal") {
+        elements.push(chooseVendor);
       }
-
-
       // show when you approve budget
       // if (this.event.budgetProgress == 100) {
       //   this.event.components.sort((a, b) => a.order - b.order);

@@ -48,13 +48,13 @@
               <sharing-role-options v-if="showEmailRoleEditor" align="right"></sharing-role-options>
             </div>
           </div>
-          <div v-if="emails.length > 0">
+          <div v-if="page === 'event' && emails.length > 0">
             <div class="form-group mt-4">
               <textarea rows="8" class="form-control" placeholder="Add message" v-model="message"></textarea>
             </div>
             <div class="d-flex align-center justify-content-between">
               <div>
-                <strong>Shared with: </strong> <span v-for="(email, idx) in emails" :key="email">{{ email }} {{idx < emails.length - 1 ? ',' : ''}} </span>
+                <strong>Shared with: </strong> <span v-for="email in emails" :key="email">{{ email }}, </span>
               </div>
               <div class="checkbox-wrapper"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
             </div>
@@ -148,8 +148,6 @@ export default {
     removeSelectedAttachment(index) {},
     sendEmail() {
 
-      if (!this.isSendingMessage) return
-
       let params = {page: this.page};
       if (this.page === 'event') {
 
@@ -162,7 +160,6 @@ export default {
           params.emails = this.emails;
           params.proposalId = this.$route.params.proposalId;
       }
-
       this.$emit('share', params);
     },
 

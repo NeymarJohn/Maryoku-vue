@@ -166,8 +166,8 @@ const mutations = {
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
     state.coverImage = proposal.coverImage || [],
-    state.inspirationalPhotos = proposal.inspirationalPhotos
-    state.initialized = true;
+      // state.inspirationalPhotos = proposal.inspirationalPhotos
+      state.initialized = true;
     // state.wizardStep = proposal.step
   },
   setWizardStep: (state, step) => {

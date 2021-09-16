@@ -51,25 +51,13 @@
               @delete="deleteComment"
             ></comment-item>
           </div>
-          <div class="form-group position-relative reply-form" :class="{'main-form':!this.selectedCommentComponent.length }">
-              <fade-transition v-if="showAddress">
-                  <md-card class="position-absolute notification-card">
-                      <md-card-content class="d-flex align-center position-relative p-10">
-                          <md-menu md-size="medium" class="action-menu">
-                              <md-menu-item v-for="c in customers" :key="c.id" @click="toAddress(c)">
-                                  {{c.name}}
-                              </md-menu-item>
-                          </md-menu>
-                      </md-card-content>
-                  </md-card>
-              </fade-transition>
+          <div class="form-group reply-form" :class="{'main-form':!this.selectedCommentComponent.length }">
             <textarea
               rows="4"
               class="form-control"
               placeholder="Write reply here"
               v-model="editingComment"
               ref="commentEditor"
-              @input="getMessage"
             ></textarea>
             <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
             <div class="footer">
@@ -89,24 +77,22 @@
   <!-- End Comments List -->
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CommentCircleButton from "./CommentCircleButton";
 import EventCommentComponent from "@/models/EventCommentComponent";
-import { postReq, getReq } from "@/utils/token";
-import { FadeTransition } from "vue2-transitions";
+import EventComment from "@/models/EventComment";
 import CommentItem from "./CommentItem";
 
 export default {
   components: {
     CommentCircleButton,
-    FadeTransition,
-    CommentItem,
+    CommentItem
   },
   props:{
       commentComponents:{
         type: Array,
         required: true,
-      },
+      }
   },
   data() {
     return {
@@ -125,10 +111,7 @@ export default {
       isExistingCommentEditing: false,
       isDragging: true,
       editingCommentId: "",
-      isFavorite: false,
-      showAddress: false,
-      customers: [],
-      selectedCustomer: null,
+      isFavorite: false
     };
   },
   computed: {
@@ -295,8 +278,7 @@ export default {
       const comment = {
             commentComponent: { id: selectedComponent.id },
             description: this.editingComment,
-            parentId: this.mainComment ? this.mainComment.id : null,
-            email: this.selectedCustomer ? this.selectedCustomer.email : null,
+            parentId: this.mainComment ? this.mainComment.id : null
       };
       this.$emit('saveComment', {component: selectedComponent, comment, index: this.selectedComponentIndex})
 
@@ -342,7 +324,6 @@ export default {
       this.$emit('deleteComment', {comment, index:this.selectedComponentIndex} )
     },
     updateComment(comment) {
-      console.log('panel.updateComment', comment);
       this.editingCommentId = "";
 
       const selectedComponent = this.commentComponents[this.selectedComponentIndex];
@@ -376,28 +357,6 @@ export default {
           this.editingComment = this.mainComment.description;
         }
       }
-    },
-    async getMessage(e){
-      console.log('getMessage', e.target.value);
-      if(e.target.value.includes('@')){
-        let queryArray = e.target.value.split('@')
-
-        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
-        console.log('customers', res);
-        this.customers = res.data;
-
-        this.showAddress = true;
-      }
-    },
-    toAddress(customer){
-      console.log('toAddress', customer, this.editingComment);
-
-      this.selectedCustomer = customer;
-      let queryArray = this.editingComment.split('@');
-      queryArray[1] = customer.name;
-
-      this.editingComment = queryArray.join('@') + ' ';
-      this.showAddress = false
     }
   },
   watch:{

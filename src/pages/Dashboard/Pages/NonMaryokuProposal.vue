@@ -72,7 +72,7 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </comment-editor-panel>
-    <modal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal">
+    <modal :containerClass="`modal-container xl`" v-if="showDetailModal">
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">Change event details</h2>
@@ -87,18 +87,11 @@
       </template>
       <template slot="body">
         <!-- <div>{{ proposal.eventData }}</div> -->
-        <event-detail
-            :event="proposal.eventData"
-            @change="handleEventChange"
-        ></event-detail>
+        <event-detail :event="proposal.eventData"></event-detail>
       </template>
       <template slot="footer">
-        <div class="condition-tooltip">
-            <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px">
-            Any change might cause pricing changes
-        </div>
-        <md-button class="md-simple md-black ml-auto">Cancel</md-button>
-        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
+        <md-button class="md-simple md-black">Cancel</md-button>
+        <md-button class="md-red" @click="updateEvent">Update Vendor</md-button>
       </template>
     </modal>
     <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
@@ -191,7 +184,6 @@ export default {
     }
     const givenToken = this.$route.query.token;
     const proposalId = this.$route.params.proposalId;
-    await this.$store.dispatch("common/getEventTypes");
     this.proposal = await Proposal.find(proposalId);
     if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
     if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
@@ -219,55 +211,30 @@ export default {
         });
     },
     async handleAsk(ask) {
-        let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
+        let expiredTime = moment().add(2, "days").unix() * 1000;
         if (this.loggedInUser) {
-          await this.saveNegotiation({expiredTime});
+          await this.saveNegotiation(expiredTime);
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-                params: {expiredTime},
+              expiredTime,
             }),
           );
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
-      }else if (ask === 'event') {
-          this.showDetailModal = false;
-          let event = {
-              startTime: this.proposal.eventData.startTime,
-              endTime: this.proposal.eventData.endTime,
-              location: this.proposal.eventData.location,
-              numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          }
-          if (this.loggedInUser) {
-              await this.saveNegotiation({event, expiredTime});
-          } else {
-              localStorage.setItem(
-                  "nonMaryokuAction",
-                  JSON.stringify({
-                      action: "saveNegotiation",
-                      params: {event, expiredTime},
-                  }),
-              );
-              this.onlyAuth = true;
-              this.showGuestSignupModal = true;
-          }
-
       }
     },
-    handleEventChange(e){
-      console.log('handleEventChange', e);
-      this.proposal.eventData = e;
-    },
-    async saveNegotiation(params) {
+    async saveNegotiation(expiredTime) {
+      console.log("saveNegotiation", expiredTime);
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
+        expiredTime,
         url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
-        ...params,
       });
       let res = await query.for(new Proposal({ id: this.proposal.id })).save();
       this.proposal.negotiations.push(res);
@@ -307,20 +274,24 @@ export default {
     negotiateRate() {
       this.showNegotiationRequestModal = true;
     },
+    askQuestion() {},
     changeEvent() {
       this.showDetailModal = true;
+    },
+    updateEvent() {
+      this.showDetailModal = false;
+      this.showUpdateSuccessModal = true;
     },
     openNewTab(link) {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
-      console.log('saveGuestComment', name)
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
-
-
-      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+      console.log("saveGuestComment.data", data);
+      if (data.action === "saveComment")
+        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
@@ -360,7 +331,7 @@ export default {
         if (data.action === "updateComment") this.updateComment(data);
         if (data.action === "deleteComment") this.deleteComment(data);
         if (data.action === "updateCommentComponent") this.saveComment(data);
-        if (data.action === "saveNegotiation") this.saveNegotiation(data.params);
+        if (data.action === "saveNegotiation") this.saveNegotiation(data.expiredTime);
         if (data.action === "saveShare") this.share(data);
 
         localStorage.removeItem("nonMaryokuAction");
@@ -368,7 +339,7 @@ export default {
     },
     saveCommentWithAuth(params) {
       console.log("saveComment");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.saveComment(params);
       } else {
         localStorage.setItem(
@@ -383,8 +354,8 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateCommentWithAuth", params);
-      if (this.loggedInUser || this.guestName) {
+      console.log("updateComment");
+      if (this.loggedInUser) {
         this.updateComment(params);
       } else {
         localStorage.setItem(
@@ -400,7 +371,7 @@ export default {
     },
     deleteCommentWithAuth(params) {
       console.log("deleteComment");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.deleteComment(params);
       } else {
         localStorage.setItem(
@@ -416,7 +387,7 @@ export default {
     },
     updateCommentComponentWithAuth(component) {
       console.log("updateCommentComponent");
-      if (this.loggedInUser || this.guestName) {
+      if (this.loggedInUser) {
         this.updateCommentComponent(component);
       } else {
         localStorage.setItem(
@@ -476,12 +447,6 @@ export default {
     loggedInUser() {
       return this.$store.state.auth.user;
     },
-    customer(){
-      return this.$store.state.comment.customer
-    },
-    guestName(){
-      return this.$store.state.comment.guestName
-    }
   },
 };
 </script>
@@ -510,28 +475,6 @@ export default {
     width: 100%;
     background: white;
     padding: 0 30px;
-  }
-}
-.condition-tooltip {
-    background-color: #ffe5ec;
-    padding: 18px 15px 18px 15px;
-    color: #050505;
-    font-size: 14px;
-
-    &::after {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        top: 4px;
-        left: 70px;
-        box-sizing: border-box;
-
-        border: 12px solid black;
-        border-color: transparent transparent #ffe5ec #ffe5ec;
-
-        transform-origin: 0 0;
-        transform: rotate(135deg);
   }
 }
 </style>
