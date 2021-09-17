@@ -187,6 +187,9 @@ export default {
           params: {
             vendorId: this.vendorData.id,
           },
+          query: {
+            customerId: customer.id
+          }
         });
         this.openNewTab(routeData.href);
       } else if (action === this.customerStatus.delete) {
