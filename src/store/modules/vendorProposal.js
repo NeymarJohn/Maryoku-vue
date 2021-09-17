@@ -14,7 +14,7 @@ import Vendor from "@/models/Vendors";
 const state = {
   vendor: null,
   initialized: false,
-  proposalRequest: {},
+  proposalRequest: null,
   proposalServices: {},
   proposalCostServices: {},
   proposalIncludedServices: {},
@@ -375,7 +375,6 @@ const actions = {
         proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,
         eventComponentId: state.proposalRequest.componentInstance ? state.proposalRequest.componentInstance.id : null,
-        requirementId: state.proposalRequest.plannerRequirement ? state.proposalRequest.plannerRequirement.id : null,
         vendorId: state.vendor.id,
         costServices: state.proposalCostServices,
         includedServices: state.proposalIncludedServices,
@@ -394,7 +393,6 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         bookedServices: state.bookedServices || [],
-        seatingData: state.seatingData,
       });
       proposal
         .save()

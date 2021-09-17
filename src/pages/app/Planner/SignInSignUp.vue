@@ -73,7 +73,10 @@ export default {
     Loader,
     MaryokuInput,
   },
-  methods: {
+  mounted() {
+    // console.log('mounted', this.$router.currentRoute);
+  },
+    methods: {
     authenticate(provider) {
       let action = this.$route.query.action;
       this.loading = true;
@@ -94,18 +97,18 @@ export default {
     },
     signIn() {
       this.loading = true;
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
       let that = this;
       this.$validator.validateAll().then((isValid) => {
         console.log(this.$validator);
         if (isValid) {
           if (this.user.email && this.user.password) {
             const userData = {
-              email: `${this.user.email}/planner`,
+              email: `${this.user.email}/${isGuest ? 'guest' : 'planner'}`,
               password: this.user.password,
             };
             this.$store.dispatch("auth/login", userData).then(
               () => {
-                console.log("after.signin");
                 if (this.keepMe) {
                   document.cookie = `rememberMe=true; path=/;`;
                 }
@@ -158,8 +161,15 @@ export default {
                     } else this.$router.push({path: `/create-event-wizard`});
                 });
             } else if (this.currentUser.currentUserType === 'guest') { // get last customer event
-                let userEvents = await UserEvent.get();
-                console.log('userEvents', userEvents);
+                let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
+                        params: {filters:{myEvents: true}},
+                    })
+                let events = res.data;
+                console.log('events', events);
+                if (events.length > 0) {
+                    this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
+                }
+
             }
           } else if (this.currentUser.tenants.length === 0) {
             console.log("redirect.create-event-wizard");

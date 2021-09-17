@@ -249,43 +249,7 @@
           </template>
         </div>
       </div>
-<!--      <div v-if="vendorProposal.vendor.vendorCategory === 'venuerental' && vendorProposal.seatingData && Object.keys(vendorProposal.seatingData).length"-->
-<!--          class="proposal-section policy-section">-->
 
-<!--        <div class="proposal-section__title">-->
-<!--            <img class="seating" :src="`${$iconURL}common/seating-purple.png`" width="40px"/> Seating Arrangement-->
-<!--        </div>-->
-
-<!--        <div class="policy-content pt-40">-->
-<!--            <div class="d-flex align-stretch seats-list">-->
-<!--                <div class="d-flex mb-30">-->
-<!--                    <template v-for="(sit, index) in vendorProposal.seatingData.options">-->
-<!--                        <div-->
-<!--                            v-if="sit.selected"-->
-<!--                            :key="`sitarrangement-${index}`"-->
-<!--                            class="d-flex flex-column justify-content-between seat-type"-->
-<!--                        >-->
-<!--                            <div class="font-bold">'{{ sit.item }}'</div>-->
-<!--                            <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>-->
-<!--                        </div>-->
-<!--                    </template>-->
-<!--                    <div v-if="vendorProposal.seatingData.hasOtherOption" class="d-flex flex-column seat-type">-->
-<!--                        <div class="font-bold">'Other'</div>-->
-<!--                        <div class="mt-20">{{ vendorProposal.vendor.seatingData.otherOptionContent }}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div v-if="!editingNewSeating" class="d-flex align-center">-->
-<!--                    <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="editingNewSeating = true">-->
-<!--                        Suggest new seating arrangement-->
-<!--                    </md-button>-->
-<!--                </div>-->
-<!--                <div v-else class="p-10" style="min-width: 350px">-->
-<!--                    <div class="font-bold mb-10">Suggest new seating arrangement</div>-->
-<!--                    <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="proposal-section policy-section">
         <div class="proposal-section__title">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
@@ -992,10 +956,6 @@ export default {
           img {
             margin-right: 0.2em;
           }
-
-          /*img.seating{*/
-          /*  filter:brightness(0) invert(0);*/
-          /*}*/
 
           small {
             margin-top: 0.5em;

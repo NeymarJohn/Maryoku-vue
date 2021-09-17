@@ -82,8 +82,7 @@ export default {
       //   str = services.join(", ");
       // }
       // return "";
-      console.log(this.lookingFor);
-      if (!this.lookingFor) return '';
+      console.log(typeof this.lookingFor);
       return this.lookingFor.join(", ");
     },
     serviceTime() {
