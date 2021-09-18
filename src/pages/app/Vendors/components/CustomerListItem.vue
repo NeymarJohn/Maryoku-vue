@@ -35,7 +35,7 @@
               :disabled="customer.name == 'Maryoku'"
             >
               <span>
-                <img :src="`${$iconURL}CustomerList/group-18971.svg`" class="mr-10" />
+                <img :src="`${$iconURL}common/download.svg`" class="mr-10" />
                 Make New Proposal
               </span>
             </md-menu-item>

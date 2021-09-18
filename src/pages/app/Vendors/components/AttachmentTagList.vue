@@ -14,7 +14,7 @@
     </div>
     <div class="attachment-tag add" @click="addNew" :class="theme">
       <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">add</md-icon>
-      Add document
+      Add Another
     </div>
     <input
       type="file"

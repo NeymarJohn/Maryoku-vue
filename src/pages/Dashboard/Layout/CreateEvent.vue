@@ -135,14 +135,15 @@ export default {
     goToSignin() {
       this.$router.push("/signin");
     },
-    singup({email, password}) {
+    singup() {
+      console.log('signup', this.email, this.password);
       this.loading = true;
 
-      if (email && password) {
+      if (this.email && this.password) {
         this.$store
           .dispatch("auth/login", {
-            email,
-            password,
+            email: this.email,
+            password: this.password,
           })
           .then(
             () => {

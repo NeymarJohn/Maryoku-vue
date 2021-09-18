@@ -1,9 +1,7 @@
 <template>
   <div class="upcoming-event-list">
-    <div class="upcoming-event" v-for="(event, index) in events" :key="event.id">
-      <div class="event-logo">
-        <img :src="`${$iconURL}CalendarIcons/${eventIcon(index)}`">
-      </div>
+    <div class="upcoming-event" v-for="event in events" :key="event.id">
+      <div class="event-logo"></div>
       <div class="event-detail flex-1">
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
         <div class="font-bold mb-10" v-if="event.customer">{{ event.customer.name }} | {{ event.customer.email }}</div>
@@ -25,40 +23,6 @@ export default {
       default: [],
     },
   },
-  data(){
-      return {
-          icons: [
-              'Group 20904.svg',
-              'Group 20909.svg',
-              'Group 20912.svg',
-              'Group 20915.svg',
-              'Group 20918.svg',
-              'Group 20919.svg',
-              'Group 20922.svg',
-              'Group 20925.svg',
-              'Group 20928.svg',
-              'Group 20929.svg',
-              'Group 20932.svg',
-              'Group 20935.svg',
-              'Group 20936.svg',
-              'Group 20941.svg',
-              'Group 20944.svg',
-              'Group 20951.svg',
-              'Group 20954.svg',
-              'Group 20957.svg',
-              'Page-1.svg',
-              'Page-1_2.svg',
-              'Page-1_3.svg',
-              'Page-1_4.svg',
-              'Page-1_5.svg',
-              'Page-1_6.svg',
-              'Page-1_7.svg',
-              'Page-1_8.svg',
-              'Page-1_9.svg',
-              'Page-1_10.svg',
-          ]
-      }
-  },
   methods: {
     getUpcomingPeriod(dateString) {
       const d = new Date(dateString);
@@ -75,9 +39,6 @@ export default {
     selectEvent(event) {
       this.$emit("showEvent", event);
     },
-    eventIcon(idx){
-      return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
-    }
   },
 };
 </script>
@@ -108,9 +69,6 @@ export default {
       min-width: 50px;
       border-radius: 50%;
       background-color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     .event-detail {
       padding: 10px;

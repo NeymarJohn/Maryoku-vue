@@ -7,16 +7,16 @@
         <div>
           <resizable-toggle-button
             class="mr-20 mb-10"
-            :key="req.category"
-            :label="getServiceCategoryByKey(req.category).title"
-            :icon="`${$iconURL}Budget+Elements/${req.category}.svg`"
-            :selectedIcon="`${$iconURL}Budget+Elements/${req.category}-white.svg`"
-            :defaultStatus="req.category === selectedCategory"
-            :disabled="!eventRequirements[req.category]"
-            :hasBadge="hasBadge(req.category)"
+            :key="tab"
+            :label="getServiceCategoryByKey(tab).title"
+            :icon="`${$iconURL}Budget+Elements/${tab}.svg`"
+            :selectedIcon="`${$iconURL}Budget+Elements/${tab}-white.svg`"
+            :defaultStatus="tab === selectedCategory"
+            :disabled="!eventRequirements[tab]"
+            :hasBadge="hasBadge(tab)"
             iconStyle="opacity:0.8"
-            v-for="req in eventRequirements"
-            @click="selectCategory(req.category)"
+            v-for="tab in tabs"
+            @click="selectCategory(tab)"
           ></resizable-toggle-button>
           <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
         </div>
@@ -467,6 +467,14 @@ export default {
       console.log(this.currentRequirement);
       if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
       return 0;
+    },
+    tabs(){
+      if(!this.eventRequirements || !Object.keys(this.eventRequirements).length) return []
+      return Object.keys(this.eventRequirements).sort((a, b) => {
+          let a_service = this.serviceCategories.find(s => s.key === a);
+          let b_service = this.serviceCategories.find(s => s.key === b);
+          return a_service.order - b_service.order;
+      })
     },
     event() {
         return this.$store.state.EventGuestVuex.eventData;
