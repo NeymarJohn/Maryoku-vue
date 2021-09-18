@@ -37,7 +37,7 @@ export default {
       const overview = {
         title: "Your Event",
         status: "not-completed",
-        route: "overview",
+        route: "booking/overview",
         progress: 0,
         componentId: "overview",
         icon: `${this.$iconURL}customer icons/flag.svg`,
