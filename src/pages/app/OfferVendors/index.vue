@@ -263,11 +263,10 @@ export default {
         async signUp({email, password, name, company}){
             console.log('signUp', email, password, name, company)
             await this.$store.dispatch("auth/register", {
-                email: email,
+                email,
                 password,
                 name,
                 company,
-                currentUserType: 'guest',
                 role: 'administrator',
             });
             await this.$store.dispatch('auth/login', {email, password});
@@ -280,21 +279,11 @@ export default {
         },
 
         async findVendors(){
-
-          if ( this.loggedInUser ) {
-            this.loading = true;
-            await this.save();
-            this.loading = false;
-          } else {
-              this.showSignupModal = true;
-          }
-
+          this.showSignupModal = true;
         },
         async save(){
-            console.log('save', this.event, this.requirements);
-            if(!this.event.id){
-                await this.createEvent();
-            }
+
+            await this.createEvent();
 
             this.expiredTime = moment(new Date()).add(3, "days").valueOf();
             let res = await postReq(`/1/events/${this.event.id}/offer-vendors/find-vendors`, {
@@ -306,6 +295,7 @@ export default {
                 "event/saveEventAction",
                 new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
             );
+
 
         },
         changePage(){
@@ -321,7 +311,7 @@ export default {
         }
     },
     computed:{
-        loggedInUser(){
+        user(){
             return this.$store.state.auth.user;
         },
         event() {
@@ -332,11 +322,7 @@ export default {
         }
     },
     async created() {
-        console.log("offer-vendors.created", this.loggedInUser);
         let tenantUser = null;
-        if (this.loggedInUser) {
-            tenantUser = await this.$store.dispatch("auth/checkToken");
-        }
         const givenToken = this.$route.query.token;
         if (givenToken) {
             tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);

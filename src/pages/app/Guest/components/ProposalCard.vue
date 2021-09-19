@@ -96,7 +96,7 @@ export default {
       default: 0,
     },
     component: {
-      type: String,
+      type: Object,
       default: () => {},
     },
     isCollapsed: {
@@ -179,11 +179,11 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     eventData() {
-      return this.$store.state.EventGuestVuex.eventData;
+      return this.$store.state.event.eventData;
     },
     period() {
       try {
-        const requirement = this.$store.state.EventGuestVuex.requirements[this.proposal.vendor.vendorCategories[0]];
+        const requirement = this.$store.state.planningBoard.requirements[this.proposal.vendor.vendorCategories[0]];
         const period = requirement.period;
         if (requirement.isEntireEvent) {
           return "For Whole Event";

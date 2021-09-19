@@ -28,9 +28,8 @@ const ProfileOverview = () => import("@/pages/app/Planner/Profile");
 // Event Pages
 const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
 const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
-const GuestEventPlan = () => import("@/pages/app/Guest/GuestEventPlan.vue");
+const UserEventPlan = () => import("@/pages/app/Guest/UserEventPlan.vue");
 const EventDetailsOverview = () => import("@/pages/app/Events/components/EventDetailsOverview");
-const GuestEventOverview = () => import("@/pages/app/Guest/overview");
 const EventProposalDetails = () => import("@/pages/app/Events/Proposal/EventProposalDetails.vue");
 const EventProposalCompare = () => import("@/pages/app/Events/Proposal/ProposalCompare.vue")
 const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeline");
@@ -435,15 +434,59 @@ let UserEventPages = {
     children: [{
             path: "/user-events/:id/booking",
             name: "Plan Event",
-            component: GuestEventPlan,
+            component: UserEventPlan,
             children: [
                 {
                     path: "overview",
-                    name: "Guest Event Overview",
-                    component: GuestEventOverview,
+                    name: "EventPlan",
+                    component: EventDetailsOverview,
                     meta: {
                         title: "Event Details",
                         gtm: "Event Details",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "concept",
+                    name: "EventPlan",
+                    component: EventConceptChoose,
+                    meta: {
+                        title: "Event Concept",
+                        gtm: "Event Concept",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "budget",
+                    name: "EventPlan",
+                    component: EventBudgetRequirement,
+                    meta: {
+                        title: "Event Concept",
+                        gtm: "Event Concept",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "campaign",
+                    name: "Campaign",
+                    component: EventCampaign,
+                    meta: {
+                        title: "Event Campaign",
+                        gtm: "Event Campaign",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "timeline",
+                    name: "Timeline",
+                    component: EventDetailsTimeline,
+                    meta: {
+                        title: "Event Timeline",
+                        gtm: "Event Timeline",
                         opaque: false,
                         requiresAuth: true,
                     },

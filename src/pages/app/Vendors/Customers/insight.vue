@@ -18,11 +18,11 @@
           <div v-else class="font-size-16 color-white py-20">
             {{ `${aggregate.wonProposals}/${aggregate.totalProposals}` }} Successful proposals
           </div>
-          <div v-else>
+          <!-- <div v-else>
             <md-button class="md-white mt-10 font-size-16 text-transform-capitalize md-simple md-outlined"
               >Create New Proposal</md-button
             >
-          </div>
+          </div> -->
         </div>
         <ServiceBarChart class="ml-auto" :chart-data="serviceChartData"> </ServiceBarChart>
         <div>
@@ -178,6 +178,7 @@ export default {
       incomeList: ["", ""],
       renderCustomer: false,
       serviceReportData: null,
+      activeCategoryColors: ["#ffffff", "#21cfe0", "#ffc001", "#2cde6b"],
     };
   },
   mounted() {
@@ -218,26 +219,27 @@ export default {
       let chartData = [];
       if (this.customer) {
         for (let category in this.sumPricesByCategory) {
+          let colorIndex = 0;
           chartData.push({
             label: "",
             value: Math.round((this.sumPricesByCategory[category] / this.totalPrice) * 100),
-            color: this.$store.state.common.serviceCategoriesMap[category].color,
+            color: this.activeCategoryColors[colorIndex++], //this.$store.state.common.serviceCategoriesMap[category].color,
             icon: `Budget+Elements/${category}-white.svg`,
-            price: this.sumPricesByCategory[category],
+            price: Math.round(this.sumPricesByCategory[category]),
           });
         }
       } else if (this.serviceReportData) {
-        console.log("this.serviceReportData", this.serviceReportData);
-
         for (let i = 0; i < this.serviceReportData.length; i++) {
           const categoryData = this.serviceReportData[i];
+          let colorIndex = 0;
           console.log("categoryData", categoryData);
           chartData.push({
             label: "",
             value: Math.round((categoryData.amount / 100 / this.aggregate.totalPrice) * 100),
-            color: this.$store.state.common.serviceCategoriesMap[categoryData._id].color,
+            // color: this.$store.state.common.serviceCategoriesMap[categoryData._id].color,
+            color: this.activeCategoryColors[colorIndex++],
             icon: `Budget+Elements/${categoryData._id}-white.svg`,
-            price: categoryData.amount / 100,
+            price: Math.round(categoryData.amount / 100),
           });
         }
       } else {

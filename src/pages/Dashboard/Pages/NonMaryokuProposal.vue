@@ -72,7 +72,7 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </comment-editor-panel>
-    <modal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal">
+    <modal :containerClass="`modal-container xl`" v-if="showDetailModal">
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">Change event details</h2>
@@ -93,11 +93,7 @@
         ></event-detail>
       </template>
       <template slot="footer">
-        <div class="condition-tooltip">
-            <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px">
-            Any change might cause pricing changes
-        </div>
-        <md-button class="md-simple md-black ml-auto">Cancel</md-button>
+        <md-button class="md-simple md-black">Cancel</md-button>
         <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
       </template>
     </modal>
@@ -219,8 +215,8 @@ export default {
         });
     },
     async handleAsk(ask) {
-        let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
+        let expiredTime = moment().add(2, "days").unix() * 1000;
         if (this.loggedInUser) {
           await this.saveNegotiation({expiredTime});
         } else {
@@ -243,13 +239,13 @@ export default {
               numberOfParticipants: this.proposal.eventData.numberOfParticipants,
           }
           if (this.loggedInUser) {
-              await this.saveNegotiation({event, expiredTime});
+              await this.saveNegotiation({event});
           } else {
               localStorage.setItem(
                   "nonMaryokuAction",
                   JSON.stringify({
                       action: "saveNegotiation",
-                      params: {event, expiredTime},
+                      params: {event},
                   }),
               );
               this.onlyAuth = true;
@@ -510,28 +506,6 @@ export default {
     width: 100%;
     background: white;
     padding: 0 30px;
-  }
-}
-.condition-tooltip {
-    background-color: #ffe5ec;
-    padding: 18px 15px 18px 15px;
-    color: #050505;
-    font-size: 14px;
-
-    &::after {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        top: 4px;
-        left: 70px;
-        box-sizing: border-box;
-
-        border: 12px solid black;
-        border-color: transparent transparent #ffe5ec #ffe5ec;
-
-        transform-origin: 0 0;
-        transform: rotate(135deg);
   }
 }
 </style>

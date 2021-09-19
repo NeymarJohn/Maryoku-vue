@@ -187,21 +187,22 @@ export default {
       selectedEventType: null,
     };
   },
-  async created() {
+  created() {
     const vendorId = this.$route.params.vendorId;
-    const customerId = this.$route.query.customerId;
-
-    let res = await this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?status=0&sort=&order=`);
-      console.log("customer", res);
-    this.customers = res.data.customers;
-    if (customerId) {
-      let customer = this.customers.find(it => it.id == customerId);
-      let event = {...this.$store.state.proposalForNonMaryoku.event, customer}
+    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?status=0&sort=&order=`).then((res) => {
+      this.customers = res.data.customers;
+      if (this.$route.params.type === "edit") {
+        console.log("customer", this.customers, this.$store.state.proposalForNonMaryoku.event.customer.email);
+        let customer = this.customers.find(
+          (it) => it.email === this.$store.state.proposalForNonMaryoku.event.customer.email,
+        );
+        console.log("customer", customer);
         this.$store.commit("proposalForNonMaryoku/setValue", {
-            key: "event",
-            value: event,
+          key: "customer",
+          value: customer,
         });
-    }
+      }
+    });
 
     this.$store.dispatch("common/getEventTypes");
   },

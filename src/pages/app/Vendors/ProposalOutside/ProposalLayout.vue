@@ -180,7 +180,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal"]),
+    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveEvent"]),
     gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
@@ -261,7 +261,10 @@ export default {
       } else {
         userEvent.isRegisteredCustomer = false;
       }
-      return new UserEvent(userEvent).save();
+      if (this.event.id) {
+        userEvent.id = this.event.id;
+      }
+      return this.saveEvent(userEvent);
     },
     back() {
       this.step = this.step - 1;

@@ -7,6 +7,7 @@ import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
+import UserEvent from "@/models/UserEvent";
 
 const state = {
   includedServices: {},
@@ -166,8 +167,7 @@ const mutations = {
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
     state.coverImage = proposal.coverImage || [],
-    state.inspirationalPhotos = proposal.inspirationalPhotos
-    state.seatingData = proposal.seatingData,
+      state.inspirationalPhotos = proposal.inspirationalPhotos
     state.initialized = true;
     // state.wizardStep = proposal.step
   },
@@ -304,10 +304,12 @@ const actions = {
     });
   },
   saveProposal: ({ commit, state, getters }, status) => {
+    if (state.event.id) {
+      new UserEvent({ id: state.event.id, totalBudget: getters.totalPriceOfProposal }).save();
+    }
     return new Promise((resolve, reject) => {
       const additionalServices = state.additionalServices || [];
       const availableAdditionalSerivces = additionalServices.filter(category => getters.pricesByCategory[category] > 0);
-      console.log('saveProposal', state.id);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
         eventData: state.event,
@@ -334,8 +336,7 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
-        bookedServices: Object.keys(state.costServices), // Set all secondary services as booked services
-        seatingData: state.seatingData
+        bookedServices: Object.keys(state.costServices) // Set all secondary services as booked services
       });
       proposal
         .save()
@@ -347,6 +348,21 @@ const actions = {
           console.error(e)
           reject(e);
         });
+    });
+  },
+
+  saveEvent({ commit, state, getters }, userEvent) {
+
+    return new Promise((resolve, reject) => {
+      try {
+        return new UserEvent(userEvent).save().then(savedEvent => {
+          commit('setEventProperty', { key: 'id', value: savedEvent.id })
+          resolve(savedEvent)
+        });
+      }
+      catch (e) {
+        reject(e)
+      }
     });
   },
 };

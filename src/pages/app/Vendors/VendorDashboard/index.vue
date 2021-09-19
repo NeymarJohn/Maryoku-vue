@@ -146,6 +146,7 @@ export default {
         { label: "Dec", value: 0, future: true },
       ],
       categoryColors: ["rgb(159 107 144)", "#4e0841", "#641856"],
+      activeCategoryColors: ["#ffffff", "#21cfe0", "#ffc001", "#2cde6b"],
       month: null,
       date: {
         selectedDates: [],
@@ -297,7 +298,7 @@ export default {
           let cat = this.serviceReportData.find((c) => c._id == vc);
           if (cat) {
             item.value = cat.amount;
-            item.color = this.$store.state.common.serviceCategoriesMap[vc].color;
+            item.color = this.activeCategoryColors[idx];
           }
         }
         return item;

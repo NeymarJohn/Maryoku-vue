@@ -612,14 +612,6 @@ export default {
     sittingArrangement() {
       return this.$store.state.proposalForNonMaryoku.seatingData || {};
     },
-    suggestedNewSeatings:{
-      get() {
-        return this.$store.state.proposalForNonMaryoku.suggestedNewSeatings;
-      },
-      set(value){
-        this.$store.commit("proposalForNonMaryoku/setValue", { key: "suggestedNewSeatings", value });
-      }
-    },
     eventVision() {
       return this.$store.state.proposalForNonMaryoku.eventVision;
     },

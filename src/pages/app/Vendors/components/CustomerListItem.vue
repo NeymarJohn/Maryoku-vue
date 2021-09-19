@@ -25,17 +25,18 @@
           <md-menu-content>
             <md-menu-item @click="edit(customerStatus.edit)" class="md-purple" :disabled="customer.name == 'Maryoku'">
               <span>
-                <img :src="`${$iconURL}Group 19254.svg`" class="mr-10" width="25px" />
+                <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
                 Customer Details</span
               >
             </md-menu-item>
             <md-menu-item
+              v-if="customer.proposals.length"
               @click="edit(customerStatus.proposal)"
               class="md-purple"
               :disabled="customer.name == 'Maryoku'"
             >
               <span>
-                <img :src="`${$iconURL}common/download.svg`" class="mr-10" />
+                <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
                 Make New Proposal
               </span>
             </md-menu-item>

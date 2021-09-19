@@ -65,7 +65,7 @@ export default {
           title: "Location",
           key: "location",
           img_src: `${this.$secondIconURL}Event Page/Group 10492.svg`,
-          warning: "",
+          warning: "Changing the address on your status might cause price changes",
           location: this.event.location,
         },
         {
