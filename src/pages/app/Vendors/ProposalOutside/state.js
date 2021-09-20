@@ -166,8 +166,9 @@ const mutations = {
     state.discounts = proposal.discounts;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
-    state.coverImage = proposal.coverImage || [],
-      state.inspirationalPhotos = proposal.inspirationalPhotos
+    state.coverImage = proposal.coverImage || [];
+    state.inspirationalPhotos = proposal.inspirationalPhotos;
+    state.seatingData = proposal.seatingData;
     state.initialized = true;
     // state.wizardStep = proposal.step
   },
@@ -310,6 +311,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       const additionalServices = state.additionalServices || [];
       const availableAdditionalSerivces = additionalServices.filter(category => getters.pricesByCategory[category] > 0);
+      console.log('saveProposal', state.id);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
         eventData: state.event,
@@ -336,7 +338,8 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
-        bookedServices: Object.keys(state.costServices) // Set all secondary services as booked services
+        bookedServices: Object.keys(state.costServices), // Set all secondary services as booked services
+        seatingData: state.seatingData
       });
       proposal
         .save()

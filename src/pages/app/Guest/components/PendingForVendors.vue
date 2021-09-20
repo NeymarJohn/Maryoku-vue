@@ -5,9 +5,7 @@
       class="mt-10 mb-30"
       style="padding: 5px 20px; max-width: 1100px; margin-left: auto; margin-right: auto; line-height: 1.5em"
     >
-      <div class="font-size-22 font-bold mb-10">WAIT FOR IT...WAIT FOR IT...</div>
-      We are seeking vendors that are aligned with your requirements. Those vendors will receive a link to create a
-      proposal. All proposals will be compared and analyzed to give you three best and final options.
+      <div class="font-size-22 font-bold-extra mb-10 text-uppercase">Our vendors are working on quotes for you</div>
     </div>
     <div class="md-layout">
       <div class="md-layout-item d-flex text-right">

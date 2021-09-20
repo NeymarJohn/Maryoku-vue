@@ -1,23 +1,27 @@
 <template>
-  <div >
+  <div>
     <div class="main-panel">
-      <div>
+        <Loader :active="loading" is-full-screen></Loader>
         <!-- your content here -->
-        <zoom-center-transition :duration="200" mode="out-in">
-          <router-view></router-view>
-        </zoom-center-transition>
-      </div>
+        <div v-if="!loading">
+            <zoom-center-transition :duration="200" mode="out-in">
+                <router-view></router-view>
+            </zoom-center-transition>
+        </div>
+
     </div>
   </div>
 </template>
 <script>
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { Loader } from "@/components";
 import EventGuestVuexModule from "../../app/Guest/EventGuest.vuex";
 import { ZoomCenterTransition, FadeTransition } from "vue2-transitions";
 
 export default {
   components: {
+    Loader,
     ZoomCenterTransition,
     FadeTransition,
   },
@@ -25,25 +29,30 @@ export default {
     return {
       // auth: auth,
       event: null,
+      loading: true,
     };
   },
   methods: {
-    ...mapMutations("EventPlannerVuex", [
+    ...mapMutations("EventGuestVuex", [
     ]),
     ...mapActions("event", ["getEventAction"]),
 
     async initData() {
       const id = this.$route.params.id;
-      await this.$store.dispatch("EventPlannerVuex/getUserEvent", {id});
+        console.log('initData', id);
+      await this.$store.dispatch("EventGuestVuex/getUserEvent", {id});
+      await this.$store.dispatch("common/fetchAllCategories");
+      // await this.$store.dispatch("common/getEventTypes");
     },
   },
   created() {
-    this.$store.registerModule("EventPlannerVuex", EventGuestVuexModule);
+    this.$store.registerModule("EventGuestVuex", EventGuestVuexModule);
   },
   async mounted() {
     try{
         await this.$store.dispatch("auth/checkToken")
         await this.initData();
+        this.loading = false;
     }catch (e) {
         this.$router.push({ path: `/signin` });
     }

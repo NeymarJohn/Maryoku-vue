@@ -59,10 +59,10 @@
 
 <script>
 import { SignupCard, MaryokuInput, Modal, Loader } from "@/components";
+import { USER_TYPE } from "@/constants/user";
 import InputText from "@/components/Inputs/InputText.vue";
 import TenantUser from "@/models/TenantUser";
 import CalendarEvent from "@/models/CalendarEvent";
-import UserEvent from "@/models/UserEvent";
 import eventService from "@/services/event.service";
 export default {
   name: "SignIn",
@@ -153,14 +153,14 @@ export default {
         } else {
           if (this.currentUser.currentTenant) {
             console.log("redirect.events");
-            if(this.currentUser.currentUserType === 'planner') { // get last event
+            if(this.currentUser.currentUserType === USER_TYPE.PLANNER) { // get last event
                 CalendarEvent.get().then((events) => {
                     if (events.length > 0) {
                         const gotoLink = eventService.getFirstTaskLink(events[0]);
                         this.$router.push({path: gotoLink});
                     } else this.$router.push({path: `/create-event-wizard`});
                 });
-            } else if (this.currentUser.currentUserType === 'guest') { // get last customer event
+            } else if (this.currentUser.currentUserType === USER_TYPE.GUEST) { // get last customer event
                 let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
                         params: {filters:{myEvents: true}},
                     })

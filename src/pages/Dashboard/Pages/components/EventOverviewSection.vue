@@ -315,7 +315,7 @@ export default {
         input {
             text-align: center;
             width: 110px;
-            height: 45px;
+            height: 55px;
             border-radius: 3px;
             font: normal 18px Manrope-Regular, sans-serif;
             border: solid 0.5px #bcbcbc !important;
@@ -335,14 +335,14 @@ export default {
     &:before {
         position: absolute;
         content: ">";
-        transform: translateX(50%) translateY(calc(100% + 1.2rem)) rotate(90deg);
+        transform: translateX(50%) translateY(calc(100% + 1.8rem)) rotate(90deg);
         left: 40%;
-        font-size: 20px;
+        font-size: 28px;
         font-weight: 800;
     }
     input {
         width: 80px;
-        height: 45px;
+        height: 55px;
         cursor: pointer;
         border-radius: 3px;
         font: normal 18px Manrope-Regular, sans-serif;

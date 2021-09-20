@@ -23,11 +23,11 @@ export default {
     this.fetchData();
   },
   computed: {
-    ...mapState("EventPlannerVuex", {
+    ...mapState("EventGuestVuex", {
       eventData: (state) => state.eventData,
     }),
     event() {
-      return this.$store.state.EventPlannerVuex.eventData;
+      return this.$store.state.EventGuestVuex.eventData;
     },
     user(){
       return this.$store.state.auth.user;
@@ -37,7 +37,7 @@ export default {
       const overview = {
         title: "Your Event",
         status: "not-completed",
-        route: "overview",
+        route: "booking/overview",
         progress: 0,
         componentId: "overview",
         icon: `${this.$iconURL}customer icons/flag.svg`,
