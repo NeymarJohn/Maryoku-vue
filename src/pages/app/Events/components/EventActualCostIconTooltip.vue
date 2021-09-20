@@ -12,6 +12,7 @@
 </template>
 <script>
 // MAIN MODULES
+import moment from 'moment'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'

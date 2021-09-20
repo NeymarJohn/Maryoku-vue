@@ -204,9 +204,10 @@ export default {
     showCart: false,
   }),
   methods: {
-    ...mapMutations("event", ["setEventData", "setBookingRequirements"]),
+    ...mapMutations("EventGuestVuex", ["setEventData", "setBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
-    ...mapActions("EventGuestVuex", ["saveMainRequirements", "getProposals", "getRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
+    ...mapActions("planningBoard", ["saveMainRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
+    ...mapActions("EventGuestVuex", ["getProposals", "getRequirements"]),
     selectCategory(category, clicked) {
       this.currentRequirement = this.eventRequirements[category];
       this.selectedCategory = category;
@@ -396,7 +397,7 @@ export default {
   },
   async created() {
     console.log('choose-vendors.created', this.event);
-    await this.$store.dispatch('EventGuestVuex/resetCartItems');
+    await this.$store.dispatch('planningBoard/resetCartItems');
     this.isLoadingProposal = true;
     await this.getRequirements(this.event.id);
     await this.getProposals({eventId: this.event.id});
@@ -455,7 +456,7 @@ export default {
       storedRequirements: "event/getBookingRequirements",
     }),
     ...mapState({
-      eventRequirements: (state) => state.EventGuestVuex.requirements || {},
+      eventRequirements: (state) => state.planningBoard.requirements || {},
     }),
     serviceCategories(){
       return this.$store.state.common.serviceCategories;

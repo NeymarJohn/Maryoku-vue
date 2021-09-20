@@ -51,6 +51,7 @@
             class="time-counter"
             :target="targetTime"
             :pending="negotiationPending"
+            :declined="negotiationDeclined"
             :approved="negotiationProcessed"
             @updateExpireDate="updateExpireDate"
             :theme="theme"
@@ -681,16 +682,22 @@ export default {
       return new Date(this.vendorProposal.expiredDate);
     },
     negotiationProcessed() {
-      // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
-      //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-      return false;
+      if (!this.vendorProposal.nonMaryoku) return false;
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.APPROVED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME && it.remainingTime > 0)
+    },
+    negotiationDeclined() {
+      if (!this.vendorProposal.nonMaryoku) return false;
+      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
+          it.status === NEGOTIATION_REQUEST_STATUS.DECLINE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME && it.remainingTime > 0)
+
     },
     negotiationPending() {
       console.log("negotiationPending", this.vendorProposal);
       return (
         !!this.vendorProposal.negotiations.length &&
         this.vendorProposal.negotiations.some(
-          (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
+          (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME && it.remainingTime > 0,
         )
       );
     },
