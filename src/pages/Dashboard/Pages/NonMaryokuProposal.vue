@@ -87,15 +87,12 @@
       </template>
       <template slot="body">
         <!-- <div>{{ proposal.eventData }}</div> -->
-        <event-detail
-            :event="proposal.eventData"
-            @change="handleEventChange"
-        ></event-detail>
+        <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>
       </template>
       <template slot="footer">
         <div class="condition-tooltip">
-            <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px">
-            Any change might cause pricing changes
+          <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px" />
+          Any change might cause pricing changes
         </div>
         <md-button class="md-simple md-black ml-auto">Cancel</md-button>
         <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
@@ -219,47 +216,46 @@ export default {
         });
     },
     async handleAsk(ask) {
-        let expiredTime = moment().add(2, "days").unix() * 1000;
+      let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
-          await this.saveNegotiation({expiredTime});
+          await this.saveNegotiation({ expiredTime });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-                params: {expiredTime},
+              params: { expiredTime },
             }),
           );
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
-      }else if (ask === 'event') {
-          this.showDetailModal = false;
-          let event = {
-              startTime: this.proposal.eventData.startTime,
-              endTime: this.proposal.eventData.endTime,
-              location: this.proposal.eventData.location,
-              numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          }
-          if (this.loggedInUser) {
-              await this.saveNegotiation({event, expiredTime});
-          } else {
-              localStorage.setItem(
-                  "nonMaryokuAction",
-                  JSON.stringify({
-                      action: "saveNegotiation",
-                      params: {event, expiredTime},
-                  }),
-              );
-              this.onlyAuth = true;
-              this.showGuestSignupModal = true;
-          }
-
+      } else if (ask === "event") {
+        this.showDetailModal = false;
+        let event = {
+          startTime: this.proposal.eventData.startTime,
+          endTime: this.proposal.eventData.endTime,
+          location: this.proposal.eventData.location,
+          numberOfParticipants: this.proposal.eventData.numberOfParticipants,
+        };
+        if (this.loggedInUser) {
+          await this.saveNegotiation({ event, expiredTime });
+        } else {
+          localStorage.setItem(
+            "nonMaryokuAction",
+            JSON.stringify({
+              action: "saveNegotiation",
+              params: { event, expiredTime },
+            }),
+          );
+          this.onlyAuth = true;
+          this.showGuestSignupModal = true;
+        }
       }
     },
-    handleEventChange(e){
-      console.log('handleEventChange', e);
+    handleEventChange(e) {
+      console.log("handleEventChange", e);
       this.proposal.eventData = e;
     },
     async saveNegotiation(params) {
@@ -314,13 +310,13 @@ export default {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
-      console.log('saveGuestComment', name)
+      console.log("saveGuestComment", name);
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
 
-
-      if (data.action === "saveComment") this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+      if (data.action === "saveComment")
+        this.saveComment({ index: data.index, comment: data.comment, component: data.component });
       if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
       if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
       if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
@@ -453,7 +449,12 @@ export default {
         email: this.proposal.eventData.customer.email,
         remindingTime: remindingTime,
         type: "proposal",
-        emailParams: {},
+        emailParams: {
+          leftTime: "1day",
+          proposalLink: window.location.href,
+          date: "22th Sep, 2021",
+          time: "12:00pm",
+        },
         emailTransactionId: "",
         phoneTransactionId: "",
       };
@@ -476,12 +477,12 @@ export default {
     loggedInUser() {
       return this.$store.state.auth.user;
     },
-    customer(){
-      return this.$store.state.comment.customer
+    customer() {
+      return this.$store.state.comment.customer;
     },
-    guestName(){
-      return this.$store.state.comment.guestName
-    }
+    guestName() {
+      return this.$store.state.comment.guestName;
+    },
   },
 };
 </script>
@@ -513,25 +514,25 @@ export default {
   }
 }
 .condition-tooltip {
-    background-color: #ffe5ec;
-    padding: 18px 15px 18px 15px;
-    color: #050505;
-    font-size: 14px;
+  background-color: #ffe5ec;
+  padding: 18px 15px 18px 15px;
+  color: #050505;
+  font-size: 14px;
 
-    &::after {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        top: 4px;
-        left: 70px;
-        box-sizing: border-box;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 4px;
+    left: 70px;
+    box-sizing: border-box;
 
-        border: 12px solid black;
-        border-color: transparent transparent #ffe5ec #ffe5ec;
+    border: 12px solid black;
+    border-color: transparent transparent #ffe5ec #ffe5ec;
 
-        transform-origin: 0 0;
-        transform: rotate(135deg);
+    transform-origin: 0 0;
+    transform: rotate(135deg);
   }
 }
 </style>
