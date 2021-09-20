@@ -166,10 +166,10 @@ const mutations = {
     state.discounts = proposal.discounts;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.event = proposal.eventData;
-    state.coverImage = proposal.coverImage || [];
-    state.inspirationalPhotos = proposal.inspirationalPhotos;
-    state.seatingData = proposal.seatingData;
-    state.initialized = true;
+    state.coverImage = proposal.coverImage || [],
+      state.inspirationalPhotos = proposal.inspirationalPhotos
+    state.seatingData = proposal.seatingData,
+      state.initialized = true;
     // state.wizardStep = proposal.step
   },
   setWizardStep: (state, step) => {

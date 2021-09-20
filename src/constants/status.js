@@ -9,5 +9,5 @@ export const NEGOTIATION_REQUEST_STATUS = {
 // negotiation request type
 
 export const NEGOTIATION_REQUEST_TYPE = {
-    ADD_MORE_TIME : 0, NEGOTIATION: 1
+    ADD_MORE_TIME : 0, EVENT_CHANGE: 1
 }
