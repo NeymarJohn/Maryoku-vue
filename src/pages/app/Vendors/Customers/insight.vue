@@ -35,7 +35,7 @@
             <img :src="`${$iconURL}${it.icon}`" width="23px" />
             <template v-if="customer || serviceReportData">
               <span class="ml-10 font-size-13" :style="{ color: it.color }">{{ it.value }}%</span>
-              <span class="ml-10 font-size-13 color-white">${{ it.price | withComma(Number) }}</span>
+              <span class="ml-10 font-size-13" :style="{ color: it.color }">${{ it.price | withComma(Number) }}</span>
             </template>
             <template v-else>
               <span class="icon" :style="{ backgroundColor: it.color }"></span>
@@ -218,8 +218,8 @@ export default {
     serviceChartData() {
       let chartData = [];
       if (this.customer) {
+        let colorIndex = 0;
         for (let category in this.sumPricesByCategory) {
-          let colorIndex = 0;
           chartData.push({
             label: "",
             value: Math.round((this.sumPricesByCategory[category] / this.totalPrice) * 100),
@@ -229,9 +229,9 @@ export default {
           });
         }
       } else if (this.serviceReportData) {
+        let colorIndex = 0;
         for (let i = 0; i < this.serviceReportData.length; i++) {
           const categoryData = this.serviceReportData[i];
-          let colorIndex = 0;
           console.log("categoryData", categoryData);
           chartData.push({
             label: "",

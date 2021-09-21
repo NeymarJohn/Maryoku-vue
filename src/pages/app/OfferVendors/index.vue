@@ -341,7 +341,7 @@ export default {
         console.log("offer-vendors.created", this.loggedInUser);
         let tenantUser = null;
         if (this.loggedInUser) {
-            tenantUser = await this.$store.dispatch("auth/checkToken");
+            tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
         }
         const givenToken = this.$route.query.token;
         if (givenToken) {
