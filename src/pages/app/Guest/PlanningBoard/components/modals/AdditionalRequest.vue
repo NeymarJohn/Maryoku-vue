@@ -477,12 +477,12 @@ export default {
   },
   computed: {
     event() {
-      return this.$store.state.EventGuestVuex.eventData;
+      return this.$store.state.event.eventData;
     },
     timeslots(){
       let slots = [];
       // classify and get timeslots by service type
-      this.$store.state.EventGuestVuex.eventData.timelineDates.map(date => {
+      this.$store.state.event.eventData.timelineDates.map(date => {
         date.timelineItems.map(item => {
           if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
             this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
