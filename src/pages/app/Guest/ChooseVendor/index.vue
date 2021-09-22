@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout booking-section position-relative booking-proposals" style="padding-left: 450px;background-color:#f5f5f5">
+  <div class="md-layout booking-section position-relative booking-proposals bg-white" style="padding-left: 450px">
     <budget-notifications field="negotiation"></budget-notifications>
     <div class="choose-vendor-board">
       <loader :active="isLoadingProposal" />
@@ -81,30 +81,29 @@
       </div>
     </div>
     <div class="proposals-footer white-card">
-<!--      <div>-->
-<!--        <md-button class="md-simple maryoku-btn md-black">-->
-<!--          <span class="text-transform-capitalize">I already have a vendor</span>-->
-<!--        </md-button>-->
-<!--        <md-button-->
-<!--          class="md-simple maryoku-btn md-black text-transform-capitalize"-->
-<!--          @click="isOpenedAdditionalModal = true"-->
-<!--        >-->
-<!--          <span class="text-transform-capitalize">Chanage requirements</span>-->
-<!--        </md-button>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <md-button-->
-<!--            class="md-simple md-outlined md-red maryoku-btn"-->
-<!--            :disabled="proposals.length === 0 || !selectedProposal"-->
-<!--            @click="bookVendor"-->
-<!--        >-->
-<!--          Book Now-->
-<!--        </md-button>-->
-<!--        <md-button class="md-red maryoku-btn"-->
-<!--                   :disabled="proposals.length === 0 || !selectedProposal"-->
-<!--                   @click="addToCart">Add To Cart</md-button>-->
-<!--      </div>-->
-        <md-button class="ml-auto md-simple maryoku-btn md-black">I need those proposals urgent</md-button>
+      <div>
+        <md-button class="md-simple maryoku-btn md-black">
+          <span class="text-transform-capitalize">I already have a vendor</span>
+        </md-button>
+        <md-button
+          class="md-simple maryoku-btn md-black text-transform-capitalize"
+          @click="isOpenedAdditionalModal = true"
+        >
+          <span class="text-transform-capitalize">Change requirements</span>
+        </md-button>
+      </div>
+      <div>
+        <md-button
+            class="md-simple md-outlined md-red maryoku-btn"
+            :disabled="proposals.length === 0 || !selectedProposal"
+            @click="bookVendor"
+        >
+          Book Now
+        </md-button>
+        <md-button class="md-red maryoku-btn"
+                   :disabled="proposals.length === 0 || !selectedProposal"
+                   @click="addToCart">Add To Cart</md-button>
+      </div>
     </div>
     <services-cart
         v-if="showCart"
@@ -114,8 +113,8 @@
       class="lg"
       v-if="isOpenedAdditionalModal"
       :subCategory="currentRequirement.mainRequirements"
-      :selectedCategory="selectedCategory"
-      :defaultData="getRequirementsFormStore(selectedCategory.key) || {}"
+      :selectedCategory="getServiceCategoryByKey(selectedCategory)"
+      :defaultData="getRequirementsFormStore(selectedCategory) || {}"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
@@ -204,9 +203,10 @@ export default {
     showCart: false,
   }),
   methods: {
-    ...mapMutations("event", ["setEventData", "setBookingRequirements"]),
+    ...mapMutations("EventGuestVuex", ["setEventData", "setBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
-    ...mapActions("EventGuestVuex", ["saveMainRequirements", "getProposals", "getRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
+    ...mapActions("planningBoard", ["saveMainRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
+    ...mapActions("EventGuestVuex", ["getProposals", "getRequirements"]),
     selectCategory(category, clicked) {
       this.currentRequirement = this.eventRequirements[category];
       this.selectedCategory = category;
@@ -396,7 +396,7 @@ export default {
   },
   async created() {
     console.log('choose-vendors.created', this.event);
-    await this.$store.dispatch('EventGuestVuex/resetCartItems');
+    await this.$store.dispatch('planningBoard/resetCartItems');
     this.isLoadingProposal = true;
     await this.getRequirements(this.event.id);
     await this.getProposals({eventId: this.event.id});
