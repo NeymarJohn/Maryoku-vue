@@ -6,7 +6,8 @@
     </h4>
     <div class="total">
       <strong>Total Event Budget:</strong>
-      <span v-if="proposalRequest">${{ eventBudget | withComma }}</span>
+      <span v-if="proposalRequest && eventBudget">${{ eventBudget | withComma }}</span>
+      <span v-else-if="proposalRequest && averageBudget">${{ averageBudget | withComma }}</span>
     </div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
@@ -53,7 +54,12 @@ export default {
   mounted() {
     console.log(this.validRequirements);
   },
-  methods: {},
+  methods: {
+      getServiceCategory(category) {
+          console.log('getServiceCategory', this.serviceCategories, category);
+          return this.serviceCategories.find((item) => item.key === category);
+      },
+  },
   computed: {
     totalBudget() {
       const sum = this.validRequirements.reduce((s, item) => {
@@ -61,8 +67,23 @@ export default {
       }, 0);
       return sum;
     },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
     eventBudget() {
       return this.$store.state.vendorProposal.proposalRequest.eventData.allocatedBudget;
+    },
+    averageBudget(){
+          let service = this.getServiceCategory(this.vendor.eventCategory.key);
+
+          let budget = this.proposalRequest.eventData.numberOfParticipants * service.basicCostPerGuest;
+          if (service.minCost && budget < service.minCost) {
+              return service.minCost;
+          } else if (service.maxCost && budget > service.maxCost) {
+              return service.maxCost;
+          } else {
+              return budget;
+          }
     },
     validRequirements() {
       return this.requirements.filter(

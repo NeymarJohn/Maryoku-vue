@@ -3,6 +3,7 @@
     <vue-element-loading v-if="isUpdating" :active="isUpdating" color="#FF547C"></vue-element-loading>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
+      <proposal-versions-bar></proposal-versions-bar>
       <div class="main-cont">
         <router-view></router-view>
       </div>
@@ -108,16 +109,13 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import moment from "moment";
 import Vendors from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
+import ProposalVersionsBar from "./ProposalVersionsBar";
 import VueElementLoading from "vue-element-loading";
 
 export default {
@@ -126,6 +124,7 @@ export default {
     Modal,
     ProposalHeader,
     VueElementLoading,
+    ProposalVersionsBar,
   },
   props: {
     newProposalRequest: Object,
@@ -135,11 +134,9 @@ export default {
       isLoading: false,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       selectedServices: [],
       submittedModal: false,
       isTimeUp: false,
-      proposalRequestRequirements: [],
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
@@ -151,6 +148,9 @@ export default {
     };
   },
   async created() {
+    if(this.$store.state.auth.user){
+      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
+    }
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });

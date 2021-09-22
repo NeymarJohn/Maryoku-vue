@@ -175,8 +175,8 @@ export default {
         async createEvent(){
 
             await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
-                eventStartMillis: this.proposal.eventData.startTime,
-                eventEndMillis: this.proposal.eventData.endTime,
+                eventStartMillis: this.proposal.eventData.startTime * 1000,
+                eventEndMillis: this.proposal.eventData.endTime * 1000,
                 status: 'draft',
                 numberOfParticipants: this.proposal.eventData.numberOfParticipants,
                 flexibleWithDates: 0,
@@ -244,7 +244,7 @@ export default {
             this.saveRequirements({...this.requirements[category], ...requirements})
         },
         async saveRequirements(requirement){
-
+            console.log('saveRequirements', requirement);
             this.$set(this.requirements, requirement.category, requirement)
             localStorage.setItem('requirements', JSON.stringify(this.requirements));
         },
@@ -348,7 +348,7 @@ export default {
             tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
             this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
             this.requirements = JSON.parse(localStorage.getItem('requirements'));
-            this.proposal = JSON.parse(localStorage.getItem('proposal'));
+            await this.getProposal();
             await this.save();
             this.goToAccountPage();
             this.isLoading = false;
@@ -359,10 +359,8 @@ export default {
             if (!this.allRequirements || !this.allRequirements.length) {
                 await this.getAllRequirements()
             }
-            this.proposal = JSON.parse(localStorage.getItem('proposal'));
-            if(!this.proposal){
-                await this.getProposal();
-            }
+
+            await this.getProposal();
             this.isLoading = false;
         }
     }

@@ -403,7 +403,7 @@ export default {
         proposalRequest.proposal.negotiations.length
       ) {
         this.selectedProposalRequest = proposalRequest;
-        this.selectedProposal = this.proposals.find(p => p.id === proposalRequest.proposal.id);
+        this.selectedProposal = this.proposals.find((p) => p.id === proposalRequest.proposal.id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
         this.negotiationType = this.proposal.negotiations[0].type

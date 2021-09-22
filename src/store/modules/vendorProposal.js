@@ -9,7 +9,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
-import Vendor from "@/models/Vendors";
+import ProposalVersion from "../../models/ProposalVersion";
 
 const state = {
   vendor: null,
@@ -49,6 +49,8 @@ const state = {
   suggestedNewSeatings: null,
   bookedServices: [],
   customer: null,
+  versions: [],
+  selectedVersion: -1,
   tenantId: authService.resolveTenantId()
 };
 const getters = {
@@ -178,6 +180,12 @@ const mutations = {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
   },
+  selectVersion: (state, version) => {
+    state.selectedVersion = version;
+  },
+  setVersions: (state, versions) => {
+    state.versions = versions;
+  },
   setProposal: (state, proposal) => {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
@@ -192,6 +200,7 @@ const mutations = {
     state.initialized = true;
     state.wizardStep = proposal.step
     state.coverImage = proposal.coverImage || []
+    state.versions = proposal.versions || []
     state.bookedServices = []
     // state.bookedServices = proposal.bookedServices
   },
@@ -407,6 +416,20 @@ const actions = {
         });
     });
   },
+  saveVersion:({ commit, state}, data) => {
+    return new Promise(async (resolve, reject) => {
+      const query = new ProposalVersion(data).for(new Proposal({ id: state.id }));
+      let res = await query.save();
+
+      let idx = state.versions.findIndex(v => v.id === res.data.id);
+      if(idx === -1) {
+          commit("setVersions", [...state.versions, res.data]);
+      } else {
+          Vue.set(state.versions, idx, res.data);
+          commit("setVersions", state.versions)
+      }
+    })
+  }
 };
 
 export default {
