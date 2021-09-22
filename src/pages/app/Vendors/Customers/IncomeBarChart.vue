@@ -7,19 +7,17 @@
         :x="25 + 36 * index"
         y="40"
         width="18"
-        :height="getHeight(chartDataItem.value)"
+        :height="chartDataItem.value"
         rx="10"
         :style="`fill: ${chartDataItem.future ? '#9F6B90' : 'white'}`"
       ></rect>
     </g>
     <g v-for="(chartDataItem, index) in chartData" :key="`chartItem-${index}`">
-      <text
-        :x="25 + 36 * index"
-        y="280"
-        fill="#a3809d"
-        :transform="`rotate(30 ${25 + 36 * index},280)`"
-        font-size="12px"
-        style="fill: white"
+      <text :x="25 + 36 * index"
+            y="280" fill="#a3809d"
+            :transform="`rotate(30 ${25 + 36 * index},280)`"
+            font-size="12px"
+            style="fill:white"
       >
         {{ chartDataItem.label }}
       </text>
@@ -34,28 +32,10 @@ export default {
       default: () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     },
   },
-  methods: {
-    getHeight(value) {
-      console.log(value);
-      console.log("this.maxValue", this.maxValue);
-      if (this.maxValue > 250) {
-        return Math.round((value / this.maxValue) * 250);
-      }
-      return value;
-    },
-  },
-  computed: {
-    maxValue() {
-      return this.chartData.reduce((max, prev) => {
-        console.log(max);
-        return max < prev.value ? prev.value : max;
-      }, 0);
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>
-.chart {
-  margin-left: 20px;
-}
+    .chart{
+        margin-left: 20px;
+    }
 </style>

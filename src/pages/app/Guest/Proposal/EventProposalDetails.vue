@@ -47,14 +47,14 @@
               </li>
             </ul>
           </div>
-<!--          <timer-panel-->
-<!--            class="time-counter"-->
-<!--            :target="targetTime"-->
-<!--            :pending="negotiationPending"-->
-<!--            :approved="negotiationProcessed"-->
-<!--            @updateExpireDate="updateExpireDate"-->
-<!--            :theme="theme"-->
-<!--          ></timer-panel>-->
+          <timer-panel
+            class="time-counter"
+            :target="targetTime"
+            :pending="negotiationPending"
+            :approved="negotiationProcessed"
+            @updateExpireDate="updateExpireDate"
+            :theme="theme"
+          ></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -451,7 +451,7 @@ export default {
       default: () => {},
     },
     category: {
-      type: String,
+      type: Object,
     },
     landingPage: {
       type: Boolean,
@@ -628,7 +628,7 @@ export default {
     },
     async changeBookedServices() {
       await this.$store.dispatch("event/updateProposal", {
-        category: this.category,
+        category: this.category.componentId,
         proposal: this.vendorProposal,
       });
     },

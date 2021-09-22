@@ -1,5 +1,5 @@
 <template>
-    <div class="booking-section planning-board-layout bg-white" style="padding-left: 450px">
+    <div class="booking-section planning-board-layout" style="padding-left: 450px;background-color:#f5f5f5">
         <div class="p-50" v-if="!showCounterPage">
             <loader :active="isLoading || isLoadingStoredData" />
             <template v-if="!isLoading && !isLoadingStoredData">

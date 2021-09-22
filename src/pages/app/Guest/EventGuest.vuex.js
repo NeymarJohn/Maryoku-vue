@@ -10,7 +10,7 @@ export default {
   state () {
     return {
       eventData: {},
-      vendorRequirements: null,
+      setVendorRequirements: null,
       requirements: {},
       proposals:{},
       favorite:{},
@@ -40,8 +40,8 @@ export default {
       setProposalsByCategory(state, {category, proposals}){
           Vue.set(state.proposals, category, proposals);
       },
-      setVendorRequirements(state, data) {
-          state.vendorRequirements = data
+      setRequirements(state, data) {
+          state.requirements = data
       },
       setCategoryRequirements(state, { category, requirements }) {
           Vue.set(state.requirements, category, requirements)
@@ -68,8 +68,8 @@ export default {
     getVendorRequirements({ commit, state }) {
           const eventId = state.eventData.id
           return new Promise((resolve, reject) => {
-              if (state.vendorRequirements) {
-                  resolve(state.vendorRequirements)
+              if (state.requirements) {
+                  resolve(state.requirements)
               } else {
                   getReq(`/1/vendor/property?eventId=${eventId}`).then((res) => {
                       commit("setVendorRequirements", res.data)

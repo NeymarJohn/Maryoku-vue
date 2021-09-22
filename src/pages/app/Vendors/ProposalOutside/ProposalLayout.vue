@@ -103,7 +103,6 @@ import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 import UserEvent from "@/models/UserEvent";
-import Vendor from "@/models/Vendors";
 import { Loader } from "@/components";
 
 export default {
@@ -255,7 +254,6 @@ export default {
         companyName: this.event.customer.companyName,
         location: this.event.location,
         guests: this.event.numberOfParticipants,
-        vendor: new Vendor({ id: this.vendor.id }),
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };

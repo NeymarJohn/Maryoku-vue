@@ -125,7 +125,7 @@
           </template>
         </carousel>
       </template>
-      <analytics v-else :incomeChartData="incomeChartData" />
+      <analytics v-else />
     </div>
   </div>
 </template>
@@ -163,17 +163,17 @@ export default {
       // serviceChartData: [],
       incomeChartData: [
         { label: "Jan", value: 0, future: false },
-        { label: "Feb", value: 0, future: false },
+        { label: "Feb", value: 120, future: false },
         { label: "Mar", value: 0, future: false },
         { label: "Apr", value: 0, future: true },
-        { label: "May", value: 0, future: true },
-        { label: "Jun", value: 0, future: true },
-        { label: "Jul", value: 0, future: true },
-        { label: "Aug", value: 0, future: true },
-        { label: "Sep", value: 0, future: true },
-        { label: "Oct", value: 0, future: true },
-        { label: "Nov", value: 0, future: true },
-        { label: "Dec", value: 0, future: true },
+        { label: "May", value: 200, future: true },
+        { label: "Jun", value: 30, future: true },
+        { label: "Jul", value: 250, future: true },
+        { label: "Aug", value: 100, future: true },
+        { label: "Sep", value: 200, future: true },
+        { label: "Oct", value: 200, future: true },
+        { label: "Nov", value: 60, future: true },
+        { label: "Dec", value: 20, future: true },
       ],
       incomeList: ["", ""],
       renderCustomer: false,
@@ -195,27 +195,6 @@ export default {
     init() {
       this.getServiceReport();
       console.log("customer.insight", this.aggregate, this.customer);
-
-      this.$http
-        .get(
-          `${process.env.SERVER_URL}/1/transaction/report/monthly/${this.vendor.id}?start=${new Date(
-            new Date().getFullYear() + "-01-01",
-          ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
-        )
-        .then((res) => {
-          if (res.data.length) {
-            res.data.forEach((item) => {
-              this.incomeChartData[Number(item._id) - 1].value = item.amount / 100;
-            });
-            this.incomeChartData = [...this.incomeChartData];
-          } else {
-            this.incomeChartData.forEach((item, index) => {
-              this.incomeChartData[index].value = 1000 * Math.random() + 200;
-            });
-            this.incomeChartData = [...this.incomeChartData];
-          }
-          console.log("this.incomeChartData", this.incomeChartData);
-        });
     },
     next() {
       this.$refs.nextButton.click();
