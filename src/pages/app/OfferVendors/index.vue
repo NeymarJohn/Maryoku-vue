@@ -175,8 +175,8 @@ export default {
         async createEvent(){
 
             await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
-                eventStartMillis: this.proposal.eventData.startTime,
-                eventEndMillis: this.proposal.eventData.endTime,
+                eventStartMillis: this.proposal.eventData.startTime * 1000,
+                eventEndMillis: this.proposal.eventData.endTime * 1000,
                 status: 'draft',
                 numberOfParticipants: this.proposal.eventData.numberOfParticipants,
                 flexibleWithDates: 0,
@@ -244,7 +244,7 @@ export default {
             this.saveRequirements({...this.requirements[category], ...requirements})
         },
         async saveRequirements(requirement){
-
+            console.log('saveRequirements', requirement);
             this.$set(this.requirements, requirement.category, requirement)
             localStorage.setItem('requirements', JSON.stringify(this.requirements));
         },
@@ -258,6 +258,7 @@ export default {
 
             this.isLoading = true;
             await this.save();
+            this.goToAccountPage();
             this.isLoading = false;
         },
         async signUp({email, password, name, company}){
@@ -276,6 +277,7 @@ export default {
 
             this.isLoading = true;
             await this.save();
+            this.goToAccountPage();
             this.isLoading = false;
         },
 
@@ -285,6 +287,7 @@ export default {
             this.loading = true;
             await this.save();
             this.loading = false;
+            this.goToAccountPage();
           } else {
               this.showSignupModal = true;
           }
@@ -308,13 +311,17 @@ export default {
             );
 
         },
+        goToAccountPage(){
+          this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
+        },
         changePage(){
             this.page = this.page === 'signin' ? 'signup' : 'signin';
         },
         authenticate(provider){
             let tenantId = this.$authService.resolveTenantId();
+            let redirectURL = `/offerVendors/${this.proposal.id}`
             let callback = btoa(
-                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}?token=`,
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedIn?redirectURL=${redirectURL}&userType=guest&token=`,
             );
             console.log(`${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
             document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
@@ -332,30 +339,28 @@ export default {
         }
     },
     async created() {
-        console.log("offer-vendors.created", this.loggedInUser);
-        let tenantUser = null;
+        let redirect = this.$route.query.redirect
+        console.log('offerVendors.created', redirect);
         if (this.loggedInUser) {
-            tenantUser = await this.$store.dispatch("auth/checkToken");
-        }
-        const givenToken = this.$route.query.token;
-        if (givenToken) {
-            tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
+            await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
+
             this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
             this.requirements = JSON.parse(localStorage.getItem('requirements'));
-            this.proposal = JSON.parse(localStorage.getItem('proposal'));
-            await this.save();
+
+            await this.getProposal();
+            if (redirect) {
+                await this.save();
+                this.goToAccountPage();
+            }
+
             this.isLoading = false;
         } else {
             this.showBookedVendorModal = true;
 
-            console.log('created', this.allRequirements);
             if (!this.allRequirements || !this.allRequirements.length) {
                 await this.getAllRequirements()
             }
-            this.proposal = JSON.parse(localStorage.getItem('proposal'));
-            if(!this.proposal){
-                await this.getProposal();
-            }
+            await this.getProposal();
             this.isLoading = false;
         }
     }

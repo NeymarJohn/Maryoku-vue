@@ -50,7 +50,7 @@ export default {
   },
   async mounted() {
     try{
-        await this.$store.dispatch("auth/checkToken")
+        await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token)
         await this.initData();
         this.loading = false;
     }catch (e) {
@@ -59,9 +59,9 @@ export default {
   },
   computed: {
     ...mapState("event", ["eventData"]),
-  },
-  watch: {
-    $route: "checkTour",
+    loggedInUser(){
+       return this.$store.state.auth.user;
+    }
   },
 };
 </script>

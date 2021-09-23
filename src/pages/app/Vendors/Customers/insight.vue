@@ -192,24 +192,20 @@ export default {
         }
       });
     },
-    getIncomingData() {
-      let customerQuery = "";
-      if (this.customer) {
-        customerQuery = `&customerId=${this.customer.id}`;
-      }
-      for (let i in this.incomeChartData) {
-        this.incomeChartData[i].value = 0;
-      }
+    init() {
+      this.getServiceReport();
+      console.log("customer.insight", this.aggregate, this.customer);
+
       this.$http
         .get(
-          `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendor.id}?start=${new Date(
+          `${process.env.SERVER_URL}/1/transaction/report/monthly/${this.vendor.id}?start=${new Date(
             new Date().getFullYear() + "-01-01",
-          ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}${customerQuery}`,
+          ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
         )
         .then((res) => {
           if (res.data.length) {
             res.data.forEach((item) => {
-              this.incomeChartData[Number(item._id) - 1].value = item.amount;
+              this.incomeChartData[Number(item._id) - 1].value = item.amount / 100;
             });
             this.incomeChartData = [...this.incomeChartData];
           } else {
@@ -218,11 +214,8 @@ export default {
             });
             this.incomeChartData = [...this.incomeChartData];
           }
+          console.log("this.incomeChartData", this.incomeChartData);
         });
-    },
-    init() {
-      this.getServiceReport();
-      this.getIncomingData();
     },
     next() {
       this.$refs.nextButton.click();
