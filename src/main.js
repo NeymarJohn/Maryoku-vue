@@ -115,8 +115,6 @@ router.beforeEach((to, from, next) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user.currentUserType === "vendor") {
       next("/vendor/profile/settings");
-    } else if (user.currentUserType === 'guest') {
-      next("/signedIn");
     } else {
       if (user.currentTenant && user.tenants.indexOf(user.currentTenant) >= 0) {
         next("/signedIn");

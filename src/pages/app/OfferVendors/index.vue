@@ -319,9 +319,8 @@ export default {
         },
         authenticate(provider){
             let tenantId = this.$authService.resolveTenantId();
-            let redirectURL = `/offerVendors/${this.proposal.id}`
             let callback = btoa(
-                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedIn?redirectURL=${redirectURL}&userType=guest&token=`,
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}?token=`,
             );
             console.log(`${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
             document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
@@ -339,27 +338,28 @@ export default {
         }
     },
     async created() {
-        let redirect = this.$route.query.redirect
-        console.log('offerVendors.created', redirect);
+        console.log("offer-vendors.created", this.loggedInUser);
+        let tenantUser = null;
         if (this.loggedInUser) {
-            await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
-
+            tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
+        }
+        const givenToken = this.$route.query.token;
+        if (givenToken) {
+            tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
             this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
             this.requirements = JSON.parse(localStorage.getItem('requirements'));
-
             await this.getProposal();
-            if (redirect) {
-                await this.save();
-                this.goToAccountPage();
-            }
-
+            await this.save();
+            this.goToAccountPage();
             this.isLoading = false;
         } else {
             this.showBookedVendorModal = true;
 
+            console.log('created', this.allRequirements);
             if (!this.allRequirements || !this.allRequirements.length) {
                 await this.getAllRequirements()
             }
+
             await this.getProposal();
             this.isLoading = false;
         }

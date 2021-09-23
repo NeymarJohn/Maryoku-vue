@@ -468,6 +468,11 @@ export default {
             }
 
             this.negotiationProcessed = status;
+            if(status === this.negotiationRequestStatus.cancel_proposal || status === this.negotiationRequestStatus.update_proposal ||
+            status === this.negotiationRequestStatus.acknowledge) {
+                this.showRequestNegotiationModal = false;
+                this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
+            }
 
           });
 
