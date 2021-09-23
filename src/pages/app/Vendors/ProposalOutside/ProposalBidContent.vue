@@ -245,7 +245,7 @@ export default {
       return this.$store.state.proposalForNonMaryoku.vendor;
     },
       costServiceItems() {
-          return this.$store.state.vendorProposal.proposalCostServices[this.category];
+          return this.$store.state.vendorProposal.costServices[this.category];
       },
       includedServiceItems(){
           return this.$store.state.vendorProposal.proposalIncludedServices[this.category];

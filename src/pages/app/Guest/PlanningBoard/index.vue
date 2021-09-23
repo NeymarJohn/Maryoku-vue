@@ -10,8 +10,9 @@
                         <span v-if="step === 2">What kind of services would you like us to find you?</span>
                     </div>
                     <progress-radial-bar
+                        v-if="allRequirements"
                         :value="percentOfBudgetCategories"
-                        :total="8"
+                        :total="allRequirements.length"
                         @click="openCart"></progress-radial-bar>
                 </div>
                 <div class="md-layout md-gutter mt-40" v-if="step === 1">
@@ -105,7 +106,7 @@
                 v-if="showCart"
                 :requirements="requirements"
                 :service-categories="serviceCategories"
-                :total="event.components.length"
+                :total="allRequirements.length"
                 @close="showCart = false"></requirements-cart>
         </transition>
     </div>

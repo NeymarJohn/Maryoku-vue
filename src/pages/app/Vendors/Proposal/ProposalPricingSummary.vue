@@ -450,13 +450,13 @@ export default {
       },
     },
     costedServices() {
-      return this.$store.state.vendorProposal.proposalCostServices[this.category];
+      return this.$store.state.vendorProposal.costServices[this.category];
     },
     includedServices() {
-      return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
+      return this.$store.state.vendorProposal.includedServices[this.category];
     },
     extraServices() {
-      return this.$store.state.vendorProposal.proposalExtraServices[this.category];
+      return this.$store.state.vendorProposal.extraServices[this.category];
     },
   },
   watch: {},

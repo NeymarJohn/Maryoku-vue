@@ -236,13 +236,13 @@ export default {
       if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
         progress += 15;
       }
-      if (vendorProposal.proposalCostServices[this.vendor.vendorCategory] && vendorProposal.proposalCostServices[this.vendor.vendorCategory].length) {
+      if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
         progress += 30;
       }
-      if (vendorProposal.proposalIncludedServices[this.vendor.vendorCategory] && vendorProposal.proposalIncludedServices[this.vendor.vendorCategory].length) {
+      if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
         progress += 10;
       }
-      if (vendorProposal.proposalExtraServices[this.vendor.vendorCategory] && vendorProposal.proposalExtraServices[this.vendor.vendorCategory].length) {
+      if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
         progress += 10;
       }
       if (vendorProposal.inspirationalPhotos.some(p => !!p)) {

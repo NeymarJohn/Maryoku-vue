@@ -41,7 +41,7 @@ export default {
     ProposalRequirements,
   },
   created() {
-    console.log('proposalBidContent', this.vendor.services);
+    // console.log('proposalBidContent', this.vendor.services);
     let taxRate = 0;
     let discountRate = 0;
     if (this.vendor.pricingPolicies) {
@@ -155,7 +155,7 @@ export default {
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
           if (item.isExtraService || !item.hideOnProposal) {
-            console.log("extra SErvce", item.extraService);
+            // console.log("extra SErvce", item.extraService);
             extraServices.push({
               comments: [],
               dateCreated: "",
@@ -246,10 +246,10 @@ export default {
       return this.$store.state.vendorProposal.vendor;
     },
     costServiceItems() {
-      return this.$store.state.vendorProposal.proposalCostServices[this.category];
+      return this.$store.state.vendorProposal.costServices[this.category];
     },
     includedServiceItems(){
-      return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
+      return this.$store.state.vendorProposal.includedServices[this.category];
     }
   },
   watch: {
@@ -262,7 +262,7 @@ export default {
                 includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
             })
           }
-          console.log('costServiceItems', includeItems);
+          // console.log('costServiceItems', includeItems);
           this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: includeItems });
         },
         deep: true,

@@ -78,6 +78,14 @@ export default {
       },
     },
   },
+  watch: {
+    eventVision:{
+        handler(newVal) {
+          console.log('eventVision', newVal);
+        },
+        deep: true,
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
