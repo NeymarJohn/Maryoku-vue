@@ -67,7 +67,7 @@
       <div class="event-summary-body">
         <div class="cover-letter font-bold-extra mb-50">
           <h4 class="font-bold-extra text-transform-uppercase">
-            Dear {{ event.owner ? event.owner.name : "Planner" }},
+            Dear {{ event.owner ? event.owner.displayName : "Planner" }},
           </h4>
           <textarea v-model="personalMessage"> </textarea>
         </div>
@@ -411,10 +411,10 @@ export default {
     },
     removeSignature() {},
     getServices(category) {
-      if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[category];
+      if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[category];
       else if (this.tableCategory === "included")
-        return this.$store.state.vendorProposal.includedServices[category];
-      else if (this.tableCategory === "extra") return this.$store.state.vendorProposal.extraServices[category];
+        return this.$store.state.vendorProposal.proposalIncludedServices[category];
+      else if (this.tableCategory === "extra") return this.$store.state.vendorProposal.proposalExtraServices[category];
     },
     flatDeep(arr, d = 1) {
       return d > 0

@@ -171,11 +171,13 @@ export default {
           this.monthlyReport = res.data;
           res.data.forEach((item) => {
             this.incomeChartData[Number(item._id) - 1].value = item.amount;
+            this.incomeChartData[Number(item._id) - 1].future = false;
           });
           this.incomeChartData = [...this.incomeChartData];
         } else {
           this.incomeChartData.forEach((item, index) => {
             this.incomeChartData[index].value = 1000 * Math.random() + 200;
+            this.incomeChartData[Number(item._id) - 1].future = true;
           });
           this.incomeChartData = [...this.incomeChartData];
         }

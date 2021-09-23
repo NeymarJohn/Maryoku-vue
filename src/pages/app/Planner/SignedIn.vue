@@ -69,66 +69,50 @@ export default {
     const eventData = localStorage.getItem('event');
     const noTenant = !tenantUser.tenants || tenantUser.tenants.length === 0;
     const isDefaultTenant = tenantId.toLowerCase() === "default";
-    let redirectURL = this.$route.query.redirectURL;
-
-    if (!tenantUser.currentUserType) {
-        let userType = this.$route.query.userType;
-        if(userType) {
-            await this.$store.dispatch("auth/updateProfile", {
-                id: tenantUser.id,
-                currentUserType: userType,
-            })
-        }
-        if (redirectURL) {
-            this.$router.push({path: `${redirectURL}`, query: {redirect: true}});
-        }
-    } else if (tenantUser.currentUserType === USER_TYPE.GUEST) {
-        let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
-            params: {filters:{myEvents: true}},
-        })
-        let events = res.data;
-        if (redirectURL) {
-            this.$router.push({path: `${redirectURL}`, query: {redirect: true}});
-        } else if (events.length > 0) {
-            this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
-        }
-    } else  {
-        if (noTenant && !action ) {
-            // WHEN PLANNER STARTD BY SIGNIN
-            this.$router.push({ path: `/create-event-wizard?action=${action}` });
-        } else if (noTenant && action) {
-            // WHEN PLANNER STAARTED BY CREATE EVENT
-            this.$router.push({ path: `/create-workspace?action=${action}` });
-        } else if (!noTenant && isDefaultTenant) {
-            this.$router.push({ path: `/choose-workspace?action=${action}` });
-        } else if (!noTenant && !isDefaultTenant && action) {
-            eventService
-                .saveEvent(eventData)
-                .then((event) => {
-                    callback = btoa(`events/${event.id}/booking/concept`);
-                    document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        } else {
-            let redirectURL = this.$route.query.redirectURL;
-            if (redirectURL) {
-                redirectURL = atob(redirectURL);
-                this.$router.push({ path: `${redirectURL}`});
-            } else {
-                if(tenantUser.currentUserType === USER_TYPE.PLANNER) { // get last event
-                    let events = await CalendarEvent.get();
-                    if (events.length > 0) {
-                        const gotoLink = eventService.getFirstTaskLink(events[0]);
-                        this.$router.push({ path: gotoLink });
-                    }
-                    else this.$router.push({ path: `/create-event-wizard` });
-                }
-            }
-        }
+    if (noTenant && !action) {
+       // WHEN PLANNER STARTD BY SIGNIN
+       this.$router.push({ path: `/create-event-wizard?action=${action}` });
+    } else if (noTenant && action) {
+       // WHEN PLANNER STAARTED BY CREATE EVENT
+       this.$router.push({ path: `/create-workspace?action=${action}` });
+    } else if (!noTenant && isDefaultTenant) {
+          this.$router.push({ path: `/choose-workspace?action=${action}` });
+      } else if (!noTenant && !isDefaultTenant && action) {
+          eventService
+              .saveEvent(eventData)
+              .then((event) => {
+                  callback = btoa(`events/${event.id}/booking/concept`);
+                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+              })
+              .catch((err) => {
+                  console.log(err);
+              });
+      } else {
+      let redirectURL = this.$route.query.redirectURL;
+      if (redirectURL) {
+          redirectURL = atob(redirectURL);
+          this.$router.push({ path: `${redirectURL}` });
+      } else {
+          console.log('gotoLInk');
+          if(tenantUser.currentUserType === USER_TYPE.PLANNER) { // get last event
+              let events = await CalendarEvent.get();
+              if (events.length > 0) {
+                  const gotoLink = eventService.getFirstTaskLink(events[0]);
+                  this.$router.push({ path: gotoLink });
+              }
+              else this.$router.push({ path: `/create-event-wizard` });
+          } else if (tenantUser.currentUserType === USER_TYPE.GUEST) { // get last customer event
+              let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
+                  params: {filters:{myEvents: true}},
+              })
+              let events = res.data;
+              console.log('events', events);
+              if (events.length > 0) {
+                  this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
+              }
+          }
+      }
     }
-
   },
   data() {
     return {

@@ -157,14 +157,18 @@ export default {
       type: Object,
       required: true,
     },
+    customerStatus: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
       // serviceChartData: [],
       incomeChartData: [
-        { label: "Jan", value: 0, future: false },
-        { label: "Feb", value: 0, future: false },
-        { label: "Mar", value: 0, future: false },
+        { label: "Jan", value: 0, future: true },
+        { label: "Feb", value: 0, future: true },
+        { label: "Mar", value: 0, future: true },
         { label: "Apr", value: 0, future: true },
         { label: "May", value: 0, future: true },
         { label: "Jun", value: 0, future: true },
@@ -182,6 +186,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.customerStatus);
     this.init();
   },
   methods: {
@@ -197,6 +202,9 @@ export default {
       if (this.customer) {
         customerQuery = `&customerId=${this.customer.id}`;
       }
+      if (this.customerStatus) {
+        customerQuery += `&customerStatus=${this.customerStatus}`;
+      }
       for (let i in this.incomeChartData) {
         this.incomeChartData[i].value = 0;
       }
@@ -210,11 +218,13 @@ export default {
           if (res.data.length) {
             res.data.forEach((item) => {
               this.incomeChartData[Number(item._id) - 1].value = item.amount;
+              this.incomeChartData[Number(item._id) - 1].future = false;
             });
             this.incomeChartData = [...this.incomeChartData];
           } else {
             this.incomeChartData.forEach((item, index) => {
               this.incomeChartData[index].value = 1000 * Math.random() + 200;
+              this.incomeChartData[index].future = true;
             });
             this.incomeChartData = [...this.incomeChartData];
           }
@@ -326,7 +336,9 @@ export default {
   },
   watch: {
     customer(newVal) {
-      console.log("customer.watch", newVal);
+      this.init();
+    },
+    customerStatus(newVal) {
       this.init();
     },
   },

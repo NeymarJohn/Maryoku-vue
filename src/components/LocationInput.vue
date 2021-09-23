@@ -6,7 +6,6 @@
       :md-input-placeholder="placeholder"
       class="location"
       :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
-      @md-opened="updateSuggestionStyle"
     ></md-autocomplete>
   </div>
 </template>
@@ -63,23 +62,7 @@ export default {
         this.locations.push(item.description);
         this.places.push({ id: item.place_id, name: item.description });
       });
-      this.updateSuggestionStyle()
     },
-    updateSuggestionStyle(){
-        console.log('updateSuggestionStyle');
-        if ( this.theme === 'purple' ) {
-            setTimeout((_) => {
-                $(".md-list-item-button").hover(
-                    function (el) {
-                        $(this).attr("style", "background-color:#641856!important;color: #fff!important");
-                    },
-                    function () {
-                        $(this).attr("style", "background-color:#fff;color:#000");
-                    },
-                );
-            }, 0);
-        }
-    }
   },
   computed: {
     getClass: function () {
@@ -95,7 +78,7 @@ export default {
       this.$emit("input", this.content);
     },
     selectedLocation: function (newValue) {
-      // console.log('selectedLocation', newValue);
+      console.log('selectedLocation', newValue);
       if (newValue.length < 3) {
         // this.locations = [];
         return;
