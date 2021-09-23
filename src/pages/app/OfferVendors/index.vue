@@ -175,8 +175,8 @@ export default {
         async createEvent(){
 
             await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
-                eventStartMillis: this.proposal.eventData.startTime * 1000,
-                eventEndMillis: this.proposal.eventData.endTime * 1000,
+                eventStartMillis: this.proposal.eventData.startTime,
+                eventEndMillis: this.proposal.eventData.endTime,
                 status: 'draft',
                 numberOfParticipants: this.proposal.eventData.numberOfParticipants,
                 flexibleWithDates: 0,
@@ -244,7 +244,7 @@ export default {
             this.saveRequirements({...this.requirements[category], ...requirements})
         },
         async saveRequirements(requirement){
-            console.log('saveRequirements', requirement);
+
             this.$set(this.requirements, requirement.category, requirement)
             localStorage.setItem('requirements', JSON.stringify(this.requirements));
         },
@@ -258,7 +258,6 @@ export default {
 
             this.isLoading = true;
             await this.save();
-            this.goToAccountPage();
             this.isLoading = false;
         },
         async signUp({email, password, name, company}){
@@ -277,7 +276,6 @@ export default {
 
             this.isLoading = true;
             await this.save();
-            this.goToAccountPage();
             this.isLoading = false;
         },
 
@@ -287,7 +285,6 @@ export default {
             this.loading = true;
             await this.save();
             this.loading = false;
-            this.goToAccountPage();
           } else {
               this.showSignupModal = true;
           }
@@ -310,9 +307,6 @@ export default {
                 new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
             );
 
-        },
-        goToAccountPage(){
-          this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
         },
         changePage(){
             this.page = this.page === 'signin' ? 'signup' : 'signin';
@@ -341,16 +335,15 @@ export default {
         console.log("offer-vendors.created", this.loggedInUser);
         let tenantUser = null;
         if (this.loggedInUser) {
-            tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
+            tenantUser = await this.$store.dispatch("auth/checkToken");
         }
         const givenToken = this.$route.query.token;
         if (givenToken) {
             tenantUser =  await this.$store.dispatch("auth/checkToken", givenToken);
             this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
             this.requirements = JSON.parse(localStorage.getItem('requirements'));
-            await this.getProposal();
+            this.proposal = JSON.parse(localStorage.getItem('proposal'));
             await this.save();
-            this.goToAccountPage();
             this.isLoading = false;
         } else {
             this.showBookedVendorModal = true;
@@ -359,8 +352,10 @@ export default {
             if (!this.allRequirements || !this.allRequirements.length) {
                 await this.getAllRequirements()
             }
-
-            await this.getProposal();
+            this.proposal = JSON.parse(localStorage.getItem('proposal'));
+            if(!this.proposal){
+                await this.getProposal();
+            }
             this.isLoading = false;
         }
     }

@@ -29,9 +29,8 @@
                 <div class="md-layout-item pl-0 md-size-45 mt-30">
                     <label>Location</label>
                     <location-input
-                        class=" mt-5"
+                        class="mt-5"
                         placeholder="Type the location here..."
-                        theme="purple"
                         :value="customerModel.location"
                         v-model="customerModel.location">
                     </location-input>
@@ -144,8 +143,8 @@
                 })
 
             }
-        },
+        }
     }
 </script>
-<style lang="scss" scoped>
+<style>
 </style>

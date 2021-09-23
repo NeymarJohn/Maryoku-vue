@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout event-details-overview edit-event-details bg-white" style="padding-left: 450px" v-if="!isLoading">
+    <div class="md-layout event-details-overview edit-event-details" style="padding-left: 450px;background-color:#f5f5f5" v-if="!isLoading">
 <!--        <comment-editor-panel-->
 <!--            v-if="showCommentEditorPanel"-->
 <!--            :commentComponents="commentComponents"-->
@@ -219,8 +219,8 @@
                     key: "date",
                     img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
                     warning: "Changing the time on your status might cause price changes",
-                    started_at: this.event.eventStartMillis,
-                    ended_at: this.event.eventEndMillis,
+                    started_at: this.event.eventStartMillis * 1000,
+                    ended_at: this.event.eventEndMillis * 1000,
                     timelineDates: this.event.timelineDates,
                     more_one_day: null,
                 };
