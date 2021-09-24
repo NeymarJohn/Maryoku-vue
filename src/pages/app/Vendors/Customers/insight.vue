@@ -157,18 +157,14 @@ export default {
       type: Object,
       required: true,
     },
-    customerStatus: {
-      type: Number,
-      default: 0,
-    },
   },
   data() {
     return {
       // serviceChartData: [],
       incomeChartData: [
-        { label: "Jan", value: 0, future: true },
-        { label: "Feb", value: 0, future: true },
-        { label: "Mar", value: 0, future: true },
+        { label: "Jan", value: 0, future: false },
+        { label: "Feb", value: 0, future: false },
+        { label: "Mar", value: 0, future: false },
         { label: "Apr", value: 0, future: true },
         { label: "May", value: 0, future: true },
         { label: "Jun", value: 0, future: true },
@@ -186,7 +182,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.customerStatus);
     this.init();
   },
   methods: {
@@ -197,42 +192,30 @@ export default {
         }
       });
     },
-    getIncomingData() {
-      let customerQuery = "";
-      if (this.customer) {
-        customerQuery = `&customerId=${this.customer.id}`;
-      }
-      if (this.customerStatus) {
-        customerQuery += `&customerStatus=${this.customerStatus}`;
-      }
-      for (let i in this.incomeChartData) {
-        this.incomeChartData[i].value = 0;
-      }
+    init() {
+      this.getServiceReport();
+      console.log("customer.insight", this.aggregate, this.customer);
+
       this.$http
         .get(
-          `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendor.id}?start=${new Date(
+          `${process.env.SERVER_URL}/1/transaction/report/monthly/${this.vendor.id}?start=${new Date(
             new Date().getFullYear() + "-01-01",
-          ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}${customerQuery}`,
+          ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
         )
         .then((res) => {
           if (res.data.length) {
             res.data.forEach((item) => {
-              this.incomeChartData[Number(item._id) - 1].value = item.amount;
-              this.incomeChartData[Number(item._id) - 1].future = false;
+              this.incomeChartData[Number(item._id) - 1].value = item.amount / 100;
             });
             this.incomeChartData = [...this.incomeChartData];
           } else {
             this.incomeChartData.forEach((item, index) => {
               this.incomeChartData[index].value = 1000 * Math.random() + 200;
-              this.incomeChartData[index].future = true;
             });
             this.incomeChartData = [...this.incomeChartData];
           }
+          console.log("this.incomeChartData", this.incomeChartData);
         });
-    },
-    init() {
-      this.getServiceReport();
-      this.getIncomingData();
     },
     next() {
       this.$refs.nextButton.click();
@@ -336,9 +319,7 @@ export default {
   },
   watch: {
     customer(newVal) {
-      this.init();
-    },
-    customerStatus(newVal) {
+      console.log("customer.watch", newVal);
       this.init();
     },
   },

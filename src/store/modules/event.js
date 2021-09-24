@@ -340,23 +340,9 @@ const mutations = {
     removeEventNote(state, { index, note }) {
         state.notes.splice(index, 1);
     },
-
-    updateEventData(state, params) {
-        state.eventData.components[params.index] = params.data;
-    },
-    removeSubComponent(state, params) {
-        state.eventData.components[params.component][params.type].splice(params.item, 1);
-    },
     updateComponent(state, params) {
         state.eventData.components.push(params);
     },
-    removeComponent(state, params) {
-        state.eventData.components.splice(params.index, 1);
-    },
-    setCurrentUserData(state, data) {
-        state.currentUser = data;
-    },
-
     setTimelineDates(state, data) {
         state.timelineDates = data;
         Vue.set(state.eventData, "timelineDates", data);

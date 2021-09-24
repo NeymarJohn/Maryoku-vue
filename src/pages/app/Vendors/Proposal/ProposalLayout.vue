@@ -196,6 +196,9 @@ export default {
     gotoNext() {
       console.log("proposal", this.$store.state.vendorProposal);
       this.step = this.step + 1;
+
+      // skip additional page if event doesn't have components
+      if (this.step === 2 && !this.event.components.length) this.step ++;
       this.scrollToTop();
     },
     getVendorCategory() {
@@ -277,6 +280,9 @@ export default {
       const initStep = this.$store.state.vendorProposal.initStep;
       if (this.step > initStep) {
         this.step = this.step - 1;
+
+        // skip additional page if event doesn't have components
+        if (this.step === 2 && !this.event.components.length) this.step --;
       } else {
         const vendorId = this.$route.params.vendorId;
         const requestId = this.$route.params.id;

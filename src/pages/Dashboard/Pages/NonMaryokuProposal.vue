@@ -184,14 +184,17 @@ export default {
     console.log("non-maryokuProposal.created", this.loggedInUser);
     let tenantUser = null;
     if (this.loggedInUser) {
-      tenantUser = await this.$store.dispatch("auth/checkToken");
+      tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
     }
     const givenToken = this.$route.query.token;
+
     const proposalId = this.$route.params.proposalId;
-    await this.$store.dispatch("common/getEventTypes");
     this.proposal = await Proposal.find(proposalId);
+    await this.$store.dispatch("common/getEventTypes");
+
     if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
     if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
+
     if (givenToken) {
       tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
       this.loading = false;

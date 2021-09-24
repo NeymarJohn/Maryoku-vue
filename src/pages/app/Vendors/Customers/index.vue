@@ -60,7 +60,6 @@
             :customer="selectedCustomer"
             :aggregate="aggregate"
             :vendor="vendorData"
-            :customerStatus="this.tab"
           ></insight>
         </div>
       </div>
@@ -189,8 +188,8 @@ export default {
             vendorId: this.vendorData.id,
           },
           query: {
-            customerId: customer.id,
-          },
+            customerId: customer.id
+          }
         });
         this.openNewTab(routeData.href);
       } else if (action === this.customerStatus.delete) {

@@ -636,7 +636,8 @@ export default {
           date: "",
         };
       }
-      let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "All Day" : "Not planned yet";
+      // let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "All Day" : "Not planned yet";
+      let serviceTimeString = "";
       let serviceDate = "";
       this.timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {
@@ -666,6 +667,9 @@ export default {
         const period = this.proposalRequest.plannerRequirement.period;
         serviceTimeString = moment(parseInt(period.startTime)).format('hh:mm:a');
         serviceTimeString = `${serviceTimeString} - ${moment(parseInt(period.endTime)).format('hh:mm:a')}`;
+      } else if(this.proposalRequest.eventData.eventStartMillis && this.proposalRequest.eventData.eventEndMillis) {
+        serviceTimeString = `${moment(this.proposalRequest.eventData.eventStartMillis).format('hh:mm:a')} -
+        ${moment(this.proposalRequest.eventData.eventEndMillis).format('hh:mm:a')}`
       }
       return {
         time: serviceTimeString,
