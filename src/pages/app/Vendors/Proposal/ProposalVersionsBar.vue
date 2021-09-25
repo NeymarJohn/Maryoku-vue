@@ -31,35 +31,16 @@ export default {
   },
   data() {
     return {
-        versionFields: [
-            'costServices',
-            'includedServices',
-            'extraServices',
-            'discounts',
-            'taxes',
-            'inspirationalPhotos',
-            'additionalServices',
-            'bundleDiscount',
-            'attachments',
-            'personalMessage',
-            'coverImage',
-        ]
     };
   },
   methods: {
     select(index){
-      console.log(this.versions);
       this.$store.commit('vendorProposal/selectVersion', index);
     },
     saveVersion(){
-      let data = {};
-      this.versionFields.map(key => {
-          data[key] = this.$store.state.vendorProposal.original[key];
-      });
-
       let version = {
           name: `Ver${this.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
-          data,
+          data: {},
       }
       this.$store.dispatch('vendorProposal/saveVersion', version);
     }
@@ -69,11 +50,12 @@ export default {
       return this.$store.state.vendorProposal.versions;
     },
     selected() {
-      return this.$store.state.vendorProposal.currentVersion;
+      return this.$store.state.vendorProposal.selectedVersion;
     }
   },
   watch: {
-    versions(newVal){console.log('versions', newVal)}
+    versions(){
+    }
   },
 };
 </script>

@@ -123,9 +123,6 @@ export default {
       this.$emit("remove", this.index);
     },
   },
-  watch:{
-    defaultPhoto(newVal){console.log('defaultPhoto', newVal); this.photo = newVal;}
-  }
 };
 </script>
 <style lang="scss" scoped>

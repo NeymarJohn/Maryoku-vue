@@ -331,9 +331,9 @@ export default {
     },
   },
   watch: {
-    costedServices(newVal){},
-    includedServices(newVal){},
-    extraServices(newVal){},
+    costedServices(newVal){console.log('costServices.watch', newVal)},
+    includedServices(newVal){console.log('includedServices.watch', newVal)},
+    extraServices(newVal){console.log('extraServices.watch', newVal)},
   },
 };
 </script>

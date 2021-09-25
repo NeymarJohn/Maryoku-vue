@@ -11,26 +11,9 @@ import moment from "moment";
 import Customer from "@/models/Customer";
 import ProposalVersion from "../../models/ProposalVersion";
 
-const setStateFromData = (state, data) => {
-    Object.keys(data).map(key => {
-        Vue.set(state, key, JSON.parse(JSON.stringify(data[key])));
-    })
-}
-const setStateByVersion = (state, {key, value}) => {
-    if (state.proposalRequest.hasOwnProperty('proposal')) {
-        if(state.currentVersion === -1) {
-            Vue.set(state.original, key, value);
-        } else {
-            Vue.set(state.versions[state.currentVersion].data, key, value);
-        }
-    }
-
-}
-
 const state = {
   vendor: null,
   initialized: false,
-  eventVision: null,
   proposalRequest: {},
   proposalServices: {},
   costServices: {},
@@ -68,7 +51,7 @@ const state = {
   customer: null,
   versions: [],
   original: null,
-  currentVersion: -1,
+  selectedVersion: -1,
   tenantId: authService.resolveTenantId()
 };
 const getters = {
@@ -193,25 +176,26 @@ const getters = {
   }
 };
 const mutations = {
-  selectVersion: (state, index) => {
-     state.currentVersion = index;
-
-     // update proposal data if vendor click version tab
-
-     if (index === -1) {
-        setStateFromData(state, JSON.parse(JSON.stringify(state.original)));
-     }
-
-     if(index > -1) {
-        setStateFromData(state, JSON.parse(JSON.stringify(state.versions[index].data)));
-     }
-  },
-  setVersions: (state, versions) => {
-     state.versions = versions;
-  },
   setVendor: (state, vendor) => {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
+  },
+  selectVersion: (state, index) => {
+    state.selectedVersion = index;
+
+    // update proposal data if vendor click version
+    Object.keys(state.original).map(key => {
+      Vue.set(state, key, state.original[key]);
+    })
+    if(index > -1) {
+        let version = state.versions[index];
+        Object.keys(version.data).map(key => {
+            Vue.set(state, key, version.data[key]);
+        })
+    }
+  },
+  setVersions: (state, versions) => {
+    state.versions = versions;
   },
   setProposal: (state, proposal) => {
     state.id = proposal.id;
@@ -231,10 +215,7 @@ const mutations = {
     state.coverImage = proposal.coverImage || []
     state.versions = proposal.versions || []
     state.bookedServices = []
-
-    delete proposal.versions;
-    Vue.set(state, 'original', proposal);
-
+    state.original = proposal;
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest;
@@ -254,18 +235,17 @@ const mutations = {
   setCostServices: (state, { category, services }) => {
     Vue.set(state.costServices, category, services);
 
-    setStateByVersion(state, {key: 'costServices', value: JSON.parse(JSON.stringify(state.costServices))})
-
+      if (state.selectedVersion === -1) {
+          Vue.set(state.original.costServices, category, value);
+      } else {
+          Vue.set(state.versions[state.selectedVersion].data.costServices, category, value);
+      }
   },
   setIncludedServices: (state, { category, services }) => {
     Vue.set(state.includedServices, category, services);
-
-    setStateByVersion(state, {key: 'includedServices', value: JSON.parse(JSON.stringify(state.includedServices))})
   },
   setExtraServices: (state, { category, services }) => {
     Vue.set(state.extraServices, category, services);
-
-    setStateByVersion(state, {key: 'extraServices', value: JSON.parse(JSON.stringify(state.extraServices))})
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -275,39 +255,34 @@ const mutations = {
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
-
-    setStateByVersion(state, {key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts))})
   },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
-
-    setStateByVersion(state, {key: 'taxes', value: state.taxes})
   },
   setAdditionalServices: (state, services) => {
     Vue.set(state.additionalServices, services);
-
-    setStateByVersion(state, {key: 'additionalServices', value: JSON.parse(JSON.stringify(state.additionalServices)) })
   },
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
     state.additionalServices.splice(index, 1);
-    setStateByVersion(state, {key: 'additionalServices', value: JSON.parse(JSON.stringify(state.additionalServices))})
   },
   setBundleDiscount: (state, bundleDiscount) => {
     state.bundleDiscount = bundleDiscount;
-    setStateByVersion(state, {key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount))})
   },
   setValue: (state, { key, value }) => {
+    console.log('setValue', state.selectedVersion);
+    if (state.selectedVersion === -1) {
+        Vue.set(state.original, key, value);
+    } else {
+        Vue.set(state.versions[state.selectedVersion].data, key, value);
+    }
     Vue.set(state, key, value);
-
-    setStateByVersion(state, {key, value});
   },
   setCustomer: (state, customer) => {
     state.customer = customer;
   },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo);
-    setStateByVersion(state, {key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos))})
   },
   initState(state) {
     Vue.set(state, "costServices", {});
@@ -428,24 +403,24 @@ const actions = {
 
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
-        personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
-        additionalServices: state.original ? state.original.additionalServices : state.additionalServices,
-        inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
+        personalMessage: state.personalMessage,
+        additionalServices: state.additionalServices,
+        inspirationalPhotos: state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
-        eventVision: state.original ? state.original.eventVision : state.eventVision,
+        eventVision: state.eventVision,
         eventComponentId: state.proposalRequest.componentInstance ? state.proposalRequest.componentInstance.id : null,
         requirementId: state.proposalRequest.plannerRequirement ? state.proposalRequest.plannerRequirement.id : null,
         vendorId: state.vendor.id,
-        costServices: state.original ? state.original.costServices : state.costServices,
-        includedServices: state.original ? state.original.includedServices : state.includedServices,
-        extraServices: state.original ? state.original.extraServices : state.extraServices,
-        discounts: state.original ? state.original.discounts : state.discounts,
-        taxes: state.original ? state.original.taxes : state.taxes,
+        costServices: state.costServices,
+        includedServices: state.includedServices,
+        extraServices: state.extraServices,
+        discounts: state.discounts,
+        taxes: state.taxes,
         cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
-        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
-        attachments: state.original ? state.original.attachments : state.attachments,
-        coverImage: state.original ? state.original.coverImage : state.coverImage,
+        bundleDiscount: state.bundleDiscount,
+        attachments: state.attachments,
+        coverImage: state.coverImage,
         status,
         step: state.wizardStep,
         progress: state.progress,
@@ -453,8 +428,7 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         bookedServices: state.bookedServices || [],
-        seatingData: state.original ? state.original.seatingData : state.seatingData,
-        versions: state.versions,
+        seatingData: state.seatingData,
       });
       proposal
         .save()

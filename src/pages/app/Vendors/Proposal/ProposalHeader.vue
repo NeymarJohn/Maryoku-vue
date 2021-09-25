@@ -239,9 +239,9 @@ export default {
     eventTime() {
       if (!this.event) return "-";
 
-      let startDate = new Date(this.event.eventStartMillis);
-      let endDate = new Date(this.event.eventEndMillis);
-      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
+      let startTime = moment(this.event.eventStartMillis).format("hh:mm a");
+      let endTime = moment(this.event.eventEndMillis).format("hh:mm a");
+      return startTime === endTime ? startTime : `${startTime} - ${endTime}`;
     },
     getEventDuration() {
       return moment.duration(this.event.eventEndMillis - this.event.eventStartMillis).humanize();

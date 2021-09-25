@@ -597,6 +597,9 @@ export default {
     findVendorCategoryTitleByKey(key) {
       return this.vendorCategories.find((item) => item.fullkey == key).key;
     },
+    getDateByFormat(data, format){
+        return moment(data).format(format);
+    }
   },
   computed: {
     vendor() {
@@ -655,21 +658,22 @@ export default {
           }
         });
       });
-      if (!serviceDate) {
-        serviceDate = `${this.$dateUtil.formatScheduleDay(
-          Number(this.proposalRequest.eventData.eventStartMillis),
-          "MMM DD, YYYY",
-        )}`;
+      if (!serviceDate || !serviceTimeString) {
+        let startDate = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, "MMM DD, YYYY");
+        let endDate = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, "MMM DD, YYYY");
+        serviceDate = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+        let startTime = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, 'hh:mm:a');
+        let endTime = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, 'hh:mm:a');
+        serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
       }
       if (this.proposalRequest.plannerRequirement.isEntireEvent) {
         serviceTimeString = "All Day";
       } else if (this.proposalRequest.plannerRequirement.period) {
         const period = this.proposalRequest.plannerRequirement.period;
-        serviceTimeString = moment(parseInt(period.startTime)).format('hh:mm:a');
-        serviceTimeString = `${serviceTimeString} - ${moment(parseInt(period.endTime)).format('hh:mm:a')}`;
-      } else if(this.proposalRequest.eventData.eventStartMillis && this.proposalRequest.eventData.eventEndMillis) {
-        serviceTimeString = `${moment(this.proposalRequest.eventData.eventStartMillis).format('hh:mm:a')} -
-        ${moment(this.proposalRequest.eventData.eventEndMillis).format('hh:mm:a')}`
+
+        let startTime = this.getDateByFormat(period.startTime, 'hh:mm:a');
+        let endTime = this.getDateByFormat(period.endTime, 'hh:mm:a');
+        serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
       }
       return {
         time: serviceTimeString,

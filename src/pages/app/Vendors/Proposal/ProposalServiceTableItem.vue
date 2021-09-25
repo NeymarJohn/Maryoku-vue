@@ -241,6 +241,10 @@
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
+<!--        <md-button class="md-simple edit-btn md-dark" @click="isExpanded = !isExpanded">-->
+<!--          <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>-->
+<!--          <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>-->
+<!--        </md-button>-->
         <md-menu v-if="!isEdit"
                  md-size="medium"
                  :md-offset-x="240"
@@ -509,11 +513,6 @@ export default {
       }, 0)
     }
   },
-
-  watch:{
-      defaultItem(newVal){console.log('newVAl', newVal); this.item = Object.assign({}, newVal)}
-  }
-
 };
 </script>
 <style lang="scss" scoped>

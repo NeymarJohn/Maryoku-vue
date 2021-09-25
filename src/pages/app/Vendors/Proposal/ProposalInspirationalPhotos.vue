@@ -118,9 +118,6 @@ export default {
       this.captionModal.isOpen = false;
     },
   },
-  watch: {
-    inspirationalPhotos(newVal){console.log('inspirationalPhotos', newVal);}
-  },
 };
 </script>
 <style lang="scss" scoped>
