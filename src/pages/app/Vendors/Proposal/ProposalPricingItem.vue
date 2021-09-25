@@ -251,22 +251,22 @@ export default {
       return s;
     },
     costedServices() {
-      return this.$store.state.vendorProposal.proposalCostServices[this.category];
+      return this.$store.state.vendorProposal.costServices[this.category];
     },
     includedServices() {
-      return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
+      return this.$store.state.vendorProposal.includedServices[this.category];
     },
     extraServices() {
-      return this.$store.state.vendorProposal.proposalExtraServices[this.category];
+      return this.$store.state.vendorProposal.extraServices[this.category];
     },
     services: {
       get: function () {
         if (this.tableCategory === "cost")
-          return this.$store.state.vendorProposal.proposalCostServices[this.vendorCategory];
+          return this.$store.state.vendorProposal.costServices[this.vendorCategory];
         else if (this.tableCategory === "included")
-          return this.$store.state.vendorProposal.proposalIncludedServices[this.vendorCategory];
+          return this.$store.state.vendorProposal.includedServices[this.vendorCategory];
         else if (this.tableCategory === "extra")
-          return this.$store.state.vendorProposal.proposalExtraServices[this.vendorCategory];
+          return this.$store.state.vendorProposal.extraServices[this.vendorCategory];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")
@@ -330,7 +330,11 @@ export default {
       return amount ? amount.toLocaleString() : 0;
     },
   },
-  watch: {},
+  watch: {
+    costedServices(newVal){},
+    includedServices(newVal){},
+    extraServices(newVal){},
+  },
 };
 </script>
 <style lang="scss" scoped>

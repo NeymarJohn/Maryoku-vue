@@ -162,7 +162,7 @@ export default {
     //get data
     this.$http
       .get(
-        `${process.env.SERVER_URL}/1/transaction/report/monthly/${this.vendorData.id}?start=${new Date(
+        `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendorData.id}?start=${new Date(
           new Date().getFullYear() + "-01-01",
         ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
       )
@@ -170,12 +170,14 @@ export default {
         if (res.data.length) {
           this.monthlyReport = res.data;
           res.data.forEach((item) => {
-            this.incomeChartData[Number(item._id) - 1].value = item.amount / 100;
+            this.incomeChartData[Number(item._id) - 1].value = item.amount;
+            this.incomeChartData[Number(item._id) - 1].future = false;
           });
           this.incomeChartData = [...this.incomeChartData];
         } else {
           this.incomeChartData.forEach((item, index) => {
             this.incomeChartData[index].value = 1000 * Math.random() + 200;
+            this.incomeChartData[Number(item._id) - 1].future = true;
           });
           this.incomeChartData = [...this.incomeChartData];
         }
@@ -310,11 +312,9 @@ export default {
     yearlyRevenue() {
       console.log("this.consoe", this.monthlyReport);
       if (this.monthlyReport.length === 0) return 0;
-      return (
-        this.monthlyReport.reduce((s, item) => {
-          return s + item.amount;
-        }, 0) / 100
-      );
+      return this.monthlyReport.reduce((s, item) => {
+        return s + item.amount;
+      }, 0);
     },
   },
   watch: {

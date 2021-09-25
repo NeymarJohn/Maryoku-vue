@@ -144,7 +144,7 @@ export default {
     },
   },
   mounted() {
-    console.log('mounted', this.proposalRequest);
+    // console.log('mounted', this.proposalRequest);
   },
 };
 </script>

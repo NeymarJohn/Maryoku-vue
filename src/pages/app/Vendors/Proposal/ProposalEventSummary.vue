@@ -411,10 +411,10 @@ export default {
     },
     removeSignature() {},
     getServices(category) {
-      if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[category];
+      if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[category];
       else if (this.tableCategory === "included")
-        return this.$store.state.vendorProposal.proposalIncludedServices[category];
-      else if (this.tableCategory === "extra") return this.$store.state.vendorProposal.proposalExtraServices[category];
+        return this.$store.state.vendorProposal.includedServices[category];
+      else if (this.tableCategory === "extra") return this.$store.state.vendorProposal.extraServices[category];
     },
     flatDeep(arr, d = 1) {
       return d > 0
