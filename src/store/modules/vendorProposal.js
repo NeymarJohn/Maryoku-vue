@@ -17,14 +17,14 @@ const setStateFromData = (state, data) => {
     })
 }
 const setStateByVersion = (state, {key, value}) => {
-    if(state.currentVersion === -1) {
-
-        Vue.set(state.original, key, value);
-
-    } else {
-
-        Vue.set(state.versions[state.currentVersion].data, key, value);
+    if (state.proposalRequest.hasOwnProperty('proposal')) {
+        if(state.currentVersion === -1) {
+            Vue.set(state.original, key, value);
+        } else {
+            Vue.set(state.versions[state.currentVersion].data, key, value);
+        }
     }
+
 }
 
 const state = {
@@ -428,24 +428,24 @@ const actions = {
 
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
-        personalMessage: state.original.personalMessage,
-        additionalServices: state.original.additionalServices,
-        inspirationalPhotos: state.original.inspirationalPhotos,
+        personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
+        additionalServices: state.original ? state.original.additionalServices : state.additionalServices,
+        inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
-        eventVision: state.original.eventVision,
+        eventVision: state.original ? state.original.eventVision : state.eventVision,
         eventComponentId: state.proposalRequest.componentInstance ? state.proposalRequest.componentInstance.id : null,
         requirementId: state.proposalRequest.plannerRequirement ? state.proposalRequest.plannerRequirement.id : null,
         vendorId: state.vendor.id,
-        costServices: state.original.costServices,
-        includedServices: state.original.includedServices,
-        extraServices: state.original.extraServices,
-        discounts: state.original.discounts,
-        taxes: state.original.taxes,
+        costServices: state.original ? state.original.costServices : state.costServices,
+        includedServices: state.original ? state.original.includedServices : state.includedServices,
+        extraServices: state.original ? state.original.extraServices : state.extraServices,
+        discounts: state.original ? state.original.discounts : state.discounts,
+        taxes: state.original ? state.original.taxes : state.taxes,
         cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
-        bundleDiscount: state.original.bundleDiscount,
-        attachments: state.original.attachments,
-        coverImage: state.original.coverImage,
+        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
+        attachments: state.original ? state.original.attachments : state.attachments,
+        coverImage: state.original ? state.original.coverImage : state.coverImage,
         status,
         step: state.wizardStep,
         progress: state.progress,
@@ -453,7 +453,7 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         bookedServices: state.bookedServices || [],
-        seatingData: state.original.seatingData,
+        seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
       });
       proposal
