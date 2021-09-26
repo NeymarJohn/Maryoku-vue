@@ -47,7 +47,7 @@
     </div>
     <div class="position-absolute d-flex flex-column align-center justify-content-center" style="bottom: 20px;width: 100%">
         <img src="static/img/maryoku-logo-dark.png" width="120px">
-        <a class="color-red text-decoration-none" target="_blank" href="https://maryoku.com">Who are we and why are we great?</a>
+        <p class="color-red">Who are we and why are we great?</p>
     </div>
   </div>
 </template>

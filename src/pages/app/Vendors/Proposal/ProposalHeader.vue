@@ -59,6 +59,7 @@
           <li>
             <img :src="`${$iconURL}common/calendar-white.svg`" />
             {{ eventDate }}
+            <!-- <img v-if="suggestionDate" class="question" :src="`${$iconURL}NewSubmitPorposal/Asset 582.svg`" /> -->
             <div
               class="suggest-date-help"
               v-if="suggestionDate"
@@ -207,8 +208,8 @@ export default {
       const suggestionDate = this.$store.state.vendorProposal.suggestionDate;
       if (!this.event) return "-";
 
-      let startDate = moment(this.event.eventStartMillis).format("MMM D, YYYY");
-      let endDate = moment(this.event.eventEndMillis).format("MMM D, YYYY");
+      let startDate = new Date(this.event.eventStartMillis);
+      let endDate = new Date(this.event.eventEndMillis);
       if (suggestionDate && suggestionDate.length > 0) {
         startDate = new Date(suggestionDate[0].date);
         endDate = new Date(suggestionDate[suggestionDate.length - 1].date);
@@ -217,7 +218,7 @@ export default {
           "DD/MM/YYYY",
         ).format("MMM D, YYYY")}`;
       }
-      return startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
     },
     getRemainingTime() {
       if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
@@ -239,9 +240,9 @@ export default {
     eventTime() {
       if (!this.event) return "-";
 
-      let startTime = moment(this.event.eventStartMillis).format("hh:mm a");
-      let endTime = moment(this.event.eventEndMillis).format("hh:mm a");
-      return startTime === endTime ? startTime : `${startTime} - ${endTime}`;
+      let startDate = new Date(this.event.eventStartMillis);
+      let endDate = new Date(this.event.eventEndMillis);
+      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
     },
     getEventDuration() {
       return moment.duration(this.event.eventEndMillis - this.event.eventStartMillis).humanize();

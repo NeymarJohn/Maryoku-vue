@@ -21,7 +21,7 @@ const actions = {
     commit('resetRequirements')
   },
   resetCartItems({commit}){
-    commit('resetCartItems')
+        commit('resetCartItems')
   },
   getRequirements({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {

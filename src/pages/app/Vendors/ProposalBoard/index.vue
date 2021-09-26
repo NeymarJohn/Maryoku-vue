@@ -171,7 +171,7 @@
         </div>
         <div class="text-center font-bold-extra">
           $
-          {{ selectedProposal.cost | withComma(Number) }}
+          {{ selectedProposal.cost | withComma }}
         </div>
         <md-button
           class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
@@ -181,49 +181,32 @@
       </template>
       <template slot="body">
         <negotiation-request
-          :type="negotiationType"
-          :eventData="eventChangeData"
           :expiredTime="expiredTime"
           :processed="negotiationProcessed"
           @close="showRequestNegotiationModal = false"
         />
       </template>
       <template slot="footer">
-        <template v-if="negotiationType === negotiationTypes.ADD_MORE_TIME">
-            <md-button
-                v-if="negotiationProcessed === 0"
-                class="md-simple md-vendor-text md-black p-0"
-                @click="handleNegotiation(negotiationRequestStatus.decline)"
-            >Decline</md-button
-            >
-            <md-button
-                class="md-simple md-outlined md-vendor ml-auto"
-                @click="handleNegotiation(negotiationRequestStatus.review)"
-            >Review proposal</md-button
-            >
-            <md-button
-                v-if="negotiationProcessed === 0"
-                class="md-vendor ml-10"
-                @click="handleNegotiation(negotiationRequestStatus.approve)"
-            >Approve</md-button>
-            <md-button v-else class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
-        </template>
-        <template v-else-if="negotiationType === negotiationTypes.EVENT_CHANGE">
-            <md-button
-                class="md-simple md-vendor-text md-black p-0"
-                @click="handleNegotiation(negotiationRequestStatus.cancel_proposal)"
-            >Cancel proposal</md-button
-            >
-            <md-button
-                class="md-simple md-outlined md-vendor ml-auto"
-                @click="handleNegotiation(negotiationRequestStatus.update_proposal)"
-            >Update proposal</md-button
-            >
-            <md-button
-                class="md-vendor ml-10"
-                @click="handleNegotiation(negotiationRequestStatus.acknowledge)"
-            >Acknowledge</md-button>
-        </template>
+        <md-button
+          v-if="negotiationProcessed === 0"
+          class="md-simple md-vendor-text md-black p-0"
+          @click="handleNegotiation(negotiationRequestStatus.decline)"
+          >Decline</md-button
+        >
+        <md-button
+          class="md-simple md-outlined md-vendor ml-auto"
+          @click="handleNegotiation(negotiationRequestStatus.review)"
+          >Review proposal</md-button
+        >
+        <md-button
+          v-if="negotiationProcessed === 0"
+          class="md-vendor ml-10"
+          @click="handleNegotiation(negotiationRequestStatus.approve)"
+          >Approve</md-button
+        >
+        <md-button v-else class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.done)"
+          >Done</md-button
+        >
       </template>
     </modal>
     <ShareProposal
@@ -245,7 +228,6 @@ import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constant
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 import carousel from "vue-owl-carousel";
-import moment from 'moment'
 import { Loader, TablePagination, Modal } from "@/components";
 import _ from "underscore";
 const ProposalContent = () => import("../components/ProposalDetail");
@@ -285,9 +267,6 @@ export default {
         approve: 1,
         decline: 2,
         done: 3,
-        cancel_proposal: 4,
-        update_proposal: 5,
-        acknowledge: 6,
       },
       proposalStatus: {
         show: 0,
@@ -298,8 +277,6 @@ export default {
         negotiation: 5,
       },
       negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
-      negotiationType:      NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
-      negotiationTypes:     NEGOTIATION_REQUEST_TYPE,
       socialMediaBlocks,
       pagination: PROPOSAL_PAGE_PAGINATION,
       sortFields: { sort: "", order: "" },
@@ -392,7 +369,6 @@ export default {
         this.selectedProposalRequest = this.proposalRequests.find((it) => it.proposal && it.proposal.id === id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
-        this.negotiationType = this.selectedProposal.negotiations[0].type
       }
     },
     handleRequestCard(idx) {
@@ -406,7 +382,6 @@ export default {
         this.selectedProposal = this.proposals.find((p) => p.id === proposalRequest.proposal.id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
-        this.negotiationType = this.proposal.negotiations[0].type
       } else {
         let params = proposalRequest.proposal
           ? { id: proposalRequest.id, type: "edit" }
@@ -419,16 +394,10 @@ export default {
       }
     },
     async handleNegotiation(status) {
-      if ( status === this.negotiationRequestStatus.review ) {
-
+      if (status === this.negotiationRequestStatus.review) {
         this.showRequestNegotiationModal = false;
         this.showProposalDetail = true;
-
-      } else if ( status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline||
-        status === this.negotiationRequestStatus.acknowledge || status === this.negotiationRequestStatus.cancel_proposal ||
-        status === this.negotiationRequestStatus.update_proposal
-      ) {
-
+      } else if (status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline) {
         let expiredTime =
           new Date(this.selectedProposal.expiredDate).getTime() +
           (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
@@ -449,38 +418,22 @@ export default {
 
             if (status === this.negotiationRequestStatus.approve)
               this.selectedProposal.expiredDate = new Date(expiredTime);
-
-            if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
-                let proposal = await Proposal.find(this.selectedProposal.id);
-                this.$store.commit("vendorDashboard/setProposal", proposal);
-            } else {
-                this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
-            }
-
-            if(status === this.negotiationRequestStatus.cancel_proposal) {
-                let proposals = this.proposals.filter(it => it.id !== this.selectedProposal.id);
-                this.$store.commit("vendorDashboard/setProposals", proposals);
-            }
+            this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
             if (!this.selectedProposal.nonMaryoku) {
               this.selectedProposalRequest.proposal = this.selectedProposal;
               this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
             }
 
-            this.negotiationProcessed = status;
-            if(status === this.negotiationRequestStatus.cancel_proposal || status === this.negotiationRequestStatus.update_proposal ||
-            status === this.negotiationRequestStatus.acknowledge) {
-                this.showRequestNegotiationModal = false;
-                this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
+            if (status === this.negotiationRequestStatus.decline) {
+              this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.DECLINE;
+            } else {
+              this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.APPROVED;
             }
-
           });
-
       } else if (status === this.negotiationRequestStatus.done) {
-
         this.showRequestNegotiationModal = false;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
-
       }
     },
     createNewProposal() {
@@ -570,21 +523,6 @@ export default {
     },
     proposals() {
       return this.$store.state.vendorDashboard.proposals;
-    },
-    eventChangeData(){
-      console.log('eventChangeData', this.selectedProposal);
-      if(!this.selectedProposal || !this.selectedProposal.negotiations.length ||
-          this.selectedProposal.negotiations[0].type !== NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) return {}
-      return {
-        originalDate: moment(this.selectedProposal.eventData.startTime * 1000).format('DD-MM-YY'),
-        date: moment(this.selectedProposal.negotiations[0].event.startTime * 1000).format('DD-MM-YY'),
-        originalStartTime: moment(this.selectedProposal.eventData.startTime * 1000).format('hh:mm a'),
-        originalEndTime: moment(this.selectedProposal.eventData.endTime * 1000).format('hh:mm a'),
-        startTime: moment(this.selectedProposal.negotiations[0].event.startTime * 1000).format('hh:mm a'),
-        endTime: moment(this.selectedProposal.negotiations[0].event.endTime * 1000).format('hh:mm a'),
-        originalNumberOfParticipants: this.selectedProposal.eventData.numberOfParticipants,
-        numberOfParticipants: this.selectedProposal.negotiations[0].event.numberOfParticipants,
-      }
     },
     expiredTime() {
       if (!this.selectedProposal) return null;

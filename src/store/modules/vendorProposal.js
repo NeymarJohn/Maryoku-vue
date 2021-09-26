@@ -9,16 +9,16 @@ import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
-import ProposalVersion from "../../models/ProposalVersion";
+import Vendor from "@/models/Vendors";
 
 const state = {
   vendor: null,
   initialized: false,
   proposalRequest: {},
   proposalServices: {},
-  costServices: {},
-  includedServices: {},
-  extraServices: {},
+  proposalCostServices: {},
+  proposalIncludedServices: {},
+  proposalExtraServices: {},
   discounts: {},
   taxes: {},
   totalTax: {
@@ -49,16 +49,13 @@ const state = {
   suggestedNewSeatings: null,
   bookedServices: [],
   customer: null,
-  versions: [],
-  original: null,
-  selectedVersion: -1,
   tenantId: authService.resolveTenantId()
 };
 const getters = {
   originalPriceOfMainCategory(state) {
     const mainService = state.vendor.eventCategory.key;
-    if (!state.costServices[mainService]) return 0;
-    const sumPrice = state.costServices[mainService].reduce((s, item) => {
+    if (!state.proposalCostServices[mainService]) return 0;
+    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
       if (item.isComplimentary) return s;
       return s + item.requirementValue * item.price;
     }, 0);
@@ -67,11 +64,11 @@ const getters = {
   totalPriceByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
-      if (!state.costServices[service]) {
+      if (!state.proposalCostServices[service]) {
         prices[service] = 0;
       }
-      if (state.costServices[service]) {
-        const sumPrice = state.costServices[service].reduce((s, item) => {
+      if (state.proposalCostServices[service]) {
+        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
           if (item.isComplimentary) return s;
           return s + item.requirementValue * item.price;
         }, 0);
@@ -84,7 +81,7 @@ const getters = {
 
   finalPriceOfMainCategory(state, getters) {
     const mainService = state.vendor.eventCategory.key;
-    if (!state.costServices[mainService]) return 0;
+    if (!state.proposalCostServices[mainService]) return 0;
     const sumPrice = getters.originalPriceOfMainCategory;
     let tax = state.taxes[mainService] || { price: 0, percentage: 0 };
     let discount = state.discounts[mainService] || { price: 0, percentage: 0 };
@@ -100,11 +97,11 @@ const getters = {
   pricesByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
-      if (!state.costServices[service]) {
+      if (!state.proposalCostServices[service]) {
         prices[service] = 0;
       }
-      if (state.costServices[service]) {
-        const sumPrice = state.costServices[service].reduce((s, item) => {
+      if (state.proposalCostServices[service]) {
+        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
           if (item.isComplimentary) return s;
           return s + item.requirementValue * item.price;
         }, 0);
@@ -117,6 +114,7 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
+    console.log("prices", prices);
     return prices;
   },
   sumOfPrices(state, getters) {
@@ -180,42 +178,22 @@ const mutations = {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
   },
-  selectVersion: (state, index) => {
-    state.selectedVersion = index;
-
-    // update proposal data if vendor click version
-    Object.keys(state.original).map(key => {
-      Vue.set(state, key, state.original[key]);
-    })
-    if(index > -1) {
-        let version = state.versions[index];
-        Object.keys(version.data).map(key => {
-            Vue.set(state, key, version.data[key]);
-        })
-    }
-  },
-  setVersions: (state, versions) => {
-    state.versions = versions;
-  },
   setProposal: (state, proposal) => {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
     state.eventVision = proposal.eventVision;
-    state.costServices = proposal.costServices;
-    state.includedServices = proposal.includedServices;
-    state.extraServices = proposal.extraServices;
+    state.proposalCostServices = proposal.costServices;
+    state.proposalIncludedServices = proposal.includedServices;
+    state.proposalExtraServices = proposal.extraServices;
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.personalMessage = proposal.personalMessage;
-    state.taxs = proposal.taxs;
-    state.discounts = proposal.discounts;
-    state.bundleDiscount = proposal.bundleDiscount;
+    state.tax = proposal.tax;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
     state.wizardStep = proposal.step
     state.coverImage = proposal.coverImage || []
-    state.versions = proposal.versions || []
     state.bookedServices = []
-    state.original = proposal;
+    // state.bookedServices = proposal.bookedServices
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest;
@@ -233,19 +211,13 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setCostServices: (state, { category, services }) => {
-    Vue.set(state.costServices, category, services);
-
-      if (state.selectedVersion === -1) {
-          Vue.set(state.original.costServices, category, value);
-      } else {
-          Vue.set(state.versions[state.selectedVersion].data.costServices, category, value);
-      }
+    Vue.set(state.proposalCostServices, category, services);
   },
   setIncludedServices: (state, { category, services }) => {
-    Vue.set(state.includedServices, category, services);
+    Vue.set(state.proposalIncludedServices, category, services);
   },
   setExtraServices: (state, { category, services }) => {
-    Vue.set(state.extraServices, category, services);
+    Vue.set(state.proposalExtraServices, category, services);
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -270,12 +242,6 @@ const mutations = {
     state.bundleDiscount = bundleDiscount;
   },
   setValue: (state, { key, value }) => {
-    console.log('setValue', state.selectedVersion);
-    if (state.selectedVersion === -1) {
-        Vue.set(state.original, key, value);
-    } else {
-        Vue.set(state.versions[state.selectedVersion].data, key, value);
-    }
     Vue.set(state, key, value);
   },
   setCustomer: (state, customer) => {
@@ -285,9 +251,9 @@ const mutations = {
     Vue.set(state.inspirationalPhotos, index, photo);
   },
   initState(state) {
-    Vue.set(state, "costServices", {});
-    Vue.set(state, "includedServices", {});
-    Vue.set(state, "extraServices", {});
+    Vue.set(state, "proposalCostServices", {});
+    Vue.set(state, "proposalIncludedServices", {});
+    Vue.set(state, "proposalExtraServices", {});
     Vue.set(state, "bookedServices", {});
     Vue.set(state, "discounts", {});
     Vue.set(state, "taxes", {});
@@ -307,11 +273,11 @@ const mutations = {
 };
 const actions = {
   addPrice({ commit, state, dispatch }, { category, selectedItem }) {
-    const includedServices = state.includedServices[category];
-    const includedIndex = includedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
-    includedServices.splice(includedIndex, 1)
-    commit("setIncludedServices", { category, services: [...includedServices] })
-    const costServices = state.costServices[category];
+    const proposalIncludedServices = state.proposalIncludedServices[category];
+    const includedIndex = proposalIncludedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
+    proposalIncludedServices.splice(includedIndex, 1)
+    commit("setIncludedServices", { category, services: [...proposalIncludedServices] })
+    const costServices = state.proposalCostServices[category];
     costServices.push(selectedItem);
     commit("setCostServices", { category, services: costServices })
   },
@@ -411,9 +377,9 @@ const actions = {
         eventComponentId: state.proposalRequest.componentInstance ? state.proposalRequest.componentInstance.id : null,
         requirementId: state.proposalRequest.plannerRequirement ? state.proposalRequest.plannerRequirement.id : null,
         vendorId: state.vendor.id,
-        costServices: state.costServices,
-        includedServices: state.includedServices,
-        extraServices: state.extraServices,
+        costServices: state.proposalCostServices,
+        includedServices: state.proposalIncludedServices,
+        extraServices: state.proposalExtraServices,
         discounts: state.discounts,
         taxes: state.taxes,
         cost: getters.totalPriceOfProposal,
@@ -441,29 +407,6 @@ const actions = {
         });
     });
   },
-  saveVersion: ({ commit, state}, data) => {
-    return new Promise(async (resolve, reject) => {
-      const query = new ProposalVersion({...data, proposal: new Proposal({ id: state.id })})
-          .for(new Proposal({ id: state.id }));
-      let res = await query.save();
-      console.log('res', res);
-      let idx = state.versions.findIndex(v => v.id === res.id);
-      if(idx === -1) {
-          commit("setVersions", [...state.versions, res]);
-      } else {
-          Vue.set(state.versions, idx, res);
-          commit("setVersions", state.versions)
-      }
-    })
-  },
-  saveVersionName: ({commit, state}, version) => {
-    return new Promise(async (resolve, reject) => {
-        let versions = state.versions;
-        let idx = state.versions.findIndex(v => v.id === version);
-        Vue.set(versions, idx, version);
-        commit("setVersions", versions)
-    })
-  }
 };
 
 export default {

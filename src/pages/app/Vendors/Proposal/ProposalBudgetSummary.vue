@@ -67,27 +67,18 @@
                   }}</span
                 >
               </li>
-                <li
-                    v-if="getAllocatedBudget(vendor.eventCategory.key) && pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0 ||
-                    getAverageBudget(vendor.eventCategory.key) && pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key) > 0"
-                >
-                    <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-
-                    <span v-if="getAllocatedBudget(vendor.eventCategory.key) && pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0">
+              <li
+                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
+                class="color-black"
+              >
+                <span>
+                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
                   Your proposal is ${{
-                    (pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key))
-                      | withComma
+                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma
                   }}
-                  more than the budget
+                  more than budget
                 </span>
-                    <span v-if="getAverageBudget(vendor.eventCategory.key) && pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key) > 0">
-                  Your proposal is ${{
-                    (pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key))
-                      | withComma
-                  }}
-                  more than the average budget
-                </span>
-                </li>
+              </li>
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">
@@ -149,23 +140,16 @@
                 <span> ${{ getAllocatedBudget(a) | withComma }}</span>
               </li>
               <li
-                v-if="getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0 || getAverageBudget(a) && pricesByCategory[a] - getAverageBudget(a) > 0"
+                v-if="pricesByCategory[a] - getAllocatedBudget(a) > 0"
               >
                 <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
 
-                <span v-if="getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0">
+                <span>
                   Your proposal is ${{
                     (pricesByCategory[a] - getAllocatedBudget(a))
                       | withComma
                   }}
                   more than the budget
-                </span>
-                <span v-if="getAverageBudget(a) && pricesByCategory[a] - getAverageBudget(a) > 0">
-                  Your proposal is ${{
-                    (pricesByCategory[a] - getAverageBudget(a))
-                      | withComma
-                  }}
-                  more than the average budget
                 </span>
               </li>
             </ul>
@@ -397,18 +381,6 @@ export default {
         (item) => item.componentId === category,
       );
       return allocatedBudgetItem ? allocatedBudgetItem.allocatedBudget : 0;
-    },
-    getAverageBudget(key){
-          let service = this.getServiceCategory(this.vendor.eventCategory.key);
-
-          let budget = this.proposalRequest.eventData.numberOfParticipants * service.basicCostPerGuest;
-          if (service.minCost && budget < service.minCost) {
-              return service.minCost;
-          } else if (service.maxCost && budget > service.maxCost) {
-              return service.maxCost;
-          } else {
-              return budget;
-          }
     },
     saveDiscount(categoryKey, discount) {
       this.$store.commit("vendorProposal/setDiscount", { category: "total", discount: discount });

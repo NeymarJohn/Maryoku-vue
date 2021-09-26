@@ -430,11 +430,11 @@ export default {
     },
     services: {
       get: function () {
-        if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[this.category];
+        if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[this.category];
         else if (this.tableCategory === "included") {
-          return this.$store.state.vendorProposal.includedServices[this.category];
+          return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
         } else if (this.tableCategory === "extra")
-          return this.$store.state.vendorProposal.extraServices[this.category];
+          return this.$store.state.vendorProposal.proposalExtraServices[this.category];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")

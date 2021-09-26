@@ -47,10 +47,10 @@
     </div>
     <hr />
     <div class="px-30 position-relative">
-      <div class="position-absolute" style="left: 0; top: 0; z-index: 100">
+      <div v-if="customer" class="position-absolute" style="left: 0; top: 0; z-index: 100">
         <img :src="`${$iconURL}Group 19406.svg`" class="cursor-pointer" width="90px" @click="prev" />
       </div>
-      <div class="position-absolute" style="right: 0; top: 0; z-index: 100">
+      <div v-if="customer" class="position-absolute" style="right: 0; top: 0; z-index: 100">
         <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="90px" @click="next" />
       </div>
       <template v-if="customer">

@@ -308,7 +308,7 @@ export default {
       this.cart = await this.getCartItems(eventId);
       this.pageType = CART;
     }
-    console.log("checkout.proposal", this.proposal, this.successURL);
+    console.log("checkout.proposal", this.successURL);
     this.loading = false;
 
     if (this.$route.query.checkout === "success") {
@@ -421,7 +421,7 @@ export default {
               price: Math.floor(this.proposal.pricesByCategory[serviceCategory] * 100),
               proposalId: this.proposal.id,
               vendorId: this.proposal.vendor.id,
-              // eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
+              eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
               serviceCategory,
             },
             { headers: this.$auth.getAuthHeader() },
