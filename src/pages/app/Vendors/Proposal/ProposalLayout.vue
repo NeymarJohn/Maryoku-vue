@@ -3,6 +3,7 @@
     <vue-element-loading v-if="isUpdating" :active="isUpdating" color="#FF547C"></vue-element-loading>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
+      <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
       <div class="main-cont">
         <router-view></router-view>
       </div>
@@ -108,16 +109,13 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import moment from "moment";
 import Vendors from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
+import ProposalVersionsBar from "./ProposalVersionsBar";
 import VueElementLoading from "vue-element-loading";
 
 export default {
@@ -126,6 +124,7 @@ export default {
     Modal,
     ProposalHeader,
     VueElementLoading,
+    ProposalVersionsBar,
   },
   props: {
     newProposalRequest: Object,
@@ -135,11 +134,9 @@ export default {
       isLoading: false,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       selectedServices: [],
       submittedModal: false,
       isTimeUp: false,
-      proposalRequestRequirements: [],
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
@@ -151,6 +148,12 @@ export default {
     };
   },
   async created() {
+    console.log('proposal.created', this.$store.state.auth.user);
+    if(this.$store.state.auth.user){
+      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
+    } else {
+        this.$router.push({ path: `/vendor/signin`});
+    }
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -196,6 +199,9 @@ export default {
     gotoNext() {
       console.log("proposal", this.$store.state.vendorProposal);
       this.step = this.step + 1;
+
+      // skip additional page if event doesn't have components
+      if (this.step === 2 && !this.event.components.length) this.step ++;
       this.scrollToTop();
     },
     getVendorCategory() {
@@ -236,13 +242,13 @@ export default {
       if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
         progress += 15;
       }
-      if (vendorProposal.proposalCostServices[this.vendor.vendorCategory] && vendorProposal.proposalCostServices[this.vendor.vendorCategory].length) {
+      if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
         progress += 30;
       }
-      if (vendorProposal.proposalIncludedServices[this.vendor.vendorCategory] && vendorProposal.proposalIncludedServices[this.vendor.vendorCategory].length) {
+      if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
         progress += 10;
       }
-      if (vendorProposal.proposalExtraServices[this.vendor.vendorCategory] && vendorProposal.proposalExtraServices[this.vendor.vendorCategory].length) {
+      if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
         progress += 10;
       }
       if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
@@ -261,9 +267,12 @@ export default {
           Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,
               buttonsStyling: false,
+              showCancelButton: true,
               type: "success",
               confirmButtonClass: "md-button md-vendor",
-              confirmButtonText: "Back to Dashboard",
+              confirmButtonText: "Back to Dashboard continue",
+              cancelButtonClass: "md-button md-purple md-simple",
+              cancelButtonText: "Continue",
           }).then(res => {
               if(res.isConfirmed) {
                   this.$router.push({path: "/vendor/dashboard"});
@@ -277,6 +286,9 @@ export default {
       const initStep = this.$store.state.vendorProposal.initStep;
       if (this.step > initStep) {
         this.step = this.step - 1;
+
+        // skip additional page if event doesn't have components
+        if (this.step === 2 && !this.event.components.length) this.step --;
       } else {
         const vendorId = this.$route.params.vendorId;
         const requestId = this.$route.params.id;
@@ -335,9 +347,6 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
-    },
-    customer(){
-      return this.$store.state.vendorProposal.customer;
     },
     step: {
       get: function () {

@@ -6,7 +6,11 @@
     <timer size="big" :target="target"></timer>
     <template v-if="approved">
       <hr />
-      <div class="font-bold font-size-14">Your Request has been Approved</div>
+      <div class="font-bold font-size-14">More Time Granted</div>
+    </template>
+    <template v-else-if="declined">
+      <hr />
+      <div class="font-bold font-size-14">Request Denied</div>
     </template>
     <template v-else-if="pending">
       <hr />
@@ -37,6 +41,10 @@ export default {
     approved:{
       type: Boolean,
       default: false,
+    },
+    declined:{
+      type: Boolean,
+      default:false,
     },
     pending:{
       type: Boolean,

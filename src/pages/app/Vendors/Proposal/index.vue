@@ -140,7 +140,8 @@ export default {
 
     // handling uploading photo backhand process
     this.$root.$on("update-inspirational-photo", ({ file, index, link, url }) => {
-      const currentPhoto = this.$store.state.vendorProposal.inspirationalPhotos[index];
+      const currentPhoto = this.inspirationalPhotos[index];
+      console.log('update-inspirational-photo', currentPhoto, url);
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
       S3Service.fileUpload(file, `photo-${index}`, link)
         .then((res) => {})
@@ -177,6 +178,9 @@ export default {
         (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
       );
     },
+    inspirationalPhotos(){
+      return this.$store.state.vendorProposal.inspirationalPhotos;
+    },
     personalMessage: {
       get() {
         return this.$store.state.vendorProposal.personalMessage;
@@ -199,6 +203,9 @@ export default {
       return this.$store.state.vendorProposal.wizardStep;
     },
   },
+  watch:{
+    inspirationalPhotos(newVal){}
+  }
 };
 </script>
 <style lang="scss" scoped>

@@ -20,7 +20,7 @@
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle text-capitalize">
       <span v-if="proposal.proposalRequest && proposal.proposalRequest.eventData && proposal.proposalRequest.eventData.owner">
-        {{ proposal.proposalRequest.eventData.owner.displayName }}
+        {{ proposal.proposalRequest.eventData.owner.name }}
       </span>
       <span v-else-if="proposal.eventData">
         {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}
@@ -88,7 +88,7 @@
       <div class="font-size-14 color-black-middle">${{ proposal.cost | withComma }}</div>
       <div class="font-size-14 color-black-middle text-capitalize">
         <span v-if="proposal.proposalRequest && proposal.proposalRequest.eventData">
-          {{ proposal.proposalRequest.eventData.owner.displayName }}
+          {{ proposal.proposalRequest.eventData.owner.name }}
         </span>
         <span v-else-if="proposal.eventData">
           {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}

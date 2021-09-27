@@ -9,16 +9,32 @@ import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
-import Vendor from "@/models/Vendors";
+import ProposalVersion from "@/models/ProposalVersion";
+
+const setStateFromData = (state, data) => {
+    Object.keys(data).map(key => {
+        Vue.set(state, key, JSON.parse(JSON.stringify(data[key])));
+    })
+}
+const setStateByVersion = (state, {key, value}) => {
+    if (state.proposalRequest.hasOwnProperty('proposal')) {
+        if(state.currentVersion === -1) {
+            Vue.set(state.original, key, value);
+        } else {
+            Vue.set(state.versions[state.currentVersion].data, key, value);
+        }
+    }
+}
 
 const state = {
   vendor: null,
   initialized: false,
+  eventVision: null,
   proposalRequest: {},
   proposalServices: {},
-  proposalCostServices: {},
-  proposalIncludedServices: {},
-  proposalExtraServices: {},
+  costServices: {},
+  includedServices: {},
+  extraServices: {},
   discounts: {},
   taxes: {},
   totalTax: {
@@ -49,13 +65,16 @@ const state = {
   suggestedNewSeatings: null,
   bookedServices: [],
   customer: null,
+  versions: [],
+  original: null,
+  currentVersion: -1,
   tenantId: authService.resolveTenantId()
 };
 const getters = {
   originalPriceOfMainCategory(state) {
     const mainService = state.vendor.eventCategory.key;
-    if (!state.proposalCostServices[mainService]) return 0;
-    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
+    if (!state.costServices[mainService]) return 0;
+    const sumPrice = state.costServices[mainService].reduce((s, item) => {
       if (item.isComplimentary) return s;
       return s + item.requirementValue * item.price;
     }, 0);
@@ -64,11 +83,11 @@ const getters = {
   totalPriceByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
-      if (!state.proposalCostServices[service]) {
+      if (!state.costServices[service]) {
         prices[service] = 0;
       }
-      if (state.proposalCostServices[service]) {
-        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
+      if (state.costServices[service]) {
+        const sumPrice = state.costServices[service].reduce((s, item) => {
           if (item.isComplimentary) return s;
           return s + item.requirementValue * item.price;
         }, 0);
@@ -81,7 +100,7 @@ const getters = {
 
   finalPriceOfMainCategory(state, getters) {
     const mainService = state.vendor.eventCategory.key;
-    if (!state.proposalCostServices[mainService]) return 0;
+    if (!state.costServices[mainService]) return 0;
     const sumPrice = getters.originalPriceOfMainCategory;
     let tax = state.taxes[mainService] || { price: 0, percentage: 0 };
     let discount = state.discounts[mainService] || { price: 0, percentage: 0 };
@@ -97,11 +116,11 @@ const getters = {
   pricesByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
-      if (!state.proposalCostServices[service]) {
+      if (!state.costServices[service]) {
         prices[service] = 0;
       }
-      if (state.proposalCostServices[service]) {
-        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
+      if (state.costServices[service]) {
+        const sumPrice = state.costServices[service].reduce((s, item) => {
           if (item.isComplimentary) return s;
           return s + item.requirementValue * item.price;
         }, 0);
@@ -114,7 +133,6 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
-    console.log("prices", prices);
     return prices;
   },
   sumOfPrices(state, getters) {
@@ -174,6 +192,22 @@ const getters = {
   }
 };
 const mutations = {
+  selectVersion: (state, index) => {
+     state.currentVersion = index;
+
+     // update proposal data if vendor click version tab
+
+     if (index === -1) {
+        setStateFromData(state, JSON.parse(JSON.stringify(state.original)));
+     }
+
+     if(index > -1) {
+        setStateFromData(state, JSON.parse(JSON.stringify(state.versions[index].data)));
+     }
+  },
+  setVersions: (state, versions) => {
+     state.versions = versions;
+  },
   setVendor: (state, vendor) => {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
@@ -182,18 +216,24 @@ const mutations = {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
     state.eventVision = proposal.eventVision;
-    state.proposalCostServices = proposal.costServices;
-    state.proposalIncludedServices = proposal.includedServices;
-    state.proposalExtraServices = proposal.extraServices;
+    state.costServices = proposal.costServices;
+    state.includedServices = proposal.includedServices;
+    state.extraServices = proposal.extraServices;
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.personalMessage = proposal.personalMessage;
-    state.tax = proposal.tax;
+    state.taxs = proposal.taxs;
+    state.discounts = proposal.discounts;
+    state.bundleDiscount = proposal.bundleDiscount;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
     state.wizardStep = proposal.step
     state.coverImage = proposal.coverImage || []
+    state.versions = proposal.versions || []
     state.bookedServices = []
-    // state.bookedServices = proposal.bookedServices
+
+    delete proposal.versions;
+    Vue.set(state, 'original', proposal);
+
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest;
@@ -211,13 +251,20 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setCostServices: (state, { category, services }) => {
-    Vue.set(state.proposalCostServices, category, services);
+    Vue.set(state.costServices, category, services);
+
+    setStateByVersion(state, {key: 'costServices', value: JSON.parse(JSON.stringify(state.costServices))})
+
   },
   setIncludedServices: (state, { category, services }) => {
-    Vue.set(state.proposalIncludedServices, category, services);
+    Vue.set(state.includedServices, category, services);
+
+    setStateByVersion(state, {key: 'includedServices', value: JSON.parse(JSON.stringify(state.includedServices))})
   },
   setExtraServices: (state, { category, services }) => {
-    Vue.set(state.proposalExtraServices, category, services);
+    Vue.set(state.extraServices, category, services);
+
+    setStateByVersion(state, {key: 'extraServices', value: JSON.parse(JSON.stringify(state.extraServices))})
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -227,33 +274,44 @@ const mutations = {
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
+
+    setStateByVersion(state, {key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts))})
   },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
+
+    setStateByVersion(state, {key: 'taxes', value: state.taxes})
   },
   setAdditionalServices: (state, services) => {
     Vue.set(state.additionalServices, services);
+
+    setStateByVersion(state, {key: 'additionalServices', value: JSON.parse(JSON.stringify(state.additionalServices)) })
   },
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
     state.additionalServices.splice(index, 1);
+    setStateByVersion(state, {key: 'additionalServices', value: JSON.parse(JSON.stringify(state.additionalServices))})
   },
   setBundleDiscount: (state, bundleDiscount) => {
     state.bundleDiscount = bundleDiscount;
+    setStateByVersion(state, {key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount))})
   },
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
+
+    setStateByVersion(state, {key, value});
   },
   setCustomer: (state, customer) => {
     state.customer = customer;
   },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo);
+    setStateByVersion(state, {key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos))})
   },
   initState(state) {
-    Vue.set(state, "proposalCostServices", {});
-    Vue.set(state, "proposalIncludedServices", {});
-    Vue.set(state, "proposalExtraServices", {});
+    Vue.set(state, "costServices", {});
+    Vue.set(state, "includedServices", {});
+    Vue.set(state, "extraServices", {});
     Vue.set(state, "bookedServices", {});
     Vue.set(state, "discounts", {});
     Vue.set(state, "taxes", {});
@@ -273,11 +331,11 @@ const mutations = {
 };
 const actions = {
   addPrice({ commit, state, dispatch }, { category, selectedItem }) {
-    const proposalIncludedServices = state.proposalIncludedServices[category];
-    const includedIndex = proposalIncludedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
-    proposalIncludedServices.splice(includedIndex, 1)
-    commit("setIncludedServices", { category, services: [...proposalIncludedServices] })
-    const costServices = state.proposalCostServices[category];
+    const includedServices = state.includedServices[category];
+    const includedIndex = includedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
+    includedServices.splice(includedIndex, 1)
+    commit("setIncludedServices", { category, services: [...includedServices] })
+    const costServices = state.costServices[category];
     costServices.push(selectedItem);
     commit("setCostServices", { category, services: costServices })
   },
@@ -369,24 +427,24 @@ const actions = {
 
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
-        personalMessage: state.personalMessage,
-        additionalServices: state.additionalServices,
-        inspirationalPhotos: state.inspirationalPhotos,
+        personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
+        additionalServices: state.original ? state.original.additionalServices : state.additionalServices,
+        inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
-        eventVision: state.eventVision,
+        eventVision: state.original ? state.original.eventVision : state.eventVision,
         eventComponentId: state.proposalRequest.componentInstance ? state.proposalRequest.componentInstance.id : null,
         requirementId: state.proposalRequest.plannerRequirement ? state.proposalRequest.plannerRequirement.id : null,
         vendorId: state.vendor.id,
-        costServices: state.proposalCostServices,
-        includedServices: state.proposalIncludedServices,
-        extraServices: state.proposalExtraServices,
-        discounts: state.discounts,
-        taxes: state.taxes,
+        costServices: state.original ? state.original.costServices : state.costServices,
+        includedServices: state.original ? state.original.includedServices : state.includedServices,
+        extraServices: state.original ? state.original.extraServices : state.extraServices,
+        discounts: state.original ? state.original.discounts : state.discounts,
+        taxes: state.original ? state.original.taxes : state.taxes,
         cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
-        bundleDiscount: state.bundleDiscount,
-        attachments: state.attachments,
-        coverImage: state.coverImage,
+        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
+        attachments: state.original ? state.original.attachments : state.attachments,
+        coverImage: state.original ? state.original.coverImage : state.coverImage,
         status,
         step: state.wizardStep,
         progress: state.progress,
@@ -394,7 +452,8 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         bookedServices: state.bookedServices || [],
-        seatingData: state.seatingData,
+        seatingData: state.original ? state.original.seatingData : state.seatingData,
+        versions: state.versions,
       });
       proposal
         .save()
@@ -406,6 +465,32 @@ const actions = {
           reject(e);
         });
     });
+  },
+  saveVersion: ({ commit, state}, data) => {
+    return new Promise(async (resolve, reject) => {
+      const query = new ProposalVersion({...data, proposal: new Proposal({ id: state.id })})
+          .for(new Proposal({ id: state.id }));
+      let res = await query.save();
+      console.log('res', res);
+      let idx = state.versions.findIndex(v => v.id === res.id);
+      if(idx === -1) {
+          commit("setVersions", [...state.versions, res]);
+      } else {
+          Vue.set(state.versions, idx, res);
+          commit("setVersions", state.versions)
+      }
+    })
+  },
+  removeVersion: ({ commit, state}, idx) => {
+    return new Promise(async (resolve, reject) => {
+        let version = await ProposalVersion.find(state.versions[idx].id);
+        await version.delete();
+
+        let versions = state.versions.filter((v, index) => index !== idx);
+
+        commit("setVersions", versions)
+        resolve();
+    })
   },
 };
 

@@ -212,7 +212,6 @@ export default {
   },
   watch:{
     defaultData(newVal){
-        console.log('defaultData.watch', newVal);
         this.selectedServices = [...this.defaultData];
     }
   }
