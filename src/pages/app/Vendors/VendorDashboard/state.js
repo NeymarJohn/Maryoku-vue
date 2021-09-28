@@ -5,6 +5,7 @@ import Proposal from "@/models/Proposal";
 import Customer from "@/models/Customer";
 import Vendor from "@/models/Vendors";
 import UserEvent from "@/models/UserEvent";
+import ProposalVersion from "@/models/ProposalVersion";
 import moment from "moment";
 
 const state = {
@@ -98,6 +99,14 @@ const actions = {
 
     });
   },
+  saveVersion({ commit, state}, payload) {
+    return new Promise(async (resolve, reject) => {
+      const query = new ProposalVersion({...payload.version, proposal: new Proposal({ id: payload.proposal.id })})
+          .for(new Proposal({ id: payload.proposal.id }));
+      let res = await query.save();
+      resolve(res);
+    })
+  }
 };
 
 const mutations = {

@@ -304,6 +304,21 @@ export default {
       pagination: PROPOSAL_PAGE_PAGINATION,
       sortFields: { sort: "", order: "" },
       renderRender: true,
+      versionFields: [
+        'eventData',
+        'costServices',
+        'includedServices',
+        'extraServices',
+        'discounts',
+        'taxes',
+        'inspirationalPhotos',
+        'additionalServices',
+        'bundleDiscount',
+        'attachments',
+        'personalMessage',
+        'coverImage',
+        'seatingData',
+      ],
     };
   },
   async mounted() {
@@ -433,6 +448,12 @@ export default {
           new Date(this.selectedProposal.expiredDate).getTime() +
           (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
+        if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
+          let version = await this.saveVersion(this.selectedProposal);
+          this.selectedProposal.versions.push(version);
+          this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
+        }
+
         let url = this.selectedProposal.nonMaryoku
           ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
           : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
@@ -450,12 +471,7 @@ export default {
             if (status === this.negotiationRequestStatus.approve)
               this.selectedProposal.expiredDate = new Date(expiredTime);
 
-            if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
-                let proposal = await Proposal.find(this.selectedProposal.id);
-                this.$store.commit("vendorDashboard/setProposal", proposal);
-            } else {
-                this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
-            }
+            this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
             if(status === this.negotiationRequestStatus.cancel_proposal) {
                 let proposals = this.proposals.filter(it => it.id !== this.selectedProposal.id);
@@ -482,6 +498,19 @@ export default {
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
 
       }
+    },
+    async saveVersion(proposal){
+        let data = {};
+        this.versionFields.map(key => {
+            data[key] = proposal[key];
+        });
+
+        let versionData = {
+            name: `Ver${proposal.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
+            data,
+        }
+        let version = await this.$store.dispatch("vendorDashboard/saveVersion", {version: versionData, proposal});
+        return version;
     },
     createNewProposal() {
       let routeData = this.$router.resolve({
