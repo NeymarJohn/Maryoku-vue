@@ -25,7 +25,7 @@
           <br />
           Propose <br />Your Bid
         </li>
-        <li v-if="event.components.length" :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
+        <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
@@ -63,6 +63,8 @@ export default {
   created() {},
   mounted() {
     this.lookingFor = this.proposalRequest.plannerRequirement.types[this.vendor.eventCategory.key];
+
+    console.log("this.lookingFor", this.lookingFor);
   },
   computed: {
     step() {
@@ -70,7 +72,17 @@ export default {
     },
     selectedServices() {
       let str = "";
-
+      // if (this.lookingFor.options) {
+      //   const services = [];
+      //   this.lookingFor.options.forEach((item) => {
+      //     if (item.selected) {
+      //       return services.push(item.name);
+      //     }
+      //   });
+      //   str = services.join(", ");
+      // }
+      // return "";
+      console.log(this.lookingFor);
       if (!this.lookingFor) return '';
       return this.lookingFor.join(", ");
     },
@@ -105,9 +117,6 @@ export default {
       });
       return serviceTimeString;
     },
-    event() {
-      return this.$store.state.vendorProposal.proposalRequest.eventData;
-    }
   },
   watch: {},
 };

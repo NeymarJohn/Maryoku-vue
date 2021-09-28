@@ -60,15 +60,12 @@
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
               <li>
-                <template v-if="getAllocatedBudget(vendor.eventCategory.key)">
-                  <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                  <span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
-                </template>
-                <template v-else-if="getAverageBudget(vendor.eventCategory.key)">
-                  <span>Average Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                  <span> ${{ getAverageBudget(vendor.eventCategory.key) | withComma }}</span>
-                </template>
-
+                <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
+                <span>
+                  ${{
+                    getAllocatedBudget(vendor.eventCategory.key) | withComma
+                  }}</span
+                >
               </li>
                 <li
                     v-if="getAllocatedBudget(vendor.eventCategory.key) && pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0 ||
@@ -148,14 +145,8 @@
                 <span>${{ pricesByCategory[a] | withComma }}</span>
               </li>
               <li>
-                <template v-if="getAllocatedBudget(a)">
-                    <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-                    <span> ${{ getAllocatedBudget(a) | withComma }}</span>
-                </template>
-                <template v-else-if="getAverageBudget(a)">
-                    <span>Average Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-                    <span> ${{ getAverageBudget(a) | withComma }}</span>
-                </template>
+                <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
+                <span> ${{ getAllocatedBudget(a) | withComma }}</span>
               </li>
               <li
                 v-if="getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0 || getAverageBudget(a) && pricesByCategory[a] - getAverageBudget(a) > 0"
@@ -408,10 +399,9 @@ export default {
       return allocatedBudgetItem ? allocatedBudgetItem.allocatedBudget : 0;
     },
     getAverageBudget(key){
-          let service = this.getServiceCategory(key);
+          let service = this.getServiceCategory(this.vendor.eventCategory.key);
 
           let budget = this.proposalRequest.eventData.numberOfParticipants * service.basicCostPerGuest;
-
           if (service.minCost && budget < service.minCost) {
               return service.minCost;
           } else if (service.maxCost && budget > service.maxCost) {

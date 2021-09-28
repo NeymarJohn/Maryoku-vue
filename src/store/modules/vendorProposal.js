@@ -9,7 +9,8 @@ import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
-import ProposalVersion from "../../models/ProposalVersion";
+import ProposalVersion from "@/models/ProposalVersion";
+import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
 const setStateFromData = (state, data) => {
     Object.keys(data).map(key => {
@@ -24,7 +25,6 @@ const setStateByVersion = (state, {key, value}) => {
             Vue.set(state.versions[state.currentVersion].data, key, value);
         }
     }
-
 }
 
 const state = {
@@ -67,6 +67,7 @@ const state = {
   bookedServices: [],
   customer: null,
   versions: [],
+  requirements: [],
   original: null,
   currentVersion: -1,
   tenantId: authService.resolveTenantId()
@@ -404,6 +405,22 @@ const actions = {
       });
     });
   },
+  getRequirements({ commit, state }, eventId) {
+    return new Promise((resolve, reject) => {
+        new ProposalRequestRequirement()
+            .for(new CalendarEvent({ id: eventId }))
+            .get()
+            .then((res) => {
+                if(res && res.length) {
+                    commit("setValue", { key: 'requirements', value:res });
+                }
+                resolve(res)
+            })
+            .catch(err => {
+                reject(err)
+            });
+    });
+  },
   getTimelineDates({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
       new EventTimelineDate()
@@ -482,14 +499,17 @@ const actions = {
       }
     })
   },
-  saveVersionName: ({commit, state}, version) => {
+  removeVersion: ({ commit, state}, idx) => {
     return new Promise(async (resolve, reject) => {
-        let versions = state.versions;
-        let idx = state.versions.findIndex(v => v.id === version);
-        Vue.set(versions, idx, version);
+        let version = await ProposalVersion.find(state.versions[idx].id);
+        await version.delete();
+
+        let versions = state.versions.filter((v, index) => index !== idx);
+
         commit("setVersions", versions)
+        resolve();
     })
-  }
+  },
 };
 
 export default {
