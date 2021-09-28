@@ -40,7 +40,7 @@ export default {
   data() {
     return {
         versionFields: [
-            'event',
+            'eventData',
             'costServices',
             'includedServices',
             'extraServices',
