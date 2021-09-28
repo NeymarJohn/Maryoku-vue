@@ -10,7 +10,6 @@ import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
 import ProposalVersion from "@/models/ProposalVersion";
-import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
 const setStateFromData = (state, data) => {
     Object.keys(data).map(key => {
@@ -67,7 +66,6 @@ const state = {
   bookedServices: [],
   customer: null,
   versions: [],
-  requirements: [],
   original: null,
   currentVersion: -1,
   tenantId: authService.resolveTenantId()
@@ -403,22 +401,6 @@ const actions = {
         }
         resolve(resp);
       });
-    });
-  },
-  getRequirements({ commit, state }, eventId) {
-    return new Promise((resolve, reject) => {
-        new ProposalRequestRequirement()
-            .for(new CalendarEvent({ id: eventId }))
-            .get()
-            .then((res) => {
-                if(res && res.length) {
-                    commit("setValue", { key: 'requirements', value:res });
-                }
-                resolve(res)
-            })
-            .catch(err => {
-                reject(err)
-            });
     });
   },
   getTimelineDates({ commit, state }, eventId) {

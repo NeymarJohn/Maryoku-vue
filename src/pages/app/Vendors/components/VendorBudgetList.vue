@@ -7,7 +7,7 @@
     <div class="total">
       <strong>Total Event Budget:</strong>
       <span v-if="proposalRequest && eventBudget">${{ eventBudget | withComma }}</span>
-      <span v-else-if="proposalRequest && averageBudget">${{ averageBudget | withComma }}</span>
+      <span v-else>Unknown</span>
     </div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
@@ -25,7 +25,8 @@
       </div>
       <div class="total">
         <span>Total</span>
-        <span>${{ totalBudget | withComma }}</span>
+        <span v-if="proposalRequest && eventBudget">${{ totalBudget | withComma }}</span>
+        <span v-else>${{ averageBudget | withComma }}</span>
       </div>
     </div>
   </div>

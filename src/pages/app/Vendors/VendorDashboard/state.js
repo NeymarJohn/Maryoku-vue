@@ -6,7 +6,6 @@ import Customer from "@/models/Customer";
 import Vendor from "@/models/Vendors";
 import UserEvent from "@/models/UserEvent";
 import ProposalVersion from "@/models/ProposalVersion";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import moment from "moment";
 
 const state = {
@@ -68,13 +67,6 @@ const actions = {
         });
     })
   },
-  removeProposal({ commit, state}, id) {
-    return new Promise(async (resolve, reject) => {
-        const proposal = await Proposal.find(id);
-        await proposal.delete();
-        resolve();
-    })
-  },
   updateProposalRequest({ commit, state }, pr) {
     return new Promise((resolve, reject) => {
         new ProposalRequest(pr).save().then(result => {
@@ -85,11 +77,11 @@ const actions = {
         })
     })
   },
-  updateProposal({ commit, state }, payload) {
+  updateProposal({ commit, state }, vendorId) {
     return new Promise((resolve, reject) => {
-        new Proposal({...payload.data}).for(new Vendors({ id: payload.vendorId })).get().then(res => {
-            console.log('updateProposal', res);
-            resolve(res);
+        new ProposalRequest().for(new Vendors({ id: vendorId })).get().then(proposalRequests => {
+            commit("setProposalRequests", proposalRequests)
+            resolve(proposalRequests);
         }).catch(err => {
             reject(err);
         })
@@ -113,14 +105,6 @@ const actions = {
           .for(new Proposal({ id: payload.proposal.id }));
       let res = await query.save();
       resolve(res);
-    })
-  },
-  saveNegotiation({ commit, state }, payload) {
-    return new Promise(async (resolve, reject) => {
-        let query = new ProposalNegotiationRequest(payload.data);
-        let res = await query.for(new Proposal({ id: payload.proposal.id }))
-            .save();
-        resolve(res);
     })
   }
 };

@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Vendors from "@/models/Vendors";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
@@ -141,7 +141,6 @@ export default {
       proposalRequest: null,
       vendorCategory: null,
       event: null,
-      requirements: [],
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
@@ -149,7 +148,7 @@ export default {
     };
   },
   async created() {
-
+    console.log('proposal.created', this.$store.state.auth.user);
     if(this.$store.state.auth.user){
       this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
     } else {
@@ -194,22 +193,15 @@ export default {
         value: this.vendor.images,
       });
     }
-
-    if (this.$route.query.version) {
-      let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version.id);
-      this.$store.commit('vendorProposal/selectVersion', index);
-    }
-    // if (!this.event.components.length) {
-    //   this.requirements = await this.getRequirements(this.event.id)
-    // }
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "setWizardStep"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal", "setWizardStep"]),
     gotoNext() {
+      console.log("proposal", this.$store.state.vendorProposal);
       this.step = this.step + 1;
 
       // skip additional page if event doesn't have components
-      if ( this.step === 2 && !this.event.components.length ) this.step ++;
+      if (this.step === 2 && !this.event.components.length) this.step ++;
       this.scrollToTop();
     },
     getVendorCategory() {
