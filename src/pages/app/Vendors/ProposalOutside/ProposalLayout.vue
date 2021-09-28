@@ -3,7 +3,6 @@
     <loader :active="isLoading"></loader>
 
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
-    <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
     <div class="main-cont">
       <router-view></router-view>
     </div>
@@ -103,14 +102,13 @@ import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
-import ProposalVersionsBar from "./ProposalVersionsBar";
+import UserEvent from "@/models/UserEvent";
 import Vendor from "@/models/Vendors";
 import { Loader } from "@/components";
 
 export default {
   components: {
     VendorBidTimeCounter,
-    ProposalVersionsBar,
     Modal,
     ProposalHeader,
     VueElementLoading,
@@ -145,10 +143,11 @@ export default {
   },
   async created() {
     console.log("non-maryoku.proposal.created");
-    if (this.$store.state.auth.user) {
-      await this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token);
+    if (this.$store.state.auth.status.loggedIn) {
+      console.log("checkToken");
+      await this.$store.dispatch("auth/checkToken");
     } else {
-      this.$router.push({ path: `/vendor/signin`});
+      this.$router.push({ path: `/signin` });
     }
 
     this.$root.$on("send-event-data", (evtData) => {

@@ -9,7 +9,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
-import ProposalVersion from "@/models/ProposalVersion";
+import ProposalVersion from "../../models/ProposalVersion";
 
 const setStateFromData = (state, data) => {
     Object.keys(data).map(key => {
@@ -24,6 +24,7 @@ const setStateByVersion = (state, {key, value}) => {
             Vue.set(state.versions[state.currentVersion].data, key, value);
         }
     }
+
 }
 
 const state = {
@@ -481,17 +482,14 @@ const actions = {
       }
     })
   },
-  removeVersion: ({ commit, state}, idx) => {
+  saveVersionName: ({commit, state}, version) => {
     return new Promise(async (resolve, reject) => {
-        let version = await ProposalVersion.find(state.versions[idx].id);
-        await version.delete();
-
-        let versions = state.versions.filter((v, index) => index !== idx);
-
+        let versions = state.versions;
+        let idx = state.versions.findIndex(v => v.id === version);
+        Vue.set(versions, idx, version);
         commit("setVersions", versions)
-        resolve();
     })
-  },
+  }
 };
 
 export default {

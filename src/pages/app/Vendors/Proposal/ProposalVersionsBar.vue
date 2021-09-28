@@ -7,21 +7,13 @@
         Original
     </div>
     <div v-for="(version, idx) in versions"
-         class="version d-flex align-center cursor-pointer text-center py-20 font-size-16 text-center w-min-250 color-black-middle border-right"
+         class="d-flex align-center cursor-pointer text-center py-20 font-size-16 text-center w-min-250 color-black-middle border-right"
          :class="{'selected': selected === idx}"
          @click="select(idx)">
         <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
-        <template v-if="idx !== editIdx">
-            {{version.name}}
-            <md-button class="md-simple md-icon-button" @click="editName(idx)">
-                <img :src="`${$iconURL}common/edit-dark.svg`" width="20px">
-            </md-button>
-        </template>
-        <template v-else>
-            <input class="name" v-model="versionName" @input="changeName" v-click-outside="closeEditing"/>
-        </template>
-        <md-button class="md-simple md-icon-button remove" @click="remove(idx)">
-            <img :src="`${$iconURL}common/trash-dark.svg`" width="20px">
+        {{version.name}}
+        <md-button class="md-simple md-icon-button ml-10">
+            <img :src="`${$iconURL}common/edit-dark.svg`" width="20px">
         </md-button>
     </div>
     <div class="d-flex font-size-16 py-20 pl-30 w-min-180 cursor-pointer" @click="saveVersion" style="color: #641856;">
@@ -31,10 +23,10 @@
 </template>
 <script>
 import moment from 'moment';
-import ClickOutside from "vue-click-outside";
+import Button from "../../../../components/Button/Button";
 export default {
   name: "proposal-versions-bar",
-  components: { ClickOutside },
+  components: {Button},
   props: {
   },
   data() {
@@ -51,14 +43,12 @@ export default {
             'attachments',
             'personalMessage',
             'coverImage',
-        ],
-        editIdx: null,
-        versionName: null,
+        ]
     };
   },
   methods: {
     select(index){
-      if (this.selected === index) return;
+      console.log(this.versions);
       this.$store.commit('vendorProposal/selectVersion', index);
     },
     saveVersion(){
@@ -72,21 +62,6 @@ export default {
           data,
       }
       this.$store.dispatch('vendorProposal/saveVersion', version);
-    },
-    editName(idx) {
-      this.editIdx = idx;
-      this.versionName = this.versions[this.editIdx].name;
-    },
-    changeName(e){
-      let versions = this.versions;
-      this.$set(versions[this.editIdx], 'name', this.versionName);
-      this.$store.commit('vendorProposal/setVersions', versions);
-    },
-    closeEditing(){
-      this.editIdx = null;
-    },
-    remove(idx) {
-      this.$store.dispatch('vendorProposal/removeVersion', idx);
     }
   },
   computed: {
@@ -109,27 +84,4 @@ export default {
 .selected{
     background-color: #ffe79f;
 }
-input{
-    background: transparent;
-    max-width: 180px;
-    border: none;
-    padding: 0 15px;
-    min-height: 25px;
-}
-.version {
-    position: relative;
-
-    .remove{
-        position: absolute;
-        right: 0;
-        opacity: 0;
-    }
-
-    &:hover{
-        .remove {
-            opacity: 1;
-        }
-    }
-}
-
 </style>

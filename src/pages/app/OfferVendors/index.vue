@@ -294,7 +294,6 @@ export default {
 
         },
         async save(){
-            console.log('save', this.event, this.requirements);
             if(!this.event.id){
                 await this.createEvent();
             }
@@ -310,6 +309,9 @@ export default {
                 new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
             );
 
+            // removed cached data in localstorage
+            localStorage.removeItem('requirements');
+            localStorage.removeItem('proposal');
         },
         goToAccountPage(){
           this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
@@ -340,12 +342,16 @@ export default {
     },
     async created() {
         let redirect = this.$route.query.redirect
-        console.log('offerVendors.created', redirect);
+
         if (this.loggedInUser) {
             await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
 
             this.allRequirements = JSON.parse(localStorage.getItem('all_requirements'));
-            this.requirements = JSON.parse(localStorage.getItem('requirements'));
+            if (!this.allRequirements || !this.allRequirements.length) {
+                await this.getAllRequirements()
+            }
+
+            this.requirements = JSON.parse(localStorage.getItem('requirements')) || {};
 
             await this.getProposal();
             if (redirect) {
@@ -363,6 +369,7 @@ export default {
             await this.getProposal();
             this.isLoading = false;
         }
+        console.log('offerVendors.created', this.requirements);
     }
 
 }

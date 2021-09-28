@@ -148,11 +148,8 @@ export default {
     };
   },
   async created() {
-    console.log('proposal.created', this.$store.state.auth.user);
     if(this.$store.state.auth.user){
       this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
-    } else {
-        this.$router.push({ path: `/vendor/signin`});
     }
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
@@ -267,12 +264,9 @@ export default {
           Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,
               buttonsStyling: false,
-              showCancelButton: true,
               type: "success",
               confirmButtonClass: "md-button md-vendor",
-              confirmButtonText: "Back to Dashboard continue",
-              cancelButtonClass: "md-button md-purple md-simple",
-              cancelButtonText: "Continue",
+              confirmButtonText: "Back to Dashboard",
           }).then(res => {
               if(res.isConfirmed) {
                   this.$router.push({path: "/vendor/dashboard"});

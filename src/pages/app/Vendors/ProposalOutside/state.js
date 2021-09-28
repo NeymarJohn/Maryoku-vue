@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
@@ -7,25 +8,8 @@ import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
 import UserEvent from "@/models/UserEvent";
-import ProposalVersion from "@/models/ProposalVersion";
-
-const setStateFromData = (state, data) => {
-    Object.keys(data).map(key => {
-        Vue.set(state, key, JSON.parse(JSON.stringify(data[key])));
-    })
-}
-const setStateByVersion = (state, {key, value}) => {
-    if (state.id) {
-        if(state.currentVersion === -1) {
-            Vue.set(state.original, key, value);
-        } else {
-            Vue.set(state.versions[state.currentVersion].data, key, value);
-        }
-    }
-}
 
 const state = {
-  id: null,
   includedServices: {},
   costServices: {},
   extraServices: {},
@@ -42,9 +26,6 @@ const state = {
   coverImage: [],
   proposalServices: {},
   inspirationalPhotos: new Array(15),
-  versions: [],
-  original: null,
-  currentVersion: -1,
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -168,22 +149,6 @@ const getters = {
   }
 };
 const mutations = {
-  selectVersion: (state, index) => {
-    state.currentVersion = index;
-
-    // update proposal data if vendor click version tab
-
-    if (index === -1) {
-        setStateFromData(state, JSON.parse(JSON.stringify(state.original)));
-    }
-
-    if(index > -1) {
-        setStateFromData(state, JSON.parse(JSON.stringify(state.versions[index].data)));
-    }
-  },
-  setVersions: (state, versions) => {
-        state.versions = versions;
-  },
   setVendor: (state, vendor) => {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
@@ -205,11 +170,7 @@ const mutations = {
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.seatingData = proposal.seatingData;
     state.initialized = true;
-    state.versions = proposal.versions || []
     // state.wizardStep = proposal.step
-
-    delete proposal.versions;
-    Vue.set(state, 'original', proposal);
   },
   setWizardStep: (state, step) => {
     state.wizardStep = step;
@@ -226,17 +187,12 @@ const mutations = {
       Vue.set(state, "additionalServices", [...state.additionalServices, category]);
     }
     Vue.set(state.costServices, category, services);
-
-    setStateByVersion(state, {key: 'costServices', value: JSON.parse(JSON.stringify(state.costServices))})
   },
   setIncludedServices: (state, { category, services }) => {
     Vue.set(state.includedServices, category, services);
-
-    setStateByVersion(state, {key: 'includedServices', value: JSON.parse(JSON.stringify(state.includedServices))})
   },
   setExtraServices: (state, { category, services }) => {
     Vue.set(state.extraServices, category, services);
-    setStateByVersion(state, {key: 'extraServices', value: JSON.parse(JSON.stringify(state.extraServices))})
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -246,15 +202,12 @@ const mutations = {
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
-    setStateByVersion(state, {key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts))})
   },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
-    setStateByVersion(state, {key: 'taxes', value: state.taxes})
   },
   setAdditionalServices: (state, services) => {
     Vue.set(state.additionalServices, services);
-    setStateByVersion(state, {key: 'taxes', value: state.taxes})
   },
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
@@ -262,19 +215,15 @@ const mutations = {
   },
   setBundleDiscount: (state, bundleDiscount) => {
     state.bundleDiscount = bundleDiscount;
-    setStateByVersion(state, {key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount))})
   },
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
-
-    setStateByVersion(state, {key, value});
   },
   setEventProperty: (state, { key, value }) => {
     Vue.set(state.event, key, value)
   },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo);
-    setStateByVersion(state, {key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos))})
   },
   initState(state) {
     Vue.set(state, "costServices", {});
@@ -366,22 +315,22 @@ const actions = {
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
         eventData: state.event,
-        personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
-        additionalServices: state.original ? state.original.additionalServices : state.additionalServices,
+        personalMessage: state.personalMessage,
+        additionalServices: availableAdditionalSerivces,
         images: state.images,
-        coverImage: state.original ? state.original.coverImage : state.coverImage,
-        eventVision: state.original ? state.original.eventVision : state.eventVision,
+        coverImage: state.coverImage,
+        eventVision: state.eventVision,
         vendorId: state.vendor.id,
-        costServices: state.original ? state.original.costServices : state.costServices,
-        includedServices: state.original ? state.original.includedServices : state.includedServices,
-        inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
-        extraServices: state.original ? state.original.extraServices : state.extraServices,
-        discounts: state.original ? state.original.discounts : state.discounts,
-          taxes: state.original ? state.original.taxes : state.taxes,
+        costServices: state.costServices,
+        includedServices: state.includedServices,
+        inspirationalPhotos: state.inspirationalPhotos,
+        extraServices: state.extraServices,
+        discounts: state.discounts,
+        taxes: state.taxes,
         cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
-        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
-        attachments: state.original ? state.original.attachments : state.attachments,
+        bundleDiscount: state.bundleDiscount,
+        attachments: state.attachments,
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
@@ -390,8 +339,7 @@ const actions = {
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
         bookedServices: Object.keys(state.costServices), // Set all secondary services as booked services
-        seatingData: state.original ? state.original.seatingData : state.seatingData,
-        versions: state.versions,
+        seatingData: state.seatingData
       });
       proposal
         .save()
@@ -419,32 +367,6 @@ const actions = {
         reject(e)
       }
     });
-  },
-  saveVersion({ commit, state}, data) {
-    return new Promise(async (resolve, reject) => {
-        const query = new ProposalVersion({...data, proposal: new Proposal({ id: state.id })})
-            .for(new Proposal({ id: state.id }));
-        let res = await query.save();
-        console.log('res', res);
-        let idx = state.versions.findIndex(v => v.id === res.id);
-        if(idx === -1) {
-            commit("setVersions", [...state.versions, res]);
-        } else {
-            Vue.set(state.versions, idx, res);
-            commit("setVersions", state.versions)
-        }
-    })
-  },
-  removeVersion: ({ commit, state}, idx) => {
-    return new Promise(async (resolve, reject) => {
-        let version = await ProposalVersion.find(state.versions[idx].id);
-        await version.delete();
-
-        let versions = state.versions.filter((v, index) => index !== idx);
-
-        commit("setVersions", versions)
-        resolve();
-    })
   },
 };
 
