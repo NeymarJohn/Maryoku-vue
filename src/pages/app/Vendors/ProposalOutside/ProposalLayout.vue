@@ -1,8 +1,8 @@
 <template>
   <div class="for-proposals-layout-wrapper">
     <loader :active="isLoading"></loader>
+
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
-    <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
     <div class="main-cont">
       <router-view></router-view>
     </div>
@@ -102,14 +102,13 @@ import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
-import ProposalVersionsBar from "./ProposalVersionsBar";
+import UserEvent from "@/models/UserEvent";
 import Vendor from "@/models/Vendors";
 import { Loader } from "@/components";
 
 export default {
   components: {
     VendorBidTimeCounter,
-    ProposalVersionsBar,
     Modal,
     ProposalHeader,
     VueElementLoading,
@@ -144,16 +143,17 @@ export default {
   },
   async created() {
     console.log("non-maryoku.proposal.created");
-    if (this.$store.state.auth.user) {
-      await this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token);
+    if (this.$store.state.auth.status.loggedIn) {
+      console.log("checkToken");
+      await this.$store.dispatch("auth/checkToken");
     } else {
-      this.$router.push({ path: `/vendor/signin`});
+      this.$router.push({ path: `/signin` });
     }
 
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
-    this.isLoading = true;
+    this.loading = true;
     if (this.$route.params.type && this.$route.params.type == "duplicate") {
       this.option = "duplicate";
     }
@@ -170,11 +170,7 @@ export default {
         value: this.vendor.images,
       });
     }
-    if (this.$route.query.version) {
-       let index = this.$store.state.proposalForNonMaryoku.versions.findIndex(v => v.id === this.$route.query.version);
-       this.$store.commit('proposalForNonMaryoku/selectVersion', index);
-    }
-    this.isLoading = false;
+    this.loading = false;
   },
 
   beforeCreate() {
@@ -311,7 +307,7 @@ export default {
     },
     submitProposal() {
       this.showSendProposalModal = false;
-      // this.uploadProposal("submit");
+      this.uploadProposal("submit");
       const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
       this.$http
         .post(
@@ -339,7 +335,7 @@ export default {
     },
 
     event() {
-      return this.$store.state.proposalForNonMaryoku.eventData;
+      return this.$store.state.proposalForNonMaryoku.event;
     },
 
     step: {
