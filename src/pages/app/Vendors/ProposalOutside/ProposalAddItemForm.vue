@@ -329,7 +329,7 @@ export default {
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
               const profileService = this.profileServices[this.camelize(capitalized)];
               const requestItemByPlanner = null;
-              console.log("requestItemByPlanner", requestItemByPlanner);
+
               if (item.available) {
                 item.available.forEach((availableItem) => {
                   const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);

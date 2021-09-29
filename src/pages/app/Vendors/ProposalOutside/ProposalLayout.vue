@@ -1,7 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
     <loader :active="isLoading"></loader>
-
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
     <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
     <div class="main-cont">
@@ -154,7 +153,7 @@ export default {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
-    this.loading = true;
+    this.isLoading = true;
     if (this.$route.params.type && this.$route.params.type == "duplicate") {
       this.option = "duplicate";
     }
@@ -171,7 +170,11 @@ export default {
         value: this.vendor.images,
       });
     }
-    this.loading = false;
+    if (this.$route.query.version) {
+       let index = this.$store.state.proposalForNonMaryoku.versions.findIndex(v => v.id === this.$route.query.version);
+       this.$store.commit('proposalForNonMaryoku/selectVersion', index);
+    }
+    this.isLoading = false;
   },
 
   beforeCreate() {
@@ -308,7 +311,7 @@ export default {
     },
     submitProposal() {
       this.showSendProposalModal = false;
-      this.uploadProposal("submit");
+      // this.uploadProposal("submit");
       const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
       this.$http
         .post(
@@ -336,7 +339,7 @@ export default {
     },
 
     event() {
-      return this.$store.state.proposalForNonMaryoku.event;
+      return this.$store.state.proposalForNonMaryoku.eventData;
     },
 
     step: {

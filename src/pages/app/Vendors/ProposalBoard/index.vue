@@ -230,7 +230,6 @@
       v-if="showShareProposalModal"
       :link="proposalLink"
       @close="showShareProposalModal = false"
-      @submit="shareProposal"
     ></ShareProposal>
   </div>
 </template>
@@ -382,20 +381,11 @@ export default {
       if (action === this.proposalStatus.show) {
         this.showProposalDetail = true;
       } else if (action === this.proposalStatus.edit) {
-        let routeData = this.$router.resolve({
-          name: this.selectedProposal.nonMaryoku ? "outsideProposalEdit" : "proposalEdit",
-          params: {
-            vendorId: this.selectedProposal.vendor.id,
-            id: this.selectedProposal.nonMaryoku ? this.selectedProposal.id : this.selectedProposal.proposalRequest.id,
-            type: "edit",
-          },
-        });
-        this.openNewTab(routeData.href);
+        this.editProposal();
       } else if (action === this.proposalStatus.delete) {
         this.loading = true;
-        const proposal = await Proposal.find(id);
-        await proposal.delete();
 
+        await this.$store.dispatch('vendorDashboard/removeProposal', id);
         await this.getProposal();
 
         this.loading = false;
@@ -439,58 +429,70 @@ export default {
         this.showRequestNegotiationModal = false;
         this.showProposalDetail = true;
 
-      } else if ( status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline||
-        status === this.negotiationRequestStatus.acknowledge || status === this.negotiationRequestStatus.cancel_proposal ||
-        status === this.negotiationRequestStatus.update_proposal
-      ) {
-
+      } else if ( status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline ) {
         let expiredTime =
           new Date(this.selectedProposal.expiredDate).getTime() +
           (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
-        if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
-          let version = await this.saveVersion(this.selectedProposal);
-          this.selectedProposal.versions.push(version);
-          this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
-        }
-
-        let url = this.selectedProposal.nonMaryoku
+          let url = this.selectedProposal.nonMaryoku
           ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
           : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
-        new ProposalNegotiationRequest({
-          id: this.selectedProposal.negotiations[0].id,
-          expiredTime,
-          status,
-          url,
-        })
-          .for(new Proposal({ id: this.selectedProposal.id }))
-          .save()
-          .then(async (res) => {
-            this.selectedProposal.negotiations[0] = res;
 
-            if (status === this.negotiationRequestStatus.approve)
+          let negotiation = this.$store.dispatch('vendorDashboard/saveNegotiation', {
+              data: {
+                  id: this.selectedProposal.negotiations[0].id,
+                  expiredTime,
+                  status,
+                  url,
+              },
+              proposal: this.selectedProposal
+          })
+          this.selectedProposal.negotiations[0] = negotiation;
+
+          if (status === this.negotiationRequestStatus.approve)
               this.selectedProposal.expiredDate = new Date(expiredTime);
 
-            this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
+          this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
-            if(status === this.negotiationRequestStatus.cancel_proposal) {
-                let proposals = this.proposals.filter(it => it.id !== this.selectedProposal.id);
-                this.$store.commit("vendorDashboard/setProposals", proposals);
-            }
-
-            if (!this.selectedProposal.nonMaryoku) {
+          if (!this.selectedProposal.nonMaryoku) {
               this.selectedProposalRequest.proposal = this.selectedProposal;
               this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
-            }
+          }
 
-            this.negotiationProcessed = status;
-            if(status === this.negotiationRequestStatus.cancel_proposal || status === this.negotiationRequestStatus.update_proposal ||
-            status === this.negotiationRequestStatus.acknowledge) {
-                this.showRequestNegotiationModal = false;
-                this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
-            }
+          this.negotiationProcessed = status;
 
-          });
+      } else if( status === this.negotiationRequestStatus.acknowledge || status === this.negotiationRequestStatus.cancel_proposal ||
+          status === this.negotiationRequestStatus.update_proposal ) {
+          let version = {};
+          if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
+              version = await this.saveVersion(this.selectedProposal);
+              this.selectedProposal.versions.push(version);
+          }
+          console.log('proposal', this.selectedProposal);
+          let negotiation = await this.$store.dispatch('vendorDashboard/saveNegotiation', {
+              data: {
+                  id: this.selectedProposal.negotiations[0].id,
+                  status,
+                  loginUrl: `${location.protocol}//${location.host}/#/signin`
+              },
+              proposal: this.selectedProposal
+          })
+
+          this.selectedProposal.negotiations[0] = negotiation;
+          this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
+
+          if(status === this.negotiationRequestStatus.cancel_proposal) {
+              let proposals = this.proposals.filter(it => it.id !== this.selectedProposal.id);
+              this.$store.commit("vendorDashboard/setProposals", proposals);
+          }
+
+          if (status === this.negotiationRequestStatus.update_proposal ) {
+              let query = {version : version.id};
+              this.editProposal(null, query);
+          }
+
+          this.showRequestNegotiationModal = false;
+          this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
 
       } else if (status === this.negotiationRequestStatus.done) {
 
@@ -502,7 +504,11 @@ export default {
     async saveVersion(proposal){
         let data = {};
         this.versionFields.map(key => {
-            data[key] = proposal[key];
+            if (key === 'eventData') {
+              data.eventData = {...this.selectedProposal.eventData, ...this.selectedProposal.negotiations[0].event};
+            } else {
+                data[key] = proposal[key];
+            }
         });
 
         let versionData = {
@@ -511,6 +517,21 @@ export default {
         }
         let version = await this.$store.dispatch("vendorDashboard/saveVersion", {version: versionData, proposal});
         return version;
+    },
+    editProposal(params = null, query = null){
+        let routeData = this.$router.resolve({
+            name: this.selectedProposal.nonMaryoku ? "outsideProposalEdit" : "proposalEdit",
+            params: params ? params : {
+                vendorId: this.selectedProposal.vendor.id,
+                id: this.selectedProposal.nonMaryoku ? this.selectedProposal.id : this.selectedProposal.proposalRequest.id,
+                type: "edit",
+            },
+            query: query ? query : null,
+        });
+        this.openNewTab(routeData.href);
+    },
+    removeProposal(id) {
+
     },
     createNewProposal() {
       let routeData = this.$router.resolve({
@@ -558,16 +579,6 @@ export default {
 
       return "";
     },
-    shareProposal() {
-      this.showShareProposalModal = false;
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
-          { type: "created" },
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {});
-    },
     async init() {
       await this.getProposal();
       this.loading = false;
@@ -613,6 +624,8 @@ export default {
         endTime: moment(this.selectedProposal.negotiations[0].event.endTime * 1000).format('hh:mm a'),
         originalNumberOfParticipants: this.selectedProposal.eventData.numberOfParticipants,
         numberOfParticipants: this.selectedProposal.negotiations[0].event.numberOfParticipants,
+        originalLocation: this.selectedProposal.eventData.location,
+        location: this.selectedProposal.negotiations[0].event.location,
       }
     },
     expiredTime() {

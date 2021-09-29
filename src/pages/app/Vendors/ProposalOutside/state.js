@@ -10,18 +10,18 @@ import UserEvent from "@/models/UserEvent";
 import ProposalVersion from "@/models/ProposalVersion";
 
 const setStateFromData = (state, data) => {
-  Object.keys(data).map(key => {
-    Vue.set(state, key, JSON.parse(JSON.stringify(data[key])));
-  })
+    Object.keys(data).map(key => {
+        Vue.set(state, key, JSON.parse(JSON.stringify(data[key])));
+    })
 }
-const setStateByVersion = (state, { key, value }) => {
-  if (state.id) {
-    if (state.currentVersion === -1) {
-      Vue.set(state.original, key, value);
-    } else {
-      Vue.set(state.versions[state.currentVersion].data, key, value);
+const setStateByVersion = (state, {key, value}) => {
+    if (state.id) {
+        if(state.currentVersion === -1) {
+            Vue.set(state.original, key, value);
+        } else {
+            Vue.set(state.versions[state.currentVersion].data, key, value);
+        }
     }
-  }
 }
 
 const state = {
@@ -30,7 +30,7 @@ const state = {
   costServices: {},
   extraServices: {},
   custom: {},
-  event: {},
+  eventData: {},
   vision: "",
   images: [],
   vendor: null,
@@ -174,15 +174,15 @@ const mutations = {
     // update proposal data if vendor click version tab
 
     if (index === -1) {
-      setStateFromData(state, JSON.parse(JSON.stringify(state.original)));
+        setStateFromData(state, JSON.parse(JSON.stringify(state.original)));
     }
 
-    if (index > -1) {
-      setStateFromData(state, JSON.parse(JSON.stringify(state.versions[index].data)));
+    if(index > -1) {
+        setStateFromData(state, JSON.parse(JSON.stringify(state.versions[index].data)));
     }
   },
   setVersions: (state, versions) => {
-    state.versions = versions;
+        state.versions = versions;
   },
   setVendor: (state, vendor) => {
     state.vendor = vendor;
@@ -200,11 +200,12 @@ const mutations = {
     state.taxs = proposal.taxs;
     state.discounts = proposal.discounts;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
-    state.event = proposal.eventData;
+    state.eventData = proposal.eventData;
     state.coverImage = proposal.coverImage || [];
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.seatingData = proposal.seatingData;
     state.initialized = true;
+
     state.versions = proposal.versions || []
     // state.wizardStep = proposal.step
 
@@ -227,16 +228,16 @@ const mutations = {
     }
     Vue.set(state.costServices, category, services);
 
-    setStateByVersion(state, { key: 'costServices', value: JSON.parse(JSON.stringify(state.costServices)) })
+    setStateByVersion(state, {key: 'costServices', value: JSON.parse(JSON.stringify(state.costServices))})
   },
   setIncludedServices: (state, { category, services }) => {
     Vue.set(state.includedServices, category, services);
 
-    setStateByVersion(state, { key: 'includedServices', value: JSON.parse(JSON.stringify(state.includedServices)) })
+    setStateByVersion(state, {key: 'includedServices', value: JSON.parse(JSON.stringify(state.includedServices))})
   },
   setExtraServices: (state, { category, services }) => {
     Vue.set(state.extraServices, category, services);
-    setStateByVersion(state, { key: 'extraServices', value: JSON.parse(JSON.stringify(state.extraServices)) })
+    setStateByVersion(state, {key: 'extraServices', value: JSON.parse(JSON.stringify(state.extraServices))})
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -246,15 +247,15 @@ const mutations = {
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
-    setStateByVersion(state, { key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts)) })
+    setStateByVersion(state, {key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts))})
   },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
-    setStateByVersion(state, { key: 'taxes', value: state.taxes })
+    setStateByVersion(state, {key: 'taxes', value: state.taxes})
   },
   setAdditionalServices: (state, services) => {
     Vue.set(state.additionalServices, services);
-    setStateByVersion(state, { key: 'taxes', value: state.taxes })
+    setStateByVersion(state, {key: 'taxes', value: state.taxes})
   },
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
@@ -262,19 +263,19 @@ const mutations = {
   },
   setBundleDiscount: (state, bundleDiscount) => {
     state.bundleDiscount = bundleDiscount;
-    setStateByVersion(state, { key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount)) })
+    setStateByVersion(state, {key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount))})
   },
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
 
-    setStateByVersion(state, { key, value });
+    setStateByVersion(state, {key, value});
   },
   setEventProperty: (state, { key, value }) => {
-    Vue.set(state.event, key, value)
+    Vue.set(state.eventData, key, value)
   },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo);
-    setStateByVersion(state, { key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos)) })
+    setStateByVersion(state, {key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos))})
   },
   initState(state) {
     Vue.set(state, "costServices", {});
@@ -288,7 +289,7 @@ const mutations = {
     Vue.set(state, "initStep", 0);
     Vue.set(state, "initialized", false);
     Vue.set(state, "attachments", {});
-    Vue.set(state, "event", {});
+    Vue.set(state, "eventData", {});
     Vue.set(state, "bundleDiscount", {
       isApplied: false,
       services: [],
@@ -356,18 +357,18 @@ const actions = {
     });
   },
   saveProposal: ({ commit, state, getters }, status) => {
-    if (state.event.id) {
-      new UserEvent({ id: state.event.id, totalBudget: getters.totalPriceOfProposal }).save();
+    if (state.eventData.id) {
+      new UserEvent({ id: state.eventData.id, totalBudget: getters.totalPriceOfProposal }).save();
     }
     return new Promise((resolve, reject) => {
       const additionalServices = state.additionalServices || [];
       const availableAdditionalSerivces = additionalServices.filter(category => getters.pricesByCategory[category] > 0);
       console.log('saveProposal', state.id);
       const proposal = new Proposal({
-        id: status == 'duplicate' ? undefined : state.id ? state.id : undefined,
-        eventData: state.event,
+        id: status == 'duplicate' ? undefined : state.id,
+        eventData: state.eventData,
         personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
-        additionalServices: state.original ? state.original.additionalServices : state.additionalServices,
+        additionalServices: availableAdditionalSerivces,
         images: state.images,
         coverImage: state.original ? state.original.coverImage : state.coverImage,
         eventVision: state.original ? state.original.eventVision : state.eventVision,
@@ -385,7 +386,7 @@ const actions = {
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
-        customerId: state.event.customer.id,
+        customerId: state.eventData.customer.id,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
@@ -420,30 +421,30 @@ const actions = {
       }
     });
   },
-  saveVersion({ commit, state }, data) {
+  saveVersion({ commit, state}, data) {
     return new Promise(async (resolve, reject) => {
-      const query = new ProposalVersion({ ...data, proposal: new Proposal({ id: state.id }) })
-        .for(new Proposal({ id: state.id }));
-      let res = await query.save();
-      console.log('res', res);
-      let idx = state.versions.findIndex(v => v.id === res.id);
-      if (idx === -1) {
-        commit("setVersions", [...state.versions, res]);
-      } else {
-        Vue.set(state.versions, idx, res);
-        commit("setVersions", state.versions)
-      }
+        const query = new ProposalVersion({...data, proposal: new Proposal({ id: state.id })})
+            .for(new Proposal({ id: state.id }));
+        let res = await query.save();
+        console.log('res', res);
+        let idx = state.versions.findIndex(v => v.id === res.id);
+        if(idx === -1) {
+            commit("setVersions", [...state.versions, res]);
+        } else {
+            Vue.set(state.versions, idx, res);
+            commit("setVersions", state.versions)
+        }
     })
   },
-  removeVersion: ({ commit, state }, idx) => {
+  removeVersion: ({ commit, state}, idx) => {
     return new Promise(async (resolve, reject) => {
-      let version = await ProposalVersion.find(state.versions[idx].id);
-      await version.delete();
+        let version = await ProposalVersion.find(state.versions[idx].id);
+        await version.delete();
 
-      let versions = state.versions.filter((v, index) => index !== idx);
+        let versions = state.versions.filter((v, index) => index !== idx);
 
-      commit("setVersions", versions)
-      resolve();
+        commit("setVersions", versions)
+        resolve();
     })
   },
 };
