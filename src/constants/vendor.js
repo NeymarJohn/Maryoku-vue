@@ -522,13 +522,11 @@ export const businessCategories = [
                 name: "Waste recycle procedures",
                 type: 'Boolean',
                 value: false,
-                xIncluded: true,
               },
               {
                 name: "Non toxic products",
                 type: 'Boolean',
                 value: false,
-                xIncluded: true,
               },
             ],
           },

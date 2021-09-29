@@ -174,9 +174,15 @@ export default {
   filters: {},
   computed: {
     extraServices() {
-      return this.event.components.filter(
-        (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
-      );
+      if ( this.event.components.length ) {
+          return this.event.components.filter(
+              (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
+          );
+      }  else if ( this.requirements.length ) {
+          return this.requirements.filter(
+              (item) => item.category !== this.vendor.vendorCategory
+          );
+      }
     },
     inspirationalPhotos(){
       return this.$store.state.vendorProposal.inspirationalPhotos;
@@ -198,6 +204,9 @@ export default {
     event() {
       if (!this.proposalRequest) return {};
       return this.proposalRequest.eventData;
+    },
+    requirements() {
+      return this.$store.state.vendorProposal.requirements;
     },
     step() {
       return this.$store.state.vendorProposal.wizardStep;

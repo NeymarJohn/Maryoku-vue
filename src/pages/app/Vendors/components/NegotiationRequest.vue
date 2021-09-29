@@ -32,9 +32,20 @@
                     Original Number of guests
                 </div>
                 <md-icon class="mx-40">arrow_forward</md-icon>
-                <div class="font-size-24 font-bold-extra w-min-180">
+                <div class="font-size-22 font-bold-extra w-min-180">
                     {{eventData.numberOfParticipants | withComma(Number)}}
                     <p class="font-size-14 font-bold-extra mt-5">New Number of guests</p>
+                </div>
+            </div>
+            <div v-if="eventData.originalLocation != eventData.location" class="d-flex align-center justify-content-center mt-40">
+                <div class="font-size-14 w-min-180 color-black-middle">
+                    <div class="font-size-24 text-line-through mb-5">{{eventData.originalLocation}}</div>
+                    Original Location
+                </div>
+                <md-icon class="mx-40">arrow_forward</md-icon>
+                <div class="font-size-22 font-bold-extra w-min-180">
+                    {{eventData.location}}
+                    <p class="font-size-14 font-bold-extra mt-5">Location</p>
                 </div>
             </div>
         </template>

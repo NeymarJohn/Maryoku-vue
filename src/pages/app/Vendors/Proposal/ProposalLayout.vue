@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import Vendors from "@/models/Vendors";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
@@ -141,6 +141,7 @@ export default {
       proposalRequest: null,
       vendorCategory: null,
       event: null,
+      requirements: [],
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
@@ -148,8 +149,11 @@ export default {
     };
   },
   async created() {
+
     if(this.$store.state.auth.user){
       this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
+    } else {
+        this.$router.push({ path: `/vendor/signin`});
     }
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
@@ -190,15 +194,19 @@ export default {
         value: this.vendor.images,
       });
     }
+
+    if (this.$route.query.version) {
+      let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version.id);
+      this.$store.commit('vendorProposal/selectVersion', index);
+    }
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal", "setWizardStep"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "setWizardStep"]),
     gotoNext() {
-      console.log("proposal", this.$store.state.vendorProposal);
       this.step = this.step + 1;
 
       // skip additional page if event doesn't have components
-      if (this.step === 2 && !this.event.components.length) this.step ++;
+      if ( this.step === 2 && !this.event.components.length ) this.step ++;
       this.scrollToTop();
     },
     getVendorCategory() {
@@ -264,9 +272,12 @@ export default {
           Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,
               buttonsStyling: false,
+              showCancelButton: true,
               type: "success",
               confirmButtonClass: "md-button md-vendor",
-              confirmButtonText: "Back to Dashboard",
+              confirmButtonText: "Back to Dashboard continue",
+              cancelButtonClass: "md-button md-purple md-simple",
+              cancelButtonText: "Continue",
           }).then(res => {
               if(res.isConfirmed) {
                   this.$router.push({path: "/vendor/dashboard"});

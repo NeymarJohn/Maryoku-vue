@@ -628,7 +628,7 @@ export default {
     },
 
     event() {
-      return this.$store.state.proposalForNonMaryoku.event;
+      return this.$store.state.proposalForNonMaryoku.eventData;
     },
     additionalServices() {
       return this.$store.state.proposalForNonMaryoku.additionalServices;
