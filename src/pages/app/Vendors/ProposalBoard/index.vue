@@ -234,19 +234,19 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
-import _ from "underscore";
-import carousel from "vue-owl-carousel";
-
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
+import Proposal from "@/models/Proposal";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
-
+import carousel from "vue-owl-carousel";
+import moment from 'moment'
 import { Loader, TablePagination, Modal } from "@/components";
+import _ from "underscore";
 const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");

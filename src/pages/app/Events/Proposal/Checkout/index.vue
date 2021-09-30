@@ -127,7 +127,11 @@
                 Support sustainability and eco-friendly initiatives with a donation to an organization committed to
                 environmental responsibility. Every donation will be matched by Maryoku.
               </div>
-              <md-button class="md-simple edit-btn md-red color-red mt-20">
+              <md-button
+                target="_blank"
+                class="md-simple edit-btn md-red color-red mt-20"
+                href="https://www.maryoku.com/giveback"
+              >
                 Read More <md-icon>keyboard_arrow_right</md-icon>
               </md-button>
               <hr class="mt-20 mb-20" />
@@ -143,22 +147,6 @@
                   would really appreciate your contribution, helping the community and the environment.
                 </div>
               </div>
-              <hr class="mt-20 mb-20" />
-              <div>
-                <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
-                  Cash in Your Maryoku Points
-                </md-checkbox>
-              </div>
-              <div class="mb-20 d-flex">
-                <div class="ml-10">
-                  If you’ve collected enough Maryoku reward points, why not exchange them for exclusive vendor perks?
-                  Simply print out the voucher and enjoy the results!
-                </div>
-              </div>
-              <md-button class="md-simple md-red edit-btn mt-20">
-                Read more about this organisation
-                <md-icon>keyboard_arrow_right</md-icon>
-              </md-button>
             </div>
           </template>
         </collapse-panel>
@@ -171,7 +159,23 @@
             </div>
           </template>
           <template slot="content">
-            <div class="price-table-content">123123</div>
+            <div>User your rewards with this event</div>
+            <hr />
+            <div class="mt-20">
+              <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
+                Cash in Your Maryoku Points
+              </md-checkbox>
+            </div>
+            <div class="mb-20 d-flex">
+              <div class="ml-10">
+                If you’ve collected enough Maryoku reward points, why not exchange them for exclusive vendor perks?
+                Simply print out the voucher and enjoy the results!
+              </div>
+            </div>
+            <md-button class="md-simple md-red edit-btn mt-20">
+              Read More About Our Loyalty Program
+              <md-icon>keyboard_arrow_right</md-icon>
+            </md-button>
           </template>
         </collapse-panel>
         <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
@@ -436,7 +440,7 @@ export default {
             price: Math.floor(this.feePrice(this.proposal) * 100),
             proposalId: this.proposal.id,
             vendorId: this.proposal.vendor.id,
-            eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
+            // eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
             serviceCategory: "serviceFee",
           },
           { headers: this.$auth.getAuthHeader() },
@@ -448,6 +452,13 @@ export default {
         const priceData = responses;
         this.showStripeCheckout = true;
         this.stripePriceData = responses.map((res) => res.data);
+
+        // send email to vendor to notify the proposal is selected
+        this.$http.post(
+          `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
+          { type: "win", proposalId: this.proposal.id },
+          { headers: this.$auth.getAuthHeader() },
+        );
       });
     },
     back() {

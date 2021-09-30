@@ -311,12 +311,12 @@ export default {
     },
     submitProposal() {
       this.showSendProposalModal = false;
-      // this.uploadProposal("submit");
+
       const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
       this.$http
         .post(
           `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
-          { type: "created" },
+          { type: "created", proposalId: proposalForNonMaryoku.id },
           { headers: this.$auth.getAuthHeader() },
         )
         .then((res) => {

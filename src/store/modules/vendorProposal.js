@@ -10,7 +10,6 @@ import authService from "@/services/auth.service";
 import moment from "moment";
 import Customer from "@/models/Customer";
 import ProposalVersion from "@/models/ProposalVersion";
-import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
 const setStateFromData = (state, data) => {
     Object.keys(data).map(key => {

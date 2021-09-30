@@ -45,7 +45,7 @@
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="edit(proposalStatus.edit)" :class="{'md-gray disabled': proposal.accepted, 'md-purple': !proposal.accepted}">
+          <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
@@ -174,7 +174,6 @@ export default {
       }
     },
     edit(action) {
-      if ( this.proposal.accepted ) return;
       this.$emit("action", action, this.proposal.id);
     },
     leave(item) {
@@ -182,29 +181,17 @@ export default {
     },
     isOpened() {
       setTimeout((_) => {
-
-        $("li.md-list-item").each(function(idx, el){
-            let disabled = $(el).hasClass('disabled');
-
-            if ( disabled ) $(el).find("img").attr("style", "filter:brightness(0) invert(50%)");
-            $(el).hover(
-                function () {
-                    if(!disabled) $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
-                },
-                function () {
-                    if(!disabled) $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
-                },
-            );
-        })
+        $("li.md-list-item").hover(
+          function (el) {
+            $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
+          },
+          function () {
+            $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
+          },
+        );
       }, 0);
     },
   },
-  mounted() {
-    console.log('mounted', this.proposal);
-  },
-  watch:{
-    proposal(newVal){}
-  }
 };
 </script>
 <style lang="scss" scoped>

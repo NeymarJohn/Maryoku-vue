@@ -80,24 +80,24 @@ export default {
               }
           })
     },
-    getRequirements({ commit, state }, eventId) {
-      return new Promise((resolve, reject) => {
-          new ProposalRequestRequirement()
-              .for(new CalendarEvent({ id: eventId }))
-              .get()
-              .then((res) => {
-                  if(res && res.length) {
-                      res.forEach(requirements => {
-                          commit("setCategoryRequirements", { category: requirements.category, requirements })
-                      })
-                  }
-                  resolve(res)
-              })
-              .catch(err => {
-                  reject(err)
-              });
-      });
-    },
+      getRequirements({ commit, state }, eventId) {
+          return new Promise((resolve, reject) => {
+              new ProposalRequestRequirement()
+                  .for(new CalendarEvent({ id: eventId }))
+                  .get()
+                  .then((res) => {
+                      if(res && res.length) {
+                          res.forEach(requirements => {
+                              commit("setCategoryRequirements", { category: requirements.category, requirements })
+                          })
+                      }
+                      resolve(res)
+                  })
+                  .catch(err => {
+                      reject(err)
+                  });
+          });
+      },
     getProposals({commit, state}, payload) {
       return new Promise((resolve, reject) => {
           new Proposal()
@@ -112,22 +112,8 @@ export default {
                       })
                   }
                   resolve(result)
-          })
+              })
       })
     },
-    saveRequirement({ commit, state }, payload) {
-      return new Promise((resolve, reject) => {
-          new ProposalRequestRequirement(payload.requirement)
-              .for(new CalendarEvent({ id: payload.eventId }))
-              .save()
-              .then((res) => {
-                  console.log('res', res);
-                  resolve(res)
-              })
-              .catch(err => {
-                  reject(err)
-              });
-      });
-    },
-  },
+  }
 }
