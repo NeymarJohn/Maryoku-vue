@@ -366,7 +366,7 @@ const actions = {
       console.log('saveProposal', state.id);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id ? state.id : undefined,
-        eventData: state.eventData,
+        eventData: state.event,
         personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
         additionalServices: availableAdditionalSerivces,
         images: state.images,

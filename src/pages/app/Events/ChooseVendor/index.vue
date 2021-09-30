@@ -272,15 +272,14 @@ export default {
       this.showCounterPage = false;
       this.showProposals = false;
     },
-    updateExpiredTime() {
-      new EventCategoryRequirement({
-        id: this.currentRequirement.id,
-        expiredBusinessTime: moment(new Date()).add(2, "days").valueOf(),
-      })
-        .save()
-        .then((res) => {
-          this.currentRequirement = Object.assign({}, res.item);
-        });
+    async updateExpiredTime() {
+      console.log('updateExpiredTime');
+      // let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
+      //   id: this.currentRequirement.id,
+      //   expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
+      // })
+      // console.log('updateExpiredTime', res);
+      // this.currentRequirement = res.data.item;
     },
     goDetailPage(proposal) {
       this.showDetails = true;

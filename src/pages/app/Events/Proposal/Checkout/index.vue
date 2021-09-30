@@ -436,7 +436,7 @@ export default {
             price: Math.floor(this.feePrice(this.proposal) * 100),
             proposalId: this.proposal.id,
             vendorId: this.proposal.vendor.id,
-            // eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
+            eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
             serviceCategory: "serviceFee",
           },
           { headers: this.$auth.getAuthHeader() },
@@ -448,14 +448,6 @@ export default {
         const priceData = responses;
         this.showStripeCheckout = true;
         this.stripePriceData = responses.map((res) => res.data);
-
-        // send email to vendor to notify the proposal is selected
-        this.$http
-          .post(
-              `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
-              { type: "win", proposalId: this.proposal.id },
-              { headers: this.$auth.getAuthHeader() },
-          );
       });
     },
     back() {
