@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-proposal-board p-40">
-    <loader :active="loading" :isFullScreen="true" />
+    <loader :active="loading" :isFullScreen="true" page="vendor" />
     <div class="font-size-22 font-bold d-flex align-center">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
       <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
@@ -121,7 +121,7 @@
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-          <insight v-if="!loading" :total="pagination.total" :won="pagination.won"></insight>
+          <insight v-if="!loading" :total="pagination.total" :won="pagination.won" @insight="showInsightModal = true"></insight>
         </div>
       </div>
       <div class="md-layout">
@@ -226,6 +226,21 @@
         </template>
       </template>
     </modal>
+    <modal v-if="showInsightModal" container-class="modal-container bg-white">
+      <template slot="header">
+        <md-button
+            class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
+            @click="showInsightModal = false"
+        ><md-icon>close</md-icon></md-button
+      ></template>
+      <template slot="body">
+          <insight-detail/>
+      </template>
+      <template slot="footer">
+          <md-button class="md-simple ml-auto md-outlined md-vendor p-0">Update Your Prices</md-button>
+          <md-button class="md-vendor ml-20" @click="showInsightModal=false">Close</md-button>
+      </template>
+    </modal>
     <ShareProposal
       v-if="showShareProposalModal"
       :link="proposalLink"
@@ -234,19 +249,20 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
+import _ from "underscore";
+import carousel from "vue-owl-carousel";
+
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
+import InsightDetail from "../components/InsightDetail";
 import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
-import carousel from "vue-owl-carousel";
-import moment from 'moment'
+
 import { Loader, TablePagination, Modal } from "@/components";
-import _ from "underscore";
 const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");
@@ -254,6 +270,7 @@ const ShareProposal = () => import("./ShareProposal");
 
 export default {
   components: {
+    InsightDetail,
     ProposalRequestCard,
     ProposalListItem,
     TablePagination,
@@ -279,6 +296,7 @@ export default {
       selectedProposalRequest: null,
 
       showRequestNegotiationModal: false,
+      showInsightModal: true,
       negotiationRequestStatus: {
         review: 0,
         approve: 1,
