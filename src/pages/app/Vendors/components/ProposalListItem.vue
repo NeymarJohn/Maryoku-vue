@@ -174,7 +174,7 @@ export default {
       }
     },
     edit(action) {
-      if ( this.proposal.accepted && action === this.proposalStatus.edit) return;
+      if ( this.proposal.accepted ) return;
       this.$emit("action", action, this.proposal.id);
     },
     leave(item) {

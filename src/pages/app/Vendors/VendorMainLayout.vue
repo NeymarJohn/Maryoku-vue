@@ -4,7 +4,7 @@
       <notifications></notifications>
       <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar" style="padding-right: 0">
         <side-bar :event="eventData"></side-bar>
-        <loader :active="loading" page="vendor"></loader>
+        <loader :active="loading"></loader>
         <zoom-center-transition v-if="!loading" :duration="200" mode="out-in">
           <router-view></router-view>
         </zoom-center-transition>

@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader :active="isLoading" page="vendor"></loader>
+    <loader :active="isLoading"></loader>
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
     <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
     <div class="main-cont">

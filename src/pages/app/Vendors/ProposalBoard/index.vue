@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-proposal-board p-40">
-    <loader :active="loading" :isFullScreen="true" page="vendor" />
+    <loader :active="loading" :isFullScreen="true" />
     <div class="font-size-22 font-bold d-flex align-center">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
       <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>

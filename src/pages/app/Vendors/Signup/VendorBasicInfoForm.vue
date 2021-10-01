@@ -17,7 +17,7 @@
           <br />approve your basic info
         </h2>
         <div class="card">
-          <loader :active="loading" height="100%" page="vendor"/>
+          <loader :active="loading" height="100%"/>
           <v-signup-editable-field
             :title="'Company Name'"
             :field="'companyName'"
