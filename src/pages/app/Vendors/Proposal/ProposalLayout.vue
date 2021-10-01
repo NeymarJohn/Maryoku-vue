@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :active="isUpdating" is-full-screen page="vendor"></Loader>
+    <vue-element-loading v-if="isUpdating" :active="isUpdating" color="#FF547C"></vue-element-loading>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
       <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
@@ -117,11 +117,9 @@ import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
 import ProposalVersionsBar from "./ProposalVersionsBar";
 import VueElementLoading from "vue-element-loading";
-import Loader from "../../../../components/loader/index";
 
 export default {
   components: {
-      Loader,
     VendorBidTimeCounter,
     Modal,
     ProposalHeader,

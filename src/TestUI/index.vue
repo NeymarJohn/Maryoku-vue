@@ -1,83 +1,58 @@
 <template>
-    <div style="width: 800px;height: 500px">
-        <income-chart :chartData="data" :options="options" :width="800" :height="500"></income-chart>
+    <div id="editable" contenteditable="true">
     </div>
 </template>
 <script>
 // import {CommentInput} from "@/components";
-import IncomeChart from "../pages/app/Vendors/VendorDashboard/IncomeChart";
 export default {
   components:{
-      IncomeChart
+    // CommentInput,
   },
   props:{
 
   },
   data(){
       return {
-          data: {
-            labels: ['Jan', '', '', '', '', 'Jun', '', '', '', '', '', 'Dec' ],
-            datasets: [
-                {
-                    label: '',
-                    data : [0, 10, 30, 60, 45, 30, 40, 40, 30, 15, 30, 20],
-                    fill: true,
-                    borderColor: '#2cde6b',
-                    backgroundColor: '#2cde6b',
-                    // tension: 0.4,
-                },
-                {
-                    label: '',
-                    data : [0, 15, 40, 80, 60, 40, 50, 45, 40, 25, 35, 30],
-                    fill: true,
-                    borderColor: '#641856',
-                    backgroundColor: '#641856',
-                    // tension: 0.4,
-                },
-            ]
-          },
-          options: {
-              type: 'line',
-              options: {
-                  responsive: true,
-                  plugins: {
-                      title: {
-                          display: true,
-                          text: ''
-                      },
-                  },
-                  interaction: {
-                      intersect: false,
-                  },
-                  scales: {
-                      x: {
-                          display: true,
-                          title: {
-                              display: true
-                          }
-                      },
-                      y: {
-                          display: true,
-                          title: {
-                              display: true,
-                              text: 'Value'
-                          },
-                          suggestedMin: -10,
-                          suggestedMax: 200
-                      }
-                  }
-              },
-          }
+        recordingData: [
+            {value: 60, color: '#ffffff'},
+            {value: 25, color: '#22cfe0'},
+            {value: 15, color: '#fec02d'},
+        ],
+        innerHtml: '',
+        text: '',
+        highlight : 'Lorem',
       }
   },
   mounted() {
-
+    // let el = document.getElementById("editable")
+    // let range = document.createRange()
+    // let sel = window.getSelection()
+    //
+    // range.setStart(el.childNodes[2], 5)
+    // range.collapse(true)
+    //
+    // sel.removeAllRanges()
+    // sel.addRange(range)
     $("#editable").keypress(this.keypress)
   },
   methods:{
     keypress(e){
       // console.log('keypress', e);
+      console.log('innerHtml', e.target.innerHTML);
+      console.log('innerText', e.target.outerText);
+      this.innerHtml = e.target.innerHTML;
+      this.text = e.target.outerText;
+      this.adjustText(`\\b${this.highlight}\\w*`);
     },
+    adjustText(regexp) {
+      let regex = /@([^ ]+)/g
+      console.log('adjustText', this.innerHtml.match(regexp));
+      $("#editable").innerHTML = this.innerHtml.replace(/@([^ ]+)/g, '<b>@$1</b>')
+      // $("#editable").html(this.innerHtml.replace(new RegExp(regexp, 'g'), '<b>$1</b>>'));
+      // $("#editable").html(this.innerHtml.replace(new RegExp(regexp, 'g'), '<b>$1</b>>'));
+
+
+    }
   }
 }
 

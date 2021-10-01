@@ -1,96 +1,95 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader v-if="isLoading" :active="isLoading" is_full_screen page="vendor"></loader>
-    <template v-else>
-        <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
-        <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
-        <div class="main-cont">
-            <router-view></router-view>
+    <loader :active="isLoading" page="vendor"></loader>
+    <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
+    <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
+    <div class="main-cont">
+      <router-view></router-view>
+    </div>
+    <section class="footer-wrapper">
+      <div>
+        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
+        </md-button>
+
+        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+          <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
+        </md-button>
+      </div>
+
+      <div class="next-cont">
+        <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
+        <a class="save" @click="uploadProposal('draft')">
+          <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
+        </a>
+        <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
+          Next
+        </a>
+        <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
+      </div>
+    </section>
+    <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
+          <div class="header-description">
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
+            one.
+          </div>
         </div>
-        <section class="footer-wrapper">
-            <div>
-                <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-                    <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
-                </md-button>
-
-                <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-                    <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
-                </md-button>
-            </div>
-
-            <div class="next-cont">
-                <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-                <a class="save" @click="uploadProposal('draft')">
-                    <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
-                </a>
-                <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
-                    Next
-                </a>
-                <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
-            </div>
-        </section>
-        <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
-            <template slot="header">
-                <div class="saved-it-modal__header">
-                    <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
-                    <div class="header-description">
-                        The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
-                        one.
-                    </div>
-                </div>
-                <button class="close" @click="hideModal()">
-                    <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
-                </button>
-            </template>
-            <template slot="body">
-                <div class="saved-it-modal__body">
-                    <div class="time-cont">
-                        <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple" />
-                    </div>
-                </div>
-            </template>
-            <template slot="footer">
-                <div class="saved-it-modal__footer">
-                    <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
-                </div>
-            </template>
-        </modal>
-        <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
-            <template slot="header">
-                <div class="saved-it-modal__header d-flex">
-                    <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
-                    <div class="ml-20">
-                        <h3 class="text-left color-black">
-                            We are sorry, but someone else got there <br />before you and already won this bid.
-                        </h3>
-                        <div class="text-left">But no worries! We will be with you soon with the next one</div>
-                    </div>
-                </div>
-                <button class="close" @click="showCloseProposalModal = false">
-                    <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
-                </button>
-            </template>
-            <template slot="body">
-                <div class="saved-it-modal__body"></div>
-            </template>
-            <template slot="footer">
-                <div class="saved-it-modal__footer">
-                    <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
-                </div>
-            </template>
-        </modal>
-        <send-proposal-modal
-            v-if="showSendProposalModal"
-            @close="showSendProposalModal = false"
-            @submit="submitProposal"
-            :event="event"
-            :link="proposalLink"
-        ></send-proposal-modal>
-        <proposal-submitted
-            v-if="showSubmittedProposalModal"
-            @close="showSubmittedProposalModal = false"
-        ></proposal-submitted>
-    </template>
+        <button class="close" @click="hideModal()">
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <div class="time-cont">
+            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple" />
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header d-flex">
+          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
+          <div class="ml-20">
+            <h3 class="text-left color-black">
+              We are sorry, but someone else got there <br />before you and already won this bid.
+            </h3>
+            <div class="text-left">But no worries! We will be with you soon with the next one</div>
+          </div>
+        </div>
+        <button class="close" @click="showCloseProposalModal = false">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body"></div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
+    <send-proposal-modal
+      v-if="showSendProposalModal"
+      @close="showSendProposalModal = false"
+      @submit="submitProposal"
+      @sms="sendSMS"
+      :event="event"
+      :link="proposalLink"
+    ></send-proposal-modal>
+    <proposal-submitted
+      v-if="showSubmittedProposalModal"
+      @close="showSubmittedProposalModal = false"
+    ></proposal-submitted>
   </div>
 </template>
 <script>
@@ -125,7 +124,7 @@ export default {
   data() {
     return {
       vendor: null,
-      isLoading: true,
+      isLoading: false,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
@@ -144,7 +143,7 @@ export default {
       proposalLink: "",
     };
   },
-  async mounted() {
+  async created() {
     console.log("non-maryoku.proposal.created");
     if (this.$store.state.auth.user) {
       await this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token);
@@ -176,7 +175,6 @@ export default {
        let index = this.$store.state.proposalForNonMaryoku.versions.findIndex(v => v.id === this.$route.query.version);
        this.$store.commit('proposalForNonMaryoku/selectVersion', index);
     }
-    setTimeout(_ => {}, 10000)
     this.isLoading = false;
   },
 
@@ -326,6 +324,22 @@ export default {
           this.showSubmittedProposalModal = true;
         });
     },
+    async sendSMS(){
+        let proposal = this.$store.state.proposalForNonMaryoku;
+        this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+        let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
+        if (proposal.eventData.customer.phone) {
+            let res = await this.$http
+                .post(
+                    `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendSMS`,
+                    { phoneNumber: proposal.eventData.customer.phone, message },
+                    { headers: this.$auth.getAuthHeader() },
+                )
+            console.log('res', res)
+        }
+
+
+    }
   },
 
   filters: {
