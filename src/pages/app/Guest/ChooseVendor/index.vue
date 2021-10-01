@@ -81,7 +81,7 @@
       </div>
     </div>
     <div class="proposals-footer white-card">
-      <div v-if="proposals.length">
+      <div>
         <md-button class="md-simple maryoku-btn md-black">
           <span class="text-transform-capitalize">I already have a vendor</span>
         </md-button>
@@ -92,11 +92,7 @@
           <span class="text-transform-capitalize">Change requirements</span>
         </md-button>
       </div>
-      <md-button v-else class="md-simple maryoku-btn md-black ml-auto" @click="updateExpiredTime">
-          <span class="text-transform-capitalize">I need those proposals urgent</span>
-      </md-button>
-
-      <div v-if="proposals.length">
+      <div>
         <md-button
             class="md-simple md-outlined md-red maryoku-btn"
             :disabled="proposals.length === 0 || !selectedProposal"
@@ -210,7 +206,7 @@ export default {
     ...mapMutations("EventGuestVuex", ["setEventData", "setBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
-    ...mapActions("EventGuestVuex", ["getProposals", "getRequirements", "saveRequirement"]),
+    ...mapActions("EventGuestVuex", ["getProposals", "getRequirements"]),
     selectCategory(category, clicked) {
       this.currentRequirement = this.eventRequirements[category];
       this.selectedCategory = category;
@@ -244,16 +240,16 @@ export default {
       }
       this.isLoading = false;
     },
-    // getCategoryRequirements() {
-    //   getReq(`/1/events/${this.event.id}/components/${this.selectedCategory.id}/requirements`)
-    //     .then((res) => {
-    //       this.currentRequirement = res.data.item;
-    //     })
-    //     .catch((e) => {
-    //       this.currentRequirement = {};
-    //       this.showCounterPage = false;
-    //     });
-    // },
+    getCategoryRequirements() {
+      getReq(`/1/events/${this.event.id}/components/${this.selectedCategory.id}/requirements`)
+        .then((res) => {
+          this.currentRequirement = res.data.item;
+        })
+        .catch((e) => {
+          this.currentRequirement = {};
+          this.showCounterPage = false;
+        });
+    },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -280,17 +276,15 @@ export default {
       this.showCounterPage = false;
       this.showProposals = false;
     },
-    async updateExpiredTime() {
-
-      let requirement = await this.saveRequirement({
-          requirement: {
-              id: this.currentRequirement.id,
-              expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).add(1, "days").valueOf(),
-          },
-          eventId: this.event.id
-      });
-      console.log('updateExpiredTime', requirement);
-      this.currentRequirement = requirement;
+    updateExpiredTime() {
+      new EventCategoryRequirement({
+        id: this.currentRequirement.id,
+        expiredBusinessTime: moment(new Date()).add(2, "days").valueOf(),
+      })
+        .save()
+        .then((res) => {
+          this.currentRequirement = Object.assign({}, res.item);
+        });
     },
     goDetailPage(proposal) {
       this.showDetails = true;
@@ -401,6 +395,7 @@ export default {
     }
   },
   async created() {
+    console.log('choose-vendors.created', this.event);
     await this.$store.dispatch('planningBoard/resetCartItems');
     this.isLoadingProposal = true;
     await this.getRequirements(this.event.id);
@@ -439,7 +434,6 @@ export default {
       }
     },
     proposals(newVal){},
-    expiredTime(){},
     $route: "fetchData",
   },
   filters: {
@@ -470,7 +464,7 @@ export default {
       return this.$store.state.EventGuestVuex.eventData.components;
     },
     expiredTime() {
-      console.log('expiredTime', this.currentRequirement);
+      console.log(this.currentRequirement);
       if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
       return 0;
     },

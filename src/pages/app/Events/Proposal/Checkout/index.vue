@@ -31,7 +31,7 @@
       <div class="md-layout-item md-size-55 right-panel">
         <div class="white-card">
           <template v-if="pageType === 0">
-            <div v-if="proposal.additionalServices.length">
+            <div v-if="proposal.bookedServices.length">
               <checkout-price-table
                 class="price-table"
                 v-for="service in proposal.bookedServices"
@@ -386,13 +386,14 @@ export default {
         totalPrice += sumOfService;
       });
 
-      const addedPrice = proposal.extraServices[proposal.vendor.eventCategory.key].reduce((s, service) => {
-        if (!service.addedOnProposal) return s;
-        return s + service.requirementValue * service.price;
-      }, 0);
-
-      console.log("totalPrice", totalPrice);
-      return totalPrice + (addedPrice || 0);
+      if (proposal.extraServices[proposal.vendor.eventCategory.key]) {
+        const addedPrice = proposal.extraServices[proposal.vendor.eventCategory.key].reduce((s, service) => {
+          if (!service.addedOnProposal) return s;
+          return s + service.requirementValue * service.price;
+        }, 0);
+        return totalPrice + (addedPrice || 0);
+      }
+      return totalPrice;
     },
     discounedAndTaxedPrice(proposal) {
       console.log("bundledDiscount", this.bundledDiscountPrice(proposal));

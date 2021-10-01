@@ -1,6 +1,6 @@
 <template>
   <div class="non-maryoku-proposal">
-    <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
+    <loader :active="loading" :isFullScreen="true"></loader>
     <div class="proposal-header d-flex align-center justify-content-between">
       <div class="font-size-30" v-if="proposal">
         <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
