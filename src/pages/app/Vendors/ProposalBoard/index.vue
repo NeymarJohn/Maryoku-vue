@@ -63,7 +63,7 @@
           v-for="tab in proposalTabs"
           :key="tab.key"
           class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
-          @click="selectTab(tab.key)"
+          @click="selectTab(tab.value)"
         >
           <div class="d-flex align-center px-20 py-10 font-size-16" :class="tab.class">
             <img

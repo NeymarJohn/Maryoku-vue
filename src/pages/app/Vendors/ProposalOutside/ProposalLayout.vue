@@ -20,7 +20,7 @@
               </div>
               <div class="next-cont">
                   <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"/> Discard </a>
-                  <a class="save" @click="uploadProposal('draft')">
+                  <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
                       <img :src="`${$iconURL}common/save-purple.svg`"/> Save for later
                   </a>
                   <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]"
@@ -97,18 +97,18 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import { Modal } from "@/components";
+import { Modal, Loader } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
-import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 import ProposalVersionsBar from "./ProposalVersionsBar";
 import Vendor from "@/models/Vendors";
-import { Loader } from "@/components";
+import { PROPOSAL_STATUS } from "@/constants/status";
+
 
 export default {
   components: {
@@ -116,7 +116,6 @@ export default {
     ProposalVersionsBar,
     Modal,
     ProposalHeader,
-    VueElementLoading,
     SendProposalModal,
     ProposalSubmitted,
     Loader,
@@ -140,7 +139,8 @@ export default {
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
-      option: "submit", // 'submit', 'duplicate'
+      proposalStatus: PROPOSAL_STATUS,
+      option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
       showSendProposalModal: false,
       showSubmittedProposalModal: false,
       proposalLink: "",
@@ -309,7 +309,7 @@ export default {
       });
     },
     setProposalLink() {
-      this.uploadProposal("submit").then((proposal) => {
+      this.uploadProposal(PROPOSAL_STATUS.PENDING).then((proposal) => {
         this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
         this.showSendProposalModal = true;
       });
