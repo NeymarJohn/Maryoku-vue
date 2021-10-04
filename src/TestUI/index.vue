@@ -1,14 +1,15 @@
 <template>
     <div style="width: 800px;height: 500px">
-        <income-chart :chartData="data" :options="options" :width="800" :height="500"></income-chart>
+        <LineChart :dataChart="data" id="number_of_participants_chart" :optionChart="options"
+                   type="line" :width="'800px'" :height="'500px'"></LineChart>
     </div>
 </template>
 <script>
 // import {CommentInput} from "@/components";
-import IncomeChart from "../pages/app/Vendors/VendorDashboard/IncomeChart";
+import LineChart from "@/components/Chart/LineChart.vue";
 export default {
   components:{
-      IncomeChart
+      LineChart,
   },
   props:{
 
@@ -38,34 +39,58 @@ export default {
           },
           options: {
               type: 'line',
-              options: {
-                  responsive: true,
-                  plugins: {
-                      title: {
-                          display: true,
-                          text: ''
-                      },
+              legend: {
+                  display: false,
+              },
+              elements: {
+                  line: {
+                      borderColor: "white",
+                      radius: 0,
                   },
-                  interaction: {
-                      intersect: false,
+              },
+              layout: {
+                  padding: {
+                      left: 20,
+                      right: 10,
+                      top: 25,
+                      bottom: 10,
                   },
-                  scales: {
-                      x: {
-                          display: true,
-                          title: {
-                              display: true
-                          }
-                      },
-                      y: {
-                          display: true,
-                          title: {
-                              display: true,
-                              text: 'Value'
+              },
+              scales: {
+                  y: {
+                      suggestedMin: 50,
+                      suggestedMax: 100,
+                  },
+                  yAxes: [
+                      {
+                          ticks: {
+                              beginAtZero: false,
+                              fontColor: "black",
+                              padding: 5,
+                              fontSize: 10,
                           },
-                          suggestedMin: -10,
-                          suggestedMax: 200
-                      }
-                  }
+                          gridLines: {
+                              color: '#707070',
+                              zeroLineColor: "white",
+                          },
+                          callback: value => console.log('value', value)
+                      },
+                  ],
+                  xAxes: [
+                      {
+                          barThickness: 10,
+                          ticks: {
+                              beginAtZero: false,
+                              fontColor: "black",
+                              padding: 5,
+                              fontSize: 12,
+                          },
+                          gridLines: {
+                              color: '#707070',
+                              zeroLineColor: "white",
+                          },
+                      },
+                  ],
               },
           }
       }

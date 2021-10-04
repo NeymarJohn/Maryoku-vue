@@ -46,7 +46,8 @@
                 <p class="color-yellow-dark">${{1543 | withComma(Number)}}</p>
             </div>
         </div>
-        <div class="text-left py-20">
+        <div class="d-flex align-center text-left py-20">
+            <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="mr-10" width="20px">
             Your's competitors earn 23% more than you on extras
         </div>
     </div>
@@ -88,44 +89,53 @@
                   ]
               },
               options: {
-                  type: 'line',
-                  options: {
-                      responsive: true,
-                      plugins: {
-                          title: {
-                              display: true,
-                              text: ''
-                          },
+                  legend: {
+                      display: false,
+                  },
+                  elements: {
+                      point: {
+                          radius: 0,
                       },
-                      interaction: {
-                          intersect: false,
+                  },
+                  layout: {
+                      padding: {
+                          left: 20,
+                          right: 10,
+                          top: 25,
+                          bottom: 10,
                       },
-                      elements: {
-                          point:{
-                              radius: 0,
-                          }
+                  },
+                  scales: {
+                      y: {
+                          suggestedMin: 0,
+                          suggestedMax: 100,
                       },
-                      scales: {
-                          x: {
-                              display: true,
-                              title: {
-                                  display: true
-                              }
-                          },
-                          y: {
-                              display: true,
-                              title: {
-                                  display: true,
-                                  label: '%',
-                                  text: 'Value'
+                      yAxes: [
+                          {
+                              ticks: {
+                                  beginAtZero: false,
+                                  fontColor: "black",
+                                  padding: 5,
+                                  fontSize: 10,
+                                  min: 0,
+                                  max: 100,
+                                  callback: function (label, idx, labels) {
+                                    return `${label}%`
+                                  }
                               },
-                              suggestedMin: 0,
-                              suggestedMax: 100
-                          }
-                      },
-                      legend: {
-                          display: false
-                      },
+                          },
+                      ],
+                      xAxes: [
+                          {
+                              barThickness: 10,
+                              ticks: {
+                                  beginAtZero: false,
+                                  fontColor: "black",
+                                  padding: 5,
+                                  fontSize: 12,
+                              },
+                          },
+                      ],
                   },
               }
           }
@@ -141,6 +151,9 @@
            },
            prev(){
              console.log('prev');
+           },
+           getRadius(ctx){
+               console.log(ctx.dataIndex);
            }
         },
         computed: {
