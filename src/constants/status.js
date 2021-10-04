@@ -1,7 +1,4 @@
 // proposal
-export const PROPOSAL_STATUS = {
-    DRAFT : 0, PENDING: 1, WON: 2, TOP3: 3, LOST: 4,
-}
 
 // negotiation request status
 

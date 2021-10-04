@@ -285,7 +285,7 @@ export default {
       let requirement = await this.saveRequirement({
           requirement: {
               id: this.currentRequirement.id,
-              expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).add(1, "days").valueOf(),
+              expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
           },
           eventId: this.event.id
       });

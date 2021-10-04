@@ -63,7 +63,7 @@
           v-for="tab in proposalTabs"
           :key="tab.key"
           class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
-          @click="selectTab(tab.value)"
+          @click="selectTab(tab.key)"
         >
           <div class="d-flex align-center px-20 py-10 font-size-16" :class="tab.class">
             <img
@@ -121,7 +121,7 @@
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-          <insight v-if="!loading" :total="pagination.total" :won="pagination.won" @insight="showInsightModal = true"></insight>
+          <insight v-if="!loading" :total="pagination.total" :won="pagination.won"></insight>
         </div>
       </div>
       <div class="md-layout">
@@ -226,21 +226,6 @@
         </template>
       </template>
     </modal>
-    <modal v-if="showInsightModal" container-class="modal-container bg-white">
-      <template slot="header">
-        <md-button
-            class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
-            @click="showInsightModal = false"
-        ><md-icon>close</md-icon></md-button
-      ></template>
-      <template slot="body">
-          <insight-detail/>
-      </template>
-      <template slot="footer">
-          <md-button class="md-simple ml-auto md-outlined md-vendor p-0">Update Your Prices</md-button>
-          <md-button class="md-vendor ml-20" @click="showInsightModal=false">Close</md-button>
-      </template>
-    </modal>
     <ShareProposal
       v-if="showShareProposalModal"
       :link="proposalLink"
@@ -255,7 +240,6 @@ import carousel from "vue-owl-carousel";
 
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
-import InsightDetail from "../components/InsightDetail";
 import ProposalRequest from "@/models/ProposalRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
@@ -270,7 +254,6 @@ const ShareProposal = () => import("./ShareProposal");
 
 export default {
   components: {
-    InsightDetail,
     ProposalRequestCard,
     ProposalListItem,
     TablePagination,
@@ -296,7 +279,6 @@ export default {
       selectedProposalRequest: null,
 
       showRequestNegotiationModal: false,
-      showInsightModal: false,
       negotiationRequestStatus: {
         review: 0,
         approve: 1,

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader :active="isLoading" :isFullScreen="true" page="vendor"/>
+        <loader :active="isLoading" :isFullScreen="true"/>
         <template v-if="showOffers">
             <div class="d-flex justify-content-between pt-50 pl-100 pr-80">
                 <div>
@@ -12,8 +12,8 @@
 
                 <progress-radial-bar
                     :value="Object.keys(requirements).length"
-                    :total="Object.keys(allRequirements).length"
-                    @click="showRequirementCart === true"></progress-radial-bar>
+                    :total="allRequirements.length"
+                    @click="showRequirementCart = true"></progress-radial-bar>
             </div>
             <div class="md-layout md-gutter mt-60 width-70 mx-auto">
                 <div

@@ -1,5 +1,6 @@
 <template>
-  <div class="for-vendor-wrapper">
+  <vue-element-loading v-if="!vendor" :active="!!vendor" spinner="ring" color="#FF547C" />
+  <div class="for-vendor-wrapper" v-else>
     <h4>So what are the details?</h4>
     <div class="main-cont">
       <div class="one-row">
@@ -356,21 +357,26 @@
 
 <script>
 import moment from "moment";
-import Swal from "sweetalert2";
-import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
+import VendorPropertyField from "./VendorPropertyField";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
 
 //COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import VendorBudgetList from "./components/VendorBudgetList.vue";
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
-import { Modal, Loader } from "@/components";
-
+import { Modal } from "@/components";
+import Swal from "sweetalert2";
 
 export default {
   components: {
     Modal,
-    Loader,
+    VueElementLoading,
     InputProposalSubItem,
     VendorBudgetList,
     FunctionalCalendar,
@@ -592,7 +598,6 @@ export default {
       return this.vendorCategories.find((item) => item.fullkey == key).key;
     },
     getDateByFormat(data, format){
-        if (typeof data == 'string') data = parseInt(data);
         return moment(data).format(format);
     }
   },
@@ -653,12 +658,14 @@ export default {
           }
         });
       });
-      if ( !serviceDate ) {
+      if (!serviceDate || !serviceTimeString) {
         let startDate = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, "MMM DD, YYYY");
         let endDate = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, "MMM DD, YYYY");
         serviceDate = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+        let startTime = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, 'hh:mm:a');
+        let endTime = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, 'hh:mm:a');
+        serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
       }
-
       if (this.proposalRequest.plannerRequirement.isEntireEvent) {
         serviceTimeString = "All Day";
       } else if (this.proposalRequest.plannerRequirement.period) {
@@ -667,10 +674,6 @@ export default {
         let startTime = this.getDateByFormat(period.startTime, 'hh:mm:a');
         let endTime = this.getDateByFormat(period.endTime, 'hh:mm:a');
         serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
-      } else {
-          let startTime = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, 'hh:mm:a');
-          let endTime = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, 'hh:mm:a');
-          serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
       }
       return {
         time: serviceTimeString,
