@@ -296,7 +296,7 @@ export default {
       selectedProposalRequest: null,
 
       showRequestNegotiationModal: false,
-      showInsightModal: true,
+      showInsightModal: false,
       negotiationRequestStatus: {
         review: 0,
         approve: 1,

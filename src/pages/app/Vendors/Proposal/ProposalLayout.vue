@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :active="isUpdating" is-full-screen page="vendor"></Loader>
+    <Loader :active="isLoading" is-full-screen page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
       <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
@@ -133,7 +133,7 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: true,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       selectedServices: [],
@@ -201,6 +201,7 @@ export default {
       let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version.id);
       this.$store.commit('vendorProposal/selectVersion', index);
     }
+    this.isLoading = false
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "setWizardStep"]),
