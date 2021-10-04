@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader :active="isLoading" :isFullScreen="true"/>
+        <loader :active="isLoading" :isFullScreen="true" page="vendor"/>
         <template v-if="showOffers">
             <div class="d-flex justify-content-between pt-50 pl-100 pr-80">
                 <div>
