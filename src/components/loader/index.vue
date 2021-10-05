@@ -34,10 +34,6 @@ export default {
       type: String,
       required: false,
       default: 'white',
-    },
-    page: {
-      type: String,
-      default: 'planner',
     }
   },
   data(){
@@ -52,11 +48,7 @@ export default {
   },
   computed:{
     imgUrl(){
-        if ( this.page === 'planner') {
-            return this.loaders[Math.ceil(Math.random() * 10) % 4];
-        } else if ( this.page === 'vendor' ) {
-            return '/static/icons/loader/vendor.gif';
-        }
+        return this.loaders[Math.ceil(Math.random() * 10) % 4];
     }
   }
 }

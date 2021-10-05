@@ -25,7 +25,7 @@
           My vendors
         </md-switch>
         <md-card-content style="min-height: 60px">
-          <Loader :active="loadingData" page="vendor"/>
+          <Loader :active="loadingData"/>
           <vendors-table
             v-if="vendorsList"
             :tooltipModels="tooltipModels"

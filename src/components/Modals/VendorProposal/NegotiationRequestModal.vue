@@ -1,9 +1,9 @@
 <template>
-  <modal class="negotiation-modal" containerClass="modal-container md">
+  <modal class="negotiation-modal" containerClass="modal-container lg">
     <template slot="header">
-      <div class="my-10">
-        <div class="font-size-30 font-bold-extra">Negotiate rate for Relish caterers & venues</div>
-        <div class="mt-15">
+      <div>
+        <div class="font-size-30 font-bold header-text">Negotiate rate for Relish caterers & venues</div>
+        <div class="mt-10">
           Submit the hourly or fixed rate below that you’d like to propose to Relish caterers & venues
         </div>
       </div>
@@ -13,30 +13,22 @@
     </template>
     <template slot="body">
       <div class="text-left">
-        <label class="font-size-16 font-bold-extra">Negotiate By:</label>
-        <div class="d-flex align-center">
-          <div class="d-flex align-center">
-              <md-radio class="d-flex" v-model="rate" value="fixed_rate"></md-radio>
-              <span>Fixed Rate</span>
-          </div>
-          <div class="d-flex align-center ml-100">
-              <md-radio v-model="rate" value="percentage"></md-radio>
-              <span>Percentages</span>
-          </div>
+        <label class="font-bold">Negotiate By:</label>
+        <div class="text-left">
+          <md-radio v-model="remindTimeOption" value="today">Fixed Rate</md-radio>
+          <md-radio v-model="remindTimeOption" value="tomorrow">By Guest Rate</md-radio>
         </div>
-        <div class="mt-50 width-70">
-            <label class="font-bold pb-10 d-inline-block">Your Rate</label>
-            <maryoku-input inputStyle="budget" placeholder="Type rate here"></maryoku-input>
-        </div>
-        <div class="mt-50">
-            <label class="font-bold pb-10 d-inline-block">Add Comment</label>
-            <textarea v-model="comment" placeholder="Type your comment here..."> </textarea>
-        </div>
+        <br />
+        <label class="font-bold pb-10 d-inline-block">Your Rate</label>
+        <maryoku-input inputStyle="budget"></maryoku-input>
+        <br />
+        <label class="font-bold pb-10 d-inline-block">Add Comment</label>
+        <textarea> </textarea>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-black md-simple my-10" @click="close"> Remind Me Later </md-button>
-      <md-button class="md-red md-bold reminder-button my-10" @click="setRemind" :disabled="!canSetReminder">
+      <md-button class="md-black md-simple" @click="close"> Cancel </md-button>
+      <md-button class="md-red md-bold reminder-button" @click="setRemind" :disabled="!canSetReminder">
         Update Vendor
       </md-button>
     </template>
@@ -64,8 +56,17 @@ export default {
   data() {
     return {
       screen: 2,
-      rate: "fixed_rate",
-      comment: null,
+      remindingEmail: "",
+      remindingPhone: "",
+      remindTimeOption: "today",
+      remindTime: "tomorrow",
+      selectedDays: 1,
+      days: [
+        { id: "1", title: "Tomorrow" },
+        { id: "2", title: "2 days later" },
+        { id: "3", title: "3 days later" },
+        { id: "4", title: "4 days later" },
+      ],
     };
   },
   created() {
@@ -80,6 +81,35 @@ export default {
     },
     setRemind() {
       this.$emit("save");
+      // let remindingTime = 0;
+      // if (this.remindTime === "week") {
+      //   remindingTime = moment(new Date()).add(1, "week").valueOf();
+      // } else if (this.remindTime === "tomorrow") {
+      //   remindingTime = moment(new Date()).add(1, "day").valueOf();
+      // } else if (this.remindTime === "tonight") {
+      //   remindingTime = moment(new Date()).hours(21).valueOf();
+      //   if (remindingTime < new Date().getTime()) {
+      //     remindingTime = moment(new Date()).add(1, "hour").valueOf();
+      //   }
+      // }
+      // const remindingData = {
+      //   reminder: this.remindTimeOption,
+      //   phoneNumber: this.remindingPhone,
+      //   email: this.remindingEmail,
+      //   remindingTime: remindingTime,
+      //   type: "rsvp",
+      //   emailParams: {
+      //     guestName: this.remindingEmail,
+      //     eventDate: this.$dateUtil.formatScheduleDay(this.rsvpRequest.event.eventStartMillis, "MMM DD, YYYY"),
+      //     plannerName: this.rsvpRequest.event.owner.display,
+      //   },
+      //   emailTransactionId: this.rsvpRequest.emailTransactionId,
+      //   phoneTransactionId: this.rsvpRequest.phoneTransactionId,
+      // };
+      // new Reminder(remindingData).save().then((res) => {
+      //   this.$emit("setRemind", res);
+      //   this.screen = 3;
+      // });
     },
   },
   computed: {
@@ -90,8 +120,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-textarea{
-    min-height: 140px;
+.reminder-time-modal {
+  .options-list {
+    display: flex;
+  }
+  .time-selector {
+    max-width: 500px;
+  }
 }
 @media only screen and (max-width: 959px) {
   .reminder-time-modal {

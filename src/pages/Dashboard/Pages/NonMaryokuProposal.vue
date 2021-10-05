@@ -1,6 +1,6 @@
 <template>
   <div class="non-maryoku-proposal">
-    <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
+    <loader :active="loading" :isFullScreen="true"></loader>
     <div class="proposal-header d-flex align-center justify-content-between">
       <div class="font-size-30" v-if="proposal">
         <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
@@ -59,7 +59,7 @@
         </md-menu-content>
       </md-menu>
       <div>
-        <md-button class="md-simple md-red md-outlined maryoku-btn" @click="declineProposal">Decline Proposal</md-button>
+        <md-button class="md-simple md-red md-outlined maryoku-btn">Decline Proposal</md-button>
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
@@ -131,24 +131,25 @@
   </div>
 </template>
 <script>
-import moment from "moment";
-import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
 import Reminder from "@/models/Reminder";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { Loader, SignInContent, Modal } from "@/components";
+import { Loader } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
-import RemindingTimeModal from "@/components/Modals/VendorProposal/RemindingTimeModal.vue";
-import NegotiationRequestModal from "@/components/Modals/VendorProposal/NegotiationRequestModal.vue";
-import HeaderActions from "@/components/HeaderActions.vue";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
 import { CommentMixins, ShareMixins } from "@/mixins";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
+import { SignInContent } from "@/components";
+import HeaderActions from "../../../components/HeaderActions.vue";
+import Modal from "../../../components/Modal.vue";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
-import { PROPOSAL_STATUS } from "@/constants/status";
+import moment from "moment";
+import RemindingTimeModal from "../../../components/Modals/VendorProposal/RemindingTimeModal.vue";
+import NegotiationRequestModal from "../../../components/Modals/VendorProposal/NegotiationRequestModal.vue";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -289,16 +290,8 @@ export default {
       console.log(proposal);
       this.proposal = { ...proposal };
     },
-    async declineProposal() {
-      let query = new Proposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
-      let res = await query.save();
-
-      // send email to vendor to notify the customer decline the proposal.
-      this.$http.post(
-          `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
-          { type: "lost", proposalId: this.proposal.id },
-          { headers: this.$auth.getAuthHeader() },
-      );
+    saveProposal(proposal) {
+      new Proposal();
     },
     downProposal() {
       this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);

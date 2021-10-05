@@ -120,7 +120,7 @@
       <div class="filters-section__reset" @click="resetFilters"><md-icon>refresh</md-icon>Reset Filters</div>
     </div>
     <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important">
-      <loader :active="working" :isFullScreen="true" page="vendor"/>
+      <loader :active="working" :isFullScreen="true"/>
       <vendors-grid
         v-if="view === 'grid'"
         :buildingBlocksList="buildingBlocksList"

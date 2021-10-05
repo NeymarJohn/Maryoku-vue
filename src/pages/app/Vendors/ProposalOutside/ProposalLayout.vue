@@ -1,36 +1,33 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader :active="isLoading" is_full_screen page="vendor"></loader>
+    <loader :active="isLoading"></loader>
+    <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
+    <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
+    <div class="main-cont">
+      <router-view></router-view>
+    </div>
+    <section class="footer-wrapper">
+      <div>
+        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
+        </md-button>
 
-          <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
-          <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
-          <div class="main-cont">
-              <router-view></router-view>
-          </div>
-          <section class="footer-wrapper">
-              <div>
-                  <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-                      <img :src="`${proposalIconsUrl}Group 4770 (2).svg`"/> Back
-                  </md-button>
+        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+          <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
+        </md-button>
+      </div>
 
-                  <md-button @click="scrollToTop"
-                             class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-                      <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17"/>
-                  </md-button>
-              </div>
-              <div class="next-cont">
-                  <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"/> Discard </a>
-                  <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
-                      <img :src="`${$iconURL}common/save-purple.svg`"/> Save for later
-                  </a>
-                  <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]"
-                     v-if="step < 3">
-                      Next
-                  </a>
-                  <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
-              </div>
-          </section>
-
+      <div class="next-cont">
+        <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
+        <a class="save" @click="uploadProposal('draft')">
+          <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
+        </a>
+        <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
+          Next
+        </a>
+        <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
+      </div>
+    </section>
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
@@ -85,7 +82,6 @@
       v-if="showSendProposalModal"
       @close="showSendProposalModal = false"
       @submit="submitProposal"
-      @sms="sendSMS"
       :event="event"
       :link="proposalLink"
     ></send-proposal-modal>
@@ -97,18 +93,18 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import { Modal, Loader } from "@/components";
+import { Modal } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
+import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 import ProposalVersionsBar from "./ProposalVersionsBar";
 import Vendor from "@/models/Vendors";
-import { PROPOSAL_STATUS } from "@/constants/status";
-
+import { Loader } from "@/components";
 
 export default {
   components: {
@@ -116,6 +112,7 @@ export default {
     ProposalVersionsBar,
     Modal,
     ProposalHeader,
+    VueElementLoading,
     SendProposalModal,
     ProposalSubmitted,
     Loader,
@@ -126,7 +123,7 @@ export default {
   data() {
     return {
       vendor: null,
-      isLoading: true,
+      isLoading: false,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
@@ -139,14 +136,13 @@ export default {
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
-      proposalStatus: PROPOSAL_STATUS,
-      option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
+      option: "submit", // 'submit', 'duplicate'
       showSendProposalModal: false,
       showSubmittedProposalModal: false,
       proposalLink: "",
     };
   },
-  async mounted() {
+  async created() {
     console.log("non-maryoku.proposal.created");
     if (this.$store.state.auth.user) {
       await this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token);
@@ -178,7 +174,6 @@ export default {
        let index = this.$store.state.proposalForNonMaryoku.versions.findIndex(v => v.id === this.$route.query.version);
        this.$store.commit('proposalForNonMaryoku/selectVersion', index);
     }
-    setTimeout(_ => {}, 10000)
     this.isLoading = false;
   },
 
@@ -234,7 +229,7 @@ export default {
             .then((proposal) => {
               this.isUpdating = false;
               this.isLoading = false;
-              if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
+              if (type === "submit") this.submittedModal = true;
               else {
                 Swal.fire({
                   title: `You saved the current proposal. You can edit anytime later!`,
@@ -309,7 +304,7 @@ export default {
       });
     },
     setProposalLink() {
-      this.uploadProposal(PROPOSAL_STATUS.PENDING).then((proposal) => {
+      this.uploadProposal("submit").then((proposal) => {
         this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
         this.showSendProposalModal = true;
       });
@@ -328,22 +323,6 @@ export default {
           this.showSubmittedProposalModal = true;
         });
     },
-    async sendSMS(){
-        let proposal = this.$store.state.proposalForNonMaryoku;
-        this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
-        let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
-        if (proposal.eventData.customer.phone) {
-            let res = await this.$http
-                .post(
-                    `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendSMS`,
-                    { phoneNumber: proposal.eventData.customer.phone, message },
-                    { headers: this.$auth.getAuthHeader() },
-                )
-            console.log('res', res)
-        }
-
-
-    }
   },
 
   filters: {

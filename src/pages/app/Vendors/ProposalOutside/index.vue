@@ -1,6 +1,7 @@
 <template>
   <div class="for-proposal-wrapper">
-    <div class="md-layout justify-content-between">
+    <vue-element-loading v-if="!vendor" :active="!vendor" spinner="ring" color="#FF547C" />
+    <div class="md-layout justify-content-between" v-else>
       <div class="md-layout-item md-size-70">
         <proposal-steps :eventCategory="vendor.eventCategory" :step="step" :vendor="vendor" />
         <div class="step-wrapper" v-if="step == 0">
@@ -45,16 +46,16 @@ import ProposalEventVision from "./ProposalEventVision.vue";
 import ProposalBidContent from "./ProposalBidContent.vue";
 import ProposalAddFiles from "./ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./ProposalTitleWithIcon.vue";
+import VueElementLoading from "vue-element-loading";
 import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
 import ProposalAdditionalRequirement from "./ProposalAddtionalRequirement";
 import S3Service from "@/services/s3.service";
 import ProposalWizardStep0 from "./ProposalWizardStep0";
 import ProposalWizardStep2 from "./ProposalWizardStep2";
 import ProposalWizardStep3 from "./ProposalWizardStep3";
-import Loader from "@/components/loader/index";
 export default {
   components: {
-    Loader,
+    VueElementLoading,
     ProposalBudgetSummary,
     ProposalItem,
     ProposalSteps,

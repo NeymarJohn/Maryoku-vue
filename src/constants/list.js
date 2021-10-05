@@ -17,12 +17,12 @@ export const CUSTOMER_TABLE_HEADERS = [
 ]
 
 export const PROPOSAL_PAGE_TABS = [
-    { key: "all", value: 'all', title: "All Proposal", icon: "proposal-active.svg", class: "color-vendor" },
-    { key: "won", value: 2, title: "I won", icon: "filter-won.svg", class: "color-won" },
-    { key: "draft", value: 0, title: "Drafts", icon: "filter-draft.svg" },
-    { key: "submit", value: 1, title: "Pending", icon: "filter-pending.svg" },
-    { key: "top", value: 3, title: "Made Top3", icon: "filter-top3.svg" },
-    { key: "lost", value: 4, title: "Lost Bids", icon: "filter-reject.svg" },
+    { key: "all", title: "All Proposal", icon: "proposal-active.svg", class: "color-vendor" },
+    { key: "won", title: "I won", icon: "filter-won.svg", class: "color-won" },
+    { key: "draft", title: "Drafts", icon: "filter-draft.svg" },
+    { key: "submit", title: "Pending", icon: "filter-pending.svg" },
+    { key: "top", title: "Made Top3", icon: "filter-top3.svg" },
+    { key: "lost", title: "Lost Bids", icon: "filter-reject.svg" },
 ]
 
 export const PROPOSAL_TABLE_HEADERS = [

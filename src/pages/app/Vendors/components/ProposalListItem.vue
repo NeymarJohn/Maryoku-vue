@@ -45,7 +45,7 @@
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="edit(proposalStatus.edit)" :class="{'md-gray disabled': proposal.accepted, 'md-purple': !proposal.accepted}">
+          <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
@@ -125,7 +125,6 @@
 <script>
 import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
-import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
   components: { Button },
@@ -163,19 +162,18 @@ export default {
   },
   methods: {
     getStatusIcon(status) {
-          let path = "/static/icons/vendor/proposalBoard/";
-          if ( status === PROPOSAL_STATUS.PENDING ) {
-              return `${path}filter-pending.svg`;
-          } else if ( status === PROPOSAL_STATUS.TOP3) {
-              return `${path}filter-top3.svg`;
-          } else if ( status === PROPOSAL_STATUS.LOST ) {
-              return `${path}filter-reject.svg`;
-          } else {
-              return `${path}filter-${status}.svg`;
-          }
+      let path = "/static/icons/vendor/proposalBoard/";
+      if (status == "submit") {
+        return `${path}filter-pending.svg`;
+      } else if (status == "top") {
+        return `${path}filter-top3.svg`;
+      } else if (status == "lost") {
+        return `${path}filter-reject.svg`;
+      } else {
+        return `${path}filter-${status}.svg`;
+      }
     },
     edit(action) {
-      if ( this.proposal.accepted && action === this.proposalStatus.edit) return;
       this.$emit("action", action, this.proposal.id);
     },
     leave(item) {
@@ -183,29 +181,17 @@ export default {
     },
     isOpened() {
       setTimeout((_) => {
-
-        $("li.md-list-item").each(function(idx, el){
-            let disabled = $(el).hasClass('disabled');
-
-            if ( disabled ) $(el).find("img").attr("style", "filter:brightness(0) invert(50%)");
-            $(el).hover(
-                function () {
-                    if(!disabled) $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
-                },
-                function () {
-                    if(!disabled) $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
-                },
-            );
-        })
+        $("li.md-list-item").hover(
+          function (el) {
+            $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
+          },
+          function () {
+            $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
+          },
+        );
       }, 0);
     },
   },
-  mounted() {
-    console.log('mounted', this.proposal);
-  },
-  watch:{
-    proposal(newVal){}
-  }
 };
 </script>
 <style lang="scss" scoped>

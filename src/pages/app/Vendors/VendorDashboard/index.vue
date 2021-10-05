@@ -177,7 +177,7 @@ export default {
         } else {
           this.incomeChartData.forEach((item, index) => {
             this.incomeChartData[index].value = 1000 * Math.random() + 200;
-            this.incomeChartData[Number(item._id) - 1].future = true;
+            this.incomeChartData[index].future = true;
           });
           this.incomeChartData = [...this.incomeChartData];
         }
@@ -310,7 +310,6 @@ export default {
       return this.$store.state.vendorDashboard.proposalRequests;
     },
     yearlyRevenue() {
-      console.log("this.consoe", this.monthlyReport);
       if (this.monthlyReport.length === 0) return 0;
       return this.monthlyReport.reduce((s, item) => {
         return s + item.amount;
