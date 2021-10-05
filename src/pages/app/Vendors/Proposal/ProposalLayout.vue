@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vue-element-loading v-if="isUpdating" :active="isUpdating" color="#FF547C"></vue-element-loading>
+    <Loader :active="isLoading" is-full-screen page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
       <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
@@ -20,7 +20,7 @@
         <div class="next-cont">
           <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-          <a class="save" @click="uploadProposal('draft')">
+          <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
             <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
           </a>
           <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
@@ -110,16 +110,18 @@
 <script>
 import { mapActions } from "vuex";
 import Vendors from "@/models/Vendors";
-import { Modal } from "@/components";
+import { Modal, Loader } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
 import ProposalVersionsBar from "./ProposalVersionsBar";
 import VueElementLoading from "vue-element-loading";
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
   components: {
+    Loader,
     VendorBidTimeCounter,
     Modal,
     ProposalHeader,
@@ -131,7 +133,7 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: true,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       selectedServices: [],
@@ -145,7 +147,8 @@ export default {
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
-      option: "submit", // 'submit', 'duplicate'
+      proposalStatus: PROPOSAL_STATUS,
+      option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
     };
   },
   async created() {
@@ -199,6 +202,7 @@ export default {
       let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version.id);
       this.$store.commit('vendorProposal/selectVersion', index);
     }
+    this.isLoading = false
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "setWizardStep"]),
@@ -267,7 +271,7 @@ export default {
         let proposal = await this.saveProposal(type);
         this.isUpdating = false;
         this.isLoading = false;
-        if (type === "submit") this.submittedModal = true;
+        if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
         else {
           Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,

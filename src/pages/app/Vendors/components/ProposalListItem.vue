@@ -125,6 +125,7 @@
 <script>
 import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
   components: { Button },
@@ -162,16 +163,16 @@ export default {
   },
   methods: {
     getStatusIcon(status) {
-      let path = "/static/icons/vendor/proposalBoard/";
-      if (status == "submit") {
-        return `${path}filter-pending.svg`;
-      } else if (status == "top") {
-        return `${path}filter-top3.svg`;
-      } else if (status == "lost") {
-        return `${path}filter-reject.svg`;
-      } else {
-        return `${path}filter-${status}.svg`;
-      }
+          let path = "/static/icons/vendor/proposalBoard/";
+          if ( status === PROPOSAL_STATUS.PENDING ) {
+              return `${path}filter-pending.svg`;
+          } else if ( status === PROPOSAL_STATUS.TOP3) {
+              return `${path}filter-top3.svg`;
+          } else if ( status === PROPOSAL_STATUS.LOST ) {
+              return `${path}filter-reject.svg`;
+          } else {
+              return `${path}filter-${status}.svg`;
+          }
     },
     edit(action) {
       if ( this.proposal.accepted && action === this.proposalStatus.edit) return;

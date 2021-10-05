@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout vendor-signin">
-    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen />
+    <Loader :active="loading" is-full-screen page="vendor"></Loader>
     <div class="md-layout-item">
       <signup-card>
         <div
@@ -81,9 +81,11 @@ import { SignupCard, MaryokuInput, Modal } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
 import VueElementLoading from "vue-element-loading";
 import TenantUser from "@/models/TenantUser";
+import Loader from "../../../components/loader/index";
 export default {
   name: "SignIn",
   components: {
+    Loader,
     SignupCard,
     Modal,
     InputText,
