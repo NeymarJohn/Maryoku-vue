@@ -16,7 +16,7 @@
           <div @click="emailAccount = 'email'" class="mr-40 type-button" :class="{ active: emailAccount === 'email' }">
             <img :src="`${$iconURL}NewSubmitPorposal/Group 16982.svg`" style="margin-top: -10px; width: 40px" />
           </div>
-          <div @click="emailAccount = 'whatsapp'" class="type-button" :class="{ active: emailAccount === 'whatsapp' }">
+          <div @click="sendSMS" class="type-button" :class="{ active: emailAccount === 'whatsapp' }">
             <img :src="`${$iconURL}NewSubmitPorposal/Group 16974.svg`" style="margin-top: -10px; width: 40px" />
           </div>
         </div>
@@ -161,6 +161,10 @@ export default {
     submitProposal() {
       this.$emit("submit");
     },
+    sendSMS(){
+      console.log('sendSMS');
+      this.$emit('sms');
+    }
   },
 };
 </script>

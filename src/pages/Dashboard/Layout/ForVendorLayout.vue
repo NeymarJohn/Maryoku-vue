@@ -1,5 +1,6 @@
 <template>
   <div class="for-vendors-layout-wrapper">
+    <Loader :active="isLoading" is_full_screen page="vendor" />
     <section class="header-wrapper">
       <div class="vendors-header">
         <ul>
@@ -113,7 +114,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -122,7 +123,7 @@ import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
-import { Modal } from "@/components";
+import { Modal, Loader } from "@/components";
 
 export default {
   components: {
@@ -133,6 +134,7 @@ export default {
     UserMenu,
     SignupRequestModal,
     Modal,
+    Loader,
   },
   data() {
     return {
@@ -140,6 +142,7 @@ export default {
       vendor: {
         eventCategory: {},
       },
+      isLoading: true,
       event: null,
       proposalRequest: null,
       showSignup: false,
@@ -148,24 +151,20 @@ export default {
       showCloseProposalModal: false,
     };
   },
-  mounted() {
-    this.getVendor(this.$route.params.vendorId)
-      .then((vendor) => {
-        this.vendor = vendor;
-        if (this.vendor.isEditing) {
-          this.showSignup = true;
-        }
-      })
-      .catch((e) => {
-        this.showSignup = true;
-      });
-    this.getProposalRequest(this.$route.params.rfpId).then((proposalRequest) => {
-      this.proposalRequest = proposalRequest;
-      this.event = this.proposalRequest.eventData;
-      if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {
-        this.showCloseProposalModal = true;
-      }
-    });
+  async mounted() {
+
+    this.vendor = await this.getVendor(this.$route.params.vendorId)
+
+    if (this.vendor.isEditing) {
+      this.showSignup = true;
+    }
+    this.proposalRequest = await this.getProposalRequest(this.$route.params.rfpId)
+
+    this.event = this.proposalRequest.eventData;
+    if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {
+      this.showCloseProposalModal = true;
+    }
+    this.isLoading = false;
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),

@@ -3407,7 +3407,7 @@ export const companyServices = [
     name: "foodandbeverage",
     type: Array,
     value: [],
-    available: ["Food catering", "Beverage"],
+    available: ["Food catering", "Beverage", "Pastry & Bakery"],
   },
   {
     name: "decor",

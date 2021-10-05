@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-customer-board p-40">
-    <loader :active="loading" :isFullScreen="true" />
+    <loader :active="loading" :isFullScreen="true" page="vendor"/>
     <div class="font-size-22 font-bold d-flex align-center">
       <img :src="`${$iconURL}CustomerList/group-19735.svg`" class="mr-10" /> CUSTOMERS
       <md-button class="ml-auto md-simple md-black md-maryoku mr-15">Import Customers List</md-button>

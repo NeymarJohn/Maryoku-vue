@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <loader :active="loading" />
+    <loader :active="loading" page="vendor"/>
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
       <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
       PROFILE & SETTINGS
