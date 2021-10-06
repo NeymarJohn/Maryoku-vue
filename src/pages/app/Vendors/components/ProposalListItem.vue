@@ -170,6 +170,8 @@ export default {
               return `${path}filter-top3.svg`;
           } else if ( status === PROPOSAL_STATUS.LOST ) {
               return `${path}filter-reject.svg`;
+          } else if ( status === PROPOSAL_STATUS.WON ) {
+              return `${path}filter-won.svg`;
           } else {
               return `${path}filter-${status}.svg`;
           }

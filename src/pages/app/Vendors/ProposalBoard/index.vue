@@ -637,7 +637,7 @@ export default {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
       return proposalRequests.filter((p) => {
         return p.proposal
-          ? (p.declineMessage !== "decline" && p.proposal.status !== PROPOSAL_STATUS.PENDING && p.remainingTime > 0) ||
+          ? (p.declineMessage !== "decline" && p.proposal.status == PROPOSAL_STATUS.DRAFT && p.remainingTime > 0) ||
               (p.proposal.status === PROPOSAL_STATUS.PENDING &&
                 p.proposal.negotiations &&
                 p.proposal.negotiations.filter(

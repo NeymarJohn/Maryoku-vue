@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :active="isLoading" is-full-screen page="vendor"></Loader>
+    <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
       <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>

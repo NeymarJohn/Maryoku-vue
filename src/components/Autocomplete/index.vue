@@ -13,6 +13,7 @@
       :placeholder="placeholder"
       @keypress="startSearch"
       @blur="stopSearch"
+      @input="input"
     />
     <div class="auto-complete-panel" v-if="showAutoCompletePanel && filteredSuggestItems.length > 0">
       <div
@@ -72,9 +73,10 @@ export default {
       this.showAutoCompletePanel = false;
     },
     startSearch() {
-      console.log(this.options);
-      console.log(this.filteredSuggestItems);
       this.showAutoCompletePanel = true;
+    },
+    input(e){
+      this.$emit('input', e);
     },
     stopSearch() {
       setTimeout(() => {
