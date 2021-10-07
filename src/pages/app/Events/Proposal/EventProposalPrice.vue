@@ -84,12 +84,20 @@
                 <img :src="`${$iconURL}common/enter-gray.svg`" />
                 <div
                   class="option-row"
-                  :class="`${index > 0 ? 'border-top' : ''}`"
-                  :key="`planner-option-${index}`"
-                  v-for="(option, index) in service.plannerOptions"
+                  :class="`${optionIndex > 0 ? 'border-top' : ''}`"
+                  :key="`planner-option-${optionIndex}`"
+                  v-for="(option, optionIndex) in [
+                    { description: service.requirementTitle, qty: service.requirementValue, price: service.price },
+                    ...service.plannerOptions,
+                  ]"
                 >
                   <div class="d-flex align-center pl-40">
-                    <md-radio class="m-0" v-model="service.selectedPlannerOption" :value="index">
+                    <md-radio
+                      class="m-0"
+                      v-model="service.selectedPlannerOption"
+                      :value="optionIndex"
+                      @change="changeAlternatvies(index, optionIndex)"
+                    >
                       {{ option.description }}
                     </md-radio>
                   </div>
@@ -259,6 +267,9 @@ export default {
       : [];
   },
   methods: {
+    changeAlternatvies(serviceIndex, alternativeIndex) {
+      this.$emit("changeBookedServices", { serviceCategory: this.serviceCategory });
+    },
     addExtraService(extraService) {
       const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
       if (itemIndex >= 0) {
@@ -292,7 +303,7 @@ export default {
       this.$forceUpdate();
     },
     changeBookService() {
-      this.$emit("changeBookedServices");
+      this.$emit("changeBookedServices", { serviceCategory });
     },
   },
   computed: {
@@ -341,7 +352,13 @@ export default {
       if (!this.costServices || this.costServices.length === 0) return 0;
       return (
         this.costServices.reduce((s, item) => {
-          return item.isComplimentary ? s : s + item.requirementValue * item.price;
+          if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
+            // if 0 you selected main option
+            const selectedAlternative = item.plannerOptions[item.selectedPlannerOption - 1];
+            return item.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return item.isComplimentary ? s : s + item.requirementValue * item.price;
+          }
         }, 0) +
         this.addedServices.reduce((s, item) => {
           return s + item.requirementValue * item.price;
@@ -385,7 +402,9 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
   margin-bottom: 1em;
-
+  /deep/ .md-radio {
+    align-items: center;
+  }
   .complimentary-tag {
     color: #ba8d05;
     font-weight: normal;

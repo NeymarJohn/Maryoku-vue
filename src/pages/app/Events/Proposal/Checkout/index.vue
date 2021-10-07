@@ -368,8 +368,13 @@ export default {
       )
         return 0;
       proposal.bundleDiscount.services.forEach((serviceCategory) => {
-        const sumOfService = proposal.costServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+        const sumOfService = proposal.costServices[serviceCategory].reduce((s, item) => {
+          if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
+            const selectedAlternative = item.plannerOptions[item.selectedPlannerOption - 1];
+            return item.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return item.isComplimentary ? s : s + item.requirementValue * item.price;
+          }
         }, 0);
         bundledServicePrice += sumOfService;
       });
@@ -380,8 +385,13 @@ export default {
       let totalPrice = 0;
       let services = proposal.additionalServices.length ? proposal.bookedServices : Object.keys(proposal.costServices);
       services.map((serviceCategory) => {
-        const sumOfService = proposal.costServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+        const sumOfService = proposal.costServices[serviceCategory].reduce((s, item) => {
+          if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
+            const selectedAlternative = item.plannerOptions[item.selectedPlannerOption - 1];
+            return item.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return item.isComplimentary ? s : s + item.requirementValue * item.price;
+          }
         }, 0);
         totalPrice += sumOfService;
       });

@@ -125,7 +125,6 @@
     ></reminding-time-modal>
     <negotiation-request-modal
       v-if="showNegotiationRequestModal"
-      :proposal="proposal"
       @close="showNegotiationRequestModal = false"
       @save="sendNegotiationRequest"
     ></negotiation-request-modal>
@@ -149,7 +148,7 @@ import { CommentMixins, ShareMixins } from "@/mixins";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
-import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
   components: {
@@ -265,7 +264,6 @@ export default {
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
-        type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE,
         url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
         ...params,
       });
@@ -438,18 +436,8 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
-    async sendNegotiationRequest(params) {
+    sendNegotiationRequest() {
       this.showNegotiationRequestModal = false;
-      let expiredTime = moment().add(2, 'days').unix() * 1000;
-      let query = new ProposalNegotiationRequest({
-        proposalId: this.proposal.id,
-        proposal: new Proposal({ id: this.proposal.id }),
-        expiredTime,
-        type: NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION,
-        ...params,
-      });
-      let res = await query.for(new Proposal({ id: this.proposal.id })).save();
-      this.proposal.negotiations.push(res);
 
       Swal.fire({
         title: "Negotiation Sent successfully",

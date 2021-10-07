@@ -115,7 +115,7 @@ let authPages = {
             },
         },
         {
-            path: "/guest/signup",
+            path: "/signup",
             name: "SignUp",
             component: SignUp,
             meta: {

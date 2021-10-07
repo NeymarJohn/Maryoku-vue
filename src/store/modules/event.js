@@ -271,7 +271,7 @@ const actions = {
         })
     },
 
-    getProposals({commit, state}, payload) {
+    getProposals({ commit, state }, payload) {
         return new Promise((resolve, reject) => {
             new Proposal()
                 .params(payload)
@@ -279,23 +279,25 @@ const actions = {
                 .then((result) => {
                     state.eventData.components.map(c => {
                         let proposals = result.filter(it => it.eventComponentId == c.id) || [];
-                        commit("setProposalsByCategory", {category: c.componentId, proposals});
+                        commit("setProposalsByCategory", { category: c.componentId, proposals });
                     })
                     resolve(result)
                 })
         })
     },
-    updateProposal({commit, state}, payload) {
+    updateProposal({ commit, state }, payload) {
         console.log('updateProposal', payload);
         return new Promise((resolve, reject) => {
-            new Proposal({...payload.proposal})
+            new Proposal({ ...payload.proposal })
                 .save()
                 .then((result) => {
                     let proposals = state.proposals[payload.category];
-                    let index = proposals.findIndex(p => p.id == payload.proposal.id);
-                    console.log(payload.category, index, payload.proposal);
-                    Vue.set(proposals, index, result)
-                    commit("setProposalsByCategory", {category: payload.category, proposals});
+                    if (proposals) {
+                        let index = proposals.findIndex(p => p.id == payload.proposal.id);
+                        console.log(payload.category, index, payload.proposal);
+                        Vue.set(proposals, index, result)
+                        commit("setProposalsByCategory", { category: payload.category, proposals });
+                    }
                     resolve(result)
                 })
         })
@@ -368,7 +370,7 @@ const mutations = {
     setBudgetNotification(state, event_id) {
         state.budgetNotification.push(event_id);
     },
-    setProposalsByCategory(state, {category, proposals}){
+    setProposalsByCategory(state, { category, proposals }) {
         Vue.set(state.proposals, category, proposals);
     }
 };

@@ -250,43 +250,43 @@
           </template>
         </div>
       </div>
-<!--      <div v-if="vendorProposal.vendor.vendorCategory === 'venuerental' && vendorProposal.seatingData && Object.keys(vendorProposal.seatingData).length"-->
-<!--          class="proposal-section policy-section">-->
+      <!--      <div v-if="vendorProposal.vendor.vendorCategory === 'venuerental' && vendorProposal.seatingData && Object.keys(vendorProposal.seatingData).length"-->
+      <!--          class="proposal-section policy-section">-->
 
-<!--        <div class="proposal-section__title">-->
-<!--            <img class="seating" :src="`${$iconURL}common/seating-purple.png`" width="40px"/> Seating Arrangement-->
-<!--        </div>-->
+      <!--        <div class="proposal-section__title">-->
+      <!--            <img class="seating" :src="`${$iconURL}common/seating-purple.png`" width="40px"/> Seating Arrangement-->
+      <!--        </div>-->
 
-<!--        <div class="policy-content pt-40">-->
-<!--            <div class="d-flex align-stretch seats-list">-->
-<!--                <div class="d-flex mb-30">-->
-<!--                    <template v-for="(sit, index) in vendorProposal.seatingData.options">-->
-<!--                        <div-->
-<!--                            v-if="sit.selected"-->
-<!--                            :key="`sitarrangement-${index}`"-->
-<!--                            class="d-flex flex-column justify-content-between seat-type"-->
-<!--                        >-->
-<!--                            <div class="font-bold">'{{ sit.item }}'</div>-->
-<!--                            <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>-->
-<!--                        </div>-->
-<!--                    </template>-->
-<!--                    <div v-if="vendorProposal.seatingData.hasOtherOption" class="d-flex flex-column seat-type">-->
-<!--                        <div class="font-bold">'Other'</div>-->
-<!--                        <div class="mt-20">{{ vendorProposal.vendor.seatingData.otherOptionContent }}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div v-if="!editingNewSeating" class="d-flex align-center">-->
-<!--                    <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="editingNewSeating = true">-->
-<!--                        Suggest new seating arrangement-->
-<!--                    </md-button>-->
-<!--                </div>-->
-<!--                <div v-else class="p-10" style="min-width: 350px">-->
-<!--                    <div class="font-bold mb-10">Suggest new seating arrangement</div>-->
-<!--                    <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--        <div class="policy-content pt-40">-->
+      <!--            <div class="d-flex align-stretch seats-list">-->
+      <!--                <div class="d-flex mb-30">-->
+      <!--                    <template v-for="(sit, index) in vendorProposal.seatingData.options">-->
+      <!--                        <div-->
+      <!--                            v-if="sit.selected"-->
+      <!--                            :key="`sitarrangement-${index}`"-->
+      <!--                            class="d-flex flex-column justify-content-between seat-type"-->
+      <!--                        >-->
+      <!--                            <div class="font-bold">'{{ sit.item }}'</div>-->
+      <!--                            <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>-->
+      <!--                        </div>-->
+      <!--                    </template>-->
+      <!--                    <div v-if="vendorProposal.seatingData.hasOtherOption" class="d-flex flex-column seat-type">-->
+      <!--                        <div class="font-bold">'Other'</div>-->
+      <!--                        <div class="mt-20">{{ vendorProposal.vendor.seatingData.otherOptionContent }}</div>-->
+      <!--                    </div>-->
+      <!--                </div>-->
+      <!--                <div v-if="!editingNewSeating" class="d-flex align-center">-->
+      <!--                    <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="editingNewSeating = true">-->
+      <!--                        Suggest new seating arrangement-->
+      <!--                    </md-button>-->
+      <!--                </div>-->
+      <!--                <div v-else class="p-10" style="min-width: 350px">-->
+      <!--                    <div class="font-bold mb-10">Suggest new seating arrangement</div>-->
+      <!--                    <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>-->
+      <!--                </div>-->
+      <!--            </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="proposal-section policy-section">
         <div class="proposal-section__title">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
@@ -663,9 +663,23 @@ export default {
       console.log("updateExpireDate");
       this.$emit("ask", "expiredDate");
     },
-    async changeBookedServices() {
+    async changeBookedServices({ serviceCategory }) {
+      console.log("this.category", serviceCategory);
+
+      // update the pricce of category
+      const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+        if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+          // if 0 you selected main option
+          const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+          return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+        } else {
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+        }
+      }, 0);
+      this.vendorProposal.pricesByCategory[serviceCategory] = sumOfService;
+
       await this.$store.dispatch("event/updateProposal", {
-        category: this.category.componentId,
+        category: serviceCategory,
         proposal: this.vendorProposal,
       });
     },
@@ -683,21 +697,37 @@ export default {
     },
     negotiationProcessed() {
       if (!this.vendorProposal.nonMaryoku) return false;
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
-          it.status === NEGOTIATION_REQUEST_STATUS.APPROVED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME && it.remainingTime > 0)
+      return (
+        !!this.vendorProposal.negotiations.length &&
+        this.vendorProposal.negotiations.every(
+          (it) =>
+            it.status === NEGOTIATION_REQUEST_STATUS.APPROVED &&
+            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
+            it.remainingTime > 0,
+        )
+      );
     },
     negotiationDeclined() {
       if (!this.vendorProposal.nonMaryoku) return false;
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
-          it.status === NEGOTIATION_REQUEST_STATUS.DECLINE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME && it.remainingTime > 0)
-
+      return (
+        !!this.vendorProposal.negotiations.length &&
+        this.vendorProposal.negotiations.every(
+          (it) =>
+            it.status === NEGOTIATION_REQUEST_STATUS.DECLINE &&
+            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
+            it.remainingTime > 0,
+        )
+      );
     },
     negotiationPending() {
       console.log("negotiationPending", this.vendorProposal);
       return (
         !!this.vendorProposal.negotiations.length &&
         this.vendorProposal.negotiations.some(
-          (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME && it.remainingTime > 0,
+          (it) =>
+            it.status === NEGOTIATION_REQUEST_STATUS.NONE &&
+            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
+            it.remainingTime > 0,
         )
       );
     },
@@ -765,13 +795,25 @@ export default {
       if (!this.checkedAllBundledOffers) return 0;
       this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+            // if 0 you selected main option
+            const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+            return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          }
         }, 0);
 
         bundledServicePrice += sumOfService;
         if (this.addedServices[serviceCategory]) {
           const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-            return service.isComplimentary ? s : s + service.requirementValue * service.price;
+            if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+              // if 0 you selected main option
+              const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+              return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+            } else {
+              return service.isComplimentary ? s : s + service.requirementValue * service.price;
+            }
           }, 0);
           bundledServicePrice += sumOfService;
         }
@@ -783,7 +825,13 @@ export default {
       let totalPrice = 0;
       this.vendorProposal.bookedServices.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+            // if 0 you selected main option
+            const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+            return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          }
         }, 0);
         totalPrice += sumOfService;
       });

@@ -1,6 +1,6 @@
 <template>
   <div class="for-vendors-layout-wrapper">
-    <Loader :active="true" is_full_screen page="vendor" />
+    <Loader :active="isLoading" is_full_screen page="vendor" />
     <section class="header-wrapper">
       <div class="vendors-header">
         <ul>

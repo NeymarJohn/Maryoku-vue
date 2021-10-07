@@ -145,7 +145,6 @@ export default {
             proposalId: this.proposal.id,
             proposalRequestId: this.proposal.proposalRequestId,
             expiredDate: newExpiredDate,
-            type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME
         })
             .for(new Proposal({ id: this.proposal.id }))
             .save()

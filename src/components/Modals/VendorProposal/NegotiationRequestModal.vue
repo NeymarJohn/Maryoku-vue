@@ -2,9 +2,9 @@
   <modal class="negotiation-modal" containerClass="modal-container md">
     <template slot="header">
       <div class="my-10">
-        <div class="font-size-30 font-bold-extra">Negotiate rate for {{vendor}}</div>
+        <div class="font-size-30 font-bold-extra">Negotiate rate for Relish caterers & venues</div>
         <div class="mt-15">
-          Submit the hourly or fixed rate below that you’d like to propose to {{vendor}}
+          Submit the hourly or fixed rate below that you’d like to propose to Relish caterers & venues
         </div>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -16,17 +16,17 @@
         <label class="font-size-16 font-bold-extra">Negotiate By:</label>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
-              <md-radio class="d-flex" v-model="rate" value="$"></md-radio>
+              <md-radio class="d-flex" v-model="rate" value="fixed_rate"></md-radio>
               <span>Fixed Rate</span>
           </div>
           <div class="d-flex align-center ml-100">
-              <md-radio v-model="rate" value="%"></md-radio>
+              <md-radio v-model="rate" value="percentage"></md-radio>
               <span>Percentages</span>
           </div>
         </div>
         <div class="mt-50 width-70">
             <label class="font-bold pb-10 d-inline-block">Your Rate</label>
-            <maryoku-input :inputStyle="inputStyle" placeholder="Type rate here" v-model="value"></maryoku-input>
+            <maryoku-input inputStyle="budget" placeholder="Type rate here"></maryoku-input>
         </div>
         <div class="mt-50">
             <label class="font-bold pb-10 d-inline-block">Add Comment</label>
@@ -35,8 +35,8 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-black md-simple my-10" @click="close"> Cancel </md-button>
-      <md-button class="md-red md-bold reminder-button my-10" @click="setRemind" :disabled="!value">
+      <md-button class="md-black md-simple my-10" @click="close"> Remind Me Later </md-button>
+      <md-button class="md-red md-bold reminder-button my-10" @click="setRemind" :disabled="!canSetReminder">
         Update Vendor
       </md-button>
     </template>
@@ -56,19 +56,20 @@ export default {
     WarningMessage,
   },
   props: {
-    proposal: {
+    rsvpRequest: {
       type: Object,
-      required: true,
+      default: () => {},
     },
   },
   data() {
     return {
-      rate: "$",
-      value: null,
+      screen: 2,
+      rate: "fixed_rate",
       comment: null,
     };
   },
   created() {
+    this.remindingEmail = this.rsvpRequest.email;
   },
   methods: {
     cancel() {
@@ -78,21 +79,14 @@ export default {
       this.$emit("close");
     },
     setRemind() {
-      this.$emit("save", {price: {
-          rate: this.rate,
-          value: this.value,
-          comment: this.comment}});
+      this.$emit("save");
     },
   },
-  computed:{
-      inputStyle(){
-        return this.rate === '$' ? 'budget' : 'percent';
-      },
-      vendor(){
-          if(!this.proposal) return null;
-          return this.proposal.vendor.tenantUser.company
-      }
-  }
+  computed: {
+    canSetReminder() {
+      return this.remindTimeOption;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

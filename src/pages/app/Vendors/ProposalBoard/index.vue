@@ -182,7 +182,8 @@
       <template slot="body">
         <negotiation-request
           :type="negotiationType"
-          :negotiation="negotiation"
+          :eventData="eventChangeData"
+          :expiredTime="expiredTime"
           :processed="negotiationProcessed"
           @close="showRequestNegotiationModal = false"
         />
@@ -223,20 +224,6 @@
                 @click="handleNegotiation(negotiationRequestStatus.acknowledge)"
             >Acknowledge</md-button>
         </template>
-        <template v-else-if="negotiationType === negotiationTypes.PRICE_NEGOTIATION">
-          <md-button
-             class="md-simple md-vendor-text md-black p-0"
-             @click="handleNegotiation(negotiationRequestStatus.decline)"
-          >Decline</md-button>
-          <md-button
-              class="md-simple md-vendor-text md-black p-0 ml-auto"
-              @click="handleNegotiation(negotiationRequestStatus.review)"
-          >Review proposal</md-button>
-          <md-button
-              class="md-vendor ml-10"
-              @click="handleNegotiation(negotiationRequestStatus.approve)"
-          >Approve</md-button>
-        </template>
       </template>
     </modal>
     <modal v-if="showInsightModal" container-class="modal-container bg-white">
@@ -276,7 +263,6 @@ import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 
 import { Loader, TablePagination, Modal } from "@/components";
-import {PROPOSAL_STATUS} from "../../../../constants/status";
 const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");
@@ -462,32 +448,26 @@ export default {
         this.showProposalDetail = true;
 
       } else if ( status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline ) {
-          let expiredTime = new Date(this.selectedProposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
-          let signupUrl = `${location.protocol}//${location.host}/#/guest/signup`;
+        let expiredTime =
+          new Date(this.selectedProposal.expiredDate).getTime() +
+          (status === this.negotiationRequestStatus.approve ? 2 * 3600 * 24 * 1000 : 0);
 
           let url = this.selectedProposal.nonMaryoku
           ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
           : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
 
-          let data = {
-              id: this.selectedProposal.negotiations[0].id,
-              status,
-              url,
-          }
-          if ( status === this.negotiationRequestStatus.approve &&
-              this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) data = {...data, expiredTime};
-          if ( status === this.negotiationRequestStatus.decline &&
-              this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) data = {...data, signupUrl};
-
           let negotiation = this.$store.dispatch('vendorDashboard/saveNegotiation', {
-              data,
+              data: {
+                  id: this.selectedProposal.negotiations[0].id,
+                  expiredTime,
+                  status,
+                  url,
+              },
               proposal: this.selectedProposal
           })
-
-          if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) this.showRequestNegotiationModal = false;
           this.selectedProposal.negotiations[0] = negotiation;
 
-          if (status === this.negotiationRequestStatus.approve || this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+          if (status === this.negotiationRequestStatus.approve)
               this.selectedProposal.expiredDate = new Date(expiredTime);
 
           this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
@@ -637,8 +617,8 @@ export default {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
       return proposalRequests.filter((p) => {
         return p.proposal
-          ? (p.declineMessage !== "decline" && p.proposal.status !== PROPOSAL_STATUS.PENDING && p.remainingTime > 0) ||
-              (p.proposal.status === PROPOSAL_STATUS.PENDING &&
+          ? (p.declineMessage !== "decline" && p.proposal.status !== "submit" && p.remainingTime > 0) ||
+              (p.proposal.status === "submit" &&
                 p.proposal.negotiations &&
                 p.proposal.negotiations.filter(
                   (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0,
@@ -649,41 +629,26 @@ export default {
     proposals() {
       return this.$store.state.vendorDashboard.proposals;
     },
-    negotiation(){
-      console.log('negotiation', this.selectedProposal);
-      if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
-
-      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE )
-        return new Date(this.selectedProposal.expiredDate).getTime();
-
-      else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
-          let {startTime, endTime, numberOfParticipants, location} = this.selectedProposal.eventData
-          let { event } = this.selectedProposal.negotiations[0];
-          return {
-              originalDate: moment(startTime * 1000).format('DD-MM-YY'),
-              date: moment(event.startTime * 1000).format('DD-MM-YY'),
-              originalStartTime: moment(startTime * 1000).format('hh:mm a'),
-              originalEndTime: moment(endTime * 1000).format('hh:mm a'),
-              startTime: moment(event.startTime * 1000).format('hh:mm a'),
-              endTime: moment(event.endTime * 1000).format('hh:mm a'),
-              originalNumberOfParticipants: numberOfParticipants,
-              numberOfParticipants: event.numberOfParticipants,
-              originalLocation: location,
-              location: event.location,
-          }
-      } else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-          console.log('price.negotiation');
-          let {numberOfParticipants} = this.selectedProposal.eventData;
-          let data = this.selectedProposal.negotiations[0].price;
-          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
-
-          return {
-              originalBudget: this.selectedProposal.cost,
-              budget,
-              originalBudgetPerGuest: (this.selectedProposal.cost / numberOfParticipants).toFixed(2),
-              budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
-          }
+    eventChangeData(){
+      console.log('eventChangeData', this.selectedProposal);
+      if(!this.selectedProposal || !this.selectedProposal.negotiations.length ||
+          this.selectedProposal.negotiations[0].type !== NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) return {}
+      return {
+        originalDate: moment(this.selectedProposal.eventData.startTime * 1000).format('DD-MM-YY'),
+        date: moment(this.selectedProposal.negotiations[0].event.startTime * 1000).format('DD-MM-YY'),
+        originalStartTime: moment(this.selectedProposal.eventData.startTime * 1000).format('hh:mm a'),
+        originalEndTime: moment(this.selectedProposal.eventData.endTime * 1000).format('hh:mm a'),
+        startTime: moment(this.selectedProposal.negotiations[0].event.startTime * 1000).format('hh:mm a'),
+        endTime: moment(this.selectedProposal.negotiations[0].event.endTime * 1000).format('hh:mm a'),
+        originalNumberOfParticipants: this.selectedProposal.eventData.numberOfParticipants,
+        numberOfParticipants: this.selectedProposal.negotiations[0].event.numberOfParticipants,
+        originalLocation: this.selectedProposal.eventData.location,
+        location: this.selectedProposal.negotiations[0].event.location,
       }
+    },
+    expiredTime() {
+      if (!this.selectedProposal) return null;
+      return new Date(this.selectedProposal.expiredDate).getTime();
     },
   },
   watch: {

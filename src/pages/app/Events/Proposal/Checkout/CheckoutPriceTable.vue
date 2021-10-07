@@ -81,7 +81,13 @@ export default {
     priceOfCostservices() {
       if (!this.costServices || this.costServices.length === 0) return 0;
       return this.costServices.reduce((s, item) => {
-        return item.isComplimentary ? s : s + item.requirementValue * item.price;
+        if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
+          // if 0 you selected main option
+          const selectedAlternative = item.plannerOptions[item.selectedPlannerOption - 1];
+          return item.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+        } else {
+          return item.isComplimentary ? s : s + item.requirementValue * item.price;
+        }
       }, 0);
     },
     priceBeforeDiscount() {
