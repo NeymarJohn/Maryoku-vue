@@ -27,7 +27,7 @@
           <div class="social-line text-center">
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
               <img :src="`${$iconURL}Signup/google-icon.jpg`" />
-              <span>Sign in with Google</span>
+              <span>Sign up with Google</span>
             </md-button>
             <h4 class="mt-1">Or</h4>
           </div>
@@ -115,25 +115,24 @@ export default {
   },
   methods: {
     authenticate(provider) {
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
       let tenantId = this.$authService.resolveTenantId();
-      console.log(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`,
-      );
+
       let callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`,
+        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'token'}`,
       );
       let action = this.$route.query.action;
       if (action) {
         callback = btoa(
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}&token=`,
+          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}${isGuest?'userType=guest&token=':'&token='}`,
         );
       }
-      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     signup() {
       this.errorMsg = "";
       this.error = "";
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
           if (!this.terms) {
@@ -151,6 +150,7 @@ export default {
             this.user.permittedEvent = { eventId: event, permit: permit };
           } else {
             this.user.role = "administrator";
+            if(isGuest) this.user.currentUserType = 'guest';
           }
           console.log(this.user);
           this.$store.dispatch("auth/register", this.user).then(

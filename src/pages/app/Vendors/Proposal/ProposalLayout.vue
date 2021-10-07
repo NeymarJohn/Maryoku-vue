@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :active="isLoading" is-full-screen page="vendor"></Loader>
+    <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
       <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
@@ -271,7 +271,7 @@ export default {
         let proposal = await this.saveProposal(type);
         this.isUpdating = false;
         this.isLoading = false;
-        if (type === "submit") this.submittedModal = true;
+        if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
         else {
           Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,

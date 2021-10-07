@@ -84,6 +84,7 @@ import Button from "../../../../components/Button/ButtonDiv";
 import ProposalListItem from "./ProposalListItem";
 import { VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import { FadeTransition } from "vue2-transitions";
+import {PROPOSAL_STATUS} from "../../../../constants/status";
 
 export default {
   components: {
@@ -137,18 +138,6 @@ export default {
     };
   },
   methods: {
-    getStatusIcon(status) {
-      let path = "/static/icons/vendor/proposalBoard/";
-      if (status == "submit") {
-        return `${path}filter-pending.svg`;
-      } else if (status == "top") {
-        return `${path}filter-top3.svg`;
-      } else if (status == "lost") {
-        return `${path}filter-reject.svg`;
-      } else {
-        return `${path}filter-${status}.svg`;
-      }
-    },
     edit(action) {
       this.$emit("customerAction", action);
     },
@@ -194,7 +183,7 @@ export default {
     },
     getIncome(customer) {
       return customer.proposals.reduce((s, p) => {
-        if (p.status === "won") return s + p.cost;
+        if (p.status === PROPOSAL_STATUS.WON) return s + p.cost;
         else return s;
       }, 0);
     },

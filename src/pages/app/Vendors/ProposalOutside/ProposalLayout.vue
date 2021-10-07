@@ -234,7 +234,7 @@ export default {
             .then((proposal) => {
               this.isUpdating = false;
               this.isLoading = false;
-              if (type === "submit") this.submittedModal = true;
+              if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
               else {
                 Swal.fire({
                   title: `You saved the current proposal. You can edit anytime later!`,

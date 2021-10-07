@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="main-panel">
-        <Loader :active="loading" is-full-screen></Loader>
+        <Loader :active="loading" :isFullScreen="true"></Loader>
         <!-- your content here -->
         <div v-if="!loading">
             <zoom-center-transition :duration="200" mode="out-in">
