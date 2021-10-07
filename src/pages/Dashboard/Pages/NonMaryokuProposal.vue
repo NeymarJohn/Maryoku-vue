@@ -22,9 +22,8 @@
         :landingPage="true"
         :nonMaryoku="true"
         v-if="proposal"
-        @updateProposal="handleUpdate"
+        @updateProposal="updateProposal"
         @ask="handleAsk"
-        @favorite="handleFavorite"
       ></event-proposal-details>
     </div>
     <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
@@ -208,9 +207,16 @@ export default {
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    async bookProposal() {
-      await this.saveProposal(this.proposal);
-      window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
+    bookProposal() {
+      new Proposal({
+        id: this.proposal.id,
+        costServices: this.proposal.costServices,
+        extraServices: this.proposal.extraServices,
+      })
+        .save()
+        .then((res) => {
+          window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
+        });
     },
     async handleAsk(ask) {
       let expiredTime = moment().add(2, "days").unix() * 1000;
@@ -281,14 +287,13 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
-    async handleUpdate(proposal){
-      this.proposal = {...this.proposal, ...proposal};
-    },
-    async handleFavorite(isFavorite){
-      await this.saveProposal({...this.proposal, isFavorite, status: isFavorite ? PROPOSAL_STATUS.TOP3 : PROPOSAL_STATUS.PENDING});
+    updateProposal(proposal) {
+      console.log(proposal);
+      this.proposal = { ...proposal };
     },
     async declineProposal() {
-      await this.saveProposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
+      let query = new Proposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
+      let res = await query.save();
 
       // send email to vendor to notify the customer decline the proposal.
       this.$http.post(
@@ -297,16 +302,11 @@ export default {
           { headers: this.$auth.getAuthHeader() },
       );
     },
-    async saveProposal(proposal){
-        let query = new Proposal(proposal);
-        let res = await query.save();
-        this.proposal = res;
-        console.log('save.proposal', res);
-    },
     downProposal() {
       this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
     },
     toggleCommentMode(mode) {
+      console.log("toggleCommentMode", mode);
       this.showCommentEditorPanel = mode;
     },
     remindMeLater() {

@@ -22,7 +22,6 @@
         :label="['companyName', 'name']"
         :selectedValue="selectedCustomer"
         @change="selectCustomer"
-        @input="searchCustomer"
       ></autocomplete>
     </div>
 
@@ -125,7 +124,6 @@
           <customer-form
               v-if="showNewCustomerModal"
               :vendorId="vendorData.id"
-              :name="candidateName"
               @save="saveCustomer"
               @close="showNewCustomerModal = false" />
       </template>
@@ -178,7 +176,6 @@ export default {
       customers: [],
       fileUrl: null,
       fileName: null,
-      candidateName: null,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         thumbnailWidth: 150,
@@ -223,20 +220,6 @@ export default {
         value: res,
       });
       this.showNewCustomerModal = false;
-    },
-    searchCustomer(e){
-      this.candidateName = e.target.value;
-      let timeout = null;
-
-      // show customer form modal if customer doesn't exist in search text
-      let customers = this.customers.filter(c => c.name.toLowerCase().indexOf(this.candidateName.toLowerCase()) !== -1);
-      if ( !customers.length ) {
-        timeout = setTimeout(_ => {
-          this.showNewCustomerModal = true;
-        }, 1000)
-      } else {
-        clearTimeout(timeout);
-      }
     },
     selectCustomer(selectedCustomer) {
       this.selectedCustomer = selectedCustomer;

@@ -90,9 +90,6 @@
                 type: Object,
                 default: null,
             },
-            name:{
-                type: String,
-            },
             vendorId:{
                 type: String,
                 default: null,
@@ -109,7 +106,7 @@
                     companyName: null,
                     ein: null,
                     location : null,
-                    name: this.name,
+                    name: null,
                     phone: null,
                     email: null,
                 },
@@ -148,9 +145,6 @@
 
             }
         },
-        watch:{
-            name(newVal){this.customerModel.name = newVal}
-        }
     }
 </script>
 <style lang="scss" scoped>
