@@ -230,7 +230,8 @@ export default {
 
       // show customer form modal if customer doesn't exist in search text
       let customers = this.customers.filter(c => c.name.toLowerCase().indexOf(this.candidateName.toLowerCase()) !== -1);
-      if ( !customers.length ) {
+      console.log('search', this.customers, customers);
+      if ( !customers.length && this.candidateName.length > 2) {
         timeout = setTimeout(_ => {
           this.showNewCustomerModal = true;
         }, 1000)

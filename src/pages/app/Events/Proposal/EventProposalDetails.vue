@@ -60,20 +60,11 @@
 
         <div class="proposal-body">
           <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
-              <img
-                  v-tooltip="{
-                    html: true,
-                    content: '<p>Let the vendor know that he is among your favorites</p>',
-                    delay: { show: 200, hide: 100 },
-                    trigger: 'hover',
-                    placement: 'bottom',
-                    classes: 'vendor-tooltip-theme',
-                  }"
-                  :src="`${$iconURL}${
-                    vendorProposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'
+            <img
+              :src="`${$iconURL}${
+                vendorProposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'
               }`"
-
-              />
+            />
           </md-button>
 
           <h1 class="font-size-30">

@@ -650,9 +650,10 @@ export default {
       return this.$store.state.vendorDashboard.proposals;
     },
     negotiation(){
+      console.log('negotiation', this.selectedProposal);
       if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
 
-      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME )
+      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE )
         return new Date(this.selectedProposal.expiredDate).getTime();
 
       else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
