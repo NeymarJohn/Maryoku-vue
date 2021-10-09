@@ -86,13 +86,17 @@ export default {
     this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", ({ file, index, link, url, fileName }) => {
-      const currentPhoto = this.$store.state.proposalForNonMaryoku.inspirationalPhotos[index];
-      this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
-      S3Service.fileUpload(file, fileName, link)
-        .then((res) => {})
-        .catch((event) => {});
-    });
+      this.$root.$on("update-inspirational-photo", async ({ file, index, link}) => {
+          const currentPhoto = this.inspirationalPhotos[index];
+          console.log('upload.photo', url);
+          let url = await S3Service.fileUpload(file, `photo-${index}`, link)
+          this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url }});
+
+      });
+      this.$root.$on("remove-inspirational-photo", async (index) => {
+          await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+          this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: null });
+      })
   },
   methods: {
     selectSecondCategory(serviceCategory) {
@@ -143,6 +147,9 @@ export default {
     },
     step() {
       return this.$store.state.proposalForNonMaryoku.wizardStep;
+    },
+    inspirationalPhotos(){
+      return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
     },
   },
 };

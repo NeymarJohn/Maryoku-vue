@@ -61,7 +61,6 @@ export default {
   },
   created() {
     this.photo = this.defaultPhoto;
-    console.log('created.defaultPhoto', this.photo)
     this.$root.$on("saveCaption", (captionData) => {
       if (this.index == captionData.currentIndex) {
         if (!this.photo) this.photo = {};

@@ -215,17 +215,16 @@ export default {
       window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
     },
     async handleAsk(ask) {
-      console.log('handleAsk', ask);
       let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
-          await this.saveNegotiation({ expiredTime, type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME });
+          await this.saveNegotiation({ expiredTime });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              params: { expiredTime, type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME },
+              params: { expiredTime },
             }),
           );
           this.onlyAuth = true;
@@ -240,13 +239,13 @@ export default {
           numberOfParticipants: this.proposal.eventData.numberOfParticipants,
         };
         if (this.loggedInUser) {
-          await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
+          await this.saveNegotiation({ event, expiredTime });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              params: { event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
+              params: { event, expiredTime },
             }),
           );
           this.onlyAuth = true;
@@ -259,11 +258,12 @@ export default {
       this.proposal.eventData = e;
     },
     async saveNegotiation(params) {
-      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
+      // if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
 
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
+        type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE,
         url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
         ...params,
       });
