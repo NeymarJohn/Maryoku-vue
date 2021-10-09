@@ -1,5 +1,14 @@
 import S3 from "aws-s3";
 
+const config = {
+    bucketName: process.env.S3_BUCKET_NAME,
+    dirName: null /* optional */,
+    region: process.env.AWS_REGION,
+    accessKeyId: process.env.AWS_ACCESSKEY,
+    secretAccessKey: process.env.AWS_SECRETKEY,
+    s3Url: process.env.S3_URL /* optional */,
+};
+
 class S3Service {
     dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(","),
@@ -15,26 +24,26 @@ class S3Service {
         return new File([u8arr], filename, { type: mime });
     }
     fileUpload(file, fileName, dirName, fileExtension) {
-        const config = {
-            bucketName: process.env.S3_BUCKET_NAME,
-            dirName: dirName /* optional */,
-            region: process.env.AWS_REGION,
-            accessKeyId: process.env.AWS_ACCESSKEY,
-            secretAccessKey: process.env.AWS_SECRETKEY,
-            s3Url: process.env.S3_URL /* optional */,
-        };
-        const S3Client = new S3(config);
-        const newFileName = "my-awesome-file";
-        const extenstion = fileExtension ? fileExtension : file.type.split("/").pop();
-        return new Promise((resolve, reject) => {
-            S3Client.uploadFile(file, fileName).finally(res => {
-                console.log(res);
-                resolve(`${fileName}.${extenstion}`);
-            });
+        config.dirName = dirName;
 
-            // finally(()=>{
-            //   resolve()
-            // })
+        const S3Client = new S3(config);
+        const extenstion = fileExtension ? fileExtension : file.type.split("/").pop();
+        return new Promise(async (resolve, reject) => {
+            let res = await S3Client.uploadFile(file, fileName);
+            console.log('fileUpload', res);
+            resolve(res.location);
+
+        });
+    }
+
+    deleteFile(fileName, dirName) {
+        config.dirName = dirName;
+
+        const S3Client = new S3(config);
+        return new Promise(async (resolve, reject) => {
+            let res = await S3Client.deleteFile(fileName);
+            console.log('deleteFile', res);
+            resolve(res);
         });
     }
 }

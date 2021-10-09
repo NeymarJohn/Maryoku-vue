@@ -443,7 +443,7 @@ export default {
         this.selectedProposal = this.proposals.find((p) => p.id === proposalRequest.proposal.id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
-        this.negotiationType = this.proposal.negotiations[0].type
+        this.negotiationType = this.selectedProposal.negotiations[0].type
       } else {
         let params = proposalRequest.proposal
           ? { id: proposalRequest.id, type: "edit" }
@@ -492,10 +492,8 @@ export default {
 
           this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
-          if (!this.selectedProposal.nonMaryoku) {
-              this.selectedProposalRequest.proposal = this.selectedProposal;
-              this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
-          }
+          this.selectedProposalRequest.proposal = this.selectedProposal;
+          this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
 
           this.negotiationProcessed = status;
 
@@ -637,7 +635,7 @@ export default {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
       return proposalRequests.filter((p) => {
         return p.proposal
-          ? (p.declineMessage !== "decline" && p.proposal.status == PROPOSAL_STATUS.DRAFT && p.remainingTime > 0) ||
+          ? (p.declineMessage !== "decline" && p.proposal.status === PROPOSAL_STATUS.DRAFT && p.remainingTime > 0) ||
               (p.proposal.status === PROPOSAL_STATUS.PENDING &&
                 p.proposal.negotiations &&
                 p.proposal.negotiations.filter(
@@ -650,10 +648,9 @@ export default {
       return this.$store.state.vendorDashboard.proposals;
     },
     negotiation(){
-      console.log('negotiation', this.selectedProposal);
       if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
 
-      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE )
+      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME )
         return new Date(this.selectedProposal.expiredDate).getTime();
 
       else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {

@@ -146,7 +146,7 @@ export default {
     },
   },
   mounted() {
-    // console.log('mounted', this.proposalRequest);
+    console.log('proposal.card.mounted', this.proposalRequest);
   },
 };
 </script>

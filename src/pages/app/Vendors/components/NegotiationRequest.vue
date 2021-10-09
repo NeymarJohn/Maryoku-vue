@@ -52,12 +52,12 @@
 
         <div v-if="type === negotiationTypes.PRICE_NEGOTIATION" class="d-flex align-center justify-content-center mt-40">
             <div class="font-size-14 w-min-180 color-black-middle">
-                <div class="font-size-24 text-line-through mb-5">{{negotiation.originalBudget}}</div>
+                <div class="font-size-24 text-line-through mb-5">${{negotiation.originalBudget}}</div>
                 <span>{{`$${negotiation.originalBudgetPerGuest}`}}</span> per guest
             </div>
             <md-icon class="mx-40">arrow_forward</md-icon>
             <div class="font-size-14 w-min-180 color-black-middle">
-                <div class=" font-size-22 font-bold-extra w-min-180">{{negotiation.budget}}</div>
+                <div class=" font-size-22 font-bold-extra w-min-180">${{negotiation.budget}}</div>
                 <span class="font-bold-extra">{{`$${negotiation.budgetPerGuest}`}}</span> per guest
             </div>
         </div>
@@ -105,13 +105,14 @@
           }
         },
         mounted() {
-          console.log('mounted', this.negotiation);
+          console.log('mounted', this.negotiation, this.type);
           this.init()
         },
         methods: {
            init(){
                if (this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
-                   let diff = (this.expiredTime - new Date().getTime()) / 1000;
+                   let diff = (this.negotiation - new Date().getTime()) / 1000;
+
                    if (diff < 0) return;
                    this.days = Math.floor(diff / (24 * 3600));
                    diff = diff - this.days * 24 * 3600;

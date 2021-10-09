@@ -61,6 +61,7 @@ export default {
   },
   created() {
     this.photo = this.defaultPhoto;
+    console.log('created.defaultPhoto', this.photo)
     this.$root.$on("saveCaption", (captionData) => {
       if (this.index == captionData.currentIndex) {
         if (!this.photo) this.photo = {};
@@ -120,7 +121,7 @@ export default {
     },
     removePhoto() {
       this.photo = null;
-      this.$emit("remove", this.index);
+      this.$root.$emit("remove-inspirational-photo", this.index);
     },
   },
   watch:{

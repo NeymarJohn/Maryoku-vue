@@ -136,8 +136,10 @@
 import moment from "moment";
 import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
+import Vendor from "@/models/Vendors";
 import Reminder from "@/models/Reminder";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+import ProposalRequest from "@/models/ProposalRequest";
 
 import { Loader, SignInContent, Modal } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
@@ -213,16 +215,17 @@ export default {
       window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
     },
     async handleAsk(ask) {
+      console.log('handleAsk', ask);
       let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
-          await this.saveNegotiation({ expiredTime });
+          await this.saveNegotiation({ expiredTime, type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              params: { expiredTime },
+              params: { expiredTime, type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME },
             }),
           );
           this.onlyAuth = true;
@@ -237,13 +240,13 @@ export default {
           numberOfParticipants: this.proposal.eventData.numberOfParticipants,
         };
         if (this.loggedInUser) {
-          await this.saveNegotiation({ event, expiredTime });
+          await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              params: { event, expiredTime },
+              params: { event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
             }),
           );
           this.onlyAuth = true;
@@ -256,10 +259,11 @@ export default {
       this.proposal.eventData = e;
     },
     async saveNegotiation(params) {
+      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
+
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
-        type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE,
         url: `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`,
         ...params,
       });
@@ -438,8 +442,23 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
+    async saveProposalRequest(){
+      console.log('savePropsalRequest');
+        let query = new ProposalRequest({
+           vendorId: this.proposal.vendor.id,
+            requestedTime: new Date().getTime(),
+            expiredTime: moment(new Date()).add(3, "days").valueOf(),
+        });
+        let res = await query.for(new Vendor({ id: this.proposal.vendor.id })).save();
+        console.log('res', res);
+
+        await this.saveProposal({...this.proposal, proposalRequestId: res.id});
+    },
     async sendNegotiationRequest(params) {
       this.showNegotiationRequestModal = false;
+
+      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
+
       let expiredTime = moment().add(2, 'days').unix() * 1000;
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
