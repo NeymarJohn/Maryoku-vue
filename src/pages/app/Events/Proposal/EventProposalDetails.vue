@@ -875,7 +875,7 @@ export default {
     },
   },
   watch: {
-    proposal(newVal) {},
+    vendorProposal(newVal) {console.log('vendorProposal.watch', newVal)},
   },
 };
 </script>

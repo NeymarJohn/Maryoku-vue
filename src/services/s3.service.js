@@ -9,6 +9,15 @@ const bucket = new S3(
     }
 );
 
+const config = {
+    bucketName: process.env.S3_BUCKET_NAME,
+    dirName: null /* optional */,
+    region: process.env.AWS_REGION,
+    accessKeyId: process.env.AWS_ACCESSKEY,
+    secretAccessKey: process.env.AWS_SECRETKEY,
+    s3Url: process.env.S3_URL /* optional */,
+};
+
 class S3Service {
 
     dataURLtoFile(dataurl, filename) {

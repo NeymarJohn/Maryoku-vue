@@ -141,7 +141,6 @@ export default {
     // handling uploading photo backhand process
     this.$root.$on("update-inspirational-photo", async ({ file, index, link, url }) => {
       const currentPhoto = this.inspirationalPhotos[index];
-
       await  S3Service.fileUpload(file, `photo-${index}`, link)
 
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
