@@ -36,19 +36,8 @@
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 1" class="white-card p-20 d-flex">
-        <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px; height: 55px" />
-        <div class="ml-15">
-          <div class="font-size-18 font-bold text-uppercase color-vendor">No Open opportunities</div>
-          <p class="my-10 font-size-14">
-            We couldn't find any more opportunities for you at this point. Increase your exposure by improving your
-            profile
-          </p>
-          <div class="d-flex">
-            <md-button class="md-simple ml-auto md-vendor md-outlined" style="height: 30px">Optimize Profile</md-button>
-          </div>
-        </div>
-      </div>
+      <empty-request-card v-if="proposalRequests.length < 1" ></empty-request-card>
+
       <template slot="next">
         <button class="nav-right nav-btn">
           <md-icon class="color-vendor">arrow_forward</md-icon>
@@ -268,6 +257,7 @@ import carousel from "vue-owl-carousel";
 
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
+import EmptyRequestCard from "../components/EmptyRequestCard";
 import InsightDetail from "../components/InsightDetail";
 import ProposalRequest from "@/models/ProposalRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
@@ -286,6 +276,7 @@ export default {
   components: {
     InsightDetail,
     ProposalRequestCard,
+    EmptyRequestCard,
     ProposalListItem,
     TablePagination,
     ProposalContent,
@@ -479,7 +470,7 @@ export default {
           if ( status === this.negotiationRequestStatus.decline &&
               this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) data = {...data, signupUrl};
 
-          let negotiation = this.$store.dispatch('vendorDashboard/saveNegotiation', {
+          let negotiation = await this.$store.dispatch('vendorDashboard/saveNegotiation', {
               data,
               proposal: this.selectedProposal
           })
@@ -487,13 +478,15 @@ export default {
           if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) this.showRequestNegotiationModal = false;
           this.selectedProposal.negotiations[0] = negotiation;
 
-          if (status === this.negotiationRequestStatus.approve || this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+          if (status === this.negotiationRequestStatus.approve && this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
               this.selectedProposal.expiredDate = new Date(expiredTime);
 
-          this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
+          await this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
 
-          this.selectedProposalRequest.proposal = this.selectedProposal;
-          this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
+          let proposalRequest = this.selectedProposalRequest ? this.selectedProposalRequest : this.proposalRequests.find(p => p.proposal.id === this.selectedProposal.id);
+          this.$set(proposalRequest, 'proposal', this.selectedProposal);
+          await this.$store.commit("vendorDashboard/setProposalRequest", proposalRequest);
+
 
           this.negotiationProcessed = status;
 
@@ -650,8 +643,9 @@ export default {
     negotiation(){
       if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
 
-      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME )
-        return new Date(this.selectedProposal.expiredDate).getTime();
+      if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
+          return new Date(this.selectedProposal.expiredDate).getTime();
+      }
 
       else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
           let {startTime, endTime, numberOfParticipants, location} = this.selectedProposal.eventData

@@ -164,6 +164,10 @@
         watch:{
           processed(newVal){
               this.init()
+          },
+          negotiation(newVal){
+             console.log('negotiation.watch', newVal);
+             this.init();
           }
         }
     }

@@ -274,7 +274,6 @@ const mutations = {
     Vue.set(state.eventData, key, value)
   },
   setInspirationalPhoto: (state, { index, photo }) => {
-    console.log('setInspirationalPhoto', photo);
     Vue.set(state.inspirationalPhotos, index, photo);
     setStateByVersion(state, { key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos)) })
   },
