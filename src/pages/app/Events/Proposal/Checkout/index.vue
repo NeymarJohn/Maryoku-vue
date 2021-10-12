@@ -161,8 +161,8 @@
           <template slot="content">
             <div>User your rewards with this event</div>
             <hr />
-            <div class="mt-20">
-              <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
+            <div class="mt-20 disabled">
+              <md-checkbox class="md-red md-simple">
                 Cash in Your Maryoku Points
               </md-checkbox>
             </div>
@@ -172,7 +172,7 @@
                 Simply print out the voucher and enjoy the results!
               </div>
             </div>
-            <md-button class="md-simple md-red edit-btn mt-20">
+            <md-button class="md-simple md-gray edit-btn mt-20">
               Read More About Our Loyalty Program
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>

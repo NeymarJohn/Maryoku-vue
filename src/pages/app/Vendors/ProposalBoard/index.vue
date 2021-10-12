@@ -648,7 +648,7 @@ export default {
       }
 
       else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
-          let {startTime, endTime, numberOfParticipants, location} = this.selectedProposal.eventData
+          let {startTime, endTime, numberOfParticipants, location, eventType} = this.selectedProposal.eventData
           let { event } = this.selectedProposal.negotiations[0];
           return {
               originalDate: moment(startTime * 1000).format('DD-MM-YY'),
@@ -661,6 +661,8 @@ export default {
               numberOfParticipants: event.numberOfParticipants,
               originalLocation: location,
               location: event.location,
+              originalEventType: eventType,
+              eventType: event.eventType,
           }
       } else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
           console.log('price.negotiation');
