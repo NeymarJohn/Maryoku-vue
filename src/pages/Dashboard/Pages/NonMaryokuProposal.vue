@@ -238,7 +238,6 @@ export default {
           endTime: this.proposal.eventData.endTime,
           location: this.proposal.eventData.location,
           numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          eventType: this.proposal.eventData.eventType,
         };
         if (this.loggedInUser) {
           await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
