@@ -24,10 +24,9 @@
               <span>Percentages</span>
           </div>
         </div>
-        <label class="mt-10 font-size-16 font-bold-extra">Current Rate: <span class="font-size-18 font-regular ml-10">${{proposal.cost}}</span></label>
         <div class="mt-50 width-70">
             <label class="font-bold pb-10 d-inline-block">Your Rate</label>
-            <maryoku-input :inputStyle="inputStyle" :placeholder="rate === '$' ? 'Type rate here' : 'Requested discount rate'" v-model="value"></maryoku-input>
+            <maryoku-input :inputStyle="inputStyle" placeholder="Type rate here" v-model="value"></maryoku-input>
         </div>
         <div class="mt-50">
             <label class="font-bold pb-10 d-inline-block">Add Comment</label>

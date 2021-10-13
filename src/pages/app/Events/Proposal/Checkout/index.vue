@@ -1,6 +1,6 @@
 <template>
   <div class="event-vendor-checkout">
-    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
+    <loader :active="loading" is-full-screen :page="pageType === VENDOR ? 'vendor' : 'planner'"/>
     <div class="checkout-content md-layout" v-if="!loading">
       <vue-element-loading :active="loadingPayment" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-45 left-panel">
@@ -161,8 +161,8 @@
           <template slot="content">
             <div>User your rewards with this event</div>
             <hr />
-            <div class="mt-20">
-              <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
+            <div class="mt-20 disabled">
+              <md-checkbox class="md-red md-simple">
                 Cash in Your Maryoku Points
               </md-checkbox>
             </div>
@@ -172,7 +172,7 @@
                 Simply print out the voucher and enjoy the results!
               </div>
             </div>
-            <md-button class="md-simple md-red edit-btn mt-20">
+            <md-button class="md-simple md-gray edit-btn mt-20">
               Read More About Our Loyalty Program
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
@@ -268,13 +268,14 @@ import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
 import CheckoutProposalTable from "./CheckoutProposalTable";
 import { mapActions } from "vuex";
+import Loader from "@/components/loader/index";
 
 // checkout page type
 const VENDOR = 0;
 const CART = 1;
 
 export default {
-  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
+  components: {Loader, CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
   data() {
     return {
       vendor: null,
