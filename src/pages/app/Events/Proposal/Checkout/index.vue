@@ -1,6 +1,6 @@
 <template>
   <div class="event-vendor-checkout">
-    <loader :active="loading" is-full-screen :page="pageType === VENDOR ? 'vendor' : 'planner'"/>
+    <loader :active="loading" is-full-screen :page="proposalType ? 'planner' : 'vendor'"/>
     <div class="checkout-content md-layout" v-if="!loading">
       <vue-element-loading :active="loadingPayment" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-45 left-panel">
@@ -274,6 +274,10 @@ import Loader from "@/components/loader/index";
 const VENDOR = 0;
 const CART = 1;
 
+// proposal type
+const PLANNER = 'planner';
+const CUSTOMER = 'customer';
+
 export default {
   components: {Loader, CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
   data() {
@@ -295,10 +299,13 @@ export default {
       onDayCordinator: false,
       feePercentail: 3.2,
       pageType: VENDOR,
+      proposalType: null,
       successURL: null,
     };
   },
   async created() {
+    this.proposalType = this.$route.params.hasOwnProperty("proposalType") === PLANNER;
+
     if (this.$route.params.hasOwnProperty("proposalId")) {
       const proposalId = this.$route.params.proposalId;
       this.proposal = await Proposal.find(proposalId);

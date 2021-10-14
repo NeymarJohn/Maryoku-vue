@@ -212,7 +212,7 @@ export default {
     ...mapMutations("comment", ["setGuestName"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
-      window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
+      window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
     },
     async handleAsk(ask) {
       console.log('handleAsk', ask);
@@ -488,7 +488,8 @@ export default {
         }
       });
     },
-    saveRemindingTime(remindingTime) {
+    saveRemindingTime({remindingTime, option}) {
+
       const remindingData = {
         reminder: "email",
         phoneNumber: "",
@@ -497,7 +498,7 @@ export default {
         remindingTime: remindingTime,
         type: "proposal",
         emailParams: {
-            expiredTime: this.proposal.expiredTime,
+            expiredTime: moment(new Date(this.proposal.expiredDate)).valueOf(),
         },
         emailTransactionId: "",
         phoneTransactionId: "",

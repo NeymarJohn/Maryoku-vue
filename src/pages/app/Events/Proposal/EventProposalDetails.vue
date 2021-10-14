@@ -579,6 +579,7 @@ export default {
           name: "CheckoutWithVendor",
           params: {
             proposalId: this.vendorProposal.id,
+            proposalType: 'planner',
           },
         });
       });

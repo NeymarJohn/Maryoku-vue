@@ -57,6 +57,12 @@
               Download
             </span>
           </md-menu-item>
+            <md-menu-item @click="edit(proposalStatus.resend)" class="md-purple">
+            <span>
+              <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
+              Resend proposal
+            </span>
+            </md-menu-item>
             <md-menu-item v-if="proposal.nonMaryoku" @click="edit(proposalStatus.share)" class="md-purple">
             <span>
               <img :src="`${$iconURL}Share/link-dark.svg`" class="label-icon mr-10" />
@@ -154,6 +160,7 @@ export default {
         share: 4,
         negotiation: 5,
         duplicate: 6,
+        resend: 7,
       },
       requestType: {
         ADD_MORE_TIME: 0,

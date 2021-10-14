@@ -318,6 +318,7 @@ export default {
         delete: 3,
         share: 4,
         negotiation: 5,
+        resend: 7,
       },
       negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
       negotiationType:      NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
@@ -421,6 +422,19 @@ export default {
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
         this.negotiationType = this.selectedProposal.negotiations[0].type
+      } else if (action === this.proposalStatus.resend) {
+        this.selectedProposalRequest = this.proposalRequests.find((it) => it.proposal && it.proposal.id === id);
+        let url = this.selectedProposal.nonMaryoku
+                ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+                : `${location.protocol}//${location.host}/#/signin`;
+        let eventName = this.selectedProposal.nonMaryoku ?
+                this.selectedProposal.eventData.customer.companyName :
+                this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event'
+        await this.$http.post(
+                `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
+                {type: "again", proposalId: this.selectedProposal.id, url, eventName},
+                {headers: this.$auth.getAuthHeader()},
+        )
       }
     },
     handleRequestCard(idx) {

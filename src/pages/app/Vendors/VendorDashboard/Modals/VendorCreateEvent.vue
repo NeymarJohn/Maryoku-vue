@@ -172,7 +172,7 @@ export default {
     },
   },
   created() {
-    console.log("vendorCreateEvent.created");
+    console.log("vendorCreateEvent.created", this.defaultData);
     this.$http
       .get(`${process.env.SERVER_URL}/1/vendors/${this.vendor.id}/customers?status=0&sort=&order=`)
       .then((res) => {
