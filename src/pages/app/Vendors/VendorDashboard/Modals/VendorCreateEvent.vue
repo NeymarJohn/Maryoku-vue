@@ -75,6 +75,7 @@
             class="width-50 mt-5 md-purple medium-selector"
             placeholder="Type name of customer here..."
             :options="customers"
+            :selectedValue="selectedCustomer"
             :label="['companyName', 'name']"
             @change="selectCustomer"
           ></autocomplete>
@@ -171,42 +172,6 @@ export default {
       default: {},
     },
   },
-  created() {
-    console.log("vendorCreateEvent.created");
-    this.$http
-      .get(`${process.env.SERVER_URL}/1/vendors/${this.vendor.id}/customers?status=0&sort=&order=`)
-      .then((res) => {
-        this.customers = res.data.customers;
-      });
-    this.companyName = this.defaultData.company;
-    this.company = this.defaultData.companyName;
-    this.location = this.defaultData.location;
-    this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer === false ? false : true;
-    this.guests = this.defaultData.guests;
-    this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
-    this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
-    this.date = moment(this.defaultData.date || new Date()).format("MM.DD.YYYY");
-    this.startTime.hh = moment(this.defaultData.startTime).format("hh");
-    this.startTime.mm = moment(this.defaultData.startTime).format("mm");
-    this.amPack.start = moment(this.defaultData.startTime).format("A");
-
-    this.endTime.hh = moment(this.defaultData.endTime).format("hh");
-    this.endTime.mm = moment(this.defaultData.endTime).format("mm");
-    this.amPack.end = moment(this.defaultData.endTime).format("A");
-
-    // date: endDate.format("YYYY-MM-DD"),
-    // startTime: startDate,
-    // endTime: endDate,
-    // companyName: this.company,
-    // customerName: this.customer,
-    // email: this.email,
-    // guests: this.guests,
-    // location: this.location,
-    // timezone: tz,
-    // isRegisteredCustomer: this.isRegisteredCustomer,
-    // fileName: this.fileName,
-    // fileUrl: this.fileUrl,
-  },
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -247,7 +212,37 @@ export default {
       errorMessage: "",
     };
   },
+  async created() {
+    console.log("vendorCreateEvent.created", this.defaultData);
+
+    this.customers = await this.getVendorCustomers();
+    this.companyName = this.defaultData.company;
+    this.company = this.defaultData.companyName;
+    this.location = this.defaultData.location;
+    this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer === false ? false : true;
+    this.guests = this.defaultData.guests;
+    this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
+    this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
+    this.date = moment(this.defaultData.date || new Date()).format("MM.DD.YYYY");
+    this.startTime.hh = moment(this.defaultData.startTime).format("hh");
+    this.startTime.mm = moment(this.defaultData.startTime).format("mm");
+    this.amPack.start = moment(this.defaultData.startTime).format("A");
+
+    this.endTime.hh = moment(this.defaultData.endTime).format("hh");
+    this.endTime.mm = moment(this.defaultData.endTime).format("mm");
+    this.amPack.end = moment(this.defaultData.endTime).format("A");
+
+    this.selectedCustomer = this.defaultData.customer;
+
+    console.log('selectedCustomer', this.selectedCustomer);
+  },
   methods: {
+    async getVendorCustomers() {
+      let res = await this.$http
+              .get(`${process.env.SERVER_URL}/1/vendors/${this.vendor.id}/customers?status=0&sort=&order=`);
+
+      return res.data.customers;
+    },
     selectCustomer(selectedCustomer) {
       this.selectedCustomer = selectedCustomer;
     },

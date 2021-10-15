@@ -264,6 +264,7 @@ export default {
         location: this.event.location,
         guests: this.event.numberOfParticipants,
         vendor: new Vendor({ id: this.vendor.id }),
+        customer: {id: this.event.customer.id}
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };

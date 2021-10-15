@@ -1,6 +1,6 @@
 <template>
   <div class="event-vendor-checkout">
-    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
+    <loader :active="loading" is-full-screen :page="proposalType ? 'planner' : 'vendor'"/>
     <div class="checkout-content md-layout" v-if="!loading">
       <vue-element-loading :active="loadingPayment" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-45 left-panel">
@@ -161,8 +161,8 @@
           <template slot="content">
             <div>User your rewards with this event</div>
             <hr />
-            <div class="mt-20">
-              <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
+            <div class="mt-20 disabled">
+              <md-checkbox class="md-red md-simple">
                 Cash in Your Maryoku Points
               </md-checkbox>
             </div>
@@ -172,7 +172,7 @@
                 Simply print out the voucher and enjoy the results!
               </div>
             </div>
-            <md-button class="md-simple md-red edit-btn mt-20">
+            <md-button class="md-simple md-gray edit-btn mt-20">
               Read More About Our Loyalty Program
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
@@ -268,13 +268,18 @@ import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
 import CheckoutProposalTable from "./CheckoutProposalTable";
 import { mapActions } from "vuex";
+import Loader from "@/components/loader/index";
 
 // checkout page type
 const VENDOR = 0;
 const CART = 1;
 
+// proposal type
+const PLANNER = 'planner';
+const CUSTOMER = 'customer';
+
 export default {
-  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
+  components: {Loader, CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
   data() {
     return {
       vendor: null,
@@ -294,10 +299,13 @@ export default {
       onDayCordinator: false,
       feePercentail: 3.2,
       pageType: VENDOR,
+      proposalType: null,
       successURL: null,
     };
   },
   async created() {
+    this.proposalType = this.$route.params.hasOwnProperty("proposalType") === PLANNER;
+
     if (this.$route.params.hasOwnProperty("proposalId")) {
       const proposalId = this.$route.params.proposalId;
       this.proposal = await Proposal.find(proposalId);
@@ -464,10 +472,12 @@ export default {
         this.showStripeCheckout = true;
         this.stripePriceData = responses.map((res) => res.data);
 
+        let eventName = this.proposal.nonMaryoku ? this.proposal.eventData.customer.companyName :
+                this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event';
         // send email to vendor to notify the proposal is selected
         this.$http.post(
           `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
-          { type: "win", proposalId: this.proposal.id },
+          { type: "win", proposalId: this.proposal.id, eventName },
           { headers: this.$auth.getAuthHeader() },
         );
       });

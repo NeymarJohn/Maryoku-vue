@@ -268,12 +268,18 @@ export default {
         });
     },
     showEvent(event) {
+      console.log('showEvent', event);
       this.showVendorCreateModal = true;
       this.defaultEventData = { ...event };
     },
-    createEventFromCalendar(dateObject) {
-      const date = moment(`${dateObject.years}-${dateObject.month}-${dateObject.date}`, "yyyy-M-D").toDate();
-      this.defaultEventData = { date };
+    createEventFromCalendar(data) {
+      console.log('createEventFromCalendar', data);
+      if (data.hasOwnProperty('event')) {
+        this.defaultEventData = {...data.event}
+      } else {
+        this.defaultEventData = { date : moment(`${data.date.years}-${data.date.month}-${data.date.date}`, "yyyy-M-D").toDate()}
+      }
+
       this.showVendorCreateModal = true;
     },
   },
