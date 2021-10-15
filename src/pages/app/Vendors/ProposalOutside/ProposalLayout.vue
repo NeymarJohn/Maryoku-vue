@@ -85,7 +85,6 @@
       v-if="showSendProposalModal"
       @close="showSendProposalModal = false"
       @submit="submitProposal"
-      @sms="sendSMS"
       :event="event"
       :link="proposalLink"
     ></send-proposal-modal>
@@ -315,36 +314,32 @@ export default {
         this.showSendProposalModal = true;
       });
     },
-    submitProposal() {
+    async submitProposal() {
       this.showSendProposalModal = false;
 
-      const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
-          { type: "created", proposalId: proposalForNonMaryoku.id },
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          this.showSubmittedProposalModal = true;
-        });
-    },
-    async sendSMS(){
+      // send email to customer to notify the proposal is created
         let proposal = this.$store.state.proposalForNonMaryoku;
-        this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
-        let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
-        if (proposal.eventData.customer.phone) {
-            let res = await this.$http
-                .post(
+      await this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendEmail`,
+          { type: "created", proposalId: proposal.id },
+          { headers: this.$auth.getAuthHeader() },
+        );
+
+      // send SMS to customer phone to notify
+      this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+      let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
+      if (proposal.eventData.customer.phone) {
+         let res = await this.$http.post(
                     `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendSMS`,
                     { phoneNumber: proposal.eventData.customer.phone, message },
                     { headers: this.$auth.getAuthHeader() },
-                )
-            console.log('res', res)
-        }
+         )
+      }
 
+      this.showSubmittedProposalModal = true;
 
-    }
+    },
   },
 
   filters: {
