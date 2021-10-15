@@ -212,7 +212,7 @@ export default {
     ...mapMutations("comment", ["setGuestName"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
-      window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
+      window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
     },
     async handleAsk(ask) {
       console.log('handleAsk', ask);
@@ -238,7 +238,6 @@ export default {
           endTime: this.proposal.eventData.endTime,
           location: this.proposal.eventData.location,
           numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          eventType: this.proposal.eventData.eventType,
         };
         if (this.loggedInUser) {
           await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
@@ -260,7 +259,6 @@ export default {
       this.proposal.eventData = e;
     },
     async saveNegotiation(params) {
-      this.loading = true;
       if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
 
       let query = new ProposalNegotiationRequest({
@@ -270,7 +268,6 @@ export default {
         ...params,
       });
       let res = await query.for(new Proposal({ id: this.proposal.id })).save();
-      this.loading = false;
       this.proposal.negotiations.push(res);
     },
     async shareWithAuth(args) {
@@ -292,9 +289,7 @@ export default {
       this.proposal = {...this.proposal, ...proposal};
     },
     async handleFavorite(isFavorite){
-
       await this.saveProposal({...this.proposal, isFavorite, status: isFavorite ? PROPOSAL_STATUS.TOP3 : PROPOSAL_STATUS.PENDING});
-
     },
     async declineProposal() {
       await this.saveProposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
@@ -307,11 +302,10 @@ export default {
       );
     },
     async saveProposal(proposal){
-        this.loading = true;
         let query = new Proposal(proposal);
         let res = await query.save();
         this.proposal = res;
-        this.loading = false;
+        console.log('save.proposal', res);
     },
     downProposal() {
       this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
@@ -332,6 +326,7 @@ export default {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
+      console.log("saveGuestComment", name);
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
@@ -488,17 +483,18 @@ export default {
         }
       });
     },
-    saveRemindingTime({remindingTime, option}) {
-
+    saveRemindingTime(remindingTime) {
       const remindingData = {
         reminder: "email",
         phoneNumber: "",
         email: this.proposal.eventData.customer.email,
-        name: this.proposal.eventData.customer.name,
         remindingTime: remindingTime,
         type: "proposal",
         emailParams: {
-            expiredTime: moment(new Date(this.proposal.expiredDate)).valueOf(),
+          leftTime: "1day",
+          proposalLink: window.location.href,
+          date: "22th Sep, 2021",
+          time: "12:00pm",
         },
         emailTransactionId: "",
         phoneTransactionId: "",

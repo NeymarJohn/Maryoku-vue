@@ -1,6 +1,5 @@
 <template>
   <div class="white-card p-40">
-    <loader :active="isLoading" is-full-screen page="vendor"></loader>
     <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
@@ -147,12 +146,10 @@ import SelectableCard from "@/components/SelectableCard.vue";
 // import AddNewCustomerModal from "./Modals/AddNewCustomer";
 import { Modal } from "@/components";
 import Customer from "@/models/Customer";
-import Loader from "../../../../components/loader/index";
 const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {
   components: {
-      Loader,
     MaryokuInput,
     VueTimepicker,
     LocationInput,
@@ -213,10 +210,11 @@ export default {
   },
   methods: {
     async saveCustomer(customer) {
-      this.isLoading = true;
-      this.showNewCustomerModal = false;
+
       let query  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
       let res = await query.save();
+      console.log('saveCustomer', res);
+
 
       this.customers.push(res);
       this.selectCustomer(res);
@@ -224,8 +222,7 @@ export default {
         key: "customer",
         value: res,
       });
-
-      this.isLoading = false;
+      this.showNewCustomerModal = false;
     },
     searchCustomer(e){
       this.candidateName = e.target.value;

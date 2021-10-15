@@ -290,7 +290,6 @@ export default {
       onDayCordinator: false,
       feePercentail: 3.2,
       pageType: VENDOR,
-      proposalType: null,
       successURL: null,
     };
   },
@@ -309,11 +308,11 @@ export default {
       this.cart = await this.getCartItems(eventId);
       this.pageType = CART;
     }
-
+    console.log("checkout.proposal", this.successURL);
     this.loading = false;
 
     if (this.$route.query.checkout === "success") {
-
+      // this.showSuccessModal = true;
     }
   },
   computed: {
