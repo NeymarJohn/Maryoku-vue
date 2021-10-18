@@ -248,6 +248,12 @@
       :link="proposalLink"
       @close="showShareProposalModal = false"
     ></ShareProposal>
+    <ResendProposalResult
+      v-if="showResendProposalModal"
+      :to="selectedProposal.proposalRequest.eventData.owner.email"
+      @close="showResendProposalModal = false"
+      @submit="showResendProposalModal = false"
+    > </ResendProposalResult>
   </div>
 </template>
 <script>
@@ -271,6 +277,7 @@ const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");
 const ShareProposal = () => import("./ShareProposal");
+const ResendProposalResult = () => import("./ResendProposalResult");
 
 export default {
   components: {
@@ -285,6 +292,8 @@ export default {
     Loader,
     Modal,
     Insight,
+    ShareProposal,
+    ResendProposalResult
   },
   data() {
     return {
@@ -300,6 +309,7 @@ export default {
       selectedProposalRequest: null,
 
       showRequestNegotiationModal: false,
+      showResendProposalModal: false,
       showInsightModal: false,
       negotiationRequestStatus: {
         review: 0,
@@ -325,7 +335,7 @@ export default {
       negotiationTypes:     NEGOTIATION_REQUEST_TYPE,
       socialMediaBlocks,
       pagination: PROPOSAL_PAGE_PAGINATION,
-      sortFields: { sort: "", order: "" },
+      sortFields: { sort: "cost", order: "desc" },
       renderRender: true,
       versionFields: [
         'eventData',
@@ -438,16 +448,19 @@ export default {
         let url = `${location.protocol}//${location.host}/#/signin`;
         let eventName = this.selectedProposal.proposalRequest.eventData.title ? this.selectedProposal.proposalRequest.eventData.title : 'New event';
         this.sendEmail({type: "again", proposalId: this.selectedProposal.id, url, eventName});
+        this.showResendProposalModal = true;
 
       } else if ( action === this.proposalStatus.cancel ) {
+
+        this.loading = true;
 
         let url = `${location.protocol}//${location.host}/#/signin`;
         await this.$store.dispatch('vendorDashboard/updateProposal', {
           data: {...this.selectedProposal, status: PROPOSAL_STATUS.INACTIVE},
           vendorId: this.selectedProposal.vendor.id,
         });
-        this.sendEmail({type: "inactive", url})
-
+        this.sendEmail({type: "inactive", url, proposalId: this.selectedProposal.id})
+        this.loading = false;
       }
     },
     handleRequestCard(idx) {
@@ -669,7 +682,7 @@ export default {
       });
     },
     proposals() {
-      return this.$store.state.vendorDashboard.proposals;
+      return this.$store.state.vendorDashboard.proposals.filter(p => p.status !== PROPOSAL_STATUS.INACTIVE);
     },
     negotiation(){
       if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
