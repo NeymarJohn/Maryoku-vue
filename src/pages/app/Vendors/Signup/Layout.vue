@@ -202,50 +202,48 @@ export default {
         currentUserType: "vendor",
       };
 
-      this.$store.dispatch("auth/register", tenantUser).then(
-        (registeredUser) => {
-          new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
-            .save()
-            .then((res) => {
-              this.isCompletedWizard = true;
-              Swal.fire({
-                title,
-                buttonsStyling: false,
-                confirmButtonClass: "md-button md-success",
-              }).then(() => {
-                const proposalRequest = this.$route.query.proposalRequest;
-                if (this.step === 6) {
-                  this.setVendor({});
-                  this.setEditing(false);
-                  this.setStep(0);
-                  this.isCompletedWizard = false;
-                  if (proposalRequest) {
-                    this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-                  } else {
-                    const userData = {
-                      email: `${tenantUser.email}/vendor`,
-                      password: tenantUser.password,
-                    };
+      let registeredUser = await this.$store.dispatch("auth/register", tenantUser);
+      let res = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false }).save();
 
-                    this.$store.dispatch("auth/login", userData).then(
-                      () => {
-                        this.$router.push(`/vendor/dashboard`);
-                      },
-                      (error) => {
-                        this.$router.push(`/vendor/signin`);
-                      },
-                    );
-                  }
-                }
-              });
-            })
-            .catch((error) => {});
-        },
-        (error) => {
-          this.loading = false;
-          this.error = "failed";
-        },
+      // send email to vendor to notify the customer decline the proposal.
+      this.$http.post(
+              `${process.env.SERVER_URL}/1/vendors/sendEmail`,
+              { type: "created", vendorId: this.vendor.id },
+              { headers: this.$auth.getAuthHeader() },
       );
+
+      this.isCompletedWizard = true;
+      Swal.fire({
+        title,
+        buttonsStyling: false,
+        confirmButtonClass: "md-button md-success",
+      }).then(() => {
+        const proposalRequest = this.$route.query.proposalRequest;
+        if (this.step === 6) {
+          this.setVendor({});
+          this.setEditing(false);
+          this.setStep(0);
+          this.isCompletedWizard = false;
+          if (proposalRequest) {
+            this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+          } else {
+            const userData = {
+              email: `${tenantUser.email}/vendor`,
+              password: tenantUser.password,
+            };
+
+            this.$store.dispatch("auth/login", userData).then(
+                    () => {
+                      this.$router.push(`/vendor/dashboard`);
+                    },
+                    (error) => {
+                      this.$router.push(`/vendor/signin`);
+                    },
+            );
+          }
+        }
+      });
+
     },
   },
   beforeCreate() {

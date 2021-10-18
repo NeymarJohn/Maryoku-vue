@@ -189,7 +189,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveEvent"]),
+    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveVendor", "saveEvent"]),
     gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
@@ -229,6 +229,7 @@ export default {
         }
         if (!this.isLoading) {
           this.isLoading = true;
+          this.saveVendor(this.vendor);
           this.saveProposal(type)
             .then((proposal) => {
               this.isUpdating = false;
@@ -264,7 +265,6 @@ export default {
         location: this.event.location,
         guests: this.event.numberOfParticipants,
         vendor: new Vendor({ id: this.vendor.id }),
-        customer: {id: this.event.customer.id}
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };
@@ -354,7 +354,9 @@ export default {
       }
       return "";
     },
-
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    },
     event() {
       return this.$store.state.proposalForNonMaryoku.eventData;
     },

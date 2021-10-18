@@ -154,7 +154,9 @@ export default {
   async created() {
 
     if(this.$store.state.auth.user){
-      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
+      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
+
+      }).catch(err => this.$router.push({ path: `/vendor/signin`}));
     } else {
         this.$router.push({ path: `/vendor/signin`});
     }
@@ -205,7 +207,7 @@ export default {
     this.isLoading = false
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "setWizardStep"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "saveVendor", "setWizardStep"]),
     gotoNext() {
       this.step = this.step + 1;
 
@@ -269,6 +271,7 @@ export default {
         this.isLoading = true;
 
         let proposal = await this.saveProposal(type);
+        let vendor = await this.saveVendor(this.$store.state.vendorProposal.vendor);
         this.isUpdating = false;
         this.isLoading = false;
         if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
@@ -357,6 +360,9 @@ export default {
       }
       return "";
     },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
     step: {
       get: function () {
         return this.$store.state.vendorProposal.wizardStep;
@@ -366,6 +372,9 @@ export default {
       },
     },
   },
+  watch: {
+    vendor(newVal){console.log('vendor.watch', newVal)}
+  }
 };
 </script>
 <style lang="scss" scoped>

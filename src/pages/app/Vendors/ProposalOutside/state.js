@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
+import Vendor from "@/models/Vendors";
 import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -218,8 +219,8 @@ const mutations = {
   setInitStep: (state, step) => {
     state.initStep = step;
   },
-  setServices: (state, { category, services }) => {
-    Vue.set(state.proposalServices, category, services);
+  setVendorServices: (state, { category, services }) => {
+    Vue.set(state.vendor.services, category, services);
   },
   setCostServices: (state, { category, services }) => {
     // Add this category for the secondary servicesList
@@ -448,6 +449,14 @@ const actions = {
       resolve();
     })
   },
+  saveVendor: ({commit, state} , vendor) => {
+    return new Promise(async resolve => {
+      let query = new Vendor(vendor);
+      let res = await query.save();
+      console.log('saveVEndor', res);
+      resolve(res)
+    })
+  }
 };
 
 export default {

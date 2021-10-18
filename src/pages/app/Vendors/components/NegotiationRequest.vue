@@ -40,23 +40,12 @@
             <div v-if="negotiation.originalLocation !== negotiation.location" class="d-flex align-center justify-content-center mt-40">
                 <div class="font-size-14 w-min-180 color-black-middle">
                     <div class="font-size-24 text-line-through mb-5">{{negotiation.originalLocation}}</div>
-                    Original location
+
                 </div>
                 <md-icon class="mx-40">arrow_forward</md-icon>
                 <div class="font-size-22 font-bold-extra w-min-180">
                     {{negotiation.location}}
                     <p class="font-size-14 font-bold-extra mt-5">Location</p>
-                </div>
-            </div>
-            <div v-if="negotiation.originalEventType.key !== negotiation.eventType.key" class="d-flex align-center justify-content-center mt-40">
-                <div class="font-size-14 w-min-180 color-black-middle">
-                    <div class="font-size-24 text-line-through mb-5">{{negotiation.originalEventType.name}}</div>
-                    Original event type
-                </div>
-                <md-icon class="mx-40">arrow_forward</md-icon>
-                <div class="font-size-22 font-bold-extra w-min-180">
-                    {{negotiation.eventType.name}}
-                    <p class="font-size-14 font-bold-extra mt-5">Event type</p>
                 </div>
             </div>
         </template>
@@ -175,10 +164,6 @@
         watch:{
           processed(newVal){
               this.init()
-          },
-          negotiation(newVal){
-             console.log('negotiation.watch', newVal);
-             this.init();
           }
         }
     }

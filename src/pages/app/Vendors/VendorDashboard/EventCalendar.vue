@@ -181,12 +181,7 @@ export default {
       return events;
     },
     clickDate(day) {
-      console.log('clickDate', day, this.eventsForDate[Number(day.number)])
-      if (this.eventsForDate[Number(day.number)].length) {
-        this.$emit("clickDate", {event: this.eventsForDate[Number(day.number)][0]});
-      } else {
-        this.$emit("clickDate", {date: day} );
-      }
+      this.$emit("clickDate", day);
     },
   },
   computed: {

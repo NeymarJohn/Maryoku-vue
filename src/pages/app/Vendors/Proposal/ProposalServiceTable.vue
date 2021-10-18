@@ -367,11 +367,12 @@ export default {
   created() {
     this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
-      this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
-        (req) => req.requirementTitle != item.requirementTitle,
-      );
-      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      this.$forceUpdate();
+      // todo why update requirement of proposal request if remove item from costServices
+      // this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
+      //   (req) => req.requirementTitle != item.requirementTitle,
+      // );
+      // this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      // this.$forceUpdate();
       this.cancel();
     });
 

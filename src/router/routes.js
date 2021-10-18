@@ -751,7 +751,7 @@ let vendorListPage = {
     },
 };
 let checkoutPageWithVendor = {
-    path: "/checkout/proposal/:proposalId/:proposalType",
+    path: "/checkout/proposal/:proposalId",
     name: "CheckoutWithVendor",
     component: Checkout,
     meta: {
