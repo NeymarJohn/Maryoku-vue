@@ -161,18 +161,19 @@ const actions = {
     },
     updateCoverImage: async ({ commit, state, dispatch }, { vendorId, serviceId, file }) => {
         const fileId = `${new Date().getTime()}_${makeid()}`;
-        new Promise(async (resovle, reject) => {
-            let coverImage = S3Service.fileUpload(file, fileId, "vendor/cover-images");
-
-            if (!serviceId) {
-                new Vendors({ id: vendorId, coverImage }).save().then(res => {
-
-                });
-            } else {
-                new VendorService({ id: serviceId, coverImage }).for(new Vendors({ id: vendorId })).save().then(res => {
-
-                });
-            }
+        new Promise((resovle, reject) => {
+            S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
+                const coverImage = `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`;
+                if (!serviceId) {
+                    new Vendors({ id: vendorId, coverImage }).save().then(res => {
+                        dispatch("getProfile")
+                    });
+                } else {
+                    new VendorService({ id: serviceId, coverImage }).for(new Vendors({ id: vendorId })).save().then(res => {
+                        dispatch("getProfile")
+                    });
+                }
+            });
         })
 
     },

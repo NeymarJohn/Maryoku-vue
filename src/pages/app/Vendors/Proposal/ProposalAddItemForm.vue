@@ -1,22 +1,6 @@
 <template>
   <div class="title-cont default add-item-form">
-    <!-- <div class="sub-items-cont" v-if="serviceType === 'cost'">
-      <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-        <md-icon>keyboard_arrow_left</md-icon>
-      </span>
-      <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
-        <select-proposal-sub-item
-          :selected="isSelectedQuickButton('')"
-          :item="requirement"
-          v-for="(requirement, sIndex) in optionalRequirements"
-          :key="sIndex"
-          @click="fillFormWithSelected"
-        />
-      </div>
-      <span class="next" @click="next()">
-        <md-icon>keyboard_arrow_right</md-icon>
-      </span>
-    </div> -->
+
     <div class="add-item-cont">
       <div class="fields-cont font-bold mb-20">
         <span>Description</span>
@@ -65,7 +49,6 @@
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
             v-if="serviceType !== 'included'"
-            @input="changeUnit"
           />
         </div>
         <div class="field">
@@ -212,7 +195,6 @@ export default {
       selectedSuggestItemIndex: -1,
       showAutoCompletePanel: false,
       showAskSaveChangeModal: false,
-      savedUnitChange: null,
     };
   },
   created() {
@@ -296,12 +278,14 @@ export default {
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
 
-      if ( this.savedUnitChange === 'profile' ) {
-        this.$store.commit('vendorProposal/setVendorServices', {category: this.camelize(this.serviceItem), services: {...this.selectedItem, value:price}})
+      if ( price !== this.selectedItem.price ) {
+        this.showAskSaveChangeModal = true;
+      } else {
+        this.cancel();
       }
 
       this.$emit("addItem", {serviceItem: editingService, option: this.savedUnitChange} );
-      this.cancel();
+
     },
     cancel() {
       this.selectedItem = null
@@ -325,16 +309,14 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
     handleSave(val){
-      this.savedUnitChange = val;
+      if ( val ===  'profile' ) {
+        this.$store.commit('vendorProposal/setVendorServices', {
+          category: this.camelize(this.serviceItem), services: {...this.selectedItem, value: this.unit}
+        })
+      }
+      this.cancel();
       this.showAskSaveChangeModal = false;
     },
-    async changeUnit(v){
-      console.log('changeUnit', v);
-      if ( !this.savedUnitChange && this.selectedItem && v !== this.selectedItem.price ) {
-
-        this.showAskSaveChangeModal = true;
-      }
-    }
   },
   computed: {
     isDisabledAdd() {

@@ -7,7 +7,7 @@
       </div>
       <div class="event-date event-basic-info">
         <md-checkbox v-model="multiple">More than one day event</md-checkbox>
-        <div class="date-picker picker-panel">
+        <div class="date-picker picker-panel bg-white">
           <div class="d-flex pl-10 justify-content-center">
             <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="21px" />
             <span class="date-string">{{ getFormattedDate }}</span>
@@ -160,6 +160,17 @@ export default {
     border-radius: 3px;
     margin: auto;
     height: max-content;
+
+    &.time-picker {
+      img {
+        width: 23px;
+        margin-right: 25px;
+      }
+      .time-select-fields {
+        flex-grow: 1;
+      }
+
+    }
   }
   .title {
     font-family: "Manrope-Bold";

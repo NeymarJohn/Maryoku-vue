@@ -93,9 +93,17 @@ span.vfc-span-day {
     color: #f51355 !important;
   }
 }
+.vfc-day .vfc-base-start, .vfc-base-end {
+  background-color: #f51355 !important;
+}
 span.vfc-span-day.vfc-marked,
 .vfc-today.vfc-marked {
   color: white !important;
+
+  &:not(.vfc-start-marked):not(.vfc-end-marked):before {
+    background-color: #f51355 !important;
+    border-radius: unset;
+  }
 }
 span.vfc-span-day.vfc-hide {
   color: white !important;
@@ -117,7 +125,7 @@ span.vfc-span-day.vfc-hide {
 .vfc-top-date {
   margin: 15px;
 }
-.vendor-calendar{
+.vendor-dashboard-calendar{
    display: flex;
    justify-content: center;
   .vfc-main-container{
@@ -132,7 +140,7 @@ span.vfc-span-day.vfc-hide {
     }
   }
   .vfc-top-date {
-      margin-top: 13px!important;
+      margin-top: 22px!important;
       a{
           color: black !important;
           font-family: "Manrope-Bold";
@@ -140,15 +148,10 @@ span.vfc-span-day.vfc-hide {
       }
   }
 
-  .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
-    margin: auto;
-    background-color: $vendorColor !important;
-    border-radius: 50%;
-    opacity: 1;
-    z-index: 1;
-  }
-
   span.vfc-span-day{
+      width: 50px!important;
+      height: 50px !important;
+      line-height: 50px !important;
       background-color: white !important;
       &.vfc-today{
           color: $vendorColor !important;
@@ -157,18 +160,16 @@ span.vfc-span-day.vfc-hide {
           box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.15);
       }
   }
-    .vfc-day .vfc-base-start,
-    .vfc-base-end {
+  .vfc-day .vfc-base-start, .vfc-base-end {
+    background-color: $vendorColor !important;
+  }
+
+  span.vfc-span-day.vfc-marked,  .vfc-today.vfc-marked {
+    color: white !important;
+
+    &:not(.vfc-start-marked):not(.vfc-end-marked):before {
         background-color: $vendorColor !important;
     }
-
-    span.vfc-span-day.vfc-marked,
-    .vfc-today.vfc-marked {
-        color: white !important;
-
-        &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-            background-color: $vendorColor !important;
-        }
   }
   .vfc-cursor-pointer {
       z-index: 30 !important;

@@ -20,10 +20,6 @@
             FunctionalCalendar
         },
         props: {
-            initDate: {
-                type: Object,
-                default: null,
-            },
             multiple: {
                 type: Boolean,
                 default: true,
@@ -40,7 +36,7 @@
         data(){
             return {
                 updated: false,
-                dateData: this.initDate ? this.initDate : {
+                dateData: {
                     currentDate: new Date(),
                     dateRange: {
                         start: { date: false, dateTime: false, hour: "00", mintue: "00" },
@@ -56,7 +52,7 @@
         },
         methods: {
             selectDay(e) {
-                console.log('select', this.dateData);
+                console.log('select', e);
                 this.$emit('select', this.dateData)
                 this.$forceUpdate();
             },
@@ -133,11 +129,9 @@
                setTimeout(_ => {
                    this.updated = false;
                }, 10)
-            },
-            initDate(newVal) {this.dateData = newVal}
+            }
         },
         mounted() {
-            console.log('initData', this.dateData)
         },
         updated() {
             this.renderCalendar();

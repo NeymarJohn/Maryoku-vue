@@ -100,7 +100,7 @@ const actions = {
         S3Service.fileUpload(file, fileId, "vendor/cover-images").then(uploadedName => {
             commit("replaceImage", {
                 index,
-                image: `${uploadedName}`,
+                image: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
             });
             if (isAllImageUploaded()) {
                 new Vendors({ id: state.vendor.id, images: state.vendor.images }).save();
