@@ -78,14 +78,14 @@
 
     <div class="row">
       <p class="mb-5 text-left text-bold">Date of the event</p>
-      <maryoku-input
+      <calendar-input
         :value="eventDate"
         class="form-input width-50"
         placeholder="Choose date…"
         inputStyle="date"
-        v-model="eventDate"
+        @input="selectDate"
         theme="purple"
-      ></maryoku-input>
+      ></calendar-input>
     </div>
     <div class="md-layout mt-30 width-50">
       <div class="md-layout-item md-size-50 p-0">
@@ -135,7 +135,7 @@
 </template>
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { MaryokuInput } from "@/components";
+import { MaryokuInput, CalendarInput } from "@/components";
 import LocationInput from "../VendorDashboard/LocationInput";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
@@ -144,16 +144,17 @@ import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import SelectableCard from "@/components/SelectableCard.vue";
-// import AddNewCustomerModal from "./Modals/AddNewCustomer";
+
 import { Modal } from "@/components";
 import Customer from "@/models/Customer";
-import Loader from "../../../../components/loader/index";
+import Loader from "@/components/loader/index";
 const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {
   components: {
       Loader,
     MaryokuInput,
+    CalendarInput,
     VueTimepicker,
     LocationInput,
     Autocomplete,
@@ -317,6 +318,30 @@ export default {
     getTimeFromFormat(date, time, a, format) {
       return moment(`${date} ${time.hh}:${time.mm} ${a}`, format).unix();
     },
+    selectDate({multiple, date}){
+      console.log('selectDate', multiple, date);
+      if(multiple) {
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
+          key: "startTime",
+          value: this.getTimeFromFormat(date.dateRange.start.date, this.startTime, this.amPack.start, "YYYY-MM-DD hh:mm a"),
+        });
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
+          key: "endTime",
+          value: this.getTimeFromFormat(date.dateRange.start.date, this.endTime, this.amPack.end, "YYYY-MM-DD hh:mm a"),
+        });
+      } else {
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
+          key: "startTime",
+          value: this.getTimeFromFormat(date.selectedDate, this.startTime, this.amPack.start, "YYYY-MM-DD hh:mm a"),
+        });
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
+          key: "endTime",
+          value: this.getTimeFromFormat(date.selectedDate, this.endTime, this.amPack.end, "YYYY-MM-DD hh:mm a"),
+        });
+      }
+
+
+    }
   },
   computed: {
     vendorData() {
@@ -362,16 +387,6 @@ export default {
         if (this.$store.state.proposalForNonMaryoku.eventData.startTime)
           return moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("DD.MM.YYYY");
         else return null;
-      },
-      set(value) {
-        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-          key: "startTime",
-          value: this.getTimeFromFormat(value, this.startTime, this.amPack.start, "DD.MM.YYYY hh:mm a"),
-        });
-        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-          key: "endTime",
-          value: this.getTimeFromFormat(value, this.endTime, this.amPack.end, "DD.MM.YYYY hh:mm a"),
-        });
       },
     },
     startTime: {
@@ -441,6 +456,7 @@ export default {
         this.showNewCustomerModal = true;
       }
     },
+    eventDate(newVal){}
   },
 };
 </script>
