@@ -1,22 +1,6 @@
 <template>
   <div class="title-cont default add-item-form">
-    <!-- <div class="sub-items-cont" v-if="serviceType === 'cost'">
-      <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-        <md-icon>keyboard_arrow_left</md-icon>
-      </span>
-      <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
-        <select-proposal-sub-item
-          :selected="isSelectedQuickButton('')"
-          :item="requirement"
-          v-for="(requirement, sIndex) in optionalRequirements"
-          :key="sIndex"
-          @click="fillFormWithSelected"
-        />
-      </div>
-      <span class="next" @click="next()">
-        <md-icon>keyboard_arrow_right</md-icon>
-      </span>
-    </div> -->
+
     <div class="add-item-cont">
       <div class="fields-cont font-bold mb-20">
         <span>Description</span>
@@ -138,14 +122,16 @@
         </md-button>
       </div>
     </div>
+    <ask-save-change v-if="showAskSaveChangeModal" @cancel="showAskSaveChangeModal=false" @save="handleSave"></ask-save-change>
   </div>
 </template>
 
 <script>
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
+import AskSaveChange from "./Modals/AskSaveChangeModal"
 
 export default {
-  components: { SelectProposalSubItem },
+  components: { SelectProposalSubItem, AskSaveChange },
 
   props: {
     optionalRequirements: {
@@ -167,11 +153,12 @@ export default {
   },
   data() {
     return {
+      selectedItem: null,
       serviceSlidePos: 0,
       serviceItem: "",
       serviceItemSize: "",
       qty: 1,
-      unit: "",
+      unit: 0,
       isRequiredPlannerChoice: false,
       isComplementary: false,
       ttpCommunicationException: "",
@@ -207,6 +194,7 @@ export default {
       isEditingComment: false,
       selectedSuggestItemIndex: -1,
       showAutoCompletePanel: false,
+      showAskSaveChangeModal: false,
     };
   },
   created() {
@@ -222,6 +210,7 @@ export default {
       this.serviceItem = this.filteredSuggestItems[index].description.slice(0, this.serviceItem.length);
     },
     selectSuggestItem(index) {
+      this.selectedItem = this.filteredSuggestItems[index];
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
       this.serviceItem = this.filteredSuggestItems[index].description;
@@ -288,10 +277,18 @@ export default {
         isComplimentary: false,
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
-      this.$emit("addItem", editingService);
-      this.cancel();
+
+      if ( price !== this.selectedItem.price ) {
+        this.showAskSaveChangeModal = true;
+      } else {
+        this.cancel();
+      }
+
+      this.$emit("addItem", {serviceItem: editingService, option: this.savedUnitChange} );
+
     },
     cancel() {
+      this.selectedItem = null
       this.serviceItemSize = "";
       this.qty = 1;
       this.unit = 0;
@@ -310,6 +307,15 @@ export default {
         return chr.toUpperCase();
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
+    },
+    handleSave(val){
+      if ( val ===  'profile' ) {
+        this.$store.commit('vendorProposal/setVendorServices', {
+          category: this.camelize(this.serviceItem), services: {...this.selectedItem, value: this.unit}
+        })
+      }
+      this.cancel();
+      this.showAskSaveChangeModal = false;
     },
   },
   computed: {
@@ -349,10 +355,7 @@ export default {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
               const profileService = this.profileServices[this.camelize(capitalized)];
-              // const requestItemByPlanner = this.proposalRequest.requirements.find((requestItem) => {
-              //   console.log(requestItem);
-              //   return requestItem.item && requestItem.item.toLowerCase() === item.name.toLowerCase();
-              // });
+
               const requestItemByPlanner = null;
               console.log("requestItemByPlanner", requestItemByPlanner);
               if (item.available) {

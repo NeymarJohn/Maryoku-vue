@@ -139,14 +139,17 @@ export default {
     this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", ({ file, index, link, url }) => {
+    this.$root.$on("update-inspirational-photo", async ({ file, index, link, url }) => {
       const currentPhoto = this.inspirationalPhotos[index];
-      console.log('update-inspirational-photo', currentPhoto, url);
+      await  S3Service.fileUpload(file, `photo-${index}`, link)
+
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
-      S3Service.fileUpload(file, `photo-${index}`, link)
-        .then((res) => {})
-        .catch((event) => {});
+
     });
+    this.$root.$on("remove-inspirational-photo", async (index) => {
+        await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+        this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
+    })
   },
   methods: {
     selectSecondCategory(serviceCategory) {

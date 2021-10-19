@@ -40,21 +40,21 @@ export default {
     this.$authService.setTenant(tenantId);
 
     // SET LIVE CHAT INFORMANTION
-    if (process.env.NODE_ENV === "production") {
-          try {
-              window.heap.identify(this.$auth.user.email);
-          } catch (e) {
-              console.error(e);
-          }
-          try {
-              this.$Tawk.$updateChatUser({
-                  name: this.$store.state.auth.user.displayName,
-                  email: this.$store.state.auth.user.email,
-              });
-          } catch (e) {
-              console.error(e);
-          }
-      }
+    // if (process.env.NODE_ENV === "production") {
+    //       try {
+    //           window.heap.identify(this.$auth.user.email);
+    //       } catch (e) {
+    //           console.error(e);
+    //       }
+    //       try {
+    //           this.$Tawk.$updateChatUser({
+    //               name: this.$store.state.auth.user.displayName,
+    //               email: this.$store.state.auth.user.email,
+    //           });
+    //       } catch (e) {
+    //           console.error(e);
+    //       }
+    //   }
     /// SET GTM
     this.$gtm.trackEvent({
           event: "user_signed_in", // Event type [default = 'interaction'] (Optional)

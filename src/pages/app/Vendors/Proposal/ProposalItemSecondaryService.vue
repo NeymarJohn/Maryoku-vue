@@ -3,7 +3,7 @@
     <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
       <div class="left-side">
         <div class="check-cont" @click="clickItem($event, service.componentId)">
-          <img v-if="isAdded(service.componentId)" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
+          <img v-if="isChecked" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
 <!--        <md-checkbox class="check-condition md-vendor"-->
@@ -107,7 +107,6 @@ export default {
       isAllFilledInfo: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isVCollapsed: false,
-      isChecked: false,
       isEditDiscount: false,
       isEditTax: false,
       clickedItem: false,
@@ -181,8 +180,6 @@ export default {
       console.log('changeItem', this.additionalServices);
     },
     clickItem(event, category) {
-      console.log('clickItem', this.isChecked);
-      this.isChecked = !this.isChecked;
       event.stopPropagation();
 
       if (!this.isChecked) {
@@ -426,7 +423,6 @@ export default {
       });
     });
 
-    console.log('additionalServices', this.additionalServices);
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
@@ -477,6 +473,9 @@ export default {
       if (!this.proposalRequest.requirements[this.category]) return [];
       return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
     },
+    isChecked(){
+      return this.additionalServices.includes(this.service.componentId);
+    },
     additionalServices: {
       get: function () {
         return this.$store.state.vendorProposal.additionalServices;
@@ -486,7 +485,9 @@ export default {
       },
     },
   },
-  watch: {},
+  watch: {
+    service(newValue){console.log('proposal.item.secondary.service', newValue)}
+  },
 };
 </script>
 <style lang="scss" scoped>

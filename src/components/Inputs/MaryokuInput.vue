@@ -44,7 +44,7 @@
     </div>
 
     <div ref="datePicker" v-if="showDatePicker">
-      <div class="date-picker picker-panel" ref="timePickerPanel" style="z-index: 200 !important">
+      <div class="date-picker maryoku picker-panel" ref="timePickerPanel" style="z-index: 200 !important">
         <div class="d-flex pl-10">
           <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
           <!-- {{dateData && dateData.selectedDate}} -->
@@ -102,7 +102,10 @@ export default {
     imgStyle: String,
     inputStyle: String,
     readonly: Boolean,
-    size: String,
+    size: {
+      type: String,
+      default: '',
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -165,16 +168,7 @@ export default {
         // this.$refs.timePickerElements.style.transform = "translateY(100%)";
       }
       if (this.inputStyle == "time" || this.inputStyle == "date") {
-        // setTimeout(() => {
-        //   const pos = this.cumulativeOffset(this.$refs.input);
-        //   console.log('pos', pos);
-        //   this.$refs.timePickerPanel.style.left = `${pos.left}px`;
-        //   this.$refs.timePickerPanel.style.top = `${80 + pos.top}px`;
-        //   this.$refs.timePickerPanel.style.display = "block";
-        //   this.$refs.timePickerPanel.style.position = "absolute";
-        //   document.getElementsByTagName("body")[0].appendChild(this.$refs.timePickerElements);
-        //   window.addEventListener("scroll", this.handleScroll);
-        // }, 100);
+
       }
     },
     clickMask() {
@@ -258,6 +252,7 @@ export default {
         this.content = newValue;
       }
     },
+    inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`}
   },
 };
 </script>

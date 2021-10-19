@@ -104,6 +104,15 @@ let authPages = {
             },
         },
         {
+            path: "/signup",
+            name: "SignUp",
+            component: SignUp,
+            meta: {
+                requiresAuth: false,
+                gtm: "SignUp",
+            },
+        },
+        {
             path: "/guest/signin",
             name: "Guest Signin",
             component: SignInSignUp,
@@ -115,7 +124,7 @@ let authPages = {
             },
         },
         {
-            path: "/signup",
+            path: "/guest/signup",
             name: "SignUp",
             component: SignUp,
             meta: {
@@ -751,7 +760,7 @@ let vendorListPage = {
     },
 };
 let checkoutPageWithVendor = {
-    path: "/checkout/proposal/:proposalId",
+    path: "/checkout/proposal/:proposalId/:proposalType",
     name: "CheckoutWithVendor",
     component: Checkout,
     meta: {

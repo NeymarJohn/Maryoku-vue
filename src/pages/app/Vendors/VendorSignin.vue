@@ -52,10 +52,10 @@
             </div>
             <div>{{ error }}</div>
           </div>
-          <div class="d-flex align-center">
-              <md-checkbox class="md-vendor mr-10" v-model="accepted">I accept</md-checkbox>
-              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>
-          </div>
+<!--          <div class="d-flex align-center">-->
+<!--              <md-checkbox class="md-vendor mr-10" v-model="accepted">I accept</md-checkbox>-->
+<!--              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>-->
+<!--          </div>-->
           <div class="d-flex justify-content-end">
               <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
           </div>

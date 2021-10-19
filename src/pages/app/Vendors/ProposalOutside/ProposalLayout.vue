@@ -83,7 +83,6 @@
       v-if="showSendProposalModal"
       @close="showSendProposalModal = false"
       @submit="submitProposal"
-      @sms="sendSMS"
       :event="event"
       :link="proposalLink"
     ></send-proposal-modal>
@@ -122,7 +121,6 @@ export default {
   },
   data() {
     return {
-      vendor: null,
       isLoading: true,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -163,7 +161,7 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    this.vendor = await this.getVendor(this.$route.params.vendorId);
+    await this.getVendor(this.$route.params.vendorId);
     if (this.$route.params.id) await this.getProposal(this.$route.params.id);
     if (!this.$store.state.vendorProposal.coverImage.length) {
       this.$store.commit("proposalForNonMaryoku/setValue", {
@@ -187,7 +185,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveEvent"]),
+    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveVendor", "saveEvent"]),
     gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
@@ -227,11 +225,12 @@ export default {
         }
         if (!this.isLoading) {
           this.isLoading = true;
+          this.saveVendor(this.vendor);
           this.saveProposal(type)
             .then((proposal) => {
               this.isUpdating = false;
               this.isLoading = false;
-              if (type === "submit") this.submittedModal = true;
+              if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
               else {
                 Swal.fire({
                   title: `You saved the current proposal. You can edit anytime later!`,
@@ -262,6 +261,7 @@ export default {
         location: this.event.location,
         guests: this.event.numberOfParticipants,
         vendor: new Vendor({ id: this.vendor.id }),
+        customer: { id: this.event.customer.id },
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };
@@ -311,22 +311,18 @@ export default {
         this.showSendProposalModal = true;
       });
     },
-    submitProposal() {
+    async submitProposal() {
       this.showSendProposalModal = false;
 
-      const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
-          { type: "created", proposalId: proposalForNonMaryoku.id },
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          this.showSubmittedProposalModal = true;
-        });
-    },
-    async sendSMS() {
+      // send email to customer to notify the proposal is created
       let proposal = this.$store.state.proposalForNonMaryoku;
+      await this.$http.post(
+        `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendEmail`,
+        { type: "created", proposalId: proposal.id },
+        { headers: this.$auth.getAuthHeader() },
+      );
+
+      // send SMS to customer phone to notify
       this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
       let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
       if (proposal.eventData.customer.phone) {
@@ -335,8 +331,9 @@ export default {
           { phoneNumber: proposal.eventData.customer.phone, message },
           { headers: this.$auth.getAuthHeader() },
         );
-        console.log("res", res);
       }
+
+      this.showSubmittedProposalModal = true;
     },
   },
 
@@ -352,7 +349,9 @@ export default {
       }
       return "";
     },
-
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    },
     event() {
       return this.$store.state.proposalForNonMaryoku.eventData;
     },

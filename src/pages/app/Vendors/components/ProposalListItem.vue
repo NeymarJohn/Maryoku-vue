@@ -57,7 +57,19 @@
               Download
             </span>
           </md-menu-item>
-            <md-menu-item v-if="proposal.nonMaryoku" @click="edit(proposalStatus.share)" class="md-purple">
+          <md-menu-item v-if="!proposal.nonMaryoku" @click="edit(proposalStatus.resend)" class="md-purple">
+            <span>
+              <img src="/static/icons/vendor/proposal.svg" class="label-icon mr-10" />
+              Resend proposal
+            </span>
+          </md-menu-item>
+          <md-menu-item @click="edit(proposalStatus.cancel)" class="md-purple">
+            <span>
+              <img src="/static/icons/vendor/proposal.svg" class="label-icon mr-10" />
+              Cancel proposal
+            </span>
+          </md-menu-item>
+          <md-menu-item v-if="proposal.nonMaryoku" @click="edit(proposalStatus.share)" class="md-purple">
             <span>
               <img :src="`${$iconURL}Share/link-dark.svg`" class="label-icon mr-10" />
               Copy Link
@@ -125,6 +137,7 @@
 <script>
 import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
   components: { Button },
@@ -153,6 +166,8 @@ export default {
         share: 4,
         negotiation: 5,
         duplicate: 6,
+        resend: 7,
+        cancel: 8,
       },
       requestType: {
         ADD_MORE_TIME: 0,
@@ -162,16 +177,18 @@ export default {
   },
   methods: {
     getStatusIcon(status) {
-      let path = "/static/icons/vendor/proposalBoard/";
-      if (status == "submit") {
-        return `${path}filter-pending.svg`;
-      } else if (status == "top") {
-        return `${path}filter-top3.svg`;
-      } else if (status == "lost") {
-        return `${path}filter-reject.svg`;
-      } else {
-        return `${path}filter-${status}.svg`;
-      }
+          let path = "/static/icons/vendor/proposalBoard/";
+          if ( status === PROPOSAL_STATUS.PENDING ) {
+              return `${path}filter-pending.svg`;
+          } else if ( status === PROPOSAL_STATUS.TOP3) {
+              return `${path}filter-top3.svg`;
+          } else if ( status === PROPOSAL_STATUS.LOST ) {
+              return `${path}filter-reject.svg`;
+          } else if ( status === PROPOSAL_STATUS.WON ) {
+              return `${path}filter-won.svg`;
+          } else {
+              return `${path}filter-${status}.svg`;
+          }
     },
     edit(action) {
       if ( this.proposal.accepted && action === this.proposalStatus.edit) return;

@@ -147,7 +147,7 @@
                   </div>
               </div>
           </template>
-          <div class="addtional-requests">
+          <div v-if="step < 2" class="addtional-requests">
             <div class="font-bold">Addtional Requests</div>
             <div>
                 {{ additionalNote }}

@@ -86,13 +86,11 @@ const actions = {
     })
   },
   updateProposal({ commit, state }, payload) {
-    return new Promise((resolve, reject) => {
-        new Proposal({...payload.data}).for(new Vendors({ id: payload.vendorId })).get().then(res => {
-            console.log('updateProposal', res);
-            resolve(res);
-        }).catch(err => {
-            reject(err);
-        })
+    return new Promise(async (resolve, reject) => {
+        let query = new Proposal({...payload.data}).for(new Vendor({ id: payload.vendorId }))
+        let res = await query.save();
+        commit('setProposal', res);
+        resolve(res);
     })
   },
   getCustomers: ({commit, state}, payload) => {

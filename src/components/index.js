@@ -2,6 +2,7 @@ import IconCheckbox from "./Inputs/IconCheckbox.vue";
 import InputText from "./Inputs/input-text.vue";
 import InputWithIcon from "./Inputs/InputWithIcon.vue";
 import MaryokuInput from "./Inputs/MaryokuInput.vue"
+import CalendarInput from "./Inputs/CalendarInput"
 import MaryokuTextarea from "./Inputs/MaryokuTextarea.vue"
 import MaryokuResizableTextarea from "./Inputs/MaryokuResizableTextarea.vue"
 
@@ -79,7 +80,6 @@ export {
     WizardTab,
     AnimatedNumber,
     Collapse,
-    AsyncWorldMap,
     LabelEdit,
     VueSlideoutPanel,
     InputWithIcon,
@@ -95,4 +95,5 @@ export {
     PieChart,
     SignInContent,
     CommentInput,
+    CalendarInput
 };

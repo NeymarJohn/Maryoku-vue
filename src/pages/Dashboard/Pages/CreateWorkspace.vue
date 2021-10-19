@@ -110,13 +110,15 @@ export default {
                 AuthService.setTenant(this.workspace);
                 let callback = this.$route.query.callback;
                 const action = this.$route.query.action;
-                let eventData = localStorage.getItem('event')
+                let eventData = JSON.parse(localStorage.getItem('event'));
                 if (action === this.$queryEventActions.create) {
                   eventService
                     .saveEvent(eventData)
                     .then((event) => {
-                      callback = btoa(`events/${event.id}/booking/concept`);
-                      document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                      // callback = btoa(`events/${event.id}/booking/concept`);
+                      // document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                      const gotoLink = eventService.getFirstTaskLink(event);
+                      this.$router.push({ path: gotoLink });
                     })
                     .catch((err) => {
                       console.log(err);
@@ -127,8 +129,10 @@ export default {
                   eventService
                     .saveEvent(eventData)
                     .then((event) => {
-                      callback = btoa(`events/${event.id}/booking/concept`);
-                      document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                      // callback = btoa(`events/${event.id}/booking/concept`);
+                      // document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                      const gotoLink = eventService.getFirstTaskLink(event);
+                      this.$router.push({ path: gotoLink });
                     })
                     .catch((err) => {
                       console.log(err);

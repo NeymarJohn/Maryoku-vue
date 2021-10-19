@@ -14,7 +14,6 @@
         :defaultPhoto="photo"
         @change="setPhoto(index, ...arguments)"
         @addCaption="addCaption(index, ...arguments)"
-        @remove="removePhoto"
       >
       </proposal-inspirational-photos-item>
       <template slot="next">
@@ -102,9 +101,6 @@ export default {
       this.captionModal.photoUrl = photoData.url;
       this.captionModal.caption = photoData.caption;
       this.captionModal.currentIndex = index;
-    },
-    removePhoto(index) {
-      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
     },
     saveCaption() {
       this.$root.$emit("saveCaption", this.captionModal);

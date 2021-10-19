@@ -345,7 +345,7 @@ input[type="file"] {
 .md-field > .md-icon ~ .md-input {
   margin: 0;
 }
-.modal-container {
-  max-width: 570px;
-}
+/*.modal-container {*/
+  /*max-width: 570px;*/
+/*}*/
 </style>

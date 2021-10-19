@@ -120,7 +120,7 @@ import Proposal from "@/models/Proposal";
 import { Modal } from "@/components";
 const NegotiationRequest = () => import("../../components/NegotiationRequest");
 const ProposalContent = () => import("../../components/ProposalDetail");
-import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
+import {NEGOTIATION_REQUEST_STATUS, PROPOSAL_STATUS} from "@/constants/status";
 
 export default {
   components: {
@@ -159,14 +159,14 @@ export default {
       if (!this.$store.state.vendorDashboard.proposalRequests) return [];
 
       return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-        return p.proposal ? p.remainingTime > 0 && p.declineMessage !== "decline" && p.proposal.status !== "submit"
+        return p.proposal ? p.remainingTime > 0 && p.declineMessage !== "decline" && p.proposal.status !== PROPOSAL_STATUS.PENDING
             : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },
     proposalNegotiationRequest(){
       if (!this.$store.state.vendorDashboard.proposalRequests) return [];
       return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-            return p.proposal && p.proposal.status === 'submit' && p.proposal.negotiations &&
+            return p.proposal && p.proposal.status === PROPOSAL_STATUS.PENDING && p.proposal.negotiations &&
                 p.proposal.negotiations.filter(it => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0).length
         });
     },
