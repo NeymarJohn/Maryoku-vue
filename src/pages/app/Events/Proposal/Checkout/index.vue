@@ -451,7 +451,7 @@ export default {
             price: Math.floor(this.feePrice(this.proposal) * 100),
             proposalId: this.proposal.id,
             vendorId: this.proposal.vendor.id,
-            // eventId: this.proposal.eventData.id, ///proposal.event.id,  //not defined yet for the non maryoku
+            eventId: this.proposal.eventData ? this.proposal.eventData.id : "", ///proposal.event.id,  //not defined yet for the non maryoku
             serviceCategory: "serviceFee",
           },
           { headers: this.$auth.getAuthHeader() },
