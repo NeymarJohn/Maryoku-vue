@@ -2,7 +2,7 @@
   <div class="for-proposal-wrapper">
     <div class="md-layout justify-content-between">
       <div class="md-layout-item md-size-70">
-        <proposal-steps :eventCategory="vendor.eventCategory" :step="step" :vendor="vendor" />
+        <proposal-steps v-if="vendor" :eventCategory="vendor.eventCategory" :step="step" :vendor="vendor" />
         <div class="step-wrapper" v-if="step == 0">
           <proposal-wizard-step-0 class="mt-20"></proposal-wizard-step-0>
         </div>

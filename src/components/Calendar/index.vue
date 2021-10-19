@@ -20,6 +20,10 @@
             FunctionalCalendar
         },
         props: {
+            initDate: {
+                type: Object,
+                default: null,
+            },
             multiple: {
                 type: Boolean,
                 default: true,
@@ -36,7 +40,7 @@
         data(){
             return {
                 updated: false,
-                dateData: {
+                dateData: this.initDate ? this.initDate : {
                     currentDate: new Date(),
                     dateRange: {
                         start: { date: false, dateTime: false, hour: "00", mintue: "00" },
@@ -50,9 +54,13 @@
                 },
             }
         },
+        created(){this.init()},
         methods: {
+            init(){
+                console.log('init', this.initDate);
+              this.dateData = this.initDate;
+            },
             selectDay(e) {
-                console.log('select', e);
                 this.$emit('select', this.dateData)
                 this.$forceUpdate();
             },
@@ -60,7 +68,7 @@
                 this.$forceUpdate();
             },
             renderCalendar(){
-                console.log('renderCal');
+                // console.log('renderCal');
                 $(".vfc-day").each(function (index, day) {
                     if (
                         $(day).find("span.vfc-span-day").hasClass("vfc-marked") ||
@@ -129,7 +137,8 @@
                setTimeout(_ => {
                    this.updated = false;
                }, 10)
-            }
+            },
+            initDate(newVal) {this.init()}
         },
         mounted() {
         },

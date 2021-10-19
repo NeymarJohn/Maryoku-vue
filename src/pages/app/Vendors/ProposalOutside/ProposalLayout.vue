@@ -124,7 +124,6 @@ export default {
   },
   data() {
     return {
-      vendor: null,
       isLoading: true,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -165,7 +164,7 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    this.vendor = await this.getVendor(this.$route.params.vendorId);
+    await this.getVendor(this.$route.params.vendorId);
     if (this.$route.params.id) await this.getProposal(this.$route.params.id);
     if (!this.$store.state.vendorProposal.coverImage.length) {
       this.$store.commit("proposalForNonMaryoku/setValue", {

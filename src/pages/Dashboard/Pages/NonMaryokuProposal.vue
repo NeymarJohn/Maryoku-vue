@@ -318,7 +318,7 @@ export default {
         this.loading = false;
     },
     downProposal() {
-      this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
+      this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;

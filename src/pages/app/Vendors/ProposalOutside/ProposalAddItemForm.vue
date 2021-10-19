@@ -48,6 +48,7 @@
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
             v-if="serviceType !== 'included'"
+            @input="changeUnit"
           />
         </div>
         <div class="field">
@@ -194,6 +195,7 @@ export default {
       selectedSuggestItemIndex: -1,
       showAutoCompletePanel: false,
       showAskSaveChangeModal: false,
+      savedUnitChange: null,
     };
   },
   created() {
@@ -275,14 +277,12 @@ export default {
         isComplimentary: false,
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
-      if ( price !== this.selectedItem.price ) {
-        this.showAskSaveChangeModal = true;
-      } else {
-        this.cancel();
+      if ( this.savedUnitChange === 'profile' ) {
+        this.$store.commit('proposalForNonMaryoku/setVendorServices', {category: this.camelize(this.serviceItem), services: {...this.selectedItem, value:price}})
       }
 
       this.$emit("addItem", editingService);
-
+      this.cancel();
     },
     cancel() {
       this.serviceItemSize = "";
@@ -305,14 +305,16 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
     handleSave(val){
-      if ( val ===  'profile' ) {
-        this.$store.commit('vendorProposal/setVendorServices', {
-          category: this.camelize(this.serviceItem), services: {...this.selectedItem, value: this.unit}
-        })
-      }
-      this.cancel();
+      this.savedUnitChange = val;
       this.showAskSaveChangeModal = false;
     },
+    async changeUnit(v){
+      console.log('changeUnit', v);
+      if ( !this.savedUnitChange && this.selectedItem && v !== this.selectedItem.price ) {
+
+        this.showAskSaveChangeModal = true;
+      }
+    }
   },
   computed: {
     isDisabledAdd() {

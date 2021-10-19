@@ -37,6 +37,7 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
+import { mapGetters } from "vuex";
 import ServiceContent from "./ServiceContent";
 export default {
   components: {

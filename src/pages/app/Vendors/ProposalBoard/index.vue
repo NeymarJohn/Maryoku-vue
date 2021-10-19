@@ -431,7 +431,7 @@ export default {
 
       } else if ( action === this.proposalStatus.download ) {
 
-        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.selectedProposal.id}/download`);
 
       } else if ( action === this.proposalStatus.share ) {
 

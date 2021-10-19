@@ -148,7 +148,6 @@ export default {
             this.user.role = "collaborator";
             this.user.invited = true;
             this.user.permittedEvent = { eventId: event, permit: permit };
-            this.user.currentUserType = 'planner';
           } else {
             this.user.role = "administrator";
             if(isGuest) this.user.currentUserType = 'guest';

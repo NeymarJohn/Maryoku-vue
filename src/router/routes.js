@@ -104,15 +104,6 @@ let authPages = {
             },
         },
         {
-            path: "/signup",
-            name: "SignUp",
-            component: SignUp,
-            meta: {
-                requiresAuth: false,
-                gtm: "SignUp",
-            },
-        },
-        {
             path: "/guest/signin",
             name: "Guest Signin",
             component: SignInSignUp,
