@@ -8,7 +8,7 @@
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
         <div class="font-bold mb-10" v-if="event.customer">{{ event.customer.name }} | {{ event.customer.email }}</div>
         <div>
-          {{ event.companyName }} | <a :href="event.fileUrl" class="color-purple" target="_blank">See proposal</a>
+          {{ event.companyName }} | <a :href="getProposalUrl(event.id)" class="color-purple" target="_blank">See proposal</a>
         </div>
       </div>
       <md-button class="md-simple md-icon-button" @click="selectEvent(event)">
@@ -77,8 +77,17 @@ export default {
     },
     eventIcon(idx){
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
+    },
+    getProposalUrl(eventId){
+      let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id === eventId);
+      return `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
     }
   },
+  computed:{
+    proposals(){
+      return this.$store.state.vendorDashboard.proposals;
+    },
+  }
 };
 </script>
 <style lang="scss" scoped>

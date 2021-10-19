@@ -361,30 +361,25 @@ export default {
     eventDate: {
       get() {
         if (this.$store.state.proposalForNonMaryoku.eventData.startTime)
-          return moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("DD.MM.YYYY");
+          return [this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000, this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000];
         else return null;
       },
       set({multiple, date}){
+        let eventData = this.$store.state.proposalForNonMaryoku.eventData;
         if(multiple) {
-          console.log('set', date.dateRange.start.date)
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "startTime",
-            value: this.getTimeFromFormat(date.dateRange.start.date, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
-          });
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "endTime",
-            value: this.getTimeFromFormat(date.dateRange.end.date, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
-          });
+          if (!date.dateRange.start.date || !date.dateRange.end.date) return;
+          console.log('set', multiple, date.dateRange.start.date, date.dateRange.end.date)
+          this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
+            startTime: this.getTimeFromFormat(date.dateRange.start.date, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
+            endTime: this.getTimeFromFormat(date.dateRange.end.date, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
+          }})
+
         } else {
-          console.log('set', date.selectedDate)
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "startTime",
-            value: this.getTimeFromFormat(date.selectedDate, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
-          });
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "endTime",
-            value: this.getTimeFromFormat(date.selectedDate, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
-          });
+          console.log('set', multiple, date.selectedDate)
+          this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
+              startTime: this.getTimeFromFormat(date.selectedDate, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
+              endTime: this.getTimeFromFormat(date.selectedDate, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
+          }});
         }
       }
     },

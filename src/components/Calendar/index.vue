@@ -58,7 +58,7 @@
         methods: {
             init(){
                 console.log('init', this.initDate);
-              this.dateData = this.initDate;
+                if (this.initDate )this.dateData = this.initDate;
             },
             selectDay(e) {
                 this.$emit('select', this.dateData)

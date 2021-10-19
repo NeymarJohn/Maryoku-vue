@@ -2,32 +2,34 @@
   <div class="for-proposals-layout-wrapper">
     <loader :active="isLoading" is_full_screen page="vendor"></loader>
 
-    <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
-    <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
-    <div class="main-cont">
-      <router-view></router-view>
-    </div>
-    <section class="footer-wrapper">
-      <div>
-        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
-        </md-button>
+          <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
+          <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
+          <div class="main-cont">
+              <router-view></router-view>
+          </div>
+          <section class="footer-wrapper">
+              <div>
+                  <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+                      <img :src="`${proposalIconsUrl}Group 4770 (2).svg`"/> Back
+                  </md-button>
 
-        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-          <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
-        </md-button>
-      </div>
-      <div class="next-cont">
-        <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-        <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
-          <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
-        </a>
-        <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
-          Next
-        </a>
-        <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
-      </div>
-    </section>
+                  <md-button @click="scrollToTop"
+                             class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+                      <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17"/>
+                  </md-button>
+              </div>
+              <div class="next-cont">
+                  <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"/> Discard </a>
+                  <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
+                      <img :src="`${$iconURL}common/save-purple.svg`"/> Save for later
+                  </a>
+                  <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]"
+                     v-if="step < 3">
+                      Next
+                  </a>
+                  <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
+              </div>
+          </section>
 
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
@@ -106,6 +108,7 @@ import ProposalVersionsBar from "./ProposalVersionsBar";
 import Vendor from "@/models/Vendors";
 import { PROPOSAL_STATUS } from "@/constants/status";
 
+
 export default {
   components: {
     VendorBidTimeCounter,
@@ -146,7 +149,7 @@ export default {
     if (this.$store.state.auth.user) {
       await this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token);
     } else {
-      this.$router.push({ path: `/vendor/signin` });
+      this.$router.push({ path: `/vendor/signin`});
     }
 
     this.$root.$on("send-event-data", (evtData) => {
@@ -170,10 +173,10 @@ export default {
       });
     }
     if (this.$route.query.version) {
-      let index = this.$store.state.proposalForNonMaryoku.versions.findIndex((v) => v.id === this.$route.query.version);
-      this.$store.commit("proposalForNonMaryoku/selectVersion", index);
+       let index = this.$store.state.proposalForNonMaryoku.versions.findIndex(v => v.id === this.$route.query.version);
+       this.$store.commit('proposalForNonMaryoku/selectVersion', index);
     }
-    setTimeout((_) => {}, 10000);
+    setTimeout(_ => {}, 10000)
     this.isLoading = false;
   },
 
@@ -261,7 +264,7 @@ export default {
         location: this.event.location,
         guests: this.event.numberOfParticipants,
         vendor: new Vendor({ id: this.vendor.id }),
-        customer: { id: this.event.customer.id },
+        customer: {id: this.event.customer.id}
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };
@@ -315,25 +318,27 @@ export default {
       this.showSendProposalModal = false;
 
       // send email to customer to notify the proposal is created
-      let proposal = this.$store.state.proposalForNonMaryoku;
-      await this.$http.post(
-        `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendEmail`,
-        { type: "created", proposalId: proposal.id },
-        { headers: this.$auth.getAuthHeader() },
-      );
+        let proposal = this.$store.state.proposalForNonMaryoku;
+      await this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendEmail`,
+          { type: "created", proposalId: proposal.id },
+          { headers: this.$auth.getAuthHeader() },
+        );
 
       // send SMS to customer phone to notify
       this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
       let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
       if (proposal.eventData.customer.phone) {
-        let res = await this.$http.post(
-          `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendSMS`,
-          { phoneNumber: proposal.eventData.customer.phone, message },
-          { headers: this.$auth.getAuthHeader() },
-        );
+         let res = await this.$http.post(
+                    `${process.env.SERVER_URL}/1/proposals/${proposal.id}/sendSMS`,
+                    { phoneNumber: proposal.eventData.customer.phone, message },
+                    { headers: this.$auth.getAuthHeader() },
+         )
       }
 
       this.showSubmittedProposalModal = true;
+
     },
   },
 
@@ -412,7 +417,7 @@ export default {
     align-items: center;
     position: absolute;
     width: 100%;
-    z-index: 8;
+    z-index: 5;
     overflow: hidden;
     position: fixed;
     bottom: 0;

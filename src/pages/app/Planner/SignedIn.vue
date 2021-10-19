@@ -54,7 +54,7 @@ export default {
     //       } catch (e) {
     //           console.error(e);
     //       }
-    //   }
+      // }
     /// SET GTM
     this.$gtm.trackEvent({
           event: "user_signed_in", // Event type [default = 'interaction'] (Optional)
