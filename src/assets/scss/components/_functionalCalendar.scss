@@ -117,7 +117,7 @@ span.vfc-span-day.vfc-hide {
 .vfc-top-date {
   margin: 15px;
 }
-.vendor-calendar{
+.vendor-dashboard-calendar{
    display: flex;
    justify-content: center;
   .vfc-main-container{
@@ -132,7 +132,7 @@ span.vfc-span-day.vfc-hide {
     }
   }
   .vfc-top-date {
-      margin-top: 13px!important;
+      margin-top: 22px!important;
       a{
           color: black !important;
           font-family: "Manrope-Bold";
@@ -140,15 +140,10 @@ span.vfc-span-day.vfc-hide {
       }
   }
 
-  .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
-    margin: auto;
-    background-color: $vendorColor !important;
-    border-radius: 50%;
-    opacity: 1;
-    z-index: 1;
-  }
-
   span.vfc-span-day{
+      width: 50px!important;
+      height: 50px !important;
+      line-height: 50px !important;
       background-color: white !important;
       &.vfc-today{
           color: $vendorColor !important;

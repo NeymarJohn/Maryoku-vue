@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
+    <Loader :active="isLoading" is-full-screen page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
       <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
@@ -154,9 +154,7 @@ export default {
   async created() {
 
     if(this.$store.state.auth.user){
-      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
-
-      }).catch(err => this.$router.push({ path: `/vendor/signin`}));
+      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token);
     } else {
         this.$router.push({ path: `/vendor/signin`});
     }
@@ -207,7 +205,7 @@ export default {
     this.isLoading = false
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "saveVendor", "setWizardStep"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "setWizardStep"]),
     gotoNext() {
       this.step = this.step + 1;
 
@@ -271,10 +269,9 @@ export default {
         this.isLoading = true;
 
         let proposal = await this.saveProposal(type);
-        let vendor = await this.saveVendor(this.$store.state.vendorProposal.vendor);
         this.isUpdating = false;
         this.isLoading = false;
-        if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
+        if (type === "submit") this.submittedModal = true;
         else {
           Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,
@@ -360,9 +357,6 @@ export default {
       }
       return "";
     },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
     step: {
       get: function () {
         return this.$store.state.vendorProposal.wizardStep;
@@ -372,9 +366,6 @@ export default {
       },
     },
   },
-  watch: {
-    vendor(newVal){console.log('vendor.watch', newVal)}
-  }
 };
 </script>
 <style lang="scss" scoped>

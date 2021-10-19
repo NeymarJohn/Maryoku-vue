@@ -102,6 +102,24 @@
                   </div>
                 </template>
               </li>
+              <li
+                v-if="
+                  calculatedTotal(getRequirementsByCategory('venuerental')) -
+                    newProposalRequest.eventData.allocatedBudget >
+                  0
+                "
+              >
+                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
+                Event Page/warning-circle-gray.svg"
+                <span
+                  >Your proposal is ${{
+                    (calculatedTotal(getRequirementsByCategory("venuerental")) -
+                      newProposalRequest.eventData.allocatedBudget)
+                      | withComma
+                  }}
+                  more than the budget
+                </span>
+              </li>
             </ul>
           </div>
         </div>
@@ -305,7 +323,9 @@ export default {
         this.iconsWithCategory.filter((c) => c.value == category)[0].icon
       }`;
     },
-
+    getRequirementsByCategory(category) {
+      return this.$store.state.vendorProposal.proposalServices[category] || [];
+    },
     getRequirementsBySelectedCategory() {
       let selectedCategories = [];
       let selectedServices = [];

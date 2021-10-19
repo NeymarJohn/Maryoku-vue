@@ -268,18 +268,12 @@ export default {
         });
     },
     showEvent(event) {
-      console.log('showEvent', event);
       this.showVendorCreateModal = true;
       this.defaultEventData = { ...event };
     },
-    createEventFromCalendar(data) {
-      console.log('createEventFromCalendar', data);
-      if (data.hasOwnProperty('event')) {
-        this.defaultEventData = {...data.event}
-      } else {
-        this.defaultEventData = { date : moment(`${data.date.years}-${data.date.month}-${data.date.date}`, "yyyy-M-D").toDate()}
-      }
-
+    createEventFromCalendar(dateObject) {
+      const date = moment(`${dateObject.years}-${dateObject.month}-${dateObject.date}`, "yyyy-M-D").toDate();
+      this.defaultEventData = { date };
       this.showVendorCreateModal = true;
     },
   },
@@ -316,9 +310,9 @@ export default {
       return this.$store.state.vendorDashboard.proposalRequests;
     },
     yearlyRevenue() {
-      if (this.monthlyReport.length === 0) return 0;
-      return this.monthlyReport.reduce((s, item) => {
-        return s + item.amount;
+      if (!this.serviceReportData || this.serviceReportData.length === 0) return 0;
+      return this.serviceReportData.reduce((s, item) => {
+        return s + item.amount / 100;
       }, 0);
     },
   },

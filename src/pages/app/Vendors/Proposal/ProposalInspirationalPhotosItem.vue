@@ -120,7 +120,7 @@ export default {
     },
     removePhoto() {
       this.photo = null;
-      this.$root.$emit("remove-inspirational-photo", this.index);
+      this.$emit("remove", this.index);
     },
   },
   watch:{

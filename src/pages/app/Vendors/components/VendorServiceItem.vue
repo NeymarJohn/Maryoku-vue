@@ -45,6 +45,12 @@
 </template>
 
 <script>
+import moment from "moment";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
+
+//COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import VendorCheckbox from "./VendorCheckbox.vue";
 
 export default {
@@ -60,6 +66,7 @@ export default {
     },
   },
   components: {
+    VueElementLoading,
     VendorCheckbox,
   },
   data() {

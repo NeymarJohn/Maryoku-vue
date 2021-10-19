@@ -42,12 +42,6 @@
       }
       @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/budget-gray.svg'))
     }
-    &.percent {
-      &.active {
-          @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Customer/noun_percentage_3652546.svg'))
-      }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Customer/noun_percentage_3652546.svg'))
-    }
     &.phone {
       &.active {
         @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Choose+vendor+and+Proposal/phone-dark.svg'))
@@ -250,7 +244,7 @@
   }
 }
 
-.maryoku.picker-panel {
+.picker-panel {
   position: absolute;
   left: 0;
   top: 0;

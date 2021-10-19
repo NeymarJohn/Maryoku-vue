@@ -22,9 +22,8 @@
         :landingPage="true"
         :nonMaryoku="true"
         v-if="proposal"
-        @updateProposal="handleUpdate"
+        @updateProposal="updateProposal"
         @ask="handleAsk"
-        @favorite="handleFavorite"
       ></event-proposal-details>
     </div>
     <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
@@ -126,7 +125,6 @@
     ></reminding-time-modal>
     <negotiation-request-modal
       v-if="showNegotiationRequestModal"
-      :proposal="proposal"
       @close="showNegotiationRequestModal = false"
       @save="sendNegotiationRequest"
     ></negotiation-request-modal>
@@ -136,10 +134,8 @@
 import moment from "moment";
 import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 import Reminder from "@/models/Reminder";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
-import ProposalRequest from "@/models/ProposalRequest";
 
 import { Loader, SignInContent, Modal } from "@/components";
 import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
@@ -152,7 +148,7 @@ import { CommentMixins, ShareMixins } from "@/mixins";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import EventDetail from "./components/EventDetail.vue";
 import { mapActions, mapMutations } from "vuex";
-import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
   components: {
@@ -210,22 +206,28 @@ export default {
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    async bookProposal() {
-      await this.saveProposal(this.proposal);
-      window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
+    bookProposal() {
+      new Proposal({
+        id: this.proposal.id,
+        costServices: this.proposal.costServices,
+        extraServices: this.proposal.extraServices,
+      })
+        .save()
+        .then((res) => {
+          window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
+        });
     },
     async handleAsk(ask) {
-      console.log('handleAsk', ask);
       let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
-          await this.saveNegotiation({ expiredTime, type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME });
+          await this.saveNegotiation({ expiredTime });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              params: { expiredTime, type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME },
+              params: { expiredTime },
             }),
           );
           this.onlyAuth = true;
@@ -238,16 +240,15 @@ export default {
           endTime: this.proposal.eventData.endTime,
           location: this.proposal.eventData.location,
           numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          eventType: this.proposal.eventData.eventType,
         };
         if (this.loggedInUser) {
-          await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
+          await this.saveNegotiation({ event, expiredTime });
         } else {
           localStorage.setItem(
             "nonMaryokuAction",
             JSON.stringify({
               action: "saveNegotiation",
-              params: { event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
+              params: { event, expiredTime },
             }),
           );
           this.onlyAuth = true;
@@ -260,9 +261,6 @@ export default {
       this.proposal.eventData = e;
     },
     async saveNegotiation(params) {
-      this.loading = true;
-      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
-
       let query = new ProposalNegotiationRequest({
         proposalId: this.proposal.id,
         proposal: new Proposal({ id: this.proposal.id }),
@@ -270,7 +268,6 @@ export default {
         ...params,
       });
       let res = await query.for(new Proposal({ id: this.proposal.id })).save();
-      this.loading = false;
       this.proposal.negotiations.push(res);
     },
     async shareWithAuth(args) {
@@ -288,39 +285,26 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
-    async handleUpdate(proposal){
-      this.proposal = {...this.proposal, ...proposal};
-    },
-    async handleFavorite(isFavorite){
-
-      await this.saveProposal({...this.proposal, isFavorite, status: isFavorite ? PROPOSAL_STATUS.TOP3 : PROPOSAL_STATUS.PENDING});
-
+    updateProposal(proposal) {
+      console.log(proposal);
+      this.proposal = { ...proposal };
     },
     async declineProposal() {
-      await this.saveProposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
-
-      let url = `${location.protocol}//${location.host}/#/signin`;
-      let eventName = this.proposal.nonMaryoku ? this.proposal.eventData.customer.companyName :
-              this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event';
+      let query = new Proposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
+      let res = await query.save();
 
       // send email to vendor to notify the customer decline the proposal.
       this.$http.post(
           `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
-          { type: "lost", proposalId: this.proposal.id, eventName, url },
+          { type: "lost", proposalId: this.proposal.id },
           { headers: this.$auth.getAuthHeader() },
       );
     },
-    async saveProposal(proposal){
-        this.loading = true;
-        let query = new Proposal(proposal);
-        let res = await query.save();
-        this.proposal = res;
-        this.loading = false;
-    },
     downProposal() {
-      this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
+      this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.proposal.id}/download`);
     },
     toggleCommentMode(mode) {
+      console.log("toggleCommentMode", mode);
       this.showCommentEditorPanel = mode;
     },
     remindMeLater() {
@@ -336,6 +320,7 @@ export default {
       window.open(link, "_blank");
     },
     saveGuestComment(name) {
+      console.log("saveGuestComment", name);
       this.showGuestSignupModal = false;
       this.setGuestName(name);
       let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
@@ -451,33 +436,8 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
-    async saveProposalRequest(){
-      console.log('savePropsalRequest');
-        let query = new ProposalRequest({
-           vendorId: this.proposal.vendor.id,
-            requestedTime: new Date().getTime(),
-            expiredTime: moment(new Date()).add(3, "days").valueOf(),
-        });
-        let res = await query.for(new Vendor({ id: this.proposal.vendor.id })).save();
-        console.log('res', res);
-
-        await this.saveProposal({...this.proposal, proposalRequestId: res.id});
-    },
-    async sendNegotiationRequest(params) {
+    sendNegotiationRequest() {
       this.showNegotiationRequestModal = false;
-
-      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
-
-      let expiredTime = moment().add(2, 'days').unix() * 1000;
-      let query = new ProposalNegotiationRequest({
-        proposalId: this.proposal.id,
-        proposal: new Proposal({ id: this.proposal.id }),
-        expiredTime,
-        type: NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION,
-        ...params,
-      });
-      let res = await query.for(new Proposal({ id: this.proposal.id })).save();
-      this.proposal.negotiations.push(res);
 
       Swal.fire({
         title: "Negotiation Sent successfully",
@@ -492,17 +452,18 @@ export default {
         }
       });
     },
-    saveRemindingTime({remindingTime, option}) {
-
+    saveRemindingTime(remindingTime) {
       const remindingData = {
         reminder: "email",
         phoneNumber: "",
         email: this.proposal.eventData.customer.email,
-        name: this.proposal.eventData.customer.name,
         remindingTime: remindingTime,
         type: "proposal",
         emailParams: {
-            expiredTime: moment(new Date(this.proposal.expiredDate)).valueOf(),
+          leftTime: "1day",
+          proposalLink: window.location.href,
+          date: "22th Sep, 2021",
+          time: "12:00pm",
         },
         emailTransactionId: "",
         phoneTransactionId: "",

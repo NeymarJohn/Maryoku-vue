@@ -153,7 +153,6 @@ import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue
 import ServicesCart from "./ServicesCart";
 import NegotiationNotification from "./components/NegotiationNotification";
 import Swal from "sweetalert2";
-import {NEGOTIATION_REQUEST_TYPE} from "../../../../constants/status";
 
 export default {
   name: "event-booking",
@@ -330,7 +329,6 @@ export default {
         name: "CheckoutWithVendor",
         params: {
             proposalId: this.selectedProposal.id,
-            proposalType: 'planner',
         },
       });
     },
@@ -352,7 +350,6 @@ export default {
                 proposalId: this.selectedProposal.id,
                 proposal: new Proposal({id: this.selectedProposal.id}),
                 expiredTime,
-                type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
                 url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
             });
 

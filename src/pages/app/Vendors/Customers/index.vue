@@ -221,7 +221,7 @@ export default {
           }
         }
       } else if (data.action === this.proposalStatus.download) {
-        this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${data.proposalId}/download`);
+        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${data.proposalId}/download`);
       } else if (data.action === this.proposalStatus.duplicate) {
       } else if (data.action === this.proposalStatus.sort) {
         this.loading = true;

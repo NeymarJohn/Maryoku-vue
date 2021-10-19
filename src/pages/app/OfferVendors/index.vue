@@ -12,8 +12,8 @@
 
                 <progress-radial-bar
                     :value="Object.keys(requirements).length"
-                    :total="allRequirements.length"
-                    @click="showRequirementCart = true"></progress-radial-bar>
+                    :total="Object.keys(allRequirements).length"
+                    @click="showRequirementCart === true"></progress-radial-bar>
             </div>
             <div class="md-layout md-gutter mt-60 width-70 mx-auto">
                 <div

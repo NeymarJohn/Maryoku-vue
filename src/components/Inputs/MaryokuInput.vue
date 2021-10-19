@@ -102,10 +102,7 @@ export default {
     imgStyle: String,
     inputStyle: String,
     readonly: Boolean,
-    size: {
-      type: String,
-      default: '',
-    },
+    size: String,
     disabled: {
       type: Boolean,
       default: false,
@@ -168,7 +165,16 @@ export default {
         // this.$refs.timePickerElements.style.transform = "translateY(100%)";
       }
       if (this.inputStyle == "time" || this.inputStyle == "date") {
-
+        // setTimeout(() => {
+        //   const pos = this.cumulativeOffset(this.$refs.input);
+        //   console.log('pos', pos);
+        //   this.$refs.timePickerPanel.style.left = `${pos.left}px`;
+        //   this.$refs.timePickerPanel.style.top = `${80 + pos.top}px`;
+        //   this.$refs.timePickerPanel.style.display = "block";
+        //   this.$refs.timePickerPanel.style.position = "absolute";
+        //   document.getElementsByTagName("body")[0].appendChild(this.$refs.timePickerElements);
+        //   window.addEventListener("scroll", this.handleScroll);
+        // }, 100);
       }
     },
     clickMask() {
@@ -252,7 +258,6 @@ export default {
         this.content = newValue;
       }
     },
-    inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`}
   },
 };
 </script>

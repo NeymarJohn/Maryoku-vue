@@ -1,6 +1,5 @@
 <template>
   <div class="white-card p-40">
-    <loader :active="isLoading" is-full-screen page="vendor"></loader>
     <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
@@ -23,7 +22,6 @@
         :label="['companyName', 'name']"
         :selectedValue="selectedCustomer"
         @change="selectCustomer"
-        @input="searchCustomer"
       ></autocomplete>
     </div>
 
@@ -78,14 +76,14 @@
 
     <div class="row">
       <p class="mb-5 text-left text-bold">Date of the event</p>
-      <calendar-input
+      <maryoku-input
         :value="eventDate"
         class="form-input width-50"
         placeholder="Choose date…"
         inputStyle="date"
         v-model="eventDate"
         theme="purple"
-      ></calendar-input>
+      ></maryoku-input>
     </div>
     <div class="md-layout mt-30 width-50">
       <div class="md-layout-item md-size-50 p-0">
@@ -126,7 +124,6 @@
           <customer-form
               v-if="showNewCustomerModal"
               :vendorId="vendorData.id"
-              :name="candidateName"
               @save="saveCustomer"
               @close="showNewCustomerModal = false" />
       </template>
@@ -135,7 +132,7 @@
 </template>
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { MaryokuInput, CalendarInput } from "@/components";
+import { MaryokuInput } from "@/components";
 import LocationInput from "../VendorDashboard/LocationInput";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
@@ -144,17 +141,14 @@ import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import SelectableCard from "@/components/SelectableCard.vue";
-
+// import AddNewCustomerModal from "./Modals/AddNewCustomer";
 import { Modal } from "@/components";
 import Customer from "@/models/Customer";
-import Loader from "@/components/loader/index";
 const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {
   components: {
-      Loader,
     MaryokuInput,
-    CalendarInput,
     VueTimepicker,
     LocationInput,
     Autocomplete,
@@ -182,7 +176,6 @@ export default {
       customers: [],
       fileUrl: null,
       fileName: null,
-      candidateName: null,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         thumbnailWidth: 150,
@@ -214,10 +207,11 @@ export default {
   },
   methods: {
     async saveCustomer(customer) {
-      this.isLoading = true;
-      this.showNewCustomerModal = false;
+
       let query  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
       let res = await query.save();
+      console.log('saveCustomer', res);
+
 
       this.customers.push(res);
       this.selectCustomer(res);
@@ -225,23 +219,7 @@ export default {
         key: "customer",
         value: res,
       });
-
-      this.isLoading = false;
-    },
-    searchCustomer(e){
-      this.candidateName = e.target.value;
-      let timeout = null;
-
-      // show customer form modal if customer doesn't exist in search text
-      let customers = this.customers.filter(c => c.name.toLowerCase().indexOf(this.candidateName.toLowerCase()) !== -1);
-      console.log('search', this.customers, customers);
-      if ( !customers.length && this.candidateName.length > 2) {
-        timeout = setTimeout(_ => {
-          this.showNewCustomerModal = true;
-        }, 1000)
-      } else {
-        clearTimeout(timeout);
-      }
+      this.showNewCustomerModal = false;
     },
     selectCustomer(selectedCustomer) {
       this.selectedCustomer = selectedCustomer;
@@ -364,29 +342,16 @@ export default {
           return moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("DD.MM.YYYY");
         else return null;
       },
-      set({multiple, date}){
-        if(multiple) {
-          console.log('set', date.dateRange.start.date)
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "startTime",
-            value: this.getTimeFromFormat(date.dateRange.start.date, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
-          });
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "endTime",
-            value: this.getTimeFromFormat(date.dateRange.end.date, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
-          });
-        } else {
-          console.log('set', date.selectedDate)
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "startTime",
-            value: this.getTimeFromFormat(date.selectedDate, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
-          });
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "endTime",
-            value: this.getTimeFromFormat(date.selectedDate, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
-          });
-        }
-      }
+      set(value) {
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
+          key: "startTime",
+          value: this.getTimeFromFormat(value, this.startTime, this.amPack.start, "DD.MM.YYYY hh:mm a"),
+        });
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
+          key: "endTime",
+          value: this.getTimeFromFormat(value, this.endTime, this.amPack.end, "DD.MM.YYYY hh:mm a"),
+        });
+      },
     },
     startTime: {
       get() {
@@ -455,7 +420,6 @@ export default {
         this.showNewCustomerModal = true;
       }
     },
-    eventDate(newVal){}
   },
 };
 </script>

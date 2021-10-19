@@ -581,9 +581,9 @@ export default {
   margin: 0;
 }
 
-/*.modal-container {*/
-  /*max-width: 570px;*/
-/*}*/
+.modal-container {
+  max-width: 570px;
+}
 </style>
 <style lang="scss">
 .modal-z-index {

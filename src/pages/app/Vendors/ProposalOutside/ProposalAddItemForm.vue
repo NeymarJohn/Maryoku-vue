@@ -48,7 +48,6 @@
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
             v-if="serviceType !== 'included'"
-            @input="changeUnit"
           />
         </div>
         <div class="field">
@@ -122,16 +121,14 @@
         </md-button>
       </div>
     </div>
-    <ask-save-change v-if="showAskSaveChangeModal" @cancel="showAskSaveChangeModal=false" @save="handleSave"></ask-save-change>
   </div>
 </template>
 
 <script>
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
-import AskSaveChange from "./Modals/AskSaveChangeModal"
 
 export default {
-  components: { SelectProposalSubItem, AskSaveChange },
+  components: { SelectProposalSubItem },
 
   props: {
     optionalRequirements: {
@@ -153,7 +150,6 @@ export default {
   },
   data() {
     return {
-      selectedItem: null,
       serviceSlidePos: 0,
       serviceItem: "",
       serviceItemSize: "",
@@ -194,8 +190,6 @@ export default {
       isEditingComment: false,
       selectedSuggestItemIndex: -1,
       showAutoCompletePanel: false,
-      showAskSaveChangeModal: false,
-      savedUnitChange: null,
     };
   },
   created() {
@@ -211,7 +205,6 @@ export default {
       this.serviceItem = this.filteredSuggestItems[index].description.slice(0, this.serviceItem.length);
     },
     selectSuggestItem(index) {
-      this.selectedItem = this.filteredSuggestItems[index]
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
       this.serviceItem = this.filteredSuggestItems[index].description;
@@ -277,10 +270,6 @@ export default {
         isComplimentary: false,
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
-      if ( this.savedUnitChange === 'profile' ) {
-        this.$store.commit('proposalForNonMaryoku/setVendorServices', {category: this.camelize(this.serviceItem), services: {...this.selectedItem, value:price}})
-      }
-
       this.$emit("addItem", editingService);
       this.cancel();
     },
@@ -304,17 +293,6 @@ export default {
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
-    handleSave(val){
-      this.savedUnitChange = val;
-      this.showAskSaveChangeModal = false;
-    },
-    async changeUnit(v){
-      console.log('changeUnit', v);
-      if ( !this.savedUnitChange && this.selectedItem && v !== this.selectedItem.price ) {
-
-        this.showAskSaveChangeModal = true;
-      }
-    }
   },
   computed: {
     isDisabledAdd() {

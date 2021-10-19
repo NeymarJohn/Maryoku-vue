@@ -88,15 +88,14 @@ export default {
       if (this.remindTimeOption === "tomorrow") {
         remindingTime = moment(new Date()).add(1, "day").valueOf();
       } else if (this.remindTimeOption === "today") {
-        remindingTime = moment(new Date()).add(5, 'hours').valueOf();
-        let endOfDay = moment().endOf('day').valueOf();
-        if (remindingTime > endOfDay) {
-          remindingTime = endOfDay;
+        remindingTime = moment(new Date()).hours(21).valueOf();
+        if (remindingTime < new Date().getTime()) {
+          remindingTime = moment(new Date()).add(1, "hour").valueOf();
         }
       } else if (this.remindTimeOption === "specific") {
         remindingTime = moment(`${this.selectedDate} ${this.selectedTime}`, "DD.MM.YYYY hh:mm a").valueOf();
       }
-      this.$emit("save", {remindingTime, option: this.remindTimeOption});
+      this.$emit("save", remindingTime);
     },
   },
   computed: {

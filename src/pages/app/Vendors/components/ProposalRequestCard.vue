@@ -53,7 +53,7 @@
       </md-button>
       <div :class="type == 'proposal' ? 'ml-auto d-flex flex-column align-center' : 'd-flex align-center width-100'">
         <div v-if="proposalRequest.proposal">
-        <div v-if="proposalRequest.proposal.status === proposalStatus.DRAFT">
+          <div v-if="proposalRequest.proposal.status === 'draft'">
             <span class="font-bold color-vendor">{{ proposalRequest.proposal.progress }} %</span> completed
             <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="proposalRequest.proposal.progress"></md-progress-bar>
           </div>
@@ -75,7 +75,6 @@
 </template>
 <script>
 import TimelineEmpty from "../../Events/components/TimelineEmpty";
-import {PROPOSAL_STATUS} from "@/constants/status";
 export default {
   components: { TimelineEmpty },
   props: {
@@ -100,7 +99,6 @@ export default {
     return {
       iconUrl: `${this.$iconURL}`,
       expanded: false,
-      proposalStatus: PROPOSAL_STATUS,
       requestType: {
           ADD_MORE_TIME: 0,
           NEGOTIATION: 1,
@@ -110,7 +108,7 @@ export default {
   computed: {
     actionName() {
       if (!this.proposalRequest.proposal) return "Apply";
-      if (this.proposalRequest.proposal.status === PROPOSAL_STATUS.DRAFT) {
+      if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
       } else if (this.hasNegotiation) {
         return "Respond";
@@ -146,7 +144,7 @@ export default {
     },
   },
   mounted() {
-    console.log('proposal.card.mounted', this.proposalRequest);
+    // console.log('mounted', this.proposalRequest);
   },
 };
 </script>

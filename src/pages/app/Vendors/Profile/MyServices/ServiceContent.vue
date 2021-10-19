@@ -1,7 +1,7 @@
 <template>
   <div class="service-content">
     <div class="service-header">
-      <img class="service-image" :src="coverImage" />
+      <img class="service-image" :src="coverImage || serviceData.images[0] || vendorData.images[0]" />
       <md-button class="md-vendor md-maryoku btn-change-cover" @click="openFileBrowser">Change Image</md-button>
       <input type="file" @change="changeCoverImage" class="d-none" id="coverImageFile" />
     </div>
@@ -74,7 +74,6 @@ export default {
     },
   },
   computed: {
-
     vendorData() {
       return this.$store.state.vendor.profile;
     },
@@ -84,9 +83,6 @@ export default {
       } else {
         return this.vendorData.secondaryServices.find((service) => service.vendorCategory === this.serviceCategory.key);
       }
-    },
-    coverImage(){
-      return this.serviceData.coverImage;
     },
     isMainService() {
       return this.serviceCategory.key === this.vendorData.vendorCategory;
@@ -130,10 +126,12 @@ export default {
   data() {
     return {
       images: [],
+      coverImage: "",
     };
   },
   created() {
     this.images = [...this.serviceData.images];
+    this.coverImage = this.serviceData.images[0] || this.vendorData.images[0];
   },
   methods: {
     setAttachment(attachment) {

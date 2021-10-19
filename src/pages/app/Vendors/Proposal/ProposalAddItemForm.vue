@@ -65,7 +65,6 @@
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
             v-if="serviceType !== 'included'"
-            @input="changeUnit"
           />
         </div>
         <div class="field">
@@ -139,16 +138,14 @@
         </md-button>
       </div>
     </div>
-    <ask-save-change v-if="showAskSaveChangeModal" @cancel="showAskSaveChangeModal=false" @save="handleSave"></ask-save-change>
   </div>
 </template>
 
 <script>
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
-import AskSaveChange from "./Modals/AskSaveChangeModal"
 
 export default {
-  components: { SelectProposalSubItem, AskSaveChange },
+  components: { SelectProposalSubItem },
 
   props: {
     optionalRequirements: {
@@ -170,12 +167,11 @@ export default {
   },
   data() {
     return {
-      selectedItem: null,
       serviceSlidePos: 0,
       serviceItem: "",
       serviceItemSize: "",
       qty: 1,
-      unit: 0,
+      unit: "",
       isRequiredPlannerChoice: false,
       isComplementary: false,
       ttpCommunicationException: "",
@@ -211,8 +207,6 @@ export default {
       isEditingComment: false,
       selectedSuggestItemIndex: -1,
       showAutoCompletePanel: false,
-      showAskSaveChangeModal: false,
-      savedUnitChange: null,
     };
   },
   created() {
@@ -228,7 +222,6 @@ export default {
       this.serviceItem = this.filteredSuggestItems[index].description.slice(0, this.serviceItem.length);
     },
     selectSuggestItem(index) {
-      this.selectedItem = this.filteredSuggestItems[index];
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
       this.serviceItem = this.filteredSuggestItems[index].description;
@@ -295,16 +288,10 @@ export default {
         isComplimentary: false,
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
-
-      if ( this.savedUnitChange === 'profile' ) {
-        this.$store.commit('vendorProposal/setVendorServices', {category: this.camelize(this.serviceItem), services: {...this.selectedItem, value:price}})
-      }
-
-      this.$emit("addItem", {serviceItem: editingService, option: this.savedUnitChange} );
+      this.$emit("addItem", editingService);
       this.cancel();
     },
     cancel() {
-      this.selectedItem = null
       this.serviceItemSize = "";
       this.qty = 1;
       this.unit = 0;
@@ -324,17 +311,6 @@ export default {
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
-    handleSave(val){
-      this.savedUnitChange = val;
-      this.showAskSaveChangeModal = false;
-    },
-    async changeUnit(v){
-      console.log('changeUnit', v);
-      if ( !this.savedUnitChange && this.selectedItem && v !== this.selectedItem.price ) {
-
-        this.showAskSaveChangeModal = true;
-      }
-    }
   },
   computed: {
     isDisabledAdd() {
@@ -373,7 +349,10 @@ export default {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
               const profileService = this.profileServices[this.camelize(capitalized)];
-
+              // const requestItemByPlanner = this.proposalRequest.requirements.find((requestItem) => {
+              //   console.log(requestItem);
+              //   return requestItem.item && requestItem.item.toLowerCase() === item.name.toLowerCase();
+              // });
               const requestItemByPlanner = null;
               console.log("requestItemByPlanner", requestItemByPlanner);
               if (item.available) {

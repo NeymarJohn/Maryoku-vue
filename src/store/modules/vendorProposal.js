@@ -3,7 +3,6 @@ import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -32,7 +31,7 @@ const state = {
   initialized: false,
   eventVision: null,
   proposalRequest: {},
-  services: {},
+  proposalServices: {},
   costServices: {},
   includedServices: {},
   extraServices: {},
@@ -218,7 +217,6 @@ const mutations = {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
     state.eventVision = proposal.eventVision;
-    state.services = proposal.vendor.services;
     state.costServices = proposal.costServices;
     state.includedServices = proposal.includedServices;
     state.extraServices = proposal.extraServices;
@@ -250,8 +248,8 @@ const mutations = {
   setInitStep: (state, step) => {
     state.initStep = step;
   },
-  setVendorServices: (state, { category, services }) => {
-    Vue.set(state.vendor.services, category, services);
+  setServices: (state, { category, services }) => {
+    Vue.set(state.proposalServices, category, services);
   },
   setCostServices: (state, { category, services }) => {
     Vue.set(state.costServices, category, services);
@@ -449,7 +447,6 @@ const actions = {
         attachments: state.original ? state.original.attachments : state.attachments,
         coverImage: state.original ? state.original.coverImage : state.coverImage,
         status,
-        services: state.original ? state.original.services : state.services,
         step: state.wizardStep,
         progress: state.progress,
         tenantId: state.tenantId,
@@ -496,14 +493,6 @@ const actions = {
         resolve();
     })
   },
-  saveVendor: ({commit, state} , vendor) => {
-    return new Promise(async resolve => {
-      let query = new Vendor(vendor);
-      let res = await query.save();
-      console.log('saveVEndor', res);
-      resolve(res)
-    })
-  }
 };
 
 export default {
