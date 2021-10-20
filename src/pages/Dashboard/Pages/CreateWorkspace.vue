@@ -110,7 +110,7 @@ export default {
                 AuthService.setTenant(this.workspace);
                 let callback = this.$route.query.callback;
                 const action = this.$route.query.action;
-                let eventData = localStorage.getItem('event')
+                let eventData = JSON.parse(localStorage.getItem('event'));
                 if (action === this.$queryEventActions.create) {
                   eventService
                     .saveEvent(eventData)
