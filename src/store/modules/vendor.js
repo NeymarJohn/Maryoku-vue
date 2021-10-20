@@ -162,11 +162,11 @@ const actions = {
     updateCoverImage: async ({ commit, state, dispatch }, { vendorId, serviceId, file }) => {
         const fileId = `${new Date().getTime()}_${makeid()}`;
         new Promise(async (resovle, reject) => {
-            let coverImage = S3Service.fileUpload(file, fileId, "vendor/cover-images");
+            let coverImage = await S3Service.fileUpload(file, fileId, "vendor/cover-images");
 
             if (!serviceId) {
                 new Vendors({ id: vendorId, coverImage }).save().then(res => {
-
+                    commit('setProfile', res.item)
                 });
             } else {
                 new VendorService({ id: serviceId, coverImage }).for(new Vendors({ id: vendorId })).save().then(res => {

@@ -79,8 +79,8 @@ export default {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
     },
     getProposalUrl(eventId){
-      let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id === eventId);
-      return `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+      let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id.toString() === eventId.toString());
+      return proposal ? `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}` : null;
     }
   },
   computed:{

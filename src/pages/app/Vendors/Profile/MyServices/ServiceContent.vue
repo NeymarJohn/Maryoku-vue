@@ -85,9 +85,6 @@ export default {
         return this.vendorData.secondaryServices.find((service) => service.vendorCategory === this.serviceCategory.key);
       }
     },
-    coverImage(){
-      return this.serviceData.coverImage;
-    },
     isMainService() {
       return this.serviceCategory.key === this.vendorData.vendorCategory;
     },
@@ -130,10 +127,12 @@ export default {
   data() {
     return {
       images: [],
+      coverImage: null,
     };
   },
   created() {
     this.images = [...this.serviceData.images];
+    this.coverImage = this.serviceData.coverImage
   },
   methods: {
     setAttachment(attachment) {
