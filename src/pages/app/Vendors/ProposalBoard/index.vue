@@ -95,7 +95,7 @@
                 v-for="proposal in proposals"
                 :proposal="proposal"
                 :hasNegotiation="
-                  !!(proposal.negotiations && proposal.negotiations.filter((it) => it.status == 0).length)
+                  !!(!proposal.accepted && proposal.negotiations && proposal.negotiations.filter((it) => it.status == 0).length)
                 "
                 :key="proposal.id"
                 class="row"
@@ -653,6 +653,7 @@ export default {
       return "";
     },
     async init() {
+      await this.$store.dispatch("vendorDashboard/getProposalRequests", this.vendorData.id);
       await this.getProposal();
       this.loading = false;
     },
@@ -673,7 +674,7 @@ export default {
       return proposalRequests.filter((p) => {
         return p.proposal
           ? (p.declineMessage !== "decline" && p.proposal.status === PROPOSAL_STATUS.DRAFT && p.remainingTime > 0) ||
-              (p.proposal.status === PROPOSAL_STATUS.PENDING &&
+              (!p.proposal.accepted &&
                 p.proposal.negotiations &&
                 p.proposal.negotiations.filter(
                   (it) => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0,

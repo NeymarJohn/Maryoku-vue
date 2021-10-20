@@ -562,7 +562,7 @@ export default {
           name: file.name,
           isRequired: false,
           fileName: file.name,
-          url: `${process.env.S3_URL}${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}/${res}`,
+          url: `${res}`,
         });
         this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
       });

@@ -80,7 +80,7 @@ export default {
           this.$emit("uploaded", {
             ...this.attachment,
             fileName: file[0].name,
-            url: `${process.env.S3_URL}vendors/attachments/${this.vendor.id}/${res}`,
+            url: `${res}`,
           });
         });
       } else {

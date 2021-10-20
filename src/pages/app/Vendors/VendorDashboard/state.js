@@ -53,19 +53,25 @@ const actions = {
 
   },
   getProposals({ commit, state }, payload) {
-    return new Promise((resolve, reject) => {
-        new Proposal()
-            .for(new Vendor({ id: payload.vendorId }))
-            .page(payload.pagination.page)
-            .limit(payload.pagination.limit)
-            .params(payload.params)
-            .get().then(res => {
-            console.log('getProposals', res);
+    return new Promise(async (resolve, reject) => {
+        let query = new Proposal().for(new Vendor({ id: payload.vendorId }));
+        if (payload.pagination) {
+            query.page(payload.pagination.page)
+                .limit(payload.pagination.limit)
+        }
+        if (payload.params) {
+            query.params(payload.params)
+        }
+        let res = await query.get();
+        console.log('getProposals', res);
+        if (payload.pagination) {
             commit('setProposals', res[0].items);
             resolve(res[0])
-        }).catch(err => {
-            reject(err);
-        });
+        } else {
+            commit('setProposals', res);
+            resolve(res)
+        }
+
     })
   },
   removeProposal({ commit, state}, id) {
