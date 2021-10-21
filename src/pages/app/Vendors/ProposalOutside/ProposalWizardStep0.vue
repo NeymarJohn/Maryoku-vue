@@ -72,7 +72,7 @@
     <div class="text-left mt-30">
       <label class="font-bold">Event location</label>
       <div class="width-50 location-input">
-        <location-input v-model="location"></location-input>
+        <location-input v-model="location" theme="purple"></location-input>
       </div>
     </div>
 
@@ -83,8 +83,8 @@
         class="form-input width-50"
         placeholder="Choose date…"
         inputStyle="date"
-        v-model="eventDate"
         theme="purple"
+        @input="handleChangeDate"
       ></calendar-input>
     </div>
     <div class="md-layout mt-30 width-50">
@@ -96,10 +96,11 @@
             input-class="time-class"
             hide-dropdown
             format="hh:mm"
-            v-model="startTime"
+            v-model="from"
+            @input="handleTimeChange('start')"
             hide-clear-button
           />
-          <div class="am-field" @click="updateStartA()">
+          <div class="am-field" @click="handleChangeAMPM('start')">
             <input type="text" v-model="amPack.start" readonly />
           </div>
         </div>
@@ -112,10 +113,11 @@
             input-class="time-class"
             hide-dropdown
             format="hh:mm"
-            v-model="endTime"
+            v-model="to"
+            @input="handleTimeChange('end')"
             hide-clear-button
           />
-          <div class="am-field" @click="updateEndA()">
+          <div class="am-field" @click="handleChangeAMPM('end')">
             <input type="text" v-model="amPack.end" readonly />
           </div>
         </div>
@@ -189,6 +191,8 @@ export default {
         maxFilesize: 5,
         headers: { "My-Awesome-Header": "header value" },
       },
+      from: { hh: "12", mm: "00" },
+      to: { hh: "12", mm: "00" },
       eventOption: "corporation",
       showNewCustomerModal: false,
       selectedEventType: null,
@@ -199,7 +203,7 @@ export default {
     const customerId = this.$route.query.customerId;
 
     let res = await this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?status=0&sort=&order=`);
-      console.log("customer", res);
+    console.log("customer", res);
     this.customers = res.data.customers;
     if (customerId) {
       let customer = this.customers.find(it => it.id == customerId);
@@ -209,10 +213,83 @@ export default {
             value: event,
         });
     }
-
+    this.setEventTime();
     this.$store.dispatch("common/getEventTypes");
   },
   methods: {
+    setEventTime(){
+      console.log('setEventTime', this.eventData);
+      if (!this.$store.state.proposalForNonMaryoku.eventData || !this.eventDate[0] || !this.eventDate[1]) return;
+      this.from = {
+        hh: moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("hh"),
+        mm: moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("mm"),
+      };
+      this.to = {
+        hh: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("hh"),
+        mm: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("mm"),
+      };
+      console.log('setEventTime', this.from, this.to);
+    },
+    handleChangeDate({multiple, date}){
+      // console.log('handleChangeDate', multiple, date);
+      let eventData = this.$store.state.proposalForNonMaryoku.eventData;
+
+      if(multiple) {
+        if (!date.dateRange.start.date || !date.dateRange.end.date) return;
+
+        this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
+            startTime: this.getTimeFromFormat(date.dateRange.start.date, this.from, this.amPack.start, "YYYY-MM-D hh:mm a"),
+            endTime: this.getTimeFromFormat(date.dateRange.end.date, this.to, this.amPack.end, "YYYY-MM-D hh:mm a"),
+          }})
+
+      } else {
+
+        this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
+            startTime: this.getTimeFromFormat(date.selectedDate, this.from, this.amPack.start, "YYYY-MM-D hh:mm a"),
+            endTime: this.getTimeFromFormat(date.selectedDate, this.to, this.amPack.end, "YYYY-MM-D hh:mm a"),
+          }});
+      }
+    },
+    handleTimeChange(type){
+      console.log('handleTimeChange', type, this.eventDate, this.from, this.to, this.amPack);
+      if (!this.eventDate[0] || !this.eventDate[1]) return;
+
+      let startDate = moment(this.eventDate[0]).format('YYYY-MM-DD');
+      let endDate = moment(this.eventDate[1]).format('YYYY-MM-DD');
+
+      let eventData = this.$store.state.proposalForNonMaryoku.eventData;
+      if ( type === 'start' ) {
+        let startTime = this.getTimeFromFormat(startDate, this.from, this.amPack.start, 'YYYY-MM-D hh:mm a');
+        this.$store.commit('proposalForNonMaryoku/setValue', {key: 'eventData', value: {...eventData, startTime}})
+      } else {
+        let endTime = this.getTimeFromFormat(endDate, this.to, this.amPack.end, 'YYYY-MM-D hh:mm a');
+        this.$store.commit('proposalForNonMaryoku/setValue', {key: 'eventData', value: {...eventData, endTime}})
+      }
+    },
+    handleChangeAMPM(type) {
+      console.log("updateStartA", type);
+      if (!this.eventDate[0] || !this.eventDate[1]) return;
+
+      let startDate = moment(this.eventDate[0]).format('YYYY-MM-DD');
+      let endDate = moment(this.eventDate[1]).format('YYYY-MM-DD');
+
+      let eventData = this.$store.state.proposalForNonMaryoku.eventData;
+
+      if (type === 'start') {
+
+        let arco  = this.amPack.start === 'am' ? 'pm' : 'am';
+        let startTime = this.getTimeFromFormat(startDate, this.from, arco, 'YYYY-MM-D hh:mm a');
+        this.$store.commit('proposalForNonMaryoku/setValue', {key: 'eventData', value: {...eventData, startTime}})
+
+      } else {
+
+        let arco = this.amPack.end === 'am' ? 'pm' : 'am';
+        let endTime = this.getTimeFromFormat(endDate, this.to, arco, 'YYYY-MM-D hh:mm a');
+        this.$store.commit('proposalForNonMaryoku/setValue', {key: 'eventData', value: {...eventData, endTime}})
+
+      }
+      console.log("updateStartA", this.amPack);
+    },
     async saveCustomer(customer) {
       this.isLoading = true;
       this.showNewCustomerModal = false;
@@ -245,23 +322,6 @@ export default {
     },
     selectCustomer(selectedCustomer) {
       this.selectedCustomer = selectedCustomer;
-    },
-    updateStartA() {
-      console.log("updateStartA");
-      if (this.amPack.start == "am") {
-        this.amPack = { start: "pm", end: this.amPack.end };
-      } else {
-        this.amPack = { start: "am", end: this.amPack.end };
-      }
-      console.log("updateStartA", this.amPack);
-    },
-    updateEndA() {
-      console.log("updateEndA");
-      if (this.amPack.end == "am") {
-        this.amPack = { start: this.amPack.start, end: "pm" };
-      } else {
-        this.amPack = { start: this.amPack.start, end: "am" };
-      }
     },
     close() {
       this.$emit("cancel");
@@ -320,6 +380,9 @@ export default {
     },
   },
   computed: {
+    eventData(){
+      return this.$store.state.proposalForNonMaryoku.eventData;
+    },
     vendorData() {
       return this.$store.state.proposalForNonMaryoku.vendor;
     },
@@ -358,65 +421,12 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "numberOfParticipants", value });
       },
     },
-    eventDate: {
-      get() {
-        if (this.$store.state.proposalForNonMaryoku.eventData.startTime)
+    eventDate () {
+        if (this.$store.state.proposalForNonMaryoku.eventData.startTime && this.$store.state.proposalForNonMaryoku.eventData.startTime)
           return [this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000, this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000];
-        else return null;
-      },
-      set({multiple, date}){
-        let eventData = this.$store.state.proposalForNonMaryoku.eventData;
-        if(multiple) {
-          if (!date.dateRange.start.date || !date.dateRange.end.date) return;
-          console.log('set', multiple, date.dateRange.start.date, date.dateRange.end.date)
-          this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
-            startTime: this.getTimeFromFormat(date.dateRange.start.date, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
-            endTime: this.getTimeFromFormat(date.dateRange.end.date, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
-          }})
-
-        } else {
-          console.log('set', multiple, date.selectedDate)
-          this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
-              startTime: this.getTimeFromFormat(date.selectedDate, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
-              endTime: this.getTimeFromFormat(date.selectedDate, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
-          }});
-        }
-      }
+        else return [null, null];
     },
-    startTime: {
-      get() {
-        if (this.$store.state.proposalForNonMaryoku.eventData.startTime)
-          return {
-            hh: moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("hh"),
-            mm: moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("mm"),
-          };
-        else return { hh: "12", mm: "00" };
-      },
-      set(value) {
-        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-          key: "startTime",
-          value: this.getTimeFromFormat(this.eventDate, value, this.amPack.start, "DD.MM.YYYY hh:mm a"),
-        });
-      },
-    },
-    endTime: {
-      get() {
-        if (this.$store.state.proposalForNonMaryoku.eventData.startTime)
-          return {
-            hh: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("hh"),
-            mm: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("mm"),
-          };
-        else return { hh: "12", mm: "00" };
-      },
-      set(value) {
-        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-          key: "endTime",
-          value: this.getTimeFromFormat(this.eventDate, value, this.amPack.end, "DD.MM.YYYY hh:mm a"),
-        });
-      },
-    },
-    amPack: {
-      get() {
+    amPack () {
         if (
           this.$store.state.proposalForNonMaryoku.eventData.startTime &&
           this.$store.state.proposalForNonMaryoku.eventData.endTime
@@ -426,22 +436,6 @@ export default {
             end: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("a"),
           };
         else return { start: "am", end: "am" };
-      },
-      set(value) {
-        if (
-          this.$store.state.proposalForNonMaryoku.eventData.startTime &&
-          this.$store.state.proposalForNonMaryoku.eventData.endTime
-        ) {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "startTime",
-            value: this.getTimeFromFormat(this.eventDate, this.startTime, value.start, "DD.MM.YYYY hh:mm a"),
-          });
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "endTime",
-            value: this.getTimeFromFormat(this.eventDate, this.endTime, value.end, "DD.MM.YYYY hh:mm a"),
-          });
-        }
-      },
     },
   },
   watch: {
@@ -450,7 +444,7 @@ export default {
         this.showNewCustomerModal = true;
       }
     },
-    eventDate(newVal){}
+    eventData(newVal){this.setEventTime()}
   },
 };
 </script>

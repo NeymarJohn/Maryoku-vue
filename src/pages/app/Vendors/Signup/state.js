@@ -26,6 +26,7 @@ const defaultState = {
         selectedWeekdays: [],
         recommendations: [],
         notAllowedThirdParty: 0,
+        guaranteed:[],
     },
     vendor_categories: [],
     allProperties: [],
@@ -168,9 +169,10 @@ const actions = {
             return !state.vendor.images.some(img => img.indexOf("base64") >= 0);
         };
         S3Service.fileUpload(file, fileId, "vendor/cover-images").then(uploadedName => {
+            console.log('uploadName', uploadedName);
             commit("replaceImage", {
                 index,
-                image: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
+                image: `${uploadedName}`,
             });
             if (isAllImageUploaded()) {
                 new Vendors({ id: state.vendor.id, images: state.vendor.images }).save();
@@ -213,6 +215,7 @@ const mutations = {
             noPolicies: [],
             selectedWeekdays: [],
             recommendations: [],
+            guaranteed:[],
             notAllowedThirdParty: 0
         }
     },

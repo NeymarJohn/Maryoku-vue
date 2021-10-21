@@ -58,10 +58,19 @@ export default {
     };
   },
   computed: {
+    eventData(){
+      return this.$store.state.proposalForNonMaryoku.eventData;
+    },
     eventDate() {
-      let startDate = new Date();
-      let endDate = new Date();
-      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
+      if (!this.eventData) return;
+      let startDate = moment(this.eventData.startTime * 1000).format("MMM D, YYYY");
+      let endDate = moment(this.eventData.endTime * 1000).format("MMM D, YYYY");
+      return startDate === endDate ? startDate :
+              `${startDate} - ${endDate}`;
+    },
+    eventTime() {
+      if (!this.eventData) return;
+      return `${moment(this.eventData.startTime * 1000).format("hh:mmA")} - ${moment(this.eventData.endTime * 1000).format("hh:mmA")}`;
     },
     getRemainingTime() {
       if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
@@ -80,11 +89,6 @@ export default {
       const seconds = Math.floor(remainingMs / 1000);
       return { days, hours, mins, seconds };
     },
-    eventTime() {
-      let startDate = new Date();
-      let endDate = new Date();
-      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
-    },
     getLocation() {
       if (this.proposalRequest) {
         return this.event.location || "-";
@@ -96,6 +100,11 @@ export default {
       return this.vendor.images.filter((image) => image);
     },
   },
+  watch:{
+    eventData(newVal){},
+    eventDate(newVal){},
+    eventTime(newVal){},
+  }
 };
 </script>
 <style lang="scss" scoped>

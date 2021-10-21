@@ -79,6 +79,7 @@ export default {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
     },
     getProposalUrl(eventId){
+      console.log('proposalUrl', eventId, this.proposals.map(p => p))
       let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id.toString() === eventId.toString());
       return proposal ? `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}` : null;
     }

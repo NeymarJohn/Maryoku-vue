@@ -93,19 +93,24 @@ export default {
   },
   methods: {
     init(){
-      if (!this.value) return;
-      console.log('calendarInput.init', this.value);
-      if (this.value[0] === this.value[1]) {
-        this.dateData.currentDate = new Date(moment(this.value[0]).format('YYYY-MM-DD'));
-        this.dateData.selectedDate = moment(this.value[1]).format('YYYY-MM-DD')
+      if (!this.value[0] || !this.value[1]) return;
+
+      let startDate = moment(this.value[0]).format('YYYY-MM-DD');
+      let endDate = moment(this.value[1]).format('YYYY-MM-DD');
+
+      console.log('calendarInput.init', this.value, startDate, endDate);
+
+      if (startDate === endDate) {
+        this.dateData.currentDate = new Date(startDate);
+        this.dateData.selectedDate = startDate
 
       } else {
         this.dateData.dateRange = {
             start: {
-              date: moment(this.value[0]).format('YYYY-MM-DD')
+              date: startDate
             },
             end: {
-              date: moment(this.value[1]).format('YYYY-MM-DD')
+              date: endDate
             }
         }
 

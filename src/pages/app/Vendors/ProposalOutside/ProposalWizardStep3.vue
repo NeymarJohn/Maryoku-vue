@@ -470,6 +470,19 @@ export default {
       editingNewSeating: false,
     };
   },
+  created() {
+    console.log(this.vendor);
+    //Get attachments from vendor profile,
+    this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: this.vendor.attachments });
+  },
+  mounted() {
+    this.savedItModal = false;
+    this.isTimeUp = true;
+    this.categories.push(this.vendor.vendorCategory);
+    this.additionalServices.forEach((service) => {
+      this.categories.push(service);
+    });
+  },
   methods: {
     chooseFiles() {
       document.getElementById("coverImage").click();
@@ -562,7 +575,7 @@ export default {
           name: file.name,
           isRequired: false,
           fileName: file.name,
-          url: `${process.env.S3_URL}${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}/${res}`,
+          url: `${res}`,
         });
         this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
       });
@@ -572,19 +585,6 @@ export default {
       attachments.splice(index, 1);
       this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
     },
-  },
-  created() {
-    console.log(this.vendor);
-    //Get attachments from vendor profile,
-    this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: this.vendor.attachments });
-  },
-  mounted() {
-    this.savedItModal = false;
-    this.isTimeUp = true;
-    this.categories.push(this.vendor.vendorCategory);
-    this.additionalServices.forEach((service) => {
-      this.categories.push(service);
-    });
   },
   computed: {
     ...mapGetters("proposalForNonMaryoku", [

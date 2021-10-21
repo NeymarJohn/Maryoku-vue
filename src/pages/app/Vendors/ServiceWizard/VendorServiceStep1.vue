@@ -93,7 +93,7 @@ export default {
         console.log("createImage", uploadedName);
         this.$root.$emit("update-vendor-value", "images", {
           index,
-          data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
+          data: `${uploadedName}`,
         });
       });
     },
