@@ -207,7 +207,7 @@ export default {
       const extension = file.type.split("/")[1];
       const logoName = `${this.event.id}`;
       S3Service.fileUpload(file, logoName, "logos").then((res) => {
-        this.$store.dispatch("campaign/setLogo", { logoUrl: res });
+        this.$store.dispatch("campaign/setLogo", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
       });
       this.$emit("changeInfo", { field: "logo", value: this.logoImageData });
     },

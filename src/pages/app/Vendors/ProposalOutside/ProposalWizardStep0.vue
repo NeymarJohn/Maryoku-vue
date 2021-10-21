@@ -72,7 +72,7 @@
     <div class="text-left mt-30">
       <label class="font-bold">Event location</label>
       <div class="width-50 location-input">
-        <location-input v-model="location" theme="purple"></location-input>
+        <location-input v-model="location"></location-input>
       </div>
     </div>
 
@@ -360,22 +360,22 @@ export default {
     },
     eventDate: {
       get() {
-        if (this.$store.state.proposalForNonMaryoku.eventData.startTime && this.$store.state.proposalForNonMaryoku.eventData.startTime)
+        if (this.$store.state.proposalForNonMaryoku.eventData.startTime)
           return [this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000, this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000];
-        else return [null, null];
+        else return null;
       },
       set({multiple, date}){
         let eventData = this.$store.state.proposalForNonMaryoku.eventData;
         if(multiple) {
           if (!date.dateRange.start.date || !date.dateRange.end.date) return;
-
+          console.log('set', multiple, date.dateRange.start.date, date.dateRange.end.date)
           this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
             startTime: this.getTimeFromFormat(date.dateRange.start.date, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
             endTime: this.getTimeFromFormat(date.dateRange.end.date, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
           }})
 
         } else {
-
+          console.log('set', multiple, date.selectedDate)
           this.$store.commit("proposalForNonMaryoku/setValue", {key: 'eventData', value: {...eventData,
               startTime: this.getTimeFromFormat(date.selectedDate, this.startTime, this.amPack.start, "YYYY-MM-D hh:mm a"),
               endTime: this.getTimeFromFormat(date.selectedDate, this.endTime, this.amPack.end, "YYYY-MM-D hh:mm a"),
@@ -393,10 +393,9 @@ export default {
         else return { hh: "12", mm: "00" };
       },
       set(value) {
-        console.log('startTime', value, this.eventDate[0])
         this.$store.commit("proposalForNonMaryoku/setEventProperty", {
           key: "startTime",
-          value: this.getTimeFromFormat(this.eventDate[0], value, this.amPack.start, "DD.MM.YYYY hh:mm a"),
+          value: this.getTimeFromFormat(this.eventDate, value, this.amPack.start, "DD.MM.YYYY hh:mm a"),
         });
       },
     },
@@ -410,10 +409,9 @@ export default {
         else return { hh: "12", mm: "00" };
       },
       set(value) {
-        console.log('startTime', value, this.eventDate[1])
         this.$store.commit("proposalForNonMaryoku/setEventProperty", {
           key: "endTime",
-          value: this.getTimeFromFormat(this.eventDate[1], value, this.amPack.end, "DD.MM.YYYY hh:mm a"),
+          value: this.getTimeFromFormat(this.eventDate, value, this.amPack.end, "DD.MM.YYYY hh:mm a"),
         });
       },
     },
@@ -436,11 +434,11 @@ export default {
         ) {
           this.$store.commit("proposalForNonMaryoku/setEventProperty", {
             key: "startTime",
-            value: this.getTimeFromFormat(this.eventDate[0], this.startTime, value.start, "DD.MM.YYYY hh:mm a"),
+            value: this.getTimeFromFormat(this.eventDate, this.startTime, value.start, "DD.MM.YYYY hh:mm a"),
           });
           this.$store.commit("proposalForNonMaryoku/setEventProperty", {
             key: "endTime",
-            value: this.getTimeFromFormat(this.eventDate[1], this.endTime, value.end, "DD.MM.YYYY hh:mm a"),
+            value: this.getTimeFromFormat(this.eventDate, this.endTime, value.end, "DD.MM.YYYY hh:mm a"),
           });
         }
       },

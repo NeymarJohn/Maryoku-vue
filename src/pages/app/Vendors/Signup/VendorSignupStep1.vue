@@ -458,7 +458,7 @@ export default {
         console.log("createImage", uploadedName);
         this.$root.$emit("update-vendor-value", "images", {
           index,
-          data: `${uploadedName}`,
+          data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
         });
       });
     },
@@ -476,7 +476,7 @@ export default {
             this.$root.$emit(
               "update-vendor-value",
               "signature",
-              `${uploadedName}`,
+              `https://maryoku.s3.amazonaws.com/vendor/signatures/${uploadedName}`,
             );
           });
           this.$root.$emit("update-vendor-value", "signature", e.target.result);
@@ -487,7 +487,7 @@ export default {
             console.log("createImage", uploadedName);
             this.$root.$emit("update-vendor-value", "images", {
               index: currentIndex,
-              data: `${uploadedName}`,
+              data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
             });
           });
           this.$root.$emit("update-vendor-value", "images", {

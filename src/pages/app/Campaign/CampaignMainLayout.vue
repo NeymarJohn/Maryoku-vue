@@ -468,8 +468,8 @@ export default {
       if (coverImage && coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
-        let fileUpload = await S3Service.fileUpload(fileObject, `${this.event.id}-${campaignType}`, "campaigns/cover-images");
-        coverImage = fileUpload;
+        await S3Service.fileUpload(fileObject, `${this.event.id}-${campaignType}`, "campaigns/cover-images");
+        coverImage = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${campaignType}.${extenstion}`;
       }
       let referenceUrl = "";
       if (campaignType === "RSVP") {

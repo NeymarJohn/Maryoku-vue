@@ -119,7 +119,7 @@ export default {
             this.addLegalDocs({
               tag: this.docTag,
               filename: file[0].name,
-              url: `${res}`,
+              url: `${process.env.S3_URL}proposals/legal-documents/${this.proposalRequest.id}/${res}`,
             });
           },
         );

@@ -158,7 +158,7 @@ export default {
       serviceReportData: null,
     };
   },
-  async mounted() {
+  mounted() {
     //get data
     this.$http
       .get(
@@ -185,7 +185,6 @@ export default {
     this.getServiceReport();
     this.getMarkedDates();
     this.getComingEvents();
-    if ( !this.proposals.length ) await this.$store.dispatch('vendorDashboard/getProposals', {vendorId: this.vendorData.id});
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
@@ -321,9 +320,6 @@ export default {
       return this.serviceReportData.reduce((s, item) => {
         return s + item.amount / 100;
       }, 0);
-    },
-    proposals(){
-      return this.$store.state.vendorDashboard.proposals;
     },
   },
   watch: {

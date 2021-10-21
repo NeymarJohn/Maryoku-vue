@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     init(){
-      if (!this.value[0] || !this.value[1]) return;
+      if (!this.value) return;
       console.log('calendarInput.init', this.value);
       if (this.value[0] === this.value[1]) {
         this.dateData.currentDate = new Date(moment(this.value[0]).format('YYYY-MM-DD'));

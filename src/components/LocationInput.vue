@@ -66,9 +66,8 @@ export default {
       this.updateSuggestionStyle()
     },
     updateSuggestionStyle(){
-        console.log('updateSuggestionStyle', this.theme);
+        console.log('updateSuggestionStyle');
         if ( this.theme === 'purple' ) {
-            console.log('purple')
             setTimeout((_) => {
                 $(".md-list-item-button").hover(
                     function (el) {
@@ -79,17 +78,6 @@ export default {
                     },
                 );
             }, 0);
-        } else {
-          setTimeout((_) => {
-            $(".md-list-item-button").hover(
-                    function (el) {
-                      $(this).attr("style", "background-color:#f51355!important;color: #fff!important");
-                    },
-                    function () {
-                      $(this).attr("style", "background-color:#fff;color:#000");
-                    },
-            );
-          }, 0);
         }
     }
   },
@@ -99,6 +87,7 @@ export default {
     },
   },
   mounted() {
+    console.log('location.mounted')
     this.init();
   },
   watch: {

@@ -5,7 +5,6 @@
       v-model="selectedLocation"
       :md-options="locations"
       :class="{ active: !!selectedLocation, 'md-purple': theme === 'purple' }"
-      @md-opened="updateSuggestionStyle"
     >
     </md-autocomplete>
   </div>
@@ -58,24 +57,7 @@ export default {
         this.locations.push(item.description);
         this.places.push({ id: item.place_id, name: item.description });
       });
-      this.updateSuggestionStyle();
     },
-    updateSuggestionStyle(){
-      console.log('updateSuggestionStyle', this.theme);
-      if ( this.theme === 'purple' ) {
-        console.log('purple')
-        setTimeout((_) => {
-          $(".md-list-item-button").hover(
-                  function (el) {
-                    $(this).attr("style", "background-color:#641856!important;color: #fff!important");
-                  },
-                  function () {
-                    $(this).attr("style", "background-color:#fff;color:#000");
-                  },
-          );
-        }, 0);
-      }
-    }
   },
   computed: {
     getClass: function () {
@@ -127,13 +109,13 @@ export default {
 .required-logo {
   color: red;
 }
-/*.md-menu-content:not(.md-select-menu) .md-menu-content-container .md-list {*/
-  /*.md-list-item {*/
-    /*.md-list-item-button {*/
-      /*&:hover {*/
-        /*background-color: #641856 !important;*/
-      /*}*/
-    /*}*/
-  /*}*/
-/*}*/
+.md-menu-content:not(.md-select-menu) .md-menu-content-container .md-list {
+  .md-list-item {
+    .md-list-item-button {
+      &:hover {
+        background-color: #641856 !important;
+      }
+    }
+  }
+}
 </style>

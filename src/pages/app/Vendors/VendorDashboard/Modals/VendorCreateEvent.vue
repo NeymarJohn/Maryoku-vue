@@ -9,8 +9,7 @@
       </md-button>
     </template>
     <template slot="body">
-      <div class="position-relative">
-        <Loader :active="isLoading" page="vendor"></Loader>
+      <div>
         <div class="row">
           <p class="mb-5 text-left text-bold">Date Of The Event</p>
           <maryoku-input
@@ -156,11 +155,9 @@ import moment from "moment";
 import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
-import Loader from "@/components/loader/index";
 
 export default {
   components: {
-    Loader,
     Modal,
     MaryokuInput,
     VueTimepicker,
@@ -217,7 +214,7 @@ export default {
   },
   async created() {
     console.log("vendorCreateEvent.created", this.defaultData);
-    this.isLoading = true;
+
     this.customers = await this.getVendorCustomers();
     this.companyName = this.defaultData.company;
     this.company = this.defaultData.companyName;
@@ -236,7 +233,7 @@ export default {
     this.amPack.end = moment(this.defaultData.endTime).format("A");
 
     this.selectedCustomer = this.defaultData.customer;
-    this.isLoading = false;
+
     console.log('selectedCustomer', this.selectedCustomer);
   },
   methods: {

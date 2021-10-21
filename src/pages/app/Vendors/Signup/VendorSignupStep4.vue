@@ -565,7 +565,7 @@ export default {
           name: file.name,
           isRequired: false,
           fileName: file.name,
-          url: `${res}`,
+          url: `${process.env.S3_URL}vendors/attachments/${this.vendor.id}/${res}`,
         });
         this.$store.commit("vendorSignup/setField", { field: "attachments", value: attachments });
       });

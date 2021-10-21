@@ -120,7 +120,7 @@ export default {
       const extension = file.type.split("/")[1];
       const logoName = `xxxxxx`;
       S3Service.fileUpload(file, logoName, "logos").then((res) => {
-        this.$store.dispatch("sharing", { logoUrl: res });
+        this.$store.dispatch("sharing", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
       });
     },
   },

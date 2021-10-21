@@ -243,7 +243,9 @@ export default {
           vendorProposal.coverImage,
           `${this.event.id}-${vendorProposal.vendor.id}`,
         );
-        coverImageUrl = await S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
+        const extenstion = fileObject.type.split("/")[1];
+        S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
+        coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
       }
 
       let progress = 0;
