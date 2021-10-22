@@ -158,6 +158,9 @@ export default {
       },
     },
   },
+  watch:{
+    vendorProfileServices(){}
+  }
 };
 </script>
 <style lang="scss" scoped>
