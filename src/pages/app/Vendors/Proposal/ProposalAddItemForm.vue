@@ -310,9 +310,9 @@ export default {
     },
     handleSave(val){
       if ( val ===  'profile' ) {
-        let vendor = this.vendor;
-        this.$set(vendor.services, this.camelize(this.serviceItem), {...this.selectedItem, value: this.unit});
-        this.$store.dispatch('proposalForNonMaryoku/saveVendor', vendor)
+        this.$store.commit('vendorProposal/setVendorServices', {
+          category: this.camelize(this.serviceItem), services: {...this.selectedItem, value: this.unit}
+        })
       }
       this.cancel();
       this.showAskSaveChangeModal = false;
@@ -336,9 +336,6 @@ export default {
       return this.suggestedItems.filter((item) =>
         item.description.toLowerCase().startsWith(this.serviceItem.toLowerCase()),
       );
-    },
-    vendor(){
-      return this.$store.state.proposalForNonMaryoku.vendor;
     },
     isAutoCompletedValue() {
       return this.selectedSuggestItemIndex >= 0;
@@ -391,9 +388,6 @@ export default {
       return items;
     },
   },
-  watch:{
-    profileServices(){}
-  }
 };
 </script>
 <style lang="scss" scoped>

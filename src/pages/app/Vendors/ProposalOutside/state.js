@@ -453,8 +453,7 @@ const actions = {
     return new Promise(async resolve => {
       let query = new Vendor(vendor);
       let res = await query.save();
-      console.log('res', res);
-      commit('setVendor', res);
+      console.log('saveVEndor', res);
       resolve(res)
     })
   }

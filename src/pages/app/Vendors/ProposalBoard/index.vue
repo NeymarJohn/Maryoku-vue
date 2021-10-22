@@ -444,9 +444,13 @@ export default {
         this.negotiationType = this.selectedProposal.negotiations[0].type
 
       } else if ( action === this.proposalStatus.resend ) {
+        let url = this.selectedProposal.nonMaryoku
+                ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+                : `${location.protocol}//${location.host}/#/signin`;
 
-        let url = `${location.protocol}//${location.host}/#/signin`;
-        let eventName = this.selectedProposal.proposalRequest.eventData.title ? this.selectedProposal.proposalRequest.eventData.title : 'New event';
+        let eventName = this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData.customer.company :
+                this.selectedProposal.proposalRequest.eventData.title ? this.selectedProposal.proposalRequest.eventData.title : 'New event';
+
         this.sendEmail({type: "again", proposalId: this.selectedProposal.id, url, eventName});
         this.showResendProposalModal = true;
 

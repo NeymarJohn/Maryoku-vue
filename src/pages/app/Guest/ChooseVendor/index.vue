@@ -244,6 +244,16 @@ export default {
       }
       this.isLoading = false;
     },
+    // getCategoryRequirements() {
+    //   getReq(`/1/events/${this.event.id}/components/${this.selectedCategory.id}/requirements`)
+    //     .then((res) => {
+    //       this.currentRequirement = res.data.item;
+    //     })
+    //     .catch((e) => {
+    //       this.currentRequirement = {};
+    //       this.showCounterPage = false;
+    //     });
+    // },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -430,7 +440,6 @@ export default {
     },
     proposals(newVal){},
     expiredTime(){},
-    eventRequirements(newVal){},
     $route: "fetchData",
   },
   filters: {

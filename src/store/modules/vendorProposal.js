@@ -501,7 +501,6 @@ const actions = {
       let query = new Vendor(vendor);
       let res = await query.save();
       console.log('saveVEndor', res);
-      commit('setVendor', res);
       resolve(res)
     })
   }

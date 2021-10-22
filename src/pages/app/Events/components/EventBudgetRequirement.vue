@@ -352,13 +352,14 @@ export default {
     getEventComponents: async function () {
       let event = new CalendarEvent({ id: this.event.id });
       let _calendar = this.getCalendar();
-      let eventComponent = new EventComponent().for(_calendar, event);
-      let components = await eventComponent.get();
-      console.log("getEventComponents", components);
-      components.sort((a, b) => a.order - b.order);
-      console.log(components);
-      this.event.components = components;
-      this.selectedComponents = components;
+      // let eventComponent = new EventComponent().for(_calendar, event);
+      // let components = await eventComponent.get();
+      // console.log("getEventComponents", components);
+      // components.sort((a, b) => a.order - b.order);
+      // console.log(components);
+      // this.event.components = components;
+      // this.selectedComponents = components;
+        this.selectedComponents = this.event.components;
     },
     onChangeComponent(event) {
       // this.loadEventData("update");

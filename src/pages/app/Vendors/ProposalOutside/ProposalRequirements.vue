@@ -39,10 +39,6 @@ import ProposalServiceTable from "./ProposalServiceTable";
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
 export default {
-  components: {
-    ProposalServiceTable,
-    ProposalAddItemForm,
-  },
   props: {
     label: {
       type: String,
@@ -94,6 +90,10 @@ export default {
       this.services.push(serviceItem);
       this.services = Object.assign([], this.services);
     },
+  },
+  components: {
+    ProposalServiceTable,
+    ProposalAddItemForm,
   },
   computed: {
     categoryName() {
@@ -158,9 +158,6 @@ export default {
       },
     },
   },
-  watch:{
-    vendorProfileServices(){}
-  }
 };
 </script>
 <style lang="scss" scoped>

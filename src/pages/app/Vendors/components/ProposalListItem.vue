@@ -57,7 +57,7 @@
               Download
             </span>
           </md-menu-item>
-          <md-menu-item v-if="!proposal.nonMaryoku" @click="edit(proposalStatus.resend)" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.resend)" class="md-purple">
             <span>
               <img src="/static/icons/vendor/proposal.svg" class="label-icon mr-10" />
               Resend proposal
