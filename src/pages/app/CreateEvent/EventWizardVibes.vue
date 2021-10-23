@@ -112,7 +112,7 @@ export default {
 
       console.log(location.href);
       if (!this.isLoggedIn) {
-        this.$router.push({ path: `/signin?lastUrl=${btoa(location.href)}&action=${this.$queryEventActions.create}` });
+        this.$router.push({ path: `/signin?lastUrl=${btoa(location.href)}&action=${this.$queryEventActions.planner}` });
       } else {
         this.createEvent();
       }
@@ -140,7 +140,6 @@ export default {
         eventService
           .saveEvent(eventData)
           .then((newEvent) => {
-            console.log('saveEvent', newEvent);
             localStorage.setItem("currentEventId", newEvent.id);
             if (newEvent.isFirstEvent) {
               this.$router.push({ path: `/welcome/event` });
@@ -160,7 +159,7 @@ export default {
       }
     },
     skip() {
-      this.$router.push({ path: `/signup?action=${this.$queryEventActions.create}` });
+      this.$router.push({ path: `/signup?action=${this.$queryEventActions.planner}` });
     },
     back() {
       if (this.publicEventData.religion) {

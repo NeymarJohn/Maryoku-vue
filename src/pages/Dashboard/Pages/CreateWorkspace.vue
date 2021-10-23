@@ -111,24 +111,24 @@ export default {
                 let callback = this.$route.query.callback;
                 const action = this.$route.query.action;
                 let eventData = JSON.parse(localStorage.getItem('event'));
-                if (action === this.$queryEventActions.create) {
+                if (action === this.$queryEventActions.planner) {
                   eventService
                     .saveEvent(eventData)
                     .then((event) => {
                       callback = btoa(`events/${event.id}/booking/concept`);
-                      document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                      document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&userType=planner&redirectURL=${callback}`;
                     })
                     .catch((err) => {
                       console.log(err);
                     });
                 } else if (action === "register") {
-                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&userType=planner&redirectURL=${callback}`;
                 } else {
                   eventService
                     .saveEvent(eventData)
                     .then((event) => {
                       callback = btoa(`events/${event.id}/booking/concept`);
-                      document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                      document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&userType=planner&redirectURL=${callback}`;
                     })
                     .catch((err) => {
                       console.log(err);

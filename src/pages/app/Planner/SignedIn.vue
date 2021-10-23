@@ -72,6 +72,28 @@ export default {
     const isDefaultTenant = tenantId.toLowerCase() === "default";
     let redirectURL = this.$route.query.redirectURL;
 
+    if (!tenantUser.currentUserType) {
+      let userType = this.$route.query.userType;
+      if(userType) {
+        await this.$store.dispatch("auth/updateProfile", {
+          id: tenantUser.id,
+          currentUserType: userType,
+        })
+      }
+    }
+
+    if (tenantUser.currentUserType === USER_TYPE.GUEST) {
+      let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
+        params: {filters: {myEvents: true}},
+      })
+      let events = res.data;
+      if (redirectURL) {
+        this.$router.push({path: `${redirectURL}`, query: {redirect: true}});
+      } else if (events.length > 0) {
+        this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
+      }
+    }
+
     if (noTenant && !action) {
       // WHEN PLANNER STARTD BY SIGNIN
       this.$router.push({ path: `/create-event-wizard?action=${action}` });

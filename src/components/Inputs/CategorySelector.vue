@@ -5,7 +5,7 @@
         <input readonly class="default" v-model="_value" @click="expanded = true" />
       </template>
       <template v-else>
-        <img class="inside-img cursor-pointer" :src="`${selectedCategory.icon}`" v-if="selectedCategory && selectedCategory.icon" @click="expanded = true"/>
+        <img class="inside-img" :src="`${selectedCategory.icon}`" v-if="selectedCategory && selectedCategory.icon" />
         <input readonly class="default with-img" v-model="_value" @click="expanded = true" />
       </template>
       <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />

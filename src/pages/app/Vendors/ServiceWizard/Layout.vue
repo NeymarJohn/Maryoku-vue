@@ -104,7 +104,7 @@ export default {
                 }).then(() => {});
               } else {
                 Swal.fire({
-                  title: `An account with the name you entered already exists. Please choose a different name.`,
+                  title: `Sorry, The information is not valid. Check your information and try again.`,
                   buttonsStyling: false,
                   confirmButtonClass: "md-button md-success",
                 }).then(() => {});

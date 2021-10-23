@@ -79,20 +79,21 @@ export default {
     methods: {
     authenticate(provider) {
       let action = this.$route.query.action;
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
+
       this.loading = true;
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`,
+              `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'userType=planner&token'}`,
       );
 
       if (action) {
         callback = btoa(
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}&token=`,
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}${isGuest?'&userType=guest&token=':'&userType=guest&token='}`,
         );
       }
 
-      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     signIn() {
@@ -143,7 +144,7 @@ export default {
       console.log("redirect.page", this.$route.query.action, this.currentUser);
       let action = this.$route.query.action;
       if (this.currentUser) {
-        if (action === this.$queryEventActions.create) {
+        if (action === this.$queryEventActions.planner) {
           if (this.currentUser.currentTenant) {
             this.$router.push({ path: "/event-wizard-create" });
           } else {

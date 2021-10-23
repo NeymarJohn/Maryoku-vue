@@ -122,6 +122,7 @@ export default {
               .save()
               .then((res) => {
                   console.log('res', res);
+                  commit('setCategoryRequirements', res.category, res)
                   resolve(res)
               })
               .catch(err => {

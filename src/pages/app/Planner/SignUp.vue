@@ -119,12 +119,12 @@ export default {
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'token'}`,
+        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'userType=planner&token'}`,
       );
       let action = this.$route.query.action;
       if (action) {
         callback = btoa(
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}${isGuest?'userType=guest&token=':'&token='}`,
+          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}${isGuest?'&userType=guest&token=':'&userType=guest&token='}`,
         );
       }
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;

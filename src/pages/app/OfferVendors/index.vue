@@ -323,7 +323,7 @@ export default {
             let tenantId = this.$authService.resolveTenantId();
             let redirectURL = `/offerVendors/${this.proposal.id}`
             let callback = btoa(
-                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedIn?redirectURL=${redirectURL}&userType=guest&token=`,
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedIn?redirectURL=${redirectURL}&action=${this.$queryEventActions.guest}&userType=guest&token=`,
             );
             console.log(`${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
             document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
