@@ -42,7 +42,7 @@ export default {
     MusicCard,
   },
   beforeCreate() {
-    const savedEvent = localStorage.getItem("event");
+    const savedEvent = JSON.parse(localStorage.getItem("event"));
     if (savedEvent) {
       eventService
         .saveEvent(savedEvent)

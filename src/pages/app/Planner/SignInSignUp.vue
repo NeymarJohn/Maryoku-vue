@@ -142,14 +142,17 @@ export default {
     },
     async redirectPage() {
       console.log("redirect.page", this.$route.query.action, this.currentUser);
+
       let action = this.$route.query.action;
+      const tenantId = this.$authService.resolveTenantId();
+
       if (this.currentUser) {
         if (action === this.$queryEventActions.planner) {
-          if (this.currentUser.currentTenant) {
-            this.$router.push({ path: "/event-wizard-create" });
-          } else {
+          if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants || !this.tenantUser.tenants.includes(tenantId)) {
             const callback = btoa("/events");
             this.$router.push({ path: `/create-workspace?action=${action}&callback=${callback}` });
+          } else {
+            this.$router.push({ path: "/event-wizard-create" });
           }
         } else {
           if (this.currentUser.currentTenant) {
@@ -217,6 +220,9 @@ export default {
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
+    },
+    tenantUser() {
+      return this.$store.state.auth.user;
     },
     currentUser() {
       return this.$store.state.auth.user;
