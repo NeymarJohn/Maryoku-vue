@@ -334,12 +334,11 @@ export default {
       item = this.vendor.services[this.camelize(this.label)];
     }
 
-    console.log("service.check.box", this.item, item);
+    console.log("service.check.box", this.label, this.item, item);
     if (item) {
-      console.log("service.checkbox", item.label, item);
       this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
       this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
-      this.currentItem.value = Number(item.hasOwnProperty("value") ? item.value : this.item.value);
+      this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
       this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
       this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
     }
@@ -347,6 +346,7 @@ export default {
     this.currentItem.checked = this.checked;
     this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
     this.currentItem.xIncluded = this.item.xIncluded;
+    console.log("service.checkbox", this.currentItem);
   },
   methods: {
     updateExChecked(items) {

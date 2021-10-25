@@ -114,7 +114,7 @@ export default {
                 }).then(() => {});
               } else {
                 Swal.fire({
-                  title: `Sorry, The information is not valid. Check your information and try again.`,
+                  title: `An account with the name you entered already exists. Please choose a different name.`,
                   buttonsStyling: false,
                   confirmButtonClass: "md-button md-success",
                 }).then(() => {});
@@ -203,10 +203,11 @@ export default {
       };
 
       let registeredUser = await this.$store.dispatch("auth/register", tenantUser);
-      let res = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false }).save();
+      let query = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
+      let res = await query.save();
 
       // send email to vendor to notify the customer decline the proposal.
-      this.$http.post(
+      await this.$http.post(
               `${process.env.SERVER_URL}/1/vendors/sendEmail`,
               { type: "created", vendorId: this.vendor.id },
               { headers: this.$auth.getAuthHeader() },

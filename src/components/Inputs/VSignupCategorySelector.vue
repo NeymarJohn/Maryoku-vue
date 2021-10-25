@@ -21,14 +21,6 @@
             @change="changeAddress(index, ...arguments)"
             class="my-10 width-100 address"
           ></location-input>
-          <!-- <vue-google-autocomplete
-            v-else-if="field === 'vendorAddresses'"
-            :id="`map-${index}`"
-            ref="address"
-            class="my-10 width-100 address"
-            :placeholder="item ? item : 'Enter an an address, zipcode, or location'"
-            v-on:placechanged="getAddressData(index, ...arguments)"
-          /> -->
           <img
             class="ml-10 close-btn"
             :src="`${$iconURL}Requirements/delete-dark.svg`"
