@@ -8,7 +8,7 @@
         <img class="inside-img cursor-pointer" :src="`${selectedCategory.icon}`" v-if="selectedCategory && selectedCategory.icon" @click="expanded = true"/>
         <input readonly class="default with-img" v-model="_value" @click="expanded = true" />
       </template>
-      <img class="dropdown cursor-pointer" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" @click="expanded = true"/>
+      <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
     <ul :style="{ 'column-count': column, 'min-width': column > 1 ? '670px' : '350px' }" v-click-outside="close" v-else>
       <li

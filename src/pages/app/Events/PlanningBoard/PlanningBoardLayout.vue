@@ -120,6 +120,7 @@ import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
+import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
 import { Loader } from "@/components";
 import moment from "moment";
@@ -156,17 +157,29 @@ export default {
     await this.$store.dispatch('planningBoard/resetRequirements');
     if (!this.allRequirements) {
       this.isLoading = true;
-      this.allRequirements = await this.$store
+      this.$store
         .dispatch("event/getRequirements")
-
-      this.isLoading = false;
+        .then((requirements) => {
+          this.allRequirements = requirements;
+          this.isLoading = false;
+        })
+        .catch((e) => {
+          this.isLoading = false;
+        });
       this.isLoadingStoredData = true;
-      await this.$store
+      this.$store
         .dispatch("planningBoard/getRequirements", this.event.id)
-
-      this.isLoadingStoredData = false;
+        .then((requirements) => {
+          this.isLoadingStoredData = false;
+        })
+        .catch((e) => {
+          this.isLoadingStoredData = false;
+        });
     }
     console.log('planningBoardLayout.created', this.serviceCards);
+    // if (this.event.processingStatus === "accept-proposal") {
+    //   this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
+    // }
   },
   computed: {
     requirements(){
@@ -245,10 +258,10 @@ export default {
         (item) => item.key === category.serviceCategory,
       );
       this.isOpenedAdditionalModal = true;
-      console.log(category.serviceCategory, this.allRequirements);
+      console.log(category.serviceCategory);
       let requirements = this.allRequirements[category.serviceCategory].requirements;
       const storedRequirements = this.requirements[category.serviceCategory].mainRequirements;
-      console.log(requirements, storedRequirements);
+      console.log(requirements);
       requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
       console.log(requirements);

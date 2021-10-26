@@ -298,7 +298,7 @@ export default {
       // border: solid 1px #f51355;
     }
     /deep/ .md-ripple {
-      padding: 0;
+      padding: 0px;
     }
     img.non-selected {
       padding: 3px;
@@ -323,7 +323,7 @@ export default {
     }
     /deep/ .owl-dots {
       position: absolute;
-      margin-top: -40px !important;
+      margin-top: -40px;
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
