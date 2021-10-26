@@ -120,7 +120,6 @@ import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
-import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
 import { Loader } from "@/components";
 import moment from "moment";
