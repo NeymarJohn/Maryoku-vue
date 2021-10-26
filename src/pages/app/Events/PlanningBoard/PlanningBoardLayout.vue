@@ -157,29 +157,17 @@ export default {
     await this.$store.dispatch('planningBoard/resetRequirements');
     if (!this.allRequirements) {
       this.isLoading = true;
-      this.$store
+      this.allRequirements = await this.$store
         .dispatch("event/getRequirements")
-        .then((requirements) => {
-          this.allRequirements = requirements;
-          this.isLoading = false;
-        })
-        .catch((e) => {
-          this.isLoading = false;
-        });
+
+      this.isLoading = false;
       this.isLoadingStoredData = true;
-      this.$store
+      await this.$store
         .dispatch("planningBoard/getRequirements", this.event.id)
-        .then((requirements) => {
-          this.isLoadingStoredData = false;
-        })
-        .catch((e) => {
-          this.isLoadingStoredData = false;
-        });
+
+      this.isLoadingStoredData = false;
     }
     console.log('planningBoardLayout.created', this.serviceCards);
-    // if (this.event.processingStatus === "accept-proposal") {
-    //   this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
-    // }
   },
   computed: {
     requirements(){
@@ -258,10 +246,10 @@ export default {
         (item) => item.key === category.serviceCategory,
       );
       this.isOpenedAdditionalModal = true;
-      console.log(category.serviceCategory);
+      console.log(category.serviceCategory, this.allRequirements);
       let requirements = this.allRequirements[category.serviceCategory].requirements;
       const storedRequirements = this.requirements[category.serviceCategory].mainRequirements;
-      console.log(requirements);
+      console.log(requirements, storedRequirements);
       requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
       console.log(requirements);

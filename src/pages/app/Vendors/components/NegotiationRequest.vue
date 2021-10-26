@@ -3,7 +3,6 @@
         <img v-if="icon" :src="`${$iconURL}${icon}`">
         <h3 class="color-vendor font-bold-extra">{{title}}</h3>
         <p>{{subTitle}}</p>
-
         <template v-if="type === negotiationTypes.EVENT_CHANGE">
             <div v-if="negotiation.originalDate !== negotiation.date" class="d-flex align-center justify-content-center mt-40">
                 <div class="font-size-14 w-min-180 color-black-middle">
