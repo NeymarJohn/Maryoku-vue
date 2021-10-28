@@ -717,7 +717,7 @@ export default {
           console.log('price.negotiation');
           let {numberOfParticipants} = this.selectedProposal.eventData;
           let data = this.selectedProposal.negotiations[0].price;
-          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : data.value;
+          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
 
           return {
               originalBudget: this.selectedProposal.cost,

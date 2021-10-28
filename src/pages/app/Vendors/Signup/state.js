@@ -12,10 +12,7 @@ const defaultState = {
     step: 0,
     status: null,
     vendor: {
-        about: {
-            company: null,
-            service: null,
-        },
+        about: {},
         capacity: {},
         images: [],
         social: {},

@@ -145,7 +145,7 @@ export default {
             step: 1,
             page: 'signup',
             showSignupModal: false,
-            showBookedVendorModal: true,
+            showBookedVendorModal: false,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
             showOffers: true,

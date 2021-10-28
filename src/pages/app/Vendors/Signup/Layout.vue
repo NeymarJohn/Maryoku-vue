@@ -203,11 +203,10 @@ export default {
       };
 
       let registeredUser = await this.$store.dispatch("auth/register", tenantUser);
-      let query = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
-      let res = await query.save();
+      let res = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false }).save();
 
       // send email to vendor to notify the customer decline the proposal.
-      await this.$http.post(
+      this.$http.post(
               `${process.env.SERVER_URL}/1/vendors/sendEmail`,
               { type: "created", vendorId: this.vendor.id },
               { headers: this.$auth.getAuthHeader() },
