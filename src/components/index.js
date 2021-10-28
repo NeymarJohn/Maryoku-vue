@@ -9,6 +9,7 @@ import MaryokuResizableTextarea from "./Inputs/MaryokuResizableTextarea.vue"
 import Badge from "./Badge";
 
 import DropDown from "./Dropdown.vue";
+import TooltipNotification from "./Popup/tooltipNofification"
 
 // Modals
 import Modal from "./Modal.vue";
@@ -95,5 +96,6 @@ export {
     PieChart,
     SignInContent,
     CommentInput,
-    CalendarInput
+    CalendarInput,
+    TooltipNotification
 };

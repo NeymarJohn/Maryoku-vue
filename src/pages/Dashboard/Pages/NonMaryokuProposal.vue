@@ -108,6 +108,14 @@
         </div>
       </template>
     </modal>
+    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
+      <template slot="body">
+        <vendor-declined
+                @close="showDeclineVendorModal=false"
+        >
+        </vendor-declined>
+      </template>
+    </modal>
 
     <guest-sign-up-modal
       v-if="showGuestSignupModal"
@@ -151,6 +159,7 @@ import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails
 import { CommentMixins, ShareMixins } from "@/mixins";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import EventDetail from "./components/EventDetail.vue";
+import VendorDeclined from "./components/VendorDeclined";
 import { mapActions, mapMutations } from "vuex";
 import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 
@@ -165,8 +174,10 @@ export default {
     Modal,
     EventDetail,
     SignInContent,
+    VendorDeclined,
     RemindingTimeModal,
     NegotiationRequestModal,
+
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -178,6 +189,7 @@ export default {
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
+      showDeclineVendorModal: false,
       showGuestSignupModal: false,
       showRemindingTimeModal: false,
       showNegotiationRequestModal: false,
@@ -304,11 +316,12 @@ export default {
               this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event';
 
       // send email to vendor to notify the customer decline the proposal.
-      this.$http.post(
+      await this.$http.post(
           `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
+      this.showDeclineVendorModal = true;
     },
     async saveProposal(proposal){
         this.loading = true;

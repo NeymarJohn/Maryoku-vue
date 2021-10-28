@@ -20,8 +20,20 @@
           <div class="card">
             <div class="field mb-50">
               <div class="title-cont">
-                <div class="top">
+                <div class="top d-flex align-center">
                   <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
+                  <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
+                    <div class="color-purple font-size-14 font-bold-extra ml-20" @click="showCompanyText=true">
+                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea</div>
+
+                    <tooltip-notification
+                            v-if="showCompanyText"
+                            :about="categoryDescriptions[vendor.vendorCategory].about_company"
+                            @copy='handleCopy($event, "company")'
+                            @cancel="showCompanyText = false"
+                    ></tooltip-notification>
+                  </div>
+
                 </div>
                 <div class="bottom">
                   <p>Include history & background</p>
@@ -38,11 +50,22 @@
             </div>
             <div class="field mb-50">
               <div class="title-cont">
-                <div class="top">
+                <div class="top d-flex align-center">
                   <h5>
                     <img :src="`${getCategoryIconbyValue(vendor.vendorCategory)}`" style="width: 32px"/>
                     about your {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </h5>
+                  <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
+                    <div class="color-purple font-size-14 font-bold-extra ml-20" @click="showServiceText=true">
+                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea</div>
+
+                    <tooltip-notification
+                            v-if="showServiceText"
+                            :about="categoryDescriptions[vendor.vendorCategory].about_service"
+                            @copy='handleCopy($event, "category")'
+                            @cancel="showServiceText = false"
+                    ></tooltip-notification>
+                  </div>
                 </div>
                 <div class="bottom">
                   <p>Tell us why your service is the best choice, what makes it special</p>
@@ -58,12 +81,6 @@
               </div>
             </div>
             <div class="field mb-50">
-              <!-- <vendor-checkbox
-                :item="{ value: vendor.companyServices || [] }"
-                :label="`Company Services`"
-                :vendor="vendor"
-                v-model="vendor.companyServices"
-              /> -->
               <label>Company Services</label>
               <company-service-selector
                 :options="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
@@ -118,7 +135,20 @@
           </div>
           <div class="card">
             <div class="field">
-              <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
+              <div class=" d-flex align-center">
+                <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
+                <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
+                  <div class="color-purple font-size-14 font-bold-extra ml-20 pb-10" @click="showPersonalMessage=true">
+                    <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" class="mr-10"/> Get an Idea</div>
+
+                  <tooltip-notification
+                          v-if="showPersonalMessage"
+                          :about="categoryDescriptions[vendor.vendorCategory].personal_message"
+                          @copy='handleCopy($event, "personalMessage")'
+                          @cancel="showPersonalMessage = false"
+                  ></tooltip-notification>
+                </div>
+              </div>
               <textarea
                 placeholder="Type 'about your personal message' here"
                 class="width-100"
@@ -270,7 +300,7 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import { Drop } from "vue-drag-drop";
-import { VendorCategories } from "@/constants/vendor";
+import { VendorCategories, categoryDescriptions } from "@/constants/vendor";
 
 //COMPONENTS
 import VendorServiceItem from "../components/VendorServiceItem.vue";
@@ -280,13 +310,9 @@ import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 import CompanyServiceSelector from "../components/CompanyServiceSelector.vue";
+import { TooltipNotification } from "@/components"
 export default {
   name: "vendor-signup-step1",
-  props: {
-    categories: Array,
-    generalInfos: Array,
-    companyServices: Array,
-  },
   components: {
     Drop,
     VueElementLoading,
@@ -295,6 +321,12 @@ export default {
     vueSignature,
     VendorPhotosCarousel,
     CompanyServiceSelector,
+    TooltipNotification,
+  },
+  props: {
+    categories: Array,
+    generalInfos: Array,
+    companyServices: Array,
   },
   data() {
     return {
@@ -304,77 +336,16 @@ export default {
       reg: /^(ftp|http|https):\/\/[^ "]+$/,
       min: Number,
       max: Number,
-      categoryNames: [
-        {
-          name: "Venue Rental",
-          value: "venuerental",
-        },
-        {
-          name: "Food & Beverage",
-          value: "foodandbeverage",
-        },
-        {
-          name: "Design and Decor",
-          value: "decor",
-        },
-        {
-          name: "Guest Services & Staffing",
-          value: "administration",
-        },
-        {
-          name: "Signage / Printing",
-          value: "signageprinting",
-        },
-        {
-          name: "Advertising and Promotion",
-          value: "advertising-promotion",
-        },
-        {
-          name: "AV / Staging",
-          value: "audiovisualstagingservices",
-        },
-        {
-          name: "Giveaways",
-          value: "giveaways",
-        },
-        {
-          name: "Shipping",
-          value: "shipping",
-        },
-        {
-          name: "Transportation & Tour operator",
-          value: "transportation",
-        },
-        {
-          name: "Entertainment",
-          value: "entertainment",
-        },
-        {
-          name: "Administration",
-          value: "administration",
-        },
-        {
-          name: "Security",
-          value: "securityservices",
-        },
-        {
-          name: "Technology",
-          value: "technologyservices",
-        },
-        {
-          name: "Videography and Photography",
-          value: "videographyandphotography",
-        },
-        {
-          name: "Equipment Rental",
-          value: "equipmentrentals",
-        },
-      ],
+      categoryNames: VendorCategories,
+      categoryDescriptions: categoryDescriptions,
       isDragOver: false,
       option: {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",
       },
+      showCompanyText: false,
+      showServiceText: false,
+      showPersonalMessage: false,
     };
   },
   methods: {
@@ -508,16 +479,19 @@ export default {
     getCategoryIconbyValue(value){
       return VendorCategories.find(it => it.value === value).icon;
     },
-    checkBlank(e) {
-      if (!e.target.value || !this.reg.test(e.target.value)) {
-        e.target.style.border = "1px solid #ff0000";
-      } else {
-        e.target.style.border = "1px solid #707070";
-      }
-    },
     updateVendor(event, fieldName) {
       // this.$root.$emit("update-vendor-value", fieldName, event.target.value);
       this.$store.commit("vendorSignup/setField", { field: fieldName, value: event.target.value });
+    },
+    handleCopy(value, field) {
+      this.showCompanyText = false;
+      this.showServiceText = false;
+      this.showPersonalMessage = false;
+      let vendor = this.vendor;
+      if ( field === 'company' ) this.$set(vendor.about, field, value);
+      if ( field === 'category' ) this.$set(vendor.about, field, value);
+      if ( field === 'personalMessage' ) this.$set(vendor, field, value);
+      this.$store.commit("vendorSignup/setVendor", vendor);
     },
     save() {
       let _this = this;
