@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader :active="isLoading" :isFullScreen="true" page="vendor"/>
+        <loader :active="isLoading" is-full-screen page="vendor"/>
         <template v-if="showOffers">
             <div class="d-flex justify-content-between pt-50 pl-100 pr-80">
                 <div>
@@ -148,7 +148,7 @@ export default {
             showBookedVendorModal: true,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
-            showOffers: true,
+            showOffers: false,
             serviceCards: serviceCards,
             allRequirements: [],
             subCategory: null,
@@ -321,7 +321,7 @@ export default {
         },
         authenticate(provider){
             let tenantId = this.$authService.resolveTenantId();
-            let redirectURL = `/offerVendors/${this.proposal.id}`
+            let redirectURL = `/vendor/offer/${this.proposal.id}`
             let callback = btoa(
                 `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedIn?redirectURL=${redirectURL}&action=${this.$queryEventActions.guest}&userType=guest&token=`,
             );
@@ -369,6 +369,7 @@ export default {
             await this.getProposal();
             this.isLoading = false;
         }
+        this.showOffers = true;
         console.log('offerVendors.created', this.requirements);
     }
 
