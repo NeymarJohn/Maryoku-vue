@@ -111,6 +111,7 @@
     <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
       <template slot="body">
         <vendor-declined
+                @rate="handleRate"
                 @close="showDeclineVendorModal=false"
         >
         </vendor-declined>
@@ -322,6 +323,9 @@ export default {
           { headers: this.$auth.getAuthHeader() },
       );
       this.showDeclineVendorModal = true;
+    },
+    async handleRate(score){
+      await this.saveProposal({...this.proposal, score});
     },
     async saveProposal(proposal){
         this.loading = true;

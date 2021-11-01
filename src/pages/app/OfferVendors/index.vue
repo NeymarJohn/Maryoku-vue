@@ -75,7 +75,9 @@
         <modal v-if="showBookedVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
             <template slot="body">
                 <vendor-booked
-                    @show="showVendors" @close="showBookedVendorModal = false" />
+                    @show="showVendors"
+                    @rate="handleRate"
+                    @close="showBookedVendorModal = false" />
             </template>
         </modal>
         <additional-request-modal
@@ -122,6 +124,7 @@ import ProgressRadialBar from "../Events/PlanningBoard/components/ProgressRadial
 import AdditionalRequestModal from "../Events/PlanningBoard/components/modals/AdditionalRequest.vue";
 import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
 import CalendarEvent from "@/models/CalendarEvent";
+import Proposal from "@/models/Proposal";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
 import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
@@ -161,6 +164,14 @@ export default {
     methods: {
         async showVendors(){
             this.showBookedVendorModal = false;
+        },
+        async handleRate(score){
+            await this.saveProposal({...this.proposal, score})
+        },
+        async saveProposal(proposal){
+            let query = new Proposal(proposal);
+            let res = await query.save();
+            this.proposal = res;
         },
         async getAllRequirements(){
           let res = await getReq(`/1/vendor/property`);
