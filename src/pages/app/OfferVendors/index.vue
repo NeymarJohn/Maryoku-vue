@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader :active="isLoading" is-full-screen page="vendor"/>
+        <loader :active="isLoading" :isFullScreen="true" page="vendor"/>
         <template v-if="showOffers">
             <div class="d-flex justify-content-between pt-50 pl-100 pr-80">
                 <div>
@@ -75,9 +75,7 @@
         <modal v-if="showBookedVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
             <template slot="body">
                 <vendor-booked
-                    @show="showVendors"
-                    @rate="handleRate"
-                    @close="showBookedVendorModal = false" />
+                    @show="showVendors" @close="showBookedVendorModal = false" />
             </template>
         </modal>
         <additional-request-modal
@@ -124,7 +122,6 @@ import ProgressRadialBar from "../Events/PlanningBoard/components/ProgressRadial
 import AdditionalRequestModal from "../Events/PlanningBoard/components/modals/AdditionalRequest.vue";
 import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
 import CalendarEvent from "@/models/CalendarEvent";
-import Proposal from "@/models/Proposal";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
 import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
@@ -148,10 +145,10 @@ export default {
             step: 1,
             page: 'signup',
             showSignupModal: false,
-            showBookedVendorModal: true,
+            showBookedVendorModal: false,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
-            showOffers: false,
+            showOffers: true,
             serviceCards: serviceCards,
             allRequirements: [],
             subCategory: null,
@@ -164,14 +161,6 @@ export default {
     methods: {
         async showVendors(){
             this.showBookedVendorModal = false;
-        },
-        async handleRate(score){
-            await this.saveProposal({...this.proposal, score})
-        },
-        async saveProposal(proposal){
-            let query = new Proposal(proposal);
-            let res = await query.save();
-            this.proposal = res;
         },
         async getAllRequirements(){
           let res = await getReq(`/1/vendor/property`);
@@ -332,7 +321,7 @@ export default {
         },
         authenticate(provider){
             let tenantId = this.$authService.resolveTenantId();
-            let redirectURL = `/vendor/offer/${this.proposal.id}`
+            let redirectURL = `/offerVendors/${this.proposal.id}`
             let callback = btoa(
                 `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedIn?redirectURL=${redirectURL}&action=${this.$queryEventActions.guest}&userType=guest&token=`,
             );
@@ -380,7 +369,6 @@ export default {
             await this.getProposal();
             this.isLoading = false;
         }
-        this.showOffers = true;
         console.log('offerVendors.created', this.requirements);
     }
 

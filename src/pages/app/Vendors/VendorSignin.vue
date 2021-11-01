@@ -81,8 +81,7 @@ import { SignupCard, MaryokuInput, Modal } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
 import VueElementLoading from "vue-element-loading";
 import TenantUser from "@/models/TenantUser";
-import Loader from "@/components/loader/index";
-
+import Loader from "../../../components/loader/index";
 export default {
   name: "SignIn",
   components: {
@@ -120,10 +119,6 @@ export default {
             notFoundUser: false,
         };
     },
-  beforeCreate(){
-    console.log('vendor.signin.beforeCreate');
-    $("#maryoku_loader").attr('src', "/static/icons/loader/vendor.gif");
-  },
   methods: {
     authenticate(provider) {
       let action = this.$route.query.action;

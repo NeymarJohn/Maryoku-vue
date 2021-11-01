@@ -21,7 +21,6 @@ const ProposalForOutsideClientContent = () => import("@/pages/app/Vendors/Propos
 
 const ServiceWizardLayout = () => import("@/pages/app/Vendors/ServiceWizard/Layout.vue");
 const ServiceWizard = () => import("@/pages/app/Vendors/ServiceWizard")
-const OfferVendors = () => import("@/pages/app/OfferVendors")
 
 export default [
     {
@@ -297,14 +296,4 @@ export default [
             },
         ],
     },
-    {
-        path: "/vendor/offer/:proposalId",
-        name: "OfferVendors",
-        component: OfferVendors,
-        meta: {
-            requiredAuth: false,
-            title: "Offer Vendors",
-            gtm: "OfferVendors"
-        }
-    }
 ];

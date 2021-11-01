@@ -17,13 +17,8 @@
         </div>
         <div class="d-flex flex-column align-center">
             <h5 class="font-size-20 font-bold-extra color-red">Can we offer you more vendors for your event?</h5>
-            <p class="font-size-14 p-0">Let us help you find more vendors that are just right for your event</p>
-            <md-button class="md-red maryoku-btn my-20" @click="$emit('show')">Show me more vendors</md-button>
-
-            <h5 class="font-size-20 font-bold-extra">Please rate your experience?</h5>
-            <div class="d-flex align-center mt-10 mb-40">
-                <img v-for="rate in rates" :src="`${$iconURL}popups/${rate.url}${score == rate.score ? '_red' : ''}.svg`" class="ml-20" @click="selectRate(rate.score)">
-            </div>
+            <p class="font-size-14">Let us help you find more vendors that are just right for your event</p>
+            <md-button class="md-red maryoku-btn my-50" @click="$emit('show')">Show me more vendors</md-button>
         </div>
     </div>
 </template>
@@ -37,20 +32,7 @@ export default {
     },
     data(){
         return {
-            score: 0,
-            rates: [
-                {score: 1, url: 'smile_1'},
-                {score: 2, url: 'smile_2'},
-                {score: 3, url: 'smile_3'},
-                {score: 4, url: 'smile_3'},
-                {score: 5, url: 'smile_5'},
-            ]
-        }
-    },
-    methods: {
-        selectRate(score){
-            this.score = score;
-            this.$emit('rate', score);
+            showBookedVendorModal: true,
         }
     }
 }

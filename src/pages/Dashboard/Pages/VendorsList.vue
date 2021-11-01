@@ -42,6 +42,16 @@
         <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
           item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
         }}</md-table-cell>
+        <md-table-cell>
+          <md-button @click="handleSelect(index)">
+            <md-icon>{{`${selectedIdx === index ? 'arrow_right' : 'arrow_bottom'}`}} </md-icon>
+          </md-button>
+        </md-table-cell>
+        <fade-transition v-if="index === selectedIdx">
+          <div>
+            selected
+          </div>
+        </fade-transition>
       </md-table-row>
     </md-table>
     <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
@@ -51,11 +61,15 @@
 import Vendors from "@/models/Vendors";
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
+import Vendor from "@/models/Vendors";
+import Proposal from "@/models/Proposal";
+import { FadeTransition } from "vue2-transitions";
 import { Loader } from "@/components";
 
 export default {
   components: {
     Loader,
+    FadeTransition,
   },
   data() {
     return {
@@ -63,6 +77,8 @@ export default {
       showAlert: false,
       currentPath: location.origin,
       loading: true,
+      selectedIdx: null,
+      vendorProposals: [],
     };
   },
   created() {
@@ -108,6 +124,14 @@ export default {
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, "vendors.xlsx");
     },
+    async handleSelect(idx){
+
+      this.loading = true;
+      this.selectedIdx = idx;
+
+      let query = new Proposal().for(new Vendor({ id: this.vendors[idx].id }));
+      this.vendorProposals = await query.get();
+    }
   },
 };
 </script>

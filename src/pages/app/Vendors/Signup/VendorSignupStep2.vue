@@ -35,8 +35,10 @@
 <script>
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
 
 //COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "../components/VendorServiceItem.vue";
 import { VendorCategories } from "@/constants/vendor";
 

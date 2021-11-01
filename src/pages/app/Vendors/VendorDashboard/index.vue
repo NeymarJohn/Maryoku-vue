@@ -185,7 +185,7 @@ export default {
     this.getServiceReport();
     this.getMarkedDates();
     this.getComingEvents();
-    await this.$store.dispatch('vendorDashboard/getProposals', {vendorId: this.vendorData.id});
+    if ( !this.proposals.length ) await this.$store.dispatch('vendorDashboard/getProposals', {vendorId: this.vendorData.id});
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {

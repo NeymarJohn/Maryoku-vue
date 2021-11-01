@@ -41,10 +41,10 @@
           <div class="ml-10">Stay sharp and respond to proposals promptly - you've got to be in it to win it!</div>
         </div>
       </div>
-      <!--<md-button class="mt-10 md-simple md-vendor-text md-vendor px-0" @click="$emit('insight')">-->
-        <!--More Insights-->
-        <!--<md-icon class="color-vendor">keyboard_arrow_down</md-icon>-->
-      <!--</md-button>-->
+      <md-button class="mt-10 md-simple md-vendor-text md-vendor px-0" @click="$emit('insight')">
+        More Insights
+        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
+      </md-button>
     </div>
   </div>
 </template>

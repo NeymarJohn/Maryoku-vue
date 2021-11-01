@@ -267,11 +267,12 @@ import EmptyRequestCard from "../components/EmptyRequestCard";
 import InsightDetail from "../components/InsightDetail";
 import ProposalRequest from "@/models/ProposalRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
-import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
+import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 
 import { Loader, TablePagination, Modal } from "@/components";
+import {PROPOSAL_STATUS} from "../../../../constants/status";
 const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");
@@ -474,7 +475,7 @@ export default {
         proposalRequest.proposal.negotiations.length
       ) {
         this.selectedProposalRequest = proposalRequest;
-        this.selectedProposal = proposalRequest.proposal;
+        this.selectedProposal = this.proposals.find((p) => p.id === proposalRequest.proposal.id);
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
         this.negotiationType = this.selectedProposal.negotiations[0].type
@@ -553,10 +554,6 @@ export default {
 
           this.selectedProposal.negotiations[0] = negotiation;
           this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);
-
-          let proposalRequest = this.selectedProposalRequest ? this.selectedProposalRequest : this.proposalRequests.find(p => p.proposal.id === this.selectedProposal.id);
-          this.$set(proposalRequest, 'proposal', this.selectedProposal);
-          await this.$store.commit("vendorDashboard/setProposalRequest", proposalRequest);
 
           if(status === this.negotiationRequestStatus.cancel_proposal) {
               let proposals = this.proposals.filter(it => it.id !== this.selectedProposal.id);
@@ -720,7 +717,7 @@ export default {
           console.log('price.negotiation');
           let {numberOfParticipants} = this.selectedProposal.eventData;
           let data = this.selectedProposal.negotiations[0].price;
-          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : data.value;
+          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
 
           return {
               originalBudget: this.selectedProposal.cost,

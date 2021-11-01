@@ -302,7 +302,7 @@ export default {
       this.pageType = VENDOR;
 
       this.successURL = this.proposal.nonMaryoku
-        ? `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/offer/${this.proposal.id}`
+        ? `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/offerVendors/${this.proposal.id}`
         : `${window.location.href}?checkout=success`;
     } else if (this.$route.params.hasOwnProperty("eventId")) {
       const eventId = this.$route.params.eventId;
