@@ -72,9 +72,9 @@
             </label>
           </md-list-item>
           <md-divider></md-divider>
-          <!--<md-list-item :md-ripple="false">-->
-            <!--<md-button class="maryoku-btn md-vendor width-100" :disabled="true">Create Your Landing Page</md-button>-->
-          <!--</md-list-item>-->
+          <md-list-item :md-ripple="false">
+            <md-button class="maryoku-btn md-vendor width-100" :disabled="true">Create Your Landing Page</md-button>
+          </md-list-item>
           <md-list-item :md-ripple="false" @click="logout">
             <label class="menu-label">
               <img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon" />

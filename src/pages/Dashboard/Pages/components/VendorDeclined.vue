@@ -9,16 +9,18 @@
         </md-button>
         <div class="pt-40" style="background-color: #f3f7fd">
             <div class="d-flex flex-column align-center w-max-600 mx-auto pb-30">
-                <img :src="`${$iconURL}messages/group-21013.svg`">
-                <h3 class="font-size-30 font-bold-extra color-won">Vendor is booked!</h3>
+                <img :src="`${$iconURL}popups/Group 22262.svg`">
+                <h2 class="font-size-30 font-bold-extra color-black">The offer was rejected</h2>
+                <h5 class="font-size-20 font-bold-extra color-red my-0">Vendor have been notified!</h5>
 
-                <p class="font-size-14">Your payment has been received and will be held in escrow until the event is completed successfully. Assuming there are no disputes, we will pay the vendor 7 days after the event.</p>
+                <p class="font-size-14">We have let the vendor know that you have decided to explore other options. Click here to tell us why this vendor was not a good fit, so we can match you with better options.</p>
+                <md-button class="md-red maryoku-btn my-10 px-40" @click="$emit('comment')">Tell Us Why</md-button>
             </div>
         </div>
         <div class="d-flex flex-column align-center">
-            <h5 class="font-size-20 font-bold-extra color-red">Can we offer you more vendors for your event?</h5>
-            <p class="font-size-14 p-0">Let us help you find more vendors that are just right for your event</p>
-            <md-button class="md-red maryoku-btn my-20" @click="$emit('show')">Show me more vendors</md-button>
+            <h5 class="font-size-20 font-bold-extra color-red">Find Another Vendor</h5>
+            <p class="font-size-14 my-0">There are plenty more vendors on Maryoku, offering you great services at attractive rates.</p>
+            <md-button class="md-red maryoku-btn my-20" @click="$emit('show')">Click here to view other vendor options</md-button>
 
             <h5 class="font-size-20 font-bold-extra">Please rate your experience?</h5>
             <div class="d-flex align-center mt-10 mb-40">
@@ -37,6 +39,7 @@ export default {
     },
     data(){
         return {
+            showBookedVendorModal: true,
             score: 0,
             rates: [
                 {score: 1, url: 'smile_1'},

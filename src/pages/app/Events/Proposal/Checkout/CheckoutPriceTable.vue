@@ -34,8 +34,6 @@
 </template>
 <script>
 import CollapsePanel from "@/components/CollapsePanel.vue";
-import { costByService } from "@/utils/price";
-
 export default {
   components: { CollapsePanel },
   props: {
@@ -82,7 +80,18 @@ export default {
 
     priceOfCostservices() {
       if (!this.costServices || this.costServices.length === 0) return 0;
-      return costByService(this.costServices);
+      return this.costServices.reduce((s, item) => {
+        if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
+          // if 0 you selected main option
+          const selectedAlternative = item.plannerOptions[item.selectedPlannerOption - 1];
+          return item.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+        } else {
+          return item.isComplimentary ? s : s + item.requirementValue * item.price;
+        }
+      }, 0);
+    },
+    priceBeforeDiscount() {
+      return this.priceOfCostservices - (this.priceOfCostservices * this.tax.percentage) / 100;
     },
     totalPrice() {
       return this.priceOfCostservices - this.discount.price + this.tax.price;

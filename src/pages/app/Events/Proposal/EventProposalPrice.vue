@@ -303,7 +303,7 @@ export default {
       this.$forceUpdate();
     },
     changeBookService() {
-      this.$emit("changeBookedServices", { serviceCategory: this.serviceCategory });
+      this.$emit("changeBookedServices", { serviceCategory });
     },
   },
   computed: {

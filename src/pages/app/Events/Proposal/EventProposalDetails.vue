@@ -468,7 +468,7 @@ import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
 import EventProposalPrice from "./EventProposalPrice.vue";
 import TimerPanel from "../components/TimerPanel.vue";
-import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -804,44 +804,64 @@ export default {
 
       if (!this.checkedAllBundledOffers) return 0;
       this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
-        const sumOfService = costByService(this.vendorProposal.costServices[serviceCategory]);
+        const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+          if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+            // if 0 you selected main option
+            const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+            return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          }
+        }, 0);
 
         bundledServicePrice += sumOfService;
+        if (this.addedServices[serviceCategory]) {
+          const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
+            if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+              // if 0 you selected main option
+              const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+              return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+            } else {
+              return service.isComplimentary ? s : s + service.requirementValue * service.price;
+            }
+          }, 0);
+          bundledServicePrice += sumOfService;
+        }
       });
-
       return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100 || 0;
     },
 
     totalPriceOfProposal() {
       let totalPrice = 0;
-
       this.vendorProposal.bookedServices.forEach((serviceCategory) => {
-        const sumOfService = costByService(this.vendorProposal.costServices[serviceCategory]);
+        const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+          if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
+            // if 0 you selected main option
+            const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
+            return service.isComplimentary ? s : s + selectedAlternative.qty * selectedAlternative.price;
+          } else {
+            return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          }
+        }, 0);
         totalPrice += sumOfService;
       });
 
       // added service item price
       Object.keys(this.addedServices).forEach((serviceCategory) => {
-        const sumOfService = extraCost(this.addedServices[serviceCategory]);
+        const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
+          return s + service.requirementValue * service.price;
+        }, 0);
         totalPrice += sumOfService;
       });
       return totalPrice;
     },
     discounedAndTaxedPrice() {
+      const discounted =
+        this.totalPriceOfProposal -
+        (this.totalPriceOfProposal * this.discount.percentage) / 100 -
+        this.bundledDiscountPrice;
 
-      let price = this.totalPriceOfProposal;
-      console.log('total.price', price);
-      // discount
-      price = discounting(price, this.discount);
-      console.log('discounted.price', price, this.discount);
-      // bundled discount
-      price -= this.bundledDiscountPrice;
-
-      // adding tax
-      price = addingTax(price, this.tax);
-      console.log('tax.price', price, this.tax);
-
-      return price;
+      return discounted + (discounted * this.tax.percentage) / 100;
     },
   },
   filters: {

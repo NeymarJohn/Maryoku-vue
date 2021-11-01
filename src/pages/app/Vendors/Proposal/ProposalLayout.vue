@@ -176,7 +176,7 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    await this.getVendor(this.$route.params.vendorId);
+    this.vendor = await this.getVendor(this.$route.params.vendorId);
 
     this.proposalRequest = await this.getProposalRequest(this.$route.params.id)
     if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {

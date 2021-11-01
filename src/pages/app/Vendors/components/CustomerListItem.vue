@@ -79,11 +79,12 @@
   </div>
 </template>
 <script>
+import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
 import ProposalListItem from "./ProposalListItem";
 import { VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import { FadeTransition } from "vue2-transitions";
-import {PROPOSAL_STATUS} from "@/constants/status";
+import {PROPOSAL_STATUS} from "../../../../constants/status";
 
 export default {
   components: {

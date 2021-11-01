@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-service-table-wrapper" v-if="services && services.length > 0">
+  <div class="proposal-service-table-wrapper" v-if="services.length > 0">
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
@@ -431,7 +431,6 @@ export default {
     },
     services: {
       get: function () {
-        console.log('services', this.category);
         if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[this.category];
         else if (this.tableCategory === "included") {
           return this.$store.state.vendorProposal.includedServices[this.category];
