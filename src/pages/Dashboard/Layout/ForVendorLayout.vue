@@ -1,65 +1,69 @@
 <template>
   <div class="for-vendors-layout-wrapper">
     <Loader :active="isLoading" :isFullScreen="true" page="vendor" />
-    <section class="header-wrapper">
-      <div class="vendors-header">
-        <ul>
-          <li class="logo">
-            <a href="https://www.maryoku.com">
-              <img src="https://www.maryoku.com/img/maryoku-logo.png" />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.maryoku.com">ABOUT US</a>
-          </li>
-        </ul>
-      </div>
-      <p>
-        <a href="https://www.maryoku.com/for-vendors" target="_blank">Get you the best jobs</a>
-      </p>
-      <div class="pull-top-right">
-        <vendor-bid-time-counter
-          :key="getRemainingTime.seconds"
-          :days="getRemainingTime.days"
-          :hours="getRemainingTime.hours"
-          :minutes="getRemainingTime.mins"
-          :seconds="getRemainingTime.seconds"
-          class="bg-yellow"
-          :bottom-content="'To send your bid'"
-        />
-      </div>
-    </section>
-    <div class="banner" :style="`background-image: url('${backgroundImage}');`">
-      <div class="banner-content">
-        <h3>Congratulations!</h3>
-        <h3>{{ vendor.companyName }}</h3>
+
+    <div v-if="!isLoading">
+      <section class="header-wrapper">
+        <div class="vendors-header">
+          <ul>
+            <li class="logo">
+              <a href="https://www.maryoku.com">
+                <img src="https://www.maryoku.com/img/maryoku-logo.png" />
+              </a>
+            </li>
+            <li>
+              <a href="https://www.maryoku.com">ABOUT US</a>
+            </li>
+          </ul>
+        </div>
         <p>
-          We found you could fit perfectly for our event with your
-          <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.
+          <a href="https://www.maryoku.com/for-vendors" target="_blank">Get you the best jobs</a>
         </p>
-        <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
+        <div class="pull-top-right">
+          <vendor-bid-time-counter
+                  :key="getRemainingTime.seconds"
+                  :days="getRemainingTime.days"
+                  :hours="getRemainingTime.hours"
+                  :minutes="getRemainingTime.mins"
+                  :seconds="getRemainingTime.seconds"
+                  class="bg-yellow"
+                  :bottom-content="'To send your bid'"
+          />
+        </div>
+      </section>
+      <div class="banner" :style="`background-image: url('${backgroundImage}');`">
+        <div class="banner-content">
+          <h3>Congratulations!</h3>
+          <h3>{{ vendor.companyName }}</h3>
+          <p>
+            We found you could fit perfectly for our event with your
+            <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.
+          </p>
+          <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
+        </div>
       </div>
+      <router-view></router-view>
+      <section class="footer-wrapper">
+        <div class="vendors-footer">
+          <ul>
+            <li class="logo">
+              <a href="https://www.maryoku.com">
+                <img src="https://www.maryoku.com/img/maryoku-logo.png" />
+              </a>
+            </li>
+            <li>
+              <p>Who are we and why are we great?</p>
+            </li>
+            <li>
+              <a href="https://www.maryoku.com" target="_blank">
+                <img :src="`${iconsUrl}Asset 273.svg`" />
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
     </div>
-    <router-view></router-view>
-    <section class="footer-wrapper">
-      <div class="vendors-footer">
-        <ul>
-          <li class="logo">
-            <a href="https://www.maryoku.com">
-              <img src="https://www.maryoku.com/img/maryoku-logo.png" />
-            </a>
-          </li>
-          <li>
-            <p>Who are we and why are we great?</p>
-          </li>
-          <li>
-            <a href="https://www.maryoku.com" target="_blank">
-              <img :src="`${iconsUrl}Asset 273.svg`" />
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
+
     <signup-request-modal :vendor="vendor" v-if="showSignup"></signup-request-modal>
     <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">

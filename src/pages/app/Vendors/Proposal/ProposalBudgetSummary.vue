@@ -404,6 +404,7 @@ export default {
       this.$store.commit("vendorProposal/setDiscount", { category: "total", discount: discount });
     },
     saveTax(categoryKey, tax) {
+      console.log('saveTax');
       this.$store.commit("vendorProposal/setTax", { category: "total", tax: tax });
     },
   },
@@ -534,6 +535,7 @@ export default {
         this.expanded = true;
       }
     },
+    totalPriceByCategory(newVal, oldVal){console.log('totalPriceByCategory', newVal)}
   },
 };
 </script>

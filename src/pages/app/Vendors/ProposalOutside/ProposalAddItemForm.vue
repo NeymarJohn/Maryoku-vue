@@ -307,7 +307,18 @@ export default {
     handleSave(val){
       if ( val ===  'profile' ) {
         let vendor = this.vendor;
-        this.$set(vendor.services, this.camelize(this.serviceItem), {...this.selectedItem, value: this.unit});
+        if (vendor.services.hasOwnProperty(this.camelize(this.serviceItem))) {
+          this.$set(vendor.services, this.camelize(this.serviceItem),
+                  {...vendor.services[this.camelize(this.serviceItem)], value: this.unit});
+        } else {
+          // todo check how to add new service item when update price in cost services
+          this.$set(vendor.services, this.camelize(this.serviceItem),
+                  {
+                    checked: true,
+                    label: this.camelize(this.serviceItem),
+                    value: this.unit
+                  });
+        }
         this.$store.dispatch('proposalForNonMaryoku/saveVendor', vendor)
       }
       this.cancel();

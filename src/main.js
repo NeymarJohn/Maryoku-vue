@@ -131,7 +131,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.path === "/" && !currentToken) {
     next("/signin");
   } else if (to.path === "/vendor" && !currentToken) {
-    next("/vendor/sigin");
+    next("/vendor/signin");
   }
   if (to.meta.requiresAuth && !currentToken) {
     if (to.meta.isVendor || to.path.startsWith("/vendor")) {

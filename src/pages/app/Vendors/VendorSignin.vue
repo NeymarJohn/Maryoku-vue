@@ -121,8 +121,7 @@ export default {
         };
     },
   beforeCreate(){
-    console.log('vendor.signin.beforeCreate');
-    $("#maryoku_loader").attr('src', "/static/icons/loader/vendor.gif");
+    console.log('isLoggedIn', this.loggedIn);
   },
   methods: {
     authenticate(provider) {

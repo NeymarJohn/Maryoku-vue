@@ -6,11 +6,6 @@
           <img v-if="isChecked" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
-<!--        <md-checkbox class="check-condition md-vendor"-->
-<!--                    v-model="this.additionalServices"-->
-<!--                    :value="service.componentId"-->
-<!--                    @change="changeItem($event)"-->
-<!--        ></md-checkbox>-->
         <h3 class="title">
           <img :src="img" />
           <span>{{ category }}</span>
@@ -104,9 +99,7 @@ export default {
   },
   data() {
     return {
-      isAllFilledInfo: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      isVCollapsed: false,
       isEditDiscount: false,
       isEditTax: false,
       clickedItem: false,
@@ -160,12 +153,6 @@ export default {
     };
   },
   methods: {
-    getObject(item) {
-      return JSON.parse(JSON.stringify(item));
-    },
-    isAdded(category) {
-      return this.additionalServices.includes(category);
-    },
     toggle(event) {
       event.stopPropagation();
       this.isExpanded = !this.isExpanded;
@@ -197,28 +184,6 @@ export default {
 
       this.$root.$emit("update-additional-services", category);
     },
-    setRange(value, type) {
-      let val = value;
-
-      if (type != "discount_by_amount") {
-        if (value > 100) {
-          val = 100;
-        }
-        if (value < 0) {
-          val = 0;
-        }
-      }
-
-      if (type == "tax") {
-        this.tax = val;
-        this.discount_by_amount = 0;
-      } else if (type == "discount_by_amount") {
-        this.discount_by_amount = val;
-        this.tax = 0;
-      } else {
-        this.discount = val;
-      }
-    },
     cancel() {
       this.selectedQuickButton = "";
       this.qty = 0;
@@ -227,178 +192,8 @@ export default {
       this.serviceItem = null;
       this.discount_by_amount = null;
     },
-    saveItem(serviceItem, qty, price, category) {
-      this.newProposalRequest.requirements.push({
-        comments: [],
-        dateCreated: "",
-        includedInPrice: true,
-        itemNotAvailable: false,
-        price: price,
-        priceUnit: "qty",
-        proposalRequest: { id: this.proposalRequest.id },
-        requirementComment: null,
-        requirementId: "",
-        requirementMandatory: false,
-        requirementPriority: null,
-        requirementTitle: serviceItem,
-        requirementsCategory: category,
-        requirementValue: `${qty}`,
-      });
-      this.$forceUpdate();
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.cancel();
-    },
-    calculateSubTotal() {
-      this.subTotal = this.qty * this.unit;
-      this.discount_by_amount = this.unit;
-    },
-    saveDiscount() {
-      this.isEditDiscount = false;
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {
-        category: this.category,
-        value: this.discount,
-      });
-    },
-    cancelDiscount() {
-      this.isEditDiscount = false;
-      this.discount = 0;
-    },
-    uploadDocument(fileId = null) {
-      this.docTag = fileId;
-      this.selectedImage = typeof fileId !== "object" ? fileId : null;
-      if (this.docTag == "option") {
-        this.$refs.optionDocument.click();
-      } else if (this.docTag == "image") {
-        this.$refs.imageFile.click();
-      } else {
-        this.$refs.legalDocument.click();
-      }
-    },
-    onFilePicked(event) {
-      let file = event.target.files || event.dataTransfer.files;
-
-      if (!file.length) {
-        return;
-      }
-      if (file[0].size <= 5000000) {
-        // 5mb
-        this.createProposalFile(file[0]);
-      } else {
-        this.alretExceedPictureSize = true;
-        this.$notify({
-          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
-          horizontalAlign: "center",
-          verticalAlign: "top",
-          icon: "warning",
-        });
-      }
-    },
-    createProposalFile(file) {
-      let reader = new FileReader();
-      let vm = this;
-
-      reader.onload = (e) => {
-        let proposalRequest = new ProposalRequest({ id: vm.$route.params.id });
-
-        this.files.push({
-          tag: this.docTag,
-          filename: file.name,
-        });
-
-        if (this.docTag == "image") {
-          Swal.fire({
-            title: `You've Uploaded an Image named ${file.name}`,
-            text: "",
-            type: "success",
-            timer: 3000,
-          });
-        }
-      };
-      reader.readAsDataURL(file);
-    },
-    getFileByTag(tag) {
-      const file = this.files.filter((f) => f.tag == tag);
-      if (file.length > 0) {
-        return file[0].filename;
-      } else {
-        return null;
-      }
-    },
-    removeFileByTag(tag) {
-      this.files = this.files.filter((f) => f.tag != tag);
-    },
-    totalOffer() {
-      // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
-      let total = 0;
-      let vm = this;
-      let requirements = [];
-      console.log("total.requirements", this.newProposalRequest);
-      if (this.newProposalRequest.requirements.length) {
-        requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty("requirementTitle"));
-      }
-
-      requirements.map(function (item) {
-        if (item.price) {
-          if (item.priceUnit === "total") {
-            total += parseFloat(String(item.price).replace(/,/g, ""));
-          } else {
-            if (vm.newProposalRequest != undefined) {
-              total += parseFloat(String(item.price).replace(/,/g, "")) * parseInt(item.requirementValue);
-            }
-          }
-        }
-      });
-
-      return total;
-    },
-    calculatedTotal() {
-      let total = this.totalOffer();
-
-      total = total - (total * this.discount) / 100;
-      if (total > 0) {
-        total = total - this.discount_by_amount;
-      }
-      total += (total * this.tax) / 100;
-      console.log("calculateTotal", total);
-      return total;
-    },
-    prev() {
-      if (this.$refs.servicesCont) {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth;
-        if (this.servicesWidth - this.serviceSlidePos > 0) {
-          this.serviceSlidePos += 200;
-        }
-      }
-    },
-    next() {
-      if (this.$refs.servicesCont) {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth;
-        if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
-          this.serviceSlidePos -= 200;
-        }
-      }
-    },
-    switchDiscountMethod() {
-      this.discount = 0;
-      this.discount_by_amount = 0;
-    },
-    isSelectedQuickButton(item) {
-      const selectedServices = this.newProposalRequest.requirements.filter((r) =>
-        this.services.includes(r.requirementTitle),
-      );
-      const selectedService = selectedServices.find((it) => it.requirementTitle === item);
-      return selectedService || item == this.selectedQuickButton;
-    },
-    async imageSelected(file) {
-      const imageData = await getBase64(file);
-      const extension = file.type.split("/")[1];
-      // S3Service.fileUpload(file, logoName, "logos").then((res) => {
-      //   this.$store.dispatch("campaign/setLogo", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
-      // });
-    },
   },
   created() {
-    this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
       // if (
@@ -456,18 +251,7 @@ export default {
       this.servicesWidth = this.$refs.servicesCont.clientWidth;
     }
   },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
   computed: {
-    isDisabledAdd() {
-      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
-    },
-    optionalRequirements() {
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
     mandatoryRequirements() {
       if (!this.proposalRequest) return [];
       if (!this.proposalRequest.requirements[this.category]) return [];
