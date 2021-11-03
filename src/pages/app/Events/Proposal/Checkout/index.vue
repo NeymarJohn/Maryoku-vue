@@ -511,18 +511,18 @@
           console.log('res', res);
           this.stripePriceData.push(res.data);
         }
-        this.loading = false;
-        console.log('stripePriceData', this.stripePriceData);
-        this.showStripeCheckout = true;
 
         let eventName = this.proposal.nonMaryoku ? this.proposal.eventData.customer.companyName :
                 this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event';
         // send email to vendor to notify the proposal is selected
-        this.$http.post(
+        await this.$http.post(
                 `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,
                 { type: "win", proposalId: this.proposal.id, eventName },
                 { headers: this.$auth.getAuthHeader() },
         );
+
+        this.loading = false;
+        this.showStripeCheckout = true;
       },
       back() {
         this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
