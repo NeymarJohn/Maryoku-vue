@@ -250,7 +250,8 @@
     ></ShareProposal>
     <ResendProposalResult
       v-if="showResendProposalModal"
-      :to="selectedProposal.proposalRequest.eventData.owner.email"
+      :to="selectedProposal.nonMaryoku ? selectedProposal.eventData.customer.email :
+       selectedProposal.proposalRequest.eventData.owner.email"
       @close="showResendProposalModal = false"
       @submit="showResendProposalModal = false"
     > </ResendProposalResult>

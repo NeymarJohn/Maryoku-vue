@@ -28,7 +28,7 @@
 
                     <tooltip-notification
                             v-if="showCompanyText"
-                            :about="getDescription('company')"
+                            :about="categoryDescriptions[vendor.vendorCategory].about_company"
                             @copy='handleCopy($event, "company")'
                             @cancel="showCompanyText = false"
                     ></tooltip-notification>
@@ -61,7 +61,7 @@
 
                     <tooltip-notification
                             v-if="showServiceText"
-                            :about="getDescription('service')"
+                            :about="categoryDescriptions[vendor.vendorCategory].about_service"
                             @copy='handleCopy($event, "category")'
                             @cancel="showServiceText = false"
                     ></tooltip-notification>
@@ -143,7 +143,7 @@
 
                   <tooltip-notification
                           v-if="showPersonalMessage"
-                          :about="getDescription('company')"
+                          :about="categoryDescriptions[vendor.vendorCategory].personal_message"
                           @copy='handleCopy($event, "personalMessage")'
                           @cancel="showPersonalMessage = false"
                   ></tooltip-notification>
@@ -483,14 +483,11 @@ export default {
       // this.$root.$emit("update-vendor-value", fieldName, event.target.value);
       this.$store.commit("vendorSignup/setField", { field: fieldName, value: event.target.value });
     },
-    getDescription(field){
-        return this.categoryDescriptions[this.vendor.vendorCategory][field].map(desc => desc.replace('company_name', this.vendor.companyName));
-    },
     handleCopy(value, field) {
       this.showCompanyText = false;
       this.showServiceText = false;
       this.showPersonalMessage = false;
-      let vendor = JSON.parse(JSON.stringify(this.vendor));
+      let vendor = this.vendor;
       if ( field === 'company' ) this.$set(vendor.about, field, value);
       if ( field === 'category' ) this.$set(vendor.about, field, value);
       if ( field === 'personalMessage' ) this.$set(vendor, field, value);
