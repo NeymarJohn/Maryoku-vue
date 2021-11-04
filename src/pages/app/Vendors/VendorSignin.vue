@@ -120,11 +120,8 @@ export default {
             notFoundUser: false,
         };
     },
-  async created(){
-    if ( this.loggedIn  ) {
-      let res = await this.$store.dispatch('auth/checkToken', this.currentUser.access_token);
-      if (res.currentUserType === 'vendor') this.$router.push('/vendor/proposals');
-    }
+  beforeCreate(){
+    console.log('isLoggedIn', this.loggedIn);
   },
   methods: {
     authenticate(provider) {

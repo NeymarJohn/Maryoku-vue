@@ -31,26 +31,26 @@
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="isEdit = true">
+            <md-menu-item class="md-purple" @click="isEdit = true">
               <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
             </md-menu-item>
-            <md-menu-item @click="removeRequirement(item)">
+            <md-menu-item class="md-purple" @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true">
+            <md-menu-item class="md-purple" @click="editingComment = true">
               <span>
                 <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
                   item.comment ? `Edit Comment` : `Add comment`
                 }}</span
               >
             </md-menu-item>
-            <md-menu-item @click="addAlternative">
+            <md-menu-item class="md-purple" @click="addAlternative">
               <span>
                 <md-icon class="color-black mr-10">add_circle_outline</md-icon>
                 Add an alternative
               </span>
             </md-menu-item>
-            <md-menu-item @click="setValue('isComplimentary', !item.isComplimentary)">
+            <md-menu-item class="md-purple" @click="setValue('isComplimentary', !item.isComplimentary)">
               <span>
                 <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
                 {{ !item.isComplimentary ? "Mark as complimentary" : "Remove complimentary" }}
@@ -365,13 +365,13 @@
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="isEdit = true">
+            <md-menu-item class="md-purple" @click="isEdit = true">
               <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
             </md-menu-item>
-            <md-menu-item @click="removeRequirement(item)">
+            <md-menu-item class="md-purple" @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true">
+            <md-menu-item class="md-purple" @click="editingComment = true">
               <span>
                 <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
                   item.comment ? `Edit Comment` : `Add comment`
@@ -499,9 +499,10 @@ export default {
               if ($(this).find('img').length) {
                   $(this).find('img').attr('style', "filter:brightness(0) invert(1)")
               } else if ($(this).find('i')) {
-                  $(this).find('i').addClass("color-white")
-                  $(this).find('i').removeClass("color-black")
+                  $(this).find('i').addClass("color-white");
+                  $(this).find('i').removeClass("color-black");
               }
+              $(this).find('button').addClass('bg-purple');
           }, function(){
               if ($(this).find('img').length) {
                   $(this).find('img').attr('style', "filter:brightness(0) invert(0)")
@@ -509,6 +510,7 @@ export default {
                   $(this).find('i').removeClass("color-white")
                   $(this).find('i').addClass("color-black")
               }
+              $(this).find('button').removeClass('bg-purple');
           })
       }, 0)
     }
