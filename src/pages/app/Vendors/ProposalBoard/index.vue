@@ -250,7 +250,8 @@
     ></ShareProposal>
     <ResendProposalResult
       v-if="showResendProposalModal"
-      :to="selectedProposal.proposalRequest.eventData.owner.email"
+      :to="selectedProposal.nonMaryoku ? selectedProposal.eventData.customer.email :
+       selectedProposal.proposalRequest.eventData.owner.email"
       @close="showResendProposalModal = false"
       @submit="showResendProposalModal = false"
     > </ResendProposalResult>
@@ -502,7 +503,7 @@ export default {
 
           let url = this.selectedProposal.nonMaryoku
           ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
-          : `${location.protocol}//${location.host}/#/signin`;
+          : `${location.protocol}//${location.host}/#/events/${this.selectedProposal.proposalRequest.eventData.id}/booking/choose-vendor`;
 
           let data = {
               id: this.selectedProposal.negotiations[0].id,
@@ -522,7 +523,7 @@ export default {
           if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) this.showRequestNegotiationModal = false;
           this.selectedProposal.negotiations[0] = negotiation;
 
-          if ( status === this.negotiationRequestStatus.approve && this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME )
+          if (status === this.negotiationRequestStatus.approve && this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
               this.selectedProposal.expiredDate = new Date(expiredTime);
 
           await this.$store.commit("vendorDashboard/setProposal", this.selectedProposal);

@@ -12,7 +12,7 @@
         <div class="font-size-18 my-30 mt-10">To: {{to}}</div>
 
         <div class="mt-50 font-size-18 font-bold-extra"> You will receive a copy to your email</div>
-        <md-button class="md-vendor mt-20">Cool, go to dashboard</md-button>
+        <!--<md-button class="md-vendor mt-20">Cool, go to dashboard</md-button>-->
       </div>
     </template>
   </modal>

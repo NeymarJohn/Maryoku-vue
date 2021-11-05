@@ -135,7 +135,7 @@
   </div>
 </template>
 <script>
-
+import moment from "moment";
 import Button from "@/components/Button/ButtonDiv";
 import { PROPOSAL_STATUS } from "@/constants/status";
 

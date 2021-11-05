@@ -42,7 +42,7 @@ export default {
                 {score: 1, url: 'smile_1'},
                 {score: 2, url: 'smile_2'},
                 {score: 3, url: 'smile_3'},
-                {score: 4, url: 'smile_4'},
+                {score: 4, url: 'smile_3'},
                 {score: 5, url: 'smile_5'},
             ]
         }

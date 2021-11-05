@@ -284,7 +284,12 @@ export default {
     },
     goDetailPage(proposal) {
       this.showDetails = true;
-      this.selectedProposal = proposal;
+
+      if(proposal.selectedVersion > -1)
+        this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
+      else this.selectedProposal = proposal;
+      console.log('selectedProposal', proposal, this.selectedProposal);
+
     },
     closeProposal() {
       this.showDetails = false;
@@ -390,6 +395,12 @@ export default {
               })
           })
       })
+    },
+    getUpdatedProposal(proposal, data) {
+      Object.keys(data).map(key => {
+        this.$set(proposal, key, data[key]);
+      });
+      return proposal
     }
   },
   async created() {
