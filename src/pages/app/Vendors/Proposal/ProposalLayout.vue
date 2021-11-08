@@ -54,6 +54,15 @@
           </div>
         </template>
       </modal>
+      <modal v-if="showMissingModal" container-class="modal-container w-max-700 no-header no-footer">
+        <template slot="body">
+            <missing-detail
+                :data="missingDetail"
+                @send="showMissingModal = false"
+                @close="showMissingModal = false"
+            ></missing-detail>
+        </template>
+      </modal>
       <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header">
@@ -118,12 +127,14 @@ import ProposalHeader from "./ProposalHeader";
 import ProposalVersionsBar from "./ProposalVersionsBar";
 import VueElementLoading from "vue-element-loading";
 import { PROPOSAL_STATUS } from "@/constants/status";
+import MissingDetail from "./Modals/MissingDetail";
 
 export default {
   components: {
     Loader,
     VendorBidTimeCounter,
     Modal,
+    MissingDetail,
     ProposalHeader,
     VueElementLoading,
     ProposalVersionsBar,
@@ -144,8 +155,10 @@ export default {
       vendorCategory: null,
       event: null,
       requirements: [],
+      missingDetail: [],
       openedModal: "",
       showCloseProposalModal: false,
+      showMissingModal: false,
       isUpdating: false,
       proposalStatus: PROPOSAL_STATUS,
       option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
@@ -236,6 +249,42 @@ export default {
       this.scrollToTop();
       const vendorProposal = this.$store.state.vendorProposal;
 
+      let progress = 0;
+        // calculate the progress of the proposal
+      if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
+        progress += 10;
+      } else {
+        this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+      if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
+        progress += 30;
+      } else {
+         this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+
+      if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
+        progress += 20;
+      } else {
+        this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+      if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
+        progress += 20;
+      } else {
+        this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+
+      if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
+        progress += 20;
+      } else {
+        this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+
+      // check missing when submit the proposal
+      if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
+          this.showMissingModal = true;
+          return;
+      }
+
       let coverImageUrl = "";
       this.isUpdating = true;
       if (vendorProposal.coverImage && vendorProposal.coverImage.indexOf("base64") >= 0) {
@@ -246,24 +295,7 @@ export default {
         coverImageUrl = await S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
       }
 
-      let progress = 0;
-      // calculate the progress of the proposal
-      if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
-        progress += 15;
-      }
-      if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
-        progress += 30;
-      }
-      if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
-        progress += 10;
-      }
-      if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
-        progress += 10;
-      }
-      if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
-        progress += 30;
-      }
-        this.$store.commit("vendorProposal/setProgress", progress);
+      this.$store.commit("vendorProposal/setProgress", progress);
 
       if (!this.isLoading) {
         this.isLoading = true;

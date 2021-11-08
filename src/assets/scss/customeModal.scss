@@ -319,3 +319,15 @@
         justify-content: start;
     }
 }
+
+.no-header{
+    .modal-header{
+        padding: 0
+    }
+}
+
+.no-footer{
+    .modal-footer{
+        padding: 0
+    }
+}
