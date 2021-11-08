@@ -63,7 +63,6 @@ export default {
     updateSuggestionStyle(){
       console.log('updateSuggestionStyle', this.theme);
       if ( this.theme === 'purple' ) {
-        console.log('purple')
         setTimeout((_) => {
           $(".md-list-item-button").hover(
                   function (el) {

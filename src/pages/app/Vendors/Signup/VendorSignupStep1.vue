@@ -28,7 +28,7 @@
 
                     <tooltip-notification
                             v-if="showCompanyText"
-                            :about="categoryDescriptions[vendor.vendorCategory].about_company"
+                            :about="getDescription('company')"
                             @copy='handleCopy($event, "company")'
                             @cancel="showCompanyText = false"
                     ></tooltip-notification>
@@ -61,7 +61,7 @@
 
                     <tooltip-notification
                             v-if="showServiceText"
-                            :about="categoryDescriptions[vendor.vendorCategory].about_service"
+                            :about="getDescription('service')"
                             @copy='handleCopy($event, "category")'
                             @cancel="showServiceText = false"
                     ></tooltip-notification>
@@ -143,8 +143,8 @@
 
                   <tooltip-notification
                           v-if="showPersonalMessage"
-                          :about="categoryDescriptions[vendor.vendorCategory].personal_message"
-                          @copy='handleCopy($event, "personalMessage")'
+                          :about="getDescription('personal')"
+                          @copy='handleCopy($event, "personal")'
                           @cancel="showPersonalMessage = false"
                   ></tooltip-notification>
                 </div>
@@ -483,11 +483,14 @@ export default {
       // this.$root.$emit("update-vendor-value", fieldName, event.target.value);
       this.$store.commit("vendorSignup/setField", { field: fieldName, value: event.target.value });
     },
+    getDescription(field){
+        return this.categoryDescriptions[this.vendor.vendorCategory][field].map(desc => desc.replace('company_name', this.vendor.companyName));
+    },
     handleCopy(value, field) {
       this.showCompanyText = false;
       this.showServiceText = false;
       this.showPersonalMessage = false;
-      let vendor = this.vendor;
+      let vendor = JSON.parse(JSON.stringify(this.vendor));
       if ( field === 'company' ) this.$set(vendor.about, field, value);
       if ( field === 'category' ) this.$set(vendor.about, field, value);
       if ( field === 'personalMessage' ) this.$set(vendor, field, value);

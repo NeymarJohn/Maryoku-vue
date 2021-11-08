@@ -150,7 +150,6 @@ export default {
   watch: {
     inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`},
     content(){},
-    value(newVal) {this.init()}
   },
 
 };
