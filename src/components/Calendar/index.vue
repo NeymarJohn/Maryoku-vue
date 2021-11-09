@@ -138,6 +138,7 @@
                    this.updated = false;
                }, 10)
             },
+            initDate(newVal) {this.init()}
         },
         mounted() {
         },

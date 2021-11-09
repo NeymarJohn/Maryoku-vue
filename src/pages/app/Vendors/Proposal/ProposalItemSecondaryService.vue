@@ -164,23 +164,25 @@ export default {
       }
     },
     changeItem(event){
-      console.log('changeItem', this.additionalServices);
+
     },
     clickItem(event, category) {
       event.stopPropagation();
 
+      let services = this.additionalServices;
       if (!this.isChecked) {
-        this.additionalServices.push(category);
+
         this.isExpanded = true;
         this.$store.commit("vendorProposal/setValue", {
           key: "currentSecondaryService",
           value: this.service.componentId,
         });
+        services.push(category);
       } else {
-        this.$store.commit("vendorProposal/removeCategoryFromAdditional");
+        services = services.filter(s => s !== category);
         this.isExpanded = false;
       }
-      console.log(this.additionalServices);
+      this.$store.commit('vendorProposal/setAdditionalServices', services);
 
       this.$root.$emit("update-additional-services", category);
     },
@@ -260,13 +262,8 @@ export default {
     isChecked(){
       return this.additionalServices.includes(this.service.componentId);
     },
-    additionalServices: {
-      get: function () {
+    additionalServices(){
         return this.$store.state.vendorProposal.additionalServices;
-      },
-      set: function (newValue) {
-        return this.$store.commit("vendorProposal/setAdditionalServices", newValue);
-      },
     },
   },
   watch: {
