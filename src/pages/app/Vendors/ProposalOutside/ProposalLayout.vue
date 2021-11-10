@@ -79,6 +79,15 @@
         </div>
       </template>
     </modal>
+    <modal v-if="showMissingModal" container-class="modal-container w-max-800 no-header no-footer">
+      <template slot="body">
+          <missing-detail
+              :data="missingDetail"
+              @send="showMissingModal = false"
+              @close="showMissingModal = false"
+          ></missing-detail>
+      </template>
+    </modal>
     <send-proposal-modal
       v-if="showSendProposalModal"
       @close="showSendProposalModal = false"
@@ -104,6 +113,7 @@ import SendProposalModal from "./Modals/SendProposal";
 import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 import ProposalVersionsBar from "./ProposalVersionsBar";
 import Vendor from "@/models/Vendors";
+import MissingDetail from "./Modals/MissingDetail";
 import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
@@ -114,6 +124,7 @@ export default {
     ProposalHeader,
     SendProposalModal,
     ProposalSubmitted,
+    MissingDetail,
     Loader,
   },
   props: {
@@ -134,10 +145,12 @@ export default {
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
+      missingDetail: [],
       proposalStatus: PROPOSAL_STATUS,
       option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
       showSendProposalModal: false,
       showSubmittedProposalModal: false,
+      showMissingModal: false,
       proposalLink: "",
     };
   },
@@ -206,7 +219,43 @@ export default {
       return new Promise((resolve, reject) => {
         this.$root.$emit("clear-slide-pos");
         this.scrollToTop();
+        this.missingDetail = [];
         const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
+
+        let progress = 0;
+        if (proposalForNonMaryoku.hasOwnProperty('eventVision') && proposalForNonMaryoku.eventVision) {
+              progress += 10;
+        } else {
+              this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+        }
+        if (proposalForNonMaryoku.costServices[this.vendor.vendorCategory] && proposalForNonMaryoku.costServices[this.vendor.vendorCategory].length) {
+              progress += 30;
+        } else {
+              this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+        }
+
+        if (proposalForNonMaryoku.includedServices[this.vendor.vendorCategory] && proposalForNonMaryoku.includedServices[this.vendor.vendorCategory].length) {
+              progress += 20;
+        } else {
+              this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+        }
+        if (proposalForNonMaryoku.extraServices[this.vendor.vendorCategory] && proposalForNonMaryoku.extraServices[this.vendor.vendorCategory].length) {
+              progress += 20;
+        } else {
+              this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+        }
+
+        if (proposalForNonMaryoku.inspirationalPhotos.some(p => !!p)) {
+              progress += 20;
+        } else {
+              this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+        }
+
+        // check missing when submit the proposal
+        if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
+              this.showMissingModal = true;
+              return;
+        }
 
         let coverImageUrl = "";
         this.isUpdating = true;
