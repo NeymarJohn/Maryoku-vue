@@ -30,13 +30,13 @@
     </div>
 </template>
 <script>
-import { Loader, Modal } from "@/components";
+const components = {
+    Loader: () => import("@/components/Loader/Loader.vue"),
+    Modal: () => import("@/components/Modal.vue"),
+}
 
 export default {
-    components: {
-        Loader,
-        Modal
-    },
+    components,
     data(){
         return {
             showBookedVendorModal: true,
