@@ -31,27 +31,19 @@
 </template>
 <script>
 import moment from 'moment';
-import ClickOutside from "vue-click-outside";
+import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
+
+const components = {
+    ClickOutside: () => import("vue-click-outside")
+}
 export default {
   name: "proposal-versions-bar",
-  components: { ClickOutside },
+  components,
   props: {
   },
   data() {
     return {
-        versionFields: [
-            'costServices',
-            'includedServices',
-            'extraServices',
-            'discounts',
-            'taxes',
-            'inspirationalPhotos',
-            'additionalServices',
-            'bundleDiscount',
-            'attachments',
-            'personalMessage',
-            'coverImage',
-        ],
+        versionFields: PROPOSAL_VERSION_FIELDS,
         editIdx: null,
         versionName: null,
     };
@@ -64,7 +56,11 @@ export default {
     saveVersion(){
       let data = {};
       this.versionFields.map(key => {
-          data[key] = this.$store.state.vendorProposal.original[key];
+          if (key === 'bookedServices') {
+              data[key] = [];
+          } else {
+              data[key] = this.$store.state.vendorProposal.original[key];
+          }
       });
 
       let version = {

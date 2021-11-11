@@ -2,7 +2,7 @@
   <div class="vendor-proposal-board p-40">
     <loader :active="loading" :isFullScreen="true" page="vendor" />
     <div class="font-size-22 font-bold d-flex align-center">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
+      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" alt=""/> Proposals Board
       <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
@@ -20,7 +20,7 @@
           <span><md-icon class="color-vendor">arrow_back</md-icon></span>
         </button>
       </template>
-      <proposal-request-card
+      <ProposalRequestCard
         class="carousel-item"
         v-for="(proposalRequest, idx) in proposalRequests"
         :key="proposalRequest.id"
@@ -29,14 +29,14 @@
           !!(
             proposalRequest.proposal &&
             proposalRequest.proposal.negotiations &&
-            proposalRequest.proposal.negotiations.filter((it) => it.status == 0).length
+            proposalRequest.proposal.negotiations.filter((it) => it.status === 0).length
           )
         "
         @handle="handleRequestCard(idx)"
         @dismiss="dismiss"
       >
-      </proposal-request-card>
-      <empty-request-card v-if="proposalRequests.length < 1" ></empty-request-card>
+      </ProposalRequestCard>
+      <EmptyRequestCard v-if="proposalRequests.length < 1" ></EmptyRequestCard>
 
       <template slot="next">
         <button class="nav-right nav-btn">
@@ -58,10 +58,11 @@
             <img
               class="mr-10"
               :src="`/static/icons/vendor/proposalBoard/${tab.icon}`"
+              alt=""
               style="width: 20px; height: 20px"
             />
             {{ tab.title }}
-            <span v-if="tab.key == 'all'" class="ml-5" :class="tab.class">({{ pagination.total }})</span>
+            <span v-if="tab.key === 'all'" class="ml-5" :class="tab.class">({{ pagination.total }})</span>
             <span v-else class="ml-5" :class="tab.class">({{ pagination[tab.key] }})</span>
           </div>
         </md-button>
@@ -77,34 +78,34 @@
             <span
               v-for="it in proposalHeaders"
               class="sort-item"
-              :class="{ selected: it.key && sortFields['sort'] == it.key, 'text-center': it.key == 'update' }"
+              :class="{ selected: it.key && sortFields['sort'] === it.key, 'text-center': it.key === 'update' }"
               @click="selectSort(it.key)"
             >
               {{ it.title }}
-              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">
-                {{ sortFields["order"] == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon
+              <md-icon v-if="it.key && it.key !== 'update' && sortFields['sort'] === it.key" class="color-black">
+                {{ sortFields["order"] === "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon
               >
-              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] != it.key" class="color-black-middle">
+              <md-icon v-if="it.key && it.key !== 'update' && sortFields['sort'] !== it.key" class="color-black-middle">
                 keyboard_arrow_down
               </md-icon>
             </span>
           </div>
           <div v-if="!loading" class="propsoals-list">
             <div class="white-card md-20 proposal-list">
-              <proposal-list-item
+              <ProposalListItem
                 v-for="proposal in proposals"
                 :proposal="proposal"
                 :hasNegotiation="
-                  !!(!proposal.accepted && proposal.negotiations && proposal.negotiations.filter((it) => it.status == 0).length)
+                  !!(!proposal.accepted && proposal.negotiations && proposal.negotiations.filter((it) => it.status === 0).length)
                 "
                 :key="proposal.id"
                 class="row"
                 @action="handleProposal"
-              ></proposal-list-item>
+              ></ProposalListItem>
             </div>
           </div>
           <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />
+            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" alt=""/>
             <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
             <md-button class="md-vendor" @click="createNewProposal">Create New Proposal</md-button>
           </div>
@@ -116,12 +117,12 @@
       <div class="md-layout">
         <div class="md-layout-item md-size-75">
           <div class="text-center">
-            <table-pagination
+            <TablePagination
               v-if="pagination.pageCount"
               class="mt-30"
               :pageCount="pagination.pageCount"
               :clickHandler="gotoPage"
-            ></table-pagination>
+            ></TablePagination>
           </div>
         </div>
         <div class="md-layout-item md-size-25"></div>
@@ -129,7 +130,7 @@
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
       <template slot="body">
-        <proposal-content :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
+        <ProposalContent :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
@@ -236,7 +237,7 @@
         ><md-icon>close</md-icon></md-button
       ></template>
       <template slot="body">
-          <insight-detail/>
+          <InsightDetail/>
       </template>
       <template slot="footer">
           <md-button class="md-simple ml-auto md-outlined md-vendor p-0">Update Your Prices</md-button>
@@ -260,41 +261,31 @@
 <script>
 import moment from 'moment'
 import _ from "underscore";
-import carousel from "vue-owl-carousel";
-
-import ProposalListItem from "../components/ProposalListItem.vue";
-import ProposalRequestCard from "../components/ProposalRequestCard";
-import EmptyRequestCard from "../components/EmptyRequestCard";
-import InsightDetail from "../components/InsightDetail";
 import ProposalRequest from "@/models/ProposalRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
+import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 
-import { Loader, TablePagination, Modal } from "@/components";
-const ProposalContent = () => import("../components/ProposalDetail");
-const NegotiationRequest = () => import("../components/NegotiationRequest");
-const Insight = () => import("./insight");
-const ShareProposal = () => import("./ShareProposal");
-const ResendProposalResult = () => import("./ResendProposalResult");
+const components = {
+    Loader: () => import("@/components/Loader/Loader.vue"),
+    Modal: () => import("@/components/Modal.vue"),
+    carousel: () => import("vue-owl-carousel"),
+    ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
+    NegotiationRequest : () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
+    ProposalContent : () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
+    ProposalListItem : () => import("@/pages/app/Vendors/components/ProposalListItem.vue"),
+    EmptyRequestCard : () => import("@/pages/app/Vendors/components/EmptyRequestCard.vue"),
+    InsightDetail : () => import("@/pages/app/Vendors/components/InsightDetail.vue"),
+    TablePagination: () => import("@/components/TablePagination.vue"),
+    Insight : () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
+    ShareProposal : () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
+    ResendProposalResult : () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
+}
 
 export default {
-  components: {
-    InsightDetail,
-    ProposalRequestCard,
-    EmptyRequestCard,
-    ProposalListItem,
-    TablePagination,
-    ProposalContent,
-    NegotiationRequest,
-    carousel,
-    Loader,
-    Modal,
-    Insight,
-    ShareProposal,
-    ResendProposalResult
-  },
+  components,
   data() {
     return {
       loading: true,
@@ -337,21 +328,7 @@ export default {
       pagination: PROPOSAL_PAGE_PAGINATION,
       sortFields: { sort: "cost", order: "desc" },
       renderRender: true,
-      versionFields: [
-        'eventData',
-        'costServices',
-        'includedServices',
-        'extraServices',
-        'discounts',
-        'taxes',
-        'inspirationalPhotos',
-        'additionalServices',
-        'bundleDiscount',
-        'attachments',
-        'personalMessage',
-        'coverImage',
-        'seatingData',
-      ],
+      versionFields: PROPOSAL_VERSION_FIELDS,
     };
   },
   async mounted() {
@@ -386,7 +363,7 @@ export default {
       this.loading = false;
     },
     async selectSort(sortField) {
-      if (!sortField || sortField == "update") return;
+      if (!sortField || sortField === "update") return;
       this.loading = true;
       if (this.sortFields.sort !== sortField) {
         this.$set(this.sortFields, "sort", sortField);
@@ -399,7 +376,7 @@ export default {
     },
     async dismiss(id) {
       this.loading = true;
-      const res = await new ProposalRequest({
+      await new ProposalRequest({
         id,
         declineMessage: "decline",
       }).save();
@@ -410,7 +387,7 @@ export default {
       this.loading = false;
     },
     async handleProposal(action, id) {
-      this.selectedProposal = this.proposals.find((it) => it.id == id);
+      this.selectedProposal = this.proposals.find((it) => it.id === id);
 
       if ( action === this.proposalStatus.show ) {
 
@@ -451,7 +428,7 @@ export default {
         let eventName = this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData.customer.company :
                 this.selectedProposal.proposalRequest.eventData.title ? this.selectedProposal.proposalRequest.eventData.title : 'New event';
 
-        this.sendEmail({type: "again", proposalId: this.selectedProposal.id, url, eventName});
+        await this.sendEmail({type: "again", proposalId: this.selectedProposal.id, url, eventName});
         this.showResendProposalModal = true;
 
       } else if ( action === this.proposalStatus.cancel ) {
@@ -463,7 +440,7 @@ export default {
           data: {...this.selectedProposal, status: PROPOSAL_STATUS.INACTIVE},
           vendorId: this.selectedProposal.vendor.id,
         });
-        this.sendEmail({type: "inactive", url, proposalId: this.selectedProposal.id})
+        await this.sendEmail({type: "inactive", url, proposalId: this.selectedProposal.id})
         this.loading = false;
       }
     },
@@ -543,7 +520,7 @@ export default {
               version = await this.saveVersion(this.selectedProposal);
               this.selectedProposal.versions.push(version);
           }
-          let negotiation = await this.$store.dispatch('vendorDashboard/saveNegotiation', {
+          const negotiation = await this.$store.dispatch('vendorDashboard/saveNegotiation', {
               data: {
                   id: this.selectedProposal.negotiations[0].id,
                   status,
@@ -583,9 +560,11 @@ export default {
         let data = {};
         this.versionFields.map(key => {
             if (key === 'eventData') {
-              data.eventData = {...this.selectedProposal.eventData, ...this.selectedProposal.negotiations[0].event};
+              data[key] = {...proposal.eventData, ...proposal.negotiations[0].event};
+            } else if ( key === 'bookedServices' ) {
+              data[key] = [];
             } else {
-                data[key] = proposal[key];
+              data[key] = proposal[key];
             }
         });
 
@@ -593,7 +572,7 @@ export default {
             name: `Ver${proposal.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
             data,
         }
-        let version = await this.$store.dispatch("vendorDashboard/saveVersion", {version: versionData, proposal});
+        const version = await this.$store.dispatch("vendorDashboard/saveVersion", {version: versionData, proposal});
         return version;
     },
     editProposal(params = null, query = null){
@@ -675,7 +654,6 @@ export default {
       return this.selectedProposal.nonMaryoku
         ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
         : `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequestId}/form/edit`;
-      return `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`;
     },
     proposalRequests() {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
@@ -739,7 +717,7 @@ export default {
   },
   updated() {
     // remove empty item in proposal-request carousel
-    $(".owl-item").each(function (el) {
+    $(".owl-item").each(function () {
       if ($(this).text().length === 0) $(this).remove();
     });
   },

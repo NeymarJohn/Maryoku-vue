@@ -47,7 +47,7 @@ import HolidayInput from './HolidayInput';
 import SidebarItem from './SidebarPlugin/NewSidebarItem.vue'
 import SideBar from './SidebarPlugin/NewSideBar.vue'
 import TimeInput from './TimeInput'
-import Loader from './loader';
+import Loader from './loader/Loader';
 import TablePagination from './TablePagination'
 import PieChart  from "./Chart/PieChart.vue";
 import Calendar from './Calendar';

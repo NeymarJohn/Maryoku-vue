@@ -10,10 +10,10 @@
                     <p>Mark the services & specify if needed. Each category has more than one option so use the arrows to navigate</p>
                 </div>
 
-                <ProgressRadialBar
+                <progress-radial-bar
                     :value="Object.keys(requirements).length"
                     :total="allRequirements.length"
-                    @click="showRequirementCart = true"></ProgressRadialBar>
+                    @click="showRequirementCart = true"></progress-radial-bar>
             </div>
             <div class="md-layout md-gutter mt-60 width-70 mx-auto">
                 <div
@@ -21,7 +21,7 @@
                     v-for="(serviceGroup, groupIndex) in serviceCards[0]"
                     :key="`serviceGroup-0-${groupIndex}`"
                 >
-                    <ServiceCategoryCard
+                    <service-category-card
                         v-for="(service, serviceIndex) in serviceGroup"
                         class="mb-40"
                         :serviceCategory="service"
@@ -32,14 +32,14 @@
                         :has-budget="true"
                         @showSpecific="getSpecification"
                         @update="setServiceStyles"
-                    ></ServiceCategoryCard>
+                    ></service-category-card>
                 </div>
                 <div
                     class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
                     v-for="(serviceGroup, groupIndex) in serviceCards[1]"
                     :key="`serviceGroup-1-${groupIndex}`"
                 >
-                    <ServiceCategoryCard
+                    <service-category-card
                         v-for="(service, serviceIndex) in serviceGroup"
                         class="mb-40"
                         :serviceCategory="service"
@@ -50,7 +50,7 @@
                         :has-budget="true"
                         @showSpecific="getSpecification"
                         @update="setServiceStyles"
-                    ></ServiceCategoryCard>
+                    ></service-category-card>
                 </div>
             </div>
             <div class="width-66 mx-auto">
@@ -74,13 +74,13 @@
 
         <modal v-if="showBookedVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
             <template slot="body">
-                <VendorBooked
+                <vendor-booked
                     @show="showVendors"
                     @rate="handleRate"
                     @close="showBookedVendorModal = false" />
             </template>
         </modal>
-        <AdditionalRequestModal
+        <additional-request-modal
             class="lg"
             v-if="isOpenedAdditionalModal"
             :subCategory="subCategory"
@@ -92,7 +92,7 @@
             @save="saveAdditionalRequest"
             @cancel="isOpenedAdditionalModal = false"
             @close="isOpenedAdditionalModal = false"
-        ></AdditionalRequestModal>
+        ></additional-request-modal>
         <modal v-if="showSignupModal" container-class="modal-container offer-vendors bg-white w-max-450">
             <template slot="body">
                 <sign-in-content
@@ -116,7 +116,13 @@
     </div>
 </template>
 <script>
-
+import { Loader, Modal } from "@/components";
+import VendorBooked from "./VendorBooked";
+import { SignInContent } from "@/components";
+import ServiceCategoryCard from "../Events/PlanningBoard/components/ServiceCategoryCard";
+import ProgressRadialBar from "../Events/PlanningBoard/components/ProgressRadialBar.vue";
+import AdditionalRequestModal from "../Events/PlanningBoard/components/modals/AdditionalRequest.vue";
+import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
 import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
@@ -125,19 +131,17 @@ import { camelize } from "@/utils/string.util";
 import _ from "underscore";
 import moment from "moment";
 
-const components = {
-    Loader: () => import("@/components/Loader/Loader.vue"),
-    Modal: () => import("@/components/Modal.vue"),
-    SignInContent: () => import('@/components/SignInContent/index.vue'),
-    VendorBooked: () => import('./VendorBooked.vue'),
-    ServiceCategoryCard: () => import('@/pages/app/Events/PlanningBoard/components/ServiceCategoryCard.vue'),
-    ProgressRadialBar: () => import('@/pages/app/Events/PlanningBoard/components/ProgressRadialBar.vue'),
-    AdditionalRequestModal: () => import('@/pages/app/Events/PlanningBoard/components/modals/AdditionalRequest.vue'),
-    RequirementsCart: () => import('@/pages/app/Events/PlanningBoard/RequirementsCart.vue'),
-}
-
 export default {
-    components,
+    components: {
+        Modal,
+        Loader,
+        VendorBooked,
+        SignInContent,
+        RequirementsCart,
+        ProgressRadialBar,
+        ServiceCategoryCard,
+        AdditionalRequestModal,
+    },
     data(){
         return {
             isLoading: true,

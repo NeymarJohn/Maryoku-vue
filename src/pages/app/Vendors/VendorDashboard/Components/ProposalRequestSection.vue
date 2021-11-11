@@ -179,21 +179,19 @@
 <script>
 
 import moment from 'moment'
-import carousel from "vue-owl-carousel";
-import ProposalRequestCard from "../../components/ProposalRequestCard.vue";
-import { Modal } from "@/components";
-const NegotiationRequest = () => import("../../components/NegotiationRequest");
-const ProposalContent = () => import("../../components/ProposalDetail");
+import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
 
+const components = {
+    Modal: () => import("@/components/Modal.vue"),
+    carousel: () => import("vue-owl-carousel"),
+    ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
+    NegotiationRequest : () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
+    ProposalContent : () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
+}
+
 export default {
-  components: {
-    carousel,
-    ProposalRequestCard,
-    NegotiationRequest,
-    ProposalContent,
-    Modal
-  },
+  components,
   props:{
     field: {
       type: String,
@@ -210,21 +208,7 @@ export default {
         showRequestNegotiationModal: false,
         showProposalDetail: false,
         selectedProposal: null,
-        versionFields: [
-            'eventData',
-            'costServices',
-            'includedServices',
-            'extraServices',
-            'discounts',
-            'taxes',
-            'inspirationalPhotos',
-            'additionalServices',
-            'bundleDiscount',
-            'attachments',
-            'personalMessage',
-            'coverImage',
-            'seatingData',
-        ],
+        versionFields: PROPOSAL_VERSION_FIELDS,
         negotiationRequestStatus: {
             review: 0,
             approve: 1,
@@ -424,7 +408,9 @@ export default {
           let data = {};
           this.versionFields.map(key => {
               if (key === 'eventData') {
-                  data.eventData = {...this.selectedProposal.eventData, ...this.selectedProposal.negotiations[0].event};
+                  data[key] = {...this.selectedProposal.eventData, ...this.selectedProposal.negotiations[0].event};
+              } else if ( key === 'bookedServices') {
+                  data[key] = []
               } else {
                   data[key] = proposal[key];
               }

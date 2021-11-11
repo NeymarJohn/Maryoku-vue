@@ -140,7 +140,7 @@ import _ from "underscore";
 import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
 import eventService from "@/services/event.service";
 import axios from "axios";
-import Loader from "../../../components/loader/index";
+import Loader from "../../../components/loader/Loader";
 
 const imageIndex = new Date().getTime() % backgroundImages.length;
 const quoteIndex = new Date().getTime() % quotes.length;

@@ -149,7 +149,7 @@ import SelectableCard from "@/components/SelectableCard.vue";
 
 import { Modal } from "@/components";
 import Customer from "@/models/Customer";
-import Loader from "@/components/loader/index";
+import Loader from "@/components/loader/Loader.vue";
 const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {

@@ -1,5 +1,5 @@
 <template>
-  <modal container-class="modal-container w-max-600 bg-white no-header no-footer">
+  <modal container-class="modal-container w-max-600 bg-white">
     <template slot="body">
       <div class="text-left font-size-28 font-bold-extra pl-20">
         <img :src="`${$iconURL}common/email-dark.svg`" class="page-icon mr-10" />

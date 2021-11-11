@@ -144,7 +144,7 @@
                   <tooltip-notification
                           v-if="showPersonalMessage"
                           :about="getDescription('personal')"
-                          @copy='handleCopy($event, "personalMessage")'
+                          @copy='handleCopy($event, "personal")'
                           @cancel="showPersonalMessage = false"
                   ></tooltip-notification>
                 </div>

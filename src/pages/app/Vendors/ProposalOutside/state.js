@@ -87,8 +87,8 @@ const getters = {
     }
     let total = sumPrice - discount.price;
     const taxPrice = Math.round((total * tax.percentage) / 100);
-    const result = total + taxPrice;
-    return result;
+
+    return  total + taxPrice;
   },
   pricesByCategory(state, getters) {
     const prices = {};
@@ -208,6 +208,7 @@ const mutations = {
     state.initialized = true;
 
     state.versions = proposal.versions || []
+    state.currentVersion = proposal.selectedVersion || -1,
     // state.wizardStep = proposal.step
 
     delete proposal.versions;
@@ -256,7 +257,7 @@ const mutations = {
   },
   setAdditionalServices: (state, services) => {
     Vue.set(state.additionalServices, services);
-    setStateByVersion(state, { key: 'taxes', value: state.taxes })
+    setStateByVersion(state, { key: 'additionalServices', value: state.additionalServices })
   },
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
@@ -318,6 +319,7 @@ const actions = {
         .then(res => {
           const proposal = res[0];
           commit("setProposal", proposal);
+          if (proposal.selectedVersion && proposal.selectedVersion > -1) commit("selectVersion", proposal.selectedVersion)
         })
         .catch(e => {
           reject(e);
@@ -341,6 +343,7 @@ const actions = {
       Proposal.find(proposalId)
         .then(resp => {
           commit("setProposal", resp);
+          if (resp.selectedVersion && resp.selectedVersion > -1) commit("selectVersion", resp.selectedVersion)
           resolve(resp);
         })
         .catch(e => {
@@ -395,6 +398,7 @@ const actions = {
         bookedServices: Object.keys(state.costServices), // Set all secondary services as booked services
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
+        selectedVersion: state.currentVersion,
       });
       proposal
         .save()

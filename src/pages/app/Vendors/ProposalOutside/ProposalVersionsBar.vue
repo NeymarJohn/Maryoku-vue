@@ -31,29 +31,20 @@
 </template>
 <script>
 import moment from 'moment';
-import ClickOutside from "vue-click-outside";
+import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
+
+const components = {
+    ClickOutside: () => import("vue-click-outside")
+}
+
 export default {
   name: "proposal-versions-bar",
-  components: { ClickOutside },
+  components,
   props: {
   },
   data() {
     return {
-        versionFields: [
-            'eventData',
-            'costServices',
-            'includedServices',
-            'extraServices',
-            'discounts',
-            'taxes',
-            'inspirationalPhotos',
-            'additionalServices',
-            'bundleDiscount',
-            'attachments',
-            'personalMessage',
-            'coverImage',
-            'seatingData',
-        ],
+        versionFields: PROPOSAL_VERSION_FIELDS,
         editIdx: null,
         versionName: null,
     };
@@ -66,7 +57,11 @@ export default {
     saveVersion(){
       let data = {};
       this.versionFields.map(key => {
-          data[key] = this.$store.state.proposalForNonMaryoku.original[key];
+          if ( key === 'bookedServices' ) {
+              data[key] = [];
+          } else {
+              data[key] = this.$store.state.proposalForNonMaryoku.original[key];
+          }
       });
 
       let version = {
