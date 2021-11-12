@@ -16,7 +16,7 @@
 <script>
 import { ZoomCenterTransition } from "vue2-transitions";
 import SideBar from "@/components/SidebarPlugin/VendorSideBar";
-import Loader from "@/components/loader";
+import Loader from "@/components/loader/Loader.vue";
 import { mapState } from "vuex";
 import state from "./VendorDashboard/state";
 

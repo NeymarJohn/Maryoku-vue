@@ -197,7 +197,7 @@ export default {
     };
   },
   async created() {
-    console.log("non-maryokuProposal.created", this.loggedInUser);
+
     let tenantUser = null;
     if (this.loggedInUser) {
       tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
@@ -205,8 +205,11 @@ export default {
     const givenToken = this.$route.query.token;
 
     const proposalId = this.$route.params.proposalId;
-    this.proposal = await Proposal.find(proposalId);
     await this.$store.dispatch("common/getEventTypes");
+    this.proposal = await Proposal.find(proposalId);
+
+    if (this.proposal.selectedVersion > -1)
+      this.proposal = this.getUpdatedProposal(this.proposal, this.proposal.versions[this.proposal.selectedVersion].data);
 
     if (!this.proposal.inspirationalPhotos) this.proposal.inspirationalPhotos = [];
     if (!this.proposal.bundleDiscount.services) this.proposal.bundleDiscount.services = [];
@@ -538,6 +541,12 @@ export default {
 
       this.showRemindingTimeModal = false;
     },
+    getUpdatedProposal(proposal, data) {
+      Object.keys(data).map(key => {
+        this.$set(proposal, key, data[key]);
+      });
+      return proposal
+    }
   },
   computed: {
     loggedInUser() {

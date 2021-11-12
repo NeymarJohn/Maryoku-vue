@@ -214,10 +214,11 @@ const mutations = {
     state.bundleDiscount = proposal.bundleDiscount;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
-    state.wizardStep = proposal.step
-    state.coverImage = proposal.coverImage || []
-    state.versions = proposal.versions || []
-    state.bookedServices = proposal.bookedServices
+    state.wizardStep = proposal.step;
+    state.coverImage = proposal.coverImage || [];
+    state.versions = proposal.versions || [];
+    state.bookedServices = proposal.bookedServices;
+    state.currentVersion = proposal.selectedVersion || -1;
 
     delete proposal.versions;
     Vue.set(state, 'original', proposal);
@@ -335,6 +336,7 @@ const actions = {
           .then(res => {
             const proposal = res[0];
             commit("setProposal", proposal);
+            if (proposal.selectedVersion && proposal.selectedVersion > -1) commit("selectVersion", proposal.selectedVersion)
           })
           .catch(e => {
             reject(e);
@@ -386,6 +388,7 @@ const actions = {
         dispatch("getTimelineDates", resp.eventData.id);
         if (resp.proposal) {
           commit("setProposal", resp.proposal);
+          if (resp.proposal.selectedVersion && resp.proposal.selectedVersion > -1) commit("selectVersion", proposal.selectedVersion)
         }
         resolve(resp);
       });
@@ -443,6 +446,7 @@ const actions = {
         bookedServices: state.bookedServices.length ? state.bookedServices : [state.vendor.eventCategory.key],
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
+        selectedVersion: state.currentVersion,
       });
       proposal
           .save()

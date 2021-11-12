@@ -77,9 +77,17 @@
                 v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
                 :key="item.item"
                 class="md-layout-item md-size-33">
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
+                <div class="d-flex align-center">
+                    <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                        <span class="text-transform-capitalize">{{ item.item }}</span>
+                    </md-checkbox>
+                    <maryoku-input
+                        v-if="item.qtyEnabled"
+                        placeholder="QTY"
+                        class="w-max-80 ml-auto"
+                        v-model="item.defaultQty">
+                    </maryoku-input>
+                </div>
             </div>
             <div v-if="subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)">
                 <div
@@ -285,6 +293,7 @@ export default {
       this.specialTags = [];
     }
     console.log('additionalRequests.created', this.specialTags);
+    console.log('additionalRequests.created', this.subCategorySections);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
