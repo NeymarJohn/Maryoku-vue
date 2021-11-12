@@ -8,16 +8,16 @@
         {{ proposal.vendor.companyName }}
       </div>
       <div>
-        <header-actions
+        <HeaderActions
           page="proposal"
           @toggleCommentMode="toggleCommentMode"
           @share="shareWithAuth"
           @export="downProposal"
-        ></header-actions>
+        ></HeaderActions>
       </div>
     </div>
     <div class="proposal-content mt-40">
-      <event-proposal-details
+      <EventProposalDetails
         :vendorProposal="proposal"
         :landingPage="true"
         :nonMaryoku="true"
@@ -25,7 +25,7 @@
         @updateProposal="handleUpdate"
         @ask="handleAsk"
         @favorite="handleFavorite"
-      ></event-proposal-details>
+      ></EventProposalDetails>
     </div>
     <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
     <div class="proposal-footer d-flex justify-content-between align-center">
@@ -64,7 +64,7 @@
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
-    <comment-editor-panel
+    <CommentEditorPanel
       v-if="showCommentEditorPanel"
       :commentComponents="commentComponents"
       @saveComment="saveCommentWithAuth"
@@ -72,7 +72,7 @@
       @deleteComment="deleteCommentWithAuth"
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
-    </comment-editor-panel>
+    </CommentEditorPanel>
     <modal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal">
       <template slot="header">
         <div class="add-category-model__header">
@@ -110,15 +110,15 @@
     </modal>
     <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
       <template slot="body">
-        <vendor-declined
+        <VendorDeclined
                 @rate="handleRate"
                 @close="showDeclineVendorModal=false"
         >
-        </vendor-declined>
+        </VendorDeclined>
       </template>
     </modal>
 
-    <guest-sign-up-modal
+    <GuestSignUpModal
       v-if="showGuestSignupModal"
       :onlyAuth="onlyAuth"
       @signIn="signIn"
@@ -127,18 +127,18 @@
       @authenticate="auth"
       @cancel="showGuestSignupModal = false"
     >
-    </guest-sign-up-modal>
-    <reminding-time-modal
+    </GuestSignUpModal>
+    <RemindingTimeModal
       v-if="showRemindingTimeModal"
       @close="showRemindingTimeModal = false"
       @save="saveRemindingTime"
-    ></reminding-time-modal>
-    <negotiation-request-modal
+    ></RemindingTimeModal>
+    <NegotiationRequestModal
       v-if="showNegotiationRequestModal"
       :proposal="proposal"
       @close="showNegotiationRequestModal = false"
       @save="sendNegotiationRequest"
-    ></negotiation-request-modal>
+    ></NegotiationRequestModal>
   </div>
 </template>
 <script>
@@ -147,39 +147,29 @@ import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import Reminder from "@/models/Reminder";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import ProposalRequest from "@/models/ProposalRequest";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { Loader, SignInContent, Modal } from "@/components";
-import GuestSignUpModal from "@/components/Modals/VendorProposal/GuestSignUpModal.vue";
-import RemindingTimeModal from "@/components/Modals/VendorProposal/RemindingTimeModal.vue";
-import NegotiationRequestModal from "@/components/Modals/VendorProposal/NegotiationRequestModal.vue";
-import HeaderActions from "@/components/HeaderActions.vue";
-import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
 import { CommentMixins, ShareMixins } from "@/mixins";
-import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
-import EventDetail from "./components/EventDetail.vue";
-import VendorDeclined from "./components/VendorDeclined";
 import { mapActions, mapMutations } from "vuex";
 import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 
-export default {
-  components: {
-    EventProposalDetails,
-    CommentEditorPanel,
-    GuestSignUpModal,
-    PlannerHeader,
-    HeaderActions,
-    Loader,
-    Modal,
-    EventDetail,
-    SignInContent,
-    VendorDeclined,
-    RemindingTimeModal,
-    NegotiationRequestModal,
+const components = {
+    EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
+    CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
+    GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
+    HeaderActions: () => import('@/components/HeaderActions.vue'),
+    EventDetail: () => import('./components/EventDetail.vue'),
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Modal: () => import('@/components/Modal.vue'),
+    SignInContent: () => import('@/components/SigninContent/index.vue'),
+    VendorDeclined: () => import('./components/VendorDeclined.vue'),
+    RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
+    NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
+}
 
-  },
+export default {
+  components,
   mixins: [CommentMixins, ShareMixins],
   data() {
     return {
