@@ -81,7 +81,7 @@ import { SignupCard, MaryokuInput, Modal } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
 import VueElementLoading from "vue-element-loading";
 import TenantUser from "@/models/TenantUser";
-import Loader from "@/components/loader/Loader.vue";
+import Loader from "@/components/loader/index";
 
 export default {
   name: "SignIn",

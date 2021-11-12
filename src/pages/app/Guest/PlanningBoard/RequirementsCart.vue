@@ -65,7 +65,7 @@ import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-ac
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import RequirementTagItem from "./components/RequirementTagItem.vue";
-import { serviceCards } from "@/constants/event.js";
+import { ServiceCards } from "@/constants/event.js";
 import _ from "underscore";
 
 export default {
@@ -100,7 +100,7 @@ export default {
         { heading: "Photography", content: "ASFASDFAs" },
       ],
       subCategorySections: [],
-      serviceCards: serviceCards,
+      serviceCards: ServiceCards,
     };
   },
   created() {

@@ -222,7 +222,7 @@ export const serviceCategoryImages = {
     "other": [],
 }
 
-export const serviceCards = [
+export const ServiceCards = [
     [
         [
             {

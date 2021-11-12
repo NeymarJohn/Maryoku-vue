@@ -28,13 +28,13 @@
     </div>
 </template>
 <script>
-import { Loader, Modal } from "@/components";
+const components = {
+    Loader: () => import("@/components/Loader"),
+    Modal: () => import("@/components/Modal.vue"),
+}
 
 export default {
-    components: {
-        Loader,
-        Modal
-    },
+    components,
     data(){
         return {
             score: 0,

@@ -247,7 +247,7 @@
   import { mapActions } from "vuex";
   import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
   import moment from "moment"
-  import Loader from "@/components/loader/Loader.vue";
+  import Loader from "@/components/loader/index";
 
   // checkout page type
   const VENDOR = 0;

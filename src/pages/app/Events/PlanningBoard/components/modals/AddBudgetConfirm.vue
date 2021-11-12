@@ -28,16 +28,17 @@
   </modal>
 </template>
 <script>
-import { Modal } from "@/components";
-import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
+
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
 
+const components = {
+    Modal: () => import("@/components/Modal.vue"),
+    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue")
+}
+
 export default {
-  components: {
-    Modal,
-    MaryokuInput,
-  },
+  components,
   props: {
     serviceCategory: {
       type: Object,

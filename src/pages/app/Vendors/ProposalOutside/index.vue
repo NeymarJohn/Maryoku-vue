@@ -51,7 +51,7 @@ import S3Service from "@/services/s3.service";
 import ProposalWizardStep0 from "./ProposalWizardStep0";
 import ProposalWizardStep2 from "./ProposalWizardStep2";
 import ProposalWizardStep3 from "./ProposalWizardStep3";
-import Loader from "@/components/loader/Loader.vue";
+import Loader from "@/components/loader/index";
 export default {
   components: {
     Loader,

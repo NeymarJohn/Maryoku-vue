@@ -39,7 +39,7 @@ const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
 const EventBudgetRequirement = () => import("@/pages/app/Events/components/EventBudgetRequirement.vue");
 const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 const PlanningBoard = () => import("@/pages/app/Events/PlanningBoard/PlanningBoardLayout.vue");
-const GuestPlanningBoard = () => import("@/pages/app/Guest/PlanningBoard");
+const GuestPlanningBoard = () => import("@/pages/app/Guest/PlanningBoard/index.vue");
 const ChooseVendor = () => import("@/pages/app/Events/ChooseVendor");
 const ChooseGuestVendor = () => import("@/pages/app/Guest/ChooseVendor");
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");

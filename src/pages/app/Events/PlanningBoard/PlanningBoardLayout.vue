@@ -112,7 +112,7 @@
 </template>
 <script>
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
-import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
+import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
@@ -142,7 +142,7 @@ export default {
       showCart: false,
       allRequirements: null,
       subCategory: null,
-      serviceCards: serviceCards,
+      serviceCards: ServiceCards,
       isOpenedAdditionalModal: false,
       isOpenedFinalModal: false,
       selectedCategory: null,

@@ -74,12 +74,8 @@
   </div>
 </template>
 <script>
-
+import TimelineEmpty from "../../Events/components/TimelineEmpty";
 import {PROPOSAL_STATUS} from "@/constants/status";
-
-const components = {
-    TimelineEmpty: () => import("@/pages/app/Events/components/TimelineEmpty.vue")
-}
 export default {
   components: { TimelineEmpty },
   props: {

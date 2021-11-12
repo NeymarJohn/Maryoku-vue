@@ -1,6 +1,6 @@
 <template>
   <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
-    <template v-if="!isSentRequest || selectedServices.length === 0">
+    <template v-if="!booked && (!isSentRequest || !selectedServices.length)">
       <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
         <template slot="prev">
           <span class="prev handle-btn">
@@ -82,48 +82,51 @@
         </template>
       </div>
     </template>
+
     <div class="issued-card flex-1 d-flex" v-else>
       <div class="flex-1 icon-section d-flex align-center flex-column justify-content-center">
         <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`" />
         <div class="service-name color-red font-size-20 font-bold">{{ serviceCategory.name }}</div>
       </div>
       <div class="p-20 font-bold d-flex align-center justify-content-center card-info">
-        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn md-simple" @click="getSpecification">
+        <div v-if="booked" class="d-flex align-center justify-content-center color-red">
+            Already booked
+        </div>
+        <md-button v-if="selectedServices.length > 0" class="md-red maryoku-btn md-simple" @click="getSpecification">
           Change specifications
         </md-button>
       </div>
     </div>
-    <add-budget-modal
+    <AddBudgetModal
       v-if="showAddNewCategory"
       :serviceCategory="serviceCategory"
       @cancel="showAddNewCategory = false"
       @save="saveBudget"
-    ></add-budget-modal>
-    <add-budget-confirm-modal
+    ></AddBudgetModal>
+    <AddBudgetConfirmModal
       v-if="showAddBudgetConfirm"
       :serviceCategory="serviceCategory"
       @cancel="showAddBudgetConfirm = false"
       @addNewBudget="addBudget"
     >
-    </add-budget-confirm-modal>
+    </AddBudgetConfirmModal>
   </div>
 </template>
 <script>
-import carousel from "vue-owl-carousel";
-import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
-import MusicPlayer from "./MusicPlayer.vue";
 import { camelize } from "@/utils/string.util";
-import AddBudgetModal from "./modals/AddBudget.vue";
-import AddBudgetConfirmModal from "./modals/AddBudgetConfirm";
+
+
+const components = {
+    carousel: () => import("vue-owl-carousel"),
+    Popper: () => import("vue-popperjs"),
+    MusicPlayer: () => import("./MusicPlayer.vue"),
+    AddBudgetModal: () => import("./modals/AddBudget.vue"),
+    AddBudgetConfirmModal: () => import("./modals/AddBudgetConfirm.vue")
+}
+
 export default {
-  components: {
-    carousel,
-    Popper,
-    MusicPlayer,
-    AddBudgetModal,
-    AddBudgetConfirmModal,
-  },
+  components,
   data() {
     return {
       showAddNewCategory: false,
@@ -155,6 +158,10 @@ export default {
       default: () => {},
     },
     isLong: {
+      type: Boolean,
+      default: false,
+    },
+    booked: {
       type: Boolean,
       default: false,
     },

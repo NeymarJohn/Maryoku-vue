@@ -156,7 +156,7 @@ import moment from "moment";
 import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
-import Loader from "@/components/loader/Loader.vue";
+import Loader from "@/components/loader/index";
 
 export default {
   components: {
