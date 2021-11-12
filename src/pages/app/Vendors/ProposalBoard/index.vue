@@ -269,7 +269,7 @@ import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 
 const components = {
-    Loader: () => import("@/components/Loader/Loader.vue"),
+    Loader: () => import("@/components/loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
     carousel: () => import("vue-owl-carousel"),
     ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),

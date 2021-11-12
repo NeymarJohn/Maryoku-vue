@@ -31,7 +31,7 @@
 </template>
 <script>
 const components = {
-    Loader: () => import("@/components/Loader"),
+    Loader: () => import("@/components/Loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
 }
 

@@ -44,7 +44,7 @@
 <script>
 
 const components = {
-    Loader: () => import("@/components/Loader"),
+    Loader: () => import("@/components/loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
 }
 

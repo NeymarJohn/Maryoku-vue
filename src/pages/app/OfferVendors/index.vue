@@ -109,7 +109,7 @@ import _ from "underscore";
 import moment from "moment";
 
 const components = {
-    // Loader: () => import("@/components/Loader/Loader.vue"),
+    Loader: () => import("@/components/Loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
     VendorBooked: () => import('./VendorBooked.vue'),
