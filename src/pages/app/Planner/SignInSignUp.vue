@@ -85,7 +85,7 @@ export default {
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(
-              `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'userType=planner&token'}`,
+              `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'userType=planner&token='}`,
       );
 
       if (action) {

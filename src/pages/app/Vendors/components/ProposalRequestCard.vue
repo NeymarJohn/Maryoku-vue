@@ -81,7 +81,7 @@ const components = {
     TimelineEmpty: () => import("@/pages/app/Events/components/TimelineEmpty.vue")
 }
 export default {
-  components: { TimelineEmpty },
+  components,
   props: {
     proposalRequest: {
       type: Object,

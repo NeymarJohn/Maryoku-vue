@@ -13,7 +13,6 @@
       :number="2"
       :nav="false"
       class="proposal-requests"
-      v-if="renderRender"
     >
       <template slot="prev">
         <button class="nav-left nav-btn">
@@ -261,6 +260,9 @@
 <script>
 import moment from 'moment'
 import _ from "underscore";
+import carousel from "vue-owl-carousel"
+import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
+import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
 import ProposalRequest from "@/models/ProposalRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
@@ -272,11 +274,11 @@ const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
     carousel: () => import("vue-owl-carousel"),
-    ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
+    // ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
     NegotiationRequest : () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
     ProposalContent : () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
     ProposalListItem : () => import("@/pages/app/Vendors/components/ProposalListItem.vue"),
-    EmptyRequestCard : () => import("@/pages/app/Vendors/components/EmptyRequestCard.vue"),
+    // EmptyRequestCard : () => import("@/pages/app/Vendors/components/EmptyRequestCard.vue"),
     InsightDetail : () => import("@/pages/app/Vendors/components/InsightDetail.vue"),
     TablePagination: () => import("@/components/TablePagination.vue"),
     Insight : () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
@@ -285,7 +287,7 @@ const components = {
 }
 
 export default {
-  components,
+  components: {...components, ProposalRequestCard, EmptyRequestCard},
   data() {
     return {
       loading: true,
@@ -298,7 +300,6 @@ export default {
       selectedProposal: null,
       selectedEventData: null,
       selectedProposalRequest: null,
-
       showRequestNegotiationModal: false,
       showResendProposalModal: false,
       showInsightModal: false,
@@ -327,7 +328,6 @@ export default {
       socialMediaBlocks,
       pagination: PROPOSAL_PAGE_PAGINATION,
       sortFields: { sort: "cost", order: "desc" },
-      renderRender: true,
       versionFields: PROPOSAL_VERSION_FIELDS,
     };
   },
