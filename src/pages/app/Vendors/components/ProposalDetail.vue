@@ -159,20 +159,20 @@
         <span class="font-regular font-size-16">*We work only with our catering</span>
       </div>
       <div class="px-40 mt-20 mb-10">What would you like to take from our suggested services?</div>
-      <EventProposalPrice
+      <event-proposal-price
         :proposalData="vendorProposal"
         :serviceCategory="vendorProposal.vendor.vendorCategory"
         :key="`${vendorProposal.vendor.vendorCategory}-section`"
         @changeAddedServices="updateAddedServices"
         :mandatory="true"
-      ></EventProposalPrice>
-      <EventProposalPrice
+      ></event-proposal-price>
+      <event-proposal-price
         v-for="service in this.vendorProposal.additionalServices"
         :proposalData="vendorProposal"
         :serviceCategory="service"
         :key="`secondary-${service}-section`"
         :mandatory="true"
-      ></EventProposalPrice>
+      ></event-proposal-price>
       <div
         class="bundle-section d-flex justify-content-between align-center"
         v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
@@ -292,8 +292,14 @@
           <div class="desc">30 days before the event</div>
         </div>
 
-        <CancellationPolicy></CancellationPolicy>
+        <cancellation-policy></cancellation-policy>
 
+        <!-- <div class="additional-info">
+                  <div class="additional-info__title">Additional</div>
+                  <div class="additional-info__content">
+                    {{ vendorProposal.candellationPolicy }}
+                  </div>
+                </div> -->
         <div class="side-label">
           <div class="label-value">Act of God</div>
         </div>
@@ -324,15 +330,16 @@ import moment from "moment";
 import { socialMediaBlocks } from "@/constants/vendor";
 import { GuaranteedOptions } from "@/constants/options";
 import _ from "underscore";
-
-const components = {
-    carousel: () => import('vue-owl-carousel'),
-    EventProposalPrice: () => import("../../Events/Proposal/EventProposalPrice.vue"),
-    CancellationPolicy: () => import("@/components/CancellationPolicy.vue")
-}
+import EventProposalPrice from "../../Events/Proposal/EventProposalPrice.vue";
+import carousel from "vue-owl-carousel";
+import CancellationPolicy from "@/components/CancellationPolicy";
 
 export default {
-  components,
+  components: {
+    carousel,
+    EventProposalPrice,
+    CancellationPolicy,
+  },
   props: {
     vendorProposal: {
       type: Object,

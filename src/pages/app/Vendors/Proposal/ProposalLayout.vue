@@ -20,13 +20,13 @@
         <div class="next-cont">
           <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-          <a class="save" @click="calculateStage(proposalStatus.DRAFT)">
+          <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
             <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
           </a>
           <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
             Next
           </a>
-          <a class="next active" @click="calculateStage(option)" v-else :disabled="isUpdating">Submit Proposal</a>
+          <a class="next active" @click="uploadProposal(option)" v-else :disabled="isUpdating">Submit Proposal</a>
         </div>
       </section>
 
@@ -58,7 +58,7 @@
         <template slot="body">
             <missing-detail
                 :data="missingDetail"
-                @send="uploadProposal(proposalStatus.PENDING)"
+                @send="showMissingModal = false"
                 @close="showMissingModal = false"
             ></missing-detail>
         </template>
@@ -244,57 +244,46 @@ export default {
       this.submittedModal = false;
       this.openedModal = "";
     },
-
-      async calculateStage(type) {
-          this.missingDetail = [];
-          const vendorProposal = this.$store.state.vendorProposal;
-
-          let progress = 0;
-          if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
-              progress += 10;
-          } else {
-              this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
-          }
-          if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
-              progress += 30;
-          } else {
-              this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
-          }
-
-          if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
-              progress += 20;
-          } else {
-              this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
-          }
-          if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
-              progress += 20;
-          } else {
-              this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
-          }
-
-          if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
-              progress += 20;
-          } else {
-              this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
-          }
-
-          // check missing when submit the proposal
-          if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
-              this.showMissingModal = true;
-              return;
-          }
-
-          this.$store.commit("vendorProposal/setProgress", progress);
-          await this.uploadProposal(type)
-    },
-
     async uploadProposal(type) {
       this.$root.$emit("clear-slide-pos");
       this.scrollToTop();
-
-      this.showMissingModal = false;
-
       const vendorProposal = this.$store.state.vendorProposal;
+
+      let progress = 0;
+        // calculate the progress of the proposal
+      if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
+        progress += 10;
+      } else {
+        this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+      if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
+        progress += 30;
+      } else {
+         this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+
+      if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
+        progress += 20;
+      } else {
+        this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+      if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
+        progress += 20;
+      } else {
+        this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+
+      if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
+        progress += 20;
+      } else {
+        this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+      }
+
+      // check missing when submit the proposal
+      if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
+          this.showMissingModal = true;
+          return;
+      }
 
       let coverImageUrl = "";
       this.isUpdating = true;
@@ -305,6 +294,8 @@ export default {
         );
         coverImageUrl = await S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
       }
+
+      this.$store.commit("vendorProposal/setProgress", progress);
 
       if (!this.isLoading) {
         this.isLoading = true;

@@ -86,7 +86,8 @@
 </template>
 
 <script>
-import moment from "moment";
+
+import StateTax from "@/models/StateTax";
 import { businessCategories, categoryNameWithIcons } from "@/constants/vendor";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
@@ -127,16 +128,18 @@ export default {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
+      taxes: [],
       iconsWithCategory: null,
       isLoading: false,
       markedDates: [],
     };
   },
   created() {},
-  mounted() {
+  async mounted() {
     this.services = Object.assign([], businessCategories);
+    this.taxes = await StateTax.get();
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-    this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process
     this.$root.$on("update-inspirational-photo", async ({ file, index, link, url }) => {

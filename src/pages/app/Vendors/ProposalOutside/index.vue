@@ -25,6 +25,7 @@
           :isEdit="true"
           :step="step"
           :services="services"
+          :taxes="taxes"
           v-if="step >= 1"
         />
       </div>
@@ -35,6 +36,7 @@
 <script>
 import { businessCategories, categoryNameWithIcons } from "@/constants/vendor";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import StateTax from "@/models/StateTax";
 
 //COMPONENTS
 import ProposalBudgetSummary from "./ProposalBudgetSummary.vue";
@@ -74,16 +76,18 @@ export default {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
+      taxes: [],
       iconsWithCategory: null,
       isLoading: false,
       markedDates: [],
     };
   },
   created() {},
-  mounted() {
+  async mounted() {
     this.services = Object.assign([], businessCategories);
+    this.taxes = await StateTax.get();
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-    this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process
       this.$root.$on("update-inspirational-photo", async ({ file, index, link}) => {
@@ -152,6 +156,9 @@ export default {
       return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
     },
   },
+  watch: {
+      taxes(newVal){console.log('taxes', newVal)}
+  }
 };
 </script>
 <style lang="scss" scoped>

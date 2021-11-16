@@ -182,17 +182,16 @@ import moment from 'moment'
 import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
 
-import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
-
 const components = {
     Modal: () => import("@/components/Modal.vue"),
     carousel: () => import("vue-owl-carousel"),
+    ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
     NegotiationRequest : () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
     ProposalContent : () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
 }
 
 export default {
-  components: {...components, ProposalRequestCard},
+  components,
   props:{
     field: {
       type: String,
