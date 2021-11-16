@@ -29,6 +29,9 @@
 </template>
 <script>
 
+import EventComponent from "@/models/EventComponent";
+import CalendarEvent from "@/models/CalendarEvent";
+
 const components = {
     Modal: () => import("@/components/Modal.vue"),
     MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue")

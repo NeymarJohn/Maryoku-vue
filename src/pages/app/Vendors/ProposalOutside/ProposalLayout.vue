@@ -19,13 +19,13 @@
       </div>
       <div class="next-cont">
         <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-        <a class="save" @click="uploadProposal(proposalStatus.DRAFT)">
+        <a class="save" @click="calculateStage(proposalStatus.DRAFT)">
           <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
         </a>
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
           Next
         </a>
-        <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
+        <a class="next active" @click="calculateStage(proposalStatus.PENDING)" v-else :disabled="isUpdating">Submit Proposal</a>
       </div>
     </section>
 
@@ -83,7 +83,7 @@
       <template slot="body">
           <missing-detail
               :data="missingDetail"
-              @send="showMissingModal = false"
+              @send="uploadProposal(proposalStatus.PENDING)"
               @close="showMissingModal = false"
           ></missing-detail>
       </template>
@@ -137,7 +137,6 @@ export default {
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       selectedServices: [],
-      submittedModal: false,
       isTimeUp: false,
       proposalRequestRequirements: [],
       proposals: [],
@@ -171,7 +170,6 @@ export default {
     }
 
     this.fullDetailsModal = false;
-    this.submittedModal = false;
     this.isTimeUp = false;
 
     await this.getVendor(this.$route.params.vendorId);
@@ -212,91 +210,95 @@ export default {
     },
     hideModal() {
       this.fullDetailsModal = false;
-      this.submittedModal = false;
+      this.showSubmittedProposalModal = false;
       this.openedModal = "";
     },
-    uploadProposal(type) {
-      return new Promise((resolve, reject) => {
-        this.$root.$emit("clear-slide-pos");
-        this.scrollToTop();
+
+    async calculateStage(type) {
         this.missingDetail = [];
         const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
 
         let progress = 0;
         if (proposalForNonMaryoku.hasOwnProperty('eventVision') && proposalForNonMaryoku.eventVision) {
-              progress += 10;
+            progress += 10;
         } else {
-              this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
         }
         if (proposalForNonMaryoku.costServices[this.vendor.vendorCategory] && proposalForNonMaryoku.costServices[this.vendor.vendorCategory].length) {
-              progress += 30;
+            progress += 30;
         } else {
-              this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
         }
 
         if (proposalForNonMaryoku.includedServices[this.vendor.vendorCategory] && proposalForNonMaryoku.includedServices[this.vendor.vendorCategory].length) {
-              progress += 20;
+            progress += 20;
         } else {
-              this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
         }
         if (proposalForNonMaryoku.extraServices[this.vendor.vendorCategory] && proposalForNonMaryoku.extraServices[this.vendor.vendorCategory].length) {
-              progress += 20;
+            progress += 20;
         } else {
-              this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
         }
 
         if (proposalForNonMaryoku.inspirationalPhotos.some(p => !!p)) {
-              progress += 20;
+            progress += 20;
         } else {
-              this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
         }
 
         // check missing when submit the proposal
         if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
-              this.showMissingModal = true;
-              return;
+            this.showMissingModal = true;
+            return;
         }
+
+        await this.uploadProposal(type)
+    },
+
+    async uploadProposal(type) {
+        this.$root.$emit("clear-slide-pos");
+        this.scrollToTop();
+
+        this.showMissingModal = false;
+        const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
 
         let coverImageUrl = "";
         this.isUpdating = true;
         if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
-          const fileObject = S3Service.dataURLtoFile(
-            proposalForNonMaryoku.coverImage,
-            `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-          );
-          const extenstion = fileObject.type.split("/")[1];
-          S3Service.fileUpload(
-            fileObject,
-            `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-            "proposals/cover-images",
-          );
-          coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${proposalForNonMaryoku.vendor.id}.${extenstion}`;
+            const fileObject = S3Service.dataURLtoFile(
+                proposalForNonMaryoku.coverImage,
+                `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+            );
+            const extenstion = fileObject.type.split("/")[1];
+            await S3Service.fileUpload(
+                fileObject,
+                `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+                "proposals/cover-images",
+            );
+            coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${proposalForNonMaryoku.vendor.id}.${extenstion}`;
         }
         if (!this.isLoading) {
-          this.isLoading = true;
-          this.saveVendor(this.vendor);
-          this.saveProposal(type)
-            .then((proposal) => {
-              this.isUpdating = false;
-              this.isLoading = false;
-              if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
-              else {
-                Swal.fire({
-                  title: `You saved the current proposal. You can edit anytime later!`,
-                  buttonsStyling: false,
-                  type: "success",
-                  confirmButtonClass: "md-button md-vendor",
+            this.isLoading = true;
+            await this.saveVendor(this.vendor);
+            const proposal = this.saveProposal(type);
+
+            this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+
+            this.isUpdating = false;
+            this.isLoading = false;
+            if (type === PROPOSAL_STATUS.PENDING) this.showSubmittedProposalModal = true;
+            else {
+                await Swal.fire({
+                    title: `You saved the current proposal. You can edit anytime later!`,
+                    buttonsStyling: false,
+                    type: "success",
+                    confirmButtonClass: "md-button md-vendor",
                 });
-              }
-              resolve(proposal);
-              this.isLoading = false;
-            })
-            .catch((e) => {
-              console.error(e);
-              this.isLoading = false;
-            });
+            }
+
+
         }
-      });
     },
 
     createEvent() {

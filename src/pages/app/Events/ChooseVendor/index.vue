@@ -5,7 +5,7 @@
       <loader :active="isLoadingProposal" />
       <div class="d-flex justify-content-between align-center">
         <div>
-          <ResizableToggleButton
+          <resizable-toggle-button
             class="mr-20 mb-10"
             :key="component.componentId"
             :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
@@ -17,15 +17,15 @@
             iconStyle="opacity:0.8"
             v-for="component in categories"
             @click="selectCategory(component)"
-          ></ResizableToggleButton>
+          ></resizable-toggle-button>
           <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
         </div>
-        <ProgressRadialBar
+        <progress-radial-bar
           :value="proposals.length"
           :total="3"
           icon="common/checked-calendar-red.svg"
           @click="openCart"
-        ></ProgressRadialBar>
+        ></progress-radial-bar>
       </div>
       <div class="booking-proposals">
         <template v-if="proposals.length > 0">
@@ -50,7 +50,7 @@
           <div>
             <!-- Event Booking Items -->
             <div class="events-booking-items" v-if="proposals.length">
-              <ProposalCard
+              <proposal-card
                 @goDetail="goDetailPage"
                 v-for="(proposal, index) in proposals.slice(0, 3)"
                 :key="index"
@@ -60,11 +60,11 @@
                 :isCollapsed="showDetails"
                 :isSelected="selectedProposal && selectedProposal.id === proposal.id"
               >
-              </ProposalCard>
+              </proposal-card>
             </div>
             <template v-if="showDetails">
               <transition name="component-fade" mode="out-in">
-                <EventProposalDetails
+                <event-proposal-details
                   class="mt-20"
                   :vendorProposal="selectedProposal"
                   :category="selectedCategory"
@@ -72,12 +72,12 @@
                   @favorite="favoriteProposal"
                   @close="closeProposal"
                   @ask="handleAsk"
-                ></EventProposalDetails>
+                ></event-proposal-details>
               </transition>
             </template>
           </div>
         </template>
-        <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
+        <pending-for-vendors v-else :expiredTime="expiredTime"></pending-for-vendors>
       </div>
     </div>
     <div class="proposals-footer white-card">
@@ -105,11 +105,11 @@
                    @click="addToCart">Add To Cart</md-button>
       </div>
     </div>
-    <ServicesCart
+    <services-cart
         v-if="showCart"
         @close="showCart = false"
-    ></ServicesCart>
-    <AdditionalRequestModal
+    ></services-cart>
+    <additional-request-modal
       class="lg"
       v-if="isOpenedAdditionalModal"
       :subCategory="currentRequirement.mainRequirements"
@@ -118,46 +118,61 @@
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
-    ></AdditionalRequestModal>
-    <EventChangeProposalModal
+    ></additional-request-modal>
+    <event-change-proposal-modal
       v-if="showDifferentProposals"
       @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
-    ></EventChangeProposalModal>
+    ></event-change-proposal-modal>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import moment from "moment";
-import { getReq } from "@/utils/token";
+import InputMask from "vue-input-mask";
+
+import { postReq, getReq } from "@/utils/token";
 
 import Proposal from "@/models/Proposal";
 import EventComponent from "@/models/EventComponent";
+import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
+import { Modal, MaryokuInput, Loader } from "@/components";
+import {NEGOTIATION_REQUEST_STATUS} from "@/constants/status";
+import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
+import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
+import ProposalCard from "../components/ProposalCard";
+import PendingForVendors from "../components/PendingForVendors.vue";
+import EventProposalDetails from "../Proposal/EventProposalDetails.vue";
+import ProposalsBar from "./ProposalsBar.vue";
+import AdditionalRequestModal from "../PlanningBoard/components/modals/AdditionalRequest.vue";
 
-const components = {
-    Loader: () => import("@/components/loader/Loader.vue"),
-    Modal: () => import("@/components/Modal.vue"),
-    InputMask: () => import("vue-input-mask"),
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    ServicesCart: () => import("./ServicesCart.vue"),
-    ProposalsBar: () => import("./ProposalsBar.vue"),
-    ProposalCard: () => import("../components/ProposalCard"),
-    ProgressRadialBar: () => import("../PlanningBoard/components/ProgressRadialBar.vue"),
-    PendingForVendors: () => import("../components/PendingForVendors.vue"),
-    EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
-    AdditionalRequestModal: () => import("../PlanningBoard/components/modals/AdditionalRequest.vue"),
-    ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
-    NegotiationNotification: () => import("./components/NegotiationNotification"),
-    EventChangeProposalModal: () => import("@/components/Modals/EventChangeProposalModal"),
-}
+import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
+import ServicesCart from "./ServicesCart";
+import NegotiationNotification from "./components/NegotiationNotification";
+import Swal from "sweetalert2";
+import {NEGOTIATION_REQUEST_TYPE} from "../../../../constants/status";
 
 export default {
   name: "event-booking",
-  components,
+  components: {
+    Loader,
+    InputMask,
+    Modal,
+    EventChangeProposalModal,
+    NegotiationNotification,
+    ProposalCard,
+    MaryokuInput,
+    ResizableToggleButton,
+    PendingForVendors,
+    EventProposalDetails,
+    ProposalsBar,
+    AdditionalRequestModal,
+    ProgressRadialBar,
+    ServicesCart,
+  },
   props: {},
   data: () => ({
     // auth: auth,

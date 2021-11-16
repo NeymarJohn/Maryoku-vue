@@ -70,8 +70,6 @@ export default {
       });
     }
 
-    if (!taxRate) taxRate = this.getTaxFromState();
-
     if (!this.$store.state.proposalForNonMaryoku.initialized) {
       let includedVendorServices = [];
       let costVendorServices = [];
@@ -220,21 +218,6 @@ export default {
         category: "total",
         discount: { percentage: discountRate, price: 0 },
       });
-    }
-  },
-  methods: {
-    getTaxFromState() {
-        if (!this.event.location) return 0;
-
-        let tax = 0
-        this.taxes.map(it => {
-            const arr = this.event.location.split(', ');
-            if (arr[2] === 'USA' && arr[1] === it.code) {
-                tax = it.tax;
-            }
-        })
-
-        return tax;
     }
   },
   computed: {

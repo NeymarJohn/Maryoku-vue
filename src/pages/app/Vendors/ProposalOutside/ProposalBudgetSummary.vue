@@ -250,12 +250,12 @@ export default {
     DiscountForm,
   },
   props: {
+    // bundleDiscount: Boolean,
+    // additional: Boolean,
+    // warning: Boolean,
+    // isEdit: Boolean,
     step: Number,
     services: Array,
-    taxes: {
-        type: Array,
-        required: true,
-    }
   },
   data() {
     return {
@@ -386,7 +386,6 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   mounted() {
-    console.log('mounted', this.taxes);
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
 
     this.$root.$on("update-proposal-budget-summary", (newProposalRequest, discountBlock) => {

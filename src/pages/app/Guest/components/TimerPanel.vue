@@ -12,7 +12,7 @@
       <hr />
       <div class="font-bold font-size-14">Waiting reply</div>
     </template>
-    <div v-else-if="section !== 'card'" class="button-wrapper">
+    <div v-else class="button-wrapper">
       <md-button
         class="maryoku-btn md-simple"
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
@@ -23,7 +23,8 @@
   </div>
 </template>
 <script>
-
+// import Timer from "../../../../components/Timer.vue";
+// import TimeCounter from "./TimeCounter.vue";
 import Swal from "sweetalert2";
 
 export default {
@@ -48,10 +49,6 @@ export default {
       type: String,
       default: "red",
     },
-    section: {
-      type: String,
-      default: "detail",
-    }
   },
   methods: {
     updateExpireTime() {
