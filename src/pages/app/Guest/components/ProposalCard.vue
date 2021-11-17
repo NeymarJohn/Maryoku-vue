@@ -6,8 +6,16 @@
               <timer-panel
                   class="time-counter mt-100"
                   :target="targetTime"
+                  section="card"
                   @updateExpireDate="updateExpireDate"
+
               ></timer-panel>
+              <md-button
+                  class="maryoku-btn md-simple md-outlined md-red mt-30"
+                  style="background: white!important;width: 300px;max-width: 90%"
+                  @click="updateExpireDate"
+              >
+                  Ask vendor for more time</md-button>
               <p class="color-white mt-20">Show me an alternative offer</p>
           </div>
     </template>
@@ -133,18 +141,19 @@ export default {
       return 0;
     },
     updateExpireDate(){
-        let newExpiredDate = 0;
+        let expiredTime = 0;
         if (this.proposal.expiredDate) {
-            newExpiredDate = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
+            expiredTime = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
         } else {
-            newExpiredDate = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
+            expiredTime = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
         }
 
         new ProposalNegotiationRequest({
             eventId: this.eventData.id,
             proposalId: this.proposal.id,
+            proposal: new Proposal({ id: this.proposal.id }),
             proposalRequestId: this.proposal.proposalRequestId,
-            expiredDate: newExpiredDate,
+            expiredTime,
             type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME
         })
             .for(new Proposal({ id: this.proposal.id }))

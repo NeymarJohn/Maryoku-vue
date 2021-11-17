@@ -16,7 +16,7 @@
       <hr />
       <div class="font-bold font-size-14">Waiting reply</div>
     </template>
-    <div v-else class="button-wrapper">
+    <div v-else-if="section !== 'card'" class="button-wrapper">
       <md-button
         class="maryoku-btn md-simple"
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
@@ -27,12 +27,14 @@
   </div>
 </template>
 <script>
-import Timer from "../../../../components/Timer.vue";
-import TimeCounter from "./TimeCounter.vue";
-import Swal from "sweetalert2";
+
+const components = {
+    Timer: () => import("@/components/Timer.vue"),
+    TimeCounter: () => import("./TimeCounter.vue"),
+}
 
 export default {
-  components: { TimeCounter, Timer },
+  components,
   props: {
     target: {
       type: [Date, Number],
@@ -54,6 +56,10 @@ export default {
       type: String,
       default: "red",
     },
+    section: {
+      type: String,
+      default: "detail"
+    }
   },
   methods: {
     updateExpireTime() {
@@ -70,6 +76,7 @@ export default {
 <style lang="scss" scoped>
 .proposal-time-counter {
   width: 300px;
+  max-width: 90%;
   color: white;
   text-align: center;
   padding: 20px;

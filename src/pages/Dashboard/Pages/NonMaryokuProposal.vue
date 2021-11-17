@@ -113,7 +113,6 @@
         <VendorDeclined
                 @rate="handleRate"
                 @close="showDeclineVendorModal=false"
-                :value="proposal.score"
         >
         </VendorDeclined>
       </template>
@@ -304,7 +303,6 @@ export default {
 
     },
     async declineProposal() {
-      if (this.proposal.score > 0) return;
       await this.saveProposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
 
       let url = `${location.protocol}//${location.host}/#/signin`;

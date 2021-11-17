@@ -3,28 +3,28 @@
     <div class="md-layout justify-content-between">
       <div class="md-layout-item md-size-70">
         <proposal-steps v-if="vendor" :eventCategory="vendor.eventCategory" :step="step" :vendor="vendor" />
-        <div class="step-wrapper" v-if="step == 0">
-          <proposal-wizard-step-0 class="mt-20"></proposal-wizard-step-0>
+        <div class="step-wrapper" v-if="step === 0">
+          <ProposalWizardStep0 class="mt-20"></ProposalWizardStep0>
         </div>
-        <div class="step-wrapper" v-if="step == 1">
-          <proposal-event-vision :event="event"></proposal-event-vision>
-          <!-- <proposal-additional-requirement></proposal-additional-requirement> -->
+        <div class="step-wrapper" v-if="step === 1">
+          <ProposalEventVision :event="event"></ProposalEventVision>
         </div>
-        <div class="step-wrapper" v-if="step == 2">
-          <proposal-wizard-step-2></proposal-wizard-step-2>
+        <div class="step-wrapper" v-if="step === 2">
+          <ProposalWizardStep2></ProposalWizardStep2>
         </div>
-        <div class="step-wrapper" v-if="step == 3">
-          <proposal-wizard-step-3 :title="`Event Information & Details`" :isEdit="false" :iconUrl="iconUrl" />
+        <div class="step-wrapper" v-if="step === 3">
+          <ProposalWizardStep3 :title="`Event Information & Details`" :isEdit="false" :iconUrl="iconUrl" />
         </div>
       </div>
       <div class="md-layout-item md-size-30 pos-relative">
-        <proposal-budget-summary
+        <ProposalBudgetSummary
           :bundleDiscount="true"
           :warning="true"
           :additional="true"
           :isEdit="true"
           :step="step"
           :services="services"
+          :taxes="taxes"
           v-if="step >= 1"
         />
       </div>
@@ -33,57 +33,41 @@
 </template>
 
 <script>
+import S3Service from "@/services/s3.service";
 import { businessCategories, categoryNameWithIcons } from "@/constants/vendor";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
 //COMPONENTS
-import ProposalBudgetSummary from "./ProposalBudgetSummary.vue";
-import ProposalRequirementsPanel from "./ProposalRequirementsPanel";
-import ProposalSteps from "./ProposalSteps.vue";
-import ProposalItem from "./ProposalItem.vue";
-import ProposalEventVision from "./ProposalEventVision.vue";
-import ProposalBidContent from "./ProposalBidContent.vue";
-import ProposalAddFiles from "./ProposalAddFiles.vue";
-import ProposalTitleWithIcon from "./ProposalTitleWithIcon.vue";
-import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
-import ProposalAdditionalRequirement from "./ProposalAddtionalRequirement";
-import S3Service from "@/services/s3.service";
-import ProposalWizardStep0 from "./ProposalWizardStep0";
-import ProposalWizardStep2 from "./ProposalWizardStep2";
-import ProposalWizardStep3 from "./ProposalWizardStep3";
-import Loader from "@/components/loader/Loader.vue";
+
+const components = {
+    Loader: () => import("@/components/loader/Loader.vue"),
+    MaryokuTextarea: () => import("@/components/Inputs/MaryokuTextarea.vue"),
+    ProposalBudgetSummary: () => import("./ProposalBudgetSummary.vue"),
+    ProposalSteps: () => import("./ProposalSteps.vue"),
+    ProposalEventVision: () => import("./ProposalEventVision.vue"),
+    ProposalWizardStep0: () => import("./ProposalWizardStep0.vue"),
+    ProposalWizardStep2: () => import("./ProposalWizardStep2.vue"),
+    ProposalWizardStep3: () => import("./ProposalWizardStep3.vue"),
+}
+
 export default {
-  components: {
-    Loader,
-    ProposalBudgetSummary,
-    ProposalItem,
-    ProposalSteps,
-    ProposalAddFiles,
-    ProposalTitleWithIcon,
-    ProposalEventVision,
-    ProposalItemSecondaryService,
-    ProposalAdditionalRequirement,
-    ProposalBidContent,
-    ProposalRequirementsPanel,
-    MaryokuTextarea,
-    ProposalWizardStep0,
-    ProposalWizardStep2,
-    ProposalWizardStep3,
-  },
+  components,
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
+      taxes: [],
       iconsWithCategory: null,
       isLoading: false,
       markedDates: [],
     };
   },
   created() {},
-  mounted() {
+  async mounted() {
     this.services = Object.assign([], businessCategories);
+
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-    this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch('common/getTaxes');
 
     // handling uploading photo backhand process
       this.$root.$on("update-inspirational-photo", async ({ file, index, link}) => {
@@ -152,6 +136,9 @@ export default {
       return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
     },
   },
+  watch: {
+      taxes(newVal){console.log('taxes', newVal)}
+  }
 };
 </script>
 <style lang="scss" scoped>
