@@ -1,21 +1,28 @@
 <template>
   <div class="proposal-item-secondary-service">
-    <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
+    <div class="title-cont dropdown" @click="clickItem(service.componentId)" :class="{ opened: isChecked }">
       <div class="left-side">
+        <!-- <div class="check-cont">
+          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
+          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
+        </div> -->
         <h3 class="title">
           <img :src="img" />
           <span>{{ category }}</span>
         </h3>
       </div>
       <div class="right-side">
-        <img
-          @click="toggle($event)"
-          :src="`${iconUrl}Component 36 (2).svg`"
-          :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
-        />
+        <div class="budget-cont">
+          <span>Budget</span>
+          <span>${{ service.allocatedBudget | withComma }}</span>
+        </div>
+        <div class="proposal-range-cont">
+          <span>You're the First bidder</span>
+        </div>
+        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
-    <template v-if="isExpanded">
+    <template v-if="isChecked">
       <proposal-requirements
         class="additional-service"
         label="Cost Items"
@@ -23,7 +30,7 @@
         tableCategory="cost"
         icon="Group+10662.svg"
         description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-        :vendorCategory="serviceCategory"
+        :vendorCategory="service.componentId"
       />
       <proposal-requirements
         class="additional-service"
@@ -32,7 +39,7 @@
         icon="includedPrice.png"
         description="(from your “included in price” items)"
         key="included"
-        :vendorCategory="serviceCategory"
+        :vendorCategory="service.componentId"
       />
       <proposal-requirements
         class="additional-service"
@@ -41,9 +48,9 @@
         icon="cost-requirements.png"
         description="What elements would you like to suggest to the client with extra pay? "
         key="extra"
-        :vendorCategory="serviceCategory"
+        :vendorCategory="service.componentId"
       />
-      <!-- <proposal-upload-legal></proposal-upload-legal> -->
+      <proposal-upload-legal></proposal-upload-legal>
     </template>
   </div>
 </template>
@@ -53,6 +60,7 @@ import ProposalRequestFile from "@/models/ProposalRequestFile";
 
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
+import EditableProposalSubItem from "../Proposal/EditableProposalSubItem.vue";
 import { Money } from "v-money";
 
 import vue2Dropzone from "vue2-dropzone";
@@ -65,6 +73,7 @@ export default {
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
+    EditableProposalSubItem,
     Money,
     vueDropzone: vue2Dropzone,
     ProposalServiceTable,
@@ -83,7 +92,6 @@ export default {
     proposalRequest: Object,
     vendor: Object,
     service: Object,
-    serviceCategory: String,
   },
   data() {
     return {
@@ -110,7 +118,6 @@ export default {
       docTag: null,
       serviceSlidePos: 0,
       servicesWidth: 0,
-      isExpanded: true,
       currencyFormat: {
         decimal: ".",
         thousands: ",",
@@ -147,33 +154,12 @@ export default {
     getObject(item) {
       return JSON.parse(JSON.stringify(item));
     },
-    isAdded(category) {
-      return this.additionalServices.includes(category);
-    },
-    toggle(event) {
-      event.stopPropagation();
-      this.isExpanded = !this.isExpanded;
-      if (this.isExpanded) {
-        this.$store.commit("vendorProposal/setValue", {
-          key: "currentSecondaryService",
-          value: this.serviceCategory,
-        });
-      }
-    },
-    clickItem(event, category) {
-      // this.isChecked = !this.isChecked;
-      event.stopPropagation();
-
-      if (!this.isAdded(category)) {
+    clickItem(category) {
+      this.isChecked = !this.isChecked;
+      if (this.isChecked) {
         this.additionalServices.push(category);
-        this.isExpanded = true;
-        this.$store.commit("vendorProposal/setValue", {
-          key: "currentSecondaryService",
-          value: this.serviceCategory,
-        });
       } else {
-        this.$store.commit("vendorProposal/removeCategoryFromAdditional");
-        this.isExpanded = false;
+        this.$store.commit("proposalForNonMaryoku/removeCategoryFromAdditional");
       }
       console.log(this.additionalServices);
 
@@ -383,6 +369,10 @@ export default {
     this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
+      // if (
+      //   this.newProposalRequest.requirements.length == 0 ||
+      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
+      // )
       this.newProposalRequest.requirements.push({
         comments: [],
         dateCreated: "",
@@ -453,11 +443,20 @@ export default {
     },
     additionalServices: {
       get: function () {
-        return this.$store.state.vendorProposal.additionalServices;
+        return this.$store.state.proposalForNonMaryoku.additionalServices;
       },
       set: function (newValue) {
-        return this.$store.commit("vendorProposal/setAdditionalServices", newValue);
+        return this.$store.commit("proposalForNonMaryoku/setAddtionalService", newValue);
       },
+    },
+    costedServices() {
+      return this.$store.state.proposalForNonMaryoku.costServices[this.category];
+    },
+    includedServices() {
+      return this.$store.state.proposalForNonMaryoku.includedServices[this.category];
+    },
+    extraServices() {
+      return this.$store.state.proposalForNonMaryoku.extraServices[this.category];
     },
   },
   watch: {},
@@ -479,24 +478,32 @@ export default {
   .title-cont {
     &.dropdown {
       padding: 40px 40px;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 50% 50%;
       align-items: center;
       cursor: pointer;
       &.opened {
-        border-bottom: solid 1px #d7d7d7;
+        border-bottom: solid 1px #050505;
       }
       .left-side {
         width: 100%;
+        // display: grid;
+        // grid-template-columns: 10% 90%;
+        // align-items: center;
+
         .check-cont {
           img {
             width: 33px;
           }
         }
         h3 {
+          display: grid;
+          align-items: center;
+          grid-template-columns: 10% 90%;
           margin: 0;
           font-size: 30px;
           font-weight: 800;
+
           img {
             width: 34px;
             height: 34px;
@@ -505,8 +512,10 @@ export default {
       }
       .right-side {
         display: flex;
+        width: 100%;
         justify-content: space-between;
         align-items: center;
+
         .budget-cont {
           margin-left: 4em;
           span {
@@ -537,18 +546,19 @@ export default {
         }
         img {
           width: 12px;
+          margin-left: 50px;
         }
       }
     }
   }
-  .additional-service:not(:last-child) {
-    border-bottom: solid 1px #d7d7d7;
+  .additional-service {
+    border-bottom: solid 2px #828282;
   }
   .additional-photos-wrapper {
     margin-left: -34px;
     margin-right: -34px;
     padding: 60px 0 10px 0;
-    border-top: 1px solid #d7d7d7;
+    border-top: 1px solid #707070;
 
     .title-cont {
       display: flex;

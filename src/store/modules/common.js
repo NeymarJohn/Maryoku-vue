@@ -3,8 +3,7 @@ const state = {
     serviceCategories: [],
     serviceCategoriesMap: {},
     companies: [],
-    eventTypes: [],
-    taxes: [],
+    eventTypes: []
 };
 const mutations = {
     setCategories: (state, categories) => {
@@ -20,9 +19,6 @@ const mutations = {
     },
     setEventTypes: (state, types) => {
         state.eventTypes = types;
-    },
-    setTaxes: (state, taxes) => {
-        state.taxes = taxes;
     }
 };
 const actions = {
@@ -75,24 +71,6 @@ const actions = {
                 });
         });
     },
-    getTaxes({commit, state}) {
-        return new Promise(async (resolve, reject) => {
-            const taxes = JSON.parse(localStorage.getItem('taxes'));
-
-            if(!taxes || !taxes.length) {
-               const res = await getReq(`/1/taxes`);
-
-                localStorage.setItem('taxes', JSON.stringify(res.data))
-                commit('setTaxes', res.data)
-                resolve(res.data)
-
-            } else {
-                commit('setTaxes', taxes)
-                resolve(taxes);
-            }
-
-        })
-    }
 };
 export default {
     namespaced: true,

@@ -14,7 +14,7 @@
         <div class="font-bold font-size-22">Any Additional Requests?</div>
         <div class="mt-20">Would you like to add one of those items?</div>
         <div class="tags mt-30">
-          <TagItem
+          <tag-item
             @click="selectTag(tag)"
             :tagLabel="tag.subCategory"
             :key="tag.subCategory"
@@ -22,7 +22,7 @@
             v-for="tag in specialTags"
             theme="red"
             class="mr-10"
-          ></TagItem>
+          ></tag-item>
         </div>
       </div>
       <div class="text-left p-20" style="background-color: #f3f7fd;">
@@ -51,13 +51,13 @@
 
                 <div class="d-flex align-center ml-50" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
                     <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index"></md-checkbox>
-                    <TimelineItem
+                    <timeline-item
                         :item="timelineItem"
                         :index="index"
                         class="my-10 timeline-group-wrapper"
                         :editMode="false"
                         size="medium"
-                    ></TimelineItem>
+                    ></timeline-item>
                 </div>
 
             </template>
@@ -81,12 +81,12 @@
                     <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
                         <span class="text-transform-capitalize">{{ item.item }}</span>
                     </md-checkbox>
-                    <MaryokuInput
+                    <maryoku-input
                         v-if="item.qtyEnabled"
                         placeholder="QTY"
                         class="w-max-80 ml-auto"
                         v-model="item.defaultQty">
-                    </MaryokuInput>
+                    </maryoku-input>
                 </div>
             </div>
             <div v-if="subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)">
@@ -96,7 +96,7 @@
                     :key="item.item"
                 >
                     <div class="mb-10">{{ item.item }}:</div>
-                    <TagItem
+                    <tag-item
                         @click="tag.selected = !tag.selected"
                         :tagLabel="tag.name"
                         :key="tag.name"
@@ -104,7 +104,7 @@
                         :theme="`red`"
                         v-for="tag in item.options"
                         class="mr-10"
-                    ></TagItem>
+                    ></tag-item>
                 </div>
             </div>
           </div>
@@ -153,7 +153,7 @@
                     <md-checkbox class="md-simple md-red" v-model="specialSection.hasOtherOption">
                       <span class="font-bold">Other:</span>
                     </md-checkbox>
-                    <MaryokuInput class="flex-1" v-model="specialSection.otherOptionContent"></MaryokuInput>
+                    <maryoku-input class="flex-1" v-model="specialSection.otherOptionContent"></maryoku-input>
                   </div>
                 </div>
               </div>
@@ -218,19 +218,21 @@
 </template>
 <script>
 import Vue from 'vue'
+import { Modal, MaryokuInput } from "@/components";
+import TagItem from "../TagItem.vue";
+import TimeSlot from "../TimeSlot.vue";
+import TimelineItem from "../../../components/TimelineItem";
 import moment from "moment";
-
-const components = {
-    Modal: () => import("@/components/Modal.vue"),
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    TagItem: () => import("../TagItem.vue"),
-    TimeSlot: () => import("../TimeSlot.vue"),
-    TimelineItem: () =>  import("@/pages/app/Events/components/TimelineItem.vue")
-}
 
 export default {
   name: "AdditionalRequestModal",
-  components,
+  components: {
+    Modal,
+    TagItem,
+    MaryokuInput,
+    TimeSlot,
+    TimelineItem,
+  },
   props: {
     subCategory: {
         type: Object,

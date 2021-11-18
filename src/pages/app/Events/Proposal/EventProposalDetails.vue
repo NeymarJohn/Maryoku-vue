@@ -36,6 +36,7 @@
                 </div>
                 <div v-else>
                   {{ eventDate() }}
+                  <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
                 </div>
               </li>
               <li class="event-details__item">
@@ -46,7 +47,7 @@
               </li>
             </ul>
           </div>
-          <TimerPanel
+          <timer-panel
             class="time-counter"
             :target="targetTime"
             :pending="negotiationPending"
@@ -54,7 +55,7 @@
             :approved="negotiationProcessed"
             @updateExpireDate="updateExpireDate"
             :theme="theme"
-          ></TimerPanel>
+          ></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -185,21 +186,21 @@
           <span class="font-regular font-size-16">*We work only with our catering</span>
         </div>
         <div class="mt-20 mb-10">What would you like to take from our suggested services?</div>
-        <EventProposalPrice
+        <event-proposal-price
           :proposalData="vendorProposal"
           :serviceCategory="vendorProposal.vendor.vendorCategory"
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
           :mandatory="true"
-        ></EventProposalPrice>
-        <EventProposalPrice
+        ></event-proposal-price>
+        <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"
           :proposalData="vendorProposal"
           :serviceCategory="service"
           :key="`secondary-${service}-section`"
           @changeBookedServices="changeBookedServices"
-        ></EventProposalPrice>
+        ></event-proposal-price>
         <div
           class="bundle-section d-flex justify-content-between align-center"
           v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied && checkedAllBundledOffers"
@@ -258,7 +259,43 @@
           </template>
         </div>
       </div>
+      <!--      <div v-if="vendorProposal.vendor.vendorCategory === 'venuerental' && vendorProposal.seatingData && Object.keys(vendorProposal.seatingData).length"-->
+      <!--          class="proposal-section policy-section">-->
 
+      <!--        <div class="proposal-section__title">-->
+      <!--            <img class="seating" :src="`${$iconURL}common/seating-purple.png`" width="40px"/> Seating Arrangement-->
+      <!--        </div>-->
+
+      <!--        <div class="policy-content pt-40">-->
+      <!--            <div class="d-flex align-stretch seats-list">-->
+      <!--                <div class="d-flex mb-30">-->
+      <!--                    <template v-for="(sit, index) in vendorProposal.seatingData.options">-->
+      <!--                        <div-->
+      <!--                            v-if="sit.selected"-->
+      <!--                            :key="`sitarrangement-${index}`"-->
+      <!--                            class="d-flex flex-column justify-content-between seat-type"-->
+      <!--                        >-->
+      <!--                            <div class="font-bold">'{{ sit.item }}'</div>-->
+      <!--                            <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>-->
+      <!--                        </div>-->
+      <!--                    </template>-->
+      <!--                    <div v-if="vendorProposal.seatingData.hasOtherOption" class="d-flex flex-column seat-type">-->
+      <!--                        <div class="font-bold">'Other'</div>-->
+      <!--                        <div class="mt-20">{{ vendorProposal.vendor.seatingData.otherOptionContent }}</div>-->
+      <!--                    </div>-->
+      <!--                </div>-->
+      <!--                <div v-if="!editingNewSeating" class="d-flex align-center">-->
+      <!--                    <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="editingNewSeating = true">-->
+      <!--                        Suggest new seating arrangement-->
+      <!--                    </md-button>-->
+      <!--                </div>-->
+      <!--                <div v-else class="p-10" style="min-width: 350px">-->
+      <!--                    <div class="font-bold mb-10">Suggest new seating arrangement</div>-->
+      <!--                    <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>-->
+      <!--                </div>-->
+      <!--            </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="proposal-section policy-section">
         <div class="proposal-section__title">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
@@ -325,7 +362,7 @@
             <div class="desc">30 days before the event</div>
           </div>
 
-          <CancellationPolicy></CancellationPolicy>
+          <cancellation-policy></cancellation-policy>
 
           <div class="side-label">
             <div class="label-value">Act of God</div>
@@ -398,35 +435,62 @@
 
 <script>
 //MAIN MODULES
-
-
+import ChartComponent from "@/components/Cards/ChartComponent";
+import CancellationPolicy from "@/components/CancellationPolicy";
+import { ChartCard } from "@/components";
 import _ from "underscore";
+
+// import auth from '@/auth';
 import moment from "moment";
+import carousel from "vue-owl-carousel";
 
-import Proposal from "@/models/Proposal";
-
-import { CommentMixins, ShareMixins } from "@/mixins";
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 
-import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
+import { Tabs, Modal, Loader } from "@/components";
 
-import { socialMediaBlocks } from "@/constants/vendor";
-import { GuaranteedOptions } from "@/constants/options";
-import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
-
+import EventBudgetVendors from "../components/EventBudgetVendors";
+import EditEventBlocksBudget from "../components/EditEventBlocksBudget";
+import Proposal from "@/models/Proposal";
 
 //COMPONENTS
-const components = {
-    Modal: () => import("@/components/Modal.vue"),
-    Loader: () => import("@/components/loader/Loader.vue"),
-    carousel: () => import("vue-owl-carousel"),
-    CancellationPolicy: () => import("@/components/CancellationPolicy"),
-    EventProposalPrice: () => import("./EventProposalPrice.vue"),
-    TimerPanel: () => import("../components/TimerPanel.vue"),
-}
+
+import SideBar from "@/components/SidebarPlugin/NewSideBar";
+import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
+import { GuaranteedOptions } from "@/constants/options";
+import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
+import ProgressSidebar from "../components/progressSidebar";
+
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "../components/CommentEditorPanel";
+import { CommentMixins, ShareMixins } from "@/mixins";
+import ExtraServiceItem from "./ExtraServiceItem";
+import IncludedServiceItem from "./IncludedServiceItem.vue";
+import { socialMediaBlocks } from "@/constants/vendor";
+import EventProposalPrice from "./EventProposalPrice.vue";
+import TimerPanel from "../components/TimerPanel.vue";
+import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
 
 export default {
-  components,
+  components: {
+    Tabs,
+    EventBudgetVendors,
+    ChartComponent,
+    ChartCard,
+    SideBar,
+    SidebarItem,
+    Modal,
+    EditEventBlocksBudget,
+    carousel,
+    ProgressSidebar,
+    HeaderActions,
+    CommentEditorPanel,
+    CancellationPolicy,
+    ExtraServiceItem,
+    IncludedServiceItem,
+    EventProposalPrice,
+    Loader,
+    TimerPanel,
+  },
   props: {
     vendorProposal: {
       type: Object,

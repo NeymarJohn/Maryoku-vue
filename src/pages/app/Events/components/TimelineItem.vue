@@ -1,10 +1,10 @@
 <template>
-  <TimelineTemplateItem
+  <timeline-template-item
     v-if="editingContent.status == 'template' || editingContent.status == 'timegap'"
     :item="item"
     :index="index"
     @applyTemplate="applyToTemplate"
-  ></TimelineTemplateItem>
+  ></timeline-template-item>
   <div class="timeline-item d-flex" :class="size === 'large' ? '' : 'align-center'"  v-else>
     <div :class="size === 'large' ? 'time-line-icon-large mt-20' : 'time-line-icon-medium'" :style="`background-color:${editingContent.color}`">
       <img
@@ -34,7 +34,7 @@
         <div class="md-layout-item md-size-100 mb-10">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">Name</label>
-            <MaryokuInput type="text" class="mt-10" v-model="editingContent.title" />
+            <maryoku-input type="text" class="mt-10" v-model="editingContent.title" />
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-20">
@@ -45,7 +45,7 @@
           </md-button>
           <div class="form-group mt-30" v-if="showDescription">
             <label class="font-size-16 font-bold">Description</label>
-            <MaryokuTextarea size="small" class="mt-10" v-model="editingContent.description"></MaryokuTextarea>
+            <maryoku-textarea size="small" class="mt-10" v-model="editingContent.description"></maryoku-textarea>
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-50 d-flex">
@@ -53,13 +53,13 @@
             <label class="font-size-16 font-bold pb-10">
               <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Start At
             </label>
-            <TimeInput
+            <time-input
               v-model="editingContent.startTime"
               :h24="false"
               class="mt-10"
               displayFormat="hh:mm"
               size="normal"
-            ></TimeInput>
+            ></time-input>
           </div>
           <div class="divider"></div>
           <div class="form-group">
@@ -75,6 +75,22 @@
             ></time-input>
           </div>
         </div>
+        <!-- <div class="md-layout-item md-size-100 mt-50">
+          <div class="form-group">
+            <label class="font-size-16 font-bold pb-10">Assign vendor to slot</label>
+            <multiselect
+              v-model="vendor"
+              :options="serviceCategories"
+              :close-on-select="true"
+              :clear-on-select="true"
+              tag-placeholder="Add this as new tag"
+              placeholder="Please select vendors"
+              class="multiple-selection small-selector mt-10"
+              label="title"
+              track-by="key"
+            ></multiselect>
+          </div>
+        </div> -->
       </md-card-content>
       <md-card-actions md-alignment="right" style="border: none" class="edit-timeline-footer">
         <md-button
@@ -147,21 +163,23 @@
   </div>
 </template>
 <script>
-
+import TimelineTemplateItem from "./TimelineTemplateItem";
+import TimeInput from "@/components/Inputs/TimeInput";
+import MaryokuInput from "@/components/Inputs/MaryokuInput";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import moment from "moment";
+import Multiselect from "vue-multiselect";
 import Swal from "sweetalert2";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import EventTimelineDate from "@/models/EventTimelineDate";
 
-const components = {
-    TimelineTemplateItem: () => import("./TimelineTemplateItem"),
-    TimeInput: () => import("@/components/Inputs/TimeInput.vue"),
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    MaryokuTextarea: () => import("@/components/Inputs/MaryokuTextarea.vue"),
-}
-
 export default {
-  components,
+  components: {
+    TimeInput,
+    TimelineTemplateItem,
+    MaryokuInput,
+    MaryokuTextarea,
+  },
   props: {
     editMode: {
       type: Boolean,
