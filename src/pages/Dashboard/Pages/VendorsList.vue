@@ -3,23 +3,23 @@
     <loader :active="loading" is-full-screen/>
     <h1>All Vendors</h1>
     <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
-    <md-table v-model="vendors" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="sort">
-        <md-table-row>
-            <md-table-head md-numeric>No</md-table-head>
-            <md-table-head>Company Name</md-table-head>
-            <md-table-head>URL</md-table-head>
-            <md-table-head>User Name</md-table-head>
-            <md-table-head>Business Catgory</md-table-head>
-            <md-table-head>Email</md-table-head>
-            <md-table-head>Address</md-table-head>
-            <md-table-head>Proposals</md-table-head>
-        </md-table-row>
+    <md-table v-if="vendors && vendors.length > 0" md-sort="companyName" md-sort-order="asc">
+      <md-table-row>
+        <md-table-head md-numeric>No</md-table-head>
+        <md-table-head md-numeric>Id</md-table-head>
+        <md-table-head>Company Name</md-table-head>
+        <md-table-head>Editing Url</md-table-head>
+        <md-table-head>User Name</md-table-head>
+        <md-table-head>Business Catgory</md-table-head>
+        <md-table-head>Email</md-table-head>
+        <md-table-head>Address</md-table-head>
+      </md-table-row>
       <template v-for="(item, index) in vendors">
-        <md-table-row v-if="selectedIdx !== item.id" :key="item.id">
+        <md-table-row v-if="selectedIdx !== index" :key="item.id">
           <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
-<!--          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>-->
+          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
           <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
-          <md-table-cell md-label="URL" md-sort-by="url">
+          <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
             <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank">{{
               `${currentPath}/#/vendor/edit/${item.id}`
               }}</a>
@@ -43,19 +43,17 @@
           <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
             item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
             }}</md-table-cell>
-          <md-table-cell md-label="Proposals" md-sort-by="proposals">{{
-                item.proposals
-            }}</md-table-cell>
           <md-table-cell>
-            <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect(item)">
-              <md-icon>{{`${selectedIdx !== item.id ? 'keyboard_arrow_right' : 'keyboard_arrow_down'}`}} </md-icon>
+            <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect(index)">
+              <md-icon>{{`${selectedIdx !== index ? 'keyboard_arrow_right' : 'keyboard_arrow_down'}`}} </md-icon>
             </md-button>
           </md-table-cell>
         </md-table-row>
 
         <template v-else>
           <md-table-row>
-            <md-table-cell md-label="NO" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
+            <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
+            <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
             <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
             <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
             <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank">{{
@@ -82,12 +80,9 @@
             <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
             item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
             }}</md-table-cell>
-            <md-table-cell md-label="Proposals" md-sort-by="proposals">{{
-              item.proposals
-            }}</md-table-cell>
             <md-table-cell>
-            <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect(item)">
-            <md-icon>{{`${selectedIdx !== item.id ? 'keyboard_arrow_right' : 'keyboard_arrow_down'}`}} </md-icon>
+            <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect(index)">
+            <md-icon>{{`${selectedIdx !== index ? 'keyboard_arrow_right' : 'keyboard_arrow_down'}`}} </md-icon>
             </md-button>
             </md-table-cell>
           </md-table-row>
@@ -134,36 +129,40 @@
             </td>
           </tr>
         </template>
+
       </template>
+
+
     </md-table>
     <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
   </div>
 </template>
 <script>
-import Vendor from "@/models/Vendors";
-import Proposal from "@/models/Proposal";
+import Vendors from "@/models/Vendors";
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
 
-import { PROPOSAL_STATUS } from "@/constants/status";
 
-const components = {
-    Loader: () => import('@/components/loader/Loader.vue'),
-    FadeTransition: () => import('vue2-transitions'),
-    ProposalListItem: () => import('@/pages/app/Vendors/components/ProposalListItem'),
-}
+import { Loader } from "@/components";
+import Vendor from "@/models/Vendors";
+import Proposal from "@/models/Proposal";
+import { FadeTransition } from "vue2-transitions";
+import { PROPOSAL_STATUS } from "@/constants/status";
+import ProposalListItem from "../../app/Vendors/components/ProposalListItem"
 
 
 export default {
-  components,
+  components: {
+    Loader,
+    FadeTransition,
+    ProposalListItem
+  },
   data() {
     return {
       vendors: null,
       showAlert: false,
       currentPath: location.origin,
       loading: true,
-      currentSort: 'name',
-      currentSortOrder: 'asc',
       selectedIdx: null,
       sortFields: { sort: "", order: "" },
       vendorProposals: [],
@@ -179,7 +178,11 @@ export default {
     };
   },
   created() {
-    new Vendor().get().then((vendors) => {
+    // Vendors.get().then((vendors) => {
+    //   this.vendors = vendors[0].results;
+    // });
+
+    new Vendors().get().then((vendors) => {
       console.log("vendors", vendors);
       this.vendors = vendors[0].results;
       this.loading = false;
@@ -217,13 +220,13 @@ export default {
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, "vendors.xlsx");
     },
-    async handleSelect(item){
-      console.log('handleSelect', item)
-      if ( this.selectedIdx !== item.id) {
-        this.loading = true;
-        this.selectedIdx = item.id;
+    async handleSelect(idx){
 
-        let query = new Proposal().for(new Vendor({ id: item.id }));
+      if ( this.selectedIdx !== idx) {
+        this.loading = true;
+        this.selectedIdx = idx;
+
+        let query = new Proposal().for(new Vendor({ id: this.vendors[idx].id }));
         this.vendorProposals = await query.get();
         this.loading = false;
       } else {
@@ -241,16 +244,8 @@ export default {
         this.sortFields["order"] = this.sortFields["order"] === "desc" ? "asc" : "desc";
       }
     },
-    sort(value) {
-        return value.sort((a, b) => {
-            const sortBy = this.currentSort
+    handleProposal(action, proposalId) {
 
-            if (this.currentSortOrder === 'desc') {
-                return a[sortBy].toString().localeCompare(b[sortBy].toString())
-            }
-
-            return b[sortBy].toString().localeCompare(a[sortBy].toString())
-        })
     },
     getStatusIcon(status) {
       let path = "/static/icons/vendor/proposalBoard/";
