@@ -37,10 +37,16 @@ const components = {
 
 export default {
     components,
+    props:{
+      value: {
+          type: Number,
+          default: 5,
+      }
+    },
     data(){
         return {
             showBookedVendorModal: true,
-            score: 0,
+            score: this.value,
             rates: [
                 {score: 1, url: 'smile_1'},
                 {score: 2, url: 'smile_2'},
