@@ -67,7 +67,7 @@ const ProposalTable = () => import('./components/ProposalTable')
 
 const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
-    Modal: () => import('@/components/modal.vue'),
+    Modal: () => import('@/components/Modal.vue'),
     FadeTransition: () => import('vue2-transitions'),
     ProposalListItem: () => import('@/pages/app/Vendors/components/ProposalListItem'),
 }
