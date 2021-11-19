@@ -87,6 +87,9 @@ export default {
   &.purple {
     background-color: #641865;
   }
+  &.mobile-red {
+     background-color: white;
+  }
   .button-wrapper {
     background-color: white !important;
     margin: auto;
@@ -102,5 +105,32 @@ export default {
     background-color: white;
     opacity: 0.5;
   }
+
+  &.mobile {
+    color: #f51355;
+    border: 2px solid #f51355;
+    background-color: white;
+    padding: 20px 0 0 0;
+
+    .button-wrapper {
+      background-color: #f51355 !important;
+      width: 100%;
+      .md-button {
+          background-color: #f51355 !important;
+          &:hover {
+              background-color: #f51355 !important;
+          }
+
+          .md-button-content{
+              color: white !important;
+          }
+      }
+    }
+
+    hr{
+        background-color: #f51355;
+    }
+  }
 }
+
 </style>

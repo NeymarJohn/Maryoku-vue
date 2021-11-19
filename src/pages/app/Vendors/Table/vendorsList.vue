@@ -34,6 +34,18 @@
             categoryTitle(vendor.vendorCategory)
           }}</md-table-cell>
           <md-table-cell md-label="Rank">
+            <!-- <vue-stars
+                            :name="item.id"
+                            active-color="#ffdd00"
+                            inactive-color="#999999"
+                            shadow-color="#ffff00"
+                            hover-color="#dddd00"
+                            :max="5"
+                            :value="item.rank"
+                            :readonly="false"
+                            char="★"
+                            inactive-char=""
+            class=""/>-->
             <div class="md-layout-item md-size-100 md-small-size-100">
               <label
                 class="star-rating__star"
@@ -53,6 +65,9 @@
             </div>
           </md-table-cell>
           <md-table-cell class="vendors-table_item-actions" v-if="mode === 'listing'">
+            <!-- <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
+                            <md-icon>star</md-icon>
+            </md-button>-->
             <md-button
               :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
               class="md-danger md-just-icon md-round"

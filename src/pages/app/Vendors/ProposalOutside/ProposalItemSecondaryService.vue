@@ -43,7 +43,6 @@
         key="extra"
         :vendorCategory="serviceCategory"
       />
-      <!-- <proposal-upload-legal></proposal-upload-legal> -->
     </template>
   </div>
 </template>
@@ -58,7 +57,6 @@ import { Money } from "v-money";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import ProposalServiceTable from "./ProposalServiceTable";
-import ProposalUploadLegal from "./ProposalUploadLegal";
 import ProposalRequirements from "./ProposalRequirements.vue";
 export default {
   name: "proposal-item",

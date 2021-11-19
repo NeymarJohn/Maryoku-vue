@@ -40,8 +40,7 @@ export default {
     ProposalUploadLegal,
     ProposalRequirements,
   },
-  created() {
-    // console.log('proposalBidContent', this.vendor.services);
+  async created() {
     let taxRate = 0;
     let discountRate = 0;
     if (this.vendor.pricingPolicies) {
@@ -70,6 +69,8 @@ export default {
         }
       });
     }
+
+    if (!taxRate) taxRate = this.getTaxFromState();
 
     if (!this.$store.state.vendorProposal.initialized) {
       let includedVendorServices = [];
@@ -221,6 +222,20 @@ export default {
       });
     }
   },
+  methods: {
+      getTaxFromState() {
+          if (!this.event.location) return 0;
+
+          let tax = 0
+          this.taxes.map(it => {
+              const arr = this.event.location.split(', ');
+              if (arr[2] === 'USA' && arr[1] === it.code) {
+                tax = it.tax;
+              }
+          })
+          return tax;
+      }
+  },
   computed: {
     event() {
       return this.proposalRequest.eventData;
@@ -230,6 +245,9 @@ export default {
     },
     requirements() {
       return this.proposalRequest.componentRequirements[this.vendor.eventCategory.key];
+    },
+    taxes() {
+      return this.$store.state.common.taxes;
     },
     optionalRequirements() {
       if (!this.requirements) return [];

@@ -178,19 +178,17 @@ export default {
   methods: {
     getStatusIcon(status) {
           let path = "/static/icons/vendor/proposalBoard/";
-        if ( status === PROPOSAL_STATUS.DRAFT ) {
-            return `${path}filter-draft.svg`;
-        } else if ( status === PROPOSAL_STATUS.PENDING ) {
-            return `${path}filter-pending.svg`;
-        } else if ( status === PROPOSAL_STATUS.TOP3) {
-            return `${path}filter-top3.svg`;
-        } else if ( status === PROPOSAL_STATUS.LOST ) {
-            return `${path}filter-reject.svg`;
-        } else if ( status === PROPOSAL_STATUS.WON ) {
-            return `${path}filter-won.svg`;
-        } else {
-            return `${path}filter-${status}.svg`;
-        }
+          if ( status === PROPOSAL_STATUS.PENDING ) {
+              return `${path}filter-pending.svg`;
+          } else if ( status === PROPOSAL_STATUS.TOP3) {
+              return `${path}filter-top3.svg`;
+          } else if ( status === PROPOSAL_STATUS.LOST ) {
+              return `${path}filter-reject.svg`;
+          } else if ( status === PROPOSAL_STATUS.WON ) {
+              return `${path}filter-won.svg`;
+          } else {
+              return `${path}filter-${status}.svg`;
+          }
     },
     edit(action) {
       if ( this.proposal.accepted && action === this.proposalStatus.edit) return;
