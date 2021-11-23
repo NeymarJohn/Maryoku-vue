@@ -1,96 +1,69 @@
 <template>
   <div class="non-maryoku-proposal">
     <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
-    <template v-if="proposal">
-        <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
-            <img v-if="isMobile && !showOffer" :src="headerBackgroundImage" class="position-absolute" style="left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 200px"/>
-            <div class="md-layout-item md-large-size-50 md-small-hide font-size-30">
-                <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
-                <b>{{ proposal.vendor.eventCategory.fullTitle }}</b>
-                {{ proposal.vendor.companyName }}
-            </div>
-
-            <div class="md-layout-item md-large-size-50 md-small-size-100 d-flex">
-                <HeaderActions
-                    className="ml-auto"
-                    page="proposal"
-                    @toggleCommentMode="toggleCommentMode"
-                    @share="shareWithAuth"
-                    @export="downProposal"
-                ></HeaderActions>
-            </div>
-
-            <div v-if="isMobile && !showOffer" class="md-layout-item md-small-size-100">
-                <md-card class="d-flex flex-column text-center border-radius-none py-20 my-10">
-                    <div><p class="font-size-10 m-0">Caterers & Venues</p></div>
-                    <h2 class="font-size-24 font-bold-extra text-uppercase my-10">catering proposal</h2>
-                    <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the 'March Madness' event. Let's start..</p>
-                </md-card>
-            </div>
-        </div>
-        <div class="proposal-container" :class="isMobile ? 'mt-10' : 'mt-40'">
-            <EventProposalDetails
-                :vendorProposal="proposal"
-                :landingPage="true"
-                :nonMaryoku="true"
-                :showOffer="showOffer"
-                v-if="proposal"
-                @updateProposal="handleUpdate"
-                @ask="handleAsk"
-                @favorite="handleFavorite"
-            ></EventProposalDetails>
-        </div>
-
-        <div class="text-center logo-area" :class="isMobile ? 'font-size-14 py-10' : 'font-size-18 p-40 mt-40'">
-            Provided By
-            <img class="ml-10" :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-            <p class="m-0">Who are we and why are we great?</p>
-        </div>
-
-        <a v-if="isMobile && !showOffer"
-           class="d-flex align-center font-size-16 font-bold-extra justify-content-center bg-red color-white py-20"
-           @click="showOffer = true"
-        >
-            View the details of the offer
-        </a>
-        <div v-if="!isMobile || isMobile && showOffer" class="proposal-footer d-flex justify-content-between align-center">
-            <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
-                <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
-                    More Actions
-                    <md-icon>expand_less</md-icon>
-                </md-button>
-                <md-menu-content>
-                    <md-menu-item class="text-center" @click="negotiateRate">
-                    <span class="font-size-16 font-bold-extra pl-20">
-          <img
-              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
-              class="mr-10"
-              style="width: 20px; height: 28px"
-          />
-          Negotiate Rate
-        </span>
-                    </md-menu-item>
-                    <md-menu-item class="text-center" @click="remindMeLater">
-                    <span class="font-size-16 font-bold-extra pl-20">
-          <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px" />
-          Remind me later
-        </span>
-                    </md-menu-item>
-                    <md-menu-item class="text-center" @click="changeEvent">
-                    <span class="font-size-16 font-bold-extra pl-20">
-          <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
-          Change event details
-        </span>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-            <div>
-                <md-button class="md-simple md-red md-outlined maryoku-btn md-small-hide" @click="declineProposal">Decline Proposal</md-button>
-                <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
-            </div>
-        </div>
-
-    </template>
+    <div class="proposal-header d-flex align-center justify-content-between">
+      <div class="font-size-30" v-if="proposal">
+        <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
+        <b>{{ proposal.vendor.eventCategory.fullTitle }}</b>
+        {{ proposal.vendor.companyName }}
+      </div>
+      <div>
+        <HeaderActions
+          page="proposal"
+          @toggleCommentMode="toggleCommentMode"
+          @share="shareWithAuth"
+          @export="downProposal"
+        ></HeaderActions>
+      </div>
+    </div>
+    <div class="proposal-content mt-40">
+      <EventProposalDetails
+        :vendorProposal="proposal"
+        :landingPage="true"
+        :nonMaryoku="true"
+        v-if="proposal"
+        @updateProposal="handleUpdate"
+        @ask="handleAsk"
+        @favorite="handleFavorite"
+      ></EventProposalDetails>
+    </div>
+    <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
+    <div class="proposal-footer d-flex justify-content-between align-center">
+      <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
+        <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
+          More Actions
+          <md-icon>expand_less</md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item class="text-center" @click="negotiateRate">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img
+                :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                class="mr-10"
+                style="width: 20px; height: 28px"
+              />
+              Negotiate Rate
+            </span>
+          </md-menu-item>
+          <md-menu-item class="text-center" @click="remindMeLater">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Remind me later
+            </span>
+          </md-menu-item>
+          <md-menu-item class="text-center" @click="changeEvent">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Change event details
+            </span>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <div>
+        <md-button class="md-simple md-red md-outlined maryoku-btn" @click="declineProposal">Decline Proposal</md-button>
+        <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
+      </div>
+    </div>
     <CommentEditorPanel
       v-if="showCommentEditorPanel"
       :commentComponents="commentComponents"
@@ -140,6 +113,7 @@
         <VendorDeclined
                 @rate="handleRate"
                 @close="showDeclineVendorModal=false"
+                :value="proposal.score"
         >
         </VendorDeclined>
       </template>
@@ -177,7 +151,7 @@ import Reminder from "@/models/Reminder";
 import ProposalRequest from "@/models/ProposalRequest";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { CommentMixins, ShareMixins, MobileMixins } from "@/mixins";
+import { CommentMixins, ShareMixins } from "@/mixins";
 import { mapActions, mapMutations } from "vuex";
 import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 
@@ -197,14 +171,13 @@ const components = {
 
 export default {
   components,
-  mixins: [CommentMixins, ShareMixins, MobileMixins],
+  mixins: [CommentMixins, ShareMixins],
   data() {
     return {
       page: "signin",
       loading: true,
       proposal: null,
       onlyAuth: false,
-      showOffer: false,
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
@@ -331,6 +304,7 @@ export default {
 
     },
     async declineProposal() {
+      if (this.proposal.score > 0) return;
       await this.saveProposal({...this.proposal, status: PROPOSAL_STATUS.LOST});
 
       let url = `${location.protocol}//${location.host}/#/signin`;
@@ -576,17 +550,6 @@ export default {
     guestName() {
       return this.$store.state.comment.guestName;
     },
-      headerBackgroundImage() {
-          if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
-          if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
-              return this.proposal.inspirationalPhotos[0].url;
-          if (this.proposal.vendor.images && this.proposal.vendor.images[0])
-              return this.proposal.vendor.images[0];
-          if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
-              return this.proposal.vendor.vendorImages[0];
-
-          return "";
-      },
   },
 };
 </script>
@@ -594,17 +557,20 @@ export default {
 .non-maryoku-proposal {
   background-color: white;
   .proposal-header {
-    position: relative;
+    padding: 0 80px;
+    background-color: #f5f5f5;
     img {
       width: 30px;
     }
+    height: 110px;
   }
-  .proposal-container {
+  .proposal-content {
     max-width: 1280px;
     margin: auto;
   }
   .logo-area {
-    color: #a0a0a0;
+    padding: 40px;
+    margin-top: 40px;
     background-color: #f5f5f5;
   }
   .proposal-footer {

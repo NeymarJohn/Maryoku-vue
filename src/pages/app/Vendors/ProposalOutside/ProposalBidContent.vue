@@ -41,7 +41,6 @@ export default {
     ProposalRequirements,
   },
   created() {
-    // console.log('proposalBidContent', this.vendor.services);
     let taxRate = 0;
     let discountRate = 0;
     if (this.vendor.pricingPolicies) {
@@ -71,7 +70,7 @@ export default {
       });
     }
 
-    if (!this.$store.state.vendorProposal.initialized) {
+    if (!this.$store.state.proposalForNonMaryoku.initialized) {
       let includedVendorServices = [];
       let costVendorServices = [];
 
@@ -155,7 +154,7 @@ export default {
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
           if (item.isExtraService || !item.hideOnProposal) {
-            // console.log("extra SErvce", item.extraService);
+            console.log("extra SErvce", item.extraService);
             extraServices.push({
               comments: [],
               dateCreated: "",
@@ -178,44 +177,44 @@ export default {
           }
         });
       }
-      this.$store.commit("vendorProposal/setValue", { key: "vendorCostServices", value: costVendorServices });
-      this.$store.commit("vendorProposal/setValue", {
+      this.$store.commit("proposalForNonMaryoku/setValue", { key: "vendorCostServices", value: costVendorServices });
+      this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "vendorIncludedServices",
         value: includedVendorServices || [],
       });
 
-      this.$store.commit("vendorProposal/setCostServices", {
+      this.$store.commit("proposalForNonMaryoku/setCostServices", {
         category: this.vendor.eventCategory.key,
         services: [],
       });
-      this.$store.commit("vendorProposal/setIncludedServices", {
+      this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
         category: this.vendor.eventCategory.key,
         services: includedSevices,
       });
 
-      this.$store.commit("vendorProposal/setExtraServices", {
+      this.$store.commit("proposalForNonMaryoku/setExtraServices", {
         category: this.vendor.eventCategory.key,
         services: extraServices,
       });
-      this.$store.commit("vendorProposal/setValue", { key: "initialized", value: true });
+      this.$store.commit("proposalForNonMaryoku/setValue", { key: "initialized", value: true });
     }
 
-    if (Object.keys(this.$store.state.vendorProposal.taxes).length === 0) {
-      this.$store.commit("vendorProposal/setValue", {
+    if (Object.keys(this.$store.state.proposalForNonMaryoku.taxes).length === 0) {
+      this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "taxes",
         value: { [this.vendor.eventCategory.key]: { percentage: taxRate, price: 0 } },
       });
-      this.$store.commit("vendorProposal/setValue", {
+      this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "taxes",
         value: { total: { percentage: taxRate, price: 0 } },
       });
     }
-    if (Object.keys(this.$store.state.vendorProposal.discounts).length === 0) {
-      this.$store.commit("vendorProposal/setDiscount", {
+    if (Object.keys(this.$store.state.proposalForNonMaryoku.discounts).length === 0) {
+      this.$store.commit("proposalForNonMaryoku/setDiscount", {
         category: this.vendor.eventCategory.key,
         discount: { percentage: discountRate, price: 0 },
       });
-      this.$store.commit("vendorProposal/setDiscount", {
+      this.$store.commit("proposalForNonMaryoku/setDiscount", {
         category: "total",
         discount: { percentage: discountRate, price: 0 },
       });
@@ -240,34 +239,34 @@ export default {
       return this.requirements.filter((item) => item.isSelected);
     },
     proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
     },
     vendor() {
-      return this.$store.state.vendorProposal.vendor;
+      return this.$store.state.proposalForNonMaryoku.vendor;
     },
-    costServiceItems() {
-      return this.$store.state.vendorProposal.costServices[this.category];
+      costServiceItems() {
+          return this.$store.state.vendorProposal.costServices[this.category];
+      },
+      includedServiceItems(){
+          return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
+      }
     },
-    includedServiceItems(){
-      return this.$store.state.vendorProposal.includedServices[this.category];
-    }
-  },
-  watch: {
-    // remove costServiceItem already in included section
-    costServiceItems: {
+    watch: {
+        // remove costServiceItem already in included section
+      costServiceItems: {
         handler(newVal) {
-          let includeItems = this.includedServiceItems;
-          if(newVal.length) {
-            newVal.map(costItem => {
-                includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
-            })
-          }
-          // console.log('costServiceItems', includeItems);
-          this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: includeItems });
+            let includeItems = this.includedServiceItems;
+            if(newVal.length) {
+                newVal.map(costItem => {
+                    includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
+                })
+            }
+            console.log('costServiceItems', includeItems);
+            this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: includeItems });
         },
         deep: true,
+      }
     }
-  }
 };
 </script>
 <style lang="scss" scoped>

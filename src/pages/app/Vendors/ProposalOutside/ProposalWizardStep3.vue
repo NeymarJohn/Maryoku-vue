@@ -423,6 +423,7 @@ import { mapGetters } from "vuex";
 import ProposalPricingItem from "./ProposalPricingItem.vue";
 import vueSignature from "vue-signature";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
+import ProposalPricingSummary from "./ProposalPricingSummary.vue";
 import { getBase64 } from "@/utils/file.util";
 import { capitalize } from "@/utils/string.util";
 import _ from "underscore";
@@ -438,6 +439,7 @@ export default {
     ProposalPricingItem,
     ProposalInspirationalPhotos,
     vueSignature,
+    ProposalPricingSummary,
     AttachmentTagList,
     carousel,
   },

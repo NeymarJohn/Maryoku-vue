@@ -83,7 +83,7 @@
       <template slot="body">
           <missing-detail
               :data="missingDetail"
-              @send="uploadProposal(proposalStatus.PENDING)"
+              @send="setProposalLink"
               @close="showMissingModal = false"
           ></missing-detail>
       </template>
@@ -253,18 +253,30 @@ export default {
             return;
         }
 
-        await this.uploadProposal(type)
+        if (type === PROPOSAL_STATUS.PENDING) {
+            await this.setProposalLink();
+            this.showSubmittedProposalModal = true;
+
+        } else {
+            await this.uploadProposal(type);
+
+            await Swal.fire({
+                title: `You saved the current proposal. You can edit anytime later!`,
+                buttonsStyling: false,
+                type: "success",
+                confirmButtonClass: "md-button md-vendor",
+            });
+        }
+
+
     },
 
-    async uploadProposal(type) {
-        this.$root.$emit("clear-slide-pos");
-        this.scrollToTop();
+    async uploadCoverImage() {
 
-        this.showMissingModal = false;
         const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
 
         let coverImageUrl = "";
-        this.isUpdating = true;
+
         if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
             const fileObject = S3Service.dataURLtoFile(
                 proposalForNonMaryoku.coverImage,
@@ -278,27 +290,23 @@ export default {
             );
             coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${proposalForNonMaryoku.vendor.id}.${extenstion}`;
         }
-        if (!this.isLoading) {
-            this.isLoading = true;
-            await this.saveVendor(this.vendor);
-            const proposal = this.saveProposal(type);
+    },
 
-            this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+    async uploadProposal(type) {
+        this.$root.$emit("clear-slide-pos");
+        this.scrollToTop();
 
-            this.isUpdating = false;
-            this.isLoading = false;
-            if (type === PROPOSAL_STATUS.PENDING) this.showSubmittedProposalModal = true;
-            else {
-                await Swal.fire({
-                    title: `You saved the current proposal. You can edit anytime later!`,
-                    buttonsStyling: false,
-                    type: "success",
-                    confirmButtonClass: "md-button md-vendor",
-                });
-            }
+        await this.uploadCoverImage();
 
+        this.isUpdating = true;
+        this.isLoading = true;
+        await this.saveVendor(this.vendor);
+        const proposal = this.saveProposal(type);
 
-        }
+        this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+
+        this.isUpdating = false;
+        this.isLoading = false;
     },
 
     createEvent() {
@@ -356,11 +364,13 @@ export default {
         }
       });
     },
-    setProposalLink() {
-      this.uploadProposal(PROPOSAL_STATUS.PENDING).then((proposal) => {
-        this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
-        this.showSendProposalModal = true;
-      });
+
+    async setProposalLink() {
+
+      this.showMissingModal = false;
+      await this.uploadProposal(PROPOSAL_STATUS.PENDING)
+
+      this.showSendProposalModal = true;
     },
     async submitProposal() {
       this.showSendProposalModal = false;
@@ -373,6 +383,7 @@ export default {
         { headers: this.$auth.getAuthHeader() },
       );
 
+      console.log('phone', proposal.eventData.customer.phone);
       // send SMS to customer phone to notify
       this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
       let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
@@ -383,8 +394,6 @@ export default {
           { headers: this.$auth.getAuthHeader() },
         );
       }
-
-      this.showSubmittedProposalModal = true;
     },
   },
 

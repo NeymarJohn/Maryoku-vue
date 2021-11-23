@@ -1,3 +1,4 @@
+import {mapActions} from "vuex";
 import { postReq, getReq } from "@/utils/token";
 
 export default {
