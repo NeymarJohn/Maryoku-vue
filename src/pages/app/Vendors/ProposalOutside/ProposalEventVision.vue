@@ -79,7 +79,7 @@
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
-import { seatingData } from "@/constants/specialData";
+import { SeatingOptions } from "@/constants/specialData";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 
 export default {
@@ -101,9 +101,6 @@ export default {
         thumbnailWidth: 150,
         maxFilesize: 10,
       },
-      sittingArrangement: {
-        options: [...seatingData],
-      },
       editingNewSeating: false,
     };
   },
@@ -116,10 +113,21 @@ export default {
       // });
     },
     changeItem() {
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "seatingData", value: this.sittingArrangement });
+      this.$store.commit("proposalForNonMaryoku/setSeatingData", this.sittingArrangement);
     },
   },
   computed: {
+    seatingData(){
+      return this.$store.state.proposalForNonMaryoku.seatingData;
+    },
+    sittingArrangement() {
+      if (this.seatingData) {
+        return this.seatingData
+      } else {
+        return {options: SeatingOptions}
+      }
+
+    },
     eventVision: {
       get() {
         return this.$store.state.proposalForNonMaryoku.eventVision;
@@ -132,6 +140,9 @@ export default {
       return this.$store.state.proposalForNonMaryoku.vendor;
     }
   },
+  watch:{
+      seatingData(newVal) {console.log('watch.seartingDAta', newVal)}
+  }
 };
 </script>
 <style lang="scss" scoped>

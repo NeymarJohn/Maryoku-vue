@@ -1,4 +1,4 @@
-export const seatingData = [
+export const SeatingOptions = [
   {
     item: "Theatre",
     popular: "meetings, Annual General Meetings, product launches",

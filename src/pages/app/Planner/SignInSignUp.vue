@@ -155,6 +155,9 @@ export default {
             this.$router.push({ path: "/event-wizard-create" });
           }
         } else {
+          if (this.currentUser.currentTenant === 'DEFAULT' && this.currentUser.tenants.length > 1) {
+              this.$router.push({ path: "/choose-workspace" });
+          }
           if (this.currentUser.currentTenant) {
             console.log("redirect.events");
             if(this.currentUser.currentUserType === USER_TYPE.PLANNER) { // get last event

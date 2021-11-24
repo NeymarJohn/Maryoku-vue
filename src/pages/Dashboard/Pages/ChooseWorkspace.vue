@@ -83,9 +83,8 @@ export default {
       }
     },
     tenantUrl(tenant) {
-      console.log("tenantUrl", `${this.$authService.getAppUrl(tenant)}/#/events`);
-      // return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
-      return `${this.$authService.getAppUrl(tenant)}/#/events`;
+      console.log("tenantUrl", `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`);
+      return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
     },
   },
   created() {

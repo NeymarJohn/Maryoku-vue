@@ -270,15 +270,20 @@ const mutations = {
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
 
-    setStateByVersion(state, { key, value });
+    setStateByVersion(state, { key, value: JSON.parse(JSON.stringify(value)) });
   },
   setEventProperty: (state, { key, value }) => {
     Vue.set(state.eventData, key, value)
   },
   setInspirationalPhoto: (state, { index, photo }) => {
-    console.log('setInspirationalPhoto', photo);
+
     Vue.set(state.inspirationalPhotos, index, photo);
     setStateByVersion(state, { key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos)) })
+  },
+  setSeatingData: (state, data) => {
+
+    Vue.set(state.seatingData, data);
+    setStateByVersion(state, { key: 'seatingData', value: JSON.parse(JSON.stringify(state.seatingData)) })
   },
   initState(state) {
     Vue.set(state, "costServices", {});
