@@ -74,14 +74,12 @@
     </div>
 </template>
 <script>
-    import { Loader, Modal, MaryokuInput, LocationInput } from "@/components";
+    import { MaryokuInput, LocationInput } from "@/components";
     import { postReq, getReq } from "@/utils/token";
     import {Validator} from "vee-validate";
 
     export default {
         components: {
-            Loader,
-            Modal,
             MaryokuInput,
             LocationInput,
         },

@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-customer-board p-40">
-    <loader :active="loading" :isFullScreen="true" page="vendor"/>
+    <loader :active="loading" is-full-screen page="vendor"/>
     <div class="font-size-22 font-bold d-flex align-center">
       <img :src="`${$iconURL}CustomerList/group-19735.svg`" class="mr-10" /> CUSTOMERS
       <!--<md-button class="ml-auto md-simple md-black md-maryoku mr-15">Import Customers List</md-button>-->
@@ -35,7 +35,7 @@
               <template v-for="(object, key) in customerObject">
                 <div class="customer-mark font-size-24 font-bold-extra mb-1">{{ object.group.toUpperCase() }}</div>
 
-                <customer-list-item
+                <CustomerListItem
                   v-for="customer in object.children"
                   :customer="customer"
                   :sort-fields="sortFields"
@@ -44,7 +44,7 @@
                   @customerAction="handleCustomer(customer, $event)"
                   @proposalAction="handleProposal"
                   @click="selectCustomer(customer)"
-                ></customer-list-item>
+                ></CustomerListItem>
               </template>
             </div>
           </div>
@@ -55,24 +55,24 @@
           </div>
         </div>
         <div class="md-layout-item md-size-35 mt-30">
-          <insight
+          <Insight
             v-if="renderInsight"
             :customer="selectedCustomer"
             :aggregate="aggregate"
             :vendor="vendorData"
             :customerStatus="this.tab"
-          ></insight>
+          ></Insight>
         </div>
       </div>
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
       <template slot="body">
-        <proposal-content :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
+        <ProposalContent :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
     <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
       <template slot="body">
-        <customer-form
+        <CustomerForm
           :customer="selectedCustomer"
           :action="customerAction"
           @save="saveCustomer"
@@ -86,28 +86,20 @@
 import Customer from "@/models/Customer";
 import { CUSTOMER_PAGE_TABS, CUSTOMER_TABLE_HEADERS } from "@/constants/list";
 import { CUSTOMER_PAGE_PAGINATION } from "@/constants/pagination";
-import ProposalListItem from "../components/ProposalListItem.vue";
-import carousel from "vue-owl-carousel";
-import { Loader, TablePagination, Modal } from "@/components";
-const CustomerListItem = () => import("../components/CustomerListItem");
-const ProposalContent = () => import("../components/ProposalDetail");
-const CustomerForm = () => import("../Form/CustomerForm");
-import { VsaList } from "vue-simple-accordion";
-const Insight = () => import("./insight");
+
+const components = {
+    Modal: () => import("@/components/Modal.vue"),
+    Insight : () => import("./insight.vue"),
+    VsaList: () => import("vue-simple-accordion"),
+    Loader: () => import('@/components/loader/Loader.vue'),
+    CustomerForm: () => import('../Form/CustomerForm.vue'),
+    CustomerListItem: () => import("../components/CustomerListItem.vue"),
+    ProposalContent: () => import("../components/ProposalDetail.vue"),
+    TablePagination: () => import("@/components/TablePagination.vue"),
+}
 
 export default {
-  components: {
-    ProposalListItem,
-    TablePagination,
-    CustomerListItem,
-    ProposalContent,
-    CustomerForm,
-    VsaList,
-    carousel,
-    Loader,
-    Modal,
-    Insight,
-  },
+  components,
   data() {
     return {
       loading: true,
@@ -235,13 +227,14 @@ export default {
       this.showNewCustomerModal = true;
     },
     async saveCustomer(customer) {
-      console.log("saveCustomer", customer);
-      if (customer.email && customer.companyName && customer.name) {
+
+      this.showNewCustomerModal = false;
+      if (customer.email) {
+        this.loading = true;
         let customerInstance = new Customer({ ...customer, vendorId: this.vendorData.id, type: 1 });
         await customerInstance.save();
-        this.showNewCustomerModal = false;
 
-        this.loading = true;
+
         await this.getCustomer();
         this.loading = false;
       }

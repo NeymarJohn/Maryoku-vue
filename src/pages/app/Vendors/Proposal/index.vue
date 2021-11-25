@@ -1,14 +1,9 @@
 <template>
   <div class="for-proposal-wrapper">
-    <vue-element-loading
-      v-if="!event || !vendor || !proposalRequest"
-      :active="!event || !vendor || !proposalRequest"
-      spinner="ring"
-      color="#FF547C"
-    />
-    <div class="md-layout justify-content-between" v-else>
+    <Loader :active="!event || !vendor || !proposalRequest" is-full-screen page="vendor"></Loader>
+    <div class="md-layout justify-content-between" v-if="event && vendor && proposalRequest">
       <div class="md-layout-item md-size-70">
-        <proposal-steps
+        <ProposalSteps
           :eventCategory="vendor.eventCategory"
           :step="step"
           :hasVisionStep="!!event && !!event.concept"
@@ -19,21 +14,21 @@
           <div class="proposal-add-personal-message-wrapper">
             <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
             <h4>Write something nice, we'll add it to the final proposal</h4>
-            <maryoku-textarea
+            <MaryokuTextarea
               class="width-100"
               size="small"
               rows="6"
               v-model="personalMessage"
               v-if="proposalRequest"
-            ></maryoku-textarea>
+            ></MaryokuTextarea>
             <span>Sincerely,</span>
             <p>{{ vendor.companyName }}</p>
           </div>
-          <proposal-event-vision :event="event"></proposal-event-vision>
-          <proposal-additional-requirement></proposal-additional-requirement>
+          <ProposalEventVision :event="event"></ProposalEventVision>
+          <ProposalAdditionalRequirement></ProposalAdditionalRequirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
-          <proposal-bid-content></proposal-bid-content>
+          <ProposalBidContent></ProposalBidContent>
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
@@ -41,7 +36,7 @@
             <img :src="`${iconUrl}Group 5280 (5).svg`" />
             Did you know? Referring us to vendors for these services can get you a commission get!
           </p>
-          <proposal-item-secondary-service
+          <ProposalItemSecondaryService
             v-for="(service, index) in extraServices"
             :key="index"
             :category="service.title"
@@ -55,10 +50,10 @@
             @click="selectSecondCategory(service.componentId)"
           />
 
-          <refer-new-vendor :event="event" :vendor="vendor" />
+          <ReferNewVendor :event="event" :vendor="vendor" />
         </div>
         <div class="step-wrapper" v-if="step == 3">
-          <proposal-event-summary
+          <ProposalEventSummary
             :title="`Event Information & Details`"
             :eventData="event"
             :isEdit="false"
@@ -70,8 +65,8 @@
         </div>
       </div>
       <div class="md-layout-item md-size-30 pos-relative">
-        <proposal-requirements-panel class="requirements-panel" v-if="step !== 3"></proposal-requirements-panel>
-        <proposal-budget-summary
+        <ProposalRequirementsPanel class="requirements-panel" v-if="step !== 3"></ProposalRequirementsPanel>
+        <ProposalBudgetSummary
           :bundleDiscount="true"
           :warning="true"
           :additional="true"
@@ -87,43 +82,27 @@
 
 <script>
 
-import StateTax from "@/models/StateTax";
+import S3Service from "@/services/s3.service";
 import { businessCategories, categoryNameWithIcons } from "@/constants/vendor";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import ProposalBudgetSummary from "./ProposalBudgetSummary.vue";
-import ProposalRequirementsPanel from "./ProposalRequirementsPanel";
-import ProposalSteps from "./ProposalSteps.vue";
-import ProposalItem from "./ProposalItem.vue";
-import ProposalEventVision from "./ProposalEventVision.vue";
-import ProposalBidContent from "./ProposalBidContent.vue";
-import ProposalAddFiles from "./ProposalAddFiles.vue";
-import ProposalTitleWithIcon from "./ProposalTitleWithIcon.vue";
-import ReferNewVendor from "../components/ReferNewVendor.vue";
-import ProposalEventSummary from "./ProposalEventSummary.vue";
-import VueElementLoading from "vue-element-loading";
-import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
-import ProposalAdditionalRequirement from "./ProposalAddtionalRequirement";
-import S3Service from "@/services/s3.service";
+
+const components = {
+    Loader: () => import("@/components/loader/Loader.vue"),
+    MaryokuTextarea: () => import("@/components/Inputs/MaryokuTextarea.vue"),
+    ProposalBudgetSummary: () => import("./ProposalBudgetSummary.vue"),
+    ProposalItemSecondaryService: () => import("./ProposalItemSecondaryService.vue"),
+    ProposalAdditionalRequirement: () => import("./ProposalAddtionalRequirement"),
+    ProposalEventSummary: () => import("./ProposalEventSummary.vue"),
+    ProposalRequirementsPanel: () => import("./ProposalRequirementsPanel.vue"),
+    ReferNewVendor: () => import("../components/ReferNewVendor.vue"),
+    ProposalSteps: () => import("./ProposalSteps.vue"),
+    ProposalEventVision: () => import("./ProposalEventVision.vue"),
+    ProposalBidContent: () => import("./ProposalBidContent.vue"),
+}
+
 export default {
-  components: {
-    VueElementLoading,
-    ProposalBudgetSummary,
-    ProposalItem,
-    ProposalSteps,
-    ProposalAddFiles,
-    ProposalTitleWithIcon,
-    ProposalEventSummary,
-    ReferNewVendor,
-    ProposalEventVision,
-    ProposalItemSecondaryService,
-    ProposalAdditionalRequirement,
-    ProposalBidContent,
-    ProposalRequirementsPanel,
-    MaryokuTextarea,
-  },
+  components,
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -137,14 +116,14 @@ export default {
   created() {},
   async mounted() {
     this.services = Object.assign([], businessCategories);
-    this.taxes = await StateTax.get();
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
     await this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch('common/getTaxes');
 
     // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", async ({ file, index, link, url }) => {
+    this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName }) => {
       const currentPhoto = this.inspirationalPhotos[index];
-      await  S3Service.fileUpload(file, `photo-${index}`, link)
+      const url = await  S3Service.fileUpload(file, fileName, link)
 
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
 

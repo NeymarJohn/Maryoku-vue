@@ -2,7 +2,7 @@
   <div class="customer-list-item mb-20">
     <div class="customer-group-item white-card cursor-pointer" @click="select">
       <div class="avatar bg-white color-blue mr-40">
-        {{ customer.name.charAt(0).toUpperCase() }}{{ customer.companyName.charAt(0).toUpperCase() }}
+        {{ customer.name ? customer.name.charAt(0).toUpperCase() : '' }}{{ customer.companyName ? customer.companyName.charAt(0).toUpperCase() : '' }}
       </div>
 
       <div>
