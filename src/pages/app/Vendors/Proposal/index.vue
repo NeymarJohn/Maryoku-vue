@@ -121,15 +121,15 @@ export default {
     await this.$store.dispatch('common/getTaxes');
 
     // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName }) => {
+    this.$root.$on("update-inspirational-photo", async ({ file, index, link, url }) => {
       const currentPhoto = this.inspirationalPhotos[index];
-      const url = await  S3Service.fileUpload(file, fileName, link)
+      await  S3Service.fileUpload(file, `photo-${index}`, link)
 
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
 
     });
     this.$root.$on("remove-inspirational-photo", async (index) => {
-        await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+        if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
         this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
     })
   },
@@ -196,6 +196,9 @@ export default {
     step() {
       return this.$store.state.vendorProposal.wizardStep;
     },
+    version() {
+      return this.$store.state.vendorProposal.currentVersion;
+    }
   },
   watch:{
     inspirationalPhotos(newVal){}

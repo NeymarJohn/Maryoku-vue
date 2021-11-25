@@ -109,7 +109,7 @@ export default {
         file: event.target.files[0],
         index: this.index,
         link: `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
-        fileName: `photo-${timeStamp}`,
+        url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.index}.${extension}`,
       });
     },
     handleAddPhoto() {

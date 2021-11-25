@@ -67,7 +67,6 @@ export default {
     vueDropzone: vue2Dropzone,
     ProposalServiceTable,
     ProposalRequirements,
-    ProposalUploadLegal,
   },
   props: {
     category: String,
