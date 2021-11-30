@@ -57,12 +57,6 @@ export default {
     },
     data(){
         return {
-            references: [
-                '68% of winning proposals include details about the vendor’s personal vision for the event, emphasizing creativity, investment, and added value.',
-                '45% of winning proposals include information about optional extras, giving planners the details they need to fine-tune their event.',
-                '89% of winning proposals include images that inspire the planner.',
-                '61% of winning proposals include details about items that are included in price, showing value for money.',
-            ]
         }
     },
     methods: {

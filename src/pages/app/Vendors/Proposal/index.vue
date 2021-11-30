@@ -129,7 +129,7 @@ export default {
 
     });
     this.$root.$on("remove-inspirational-photo", async (index) => {
-        await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+        if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
         this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
     })
   },
@@ -196,6 +196,9 @@ export default {
     step() {
       return this.$store.state.vendorProposal.wizardStep;
     },
+    version() {
+      return this.$store.state.vendorProposal.currentVersion;
+    }
   },
   watch:{
     inspirationalPhotos(newVal){}

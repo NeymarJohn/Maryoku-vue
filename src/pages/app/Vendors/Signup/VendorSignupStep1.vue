@@ -23,7 +23,7 @@
                 <div class="top d-flex align-center">
                   <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
                   <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
-                    <div class="color-purple font-size-14 font-bold-extra ml-20" @click="showCompanyText=true">
+                    <div class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer" @click="showCompanyText=true">
                       <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea</div>
 
                     <tooltip-notification
@@ -56,7 +56,7 @@
                     about your {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </h5>
                   <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
-                    <div class="color-purple font-size-14 font-bold-extra ml-20" @click="showServiceText=true">
+                    <div class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer" @click="showServiceText=true">
                       <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea</div>
 
                     <tooltip-notification
@@ -138,7 +138,7 @@
               <div class=" d-flex align-center">
                 <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
                 <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
-                  <div class="color-purple font-size-14 font-bold-extra ml-20 pb-10" @click="showPersonalMessage=true">
+                  <div class="color-purple font-size-14 font-bold-extra ml-20 pb-10 cursor-pointer" @click="showPersonalMessage=true">
                     <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" class="mr-10"/> Get an Idea</div>
 
                   <tooltip-notification

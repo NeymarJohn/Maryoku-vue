@@ -73,12 +73,13 @@ export default {
       this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName}) => {
           const currentPhoto = this.inspirationalPhotos[index];
 
+
           const url = await S3Service.fileUpload(file, fileName, link)
           this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url }});
 
       });
       this.$root.$on("remove-inspirational-photo", async (index) => {
-          await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+          if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
           this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: null });
       })
   },
@@ -135,6 +136,9 @@ export default {
     inspirationalPhotos(){
       return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
     },
+    version(){
+      return this.$store.state.proposalForNonMaryoku.currentVersion;
+    }
   },
   watch: {
       taxes(newVal){console.log('taxes', newVal)}

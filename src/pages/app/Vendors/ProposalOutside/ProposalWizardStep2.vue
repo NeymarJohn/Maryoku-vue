@@ -47,6 +47,9 @@ export default {
       });
     }
 
+    if (!taxRate) taxRate = this.getTaxFromState();
+    console.log('taxRate', taxRate);
+
     if (!this.$store.state.proposalForNonMaryoku.initialized) {
       this.setInitServices(
         this.vendor.eventCategory.key,
@@ -63,10 +66,34 @@ export default {
           );
         });
       }
+
       this.$store.commit("proposalForNonMaryoku/setValue", { key: "initialized", value: true });
+
+      if (Object.keys(this.$store.state.vendorProposal.taxes).length === 0) {
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+            key: "taxes",
+            value: { [this.vendor.eventCategory.key]: { percentage: taxRate, price: 0 } },
+        });
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+            key: "taxes",
+            value: { total: { percentage: taxRate, price: 0 } },
+        });
+      }
     }
   },
   methods: {
+      getTaxFromState() {
+          if (!this.event.location) return 0;
+
+          let tax = 0
+          this.taxes.map(it => {
+              const arr = this.event.location.split(', ');
+              if (arr[2] === 'USA' && arr[1] === it.code) {
+                  tax = it.tax;
+              }
+          })
+          return tax;
+      },
     setInitServices(serviceName, services, pricingPolicies) {
       let includedVendorServices = [];
       let costVendorServices = [];
@@ -144,6 +171,12 @@ export default {
   computed: {
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;
+    },
+    event(){
+      return this.$store.state.proposalForNonMaryoku.eventData;
+    },
+    taxes(){
+      return this.$store.state.common.taxes;
     },
     costServiceItems() {
       return this.$store.state.proposalForNonMaryoku.costServices[this.vendor.eventCategory.key];
