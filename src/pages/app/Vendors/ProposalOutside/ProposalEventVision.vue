@@ -108,9 +108,6 @@ export default {
     async imageSelected(file) {
       const imageData = await getBase64(file);
       const extension = file.type.split("/")[1];
-      // S3Service.fileUpload(file, logoName, "logos").then((res) => {
-      //   this.$store.dispatch("campaign/setLogo", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
-      // });
     },
     changeItem() {
       this.$store.commit("proposalForNonMaryoku/setSeatingData", this.sittingArrangement);
@@ -121,12 +118,12 @@ export default {
       return this.$store.state.proposalForNonMaryoku.seatingData;
     },
     sittingArrangement() {
+      console.log('sittingArrangement', this.seatingData);
       if (this.seatingData) {
         return this.seatingData
       } else {
         return {options: SeatingOptions}
       }
-
     },
     eventVision: {
       get() {
@@ -140,9 +137,6 @@ export default {
       return this.$store.state.proposalForNonMaryoku.vendor;
     }
   },
-  watch:{
-      seatingData(newVal) {console.log('watch.seartingDAta', newVal)}
-  }
 };
 </script>
 <style lang="scss" scoped>

@@ -2,8 +2,8 @@
   <div>
     <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
-      <ProposalHeader v-if="event" :event="event" :proposalRequest="proposalRequest"></ProposalHeader>
-      <ProposalVersionsBar v-if="proposalRequest && proposalRequest.proposal"></ProposalVersionsBar>
+      <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
+      <proposal-versions-bar v-if="proposalRequest && proposalRequest.proposal"></proposal-versions-bar>
       <div class="main-cont">
         <router-view></router-view>
       </div>
@@ -56,11 +56,11 @@
       </modal>
       <modal v-if="showMissingModal" container-class="modal-container w-max-700 no-header no-footer">
         <template slot="body">
-            <MissingDetail
+            <missing-detail
                 :data="missingDetail"
                 @send="uploadProposal(proposalStatus.PENDING)"
                 @close="showMissingModal = false"
-            ></MissingDetail>
+            ></missing-detail>
         </template>
       </modal>
       <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
@@ -79,7 +79,7 @@
         <template slot="body">
           <div class="saved-it-modal__body">
             <div class="time-cont">
-              <VendorBidTimeCounter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple"/>
+              <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple"/>
             </div>
           </div>
         </template>
@@ -119,23 +119,26 @@
 <script>
 import { mapActions } from "vuex";
 import Vendors from "@/models/Vendors";
+import { Modal, Loader } from "@/components";
 import Swal from "sweetalert2";
+import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
+import ProposalHeader from "./ProposalHeader";
+import ProposalVersionsBar from "./ProposalVersionsBar";
+import VueElementLoading from "vue-element-loading";
 import { PROPOSAL_STATUS } from "@/constants/status";
-import { MISSING_DETAILS } from "@/constants/proposal";
-
-const components = {
-    Loader: () => import('@/components/loader/Loader.vue'),
-    Modal: () => import('@/components/Modal.vue'),
-    MissingDetail: () => import('./Modals/MissingDetail.vue'),
-    ProposalVersionsBar: () => import('./ProposalVersionsBar.vue'),
-    ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
-    ProposalHeader: () => import('./ProposalHeader.vue'),
-    VendorBidTimeCounter: () => import('@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue'),
-}
+import MissingDetail from "./Modals/MissingDetail";
 
 export default {
-  components,
+  components: {
+    Loader,
+    VendorBidTimeCounter,
+    Modal,
+    MissingDetail,
+    ProposalHeader,
+    VueElementLoading,
+    ProposalVersionsBar,
+  },
   props: {
     newProposalRequest: Object,
   },
@@ -242,10 +245,6 @@ export default {
       this.openedModal = "";
     },
 
-      getMissingDetail(field) {
-          return MISSING_DETAILS.find(it => it.key === field)
-      },
-
       async calculateStage(type) {
           this.missingDetail = [];
           const vendorProposal = this.$store.state.vendorProposal;
@@ -254,29 +253,29 @@ export default {
           if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
               progress += 10;
           } else {
-              this.missingDetail.push(this.getMissingDetail('vision'))
+              this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
           }
           if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
               progress += 30;
           } else {
-              this.missingDetail.push(this.getMissingDetail('cost'))
+              this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
           }
 
           if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
               progress += 20;
           } else {
-              this.missingDetail.push(this.getMissingDetail('include'))
+              this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
           }
           if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
               progress += 20;
           } else {
-              this.missingDetail.push(this.getMissingDetail('extra'))
+              this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
           }
 
           if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
               progress += 20;
           } else {
-              this.missingDetail.push(this.getMissingDetail('image'))
+              this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
           }
 
           // check missing when submit the proposal

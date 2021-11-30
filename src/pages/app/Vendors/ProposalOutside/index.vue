@@ -70,11 +70,10 @@ export default {
     await this.$store.dispatch('common/getTaxes');
 
     // handling uploading photo backhand process
-      this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName}) => {
+      this.$root.$on("update-inspirational-photo", async ({ file, index, link}) => {
           const currentPhoto = this.inspirationalPhotos[index];
 
-
-          const url = await S3Service.fileUpload(file, fileName, link)
+          let url = await S3Service.fileUpload(file, `photo-${index}`, link)
           this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url }});
 
       });

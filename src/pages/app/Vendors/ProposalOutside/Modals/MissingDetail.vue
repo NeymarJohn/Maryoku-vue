@@ -25,13 +25,10 @@
                     {{ option.label }}</div>
             </div>
             <div class="p-20">
-                <template v-for="option in data">
-                    <p v-if="option.message" class="font-size-16 d-flex align-start">
-                        <img :src="`${$iconURL}common/light.svg`" class="label-icon mr-10" />
-                        {{ option.message }}
-                    </p>
-                </template>
-
+                <p v-for="ref in references" class="font-size-16 d-flex align-start">
+                    <img :src="`${$iconURL}common/light.svg`" class="label-icon mr-10" />
+                    {{ ref }}
+                </p>
             </div>
         </div>
         <div class="d-flex align-center">
@@ -59,6 +56,12 @@ export default {
     },
     data(){
         return {
+            references: [
+                '68% of winning proposals include details about the vendor’s personal vision for the event, emphasizing creativity, investment, and added value.',
+                '45% of winning proposals include information about optional extras, giving planners the details they need to fine-tune their event.',
+                '89% of winning proposals include images that inspire the planner.',
+                '61% of winning proposals include details about items that are included in price, showing value for money.',
+            ]
         }
     },
     methods: {
