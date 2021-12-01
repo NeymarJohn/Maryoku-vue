@@ -48,16 +48,7 @@
             </ul>
           </div>
           <div class="d-flex flex-column align-center bg-white">
-              <TimerPanel
-                  v-if="!isMobile || isMobile && !showOffer"
-                  :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
-                  :target="targetTime"
-                  :pending="negotiationPending"
-                  :declined="negotiationDeclined"
-                  :approved="negotiationProcessed"
-                  @updateExpireDate="updateExpireDate"
-                  :theme="isMobile ? 'mobile red' : theme"
-              ></TimerPanel>
+              <slot name="timer"></slot>
               <div v-if="isMobile && !showOffer">
                   <div class="width-70 mx-auto">
                       <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
@@ -265,12 +256,17 @@
         </div>
       </div>
 
-      <div v-if="!isMobile || isMobile && section === 2" class="proposal-section policy-section">
-        <div
-              v-if="vendorProposal.vendor.healthPolicy ||
+      <div v-if="!isMobile || isMobile && section === 2" class="proposal-section policy-section" :class="isMobile ? 'my-15' : ' mt-40'">
+
+        <div class="d-flex align-center py-10" v-if="isMobile && section === 2">
+            <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
+            <div class="ml-10 font-size-18 font-bold-extra">Policy and documents</div>
+        </div>
+
+        <div v-if="vendorProposal.vendor.healthPolicy ||
           vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length
         "
-              class="proposal-section policy-section"
+              class="proposal-section"
           >
               <div class="proposal-section__title"><img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy</div>
 
@@ -302,9 +298,9 @@
                   </template>
               </div>
           </div>
-        <div class="proposal-section__title">
+        <h2 class="proposal-section__title">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
-        </div>
+        </h2>
 
         <div class="policy-content">
           <div class="side-label">
@@ -390,65 +386,50 @@
         </div>
       </div>
 
-      <div v-if="isMobile && section === 3" class="proposal-section">
-          <div class="about-us mb-40">
-              <p class="about-content mt-10">{{ vendorProposal.vendor.about.company }}</p>
+      <div v-if="isMobile && section === 3" class="proposal-section px-20">
+          <div class="d-flex align-center py-10">
+              <img :src="`${$iconURL}Budget+Elements/${vendorProposal.vendor.eventCategory.icon}`" width="35px"/>
+              <h5 class="ml-10 font-bold-extra">About Our Venue</h5>
           </div>
-          <div class="contact-section mb-40">
-              <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
-              <ul class="contact-list_items d-flex justify-content-start">
-                  <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
-                      <a href>
+          <div class="">
+              <p class="font-size-12 m-0">{{ vendorProposal.vendor.about.company }}</p>
+          </div>
+          <md-divider class="my-20"></md-divider>
+          <div class="contact-section">
+              <div class="font-size-16 font-bold-extra mb-10">Contact Us</div>
+              <ul class="list-style-none p-0">
+                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorMainEmail">
+                      <a href class="font-size-14">
                           <img :src="`${submitProposalIcon}Asset 286.svg`" />
                           {{ vendorProposal.vendor.vendorMainEmail }}
                       </a>
                   </li>
-                  <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
-                      <a href>
+                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorAddressLine1">
+                      <a href class="font-size-14">
                           <img :src="`${submitProposalIcon}Asset 285.svg`" />
                           {{ vendorProposal.vendor.vendorAddressLine1 }}
                           {{ vendorProposal.vendor.vendorAddressLine2 }}
                       </a>
                   </li>
-                  <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-                      <a href>
+                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                      <a href class="font-size-14">
                           <img :src="`${submitProposalIcon}Asset 284.svg`" />
                           {{ vendorProposal.vendor.vendorMainPhoneNumber }}
                       </a>
                   </li>
               </ul>
           </div>
-          <div class="social-section mb-30" v-if="isSocial()">
-              <div>Website & social</div>
-              <div class="items mt-10">
-                  <div
-                      class="item"
-                      v-for="(s, sIndex) in socialMediaBlocks"
-                      :key="sIndex"
-                      :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
+          <div class="d-flex align-center justify-content-center my-20" v-if="isSocial()">
+              <template v-for="(s, sIndex) in socialMediaBlocks">
+                  <a
+                      class="mx-10"
+                      v-if="vendorProposal.vendor.social[s.name]"
+                      :href="vendorProposal.vendor.social[s.name]"
+                      target="_blank"
                   >
-                      <a
-                          v-if="vendorProposal.vendor.social[s.name]"
-                          :href="vendorProposal.vendor.social[s.name]"
-                          target="_blank"
-                      >
-                          <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
-                          {{ vendorProposal.vendor.social[s.name] }}
-                      </a>
-                  </div>
-              </div>
-          </div>
-          <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
-              <div class="attachment-tag-list">
-                  <div
-                      class="attachment-tag"
-                      v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
-                      :key="index"
-                  >
-                      <img :src="`${$iconURL}common/pin-red.svg`" />
-                      <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
-                  </div>
-              </div>
+                      <img :src="`${$iconURL}Vendor Signup/${s.icon}`" width="25px" />
+                  </a>
+              </template>
           </div>
       </div>
     </div>
@@ -515,7 +496,6 @@ import { costByService, extraCost, discounting, addingTax } from "@/utils/price"
 import { socialMediaBlocks } from "@/constants/vendor";
 import { GuaranteedOptions } from "@/constants/options";
 import { ProposalContentTabOptions } from "@/constants/tabs";
-import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import { CommentMixins, ShareMixins, MobileMixins } from "@/mixins";
 
 //COMPONENTS
@@ -525,7 +505,6 @@ const components = {
     carousel: () => import("vue-owl-carousel"),
     CancellationPolicy: () => import("@/components/CancellationPolicy"),
     EventProposalPrice: () => import("./EventProposalPrice.vue"),
-    TimerPanel: () => import("../components/TimerPanel.vue"),
     ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
 }
 
@@ -751,45 +730,6 @@ export default {
     ...mapGetters({
       components: "event/getComponentsList",
     }),
-    targetTime() {
-      return new Date(this.vendorProposal.expiredDate);
-    },
-    negotiationProcessed() {
-      if (!this.vendorProposal.nonMaryoku) return false;
-      return (
-        !!this.vendorProposal.negotiations.length &&
-        this.vendorProposal.negotiations.every(
-          (it) =>
-            it.status === NEGOTIATION_REQUEST_STATUS.APPROVED &&
-            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
-            it.remainingTime > 0,
-        )
-      );
-    },
-    negotiationDeclined() {
-      if (!this.vendorProposal.nonMaryoku) return false;
-      return (
-        !!this.vendorProposal.negotiations.length &&
-        this.vendorProposal.negotiations.every(
-          (it) =>
-            it.status === NEGOTIATION_REQUEST_STATUS.DECLINE &&
-            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
-            it.remainingTime > 0,
-        )
-      );
-    },
-    negotiationPending() {
-      console.log("negotiationPending", this.vendorProposal);
-      return (
-        !!this.vendorProposal.negotiations.length &&
-        this.vendorProposal.negotiations.some(
-          (it) =>
-            it.status === NEGOTIATION_REQUEST_STATUS.NONE &&
-            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
-            it.remainingTime > 0,
-        )
-      );
-    },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
