@@ -48,7 +48,16 @@
             </ul>
           </div>
           <div class="d-flex flex-column align-center bg-white">
-              <slot name="timer"></slot>
+              <TimerPanel
+                  v-if="!isMobile || isMobile && !showOffer"
+                  :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
+                  :target="targetTime"
+                  :pending="negotiationPending"
+                  :declined="negotiationDeclined"
+                  :approved="negotiationProcessed"
+                  @updateExpireDate="updateExpireDate"
+                  :theme="isMobile ? 'mobile red' : theme"
+              ></TimerPanel>
               <div v-if="isMobile && !showOffer">
                   <div class="width-70 mx-auto">
                       <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
@@ -69,14 +78,26 @@
           </div>
         </div>
 
-        <ProposalContentTabs
-            v-if="isMobile && showOffer"
-            :selected="section"
-            :options="contentTabs"
-            @select="selectTab"
-        />
+        <div v-if="isMobile && showOffer" class="md-layout md-elevation-1">
+            <div class="md-layout-item text-center font-size-14 border-right p-5 flex-1" @click="section = 0">
+                <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" width="20px" />
+                <div class="mt-10">Detail & Vision</div>
+            </div>
+            <div class="md-layout-item text-center font-size-14 border-right p-5 flex-1" @click="section = 1">
+                <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" width="20px"/>
+                <div class="mt-10">Pricing</div>
+            </div>
+            <div class="md-layout-item text-center font-size-14 border-right p-5 flex-1" @click="section = 2">
+                <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" width="20px"/>
+                <div class="mt-10">Policy & More</div>
+            </div>
+            <div class="md-layout-item text-center font-size-14 p-5 flex-1" @click="section = 3">
+                <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" width="20px"/>
+                <div class="mt-10">About us</div>
+            </div>
+        </div>
 
-        <div v-if="!isMobile || isMobile && section === 0" class="proposal-body p-20">
+        <div v-if="!isMobile || isMobile && section === 0" class="proposal-body">
           <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
               <img
                   v-tooltip="{
@@ -103,9 +124,9 @@
               </p>
           </div>
 
-          <div class="mt-30 mb-40" :class="isMobile ? 'font-size-18' : 'font-size-22'">
+          <div class="vision mt-30 font-size-22 mb-40">
             <div class="font-bold">
-              <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="mr-10" width="25px"/>
+              <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
               Our vision for your event
             </div>
             <p class="mt-10">{{ vendorProposal.eventVision }}</p>
@@ -200,16 +221,16 @@
         </div>
       </div>
 
-      <div v-if="!isMobile || isMobile && section === 1" class="proposal-section pricing-section" :class="isMobile ? 'my-15' : ' mt-40'">
-        <div class="proposal-section__title font-size-22 font-bold-extra" :class="isMobile ? 'p-20 bg-white' : ''">
+      <div v-if="!isMobile || isMobile && section === 1" class="proposal-section pricing-section">
+        <div class="proposal-section__title font-size-22 font-bold-extra">
           <img
             src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
             width="15"
           />
           Pricing & Details
-          <span class="font-regular font-size-16 md-small-hide">*We work only with our catering</span>
+          <span class="font-regular font-size-16">*We work only with our catering</span>
         </div>
-        <div class="mt-20 mb-10 md-small-hide">What would you like to take from our suggested services?</div>
+        <div class="mt-20 mb-10">What would you like to take from our suggested services?</div>
         <EventProposalPrice
           :proposalData="vendorProposal"
           :serviceCategory="vendorProposal.vendor.vendorCategory"
@@ -229,24 +250,14 @@
           class="bundle-section d-flex justify-content-between align-center"
           v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied && checkedAllBundledOffers"
         >
-        <div>
+          <div>
             <span class="font-size-30 font-bold">Bundle offer</span>
             <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
             <span>{{ getBundleServices(vendorProposal.bookedServices) }}</span>
           </div>
-        <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
+          <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
-        <div v-if="isMobile" class="total-section p-30">
-          <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
-            Current bid
-            <p class="font-size-18 font-bold-extra color-white m-0">$2120</p>
-          </div>
-          <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
-            Before discount
-            <p class="color-white m-0">(10% off) $3000</p>
-          </div>
-        </div>
-        <div v-else class="total-section d-flex justify-content-between mt-15 p-40">
+        <div class="total-section d-flex justify-content-between mt-15">
           <div>
             <span class="font-bold-extra font-size-30">Total</span>
           </div>
@@ -256,17 +267,14 @@
         </div>
       </div>
 
-      <div v-if="!isMobile || isMobile && section === 2" class="proposal-section policy-section" :class="isMobile ? 'my-15' : ' mt-40'">
 
-        <div class="d-flex align-center py-10" v-if="isMobile && section === 2">
-            <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
-            <div class="ml-10 font-size-18 font-bold-extra">Policy and documents</div>
-        </div>
 
-        <div v-if="vendorProposal.vendor.healthPolicy ||
+      <div v-if="!isMobile || isMobile && section === 2" class="proposal-section policy-section">
+        <div
+              v-if="vendorProposal.vendor.healthPolicy ||
           vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length
         "
-              class="proposal-section"
+              class="proposal-section policy-section"
           >
               <div class="proposal-section__title"><img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy</div>
 
@@ -298,9 +306,9 @@
                   </template>
               </div>
           </div>
-        <h2 class="proposal-section__title">
+        <div class="proposal-section__title">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
-        </h2>
+        </div>
 
         <div class="policy-content">
           <div class="side-label">
@@ -386,50 +394,65 @@
         </div>
       </div>
 
-      <div v-if="isMobile && section === 3" class="proposal-section px-20">
-          <div class="d-flex align-center py-10">
-              <img :src="`${$iconURL}Budget+Elements/${vendorProposal.vendor.eventCategory.icon}`" width="35px"/>
-              <h5 class="ml-10 font-bold-extra">About Our Venue</h5>
+      <div v-if="isMobile && section === 3" class="proposal-section">
+          <div class="about-us mb-40">
+              <p class="about-content mt-10">{{ vendorProposal.vendor.about.company }}</p>
           </div>
-          <div class="">
-              <p class="font-size-12 m-0">{{ vendorProposal.vendor.about.company }}</p>
-          </div>
-          <md-divider class="my-20"></md-divider>
-          <div class="contact-section">
-              <div class="font-size-16 font-bold-extra mb-10">Contact Us</div>
-              <ul class="list-style-none p-0">
-                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorMainEmail">
-                      <a href class="font-size-14">
+          <div class="contact-section mb-40">
+              <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
+              <ul class="contact-list_items d-flex justify-content-start">
+                  <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                      <a href>
                           <img :src="`${submitProposalIcon}Asset 286.svg`" />
                           {{ vendorProposal.vendor.vendorMainEmail }}
                       </a>
                   </li>
-                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorAddressLine1">
-                      <a href class="font-size-14">
+                  <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                      <a href>
                           <img :src="`${submitProposalIcon}Asset 285.svg`" />
                           {{ vendorProposal.vendor.vendorAddressLine1 }}
                           {{ vendorProposal.vendor.vendorAddressLine2 }}
                       </a>
                   </li>
-                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-                      <a href class="font-size-14">
+                  <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                      <a href>
                           <img :src="`${submitProposalIcon}Asset 284.svg`" />
                           {{ vendorProposal.vendor.vendorMainPhoneNumber }}
                       </a>
                   </li>
               </ul>
           </div>
-          <div class="d-flex align-center justify-content-center my-20" v-if="isSocial()">
-              <template v-for="(s, sIndex) in socialMediaBlocks">
-                  <a
-                      class="mx-10"
-                      v-if="vendorProposal.vendor.social[s.name]"
-                      :href="vendorProposal.vendor.social[s.name]"
-                      target="_blank"
+          <div class="social-section mb-30" v-if="isSocial()">
+              <div>Website & social</div>
+              <div class="items mt-10">
+                  <div
+                      class="item"
+                      v-for="(s, sIndex) in socialMediaBlocks"
+                      :key="sIndex"
+                      :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
                   >
-                      <img :src="`${$iconURL}Vendor Signup/${s.icon}`" width="25px" />
-                  </a>
-              </template>
+                      <a
+                          v-if="vendorProposal.vendor.social[s.name]"
+                          :href="vendorProposal.vendor.social[s.name]"
+                          target="_blank"
+                      >
+                          <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
+                          {{ vendorProposal.vendor.social[s.name] }}
+                      </a>
+                  </div>
+              </div>
+          </div>
+          <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
+              <div class="attachment-tag-list">
+                  <div
+                      class="attachment-tag"
+                      v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
+                      :key="index"
+                  >
+                      <img :src="`${$iconURL}common/pin-red.svg`" />
+                      <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
+                  </div>
+              </div>
           </div>
       </div>
     </div>
@@ -495,7 +518,7 @@ import { costByService, extraCost, discounting, addingTax } from "@/utils/price"
 
 import { socialMediaBlocks } from "@/constants/vendor";
 import { GuaranteedOptions } from "@/constants/options";
-import { ProposalContentTabOptions } from "@/constants/tabs";
+import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import { CommentMixins, ShareMixins, MobileMixins } from "@/mixins";
 
 //COMPONENTS
@@ -505,7 +528,7 @@ const components = {
     carousel: () => import("vue-owl-carousel"),
     CancellationPolicy: () => import("@/components/CancellationPolicy"),
     EventProposalPrice: () => import("./EventProposalPrice.vue"),
-    ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
+    TimerPanel: () => import("../components/TimerPanel.vue"),
 }
 
 export default {
@@ -567,7 +590,6 @@ export default {
       addedServices: {},
       socialMediaBlocks,
       guaranteedOptions: GuaranteedOptions,
-      contentTabs: ProposalContentTabOptions,
     };
   },
   created() {
@@ -721,15 +743,51 @@ export default {
     favorite() {
       this.$emit("favorite", !this.vendorProposal.isFavorite);
     },
-    selectTab(val){
-      this.section = val;
-    }
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
     ...mapGetters({
       components: "event/getComponentsList",
     }),
+    targetTime() {
+      return new Date(this.vendorProposal.expiredDate);
+    },
+    negotiationProcessed() {
+      if (!this.vendorProposal.nonMaryoku) return false;
+      return (
+        !!this.vendorProposal.negotiations.length &&
+        this.vendorProposal.negotiations.every(
+          (it) =>
+            it.status === NEGOTIATION_REQUEST_STATUS.APPROVED &&
+            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
+            it.remainingTime > 0,
+        )
+      );
+    },
+    negotiationDeclined() {
+      if (!this.vendorProposal.nonMaryoku) return false;
+      return (
+        !!this.vendorProposal.negotiations.length &&
+        this.vendorProposal.negotiations.every(
+          (it) =>
+            it.status === NEGOTIATION_REQUEST_STATUS.DECLINE &&
+            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
+            it.remainingTime > 0,
+        )
+      );
+    },
+    negotiationPending() {
+      console.log("negotiationPending", this.vendorProposal);
+      return (
+        !!this.vendorProposal.negotiations.length &&
+        this.vendorProposal.negotiations.some(
+          (it) =>
+            it.status === NEGOTIATION_REQUEST_STATUS.NONE &&
+            it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME &&
+            it.remainingTime > 0,
+        )
+      );
+    },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
@@ -869,6 +927,9 @@ export default {
     position: relative;
   }
 }
+.border-right{
+    border-right: 1px solid #e5e5e5;
+}
 .proposal-page {
   &_details {
     .alert-danger {
@@ -984,6 +1045,7 @@ export default {
       }
 
       .proposal-body {
+        padding: 1em 2.5em;
         position: relative;
 
         h1 {
@@ -1074,6 +1136,8 @@ export default {
         }
       }
       .pricing-section {
+        margin-top: 4em;
+
         &__table,
         &__list {
           width: 100%;
@@ -1410,11 +1474,18 @@ export default {
     .total-section {
       color: white;
       background-color: #404040;
+      padding: 40px 60px;
       border-radius: 3px;
     }
     .proposal-footer {
       text-align: center;
       padding: 40px;
+    }
+    .vision {
+      img {
+        width: 25px;
+        margin-right: 10px;
+      }
     }
 
     .proposal-images {

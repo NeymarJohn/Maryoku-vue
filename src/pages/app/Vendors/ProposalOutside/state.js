@@ -45,7 +45,6 @@ const state = {
   inspirationalPhotos: new Array(15),
   versions: [],
   original: null,
-  seatingData: null,
   currentVersion: -1,
 };
 const getters = {
@@ -277,13 +276,14 @@ const mutations = {
     Vue.set(state.eventData, key, value)
   },
   setInspirationalPhoto: (state, { index, photo }) => {
+    console.log('setInspirationalPhoto', index, photo, state.currentVersion)
     Vue.set(state.inspirationalPhotos, index, photo);
     setStateByVersion(state, { key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos)) })
   },
   setSeatingData: (state, data) => {
 
-    Vue.set(state, 'seatingData', JSON.parse(JSON.stringify(data)));
-    setStateByVersion(state, { key: 'seatingData', value: JSON.parse(JSON.stringify(data)) })
+    Vue.set(state.seatingData, data);
+    setStateByVersion(state, { key: 'seatingData', value: JSON.parse(JSON.stringify(state.seatingData)) })
   },
   initState(state) {
     Vue.set(state, "costServices", {});

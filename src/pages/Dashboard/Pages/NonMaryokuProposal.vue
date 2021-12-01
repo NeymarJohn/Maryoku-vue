@@ -38,20 +38,7 @@
                 @updateProposal="handleUpdate"
                 @ask="handleAsk"
                 @favorite="handleFavorite"
-            >
-                <template slot="timer">
-                    <TimerPanel
-                        v-if="!isMobile || isMobile && !showOffer"
-                        :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
-                        :target="targetTime"
-                        :pending="negotiationPending"
-                        :declined="negotiationDeclined"
-                        :approved="negotiationProcessed"
-                        @updateExpireDate="handleAsk('expiredDate')"
-                        :theme="isMobile ? 'mobile red' : 'red'"
-                    ></TimerPanel>
-                </template>
-            </EventProposalDetails>
+            ></EventProposalDetails>
         </div>
 
         <div class="text-center logo-area" :class="isMobile ? 'font-size-14 py-10' : 'font-size-18 p-40 mt-40'">
@@ -191,13 +178,12 @@ import Reminder from "@/models/Reminder";
 import ProposalRequest from "@/models/ProposalRequest";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { CommentMixins, ShareMixins, MobileMixins, TimerMixins } from "@/mixins";
+import { CommentMixins, ShareMixins, MobileMixins } from "@/mixins";
 import { mapActions, mapMutations } from "vuex";
 import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 
 const components = {
     EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
-    TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
     CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
     GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
     HeaderActions: () => import('@/components/HeaderActions.vue'),
@@ -206,14 +192,13 @@ const components = {
     Modal: () => import('@/components/Modal.vue'),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
     VendorDeclined: () => import('./components/VendorDeclined.vue'),
-    CollapsePanel: () => import("@/components/CollapsePanel.vue"),
     RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
     NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
 }
 
 export default {
   components,
-  mixins: [CommentMixins, ShareMixins, MobileMixins, TimerMixins],
+  mixins: [CommentMixins, ShareMixins, MobileMixins],
   data() {
     return {
       page: "signin",

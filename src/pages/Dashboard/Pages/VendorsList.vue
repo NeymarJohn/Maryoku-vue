@@ -2,15 +2,21 @@
   <div class="card vendor-list-all">
     <loader :active="loading" is-full-screen/>
     <h1>All Vendors</h1>
-    <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
-    <md-table v-model="vendors" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="sort">
+    <md-table v-model="vendors" :md-sort.sync="sortFields.sort" :md-sort-order.sync="sortFields.order" :md-sort-fn="sort">
+        <md-table-toolbar>
+            <div class="md-toolbar-section-start">
+                <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
+            </div>
 
-      <template slot="md-table-row" slot-scope="{ item }">
-        <md-table-row :key="item.id">
-          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ getIndex(item) + 1 }}</md-table-cell>
-<!--          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>-->
+            <md-field md-clearable class="md-toolbar-section-end">
+                <md-input placeholder="Search by name..." v-model="search" @input="searchOnTable" />
+            </md-field>
+        </md-table-toolbar>
+
+        <md-table-row slot="md-table-row" slot-scope="{ item }">
+          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ pagination.limit * (pagination.page - 1) + getIndex(item) + 1 }}</md-table-cell>
           <md-table-cell md-label="Company" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
-          <md-table-cell md-label="URL" md-sort-by="url">
+          <md-table-cell md-label="URL" md-sort-by="id">
             <div class="d-flex align-center">
                 <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank" class="mr-10">{{ item.id }}</a>
                 <md-button
@@ -42,14 +48,32 @@
             </md-button>
           </md-table-cell>
         </md-table-row>
+<!--      <md-table-pagination-->
+<!--        :md-page-size="pagination.limit"-->
+<!--        :md-page-options="[5, 10, 25, 50, 100]"-->
+<!--        :md-update="updatePagination"-->
+<!--        :md-data.sync="pagination.vendors" />-->
 
-<!--        <md-table-row class="md-table-row px-100" v-if="selectedIdx === item.id">-->
-<!--              <md-table-cell colspan="9">-->
-<!--               -->
-<!--              </md-table-cell>-->
-<!--        </md-table-row>-->
-      </template>
     </md-table>
+      <div class="d-flex align-center">
+          <div class="ml-auto font-size-14">Vendors per page</div>
+          <md-field class="w-max-80 ml-10">
+              <md-select v-model="pagination.limit" name="vendorPerPage" id="vendorPerPage" @md-selected="updatePagination">
+                  <md-option :value="10">10</md-option>
+                  <md-option :value="25">25</md-option>
+                  <md-option :value="50">50</md-option>
+                  <md-option :value="100">100</md-option>
+              </md-select>
+          </md-field>
+          <div>{{`${pagination.limit * (pagination.page - 1) + 1} - ${pagination.limit * pagination.page < pagination.total ?
+              pagination.limit * pagination.page : pagination.total} of ${pagination.total}`}}</div>
+          <md-button class="md-icon-button md-simple collapse-button ml-10" @click="preview">
+              <md-icon>keyboard_arrow_left</md-icon>
+          </md-button>
+          <md-button class="md-icon-button md-simple collapse-button" @click="next">
+              <md-icon>keyboard_arrow_right</md-icon>
+          </md-button>
+      </div>
     <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
     <Modal containerClass="modal-container no-header no-footer" v-if="showProposalTable">
       <template slot="body">
@@ -63,6 +87,7 @@ import Vendor from "@/models/Vendors";
 import Proposal from "@/models/Proposal";
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
+import { VENDOR_PAGE_PAGINATION } from "@/constants/pagination";
 const ProposalTable = () => import('./components/ProposalTable')
 
 const components = {
@@ -77,26 +102,37 @@ export default {
   components : {...components, ProposalTable},
   data() {
     return {
-      vendors: null,
+      vendors: [],
       showAlert: false,
       currentPath: location.origin,
       loading: true,
-      currentSort: 'name',
-      currentSortOrder: 'asc',
+      search: '',
       selectedIdx: null,
-      sortFields: { sort: "", order: "" },
+      pagination: VENDOR_PAGE_PAGINATION,
+      sortFields: { sort: "url", order: "asc" },
       vendorProposals: [],
       showProposalTable: false,
     };
   },
-  created() {
-    new Vendor().get().then((vendors) => {
-      console.log("vendors", vendors);
-      this.vendors = vendors[0].results;
-      this.loading = false;
-    });
+  async created() {
+      this.vendors = await this.getVendors();
   },
   methods: {
+    async getVendors() {
+      this.loading = true;
+
+      let query = new Vendor();
+      query.page(this.pagination.page).limit(this.pagination.limit)
+      query.params({...this.sortFields, q: this.search.toLowerCase()});
+      let res = await query.get();
+
+      Object.keys(this.pagination).forEach(key => {
+          this.pagination[key] = parseInt(res[0].model[key]);
+      })
+      this.loading = false;
+
+      return res[0].results
+    },
     copyUrl(url) {},
     onCopy() {
       this.showAlert = true;
@@ -129,7 +165,6 @@ export default {
       FileSaver.saveAs(data, "vendors.xlsx");
     },
     async handleSelect(item){
-      console.log('handleSelect', item)
       if ( this.selectedIdx !== item.id) {
         this.loading = true;
         this.selectedIdx = item.id;
@@ -143,26 +178,29 @@ export default {
       }
 
     },
-    async selectSort(sortField) {
-      if (!sortField) return;
-
-      if (this.sortFields.sort !== sortField) {
-        this.$set(this.sortFields, "sort", sortField);
-        this.$set(this.sortFields, "order", "asc");
-      } else {
-        this.sortFields["order"] = this.sortFields["order"] === "desc" ? "asc" : "desc";
-      }
+    async searchOnTable() {
+        console.log('searchOnTable', this.search);
+        this.pagination.page = 1;
+        this.vendors = await this.getVendors();
     },
-    sort(value) {
-        return value.sort((a, b) => {
-            const sortBy = this.currentSort
-
-            if (this.currentSortOrder === 'desc') {
-                return a[sortBy].toString().localeCompare(b[sortBy].toString())
-            }
-
-            return b[sortBy].toString().localeCompare(a[sortBy].toString())
-        })
+    async updatePagination(){
+        console.log('updatePage', this.pagination.limit)
+        this.vendors = await this.getVendors();
+    },
+    async next(){
+        if (this.pagination.total < (this.pagination.page) * this.pagination.limit) return
+        this.pagination.page += 1;
+        this.vendors = await this.getVendors();
+    },
+    async preview() {
+        if (this.pagination.page === 1) return
+        this.pagination.page -= 1;
+        this.vendors = await this.getVendors();
+    },
+    async sort(value) {
+        console.log('sort', this.sortFields);
+        this.pagination.page = 1;
+        this.vendors = await this.getVendors()
     },
     getIndex (item){
         return this.vendors.findIndex(v => v.id === item.id);

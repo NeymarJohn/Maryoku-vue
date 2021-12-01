@@ -2568,7 +2568,7 @@
                             }
                             &.md-checked {
                                 .md-radio-container {
-                                    border-color: $rose !important;
+                                    //border-color: $rose !important;
                                 }
                             }
                         }
@@ -2593,7 +2593,7 @@
                             }
                             &.md-checked {
                                 .md-checkbox-container {
-                                    border-color: $rose;
+                                    //border-color: $rose;
                                     border-width: 3px;
 
                                     &:after {

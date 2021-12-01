@@ -1,131 +1,65 @@
 <template>
-    <div style="width: 800px;height: 500px">
-        <LineChart :dataChart="data" id="number_of_participants_chart" :optionChart="options"
-                   type="line" :width="'800px'" :height="'500px'"></LineChart>
+    <div>
+        <md-table v-model="users.mdData" md-card>
+            <md-table-toolbar>
+                <h1 className="md-title">Users</h1>
+            </md-table-toolbar>
+
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
+                <md-table-cell className="avatar" md-label="Avatar"><img :src="item.avatar" width="30px"></md-table-cell>
+                <md-table-cell md-label="Name">{{ item.first_name }}</md-table-cell>
+                <md-table-cell md-label="Last name">{{ item.last_name }}</md-table-cell>
+            </md-table-row>
+
+            <md-table-pagination
+                :md-page-size="rowsPerPage"
+                :md-page-options="[3, 5, 10, 15]"
+                :md-update="updatePagination"
+                :md-data.sync="users"/>
+        </md-table>
     </div>
 </template>
+
 <script>
-// import {CommentInput} from "@/components";
-import LineChart from "@/components/Chart/LineChart.vue";
+
 export default {
-  components:{
-      LineChart,
-  },
-  props:{
-
-  },
-  data(){
-      return {
-          data: {
-            labels: ['Jan', '', '', '', '', 'Jun', '', '', '', '', '', 'Dec' ],
-            datasets: [
-                {
-                    label: '',
-                    data : [0, 10, 30, 60, 45, 30, 40, 40, 30, 15, 30, 20],
-                    fill: true,
-                    borderColor: '#2cde6b',
-                    backgroundColor: '#2cde6b',
-                    // tension: 0.4,
-                },
-                {
-                    label: '',
-                    data : [0, 15, 40, 80, 60, 40, 50, 45, 40, 25, 35, 30],
-                    fill: true,
-                    borderColor: '#641856',
-                    backgroundColor: '#641856',
-                    // tension: 0.4,
-                },
-            ]
-          },
-          options: {
-              type: 'line',
-              legend: {
-                  display: false,
-              },
-              elements: {
-                  line: {
-                      borderColor: "white",
-                      radius: 0,
-                  },
-              },
-              layout: {
-                  padding: {
-                      left: 20,
-                      right: 10,
-                      top: 25,
-                      bottom: 10,
-                  },
-              },
-              scales: {
-                  y: {
-                      suggestedMin: 50,
-                      suggestedMax: 100,
-                  },
-                  yAxes: [
-                      {
-                          ticks: {
-                              beginAtZero: false,
-                              fontColor: "black",
-                              padding: 5,
-                              fontSize: 10,
-                          },
-                          gridLines: {
-                              color: '#707070',
-                              zeroLineColor: "white",
-                          },
-                          callback: value => console.log('value', value)
-                      },
-                  ],
-                  xAxes: [
-                      {
-                          barThickness: 10,
-                          ticks: {
-                              beginAtZero: false,
-                              fontColor: "black",
-                              padding: 5,
-                              fontSize: 12,
-                          },
-                          gridLines: {
-                              color: '#707070',
-                              zeroLineColor: "white",
-                          },
-                      },
-                  ],
-              },
-          }
-      }
-  },
-  mounted() {
-
-    $("#editable").keypress(this.keypress)
-  },
-  methods:{
-    keypress(e){
-      // console.log('keypress', e);
+    name: 'TablePaginationRemote',
+    data: () => ({
+        users: {
+            mdCount: null,
+            mdPage: null,
+            mdData: []
+        },
+        rowsPerPage: 3,
+    }),
+    created() {
+        this.updatePagination(1, this.rowsPerPage)
     },
-  }
+    methods: {
+        updatePagination(page, pageSize, sort, sortOrder) {
+            console.log('pagination has updated', page, pageSize, sort, sortOrder);
+            // Example of response - in case the service goes down.
+            // {"page":1,"per_page":5,"total":12,"total_pages":3,"data":[{"id":1,"first_name":"George","last_name":"Bluth","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg"},{"id":2,"first_name":"Janet","last_name":"Weaver","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg"},{"id":3,"first_name":"Emma","last_name":"Wong","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/olegpogodaev/128.jpg"},{"id":4,"first_name":"Eve","last_name":"Holt","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"},{"id":5,"first_name":"Charles","last_name":"Morris","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"}]}
+            this.$http.get(`https://reqres.in/api/users?page=${page}&per_page=${pageSize}`).then(({data: resp}) => {
+                this.rowsPerPage = resp.per_page
+                this.users = {
+                    mdCount: resp.total,
+                    mdPage: resp.page,
+                    mdData: resp.data
+                }
+            })
+        }
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.md-table + .md-table {
+    margin-top: 16px
 }
 
-</script>
-<style lang="scss" scoped>
-#editable{
-    -moz-appearance: textfield-multiline;
-    -webkit-appearance: textarea;
-    border: solid 1px #989898;
-    padding: 10px;
-    font: medium -moz-fixed;
-    font-family: "Manrope-regular",sans-serif;
-    font-size: 15px;
-    height: 100px;
-    overflow: auto;
-    border-radius: 3px;
-    resize: both;
-    width: 400px;
-    background-color: white;
-    color: #050505;
-}
-.address{
-    margin: 0 5px;
-    background-color: yellow;
+.avatar img {
+    max-width: 30px;
 }
 </style>

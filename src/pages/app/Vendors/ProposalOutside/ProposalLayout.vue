@@ -2,8 +2,8 @@
   <div class="for-proposals-layout-wrapper">
     <loader :active="isLoading" is_full_screen page="vendor"></loader>
 
-    <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
-    <proposal-versions-bar v-if="$route.params.id"></proposal-versions-bar>
+    <ProposalHeader v-if="vendor" :vendor="vendor"></ProposalHeader>
+    <ProposalVersionsBar v-if="$route.params.id"></ProposalVersionsBar>
     <div class="main-cont">
       <router-view></router-view>
     </div>
@@ -29,7 +29,7 @@
       </div>
     </section>
 
-    <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
+    <modal v-if="openedModal === 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
@@ -81,52 +81,48 @@
     </modal>
     <modal v-if="showMissingModal" container-class="modal-container w-max-800 no-header no-footer">
       <template slot="body">
-          <missing-detail
+          <MissingDetail
               :data="missingDetail"
               @send="setProposalLink"
               @close="showMissingModal = false"
-          ></missing-detail>
+          ></MissingDetail>
       </template>
     </modal>
-    <send-proposal-modal
+    <SendProposalModal
       v-if="showSendProposalModal"
       @close="showSendProposalModal = false"
       @submit="submitProposal"
       :event="event"
       :link="proposalLink"
-    ></send-proposal-modal>
-    <proposal-submitted
+    ></SendProposalModal>
+    <ProposalSubmitted
       v-if="showSubmittedProposalModal"
       @close="showSubmittedProposalModal = false"
-    ></proposal-submitted>
+    ></ProposalSubmitted>
   </div>
 </template>
 <script>
 import { mapActions } from "vuex";
-import { Modal, Loader } from "@/components";
-import Swal from "sweetalert2";
-import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
-import S3Service from "@/services/s3.service";
-import ProposalHeader from "./ProposalHeader";
-import state from "./state";
-import SendProposalModal from "./Modals/SendProposal";
-import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
-import ProposalVersionsBar from "./ProposalVersionsBar";
 import Vendor from "@/models/Vendors";
-import MissingDetail from "./Modals/MissingDetail";
+import Swal from "sweetalert2";
+import S3Service from "@/services/s3.service";
+import state from "./state";
 import { PROPOSAL_STATUS } from "@/constants/status";
+import { MISSING_DETAILS } from "@/constants/proposal";
+
+const components = {
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Modal: () => import('@/components/Modal.vue'),
+    MissingDetail: () => import('./Modals/MissingDetail.vue'),
+    ProposalVersionsBar: () => import('./ProposalVersionsBar.vue'),
+    ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
+    SendProposalModal: () => import('./Modals/SendProposal.vue'),
+    ProposalHeader: () => import('./ProposalHeader.vue'),
+    VendorBidTimeCounter: () => import('@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue'),
+}
 
 export default {
-  components: {
-    VendorBidTimeCounter,
-    ProposalVersionsBar,
-    Modal,
-    ProposalHeader,
-    SendProposalModal,
-    ProposalSubmitted,
-    MissingDetail,
-    Loader,
-  },
+  components,
   props: {
     newProposalRequest: Object,
   },
@@ -214,6 +210,10 @@ export default {
       this.openedModal = "";
     },
 
+    getMissingDetail(field) {
+        return MISSING_DETAILS.find(it => it.key === field)
+    },
+
     async calculateStage(type) {
         this.missingDetail = [];
         const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
@@ -222,29 +222,35 @@ export default {
         if (proposalForNonMaryoku.hasOwnProperty('eventVision') && proposalForNonMaryoku.eventVision) {
             progress += 10;
         } else {
-            this.missingDetail.push({key: 'vision', label: 'Your vision for this event', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push(this.getMissingDetail('vision'))
         }
         if (proposalForNonMaryoku.costServices[this.vendor.vendorCategory] && proposalForNonMaryoku.costServices[this.vendor.vendorCategory].length) {
             progress += 30;
         } else {
-            this.missingDetail.push({key: 'cost', label: 'Cost', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push(this.getMissingDetail('cost'))
         }
 
         if (proposalForNonMaryoku.includedServices[this.vendor.vendorCategory] && proposalForNonMaryoku.includedServices[this.vendor.vendorCategory].length) {
             progress += 20;
         } else {
-            this.missingDetail.push({key: 'include', label: 'Included in price', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push(this.getMissingDetail('include'))
         }
         if (proposalForNonMaryoku.extraServices[this.vendor.vendorCategory] && proposalForNonMaryoku.extraServices[this.vendor.vendorCategory].length) {
             progress += 20;
         } else {
-            this.missingDetail.push({key: 'extra', label: 'Extra', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push(this.getMissingDetail('extra'))
         }
 
         if (proposalForNonMaryoku.inspirationalPhotos.some(p => !!p)) {
             progress += 20;
         } else {
-            this.missingDetail.push({key: 'image', label: 'Images', icon: 'Vendor+Landing+Page/Asset+491.svg'})
+            this.missingDetail.push(this.getMissingDetail('image'))
+        }
+
+        // check missing when submit the proposal
+        if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
+            this.showMissingModal = true;
+            return;
         }
 
         // check missing when submit the proposal
@@ -255,7 +261,6 @@ export default {
 
         if (type === PROPOSAL_STATUS.PENDING) {
             await this.setProposalLink();
-            this.showSubmittedProposalModal = true;
 
         } else {
             await this.uploadProposal(type);
@@ -301,7 +306,7 @@ export default {
         this.isUpdating = true;
         this.isLoading = true;
         await this.saveVendor(this.vendor);
-        const proposal = this.saveProposal(type);
+        const proposal = await this.saveProposal(type);
 
         this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
 
@@ -383,7 +388,6 @@ export default {
         { headers: this.$auth.getAuthHeader() },
       );
 
-      console.log('phone', proposal.eventData.customer.phone);
       // send SMS to customer phone to notify
       this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
       let message = `Here is a new proposal for you from ${proposal.vendor.companyName} : ${this.proposalLink}`;
@@ -394,6 +398,8 @@ export default {
           { headers: this.$auth.getAuthHeader() },
         );
       }
+
+      this.showSubmittedProposalModal = true;
     },
   },
 

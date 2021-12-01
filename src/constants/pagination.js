@@ -23,3 +23,9 @@ export const CUSTOMER_PAGE_PAGINATION = {
     page: 0,
     limit: 6,
 };
+
+export const VENDOR_PAGE_PAGINATION = {
+    page: 1,
+    limit: 25,
+    total: 0,
+}

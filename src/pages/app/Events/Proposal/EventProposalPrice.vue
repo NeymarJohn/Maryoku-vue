@@ -1,5 +1,5 @@
 <template>
-  <div class="pricing-section__item element-block" :class="isMobile ? 'p-20': 'p-60'">
+  <div class="pricing-section__item element-block p-60 pt-40">
     <div class="d-flex justify-content-between align-center">
       <div class="item-info d-flex justify-content-start align-center">
         <div class="element-title">
@@ -9,14 +9,14 @@
             @change="changeBookService"
             v-if="!mandatory"
           ></md-checkbox>
-          <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" class="md-small-hide"/>
-          <span :class="isMobile ? 'font-size-18' : 'font-size-24'">{{ vendorCategory.fullTitle }}</span>
-          <span class="element-duration md-small-hide">For Whole Event</span>
+          <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" />
+          {{ vendorCategory.fullTitle }}
+          <span class="element-duration">For Whole Event</span>
         </div>
       </div>
       <div class="item-pricing d-flex justify-content-end align-center">
         <div class="element-value" v-if="!expand">
-          <div class="element-price font-bold-extra">${{ totalPrice | withComma }}</div>
+          <div class="element-price">${{ totalPrice | withComma }}</div>
           <div class="discount-details" v-if="discount.percentage">
             ({{ discount.percentage }}% off)
             <span>${{ priceOfCostservices | withComma }}</span>
@@ -31,211 +31,186 @@
     </div>
     <!-- Expanded Section -->
     <div class="expanded-section" v-if="expand">
-      <div class="d-flex justify-content-between align-center" v-if="isMobile">
-        <div>
-            Cost items
-        </div>
-        <md-button class="md-just-icon md-simple md-red" :class="{ expanded: costServicesExpand }" @click="costServicesExpand = !costServicesExpand">
-            <img :src="`${$iconURL}Submit%20Proposal/Component 36.svg`" width="10px"/>
-        </md-button>
+      <div
+        class="loading"
+        v-if="proposalData.attachements && proposalData.attachements.length && !fetchingAllAttachments"
+      >
+        Loading ...
       </div>
-      <div v-if="!isMobile || isMobile && costServicesExpand">
-          <div class="element-pricing-table elements-list">
-              <div class="element-pricing-table-header md-small-hide" v-if="!isMobile">
-                  <div>Description</div>
-                  <div class="text-right">Price per unit</div>
-                  <div class="text-right">QTY</div>
-                  <div class="text-right">Subtotal</div>
-                  <div></div>
+      <div class="element-pricing-table elements-list">
+        <div class="element-pricing-table-header">
+          <div>Description</div>
+          <div class="text-right">QTY</div>
+          <div class="text-right">Price per unit</div>
+          <div class="text-right">Subtotal</div>
+          <div></div>
+        </div>
+        <div class="element-pricing-table-body">
+          <template v-for="(service, index) in costServices">
+            <div
+              class="element-pricing-table-body-row"
+              :key="`cost-service-${index}`"
+              v-if="service.plannerOptions.length === 0"
+            >
+              <div>
+                <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
+                {{ service.requirementTitle }}
+                <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
               </div>
-              <div class="element-pricing-table-body">
-                  <template v-for="(service, index) in costServices">
-                      <div
-                          class="md-layout py-10"
-                          :key="`cost-service-${index}`"
-                          v-if="service.plannerOptions.length === 0"
-                      >
-                          <div class="md-layout-item md-size-30 md-small-size-50 p-0">
-                              <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
-                              {{ service.requirementTitle }}
-                              <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
-                          </div>
-                          <div class="md-layout-item md-size-20 md-small-size-50 p-0 text-right">{{ service.requirementValue }}</div>
-                          <div class="md-layout-item md-size-20 md-small-size-50 p-0 text-right" :class="{ crosslinedText: service.isComplimentary }">
-                              ${{ service.price | withComma }}
-                          </div>
-                          <div class="md-layout-item md-size-20 md-small-size-50 text-right" :class="{ crosslinedText: service.isComplimentary }">
-                              ${{ (service.requirementValue * service.price) | withComma }}
-                          </div>
-                          <div class="md-layout-item md-size-10 p-0 element-actions">
-                              <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
-                                  <img :src="`${$iconURL}common/trash-dark.svg`" />
-                              </md-button>
-                          </div>
-                      </div>
-                      <template v-else>
-                          <div class="element-pricing-table-body-row">
-                              <div>
-                                  <span class="font-bold">{{ service.requirementTitle }}</span> <br />
-                                  <span class="font-size-14">Please Choose:</span>
-                              </div>
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                          </div>
-                          <div class="options-list">
-                              <img :src="`${$iconURL}common/enter-gray.svg`" />
-                              <div
-                                  class="option-row"
-                                  :class="`${optionIndex > 0 ? 'border-top' : ''}`"
-                                  :key="`planner-option-${optionIndex}`"
-                                  v-for="(option, optionIndex) in [
+              <div class="text-right">{{ service.requirementValue }}</div>
+              <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                ${{ service.price | withComma }}
+              </div>
+              <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                ${{ (service.requirementValue * service.price) | withComma }}
+              </div>
+              <div class="element-actions">
+                <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
+                  <img :src="`${$iconURL}common/trash-dark.svg`" />
+                </md-button>
+              </div>
+            </div>
+            <template v-else>
+              <div class="element-pricing-table-body-row">
+                <div>
+                  <span class="font-bold">{{ service.requirementTitle }}</span> <br />
+                  <span class="font-size-14">Please Choose:</span>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div class="options-list">
+                <img :src="`${$iconURL}common/enter-gray.svg`" />
+                <div
+                  class="option-row"
+                  :class="`${optionIndex > 0 ? 'border-top' : ''}`"
+                  :key="`planner-option-${optionIndex}`"
+                  v-for="(option, optionIndex) in [
                     { description: service.requirementTitle, qty: service.requirementValue, price: service.price },
                     ...service.plannerOptions,
                   ]"
-                              >
-                                  <div class="d-flex align-center pl-40">
-                                      <md-radio
-                                          class="m-0"
-                                          v-model="service.selectedPlannerOption"
-                                          :value="optionIndex"
-                                          @change="changeAlternatvies(index, optionIndex)"
-                                      >
-                                          {{ option.description }}
-                                      </md-radio>
-                                  </div>
-                                  <div class="text-right">{{ option.qty }}</div>
-                                  <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
-                                      ${{ option.price | withComma }}
-                                  </div>
-                                  <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
-                                      ${{ (option.qty * option.price) | withComma }}
-                                  </div>
-                                  <div class="element-actions">
-                                      <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
-                                          <img :src="`${$iconURL}common/trash-dark.svg`" />
-                                      </md-button>
-                                  </div>
-                              </div>
-                          </div>
-                      </template>
-                  </template>
-              </div>
-          </div>
-          <div class="element-pricing-table taxes-list md-small-hide">
-              <table>
-                  <tbody>
-                  <tr>
-                      <td colspan="3">
-                          <span class="taxes-title">Discount</span>
-                          <span class="taxes-percentage">{{ discount.percentage }}%</span>
-                      </td>
-                      <td>-${{ discount.price | withComma }}</td>
-                      <td class="element-actions">
-                          <md-button class="md-simple md-just-icon">
-                              <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
-                          </md-button>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td colspan="3">
-                          <span class="taxes-title">Taxes</span>
-                          <span class="taxes-percentage">{{ tax.percentage }}%</span>
-                      </td>
-                      <td>${{ tax.price | withComma }}</td>
-                      <td class="element-actions">
-                          <md-button class="md-simple md-just-icon">
-                              <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
-                          </md-button>
-                      </td>
-                  </tr>
-                  </tbody>
-              </table>
-          </div>
-          <div class="element-pricing-table total-list md-small-hide">
-              <table>
-                  <tbody>
-                  <tr>
-                      <td colspan="3">
-                          <b class="font-size-22">Total</b>
-                          <div class="font-size-14" v-if="discount.percentage">Before discount</div>
-                      </td>
-                      <td class="element-value">
-                          <div class="element-price">${{ totalPrice | withComma }}</div>
-                          <div class="discount-details" v-if="discount.percentage">
-                              ({{ discount.percentage }}% off)
-                              <span>${{ priceBeforeDiscount | withComma }}</span>
-                          </div>
-                      </td>
-                      <td class="element-actions">
-                          <md-button class="md-simple md-just-icon">
-                              <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
-                          </md-button>
-                      </td>
-                  </tr>
-                  </tbody>
-              </table>
-          </div>
-      </div>
-
-      <div class="d-flex justify-content-between align-center" v-if="isMobile">
-        <div>
-            Included in items
-        </div>
-        <md-button class="md-just-icon md-simple md-red" :class="{ expanded: includedServicesExpand }" @click="includedServicesExpand = !includedServicesExpand">
-            <img :src="`${$iconURL}Submit%20Proposal/Component 36.svg`" width="10px"/>
-        </md-button>
-      </div>
-      <div class="proposal-includes md-layout" v-if="!isMobile || isMobile && includedServicesExpand">
-        <div class="md-layout-item md-size-80 md-small-size-100">
-            <div class="proposal-includes__title font-size-22 md-small-hide">
-                <img data-v-5af98ad9="" :src="`${$iconURL}NewSubmitPorposal/includedPrice.png`" class="page-icon mr-10" />
-                What Do We Include In This Proposal?
-            </div>
-            <template v-if="includedServices.length">
-                <included-service-item
-                    class="proposal-includes__item"
-                    v-for="(item, index) in includedServices"
-                    :item="item"
-                    :key="index"
                 >
-                </included-service-item>
+                  <div class="d-flex align-center pl-40">
+                    <md-radio
+                      class="m-0"
+                      v-model="service.selectedPlannerOption"
+                      :value="optionIndex"
+                      @change="changeAlternatvies(index, optionIndex)"
+                    >
+                      {{ option.description }}
+                    </md-radio>
+                  </div>
+                  <div class="text-right">{{ option.qty }}</div>
+                  <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                    ${{ option.price | withComma }}
+                  </div>
+                  <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                    ${{ (option.qty * option.price) | withComma }}
+                  </div>
+                  <div class="element-actions">
+                    <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
+                      <img :src="`${$iconURL}common/trash-dark.svg`" />
+                    </md-button>
+                  </div>
+                </div>
+              </div>
             </template>
+          </template>
         </div>
       </div>
-      <div class="d-flex justify-content-between align-center" v-if="isMobile">
-            <div>
-                extra items
-            </div>
-            <md-button class="md-just-icon md-simple md-red" :class="{ expanded: extraServicesExpand }" @click="extraServicesExpand = !extraServicesExpand">
-                <img :src="`${$iconURL}Submit%20Proposal/Component 36.svg`" width="10px"/>
-            </md-button>
+      <div class="element-pricing-table taxes-list">
+        <table>
+          <tbody>
+            <tr>
+              <td colspan="3">
+                <span class="taxes-title">Discount</span>
+                <span class="taxes-percentage">{{ discount.percentage }}%</span>
+              </td>
+              <td>-${{ discount.price | withComma }}</td>
+              <td class="element-actions">
+                <md-button class="md-simple md-just-icon">
+                  <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
+                </md-button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <span class="taxes-title">Taxes</span>
+                <span class="taxes-percentage">{{ tax.percentage }}%</span>
+              </td>
+              <td>${{ tax.price | withComma }}</td>
+              <td class="element-actions">
+                <md-button class="md-simple md-just-icon">
+                  <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
+                </md-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="extras-section md-layout" v-if="!isMobile || isMobile && extraServicesExpand">
-        <div class="md-layout-item md-size-80 md-small-size-100">
-            <div class="extras-section__title">
-                <h3 class="font-size-22">
-                    <img
-                        src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
-                        width="12"
-                    />
-                    Extras
-                </h3>
-                <div class="extras-section__header">
-                    <span>Would you like to upgrade & add one of these?</span>
-                    <div class="text-center">QTY</div>
-                    <div class="text-center">Price per unit</div>
+      <div class="element-pricing-table total-list">
+        <table>
+          <tbody>
+            <tr>
+              <td colspan="3">
+                <b class="font-size-22">Total</b>
+                <div class="font-size-14" v-if="discount.percentage">Before discount</div>
+              </td>
+              <td class="element-value">
+                <div class="element-price">${{ totalPrice | withComma }}</div>
+                <div class="discount-details" v-if="discount.percentage">
+                  ({{ discount.percentage }}% off)
+                  <span>${{ priceBeforeDiscount | withComma }}</span>
                 </div>
-            </div>
-            <div class="extras-section__list">
-                <extra-service-item
-                    class="extras-section__item"
-                    v-for="(item, index) in extraServices.filter((item) => item.price)"
-                    :key="`extra-service-item-${index}`"
-                    :item="item"
-                    @add="addExtraService(item)"
-                ></extra-service-item>
-            </div>
+              </td>
+              <td class="element-actions">
+                <md-button class="md-simple md-just-icon">
+                  <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
+                </md-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="proposal-includes">
+        <div class="proposal-includes__title font-size-22">
+          <img data-v-5af98ad9="" :src="`${$iconURL}NewSubmitPorposal/includedPrice.png`" class="page-icon mr-10" />
+          What Do We Include In This Proposal?
+        </div>
+        <template v-if="includedServices.length">
+          <included-service-item
+            class="proposal-includes__item"
+            v-for="(item, index) in includedServices"
+            :item="item"
+            :key="index"
+          >
+          </included-service-item>
+        </template>
+      </div>
+      <div class="extras-section" v-if="extraServices.length">
+        <div class="extras-section__title">
+          <h3 class="font-size-22">
+            <img
+              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
+              width="12"
+            />
+            Extras
+          </h3>
+          <div class="extras-section__header">
+            <span>Would you like to upgrade & add one of these?</span>
+            <div class="text-center">QTY</div>
+            <div class="text-center">Price per unit</div>
+          </div>
+        </div>
+        <div class="extras-section__list">
+          <extra-service-item
+            class="extras-section__item"
+            v-for="(item, index) in extraServices.filter((item) => item.price)"
+            :key="`extra-service-item-${index}`"
+            :item="item"
+            @add="addExtraService(item)"
+          ></extra-service-item>
         </div>
       </div>
       <div class="proposal-section attachments-section" v-if="attachedFiles.length">
@@ -255,17 +230,15 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
-import { MobileMixins } from "@/mixins";
-
-const components = {
-  ExtraServiceItem: () => import("./ExtraServiceItem"),
-  IncludedServiceItem: () => import("./IncludedServiceItem.vue"),
-}
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
+import ExtraServiceItem from "./ExtraServiceItem";
+import IncludedServiceItem from "./IncludedServiceItem.vue";
 export default {
   name: "event-proposal-price",
-  mixins: [MobileMixins],
-  components,
+  components: {
+    ExtraServiceItem,
+    IncludedServiceItem,
+  },
   props: {
     proposalData: {
       type: Object,
@@ -283,9 +256,6 @@ export default {
   data() {
     return {
       expand: false,
-      costServicesExpand: false,
-      includedServicesExpand: false,
-      extraServicesExpand: false,
       addedServices: [],
       extraServices: [],
       attachedFiles: [],
@@ -568,8 +538,15 @@ export default {
   }
 
   .view-element {
+    margin-left: 1em;
     img {
       width: 13px;
+    }
+
+    .expanded {
+      img {
+        transform: rotate(90deg);
+      }
     }
   }
 
@@ -577,6 +554,7 @@ export default {
     margin-top: 1em;
 
     .proposal-includes {
+      padding-right: 20%;
       &__title {
         font-size: 20px;
         font-weight: 800;
@@ -611,6 +589,7 @@ export default {
 
     .extras-section {
       margin-top: 5em;
+      padding-right: 20%;
       position: relative;
 
       &:after {
@@ -795,11 +774,6 @@ export default {
           padding-right: 44px;
         }
       }
-    }
-  }
-  .expanded {
-    img {
-        transform: rotate(90deg);
     }
   }
 }
