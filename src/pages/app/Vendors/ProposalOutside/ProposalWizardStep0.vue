@@ -1,6 +1,6 @@
 <template>
   <div class="white-card p-40">
-    <Loader :active="isLoading" is-full-screen page="vendor"></Loader>
+    <loader :active="isLoading" is-full-screen page="vendor"></loader>
     <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
@@ -16,7 +16,7 @@
     </div>
     <div class="mt-30 text-left">
       <label class="font-bold">Company / Customer Name</label>
-      <Autocomplete
+      <autocomplete
         class="width-50 mt-5 md-purple medium-selector"
         placeholder="Type name of customer here..."
         :options="customers"
@@ -24,30 +24,30 @@
         :selectedValue="selectedCustomer"
         @change="selectCustomer"
         @input="searchCustomer"
-      ></Autocomplete>
+      ></autocomplete>
     </div>
 
     <div class="d-flex mt-40">
-      <SelectableCard
+      <selectable-card
         label="Corporate Event"
         value="corporation"
         :selected="eventOption"
         :icon="`${$iconURL}VendorsProposalPage/Group 17122.svg`"
         theme="purple"
         @change="eventOption = 'corporation'"
-      ></SelectableCard>
-      <SelectableCard
+      ></selectable-card>
+      <selectable-card
         label="Social Event"
         value="social"
         :icon="`${$iconURL}VendorsProposalPage/Group 17394.svg`"
         :selected="eventOption"
         @change="eventOption = 'social'"
         theme="purple"
-      ></SelectableCard>
+      ></selectable-card>
     </div>
     <div v-if="eventOption === 'corporation'" class="text-left mt-30">
       <label class="font-bold">Type of event:</label>
-      <Multiselect
+      <multiselect
         class="width-50 mt-5 form-input md-purple"
         v-model="eventType"
         :options="eventTypes"
@@ -58,16 +58,16 @@
         label="name"
         track-by="key"
         :key="eventTypes.length"
-      ></Multiselect>
+      ></multiselect>
     </div>
     <div class="text-left mt-30">
       <label class="font-bold">Number of guests</label>
-      <MaryokuInput
+      <maryoku-input
         class="width-50 mt-5 form-input"
         v-model="numberOfParticipants"
         inputStyle="users"
         placeholer="Type the amount of guests here..."
-      ></MaryokuInput>
+      ></maryoku-input>
     </div>
     <div class="text-left mt-30">
       <label class="font-bold">Event location</label>
@@ -78,20 +78,20 @@
 
     <div class="row">
       <p class="mb-5 text-left text-bold">Date of the event</p>
-      <CalendarInput
+      <calendar-input
         :value="eventDate"
         class="form-input width-50"
         placeholder="Choose date…"
         inputStyle="date"
         theme="purple"
         @input="handleChangeDate"
-      ></CalendarInput>
+      ></calendar-input>
     </div>
     <div class="md-layout mt-30 width-50">
       <div class="md-layout-item md-size-50 p-0">
         <p class="mb-5 text-left text-bold"><img :src="`${iconUrl}Asset 522.svg`" class="mr-10" width="16" />From</p>
         <div class="event-time d-flex align-center">
-          <VueTimepicker
+          <vue-timepicker
             manual-input
             input-class="time-class"
             hide-dropdown
@@ -108,7 +108,7 @@
       <div class="md-layout-item md-size-50 p-0">
         <p class="mb-5 text-left text-bold"><img class="mr-10" :src="`${iconUrl}Asset 522.svg`" width="16" />To</p>
         <div class="event-time d-flex align-center">
-          <VueTimepicker
+          <vue-timepicker
             manual-input
             input-class="time-class"
             hide-dropdown
@@ -125,7 +125,7 @@
     </div>
     <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
       <template slot="body">
-          <CustomerForm
+          <customer-form
               v-if="showNewCustomerModal"
               :vendorId="vendorData.id"
               :name="candidateName"
@@ -136,26 +136,36 @@
   </div>
 </template>
 <script>
-import moment from "moment";
-import Customer from "@/models/Customer";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+import { MaryokuInput, CalendarInput } from "@/components";
+import LocationInput from "../VendorDashboard/LocationInput";
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
+import moment from "moment";
+import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
+import SelectableCard from "@/components/SelectableCard.vue";
 
-const components = {
-    Loader: () => import('@/components/loader/Loader.vue'),
-    Modal: () => import('@/components/Modal.vue'),
-    MaryokuInput: () => import('@/components/Inputs/MaryokuInput.vue'),
-    CalendarInput: () => import('@/components/Inputs/CalendarInput.vue'),
-    LocationInput: () => import('../VendorDashboard/LocationInput.vue'),
-    VueTimepicker: () => import('vue2-timepicker/src/vue-timepicker.vue'),
-    Autocomplete: () => import('@/components/Autocomplete/index.vue'),
-    SelectableCard: () => import('@/components/SelectableCard.vue'),
-    CustomerForm: () => import('../Form/CustomerForm')
-}
+import { Modal } from "@/components";
+import Customer from "@/models/Customer";
+import Loader from "@/components/loader/Loader.vue";
+const CustomerForm = () => import("../Form/CustomerForm");
 
 export default {
-  components,
+  components: {
+      Loader,
+    MaryokuInput,
+    CalendarInput,
+    VueTimepicker,
+    LocationInput,
+    Autocomplete,
+    VueGoogleAutocomplete,
+    vueDropzone: vue2Dropzone,
+    SelectableCard,
+    CustomerForm,
+    Modal,
+  },
   props: {
     defaultData: {
       type: Object,
@@ -171,6 +181,7 @@ export default {
       guests: null,
       link_proposal: null,
       attachment: null,
+      customers: [],
       fileUrl: null,
       fileName: null,
       candidateName: null,
@@ -189,34 +200,25 @@ export default {
   },
   async created() {
     const vendorId = this.$route.params.vendorId;
+    const customerId = this.$route.query.customerId;
 
-    const payload = {
-        vendorId: vendorId,
-        params: {
-            status: 0,
-        }
+    let res = await this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?status=0&sort=&order=`);
+    console.log("customer", res);
+    this.customers = res.data.customers;
+    if (customerId) {
+      let customer = this.customers.find(it => it.id == customerId);
+      let event = {...this.$store.state.proposalForNonMaryoku.eventData, customer}
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+            key: "eventData",
+            value: event,
+        });
     }
-    await this.$store.dispatch("customer/getCustomers", payload);
-    await this.$store.dispatch("common/getEventTypes");
-
     this.setEventTime();
-
-  },
-  mounted() {
-      console.log('mounted.step0', this.selectedCustomer);
-      const customerId = this.$route.query.customerId;
-      if (customerId) {
-          let customer = this.customers.find(it => it.id === customerId);
-          let event = {...this.$store.state.proposalForNonMaryoku.eventData, customer}
-          this.$store.commit("proposalForNonMaryoku/setValue", {
-              key: "eventData",
-              value: event,
-          });
-      }
+    this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     setEventTime(){
-
+      console.log('setEventTime', this.eventData);
       if (!this.$store.state.proposalForNonMaryoku.eventData || !this.eventDate[0] || !this.eventDate[1]) return;
       this.from = {
         hh: moment(this.$store.state.proposalForNonMaryoku.eventData.startTime * 1000).format("hh"),
@@ -226,7 +228,7 @@ export default {
         hh: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("hh"),
         mm: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("mm"),
       };
-
+      console.log('setEventTime', this.from, this.to);
     },
     handleChangeDate({multiple, date}){
       // console.log('handleChangeDate', multiple, date);
@@ -249,7 +251,7 @@ export default {
       }
     },
     handleTimeChange(type){
-
+      console.log('handleTimeChange', type, this.eventDate, this.from, this.to, this.amPack);
       if (!this.eventDate[0] || !this.eventDate[1]) return;
 
       let startDate = moment(this.eventDate[0]).format('YYYY-MM-DD');
@@ -265,7 +267,7 @@ export default {
       }
     },
     handleChangeAMPM(type) {
-
+      console.log("updateStartA", type);
       if (!this.eventDate[0] || !this.eventDate[1]) return;
 
       let startDate = moment(this.eventDate[0]).format('YYYY-MM-DD');
@@ -286,7 +288,7 @@ export default {
         this.$store.commit('proposalForNonMaryoku/setValue', {key: 'eventData', value: {...eventData, endTime}})
 
       }
-
+      console.log("updateStartA", this.amPack);
     },
     async saveCustomer(customer) {
       this.isLoading = true;
@@ -309,7 +311,7 @@ export default {
 
       // show customer form modal if customer doesn't exist in search text
       let customers = this.customers.filter(c => c.name.toLowerCase().indexOf(this.candidateName.toLowerCase()) !== -1);
-
+      console.log('search', this.customers, customers);
       if ( !customers.length && this.candidateName.length > 2) {
         timeout = setTimeout(_ => {
           this.showNewCustomerModal = true;
@@ -434,9 +436,6 @@ export default {
             end: moment(this.$store.state.proposalForNonMaryoku.eventData.endTime * 1000).format("a"),
           };
         else return { start: "am", end: "am" };
-    },
-    customers() {
-        return this.$store.state.customer.customers;
     },
   },
   watch: {

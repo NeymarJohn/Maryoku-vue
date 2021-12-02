@@ -1,7 +1,7 @@
 <template>
   <div class="autocomplete-field">
     <input
-      v-if="filteredSuggestItems[selectedSuggestItemIndex]"
+      v-if="filteredSuggestItems[selectedSuggestItemIndex] && searchWord"
       class="suggested-place-holder"
       :value="getOptionLabel(filteredSuggestItems[selectedSuggestItemIndex])"
     />
@@ -93,14 +93,6 @@ export default {
       }
     },
   },
-  mounted() {
-      console.log('Autocomplete.mounted', this.selectedValue, this.options);
-      if (this.selectedValue) {
-          this.selectedSuggestItemIndex = this.filteredSuggestItems.findIndex(it =>
-              it.companyName === this.selectedValue.companyName && it.name === this.selectedValue.name)
-      }
-
-  },
   computed: {
     filteredSuggestItems() {
       return this.options.filter((item) =>
@@ -110,7 +102,6 @@ export default {
   },
   watch: {
     selectedValue(newValue, oldValue) {
-      console.log('selectedValue', newValue);
       this.searchWord = `${newValue.companyName} / ${newValue.name}`;
     },
   },

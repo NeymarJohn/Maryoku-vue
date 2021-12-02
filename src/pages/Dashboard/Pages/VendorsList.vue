@@ -48,12 +48,6 @@
             </md-button>
           </md-table-cell>
         </md-table-row>
-<!--      <md-table-pagination-->
-<!--        :md-page-size="pagination.limit"-->
-<!--        :md-page-options="[5, 10, 25, 50, 100]"-->
-<!--        :md-update="updatePagination"-->
-<!--        :md-data.sync="pagination.vendors" />-->
-
     </md-table>
       <div class="d-flex align-center">
           <div class="ml-auto font-size-14">Vendors per page</div>
