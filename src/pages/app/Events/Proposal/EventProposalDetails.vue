@@ -14,7 +14,7 @@
           <div class="event-info md-small-hide">
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
-              <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
+              <div class="alert alert-danger mb-0" v-if="proposal.suggestionDate">
                 <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
                   This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
                 </span>
@@ -32,7 +32,7 @@
               </li>
               <li class="event-details__item">
                 <label>Date</label>
-                <div class="info-text" v-if="!vendorProposal.suggestionDate">
+                <div class="info-text" v-if="!proposal.suggestionDate">
                   {{ eventData.eventStartMillis | formatDate }}
                 </div>
                 <div v-else>
@@ -88,7 +88,7 @@
                     classes: 'vendor-tooltip-theme',
                   }"
                   :src="`${$iconURL}${
-                    vendorProposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'
+                    proposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'
               }`"
 
               />
@@ -96,10 +96,10 @@
 
           <div class="md-small-hide">
               <h1 class="font-size-30">
-                  Dear {{ nonMaryoku ? vendorProposal.eventData.customer.name : $store.state.auth.user.name }},
+                  Dear {{ nonMaryoku ? proposal.eventData.customer.name : $store.state.auth.user.name }},
               </h1>
               <p>
-                  {{ vendorProposal.personalMessage }}
+                  {{ proposal.personalMessage }}
               </p>
           </div>
 
@@ -108,7 +108,7 @@
               <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="mr-10" width="25px"/>
               Our vision for your event
             </div>
-            <p class="mt-10">{{ vendorProposal.eventVision }}</p>
+            <p class="mt-10">{{ proposal.eventVision }}</p>
           </div>
           <div class="proposal-images mb-40">
             <div class="font-bold mb-10">Some references to the experience you will get from us</div>
@@ -119,7 +119,7 @@
                 </span>
               </template>
 
-              <div v-for="item in vendorProposal.inspirationalPhotos.filter((item) => !!item)" :key="item.url">
+              <div v-for="item in proposal.inspirationalPhotos.filter((item) => !!item)" :key="item.url">
                 <img class="item" :src="item.url" />
                 <div class="mt-5">{{ item.caption }}</div>
               </div>
@@ -137,28 +137,28 @@
                 About Us <md-icon class="color-red">keyboard_arrow_right</md-icon>
               </span>
                   </md-button>
-                  <div class="about-content mt-10" v-if="showAboutUs">{{ vendorProposal.vendor.about.company }}</div>
+                  <div class="about-content mt-10" v-if="showAboutUs">{{ proposal.vendor.about.company }}</div>
               </div>
               <div class="contact-section mb-40">
                   <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
                   <ul class="contact-list_items d-flex justify-content-start">
-                      <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                      <li class="contact-list_item" v-if="proposal.vendor.vendorMainEmail">
                           <a href>
                               <img :src="`${submitProposalIcon}Asset 286.svg`" />
-                              {{ vendorProposal.vendor.vendorMainEmail }}
+                              {{ proposal.vendor.vendorMainEmail }}
                           </a>
                       </li>
-                      <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                      <li class="contact-list_item" v-if="proposal.vendor.vendorAddressLine1">
                           <a href>
                               <img :src="`${submitProposalIcon}Asset 285.svg`" />
-                              {{ vendorProposal.vendor.vendorAddressLine1 }}
-                              {{ vendorProposal.vendor.vendorAddressLine2 }}
+                              {{ proposal.vendor.vendorAddressLine1 }}
+                              {{ proposal.vendor.vendorAddressLine2 }}
                           </a>
                       </li>
-                      <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                      <li class="contact-list_item" v-if="proposal.vendor.vendorMainPhoneNumber">
                           <a href>
                               <img :src="`${submitProposalIcon}Asset 284.svg`" />
-                              {{ vendorProposal.vendor.vendorMainPhoneNumber }}
+                              {{ proposal.vendor.vendorMainPhoneNumber }}
                           </a>
                       </li>
                   </ul>
@@ -170,15 +170,15 @@
                           class="item"
                           v-for="(s, sIndex) in socialMediaBlocks"
                           :key="sIndex"
-                          :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
+                          :class="{ 'mr-20': proposal.vendor.social[s.name] }"
                       >
                           <a
-                              v-if="vendorProposal.vendor.social[s.name]"
-                              :href="vendorProposal.vendor.social[s.name]"
+                              v-if="proposal.vendor.social[s.name]"
+                              :href="proposal.vendor.social[s.name]"
                               target="_blank"
                           >
                               <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
-                              {{ vendorProposal.vendor.social[s.name] }}
+                              {{ proposal.vendor.social[s.name] }}
                           </a>
                       </div>
                   </div>
@@ -211,28 +211,28 @@
         </div>
         <div class="mt-20 mb-10 md-small-hide">What would you like to take from our suggested services?</div>
         <EventProposalPrice
-          :proposalData="vendorProposal"
-          :serviceCategory="vendorProposal.vendor.vendorCategory"
-          :key="`${vendorProposal.vendor.vendorCategory}-section`"
+          :proposalData="proposal"
+          :serviceCategory="proposal.vendor.vendorCategory"
+          :key="`${proposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
           :mandatory="true"
         ></EventProposalPrice>
         <EventProposalPrice
-          v-for="service in this.vendorProposal.additionalServices"
-          :proposalData="vendorProposal"
+          v-for="service in this.proposal.additionalServices"
+          :proposalData="proposal"
           :serviceCategory="service"
           :key="`secondary-${service}-section`"
           @changeBookedServices="changeBookedServices"
         ></EventProposalPrice>
         <div
           class="bundle-section d-flex justify-content-between align-center"
-          v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied && checkedAllBundledOffers"
+          v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied && checkedAllBundledOffers"
         >
         <div>
             <span class="font-size-30 font-bold">Bundle offer</span>
-            <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(vendorProposal.bookedServices) }}</span>
+            <span>{{ proposal.bundleDiscount.percentage }}%</span>
+            <span>{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
         <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
@@ -256,40 +256,34 @@
         </div>
       </div>
 
-      <div v-if="!isMobile || isMobile && section === 2" class="proposal-section policy-section" :class="isMobile ? 'my-15' : ' mt-40'">
-
-        <div class="d-flex align-center py-10" v-if="isMobile && section === 2">
-            <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
-            <div class="ml-10 font-size-18 font-bold-extra">Policy and documents</div>
-        </div>
-
-        <div v-if="vendorProposal.vendor.healthPolicy ||
-          vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length
+      <div class="proposal-section policy-section mt-40 md-small-hide" >
+        <div v-if="proposal.vendor.healthPolicy ||
+          proposal.vendor.guaranteed && proposal.vendor.guaranteed.length
         "
               class="proposal-section"
           >
               <div class="proposal-section__title"><img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy</div>
 
               <div class="policy-content">
-                  <template v-if="vendorProposal.vendor.healthPolicy">
+                  <template v-if="proposal.vendor.healthPolicy">
                       <div class="mt-20 font-bold-extra">
                           <span class="color-red">COVID 19</span>
                           - Exceptional Policy
                       </div>
                       <p class="my-10">
-                          {{ vendorProposal.vendor.healthPolicy }}
+                          {{ proposal.vendor.healthPolicy }}
                       </p>
                   </template>
-                  <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
+                  <template v-if="proposal.vendor.guaranteed && proposal.vendor.guaranteed.length">
                       <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
                       <div class="md-layout mt-20">
                           <div
                               v-for="option in guaranteedOptions"
                               class="md-layout-item md-size-30 py-10"
                               :key="option.value"
-                              :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+                              :style="{ display: proposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
                           >
-                              <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                              <div v-if="proposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
                                   <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
                                   {{ option.label }}
                               </div>
@@ -369,7 +363,7 @@
             <div class="label-value">Act of God</div>
           </div>
           <div class="rules">
-            <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
+            <span class="font-bold"> {{ proposal.vendor.companyName }}</span>
             is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
             authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
             quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
@@ -377,44 +371,50 @@
 
           <div class="signature-section">
             <div class="signature-section__vendor">
-              {{ vendorProposal.vendor.vendorDisplayName }}
+              {{ proposal.vendor.vendorDisplayName }}
             </div>
             <div class="signature-section__image">
-              <img :src="vendorProposal.vendor.signature" />
+              <img :src="proposal.vendor.signature" />
             </div>
           </div>
         </div>
       </div>
-
+      <div v-if="isMobile && section === 2" class="proposal-section">
+          <div class="d-flex align-center py-30 px-20">
+              <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
+              <div class="ml-10 font-size-18 font-bold-extra">Policy and documents</div>
+          </div>
+          <EventProposalPolicy :proposal="proposal"></EventProposalPolicy>
+      </div>
       <div v-if="isMobile && section === 3" class="proposal-section px-20">
           <div class="d-flex align-center py-10">
-              <img :src="`${$iconURL}Budget+Elements/${vendorProposal.vendor.eventCategory.icon}`" width="35px"/>
+              <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" width="35px"/>
               <h5 class="ml-10 font-bold-extra">About Our Venue</h5>
           </div>
           <div class="">
-              <p class="font-size-12 m-0">{{ vendorProposal.vendor.about.company }}</p>
+              <p class="font-size-12 m-0">{{ proposal.vendor.about.company }}</p>
           </div>
           <md-divider class="my-20"></md-divider>
           <div class="contact-section">
               <div class="font-size-16 font-bold-extra mb-10">Contact Us</div>
               <ul class="list-style-none p-0">
-                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorMainEmail">
+                  <li class="contact-list_item mb-10" v-if="proposal.vendor.vendorMainEmail">
                       <a href class="font-size-14">
                           <img :src="`${submitProposalIcon}Asset 286.svg`" />
-                          {{ vendorProposal.vendor.vendorMainEmail }}
+                          {{ proposal.vendor.vendorMainEmail }}
                       </a>
                   </li>
-                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorAddressLine1">
+                  <li class="contact-list_item mb-10" v-if="proposal.vendor.vendorAddressLine1">
                       <a href class="font-size-14">
                           <img :src="`${submitProposalIcon}Asset 285.svg`" />
-                          {{ vendorProposal.vendor.vendorAddressLine1 }}
-                          {{ vendorProposal.vendor.vendorAddressLine2 }}
+                          {{ proposal.vendor.vendorAddressLine1 }}
+                          {{ proposal.vendor.vendorAddressLine2 }}
                       </a>
                   </li>
-                  <li class="contact-list_item mb-10" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                  <li class="contact-list_item mb-10" v-if="proposal.vendor.vendorMainPhoneNumber">
                       <a href class="font-size-14">
                           <img :src="`${submitProposalIcon}Asset 284.svg`" />
-                          {{ vendorProposal.vendor.vendorMainPhoneNumber }}
+                          {{ proposal.vendor.vendorMainPhoneNumber }}
                       </a>
                   </li>
               </ul>
@@ -423,8 +423,8 @@
               <template v-for="(s, sIndex) in socialMediaBlocks">
                   <a
                       class="mx-10"
-                      v-if="vendorProposal.vendor.social[s.name]"
-                      :href="vendorProposal.vendor.social[s.name]"
+                      v-if="proposal.vendor.social[s.name]"
+                      :href="proposal.vendor.social[s.name]"
                       target="_blank"
                   >
                       <img :src="`${$iconURL}Vendor Signup/${s.icon}`" width="25px" />
@@ -437,11 +437,11 @@
     <div class="book-proposal-form" v-if="!isLoading">
       <div class="form-title">
         Would You Like To Book
-        <a :href="`/#/vendors/${this.vendorProposal.vendor.id}/detail`" target="_blank" class="font-bold-extra">
-          {{ vendorProposal.vendor.companyName }} </a
+        <a :href="`/#/vendors/${this.proposal.vendor.id}/detail`" target="_blank" class="font-bold-extra">
+          {{ proposal.vendor.companyName }} </a
         >?
       </div>
-      <div class="agree-checkbox" v-if="this.vendorProposal.suggestionDate">
+      <div class="agree-checkbox" v-if="this.proposal.suggestionDate">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
@@ -473,7 +473,7 @@
         <md-button
           class="md-red maryoku-btn"
           @click="bookVendor"
-          :disabled="this.vendorProposal.suggestionDate && !acceptNewTimes"
+          :disabled="this.proposal.suggestionDate && !acceptNewTimes"
           >Book this vendor
         </md-button>
       </div>
@@ -491,12 +491,10 @@ import moment from "moment";
 import Proposal from "@/models/Proposal";
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 
-import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
-
 import { socialMediaBlocks } from "@/constants/vendor";
 import { GuaranteedOptions } from "@/constants/options";
 import { ProposalContentTabOptions } from "@/constants/tabs";
-import { CommentMixins, ShareMixins, MobileMixins } from "@/mixins";
+import { CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins } from "@/mixins";
 
 //COMPONENTS
 const components = {
@@ -505,13 +503,14 @@ const components = {
     carousel: () => import("vue-owl-carousel"),
     CancellationPolicy: () => import("@/components/CancellationPolicy"),
     EventProposalPrice: () => import("./EventProposalPrice.vue"),
+    EventProposalPolicy: () => import('./EventProposalPolicy.vue'),
     ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
 }
 
 export default {
   components,
   props: {
-    vendorProposal: {
+    proposal: {
       type: Object,
       default: () => {},
     },
@@ -535,7 +534,7 @@ export default {
       default: "red",
     },
   },
-  mixins: [CommentMixins, ShareMixins, MobileMixins],
+  mixins: [CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins],
   data() {
     return {
       // auth: auth,
@@ -553,7 +552,6 @@ export default {
       menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
       iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
       submitProposalIcon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Submit%20Proposal/",
-      // vendorProposal: {},
       extraTotal: 0,
       serverUrl: process.env.SERVER_URL,
       images: [],
@@ -571,7 +569,7 @@ export default {
     };
   },
   created() {
-    this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
+    this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
 
   methods: {
@@ -599,11 +597,11 @@ export default {
     negotiate() {},
     askQuestion() {},
     bookVendor() {
-      new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
+      new Proposal({ ...this.proposal }).save().then((proposal) => {
         this.$router.push({
           name: "CheckoutWithVendor",
           params: {
-            proposalId: this.vendorProposal.id,
+            proposalId: this.proposal.id,
             proposalType: 'planner',
           },
         });
@@ -614,7 +612,7 @@ export default {
       window.scrollTo(0, 0);
     },
     eventDate() {
-      const suggestionDate = this.vendorProposal.suggestionDate;
+      const suggestionDate = this.proposal.suggestionDate;
       if (!this.eventData) return "-";
 
       let startDate = new Date(this.eventData.eventStartMillis);
@@ -628,7 +626,7 @@ export default {
       return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
     },
     getDiffDaysFromOriginal() {
-      const suggestionDate = this.vendorProposal.suggestionDate;
+      const suggestionDate = this.proposal.suggestionDate;
       if (!this.eventData) return "-";
 
       let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
@@ -643,7 +641,7 @@ export default {
       this.images = [];
       this.attachedFiles = [];
 
-      this.vendorProposal.attachements.forEach((item, index) => {
+      this.proposal.attachements.forEach((item, index) => {
         const fullPath = `${this.serverUrl}/1/proposal-requests/${vm.$route.params.proposalId}/files/${item.id}`;
 
         this.$http.get(fullPath, { headers: this.$auth.getAuthHeader() }).then((response) => {
@@ -664,7 +662,7 @@ export default {
             }
           }
 
-          if (index + 1 == vm.vendorProposal.attachements.length) {
+          if (index + 1 == vm.proposal.attachements.length) {
             setTimeout(function () {
               vm.fetchingAllAttachments = true;
             }, 2000);
@@ -680,16 +678,16 @@ export default {
     },
     isSocial() {
       let isBlank = true;
-      _.each(this.vendorProposal.vendor.social, (s) => {
+      _.each(this.proposal.vendor.social, (s) => {
         isBlank &= s === null;
       });
 
       return !isBlank;
     },
     updateAddedServices({ category, costServices, extraServices }) {
-      this.vendorProposal.costServices[category] = costServices;
-      this.vendorProposal.extraServices[category] = extraServices;
-      this.$emit("updateProposal", this.vendorProposal);
+      this.proposal.costServices[category] = costServices;
+      this.proposal.extraServices[category] = extraServices;
+      this.$emit("updateProposal", this.proposal);
     },
     closeDetail() {
       this.$emit("close");
@@ -702,7 +700,7 @@ export default {
       console.log("this.category", serviceCategory);
 
       // update the pricce of category
-      const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+      const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
         if (service.plannerOptions.length > 0 && service.selectedPlannerOption > 0) {
           // if 0 you selected main option
           const selectedAlternative = service.plannerOptions[service.selectedPlannerOption - 1];
@@ -711,15 +709,15 @@ export default {
           return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }
       }, 0);
-      this.vendorProposal.pricesByCategory[serviceCategory] = sumOfService;
+      this.proposal.pricesByCategory[serviceCategory] = sumOfService;
 
       await this.$store.dispatch("event/updateProposal", {
         category: serviceCategory,
-        proposal: this.vendorProposal,
+        proposal: this.proposal,
       });
     },
     favorite() {
-      this.$emit("favorite", !this.vendorProposal.isFavorite);
+      this.$emit("favorite", !this.proposal.isFavorite);
     },
     selectTab(val){
       this.section = val;
@@ -731,106 +729,38 @@ export default {
       components: "event/getComponentsList",
     }),
     extraMissingRequirements() {
-      return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
+      return _.union(this.proposal.extras, this.proposal.missing);
     },
     headerBackgroundImage() {
-      if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0]) return this.vendorProposal.coverImage[0];
-      if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
-        return this.vendorProposal.inspirationalPhotos[0].url;
-      if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
-        return this.vendorProposal.vendor.images[0];
-      if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
-        return this.vendorProposal.vendor.vendorImages[0];
+      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
+      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
+        return this.proposal.inspirationalPhotos[0].url;
+      if (this.proposal.vendor.images && this.proposal.vendor.images[0])
+        return this.proposal.vendor.images[0];
+      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
+        return this.proposal.vendor.vendorImages[0];
 
       return "";
     },
     attachments() {
-      if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
-        return this.vendorProposal.attachments;
-      if (this.vendorProposal.vendor.attachments && this.vendorProposal.vendor.attachments.length > 0)
-        return this.vendorProposal.vendor.attachments;
+      if (this.proposal.attachments && this.proposal.attachments.length > 0)
+        return this.proposal.attachments;
+      if (this.proposal.vendor.attachments && this.proposal.vendor.attachments.length > 0)
+        return this.proposal.vendor.attachments;
       return [];
     },
     validPolicy() {
-      if (this.vendorProposal.vendor.policies)
-        return this.vendorProposal.vendor.policies.filter(
+      if (this.proposal.vendor.policies)
+        return this.proposal.vendor.policies.filter(
           (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
         );
       return null;
     },
     additionalRules() {
-      return this.vendorProposal.vendor.additionalRules;
+      return this.proposal.vendor.additionalRules;
     },
     categories() {
       return this.$store.state.common.serviceCategories;
-    },
-    checkedAllBundledOffers() {
-      return (
-        this.vendorProposal.bundleDiscount.services &&
-        this.vendorProposal.bundleDiscount.services.length &&
-        this.vendorProposal.bookedServices.length &&
-        this.vendorProposal.bundleDiscount.services.every((it) => this.vendorProposal.bookedServices.includes(it))
-      );
-    },
-    tax() {
-      if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
-      let tax = this.vendorProposal.taxes["total"];
-      if (!tax) {
-        tax = { price: 0, percentage: 0 };
-      }
-      return tax;
-    },
-    discount() {
-      if (!this.vendorProposal.discounts) return { percentage: 0, price: 0 };
-      let discount = this.vendorProposal.discounts["total"];
-      if (!discount) {
-        discount = { price: 0, percentage: 0 };
-      }
-      return discount;
-    },
-    bundledDiscountPrice() {
-      let bundledServicePrice = 0;
-
-      if (!this.checkedAllBundledOffers) return 0;
-      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
-        const sumOfService = costByService(this.vendorProposal.costServices[serviceCategory]);
-
-        bundledServicePrice += sumOfService;
-      });
-
-      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100 || 0;
-    },
-
-    totalPriceOfProposal() {
-      let totalPrice = 0;
-
-      this.vendorProposal.bookedServices.forEach((serviceCategory) => {
-        const sumOfService = costByService(this.vendorProposal.costServices[serviceCategory]);
-        totalPrice += sumOfService;
-      });
-
-      // added service item price
-      Object.keys(this.addedServices).forEach((serviceCategory) => {
-        const sumOfService = extraCost(this.addedServices[serviceCategory]);
-        totalPrice += sumOfService;
-      });
-      return totalPrice;
-    },
-    discounedAndTaxedPrice() {
-
-      let price = this.totalPriceOfProposal;
-      console.log('total.price', price);
-      // discount
-      price = discounting(price, this.discount);
-      console.log('discounted.price', price, this.discount);
-      // bundled discount
-      price -= this.bundledDiscountPrice;
-
-      // adding tax
-      price = addingTax(price, this.tax);
-      console.log('tax.price', price, this.tax);
-
-      return price;
     },
   },
   filters: {
@@ -845,7 +775,7 @@ export default {
     },
   },
   watch: {
-    vendorProposal(newVal) {console.log('vendorProposal.watch', newVal)},
+    proposal(newVal) {console.log('proposal.watch', newVal)},
     showOffer(newVal) {if(newVal) this.section = 0;},
   },
 };

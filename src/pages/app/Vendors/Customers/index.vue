@@ -13,7 +13,7 @@
             <md-button
               v-for="tab in customerTabs"
               :key="tab.key"
-              class="md-round md-white-shadow md-white maryoku-btn mr-20"
+              class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
               @click="selectTab(tab.value)"
             >
               <div class="d-flex align-center px-20 pt-10 pb-10 font-size-16" :class="tab.class">
@@ -267,7 +267,7 @@ export default {
     customerObject() {
       if (!this.customers) return {};
       let object = this.customers.reduce((r, e) => {
-        let group = e.companyName[0].toLowerCase();
+        let group = e.companyName[0];
         if (!r[group]) r[group] = { group, children: [e] };
         else r[group].children.push(e);
         return r;

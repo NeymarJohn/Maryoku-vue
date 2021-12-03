@@ -36,8 +36,8 @@ export default {
   },
   methods: {
     getHeight(value) {
-      // console.log(value);
-      // console.log("this.maxValue", this.maxValue);
+      console.log(value);
+      console.log("this.maxValue", this.maxValue);
       if (this.maxValue > 250) {
         return Math.round((value / this.maxValue) * 250);
       }
