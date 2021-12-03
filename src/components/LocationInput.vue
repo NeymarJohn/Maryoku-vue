@@ -66,7 +66,7 @@ export default {
       this.updateSuggestionStyle()
     },
     updateSuggestionStyle(){
-        console.log('updateSuggestionStyle', this.theme, this.locations);
+        console.log('updateSuggestionStyle', this.theme);
         if ( this.theme === 'purple' ) {
             console.log('purple')
             setTimeout((_) => {

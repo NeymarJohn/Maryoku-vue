@@ -66,7 +66,7 @@
               <transition name="component-fade" mode="out-in">
                 <event-proposal-details
                   class="mt-20"
-                  :proposal="selectedProposal"
+                  :vendorProposal="selectedProposal"
                   :category="selectedCategory"
                   :key="selectedProposal.id"
                   @favorite="favoriteProposal"

@@ -10,7 +10,7 @@
         <div class="profile" v-if="vendorData">
           <div class="avatar" style="">
             <!-- <user-avatar :user="userData" @set="setAvatar"></user-avatar> -->
-            <company-logo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></company-logo>
+            <CompanyLogo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></CompanyLogo>
           </div>
           <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
           <div class="text-center">
@@ -85,9 +85,9 @@
       </div>
     </div>
     <div class="md-layout-item md-size-70">
-      <vendor-account-settings v-if="pageName === 'settings'"></vendor-account-settings>
-      <company-details v-if="pageName === 'details'"></company-details>
-      <my-services v-if="pageName === 'services'"></my-services>
+      <VendorAccountSettings v-if="pageName === 'settings'"></VendorAccountSettings>
+      <CompanyDetails v-if="pageName === 'details'"></CompanyDetails>
+      <MyServices v-if="pageName === 'services'"></MyServices>
     </div>
   </div>
 </template>
@@ -105,6 +105,18 @@ import CompanyLogo from "@/components/CompanyLogo.vue";
 import VendorAccountSettings from "./Account";
 import CompanyDetails from "./CompanyDetails";
 import MyServices from "./MyServices";
+
+const components = {
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Tabs: () => import('@/components/Tabs.vue'),
+    LabelEdit: () => import('@/components/LabelEdit.vue'),
+    StarRating: () => import('vue-star-rating'),
+    UserAvatar: () => import('@/components/UserAvatar.vue'),
+    CompanyLogo: () => import('@/components/CompanyLogo.vue'),
+    VendorAccountSettings: () => import('./CompanyDetails'),
+    MyServices: () => import('./MyServices'),
+}
+
 export default {
   components: {
     VueElementLoading,

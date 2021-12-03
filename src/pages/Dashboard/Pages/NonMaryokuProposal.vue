@@ -30,7 +30,7 @@
         </div>
         <div class="proposal-container" :class="isMobile ? 'mt-10' : 'mt-40'">
             <EventProposalDetails
-                :proposal="proposal"
+                :vendorProposal="proposal"
                 :landingPage="true"
                 :nonMaryoku="true"
                 :showOffer="showOffer"

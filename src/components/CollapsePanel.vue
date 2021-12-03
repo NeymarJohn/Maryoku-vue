@@ -30,7 +30,7 @@ export default {
   props: {
     defaultStatus: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     spacing: {
       type: Number,

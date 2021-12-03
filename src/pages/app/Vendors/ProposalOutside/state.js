@@ -466,7 +466,7 @@ const actions = {
       commit('setVendor', res);
       resolve(res)
     })
-  },
+  }
 };
 
 export default {
