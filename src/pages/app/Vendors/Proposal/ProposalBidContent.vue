@@ -229,7 +229,7 @@ export default {
           let tax = 0
           this.taxes.map(it => {
               const arr = this.event.location.split(', ');
-              if (arr[2] === 'USA' && arr[1] === it.code) {
+              if (arr[arr.length - 1] === 'USA' && arr[arr.length - 2] === it.code) {
                 tax = it.tax;
               }
           })

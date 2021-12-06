@@ -10,6 +10,7 @@ import vendor from "./modules/vendor";
 import campaign from "./modules/campaign";
 import vendorProposal from "./modules/vendorProposal"
 import planningBoard from "./modules/planningBoard"
+import customer from "./modules/customer"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         campaign,
         vendorProposal,
         common,
+        customer,
         planningBoard
     },
 });
