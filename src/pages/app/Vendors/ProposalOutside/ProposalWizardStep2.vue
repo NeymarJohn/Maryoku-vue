@@ -83,13 +83,12 @@ export default {
   },
   methods: {
       getTaxFromState() {
-          console.log('taxRate', this.event.location);
           if (!this.event.location) return 0;
 
           let tax = 0
           this.taxes.map(it => {
               const arr = this.event.location.split(', ');
-              if (arr[arr.length - 1] === 'USA' && arr[arr.length - 2] === it.code) {
+              if (arr[2] === 'USA' && arr[1] === it.code) {
                   tax = it.tax;
               }
           })

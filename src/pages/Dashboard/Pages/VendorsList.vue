@@ -83,6 +83,7 @@ import FileSaver from "file-saver";
 import XLSX from "xlsx";
 import { VENDOR_PAGE_PAGINATION } from "@/constants/pagination";
 const ProposalTable = () => import('./components/ProposalTable')
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
@@ -165,6 +166,7 @@ export default {
 
         let query = new Proposal().for(new Vendor({ id: item.id }));
         this.vendorProposals = await query.get();
+
         this.showProposalTable = true;
         this.loading = false;
       } else {

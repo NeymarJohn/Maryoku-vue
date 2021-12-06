@@ -200,7 +200,7 @@
         </div>
       </div>
 
-      <div v-if="!isMobile || isMobile && section === 1" class="proposal-section pricing-section" :class="isMobile ? 'bg-white pt-10' : ' mt-40'">
+      <div v-if="!isMobile || isMobile && section === 1" class="proposal-section pricing-section" :class="isMobile ? 'my-15' : ' mt-40'">
         <div class="proposal-section__title font-size-22 font-bold-extra" :class="isMobile ? 'p-20 bg-white' : ''">
           <img
             src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
@@ -217,15 +217,13 @@
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
           :mandatory="true"
-          :class-name="`${isMobile? 'p-0' : 'p-60 mb-20'} bg-light-gray`"
         ></EventProposalPrice>
         <EventProposalPrice
-          v-for="(service, index) in this.proposal.additionalServices"
+          v-for="service in this.proposal.additionalServices"
           :proposalData="proposal"
           :serviceCategory="service"
           :key="`secondary-${service}-section`"
           @changeBookedServices="changeBookedServices"
-          :class-name="`${isMobile ? 'p-0': 'p-60 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
         ></EventProposalPrice>
         <div
           class="bundle-section d-flex justify-content-between align-center"
@@ -503,7 +501,7 @@ const components = {
     Modal: () => import("@/components/Modal.vue"),
     Loader: () => import("@/components/loader/Loader.vue"),
     carousel: () => import("vue-owl-carousel"),
-    CancellationPolicy: () => import("@/components/CancellationPolicy.vue"),
+    CancellationPolicy: () => import("@/components/CancellationPolicy"),
     EventProposalPrice: () => import("./EventProposalPrice.vue"),
     EventProposalPolicy: () => import('./EventProposalPolicy.vue'),
     ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
@@ -1446,9 +1444,6 @@ export default {
       margin-right: 0.5em;
     }
   }
-}
-.bg-light-gray{
-    background-color: #f8fafb;
 }
 </style>
 
