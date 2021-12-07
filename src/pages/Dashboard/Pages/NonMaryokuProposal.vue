@@ -22,7 +22,7 @@
 
             <div v-if="isMobile && !showOffer" class="md-layout-item md-small-size-100">
                 <md-card class="d-flex flex-column text-center border-radius-none py-20 my-10">
-                    <div><p class="font-size-10 m-0">Caterers & Venues</p></div>
+                    <div><img :src="`${$iconURL}responsive/Group 22041.svg`"></div>
                     <h2 class="font-size-24 font-bold-extra text-uppercase my-10">catering proposal</h2>
                     <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the 'March Madness' event. Let's start..</p>
                 </md-card>
