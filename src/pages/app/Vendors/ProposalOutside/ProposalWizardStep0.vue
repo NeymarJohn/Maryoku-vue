@@ -152,7 +152,7 @@ const components = {
     Autocomplete: () => import('@/components/Autocomplete/index.vue'),
     SelectableCard: () => import('@/components/SelectableCard.vue'),
     CustomerForm: () => import('../Form/CustomerForm.vue'),
-    Multiselect: () => import("vue-multiselect"),
+    Multiselect: () => import('vue-multiselect'),
 }
 
 export default {

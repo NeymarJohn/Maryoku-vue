@@ -65,6 +65,8 @@ export default {
                 return `${path}filter-reject.svg`;
             } else if ( status === PROPOSAL_STATUS.WON ) {
                 return `${path}filter-won.svg`;
+            } else if ( status === PROPOSAL_STATUS.INACTIVE ) {
+                return `${path}filter-inactive.svg`;
             } else {
                 return `${path}filter-${status}.svg`;
             }
