@@ -642,6 +642,11 @@ hr {
 .bg-light-pink{
     background-color: #fdf0f4
 }
+
+.mobile-show{
+    display: none;
+}
+
 @media only screen and (max-width: 959px) {
   .font-size-14 {
       font-size: 12px !important;
@@ -661,4 +666,12 @@ hr {
       font-size: 20px !important;
       font-family: "Manrope-Regular";
   }
+
+    .mobile-show{
+        display: flex;
+    }
 }
+
+
+
+
