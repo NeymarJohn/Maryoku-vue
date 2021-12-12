@@ -104,16 +104,8 @@ export default {
   },
   methods: {
     onUpdateFocus(newValue) {},
-    async saveValue({ field, value }) {
-      // search and edit existing vendor
-      if (field === 'companyName') {
-          const vendors = await this.$store.dispatch('vendorSignup/searchVendor', {companyName: value});
-          if (vendors.length) {
-              this.$store.commit('vendorSignup/setEditing', true);
-              this.$store.commit("vendorSignup/setVendor", vendors[0]);
-              return;
-          }
-      }
+    saveValue({ field, value }) {
+      // this.$root.$emit("update-vendor-value", field, value);
       this.$store.commit("vendorSignup/setField", { field, value });
     },
   },

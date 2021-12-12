@@ -94,11 +94,10 @@ const actions = {
     });
   },
   saveMainRequirements({ commit, state }, { event, category, requirements }) {
+    let originalRequirements = state.requirements[category];
+    if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
+    originalRequirements = { ...originalRequirements, ...requirements }
     return new Promise((resolve, reject) => {
-      let originalRequirements = state.requirements[category];
-      if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
-      originalRequirements = { ...originalRequirements, ...requirements }
-
       new ProposalRequestRequirement(originalRequirements)
         .for(new CalendarEvent({ id: event.id }))
         .save()

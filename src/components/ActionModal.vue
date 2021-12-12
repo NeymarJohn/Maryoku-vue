@@ -11,7 +11,15 @@
       <div class="modal-wrapper">
         <div :class="containerClass" v-click-outside="closeModal">
           <div class="modal-header">
+            <a class="color-black text-decoration-none mobile-show" @click="closeModal"> Cancel </a>
             <slot name="header"></slot>
+            <a class="color-red text-decoration-none mobile-show" @click="done">
+              Done
+            </a>
+
+            <md-button class="md-simple md-just-icon md-round modal-default-button md-small-hide" @click="closeModal">
+              <md-icon>clear</md-icon>
+            </md-button>
           </div>
 
           <div class="modal-body text-center">
@@ -54,6 +62,9 @@ export default {
       event.stopPropagation();
       return;
     },
+    done(){
+      this.$emit('done');
+    }
   },
 };
 </script>

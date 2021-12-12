@@ -2,31 +2,36 @@
   <div>
     <slideout-panel></slideout-panel>
     <router-view></router-view>
-
-    <NotificationModal v-if="!!name" :name="name"></NotificationModal>
   </div>
 </template>
 
 <script>
 // import auth from '@/auth';
 // import Model from '@/models/Model'
-const components = {
-    NotificationModal: () => import('@/components/Modals/NotificationModal.vue'),
-}
 
 export default {
-  components,
+  components: {},
   data () {
     return {
       // auth: auth
     }
   },
+  created () {},
   mounted () {
+    let before = new Date()
     const that = this
     if (window.focusEventListener != null) {
       window.removeEventListener('focus', window.focusEventListener)
       window.focusEventListener = null
     }
+    window.focusEventListener = window.addEventListener('focus', function () {
+      const now = new Date()
+      // if (now.getTime() - before.getTime() >= 300000) {
+      //   that.$auth.currentUser(that, true)
+      // } else {
+      //   before = new Date()
+      // }
+    })
 
     let initialMessage = document.getElementById('initial-message')
     if (initialMessage) {
@@ -36,14 +41,6 @@ export default {
     if (loadingBackground) {
       loadingBackground.remove()
     }
-  },
-  computed: {
-    name() {
-        return this.$store.state.modal.name;
-    }
-  },
-  watch: {
-    isOpen(newVal){}
   }
 }
 </script>

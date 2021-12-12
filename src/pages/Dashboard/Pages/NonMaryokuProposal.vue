@@ -4,13 +4,18 @@
     <template v-if="proposal">
         <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
             <img v-if="isMobile && !showOffer" :src="headerBackgroundImage" class="position-absolute" style="left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 200px"/>
-            <div class="md-layout-item md-large-size-50 md-small-hide font-size-30">
-                <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
-                <b>{{ proposal.vendor.eventCategory.fullTitle }}</b>
-                {{ proposal.vendor.companyName }}
-            </div>
+            <div class="md-layout-item md-large-size-50 md-small-size-80 d-flex" :class="isMobile ?'justify-content-center':''">
+                <img class="md-small-hide" :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
+                <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
 
-            <div class="md-layout-item md-large-size-50 md-small-size-100 d-flex">
+                <div v-if="isMobile && vendor.vendorLogoImage">
+                    <img class="ml-10" :src="`${vendor.vendorLogoImage}`">
+                </div>
+
+                <div :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">{{ proposal.vendor.companyName }}</div>
+            </div>
+            = score
+            <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
                 <HeaderActions
                     className="ml-auto"
                     page="proposal"
@@ -20,11 +25,17 @@
                 ></HeaderActions>
             </div>
 
-            <div v-if="isMobile && !showOffer" class="md-layout-item md-small-size-100">
-                <md-card class="d-flex flex-column text-center border-radius-none py-20 my-10">
-                    <div><img :src="`${$iconURL}responsive/Group 22041.svg`"></div>
-                    <h2 class="font-size-24 font-bold-extra text-uppercase my-10">catering proposal</h2>
-                    <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the 'March Madness' event. Let's start..</p>
+            <div v-if="isMobile" class="md-layout-item md-small-size-100">
+                <md-card v-if="!showOffer" class="d-flex flex-column text-center border-radius-none py-20 my-10">
+                    <div v-if="vendor.vendorLogoImage">
+                        <img :src="`${vendor.vendorLogoImage}`">
+                    </div>
+                    <h2 v-if="vendor.companyName" class="font-size-24 font-bold-extra text-uppercase my-10">{{
+                            `${vendor.companyName} proposal`
+                        }}</h2>
+                    <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the</p>
+                    <span class="text-center font-bold-extra m-0 px-10">
+                        <b class="font-size-16 font-bold-extra text-capitalize">{{` ${proposal.eventData.customer.companyName}` }}</b> event. Let's start..</span>
                 </md-card>
             </div>
         </div>
@@ -54,10 +65,10 @@
             </EventProposalDetails>
         </div>
 
-        <div class="text-center logo-area" :class="isMobile ? 'font-size-14 py-10' : 'font-size-18 p-40 mt-40'">
+        <div class="text-center logo-area" :class="isMobile ? 'font-size-12 py-10' : 'font-size-18 p-40 mt-40'">
             Provided By
             <img class="ml-10" :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-            <p class="m-0">Who are we and why are we great?</p>
+            <p class="m-0 align-baseline text-underline">Who are we and why are we great?</p>
         </div>
 
         <a v-if="isMobile && !showOffer"
@@ -66,41 +77,48 @@
         >
             View the details of the offer
         </a>
-        <div v-if="!isMobile || isMobile && showOffer" class="proposal-footer d-flex justify-content-between align-center">
-            <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
-                <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
-                    More Actions
-                    <md-icon>expand_less</md-icon>
-                </md-button>
-                <md-menu-content>
-                    <md-menu-item class="text-center" @click="negotiateRate">
-                    <span class="font-size-16 font-bold-extra pl-20">
-          <img
-              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
-              class="mr-10"
-              style="width: 20px; height: 28px"
-          />
-          Negotiate Rate
-        </span>
-                    </md-menu-item>
-                    <md-menu-item class="text-center" @click="remindMeLater">
-                    <span class="font-size-16 font-bold-extra pl-20">
-          <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px" />
-          Remind me later
-        </span>
-                    </md-menu-item>
-                    <md-menu-item class="text-center" @click="changeEvent">
-                    <span class="font-size-16 font-bold-extra pl-20">
-          <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
-          Change event details
-        </span>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-            <div>
-                <md-button class="md-simple md-red md-outlined maryoku-btn md-small-hide" @click="declineProposal">Decline Proposal</md-button>
-                <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
-            </div>
+        <div v-if="!isMobile" class="proposal-footer d-flex justify-content-between align-center px-30">
+
+                <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
+                    <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
+                        More Actions
+                        <md-icon>expand_less</md-icon>
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item class="text-center" @click="negotiateRate">
+                        <span class="font-size-16 font-bold-extra pl-20">
+                          <img
+                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              class="mr-10"
+                              style="width: 20px; height: 28px"
+                          />
+                          Negotiate Rate
+                        </span>
+                        </md-menu-item>
+                        <md-menu-item class="text-center" @click="remindMeLater">
+                        <span class="font-size-16 font-bold-extra pl-20">
+                          <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10"
+                               style="width: 20px; height: 20px"/>
+                          Remind me later
+                        </span>
+                        </md-menu-item>
+                        <md-menu-item class="text-center" @click="changeEvent">
+                        <span class="font-size-16 font-bold-extra pl-20">
+                          <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
+                          Change event details
+                        </span>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+
+                <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">Decline Proposal</md-button>
+                <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
+
+        </div>
+
+        <div v-if="showOffer" class="md-layout mobile-show">
+            <a class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none">More actions</a>
+            <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
         </div>
 
     </template>
@@ -113,21 +131,15 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </CommentEditorPanel>
-    <modal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal">
+    <ActionModal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal" @close="showDetailModal=false">
       <template slot="header">
-        <div class="add-category-model__header">
-          <h2 class="font-size-30 font-bold-extra">Change event details</h2>
-          <div>
-            You can change or add event details and information. <br />
-            Vendor will send you a updated proposal in a short time
-          </div>
-        </div>
-        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showDetailModal = false">
-          <md-icon>clear</md-icon>
-        </md-button>
+          <div class="title font-bold-extra">Change event details</div>
       </template>
       <template slot="body">
-        <!-- <div>{{ proposal.eventData }}</div> -->
+        <div class="text-left mb-10">
+              You can change or add event details and information. <br />
+              Vendor will send you a updated proposal in a short time
+        </div>
         <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>
       </template>
       <template slot="footer">
@@ -138,7 +150,7 @@
         <md-button class="md-simple md-black ml-auto">Cancel</md-button>
         <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
       </template>
-    </modal>
+    </ActionModal>
     <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
       <template slot="body">
         <h2>Changes set successfully</h2>
@@ -148,16 +160,16 @@
         </div>
       </template>
     </modal>
-<!--    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">-->
-<!--      <template slot="body">-->
-<!--        <VendorDeclined-->
-<!--                @rate="handleRate"-->
-<!--                @close="showDeclineVendorModal=false"-->
-<!--                :value="proposal.score"-->
-<!--        >-->
-<!--        </VendorDeclined>-->
-<!--      </template>-->
-<!--    </modal>-->
+    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
+      <template slot="body">
+        <VendorDeclined
+                @rate="handleRate"
+                @close="showDeclineVendorModal=false"
+                :value="proposal.score"
+        >
+        </VendorDeclined>
+      </template>
+    </modal>
 
     <GuestSignUpModal
       v-if="showGuestSignupModal"
@@ -204,7 +216,9 @@ const components = {
     EventDetail: () => import('./components/EventDetail.vue'),
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
+    ActionModal: () => import('@/components/ActionModal.vue'),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
+    VendorDeclined: () => import('./components/VendorDeclined.vue'),
     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
     RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
     NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
@@ -223,7 +237,7 @@ export default {
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
-      showDeclineVendorModal: true,
+      showDeclineVendorModal: false,
       showGuestSignupModal: false,
       showRemindingTimeModal: false,
       showNegotiationRequestModal: false,
@@ -259,7 +273,6 @@ export default {
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    ...mapMutations("modal", ["setOpen"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
@@ -360,7 +373,7 @@ export default {
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
-      this.setOpen('DECLINE')
+      this.showDeclineVendorModal = true;
     },
     async handleRate(score){
       await this.saveProposal({...this.proposal, score});
@@ -593,6 +606,9 @@ export default {
     guestName() {
       return this.$store.state.comment.guestName;
     },
+    vendor(){
+      return this.proposal.vendor
+    },
       headerBackgroundImage() {
           if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
           if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
@@ -628,7 +644,6 @@ export default {
     height: 80px;
     width: 100%;
     background: white;
-    padding: 0 30px;
   }
 }
 .condition-tooltip {
