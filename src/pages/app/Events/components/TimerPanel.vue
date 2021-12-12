@@ -120,11 +120,11 @@ export default {
           &:hover {
               background-color: #f51355 !important;
           }
-      }
-    }
 
-    /deep/ .md-button-content {
-        color: white !important;
+          .md-button-content{
+              color: white !important;
+          }
+      }
     }
 
     hr{

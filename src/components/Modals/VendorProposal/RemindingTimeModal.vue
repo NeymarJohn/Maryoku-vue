@@ -1,12 +1,18 @@
 <template>
-  <ActionModal class="reminder-time-modal" containerClass="modal-container sm" @close="close" @done="setRemind">
+  <modal class="reminder-time-modal" containerClass="modal-container sm">
     <template slot="header">
-        <div class="title font-bold text-center">Set a reminder</div>
+      <div>
+        <div class="font-size-30 font-bold header-text">Set a reminder</div>
+        <div class="mt-20">
+          Want to come back to this later? We’ll send you a reminder so you never miss a deadline.
+        </div>
+      </div>
+
+      <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
+        <md-icon>clear</md-icon>
+      </md-button>
     </template>
     <template slot="body">
-      <div class="text-left mb-10">
-         Want to come back to this later? We’ll send you a reminder so you never miss a deadline.
-      </div>
       <div class="text-left">
         <label>Just select the best time for you: </label>
         <div class="text-left">
@@ -17,16 +23,16 @@
         <div class="pl-40 time-selector" v-if="remindTimeOption === 'specific'">
           <div class="text-left mb-20 d-flex">
             <div class="width-50">
-              <MaryokuInput
+              <maryoku-input
                 class="form-input mr-10"
                 placeholder="Choose date…"
                 inputStyle="date"
                 v-model="selectedDate"
-              ></MaryokuInput>
+              ></maryoku-input>
             </div>
-            <TimePicker v-model="selectedTime"></TimePicker>
+            <time-picker v-model="selectedTime"></time-picker>
           </div>
-          <WarningMessage class="mb-50" label="This offer is valid for 4 days"></WarningMessage>
+          <warning-message class="mb-50" label="This offer is valid for 4 days"></warning-message>
         </div>
       </div>
     </template>
@@ -36,19 +42,21 @@
         Done
       </md-button>
     </template>
-  </ActionModal>
+  </modal>
 </template>
 <script>
+import { Modal, MaryokuInput } from "@/components";
 import moment from "moment";
-
-const components = {
-    ActionModal: () => import('@/components/ActionModal.vue'),
-    MaryokuInput: () => import('@/components/inputs/MaryokuInput.vue'),
-    TimePicker: () => import('@/components/Inputs/TimePicker.vue'),
-    WarningMessage: () => import("@/components/WarningMessage.vue"),
-}
+import Reminder from "@/models/Reminder";
+import TimePicker from "@/components/Inputs/TimePicker";
+import WarningMessage from "@/components/WarningMessage";
 export default {
-  components,
+  components: {
+    Modal,
+    MaryokuInput,
+    TimePicker,
+    WarningMessage,
+  },
   props: {},
   data() {
     return {
@@ -72,7 +80,6 @@ export default {
       this.$emit("close");
     },
     close() {
-      console.log('close');
       this.$emit("close");
     },
     setRemind() {
