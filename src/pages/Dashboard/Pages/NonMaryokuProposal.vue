@@ -148,16 +148,16 @@
         </div>
       </template>
     </modal>
-    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
-      <template slot="body">
-        <VendorDeclined
-                @rate="handleRate"
-                @close="showDeclineVendorModal=false"
-                :value="proposal.score"
-        >
-        </VendorDeclined>
-      </template>
-    </modal>
+<!--    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">-->
+<!--      <template slot="body">-->
+<!--        <VendorDeclined-->
+<!--                @rate="handleRate"-->
+<!--                @close="showDeclineVendorModal=false"-->
+<!--                :value="proposal.score"-->
+<!--        >-->
+<!--        </VendorDeclined>-->
+<!--      </template>-->
+<!--    </modal>-->
 
     <GuestSignUpModal
       v-if="showGuestSignupModal"
@@ -205,7 +205,6 @@ const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
-    VendorDeclined: () => import('./components/VendorDeclined.vue'),
     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
     RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
     NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
@@ -224,7 +223,7 @@ export default {
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
-      showDeclineVendorModal: false,
+      showDeclineVendorModal: true,
       showGuestSignupModal: false,
       showRemindingTimeModal: false,
       showNegotiationRequestModal: false,
@@ -260,6 +259,7 @@ export default {
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
+    ...mapMutations("modal", ["setOpen"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
@@ -360,7 +360,7 @@ export default {
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
-      this.showDeclineVendorModal = true;
+      this.setOpen('DECLINE')
     },
     async handleRate(score){
       await this.saveProposal({...this.proposal, score});
