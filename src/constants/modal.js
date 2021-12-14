@@ -32,3 +32,52 @@ export const NOTIFICATION = {
         },
     },
 }
+
+export const ACTION = {
+    MORE_ACTIONS:{
+        title: false,
+        description: false,
+        cancel: false,
+        action: false,
+    },
+    NEGOTIATION: {
+        title: 'Negotiation rate',
+        icon: 'budget+screen/SVG/Asset%2010.svg',
+        description: 'Submit the hourly or fixed rate below that you’d like to propose to Zenger Group',
+        cancel: true,
+        action: 'Update Vendor',
+    },
+    REMINDER: {
+        title: 'Set a reminder',
+        icon: 'Vendor Signup/Asset 522.svg',
+        description: 'Want to come back to this later? We’ll send you a reminder so you never miss a deadline.',
+        cancel: true,
+        action: 'Done',
+    },
+    EVENT_CHANGE: {
+        title: 'Change event details',
+        icon: 'common/calendar-dark.svg',
+        description: 'You can change or add event details and information.',
+        cancel: true,
+        action: 'Update Vendor',
+    },
+    COMMENT: {
+        title: 'Comment',
+        icon: '',
+        description: false,
+        cancel: false,
+        action: false
+    },
+    // SHARE: {
+    //     title: 'Share \'Proposal\' With Your Colleague',
+    //     cancel: false,
+    //     action: 'Done'
+    // },
+    LOOK: {
+        title: 'Look for something else',
+        icon: '',
+        description: false,
+        cancel: false,
+        action: false
+    }
+}

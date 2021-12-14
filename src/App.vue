@@ -3,15 +3,19 @@
     <slideout-panel></slideout-panel>
     <router-view></router-view>
 
-    <NotificationModal v-if="!!name" :name="name"></NotificationModal>
+    <NotificationModal v-if="isNotificationModal" :name="name"></NotificationModal>
+    <ActionModal v-if="isActionModal" :name="name"></ActionModal>
   </div>
 </template>
 
 <script>
 // import auth from '@/auth';
 // import Model from '@/models/Model'
+import { NOTIFICATION, ACTION } from "./constants/modal";
+
 const components = {
     NotificationModal: () => import('@/components/Modals/NotificationModal.vue'),
+    ActionModal: () => import('@/components/Modals/ActionModal.vue'),
 }
 
 export default {
@@ -40,10 +44,16 @@ export default {
   computed: {
     name() {
         return this.$store.state.modal.name;
+    },
+    isNotificationModal(){
+        return Object.keys(NOTIFICATION).includes(this.name)
+    },
+    isActionModal(){
+        return Object.keys(ACTION).includes(this.name)
     }
   },
   watch: {
-    isOpen(newVal){}
+    name(newVal){console.log('watch.name', newVal, Object.keys(ACTION))}
   }
 }
 </script>

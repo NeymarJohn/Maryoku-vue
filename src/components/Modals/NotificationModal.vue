@@ -9,7 +9,7 @@
             @dragleave="modalMaskClick"
         >
             <div class="modal-wrapper">
-                <div class="modal-container no-header no-footer" v-click-outside="closeModal">
+                <div class="modal-container no-header no-footer w-min-800" v-click-outside="closeModal">
                     <div class="modal-header position-relative">
                         <md-button
                             class="md-simple position-absolute"
@@ -19,14 +19,14 @@
                             <md-icon>close</md-icon>
                         </md-button>
 
-                        <div class="pt-40 text-center width-100 header-bg">
-                            <div class="d-flex flex-column align-center w-max-600 mx-auto pb-30">
+                        <div class="py-40 d-flex justify-content-center width-100 header-bg">
+                            <div class="w-max-600 text-center">
                                 <img :src="`${$iconURL}${notification[name].icon}`">
                                 <h3 class="font-size-30 font-bold-extra color-won">{{ notification[name].title }}</h3>
 
-                                <p class="font-size-14"> {{notification[name].description}}</p>
+                                <p class="font-size-14 m-0"> {{notification[name].description}}</p>
 
-                                <md-button v-if="notification[name].action" class="md-red maryoku-btn my-10" >
+                                <md-button v-if="notification[name].action" class="md-red maryoku-btn mb-20 ml-60" >
                                     {{ notification[name].action }}</md-button>
                             </div>
                         </div>
