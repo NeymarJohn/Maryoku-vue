@@ -40,19 +40,21 @@
 </template>
 <script>
 import moment from "moment";
-import { MaryokuInput } from '@/components';
 
 const components = {
     ActionModal: () => import('@/components/ActionModal.vue'),
-    // MaryokuInput: () => import('@/components/inputs/MaryokuInput.vue'),
+    MaryokuInput: () => import('@/components/inputs/MaryokuInput.vue'),
     TimePicker: () => import('@/components/Inputs/TimePicker.vue'),
     WarningMessage: () => import("@/components/WarningMessage.vue"),
 }
 export default {
-  components: {...components, MaryokuInput},
+  components,
   props: {},
   data() {
     return {
+      screen: 2,
+      remindingEmail: "",
+      remindingPhone: "",
       remindTimeOption: "today",
       selectedDate: "",
       selectedTime: "",

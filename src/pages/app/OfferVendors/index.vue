@@ -55,6 +55,14 @@
             </div>
         </template>
 
+        <modal v-if="showBookedVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
+            <template slot="body">
+                <VendorBooked
+                    @show="showVendors"
+                    @rate="handleRate"
+                    @close="showBookedVendorModal = false" />
+            </template>
+        </modal>
         <AdditionalRequestModal
             class="lg"
             v-if="isOpenedAdditionalModal"
@@ -99,12 +107,12 @@ import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
 import _ from "underscore";
 import moment from "moment";
-import {mapMutations} from "vuex";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
+    VendorBooked: () => import('./VendorBooked.vue'),
     ServiceCategoryCard: () => import('@/pages/app/Events/PlanningBoard/components/ServiceCategoryCard.vue'),
     ProgressRadialBar: () => import('@/pages/app/Events/PlanningBoard/components/ProgressRadialBar.vue'),
     AdditionalRequestModal: () => import('@/pages/app/Events/PlanningBoard/components/modals/AdditionalRequest.vue'),
@@ -119,6 +127,7 @@ export default {
             step: 1,
             page: 'signup',
             showSignupModal: false,
+            showBookedVendorModal: true,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
             showOffers: false,
@@ -132,7 +141,9 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('modal', ['setOpen']),
+        async showVendors(){
+            this.showBookedVendorModal = false;
+        },
         async handleRate(score){
             await this.saveProposal({...this.proposal, score})
         },
@@ -348,7 +359,6 @@ export default {
             this.isLoading = false;
         }
         this.showOffers = true;
-        this.setOpen('BOOKED');
     }
 
 }

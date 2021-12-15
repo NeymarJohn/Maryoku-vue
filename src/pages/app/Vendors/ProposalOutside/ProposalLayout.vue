@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader :active="isLoading" is_full_screen page="vendor" height="100%"></loader>
+    <loader :active="isLoading" is_full_screen page="vendor"></loader>
 
     <ProposalHeader v-if="vendor" :vendor="vendor"></ProposalHeader>
     <ProposalVersionsBar v-if="$route.params.id"></ProposalVersionsBar>
@@ -193,16 +193,13 @@ export default {
   },
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveVendor", "saveEvent"]),
-    async gotoNext() {
+    gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
-
-        this.isLoading = true;
-        await this.createEvent()
-        this.step = this.step + 1;
-        this.scrollToTop();
-
-        this.isLoading = false;
+        this.createEvent().then(() => {
+          this.step = this.step + 1;
+          this.scrollToTop();
+        });
       } else {
         this.step = this.step + 1;
       }
@@ -317,7 +314,7 @@ export default {
         this.isLoading = false;
     },
 
-    async createEvent() {
+    createEvent() {
       const userEvent = {
         company: this.event.company,
         date: new Date(this.event.startTime * 1000).toISOString(),
@@ -339,7 +336,7 @@ export default {
       if (this.event.id) {
         userEvent.id = this.event.id;
       }
-      await this.saveEvent(userEvent);
+      return this.saveEvent(userEvent);
     },
     back() {
       this.step = this.step - 1;

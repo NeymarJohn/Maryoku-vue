@@ -85,7 +85,7 @@
                         <md-icon>expand_less</md-icon>
                     </md-button>
                     <md-menu-content>
-                        <md-menu-item class="text-center" @click="showModal('NEGOTIATION')">
+                        <md-menu-item class="text-center" @click="negotiateRate">
                         <span class="font-size-16 font-bold-extra pl-20">
                           <img
                               :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
@@ -95,14 +95,14 @@
                           Negotiate Rate
                         </span>
                         </md-menu-item>
-                        <md-menu-item class="text-center" @click="showModal('REMINDER')">
+                        <md-menu-item class="text-center" @click="remindMeLater">
                         <span class="font-size-16 font-bold-extra pl-20">
                           <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10"
                                style="width: 20px; height: 20px"/>
                           Remind me later
                         </span>
                         </md-menu-item>
-                        <md-menu-item class="text-center" @click="showModal('EVENT_CHANGE')">
+                        <md-menu-item class="text-center" @click="changeEvent">
                         <span class="font-size-16 font-bold-extra pl-20">
                           <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
                           Change event details
@@ -117,7 +117,7 @@
         </div>
 
         <div v-if="showOffer" class="md-layout mobile-show">
-            <a class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
+            <a class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none">More actions</a>
             <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
         </div>
 
@@ -131,35 +131,45 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </CommentEditorPanel>
-<!--    <ActionModal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal" @close="showDetailModal=false">-->
-<!--      <template slot="header">-->
-<!--          <div class="title font-bold-extra">Change event details</div>-->
-<!--      </template>-->
-<!--      <template slot="body">-->
-<!--        <div class="text-left mb-10">-->
-<!--              You can change or add event details and information. <br />-->
-<!--              Vendor will send you a updated proposal in a short time-->
-<!--        </div>-->
-<!--        <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>-->
-<!--      </template>-->
-<!--      <template slot="footer">-->
-<!--        <div class="condition-tooltip">-->
-<!--          <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px" />-->
-<!--          Any change might cause pricing changes-->
-<!--        </div>-->
-<!--        <md-button class="md-simple md-black ml-auto">Cancel</md-button>-->
-<!--        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>-->
-<!--      </template>-->
-<!--    </ActionModal>-->
-<!--    <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">-->
-<!--      <template slot="body">-->
-<!--        <h2>Changes set successfully</h2>-->
-<!--        <div>Changes have been sent to the vendor and he will send you an updated offer as soon as possible</div>-->
-<!--        <div class="text-center">-->
-<!--          <md-button class="md-red" @click="showUpdateSuccessModal = false">Done</md-button>-->
-<!--        </div>-->
-<!--      </template>-->
-<!--    </modal>-->
+    <ActionModal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal" @close="showDetailModal=false">
+      <template slot="header">
+          <div class="title font-bold-extra">Change event details</div>
+      </template>
+      <template slot="body">
+        <div class="text-left mb-10">
+              You can change or add event details and information. <br />
+              Vendor will send you a updated proposal in a short time
+        </div>
+        <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>
+      </template>
+      <template slot="footer">
+        <div class="condition-tooltip">
+          <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px" />
+          Any change might cause pricing changes
+        </div>
+        <md-button class="md-simple md-black ml-auto">Cancel</md-button>
+        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
+      </template>
+    </ActionModal>
+    <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
+      <template slot="body">
+        <h2>Changes set successfully</h2>
+        <div>Changes have been sent to the vendor and he will send you an updated offer as soon as possible</div>
+        <div class="text-center">
+          <md-button class="md-red" @click="showUpdateSuccessModal = false">Done</md-button>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
+      <template slot="body">
+        <VendorDeclined
+                @rate="handleRate"
+                @close="showDeclineVendorModal=false"
+                :value="proposal.score"
+        >
+        </VendorDeclined>
+      </template>
+    </modal>
 
     <GuestSignUpModal
       v-if="showGuestSignupModal"
@@ -171,17 +181,17 @@
       @cancel="showGuestSignupModal = false"
     >
     </GuestSignUpModal>
-<!--    <RemindingTimeModal-->
-<!--      v-if="showRemindingTimeModal"-->
-<!--      @close="showRemindingTimeModal = false"-->
-<!--      @save="saveRemindingTime"-->
-<!--    ></RemindingTimeModal>-->
-<!--    <NegotiationRequestModal-->
-<!--      v-if="showNegotiationRequestModal"-->
-<!--      :proposal="proposal"-->
-<!--      @close="showNegotiationRequestModal = false"-->
-<!--      @save="sendNegotiationRequest"-->
-<!--    ></NegotiationRequestModal>-->
+    <RemindingTimeModal
+      v-if="showRemindingTimeModal"
+      @close="showRemindingTimeModal = false"
+      @save="saveRemindingTime"
+    ></RemindingTimeModal>
+    <NegotiationRequestModal
+      v-if="showNegotiationRequestModal"
+      :proposal="proposal"
+      @close="showNegotiationRequestModal = false"
+      @save="sendNegotiationRequest"
+    ></NegotiationRequestModal>
   </div>
 </template>
 <script>
@@ -203,11 +213,12 @@ const components = {
     CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
     GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
     HeaderActions: () => import('@/components/HeaderActions.vue'),
-
+    EventDetail: () => import('./components/EventDetail.vue'),
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
     ActionModal: () => import('@/components/ActionModal.vue'),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
+    VendorDeclined: () => import('./components/VendorDeclined.vue'),
     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
     RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
     NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
@@ -226,6 +237,7 @@ export default {
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
+      showDeclineVendorModal: false,
       showGuestSignupModal: false,
       showRemindingTimeModal: false,
       showNegotiationRequestModal: false,
@@ -257,13 +269,10 @@ export default {
       this.loading = false;
     }
 
-    this.setOpen('DECLINE');
-
     // await this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    ...mapMutations("modal", ["setOpen", "setProposal"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
@@ -364,7 +373,10 @@ export default {
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
-      this.setOpen('DECLINE')
+      this.showDeclineVendorModal = true;
+    },
+    async handleRate(score){
+      await this.saveProposal({...this.proposal, score});
     },
     async saveProposal(proposal){
         this.loading = true;
@@ -379,10 +391,14 @@ export default {
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
-    showModal(name){
-        console.log('show.modal', name);
-        this.setProposal(this.proposal);
-        this.setOpen(name);
+    remindMeLater() {
+      this.showRemindingTimeModal = true;
+    },
+    negotiateRate() {
+      this.showNegotiationRequestModal = true;
+    },
+    changeEvent() {
+      this.showDetailModal = true;
     },
     openNewTab(link) {
       window.open(link, "_blank");

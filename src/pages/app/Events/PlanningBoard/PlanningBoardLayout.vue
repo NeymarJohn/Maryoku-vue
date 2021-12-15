@@ -9,10 +9,10 @@
             <span v-if="step === 1">We'd love to know your style</span>
             <span v-if="step === 2">What kind of services would you like us to find you?</span>
           </div>
-          <ProgressRadialBar
+          <progress-radial-bar
               :value="percentOfBudgetCategories"
               :total="event.components.length"
-              @click="openCart"></ProgressRadialBar>
+              @click="openCart"></progress-radial-bar>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 1">
           <div
@@ -20,7 +20,7 @@
             v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
             :key="`serviceGroup-${groupIndex}`"
           >
-            <ServiceCategoryCard
+            <service-category-card
               v-for="(service, serviceIndex) in serviceGroup"
               class="mb-40"
               :serviceCategory="service"
@@ -35,7 +35,7 @@
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
-            ></ServiceCategoryCard>
+            ></service-category-card>
           </div>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 2">
@@ -64,7 +64,7 @@
       </template>
     </div>
     <template v-else>
-      <PendingForVendors :expiredTime="expiredTime"></PendingForVendors>
+      <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
@@ -82,7 +82,7 @@
         <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
       </div>
     </div>
-    <AdditionalRequestModal
+    <additional-request-modal
       class="lg"
       v-if="isOpenedAdditionalModal"
       :subCategory="subCategory"
@@ -92,7 +92,7 @@
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
-    ></AdditionalRequestModal>
+    ></additional-request-modal>
     <special-requirement-modal
       v-if="isOpenedFinalModal"
       :defaultData="specialRequirements"
@@ -101,39 +101,42 @@
     >
     </special-requirement-modal>
     <transition name="slide-fade">
-      <RequirementsCart
+      <requirements-cart
           v-if="showCart"
           :requirements="requirements"
           :service-categories="serviceCategories"
           :total="event.components.length"
-          @close="showCart = false"></RequirementsCart>
+          @close="showCart = false"></requirements-cart>
     </transition>
   </div>
 </template>
 <script>
-
+import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
+import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
+import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
+import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
+import PendingForVendors from "../components/PendingForVendors.vue";
+import { Loader } from "@/components";
 import moment from "moment";
-
+import RequirementsCart from "./RequirementsCart.vue";
 
 import { postReq, getReq } from "@/utils/token";
 
-const components = {
-    ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
-    ProgressRadialBar: () => import('./components/ProgressRadialBar.vue'),
-    AdditionalRequestModal: () => import('./components/modals/AdditionalRequest.vue'),
-    SpecialRequirementModal: () => import('./components/modals/SpecialRequirement.vue'),
-    PendingForVendors: () => import('../components/PendingForVendors.vue'),
-    Loader: () => import('@/components/loader/Loader.vue'),
-    RequirementsCart: () => import('./RequirementsCart.vue'),
-}
-
 export default {
-  components,
+  components: {
+    ServiceCategoryCard,
+    ProgressRadialBar,
+    AdditionalRequestModal,
+    SpecialRequirementModal,
+    PendingForVendors,
+    Loader,
+    RequirementsCart,
+  },
   data() {
     return {
       showCart: false,
@@ -211,7 +214,6 @@ export default {
   methods: {
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
-    ...mapMutations("modal", ['setOpen']),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements"]),
     findVendors() {
       this.isOpenedFinalModal = true;
@@ -279,14 +281,10 @@ export default {
       });
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
-    async saveAdditionalRequest({ category, requirements }) {
+    saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
-
-      const expiredTime = moment(new Date()).add(3, "days").valueOf();
-      this.$set(requirements, 'expiredBusinessTime', expiredTime)
-
-      await this.saveMainRequirements({ category, event: this.event, requirements });
-      await this.setOpen('REQUIREMENT');
+      // this.setMainRequirements({ category: category, data: requirements });
+      this.saveMainRequirements({ category, event: this.event, requirements });
     },
 
     async addNewCategory(category) {
