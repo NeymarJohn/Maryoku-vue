@@ -49,55 +49,6 @@
       <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>
       <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>
     </div>
-      <div class="service-item" v-if="!isDiscountEditing">
-          <div class="flex-1">
-              <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />
-              <span>Discount</span>
-          </div>
-          <div class="text-right">{{ discount.percentage }}%</div>
-          <div class="text-right">-${{ discount.price || calcedDiscont | withComma }}</div>
-          <div class="text-right">
-              <md-button class="md-simple edit-btn" @click="toggleEditMode('discount')">
-                  <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
-              </md-button>
-          </div>
-      </div>
-      <div class="service-item is-edit" v-else>
-          <div class="flex-1">
-              <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />
-              <span>Discount</span>
-          </div>
-          <money
-              v-model="editingDiscount.percentage"
-              v-bind="{
-          decimal: '.',
-          thousands: ',',
-          prefix: '',
-          suffix: ' %',
-          precision: 2,
-          masked: false,
-        }"
-              class="bundle-discount-input mr-10"
-              @keyup.native="setPercentRange(editingDiscount.percentage, 'discount')"
-          />
-          <money
-              v-model="editingDiscount.price"
-              v-bind="{
-          decimal: '.',
-          thousands: ',',
-          prefix: '$ ',
-          suffix: '',
-          precision: 2,
-          masked: false,
-        }"
-              class="bundle-discount-input"
-              @keyup.native="setPriceRange(editingDiscount.price, 'discount')"
-          />
-      </div>
-      <div class="text-right mb-10" v-if="isDiscountEditing">
-          <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>
-          <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>
-      </div>
     <div class="service-item" v-if="!isTaxEditing">
       <div class="flex-1">
         <img :src="`${$iconURL}NewSubmitPorposal/Asset 613.svg`" style="width: 20px" class="mr-10" />
@@ -161,10 +112,6 @@ export default {
       default: () => {},
     },
     defaultTax: {
-      type: Object,
-      default: () => {},
-    },
-    negotiationDiscount: {
       type: Object,
       default: () => {},
     },

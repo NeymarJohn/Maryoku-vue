@@ -131,35 +131,6 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </CommentEditorPanel>
-<!--    <ActionModal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal" @close="showDetailModal=false">-->
-<!--      <template slot="header">-->
-<!--          <div class="title font-bold-extra">Change event details</div>-->
-<!--      </template>-->
-<!--      <template slot="body">-->
-<!--        <div class="text-left mb-10">-->
-<!--              You can change or add event details and information. <br />-->
-<!--              Vendor will send you a updated proposal in a short time-->
-<!--        </div>-->
-<!--        <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>-->
-<!--      </template>-->
-<!--      <template slot="footer">-->
-<!--        <div class="condition-tooltip">-->
-<!--          <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px" />-->
-<!--          Any change might cause pricing changes-->
-<!--        </div>-->
-<!--        <md-button class="md-simple md-black ml-auto">Cancel</md-button>-->
-<!--        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>-->
-<!--      </template>-->
-<!--    </ActionModal>-->
-<!--    <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">-->
-<!--      <template slot="body">-->
-<!--        <h2>Changes set successfully</h2>-->
-<!--        <div>Changes have been sent to the vendor and he will send you an updated offer as soon as possible</div>-->
-<!--        <div class="text-center">-->
-<!--          <md-button class="md-red" @click="showUpdateSuccessModal = false">Done</md-button>-->
-<!--        </div>-->
-<!--      </template>-->
-<!--    </modal>-->
 
     <GuestSignUpModal
       v-if="showGuestSignupModal"
@@ -171,17 +142,6 @@
       @cancel="showGuestSignupModal = false"
     >
     </GuestSignUpModal>
-<!--    <RemindingTimeModal-->
-<!--      v-if="showRemindingTimeModal"-->
-<!--      @close="showRemindingTimeModal = false"-->
-<!--      @save="saveRemindingTime"-->
-<!--    ></RemindingTimeModal>-->
-<!--    <NegotiationRequestModal-->
-<!--      v-if="showNegotiationRequestModal"-->
-<!--      :proposal="proposal"-->
-<!--      @close="showNegotiationRequestModal = false"-->
-<!--      @save="sendNegotiationRequest"-->
-<!--    ></NegotiationRequestModal>-->
   </div>
 </template>
 <script>
@@ -257,11 +217,13 @@ export default {
       this.loading = false;
     }
 
+    // this.setOpen('DECLINE');
+
     // await this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    ...mapMutations("modal", ["setOpen", "setProposal"]),
+    ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
@@ -283,33 +245,8 @@ export default {
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
-      } else if (ask === "event") {
-        this.showDetailModal = false;
-        let event = {
-          startTime: this.proposal.eventData.startTime,
-          endTime: this.proposal.eventData.endTime,
-          location: this.proposal.eventData.location,
-          numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          eventType: this.proposal.eventData.eventType,
-        };
-        if (this.loggedInUser) {
-          await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
-        } else {
-          localStorage.setItem(
-            "nonMaryokuAction",
-            JSON.stringify({
-              action: "saveNegotiation",
-              params: { event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
-            }),
-          );
-          this.onlyAuth = true;
-          this.showGuestSignupModal = true;
-        }
       }
-    },
-    handleEventChange(e) {
-      console.log("handleEventChange", e);
-      this.proposal.eventData = e;
+
     },
     async saveNegotiation(params) {
       this.loading = true;
@@ -362,7 +299,6 @@ export default {
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
-      this.$store.commit('modal/setProposal', this.proposal)
       this.setOpen('DECLINE')
     },
     async saveProposal(proposal){
@@ -380,8 +316,9 @@ export default {
     },
     showModal(name){
         console.log('show.modal', name);
-        this.setProposal(this.proposal);
-        this.setOpen(name);
+        this.setProposal(this.proposal)
+        this.setProposalRequest(this.proposalre)
+        this.setOpen(name)
     },
     openNewTab(link) {
       window.open(link, "_blank");
@@ -506,8 +443,8 @@ export default {
       console.log('savePropsalRequest');
         let query = new ProposalRequest({
            vendorId: this.proposal.vendor.id,
-            requestedTime: new Date().getTime(),
-            expiredTime: moment(new Date()).add(3, "days").valueOf(),
+           requestedTime: new Date().getTime(),
+           expiredTime: moment(new Date()).add(3, "days").valueOf(),
         });
         let res = await query.for(new Vendor({ id: this.proposal.vendor.id })).save();
         console.log('res', res);

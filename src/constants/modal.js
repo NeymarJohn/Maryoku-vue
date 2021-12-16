@@ -63,7 +63,7 @@ export const ACTION = {
     },
     COMMENT: {
         title: 'Comment',
-        icon: '',
+        icon: 'responsive/Group 22880.svg',
         description: false,
         cancel: false,
         action: false
@@ -75,7 +75,7 @@ export const ACTION = {
     // },
     LOOK: {
         title: 'Look for something else',
-        icon: '',
+        icon: 'responsive/Group 22879.svg',
         description: false,
         cancel: false,
         action: false

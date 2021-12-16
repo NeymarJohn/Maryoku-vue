@@ -38,7 +38,6 @@ const state = {
   wizardStep: 0,
   additionalServices: [],
   bundleDiscount: {},
-  negotiationDiscount: {},
   discounts: {},
   taxes: {},
   coverImage: [],
@@ -163,10 +162,6 @@ const getters = {
     sum = sum + sum * tax.percentage / 100;
     // check bundle discount
 
-    if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
-      sum -= state.negotiationDiscount.price
-    }
-
     if (state.bundleDiscount && state.bundleDiscount.isApplied) {
       sum -= state.bundleDiscount.price
     }
@@ -206,7 +201,6 @@ const mutations = {
     state.personalMessage = proposal.personalMessage;
     state.taxs = proposal.taxs;
     state.discounts = proposal.discounts;
-    state.negotiationDiscount = proposal.negotiationDiscount,
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.eventData = proposal.eventData;
     state.coverImage = proposal.coverImage || [];
@@ -258,14 +252,6 @@ const mutations = {
     Vue.set(state.discounts, category, discount);
     setStateByVersion(state, { key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts)) })
   },
-  setNegotiationDiscount: (state, discount) => {
-    state.negotiationDiscount = discount;
-    setStateByVersion(state, { key: 'negotiationDiscount', value: JSON.parse(JSON.stringify(state.negotiationDiscount)) })
-  },
-  setBundleDiscount: (state, bundleDiscount) => {
-    state.bundleDiscount = bundleDiscount;
-    setStateByVersion(state, { key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount)) })
-  },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
     setStateByVersion(state, { key: 'taxes', value: state.taxes })
@@ -277,6 +263,10 @@ const mutations = {
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
     state.additionalServices.splice(index, 1);
+  },
+  setBundleDiscount: (state, bundleDiscount) => {
+    state.bundleDiscount = bundleDiscount;
+    setStateByVersion(state, { key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount)) })
   },
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
@@ -308,11 +298,6 @@ const mutations = {
     Vue.set(state, "initialized", false);
     Vue.set(state, "attachments", {});
     Vue.set(state, "eventData", {});
-    Vue.set(state, "negotiationDiscounts", {
-      isApplied: false,
-      percent: 0,
-      price: 0,
-    });
     Vue.set(state, "bundleDiscount", {
       isApplied: false,
       services: [],
@@ -403,11 +388,10 @@ const actions = {
         inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
         extraServices: state.original ? state.original.extraServices : state.extraServices,
         discounts: state.original ? state.original.discounts : state.discounts,
-        negotiationDiscount: state.original ? state.original.negotiationDiscount : state.negotiationDiscount,
-        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
         taxes: state.original ? state.original.taxes : state.taxes,
         cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
+        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
         attachments: state.original ? state.original.attachments : state.attachments,
         status,
         step: state.wizardStep,
