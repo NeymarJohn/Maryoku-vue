@@ -222,7 +222,7 @@ export default {
       this.step = this.step + 1;
 
       // skip additional page if event doesn't have components
-      if ( this.step === 2 && !this.event.components.length ) this.step ++;
+      if ( this.step === 2 && this.event.components.length < 2 ) this.step ++;
       this.scrollToTop();
     },
     getVendorCategory() {

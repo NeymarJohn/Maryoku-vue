@@ -75,15 +75,22 @@
 </template>
 <script>
 import moment from "moment";
+import Popup from "@/components/Popup";
+import TimeInput from "@/components/TimeInput";
+import { FunctionalCalendar } from "vue-functional-calendar";
 
-const components = {
-    TimeInput: () => import('@/components/inputs/TimeInput.vue'),
-    FunctionalCalendar: () => import('vue-functional-calendar'),
-}
+// const components = {
+//     TimeInput: () => import('@/components/inputs/TimeInput.vue'),
+//     FunctionalCalendar: () => import('vue-functional-calendar'),
+// }
 
 export default {
   name: "maryoku-input",
-  components,
+  components: {
+        Popup,
+        TimeInput,
+        FunctionalCalendar,
+  },
   props: {
     /**
      * Data binding

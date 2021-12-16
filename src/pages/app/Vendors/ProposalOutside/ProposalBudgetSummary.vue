@@ -59,22 +59,6 @@
                 <span>Your proposal</span>
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
-              <!-- <li>
-                <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                <span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
-              </li>
-              <li
-                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
-                class="color-black"
-              >
-                <span>
-                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                  Your proposal is ${{
-                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma
-                  }}
-                  more than budget
-                </span>
-              </li> -->
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">
@@ -133,30 +117,48 @@
                 <span>Your proposal</span>
                 <span>${{ pricesByCategory[a] | withComma }}</span>
               </li>
-              <!-- <li>
-                <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-                <span> ${{ getAllocatedBudget(a) | withComma }}</span>
-              </li>
-              <li v-if="pricesByCategory[a] - getAllocatedBudget(a) > 0">
-                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-
-                <span>
-                  Your proposal is ${{ (pricesByCategory[a] - getAllocatedBudget(a)) | withComma }}
-                  more than the budget
-                </span>
-              </li> -->
               <li></li>
             </ul>
           </div>
         </div>
-        <discount-form
-          :totalPrice="totalPriceBeforeDiscount"
-          :defaultTax="defaultTax"
+<!--        <DiscountForm-->
+<!--          :totalPrice="totalPriceBeforeDiscount"-->
+<!--          :defaultTax="defaultTax"-->
+<!--          :defaultDiscount="defaultDiscount"-->
+<!--          :negotiationDiscount="negotiationDiscount"-->
+<!--          :nonMaryoku="true"-->
+<!--          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"-->
+<!--          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"-->
+<!--        ></DiscountForm>-->
+        <ItemForm
+            :defaultDiscount="defaultDiscount"
+            :defaultNegotiation="negotiationDiscount"
+            :defaultTax="defaultTax"
+            field="discount"
+            :non-maryoku="true"
+            @saveDiscount="saveDiscount('discount', $event)"
+        >
+        </ItemForm>
+        <ItemForm
+          v-if="negotiationDiscount && negotiationDiscount.isApplied"
           :defaultDiscount="defaultDiscount"
-          :nonMaryoku="true"
-          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
-          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
-        ></discount-form>
+          :defaultNegotiation="negotiationDiscount"
+          :defaultTax="defaultTax"
+          field="negotiation"
+          :non-maryoku="true"
+          @saveDiscount="saveDiscount('negotiation', $event)"
+        >
+        </ItemForm>
+
+        <ItemForm
+          :defaultDiscount="defaultDiscount"
+          :defaultNegotiation="negotiationDiscount"
+          :defaultTax="defaultTax"
+          field="tax"
+          :non-maryoku="true"
+          @saveDiscount="saveDiscount('tax', $event)"
+        >
+        </ItemForm>
         <div class="item bundle" v-if="isBundleDiscount">
           <div class="element">
             <label class="">
@@ -237,18 +239,18 @@
 </template>
 <script>
 import { categoryNameWithIcons } from "@/constants/vendor";
-import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import { Money } from "v-money";
 import { mapGetters } from "vuex";
-import DiscountForm from "../components/DiscountForm.vue";
+
+const components = {
+    // InputProposalSubItem: () => import('@/components/Inputs/InputProposalSubItem.vue'),
+    Money: () => import('v-money'),
+    DiscountForm: () => import('../components/DiscountForm.vue'),
+    ItemForm: () => import('../components/ItemForm.vue'),
+}
 
 export default {
   name: "proposal-budget-summary",
-  components: {
-    InputProposalSubItem,
-    Money,
-    DiscountForm,
-  },
+  components,
   props: {
     step: Number,
     services: Array,
@@ -372,11 +374,14 @@ export default {
     getAllocatedBudget(category) {
       return 0;
     },
-    saveDiscount(categoryKey, discount) {
-      this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount: discount });
-    },
-    saveTax(categoryKey, tax) {
-      this.$store.commit("proposalForNonMaryoku/setTax", { category: "total", tax: tax });
+    saveDiscount(field, discount) {
+        console.log('saveDiscount', field, discount);
+        if (field === 'discount')
+            this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount});
+        else if (field === 'negotiation')
+            this.$store.commit("proposalForNonMaryoku/setNegotiationDiscount", discount);
+        else if (field === 'tax')
+            this.$store.commit("proposalForNonMaryoku/setTax", { category: "total", tax: discount });
     },
   },
   created() {
@@ -447,10 +452,12 @@ export default {
     },
 
     totalPrice() {
+      console.log('totalPrice', this.totalPriceBeforeDiscount, this.defaultDiscount, this.negotiationDiscount, this.defaultTax);
       return (
         this.totalPriceBeforeDiscount -
         (this.defaultDiscount ? this.defaultDiscount.price : 0) +
         (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0) -
         (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
       );
     },
@@ -458,7 +465,8 @@ export default {
       return (
         this.totalPriceBeforeDiscount -
         (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0)
+        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0)
       );
     },
     totalPriceBeforeDiscount() {
@@ -477,9 +485,6 @@ export default {
       });
       return s;
     },
-    bundleDiscount() {
-      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
-    },
     bundledServicesString() {
       let result = "";
       this.bundleDiscount.services.forEach((service, index) => {
@@ -493,6 +498,12 @@ export default {
     },
     defaultDiscount() {
       return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
+    },
+    negotiationDiscount(){
+      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
+    },
+    bundleDiscount() {
+      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
     },
   },
   watch: {
