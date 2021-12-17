@@ -5,13 +5,11 @@
         <h2 v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</h2>
         <h2 v-if="page === 'proposal'">Share 'Proposal' With Your Colleague</h2>
       </div>
-        <md-button
-            class="md-simple md-icon-button position-absolute md-small-hide"
-            style="top: 20px;right:20px"
+      <md-button
+            class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
             @click="$emit('cancel')"
-        >
-            <md-icon>close</md-icon>
-        </md-button>
+      ><md-icon>close</md-icon>
+      </md-button>
     </template>
     <template slot="body">
       <div class="md-layout maryoku-modal-body">
@@ -73,7 +71,7 @@
         <md-button class="md-red md-bold add-category-btn" @click="sendEmail">Send</md-button>
       </template>
       <template v-else>
-        <md-button class="md-black" @click="onCancel()">Done</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
       </template>
     </template>
   </modal>

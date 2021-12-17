@@ -10,7 +10,6 @@
     >
       <div class="modal-wrapper">
         <div :class="containerClass" v-click-outside="closeModal">
-          <loader :active="loading" page="vendor"></loader>
           <div class="modal-header position-relative">
             <md-button
                   class="md-simple position-absolute md-small-hide"
@@ -28,7 +27,7 @@
           </div>
 
           <div class="modal-body text-center">
-              <p class="font-size-14 text-left" v-if="actions[name].description"> {{actions[name].description}}</p>
+              <p class="font-size-14" v-if="actions[name].description"> {{actions[name].description}}</p>
 
               <div v-if="name === 'MORE_ACTIONS'" class="md-layout text-left">
                 <template v-for="(action, key) in actions">
@@ -97,9 +96,9 @@
           </div>
 
           <div class="modal-footer">
-              <md-button v-if="actions[name].cancel" class="md-black md-simple my-10" @click="closeModal"> Cancel </md-button>
-              <md-button v-if="actions[name].action" class="md-red md-bold reminder-button my-10" @click="action">
-                  {{ actions[name].action }}
+              <md-button class="md-black md-simple my-10" @click="closeModal"> Cancel </md-button>
+              <md-button class="md-red md-bold reminder-button my-10" @click="action" :disabled="!value">
+                  Update Vendor
               </md-button>
           </div>
         </div>
@@ -109,14 +108,9 @@
 </template>
 
 <script>
-import moment from "moment";
 import { ACTION } from "@/constants/modal";
-import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
-import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 
 const components = {
-    Loader: () => import('@/components/loader/Loader.vue'),
     MaryokuInput: () => import('../Inputs/MaryokuInput.vue'),
     EventDetail: () => import('@/pages/Dashboard/Pages/components/EventDetail.vue'),
 
@@ -143,7 +137,6 @@ export default {
     return {
         actions: ACTION,
         rate: "$",
-        loading: false,
         value: null,
         comment: null,
 
@@ -166,6 +159,7 @@ export default {
   },
   methods: {
     closeModal() {
+
       this.$store.commit('modal/setOpen', null);
     },
     modalMaskClick(event) {
@@ -173,108 +167,18 @@ export default {
       return;
     },
     handleEventChange(){
-        this.proposal.eventData = e;
+
     },
     selectAction(name){
-      if (name === 'COMMENT' || 'LOOK') return
       this.$store.commit('modal/setOpen', name);
     },
-    async saveNegotiation(params) {
-        const request = {
-            vendorId: this.proposal.vendor.id,
-            requestedTime: new Date().getTime(),
-            expiredTime: moment(new Date()).add(3, "days").valueOf(),
-        }
-        const res1 = await this.$store.dispatch('modal/saveProposalRequest',{
-            request,
-            vendor: new Vendor({id: this.proposal.vendor.id}),
-        })
-        await this.$store.dispatch('modal/saveProposal', {...this.proposal, proposalRequestId: res1.id});
-        const negotiation = {
-            proposalId: this.proposal.id,
-            proposal: new Proposal({ id: this.proposal.id }),
-            expiredTime: moment().add(2, 'days').unix() * 1000,
-            ...params,
-        }
-        await this.$store.dispatch('modal/saveProposalNegotiationRequest', {
-            negotiation,
-            proposal: new Proposal({ id: this.proposal.id })});
-    },
-    async action(){
-        this.loading = true;
-        if (this.name === 'NEGOTIATION') {
-            await this.saveNegotiation({
-                type: NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION,
-                price: {
-                    rate: this.rate,
-                    value: this.value,
-                    comment: this.comment}
-            })
-
-        } else if (this.name === 'REMINDER') {
-            let remindingTime = 0;
-            if (this.remindTimeOption === "tomorrow") {
-                remindingTime = moment(new Date()).add(1, "day").valueOf();
-            } else if (this.remindTimeOption === "today") {
-                remindingTime = moment(new Date()).add(5, 'hours').valueOf();
-                let endOfDay = moment().endOf('day').valueOf();
-                if (remindingTime > endOfDay) {
-                    remindingTime = endOfDay;
-                }
-            } else if (this.remindTimeOption === "specific") {
-                remindingTime = moment(`${this.selectedDate} ${this.selectedTime}`, "DD.MM.YYYY hh:mm a").valueOf();
-            }
-            const remindingData = {
-                reminder: "email",
-                phoneNumber: "",
-                email: this.proposal.eventData.customer.email,
-                name: this.proposal.eventData.customer.name,
-                remindingTime: remindingTime,
-                type: "proposal",
-                emailParams: {
-                    expiredTime: moment(new Date(this.proposal.expiredDate)).valueOf(),
-                },
-                emailTransactionId: "",
-                phoneTransactionId: "",
-            };
-
-            await this.$store.dispatch('modal/saveReminder', remindingData)
-        } else if (this.name === 'EVENT_CHANGE') {
-            let event = {
-                startTime: this.proposal.eventData.startTime,
-                endTime: this.proposal.eventData.endTime,
-                location: this.proposal.eventData.location,
-                numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-                eventType: this.proposal.eventData.eventType,
-            };
-            if (this.loggedInUser) {
-                await this.saveNegotiation({ event, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
-            } else {
-                localStorage.setItem(
-                    "nonMaryokuAction",
-                    JSON.stringify({
-                        action: "saveNegotiation",
-                        params: { event, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
-                    }),
-                );
-            }
-
-        } else if (this.name === 'COMMENT') {
-
-        } else if (this.name === 'LOOK') {
-
-        }
-
-        this.loading = false;
-        this.$store.commit('modal/setOpen', null);
+    action(){
+      this.$emit('done');
     }
   },
   computed:{
      inputStyle(){
          return this.rate === '$' ? 'budget' : 'percent';
-     },
-     loggedInUser() {
-        return this.$store.state.auth.user;
      },
      proposal(){
          return this.$store.state.modal.proposal;

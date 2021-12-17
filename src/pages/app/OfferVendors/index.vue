@@ -132,7 +132,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('modal', ['setOpen']),
+        ...mapMutations('modal', ['setOpen', 'setProposal']),
         async handleRate(score){
             await this.saveProposal({...this.proposal, score})
         },
@@ -348,6 +348,7 @@ export default {
             this.isLoading = false;
         }
         this.showOffers = true;
+        this.setProposal(this.proposal);
         this.setOpen('BOOKED');
     }
 

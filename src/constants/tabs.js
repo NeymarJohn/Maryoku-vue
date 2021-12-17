@@ -4,9 +4,3 @@ export const ProposalContentTabOptions = [
     {title: 'Policy & More', value: 2, icon: 'responsive/policy'},
     {title: 'About us', value: 3, icon: 'responsive/about'},
 ]
-
-export const HeaderActions = [
-    {key: 'download', icon: 'common/download-dark.svg'},
-    {key: 'share', icon: 'common/share-dark.svg'},
-    {key: 'comment', icon: 'common/message-dark.svg'},
-]

@@ -1,16 +1,26 @@
 <template>
     <div class="header-actions" :class="className">
         <ul class="d-flex list-style-none">
-            <template v-for="action in actions">
-                <li v-if="action.key === 'share' || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment" class="md-small-hide">
-                    <md-button
-                        class="md-simple md-just-icon"
-                        :class="[action.key === 'comment' && isCommentMode ? 'active': '', action.key !== 'share' ?'md-small-hide':'']"
-                        @click="click(action.key)">
-                        <img :src="`${$iconURL}${action.icon}`" />
-                    </md-button>
-                </li>
-            </template>
+            <li v-if="!hideDownload && !isMobile">
+                <md-button class="md-simple md-just-icon" id="download-button" @click="startDownload">
+                    <img :src="`${$iconURL}common/download-dark.svg`" />
+                </md-button>
+            </li>
+            <li>
+                <md-button class="md-simple md-just-icon" @click="toggleSharingMode" id="invite-button">
+                    <img :src="`${$iconURL}common/share-dark.svg`" />
+                </md-button>
+            </li>
+            <li v-if="canComment && !isMobile">
+                <md-button
+                    class="md-simple md-just-icon"
+                    :class="{ active: isCommentMode }"
+                    @click="toggleCommentMode"
+                    id="comment-button"
+                >
+                    <img :src="`${$iconURL}common/message-dark.svg`" />
+                </md-button>
+            </li>
         </ul>
         <sharing-modal
             v-if="isSharing"
@@ -21,10 +31,10 @@
 </template>
 <script>
 import SharingModal from "@/components/Modals/SharingModal";
-import { HeaderActions } from "@/constants/tabs";
-
+import { MobileMixins } from "@/mixins";
 export default {
   name: "header-actions",
+  mixins: [MobileMixins],
   components: {
     SharingModal,
   },
@@ -44,7 +54,6 @@ export default {
   },
   data() {
     return {
-      actions: HeaderActions,
       isCommentMode: false,
       isSharing: false,
     };
@@ -53,18 +62,16 @@ export default {
     const tenantId = this.$authService.resolveTenantId();
   },
   methods: {
-    click(key) {
-      console.log('action', key);
-      if (key === 'download') {
-          this.$emit("export", { type: "pdf" });
-      } else if (key === 'share') {
-          this.isSharing = !this.isSharing;
-      } else if (key === 'comment') {
-          this.isCommentMode = !this.isCommentMode;
-          this.$emit("toggleCommentMode", this.isCommentMode);
-      }
+    toggleCommentMode() {
+      this.isCommentMode = !this.isCommentMode;
+      this.$emit("toggleCommentMode", this.isCommentMode);
     },
-
+    toggleSharingMode() {
+      this.isSharing = !this.isSharing;
+    },
+    startDownload() {
+      this.$emit("export", { type: "pdf" });
+    },
     shareLink(args){
       this.$emit("share", {...args, cb: params => {
           console.log('shareLink', params);
