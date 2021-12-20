@@ -49,15 +49,15 @@
           </div>
           <div class="d-flex flex-column align-center bg-white">
               <slot name="timer"></slot>
-              <div v-if="isMobile && !showOffer">
+              <div class="d-block" v-if="step === 0 && isMobile">
                   <div class="width-70 mx-auto">
                       <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
                         Current bid
-                        <p class="font-size-18 font-bold-extra color-red m-0">$2120</p>
+                        <p class="font-size-18 font-bold-extra color-red m-0">${{ discounedAndTaxedPrice | withComma}}</p>
                       </div>
-                      <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
+                      <div v-if="discount" class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
                         Before discount
-                        <p class="color-black m-0">(10% off) $3000</p>
+                        <p class="color-black m-0">({{ discount.percentage }}% off) ${{ totalPriceOfProposal }}</p>
                         </div>
                   </div>
                   <md-divider></md-divider>
@@ -70,13 +70,14 @@
         </div>
 
         <ProposalContentTabs
-            v-if="isMobile && showOffer"
-            :selected="section"
+            class="mobile-show"
+            v-if="step > 0"
+            :selected="step"
             :options="contentTabs"
             @select="selectTab"
         />
 
-        <div v-if="!isMobile || isMobile && section === 0" class="proposal-body p-20">
+        <div v-if="!isMobile || isMobile && step === 1" class="proposal-body p-20">
           <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
               <img
                   v-tooltip="{
@@ -200,8 +201,8 @@
         </div>
       </div>
 
-      <div v-if="!isMobile || isMobile && section === 1" class="proposal-section pricing-section" :class="isMobile ? 'pt-10' : ' mt-40'">
-        <div class="proposal-section__title font-size-22 font-bold-extra" :class="isMobile ? 'p-20 bg-white' : ''">
+      <div v-if="!isMobile || isMobile && step === 2" class="proposal-section pricing-section" :class="isMobile ? '' : ' mt-40'">
+        <div class="proposal-section__title font-size-22 font-bold-extra" :class="isMobile ? 'p-20' : ''">
           <img
             src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
             width="15"
@@ -217,7 +218,7 @@
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
           :mandatory="true"
-          :class-name="`${isMobile? 'p-0' : 'p-60 mb-20'} bg-light-gray`"
+          :class-name="`${isMobile? 'p-0' : 'p-20 mb-20'} bg-light-gray`"
         ></EventProposalPrice>
         <EventProposalPrice
           v-for="(service, index) in this.proposal.additionalServices"
@@ -241,11 +242,11 @@
         <div v-if="isMobile" class="total-section p-30">
           <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
             Current bid
-            <p class="font-size-18 font-bold-extra color-white m-0">$2120</p>
+            <p class="font-size-18 font-bold-extra color-white m-0">{{discounedAndTaxedPrice}}</p>
           </div>
-          <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
+          <div v-if="discount" class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
             Before discount
-            <p class="color-white m-0">(10% off) $3000</p>
+            <p class="color-white m-0">({{ discount.percentage }}% off) {{ totalPriceOfProposal }}</p>
           </div>
         </div>
         <div v-else class="total-section d-flex justify-content-between mt-15 p-40">
@@ -381,14 +382,14 @@
           </div>
         </div>
       </div>
-      <div v-if="isMobile && section === 2" class="proposal-section">
+      <div v-if="isMobile && step === 3" class="proposal-section">
           <div class="d-flex align-center py-30 px-20">
               <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
               <div class="ml-10 font-size-18 font-bold-extra">Policy and documents</div>
           </div>
           <EventProposalPolicy :proposal="proposal"></EventProposalPolicy>
       </div>
-      <div v-if="isMobile && section === 3" class="proposal-section px-20">
+      <div v-if="isMobile && step === 4" class="proposal-section px-20">
           <div class="d-flex align-center py-10">
               <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" width="35px"/>
               <h5 class="ml-10 font-bold-extra">About Our Venue</h5>
@@ -527,9 +528,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    showOffer: {
-      type: Boolean,
-      default: false,
+    step: {
+      type: Number,
+      default: 0,
     },
     theme: {
       type: String,
@@ -560,7 +561,6 @@ export default {
       attachedFiles: [],
       fetchingAllAttachments: false,
       acceptNewTimes: false,
-      section: null,
       expand: true,
       extraServices: [],
       showAboutUs: false,
@@ -722,7 +722,8 @@ export default {
       this.$emit("favorite", !this.proposal.isFavorite);
     },
     selectTab(val){
-      this.section = val;
+      this.$emit('change', val)
+
     }
   },
   computed: {
@@ -778,7 +779,7 @@ export default {
   },
   watch: {
     proposal(newVal) {console.log('proposal.watch', newVal)},
-    showOffer(newVal) {if(newVal) this.section = 0;},
+    step(newVal) {},
   },
 };
 </script>
