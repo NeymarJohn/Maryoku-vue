@@ -10,6 +10,7 @@
         >
             <div class="modal-wrapper">
                 <div class="modal-container no-header no-footer w-min-800" v-click-outside="closeModal">
+                    <loader :active="loading" page="vendor"></loader>
                     <div class="modal-header position-relative">
                         <md-button
                             class="md-simple position-absolute"
@@ -37,7 +38,7 @@
                             <h5 v-if="notification[name].content.title" class="font-size-20 font-bold-extra color-red">
                                 {{ 'Can we offer you more vendors for your event ?' }}</h5>
                             <p class="font-size-14 p-0">Let us help you find more vendors that are just right for your event</p>
-                            <md-button class="md-red maryoku-btn my-20" @click="$emit('show')">Show me more vendors</md-button>
+                            <md-button class="md-red maryoku-btn my-20" @click="closeModal">Show me more vendors</md-button>
 
                             <Rate v-if="notification[name].content.rate" @rate="selectRate"></Rate>
                         </div>
@@ -55,6 +56,7 @@ import {mapMutations} from "vuex";
 
 const components = {
     Rate: () => import('./Rate'),
+    loader: () => import('@/components/loader/Loader.vue'),
 }
 
 export default {
@@ -75,6 +77,7 @@ export default {
     data(){
         return {
             notification: NOTIFICATION,
+            loading: false,
         }
     },
     methods:{
@@ -86,15 +89,20 @@ export default {
             event.stopPropagation();
             return;
         },
-        selectRate(score){
+        async selectRate(score){
+            if (!this.proposal) return;
+            this.loading = true;
             this.score = score;
             this.proposal = {...this.proposal, score};
 
-            this.$store.dispatch('saveProposal', this.proposal);
+            await this.$store.dispatch('modal/saveProposal', this.proposal);
+            this.loading = false;
         }
     },
-    computed(){
-        return this.$store.state.modal.proposal;
+    computed:{
+        proposal() {
+            return this.$store.state.modal.proposal;
+        }
     }
 }
 </script>

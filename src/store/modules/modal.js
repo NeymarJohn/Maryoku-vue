@@ -2,6 +2,7 @@ import Proposal from "@/models/Proposal";
 import Reminder from "@/models/Reminder";
 import ProposalRequest from "@/models/ProposalRequest";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+import { postReq, getReq } from "@/utils/token";
 
 const state = {
       name: null,
@@ -43,6 +44,16 @@ const actions = {
             let res = await query.for(proposal).save();
             console.log('saveProposalNegotiationRequest', res);
             resolve(res);
+        })
+    },
+    sendEmail({state}, payload) {
+        return new Promise(async (resolve, reject) => {
+            const res = await postReq(`/1/proposals/${payload.proposalId}/sendEmail`, {
+                proposalId: payload.proposalId,
+                emails:payload.emails,
+                type: 'share'
+            })
+            resolve();
         })
     }
 }

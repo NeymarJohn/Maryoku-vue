@@ -94,6 +94,32 @@
               <div v-if="name === 'COMMENT'"></div>
 
               <div v-if="name === 'LOOK'"></div>
+
+              <div class="text-left" v-if="name === 'SHARE'">
+                  <div class="font-size-16 font-bold-extra color-black">Link sharing on</div>
+
+                  <p class="mt-20 mb-10">Anyone with this link </p>
+
+                  <maryoku-input inputStyle="sharing" :value="shareLink" readonly class="sharelink"></maryoku-input>
+
+                  <div class="font-size-16 font-bold-extra color-black mt-20">Invite People</div>
+                  <p class="mt-20 mb-10">Email Address</p>
+
+                  <InputTag v-model="emails" class="align-center"></InputTag>
+
+                  <div class="mt-20" v-if="emails.length > 0">
+
+                      <textarea rows="8" class="p-10" placeholder="Add message" v-model="message" style="max-height: 100px"></textarea>
+
+                      <div class="md-layout md-alignment-center justify-content-between">
+                          <div class="md-layout-item md-size-50 md-small-size-100">
+                              <strong>Shared with: </strong>
+                              <span v-for="(email, idx) in emails" :key="email">{{ email }} {{idx < emails.length - 1 ? ',' : ''}} </span>
+                          </div>
+                          <div class="checkbox-wrapper md-layout-item md-size-50 md-small-size-100"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
+                      </div>
+                  </div>
+              </div>
           </div>
 
           <div class="modal-footer">
@@ -123,6 +149,8 @@ const components = {
 
     TimePicker: () => import('../Inputs/TimePicker.vue'),
     WarningMessage: () => import("../WarningMessage.vue"),
+    SharingRoleOptions: () => import("@/components/SharingRoleOptions.vue"),
+    InputTag: () => import("vue-input-tag"),
 }
 
 export default {
@@ -157,6 +185,14 @@ export default {
             { id: "3", title: "3 days later" },
             { id: "4", title: "4 days later" },
         ],
+
+        emails: ['test@test.com'],
+        message: "",
+        showLinkRoleEditor: false,
+        showEmailRoleEditor: false,
+        isSendingMessage: false,
+        role: "view",
+        statusMessage: "",
     };
   },
   beforeCreate() {
@@ -178,6 +214,10 @@ export default {
     selectAction(name){
       if (name === 'COMMENT' || name === 'LOOK') return
       this.$store.commit('modal/setOpen', name);
+    },
+    setRole(role) {
+      this.role = role;
+      this.showLinkRoleEditor = false;
     },
     async saveNegotiation(params) {
         const request = {
@@ -277,6 +317,11 @@ export default {
                 );
             }
 
+        } else if (this.name === 'SHARE') {
+            await this.$store.dispatch('modal/sendEmail', {
+                emails: this.emails,
+                proposalId: this.proposal.id
+            })
         } else if (this.name === 'COMMENT') {
 
         } else if (this.name === 'LOOK') {
@@ -296,7 +341,10 @@ export default {
      },
      proposal(){
          return this.$store.state.modal.proposal;
-     }
+     },
+     shareLink() {
+          return location.href
+     },
   }
 };
 </script>

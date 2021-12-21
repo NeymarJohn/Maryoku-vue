@@ -68,16 +68,16 @@ export const ACTION = {
         cancel: true,
         action: false
     },
-    // SHARE: {
-    //     title: 'Share \'Proposal\' With Your Colleague',
-    //     cancel: false,
-    //     action: 'Done'
-    // },
+    SHARE: {
+        title: 'Share \'Proposal\' With Your Colleague',
+        cancel: true,
+        action: 'Done'
+    },
     LOOK: {
         title: 'Look for something else',
         icon: 'responsive/Group 22879.svg',
         description: false,
         cancel: true,
         action: false
-    }
+    },
 }

@@ -134,7 +134,7 @@
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header">
-        <div class="border-right font-bold-extra text-center pr-10 mr-10">
+        <div class="border-right font-bold-extra text-left pr-10 mr-10">
           <div
             v-if="
               selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.concept
@@ -497,7 +497,11 @@ export default {
               proposal: this.selectedProposal
           })
 
-          if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) this.showRequestNegotiationModal = false;
+          if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
+              this.showRequestNegotiationModal = false;
+              const version = await this.saveVersion(this.selectedProposal);
+              this.selectedProposal.versions.push(version);
+          }
           this.selectedProposal.negotiations[0] = negotiation;
 
           if ( status === this.negotiationRequestStatus.approve && this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME )
@@ -519,6 +523,7 @@ export default {
           if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
               version = await this.saveVersion(this.selectedProposal);
               this.selectedProposal.versions.push(version);
+              this.editProposal();
           }
           const negotiation = await this.$store.dispatch('vendorDashboard/saveNegotiation', {
               data: {
@@ -563,6 +568,14 @@ export default {
               data[key] = {...proposal.eventData, ...proposal.negotiations[0].event};
             } else if ( key === 'bookedServices' ) {
               data[key] = [];
+            } else if ( key === 'negotiationDiscount' && proposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
+              data.negotiationDiscount = {
+                  isApplied: true,
+                  percentage: proposal.negotiations[0].price.rate === '%' ? proposal.negotiations[0].price.value :
+                      (proposal.negotiations[0].price.value / proposal.cost * 100).toFixed(2),
+                  price: proposal.negotiations[0].price.rate === '$' ? proposal.negotiations[0].price.value :
+                      (proposal.negotiations[0].price.value / 100 * proposal.cost).toFixed(2),
+              }
             } else {
               data[key] = proposal[key];
             }
@@ -696,10 +709,10 @@ export default {
               eventType: event.eventType,
           }
       } else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-          console.log('price.negotiation');
+
           let {numberOfParticipants} = this.selectedProposal.eventData;
           let data = this.selectedProposal.negotiations[0].price;
-          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : data.value;
+          let budget = data.rate === '%' ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
 
           return {
               originalBudget: this.selectedProposal.cost,

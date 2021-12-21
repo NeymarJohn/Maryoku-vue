@@ -215,7 +215,6 @@ export default {
       this.loading = false;
     }
 
-
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
@@ -299,6 +298,7 @@ export default {
           { headers: this.$auth.getAuthHeader() },
       );
       this.showModal('DECLINE')
+
     },
     async saveProposal(proposal){
         this.loading = true;

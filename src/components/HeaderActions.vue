@@ -2,10 +2,11 @@
     <div class="header-actions" :class="className">
         <ul class="d-flex list-style-none">
             <template v-for="action in actions">
-                <li v-if="action.key === 'share' || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment">
+                <li v-if="action.key === 'share' || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment"
+                    :class="{'md-small-hide':action.key !== 'share'}"
+                >
                     <md-button
                         class="md-simple md-just-icon"
-                        :class="{'active': action.key === 'comment' && isCommentMode, 'md-small-hide':action.key !== 'share'}"
                         @click="click(action.key)">
                         <img :src="`${$iconURL}${action.icon}`" />
                     </md-button>

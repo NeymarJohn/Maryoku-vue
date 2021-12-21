@@ -1,9 +1,9 @@
 <template>
   <modal class="sharing-model">
     <template slot="header">
-      <div class="maryoku-modal-header">
-        <h2 v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</h2>
-        <h2 v-if="page === 'proposal'">Share 'Proposal' With Your Colleague</h2>
+      <div class="title">
+        <div v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</div>
+        <div v-if="page === 'proposal'">Share 'Proposal' With Your Colleague</div>
       </div>
         <md-button
             class="md-simple md-icon-button position-absolute md-small-hide"
@@ -113,15 +113,6 @@ export default {
       isSendingMessage: false,
       shareLink: "",
       role: "view",
-      editingVendor: {
-        vendorDisplayName: "",
-        cost: "",
-        vendorAddressLine1: "",
-        vendorMainPhoneNumber: "",
-        vendorMainEmail: "",
-        attachedProposal: "",
-        attachment: null,
-      },
       statusMessage: "",
     };
   },

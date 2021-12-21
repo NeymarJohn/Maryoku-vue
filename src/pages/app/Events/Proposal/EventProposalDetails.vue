@@ -55,7 +55,7 @@
                         Current bid
                         <p class="font-size-18 font-bold-extra color-red m-0">${{ discounedAndTaxedPrice | withComma}}</p>
                       </div>
-                      <div v-if="discount" class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
+                      <div v-if="discount.percentage" class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
                         Before discount
                         <p class="color-black m-0">({{ discount.percentage }}% off) ${{ totalPriceOfProposal }}</p>
                         </div>
@@ -244,7 +244,7 @@
             Current bid
             <p class="font-size-18 font-bold-extra color-white m-0">{{discounedAndTaxedPrice}}</p>
           </div>
-          <div v-if="discount" class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
+          <div v-if="discount.percentage" class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
             Before discount
             <p class="color-white m-0">({{ discount.percentage }}% off) {{ totalPriceOfProposal }}</p>
           </div>
