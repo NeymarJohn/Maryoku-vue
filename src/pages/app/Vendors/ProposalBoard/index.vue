@@ -563,9 +563,7 @@ export default {
         let data = {};
         this.versionFields.map(key => {
             if (key === 'eventData') {
-              data[key] = {...proposal.eventData, ...proposal.negotiations[0].event};
-            } else if ( key === 'bookedServices' ) {
-              data[key] = [];
+                data[key] = {...proposal.eventData, ...proposal.negotiations[0].event};
             } else if ( key === 'negotiationDiscount' && proposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
               data.negotiationDiscount = {
                   isApplied: true,

@@ -3,19 +3,20 @@
     <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
     <template v-if="proposal">
         <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
-            <img v-if="step === 0" :src="headerBackgroundImage" class="position-absolute mobile-show" style="left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 200px"/>
-            <div class="md-layout-item md-large-size-50 md-small-size-80 d-flex" :class="isMobile ?'justify-content-center':''">
-                <img class="md-small-hide" :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
-                <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
-
-                <div class="mobile-show" v-if="vendor.vendorLogoImage">
-                    <img class="ml-10" :src="`${vendor.vendorLogoImage}`">
+            <img v-if="step === 0" :src="headerBackgroundImage" class="position-absolute mobile-show header-bg"/>
+            <div class="md-layout-item md-large-size-80 md-small-size-80 d-flex align-center" :class="isMobile ?'justify-content-center':''">
+                <div v-if="vendor.vendorLogoImage">
+                    <img :src="`${vendor.vendorLogoImage}`" style="max-height: 40px">
                 </div>
 
+                <img class="md-small-hide ml-10" :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" width="30px"/>
+                <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
+
                 <div :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">{{ proposal.vendor.companyName }}</div>
+                <div v-if="contract" class="text-uppercase" :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">contract</div>
             </div>
 
-            <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
+            <div class="md-layout-item md-large-size-20 md-small-size-20 d-flex">
                 <HeaderActions
                     className="ml-auto"
                     page="proposal"
@@ -28,7 +29,7 @@
             <div class="md-layout-item md-small-size-100 mobile-show">
                 <md-card v-if="step === 0" class="d-flex flex-column text-center border-radius-none py-20 my-10">
                     <div v-if="vendor.vendorLogoImage">
-                        <img :src="`${vendor.vendorLogoImage}`">
+                        <img :src="`${vendor.vendorLogoImage}`" style="max-height: 30px;width: auto">
                     </div>
                     <h2 v-if="vendor.companyName" class="font-size-24 font-bold-extra text-uppercase my-10">{{
                             `${vendor.companyName} proposal`
@@ -85,7 +86,7 @@
                         More Actions
                         <md-icon>expand_less</md-icon>
                     </md-button>
-                    <md-menu-content>
+                    <md-menu-content v-if="!contract">
                         <md-menu-item class="text-center" @click="showModal('NEGOTIATION')">
                         <span class="font-size-16 font-bold-extra pl-20">
                           <img
@@ -110,14 +111,41 @@
                         </span>
                         </md-menu-item>
                     </md-menu-content>
+                    <md-menu-content v-else>
+                        <md-menu-item class="text-center" @click="showModal('CANCEL_BOOKING')">
+                        <span class="font-size-16 font-bold-extra text-capitalize pl-20">
+                          <img
+                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              class="mr-10"
+                              style="width: 20px; height: 28px"
+                          />
+                          cancel booking
+                        </span>
+                        </md-menu-item>
+                        <md-menu-item class="text-center" @click="showModal('DOWNLOAD_INVOICE')">
+                        <span class="font-size-16 font-bold-extra text-capitalize pl-20">
+                          <img
+                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              class="mr-10"
+                              style="width: 20px; height: 28px"
+                          />
+                          download invoices
+                        </span>
+                        </md-menu-item>
+                    </md-menu-content>
                 </md-menu>
 
-                <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">Decline Proposal</md-button>
-                <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
+                <template v-if="!contract">
+                    <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">Decline Proposal</md-button>
+                    <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
+                </template>
+                <template v-else>
+                    Vendor is Booked
+                </template>
 
         </div>
 
-        <div v-if="step > 0" class="md-layout mobile-show">
+        <div v-if="step > 0 && !contract" class="md-layout mobile-show">
             <a v-if="step < 3" class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
             <a v-else class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="declineProposal">Decline</a>
             <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
@@ -148,10 +176,8 @@
 </template>
 <script>
 import moment from "moment";
-import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
-import Reminder from "@/models/Reminder";
 import ProposalRequest from "@/models/ProposalRequest";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
@@ -224,7 +250,6 @@ export default {
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
     },
     async handleAsk(ask) {
-      console.log('handleAsk', ask);
       let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
@@ -469,6 +494,11 @@ export default {
     vendor(){
       return this.proposal.vendor
     },
+    contract(){
+      if (!this.proposal) return false;
+      return this.proposal.status === PROPOSAL_STATUS.WON
+
+    },
     headerBackgroundImage() {
       if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
       if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
@@ -488,9 +518,6 @@ export default {
   background-color: white;
   .proposal-header {
     position: relative;
-    img {
-      width: 30px;
-    }
   }
   .proposal-container {
     max-width: 1280px;
@@ -505,6 +532,14 @@ export default {
     width: 100%;
     background: white;
   }
+}
+.header-bg{
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 200px
 }
 .condition-tooltip {
   background-color: #ffe5ec;

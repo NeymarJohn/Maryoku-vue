@@ -44,6 +44,7 @@ const state = {
   coverImage: [],
   proposalServices: {},
   inspirationalPhotos: new Array(15),
+  bookedServices: [],
   versions: [],
   original: null,
   seatingData: null,
@@ -220,6 +221,7 @@ const mutations = {
     state.coverImage = proposal.coverImage || [];
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.seatingData = proposal.seatingData;
+    state.bookedServices = proposal.bookedServices;
     state.initialized = true;
 
     state.versions = proposal.versions || []
@@ -424,7 +426,7 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
-        bookedServices: Object.keys(state.costServices), // Set all secondary services as booked services
+        bookedServices: state.bookedServices.length ? state.bookedServices : Object.keys(state.costServices), // Set all secondary services as booked services
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
         selectedVersion: state.currentVersion,
