@@ -13,7 +13,7 @@
         <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
         <template v-if="idx !== editIdx">
             {{version.name}}
-            <md-button class="md-simple md-icon-button ml-10" @click="editName(idx)">
+            <md-button class="md-simple md-icon-button" @click="editName(idx)">
                 <img :src="`${$iconURL}common/edit-dark.svg`" width="20px">
             </md-button>
         </template>
@@ -36,11 +36,17 @@ import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 const components = {
     ClickOutside: () => import("vue-click-outside")
 }
-
 export default {
   name: "proposal-versions-bar",
   components,
   props: {
+      versions:{
+          type: Array,
+      },
+      selected:{
+          type: Number,
+          default: -1,
+      }
   },
   data() {
     return {
@@ -51,16 +57,17 @@ export default {
   },
   methods: {
     select(index){
+      console.log('select', index, this.selected);
       if (this.selected === index) return;
-      this.$store.commit('proposalForNonMaryoku/selectVersion', index);
+      this.$emit('select', index);
     },
     saveVersion(){
       let data = {};
       this.versionFields.map(key => {
-          if ( key === 'bookedServices' ) {
+          if (key === 'bookedServices') {
               data[key] = [];
           } else {
-              data[key] = this.$store.state.proposalForNonMaryoku.original[key];
+              data[key] = this.$store.state.vendorProposal.original[key];
           }
       });
 
@@ -68,7 +75,7 @@ export default {
           name: `Ver${this.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
           data,
       }
-      this.$store.dispatch('proposalForNonMaryoku/saveVersion', version);
+      this.$emit('save', version)
     },
     editName(idx) {
       this.editIdx = idx;
@@ -77,21 +84,13 @@ export default {
     changeName(e){
       let versions = this.versions;
       this.$set(versions[this.editIdx], 'name', this.versionName);
-      this.$store.commit('proposalForNonMaryoku/setVersions', versions);
+      this.$emit('change', versions);
     },
     closeEditing(){
       this.editIdx = null;
     },
     remove(idx) {
-      this.$store.dispatch('proposalForNonMaryoku/removeVersion', idx);
-    }
-  },
-  computed: {
-    versions() {
-      return this.$store.state.proposalForNonMaryoku.versions;
-    },
-    selected() {
-      return this.$store.state.proposalForNonMaryoku.currentVersion;
+      this.$emit('remove', idx);
     }
   },
   watch: {
@@ -128,4 +127,5 @@ input{
         }
     }
 }
+
 </style>

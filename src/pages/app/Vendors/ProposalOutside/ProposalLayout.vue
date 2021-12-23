@@ -3,7 +3,15 @@
     <loader :active="isLoading" is_full_screen page="vendor" height="100%"></loader>
 
     <ProposalHeader v-if="vendor" :vendor="vendor"></ProposalHeader>
-    <ProposalVersionsBar v-if="$route.params.id"></ProposalVersionsBar>
+    <ProposalVersionsBar
+         v-if="$route.params.id"
+         :versions="versions"
+         :selected="selectedVersion"
+         @select="selectVersion"
+         @save="saveVersion"
+         @change="changeVersion"
+         @remove="removeVersion"
+    ></ProposalVersionsBar>
     <div class="main-cont">
       <router-view></router-view>
     </div>
@@ -114,7 +122,7 @@ const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
     MissingDetail: () => import('./Modals/MissingDetail.vue'),
-    ProposalVersionsBar: () => import('./ProposalVersionsBar.vue'),
+    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
     ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
     SendProposalModal: () => import('./Modals/SendProposal.vue'),
     ProposalHeader: () => import('./ProposalHeader.vue'),
@@ -275,8 +283,6 @@ export default {
                 confirmButtonClass: "md-button md-vendor",
             });
         }
-
-
     },
 
     async uploadCoverImage() {
@@ -404,6 +410,19 @@ export default {
 
       this.showSubmittedProposalModal = true;
     },
+
+    selectVersion(index){
+        this.$store.commit('proposalForNonMaryoku/selectVersion', index);
+    },
+    saveVersion(version){
+      this.$store.dispatch('proposalForNonMaryoku/saveVersion', version);
+    },
+    changeVersion(versions){
+      this.$store.commit('proposalForNonMaryoku/setVersions', versions);
+    },
+    removeVersion(id){
+      this.$store.dispatch('proposalForNonMaryoku/removeVersion', idx);
+    }
   },
 
   filters: {
@@ -424,7 +443,12 @@ export default {
     event() {
       return this.$store.state.proposalForNonMaryoku.eventData;
     },
-
+    selectedVersion(){
+      return this.$store.state.proposalForNonMaryoku.currentVersion;
+    },
+    versions(){
+      return this.$store.state.proposalForNonMaryoku.versions;
+    },
     step: {
       get: function () {
         return this.$store.state.proposalForNonMaryoku.wizardStep;

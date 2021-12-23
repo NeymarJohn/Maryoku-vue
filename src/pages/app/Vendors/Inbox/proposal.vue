@@ -1,0 +1,182 @@
+<template>
+    <div style="padding-left: 400px">
+        <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
+        <template v-if="proposal">
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-pale-grey">
+                <div class="md-layout-item md-large-size-50 ">
+                    <div class="d-flex align-center">
+                        <b class="font-size-25">{{ proposal.vendor.eventCategory.fullTitle }}</b>
+
+                        <div class="font-size-25 ml-10" >{{ proposal.vendor.companyName }}</div>
+                    </div>
+                    <ul class="event-details mt-20">
+                        <li class="event-details__item">
+                            Venue + Catering
+                        </li>
+                        <li class="event-details__item">
+                             For Whole Event
+                        </li>
+                        <li class="event-details__item">
+                            $2800
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
+                    <HeaderActions
+                        className="ml-auto"
+                        page="proposal"
+                        @toggleCommentMode="toggleCommentMode"
+                        @export="downProposal"
+                    ></HeaderActions>
+                </div>
+            </div>
+            <ProposalVersionsBar
+                :versions="proposal.versions"
+                :selected="proposal.currentVersion"
+                @select="selectVersion"
+                @save="saveVersion"
+                @change="changeVersion"
+                @remove="removeVersion"
+            ></ProposalVersionsBar>
+            <div class="proposal-container mt-40">
+                <EventProposalDetails
+                    :proposal="proposal"
+                    :landingPage="true"
+                    :nonMaryoku="true"
+                    :step="step"
+                    v-if="proposal"
+                    @change="handleStep"
+                >
+                </EventProposalDetails>
+            </div>
+
+        </template>
+    </div>
+
+</template>
+<script>
+import Proposal from "@/models/Proposal";
+import Vendor from "@/models/Vendors";
+import { mapActions, mapMutations } from "vuex";
+const components = {
+    EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
+    TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
+    CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
+    GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
+    HeaderActions: () => import('@/components/HeaderActions.vue'),
+
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Modal: () => import('@/components/Modal.vue'),
+    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
+}
+export default {
+    components,
+    data(){
+        return {
+            loading: true,
+            proposal: null,
+            step: 0,
+            showDetailModal: false,
+            showUpdateSuccessModal: false,
+            showCommentEditorPanel: false,
+            showGuestSignupModal: false,
+        }
+    },
+    async created() {
+        let tenantUser = null;
+        if (this.loggedInUser) {
+            tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
+        }
+        const givenToken = this.$route.query.token;
+
+        const proposalId = this.$route.params.proposalId;
+        await this.$store.dispatch("common/getEventTypes");
+        this.proposal = await Proposal.find(proposalId);
+
+        this.loading = false;
+    },
+    methods: {
+        ...mapMutations("comment", ["setGuestName"]),
+        ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
+        handleStep(step){
+            this.step = step
+        },
+        downProposal() {
+            this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
+        },
+        toggleCommentMode(mode) {
+            this.showCommentEditorPanel = mode;
+        },
+        showModal(name){
+            this.setProposal(this.proposal)
+            this.setProposalRequest(this.proposal.proposalRequest)
+            this.setOpen(name)
+        },
+        openNewTab(link) {
+            window.open(link, "_blank");
+        },
+        saveGuestComment(name) {
+            this.showGuestSignupModal = false;
+            this.setGuestName(name);
+            let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
+
+            if (data.action === "saveComment")
+                this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+            if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
+            if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
+            if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
+            this.showCommentEditorPanel = true;
+        },
+        selectVersion(index){
+            this.$store.commit('proposalForNonMaryoku/selectVersion', index);
+        },
+        saveVersion(version){
+            this.$store.dispatch('proposalForNonMaryoku/saveVersion', version);
+        },
+        changeVersion(versions){
+            this.$store.commit('proposalForNonMaryoku/setVersions', versions);
+        },
+        removeVersion(id){
+            this.$store.dispatch('proposalForNonMaryoku/removeVersion', idx);
+        }
+    },
+    computed:{
+        loggedInUser() {
+            return this.$store.state.auth.user;
+        },
+        customer() {
+            return this.$store.state.comment.customer;
+        },
+        guestName() {
+            return this.$store.state.comment.guestName;
+        },
+        vendor(){
+            return this.proposal.vendor
+        },
+    }
+}
+</script>
+<style lang="scss" scoped>
+.event-details {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+
+    &__item {
+        font-size: 14px;
+        padding-bottom: 10px;
+
+        &:not(:last-child) {
+            border-right: 1px solid #818080;
+            padding-right: 40px;
+            margin-right: 40px;
+        }
+    }
+}
+
+</style>
+
