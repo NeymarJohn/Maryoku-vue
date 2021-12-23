@@ -379,7 +379,7 @@ export default {
       this.handleAction();
     },
     auth(provider) {
-      console.log("auth", provider);
+      // console.log("auth", provider);
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(`${document.location.href}?token=`);
@@ -399,7 +399,7 @@ export default {
       }
     },
     saveCommentWithAuth(params) {
-      console.log("saveComment");
+      // console.log("saveComment");
       if (this.loggedInUser || this.guestName) {
         this.saveComment(params);
       } else {
@@ -415,7 +415,7 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateCommentWithAuth", params);
+      // console.log("updateCommentWithAuth", params);
       if (this.loggedInUser || this.guestName) {
         this.updateComment(params);
       } else {
@@ -431,7 +431,7 @@ export default {
       }
     },
     deleteCommentWithAuth(params) {
-      console.log("deleteComment");
+      // console.log("deleteComment");
       if (this.loggedInUser || this.guestName) {
         this.deleteComment(params);
       } else {
@@ -447,7 +447,7 @@ export default {
       }
     },
     updateCommentComponentWithAuth(component) {
-      console.log("updateCommentComponent");
+      // console.log("updateCommentComponent");
       if (this.loggedInUser || this.guestName) {
         this.updateCommentComponent(component);
       } else {
@@ -463,14 +463,14 @@ export default {
       }
     },
     async saveProposalRequest(){
-      console.log('savePropsalRequest');
+      // console.log('savePropsalRequest');
         let query = new ProposalRequest({
            vendorId: this.proposal.vendor.id,
            requestedTime: new Date().getTime(),
            expiredTime: moment(new Date()).add(3, "days").valueOf(),
         });
         let res = await query.for(new Vendor({ id: this.proposal.vendor.id })).save();
-        console.log('res', res);
+        // console.log('res', res);
 
         await this.saveProposal({...this.proposal, proposalRequestId: res.id});
     },

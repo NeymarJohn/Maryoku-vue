@@ -721,7 +721,7 @@ export default {
   },
   watch: {
     proposalRequests(newVal) {
-      console.log("proposalRequests.watch", newVal);
+      // console.log("proposalRequests.watch", newVal);
     },
   },
   updated() {
