@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     selectSecondCategory(serviceCategory) {
-      console.log('selectSecondCategory', serviceCategory);
+      // console.log('selectSecondCategory', serviceCategory);
       this.$store.commit("vendorProposal/setValue", { key: "currentSecondaryService", value: serviceCategory });
     },
     flatDeep(arr, d = 1) {
