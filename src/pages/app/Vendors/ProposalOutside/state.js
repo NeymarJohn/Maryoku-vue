@@ -162,24 +162,20 @@ const getters = {
     const discount = state.discounts['total'] || { price: 0, percentage: 0 };
     sum = sum - sum * discount.percentage / 100;
 
-    // check negotiation
-    const negotiation = state.negotiationDiscount || { price: 0, percentage: 0}
-    sum = sum - sum * negotiation.percentage / 100;
-
+    // check negotiation discount
+    if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
+       sum -= state.negotiationDiscount.price
+    }
 
     // check tax
     const tax = state.taxes['total'] || { price: 0, percentage: 0 };
     sum = sum + sum * tax.percentage / 100;
     // check bundle discount
 
-    if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
-      sum -= state.negotiationDiscount.price
-    }
-
     if (state.bundleDiscount && state.bundleDiscount.isApplied) {
       sum -= state.bundleDiscount.price
     }
-
+    console.log('totalPrice', sum);
     return sum
   }
 };
@@ -318,7 +314,7 @@ const mutations = {
     Vue.set(state, "initialized", false);
     Vue.set(state, "attachments", {});
     Vue.set(state, "eventData", {});
-    Vue.set(state, "negotiationDiscounts", {
+    Vue.set(state, "negotiationDiscount", {
       isApplied: false,
       percent: 0,
       price: 0,
