@@ -13,6 +13,14 @@ export default {
     components,
     data(){
         return{}
+    },
+    async created(){
+        await this.$store.dispatch('vendorDashboard/getComments', {vendorId: this.vendorData.id});
+    },
+    computed:{
+        vendorData() {
+            return this.$store.state.vendor.profile;
+        },
     }
 }
 </script>
