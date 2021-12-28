@@ -8,11 +8,36 @@
       <div class="font-size-22 font-bold-extra mb-10 text-uppercase">Our vendors are working on quotes for you</div>
     </div>
     <div class="md-layout">
-      <div v-for="(tmp, index) in templates" :key="index"
-           class="md-layout-item d-flex text-right">
+      <div class="md-layout-item d-flex text-right">
         <div class="p-40 proposal-card">
           <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/photo%20(1).svg" />
-          <h4 class="font-bold card-title">PROPOSAL {{ index + 1 }}</h4>
+          <h4 class="font-bold card-title">PROPOSAL 01</h4>
+          <div class="mb-10 bar" style="width: 180px"></div>
+          <div class="mb-10 bar" style="width: 100px"></div>
+          <div class="mb-10 bar" style="width: 150px"></div>
+          <div class="mb-10 bar" style="width: 150px"></div>
+          <div class="mb-10 bar" style="width: 100px"></div>
+          <div class="action mt-40">Defaults & Booking</div>
+        </div>
+      </div>
+
+      <div class="md-layout-item d-flex text-center">
+        <div class="p-40 proposal-card">
+          <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/photo%20(1).svg" />
+          <h4 class="font-bold card-title">PROPOSAL 02</h4>
+          <div class="mb-10 bar" style="width: 180px"></div>
+          <div class="mb-10 bar" style="width: 100px"></div>
+          <div class="mb-10 bar" style="width: 150px"></div>
+          <div class="mb-10 bar" style="width: 150px"></div>
+          <div class="mb-10 bar" style="width: 100px"></div>
+          <div class="action mt-40">Defaults & Booking</div>
+        </div>
+      </div>
+
+      <div class="md-layout-item d-flex text-left">
+        <div class="p-40 proposal-card">
+          <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/photo%20(1).svg" />
+          <h4 class="font-bold card-title">PROPOSAL 03</h4>
           <div class="mb-10 bar" style="width: 180px"></div>
           <div class="mb-10 bar" style="width: 100px"></div>
           <div class="mb-10 bar" style="width: 150px"></div>
@@ -132,7 +157,6 @@ export default {
       hours: 23,
       mins: 59,
       seconds: 59,
-      templates: ['', '', '']
     };
   },
   created() {

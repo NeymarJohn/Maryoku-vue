@@ -67,12 +67,13 @@
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
+          :disabled="true"
           :link="{
-            name: 'inbox',
+            name: 'Event Budget',
             iconUrl: '/static/icons/vendor/message.svg',
             iconActiveUrl: '/static/icons/vendor/message-active.svg',
-            path: `/vendor/inbox`,
-            startLink: `/vendor/inbox`,
+            path: `/vendor/dashboard`,
+            startLink: `/vendor/dashboard`,
           }"
         ></sidebar-item>
           <sidebar-item

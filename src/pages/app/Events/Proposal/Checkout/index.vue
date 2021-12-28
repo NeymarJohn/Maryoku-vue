@@ -513,8 +513,7 @@
         }
 
         let eventName = this.proposal.nonMaryoku ? this.proposal.eventData.customer.companyName :
-            'New event';
-                // this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event';
+                this.selectedProposalRequest.eventData.title ? this.selectedProposalRequest.eventData.title : 'New event';
         // send email to vendor to notify the proposal is selected
         await this.$http.post(
                 `${process.env.SERVER_URL}/1/proposals/${this.proposal.id}/sendEmail`,

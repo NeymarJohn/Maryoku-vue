@@ -38,13 +38,11 @@ const state = {
   wizardStep: 0,
   additionalServices: [],
   bundleDiscount: {},
-  negotiationDiscount: {},
   discounts: {},
   taxes: {},
   coverImage: [],
   proposalServices: {},
   inspirationalPhotos: new Array(15),
-  bookedServices: [],
   versions: [],
   original: null,
   seatingData: null,
@@ -54,11 +52,11 @@ const getters = {
   originalPriceOfMainCategory(state) {
     const mainService = state.vendor.eventCategory.key;
     if (!state.costServices[mainService]) return 0;
-
-    return state.costServices[mainService].reduce((s, item) => {
+    const sumPrice = state.costServices[mainService].reduce((s, item) => {
       if (item.isComplimentary) return s;
       return s + item.requirementValue * item.price;
     }, 0);
+    return sumPrice;
   },
   totalPriceByCategory(state, getters) {
     const prices = {};
@@ -138,12 +136,9 @@ const getters = {
       sum += Number(getter.totalPriceByCategory[category])
     })
 
-    // check default discount
-    const discount = state.discounts['total'] || { price: 0, percentage: 0 };
+    // check discount
+    let discount = state.discounts['total'] || { price: 0, percentage: 0 };
     sum = sum - sum * discount.percentage / 100;
-
-    const negotiation = state.negotiationDiscount || {price: 0, percentage: 0}
-    sum = sum - sum * negotiation.percentage / 100;
 
     // check tax
     let tax = state.taxes['total'] || { price: 0, percentage: 0 };
@@ -159,23 +154,18 @@ const getters = {
     })
 
     // check discount
-    const discount = state.discounts['total'] || { price: 0, percentage: 0 };
+    let discount = state.discounts['total'] || { price: 0, percentage: 0 };
     sum = sum - sum * discount.percentage / 100;
 
-    // check negotiation discount
-    if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
-       sum -= state.negotiationDiscount.price
-    }
-
     // check tax
-    const tax = state.taxes['total'] || { price: 0, percentage: 0 };
+    let tax = state.taxes['total'] || { price: 0, percentage: 0 };
     sum = sum + sum * tax.percentage / 100;
     // check bundle discount
 
     if (state.bundleDiscount && state.bundleDiscount.isApplied) {
       sum -= state.bundleDiscount.price
     }
-    console.log('totalPrice', sum);
+
     return sum
   }
 };
@@ -211,13 +201,11 @@ const mutations = {
     state.personalMessage = proposal.personalMessage;
     state.taxs = proposal.taxs;
     state.discounts = proposal.discounts;
-    state.negotiationDiscount = proposal.negotiationDiscount,
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.eventData = proposal.eventData;
     state.coverImage = proposal.coverImage || [];
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.seatingData = proposal.seatingData;
-    state.bookedServices = proposal.bookedServices;
     state.initialized = true;
 
     state.versions = proposal.versions || []
@@ -264,14 +252,6 @@ const mutations = {
     Vue.set(state.discounts, category, discount);
     setStateByVersion(state, { key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts)) })
   },
-  setNegotiationDiscount: (state, discount) => {
-    state.negotiationDiscount = discount;
-    setStateByVersion(state, { key: 'negotiationDiscount', value: JSON.parse(JSON.stringify(state.negotiationDiscount)) })
-  },
-  setBundleDiscount: (state, bundleDiscount) => {
-    state.bundleDiscount = bundleDiscount;
-    setStateByVersion(state, { key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount)) })
-  },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
     setStateByVersion(state, { key: 'taxes', value: state.taxes })
@@ -283,6 +263,10 @@ const mutations = {
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex(item => item == category);
     state.additionalServices.splice(index, 1);
+  },
+  setBundleDiscount: (state, bundleDiscount) => {
+    state.bundleDiscount = bundleDiscount;
+    setStateByVersion(state, { key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount)) })
   },
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
@@ -314,11 +298,6 @@ const mutations = {
     Vue.set(state, "initialized", false);
     Vue.set(state, "attachments", {});
     Vue.set(state, "eventData", {});
-    Vue.set(state, "negotiationDiscount", {
-      isApplied: false,
-      percent: 0,
-      price: 0,
-    });
     Vue.set(state, "bundleDiscount", {
       isApplied: false,
       services: [],
@@ -409,11 +388,10 @@ const actions = {
         inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
         extraServices: state.original ? state.original.extraServices : state.extraServices,
         discounts: state.original ? state.original.discounts : state.discounts,
-        negotiationDiscount: state.original ? state.original.negotiationDiscount : state.negotiationDiscount,
-        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
         taxes: state.original ? state.original.taxes : state.taxes,
         cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
+        bundleDiscount: state.original ? state.original.bundleDiscount : state.bundleDiscount,
         attachments: state.original ? state.original.attachments : state.attachments,
         status,
         step: state.wizardStep,
@@ -422,7 +400,7 @@ const actions = {
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
-        bookedServices: state.bookedServices.length ? state.bookedServices : Object.keys(state.costServices), // Set all secondary services as booked services
+        bookedServices: Object.keys(state.costServices), // Set all secondary services as booked services
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
         selectedVersion: state.currentVersion,
