@@ -63,21 +63,21 @@ export const ACTION = {
     },
     COMMENT: {
         title: 'Comment',
-        icon: '',
+        icon: 'responsive/Group 22880.svg',
         description: false,
-        cancel: false,
+        cancel: true,
         action: false
     },
-    // SHARE: {
-    //     title: 'Share \'Proposal\' With Your Colleague',
-    //     cancel: false,
-    //     action: 'Done'
-    // },
+    SHARE: {
+        title: 'Share \'Proposal\' With Your Colleague',
+        cancel: true,
+        action: 'Done'
+    },
     LOOK: {
         title: 'Look for something else',
-        icon: '',
+        icon: 'responsive/Group 22879.svg',
         description: false,
-        cancel: false,
+        cancel: true,
         action: false
-    }
+    },
 }

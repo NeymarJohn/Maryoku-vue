@@ -3,7 +3,15 @@
     <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <ProposalHeader v-if="event" :event="event" :proposalRequest="proposalRequest"></ProposalHeader>
-      <ProposalVersionsBar v-if="proposalRequest && proposalRequest.proposal"></ProposalVersionsBar>
+      <ProposalVersionsBar
+          v-if="proposalRequest && proposalRequest.proposal"
+          :versions="versions"
+          :selected="selectedVersion"
+          @select="selectVersion"
+          @save="saveVersion"
+          @change="changeVersion"
+          @remove="removeVersion"
+      ></ProposalVersionsBar>
       <div class="main-cont">
         <router-view></router-view>
       </div>
@@ -128,7 +136,7 @@ const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
     MissingDetail: () => import('./Modals/MissingDetail.vue'),
-    ProposalVersionsBar: () => import('./ProposalVersionsBar.vue'),
+    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
     ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
     ProposalHeader: () => import('./ProposalHeader.vue'),
     VendorBidTimeCounter: () => import('@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue'),
@@ -379,6 +387,18 @@ export default {
         }
       });
     },
+    selectVersion(index){
+      this.$store.commit('vendorProposal/selectVersion', index);
+    },
+    saveVersion(version){
+        this.$store.dispatch('vendorProposal/saveVersion', version);
+    },
+    changeVersion(versions){
+        this.$store.commit('vendorProposal/setVersions', versions);
+    },
+    removeVersion(id){
+        this.$store.dispatch('vendorProposal/removeVersion', idx);
+    }
   },
 
   filters: {
@@ -402,6 +422,12 @@ export default {
     },
     vendor() {
       return this.$store.state.vendorProposal.vendor;
+    },
+    selectedVersion(){
+      return this.$store.state.vendorProposal.currentVersion;
+    },
+    versions(){
+      return this.$store.state.vendorProposal.versions;
     },
     step: {
       get: function () {

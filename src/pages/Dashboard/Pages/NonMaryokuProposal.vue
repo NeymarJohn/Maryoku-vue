@@ -3,19 +3,20 @@
     <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
     <template v-if="proposal">
         <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
-            <img v-if="isMobile && !showOffer" :src="headerBackgroundImage" class="position-absolute" style="left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 200px"/>
-            <div class="md-layout-item md-large-size-50 md-small-size-80 d-flex" :class="isMobile ?'justify-content-center':''">
-                <img class="md-small-hide" :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
-                <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
-
-                <div v-if="isMobile && vendor.vendorLogoImage">
-                    <img class="ml-10" :src="`${vendor.vendorLogoImage}`">
+            <img v-if="step === 0" :src="headerBackgroundImage" class="position-absolute mobile-show header-bg"/>
+            <div class="md-layout-item md-large-size-80 md-small-size-80 d-flex align-center" :class="isMobile ?'justify-content-center':''">
+                <div v-if="vendor.vendorLogoImage">
+                    <img :src="`${vendor.vendorLogoImage}`" style="max-height: 40px">
                 </div>
 
+                <img class="md-small-hide ml-10" :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" width="30px"/>
+                <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
+
                 <div :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">{{ proposal.vendor.companyName }}</div>
+                <div v-if="contract" class="text-uppercase" :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">contract</div>
             </div>
 
-            <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
+            <div class="md-layout-item md-large-size-20 md-small-size-20 d-flex">
                 <HeaderActions
                     className="ml-auto"
                     page="proposal"
@@ -25,10 +26,10 @@
                 ></HeaderActions>
             </div>
 
-            <div v-if="isMobile" class="md-layout-item md-small-size-100">
-                <md-card v-if="!showOffer" class="d-flex flex-column text-center border-radius-none py-20 my-10">
+            <div class="md-layout-item md-small-size-100 mobile-show">
+                <md-card v-if="step === 0" class="d-flex flex-column text-center border-radius-none py-20 my-10">
                     <div v-if="vendor.vendorLogoImage">
-                        <img :src="`${vendor.vendorLogoImage}`">
+                        <img :src="`${vendor.vendorLogoImage}`" style="max-height: 30px;width: auto">
                     </div>
                     <h2 v-if="vendor.companyName" class="font-size-24 font-bold-extra text-uppercase my-10">{{
                             `${vendor.companyName} proposal`
@@ -44,15 +45,16 @@
                 :proposal="proposal"
                 :landingPage="true"
                 :nonMaryoku="true"
-                :showOffer="showOffer"
+                :step="step"
                 v-if="proposal"
+                @change="handleStep"
                 @updateProposal="handleUpdate"
                 @ask="handleAsk"
                 @favorite="handleFavorite"
             >
                 <template slot="timer">
                     <TimerPanel
-                        v-if="!isMobile || isMobile && !showOffer"
+                        v-if="!isMobile || isMobile && step === 0"
                         :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
                         :target="targetTime"
                         :pending="negotiationPending"
@@ -71,9 +73,9 @@
             <p class="m-0 align-baseline text-underline">Who are we and why are we great?</p>
         </div>
 
-        <a v-if="isMobile && !showOffer"
-           class="d-flex align-center font-size-16 font-bold-extra justify-content-center bg-red color-white py-20"
-           @click="showOffer = true"
+        <a v-if="step === 0"
+           class="d-flex align-center font-size-16 font-bold-extra justify-content-center bg-red color-white py-20 mobile-show"
+           @click="step++"
         >
             View the details of the offer
         </a>
@@ -84,7 +86,7 @@
                         More Actions
                         <md-icon>expand_less</md-icon>
                     </md-button>
-                    <md-menu-content>
+                    <md-menu-content v-if="!contract">
                         <md-menu-item class="text-center" @click="showModal('NEGOTIATION')">
                         <span class="font-size-16 font-bold-extra pl-20">
                           <img
@@ -109,15 +111,43 @@
                         </span>
                         </md-menu-item>
                     </md-menu-content>
+                    <md-menu-content v-else>
+                        <md-menu-item class="text-center" @click="showModal('CANCEL_BOOKING')">
+                        <span class="font-size-16 font-bold-extra text-capitalize pl-20">
+                          <img
+                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              class="mr-10"
+                              style="width: 20px; height: 28px"
+                          />
+                          cancel booking
+                        </span>
+                        </md-menu-item>
+                        <md-menu-item class="text-center" @click="showModal('DOWNLOAD_INVOICE')">
+                        <span class="font-size-16 font-bold-extra text-capitalize pl-20">
+                          <img
+                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              class="mr-10"
+                              style="width: 20px; height: 28px"
+                          />
+                          download invoices
+                        </span>
+                        </md-menu-item>
+                    </md-menu-content>
                 </md-menu>
 
-                <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">Decline Proposal</md-button>
-                <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
+                <template v-if="!contract">
+                    <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">Decline Proposal</md-button>
+                    <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
+                </template>
+                <template v-else>
+                    Vendor is Booked
+                </template>
 
         </div>
 
-        <div v-if="showOffer" class="md-layout mobile-show">
-            <a class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
+        <div v-if="step > 0 && !contract" class="md-layout mobile-show">
+            <a v-if="step < 3" class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
+            <a v-else class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="declineProposal">Decline</a>
             <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
         </div>
 
@@ -131,35 +161,6 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </CommentEditorPanel>
-<!--    <ActionModal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal" @close="showDetailModal=false">-->
-<!--      <template slot="header">-->
-<!--          <div class="title font-bold-extra">Change event details</div>-->
-<!--      </template>-->
-<!--      <template slot="body">-->
-<!--        <div class="text-left mb-10">-->
-<!--              You can change or add event details and information. <br />-->
-<!--              Vendor will send you a updated proposal in a short time-->
-<!--        </div>-->
-<!--        <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>-->
-<!--      </template>-->
-<!--      <template slot="footer">-->
-<!--        <div class="condition-tooltip">-->
-<!--          <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px" />-->
-<!--          Any change might cause pricing changes-->
-<!--        </div>-->
-<!--        <md-button class="md-simple md-black ml-auto">Cancel</md-button>-->
-<!--        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>-->
-<!--      </template>-->
-<!--    </ActionModal>-->
-<!--    <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">-->
-<!--      <template slot="body">-->
-<!--        <h2>Changes set successfully</h2>-->
-<!--        <div>Changes have been sent to the vendor and he will send you an updated offer as soon as possible</div>-->
-<!--        <div class="text-center">-->
-<!--          <md-button class="md-red" @click="showUpdateSuccessModal = false">Done</md-button>-->
-<!--        </div>-->
-<!--      </template>-->
-<!--    </modal>-->
 
     <GuestSignUpModal
       v-if="showGuestSignupModal"
@@ -171,25 +172,12 @@
       @cancel="showGuestSignupModal = false"
     >
     </GuestSignUpModal>
-<!--    <RemindingTimeModal-->
-<!--      v-if="showRemindingTimeModal"-->
-<!--      @close="showRemindingTimeModal = false"-->
-<!--      @save="saveRemindingTime"-->
-<!--    ></RemindingTimeModal>-->
-<!--    <NegotiationRequestModal-->
-<!--      v-if="showNegotiationRequestModal"-->
-<!--      :proposal="proposal"-->
-<!--      @close="showNegotiationRequestModal = false"-->
-<!--      @save="sendNegotiationRequest"-->
-<!--    ></NegotiationRequestModal>-->
   </div>
 </template>
 <script>
 import moment from "moment";
-import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
-import Reminder from "@/models/Reminder";
 import ProposalRequest from "@/models/ProposalRequest";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
@@ -209,8 +197,6 @@ const components = {
     ActionModal: () => import('@/components/ActionModal.vue'),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
-    RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
-    NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
 }
 
 export default {
@@ -222,13 +208,11 @@ export default {
       loading: true,
       proposal: null,
       onlyAuth: false,
-      showOffer: false,
+      step: 0,
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
       showGuestSignupModal: false,
-      showRemindingTimeModal: false,
-      showNegotiationRequestModal: false,
     };
   },
   async created() {
@@ -257,19 +241,15 @@ export default {
       this.loading = false;
     }
 
-    this.setOpen('DECLINE');
-
-    // await this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    ...mapMutations("modal", ["setOpen", "setProposal"]),
+    ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
     },
     async handleAsk(ask) {
-      console.log('handleAsk', ask);
       let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
@@ -285,33 +265,8 @@ export default {
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
-      } else if (ask === "event") {
-        this.showDetailModal = false;
-        let event = {
-          startTime: this.proposal.eventData.startTime,
-          endTime: this.proposal.eventData.endTime,
-          location: this.proposal.eventData.location,
-          numberOfParticipants: this.proposal.eventData.numberOfParticipants,
-          eventType: this.proposal.eventData.eventType,
-        };
-        if (this.loggedInUser) {
-          await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
-        } else {
-          localStorage.setItem(
-            "nonMaryokuAction",
-            JSON.stringify({
-              action: "saveNegotiation",
-              params: { event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
-            }),
-          );
-          this.onlyAuth = true;
-          this.showGuestSignupModal = true;
-        }
       }
-    },
-    handleEventChange(e) {
-      console.log("handleEventChange", e);
-      this.proposal.eventData = e;
+
     },
     async saveNegotiation(params) {
       this.loading = true;
@@ -342,6 +297,9 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
+    handleStep(step){
+        this.step = step
+    },
     async handleUpdate(proposal){
       this.proposal = {...this.proposal, ...proposal};
     },
@@ -364,7 +322,8 @@ export default {
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
-      this.setOpen('DECLINE')
+      this.showModal('DECLINE')
+
     },
     async saveProposal(proposal){
         this.loading = true;
@@ -380,9 +339,9 @@ export default {
       this.showCommentEditorPanel = mode;
     },
     showModal(name){
-        console.log('show.modal', name);
-        this.setProposal(this.proposal);
-        this.setOpen(name);
+        this.setProposal(this.proposal)
+        this.setProposalRequest(this.proposal.proposalRequest)
+        this.setOpen(name)
     },
     openNewTab(link) {
       window.open(link, "_blank");
@@ -420,7 +379,7 @@ export default {
       this.handleAction();
     },
     auth(provider) {
-      console.log("auth", provider);
+      // console.log("auth", provider);
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(`${document.location.href}?token=`);
@@ -440,7 +399,7 @@ export default {
       }
     },
     saveCommentWithAuth(params) {
-      console.log("saveComment");
+      // console.log("saveComment");
       if (this.loggedInUser || this.guestName) {
         this.saveComment(params);
       } else {
@@ -456,7 +415,7 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      console.log("updateCommentWithAuth", params);
+      // console.log("updateCommentWithAuth", params);
       if (this.loggedInUser || this.guestName) {
         this.updateComment(params);
       } else {
@@ -472,7 +431,7 @@ export default {
       }
     },
     deleteCommentWithAuth(params) {
-      console.log("deleteComment");
+      // console.log("deleteComment");
       if (this.loggedInUser || this.guestName) {
         this.deleteComment(params);
       } else {
@@ -488,7 +447,7 @@ export default {
       }
     },
     updateCommentComponentWithAuth(component) {
-      console.log("updateCommentComponent");
+      // console.log("updateCommentComponent");
       if (this.loggedInUser || this.guestName) {
         this.updateCommentComponent(component);
       } else {
@@ -504,74 +463,16 @@ export default {
       }
     },
     async saveProposalRequest(){
-      console.log('savePropsalRequest');
+      // console.log('savePropsalRequest');
         let query = new ProposalRequest({
            vendorId: this.proposal.vendor.id,
-            requestedTime: new Date().getTime(),
-            expiredTime: moment(new Date()).add(3, "days").valueOf(),
+           requestedTime: new Date().getTime(),
+           expiredTime: moment(new Date()).add(3, "days").valueOf(),
         });
         let res = await query.for(new Vendor({ id: this.proposal.vendor.id })).save();
-        console.log('res', res);
+        // console.log('res', res);
 
         await this.saveProposal({...this.proposal, proposalRequestId: res.id});
-    },
-    async sendNegotiationRequest(params) {
-      this.showNegotiationRequestModal = false;
-
-      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
-
-      let expiredTime = moment().add(2, 'days').unix() * 1000;
-      let query = new ProposalNegotiationRequest({
-        proposalId: this.proposal.id,
-        proposal: new Proposal({ id: this.proposal.id }),
-        expiredTime,
-        type: NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION,
-        ...params,
-      });
-      let res = await query.for(new Proposal({ id: this.proposal.id })).save();
-      this.proposal.negotiations.push(res);
-
-      Swal.fire({
-        title: "Negotiation Sent successfully",
-        text: `Negotiation request has been successfully sent to the vendor and he will respond as soon as possible`,
-        showCancelButton: false,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Done",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-        }
-      });
-    },
-    saveRemindingTime({remindingTime, option}) {
-
-      const remindingData = {
-        reminder: "email",
-        phoneNumber: "",
-        email: this.proposal.eventData.customer.email,
-        name: this.proposal.eventData.customer.name,
-        remindingTime: remindingTime,
-        type: "proposal",
-        emailParams: {
-            expiredTime: moment(new Date(this.proposal.expiredDate)).valueOf(),
-        },
-        emailTransactionId: "",
-        phoneTransactionId: "",
-      };
-      new Reminder(remindingData).save().then((res) => {
-        Swal.fire({
-          title: "Reminder set successfully",
-          text: `You will receive the reminder in your email`,
-          showCancelButton: false,
-          confirmButtonClass: "md-button md-success btn-fill",
-          cancelButtonClass: "md-button md-danger btn-fill",
-          confirmButtonText: "Done",
-          buttonsStyling: false,
-        }).then((result) => {});
-      });
-
-      this.showRemindingTimeModal = false;
     },
     getUpdatedProposal(proposal, data) {
       Object.keys(data).map(key => {
@@ -593,17 +494,22 @@ export default {
     vendor(){
       return this.proposal.vendor
     },
-      headerBackgroundImage() {
-          if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
-          if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
-              return this.proposal.inspirationalPhotos[0].url;
-          if (this.proposal.vendor.images && this.proposal.vendor.images[0])
-              return this.proposal.vendor.images[0];
-          if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
-              return this.proposal.vendor.vendorImages[0];
+    contract(){
+      if (!this.proposal) return false;
+      return this.proposal.status === PROPOSAL_STATUS.WON
 
-          return "";
-      },
+    },
+    headerBackgroundImage() {
+      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
+      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
+          return this.proposal.inspirationalPhotos[0].url;
+      if (this.proposal.vendor.images && this.proposal.vendor.images[0])
+          return this.proposal.vendor.images[0];
+      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
+          return this.proposal.vendor.vendorImages[0];
+
+      return "";
+    },
   },
 };
 </script>
@@ -612,9 +518,6 @@ export default {
   background-color: white;
   .proposal-header {
     position: relative;
-    img {
-      width: 30px;
-    }
   }
   .proposal-container {
     max-width: 1280px;
@@ -629,6 +532,14 @@ export default {
     width: 100%;
     background: white;
   }
+}
+.header-bg{
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 200px
 }
 .condition-tooltip {
   background-color: #ffe5ec;

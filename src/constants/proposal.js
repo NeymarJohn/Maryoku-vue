@@ -7,6 +7,7 @@ export const PROPOSAL_VERSION_FIELDS = [
     'taxes',
     'inspirationalPhotos',
     'additionalServices',
+    'negotiationDiscount',
     'bundleDiscount',
     'attachments',
     'personalMessage',
