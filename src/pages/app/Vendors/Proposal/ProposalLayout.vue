@@ -233,6 +233,21 @@ export default {
       if ( this.step === 2 && this.event.components.length < 2 ) this.step ++;
       this.scrollToTop();
     },
+    back() {
+      const initStep = this.$store.state.vendorProposal.initStep;
+      if (this.step > initStep) {
+          this.step = this.step - 1;
+
+          // skip additional page if event doesn't have components
+          if (this.step === 2 && this.event.components.length < 2) this.step --;
+      } else {
+          const vendorId = this.$route.params.vendorId;
+          const requestId = this.$route.params.id;
+          this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
+      }
+
+      this.scrollToTop();
+    },
     getVendorCategory() {
       this.$auth.currentUser(
         this,
@@ -342,21 +357,6 @@ export default {
       }
     },
 
-    back() {
-      const initStep = this.$store.state.vendorProposal.initStep;
-      if (this.step > initStep) {
-        this.step = this.step - 1;
-
-        // skip additional page if event doesn't have components
-        if (this.step === 2 && !this.event.components.length) this.step --;
-      } else {
-        const vendorId = this.$route.params.vendorId;
-        const requestId = this.$route.params.id;
-        this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
-      }
-
-      this.scrollToTop();
-    },
     scrollToTop() {
       setTimeout(() => {
         window.scrollTo(0, 0);

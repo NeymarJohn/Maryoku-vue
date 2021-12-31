@@ -1,6 +1,8 @@
 <template>
-    <div class="event-plan">
-        <InboxSidebar />
+    <div class="event-plan d-flex">
+        <div class="" style="width: 25vw;">
+            <InboxSidebar />
+        </div>
         <router-view></router-view>
         hello
     </div>

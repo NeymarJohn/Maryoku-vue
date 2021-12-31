@@ -1,60 +1,42 @@
 <template>
-    <div style="padding-left: 400px">
+    <div class="proposal-main-container" style="">
         <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
         <template v-if="proposal">
-            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-pale-grey">
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white">
                 <div class="md-layout-item md-large-size-50 ">
                     <div class="d-flex align-center">
                         <b class="font-size-25">{{ proposal.vendor.eventCategory.fullTitle }}</b>
-
-                        <div class="font-size-25 ml-10" >{{ proposal.vendor.companyName }}</div>
+                        <div class="font-size-25 ml-10">{{ proposal.vendor.companyName }}</div>
                     </div>
                     <ul class="event-details mt-20">
                         <li class="event-details__item">
                             Venue + Catering
                         </li>
                         <li class="event-details__item">
-                             For Whole Event
+                            For Whole Event
                         </li>
                         <li class="event-details__item">
-                            $2800
+                            ${{ proposal.cost | withComma }}
                         </li>
                     </ul>
-
                 </div>
-
                 <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
-                    <HeaderActions
-                        className="ml-auto"
-                        page="proposal"
-                        @toggleCommentMode="toggleCommentMode"
-                        @export="downProposal"
-                    ></HeaderActions>
+                    <HeaderActions className="ml-auto" page="proposal" @toggleCommentMode="toggleCommentMode" @export="downProposal"></HeaderActions>
                 </div>
             </div>
-            <ProposalVersionsBar
-                :versions="proposal.versions"
-                :selected="proposal.currentVersion"
-                @select="selectVersion"
-                @save="saveVersion"
-                @change="changeVersion"
-                @remove="removeVersion"
-            ></ProposalVersionsBar>
-            <div class="proposal-container mt-40">
-                <EventProposalDetails
-                    :proposal="proposal"
-                    :landingPage="true"
-                    :nonMaryoku="true"
-                    :step="step"
-                    v-if="proposal"
-                    @change="handleStep"
-                >
+            <ProposalVersionsBar 
+            :versions="proposal.versions" 
+            :selected="proposal.currentVersion" 
+            @select="selectVersion" 
+            @save="saveVersion" 
+            @change="changeVersion" 
+            @remove="removeVersion"></ProposalVersionsBar>
+            <div class="proposal-container" style="padding: 20px;">
+                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
                 </EventProposalDetails>
             </div>
-
         </template>
     </div>
-
 </template>
 <script>
 import Proposal from "@/models/Proposal";
@@ -73,7 +55,7 @@ const components = {
 }
 export default {
     components,
-    data(){
+    data() {
         return {
             loading: true,
             proposal: null,
@@ -85,6 +67,7 @@ export default {
         }
     },
     async created() {
+        console.log("created")
         let tenantUser = null;
         if (this.loggedInUser) {
             tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
@@ -97,10 +80,13 @@ export default {
 
         this.loading = false;
     },
+    mounted(){
+        console.log("mounted");
+    },
     methods: {
         ...mapMutations("comment", ["setGuestName"]),
         ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
-        handleStep(step){
+        handleStep(step) {
             this.step = step
         },
         downProposal() {
@@ -109,7 +95,7 @@ export default {
         toggleCommentMode(mode) {
             this.showCommentEditorPanel = mode;
         },
-        showModal(name){
+        showModal(name) {
             this.setProposal(this.proposal)
             this.setProposalRequest(this.proposal.proposalRequest)
             this.setOpen(name)
@@ -129,20 +115,20 @@ export default {
             if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
             this.showCommentEditorPanel = true;
         },
-        selectVersion(index){
+        selectVersion(index) {
             this.$store.commit('proposalForNonMaryoku/selectVersion', index);
         },
-        saveVersion(version){
+        saveVersion(version) {
             this.$store.dispatch('proposalForNonMaryoku/saveVersion', version);
         },
-        changeVersion(versions){
+        changeVersion(versions) {
             this.$store.commit('proposalForNonMaryoku/setVersions', versions);
         },
-        removeVersion(id){
+        removeVersion(id) {
             this.$store.dispatch('proposalForNonMaryoku/removeVersion', idx);
         }
     },
-    computed:{
+    computed: {
         loggedInUser() {
             return this.$store.state.auth.user;
         },
@@ -152,11 +138,12 @@ export default {
         guestName() {
             return this.$store.state.comment.guestName;
         },
-        vendor(){
+        vendor() {
             return this.proposal.vendor
         },
     }
 }
+
 </script>
 <style lang="scss" scoped>
 .event-details {
@@ -177,6 +164,7 @@ export default {
         }
     }
 }
-
+.proposal-main-container{
+    width:75vw;
+}
 </style>
-

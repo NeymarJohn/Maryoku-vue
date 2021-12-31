@@ -97,7 +97,7 @@
 
           <div class="md-small-hide">
               <h1 class="font-size-30">
-                  Dear {{ nonMaryoku ? proposal.eventData.customer.name : $store.state.auth.user.name }},
+                  Dear {{ nonMaryoku ? (proposal.eventData ? proposal.eventData.customer.name:'') : $store.state.auth.user.name }},
               </h1>
               <p>
                   {{ proposal.personalMessage }}

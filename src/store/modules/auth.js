@@ -22,12 +22,13 @@ export default {
       );
     },
     logout({ commit }) {
-      AuthService.logout().then(() => {
-        commit('logout');
-      })
-        .catch(err => {
+      return new Promise(async (resolve) => {
+          const res = await AuthService.logout()
+          console.log('logout.res', res)
           commit('logout');
-        });
+          resolve()
+      })
+
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
@@ -69,6 +70,7 @@ export default {
       state.user = null;
     },
     logout(state) {
+      console.log('commit.logout')
       state.status.loggedIn = false;
       state.user = null;
     },
