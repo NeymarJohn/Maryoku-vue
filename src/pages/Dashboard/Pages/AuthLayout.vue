@@ -150,10 +150,9 @@ export default {
     window.addEventListener("resize", this.onResponsiveInverted);
   },
   beforeMount() {
-    console.log(this.$store.state.auth.status.loggedIn);
     if (this.$store.state.auth.status.loggedIn) {
       this.$store
-        .dispatch("auth/checkToken")
+        .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
         .then((res) => {})
         .catch((error) => {
           this.$store.dispatch("auth/logout").then((res) => {

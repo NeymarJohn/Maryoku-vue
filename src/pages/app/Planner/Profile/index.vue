@@ -134,7 +134,7 @@ export default {
     console.log("profile", this.$auth.user);
     this.getPageName();
     this.$store
-      .dispatch("auth/checkToken")
+      .dispatch("auth/checkToken", this.$auth.user.access_token)
       .then(() => {
         this.user = this.$auth.user;
       })

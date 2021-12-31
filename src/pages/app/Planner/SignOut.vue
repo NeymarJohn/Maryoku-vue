@@ -11,37 +11,37 @@
 export default {
   components: {},
   methods: {},
-  async created() {
-
-      await this.$store.dispatch("auth/logout")
-
+  created() {
+    const that = this;
+    this.$store.dispatch("auth/logout").then(() => {
       if (this.$route.meta.isVendor) {
-          this.$router.push({ path: "/vendor/signin" });
+        this.$router.push({ path: "/vendor/signin" });
       } else {
-          this.$router.push({ path: "/signin" });
+        this.$router.push({ path: "/signin" });
       }
       if (process.env.NODE_ENV === "production") {
-          try {
-              window.heap.resetIdentity();
-          } catch (e) {
-              console.error(e);
-          }
+        try {
+          window.heap.resetIdentity();
+        } catch (e) {
+          console.error(e);
+        }
 
-          try {
-              this.$Tawk.$endChat();
-          } catch (e) {
-              console.error(e);
-          }
+        try {
+          this.$Tawk.$endChat();
+        } catch (e) {
+          console.error(e);
+        }
 
-          this.$gtm.trackEvent({
-              event: "user_signed_out", // Event type [default = 'interaction'] (Optional)
-              category: "Users",
-              action: "signout",
-              label: "User Signed Out",
-              value: this.$auth.user.emailAddress,
-              noninteraction: false, // Optional
-          });
+        this.$gtm.trackEvent({
+          event: "user_signed_out", // Event type [default = 'interaction'] (Optional)
+          category: "Users",
+          action: "signout",
+          label: "User Signed Out",
+          value: this.$auth.user.emailAddress,
+          noninteraction: false, // Optional
+        });
       }
+    });
   },
   data() {
     return {
