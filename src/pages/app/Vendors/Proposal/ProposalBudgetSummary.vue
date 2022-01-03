@@ -162,13 +162,41 @@
             </ul>
           </div>
         </div>
-        <discount-form
-          :totalPrice="totalPriceBeforeDiscount"
-          :defaultTax="defaultTax"
-          :defaultDiscount="defaultDiscount"
-          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
-          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
-        ></discount-form>
+<!--        <discount-form-->
+<!--          :totalPrice="totalPriceBeforeDiscount"-->
+<!--          :defaultTax="defaultTax"-->
+<!--          :defaultDiscount="defaultDiscount"-->
+<!--          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"-->
+<!--          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"-->
+<!--        ></discount-form>-->
+          <ItemForm
+              :defaultDiscount="defaultDiscount"
+              :defaultNegotiation="negotiationDiscount"
+              :defaultTax="defaultTax"
+              field="discount"
+              :non-maryoku="true"
+              @saveDiscount="saveDiscount('discount', $event)"
+          >
+          </ItemForm>
+          <ItemForm
+              v-if="negotiationDiscount && negotiationDiscount.isApplied"
+              :defaultDiscount="defaultDiscount"
+              :defaultNegotiation="negotiationDiscount"
+              :defaultTax="defaultTax"
+              field="negotiation"
+              :non-maryoku="true"
+              @saveDiscount="saveDiscount('negotiation', $event)"
+          >
+          </ItemForm>
+
+          <ItemForm
+              :defaultDiscount="defaultDiscount"
+              :defaultNegotiation="negotiationDiscount"
+              :defaultTax="defaultTax"
+              field="tax"
+              :non-maryoku="true"
+              @saveDiscount="saveDiscount('tax', $event)"
+          ></ItemForm>
         <div class="item bundle" v-if="isBundleDiscount">
           <div class="element">
             <label class="">
@@ -252,7 +280,15 @@ import { categoryNameWithIcons } from "@/constants/vendor";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import { Money } from "v-money";
 import { mapGetters } from "vuex";
+import ItemForm from "../components/ItemForm.vue";
 import DiscountForm from "../components/DiscountForm.vue";
+
+// const components = {
+//     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
+//     Money: () => import('v-money'),
+//     DiscountForm: () => import('../components/DiscountForm.vue'),
+//     ItemForm: () => import('../components/ItemForm.vue'),
+// }
 
 export default {
   name: "proposal-budget-summary",
@@ -260,12 +296,9 @@ export default {
     InputProposalSubItem,
     Money,
     DiscountForm,
+    ItemForm,
   },
   props: {
-    // bundleDiscount: Boolean,
-    // additional: Boolean,
-    // warning: Boolean,
-    // isEdit: Boolean,
     step: Number,
     services: Array,
   },
@@ -521,6 +554,9 @@ export default {
     },
     defaultDiscount() {
       return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
+    },
+    negotiationDiscount(){
+      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
     },
   },
   watch: {

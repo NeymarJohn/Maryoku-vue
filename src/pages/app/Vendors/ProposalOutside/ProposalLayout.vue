@@ -421,7 +421,7 @@ export default {
       this.$store.commit('proposalForNonMaryoku/setVersions', versions);
     },
     removeVersion(id){
-      this.$store.dispatch('proposalForNonMaryoku/removeVersion', idx);
+      this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
     }
   },
 

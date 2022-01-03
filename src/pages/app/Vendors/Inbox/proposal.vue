@@ -24,12 +24,12 @@
                     <HeaderActions className="ml-auto" page="proposal" @toggleCommentMode="toggleCommentMode" @export="downProposal"></HeaderActions>
                 </div>
             </div>
-            <ProposalVersionsBar 
-            :versions="proposal.versions" 
-            :selected="proposal.currentVersion" 
-            @select="selectVersion" 
-            @save="saveVersion" 
-            @change="changeVersion" 
+            <ProposalVersionsBar
+            :versions="proposal.versions"
+            :selected="proposal.currentVersion"
+            @select="selectVersion"
+            @save="saveVersion"
+            @change="changeVersion"
             @remove="removeVersion"></ProposalVersionsBar>
             <div class="proposal-container" style="padding: 20px;">
                 <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
@@ -125,7 +125,7 @@ export default {
             this.$store.commit('proposalForNonMaryoku/setVersions', versions);
         },
         removeVersion(id) {
-            this.$store.dispatch('proposalForNonMaryoku/removeVersion', idx);
+            this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
         }
     },
     computed: {

@@ -111,15 +111,6 @@
                         </ul>
                     </div>
                 </div>
-                <!--        <DiscountForm-->
-                <!--          :totalPrice="totalPriceBeforeDiscount"-->
-                <!--          :defaultTax="defaultTax"-->
-                <!--          :defaultDiscount="defaultDiscount"-->
-                <!--          :negotiationDiscount="negotiationDiscount"-->
-                <!--          :nonMaryoku="true"-->
-                <!--          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"-->
-                <!--          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"-->
-                <!--        ></DiscountForm>-->
                 <ItemForm
                     :defaultDiscount="defaultDiscount"
                     :defaultNegotiation="negotiationDiscount"
@@ -442,7 +433,7 @@ export default {
     },
 
     totalPrice() {
-      console.log('totalPrice', this.totalPriceBeforeDiscount, this.defaultDiscount, this.negotiationDiscount, this.defaultTax);
+      console.log('totalPrice1', this.totalPriceBeforeDiscount, this.defaultDiscount, this.negotiationDiscount, this.defaultTax);
       return (
         this.totalPriceBeforeDiscount -
         (this.defaultDiscount ? this.defaultDiscount.price : 0) -
@@ -484,6 +475,7 @@ export default {
       return result;
     },
     defaultTax() {
+      console.log('defaultTax', this.$store.state.proposalForNonMaryoku.taxes["total"])
       return this.$store.state.proposalForNonMaryoku.taxes["total"] || { percentage: 0, price: 0 };
     },
     defaultDiscount() {

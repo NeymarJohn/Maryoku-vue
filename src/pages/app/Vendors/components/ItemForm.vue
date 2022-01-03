@@ -100,14 +100,14 @@ export default {
         console.log('created', this.field, this.defaultTax, this.defaultDiscount);
 
         if ( this.field === 'discount' ) {
-            this.discount = this.defaultDiscount;
-            this.editingDiscount = this.defaultDiscount
+            this.discount = JSON.parse(JSON.stringify(this.defaultDiscount))
+            this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount))
         } else if ( this.field === 'negotiation' ) {
-            this.discount = this.defaultNegotiation
-            this.editingDiscount = this.defaultNegotiation
+            this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation))
+            this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation))
         } else if ( this.field === 'tax' ) {
-            this.discount = this.defaultTax
-            this.editingDiscount = this.defaultTax
+            this.discount = JSON.parse(JSON.stringify(this.defaultTax))
+            this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax))
         }
     },
     methods: {

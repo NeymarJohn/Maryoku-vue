@@ -397,7 +397,7 @@ export default {
         this.$store.commit('vendorProposal/setVersions', versions);
     },
     removeVersion(id){
-        this.$store.dispatch('vendorProposal/removeVersion', idx);
+        this.$store.dispatch('vendorProposal/removeVersion', id);
     }
   },
 

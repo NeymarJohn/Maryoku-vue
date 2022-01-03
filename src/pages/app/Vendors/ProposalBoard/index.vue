@@ -466,9 +466,11 @@ export default {
       }
     },
     async handleNegotiation(status) {
+      this.showRequestNegotiationModal = false;
+
       if ( status === this.negotiationRequestStatus.review ) {
 
-        this.showRequestNegotiationModal = false;
+
         this.showProposalDetail = true;
 
       } else if ( status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline ) {
@@ -495,11 +497,8 @@ export default {
               proposal: this.selectedProposal
           })
 
-          if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-              this.showRequestNegotiationModal = false;
-              const version = await this.saveVersion(this.selectedProposal);
-              this.selectedProposal.versions.push(version);
-          }
+          if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) await this.editVersion()
+
           this.selectedProposal.negotiations[0] = negotiation;
 
           if ( status === this.negotiationRequestStatus.approve && this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME )
@@ -517,12 +516,7 @@ export default {
       } else if( status === this.negotiationRequestStatus.acknowledge || status === this.negotiationRequestStatus.cancel_proposal ||
           status === this.negotiationRequestStatus.update_proposal ) {
           this.loading = true;
-          let version = {};
-          if (status === this.negotiationRequestStatus.update_proposal) {     // get proposal to update event info
-              version = await this.saveVersion(this.selectedProposal);
-              this.selectedProposal.versions.push(version);
-              this.editProposal();
-          }
+
           const negotiation = await this.$store.dispatch('vendorDashboard/saveNegotiation', {
               data: {
                   id: this.selectedProposal.negotiations[0].id,
@@ -544,20 +538,22 @@ export default {
               this.$store.commit("vendorDashboard/setProposals", proposals);
           }
 
-          if (status === this.negotiationRequestStatus.update_proposal ) {
-              let query = {version : version.id};
-              this.editProposal(null, query);
-          }
+          if (status === this.negotiationRequestStatus.update_proposal ) await this.editVersion()
+
           this.loading = false;
-          this.showRequestNegotiationModal = false;
           this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
 
       } else if (status === this.negotiationRequestStatus.done) {
 
-        this.showRequestNegotiationModal = false;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
 
       }
+    },
+    async editVersion() {
+        const version = await this.saveVersion(this.selectedProposal);
+        this.selectedProposal.versions.push(version);
+        const query = {version : version.id};
+        this.editProposal(null, query);
     },
     async saveVersion(proposal){
         let data = {};
