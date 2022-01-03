@@ -2,7 +2,15 @@
     <div class="proposal-main-container" style="">
         <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
         <template v-if="proposal">
-            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white">
+            <comment-editor-panel 
+            v-if="showCommentEditorPanel" 
+            :commentComponents="proposalComments" 
+            @saveComment="saveComment" 
+            @updateComment="updateComment" 
+            @deleteComment="deleteComment" 
+            @updateCommentComponent="updateCommentComponent">
+            </comment-editor-panel>
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-20vh">
                 <div class="md-layout-item md-large-size-50 ">
                     <div class="d-flex align-center">
                         <b class="font-size-25">{{ proposal.vendor.eventCategory.fullTitle }}</b>
@@ -41,7 +49,10 @@
 <script>
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
+import EventCommentComponent from '@/models/EventCommentComponent'
 import { mapActions, mapMutations } from "vuex";
+import {CommentMixins, ShareMixins} from "@/mixins";
+
 const components = {
     EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
     TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
@@ -64,23 +75,15 @@ export default {
             showUpdateSuccessModal: false,
             showCommentEditorPanel: false,
             showGuestSignupModal: false,
+            proposalComments:[]
         }
     },
+    mixins: [CommentMixins, ShareMixins],
     async created() {
         console.log("created")
-        let tenantUser = null;
-        if (this.loggedInUser) {
-            tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
-        }
-        const givenToken = this.$route.query.token;
-
-        const proposalId = this.$route.params.proposalId;
-        await this.$store.dispatch("common/getEventTypes");
-        this.proposal = await Proposal.find(proposalId);
-
-        this.loading = false;
+        this.getProposal(this.$route.params.proposalId);
     },
-    mounted(){
+    mounted() {
         console.log("mounted");
     },
     methods: {
@@ -126,6 +129,31 @@ export default {
         },
         removeVersion(id) {
             this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
+        },
+        async getProposal(proposalId) {
+            this.loading = true;
+            let tenantUser = null;
+            if (this.loggedInUser) {
+                tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
+            }
+            const givenToken = this.$route.query.token;
+
+            await this.$store.dispatch("common/getEventTypes");
+            this.proposal = await Proposal.find(proposalId);
+            this.getComments(this.proposal.id);
+            this.loading = false;
+        },
+        async getComments(proposalId) {
+
+            let query = new EventCommentComponent();
+            let url = `/unregistered/proposals/${proposalId}`
+            const res = await query.params({url}).get();
+
+            if (res.success) {
+                this.proposalComments = res.data;
+            }else {
+
+            }
         }
     },
     computed: {
@@ -140,6 +168,12 @@ export default {
         },
         vendor() {
             return this.proposal.vendor
+        },
+    },
+    watch: {
+        $route: function() {
+            this.proposal = null;
+            this.getProposal(this.$route.params.proposalId);
         },
     }
 }
@@ -164,7 +198,12 @@ export default {
         }
     }
 }
-.proposal-main-container{
-    width:75vw;
+
+.proposal-main-container {
+    margin-left: 25vw;
+}
+
+.h-20vh{
+    height: 20vh;
 }
 </style>

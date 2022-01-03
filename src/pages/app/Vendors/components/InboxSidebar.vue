@@ -1,14 +1,15 @@
 <template>
-    <div class="progress-sidebar">
+    <div class="progress-sidebar inbox-sidebar">
         <div class="summer-party">
-            <div class="title-label text-uppercase">
+            <img class="title-icon" src="/static/icons/inbox-sidebar.svg"" />
+            <div class="title-label title-text text-uppercase">
                 <span class="Comment-Mode">
                     Comment Mode
                 </span>
             </div>
         </div>
         <div class="sidebar__items d-flex flex-column">
-            <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="proposal in proposals" @click="$router.push(`/vendor/inbox/proposal/${proposal.id}`);">
+            <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="proposal in commentsProposals" @click="changeProposal(proposal)" :class="{'active':(activeProposal && activeProposal.id == proposal.id)}">
                 <div class="d-flex sidebar__item__content">
                     <img class="sidebar__item__img" src="/static/icons/Group 21554.png">
                     <div class="sidebar__item__details d-flex flex-column">
@@ -18,20 +19,6 @@
                 </div>
                 <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
                 <button class="md-button md-vendor md-theme-default sidebar__item__btn">Full Discussion</button>
-                <!-- <div class="Path-1224"></div> -->
-            </div>
-            <div class="sidebar__item d-flex align-items-center justify-content-between">
-                <div class="d-flex sidebar__item__content">
-                    <img class="sidebar__item__img" src="/static/icons/Group 21554.png">
-                    <div class="sidebar__item__details d-flex flex-column">
-                        <span class="Product-Launch-Party">
-                            Product Launch Party
-                        </span>
-                        <span>25 / 12 | $9,400</span>
-                    </div>
-                </div>
-                <span class="sidebar__item__badge mx-auto">1</span>
-                <!-- <button class="md-button md-vendor md-theme-default sidebar__item__btn">Full Discussion</button> -->
                 <!-- <div class="Path-1224"></div> -->
             </div>
         </div>
@@ -53,64 +40,68 @@ export default {
     components,
     props: {},
     data: () => ({
-        commnents: [],
+        commentsProposals: [],
         loading: false,
         pagination: PROPOSAL_PAGE_PAGINATION,
         sortFields: { sort: "cost", order: "desc" },
         tab: "all",
+        activeProposal:null
     }),
     computed: {},
 
     created() {},
     mounted() {
-        // this.loadComments();
-        this.getProposal();
+        this.loadCommentsProposals();
     },
     computed: {
         vendor() {
             return this.$store.state.vendor.profile;
         },
-        proposals() {
-            return this.$store.state.vendorDashboard.proposals.filter(p => p.status !== PROPOSAL_STATUS.INACTIVE);
-        },
     },
     watch: {},
     methods: {
-        async getProposal() {
+        async loadCommentsProposals() {
             this.loading = true;
-            const { pagination } = this;
-            const params = { status: this.tab, ...this.sortFields };
-            const data = await this.$store.dispatch("vendorDashboard/getProposals", {
-                vendorId: this.vendor.id,
-                pagination,
-                params,
-            });
-
-            this.pagination.total = data.total;
-            this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
+            let query = new EventCommentComponent();
+            const res = await query.params({vendorId:this.vendor.id}).get();
+            this.commentsProposals = res.data;
+            if (this.commentsProposals.length) {
+              this.changeProposal(this.commentsProposals[0]);
+            }
             this.loading = false;
         },
-        async loadComments() {
-            this.loading = true;
-            this.commnents = await EventCommentComponent.find(this.vendor.id);
-            console.log("response", this.commnents)
-            this.loading = false;
+        changeProposal(proposal){
+          this.activeProposal = proposal;
+          this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
         }
     }
 };
 
 </script>
 <style lang="scss">
+.title-icon {
+  margin-right: 10px;
+}
+
+.title-text span {
+  font-size: 27px !important;
+}
+
+.sidebar__items {
+    height: 100vh;
+    overflow-y: scroll !important;
+}
+
 .sidebar__item {
     align-items: center;
     padding: 5px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
     transition: 0.3s ease-in-out all;
 }
 
-.sidebar__item:hover {
+.sidebar__item:hover,.sidebar__item.active {
     background-color: #f6eef6;
 }
 
@@ -193,4 +184,26 @@ export default {
     top: 133px;
 }
 
+.inbox-sidebar{
+  overflow-y: hidden;
+  left:0;
+  width : 25vw;
+  height: 100%;
+  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+  border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
+}
+
+.summer-party{
+  position: inherit !important;
+  border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
+  box-shadow: none !important;
+  height:20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__items::-webkit-scrollbar-thumb{
+  border-radius:0 !important;
+}
 </style>

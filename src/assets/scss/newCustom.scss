@@ -618,31 +618,28 @@
 
 .progress-sidebar {
     position: fixed;
-    /*left: 80px;*/
+    left: 80px;
     top: 0;
     bottom: 0;
-    width : 25vw;
+    width : 400px;
     background: #fff;
 
     // height: calc(100vh - 80px);
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 10;
-    height: 100%;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     .summer-party {
         width: 400px;
         background: #fff;
         text-align: center;
         // padding : 1.5em 0 0.6em;
-        padding: 35px 0px 35px;
-        //position: absolute;
+        padding: 35px 0px 40px;
+        position: absolute;
         left: 0px;
         right: 0px;
         top: 0;
         z-index: 999999;
-        border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
-        /*box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);*/
+        box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
 
         .title-label {
             font-size: 17px;
