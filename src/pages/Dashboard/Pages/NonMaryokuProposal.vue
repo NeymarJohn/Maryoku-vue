@@ -115,7 +115,7 @@
                         <md-menu-item class="text-center" @click="showModal('CANCEL_BOOKING')">
                         <span class="font-size-16 font-bold-extra text-capitalize pl-20">
                           <img
-                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              :src="`${$iconURL}Contract/group-21003.svg`"
                               class="mr-10"
                               style="width: 20px; height: 28px"
                           />
@@ -125,7 +125,7 @@
                         <md-menu-item class="text-center" @click="showModal('DOWNLOAD_INVOICE')">
                         <span class="font-size-16 font-bold-extra text-capitalize pl-20">
                           <img
-                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                              :src="`${$iconURL}Contract/group-8864.svg`"
                               class="mr-10"
                               style="width: 20px; height: 28px"
                           />
@@ -140,15 +140,33 @@
                     <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
                 </template>
                 <template v-else>
-                    Vendor is Booked
+                    <div>
+                        <img src="/static/icons/vendor/proposalBoard/filter-won.svg"
+                             class="mr-10"
+                             style="width: 20px; height: 28px"
+                        >
+                        Vendor is Booked
+                    </div>
                 </template>
 
         </div>
 
-        <div v-if="step > 0 && !contract" class="md-layout mobile-show">
-            <a v-if="step < 3" class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
-            <a v-else class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="declineProposal">Decline</a>
-            <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
+        <div v-if="step > 0" class="md-layout mobile-show">
+            <template v-if="!contract">
+                <a v-if="step < 3" class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
+                <a v-else class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="declineProposal">Decline</a>
+                <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
+            </template>
+            <template v-else>
+                <a class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
+                <div class="md-layout-item md-size-50 font-size-14 d-flex justify-content-center align-center">
+                    <img src="/static/icons/vendor/proposalBoard/filter-won.svg"
+                         class="mr-10"
+                         style="width: 20px; height: 28px"
+                    >
+                    Vendor is Booked
+                </div>
+            </template>
         </div>
 
     </template>

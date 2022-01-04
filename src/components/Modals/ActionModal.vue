@@ -31,16 +31,16 @@
               <p class="font-size-14 text-left" v-if="actions[name].description"> {{actions[name].description}}</p>
 
               <div v-if="name === 'MORE_ACTIONS'" class="md-layout text-left">
-                <template v-for="(action, key) in actions">
-                    <div v-if="key !== 'MORE_ACTIONS'"  class="md-layout-item md-size-100 my-10" @click="selectAction(key)">
-                        <img
-                            :src="`${$iconURL}${action.icon}`"
-                            class="mr-10"
-                            style="width: 20px; height: 28px"
-                        />
-                        {{action.title}}
-                    </div>
-                </template>
+
+                <div v-for="(action, key) in validActions"  class="md-layout-item md-size-100 my-10" @click="selectAction(key)">
+                    <img
+                        :src="`${$iconURL}${action.icon}`"
+                        class="mr-10"
+                        style="width: 20px; height: 28px"
+                    />
+                    {{action.title}}
+                </div>
+
               </div>
 
               <div v-if="name === 'NEGOTIATION'" class="text-left">
@@ -170,11 +170,11 @@ export default {
   },
   data(){
     return {
-        actions: ACTION,
         rate: "$",
         loading: false,
         value: null,
         comment: null,
+        actions: ACTION,
 
         selectedDate: "",
         selectedTime: "",
@@ -212,7 +212,7 @@ export default {
         this.proposal.eventData = e;
     },
     selectAction(name){
-      if (name === 'COMMENT' || name === 'LOOK') return
+      if (name === 'COMMENT' || name === 'LOOK' || name === 'CANCEL_BOOKING' || name === 'DOWNLOAD_INVOICE') return
       this.$store.commit('modal/setOpen', name);
     },
     setRole(role) {
@@ -333,6 +333,18 @@ export default {
     }
   },
   computed:{
+     validActions() {
+         let actions = {}
+         Object.keys(this.actions).forEach(key => {
+             if (this.proposal.accepted) {
+                 if (this.actions[key].hasOwnProperty('contract') && this.actions[key].contract) actions[key] = this.actions[key]
+             } else {
+                 if (this.actions[key].hasOwnProperty('contract') && !this.actions[key].contract) actions[key] = this.actions[key]
+             }
+         })
+         console.log('actions', actions)
+         return actions
+     },
      inputStyle(){
          return this.rate === '$' ? 'budget' : 'percent';
      },

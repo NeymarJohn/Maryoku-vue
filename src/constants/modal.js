@@ -37,7 +37,7 @@ export const ACTION = {
     MORE_ACTIONS:{
         title: false,
         description: false,
-        cancel: false,
+        cancel: true,
         action: false,
     },
     NEGOTIATION: {
@@ -46,6 +46,7 @@ export const ACTION = {
         description: 'Submit the hourly or fixed rate below that you’d like to propose to Zenger Group',
         cancel: true,
         action: 'Update Vendor',
+        contract: false,
     },
     REMINDER: {
         title: 'Set a reminder',
@@ -53,6 +54,7 @@ export const ACTION = {
         description: 'Want to come back to this later? We’ll send you a reminder so you never miss a deadline.',
         cancel: true,
         action: 'Done',
+        contract: false,
     },
     EVENT_CHANGE: {
         title: 'Change event details',
@@ -60,24 +62,44 @@ export const ACTION = {
         description: 'You can change or add event details and information.',
         cancel: true,
         action: 'Update Vendor',
+        contract: false,
     },
     COMMENT: {
         title: 'Comment',
         icon: 'responsive/Group 22880.svg',
         description: false,
         cancel: true,
-        action: false
+        action: false,
+        contract: false,
     },
     SHARE: {
         title: 'Share \'Proposal\' With Your Colleague',
+        icon: 'common/share-dark.svg',
         cancel: true,
-        action: 'Done'
+        action: 'Done',
+        contract: false,
     },
     LOOK: {
         title: 'Look for something else',
         icon: 'responsive/Group 22879.svg',
         description: false,
         cancel: true,
-        action: false
+        action: false,
+        contract: false,
+    },
+    CANCEL_BOOKING: {
+        title: 'Cancel booking',
+        icon: 'Contract/group-21003.svg',
+        cancel: false,
+        action: false,
+        contract: true,
+    },
+    DOWNLOAD_INVOICE: {
+        title: 'Download invoices',
+        icon: 'Contract/group-8864.svg',
+        description: false,
+        cancel: false,
+        action: false,
+        contract: true,
     },
 }

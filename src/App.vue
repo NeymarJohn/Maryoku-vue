@@ -53,7 +53,7 @@ export default {
     }
   },
   watch: {
-    name(newVal){console.log('watch.name', newVal, Object.keys(ACTION))}
+    name(newVal){}
   }
 }
 </script>
