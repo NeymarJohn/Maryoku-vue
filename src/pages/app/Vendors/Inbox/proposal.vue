@@ -2,11 +2,19 @@
     <div class="proposal-main-container" style="">
         <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
         <template v-if="proposal">
-            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white">
+            <comment-editor-panel
+            v-if="showCommentEditorPanel"
+            :commentComponents="proposalComments"
+            @saveComment="saveComment"
+            @updateComment="updateComment"
+            @deleteComment="deleteComment"
+            @updateCommentComponent="updateCommentComponent">
+            </comment-editor-panel>
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-18vh">
                 <div class="md-layout-item md-large-size-50 ">
-                    <div class="d-flex align-center">
-                        <b class="font-size-25">{{ proposal.vendor.eventCategory.fullTitle }}</b>
-                        <div class="font-size-25 ml-10">{{ proposal.vendor.companyName }}</div>
+                    <div class="d-flex align-center header-title">
+                        <b class="fullTitle">{{ proposal.vendor.eventCategory.fullTitle }}</b>
+                        <div class="companyName"> | {{ proposal.vendor.companyName }}</div>
                     </div>
                     <ul class="event-details mt-20">
                         <li class="event-details__item">
@@ -31,7 +39,7 @@
             @save="saveVersion"
             @change="changeVersion"
             @remove="removeVersion"></ProposalVersionsBar>
-            <div class="proposal-container" style="padding: 20px;">
+            <div class="proposal-container" style="padding: 39px 92px;">
                 <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
                 </EventProposalDetails>
             </div>
@@ -156,6 +164,7 @@ export default {
     &__item {
         font-size: 14px;
         padding-bottom: 10px;
+        color: #505050;
 
         &:not(:last-child) {
             border-right: 1px solid #818080;
@@ -164,7 +173,37 @@ export default {
         }
     }
 }
-.proposal-main-container{
-    width:75vw;
+
+.proposal-main-container {
+    margin-left: 25vw;
+}
+
+.h-18vh{
+    height: 18vh;
+}
+
+.proposal-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-title{
+    font-size: 30px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #050505;
+}
+
+.fullTitle {
+    font-weight: 800;
+    margin-right:15px;
+}
+
+.event-details__item {
+    font-size: 20px !important;
 }
 </style>
