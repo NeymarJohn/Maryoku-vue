@@ -174,10 +174,6 @@ export default {
     }
 }
 
-.proposal-main-container {
-    margin-left: 25vw;
-}
-
 .h-18vh{
     height: 18vh;
 }

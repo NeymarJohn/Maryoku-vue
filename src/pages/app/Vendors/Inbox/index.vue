@@ -4,7 +4,6 @@
             <InboxSidebar />
         </div>
         <router-view></router-view>
-        hello
     </div>
 </template>
 <script>
