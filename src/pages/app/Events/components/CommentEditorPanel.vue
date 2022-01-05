@@ -210,6 +210,7 @@ export default {
         // this.selectedCommentComponent = null;
       }
       this.isOpenCommentListsPane = isEditing;
+      this.markAsRead(commentComponent);
     },
     clearStatus() {
       if (this.selectedComponentIndex >=0 ) {
@@ -336,6 +337,21 @@ export default {
       const commentIndex = hoveredComponent.comments.findIndex(item=>item.id===comment.id)
       this.commentComponents[this.selectedComponentIndex].comments[commentIndex] = comment
       this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
+    },
+
+    markAsRead(commentComponent){
+      console.log("this.commentComponents",commentComponent)
+      for(let comment of commentComponent.comments){
+        if(!comment.viewed){
+          comment.viewed = true;
+        }
+      } 
+      commentComponent = new EventCommentComponent({
+            id: commentComponent.id,
+            comments:commentComponent.comments
+        });
+      commentComponent.save()
+        // this.$emit('updateCommentComponent', {component: commentComponent})
     },
 
     deleteComment(comment) {

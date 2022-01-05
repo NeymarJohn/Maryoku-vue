@@ -21,7 +21,8 @@
                 </div>
             </div>
             <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
-            <button class="md-button md-vendor md-theme-default sidebar__item__btn">Full Discussion</button>
+            <button class="md-button md-vendor md-theme-default sidebar__item__btn" v-if="!proposal.unread_count">Full Discussion</button>
+            <span class="unread-count" v-if="proposal.unread_count">{{proposal.unread_count}}</span>
             <!-- <div class="Path-1224"></div> -->
         </div>
     </div>
@@ -63,6 +64,16 @@ export default {
             return this.$store.state.vendor.profile;
         },
         commentsProposals() {
+
+            let proposals = []
+
+            for (let proposal of this.proposals){
+              if(proposal.commentComponent.length){
+                proposal.unread_count = this.getViewCount(proposal.commentComponent);
+                proposals.push(proposal);
+              }
+            }
+            return proposals;
             return this.proposals.filter((p) => p.commentComponent.length)
         }
     },
@@ -82,6 +93,18 @@ export default {
         changeProposal(proposal) {
             this.activeProposal = proposal;
             this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
+        },
+        getViewCount(commentComponents = []){
+          let count = 0;
+          for(let commentComponent of commentComponents){
+            for (let comment of (commentComponent.comments || [])){
+              if(!comment.viewed){
+                count ++;
+              }
+            }
+          }
+
+          return count;
         }
     }
 };
@@ -208,7 +231,7 @@ export default {
     position: inherit !important;
     border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
     box-shadow: none !important;
-    height: 18vh;
+    height: 10rem;
     display: flex;
     align-items: center;
     padding-left:25px !important;
@@ -219,4 +242,22 @@ export default {
     border-radius: 0 !important;
 }
 
+.unread-count{
+  width: 28px;
+  height: 28px;
+  margin: 37px 34px 57px 13px;
+  padding: 3px 11px 3px 10px;
+  background-color: #f51355;
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  right: 40px;
+}
 </style>

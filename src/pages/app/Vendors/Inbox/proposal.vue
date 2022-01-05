@@ -10,7 +10,7 @@
             @deleteComment="deleteComment"
             @updateCommentComponent="updateCommentComponent">
             </comment-editor-panel>
-            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-18vh">
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-10rem">
                 <div class="md-layout-item md-large-size-50 ">
                     <div class="d-flex align-center header-title">
                         <b class="fullTitle">{{ proposal.vendor.eventCategory.fullTitle }}</b>
@@ -50,6 +50,9 @@
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import { mapActions, mapMutations } from "vuex";
+import EventCommentComponent from '@/models/EventCommentComponent'
+import {CommentMixins, ShareMixins} from "@/mixins";
+
 const components = {
     EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
     TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
@@ -72,21 +75,22 @@ export default {
             showUpdateSuccessModal: false,
             showCommentEditorPanel: false,
             showGuestSignupModal: false,
+            proposalComments:[]
         }
     },
+    mixins: [CommentMixins, ShareMixins],
     async created() {
         console.log("created")
+        this.loading = true;
         let tenantUser = null;
         if (this.loggedInUser) {
             tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
         }
         const givenToken = this.$route.query.token;
 
-        const proposalId = this.$route.params.proposalId;
         await this.$store.dispatch("common/getEventTypes");
-        this.proposal = await Proposal.find(proposalId);
-
         this.loading = false;
+        this.getProposal(this.$route.params.proposalId);
     },
     mounted(){
         console.log("mounted");
@@ -134,6 +138,24 @@ export default {
         },
         removeVersion(id) {
             this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
+        },
+        async getProposal(proposalId) {
+            this.loading = true;
+            this.proposal = await Proposal.find(proposalId);
+            this.getComments(this.proposal.id);
+            this.loading = false;
+        },
+        async getComments(proposalId) {
+
+            let query = new EventCommentComponent();
+            let url = `/unregistered/proposals/${proposalId}`
+            const res = await query.params({url}).get();
+
+            if (res.success) {
+                this.proposalComments = res.data;
+            }else {
+
+            }
         }
     },
     computed: {
@@ -148,6 +170,12 @@ export default {
         },
         vendor() {
             return this.proposal.vendor
+        },
+    },
+    watch: {
+        $route: function() {
+            this.proposal = null;
+            this.getProposal(this.$route.params.proposalId);
         },
     }
 }
@@ -174,8 +202,8 @@ export default {
     }
 }
 
-.h-18vh{
-    height: 18vh;
+.h-10rem{
+    height: 10rem;
 }
 
 .proposal-header{
