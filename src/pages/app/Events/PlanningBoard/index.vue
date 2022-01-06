@@ -163,7 +163,7 @@ export default {
 
       this.isLoadingStoredData = false;
     }
-    console.log('planningBoardLayout.created', this.serviceCards);
+
   },
   computed: {
     requirements(){
@@ -239,17 +239,18 @@ export default {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
+
       this.selectedCategory = this.$store.state.common.serviceCategories.find(
         (item) => item.key === category.serviceCategory,
       );
       this.isOpenedAdditionalModal = true;
-      console.log(category.serviceCategory, this.allRequirements);
+
       let requirements = this.allRequirements[category.serviceCategory].requirements;
       const storedRequirements = this.requirements[category.serviceCategory].mainRequirements;
-      console.log(requirements, storedRequirements);
+
       requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
-      console.log(requirements);
+
       for (let subCategory of Object.keys(requirements)) {
         requirements[subCategory].forEach((item) => {
           try {
@@ -282,11 +283,16 @@ export default {
     async saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
 
+
+
+
       const expiredTime = moment(new Date()).add(3, "days").valueOf();
       this.$set(requirements, 'expiredBusinessTime', expiredTime)
 
       await this.saveMainRequirements({ category, event: this.event, requirements });
-      await this.setOpen('REQUIREMENT');
+
+      // popup notification if requirement is issued
+      if (this.getRequirements(category).isIssued) this.setOpen('REQUIREMENT')
     },
 
     async addNewCategory(category) {
@@ -300,7 +306,7 @@ export default {
       // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     getRequirements(category) {
-      if (!this.$store.state.planningBoard.requirements[category]) return {};
+      if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },
     openCart() {

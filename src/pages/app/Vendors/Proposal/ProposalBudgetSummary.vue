@@ -556,7 +556,7 @@ export default {
       return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
     negotiationDiscount(){
-      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
+      return this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
     },
   },
   watch: {
