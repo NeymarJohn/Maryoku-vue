@@ -475,7 +475,7 @@ export default {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  z-index: 9999;
+  z-index: 4999;
 }
 .comments-list {
   position: absolute;
