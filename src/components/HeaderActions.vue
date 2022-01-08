@@ -7,7 +7,6 @@
                 >
                     <md-button
                         class="md-simple md-just-icon"
-                        :class="{active: action.key === 'comment' && isCommentMode}"
                         @click="click(action.key)">
                         <img :src="`${$iconURL}${action.icon}`" />
                     </md-button>

@@ -4,17 +4,18 @@
         <template v-if="proposal">
             <comment-editor-panel
             v-if="showCommentEditorPanel"
-            :commentComponents="proposalComments"
+            :commentComponents="proposal.commentComponent"
+            :proposal="proposal"
             @saveComment="saveComment"
             @updateComment="updateComment"
             @deleteComment="deleteComment"
             @updateCommentComponent="updateCommentComponent">
             </comment-editor-panel>
-            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-18vh">
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-10rem">
                 <div class="md-layout-item md-large-size-50 ">
                     <div class="d-flex align-center header-title">
-                        <b class="fullTitle">{{ proposal.vendor.eventCategory.fullTitle }}</b>
-                        <div class="companyName"> | {{ proposal.vendor.companyName }}</div>
+                        <b class="fullTitle">{{ proposal.vendor ? proposal.vendor.eventCategory.fullTitle : '' }}</b>
+                        <div class="companyName"> | {{ proposal.vendor? proposal.vendor.companyName : '' }}</div>
                     </div>
                     <ul class="event-details mt-20">
                         <li class="event-details__item">
@@ -50,6 +51,9 @@
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import { mapActions, mapMutations } from "vuex";
+import EventCommentComponent from '@/models/EventCommentComponent'
+import {CommentMixins, ShareMixins} from "@/mixins";
+
 const components = {
     EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
     TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
@@ -66,7 +70,6 @@ export default {
     data() {
         return {
             loading: true,
-            proposal: null,
             step: 0,
             showDetailModal: false,
             showUpdateSuccessModal: false,
@@ -74,25 +77,25 @@ export default {
             showGuestSignupModal: false,
         }
     },
+    mixins: [CommentMixins, ShareMixins],
     async created() {
         console.log("created")
+        this.loading = true;
         let tenantUser = null;
         if (this.loggedInUser) {
             tenantUser = await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
         }
         const givenToken = this.$route.query.token;
 
-        const proposalId = this.$route.params.proposalId;
         await this.$store.dispatch("common/getEventTypes");
-        this.proposal = await Proposal.find(proposalId);
-
         this.loading = false;
     },
     mounted(){
         console.log("mounted");
+        this.selectProposal();
     },
     methods: {
-        ...mapMutations("comment", ["setGuestName"]),
+        ...mapMutations("comment", ["setGuestName","setSelectedProposal"]),
         ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
         handleStep(step) {
             this.step = step
@@ -134,6 +137,21 @@ export default {
         },
         removeVersion(id) {
             this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
+        },
+        async getProposal(proposalId) {
+            this.loading = true;
+            this.getComments(this.proposal.id);
+            this.loading = false;
+        },
+        async getComments(proposalId) {
+
+            let url = `/unregistered/proposals/${proposalId}`
+            // this.proposalComments = await this.getCommentComponents(url);
+        },
+        selectProposal(){
+            console.log("selectProposal")
+            let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
+            this.setSelectedProposal(proposal);
         }
     },
     computed: {
@@ -149,6 +167,23 @@ export default {
         vendor() {
             return this.proposal.vendor
         },
+        proposal(){
+            return this.$store.state.comment.selectedProposal;
+        },
+        proposals(){
+            return this.$store.state.comment.commentsProposals;
+        }
+    },
+    watch: {
+        $route: function() {
+            console.log("route")
+            this.selectProposal();
+            // this.getProposal(this.$route.params.proposalId);
+        },
+        proposals(){
+            console.log("proposals")
+            this.selectProposal();
+        }
     }
 }
 
@@ -174,8 +209,8 @@ export default {
     }
 }
 
-.h-18vh{
-    height: 18vh;
+.h-10rem{
+    height: 10rem;
 }
 
 .proposal-header{
@@ -201,5 +236,10 @@ export default {
 
 .event-details__item {
     font-size: 20px !important;
+}
+
+.proposal-main-container{
+    left: 400px;
+    width: calc(100% - 400px);
 }
 </style>

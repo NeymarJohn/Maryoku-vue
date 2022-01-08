@@ -16,7 +16,8 @@ export default {
             "getCommentsAction",
             "updateCommentAction",
             "addComment",
-            "deleteCommentAction"
+            "deleteCommentAction",
+            "getCommentsProposalsByVendor"
         ]),
         async saveComment({component, comment, index}) {
             console.log('saveComment', comment);
