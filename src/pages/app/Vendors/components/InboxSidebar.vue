@@ -1,15 +1,35 @@
 <template>
     <div class="progress-sidebar">
-        <div class="summer-party">
-            <img class="title-icon" src="/static/icons/inbox-sidebar.svg"" />
+        <div class="summer-party flex-column">
+            <div class="title">
+                <img class="title-icon" src="/static/icons/inbox-sidebar.svg"" />
             <div class=" title-label title-text text-uppercase">
-            <span class="Comment-Mode">
-                Comment Mode
-            </span>
+                <span class="Comment-Mode">
+                    Comment Mode
+                </span>
+            </div>
+        </div>
+        <div class="dropdown d-flex">
+            <md-menu md-size="medium" class="action-menu mr-1" :md-offset-x="-300" :md-offset-y="-36">
+                <md-button md-menu-trigger class="edit-btn md-simple">
+                    Sort &nbsp;&nbsp;
+                    <i class="fas fa-chevron-up" v-if="sortType == 'asc'" @click.stop="changeSortType"></i>
+                    <i class="fas fa-chevron-down" @click.stop="changeSortType" v-else></i>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item @click="sortBy='name'" class="md-purple"><span>Name</span></md-menu-item>
+                    <md-menu-item @click="sortBy='date'" class="md-purple"><span>Date</span></md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-button md-menu-trigger class="edit-btn md-simple" @click="changeStatusSortType">
+                Status &nbsp;&nbsp;
+                <i class="fas fa-chevron-up" v-if="statusSortType == 'asc'"></i>
+                <i class="fas fa-chevron-down" v-else></i>
+            </md-button>
         </div>
     </div>
     <div class="sidebar__items d-flex flex-column">
-        <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="proposal in commentsProposals" @click="changeProposal(proposal)" :class="{'active':(activeProposal && activeProposal.id == proposal.id)}">
+        <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="proposal in commentsProposals" @click="changeProposal(proposal)" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}">
             <div class="d-flex sidebar__item__content">
                 <!-- <img v-if="proposal.nonMaryoku" :src="'https://ui-avatars.com/api/?background=0D8ABC&color=fff&rounded&name='+proposal.eventData.customer.companyName"> -->
                 <Avartar :name="proposal.eventData.customer.companyName"></Avartar>
@@ -21,7 +41,8 @@
                 </div>
             </div>
             <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
-            <button class="md-button md-vendor md-theme-default sidebar__item__btn">Full Discussion</button>
+            <button class="md-button md-vendor md-theme-default sidebar__item__btn" v-if="!proposal.unread_count">Full Discussion</button>
+            <span class="unread-count" v-if="proposal.unread_count">{{proposal.unread_count}}</span>
             <!-- <div class="Path-1224"></div> -->
         </div>
     </div>
@@ -44,44 +65,110 @@ export default {
     components,
     props: {},
     data: () => ({
-        proposals: [],
         loading: false,
         pagination: PROPOSAL_PAGE_PAGINATION,
         sortFields: { sort: "cost", order: "desc" },
         tab: "all",
-        activeProposal: null
+        activeProposal: null,
+        sortBy: '',
+        sortType: 'asc',
+        statusSortType: 'asc'
     }),
     computed: {},
 
     created() {},
     mounted() {
-        // this.loadComments();
-        this.getProposal();
+
     },
     computed: {
         vendor() {
             return this.$store.state.vendor.profile;
         },
         commentsProposals() {
-            return this.proposals.filter((p) => p.commentComponent.length)
-        }
-    },
-    watch: {},
-    methods: {
-        async getProposal() {
-            this.loading = true;
 
-            let query = new EventCommentComponent();
-            const res = await query.params({ vendorId: this.vendor.id }).get();
-            this.proposals = res.data;
-            if (this.commentsProposals.length) {
-                this.changeProposal(this.commentsProposals[0]);
+            let proposals = []
+
+            for (let proposal of this.proposals) {
+                if (proposal.commentComponent.length) {
+                    proposal.unread_count = this.getViewCount(proposal.commentComponent);
+                    proposals.push(proposal);
+                }
             }
-            this.loading = false;
+
+            if (this.sortBy == 'status') {
+                proposals.sort((a, b) => {
+                    if(this.statusSortType == 'asc'){
+                    return b.unread_count - a.unread_count;
+                    }
+
+                    return a.unread_count - b.unread_count;
+                });
+            }
+
+            if (this.sortBy == 'date') {
+                proposals.sort((a, b) => {
+                    if(this.sortType == 'asc'){
+                      return a.dateCreated - b.dateCreated;
+                    }
+
+                    return b.dateCreated - a.dateCreated;
+                });
+            }
+
+            if (this.sortBy == 'name') {
+                proposals.sort((a, b) => {
+                    if(this.sortType == 'asc'){
+                      return a.eventData.customer.name > b.eventData.customer.name ? 1 : -1;
+                    }
+
+                    return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
+                });
+            }
+
+            return proposals;
         },
+        proposals() {
+            return this.$store.state.comment.commentsProposals;
+        },
+        selectedProposal() {
+            return this.$store.state.comment.selectedProposal;
+        },
+    },
+    watch: {
+      proposals(){
+        console.log("this.commentsProposals",this.commentsProposals.length)
+        if (this.commentsProposals.length && this.selectedProposal == null) {
+            this.changeProposal(this.commentsProposals[0]);
+        }
+      }
+    },
+    methods: {
+        ...mapMutations("comment", ["setSelectedProposal"]),
         changeProposal(proposal) {
             this.activeProposal = proposal;
             this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
+        },
+        getViewCount(commentComponents = []) {
+            let count = 0;
+            for (let commentComponent of commentComponents) {
+                for (let comment of (commentComponent.comments || [])) {
+                    if (!comment.viewed) {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        },
+        changeStatusSortType() {
+          this.statusSortType = this.statusSortType == 'asc' ? 'desc' : 'asc'
+          this.sortBy = 'status';
+        },
+        changeSortType(){
+          this.sortType = this.sortType == 'asc' ? 'desc' : 'asc'
+          if(this.sortBy == ''){
+            this.sortBy = 'date';
+          }
         }
     }
 };
@@ -97,8 +184,8 @@ export default {
 }
 
 .sidebar__items {
-    height: 100vh;
-    overflow-y: scroll !important;
+    height: calc(100% - 10rem);
+    overflow-y: scroll !important
 }
 
 .sidebar__item {
@@ -107,6 +194,7 @@ export default {
     border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
     transition: 0.3s ease-in-out all;
     height: 100px;
+    position:relative;
 }
 
 .sidebar__item:hover,
@@ -151,9 +239,9 @@ export default {
 }
 
 .sidebar__item__img {
-  width: 57px;
-  height: 57px !important;
-  margin-right: 25px;
+    width: 57px;
+    height: 57px !important;
+    margin-right: 25px;
 }
 
 .Comment-Mode {
@@ -208,15 +296,76 @@ export default {
     position: inherit !important;
     border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
     box-shadow: none !important;
-    height: 18vh;
+    height: 10rem;
     display: flex;
     align-items: center;
-    padding-left:25px !important;
+    padding-left: 25px !important;
     width: 100% !important;
+}
+
+.summer-party .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.summer-party .dropdown {
+    position: absolute;
+    bottom: 1rem;
+}
+
+.summer-party .dropdown select {
+    padding: 0 !important;
+    border: none !important;
+    margin-right: 10px;
 }
 
 .sidebar__items::-webkit-scrollbar-thumb {
     border-radius: 0 !important;
 }
 
+.unread-count {
+    width: 28px;
+    height: 28px;
+    margin: 37px 34px 57px 13px;
+    padding: 3px 11px 3px 10px;
+    background-color: #f51355;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    right: 40px;
+}
+
+.event-plan .progress-sidebar {
+    left: 0 !important;
+}
+
+.sort-bar {
+    height: 50px;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
+
+    .sort-item {
+        cursor: pointer;
+        color: #707070;
+        font-size: 14px;
+
+        &.selected {
+            color: #050505;
+            font-weight: bold;
+        }
+    }
+}
+
+.mr-1{
+  margin-right: 1rem;
+}
 </style>

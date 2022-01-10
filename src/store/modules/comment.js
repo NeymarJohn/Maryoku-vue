@@ -4,6 +4,8 @@ import EventCommentComponent from '@/models/EventCommentComponent'
 import { reject } from 'promise-polyfill'
 const state = {
   commentComponents: [],
+  commentsProposals: [],
+  selectedProposal: null,
   guestName: null,
   customer: null,
   error: null
@@ -27,6 +29,13 @@ const mutations = {
   },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
+  },
+  setCommentsProposals(state, commentsProposals) {
+    console.log("setCommentsProposals",commentsProposals)
+    state.commentsProposals = commentsProposals
+  },
+  setSelectedProposal(state, commentsProposal) {
+    state.selectedProposal = commentsProposal
   },
   addCommentComponent(state, commentComponent) {
     state.commentComponents.push(commentComponent);
@@ -91,6 +100,22 @@ const actions = {
           commit('setCommentComponents', res.data)
           // save customer when user comment as guest
           if(res.customer) commit('setCustomer', res.customer);
+          resolve(res.data)
+      }else {
+          commit('setError', res.message);
+          resolve([]);
+      }
+    });
+  },
+
+  getCommentsProposalsByVendor({ commit, state }, vendor_id) {
+
+    return new Promise( async (resolve, reject) => {
+      let query = new EventCommentComponent();
+      const res = await query.params({ vendorId:vendor_id }).get();
+      if (res.success) {
+          commit('setCommentsProposals', res.data)
+          // save customer when user comment as guest
           resolve(res.data)
       }else {
           commit('setError', res.message);
@@ -196,8 +221,23 @@ const actions = {
             commit('setError', res.data.message);
         }
     })
-  }
+  },
 
+  markAsRead({commit, state}, {proposal,commentComponent}){
+
+      console.log("this.commentComponents",commentComponent)
+      for(let comment of commentComponent.comments){
+          if(!comment.viewed){
+            comment.viewed = true;
+          }
+      }
+
+      commentComponent = new EventCommentComponent({
+        id: commentComponent.id,
+        comments:commentComponent.comments
+      });
+      commentComponent.save()
+  },
 }
 
 
