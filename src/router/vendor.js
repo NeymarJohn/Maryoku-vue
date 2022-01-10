@@ -205,12 +205,6 @@ export default [
                     path: "proposal/:proposalId",
                     name: "VendorInboxProposal",
                     component: VendorInboxProposal,
-                    meta: {
-                        requiresAuth: true,
-                        title: "Vendor Proposal",
-                        gtm: "Vendor Proposal",
-                        isVendor: true
-                    },
                 }],
                 meta: {
                     requiresAuth: true,

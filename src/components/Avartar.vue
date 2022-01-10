@@ -18,6 +18,7 @@ export default {
   computed: {
     symbol() {
       const phrases = this.name.split(" ");
+      console.log(phrases);
       if (phrases.length >= 2) {
         return `${phrases[0].substr(0, 1)}${phrases[1].substr(0, 1)}`.toUpperCase();
       }

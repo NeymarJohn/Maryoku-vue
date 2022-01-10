@@ -1,64 +1,29 @@
 <template>
     <div class="event-plan d-flex">
-        <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
-        <div class="inboxSidebar" style="position: fixed;">
+        <div class="" style="width: 25vw;">
             <InboxSidebar />
         </div>
         <router-view></router-view>
-        <section class="footer-wrapper" v-if="selectedProposal">
-            <div>
-                <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-                    <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button>
-                <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-                    <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
-                </md-button>
-            </div>
-            <div class="next-cont">
-                <a class="save" @click="">
-                    <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
-                </a>
-            </div>
-        </section>
     </div>
 </template>
 <script>
 const components = {
     InboxSidebar: () => import('../components/InboxSidebar.vue'),
-    Loader: () => import("@/components/loader/Loader.vue"),
 }
-import { CommentMixins } from "@/mixins";
 export default {
     components,
-    data() {
-        return {
-            loading: false,
-            proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-        }
+    data(){
+        return{}
     },
-    mixins: [CommentMixins],
-    async created() {
-        this.loading = true;
-        await this.$store.dispatch('vendorDashboard/getComments', { vendorId: this.vendorData.id });
-        await this.getCommentsProposalsByVendor(this.vendorData.id);
-        this.loading = false;
+    async created(){
+        await this.$store.dispatch('vendorDashboard/getComments', {vendorId: this.vendorData.id});
     },
-    computed: {
+    computed:{
         vendorData() {
             return this.$store.state.vendor.profile;
         },
-        selectedProposal() {
-            return this.$store.state.comment.selectedProposal;
-        },
-    },
-    methods: {
-        scrollToTop() {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-            }, 100);
-        },
     }
 }
-
 </script>
 <style lang="scss" scoped>
 section.footer-wrapper {
@@ -155,10 +120,7 @@ section.footer-wrapper {
     z-index: 10;
 }
 
-.event-plan {}
+.event-plan{
 
-.inboxSidebar {
-    z-index: 10;
 }
-
 </style>

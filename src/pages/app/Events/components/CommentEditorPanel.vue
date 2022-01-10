@@ -107,10 +107,6 @@ export default {
         type: Array,
         required: true,
       },
-      proposal:{
-        type: Object,
-        required: false,
-      }
   },
   data() {
     return {
@@ -167,8 +163,7 @@ export default {
       "getCommentsAction",
       "updateCommentAction",
       "addComment",
-      "deleteCommentAction",
-      "markAsRead"
+      "deleteCommentAction"
     ]),
     selectItem(event, item) {
       item.isEditing = !item.isEditing;
@@ -215,7 +210,6 @@ export default {
         // this.selectedCommentComponent = null;
       }
       this.isOpenCommentListsPane = isEditing;
-      this.markAsRead({proposal:this.proposal,commentComponent});
     },
     clearStatus() {
       if (this.selectedComponentIndex >=0 ) {
@@ -343,21 +337,6 @@ export default {
       this.commentComponents[this.selectedComponentIndex].comments[commentIndex] = comment
       this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
     },
-
-    /*markAsRead(commentComponent){
-      console.log("this.commentComponents",commentComponent)
-      for(let comment of commentComponent.comments){
-        if(!comment.viewed){
-          comment.viewed = true;
-        }
-      } 
-      commentComponent = new EventCommentComponent({
-            id: commentComponent.id,
-            comments:commentComponent.comments
-        });
-      commentComponent.save()
-        // this.$emit('updateCommentComponent', {component: commentComponent})
-    },*/
 
     deleteComment(comment) {
       this.$emit('deleteComment', {comment, index:this.selectedComponentIndex} )
@@ -496,7 +475,7 @@ export default {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  z-index: 9999;
+  z-index: 4999;
 }
 .comments-list {
   position: absolute;
