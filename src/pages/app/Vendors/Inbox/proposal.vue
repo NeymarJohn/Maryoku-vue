@@ -4,7 +4,7 @@
         <template v-if="proposal">
             <comment-editor-panel
             v-if="showCommentEditorPanel"
-            :commentComponents="proposal.commentComponent"
+            :commentComponents="commentComponents"
             :proposal="proposal"
             @saveComment="saveComment"
             @updateComment="updateComment"
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <ProposalVersionsBar
-            :versions="proposal.versions"
+            :versions="proposal.versions || []"
             :selected="proposal.currentVersion"
             @select="selectVersion"
             @save="saveVersion"
@@ -151,7 +151,11 @@ export default {
         selectProposal(){
             console.log("selectProposal")
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
-            this.setSelectedProposal(proposal);
+            if(proposal){
+                this.commentComponents = proposal.commentComponent;
+                this.setSelectedProposal(proposal);
+                this.$store.dispatch("vendorProposal/setProposal",proposal);
+            }
         }
     },
     computed: {
@@ -179,6 +183,12 @@ export default {
             console.log("route")
             this.selectProposal();
             // this.getProposal(this.$route.params.proposalId);
+            if(this.showCommentEditorPanel){
+                this.showCommentEditorPanel = false;
+                setTimeout(() => {
+                    this.showCommentEditorPanel = true;
+                },100);
+            }
         },
         proposals(){
             console.log("proposals")
