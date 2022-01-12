@@ -137,13 +137,12 @@ import EventComponent from "@/models/EventComponent";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
-import { MaryokuInput } from "@/components";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
     InputMask: () => import("vue-input-mask"),
-    // MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
+    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
     ServicesCart: () => import("./ServicesCart.vue"),
     ProposalsBar: () => import("./ProposalsBar.vue"),
     ProposalCard: () => import("../components/ProposalCard"),
@@ -158,7 +157,7 @@ const components = {
 
 export default {
   name: "event-booking",
-  components: {...components, MaryokuInput},
+  components,
   props: {},
   data: () => ({
     // auth: auth,

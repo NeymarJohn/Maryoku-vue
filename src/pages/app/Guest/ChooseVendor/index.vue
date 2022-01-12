@@ -35,6 +35,17 @@
           </div>
           <div class="d-flex justify-content-between">
             <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
+<!--            <div class="header-actions">-->
+<!--              <md-button class="md-simple normal-btn md-red" @click="compareProposal">-->
+<!--                <md-icon>bar_chart</md-icon>-->
+<!--                Compare Proposals-->
+<!--              </md-button>-->
+<!--              <span class="seperator"></span>-->
+<!--              <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">-->
+<!--                <md-icon>edit</md-icon>-->
+<!--                I Want Something Different-->
+<!--              </md-button>-->
+<!--            </div>-->
           </div>
           <div>
             <!-- Event Booking Items -->
@@ -66,7 +77,7 @@
             </template>
           </div>
         </template>
-        <pending-for-vendors v-else :expiredTime="currentRequirement.expiredBusinessTime"></pending-for-vendors>
+        <pending-for-vendors v-else :expiredTime="expiredTime"></pending-for-vendors>
       </div>
     </div>
     <div class="proposals-footer white-card">
@@ -178,7 +189,7 @@ export default {
     selectedBlock: null,
     // proposals: [],
     blockId: "",
-    currentRequirement: {},
+    currentRequirement: null,
     proposalsByCategory: {},
 
     isOpenedAdditionalModal: false,
@@ -213,7 +224,6 @@ export default {
       }
     },
     getServiceCategoryByKey(key){
-        console.log('service.category', key);
         if(!key) return null
         let category = this.serviceCategories.find(cat => cat.key === key);
         return category ? category : null;
@@ -419,6 +429,7 @@ export default {
       }
     },
     proposals(newVal){},
+    expiredTime(){},
     eventRequirements(newVal){},
     $route: "fetchData",
   },
@@ -449,9 +460,18 @@ export default {
     categoryList() {
       return this.$store.state.EventGuestVuex.eventData.components;
     },
+    expiredTime() {
+      console.log('expiredTime', this.currentRequirement);
+      if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
+      return 0;
+    },
     tabs(){
       if(!this.eventRequirements || !Object.keys(this.eventRequirements).length) return []
-        return Object.keys(this.eventRequirements)
+      return Object.keys(this.eventRequirements).sort((a, b) => {
+          let a_service = this.serviceCategories.find(s => s.key === a);
+          let b_service = this.serviceCategories.find(s => s.key === b);
+          return a_service.order - b_service.order;
+      })
     },
     event() {
         return this.$store.state.EventGuestVuex.eventData;

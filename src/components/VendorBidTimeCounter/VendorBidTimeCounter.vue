@@ -48,28 +48,20 @@ export default {
       this.m = Math.floor((totalTime % (1000 * 60 * 60)) / (1000 * 60));
       this.s = Math.floor((totalTime % (1000 * 60)) / 1000);
     },
-    init(){
-        this.totalTime =
-            this.days * 24 * 60 * 60 * 1000 + this.hours * 60 * 60 * 1000 + this.minutes * 60 * 1000 + this.seconds * 1000;
-        if (this.totalTime != 0) {
-            this.timerCount();
-            this.interval = setInterval(() => {
-                this.timerCount();
-            }, 1000);
-        }
-    }
   },
   created() {},
   mounted() {
-    this.init();
+    this.totalTime =
+      this.days * 24 * 60 * 60 * 1000 + this.hours * 60 * 60 * 1000 + this.minutes * 60 * 1000 + this.seconds * 1000;
+    if (this.totalTime != 0) {
+      this.timerCount();
+      this.interval = setInterval(() => {
+        this.timerCount();
+      }, 1000);
+    }
   },
   computed: {},
-  watch: {
-    days(newVal){this.init()},
-    hours(newVal){this.init()},
-    minutes(newVal){this.init()},
-    seconds(newVal){this.init()},
-  },
+  watch: {},
   filters: {
     attachZero(number) {
       return number > 9 ? number : "0" + number.toString();

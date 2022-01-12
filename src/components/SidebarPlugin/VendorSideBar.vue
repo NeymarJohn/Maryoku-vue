@@ -67,12 +67,13 @@
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
+          :disabled="true"
           :link="{
-            name: 'inbox',
+            name: 'Event Budget',
             iconUrl: '/static/icons/vendor/message.svg',
             iconActiveUrl: '/static/icons/vendor/message-active.svg',
-            path: `/vendor/inbox`,
-            startLink: `/vendor/inbox`,
+            path: `/vendor/dashboard`,
+            startLink: `/vendor/dashboard`,
           }"
         ></sidebar-item>
           <sidebar-item
@@ -242,7 +243,8 @@ export default {
   font-weight: 200;
   z-index: 9999;
   width: 80px;
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.13);
+  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2);
   background-size: cover;
   background-position: 50%;
   background: #fff;

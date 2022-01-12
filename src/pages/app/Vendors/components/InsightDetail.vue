@@ -76,7 +76,6 @@
                           fill: true,
                           borderColor: '#2cde6b',
                           backgroundColor: '#2cde6b',
-                          gradient: true,
                           // tension: 0.4,
                       },
                       {
@@ -85,7 +84,6 @@
                           fill: true,
                           borderColor: '#641856',
                           backgroundColor: '#641856',
-                          gradient: true,
                           // tension: 0.4,
                       },
                   ]

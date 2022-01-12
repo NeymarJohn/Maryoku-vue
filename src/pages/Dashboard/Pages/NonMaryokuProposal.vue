@@ -3,20 +3,14 @@
     <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
     <template v-if="proposal">
         <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
-            <img v-if="step === 0" :src="headerBackgroundImage" class="position-absolute mobile-show header-bg"/>
-            <div class="md-layout-item md-large-size-80 md-small-size-80 d-flex align-center" :class="isMobile ?'justify-content-center':''">
-                <div v-if="vendor.vendorLogoImage">
-                    <img :src="`${vendor.vendorLogoImage}`" style="max-height: 40px">
-                </div>
-
-                <img class="md-small-hide ml-10" :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" width="30px"/>
-                <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
-
-                <div :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">{{ proposal.vendor.companyName }}</div>
-                <div v-if="contract" class="text-uppercase" :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">contract</div>
+            <img v-if="isMobile && !showOffer" :src="headerBackgroundImage" class="position-absolute" style="left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 200px"/>
+            <div class="md-layout-item md-large-size-50 md-small-hide font-size-30">
+                <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
+                <b>{{ proposal.vendor.eventCategory.fullTitle }}</b>
+                {{ proposal.vendor.companyName }}
             </div>
 
-            <div class="md-layout-item md-large-size-20 md-small-size-20 d-flex">
+            <div class="md-layout-item md-large-size-50 md-small-size-100 d-flex">
                 <HeaderActions
                     className="ml-auto"
                     page="proposal"
@@ -26,17 +20,11 @@
                 ></HeaderActions>
             </div>
 
-            <div class="md-layout-item md-small-size-100 mobile-show">
-                <md-card v-if="step === 0" class="d-flex flex-column text-center border-radius-none py-20 my-10">
-                    <div v-if="vendor.vendorLogoImage">
-                        <img :src="`${vendor.vendorLogoImage}`" style="max-height: 30px;width: auto">
-                    </div>
-                    <h2 v-if="vendor.companyName" class="font-size-24 font-bold-extra text-uppercase my-10">{{
-                            `${vendor.companyName} proposal`
-                        }}</h2>
-                    <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the</p>
-                    <span class="text-center font-bold-extra m-0 px-10">
-                        <b class="font-size-16 font-bold-extra text-capitalize">{{` ${proposal.eventData.customer.companyName}` }}</b> event. Let's start..</span>
+            <div v-if="isMobile && !showOffer" class="md-layout-item md-small-size-100">
+                <md-card class="d-flex flex-column text-center border-radius-none py-20 my-10">
+                    <div><img :src="`${$iconURL}responsive/Group 22041.svg`"></div>
+                    <h2 class="font-size-24 font-bold-extra text-uppercase my-10">catering proposal</h2>
+                    <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the 'March Madness' event. Let's start..</p>
                 </md-card>
             </div>
         </div>
@@ -45,16 +33,15 @@
                 :proposal="proposal"
                 :landingPage="true"
                 :nonMaryoku="true"
-                :step="step"
+                :showOffer="showOffer"
                 v-if="proposal"
-                @change="handleStep"
                 @updateProposal="handleUpdate"
                 @ask="handleAsk"
                 @favorite="handleFavorite"
             >
                 <template slot="timer">
                     <TimerPanel
-                        v-if="!isMobile || isMobile && step === 0"
+                        v-if="!isMobile || isMobile && !showOffer"
                         :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
                         :target="targetTime"
                         :pending="negotiationPending"
@@ -67,106 +54,53 @@
             </EventProposalDetails>
         </div>
 
-        <div class="text-center logo-area" :class="isMobile ? 'font-size-12 py-10' : 'font-size-18 p-40 mt-40'">
+        <div class="text-center logo-area" :class="isMobile ? 'font-size-14 py-10' : 'font-size-18 p-40 mt-40'">
             Provided By
             <img class="ml-10" :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-            <p class="m-0 align-baseline text-underline">Who are we and why are we great?</p>
+            <p class="m-0">Who are we and why are we great?</p>
         </div>
 
-        <a v-if="step === 0"
-           class="d-flex align-center font-size-16 font-bold-extra justify-content-center bg-red color-white py-20 mobile-show"
-           @click="step++"
+        <a v-if="isMobile && !showOffer"
+           class="d-flex align-center font-size-16 font-bold-extra justify-content-center bg-red color-white py-20"
+           @click="showOffer = true"
         >
             View the details of the offer
         </a>
-        <div v-if="!isMobile" class="proposal-footer d-flex justify-content-between align-center px-30">
-
-                <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
-                    <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
-                        More Actions
-                        <md-icon>expand_less</md-icon>
-                    </md-button>
-                    <md-menu-content v-if="!contract">
-                        <md-menu-item class="text-center" @click="showModal('NEGOTIATION')">
-                        <span class="font-size-16 font-bold-extra pl-20">
-                          <img
-                              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
-                              class="mr-10"
-                              style="width: 20px; height: 28px"
-                          />
-                          Negotiate Rate
-                        </span>
-                        </md-menu-item>
-                        <md-menu-item class="text-center" @click="showModal('REMINDER')">
-                        <span class="font-size-16 font-bold-extra pl-20">
-                          <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10"
-                               style="width: 20px; height: 20px"/>
-                          Remind me later
-                        </span>
-                        </md-menu-item>
-                        <md-menu-item class="text-center" @click="showModal('EVENT_CHANGE')">
-                        <span class="font-size-16 font-bold-extra pl-20">
-                          <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
-                          Change event details
-                        </span>
-                        </md-menu-item>
-                    </md-menu-content>
-                    <md-menu-content v-else>
-                        <md-menu-item class="text-center" @click="showModal('CANCEL_BOOKING')">
-                        <span class="font-size-16 font-bold-extra text-capitalize pl-20">
-                          <img
-                              :src="`${$iconURL}Contract/group-21003.svg`"
-                              class="mr-10"
-                              style="width: 20px; height: 28px"
-                          />
-                          cancel booking
-                        </span>
-                        </md-menu-item>
-                        <md-menu-item class="text-center" @click="showModal('DOWNLOAD_INVOICE')">
-                        <span class="font-size-16 font-bold-extra text-capitalize pl-20">
-                          <img
-                              :src="`${$iconURL}Contract/group-8864.svg`"
-                              class="mr-10"
-                              style="width: 20px; height: 28px"
-                          />
-                          download invoices
-                        </span>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-
-                <template v-if="!contract">
-                    <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">Decline Proposal</md-button>
-                    <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
-                </template>
-                <template v-else>
-                    <div>
-                        <img src="/static/icons/vendor/proposalBoard/filter-won.svg"
-                             class="mr-10"
-                             style="width: 20px; height: 28px"
-                        >
-                        Vendor is Booked
-                    </div>
-                </template>
-
-        </div>
-
-        <div v-if="step > 0" class="md-layout mobile-show">
-            <template v-if="!contract">
-                <a v-if="step < 3" class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
-                <a v-else class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="declineProposal">Decline</a>
-                <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
-            </template>
-            <template v-else>
-                <a class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none" @click="showModal('MORE_ACTIONS')">More actions</a>
-                <div class="md-layout-item md-size-50 font-size-14 d-flex justify-content-center align-center">
-                    <img src="/static/icons/vendor/proposalBoard/filter-won.svg"
-                         class="mr-10"
-                         style="width: 20px; height: 28px"
-                    >
-                    Vendor is Booked
-                </div>
-            </template>
+        <div v-if="!isMobile || isMobile && showOffer" class="proposal-footer d-flex justify-content-between align-center">
+            <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
+                <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
+                    More Actions
+                    <md-icon>expand_less</md-icon>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item class="text-center" @click="negotiateRate">
+                    <span class="font-size-16 font-bold-extra pl-20">
+          <img
+              :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+              class="mr-10"
+              style="width: 20px; height: 28px"
+          />
+          Negotiate Rate
+        </span>
+                    </md-menu-item>
+                    <md-menu-item class="text-center" @click="remindMeLater">
+                    <span class="font-size-16 font-bold-extra pl-20">
+          <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px" />
+          Remind me later
+        </span>
+                    </md-menu-item>
+                    <md-menu-item class="text-center" @click="changeEvent">
+                    <span class="font-size-16 font-bold-extra pl-20">
+          <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
+          Change event details
+        </span>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <div>
+                <md-button class="md-simple md-red md-outlined maryoku-btn md-small-hide" @click="declineProposal">Decline Proposal</md-button>
+                <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
+            </div>
         </div>
 
     </template>
@@ -179,6 +113,51 @@
       @updateCommentComponent="updateCommentComponentWithAuth"
     >
     </CommentEditorPanel>
+    <modal :containerClass="`modal-container xl change-event-detail`" v-if="showDetailModal">
+      <template slot="header">
+        <div class="add-category-model__header">
+          <h2 class="font-size-30 font-bold-extra">Change event details</h2>
+          <div>
+            You can change or add event details and information. <br />
+            Vendor will send you a updated proposal in a short time
+          </div>
+        </div>
+        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showDetailModal = false">
+          <md-icon>clear</md-icon>
+        </md-button>
+      </template>
+      <template slot="body">
+        <!-- <div>{{ proposal.eventData }}</div> -->
+        <event-detail :event="proposal.eventData" @change="handleEventChange"></event-detail>
+      </template>
+      <template slot="footer">
+        <div class="condition-tooltip">
+          <img class="mr-10" :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" width="27px" />
+          Any change might cause pricing changes
+        </div>
+        <md-button class="md-simple md-black ml-auto">Cancel</md-button>
+        <md-button class="md-red" @click="handleAsk('event')">Update Vendor</md-button>
+      </template>
+    </modal>
+    <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
+      <template slot="body">
+        <h2>Changes set successfully</h2>
+        <div>Changes have been sent to the vendor and he will send you an updated offer as soon as possible</div>
+        <div class="text-center">
+          <md-button class="md-red" @click="showUpdateSuccessModal = false">Done</md-button>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="showDeclineVendorModal" container-class="modal-container bg-white offer-vendors w-max-800">
+      <template slot="body">
+        <VendorDeclined
+                @rate="handleRate"
+                @close="showDeclineVendorModal=false"
+                :value="proposal.score"
+        >
+        </VendorDeclined>
+      </template>
+    </modal>
 
     <GuestSignUpModal
       v-if="showGuestSignupModal"
@@ -190,12 +169,25 @@
       @cancel="showGuestSignupModal = false"
     >
     </GuestSignUpModal>
+    <RemindingTimeModal
+      v-if="showRemindingTimeModal"
+      @close="showRemindingTimeModal = false"
+      @save="saveRemindingTime"
+    ></RemindingTimeModal>
+    <NegotiationRequestModal
+      v-if="showNegotiationRequestModal"
+      :proposal="proposal"
+      @close="showNegotiationRequestModal = false"
+      @save="sendNegotiationRequest"
+    ></NegotiationRequestModal>
   </div>
 </template>
 <script>
 import moment from "moment";
+import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
+import Reminder from "@/models/Reminder";
 import ProposalRequest from "@/models/ProposalRequest";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
@@ -209,12 +201,14 @@ const components = {
     CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
     GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
     HeaderActions: () => import('@/components/HeaderActions.vue'),
-
+    EventDetail: () => import('./components/EventDetail.vue'),
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
-    ActionModal: () => import('@/components/ActionModal.vue'),
     SignInContent: () => import('@/components/SignInContent/index.vue'),
+    VendorDeclined: () => import('./components/VendorDeclined.vue'),
     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
+    RemindingTimeModal: () => import('@/components/Modals/VendorProposal/RemindingTimeModal.vue'),
+    NegotiationRequestModal: () => import('@/components/Modals/VendorProposal/NegotiationRequestModal.vue'),
 }
 
 export default {
@@ -226,11 +220,14 @@ export default {
       loading: true,
       proposal: null,
       onlyAuth: false,
-      step: 0,
+      showOffer: false,
       showDetailModal: false,
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
+      showDeclineVendorModal: false,
       showGuestSignupModal: false,
+      showRemindingTimeModal: false,
+      showNegotiationRequestModal: false,
     };
   },
   async created() {
@@ -259,15 +256,16 @@ export default {
       this.loading = false;
     }
 
+    // await this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     ...mapMutations("comment", ["setGuestName"]),
-    ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
       window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
     },
     async handleAsk(ask) {
+      console.log('handleAsk', ask);
       let expiredTime = moment().add(2, "days").unix() * 1000;
       if (ask === "expiredDate") {
         if (this.loggedInUser) {
@@ -283,8 +281,33 @@ export default {
           this.onlyAuth = true;
           this.showGuestSignupModal = true;
         }
+      } else if (ask === "event") {
+        this.showDetailModal = false;
+        let event = {
+          startTime: this.proposal.eventData.startTime,
+          endTime: this.proposal.eventData.endTime,
+          location: this.proposal.eventData.location,
+          numberOfParticipants: this.proposal.eventData.numberOfParticipants,
+          eventType: this.proposal.eventData.eventType,
+        };
+        if (this.loggedInUser) {
+          await this.saveNegotiation({ event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE });
+        } else {
+          localStorage.setItem(
+            "nonMaryokuAction",
+            JSON.stringify({
+              action: "saveNegotiation",
+              params: { event, expiredTime, type: NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE },
+            }),
+          );
+          this.onlyAuth = true;
+          this.showGuestSignupModal = true;
+        }
       }
-
+    },
+    handleEventChange(e) {
+      console.log("handleEventChange", e);
+      this.proposal.eventData = e;
     },
     async saveNegotiation(params) {
       this.loading = true;
@@ -315,9 +338,6 @@ export default {
         this.showGuestSignupModal = true;
       }
     },
-    handleStep(step){
-        this.step = step
-    },
     async handleUpdate(proposal){
       this.proposal = {...this.proposal, ...proposal};
     },
@@ -340,8 +360,10 @@ export default {
           { type: "lost", proposalId: this.proposal.id, eventName, url },
           { headers: this.$auth.getAuthHeader() },
       );
-      this.showModal('DECLINE')
-
+      this.showDeclineVendorModal = true;
+    },
+    async handleRate(score){
+      await this.saveProposal({...this.proposal, score});
     },
     async saveProposal(proposal){
         this.loading = true;
@@ -356,10 +378,14 @@ export default {
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
-    showModal(name){
-        this.setProposal(this.proposal)
-        this.setProposalRequest(this.proposal.proposalRequest)
-        this.setOpen(name)
+    remindMeLater() {
+      this.showRemindingTimeModal = true;
+    },
+    negotiateRate() {
+      this.showNegotiationRequestModal = true;
+    },
+    changeEvent() {
+      this.showDetailModal = true;
     },
     openNewTab(link) {
       window.open(link, "_blank");
@@ -397,7 +423,7 @@ export default {
       this.handleAction();
     },
     auth(provider) {
-      // console.log("auth", provider);
+      console.log("auth", provider);
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(`${document.location.href}?token=`);
@@ -417,7 +443,7 @@ export default {
       }
     },
     saveCommentWithAuth(params) {
-      // console.log("saveComment");
+      console.log("saveComment");
       if (this.loggedInUser || this.guestName) {
         this.saveComment(params);
       } else {
@@ -433,7 +459,7 @@ export default {
       }
     },
     updateCommentWithAuth(params) {
-      // console.log("updateCommentWithAuth", params);
+      console.log("updateCommentWithAuth", params);
       if (this.loggedInUser || this.guestName) {
         this.updateComment(params);
       } else {
@@ -449,7 +475,7 @@ export default {
       }
     },
     deleteCommentWithAuth(params) {
-      // console.log("deleteComment");
+      console.log("deleteComment");
       if (this.loggedInUser || this.guestName) {
         this.deleteComment(params);
       } else {
@@ -465,7 +491,7 @@ export default {
       }
     },
     updateCommentComponentWithAuth(component) {
-      // console.log("updateCommentComponent");
+      console.log("updateCommentComponent");
       if (this.loggedInUser || this.guestName) {
         this.updateCommentComponent(component);
       } else {
@@ -481,16 +507,74 @@ export default {
       }
     },
     async saveProposalRequest(){
-      // console.log('savePropsalRequest');
+      console.log('savePropsalRequest');
         let query = new ProposalRequest({
            vendorId: this.proposal.vendor.id,
-           requestedTime: new Date().getTime(),
-           expiredTime: moment(new Date()).add(3, "days").valueOf(),
+            requestedTime: new Date().getTime(),
+            expiredTime: moment(new Date()).add(3, "days").valueOf(),
         });
         let res = await query.for(new Vendor({ id: this.proposal.vendor.id })).save();
-        // console.log('res', res);
+        console.log('res', res);
 
         await this.saveProposal({...this.proposal, proposalRequestId: res.id});
+    },
+    async sendNegotiationRequest(params) {
+      this.showNegotiationRequestModal = false;
+
+      if (!this.proposal.proposalRequestId) await this.saveProposalRequest();
+
+      let expiredTime = moment().add(2, 'days').unix() * 1000;
+      let query = new ProposalNegotiationRequest({
+        proposalId: this.proposal.id,
+        proposal: new Proposal({ id: this.proposal.id }),
+        expiredTime,
+        type: NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION,
+        ...params,
+      });
+      let res = await query.for(new Proposal({ id: this.proposal.id })).save();
+      this.proposal.negotiations.push(res);
+
+      Swal.fire({
+        title: "Negotiation Sent successfully",
+        text: `Negotiation request has been successfully sent to the vendor and he will respond as soon as possible`,
+        showCancelButton: false,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Done",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+        }
+      });
+    },
+    saveRemindingTime({remindingTime, option}) {
+
+      const remindingData = {
+        reminder: "email",
+        phoneNumber: "",
+        email: this.proposal.eventData.customer.email,
+        name: this.proposal.eventData.customer.name,
+        remindingTime: remindingTime,
+        type: "proposal",
+        emailParams: {
+            expiredTime: moment(new Date(this.proposal.expiredDate)).valueOf(),
+        },
+        emailTransactionId: "",
+        phoneTransactionId: "",
+      };
+      new Reminder(remindingData).save().then((res) => {
+        Swal.fire({
+          title: "Reminder set successfully",
+          text: `You will receive the reminder in your email`,
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success btn-fill",
+          cancelButtonClass: "md-button md-danger btn-fill",
+          confirmButtonText: "Done",
+          buttonsStyling: false,
+        }).then((result) => {});
+      });
+
+      this.showRemindingTimeModal = false;
     },
     getUpdatedProposal(proposal, data) {
       Object.keys(data).map(key => {
@@ -509,25 +593,17 @@ export default {
     guestName() {
       return this.$store.state.comment.guestName;
     },
-    vendor(){
-      return this.proposal.vendor
-    },
-    contract(){
-      if (!this.proposal) return false;
-      return this.proposal.status === PROPOSAL_STATUS.WON
+      headerBackgroundImage() {
+          if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
+          if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
+              return this.proposal.inspirationalPhotos[0].url;
+          if (this.proposal.vendor.images && this.proposal.vendor.images[0])
+              return this.proposal.vendor.images[0];
+          if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
+              return this.proposal.vendor.vendorImages[0];
 
-    },
-    headerBackgroundImage() {
-      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
-      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
-          return this.proposal.inspirationalPhotos[0].url;
-      if (this.proposal.vendor.images && this.proposal.vendor.images[0])
-          return this.proposal.vendor.images[0];
-      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
-          return this.proposal.vendor.vendorImages[0];
-
-      return "";
-    },
+          return "";
+      },
   },
 };
 </script>
@@ -536,6 +612,9 @@ export default {
   background-color: white;
   .proposal-header {
     position: relative;
+    img {
+      width: 30px;
+    }
   }
   .proposal-container {
     max-width: 1280px;
@@ -549,15 +628,8 @@ export default {
     height: 80px;
     width: 100%;
     background: white;
+    padding: 0 30px;
   }
-}
-.header-bg{
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 200px
 }
 .condition-tooltip {
   background-color: #ffe5ec;

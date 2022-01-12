@@ -3,15 +3,7 @@
     <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
       <ProposalHeader v-if="event" :event="event" :proposalRequest="proposalRequest"></ProposalHeader>
-      <ProposalVersionsBar
-          v-if="proposalRequest && proposalRequest.proposal"
-          :versions="versions"
-          :selected="selectedVersion"
-          @select="selectVersion"
-          @save="saveVersion"
-          @change="changeVersion"
-          @remove="removeVersion"
-      ></ProposalVersionsBar>
+      <ProposalVersionsBar v-if="proposalRequest && proposalRequest.proposal"></ProposalVersionsBar>
       <div class="main-cont">
         <router-view></router-view>
       </div>
@@ -136,7 +128,7 @@ const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
     MissingDetail: () => import('./Modals/MissingDetail.vue'),
-    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
+    ProposalVersionsBar: () => import('./ProposalVersionsBar.vue'),
     ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
     ProposalHeader: () => import('./ProposalHeader.vue'),
     VendorBidTimeCounter: () => import('@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue'),
@@ -230,22 +222,7 @@ export default {
       this.step = this.step + 1;
 
       // skip additional page if event doesn't have components
-      if ( this.step === 2 && this.event.components.length < 2 ) this.step ++;
-      this.scrollToTop();
-    },
-    back() {
-      const initStep = this.$store.state.vendorProposal.initStep;
-      if (this.step > initStep) {
-          this.step = this.step - 1;
-
-          // skip additional page if event doesn't have components
-          if (this.step === 2 && this.event.components.length < 2) this.step --;
-      } else {
-          const vendorId = this.$route.params.vendorId;
-          const requestId = this.$route.params.id;
-          this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
-      }
-
+      if ( this.step === 2 && !this.event.components.length ) this.step ++;
       this.scrollToTop();
     },
     getVendorCategory() {
@@ -357,6 +334,21 @@ export default {
       }
     },
 
+    back() {
+      const initStep = this.$store.state.vendorProposal.initStep;
+      if (this.step > initStep) {
+        this.step = this.step - 1;
+
+        // skip additional page if event doesn't have components
+        if (this.step === 2 && !this.event.components.length) this.step --;
+      } else {
+        const vendorId = this.$route.params.vendorId;
+        const requestId = this.$route.params.id;
+        this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
+      }
+
+      this.scrollToTop();
+    },
     scrollToTop() {
       setTimeout(() => {
         window.scrollTo(0, 0);
@@ -387,18 +379,6 @@ export default {
         }
       });
     },
-    selectVersion(index){
-      this.$store.commit('vendorProposal/selectVersion', index);
-    },
-    saveVersion(version){
-        this.$store.dispatch('vendorProposal/saveVersion', version);
-    },
-    changeVersion(versions){
-        this.$store.commit('vendorProposal/setVersions', versions);
-    },
-    removeVersion(id){
-        this.$store.dispatch('vendorProposal/removeVersion', id);
-    }
   },
 
   filters: {
@@ -422,12 +402,6 @@ export default {
     },
     vendor() {
       return this.$store.state.vendorProposal.vendor;
-    },
-    selectedVersion(){
-      return this.$store.state.vendorProposal.currentVersion;
-    },
-    versions(){
-      return this.$store.state.vendorProposal.versions;
     },
     step: {
       get: function () {

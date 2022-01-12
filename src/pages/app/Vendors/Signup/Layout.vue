@@ -4,7 +4,7 @@
       <a href="https://www.maryoku.com">
         <img src="/static/img/maryoku-logo-dark.png" />
       </a>
-      <VSignupSteps :step="step"></VSignupSteps>
+      <v-signup-steps :step="step"></v-signup-steps>
     </section>
     <router-view></router-view>
     <template v-if="step < 7">
@@ -67,17 +67,17 @@
   </div>
 </template>
 <script>
+import VSignupSteps from "./VSignupSteps.vue";
+import { Modal } from "@/components";
 import Vendors from "@/models/Vendors";
 import Swal from "sweetalert2";
 import { mapMutations, mapGetters } from "vuex";
 import VendorSignupState from "./state";
-
-const components = {
-    Modal: () => import('@/components/Modal.vue'),
-    VSignupSteps: () => import('./VSignupSteps.vue'),
-}
 export default {
-  components,
+  components: {
+    VSignupSteps,
+    Modal,
+  },
   data() {
     return {
       savedItModal: false,
@@ -87,11 +87,11 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("vendorSignup", ["setVendor", "setEditing", "setStep", "setLoading"]),
+    ...mapMutations("vendorSignup", ["setVendor", "setEditing", "setStep"]),
     goTo(router) {
       this.$router.push(router);
     },
-    async approve() {
+    approve() {
       if (this.$store.state.vendorSignup.isEditing) {
         this.setStep(1);
       } else {
@@ -99,33 +99,29 @@ export default {
           this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
           this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
           this.$set(this.vendor, "isEditing", true);
-          this.setLoading(true);
-          try{
-              const res = await this.$store.dispatch("vendorSignup/saveVendor", this.vendor)
+          this.$store
+            .dispatch("vendorSignup/saveVendor", this.vendor)
+            .then((res) => {
               this.setEditing(true);
               this.setStep(1);
-
-          }catch (e) {
-              const params = {}
-              params.companyName =  this.vendor.companyName;
-              const vendors = await this.$store
-                  .dispatch("vendorSignup/searchVendor", params)
-
-              console.log('vendors', vendors);
-
-              if(vendors.length) {
-                  this.setVendor(vendors[0]);
-                  this.setEditing(true);
-                  this.setStep(0);
-                  this.isCompletedWizard = false;
-
-                  this.$router.push(`/vendor/edit/${vendors[0].id}`);
+            })
+            .catch((error) => {
+              if (error.message.indexOf("companyName") >= 0) {
+                Swal.fire({
+                  title: `Sorry, Company Name is duplicated. Please choose another.`,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {});
+              } else {
+                Swal.fire({
+                  title: `An account with the name you entered already exists. Please choose a different name.`,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {});
               }
-          }
+            });
         } else {
-
         }
-          this.setLoading(false);
         this.scrollToTop();
       }
     },

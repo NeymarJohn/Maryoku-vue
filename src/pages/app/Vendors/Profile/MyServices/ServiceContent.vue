@@ -132,12 +132,7 @@ export default {
   },
   created() {
     this.images = [...this.serviceData.images];
-
-    if ( this.serviceData.coverImage ) {
-        this.coverImage = this.serviceData.coverImage
-    } else if ( this.serviceData.images && this.serviceData.images.length ) {
-        this.coverImage = this.serviceData.images[0];
-    }
+    this.coverImage = this.serviceData.coverImage
   },
   methods: {
     setAttachment(attachment) {

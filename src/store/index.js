@@ -5,7 +5,6 @@ import user from "./modules/user";
 import event from "./modules/event";
 import comment from "./modules/comment";
 import auth from "./modules/auth";
-import modal from "./modules/modal";
 import PublicEventPlanner from "./modules/PublicEventPlanner";
 import vendor from "./modules/vendor";
 import campaign from "./modules/campaign";
@@ -18,7 +17,6 @@ export default new Vuex.Store({
     modules: {
         auth,
         user,
-        modal,
         event,
         comment,
         vendor,
@@ -27,6 +25,6 @@ export default new Vuex.Store({
         vendorProposal,
         common,
         customer,
-        planningBoard,
+        planningBoard
     },
 });
