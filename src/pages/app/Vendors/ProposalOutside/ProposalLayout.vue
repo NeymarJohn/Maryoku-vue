@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader :active="isLoading" is_full_screen page="vendor" height="100vh"></loader>
+    <loader :active="isLoading" is_full_screen page="vendor" height="100%"></loader>
 
     <ProposalHeader v-if="vendor" :vendor="vendor"></ProposalHeader>
     <ProposalVersionsBar
