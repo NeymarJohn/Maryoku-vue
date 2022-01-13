@@ -1,170 +1,153 @@
 <template>
   <div class="proposal-budget-summary-wrapper" :style="{ top: `${panelTopPos}px` }">
-    <template>
-      <div class="proposal-budget-summary-header">
-        <div class="d-flex justify-content-between flex-1" v-if="!expanded">
-          <div class="title">
-            <span class="font-bold font-size-22">Total</span>
-            <br />
-            <span class="font-size-14"> Before discount </span>
-          </div>
-          <div class="pricet text-right">
-            <span class="font-bold font-size-22">${{ (totalPrice - bundleDiscountAmount) | withComma }}</span>
-            <br />
-            <span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
-            <span class="font-size-14"> ${{ totalPrice | withComma }} </span>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between flex-1 font-size-22 font-bold" v-else>Summary</div>
-        <md-button @click="expanded = !expanded" class="md-icon-button md-simple collapse-button">
-          <md-icon class="icon font-size-36" v-if="expanded">keyboard_arrow_down</md-icon>
-          <md-icon class="icon font-size-36" v-if="!expanded">keyboard_arrow_right</md-icon>
-        </md-button>
-      </div>
-    </template>
-    <template v-if="expanded">
-      <div class="summary-cont">
-        <div
-          class="bundle-discount mt-20"
-          @click="isBundleDiscount = !isBundleDiscount"
-          v-if="additionalServices.length > 0 && step === 2"
-        >
-          <img class="black" :src="`${iconUrl}Asset 579.svg`" />
-          <span>
+    <CollapsePanel :defaultStatus="false" :spacing="0">
+        <template slot="header">
+            <div class="d-flex align-center title py-20 mr-30">
+                <span class="font-bold font-size-22">Total</span>
+                <span class="font-bold font-size-22 ml-auto">${{ (totalPrice) | withComma }}</span>
+            </div>
+            <div v-if="defaultDiscount.percentage || negotiationDiscount.isApplied" class="d-flex align-center font-size-14 pb-20 mr-30">
+                <span> Before discount </span>
+                <span class="ml-auto mr-10">{{ `(${defaultDiscount.percentage}% off)` }}</span>
+                <span> ${{ totalBeforeDiscount | withComma }} </span>
+            </div>
+        </template>
+        <template slot="content">
+            <div class="summary-cont">
+                <div
+                    class="bundle-discount mt-20"
+                    @click="isBundleDiscount = !isBundleDiscount"
+                    v-if="additionalServices.length > 0 && step === 2"
+                >
+                    <img class="black" :src="`${iconUrl}Asset 579.svg`" />
+                    <span>
             Add Bundle Discount
             <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
             <md-icon v-else>keyboard_arrow_down</md-icon>
           </span>
-          <p v-if="isBundleDiscount">What services would you like to include in your bundle?</p>
-        </div>
-      </div>
-      <div class="items-cont">
-        <div class="item">
-          <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
-            <md-checkbox
-              v-if="isBundleDiscount"
-              class="no-margin md-vendor"
-              :value="vendor.eventCategory.key"
-              v-model="bundleDiscountServices"
-            />
-            <ul class="flex-1">
-              <li>
-                <img :src="`${iconUrl}Asset 614.svg`" />
-                {{ vendor.eventCategory.title }}
-              </li>
-              <li>
-                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
-              </li>
-              <li>
-                <span>Your proposal</span>
-                <span>${{ originalPriceOfMainCategory | withComma }}</span>
-              </li>
-              <!-- <li>
-                <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                <span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
-              </li>
-              <li
-                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
-                class="color-black"
-              >
-                <span>
-                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                  Your proposal is ${{
-                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma
-                  }}
-                  more than budget
-                </span>
-              </li> -->
-              <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
-                <template v-if="discountBlock[vendor.eventCategory.key]">
-                  <div class="left">
-                    <span>After discount</span>
-                  </div>
-                  <div class="right">
-                    <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
-                    <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
-                  </div>
-                </template>
-              </li>
-              <li
-                v-if="
+                    <p v-if="isBundleDiscount">What services would you like to include in your bundle?</p>
+                </div>
+            </div>
+            <div class="items-cont">
+                <div class="item">
+                    <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
+                        <md-checkbox
+                            v-if="isBundleDiscount"
+                            class="no-margin md-vendor"
+                            :value="vendor.eventCategory.key"
+                            v-model="bundleDiscountServices"
+                        />
+                        <ul class="flex-1">
+                            <li>
+                                <img :src="`${iconUrl}Asset 614.svg`" />
+                                {{ vendor.eventCategory.title }}
+                            </li>
+                            <li>
+                                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+                            </li>
+                            <li>
+                                <span>Your proposal</span>
+                                <span>${{ originalPriceOfMainCategory | withComma }}</span>
+                            </li>
+                            <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
+                                <template v-if="discountBlock[vendor.eventCategory.key]">
+                                    <div class="left">
+                                        <span>After discount</span>
+                                    </div>
+                                    <div class="right">
+                                        <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
+                                        <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
+                                    </div>
+                                </template>
+                            </li>
+                            <li
+                                v-if="
                   calculatedTotal(getRequirementsByCategory('venuerental')) -
                     newProposalRequest.eventData.allocatedBudget >
                   0
                 "
-              >
-                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                Event Page/warning-circle-gray.svg"
-                <span
-                  >Your proposal is ${{
-                    (calculatedTotal(getRequirementsByCategory("venuerental")) -
-                      newProposalRequest.eventData.allocatedBudget)
-                      | withComma
-                  }}
+                            >
+                                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
+                                Event Page/warning-circle-gray.svg"
+                                <span
+                                >Your proposal is ${{
+                                        (calculatedTotal(getRequirementsByCategory("venuerental")) -
+                                            newProposalRequest.eventData.allocatedBudget)
+                                            | withComma
+                                    }}
                   more than the budget
                 </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
-          <div
-            class="service-item"
-            :class="{ 'with-check': isBundleDiscount }"
-            v-for="(a, aIndex) in additionalServices.filter((item) => pricesByCategory[item] > 0)"
-            :key="aIndex"
-          >
-            <h3 class="width-100" v-if="aIndex === 0">Additional Services</h3>
-            <md-checkbox
-              v-if="isBundleDiscount"
-              class="no-margin md-vendor"
-              v-model="bundleDiscountServices"
-              :value="a"
-            />
-            <ul>
-              <li>
-                <img :src="getIconUrlByCategory(a)" />
-                {{ getServiceCategory(a).title }}
-              </li>
-              <li>
-                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
-              </li>
-              <li>
-                <span>Your proposal</span>
-                <span>${{ pricesByCategory[a] | withComma }}</span>
-              </li>
-              <!-- <li>
-                <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-                <span> ${{ getAllocatedBudget(a) | withComma }}</span>
-              </li>
-              <li v-if="pricesByCategory[a] - getAllocatedBudget(a) > 0">
-                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
+                    <div
+                        class="service-item"
+                        :class="{ 'with-check': isBundleDiscount }"
+                        v-for="(a, aIndex) in additionalServices.filter((item) => pricesByCategory[item] > 0)"
+                        :key="aIndex"
+                    >
+                        <h3 class="width-100" v-if="aIndex === 0">Additional Services</h3>
+                        <md-checkbox
+                            v-if="isBundleDiscount"
+                            class="no-margin md-vendor"
+                            v-model="bundleDiscountServices"
+                            :value="a"
+                        />
+                        <ul>
+                            <li>
+                                <img :src="getIconUrlByCategory(a)" />
+                                {{ getServiceCategory(a).title }}
+                            </li>
+                            <li>
+                                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+                            </li>
+                            <li>
+                                <span>Your proposal</span>
+                                <span>${{ pricesByCategory[a] | withComma }}</span>
+                            </li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+                <ItemForm
+                    :defaultDiscount="defaultDiscount"
+                    :defaultNegotiation="negotiationDiscount"
+                    :defaultTax="defaultTax"
+                    field="discount"
+                    :non-maryoku="true"
+                    @saveDiscount="saveDiscount('discount', $event)"
+                >
+                </ItemForm>
+                <ItemForm
+                    v-if="negotiationDiscount && negotiationDiscount.isApplied"
+                    :defaultDiscount="defaultDiscount"
+                    :defaultNegotiation="negotiationDiscount"
+                    :defaultTax="defaultTax"
+                    field="negotiation"
+                    :non-maryoku="true"
+                    @saveDiscount="saveDiscount('negotiation', $event)"
+                >
+                </ItemForm>
 
-                <span>
-                  Your proposal is ${{ (pricesByCategory[a] - getAllocatedBudget(a)) | withComma }}
-                  more than the budget
-                </span>
-              </li> -->
-              <li></li>
-            </ul>
-          </div>
-        </div>
-        <discount-form
-          :totalPrice="totalPriceBeforeDiscount"
-          :defaultTax="defaultTax"
-          :defaultDiscount="defaultDiscount"
-          :nonMaryoku="true"
-          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
-          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
-        ></discount-form>
-        <div class="item bundle" v-if="isBundleDiscount">
-          <div class="element">
-            <label class="">
-              <span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
-            </label>
-            <money
-              v-model="bundleDiscountAmount"
-              v-bind="{
+                <ItemForm
+                    :defaultDiscount="defaultDiscount"
+                    :defaultNegotiation="negotiationDiscount"
+                    :defaultTax="defaultTax"
+                    field="tax"
+                    :non-maryoku="true"
+                    @saveDiscount="saveDiscount('tax', $event)"
+                >
+                </ItemForm>
+                <div class="item bundle" v-if="isBundleDiscount">
+                    <div class="element">
+                        <label class="">
+                            <span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
+                        </label>
+                        <money
+                            v-model="bundleDiscountAmount"
+                            v-bind="{
                 decimal: '.',
                 thousands: ',',
                 prefix: '$ ',
@@ -172,16 +155,16 @@
                 precision: 2,
                 masked: false,
               }"
-              class="bundle-discount-input"
-              @keyup.native="setPercentage"
-              @click.native="discoutOption = 'amount'"
-            />
-          </div>
-          <div class="element">
-            <label class="font-bold">Or by percentage </label>
-            <money
-              v-model="bundleDiscountPercentage"
-              v-bind="{
+                            class="bundle-discount-input"
+                            @keyup.native="setPercentage"
+                            @click.native="discoutOption = 'amount'"
+                        />
+                    </div>
+                    <div class="element">
+                        <label class="font-bold">Or by percentage </label>
+                        <money
+                            v-model="bundleDiscountPercentage"
+                            v-bind="{
                 decimal: '.',
                 thousands: ',',
                 prefix: '',
@@ -189,66 +172,67 @@
                 precision: 2,
                 masked: false,
               }"
-              class="bundle-discount-input"
-              @keyup.native="setRange"
-              @click.native="discoutOption = 'percentage'"
-            />
-          </div>
-          <div class="element dis-value">
-            <span v-if="discoutOption == 'percentage'"> {{ bundleDiscountPercentage }}% </span>
-            <span v-else> ${{ bundleDiscountAmount }} </span>
-          </div>
-          <div class="action-cont">
-            <a class="clear" @click="cancelBundle">Cancel</a>
-            <a class="add" @click="addBunldDiscount">Add bundle</a>
-          </div>
-        </div>
-      </div>
-      <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.percentage">
-        <div>
-          <span>{{ bundledServicesString }}</span>
-        </div>
-        <div class="font-bold d-flex justify-content-between">
-          <span>Total Bundle</span><span class="font-bold font-size-22">${{ bundleDiscount.price | withComma }}</span>
-        </div>
-      </div>
-      <div class="total-cont">
-        <div class="price-row">
-          <span class="title">Total</span>
-          <strong>${{ Number(totalPrice) | withComma }}</strong>
-        </div>
-        <div v-if="bundleDiscount.isApplied" class="price-row">
-          <span>Before bundle discount</span>
-          <div>
-            <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-            <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
-          </div>
-        </div>
-        <div v-if="defaultDiscount.percentage" class="price-row">
-          <span>Before discount</span>
-          <div>
-            <span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
-            <span class="crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</span>
-          </div>
-        </div>
-      </div>
-    </template>
+                            class="bundle-discount-input"
+                            @keyup.native="setRange"
+                            @click.native="discoutOption = 'percentage'"
+                        />
+                    </div>
+                    <div class="element dis-value">
+                        <span v-if="discoutOption == 'percentage'"> {{ bundleDiscountPercentage }}% </span>
+                        <span v-else> ${{ bundleDiscountAmount }} </span>
+                    </div>
+                    <div class="action-cont">
+                        <a class="clear" @click="cancelBundle">Cancel</a>
+                        <a class="add" @click="addBundlDiscount">Add bundle</a>
+                    </div>
+                </div>
+            </div>
+            <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.percentage">
+                <div>
+                    <span>{{ bundledServicesString }}</span>
+                </div>
+                <div class="font-bold d-flex justify-content-between">
+                    <span>Total Bundle</span><span class="font-bold font-size-22">${{ bundleDiscount.price | withComma }}</span>
+                </div>
+            </div>
+            <div class="total-cont">
+                <div class="price-row">
+                    <span class="title">Total</span>
+                    <strong>${{ Number(totalPrice) | withComma }}</strong>
+                </div>
+                <div v-if="bundleDiscount.isApplied" class="price-row">
+                    <span>Before bundle discount</span>
+                    <div>
+                        <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
+                        <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
+                    </div>
+                </div>
+                <div v-if="defaultDiscount.percentage || negotiationDiscount.isApplied" class="price-row">
+                    <span>Before discount</span>
+                    <div>
+                        <span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
+                        <span class="crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </CollapsePanel>
   </div>
 </template>
 <script>
 import { categoryNameWithIcons } from "@/constants/vendor";
-import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import { Money } from "v-money";
 import { mapGetters } from "vuex";
-import DiscountForm from "../components/DiscountForm.vue";
+
+const components = {
+    CollapsePanel: () => import("@/components/CollapsePanel.vue"),
+    Money: () => import('v-money'),
+    DiscountForm: () => import('../components/DiscountForm.vue'),
+    ItemForm: () => import('../components/ItemForm.vue'),
+}
 
 export default {
   name: "proposal-budget-summary",
-  components: {
-    InputProposalSubItem,
-    Money,
-    DiscountForm,
-  },
+  components,
   props: {
     step: Number,
     services: Array,
@@ -275,7 +259,6 @@ export default {
       bundleDiscountPercentage: 0,
       bundleDiscountAmount: 0,
       discoutOption: "",
-      expanded: false,
     };
   },
   methods: {
@@ -341,7 +324,7 @@ export default {
         this.panelTopPos = 0;
       }
     },
-    addBunldDiscount() {
+    addBundlDiscount() {
       this.discountBlock = {};
       this.bundleDiscountServices.forEach((category) => {
         this.discountBlock[category] = { value: this.bundleDiscountAmount };
@@ -372,11 +355,14 @@ export default {
     getAllocatedBudget(category) {
       return 0;
     },
-    saveDiscount(categoryKey, discount) {
-      this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount: discount });
-    },
-    saveTax(categoryKey, tax) {
-      this.$store.commit("proposalForNonMaryoku/setTax", { category: "total", tax: tax });
+    saveDiscount(field, discount) {
+        console.log('saveDiscount', field, discount);
+        if (field === 'discount')
+            this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount});
+        else if (field === 'negotiation')
+            this.$store.commit("proposalForNonMaryoku/setNegotiationDiscount", discount);
+        else if (field === 'tax')
+            this.$store.commit("proposalForNonMaryoku/setTax", { category: "total", tax: discount });
     },
   },
   created() {
@@ -447,9 +433,11 @@ export default {
     },
 
     totalPrice() {
+      console.log('totalPrice1', this.totalPriceBeforeDiscount, this.defaultDiscount, this.negotiationDiscount, this.defaultTax);
       return (
         this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
+        (this.defaultDiscount ? this.defaultDiscount.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0) +
         (this.defaultTax ? this.defaultTax.price : 0) -
         (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
       );
@@ -458,7 +446,8 @@ export default {
       return (
         this.totalPriceBeforeDiscount -
         (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0)
+        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0)
       );
     },
     totalPriceBeforeDiscount() {
@@ -477,9 +466,6 @@ export default {
       });
       return s;
     },
-    bundleDiscount() {
-      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
-    },
     bundledServicesString() {
       let result = "";
       this.bundleDiscount.services.forEach((service, index) => {
@@ -489,10 +475,17 @@ export default {
       return result;
     },
     defaultTax() {
+      console.log('defaultTax', this.$store.state.proposalForNonMaryoku.taxes["total"])
       return this.$store.state.proposalForNonMaryoku.taxes["total"] || { percentage: 0, price: 0 };
     },
     defaultDiscount() {
       return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
+    },
+    negotiationDiscount(){
+      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
+    },
+    bundleDiscount() {
+      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
     },
   },
   watch: {
@@ -501,11 +494,6 @@ export default {
     },
     defaultDiscount(newValue) {
       this.discount = newValue;
-    },
-    step(newValue, oldValue) {
-      if (newValue === 3) {
-        this.expanded = true;
-      }
     },
   },
 };

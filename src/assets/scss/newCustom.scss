@@ -39,7 +39,6 @@
         padding: 0;
         margin: 0;
         li {
-            display: inline-block;
             margin-left: 0.4em;
             a {
                 width: 38px;
@@ -622,13 +621,15 @@
     left: 80px;
     top: 0;
     bottom: 0;
-    // width : 460px;
+    width : 400px;
     background: #fff;
 
     // height: calc(100vh - 80px);
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 10;
+    height: 100%;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     .summer-party {
         width: 400px;
         background: #fff;
@@ -640,6 +641,97 @@
         right: 0px;
         top: 0;
         z-index: 999999;
+        border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
+        box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
+
+        .title-label {
+            font-size: 17px;
+            font-family: "Manrope-ExtraBold", sans-serif;
+            color: #050505;
+            text-transform: uppercase;
+
+            small {
+                font-weight: normal;
+                text-transform: initial;
+            }
+        }
+
+        .completion-progress {
+            width: 80%;
+            margin: 0.3em auto;
+            height: 8px;
+            border-radius: 100px;
+            background: #d8d8d8;
+
+            .progress-done {
+                height: 100%;
+                width: 30%;
+                border-radius: 100px;
+                background: $green;
+            }
+        }
+
+        .percentage {
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                text-align: center;
+
+                li {
+                    display: inline-block;
+                    font-size: 15px;
+                    &.green-label {
+                        color: $green;
+                    }
+                    &:not(.green-label) {
+                        color: #050505;
+                        border-left: 1px solid #b7b7b7;
+                        padding-left: 0.6em;
+                        margin-left: 0.6em;
+                        font-size: 13px;
+                        line-height: 1;
+                    }
+                }
+            }
+        }
+
+        .subTitle-label {
+            font-size: 15px;
+            color: #050505;
+        }
+        .small-label {
+            font-size: 13px;
+            color: #a0a0a0;
+        }
+        .my-notes {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            top: 100%;
+            width: 50%;
+            .md-button {
+                width: 100%;
+                border-radius: 25px;
+                font-family: "Manrope-ExtraBold";
+                text-transform: capitalize;
+                font-size: 16px;
+                background-color: #f51355 !important;
+            }
+        }
+    }
+
+    .summer-party2 {
+        width: 400px;
+        background: #fff;
+        text-align: center;
+        padding: 0px 0px 40px;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        z-index: 999999;
+        border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
         box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
 
         .title-label {

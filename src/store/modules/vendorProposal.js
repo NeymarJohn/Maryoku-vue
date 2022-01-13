@@ -493,6 +493,9 @@ const actions = {
       commit('setVendor', res);
       resolve(res)
     })
+  },
+  setProposal:({commit, state} , proposal) => {
+    commit("setProposal", proposal);
   }
 };
 

@@ -47,7 +47,7 @@
     </div>
     <div v-if="eventOption === 'corporation'" class="text-left mt-30">
       <label class="font-bold">Type of event:</label>
-      <MultiSelect
+      <Multiselect
         class="width-50 mt-5 form-input md-purple"
         v-model="eventType"
         :options="eventTypes"
@@ -58,7 +58,7 @@
         label="name"
         track-by="key"
         :key="eventTypes.length"
-      ></MultiSelect>
+      ></Multiselect>
     </div>
     <div class="text-left mt-30">
       <label class="font-bold">Number of guests</label>
@@ -152,7 +152,7 @@ const components = {
     Autocomplete: () => import('@/components/Autocomplete/index.vue'),
     SelectableCard: () => import('@/components/SelectableCard.vue'),
     CustomerForm: () => import('../Form/CustomerForm.vue'),
-    Multiselect: () => import("vue-multiselect"),
+    Multiselect: () => import('vue-multiselect'),
 }
 
 export default {

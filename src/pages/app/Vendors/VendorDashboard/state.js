@@ -8,6 +8,7 @@ import UserEvent from "@/models/UserEvent";
 import ProposalVersion from "@/models/ProposalVersion";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import moment from "moment";
+import { postReq, getReq } from "@/utils/token";
 
 const state = {
   calendarEvents: {},
@@ -126,6 +127,12 @@ const actions = {
             .save();
         resolve(res);
     })
+  },
+  getInbox({ commit, state}, payload) {
+      return new Promise(async (resolve, reject) => {
+          const comments = await getReq(`/1/commentComponents?&vendorId=${payload.vendorId}`);
+          console.log('comments', comments);
+      })
   }
 };
 

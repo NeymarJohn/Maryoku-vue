@@ -2,36 +2,35 @@
   <div>
     <slideout-panel></slideout-panel>
     <router-view></router-view>
+
+    <NotificationModal v-if="isNotificationModal" :name="name"></NotificationModal>
+    <ActionModal v-if="isActionModal" :name="name"></ActionModal>
   </div>
 </template>
 
 <script>
 // import auth from '@/auth';
 // import Model from '@/models/Model'
+import { NOTIFICATION, ACTION } from "./constants/modal";
+
+const components = {
+    NotificationModal: () => import('@/components/Modals/NotificationModal.vue'),
+    ActionModal: () => import('@/components/Modals/ActionModal.vue'),
+}
 
 export default {
-  components: {},
+  components,
   data () {
     return {
       // auth: auth
     }
   },
-  created () {},
   mounted () {
-    let before = new Date()
     const that = this
     if (window.focusEventListener != null) {
       window.removeEventListener('focus', window.focusEventListener)
       window.focusEventListener = null
     }
-    window.focusEventListener = window.addEventListener('focus', function () {
-      const now = new Date()
-      // if (now.getTime() - before.getTime() >= 300000) {
-      //   that.$auth.currentUser(that, true)
-      // } else {
-      //   before = new Date()
-      // }
-    })
 
     let initialMessage = document.getElementById('initial-message')
     if (initialMessage) {
@@ -41,6 +40,20 @@ export default {
     if (loadingBackground) {
       loadingBackground.remove()
     }
+  },
+  computed: {
+    name() {
+        return this.$store.state.modal.name;
+    },
+    isNotificationModal(){
+        return Object.keys(NOTIFICATION).includes(this.name)
+    },
+    isActionModal(){
+        return Object.keys(ACTION).includes(this.name)
+    }
+  },
+  watch: {
+    name(newVal){}
   }
 }
 </script>

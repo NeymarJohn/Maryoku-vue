@@ -486,7 +486,7 @@ export default {
     }
 
     this.$store
-      .dispatch("auth/checkToken")
+      .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
       .then(() => {
         this.initData();
       })

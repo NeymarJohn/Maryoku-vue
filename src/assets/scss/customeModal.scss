@@ -270,6 +270,7 @@
 
 .negotiation{
     .modal-header{
+        justify-content: left;
         background-color: #f3f7fd;
         padding: 40px;
     }
@@ -319,6 +320,19 @@
         justify-content: start;
     }
 }
+
+.rsvp-modal {
+    .modal-container {
+        max-width: 1000px;
+        .modal-header {
+            padding: 60px 60px 0;
+        }
+        .modal-body {
+            padding: 40px 60px 40px;
+        }
+    }
+}
+
 
 .no-header{
     .modal-header{
