@@ -1,6 +1,3 @@
-import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
-
-
 const VendorSignupLayout = () => import("@/pages/app/Vendors/Signup/Layout.vue");
 const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue");
 
@@ -119,27 +116,13 @@ export default [
     {
         path: "/vendor/signin",
         name: "Vendor Signin",
-        component: AuthLayout,
+        component: VendorSignin,
         meta: {
             requiresAuth: false,
             title: "Vendor Signin",
             gtm: "Vendor Signin",
             isVendor: true
         },
-        children: [
-            {
-                path: "/vendor/signin",
-                name: "Vendor Signin",
-                component: VendorSignin,
-                meta: {
-                    requiresAuth: false,
-                    title: "Vendor Signin",
-                    gtm: "Vendor Signin",
-                    isVendor: true
-                },
-            }
-
-        ],
     },
     {
         path: "/vendor/signedin",

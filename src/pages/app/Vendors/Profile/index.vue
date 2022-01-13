@@ -158,7 +158,15 @@ export default {
     this.loading = true;
     this.getPageName();
     this.$store.dispatch("common/fetchAllCategories");
-    this.loading = false;
+    this.$store
+      .dispatch("auth/checkToken")
+      .then(() => {
+        this.user = this.$auth.user;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.$router.push({ path: `/signin` });
+      });
   },
   methods: {
     setAvatar(avatar) {

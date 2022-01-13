@@ -8,7 +8,7 @@
           </a>
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
-          <ul class="list-style-none d-flex align-center">
+          <ul class="actions-list unstyled">
             <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog">
               Already A User?
             </md-button>
@@ -20,6 +20,7 @@
                 <md-menu-item @click="logout">Logout</md-menu-item>
               </md-menu-content>
             </md-menu>
+            <!-- <md-button v-else class="md-simple md-black md-maryoku"> {{tenantUser.name}}</md-button> -->
             <md-button class="md-simple md-just-icon question" @click="showSingupDialog">
               <img :src="`${$iconURL}Onboarding/question-dark.svg`" />
             </md-button>

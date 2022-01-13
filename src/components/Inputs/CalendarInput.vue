@@ -75,7 +75,7 @@ export default {
       showDatePicker: false,
       multipleDates: this.multiple,
       dateData: {
-        currentDate: new Date(),
+        currentDate: null,
         dateRange: {
           start: { date: false, dateTime: false, hour: "00", mintue: "00" },
           end: { date: false, dateTime: false, hour: "00", mintue: "00" },
@@ -97,6 +97,8 @@ export default {
 
       let startDate = moment(this.value[0]).format('YYYY-MM-DD');
       let endDate = moment(this.value[1]).format('YYYY-MM-DD');
+
+      console.log('calendarInput.init', this.value, startDate, endDate);
 
       if (startDate === endDate) {
         this.dateData.currentDate = new Date(startDate);

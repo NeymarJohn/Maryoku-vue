@@ -64,13 +64,13 @@
 
         <div v-if="type === negotiationTypes.PRICE_NEGOTIATION" class="d-flex align-center justify-content-center mt-40">
             <div class="font-size-14 w-min-180 color-black-middle">
-                <div class="font-size-24 text-line-through mb-5">${{negotiation.originalBudget | withComma}}</div>
-                <span>${{negotiation.originalBudgetPerGuest | withComma}}</span> per guest
+                <div class="font-size-24 text-line-through mb-5">${{negotiation.originalBudget}}</div>
+                <span>{{`$${negotiation.originalBudgetPerGuest}`}}</span> per guest
             </div>
             <md-icon class="mx-40">arrow_forward</md-icon>
             <div class="font-size-14 w-min-180 color-black-middle">
-                <div class=" font-size-22 font-bold-extra w-min-180">${{negotiation.budget | withComma}}</div>
-                <span class="font-bold-extra">${{negotiation.budgetPerGuest | withComma}}</span> per guest
+                <div class=" font-size-22 font-bold-extra w-min-180">${{negotiation.budget}}</div>
+                <span class="font-bold-extra">{{`$${negotiation.budgetPerGuest}`}}</span> per guest
             </div>
         </div>
 

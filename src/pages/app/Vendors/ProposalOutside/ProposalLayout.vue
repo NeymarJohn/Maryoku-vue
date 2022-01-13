@@ -1,17 +1,9 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <loader :active="isLoading" is_full_screen page="vendor" height="100%"></loader>
+    <loader :active="isLoading" is_full_screen page="vendor"></loader>
 
     <ProposalHeader v-if="vendor" :vendor="vendor"></ProposalHeader>
-    <ProposalVersionsBar
-         v-if="$route.params.id"
-         :versions="versions"
-         :selected="selectedVersion"
-         @select="selectVersion"
-         @save="saveVersion"
-         @change="changeVersion"
-         @remove="removeVersion"
-    ></ProposalVersionsBar>
+    <ProposalVersionsBar v-if="$route.params.id"></ProposalVersionsBar>
     <div class="main-cont">
       <router-view></router-view>
     </div>
@@ -122,7 +114,7 @@ const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
     Modal: () => import('@/components/Modal.vue'),
     MissingDetail: () => import('./Modals/MissingDetail.vue'),
-    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
+    ProposalVersionsBar: () => import('./ProposalVersionsBar.vue'),
     ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
     SendProposalModal: () => import('./Modals/SendProposal.vue'),
     ProposalHeader: () => import('./ProposalHeader.vue'),
@@ -201,16 +193,13 @@ export default {
   },
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal", "saveVendor", "saveEvent"]),
-    async gotoNext() {
+    gotoNext() {
       // create event only when the proposal is created
       if (this.step === 0 && !this.$route.params.id) {
-
-        this.isLoading = true;
-        await this.createEvent()
-        this.step = this.step + 1;
-        this.scrollToTop();
-
-        this.isLoading = false;
+        this.createEvent().then(() => {
+          this.step = this.step + 1;
+          this.scrollToTop();
+        });
       } else {
         this.step = this.step + 1;
       }
@@ -283,6 +272,8 @@ export default {
                 confirmButtonClass: "md-button md-vendor",
             });
         }
+
+
     },
 
     async uploadCoverImage() {
@@ -323,7 +314,7 @@ export default {
         this.isLoading = false;
     },
 
-    async createEvent() {
+    createEvent() {
       const userEvent = {
         company: this.event.company,
         date: new Date(this.event.startTime * 1000).toISOString(),
@@ -345,7 +336,7 @@ export default {
       if (this.event.id) {
         userEvent.id = this.event.id;
       }
-      await this.saveEvent(userEvent);
+      return this.saveEvent(userEvent);
     },
     back() {
       this.step = this.step - 1;
@@ -410,19 +401,6 @@ export default {
 
       this.showSubmittedProposalModal = true;
     },
-
-    selectVersion(index){
-        this.$store.commit('proposalForNonMaryoku/selectVersion', index);
-    },
-    saveVersion(version){
-      this.$store.dispatch('proposalForNonMaryoku/saveVersion', version);
-    },
-    changeVersion(versions){
-      this.$store.commit('proposalForNonMaryoku/setVersions', versions);
-    },
-    removeVersion(id){
-      this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
-    }
   },
 
   filters: {
@@ -443,12 +421,7 @@ export default {
     event() {
       return this.$store.state.proposalForNonMaryoku.eventData;
     },
-    selectedVersion(){
-      return this.$store.state.proposalForNonMaryoku.currentVersion;
-    },
-    versions(){
-      return this.$store.state.proposalForNonMaryoku.versions;
-    },
+
     step: {
       get: function () {
         return this.$store.state.proposalForNonMaryoku.wizardStep;

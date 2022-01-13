@@ -33,7 +33,7 @@
       <div class="time-picker picker-panel" ref="timePickerPanel">
         <div class="d-flex picker-content">
           <img :src="`${$iconURL}Notes/clock-dark.svg`" width="23px" />
-          <TimeInput v-model="timeInfo"></TimeInput>
+          <time-input v-model="timeInfo"></time-input>
         </div>
         <div class="btn-group">
           <md-button class="md-simple md-black normal-btn" @click="showTimePicker = false">Cancel</md-button>
@@ -52,14 +52,14 @@
         </div>
         <!-- <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div> -->
         <div>
-          <FunctionalCalendar
+          <functional-calendar
             :is-date-picker="true"
             :change-month-function="true"
             :change-year-function="true"
             dateFormat="yyyy-mm-dd"
             v-model="dateData"
             :class="theme"
-          ></FunctionalCalendar>
+          ></functional-calendar>
         </div>
         <div class="btn-group">
           <md-button class="md-simple md-black normal-btn" @click="showDatePicker = false">Cancel</md-button>
@@ -74,22 +74,17 @@
   </div>
 </template>
 <script>
-import moment from "moment";
 import Popup from "@/components/Popup";
 import TimeInput from "@/components/TimeInput";
 import { FunctionalCalendar } from "vue-functional-calendar";
-
-// const components = {
-//     TimeInput: () => import('@/components/inputs/TimeInput.vue'),
-//     FunctionalCalendar: () => import('vue-functional-calendar'),
-// }
-
+import moment from "moment";
 export default {
   name: "maryoku-input",
+  model: {},
   components: {
-        Popup,
-        TimeInput,
-        FunctionalCalendar,
+    Popup,
+    TimeInput,
+    FunctionalCalendar,
   },
   props: {
     /**

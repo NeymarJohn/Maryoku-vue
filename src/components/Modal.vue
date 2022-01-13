@@ -47,8 +47,9 @@ export default {
   },
   methods: {
     closeModal: function () {
-
-      this.$emit("close");
+      if (this.allowClickOutside) {
+        this.$emit("close");
+      }
     },
     modalMaskClick: function (event) {
       event.stopPropagation();

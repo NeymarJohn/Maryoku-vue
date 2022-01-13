@@ -147,7 +147,7 @@ export default {
   },
   beforeMount() {
     this.$store
-      .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
+      .dispatch("auth/checkToken")
       .then((res) => {})
       .catch((error) => {
         this.$store.dispatch("auth/logout").then((res) => {

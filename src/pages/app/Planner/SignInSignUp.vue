@@ -159,11 +159,11 @@ export default {
               this.$router.push({ path: "/choose-workspace" });
           }
           if (this.currentUser.currentTenant) {
+            console.log("redirect.events");
             if(this.currentUser.currentUserType === USER_TYPE.PLANNER) { // get last event
                 CalendarEvent.get().then((events) => {
                     if (events.length > 0) {
                         const gotoLink = eventService.getFirstTaskLink(events[0]);
-                        console.log("redirect.events", gotoLink);
                         this.$router.push({path: gotoLink});
                     } else this.$router.push({path: `/create-event-wizard`});
                 });
