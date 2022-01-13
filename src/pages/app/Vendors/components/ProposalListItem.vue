@@ -2,17 +2,17 @@
   <div v-if="page === 'proposal'" class="proposal-list-item proposal"
        :class="hasNegotiation ? 'negotiation-item' : ''">
     <div>
-      <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName"></Avartar>
-      <img v-else src="/static/icons/vendor/maryoku_avatar.svg" width="62px"/>
+      <img v-if="proposal.nonMaryoku" :src="`${$storageURL}maryoku - logo square white@2x.png`" width="50">
+      <img v-else src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" width="40"/>
     </div>
-    <div class="font-bold font-size-16 ml-10">
-      <div v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
+    <div>
+      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
         {{ proposal.eventData.customer.companyName }}
       </div>
-      <div v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
+      <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
         {{ proposal.proposalRequest.eventData.title }}
       </div>
-      <div v-else>New Event</div>
+      <div class="font-bold font-size-16" v-else>New Event</div>
     </div>
     <div class="font-size-14 color-black-middle">{{ proposal.dateCreated | date("DD/MM/YYYY") }}</div>
     <div class="font-size-14 color-black-middle">${{ proposal.cost | withComma }}</div>
@@ -137,11 +137,10 @@
 <script>
 
 import Button from "@/components/Button/ButtonDiv";
-import Avartar from "@/components/Avartar.vue";
 import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
-  components: { Avartar, Button },
+  components: { Button },
   props: {
     proposal: {
       type: Object,

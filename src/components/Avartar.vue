@@ -1,12 +1,9 @@
 <template>
-  <div class="avatar-symbol" :style="`background-color:${getRandomColor}`">
+  <div class="avatar-symbol" :style="`background-color:${color}`">
     {{ symbol }}
   </div>
 </template>
 <script>
-
-import {avatarColors} from "@/constants/color";
-
 export default {
   props: {
     name: {
@@ -18,11 +15,6 @@ export default {
       default: "#F51355",
     },
   },
-  data(){
-    return {
-        colors: avatarColors
-    }
-  },
   computed: {
     symbol() {
       const phrases = this.name.split(" ");
@@ -30,10 +22,6 @@ export default {
         return `${phrases[0].substr(0, 1)}${phrases[1].substr(0, 1)}`.toUpperCase();
       }
       return phrases[0].substr(0, 2).toUpperCase();
-    },
-    getRandomColor() {
-      let randomIndex = Math.floor(Math.random() * this.colors.length);
-      return this.colors[randomIndex];
     },
   },
 };
