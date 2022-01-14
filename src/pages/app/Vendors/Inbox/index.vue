@@ -26,9 +26,7 @@ const components = {
     InboxSidebar: () => import('../components/InboxSidebar.vue'),
     Loader: () => import("@/components/loader/Loader.vue"),
 }
-import state from "./state";
 import { CommentMixins } from "@/mixins";
-
 export default {
     components,
     data() {
@@ -38,9 +36,6 @@ export default {
         }
     },
     mixins: [CommentMixins],
-    beforeCreate() {
-        this.$store.registerModule("commentProposal", state);
-    },
     async created() {
         this.loading = true;
         await this.$store.dispatch('vendorDashboard/getComments', { vendorId: this.vendorData.id });

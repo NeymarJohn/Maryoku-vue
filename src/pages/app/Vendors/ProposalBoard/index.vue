@@ -92,13 +92,14 @@
           <div v-if="!loading" class="propsoals-list">
             <div class="white-card md-20 proposal-list">
               <ProposalListItem
-                v-for="proposal in proposals"
+                v-for="(proposal, idx) in proposals"
                 :proposal="proposal"
                 :hasNegotiation="
                   !!(!proposal.accepted && proposal.negotiations && proposal.negotiations.filter((it) => it.status === 0).length)
                 "
                 :key="proposal.id"
                 class="row"
+                :color="colors[idx]"
                 @action="handleProposal"
               ></ProposalListItem>
             </div>
@@ -261,6 +262,7 @@
 import moment from 'moment'
 import _ from "underscore";
 import carousel from "vue-owl-carousel"
+import {avatarColors} from "@/constants/color";
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
 import ProposalRequest from "@/models/ProposalRequest";
@@ -327,6 +329,7 @@ export default {
       pagination: PROPOSAL_PAGE_PAGINATION,
       sortFields: { sort: "cost", order: "desc" },
       versionFields: PROPOSAL_VERSION_FIELDS,
+      colors: avatarColors
     };
   },
   async mounted() {

@@ -33,9 +33,9 @@
                     <HeaderActions className="ml-auto" page="proposal" @toggleCommentMode="toggleCommentMode" @export="downProposal"></HeaderActions>
                 </div>
             </div>
-        <ProposalVersionsBar
-            :versions="versions"
-            :selected="selectedVersion"
+            <ProposalVersionsBar
+            :versions="proposal.versions || []"
+            :selected="proposal.currentVersion"
             @select="selectVersion"
             @save="saveVersion"
             @change="changeVersion"
@@ -95,7 +95,6 @@ export default {
         this.selectProposal();
     },
     methods: {
-        ...mapActions("commentProposal", ["saveVersion"]),
         ...mapMutations("comment", ["setGuestName","setSelectedProposal"]),
         ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
         handleStep(step) {
@@ -127,6 +126,18 @@ export default {
             if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
             this.showCommentEditorPanel = true;
         },
+        selectVersion(index) {
+            this.$store.commit('proposalForNonMaryoku/selectVersion', index);
+        },
+        saveVersion(version) {
+            this.$store.dispatch('proposalForNonMaryoku/saveVersion', version);
+        },
+        changeVersion(versions) {
+            this.$store.commit('proposalForNonMaryoku/setVersions', versions);
+        },
+        removeVersion(id) {
+            this.$store.dispatch('proposalForNonMaryoku/removeVersion', id);
+        },
         async getProposal(proposalId) {
             this.loading = true;
             this.getComments(this.proposal.id);
@@ -142,23 +153,9 @@ export default {
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
-                proposal.versions = !proposal.versions ? [] : proposal.versions;
                 this.setSelectedProposal(proposal);
-                this.$store.dispatch("vendorProposal/setProposal",{...proposal});
-                this.$store.dispatch("commentProposal/setProposal",{...proposal});
+                this.$store.dispatch("vendorProposal/setProposal",proposal);
             }
-        },
-        selectVersion(index){
-            this.$store.commit('commentProposal/selectVersion', index);
-        },
-        saveVersion(version){
-            this.$store.dispatch('commentProposal/saveVersion', version);
-        },
-        changeVersion(versions){
-            this.$store.commit('commentProposal/setVersions', versions);
-        },
-        removeVersion(id){
-            this.$store.dispatch('commentProposal/removeVersion', id);
         }
     },
     computed: {
@@ -175,18 +172,11 @@ export default {
             return this.proposal.vendor
         },
         proposal(){
-            return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
             return this.$store.state.comment.selectedProposal;
         },
         proposals(){
             return this.$store.state.comment.commentsProposals;
-        },
-        selectedVersion(){
-          return this.$store.state.commentProposal.currentVersion;
-        },
-        versions(){
-          return this.$store.state.commentProposal.proposal.versions;
-        },
+        }
     },
     watch: {
         $route: function() {

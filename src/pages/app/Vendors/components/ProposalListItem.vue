@@ -2,7 +2,7 @@
   <div v-if="page === 'proposal'" class="proposal-list-item proposal"
        :class="hasNegotiation ? 'negotiation-item' : ''">
     <div>
-      <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName"></Avartar>
+      <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName"  :color="color"></Avartar>
       <img v-else src="/static/icons/vendor/maryoku_avatar.svg" width="62px"/>
     </div>
     <div class="font-bold font-size-16 ml-10">
@@ -154,6 +154,10 @@ export default {
     hasNegotiation: {
       type: Boolean,
       default: false,
+    },
+    color: {
+      type: String,
+      default: '#ff0066',
     }
   },
   data() {
