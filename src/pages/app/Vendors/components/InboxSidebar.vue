@@ -148,7 +148,9 @@
         <Loader :active="loading" :isFullScreen="true" page="vendor"></Loader>
     </div>
 </template>
+
 <script>
+
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import EventCommentComponent from "@/models/EventCommentComponent";
 import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
@@ -234,7 +236,6 @@ export default {
                     return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
                 });
             }
-
             return proposals;
         },
         proposals() {
@@ -324,6 +325,7 @@ export default {
 };
 
 </script>
+
 <style lang="scss">
 .title-icon {
     margin-right: 10px;
@@ -368,6 +370,11 @@ export default {
 
 .sidebar__item__content {
     margin-left: 5px;
+}
+
+.sidebar__item__content2 {
+    // margin-left: 5px;
+    margin-left: -1rem;
 }
 
 .sidebar__item__btn {

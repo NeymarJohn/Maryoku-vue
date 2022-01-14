@@ -154,6 +154,10 @@ export default {
     hasNegotiation: {
       type: Boolean,
       default: false,
+    },
+    color: {
+      type: String,
+      default: '#ff0066',
     }
   },
   data() {
