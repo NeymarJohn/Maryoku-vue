@@ -1,6 +1,5 @@
 <template>
   <div class="md-layout vendor-signin">
-    
     <Loader :active="loading" is-full-screen page="vendor"></Loader>
     <div class="md-layout-item">
       <signup-card>

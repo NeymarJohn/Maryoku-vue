@@ -19,7 +19,7 @@
       <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
         <div class="container md-offset">
           <video autoplay muted loop class="background-video">
-            <source :src="`/static/videos/signinBg.mp4`" type="video/mp4" />
+            <source :src="`/static/videos/signinBackground.mov`" type="video/mp4" />
             Your browser does not support HTML5 video.
           </video>
           <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
@@ -150,13 +150,12 @@ export default {
     window.addEventListener("resize", this.onResponsiveInverted);
   },
   beforeMount() {
-    console.log(this.$store.state.auth.status.loggedIn);
     if (this.$store.state.auth.status.loggedIn) {
       this.$store
-        .dispatch("auth/checkToken")
-        .then(res => {})
-        .catch(error => {
-          this.$store.dispatch("auth/logout").then(res => {
+        .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
+        .then((res) => {})
+        .catch((error) => {
+          this.$store.dispatch("auth/logout").then((res) => {
             this.$router.push({ path: "/signin" });
           });
         });

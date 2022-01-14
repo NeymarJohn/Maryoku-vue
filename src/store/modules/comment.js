@@ -2,17 +2,13 @@
 import EventComment from '@/models/EventComment'
 import EventCommentComponent from '@/models/EventCommentComponent'
 import { reject } from 'promise-polyfill'
-import Proposal from "@/models/Proposal";
-import ProposalVersion from "@/models/ProposalVersion";
-
 const state = {
   commentComponents: [],
   commentsProposals: [],
   selectedProposal: null,
   guestName: null,
   customer: null,
-  error: null,
-  currentVersion: -1,
+  error: null
 }
 
 const getters = {
@@ -40,7 +36,6 @@ const mutations = {
   },
   setSelectedProposal(state, commentsProposal) {
     state.selectedProposal = commentsProposal
-    state.currentVersion = -1;
   },
   addCommentComponent(state, commentComponent) {
     state.commentComponents.push(commentComponent);
@@ -78,10 +73,6 @@ const mutations = {
     state.commentComponents[index].comments.push(comment)
   },
   updateComment(state, comment) {
-  },
-  setVersions: (state, versions) => {
-    console.log("setVersions",versions);
-    state.selectedProposal.versions = versions;
   },
 }
 
@@ -246,28 +237,6 @@ const actions = {
         comments:commentComponent.comments
       });
       commentComponent.save()
-  },
-
-  saveVersion({ commit, state }, data) {
-    return new Promise(async (resolve, reject) => {
-      const query = new ProposalVersion({ ...data, proposal: new Proposal({ id: state.selectedProposal.id }) })
-        .for(new Proposal({ id: state.selectedProposal.id }));
-      let res = await query.save();
-      console.log('res', res);
-
-      if(!state.selectedProposal.versions){
-        commit("setVersions", [res])
-        return
-      }
-
-      let idx = state.selectedProposal.versions.findIndex(v => v.id === res.id);
-      if (idx === -1) {
-        commit("setVersions", [...state.selectedProposal.versions, res]);
-      } else {
-        Vue.set(state.selectedProposal.versions, idx, res);
-        commit("setVersions", state.selectedProposal.versions)
-      }
-    })
   },
 }
 
