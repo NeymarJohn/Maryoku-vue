@@ -183,9 +183,8 @@ export default {
       if (myVendor.attachment) {
         let formData = new FormData();
         formData.append("file", myVendor.attachment);
-        formData.append("from", "eventvendor");
-        formData.append("type", "attachment");
-        formData.append("name", myVendor.attachment.name);
+        formData.append("key", `eventvendor/attachment/${myVendor.attachment.name}`);
+
         const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -194,8 +193,8 @@ export default {
         myVendor.attachments = [
           {
             originalName: myVendor.attachment.name,
-            url: result.data.upload.path,
-            name: result.data.upload.name,
+            url: result.data.key,
+            name: myVendor.attachment.name,
           },
         ];
       }

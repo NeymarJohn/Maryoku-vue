@@ -2,11 +2,17 @@
 import EventComment from '@/models/EventComment'
 import EventCommentComponent from '@/models/EventCommentComponent'
 import { reject } from 'promise-polyfill'
+import Proposal from "@/models/Proposal";
+import ProposalVersion from "@/models/ProposalVersion";
+
 const state = {
   commentComponents: [],
+  commentsProposals: [],
+  selectedProposal: null,
   guestName: null,
   customer: null,
-  error: null
+  error: null,
+  currentVersion: -1,
 }
 
 const getters = {
@@ -27,6 +33,14 @@ const mutations = {
   },
   setCommentComponents(state, commentComponents) {
     state.commentComponents = commentComponents
+  },
+  setCommentsProposals(state, commentsProposals) {
+    console.log("setCommentsProposals",commentsProposals)
+    state.commentsProposals = commentsProposals
+  },
+  setSelectedProposal(state, commentsProposal) {
+    state.selectedProposal = commentsProposal
+    state.currentVersion = -1;
   },
   addCommentComponent(state, commentComponent) {
     state.commentComponents.push(commentComponent);
@@ -65,6 +79,10 @@ const mutations = {
   },
   updateComment(state, comment) {
   },
+  setVersions: (state, versions) => {
+    console.log("setVersions",versions);
+    state.selectedProposal.versions = versions;
+  },
 }
 
 const actions = {
@@ -91,6 +109,22 @@ const actions = {
           commit('setCommentComponents', res.data)
           // save customer when user comment as guest
           if(res.customer) commit('setCustomer', res.customer);
+          resolve(res.data)
+      }else {
+          commit('setError', res.message);
+          resolve([]);
+      }
+    });
+  },
+
+  getCommentsProposalsByVendor({ commit, state }, vendor_id) {
+
+    return new Promise( async (resolve, reject) => {
+      let query = new EventCommentComponent();
+      const res = await query.params({ vendorId:vendor_id }).get();
+      if (res.success) {
+          commit('setCommentsProposals', res.data)
+          // save customer when user comment as guest
           resolve(res.data)
       }else {
           commit('setError', res.message);
@@ -196,8 +230,45 @@ const actions = {
             commit('setError', res.data.message);
         }
     })
-  }
+  },
 
+  markAsRead({commit, state}, {proposal,commentComponent}){
+
+      console.log("this.commentComponents",commentComponent)
+      for(let comment of commentComponent.comments){
+          if(!comment.viewed){
+            comment.viewed = true;
+          }
+      }
+
+      commentComponent = new EventCommentComponent({
+        id: commentComponent.id,
+        comments:commentComponent.comments
+      });
+      commentComponent.save()
+  },
+
+  saveVersion({ commit, state }, data) {
+    return new Promise(async (resolve, reject) => {
+      const query = new ProposalVersion({ ...data, proposal: new Proposal({ id: state.selectedProposal.id }) })
+        .for(new Proposal({ id: state.selectedProposal.id }));
+      let res = await query.save();
+      console.log('res', res);
+
+      if(!state.selectedProposal.versions){
+        commit("setVersions", [res])
+        return
+      }
+
+      let idx = state.selectedProposal.versions.findIndex(v => v.id === res.id);
+      if (idx === -1) {
+        commit("setVersions", [...state.selectedProposal.versions, res]);
+      } else {
+        Vue.set(state.selectedProposal.versions, idx, res);
+        commit("setVersions", state.selectedProposal.versions)
+      }
+    })
+  },
 }
 
 

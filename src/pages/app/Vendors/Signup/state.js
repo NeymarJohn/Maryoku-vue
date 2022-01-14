@@ -61,7 +61,6 @@ const getters = {
         return isValid;
     },
 };
-
 const actions = {
     getVendor: ({ commit, state }, vendorId) => {
         Vendors.find(vendorId).then((vendor) => {
@@ -153,12 +152,11 @@ const actions = {
     },
     saveVendor: ({ commit, state }, vendor) => {
         return new Promise((resolve, reject) => {
-            state.isLoading = true;
             new Vendors(vendor)
                 .save()
                 .then(res => {
                     commit("setVendor", { ...state.vendor, ...res.item });
-                    state.isLoading = false;
+
                     resolve(res.item);
                 })
                 .catch(error => {
@@ -199,6 +197,14 @@ const actions = {
             }
         });
     },
+    searchVendor: ({ commit, state }, payload) => {
+        return new Promise(async(resolve, reject) => {
+            const query = new Vendors();
+            const res = await query.params(payload).get();
+            console.log('searchVendor',res);
+            resolve(res[0].results);
+        })
+    },
 };
 
 const mutations = {
@@ -230,6 +236,9 @@ const mutations = {
     },
     setEditing(state, editing) {
         state.isEditing = editing;
+    },
+    setLoading(state, value) {
+        state.isLoading = value
     },
     setVendor(state, vendor) {
         state.vendor = vendor;

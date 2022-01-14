@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-signup-wrapper">
-    <vendor-basic-info-form v-if="step == 0" :vendor="vendor" />
-    <vendor-signup-step1
+    <VendorBasicInfoForm v-if="step == 0" :vendor="vendor" />
+    <VendorSignupStep1
       :categories="businessCategories"
       :generalInfos="generalInfos"
       :companyServices="companyServices"
@@ -9,45 +9,35 @@
       :vendor="vendor"
       v-if="step == 1"
     />
-    <vendor-signup-step2 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 2" />
-    <vendor-signup-step3 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 3" />
-    <vendor-signup-step4 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 4" />
+    <VendorSignupStep2 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 2" />
+    <VendorSignupStep3 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 3" />
+    <VendorSignupStep4 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 4" />
 
-    <vendor-signup-step5 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 5" />
-    <vendor-signup-final-form :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 6" />
+    <VendorSignupStep5 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 5" />
+    <VendorSignupFinalForm :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 6" />
     <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
   </div>
 </template>
 
 <script>
-import VueElementLoading from "vue-element-loading";
+
 import Vendors from "@/models/Vendors";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-
-//COMPONENTS
-import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VendorBasicInfoForm from "./VendorBasicInfoForm.vue";
-import VendorSignupStep1 from "./VendorSignupStep1.vue";
-import VendorSignupStep2 from "./VendorSignupStep2.vue";
-import VendorSignupStep3 from "./VendorSignupStep3.vue";
-import VendorSignupStep4 from "./VendorSignupStep4.vue";
-import VendorSignupStep5 from "./VendorSignupStep5.vue";
-import VendorSignupFinalForm from "./VendorSignupFinalForm.vue";
-
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
+const components = {
+    VSignupEditableField: () => import("@/components/Inputs/VSignupEditableField.vue"),
+    VendorBasicInfoForm: () => import("./VendorBasicInfoForm.vue"),
+    VendorSignupStep1: () => import("./VendorSignupStep1.vue"),
+    VendorSignupStep2: () => import("./VendorSignupStep2.vue"),
+    VendorSignupStep3: () => import("./VendorSignupStep3.vue"),
+    VendorSignupStep4: () => import("./VendorSignupStep4.vue"),
+    VendorSignupStep5: () => import("./VendorSignupStep5.vue"),
+    VendorSignupFinalForm: () => import("./VendorSignupFinalForm.vue"),
+}
+
 export default {
-  components: {
-    VueElementLoading,
-    VSignupEditableField,
-    VendorBasicInfoForm,
-    VendorSignupStep1,
-    VendorSignupStep2,
-    VendorSignupStep3,
-    VendorSignupStep4,
-    VendorSignupStep5,
-    VendorSignupFinalForm,
-  },
+  components,
   data() {
     return {
       // selected_vendor: {
