@@ -77,6 +77,7 @@
                   v-if="upcomingEvents && upcomingEvents.length > 0"
                   :events="upcomingEvents"
                   @showEvent="showEvent"
+                  @showModal="showModal"
                 ></upcoming-event>
                 <template v-else>
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
@@ -97,6 +98,30 @@
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
+    <modal v-if="iconsModal" container-class="modal-container bg-white">
+      <template slot="header">
+        <div class="header-container">
+          <div>
+            <p>Select an icon</p>
+            <span>Icons are made to visually identify the events, only you see them.</span>
+          </div>
+
+          <div>
+            <md-button class=" md-simple text-decoration-none cursor-pointer " @click="iconsModal = false"
+              ><md-icon>close</md-icon></md-button
+            >
+          </div>
+        </div>
+      </template>
+      <template slot="body">
+        <div class="event-logo">
+          000
+        </div>
+      </template>
+      <template slot="footer">
+        
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -112,6 +137,7 @@ import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
 import ProposalRequestSection from "./Components/ProposalRequestSection.vue";
+import Modal from "@/components/Modal.vue";
 
 export default {
   components: {
@@ -122,6 +148,7 @@ export default {
     VendorCreateEventModal,
     UpcomingEvent,
     EventCalendar,
+    Modal,
     SyncCalendarModal,
     ProposalRequestSection,
   },
@@ -130,6 +157,7 @@ export default {
       iconUrl: `${this.$resourceURL}storage/icons/`,
       showVendorCreateModal: false,
       backOutDays: false,
+      iconsModal: false,
       monthlyReport: [],
       incomeChartData: [
         { label: "Jan", value: 0, future: true },
@@ -166,10 +194,10 @@ export default {
           new Date().getFullYear() + "-01-01",
         ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
       )
-      .then((res) => {
+      .then(res => {
         if (res.data.length) {
           this.monthlyReport = res.data;
-          res.data.forEach((item) => {
+          res.data.forEach(item => {
             this.incomeChartData[Number(item._id) - 1].value = item.amount;
             this.incomeChartData[Number(item._id) - 1].future = false;
           });
@@ -185,12 +213,12 @@ export default {
     this.getServiceReport();
     this.getMarkedDates();
     this.getComingEvents();
-    await this.$store.dispatch('vendorDashboard/getProposals', {vendorId: this.vendorData.id});
+    await this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
     getServiceReport() {
-      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then((res) => {
+      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then(res => {
         if (res.data.length) {
           this.serviceReportData = res.data;
         }
@@ -218,12 +246,12 @@ export default {
       let markedDates = [];
       if (this.backOutDays) {
         if (this.vendorData.dontWorkDays && this.vendorData.dontWorkDays.length) {
-          _.each(this.vendorData.dontWorkDays, (sd) => {
+          _.each(this.vendorData.dontWorkDays, sd => {
             markedDates.push(sd.date);
           });
         }
         if (this.vendorData.exDonts && this.vendorData.exDonts.length) {
-          this.vendorData.exDonts.map((h) => {
+          this.vendorData.exDonts.map(h => {
             markedDates.push(moment(h.date).format("YYYY-M-D"));
           });
         }
@@ -250,9 +278,9 @@ export default {
       let day = moment(e.date).date();
       let date = moment(e.date).format("YYYY-M-D");
       let selectedDates = this.date.selectedDates;
-      if (this.date.selectedDates.find((m) => m.date === date)) {
-        selectedDates = this.date.selectedDates.filter((s) => s.date !== e.date);
-        this.markedDates = this.markedDates.filter((m) => m !== date);
+      if (this.date.selectedDates.find(m => m.date === date)) {
+        selectedDates = this.date.selectedDates.filter(s => s.date !== e.date);
+        this.markedDates = this.markedDates.filter(m => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
         $("span.vfc-span-day:contains(" + day + ")").css("background-color", "");
       }
@@ -264,21 +292,29 @@ export default {
         limit: this.eventLimit,
       })
         .get()
-        .then((events) => {
+        .then(events => {
           this.upcomingEvents = events.slice(0, 5);
         });
     },
     showEvent(event) {
-      console.log('showEvent', event);
+      console.log("showEvent", event);
       this.showVendorCreateModal = true;
       this.defaultEventData = { ...event };
     },
+
+    ShowModal(event) {
+      console.log("showEvent", event);
+      this.iconsModal = true;
+      this.defaultEventData = { ...event };
+    },
     createEventFromCalendar(data) {
-      console.log('createEventFromCalendar', data);
-      if (data.hasOwnProperty('event')) {
-        this.defaultEventData = {...data.event}
+      console.log("createEventFromCalendar", data);
+      if (data.hasOwnProperty("event")) {
+        this.defaultEventData = { ...data.event };
       } else {
-        this.defaultEventData = { date : moment(`${data.date.years}-${data.date.month}-${data.date.date}`, "yyyy-M-D").toDate()}
+        this.defaultEventData = {
+          date: moment(`${data.date.years}-${data.date.month}-${data.date.date}`, "yyyy-M-D").toDate(),
+        };
       }
 
       this.showVendorCreateModal = true;
@@ -293,7 +329,7 @@ export default {
     },
     serviceChart() {
       let services = [this.vendorData.vendorCategories[0]];
-      this.vendorData.secondaryServices.map((s) => {
+      this.vendorData.secondaryServices.map(s => {
         services.push(s.vendorCategory);
       });
       return services.map((vc, idx) => {
@@ -304,7 +340,7 @@ export default {
           image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
         if (this.serviceReportData) {
-          let cat = this.serviceReportData.find((c) => c._id == vc);
+          let cat = this.serviceReportData.find(c => c._id == vc);
           if (cat) {
             item.value = cat.amount;
             item.color = this.activeCategoryColors[idx];
@@ -322,7 +358,7 @@ export default {
         return s + item.amount / 100;
       }, 0);
     },
-    proposals(){
+    proposals() {
       return this.$store.state.vendorDashboard.proposals;
     },
   },
@@ -355,5 +391,17 @@ export default {
 }
 /deep/ .md-switch-label {
   color: #999999;
+}
+
+.event-logo {
+  box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -1,14 +1,15 @@
 <template>
   <div class="upcoming-event-list">
     <div class="upcoming-event" v-for="(event, index) in events" :key="event.id">
-      <div class="event-logo">
-        <img :src="`${$iconURL}CalendarIcons/${eventIcon(index)}`">
+      <div class="event-logo" @click="showModal(event)" >
+        <img :src="`${$iconURL}CalendarIcons/${eventIcon(index)}`" />
       </div>
       <div class="event-detail flex-1">
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
         <div class="font-bold mb-10" v-if="event.customer">{{ event.customer.name }} | {{ event.customer.email }}</div>
         <div>
-          {{ event.companyName }} | <a :href="getProposalUrl(event.id)" class="color-purple" target="_blank">See proposal</a>
+          {{ event.companyName }} |
+          <a :href="getProposalUrl(event.id)" class="color-purple" target="_blank">See proposal</a>
         </div>
       </div>
       <md-button class="md-simple md-icon-button" @click="selectEvent(event)">
@@ -25,39 +26,41 @@ export default {
       default: [],
     },
   },
-  data(){
-      return {
-          icons: [
-              'Group 20904.svg',
-              'Group 20909.svg',
-              'Group 20912.svg',
-              'Group 20915.svg',
-              'Group 20918.svg',
-              'Group 20919.svg',
-              'Group 20922.svg',
-              'Group 20925.svg',
-              'Group 20928.svg',
-              'Group 20929.svg',
-              'Group 20932.svg',
-              'Group 20935.svg',
-              'Group 20936.svg',
-              'Group 20941.svg',
-              'Group 20944.svg',
-              'Group 20951.svg',
-              'Group 20954.svg',
-              'Group 20957.svg',
-              'Page-1.svg',
-              'Page-1_2.svg',
-              'Page-1_3.svg',
-              'Page-1_4.svg',
-              'Page-1_5.svg',
-              'Page-1_6.svg',
-              'Page-1_7.svg',
-              'Page-1_8.svg',
-              'Page-1_9.svg',
-              'Page-1_10.svg',
-          ]
-      }
+  components: {
+  },
+  data() {
+    return {
+      icons: [
+        "Group 20904.svg",
+        "Group 20909.svg",
+        "Group 20912.svg",
+        "Group 20915.svg",
+        "Group 20918.svg",
+        "Group 20919.svg",
+        "Group 20922.svg",
+        "Group 20925.svg",
+        "Group 20928.svg",
+        "Group 20929.svg",
+        "Group 20932.svg",
+        "Group 20935.svg",
+        "Group 20936.svg",
+        "Group 20941.svg",
+        "Group 20944.svg",
+        "Group 20951.svg",
+        "Group 20954.svg",
+        "Group 20957.svg",
+        "Page-1.svg",
+        "Page-1_2.svg",
+        "Page-1_3.svg",
+        "Page-1_4.svg",
+        "Page-1_5.svg",
+        "Page-1_6.svg",
+        "Page-1_7.svg",
+        "Page-1_8.svg",
+        "Page-1_9.svg",
+        "Page-1_10.svg",
+      ],
+    };
   },
   methods: {
     getUpcomingPeriod(dateString) {
@@ -75,20 +78,23 @@ export default {
     selectEvent(event) {
       this.$emit("showEvent", event);
     },
-    eventIcon(idx){
+     showModal(event) {
+      this.$emit("showModal", event);
+    },
+    eventIcon(idx) {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
     },
-    getProposalUrl(eventId){
-      console.log('proposalUrl', eventId, this.proposals.map(p => p))
+    getProposalUrl(eventId) {
+      console.log("proposalUrl", eventId, this.proposals.map(p => p));
       let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id.toString() === eventId.toString());
       return proposal ? `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}` : null;
-    }
+    },
   },
-  computed:{
-    proposals(){
+  computed: {
+    proposals() {
       return this.$store.state.vendorDashboard.proposals;
     },
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

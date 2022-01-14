@@ -53,7 +53,7 @@ export default {
   computed:{
     imgUrl(){
         if ( this.page === 'planner') {
-            return this.loaders[Math.ceil(Math.random() * 10) % 4];
+            return '/static/icons/loader/circular.gif';
         } else if ( this.page === 'vendor' ) {
             return '/static/icons/loader/vendor.gif';
         }
