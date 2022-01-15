@@ -24,7 +24,7 @@
             <li class="event-details__item">
               <label>Date</label>
               <div class="info-text" v-if="vendorProposal.nonMaryoku">
-                    {{ eventData.startTime * 1000 | date("MMM Do YYYY") }}
+                {{ (eventData.startTime * 1000) | date("MMM Do YYYY") }}
               </div>
               <div class="info-text" v-else-if="!vendorProposal.suggestionDate">
                 {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
@@ -37,7 +37,7 @@
             <li class="event-details__item">
               <label>Guest Arrival Time</label>
               <div class="info-text" v-if="vendorProposal.nonMaryoku">
-                {{ eventData.startTime * 1000 | date("MMM Do YYYY") }}
+                {{ (eventData.startTime * 1000) | date("MMM Do YYYY") }}
               </div>
               <div class="info-text" v-else>
                 {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
@@ -48,8 +48,12 @@
       </section>
 
       <section class="proposal-body">
-        <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner') && eventData.owner">Dear {{ eventData.owner.name }},</h1>
-        <h1 class="font-size-30 text-capitalize" v-else-if="eventData.hasOwnProperty('customer')">Dear {{ eventData.customer.name }},</h1>
+        <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner') && eventData.owner">
+          Dear {{ eventData.owner.name }},
+        </h1>
+        <h1 class="font-size-30 text-capitalize" v-else-if="eventData.hasOwnProperty('customer')">
+          Dear {{ eventData.customer.name }},
+        </h1>
         <p class="mt-10">
           {{ vendorProposal.personalMessage }}
 
@@ -74,7 +78,7 @@
             </template>
 
             <template v-if="vendorProposal.inspirationalPhotos">
-              <div v-for="item in vendorProposal.inspirationalPhotos.filter((item) => !!item)" :key="item.url">
+              <div v-for="item in vendorProposal.inspirationalPhotos.filter(item => !!item)" :key="item.url">
                 <img class="item" :src="item.url" />
                 <div class="mt-5">{{ item.caption }}</div>
               </div>
@@ -142,7 +146,7 @@
           <div class="attachment-tag-list">
             <div
               class="attachment-tag"
-              v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
+              v-for="(attachment, index) in attachments.filter(attachement => attachement.url)"
               :key="index"
             >
               <img :src="`${$iconURL}common/pin-red.svg`" />
@@ -193,127 +197,166 @@
         </div>
       </div>
     </section>
-    <section v-if="vendorProposal.vendor.healthPolicy || vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length"
-           class="proposal-section policy-section"
-      >
-          <div class="proposal-section__title px-40">
-              <img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy
+    <section
+      v-if="
+        vendorProposal.vendor.healthPolicy ||
+          (vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length)
+      "
+      class="proposal-section policy-section"
+    >
+     
+      <div class="card-section align-center px-20 py-30">
+        <div class="px-40">
+          <div class="d-flex justify-content-between align-center">
+            <div class="proposal-section__title">
+              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5"> Health policy </span>
+            </div>
+            <div>
+              <md-button class="md-simple" @click="isEdit = !isEdit">
+                <md-icon style="font-size: 40px !important">
+                  {{ isEdit ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
+                </md-icon>
+              </md-button>
+            </div>
           </div>
-
-          <div class="policy-content">
+          <div v-if="isEdit" class="value">
+            <div class="policy-content">
               <template v-if="vendorProposal.vendor.healthPolicy">
-                  <div class="mt-20 font-bold-extra">
-                      <span class="color-red">COVID 19</span>
-                      - Exceptional Policy
-                  </div>
-                  <p class="my-10">
-                      {{vendorProposal.vendor.healthPolicy}}
-                  </p>
+                <div class="mt-20 font-bold-extra">
+                  <span class="color-red">COVID 19</span>
+                  - Exceptional Policy
+                </div>
+                <p class="my-10">
+                  {{ vendorProposal.vendor.healthPolicy }}
+                </p>
               </template>
               <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
-                  <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-                  <div class="md-layout mt-20">
-                      <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                           :style="{display: vendorProposal.vendor.guaranteed.includes(option.value)? '': 'none'}">
-                          <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                              <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
-                              {{option.label}}
-                          </div>
-                      </div>
+                <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+                <div class="md-layout mt-20">
+                  <div
+                    v-for="option in guaranteedOptions"
+                    class="md-layout-item md-size-30 py-10"
+                    :key="option.value"
+                    :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+                  >
+                    <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                      <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
+                      {{ option.label }}
+                    </div>
                   </div>
+                </div>
               </template>
-
+            </div>
           </div>
+        </div>
+      </div>
     </section>
 
     <section class="proposal-section policy-section">
-      <div class="proposal-section__title px-40">
-        <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
-      </div>
+      <div class="card-section align-center px-20 py-30">
+        <div class="px-40">
+          <div class="d-flex justify-content-between align-center">
+            <div class="proposal-section__title">
+              <img :src="`${submitProposalIcon}Asset 287.svg`" width="27" /> <span class="px-5">Our Policy </span>
+            </div>
 
-      <div class="policy-content">
-        <div class="side-label">
-          <div class="label-value">Our Policy</div>
-        </div>
-        <div class="rules">
-          <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-            <div class="item">{{ policy.name }}</div>
-            <div class="item" v-if="policy.type === 'MultiSelection'">
-              <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-              }}</span>
-            </div>
-            <div class="item" v-else-if="policy.type === 'Including'">
-              <span class="mr-10" v-if="policy.value"> Yes </span>
-              <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-            </div>
-            <div class="item text-right" v-else>
-              <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-              <span v-if="policy.type === 'Boolean'">
-                <img
-                  v-if="policy.value === true"
-                  :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                  class="page-icon"
-                />
-                <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
-                <!-- {{ policy.value === true ? "Yes" : "No" }} -->
-              </span>
-              <span v-else>
-                <img
-                  class="page-icon"
-                  v-if="policy.value === true"
-                  :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                />
-                <img
-                  class="page-icon"
-                  v-else-if="policy.value === false"
-                  :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
-                />
-                <span v-else>{{ policy.value }}</span>
-              </span>
-              <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
-              <span v-if="policy.isPercentage">%</span>
-              <span class="ml-50" v-if="policy.hasOwnProperty('attendees')"> {{ policy.attendees }} attendees </span>
+            <div>
+              <md-button class="md-simple" @click="isPolicy = !isPolicy">
+                <md-icon style="font-size: 40px !important">
+                  {{ isPolicy ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
+                </md-icon>
+              </md-button>
             </div>
           </div>
-        </div>
-        <div class="rules" v-if="additionalRules && additionalRules.length > 0">
-          <h5 class="font-bold font-size-20">Additional Rules</h5>
-          <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-            <div class="item">Event must be {{ policy }}</div>
-          </div>
-        </div>
-        <div class="side-label">
-          <div class="label-value">Our cancellation approach</div>
-        </div>
+          <div v-if="isPolicy" class="value">
+            
 
-        <div class="proposal-section__subtitle">
-          <div class="subtitle">We allow free cancellation until:</div>
-          <div class="desc">30 days before the event</div>
-        </div>
+            <div class="policy-content">
+              <div class="rules">
+                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                  <div class="item">{{ policy.name }}</div>
+                  <div class="item" v-if="policy.type === 'MultiSelection'">
+                    <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                    }}</span>
+                  </div>
+                  <div class="item" v-else-if="policy.type === 'Including'">
+                    <span class="mr-10" v-if="policy.value"> Yes </span>
+                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                  </div>
+                  <div class="item text-right" v-else>
+                    <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                    <span v-if="policy.type === 'Boolean'">
+                      <img
+                        v-if="policy.value === true"
+                        :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                        class="page-icon"
+                      />
+                      <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
+                      <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                    </span>
+                    <span v-else>
+                      <img
+                        class="page-icon"
+                        v-if="policy.value === true"
+                        :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                      />
+                      <img
+                        class="page-icon"
+                        v-else-if="policy.value === false"
+                        :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                      />
+                      <span v-else>{{ policy.value }}</span>
+                    </span>
+                    <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                    <span v-if="policy.isPercentage">%</span>
+                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                      {{ policy.attendees }} attendees
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="rules" v-if="additionalRules && additionalRules.length > 0">
+                <h5 class="font-bold font-size-20">Additional Rules</h5>
+                <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+                  <div class="item">Event must be {{ policy }}</div>
+                </div>
+              </div>
+              <div class="side-label">
+                <div class="label-value">Our cancellation approach</div>
+              </div>
 
-        <CancellationPolicy></CancellationPolicy>
+              <div class="proposal-section__subtitle">
+                <div class="subtitle">We allow free cancellation until:</div>
+                <div class="desc">30 days before the event</div>
+              </div>
 
-        <div class="side-label">
-          <div class="label-value">Act of God</div>
-        </div>
-        <div class="rules">
-          <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
-          is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
-          authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics, quarantines,
-          other diseases, climatic aberrations, or from any other cause beyond company’s control.
-        </div>
+              <CancellationPolicy></CancellationPolicy>
 
-        <div class="signature-section">
-          <div class="signature-section__vendor">
-            {{ vendorProposal.vendor.vendorDisplayName }}
-          </div>
-          <div class="signature-section__image">
-            <img :src="vendorProposal.vendor.signature" />
+              <div class="side-label">
+                <div class="label-value">Act of God</div>
+              </div>
+              <div class="rules">
+                <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
+                is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
+                authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
+                quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
+              </div>
+
+              <div class="signature-section">
+                <div class="signature-section__vendor">
+                  {{ vendorProposal.vendor.vendorDisplayName }}
+                </div>
+                <div class="signature-section__image">
+                  <img :src="vendorProposal.vendor.signature" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
+
     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
       <md-icon>close</md-icon>
     </md-button>
@@ -326,10 +369,10 @@ import { GuaranteedOptions } from "@/constants/options";
 import _ from "underscore";
 
 const components = {
-    carousel: () => import('vue-owl-carousel'),
-    EventProposalPrice: () => import("../../Events/Proposal/EventProposalPrice.vue"),
-    CancellationPolicy: () => import("@/components/CancellationPolicy.vue")
-}
+  carousel: () => import("vue-owl-carousel"),
+  EventProposalPrice: () => import("../../Events/Proposal/EventProposalPrice.vue"),
+  CancellationPolicy: () => import("@/components/CancellationPolicy.vue"),
+};
 
 export default {
   components,
@@ -341,6 +384,9 @@ export default {
   },
   data() {
     return {
+      isEdit: false,
+      isPolicy: false,
+      expandHealth: false,
       menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
       iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
       submitProposalIcon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Submit%20Proposal/",
@@ -356,19 +402,17 @@ export default {
     console.log("detail.mounted", this.vendorProposal);
     if (this.vendorProposal.nonMaryoku) {
       this.eventData = this.vendorProposal.eventData;
-
     } else {
       this.eventData = this.vendorProposal.proposalRequest.eventData;
     }
-      console.log("detail.mounted", this.eventData);
+    console.log("detail.mounted", this.eventData);
   },
   computed: {
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
     headerBackgroundImage() {
-      if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0])
-        return this.vendorProposal.coverImage[0];
+      if (this.vendorProposal.coverImage && this.vendorProposal.coverImage[0]) return this.vendorProposal.coverImage[0];
       if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
         return this.vendorProposal.inspirationalPhotos[0].url;
       if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
@@ -388,7 +432,7 @@ export default {
     validPolicy() {
       if (this.vendorProposal.vendor.policies)
         return this.vendorProposal.vendor.policies.filter(
-          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+          item => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
         );
       return null;
     },
@@ -418,12 +462,12 @@ export default {
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-        let services =
-            this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied
-                ? this.vendorProposal.bookedServices
-                : this.vendorProposal.bundleDiscount.services;
+      let services =
+        this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied
+          ? this.vendorProposal.bookedServices
+          : this.vendorProposal.bundleDiscount.services;
       if (!services) return 0;
-      services.forEach((serviceCategory) => {
+      services.forEach(serviceCategory => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
@@ -440,7 +484,7 @@ export default {
 
     totalPriceOfProposal() {
       let totalPrice = 0;
-      Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
+      Object.keys(this.vendorProposal.costServices).forEach(serviceCategory => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
@@ -450,7 +494,7 @@ export default {
 
       console.log(this.addedServices);
       // added service item price
-      Object.keys(this.addedServices).forEach((serviceCategory) => {
+      Object.keys(this.addedServices).forEach(serviceCategory => {
         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
           return s + service.requirementValue * service.price;
         }, 0);
@@ -493,17 +537,17 @@ export default {
       return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
     },
     getBundleServices(bundleServices) {
-      const serviceNames = bundleServices.map((service) => {
+      const serviceNames = bundleServices.map(service => {
         return this.getCategory(service).title;
       });
       return serviceNames.join(" + ");
     },
     getCategory(key) {
-      return this.categories.find((item) => item.key === key);
+      return this.categories.find(item => item.key === key);
     },
     isSocial() {
       let isBlank = true;
-      _.each(this.vendorProposal.vendor.social, (s) => {
+      _.each(this.vendorProposal.vendor.social, s => {
         isBlank &= s === null;
       });
 
