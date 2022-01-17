@@ -230,12 +230,14 @@
       </template>
     </modal>
 
-    <centred-modal v-if="showLessInsightModal" container-class=" bg-white px-60">
+    <centred-modal v-if="showLessInsightModal" container-class="modal-container bg-white ">
       <template slot="header">
         <div>
           <span
-           class="winning-rate"
-
+            style="
+          font-size: 30px;
+          font-weight: bold;
+          "
             >Winning Rate</span
           >
         </div>
@@ -244,7 +246,7 @@
         <NoInsight />
       </template>
       <template slot="footer">
-        <md-button class="md-vendor px-50" @click="showLessInsightModal = false">Close</md-button>
+        <md-button class="md-vendor ml-40" @click="showLessInsightModal = false">Close</md-button>
       </template>
     </centred-modal>
     <modal v-if="showInsightModal" container-class="modal-container bg-white">
@@ -769,19 +771,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.winning-rate {
-  width: 217px;
-  height: 41px;
-
-  font-size: 25px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.53;
-  letter-spacing: normal;
-  text-align: center;
-  color: #050505;
-}
 .vendor-proposal-board {
   .proposal-requests {
     display: flex;

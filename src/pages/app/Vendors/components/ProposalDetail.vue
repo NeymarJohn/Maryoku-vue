@@ -204,159 +204,131 @@
       "
       class="proposal-section policy-section"
     >
-     
-      <div class="card-section align-center px-20 py-30">
-        <div class="px-40">
-          <div class="d-flex justify-content-between align-center">
-            <div class="proposal-section__title">
-              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5"> Health policy </span>
-            </div>
-            <div>
-              <md-button class="md-simple" @click="isEdit = !isEdit">
-                <md-icon style="font-size: 40px !important">
-                  {{ isEdit ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
-                </md-icon>
-              </md-button>
-            </div>
-          </div>
-          <div v-if="isEdit" class="value">
-            <div class="policy-content">
-              <template v-if="vendorProposal.vendor.healthPolicy">
-                <div class="mt-20 font-bold-extra">
-                  <span class="color-red">COVID 19</span>
-                  - Exceptional Policy
-                </div>
-                <p class="my-10">
-                  {{ vendorProposal.vendor.healthPolicy }}
-                </p>
-              </template>
-              <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
-                <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-                <div class="md-layout mt-20">
-                  <div
-                    v-for="option in guaranteedOptions"
-                    class="md-layout-item md-size-30 py-10"
-                    :key="option.value"
-                    :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
-                  >
-                    <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                      <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
-                      {{ option.label }}
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
-          </div>
+      <md-list-item md-expand :md-expanded.sync="expandHealth" class="">
+        <div class="proposal-section__title px-29">
+          <img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy
         </div>
-      </div>
+        <div class="policy-content" slot="md-expand">
+          <template v-if="vendorProposal.vendor.healthPolicy">
+            <div class="mt-20 font-bold-extra">
+              <span class="color-red">COVID 19</span>
+              - Exceptional Policy
+            </div>
+            <p class="my-10">
+              {{ vendorProposal.vendor.healthPolicy }}
+            </p>
+          </template>
+          <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
+            <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+            <div class="md-layout mt-20">
+              <div
+                v-for="option in guaranteedOptions"
+                class="md-layout-item md-size-30 py-10"
+                :key="option.value"
+                :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+              >
+                <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                  <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
+                  {{ option.label }}
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+       
+      </md-list-item>
     </section>
 
     <section class="proposal-section policy-section">
-      <div class="card-section align-center px-20 py-30">
-        <div class="px-40">
-          <div class="d-flex justify-content-between align-center">
-            <div class="proposal-section__title">
-              <img :src="`${submitProposalIcon}Asset 287.svg`" width="27" /> <span class="px-5">Our Policy </span>
-            </div>
+      <div class="proposal-section__title px-30">
+        <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
+      </div>
 
-            <div>
-              <md-button class="md-simple" @click="isPolicy = !isPolicy">
-                <md-icon style="font-size: 40px !important">
-                  {{ isPolicy ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
-                </md-icon>
-              </md-button>
+      <div class="policy-content">
+        <div class="side-label">
+          <div class="label-value">Our Policy</div>
+        </div>
+
+        <div class="rules">
+          <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+            <div class="item">{{ policy.name }}</div>
+            <div class="item" v-if="policy.type === 'MultiSelection'">
+              <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+              }}</span>
+            </div>
+            <div class="item" v-else-if="policy.type === 'Including'">
+              <span class="mr-10" v-if="policy.value"> Yes </span>
+              <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+            </div>
+            <div class="item text-right" v-else>
+              <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+              <span v-if="policy.type === 'Boolean'">
+                <img
+                  v-if="policy.value === true"
+                  :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                  class="page-icon"
+                />
+                <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
+                <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+              </span>
+              <span v-else>
+                <img
+                  class="page-icon"
+                  v-if="policy.value === true"
+                  :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                />
+                <img
+                  class="page-icon"
+                  v-else-if="policy.value === false"
+                  :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                />
+                <span v-else>{{ policy.value }}</span>
+              </span>
+              <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+              <span v-if="policy.isPercentage">%</span>
+              <span class="ml-50" v-if="policy.hasOwnProperty('attendees')"> {{ policy.attendees }} attendees </span>
             </div>
           </div>
-          <div v-if="isPolicy" class="value">
-            
+        </div>
+        <div class="rules" v-if="additionalRules && additionalRules.length > 0">
+          <h5 class="font-bold font-size-20">Additional Rules</h5>
+          <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+            <div class="item">Event must be {{ policy }}</div>
+          </div>
+        </div>
+        <div class="side-label">
+          <div class="label-value">Our cancellation approach</div>
+        </div>
 
-            <div class="policy-content">
-              <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                  <div class="item">{{ policy.name }}</div>
-                  <div class="item" v-if="policy.type === 'MultiSelection'">
-                    <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                    }}</span>
-                  </div>
-                  <div class="item" v-else-if="policy.type === 'Including'">
-                    <span class="mr-10" v-if="policy.value"> Yes </span>
-                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                  </div>
-                  <div class="item text-right" v-else>
-                    <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                    <span v-if="policy.type === 'Boolean'">
-                      <img
-                        v-if="policy.value === true"
-                        :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                        class="page-icon"
-                      />
-                      <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
-                      <!-- {{ policy.value === true ? "Yes" : "No" }} -->
-                    </span>
-                    <span v-else>
-                      <img
-                        class="page-icon"
-                        v-if="policy.value === true"
-                        :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                      />
-                      <img
-                        class="page-icon"
-                        v-else-if="policy.value === false"
-                        :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
-                      />
-                      <span v-else>{{ policy.value }}</span>
-                    </span>
-                    <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
-                    <span v-if="policy.isPercentage">%</span>
-                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                      {{ policy.attendees }} attendees
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="rules" v-if="additionalRules && additionalRules.length > 0">
-                <h5 class="font-bold font-size-20">Additional Rules</h5>
-                <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                  <div class="item">Event must be {{ policy }}</div>
-                </div>
-              </div>
-              <div class="side-label">
-                <div class="label-value">Our cancellation approach</div>
-              </div>
+        <div class="proposal-section__subtitle">
+          <div class="subtitle">We allow free cancellation until:</div>
+          <div class="desc">30 days before the event</div>
+        </div>
 
-              <div class="proposal-section__subtitle">
-                <div class="subtitle">We allow free cancellation until:</div>
-                <div class="desc">30 days before the event</div>
-              </div>
+        <CancellationPolicy></CancellationPolicy>
 
-              <CancellationPolicy></CancellationPolicy>
+        <div class="side-label">
+          <div class="label-value">Act of God</div>
+        </div>
+        <div class="rules">
+          <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
+          is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
+          authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics, quarantines,
+          other diseases, climatic aberrations, or from any other cause beyond company’s control.
+        </div>
 
-              <div class="side-label">
-                <div class="label-value">Act of God</div>
-              </div>
-              <div class="rules">
-                <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
-                is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
-                authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
-                quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
-              </div>
-
-              <div class="signature-section">
-                <div class="signature-section__vendor">
-                  {{ vendorProposal.vendor.vendorDisplayName }}
-                </div>
-                <div class="signature-section__image">
-                  <img :src="vendorProposal.vendor.signature" />
-                </div>
-              </div>
-            </div>
+        <div class="signature-section">
+          <div class="signature-section__vendor">
+            {{ vendorProposal.vendor.vendorDisplayName }}
+          </div>
+          <div class="signature-section__image">
+            <img :src="vendorProposal.vendor.signature" />
           </div>
         </div>
       </div>
     </section>
-
     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
       <md-icon>close</md-icon>
     </md-button>
@@ -384,8 +356,6 @@ export default {
   },
   data() {
     return {
-      isEdit: false,
-      isPolicy: false,
       expandHealth: false,
       menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
       iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
