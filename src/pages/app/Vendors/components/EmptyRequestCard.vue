@@ -34,6 +34,7 @@ export default {
   padding: 31.5px 30.9px 30.4px 23.1px;
   min-width: 468px;
 }
+
         .card-title{
         font-family: "Manrope-Bold";
         text-transform: uppercase;
@@ -44,6 +45,7 @@ export default {
         font-weight: bold;
         font-size: 20px;
         }
+
         .card-description{
         font-family: 'Manrope-Regular';
         letter-spacing: normal;
@@ -54,11 +56,12 @@ export default {
         color: #050505;
         font-size: 16px;
         }
+
           .card-button{
           font-family: "Manrope-Bold";
           letter-spacing: normal;
           font-stretch: normal;
-          text-transform: none;
+          padding: 7.5px 38px;
           line-height: normal;
           text-align: center;
           font-weight: bold;
