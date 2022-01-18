@@ -116,6 +116,7 @@ import VueElementLoading from "vue-element-loading";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventComponentVendor from "@/models/EventComponentVendor";
+import S3Service from "../../services/s3.service";
 export default {
   name: "add-vendor-modal",
   components: {
@@ -181,15 +182,8 @@ export default {
 
       myVendor.vendorCategory = this.selectedComponent.componentId;
       if (myVendor.attachment) {
-        let formData = new FormData();
-        formData.append("file", myVendor.attachment);
-        formData.append("key", `eventvendor/attachment/${myVendor.attachment.name}`);
 
-        const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const result = await S3Service.fileUpload(myVendor.attachment, `eventvendor/attachment/${myVendor.attachment.name}`);
         myVendor.attachments = [
           {
             originalName: myVendor.attachment.name,
