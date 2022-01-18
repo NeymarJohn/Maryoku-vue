@@ -43,20 +43,20 @@
             </div>
             <div class="dropdown2 d-flex">
                 <md-menu md-size="medium" class="action-menu myr-1" :md-offset-x="-300" :md-offset-y="-36">
-                    <md-button md-menu-trigger class="edit-btn md-simple sortStatus">
+                    <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('name')">
                         Sort
-                        <i class="fas fa-chevron-up" v-if="sortType == 'asc'" @click.stop="changeSortType"></i>
-                        <i class="fas fa-chevron-down" @click.stop="changeSortType" v-else></i>
+                        <i class="fas fa-chevron-up my-chevron" v-if="commentSortType == 'asc'" @click.stop="changeCommentSortType('name')" @click="sortBy='name'"></i>
+                        <i class="fas fa-chevron-down my-chevron" v-else @click.stop="changeCommentSortType('name')" @click="sortBy='name'"></i>
                     </md-button>
                     <md-menu-content>
                         <md-menu-item @click="sortBy='name'" class="md-purple"><span>Name</span></md-menu-item>
                         <md-menu-item @click="sortBy='date'" class="md-purple"><span>Date</span></md-menu-item>
                     </md-menu-content>
                 </md-menu>
-                <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click="changeStatusSortType">
+                <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('status')">
                     Status
-                    <i class="fas fa-chevron-up" v-if="statusSortType == 'asc'"></i>
-                    <i class="fas fa-chevron-down" v-else></i>
+                    <i class="fas fa-chevron-up my-chevron" v-if="commentStatusSortType == 'asc'" @click.stop="changeCommentSortType('status')"></i>
+                    <i class="fas fa-chevron-down my-chevron" v-else @click.stop="changeCommentSortType('status')"></i>
                 </md-button>
             </div>
         </div>
@@ -200,10 +200,10 @@ export default {
             let proposals = []
 
             for (let proposal of this.proposals) {
-                if (proposal.commentComponent.length) {
+                // if (proposal.commentComponent.length) {
                     proposal.unread_count = this.getViewCount(proposal.commentComponent);
                     proposals.push(proposal);
-                }
+                // }
                 proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
             }
 
@@ -282,6 +282,54 @@ export default {
             if (this.sortBy == '') {
                 this.sortBy = 'date';
             }
+        },
+        changeCommentSortType(sortByType) {
+            if(sortByType == 'name'){
+                this.commentSortType = this.commentSortType == 'asc' ? 'desc' : 'asc'
+            }
+
+            if(sortByType == 'status'){
+                this.commentStatusSortType = this.commentStatusSortType == 'asc' ? 'desc' : 'asc'
+            }
+
+            this.commentSortBy = sortByType;
+
+            let components2 = [];
+
+            for (let component of this.commentComponents) {
+                if (component.comments.length) {
+                    component.unread_count = this.getViewCount(component.comments);
+                    components2.push(component);
+                }
+            }
+            if(sortByType == 'name'){
+                if (this.commentSortBy == 'name') {
+                    components2.sort((a, b) => {
+                        let name1 = a.customer ? a.customer.name : a.planner.name;
+                        let name2 = b.customer ? b.customer.name : b.planner.name;
+                        if (this.commentSortType == 'asc') {
+                            return name1 > name2 ? 1 : -1;
+                        }else{
+                            return name1 < name2 ? 1 : -1;
+                        }
+                    });
+                }
+            }
+
+
+            if(sortByType == 'status'){
+                if (this.commentSortBy == 'status') {
+                    components2.sort((a, b) => {
+                        if (this.commentStatusSortType == 'asc') {
+                            return b.unread_count - a.unread_count;
+                        }
+
+                        return a.unread_count - b.unread_count;
+                    });
+                }
+            }
+
+            this.commentComponents = components2;
         },
         toggleshowReply(commentIndex) {
             this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex
@@ -403,7 +451,7 @@ export default {
 .sidebar__item__img {
     width: 57px;
     height: 57px !important;
-    margin-right: 25px;
+    // margin-right: 25px;
 }
 
 .commentMode {
@@ -683,7 +731,8 @@ img.header-img {
 
     .commentsReplies {
         border-top: 1.3px solid rgba(112, 112, 112, 0.45);
-        padding: 1rem;
+        border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
+        padding: 1rem 0rem 1rem 2rem;
 
         .commentItem {
             border-bottom: 0.5px solid rgba(112, 112, 112, 0.45);
