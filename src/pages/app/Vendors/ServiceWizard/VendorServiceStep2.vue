@@ -21,6 +21,7 @@
             description or amount.
           </p>
         </div>
+        <vendor-custom-service-item />
         <vendor-service-item
           v-for="(c, cIndex) in categories.find((category) => category.name == currentService.vendorCategory)
             .categories"
@@ -38,6 +39,7 @@
 <script>
 
 import VendorServiceItem from "../components/VendorServiceItem.vue";
+import VendorCustomServiceItem from "../components/VendorCustomServiceItem.vue"
 import { VendorCategories } from "@/constants/vendor";
 
 export default {
@@ -48,6 +50,7 @@ export default {
   },
   components: {
     VendorServiceItem,
+    VendorCustomServiceItem
   },
   data() {
     return {
