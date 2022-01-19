@@ -2,8 +2,10 @@
   <div v-if="page === 'proposal'" class="proposal-list-item proposal"
        :class="hasNegotiation ? 'negotiation-item' : ''">
     <div>
-      <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName"></Avartar>
-      <img v-else src="/static/icons/vendor/maryoku_avatar.svg" width="62px"/>
+
+    <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName"  :color="color"></Avartar>
+    <img v-else :src="`${$iconURL}group-22441.svg`" width="52px"/>
+
     </div>
     <div class="font-bold font-size-16 ml-10">
       <div v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
@@ -224,7 +226,7 @@ export default {
     },
   },
   mounted() {
-    console.log('mounted', this.proposal);
+    console.log('proposal.item.mounted', this.color);
   },
   watch:{
     proposal(newVal){}

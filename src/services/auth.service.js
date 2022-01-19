@@ -1,5 +1,4 @@
 import axios from "axios";
-import store from "../store";
 
 const { SERVER_URL, HOST_URL } = { SERVER_URL: process.env.SERVER_URL, HOST_URL: process.env.HOST_URL };
 

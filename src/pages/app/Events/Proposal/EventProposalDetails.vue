@@ -224,7 +224,7 @@
           Pricing & Details
           <span class="font-regular font-size-16 md-small-hide">*We work only with our catering</span>
         </div>
-        <div class="mt-20 mb-30 md-small-hide">What would you like to take from our suggested services?</div>
+        <div class="mt-20 mb-10 md-small-hide">What would you like to take from our suggested services?</div>
         <EventProposalPrice
           :proposalData="proposal"
           :serviceCategory="proposal.vendor.vendorCategory"
@@ -279,8 +279,7 @@
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
-              <img :src="`${$iconURL}VendorsProposalPage/group-8249.svg`" width="50" />
-              <span class="px-5">Seating Arrangement </span>
+              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5">Seating Arrangement </span>
             </div>
 
             <div>
@@ -299,7 +298,7 @@
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
-              <img :src="`${$iconURL}union-12.svg`" width="30" /> <span class="px-5"> Health Protocol</span>
+              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5"> Health Protocol</span>
             </div>
 
             <div>
@@ -364,7 +363,8 @@
           </div>
           <div v-if="isPolicy" class="value">
             <div class="proposal-section policy-section mt-40 md-small-hide">
-              <div class="">
+              <div class="policy-content">
+                
                 <div class="rules">
                   <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
                     <div class="item">{{ policy.name }}</div>
@@ -450,6 +450,7 @@
         </div>
       </div>
 
+    
       <div v-if="isMobile && step === 3" class="proposal-section">
         <div class="d-flex align-center py-30 px-20">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
@@ -607,8 +608,6 @@ export default {
   mixins: [CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins],
   data() {
     return {
-      storageIcon: `${this.$resourceURL}storage/icons/`,
-
       isHealth: false,
       isSeating: false,
       isPolicy: false,
@@ -1304,7 +1303,6 @@ export default {
           color: #050505;
           margin: 3em 0 1.5em;
           position: relative;
-          left: -16px;
 
           &:before {
             content: " ";
