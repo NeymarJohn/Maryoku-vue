@@ -226,7 +226,7 @@ export default {
     },
   },
   mounted() {
-    console.log('proposal.item.mounted', this.color);
+    console.log('mounted', this.proposal);
   },
   watch:{
     proposal(newVal){}
