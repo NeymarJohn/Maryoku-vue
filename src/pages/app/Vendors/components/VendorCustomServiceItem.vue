@@ -12,45 +12,88 @@
       </div>
 
       <div class="items-cont" v-if="!collapsed">
-        <form v-on:submit.prevent>
-          <span>
+        <form @submit.prevent style="display: flex; justify-content: space-between;">
+          <div>
             <label class="titles" v-text="'Add Services'"></label>
-            <input v-model="addService" type="text" style="margin-right: 15px; min-width:555px" />
-          </span>
+            <input
+              @input="addService = $event.target.value"
+              v-model="addService"
+              type="text"
+              style="margin-right: 15px; min-width:555px"
+            />
+          </div>
 
-          <span>
+          <div>
             <label class="titles" v-text="'Price'"></label>
-            <money v-model="price" v-bind="currencyFormat" style="text-align: center; max-width: 166px" />
-          </span>
+            <money v-model="price" style="text-align: center; max-width: 166px" @input="price = $event" />
+          </div>
 
-          <span style="margin-top: 55px">
-            <input v-model="virtualService" type="checkbox" id="check" class="custom-checkbox" />
+          <div style="margin-top: 55px">
+            <input
+              v-model="virtualService"
+              type="checkbox"
+              id="check"
+              class="custom-checkbox"
+              @input="virtualService = $event.target.checked"
+              style="cursor: pointer"
+            />
             <label class="virtual-services" v-text="'Virtual services'" for="check"></label>
-          </span>
+          </div>
 
-          <button v-on:click="addedService" class="button-add-custom-service">Add</button>
+          <button @click="addedService" class="button-add-custom-service">Add</button>
         </form>
 
         <div>
-          <div
-            v-for="service in services"
-            :key="service.id"
-            style="padding: 30px 43.1px 33.5px 65px; background-color: #f7f7f7;"
-          >
-            <div class="wrapper-service">
-              <span class="service" style="min-width: 555px">{{ service.name }}</span>
+          <div v-for="service in services" :key="service.id" style="background-color: #f7f7f7;">
+            <div class="wrapper-service" v-if="editingItem == service.id">
+              <input type="text" style="min-width: 555px; height: 20px; margin-top: 18px;" v-model="editingInput" />
               <span class="service" style="font-weight: normal">{{ service.price }}</span>
               <span class="service">
-                <input v-model="service.checked" type="checkbox" id="check" class="custom-checkbox" />
-                <label v-text="'Virtual services'" for="check"></label>
+                <input v-model="service.checked" type="checkbox" class="custom-checkbox" />
+                <label v-text="'Virtual services'"></label>
               </span>
-              <span style="height: 25px">
-                <img src="/static/icons/vendor/update.png" width="22px" height="22px" style="cursor: pointer" />
+              <span style="height: 25px; margin-top: 30px">
+                <img
+                  src="/static/icons/vendor/update.png"
+                  width="22px"
+                  height="22px"
+                  style="cursor: pointer"
+                  :id="service.id"
+                  @click="saveEditItem"
+                />
                 <img
                   src="/static/icons/vendor/delete.png"
                   width="25px"
                   height="25px"
                   style="cursor: pointer; margin-left: 25px"
+                  @click="removeService"
+                  :id="service.id"
+                />
+              </span>
+            </div>
+            <div class="wrapper-service" v-else>
+              <span class="service" style="min-width: 555px">{{ service.name }}</span>
+              <span class="service" style="font-weight: normal">{{ service.price }}</span>
+              <span class="service">
+                <input v-model="service.checked" type="checkbox" class="custom-checkbox" />
+                <label v-text="'Virtual services'"></label>
+              </span>
+              <span style="height: 25px; margin-top: 30px">
+                <img
+                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22425.svg"
+                  width="22px"
+                  height="22px"
+                  style="cursor: pointer"
+                  :name="service.name"
+                  @click="editItem"
+                />
+                <img
+                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22420.svg"
+                  width="25px"
+                  height="25px"
+                  style="cursor: pointer; margin-left: 25px"
+                  @click="removeService"
+                  :id="service.id"
                 />
               </span>
             </div>
@@ -65,10 +108,8 @@
 export default {
   name: 'vendor-custom-service-item',
   props: {
-    serviceItem: Object,
     vendorCategory: String,
     vendor: Object,
-    service: Object,
     theme: {
       type: String,
       default: 'red',
@@ -92,21 +133,36 @@ export default {
         precision: 2,
         masked: false,
       },
+      editingItem: null,
+      editingInput: '',
     }
   },
   methods: {
     addedService ({ target }) {
-      console.log(target)
-      if (!target.form[0].value || !target.form[1].value) {
+      if (!target.form[0].value || target.form[1].value === '0.0000') {
         return
       }
-      this.services.push({
+      const newService = {
         id: Date.now(),
-        name: target.form[0].value,
-        price: target.form[1].value,
-        checked: target.form[2].checked,
-      })
-      console.log(this.services)
+        name: this.addService,
+        price: this.price,
+        checked: this.virtualService,
+      }
+      this.services.push(newService)
+      this.addService = ''
+      this.price = ''
+      this.virtualService = false
+    },
+    removeService ({ target }) {
+      this.services = this.services.filter(service => service.id !== Number(target.id))
+    },
+    editItem ({ target }) {
+      this.editingItem = target.nextElementSibling.id
+      this.editingInput = target.name
+    },
+    saveEditItem ({ target }) {
+      this.services.map(service => (service.id === Number(target.id) ? (service.name = this.editingInput) : service))
+      this.editingItem = null
     },
   },
 }
@@ -153,7 +209,6 @@ export default {
     justify-content: space-between;
     background-color: #f7f7f7;
     border-radius: 0.5px;
-    // display: flex;
   }
   .titles {
     font-family: 'Manrope-ExtraBold';
@@ -166,6 +221,7 @@ export default {
     font-weight: 800;
     font-size: 16px;
     color: #050505;
+    display: block;
   }
   .custom-checkbox {
     position: absolute;
@@ -181,16 +237,17 @@ export default {
     background-position: center center;
     background-repeat: no-repeat;
     border: 1px solid #b7b5b5;
-    background-size: 50% 50%;
+    background-size: 100% 100%;
     display: inline-block;
     border-radius: 50%;
     margin-right: 13px;
+    cursor: pointer;
     height: 30px;
     width: 30px;
     content: '';
   }
   .custom-checkbox:checked + label::before {
-    background-image: url('https://img.icons8.com/material-outlined/24/000000/cloud--v1.png');
+    background-image: url('https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22431.svg');
     background-color: #641856;
     border-color: #641856;
   }
@@ -216,6 +273,8 @@ export default {
     border-bottom: solid 0.5px #707070;
     border-top: solid 0.5px #707070;
     justify-content: space-between;
+    margin-bottom: 30.6px;
+    margin-top: 45.4px;
     min-height: 88px;
     display: flex;
   }
