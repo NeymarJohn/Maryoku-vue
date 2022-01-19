@@ -320,7 +320,7 @@ export default {
   },
   data() {
     return {
-      expand: false,
+      expand: true,
       costServicesExpand: false,
       includedServicesExpand: false,
       extraServicesExpand: false,

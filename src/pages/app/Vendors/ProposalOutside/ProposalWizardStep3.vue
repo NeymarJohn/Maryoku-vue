@@ -43,6 +43,90 @@
                 <span>Guest Arrival Time</span>
                 <p>{{ event.arrival }}</p>
               </li>
+              <li>
+                <div class="time-box">
+                    <div class="time-layer">
+                        <div class="this-offer">
+                            This offer will expire in
+                        </div>
+                        <hr>
+                        <div v-if="showTimerInputs" class="time-display ">
+                            <div class="d-flex justify-content-center">
+                                <div class="days-num">
+                                    <input
+                                    id="days-input"
+                                    name="days-input"
+                                    type="number"
+                                    value="07"
+                                    @change="onDaysChange"
+                                    />
+                                :
+                                </div>
+                                <div class="hours-num">
+                                    <input
+                                    id="hours-input"
+                                    name="hours-input"
+                                    type="number"
+                                    value="11"
+                                    @change="onHoursChange"
+                                    />
+                                    :
+                                </div>
+                                <div class="mins-num">
+                                    <input
+                                    id="mins-input"
+                                    name="mins-input"
+                                    type="number"
+                                    value="32"
+                                    @change="onMinsChange"
+                                    />
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div class="days">
+                                    Days
+                                </div>
+                                <div class="hours">
+                                    Hours
+                                </div>
+                                <div class="mins">
+                                    Mins
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="time-display">
+                            <div class="d-flex justify-content-center">
+                                <div class="days-num">
+                                    07 :
+                                </div>
+                                <div class="hours-num">
+                                    11 :
+                                </div>
+                                <div class="mins-num">
+                                    32
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div class="days">
+                                    Days
+                                </div>
+                                <div class="hours">
+                                    Hours
+                                </div>
+                                <div class="mins">
+                                    Mins
+                                </div>
+                            </div>
+                        </div>
+                        <button class="timer-btn" @click="changeTimer">
+                            Set timer
+                        </button>
+                        <!-- <div class="timer-btn">
+                            Set timer
+                        </div> -->
+                    </div>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
@@ -466,6 +550,7 @@ export default {
       },
       guaranteedOptions: GuaranteedOptions,
       editingNewSeating: false,
+      showTimerInputs: false,
     };
   },
   created() {
@@ -482,6 +567,13 @@ export default {
     });
   },
   methods: {
+    changeTimer() {
+        if(this.showTimerInputs == false){
+            this.showTimerInputs = true;
+        } else {
+            this.showTimerInputs = false;
+        }
+    },
     chooseFiles() {
       document.getElementById("coverImage").click();
     },
@@ -775,6 +867,160 @@ export default {
               border: none;
             }
           }
+        }
+        .time-box {
+            width: 290.6px;
+            height: 201.5px;
+            margin: -120px 0 0 73px;
+            padding: 13.4px 27px 18.1px 27.5px;
+            border-radius: 3px;
+            background-color: #641856;
+            position: absolute;
+            right: 20px;
+
+            .time-layer {
+                width: 236.1px;
+                height: 170.1px;
+            }
+            .this-offer {
+                width: 150px;
+                height: 19px;
+                margin: 0 42.6px 13.7px 43.5px;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #fff;
+            }
+
+            .time-display {
+                // width: 165px;
+                width: 174px;
+                height: 60.3px;
+                margin: 8px 35.1px 25.1px 36px;
+            }
+
+            .days-num {
+                width: 58px;
+                height: 41px;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 30px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #fff;
+            }
+            .hours-num {
+                width: 58px;
+                height: 41px;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 30px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #fff;
+            }
+            .mins-num {
+                // width: 36px;
+                width: 58px;
+                height: 41px;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 30px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #fff;
+            }
+
+            #days-input {
+                width: 60%; height: 40%; padding: 4px 4px;
+            }
+            #hours-input {
+                width: 60%; height: 40%; padding: 4px 4px;
+            }
+            #mins-input {
+                width: 60%; height: 40%; padding: 4px 4px;
+            }
+
+            .days {
+                width: 32px;
+                height: 19px;
+                // margin: 10px 2px 0;
+                margin: 14px 28px 0 0;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #fff;
+            }
+            .hours {
+                width: 32px;
+                height: 19px;
+                margin: 14px 28px 0 0;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #fff;
+            }
+            .mins {
+                width: 32px;
+                height: 19px;
+                margin: 14px 28px 0 0;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                // font-family: Manrope;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #fff;
+            }
+            .timer-btn {
+                width: 224.9px;
+                height: 44px;
+                margin: 7.1px 5.6px 0 5.5px;
+                padding: 11px 70.4px 11px 70.5px;
+                border-radius: 3px;
+                background-color: #fff;
+                color: #641856;
+                font-size: 16px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 0.34px;
+                text-align: center;
+            }
         }
       }
     }
