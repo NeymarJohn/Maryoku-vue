@@ -204,7 +204,6 @@
       "
       class="proposal-section policy-section"
     >
-     
       <div class="card-section align-center px-20 py-30">
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
@@ -220,7 +219,7 @@
             </div>
           </div>
           <div v-if="isEdit" class="value">
-            <div class="policy-content">
+            <div class="">
               <template v-if="vendorProposal.vendor.healthPolicy">
                 <div class="mt-20 font-bold-extra">
                   <span class="color-red">COVID 19</span>
@@ -231,7 +230,7 @@
                 </p>
               </template>
               <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
-                <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+                <div class="mt-30 font-bold-extra ml-5 ">Guaranteed with every staff member:</div>
                 <div class="md-layout mt-20">
                   <div
                     v-for="option in guaranteedOptions"
@@ -251,8 +250,7 @@
         </div>
       </div>
     </section>
-
-    <section class="proposal-section policy-section">
+    <section class="proposal-section policy-section ">
       <div class="card-section align-center px-20 py-30">
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
@@ -269,9 +267,7 @@
             </div>
           </div>
           <div v-if="isPolicy" class="value">
-            
-
-            <div class="policy-content">
+            <div class="">
               <div class="rules">
                 <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
                   <div class="item">{{ policy.name }}</div>
@@ -325,14 +321,11 @@
               <div class="side-label">
                 <div class="label-value">Our cancellation approach</div>
               </div>
-
               <div class="proposal-section__subtitle">
                 <div class="subtitle">We allow free cancellation until:</div>
                 <div class="desc">30 days before the event</div>
               </div>
-
               <CancellationPolicy></CancellationPolicy>
-
               <div class="side-label">
                 <div class="label-value">Act of God</div>
               </div>
@@ -342,7 +335,6 @@
                 authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
                 quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
               </div>
-
               <div class="signature-section">
                 <div class="signature-section__vendor">
                   {{ vendorProposal.vendor.vendorDisplayName }}
@@ -356,7 +348,6 @@
         </div>
       </div>
     </section>
-
     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
       <md-icon>close</md-icon>
     </md-button>
@@ -956,7 +947,7 @@ export default {
   }
 
   .policy-section {
-    margin-top: 4em;
+    margin-top: 1em;
 
     .proposal-section__subtitle {
       color: #050505;
@@ -978,6 +969,7 @@ export default {
       color: #050505;
       margin: 3em 0 1.5em;
       position: relative;
+      left: -20px;
 
       &:before {
         content: " ";

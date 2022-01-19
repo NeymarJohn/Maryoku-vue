@@ -1,7 +1,7 @@
 <template>
   <div class="upcoming-event-list">
     <div class="upcoming-event" v-for="(event, index) in events" :key="event.id">
-      <div class="event-logo" @click="showModal(event)" >
+      <div class="event-logo" @click="show(event)" >
         <img :src="`${$iconURL}CalendarIcons/${eventIcon(index)}`" />
       </div>
       <div class="event-detail flex-1">
@@ -78,8 +78,8 @@ export default {
     selectEvent(event) {
       this.$emit("showEvent", event);
     },
-     showModal(event) {
-      this.$emit("showModal", event);
+     show(event) {
+     this.$emit("show", event)
     },
     eventIcon(idx) {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
