@@ -175,17 +175,17 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   margin-bottom: 30px;
   .title-cont {
-    display: flex;
     justify-content: space-between;
+    display: flex;
     padding: 60px;
     cursor: pointer;
     .title {
+      font: 800 22px 'Manrope-Regular';
       text-transform: capitalize;
-      font: 800 22px Manrope-Regular, sans-serif;
       flex: 1;
     }
     .help {
-      font: 800 16px Manrope-Regular, sans-serif;
+      font: 800 16px 'Manrope-Regular';
       flex: 1;
       img {
         width: 27px;
@@ -209,17 +209,23 @@ export default {
     justify-content: space-between;
     background-color: #f7f7f7;
     border-radius: 0.5px;
+
+    &:last-of-type {
+      border-bottom: 87px solid #ffffff;
+    }
   }
   .titles {
-    font-family: 'Manrope-ExtraBold';
+    font: {
+      family: 'Manrope-ExtraBold';
+      stretch: normal;
+      style: normal;
+      weight: 800;
+      size: 16px;
+    }
     letter-spacing: normal;
     display: inline-block;
-    font-stretch: normal;
     margin-bottom: 21px;
     line-height: normal;
-    font-style: normal;
-    font-weight: 800;
-    font-size: 16px;
     color: #050505;
     display: block;
   }
@@ -227,67 +233,85 @@ export default {
     position: absolute;
     z-index: -1;
     opacity: 0;
+
+    & + label {
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+    }
+
+    & + label::before {
+      background: {
+        position: center center;
+        repeat: no-repeat;
+        size: 100% 100%;
+      }
+      border: 1px solid #b7b5b5;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 13px;
+      cursor: pointer;
+      height: 30px;
+      width: 30px;
+      content: '';
+    }
+
+    &:checked + label::before {
+      background: {
+        image: url('https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22431.svg');
+        color: #641856;
+      }
+      border-color: #641856;
+    }
   }
-  .custom-checkbox + label {
-    display: inline-flex;
-    align-items: center;
-    user-select: none;
-  }
-  .custom-checkbox + label::before {
-    background-position: center center;
-    background-repeat: no-repeat;
-    border: 1px solid #b7b5b5;
-    background-size: 100% 100%;
-    display: inline-block;
-    border-radius: 50%;
-    margin-right: 13px;
-    cursor: pointer;
-    height: 30px;
-    width: 30px;
-    content: '';
-  }
-  .custom-checkbox:checked + label::before {
-    background-image: url('https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22431.svg');
-    background-color: #641856;
-    border-color: #641856;
-  }
+
   .button-add-custom-service {
+    font: {
+      family: 'Manrope-ExtraBold';
+      stretch: normal;
+      style: normal;
+      size: 16px;
+    }
+    margin: {
+      left: 32.7px;
+      top: 45px;
+    }
     padding: 12.2px 36.6px 10.8px 36.7px;
-    font-family: 'Manrope-ExtraBold';
     background-color: #641856;
     letter-spacing: normal;
-    font-stretch: normal;
-    margin-left: 32.7px;
     border-radius: 3px;
-    font-style: normal;
     line-height: 1.88;
     font-weight: 800;
     max-height: 53px;
-    margin-top: 45px;
     cursor: pointer;
-    font-size: 16px;
     color: #fff;
     border: none;
   }
   .wrapper-service {
-    border-bottom: solid 0.5px #707070;
-    border-top: solid 0.5px #707070;
+    border: {
+      bottom: solid 0.5px #707070;
+      top: solid 0.5px #707070;
+    }
+    margin: {
+      bottom: 30.6px;
+      top: 45.4px;
+    }
     justify-content: space-between;
-    margin-bottom: 30.6px;
-    margin-top: 45.4px;
     min-height: 88px;
     display: flex;
   }
   .service {
-    display: inline-block;
-    font-family: 'Manrope-Regular';
+    font: {
+      family: 'Manrope-Regular';
+      stretch: normal;
+      style: normal;
+      weight: 600;
+      size: 16px;
+    }
     letter-spacing: normal;
-    font-stretch: normal;
+    display: inline-block;
     line-height: normal;
-    font-style: normal;
-    font-weight: 600;
     color: #050505;
-    font-size: 16px;
     margin-top: 30px;
   }
 }
