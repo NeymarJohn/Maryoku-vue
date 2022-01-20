@@ -10,6 +10,7 @@ selenium-debug.log
 .gradle/
 config/dev.env.js
 config/test.env.js
+.env
 
 # Editor directories and files
 .idea

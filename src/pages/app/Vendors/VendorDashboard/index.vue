@@ -4,10 +4,7 @@
       <div class="font-size-22 font-bold color-purple">
         <img src="/static/icons/vendor/dashboard-active.svg" class="mr-10" /> WELCOME ON BOARD SAM!
       </div>
-
-      <div>
-        <md-button class="md-vendor maryoku-btn" @click="gotoProposalWizard">Create New Proposal</md-button>
-      </div>
+      <div><md-button class="md-vendor maryoku-btn" @click="gotoProposalWizard">Create New Proposal</md-button></div>
     </div>
     <div class="md-layout pt-30">
       <div class="md-layout-item md-size-45 chart-section pt-30 pl-40 pr-40">
@@ -80,8 +77,7 @@
                   v-if="upcomingEvents && upcomingEvents.length > 0"
                   :events="upcomingEvents"
                   @showEvent="showEvent"
-                  :datas="hola"
-                  @show="show($event)"
+                  @showModal="showModal"
                 ></upcoming-event>
                 <template v-else>
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
@@ -96,24 +92,39 @@
         </div>
       </div>
     </div>
-    <select-icons
-      v-if="iconsModal"
-      :events="upcomingEvents"
-      @icon="icon($event)"
-      @cancel="cancelIcon()"
-      :data="selectedEvent"
-    >
-    </select-icons>
     <vendor-create-event-modal
       v-if="showVendorCreateModal"
       :defaultData="defaultEventData"
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
+    <modal v-if="iconsModal" container-class="modal-container bg-white">
+      <template slot="header">
+        <div class="header-container">
+          <div>
+            <p>Select an icon</p>
+            <span>Icons are made to visually identify the events, only you see them.</span>
+          </div>
+
+          <div>
+            <md-button class=" md-simple text-decoration-none cursor-pointer " @click="iconsModal = false"
+              ><md-icon>close</md-icon></md-button
+            >
+          </div>
+        </div>
+      </template>
+      <template slot="body">
+        <div class="event-logo">
+          000
+        </div>
+      </template>
+      <template slot="footer">
+        
+      </template>
+    </modal>
   </div>
 </template>
 <script>
-import selectIcons from "./Modals/SelectIcon.vue";
 import PieChart from "@/components/Chart/PieChart.vue";
 import IncomeBarChart from "./IncomeBarChart.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
@@ -131,7 +142,6 @@ import Modal from "@/components/Modal.vue";
 export default {
   components: {
     IncomeChart,
-    selectIcons,
     FunctionalCalendar,
     PieChart,
     IncomeBarChart,
@@ -144,12 +154,9 @@ export default {
   },
   data() {
     return {
-      hola: null,
       iconUrl: `${this.$resourceURL}storage/icons/`,
-      storageIcon: `${this.$IconURL}storage/icons/`,
       showVendorCreateModal: false,
       backOutDays: false,
-      selectedEvent: null,
       iconsModal: false,
       monthlyReport: [],
       incomeChartData: [
@@ -211,17 +218,6 @@ export default {
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
-    cancelIcon() {
-      this.iconsModal = false;
-    },
-    icon(ev) {
-      this.hola = ev;
-    },
-    show(ev) {
-      this.iconsModal = true;
-      this.selectedEvent = ev;
-    },
-
     getServiceReport() {
       this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then(res => {
         if (res.data.length) {
@@ -298,33 +294,7 @@ export default {
       })
         .get()
         .then(events => {
-        
-          const r = Math.floor(Math.random() * 28) + 1;
-
-          events.forEach(element => {
-            const lp = {
-              date: element.date,
-              fileName: element.fileName,
-              totalBudget: element.totalBudget,
-              companyName: element.companyName,
-              eventType: element.eventType,
-              customerName: element.customerName,
-              guests: element.guests,
-              startTime: element.startTime,
-              fileUrl: element.fileUrl,
-              location: element.location,
-              id: element.id,
-              endTime: element.endTime,
-              isRegisteredCustomer: element.isRegisteredCustomer,
-              email: element.email,
-              customer: element.customer,
-              status: element.status,
-              idx: r
-            };
-            this.upcomingEvents.push(lp);
-          });
-
-       
+          this.upcomingEvents = events.slice(0, 5);
         });
     },
     showEvent(event) {
@@ -334,7 +304,7 @@ export default {
     },
 
     ShowModal(event) {
-      console.log("showModal", event);
+      console.log("showEvent", event);
       this.iconsModal = true;
       this.defaultEventData = { ...event };
     },
@@ -369,7 +339,6 @@ export default {
         };
         if (this.serviceReportData) {
           const cat = this.serviceReportData.find(c => c._id == vc);
-
           if (cat) {
             item.value = cat.amount;
             item.color = this.activeCategoryColors[idx];
@@ -420,5 +389,17 @@ export default {
 }
 /deep/ .md-switch-label {
   color: #999999;
+}
+
+.event-logo {
+  box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

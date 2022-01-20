@@ -34,7 +34,7 @@
                 </div>
             </div>
             <ProposalVersionsBar
-            :versions="proposal.versions"
+            :versions="proposal.versions || []"
             :selected="proposal.currentVersion"
             @select="selectVersion"
             @save="saveVersion"
@@ -149,23 +149,9 @@ export default {
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
-                proposal.versions = !proposal.versions ? [] : proposal.versions;
                 this.setSelectedProposal(proposal);
-                this.$store.dispatch("vendorProposal/setProposal",{...proposal});
-                this.$store.dispatch("commentProposal/setProposal",{...proposal});
+                this.$store.dispatch("vendorProposal/setProposal",proposal);
             }
-        },
-        selectVersion(index){
-            this.$store.commit('commentProposal/selectVersion', index);
-        },
-        saveVersion(version){
-            this.$store.dispatch('commentProposal/saveVersion', version);
-        },
-        changeVersion(versions){
-            this.$store.commit('commentProposal/setVersions', versions);
-        },
-        removeVersion(id){
-            this.$store.dispatch('commentProposal/removeVersion', id);
         }
     },
     computed: {
@@ -182,14 +168,14 @@ export default {
             return this.proposal.vendor
         },
         proposal(){
-            return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
+            // return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
+            return this.$store.state.comment.selectedProposal;
         },
         proposals(){
             return this.$store.state.comment.commentsProposals;
         },
         selectedVersion(){
-
-        },
+    },
     },
     watch: {
         $route: function() {

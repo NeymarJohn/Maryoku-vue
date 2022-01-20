@@ -129,7 +129,7 @@
             <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="(proposal, pindex) in commentsProposals" :key="pindex" @click="changeProposal(proposal)" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}">
                 <div class="d-flex align-item-center sidebar__item__content">
                     <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
-                    <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
+                    <img v-else class="sidebar__item__img" src="/static/icons/maryoku_icon.png">
                     <div class="sidebar__item__details d-flex flex-column">
                         <span class="productLaunchParty">{{proposal.vendor.eventCategory.fullTitle}}</span>
                         <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
@@ -446,6 +446,12 @@ export default {
     border-radius: 30px;
     font-size: 13px;
     font-weight: 800;
+}
+
+.sidebar__item__img {
+    width: 57px;
+    height: 57px !important;
+    // margin-right: 25px;
 }
 
 .commentMode {
