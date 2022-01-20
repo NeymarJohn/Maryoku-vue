@@ -40,13 +40,6 @@ export default {
   name: "proposal-versions-bar",
   components,
   props: {
-      versions:{
-          type: Array,
-      },
-      selected:{
-          type: Number,
-          default: -1,
-      }
   },
   data() {
     return {
@@ -57,9 +50,8 @@ export default {
   },
   methods: {
     select(index){
-      console.log('select', index, this.selected);
       if (this.selected === index) return;
-      this.$emit('select', index);
+      this.$store.commit('vendorProposal/selectVersion', index);
     },
     saveVersion(){
       let data = {};
@@ -75,7 +67,7 @@ export default {
           name: `Ver${this.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
           data,
       }
-      this.$emit('save', version)
+      this.$store.dispatch('vendorProposal/saveVersion', version);
     },
     editName(idx) {
       this.editIdx = idx;
@@ -84,13 +76,21 @@ export default {
     changeName(e){
       let versions = this.versions;
       this.$set(versions[this.editIdx], 'name', this.versionName);
-      this.$emit('change', versions);
+      this.$store.commit('vendorProposal/setVersions', versions);
     },
     closeEditing(){
       this.editIdx = null;
     },
     remove(idx) {
-      this.$emit('remove', idx);
+      this.$store.dispatch('vendorProposal/removeVersion', idx);
+    }
+  },
+  computed: {
+    versions() {
+      return this.$store.state.vendorProposal.versions;
+    },
+    selected() {
+      return this.$store.state.vendorProposal.currentVersion;
     }
   },
   watch: {
