@@ -30,7 +30,7 @@
                     <div class=" d-flex justify-content-center align-item-center">
                         <div class="md-small-hide">
                             <div class="md-vendor lets-begin">
-                                <div class="lets-text">Let's Begin</div>
+                                <a :href="link" class="lets-text">Let's Begin</a>
                             </div>
                         </div>
                     </div>
@@ -44,14 +44,23 @@
 </template>
 <script>
 export default {
-    props: {},
+    props: {
+        proposal: {
+          type: Object,
+          default: () => {},
+        },
+    },
     data() {
         return {};
     },
     created() {},
 
     methods: {},
-    computed: {},
+    computed: {
+        link(){
+            return `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`
+        }
+    },
     filters: {},
     watch: {},
 };
@@ -228,6 +237,7 @@ export default {
                     letter-spacing: 0.42px;
                     text-align: center;
                     color: #fff;
+                    text-decoration: none !important;
                 }
 
             }

@@ -47,7 +47,7 @@
         </template>
         <template>
             <div class="proposal-container no-proposal">
-                <NoProposal>
+                <NoProposal :proposal="proposal">
                 </NoProposal>
             </div>
         </template>
