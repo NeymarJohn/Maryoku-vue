@@ -285,21 +285,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "accessibility",
         subCategories: [
           {
@@ -789,21 +774,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "equipment",
         subCategories: [
           {
@@ -1144,21 +1114,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "amenities",
         subCategories: [
           {
@@ -1392,21 +1347,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "amenities",
         subCategories: [
           {
@@ -1590,21 +1530,6 @@ export const businessCategories = [
                 name: "setup & breakdown",
                 type: 'Boolean',
                 value: 0,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
               },
             ],
           },
@@ -1891,21 +1816,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "amenities",
         subCategories: [
           {
@@ -2073,21 +1983,6 @@ export const businessCategories = [
                 name: "tours",
                 type: 'Boolean',
                 value: false,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
               },
             ],
           },
@@ -2426,21 +2321,6 @@ export const businessCategories = [
                 type: 'Boolean',
                 value: false,
                 unit: "hour",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
               },
             ],
           },
@@ -2951,21 +2831,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "Sustainability, Inclusion and Diversity",
         subCategories: [
           {
@@ -3165,21 +3030,6 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "Sustainability, Inclusion and Diversity",
         subCategories: [
           {
@@ -3295,21 +3145,6 @@ export const businessCategories = [
                 name: "set-up & tear-Down",
                 type: 'Boolean',
                 value: false,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "Custom service",
-        subCategories: [
-          {
-            name: "",
-            items: [
-              {
-                name: "",
-                type: 'custom_service',
-                value: null,
               },
             ],
           },
@@ -3506,79 +3341,6 @@ export const businessCategories = [
     ],
   },
 ];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const generalInfos = [
   {
     name: "venuerental",
@@ -4018,6 +3780,21 @@ export const VendorPolicy = [
       {
         name: "Visit the venue in advance",
         type: 'Boolean',
+      },
+      {
+        name: "Custom service",
+        subCategories: [
+          {
+            name: "",
+            items: [
+              {
+                name: "",
+                type: 'custom_service',
+                value: null,
+              }
+            ],
+          }
+        ],
       },
       {
         name: "Minimum hours of service",
@@ -4709,6 +4486,21 @@ export const VendorPricingPolicy = [
         type: 'Number',
         isPercentage: true,
         hideOnProposal: true,
+      },
+      {
+        name: "Custom service",
+        subCategories: [
+          {
+            name: "",
+            items: [
+              {
+                name: "",
+                type: 'custom_service',
+                value: null,
+              }
+            ],
+          }
+        ],
       },
       {
         name: "Large group discounts",

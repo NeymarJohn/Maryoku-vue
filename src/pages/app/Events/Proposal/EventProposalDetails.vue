@@ -224,7 +224,7 @@
           Pricing & Details
           <span class="font-regular font-size-16 md-small-hide">*We work only with our catering</span>
         </div>
-        <div class="mt-20 mb-10 md-small-hide">What would you like to take from our suggested services?</div>
+        <div class="mt-20 mb-30 md-small-hide">What would you like to take from our suggested services?</div>
         <EventProposalPrice
           :proposalData="proposal"
           :serviceCategory="proposal.vendor.vendorCategory"
@@ -279,7 +279,8 @@
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
-              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5">Seating Arrangement </span>
+              <img :src="`${$iconURL}VendorsProposalPage/group-8249.svg`" width="50" />
+              <span class="px-5">Seating Arrangement </span>
             </div>
 
             <div>
@@ -290,7 +291,49 @@
               </md-button>
             </div>
           </div>
-          <div v-if="isSeating" class="value"></div>
+          <div v-if="isSeating" class="value">
+            <div class="md-layout">
+              <div class="md-layout-item pl-0 md-size-100">
+                <h3 class="font-bold font-size-16">Vendor Suggestion:</h3>
+              </div>
+              <div class="md-layout-item pl-0 md-size-40">
+                <div class="ml-10">
+                  <h2 class="font-bold font-size-16">‘Theatre’</h2>
+                </div>
+
+                <img src="/static/img/nn1.webp" alt="" />
+              </div>
+              <div class="md-layout-item pl-0 md-size-40">
+                <div class="ml-10">
+                  <h2 class="font-bold font-size-16">‘U shape’</h2>
+                </div>
+                <img src="/static/img/nn2.webp" alt="" />
+              </div>
+              <div class="md-layout-item pl-0 md-size-100">
+                <div class="d-flex align-center">
+                  <div class="d-flex align-center mr-10">
+                    <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
+                    <h2 class="font-bold font-size-22">Group Work Planned</h2>
+                  </div>
+                  <div
+                    class="mx-15"
+                    style=" width: 0;
+                     height: 40px;
+                  border: solid 1px #707070;"
+                  ></div>
+
+                  <div class="d-flex align-center">
+                    <div><span class="font-size-16 mx-5">Group size:</span></div>
+                   <div class="mx-5">
+                    <img src="/static/img/account-multiple.svg" alt="image" />
+                  </div>
+                    <h2 class="font-size-22 mx-5">14-18</h2>
+                    <h2 class="font-size-18 mx-5">People</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -298,7 +341,7 @@
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
-              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5"> Health Protocol</span>
+              <img :src="`${$iconURL}union-12.svg`" width="30" /> <span class="px-5"> Health Protocol</span>
             </div>
 
             <div>
@@ -363,8 +406,7 @@
           </div>
           <div v-if="isPolicy" class="value">
             <div class="proposal-section policy-section mt-40 md-small-hide">
-              <div class="policy-content">
-                
+              <div class="">
                 <div class="rules">
                   <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
                     <div class="item">{{ policy.name }}</div>
@@ -450,7 +492,6 @@
         </div>
       </div>
 
-    
       <div v-if="isMobile && step === 3" class="proposal-section">
         <div class="d-flex align-center py-30 px-20">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="25" />
@@ -608,6 +649,8 @@ export default {
   mixins: [CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins],
   data() {
     return {
+      storageIcon: `${this.$resourceURL}storage/icons/`,
+
       isHealth: false,
       isSeating: false,
       isPolicy: false,
@@ -1303,6 +1346,7 @@ export default {
           color: #050505;
           margin: 3em 0 1.5em;
           position: relative;
+          left: -16px;
 
           &:before {
             content: " ";
