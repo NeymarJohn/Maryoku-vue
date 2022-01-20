@@ -188,14 +188,7 @@
         </div>
         <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
       </div>
-      <div class="total-section d-flex justify-content-between mt-15">
-        <div>
-          <span class="font-bold-extra font-size-30">Total</span>
-        </div>
-        <div>
-          <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
-        </div>
-      </div>
+     
     </section>
     <div class="card-section align-center px-20 py-30 mt-10">
       <div class="px-40">
@@ -243,11 +236,11 @@
                      height: 40px;
                   border: solid 1px #707070;"
                 ></div>
-
                 <div class="d-flex align-center">
                   <div><span class="font-size-16 mx-5">Group size:</span></div>
                   <div class="mx-5">
-                    <img src="/static/img/account-multiple.svg" alt="image" />
+                                          <img :src="`${$iconURL}NewSubmitPorposal/Group 3485.svg`"/>
+
                   </div>
                   <h2 class="font-size-22 mx-5">14-18</h2>
                   <h2 class="font-size-18 mx-5">People</h2>

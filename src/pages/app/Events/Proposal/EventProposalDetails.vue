@@ -303,6 +303,7 @@
 
                 <img src="/static/img/nn1.webp" alt="" />
               </div>
+              <div class="md-layout-item pl-0 md-size-5"></div>
               <div class="md-layout-item pl-0 md-size-40">
                 <div class="ml-10">
                   <h2 class="font-bold font-size-16">‘U shape’</h2>
@@ -324,9 +325,9 @@
 
                   <div class="d-flex align-center">
                     <div><span class="font-size-16 mx-5">Group size:</span></div>
-                   <div class="mx-5">
-                    <img src="/static/img/account-multiple.svg" alt="image" />
-                  </div>
+                    <div class="mx-5">
+                      <img :src="`${$iconURL}NewSubmitPorposal/Group 3485.svg`"/>
+                    </div>
                     <h2 class="font-size-22 mx-5">14-18</h2>
                     <h2 class="font-size-18 mx-5">People</h2>
                   </div>
