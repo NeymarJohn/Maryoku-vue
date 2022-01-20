@@ -91,7 +91,7 @@
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
           v-else
-          @click="cancelTimeline(editingContent)"
+          @click="updateTimelineItem"
           >Cancel</md-button
         >
         <md-button
@@ -264,11 +264,8 @@ export default {
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
     },
-    cancelTimeline() {
-      this.editingContent = { ...this.item };
-      this.$emit("cancel", { item: this.editingContent, index: this.index });
-    },
     cancelTimelineItem(item) {
+      // this.$set(item, "mode", "saved");
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
