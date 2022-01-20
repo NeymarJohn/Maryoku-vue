@@ -266,14 +266,7 @@
             <p class="color-white m-0">({{ discount.percentage }}% off) {{ totalPriceOfProposal }}</p>
           </div>
         </div>
-        <div v-else class="total-section d-flex justify-content-between mt-15 p-40">
-          <div>
-            <span class="font-bold-extra font-size-30">Total</span>
-          </div>
-          <div>
-            <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
-          </div>
-        </div>
+       
       </div>
       <div class="card-section align-center px-20 py-30 mt-10">
         <div class="px-40">
