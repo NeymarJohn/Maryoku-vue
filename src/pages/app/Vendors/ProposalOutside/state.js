@@ -49,6 +49,7 @@ const state = {
   original: null,
   seatingData: null,
   currentVersion: -1,
+  expiredDate:moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -219,7 +220,7 @@ const mutations = {
     state.seatingData = proposal.seatingData;
     state.bookedServices = proposal.bookedServices;
     state.initialized = true;
-
+    state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate();
     state.versions = proposal.versions || []
     state.currentVersion = proposal.selectedVersion || -1,
     // state.wizardStep = proposal.step
@@ -420,7 +421,7 @@ const actions = {
         tenantId: state.tenantId,
         customerId: state.eventData.customer.id,
         suggestionDate: state.suggestionDate,
-        expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
+        expiredDate: state.expiredDate,
         nonMaryoku: true,
         bookedServices: state.bookedServices.length ? state.bookedServices : Object.keys(state.costServices), // Set all secondary services as booked services
         seatingData: state.original ? state.original.seatingData : state.seatingData,

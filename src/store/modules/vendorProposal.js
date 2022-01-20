@@ -71,7 +71,8 @@ const state = {
   requirements: [],
   original: null,
   currentVersion: -1,
-  tenantId: authService.resolveTenantId()
+  tenantId: authService.resolveTenantId(),
+  expiredDate:null
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -219,6 +220,7 @@ const mutations = {
     state.versions = proposal.versions || [];
     state.bookedServices = proposal.bookedServices;
     state.currentVersion = proposal.selectedVersion || -1;
+    state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate();
 
     delete proposal.versions;
     Vue.set(state, 'original', proposal);
