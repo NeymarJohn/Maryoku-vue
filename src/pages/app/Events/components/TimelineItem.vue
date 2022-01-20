@@ -5,8 +5,11 @@
     :index="index"
     @applyTemplate="applyToTemplate"
   ></TimelineTemplateItem>
-  <div class="timeline-item d-flex" :class="size === 'large' ? '' : 'align-center'"  v-else>
-    <div :class="size === 'large' ? 'time-line-icon-large mt-20' : 'time-line-icon-medium'" :style="`background-color:${editingContent.color}`">
+  <div class="timeline-item d-flex" :class="size === 'large' ? '' : 'align-center'" v-else>
+    <div
+      :class="size === 'large' ? 'time-line-icon-large mt-20' : 'time-line-icon-medium'"
+      :style="`background-color:${editingContent.color}`"
+    >
       <img
         :src="`${this.$resourceURL}storage/icons/Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
         v-if="editingContent.icon"
@@ -80,7 +83,15 @@
         <md-button
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
-          @click="cancelTimelineItem"
+          @click="cancelTimelineItem(editingContent)"
+          v-if="!editingContent.dateCreated"
+          >Cancel</md-button
+        >
+        <md-button
+          name="event-planner-tab-timeline-item-save"
+          class="maryoku-btn md-default md-simple"
+          v-else
+          @click="cancelTimeline(editingContent)"
           >Cancel</md-button
         >
         <md-button
@@ -101,19 +112,26 @@
         >
       </md-card-actions>
     </md-card>
-    <md-card class="block-form" :class="size === 'large' ? 'p-20 m-20' : 'my-10 ml-30 p-10 w-min-500'" :style="getBorderStyle(editingContent.color)" v-else>
+    <md-card
+      class="block-form"
+      :class="size === 'large' ? 'p-20 m-20' : 'my-10 ml-30 p-10 w-min-500'"
+      :style="getBorderStyle(editingContent.color)"
+      v-else
+    >
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content>
         <div class="timeline-actions" v-if="editMode">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
             <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
-          <md-button class="md-icon-button md-simple" @click="removeItem">
+          <md-button class="md-icon-button md-simple" @click="removeItem(editingContent)">
             <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
         </div>
         <div class="item-title-and-time" :class="size === 'large' ? '' : 'd-flex align-center'">
-          <span class="item-time color-dark-gray" :class="size === 'large' ? 'font-size-20' : 'font-size-16 pr-20 border-right'"
+          <span
+            class="item-time color-dark-gray"
+            :class="size === 'large' ? 'font-size-20' : 'font-size-16 pr-20 border-right'"
             >{{ formatHour(editingContent.startTime) }} - {{ formatHour(editingContent.endTime) }}</span
           >
 
@@ -147,19 +165,16 @@
   </div>
 </template>
 <script>
-
 import moment from "moment";
 import Swal from "sweetalert2";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import EventTimelineDate from "@/models/EventTimelineDate";
-
 const components = {
-    TimelineTemplateItem: () => import("./TimelineTemplateItem"),
-    TimeInput: () => import("@/components/Inputs/TimeInput.vue"),
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    MaryokuTextarea: () => import("@/components/Inputs/MaryokuTextarea.vue"),
-}
-
+  TimelineTemplateItem: () => import("./TimelineTemplateItem"),
+  TimeInput: () => import("@/components/Inputs/TimeInput.vue"),
+  MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
+  MaryokuTextarea: () => import("@/components/Inputs/MaryokuTextarea.vue"),
+};
 export default {
   components,
   props: {
@@ -190,7 +205,7 @@ export default {
     size: {
       type: String,
       default: "large",
-    }
+    },
   },
   data() {
     return {
@@ -201,10 +216,10 @@ export default {
     };
   },
   mounted() {
-    console.log('timeline-item.mounted', this.size);
+    console.log("timeline-item.mounted", this.size);
     this.editingContent = { ...this.item };
     this.vendor = this.serviceCategories.find(
-      (item) => this.editingContent.eventCategory && item.key == this.editingContent.eventCategory[0],
+      item => this.editingContent.eventCategory && item.key == this.editingContent.eventCategory[0],
     );
     // this.$root.$on("apply-template", ({ item, block, index }) => {
     //   // this.timelineItems[item.date][index] = {};
@@ -233,7 +248,7 @@ export default {
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
-        .then((res) => {
+        .then(res => {
           this.editingContent = res;
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
@@ -244,15 +259,26 @@ export default {
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
-        .then((res) => {
+        .then(res => {
           this.editingContent = res;
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
     },
-    cancelTimelineItem() {
+    cancelTimeline() {
       this.editingContent = { ...this.item };
-      this.$set(this.editingContent, "mode", "saved");
       this.$emit("cancel", { item: this.editingContent, index: this.index });
+    },
+    cancelTimelineItem(item) {
+      new EventTimelineItem(this.editingContent)
+        .for(new EventTimelineDate({ id: this.timelineDate.id }))
+        .save()
+        .then(res => {
+          item = res;
+          this.$emit("remove", { index: this.index, item: item });
+        })
+        .catch(err => {
+          this.$root.$emit("timeline-updated", this.timelineItems);
+        });
     },
     formatDate(date) {
       if (typeof date == "number") {
@@ -270,10 +296,8 @@ export default {
         block.mode = "edit";
         let startDate = new Date(template.date);
         let endDate = new Date(template.date);
-
         block.startTime = moment(`${template.date} 00:00 am`, "DD/MM/YY hh:mm a").valueOf();
         block.endTime = moment(`${template.date} 00:00 am`, "DD/MM/YY hh:mm a").valueOf();
-
         if (index == 0) {
           if (this.event.eventDayPart == "evening") {
             block.startTime = moment(`${template.date} 07:00 PM`, "DD/MM/YY hh:mm A").valueOf();
@@ -289,7 +313,6 @@ export default {
             block.endTime = prevItem.endTime + 3600 * 1000;
           }
         }
-
         block.title = selectedBlock.buildingBlockType;
         block.startDuration = "am";
         block.endDuration = "am";
@@ -310,7 +333,7 @@ export default {
     editTimeline() {
       this.$set(this.editingContent, "mode", "edit");
     },
-    removeItem() {
+    removeItem(editItem) {
       Swal.fire({
         title: "Are you sure want to delete this item?",
         showCancelButton: true,
@@ -319,21 +342,22 @@ export default {
         confirmButtonText: "Yes I'm sure",
         buttonsStyling: false,
       })
-        .then((result) => {
+        .then(result => {
           if (result.value === true) {
-            this.$emit("remove", { index: this.index, item: this.editingContent });
+            this.$emit("remove", { index: this.index, item: editItem });
+            console.log(editItem);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
   },
   watch: {
     size(newVal) {
-        console.log('timelineItem.watch.size');
-    }
-  }
+      console.log("timelineItem.watch.size");
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -345,18 +369,18 @@ export default {
     height: 60px;
     border-radius: 50%;
     img {
-        width: 60px;
-        height: 60px;
+      width: 60px;
+      height: 60px;
     }
   }
   .time-line-icon-medium {
     min-width: 60px;
     height: 60px;
     border-radius: 50%;
-      img {
-          width: 60px;
-          height: 60px;
-      }
+    img {
+      width: 60px;
+      height: 60px;
+    }
   }
   .divider {
     width: 20px;
@@ -384,8 +408,8 @@ export default {
       }
     }
   }
-  .border-right{
-     border-right: 2px solid #818080;
+  .border-right {
+    border-right: 2px solid #818080;
   }
 }
 </style>

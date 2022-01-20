@@ -10,21 +10,21 @@
                 </div>
             </div>
             <div class="dropdown d-flex">
-                <md-menu md-size="medium" class="action-menu mr-1" :md-offset-x="-300" :md-offset-y="-36">
-                    <md-button md-menu-trigger class="edit-btn md-simple">
-                        Sort &nbsp;&nbsp;
-                        <i class="fas fa-chevron-up" v-if="sortType == 'asc'" @click.stop="changeSortType"></i>
-                        <i class="fas fa-chevron-down" @click.stop="changeSortType" v-else></i>
+                <md-menu md-size="medium" class="action-menu myr-1" :md-offset-x="-300" :md-offset-y="-36">
+                    <md-button md-menu-trigger class="edit-btn md-simple sortStatus">
+                        Sort
+                        <i class="fas fa-chevron-up my-chevron" v-if="sortType == 'asc'" @click.stop="changeSortType"></i>
+                        <i class="fas fa-chevron-down my-chevron" @click.stop="changeSortType" v-else></i>
                     </md-button>
                     <md-menu-content>
                         <md-menu-item @click="sortBy='name'" class="md-purple"><span>Name</span></md-menu-item>
                         <md-menu-item @click="sortBy='date'" class="md-purple"><span>Date</span></md-menu-item>
                     </md-menu-content>
                 </md-menu>
-                <md-button md-menu-trigger class="edit-btn md-simple" @click="changeStatusSortType">
-                    Status &nbsp;&nbsp;
-                    <i class="fas fa-chevron-up" v-if="statusSortType == 'asc'"></i>
-                    <i class="fas fa-chevron-down" v-else></i>
+                <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click="changeStatusSortType">
+                    Status
+                    <i class="fas fa-chevron-up my-chevron" v-if="statusSortType == 'asc'"></i>
+                    <i class="fas fa-chevron-down my-chevron" v-else></i>
                 </md-button>
             </div>
         </div>
@@ -48,10 +48,6 @@
                         <i class="fas fa-chevron-up my-chevron" v-if="commentSortType == 'asc'" @click.stop="changeCommentSortType('name')" @click="sortBy='name'"></i>
                         <i class="fas fa-chevron-down my-chevron" v-else @click.stop="changeCommentSortType('name')" @click="sortBy='name'"></i>
                     </md-button>
-                    <md-menu-content>
-                        <md-menu-item @click="sortBy='name'" class="md-purple"><span>Name</span></md-menu-item>
-                        <md-menu-item @click="sortBy='date'" class="md-purple"><span>Date</span></md-menu-item>
-                    </md-menu-content>
                 </md-menu>
                 <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('status')">
                     Status
@@ -62,10 +58,18 @@
         </div>
         <div class="sidebar__items d-flex flex-column fullDiscussion" v-if="fullDiscussion">
             <div class="comment_item align-items-center justify-content-between cursor-pointer" v-for="(commentComponent, commentIndex) in commentComponents" :key="commentIndex">
-                <div class="d-flex sidebar__item__content justify-content-between">
+                <div class="d-flex justify-content-between">
+                    <!-- sidebar__item__content -->
                     <div class="sidebar__item__details2 d-flex">
                         <img class="" src="/static/icons/Group-21554.png">
-                        <div class="productLaunchParty">{{selectedProposal.vendor.eventCategory.fullTitle}}</div>
+                        <div class="productLaunchParty">
+                            <div v-if="commentComponent.planner">
+                                {{commentComponent.planner.name}}
+                            </div>
+                            <div v-if="commentComponent.customer">
+                                {{commentComponent.customer.name}}
+                            </div>
+                        </div>
                     </div>
                     <timeago class="time-color" :datetime="commentComponent.dateCreated"></timeago>
                 </div>
@@ -83,14 +87,22 @@
                     </span> -->
                 </div>
                 <div v-if="showReplyComment == commentIndex " class="commentsReplies p-4">
-                    <div class="commentItem" v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex">
-                        <div class="d-flex sidebar__item__content justify-content-between">
-                            <div class="d-flex sidebar__item__content">
+                    <div class="commentItem" v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
+                        <div class="d-flex sidebar__item__content2 justify-content-between">
+                            <!-- <div class="d-flex sidebar__item__content"> -->
                                 <div class="sidebar__item__details d-flex">
                                     <img class="" src="/static/icons/Group-21554.png">
-                                    <div class="productLaunchParty">{{selectedProposal.vendor.eventCategory.fullTitle}}</div>
+                                    <div class="productLaunchParty">
+                                        <!-- {{selectedProposal.vendor.eventCategory.fullTitle}} -->
+                                        <div v-if="comment.planner">
+                                            {{comment.planner.name}}
+                                        </div>
+                                        <div v-if="comment.customer">
+                                            {{comment.customer.name}}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                             <timeago class="time-color" :datetime="comment.dateCreated"></timeago>
                         </div>
                         <div class="commentDesc">
@@ -99,7 +111,7 @@
                     </div>
                 </div>
                 <div v-if="showReplyComment == commentIndex ">
-                    <div class="form-group position-relative reply-form">
+                    <div class="form-group position-relative reply-form my-top">
                         <fade-transition v-if="showAddress">
                             <md-card class="position-absolute notification-card">
                                 <md-card-content class="d-flex align-center position-relative p-10">
@@ -113,7 +125,7 @@
                         </fade-transition>
                         <textarea rows="4" class="form-control reply-text-area" placeholder="Write reply here" v-model="editingComment" ref="commentEditor" @input="getMessage"></textarea>
                         <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
-                        <div class="footer text-right">
+                        <div class="footer text-right my-top my-bottom">
                             <md-button class="md-simple normal-btn" @click="">Cancel</md-button>
                             <md-button class="md-simple md-black normal-btn" @click="saveCommentReply($event, 'reply')">Submit</md-button>
                         </div>
@@ -129,14 +141,14 @@
             <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="(proposal, pindex) in commentsProposals" :key="pindex" @click="changeProposal(proposal)" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}">
                 <div class="d-flex align-item-center sidebar__item__content">
                     <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
-                    <img v-else class="sidebar__item__img" src="/static/icons/maryoku_icon.png">
+                    <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
                     <div class="sidebar__item__details d-flex flex-column">
                         <span class="productLaunchParty">{{proposal.vendor.eventCategory.fullTitle}}</span>
                         <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
                     </div>
                 </div>
                 <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
-                <button class="md-button md-vendor md-theme-default sidebar__item__btn" @click="fullDiscussion=true" v-if="!proposal.unread_count">Full Discussion</button>
+                <button class="md-button md-vendor md-theme-default sidebar__item__btn" @click="fullDiscussion=true" v-if="proposal.unread_count == 0 && proposal.commentComponent.length">Full Discussion</button>
                 <span class="unread-count" v-if="proposal.unread_count">{{proposal.unread_count}}</span>
             </div>
         </div>
@@ -178,6 +190,9 @@ export default {
         sortBy: '',
         sortType: 'asc',
         statusSortType: 'asc',
+        commentSortBy: '',
+        commentSortType: 'asc',
+        commentStatusSortType: 'asc',
         fullDiscussion: false,
         showReply: false,
         showReplyComment: null,
@@ -448,12 +463,6 @@ export default {
     font-weight: 800;
 }
 
-.sidebar__item__img {
-    width: 57px;
-    height: 57px !important;
-    // margin-right: 25px;
-}
-
 .commentMode {
     width: 247px;
     height: 40px;
@@ -569,11 +578,13 @@ export default {
     align-items: center;
     justify-content: center;
     margin-top: 3rem;
+    margin-right: 5rem;
 }
 
 .summer-party3 .dropdown {
     position: absolute;
     bottom: 1rem;
+    margin-right: 5.5rem;
 }
 
 .summer-party3 .dropdown2 {
@@ -615,7 +626,7 @@ export default {
     // width: 28px;
     // height: 28px;
     // margin: 37px 34px 57px 13px;
-    padding: 3px 8px 3px 8px;
+    padding: 5px 8px 5px 8px;
     background-color: lightgrey;
     font-size: 16px;
     font-weight: bold;
@@ -627,7 +638,8 @@ export default {
     color: #fff;
     border-radius: 50%;
     position: absolute;
-    right: 40px;
+    right: 0;
+    top: 75px;
 }
 
 .event-plan .progress-sidebar {
@@ -659,6 +671,7 @@ export default {
 
 .myr-1 {
     margin-right: 1.5rem;
+    margin-top: 0.25rem;
 }
 
 .titleText {
@@ -697,7 +710,7 @@ img.header-img {
 
 .fullDiscussion {
 
-    padding: 2rem;
+    padding: 1rem 2rem;
 
     img {
         width: 30px;
@@ -735,8 +748,13 @@ img.header-img {
         padding: 1rem 0rem 1rem 2rem;
 
         .commentItem {
-            border-bottom: 0.5px solid rgba(112, 112, 112, 0.45);
+            // border-bottom: 0.5px solid rgba(112, 112, 112, 0.45);
             padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .b-bottom {
+            border-bottom: 0.5px solid rgba(112, 112, 112, 0.45);
         }
 
         p {
@@ -750,7 +768,7 @@ img.header-img {
     }
 
     .commentDesc {
-        padding: 10px 12px;
+        padding: 10px 12px 10px 0px;
     }
 
     .reply-text-area {
@@ -779,8 +797,17 @@ img.header-img {
     border-color: #fff !important;
     color: #050505 !important;
 }
+.md-button.md-simple i.my-chevron {
+    color: #050505 !important;
+}
 .time-color {
     color: #818080;
+}
+.my-top {
+    margin-top: 20px;
+}
+.my-bottom {
+    margin-bottom: 20px;
 }
 
 </style>

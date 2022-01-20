@@ -1,10 +1,17 @@
 <template>
   <div class="vendor-customer-board p-40">
-    <loader :active="loading" is-full-screen page="vendor"/>
+    <loader :active="loading" is-full-screen page="vendor" />
     <div class="font-size-22 font-bold d-flex align-center">
       <img :src="`${$iconURL}CustomerList/group-19735.svg`" class="mr-10" /> CUSTOMERS
       <!--<md-button class="ml-auto md-simple md-black md-maryoku mr-15">Import Customers List</md-button>-->
-      <md-button class="md-vendor md-maryoku mr-15 ml-auto" @click="createNewCustomer">Add New Customers</md-button>
+      <div class="mr-15 ml-auto">
+        <md-button class="   font-size-14 font-bold md-simple " @click="importCustomersModal = true">
+          <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20" />
+          <span style="color: black;  text-transform: capitalize">Import Customers List</span>
+        </md-button>
+
+        <md-button class="md-vendor md-maryoku " @click="createNewCustomer">Add New Customers</md-button>
+      </div>
     </div>
     <div class="customer-table pl-50">
       <div class="md-layout mt-10">
@@ -80,6 +87,12 @@
         />
       </template>
     </modal>
+    <modal v-if="importCustomersModal">
+      <template slot="body">
+        <CustomerListModal @cancel="importCustomersModal = false" />
+      </template>
+    </modal>
+    <!-- <CustomerListModal v-if="importCustomersModal" :events="upcomingEvents" @cancel="importCustomersModal = false" /> -->
   </div>
 </template>
 <script>
@@ -88,21 +101,25 @@ import { CUSTOMER_PAGE_TABS, CUSTOMER_TABLE_HEADERS } from "@/constants/list";
 import { CUSTOMER_PAGE_PAGINATION } from "@/constants/pagination";
 
 const components = {
-    Modal: () => import("@/components/Modal.vue"),
-    Insight : () => import("./insight.vue"),
-    VsaList: () => import("vue-simple-accordion"),
-    Loader: () => import('@/components/loader/Loader.vue'),
-    CustomerForm: () => import('../Form/CustomerForm.vue'),
-    CustomerListItem: () => import("../components/CustomerListItem.vue"),
-    ProposalContent: () => import("../components/ProposalDetail.vue"),
-    TablePagination: () => import("@/components/TablePagination.vue"),
-}
+  CustomerListModal: () => import("./ImportCustomers.vue"),
+  Modal: () => import("@/components/Modal.vue"),
+  Insight: () => import("./insight.vue"),
+  VsaList: () => import("vue-simple-accordion"),
+  Loader: () => import("@/components/loader/Loader.vue"),
+  CustomerForm: () => import("../Form/CustomerForm.vue"),
+  CustomerListItem: () => import("../components/CustomerListItem.vue"),
+  ProposalContent: () => import("../components/ProposalDetail.vue"),
+  TablePagination: () => import("@/components/TablePagination.vue"),
+};
 
 export default {
   components,
   data() {
     return {
+      importCustomersModal: false,
       loading: true,
+      iconUrl: `${this.$resourceURL}storage/icons/`,
+      storageIcon: `${this.$IconURL}storage/icons/`,
       iconUrl: `${this.$iconURL}`,
       customerTabs: CUSTOMER_PAGE_TABS,
       customerHeaders: CUSTOMER_TABLE_HEADERS,
@@ -147,7 +164,7 @@ export default {
       });
 
       this.pagination.total = data.total;
-      this.customerTabs.map((t) => {
+      this.customerTabs.map(t => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
@@ -187,10 +204,7 @@ export default {
         this.openNewTab(routeData.href);
       } else if (action === this.customerStatus.delete) {
         this.loading = true;
-        this.$store.commit(
-          "vendorDashboard/setCustomers",
-          this.customers.filter((it) => it.id !== customer.id),
-        );
+        this.$store.commit("vendorDashboard/setCustomers", this.customers.filter(it => it.id !== customer.id));
         let query = new Customer({ id: customer.id });
         let res = await query.delete();
         this.loading = false;
@@ -202,11 +216,11 @@ export default {
 
       if (data.action === this.proposalStatus.show) {
         for (let i = 0; i < this.customers.length; i++) {
-          this.selectedProposal = this.customers[i].proposals.find((p) => p.id === data.proposalId);
+          this.selectedProposal = this.customers[i].proposals.find(p => p.id === data.proposalId);
 
           if (this.selectedProposal) {
             this.selectedProposal.proposalRequest = this.proposalRequests.find(
-              (it) => it.id === this.selectedProposal.proposalRequestId,
+              it => it.id === this.selectedProposal.proposalRequestId,
             );
             this.showProposalDetail = true;
             break;
@@ -227,13 +241,11 @@ export default {
       this.showNewCustomerModal = true;
     },
     async saveCustomer(customer) {
-
       this.showNewCustomerModal = false;
       if (customer.email) {
         this.loading = true;
         let customerInstance = new Customer({ ...customer, vendorId: this.vendorData.id, type: 1 });
         await customerInstance.save();
-
 
         await this.getCustomer();
         this.loading = false;
@@ -249,7 +261,7 @@ export default {
       await this.getCustomer();
       this.loading = false;
 
-      this.$nextTick((_) => {
+      this.$nextTick(_ => {
         this.renderInsight = true;
       });
     },
@@ -286,8 +298,8 @@ export default {
 
       if (!this.customers.length) return { totalPrice, totalProposals, wonProposals, averagePrice };
 
-      this.customers.map((c) => {
-        let wonProposalsOfCustomer = c.proposals.filter((p) => p.accepted);
+      this.customers.map(c => {
+        let wonProposalsOfCustomer = c.proposals.filter(p => p.accepted);
 
         wonProposals += wonProposalsOfCustomer.length;
         totalProposals += c.proposals.length;

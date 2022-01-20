@@ -271,20 +271,24 @@
         </div>
       </div>
     </template>
+    <template v-if="item.type == 'custom_service'">
+      <vendor-custom-service-item :vendor="vendor"/>
+    </template>
   </div>
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import Vendors from '@/models/Vendors'
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import CategorySelector from "@/components/Inputs/CategorySelector";
+import Icon from '@/components/Icon/Icon.vue'
+import CategorySelector from '@/components/Inputs/CategorySelector'
+import VendorCustomServiceItem from '../components/VendorCustomServiceItem.vue'
 
 export default {
-  name: "vendor-checkbox",
+  name: 'vendor-checkbox',
   props: {
     category: String,
     type: String,
@@ -294,14 +298,15 @@ export default {
     service: Object,
     theme: {
       type: String,
-      default: "red",
+      default: 'red',
     },
   },
   components: {
     CategorySelector,
     VueElementLoading,
+    VendorCustomServiceItem,
   },
-  data() {
+  data () {
     return {
       checked: false,
       included: true,
@@ -315,70 +320,70 @@ export default {
         dry: null,
         hideLabelForValue: false,
       },
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: 'https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/',
       currencyFormat: {
-        decimal: ".",
-        thousands: ",",
-        prefix: "$ ",
-        suffix: "",
+        decimal: '.',
+        thousands: ',',
+        prefix: '$ ',
+        suffix: '',
         precision: 2,
         masked: false,
       },
-    };
+    }
   },
-  mounted() {
-    let item = null;
+  mounted () {
+    let item = null
     if (this.service) {
-      item = this.service.services[this.camelize(this.label)];
+      item = this.service.services[this.camelize(this.label)]
     } else if (this.vendor) {
-      item = this.vendor.services[this.camelize(this.label)];
+      item = this.vendor.services[this.camelize(this.label)]
     }
 
-    console.log("service.check.box", this.label, this.item, item);
+    console.log('service.check.box', this.label, this.item, item)
     if (item) {
-      this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
-      this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
-      this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
-      this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
-      this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
+      this.included = item.hasOwnProperty('included') ? item.included : this.item.included
+      this.checked = item.hasOwnProperty('checked') ? item.checked : this.item.checked
+      this.currentItem.value = item.hasOwnProperty('value') ? item.value : this.item.value
+      this.currentItem.desc = item.hasOwnProperty('desc') ? item.desc : this.item.desc
+      this.currentItem.dry = item.hasOwnProperty('dry') ? item.dry : this.item.dry
     }
-    this.currentItem.included = this.included;
-    this.currentItem.checked = this.checked;
-    this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
-    this.currentItem.xIncluded = this.item.xIncluded;
-    console.log("service.checkbox", this.currentItem);
+    this.currentItem.included = this.included
+    this.currentItem.checked = this.checked
+    this.currentItem.hideLabelForValue = this.item.hideLabelForValue
+    this.currentItem.xIncluded = this.item.xIncluded
+    console.log('service.checkbox', this.currentItem)
   },
   methods: {
-    updateExChecked(items) {
-      this.currentItem.value = items;
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+    updateExChecked (items) {
+      this.currentItem.value = items
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
-    updateCheck() {
-      this.checked = !this.checked;
-      this.currentItem.checked = this.checked;
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+    updateCheck () {
+      this.checked = !this.checked
+      this.currentItem.checked = this.checked
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
-    updateValue(field, value) {
-      if (field && typeof value !== "undefined") {
-        this.currentItem[field] = value;
+    updateValue (field, value) {
+      if (field && typeof value !== 'undefined') {
+        this.currentItem[field] = value
       }
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
-    updateIncluded() {
-      this.included = !this.included;
-      this.currentItem.included = this.included;
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+    updateIncluded () {
+      this.included = !this.included
+      this.currentItem.included = this.included
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
-    camelize(str) {
+    camelize (str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
-        return chr.toUpperCase();
-      });
-      return temp.charAt(0).toLowerCase() + temp.slice(1);
+        return chr.toUpperCase()
+      })
+      return temp.charAt(0).toLowerCase() + temp.slice(1)
     },
   },
   computed: {
-    columnCount() {
-      return this.item.available.length > 8 ? "2" : "1";
+    columnCount () {
+      return this.item.available.length > 8 ? '2' : '1'
     },
   },
   filters: {},
@@ -386,20 +391,20 @@ export default {
     currentItem: {
       deep: true,
       handler: function (newValue, oldValue) {
-        this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, newValue);
+        this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, newValue)
       },
     },
   },
-  beforeDestroy() {
+  beforeDestroy () {
     // this.$root.$off('update-vendor-value')
   },
-};
+}
 </script>
 <style lang="scss" scoped>
 .vendor-checkbox-wrapper {
   font-family: Manrope-Regular, sans-serif;
   color: #050505;
-  background: #ffffff;
+  background: #f7f7f7;
   margin: auto -60px;
   margin-bottom: 0px;
   padding: 25px 60px;
@@ -441,7 +446,7 @@ export default {
         padding: 0.5rem 1rem;
         max-width: 20rem;
         font: normal 16px Manrope-Regular, sans-serif;
-        background-image: url("https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg");
+        background-image: url('https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg');
         background-repeat: no-repeat;
         background-size: 20px 20px;
         background-position: calc(100% - 1rem);
@@ -575,9 +580,9 @@ export default {
     }
   }
 
-  &:first-child {
-    margin-top: 15px;
-  }
+  // &:first-child {
+  //   margin-top: 15px;
+  // }
   &.checked {
     background: #f7f7f7;
     margin-top: 0px !important;

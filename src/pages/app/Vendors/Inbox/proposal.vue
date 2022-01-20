@@ -1,7 +1,7 @@
 <template>
     <div class="proposal-main-container" style="">
         <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
-        <template v-if="proposal && commentComponents.length">
+        <template v-if="showProposal">
             <comment-editor-panel
             v-if="showCommentEditorPanel"
             :commentComponents="commentComponents"
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <ProposalVersionsBar
-            :versions="proposal.versions || []"
+            :versions="proposal.versions"
             :selected="proposal.currentVersion"
             @select="selectVersion"
             @save="saveVersion"
@@ -45,9 +45,9 @@
                 </EventProposalDetails>
             </div>
         </template>
-        <template>
+        <template v-else>
             <div class="proposal-container no-proposal">
-                <NoProposal>
+                <NoProposal :proposal="proposal" @show="showProposal = true">
                 </NoProposal>
             </div>
         </template>
@@ -78,6 +78,7 @@ export default {
         return {
             loading: true,
             step: 0,
+            showProposal: false,
             showDetailModal: false,
             showUpdateSuccessModal: false,
             showCommentEditorPanel: false,
@@ -149,9 +150,24 @@ export default {
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
+                this.showProposal = !!this.commentComponents.length
+                proposal.versions = !proposal.versions ? [] : proposal.versions;
                 this.setSelectedProposal(proposal);
-                this.$store.dispatch("vendorProposal/setProposal",proposal);
+                this.$store.dispatch("vendorProposal/setProposal",{...proposal});
+                this.$store.dispatch("commentProposal/setProposal",{...proposal});
             }
+        },
+        selectVersion(index){
+            this.$store.commit('commentProposal/selectVersion', index);
+        },
+        saveVersion(version){
+            this.$store.dispatch('commentProposal/saveVersion', version);
+        },
+        changeVersion(versions){
+            this.$store.commit('commentProposal/setVersions', versions);
+        },
+        removeVersion(id){
+            this.$store.dispatch('commentProposal/removeVersion', id);
         }
     },
     computed: {
@@ -168,14 +184,14 @@ export default {
             return this.proposal.vendor
         },
         proposal(){
-            // return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
-            return this.$store.state.comment.selectedProposal;
+            return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
         },
         proposals(){
             return this.$store.state.comment.commentsProposals;
         },
         selectedVersion(){
-    },
+
+        },
     },
     watch: {
         $route: function() {
