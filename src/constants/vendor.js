@@ -2585,6 +2585,21 @@ export const businessCategories = [
         ],
       },
       {
+        name: "Custom service",
+        subCategories: [
+          {
+            name: "",
+            items: [
+              {
+                name: "",
+                type: 'custom_service',
+                value: null,
+              }
+            ],
+          }
+        ],
+      },
+      {
         name: "amenities",
         subCategories: [
           {
@@ -3767,6 +3782,21 @@ export const VendorPolicy = [
         type: 'Boolean',
       },
       {
+        name: "Custom service",
+        subCategories: [
+          {
+            name: "",
+            items: [
+              {
+                name: "",
+                type: 'custom_service',
+                value: null,
+              }
+            ],
+          }
+        ],
+      },
+      {
         name: "Minimum hours of service",
         type: 'Number',
         noSuffix: true,
@@ -4457,7 +4487,21 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true,
       },
-
+      {
+        name: "Custom service",
+        subCategories: [
+          {
+            name: "",
+            items: [
+              {
+                name: "",
+                type: 'custom_service',
+                value: null,
+              }
+            ],
+          }
+        ],
+      },
       {
         name: "Large group discounts",
         type: "GroupDiscount",

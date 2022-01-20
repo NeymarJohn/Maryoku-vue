@@ -204,7 +204,8 @@
       "
       class="proposal-section policy-section"
     >
-        <div class="card-section align-center px-20 py-30">
+     
+      <div class="card-section align-center px-20 py-30">
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
@@ -250,6 +251,7 @@
         </div>
       </div>
     </section>
+
     <section class="proposal-section policy-section">
       <div class="card-section align-center px-20 py-30">
         <div class="px-40">
@@ -323,11 +325,14 @@
               <div class="side-label">
                 <div class="label-value">Our cancellation approach</div>
               </div>
+
               <div class="proposal-section__subtitle">
                 <div class="subtitle">We allow free cancellation until:</div>
                 <div class="desc">30 days before the event</div>
               </div>
+
               <CancellationPolicy></CancellationPolicy>
+
               <div class="side-label">
                 <div class="label-value">Act of God</div>
               </div>
@@ -337,6 +342,7 @@
                 authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
                 quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
               </div>
+
               <div class="signature-section">
                 <div class="signature-section__vendor">
                   {{ vendorProposal.vendor.vendorDisplayName }}
@@ -350,6 +356,7 @@
         </div>
       </div>
     </section>
+
     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
       <md-icon>close</md-icon>
     </md-button>
