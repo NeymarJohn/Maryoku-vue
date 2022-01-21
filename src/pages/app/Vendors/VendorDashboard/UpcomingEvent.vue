@@ -1,14 +1,24 @@
 <template>
   <div class="upcoming-event-list">
-    <div class="upcoming-event" v-for="(event, index) in events" :key="event.id">
-      <div class="event-logo" @click="showModal(event)" >
-        <img :src="`${$iconURL}CalendarIcons/${eventIcon(index)}`" />
+    <div class="upcoming-event" v-for="event in events" :key="event.id">
+      <div class="event-logo" @click="show(event.idx)">
+        <img :src="`${$iconURL}CalendarIcons/${eventIcon(event.idx)}`" v-if="datas === null" />
+        <img
+          v-if="datas !== null"
+          :src="`${$iconURL}CalendarIcons/${icons[datas]}`"
+          style="  width: 27.1px;
+             height: 31.1px;
+             object-fit: contain;
+             "
+        />
       </div>
+
       <div class="event-detail flex-1">
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
         <div class="font-bold mb-10" v-if="event.customer">{{ event.customer.name }} | {{ event.customer.email }}</div>
         <div>
           {{ event.companyName }} |
+
           <a :href="getProposalUrl(event.id)" class="color-purple" target="_blank">See proposal</a>
         </div>
       </div>
@@ -21,13 +31,13 @@
 <script>
 export default {
   props: {
+    datas: String,
     events: {
       type: Array,
       default: [],
     },
   },
-  components: {
-  },
+  components: {},
   data() {
     return {
       icons: [
@@ -78,11 +88,13 @@ export default {
     selectEvent(event) {
       this.$emit("showEvent", event);
     },
-     showModal(event) {
-      this.$emit("showModal", event);
+    show(event) {
+      event = this.datas;
+
+      this.$emit("show", event);
     },
     eventIcon(idx) {
-      return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
+      return this.icons[Math.ceil(Math.random() * 10 * idx) % 28];
     },
     getProposalUrl(eventId) {
       console.log("proposalUrl", eventId, this.proposals.map(p => p));
@@ -123,6 +135,7 @@ export default {
       height: 50px !important;
       min-width: 50px;
       border-radius: 50%;
+      cursor: pointer;
       background-color: white;
       display: flex;
       justify-content: center;
