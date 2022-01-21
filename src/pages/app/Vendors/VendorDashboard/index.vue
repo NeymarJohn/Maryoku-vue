@@ -229,6 +229,7 @@ export default {
           this.incomeChartData = [...this.incomeChartData];
         }
       });
+    this.getServiceReport();
     },
     handleYearChange(year) {
     this.selectedYear = year;
