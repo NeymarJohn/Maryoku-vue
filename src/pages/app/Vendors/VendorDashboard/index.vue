@@ -194,6 +194,11 @@ export default {
   async mounted() {
     //get data
     this.getIncomingData()
+    this.getComingEvents();
+    this.getServiceReport();
+    this.getMarkedDates();
+    await this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
+    this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
     getIncomingData() {
@@ -229,12 +234,6 @@ export default {
           this.incomeChartData = [...this.incomeChartData];
         }
       });
-    this.getServiceReport();
-    this.getMarkedDates();
-    this.getComingEvents();
-    this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
-    this.$store.dispatch("common/fetchAllCategories");
-
     },
     handleYearChange(year) {
     this.selectedYear = year;
