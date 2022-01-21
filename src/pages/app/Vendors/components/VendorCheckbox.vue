@@ -272,7 +272,7 @@
       </div>
     </template>
     <template v-if="item.type == 'custom_service'">
-      <vendor-custom-service-item :vendor="vendor"/>
+      <vendor-custom-service-item :vendor="vendor" />
     </template>
   </div>
 </template>

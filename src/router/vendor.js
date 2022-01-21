@@ -7,8 +7,6 @@ const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue"
 const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile");
 const VendorProposalBoard = () => import("@/pages/app/Vendors/ProposalBoard");
 const VendorCustomers = () => import("@/pages/app/Vendors/Customers");
-const VendorInbox =() => import("@/pages/app/Vendors/Inbox");
-const VendorInboxProposal =() => import("@/pages/app/Vendors/Inbox/proposal.vue");
 const VendorDashboard = () => import("@/pages/app/Vendors/VendorDashboard")
 const VendorSignup = () => import("@/pages/app/Vendors/Signup");
 const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue");
@@ -211,28 +209,6 @@ export default [
                     requiresAuth: true,
                     title: "Customers",
                     gtm: "Customers",
-                    isVendor: true
-                },
-            },
-            {
-                path: "inbox",
-                name: "inbox",
-                component: VendorInbox,
-                children:[{
-                    path: "proposal/:proposalId",
-                    name: "VendorInboxProposal",
-                    component: VendorInboxProposal,
-                    meta: {
-                        requiresAuth: true,
-                        title: "Vendor Proposal",
-                        gtm: "Vendor Proposal",
-                        isVendor: true
-                    },
-                }],
-                meta: {
-                    requiresAuth: true,
-                    title: "Inbox",
-                    gtm: "Inbox",
                     isVendor: true
                 },
             },

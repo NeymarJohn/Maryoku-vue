@@ -3,20 +3,27 @@
     <form @submit.prevent style="display: flex; justify-content: space-between;">
       <div>
         <label class="titles" v-text="'Add Services'"></label>
-        <input
-          @input="addService = $event.target.value"
-          v-model="addService"
-          type="text"
-          style="margin-right: 15px; min-width:555px"
-        />
+        <input @input="addService = $event.target.value" v-model="addService" type="text" style="min-width:555px" />
       </div>
 
       <div>
         <label class="titles" v-text="'Price'"></label>
-        <money v-model="price" style="text-align: center; max-width: 166px" @input="price = $event" />
+        <money
+          v-model="price"
+          v-bind="{
+            decimal: '.',
+            thousands: ',',
+            prefix: '$ ',
+            suffix: '',
+            precision: 2,
+            masked: false,
+          }"
+          style="text-align: center; max-width: 166px"
+          @input="price = $event"
+        />
       </div>
 
-      <div style="margin-top: 55px">
+      <div style="margin-top: 25px; width: 166px">
         <input
           v-model="virtualService"
           type="checkbox"
@@ -25,60 +32,82 @@
           @input="virtualService = $event.target.checked"
           style="cursor: pointer"
         />
-        <label class="virtual-services" v-text="'Virtual services'" for="check"></label>
+        <label class="virtual-services service" v-text="'Virtual services'" for="check"></label>
       </div>
 
       <button @click="addedService" class="button-add-custom-service">Add</button>
     </form>
 
     <div>
-      <div v-for="service in vendor.customService" :key="service.id" style="background-color: #f7f7f7;">
+      <div v-for="service in vendor.services.customService.data" :key="service.id" style="background-color: #f7f7f7;">
         <div class="wrapper-service" v-if="editingItem == service.id">
           <input type="text" style="min-width: 555px; height: 20px; margin-top: 18px;" v-model="editingInput" />
-          <span class="service" style="font-weight: normal">{{ service.price }}</span>
+          <money
+            v-model="editingItemPrice"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            style="text-align: center; max-width: 166px; max-height: 50px; margin-top: 18px"
+            @input="editingPrice = $event"
+          />
           <span class="service">
-            <input v-model="service.checked" type="checkbox" class="custom-checkbox" />
-            <label v-text="'Virtual services'"></label>
+            <input
+              v-model="editingItemChecked"
+              type="checkbox"
+              class="custom-checkbox"
+              id="newCheck"
+              style="cursor: pointer"
+              @input="editingChecked = $event.target.checked"
+            />
+            <label
+              class="virtual-services service"
+              v-text="'Virtual services'"
+              for="newCheck"
+              style="margin: 0; width: 166px"
+            ></label>
           </span>
-          <span style="height: 25px; margin-top: 30px">
+          <span style="height: 25px; margin-top: 30px; min-width: 104.22px; text-align: end">
             <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22425.svg"
-              width="22px"
-              height="22px"
+              src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 562.svg"
+              width="22"
+              height="22"
               style="cursor: pointer"
               :id="service.id"
               @click="saveEditItem"
             />
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22420.svg"
-              width="25px"
-              height="25px"
               style="cursor: pointer; margin-left: 25px"
               @click="removeService"
               :id="service.id"
             />
           </span>
         </div>
+
         <div class="wrapper-service" v-else>
           <span class="service" style="min-width: 555px">{{ service.name }}</span>
-          <span class="service" style="font-weight: normal">{{ service.price }}</span>
+          <span class="service" style="font-weight: normal; text-align: center;">{{ `$ ${service.price}` }}</span>
           <span class="service">
             <input v-model="service.checked" type="checkbox" class="custom-checkbox" />
             <label v-text="'Virtual services'"></label>
           </span>
-          <span style="height: 25px; margin-top: 30px">
+          <span style="height: 25px; margin-top: 30px; min-width: 104.22px; text-align: end">
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22425.svg"
-              width="22px"
-              height="22px"
               style="cursor: pointer"
+              :id="service.id"
               :name="service.name"
+              :price="service.price"
+              :checked="service.checked"
               @click="editItem"
             />
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22420.svg"
-              width="25px"
-              height="25px"
               style="cursor: pointer; margin-left: 25px"
               @click="removeService"
               :id="service.id"
@@ -91,39 +120,43 @@
 </template>
 
 <script>
+import { Money } from 'v-money'
+
 export default {
   name: 'vendor-custom-service-item',
+  components: {
+    Money,
+  },
   props: {
     vendor: Object,
   },
   data () {
     return {
-      collapsed: true,
-      conditionTooltip: false,
       header: 'Custom Service',
-      addService: '',
-      price: 0,
+      conditionTooltip: false,
       virtualService: false,
-      iconUrl: 'https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/',
-      currencyFormat: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '$ ',
-        suffix: '',
-        precision: 2,
-        masked: false,
-      },
+
+      editingItemChecked: null,
+      editingChecked: false,
+
+      editingItemPrice: null,
+      editingPrice: '0.00',
+
       editingItem: null,
       editingInput: '',
+
+      collapsed: true,
+      addService: '',
+      price: '0.00',
     }
   },
   mounted () {
-    this.vendor.customService = []
+    this.vendor.services.customService = { data: [] }
   },
 
   methods: {
     addedService ({ target }) {
-      if (!target.form[0].value || target.form[1].value === '0.0000') {
+      if (!target.form[0].value || target.form[1].value === '$ 0.00') {
         return
       }
       const newService = {
@@ -132,20 +165,30 @@ export default {
         price: this.price,
         checked: this.virtualService,
       }
-      this.vendor.customService.push(newService)
+      this.vendor.services.customService.data.push(newService)
       this.addService = ''
       this.price = ''
       this.virtualService = false
     },
     removeService ({ target }) {
-      this.vendor.customService = this.vendor.customService.filter(service => service.id !== Number(target.id))
+      this.vendor.services.customService.data = this.vendor.services.customService.data.filter(
+        service => service.id !== Number(target.id),
+      )
     },
     editItem ({ target }) {
-      this.editingItem = target.nextElementSibling.id
-      this.editingInput = target.name
+      this.editingItem = target.attributes.id.value
+      this.editingInput = target.attributes.name.value
+      this.editingItemPrice = target.attributes.price.value
+      this.editingItemChecked = target.attributes.checked ? true : false
     },
     saveEditItem ({ target }) {
-      this.vendor.customService.map(service => (service.id === Number(target.id) ? (service.name = this.editingInput) : service))
+      this.vendor.services.customService.data.map(service =>
+        service.id === Number(target.id)
+          ? ((service.name = this.editingInput),
+            (service.price = this.editingPrice),
+            (service.checked = this.editingChecked))
+          : service,
+      )
       this.editingItem = null
     },
   },
@@ -211,10 +254,6 @@ export default {
     style: normal;
     size: 16px;
   }
-  margin: {
-    left: 32.7px;
-    top: 45px;
-  }
   padding: 12.2px 36.6px 10.8px 36.7px;
   background-color: #641856;
   letter-spacing: normal;
@@ -222,6 +261,7 @@ export default {
   line-height: 1.88;
   font-weight: 800;
   max-height: 53px;
+  margin-top: 45px;
   cursor: pointer;
   color: #fff;
   border: none;
@@ -250,7 +290,8 @@ export default {
   letter-spacing: normal;
   display: inline-block;
   line-height: normal;
-  color: #050505;
   margin-top: 30px;
+  min-width: 166px;
+  color: #050505;
 }
 </style>
