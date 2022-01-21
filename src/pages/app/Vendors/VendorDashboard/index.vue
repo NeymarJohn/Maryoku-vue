@@ -230,6 +230,11 @@ export default {
         }
       });
     this.getServiceReport();
+    this.getMarkedDates();
+    this.getComingEvents();
+    this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
+    this.$store.dispatch("common/fetchAllCategories");
+
     },
     handleYearChange(year) {
     this.selectedYear = year;
