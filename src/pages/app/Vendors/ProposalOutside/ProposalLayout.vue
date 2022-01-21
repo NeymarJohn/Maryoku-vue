@@ -104,6 +104,7 @@
       :link="proposalLink"
     ></SendProposalModal>
     <ProposalSubmitted
+      class="proposal-submitted"
       v-if="showSubmittedProposalModal"
       @close="showSubmittedProposalModal = false"
     ></ProposalSubmitted>

@@ -2,7 +2,7 @@
   <div class="vendor-service-item-wrapper">
     <div class="title-cont" @click="collapsed = !collapsed">
       <div class="title">{{ serviceItem.name }}</div>
-      <div class="help d-flex justify-content-end align-center mr-20" v-if="!collapsed">
+      <div class="help d-flex justify-content-end align-center mr-20" v-if="!collapsed && serviceItem.name !== 'Custom service'">
         <div v-if="serviceItem.name !== 'Sustainability, Inclusion and Diversity'">
           Check all of the services that are included in your initial offer.
         </div>

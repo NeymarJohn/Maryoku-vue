@@ -216,7 +216,7 @@
               <md-table-cell>{{ item.email }}</md-table-cell>
               <md-table-cell>{{ item.address }}</md-table-cell>
               <md-table-cell>{{ item.name }} </md-table-cell>
-              <md-table-cell>
+              <md-table-cell >
                 <span style="color: #b7b5b5;" v-if="item.icon === true"> <i class="fas fa-ellipsis-v fa-lg"></i></span
               ></md-table-cell>
             </md-table-row>

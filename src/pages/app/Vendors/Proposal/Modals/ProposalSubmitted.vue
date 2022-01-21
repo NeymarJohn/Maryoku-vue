@@ -9,11 +9,13 @@
     <template slot="body">
       <div>
         <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`" />
-        <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div>
-        <div class="mt-20">To:mayaetti@gmail.com</div>
-        <div class="mt-40">A copy will be sent to your email</div>
-        <div class="mt-20">
-          <md-button class="md-vendor maryoku-btn" @click="goToDashboard">Cool, Back To Dashboard</md-button>
+        <!-- <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div> -->
+        <div class="font-size-30 font-bold mt-30 color-purple p-success">Proposal sent successfully!</div>
+        <div class="mt-10 "><span class="text-to">To:</span><span class="to-email"> mayaetti@gmail.com</span></div>
+        <!-- <div class="mt-40">A copy will be sent to your email</div> -->
+        <div class="mt-50 copy-email">you will receive a copy to your email</div>
+        <div class="mt-30">
+          <md-button class="md-vendor maryoku-btn cool-dash" @click="goToDashboard">Cool, Go To Dashboard</md-button>
         </div>
       </div>
     </template>
@@ -190,5 +192,32 @@ export default {
       color: white;
     }
   }
+}
+.proposal-submitted {
+    .p-success {
+        line-height: 1.53;
+        letter-spacing: normal;
+    }
+    .to-email {
+        -webkit-text-stroke: 1px #707070;
+        font-size: 20px;
+        line-height: normal;
+        letter-spacing: normal;
+    }
+    .text-to {
+        font-weight: 600;
+        font-size: 20px;
+        line-height: normal;
+        letter-spacing: normal;
+    }
+    .copy-email {
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .cool-dash {
+        width: 301px;
+        height: 52px;
+        padding: 15px 59.3px 16px 59.7px;
+    }
 }
 </style>
