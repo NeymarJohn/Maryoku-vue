@@ -8,12 +8,7 @@
       <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
       <div class="md-layout my-40">
         <div class="md-layout-item font-size-16 color-white md-size-50 text-left pl-50">
-          <select v-model="selected" class='selected'>
-            <option disabled value="" class='d-none'>{{selected||date}} </option>
-            <option>{{date-1}}</option>
-            <option>{{date}}</option>
-            <option>{{date+1}}</option>
-         </select>
+        <year-select :data="yearsList" width="60%" :initialValue="initialYear" @valueChanged="handleYearChange"/>
         </div>
         <div class="md-layout-item md-size-50 d-flex align-center font-size-16 color-white text-right pr-50">
           <span :style="`background-color: #ffffff;`" class="icon mr-10"></span>
@@ -30,12 +25,15 @@
 <script>
 import carousel from "vue-owl-carousel";
 import IncomeBarChart from "./IncomeBarChart.vue";
+import YearSelect from "@/components/Select/YearSelect.vue";
 
 export default {
   components: {
     carousel,
     IncomeBarChart,
+    YearSelect
   },
+  
   props: {
     incomeChartData: {
       type: Array,
@@ -43,32 +41,28 @@ export default {
     },
   },
   data() {
+    const date = new Date().getFullYear()
     return {
       incomeList: [""],
-      date: Number(new Date().toLocaleString('ru',{year:'numeric'})),
-      selected: ''
+      yearsList: [
+        date - 1,
+        date,
+        date + 1
+      ],
+      date,
+      initialYear: new Date().getFullYear()
     };
-  },
-};
+  },	
+  methods: {
+      handleYearChange(value) {
+        this.$emit('onYearChanged', value);
+      }
+    }
+  };
 </script>
 <style type="scss">
-
 .carousel-item {
 }
-.selected{
-  background-color: #641856;
-  cursor: pointer;
-  color:white;
-  border:none;
- 
-}
-  .selected>option{
-  background-color: white;
-  color:#641856
-  }
-  .selected:active{
-    border: none;
-  }
 
 .icon {
   min-width: 14px;

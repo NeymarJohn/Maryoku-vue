@@ -1,7 +1,7 @@
 <template>
     <div class="proposal-main-container" style="">
         <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
-        <template v-if="proposal">
+        <template v-if="showProposal">
             <comment-editor-panel
             v-if="showCommentEditorPanel"
             :commentComponents="commentComponents"
@@ -34,15 +34,21 @@
                 </div>
             </div>
             <ProposalVersionsBar
-            :versions="proposal.versions || []"
+            :versions="proposal.versions"
             :selected="proposal.currentVersion"
             @select="selectVersion"
             @save="saveVersion"
             @change="changeVersion"
             @remove="removeVersion"></ProposalVersionsBar>
-            <div class="proposal-container" style="padding: 39px 92px;">
+            <div class="proposal-container event-proposal" >
                 <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
                 </EventProposalDetails>
+            </div>
+        </template>
+        <template v-else>
+            <div class="proposal-container no-proposal">
+                <NoProposal :proposal="proposal" @show="showProposal = true">
+                </NoProposal>
             </div>
         </template>
     </div>
@@ -56,6 +62,7 @@ import {CommentMixins, ShareMixins} from "@/mixins";
 
 const components = {
     EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
+    NoProposal: () => import('@/pages/app/Vendors/Inbox/NoProposal.vue'),
     TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
     CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
     GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
@@ -71,6 +78,7 @@ export default {
         return {
             loading: true,
             step: 0,
+            showProposal: false,
             showDetailModal: false,
             showUpdateSuccessModal: false,
             showCommentEditorPanel: false,
@@ -142,9 +150,24 @@ export default {
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
+                this.showProposal = !!this.commentComponents.length
+                proposal.versions = !proposal.versions ? [] : proposal.versions;
                 this.setSelectedProposal(proposal);
-                this.$store.dispatch("vendorProposal/setProposal",proposal);
+                this.$store.dispatch("vendorProposal/setProposal",{...proposal});
+                this.$store.dispatch("commentProposal/setProposal",{...proposal});
             }
+        },
+        selectVersion(index){
+            this.$store.commit('commentProposal/selectVersion', index);
+        },
+        saveVersion(version){
+            this.$store.dispatch('commentProposal/saveVersion', version);
+        },
+        changeVersion(versions){
+            this.$store.commit('commentProposal/setVersions', versions);
+        },
+        removeVersion(id){
+            this.$store.dispatch('commentProposal/removeVersion', id);
         }
     },
     computed: {
@@ -162,16 +185,12 @@ export default {
         },
         proposal(){
             return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
-            return this.$store.state.comment.selectedProposal;
         },
         proposals(){
             return this.$store.state.comment.commentsProposals;
         },
         selectedVersion(){
-          return this.$store.state.commentProposal.currentVersion;
-        },
-        versions(){
-          return this.$store.state.commentProposal.proposal.versions;
+
         },
     },
     watch: {
@@ -247,5 +266,12 @@ export default {
 .proposal-main-container{
     left: 400px;
     width: calc(100% - 400px);
+}
+
+.no-proposal {
+    padding: 75px 75px;
+}
+.event-proposal {
+    padding: 39px 92px;
 }
 </style>
