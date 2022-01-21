@@ -143,19 +143,16 @@ export default {
     },
   },
   mounted() {
-    console.log("timeline.edit.panel", this.timelineDates);
+    console.log('timeline.edit.panel', this.timelineDates);
   },
-  created() {
-    console.log("timeline.edit.panel", this.timelineDates);
-  },
-  methods: {
+    methods: {
     formatDate() {},
     numberToWord(num) {
       return numberToWord(num);
     },
     getDisabledDates(index) {
       const vm = this;
-      const checkDate = function(date) {
+      const checkDate = function (date) {
         if (index == 0) {
           return false;
         }
@@ -171,7 +168,7 @@ export default {
     addNewDateAfterCurrent(scheduleDate) {
       const currentDate = new moment(scheduleDate, "YYYY-MM-DD");
       const newDate = moment(currentDate).add(1, "d");
-      if (this.timelineDates.findIndex(item => item.date === newDate.format("YYYY-MM-DD")) >= 0) {
+      if (this.timelineDates.findIndex((item) => item.date === newDate.format("YYYY-MM-DD")) >= 0) {
         Swal.fire({
           title: `Sorry you have timelins on ${newDate.format("DD/MM/YY")}`,
           showCancelButton: false,
@@ -179,12 +176,12 @@ export default {
           confirmButtonText: "Ok",
           buttonsStyling: false,
         })
-          .then(result => {
+          .then((result) => {
             if (result.value === true) {
               return;
             }
           })
-          .catch(err => {
+          .catch((err) => {
             return;
           });
       } else {
@@ -196,7 +193,7 @@ export default {
         })
           .for(new CalendarEvent({ id: this.event.id }))
           .save()
-          .then(res => {
+          .then((res) => {
             this.timelineDates.push(res);
           });
       }
@@ -206,7 +203,6 @@ export default {
       this.showDeleteConfirmModal = true;
     },
     removeItem() {
-    
       alert();
     },
     removeTimelineItem() {
@@ -225,6 +221,7 @@ export default {
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
       block.mode = "edit";
+
       if (this.event.eventDayPart == "evening") {
         block.startTime = moment(`${scheduleDate} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
         block.endTime = moment(`${scheduleDate} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
@@ -232,6 +229,7 @@ export default {
         block.startTime = moment(`${scheduleDate} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
         block.endTime = moment(`${scheduleDate} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
       }
+
       block.title = data.block.buildingBlockType;
       block.startDuration = "am";
       block.endDuration = "am";
@@ -281,6 +279,7 @@ export default {
         left: 0px;
         width: 100%;
       }
+
       .header-title {
         position: absolute;
         left: 50%;
