@@ -67,7 +67,7 @@ export default {
           if (key === 'bookedServices') {
               data[key] = [];
           } else {
-              data[key] = this.$store.state.vendorProposal[key];
+              data[key] = this.$store.state.vendorProposal.original[key];
           }
       });
 

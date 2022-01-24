@@ -4,6 +4,7 @@
       <div class="font-size-22 font-bold color-purple">
         <img src="/static/icons/vendor/dashboard-active.svg" class="mr-10" /> WELCOME ON BOARD SAM!
       </div>
+
       <div>
         <md-button class="md-vendor maryoku-btn" @click="gotoProposalWizard">Create New Proposal</md-button>
       </div>
@@ -11,24 +12,21 @@
     <div class="md-layout pt-30">
       <div class="md-layout-item md-size-45 chart-section pt-30 pl-40 pr-40">
         <div>
-          <div style="display: flex; justify-content: space-between;">
-            <label>Yearly Revenue By Segment</label>
-            <year-select :data="yearsList" :initialValue="selectedYear" @valueChanged="handleYearChange"/>
-          </div>
+          <label>Yearly Revenue By Segment</label>
           <div class="md-layout my-20">
-            <div class="md-layout-item md-size-35 px-0">
+            <div class="md-layout-item md-size-40 pl-0">
               <div class="font-size-50 total-revenue" v-if="yearlyRevenue">
                 ${{ Math.round(yearlyRevenue) | formatQty }}
               </div>
               <div class="font-size-50 total-revenue" v-else>$0</div>
             </div>
-            <div class="md-layout-item md-size-65 pr-0">
+            <div class="md-layout-item md-size-60">
               <div>
                 <pie-chart
                   :chartData="serviceChart"
                   :columns="1"
                   :options="{
-                    width: 170,
+                    width: 150,
                     height: 180,
                     strokWidth: 30,
                     direction: 'row',
@@ -98,6 +96,7 @@
         </div>
       </div>
     </div>
+
     <select-icons
       v-if="iconsModal"
       :events="upcomingEvents"
@@ -112,6 +111,7 @@
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
+
   </div>
 </template>
 <script>
@@ -129,7 +129,6 @@ import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
 import ProposalRequestSection from "./Components/ProposalRequestSection.vue";
 import Modal from "@/components/Modal.vue";
-import YearSelect from "../../../../components/Select/YearSelect.vue";
 
 export default {
   components: {
@@ -144,10 +143,8 @@ export default {
     Modal,
     SyncCalendarModal,
     ProposalRequestSection,
-    YearSelect
   },
   data() {
-    const date = new Date().getFullYear()
     return {
       hola: null,
       iconUrl: `${this.$resourceURL}storage/icons/`,
@@ -182,41 +179,16 @@ export default {
       eventLimit: 3,
       defaultEventData: {},
       serviceReportData: null,
-      yearsList: [
-        date - 1,
-        date,
-        date + 1
-      ],
-      date,
-      selectedYear: new Date().getFullYear(),
     };
   },
   async mounted() {
     //get data
-    this.getIncomingData()
-    this.getComingEvents();
-    this.getServiceReport();
-    this.getMarkedDates();
-    await this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
-    this.$store.dispatch("common/fetchAllCategories");
-  },
-  methods: {
-    getIncomingData() {
-    if (this.customer) {
-      customerQuery = `&customerId=${this.customer.id}`;
-    }
-    if (this.customerStatus) {
-      customerQuery += `&customerStatus=${this.customerStatus}`;
-    }
-    for (let i in this.incomeChartData) {
-      this.incomeChartData[i].value = 0;
-    }
     this.$http
       .get(
-      `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendorData.id}?start=${new Date(
-        this.selectedYear + "-01-01",
-      ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`,
-    )
+        `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendorData.id}?start=${new Date(
+          new Date().getFullYear() + "-01-01",
+        ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
+      )
       .then(res => {
         if (res.data.length) {
           this.monthlyReport = res.data;
@@ -226,7 +198,6 @@ export default {
           });
           this.incomeChartData = [...this.incomeChartData];
         } else {
-          // TODO: fake data, mb delete it
           this.incomeChartData.forEach((item, index) => {
             this.incomeChartData[index].value = 1000 * Math.random() + 200;
             this.incomeChartData[index].future = true;
@@ -234,11 +205,13 @@ export default {
           this.incomeChartData = [...this.incomeChartData];
         }
       });
-    },
-    handleYearChange(year) {
-    this.selectedYear = year;
-    this.getIncomingData();
-    },
+    this.getServiceReport();
+    this.getMarkedDates();
+    this.getComingEvents();
+    await this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
+    this.$store.dispatch("common/fetchAllCategories");
+  },
+  methods: {
     cancelIcon() {
       this.iconsModal = false;
     },
@@ -326,7 +299,6 @@ export default {
       })
         .get()
         .then(events => {
-        
           const r = Math.floor(Math.random() * 28) + 1;
 
           events.forEach(element => {
@@ -347,12 +319,10 @@ export default {
               email: element.email,
               customer: element.customer,
               status: element.status,
-              idx: r
+              idx: r,
             };
             this.upcomingEvents.push(lp);
           });
-
-       
         });
     },
     showEvent(event) {
@@ -387,17 +357,19 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     serviceChart() {
-      const services = this.vendorData.vendorCategories.concat(this.vendorData.secondaryServices.map((s) => s.vendorCategory));
+      let services = [this.vendorData.vendorCategories[0]];
+      this.vendorData.secondaryServices.map(s => {
+        services.push(s.vendorCategory);
+      });
       return services.map((vc, idx) => {
         const item = {
           title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
           value: 1,
-          color: this.activeCategoryColors[idx],
+          color: this.categoryColors[idx],
           image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
         if (this.serviceReportData) {
-          const cat = this.serviceReportData.find(c => c._id == vc);
-
+          let cat = this.serviceReportData.find(c => c._id == vc);
           if (cat) {
             item.value = cat.amount;
             item.color = this.activeCategoryColors[idx];

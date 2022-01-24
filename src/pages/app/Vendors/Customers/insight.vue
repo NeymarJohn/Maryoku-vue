@@ -125,7 +125,7 @@
           </template>
         </carousel>
       </template>
-      <analytics v-else :incomeChartData="incomeChartData" @onYearChanged="handleYearChange" />
+      <analytics v-else :incomeChartData="incomeChartData" />
     </div>
   </div>
 </template>
@@ -183,7 +183,6 @@ export default {
       renderCustomer: false,
       serviceReportData: null,
       activeCategoryColors: ["#ffffff", "#21cfe0", "#ffc001", "#2cde6b"],
-      selectedYear: new Date().getFullYear()
     };
   },
   mounted() {
@@ -210,9 +209,10 @@ export default {
         this.incomeChartData[i].value = 0;
       }
       this.$http
-        .get(`${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendor.id}?start=${new Date(
-             this.selectedYear + "-01-01",
-             ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}${customerQuery}`,
+        .get(
+          `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendor.id}?start=${new Date(
+            new Date().getFullYear() + "-01-01",
+          ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}${customerQuery}`,
         )
         .then((res) => {
           if (res.data.length) {
@@ -229,10 +229,6 @@ export default {
             this.incomeChartData = [...this.incomeChartData];
           }
         });
-    },
-    handleYearChange(year) {
-      this.selectedYear = year;
-      this.getIncomingData();
     },
     init() {
       this.getServiceReport();
