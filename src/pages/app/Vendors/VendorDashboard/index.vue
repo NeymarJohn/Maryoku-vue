@@ -14,19 +14,19 @@
         <div>
           <label>Yearly Revenue By Segment</label>
           <div class="md-layout my-20">
-            <div class="md-layout-item md-size-40 pl-0">
+            <div class="md-layout-item md-size-35 px-0">
               <div class="font-size-50 total-revenue" v-if="yearlyRevenue">
                 ${{ Math.round(yearlyRevenue) | formatQty }}
               </div>
               <div class="font-size-50 total-revenue" v-else>$0</div>
             </div>
-            <div class="md-layout-item md-size-60">
+            <div class="md-layout-item md-size-65 pr-0">
               <div>
                 <pie-chart
                   :chartData="serviceChart"
                   :columns="1"
                   :options="{
-                    width: 150,
+                    width: 170,
                     height: 180,
                     strokWidth: 30,
                     direction: 'row',
@@ -96,7 +96,6 @@
         </div>
       </div>
     </div>
-
     <select-icons
       v-if="iconsModal"
       :events="upcomingEvents"
@@ -111,7 +110,6 @@
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
-
   </div>
 </template>
 <script>
@@ -198,6 +196,7 @@ export default {
           });
           this.incomeChartData = [...this.incomeChartData];
         } else {
+          // TODO: fake data, mb delete it
           this.incomeChartData.forEach((item, index) => {
             this.incomeChartData[index].value = 1000 * Math.random() + 200;
             this.incomeChartData[index].future = true;
@@ -299,6 +298,7 @@ export default {
       })
         .get()
         .then(events => {
+        
           const r = Math.floor(Math.random() * 28) + 1;
 
           events.forEach(element => {
@@ -319,10 +319,12 @@ export default {
               email: element.email,
               customer: element.customer,
               status: element.status,
-              idx: r,
+              idx: r
             };
             this.upcomingEvents.push(lp);
           });
+
+       
         });
     },
     showEvent(event) {
@@ -357,19 +359,17 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     serviceChart() {
-      let services = [this.vendorData.vendorCategories[0]];
-      this.vendorData.secondaryServices.map(s => {
-        services.push(s.vendorCategory);
-      });
+      const services = this.vendorData.vendorCategories.concat(this.vendorData.secondaryServices.map((s) => s.vendorCategory));
       return services.map((vc, idx) => {
         const item = {
           title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
           value: 1,
-          color: this.categoryColors[idx],
+          color: this.activeCategoryColors[idx],
           image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
         if (this.serviceReportData) {
-          let cat = this.serviceReportData.find(c => c._id == vc);
+          const cat = this.serviceReportData.find(c => c._id == vc);
+
           if (cat) {
             item.value = cat.amount;
             item.color = this.activeCategoryColors[idx];

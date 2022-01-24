@@ -269,7 +269,7 @@ export const ServiceCards = [
                 name: "Cuisine Speciality",
                 serviceCategory: "foodandbeverage",
                 script:
-                    "requirements['multi-selection'][0]['options'][0]['selected'] = true;requirements['multi-selection'][0]['options'][1]['selected'] = false",
+                "requirements['multi-selection'][0]['options'][0]['selected'] = true;requirements['multi-selection'][0]['options'][1]['selected'] = false",
                 images: [
                     "Cuisine/American Food.png",
                     "Cuisine/Argentine Food.png",
@@ -310,7 +310,7 @@ export const ServiceCards = [
                 name: "Liquor Stations",
                 serviceCategory: "foodandbeverage",
                 script:
-                    "requirements['multi-selection'][0]['options'][0]['selected'] = false;requirements['multi-selection'][0]['options'][1]['selected'] = true",
+                "requirements['multi-selection'][0]['options'][0]['selected'] = false;requirements['multi-selection'][0]['options'][1]['selected'] = true",
                 images: [
                     "Beverage/Beer.png",
                     "Beverage/Bourbon.png",

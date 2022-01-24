@@ -266,6 +266,7 @@
             <p class="color-white m-0">({{ discount.percentage }}% off) {{ totalPriceOfProposal }}</p>
           </div>
         </div>
+       
       </div>
       <div class="card-section align-center px-20 py-30 mt-10">
         <div class="px-40">
@@ -318,7 +319,7 @@
                   <div class="d-flex align-center">
                     <div><span class="font-size-16 mx-5">Group size:</span></div>
                     <div class="mx-5">
-                      <img :src="`${$iconURL}NewSubmitPorposal/Group 3485.svg`" />
+                      <img :src="`${$iconURL}NewSubmitPorposal/Group 3485.svg`"/>
                     </div>
                     <h2 class="font-size-22 mx-5">14-18</h2>
                     <h2 class="font-size-18 mx-5">People</h2>
@@ -584,7 +585,6 @@
         </md-button>
       </div>
     </div>
-    <MessageModal v-if="showMessage" @cancel="showMessage = false" />
   </div>
 </template>
 
@@ -611,7 +611,6 @@ const components = {
   EventProposalPrice: () => import("./EventProposalPrice.vue"),
   EventProposalPolicy: () => import("./EventProposalPolicy.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
-  MessageModal: () => import("../components/Modal/PlannerMessage.vue"),
 };
 
 export default {
@@ -645,7 +644,7 @@ export default {
   data() {
     return {
       storageIcon: `${this.$resourceURL}storage/icons/`,
-      showMessage: false,
+
       isHealth: false,
       isSeating: false,
       isPolicy: false,

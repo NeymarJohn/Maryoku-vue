@@ -21,7 +21,7 @@
           <md-button
             class="md-default md-simple md-just-icon md-wrapper edit-btn"
             style="font-size: 26px !important"
-            @click="askRemoveTimelineItem(dateIndex)"
+            @click="askRemoveTimelineItem(scheduleDate.date)"
           >
             <md-icon>delete_outline</md-icon>
           </md-button>
@@ -130,7 +130,6 @@ export default {
   data() {
     return {
       showDeleteConfirmModal: false,
-      delItem: null,
     };
   },
   props: {
@@ -191,7 +190,7 @@ export default {
       } else {
         new EventTimelineDate({
           date: newDate.format("YYYY-MM-DD"),
-          templates: _.shuffle(timelineTempates),
+          templates: timelineTempates,
           status: "editing",
           event: new CalendarEvent({ id: this.event.id }),
         })
@@ -203,7 +202,6 @@ export default {
       }
     },
     askRemoveTimelineItem(scheduleDate) {
-      this.delItem = scheduleDate;
       this.deletingDate = scheduleDate;
       this.showDeleteConfirmModal = true;
     },
@@ -213,8 +211,8 @@ export default {
     },
     removeTimelineItem() {
       // alert();
-      // const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
-      this.timelineDates.splice(this.delItem, 1);
+      const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
+      this.timelineDates.splice(deletingDateIndedx, 1);
       this.showDeleteConfirmModal = false;
     },
     addSlot(dateIndex, templateIndex, slotData) {
@@ -227,6 +225,7 @@ export default {
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
       block.mode = "edit";
+
       if (this.event.eventDayPart == "evening") {
         block.startTime = moment(`${scheduleDate} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
         block.endTime = moment(`${scheduleDate} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
@@ -234,6 +233,7 @@ export default {
         block.startTime = moment(`${scheduleDate} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
         block.endTime = moment(`${scheduleDate} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
       }
+
       block.title = data.block.buildingBlockType;
       block.startDuration = "am";
       block.endDuration = "am";
@@ -283,6 +283,7 @@ export default {
         left: 0px;
         width: 100%;
       }
+
       .header-title {
         position: absolute;
         left: 50%;
