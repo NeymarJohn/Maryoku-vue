@@ -1,7 +1,5 @@
 // import S3 from "aws-s3";
 import S3 from 'aws-sdk/clients/s3';
-import axios from "axios";
-import authHeader from "./auth-header";
 
 const bucket = new S3(
     {
@@ -40,8 +38,8 @@ class S3Service {
         return new Promise((resolve, reject) => {
             ext = ext ? ext : file.type.split("/").pop();
             let key = `${dirName}/${fileName}.${ext}`;
-            console.log('upload.key', key,process.env.S3_URL);
-            /*const params = {
+            console.log('upload.key', key);
+            const params = {
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key: key,
                 ContentType: ext,
@@ -61,23 +59,6 @@ class S3Service {
                 }
                 console.log('result', data);
                 resolve(data['Location']);
-            });*/
-
-            let formData = new FormData();
-            formData.append("file", file);
-            formData.append("key",key);
-
-            axios.defaults.headers.common.Authorization = authHeader().Authorization;
-            const result = axios.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }).then(result => {
-                let data = result.data
-                data.url = process.env.S3_URL + data.key
-                resolve(data.url)
-            }).catch(error => {
-                reject(error)
             });
         })
     }

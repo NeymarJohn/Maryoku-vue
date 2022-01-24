@@ -39,11 +39,11 @@
     </form>
 
     <div>
-      <div v-for="service in vendor.services.customService" :key="service.id" style="background-color: #f7f7f7;">
+      <div v-for="(service, index) in services" :key="service.id" style="background-color: #f7f7f7;">
         <div class="wrapper-service" v-if="editingItem == service.id">
-          <input type="text" style="min-width: 555px; height: 20px; margin-top: 18px;" v-model="editingInput" />
+          <input type="text" style="min-width: 555px; height: 20px; margin-top: 18px;" v-model="services[index].name" />
           <money
-            v-model="editingItemPrice"
+            v-model="services[index].price"
             v-bind="{
               decimal: '.',
               thousands: ',',
@@ -53,16 +53,14 @@
               masked: false,
             }"
             style="text-align: center; max-width: 166px; max-height: 50px; margin-top: 18px"
-            @input="editingPrice = $event"
           />
           <span class="service">
             <input
-              v-model="editingItemChecked"
+              v-model="services[index].checked"
               type="checkbox"
               class="custom-checkbox"
               id="newCheck"
               style="cursor: pointer"
-              @input="editingChecked = $event.target.checked"
             />
             <label
               class="virtual-services service"
@@ -78,6 +76,9 @@
               height="22"
               style="cursor: pointer"
               :id="service.id"
+              :name="service.name"
+              :price="service.price"
+              :checked="service.checked"
               @click="saveEditItem"
             />
             <img
@@ -132,26 +133,23 @@ export default {
   },
   data () {
     return {
-      header: 'Custom Service',
-      conditionTooltip: false,
+      services: [],
       virtualService: false,
-
       editingItemChecked: null,
       editingChecked: false,
-
       editingItemPrice: null,
       editingPrice: '0.00',
-
       editingItem: null,
       editingInput: '',
-
       collapsed: true,
       addService: '',
       price: '0.00',
     }
   },
   mounted () {
-    this.vendor.services.customService = []
+    this.services = this.vendor.services.customService ?
+      this.vendor.services.customService.data :
+      [];
   },
 
   methods: {
@@ -162,35 +160,37 @@ export default {
       const newService = {
         id: Date.now(),
         name: this.addService,
-        price: this.price,
+        price: this.price.toFixed(2),
         checked: this.virtualService,
       }
-      this.vendor.services.customService.push(newService)
+      this.services.push(newService)
       this.addService = ''
       this.price = ''
       this.virtualService = false
+      this.updateRootState();
     },
     removeService ({ target }) {
-      this.vendor.services.customService = this.vendor.services.customService.filter(
-        service => service.id !== Number(target.id),
+      this.services = this.services.filter(
+        service => service.id != Number(target.id),
       )
+      this.updateRootState()
     },
     editItem ({ target }) {
       this.editingItem = target.attributes.id.value
-      this.editingInput = target.attributes.name.value
-      this.editingItemPrice = target.attributes.price.value
-      this.editingItemChecked = target.attributes.checked ? true : false
     },
     saveEditItem ({ target }) {
-      this.vendor.services.customService.map(service =>
-        service.id === Number(target.id)
-          ? ((service.name = this.editingInput),
-            (service.price = this.editingPrice),
-            (service.checked = this.editingChecked))
-          : service,
-      )
-      this.editingItem = null
+      this.services = this.services.map(service => {
+        if (service.id == Number(target.id)) {
+          return {...service, price: service.price.toFixed(2)}
+        }
+        return service
+      });
+      this.editingItem = ''
+      this.updateRootState()
     },
+    updateRootState() {
+      this.$root.$emit('update-vendor-value', `services.customService`, {data: this.services})
+    }
   },
 }
 </script>

@@ -96,6 +96,7 @@
         </div>
       </div>
     </div>
+
     <select-icons
       v-if="iconsModal"
       :events="upcomingEvents"
@@ -110,6 +111,7 @@
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
+
   </div>
 </template>
 <script>
@@ -298,7 +300,6 @@ export default {
       })
         .get()
         .then(events => {
-        
           const r = Math.floor(Math.random() * 28) + 1;
 
           events.forEach(element => {
@@ -319,12 +320,10 @@ export default {
               email: element.email,
               customer: element.customer,
               status: element.status,
-              idx: r
+              idx: r,
             };
             this.upcomingEvents.push(lp);
           });
-
-       
         });
     },
     showEvent(event) {

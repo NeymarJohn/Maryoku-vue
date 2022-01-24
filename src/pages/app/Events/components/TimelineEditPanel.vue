@@ -225,7 +225,6 @@ export default {
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
       block.mode = "edit";
-
       if (this.event.eventDayPart == "evening") {
         block.startTime = moment(`${scheduleDate} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
         block.endTime = moment(`${scheduleDate} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
@@ -233,7 +232,6 @@ export default {
         block.startTime = moment(`${scheduleDate} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
         block.endTime = moment(`${scheduleDate} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
       }
-
       block.title = data.block.buildingBlockType;
       block.startDuration = "am";
       block.endDuration = "am";
@@ -283,7 +281,6 @@ export default {
         left: 0px;
         width: 100%;
       }
-
       .header-title {
         position: absolute;
         left: 50%;

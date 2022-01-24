@@ -59,12 +59,14 @@ export default {
 
       const extension = files[0].type.split("/")[1];
       let imageName = this.user.id;
-      console.log("process.env.S3_URL",process.env.S3_URL )
+      let imageUrl = `https://maryoku.s3.amazonaws.com/company/logos/${this.user.id}.${extension}`;
       this.isLoading = true;
       S3Service.fileUpload(files[0], `${imageName}`, `company/logos`).then((res) => {
+        console.log(res);
         this.isLoading = false;
-        this.companyLogo = res;
-        this.$emit("set", res);
+        this.companyLogo = imageUrl;
+
+        this.$emit("set", imageUrl);
       });
     },
   },

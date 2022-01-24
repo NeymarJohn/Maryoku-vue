@@ -10,9 +10,10 @@
             <span v-if="step === 2">What kind of services would you like us to find you?</span>
           </div>
           <ProgressRadialBar
-              :value="percentOfBudgetCategories"
-              :total="event.components.length"
-              @click="openCart"></ProgressRadialBar>
+            :value="percentOfBudgetCategories"
+            :total="event.components.length"
+            @click="openCart"
+          ></ProgressRadialBar>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 1">
           <div
@@ -31,7 +32,7 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
                 $store.state.planningBoard.requirements[service.serviceCategory] &&
-                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                  $store.state.planningBoard.requirements[service.serviceCategory].isIssued
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -54,7 +55,7 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
                 $store.state.planningBoard.requirements[service.serviceCategory] &&
-                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                  $store.state.planningBoard.requirements[service.serviceCategory].isIssued
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -102,16 +103,17 @@
     </special-requirement-modal>
     <transition name="slide-fade">
       <RequirementsCart
-          v-if="showCart"
-          :requirements="requirements"
-          :service-categories="serviceCategories"
-          :total="event.components.length"
-          @close="showCart = false"></RequirementsCart>
+        v-if="showCart"
+        :requirements="requirements"
+        :service-categories="serviceCategories"
+        :total="event.components.length"
+        @close="showCart = false"
+      ></RequirementsCart>
     </transition>
+    <requirement @cancel="requirementModal = false" v-if="requirementModal" />
   </div>
 </template>
 <script>
-
 import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
@@ -119,23 +121,24 @@ import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
 
-
 import { postReq, getReq } from "@/utils/token";
 
 const components = {
-    ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
-    ProgressRadialBar: () => import('./components/ProgressRadialBar.vue'),
-    AdditionalRequestModal: () => import('./components/modals/AdditionalRequest.vue'),
-    SpecialRequirementModal: () => import('./components/modals/SpecialRequirement.vue'),
-    PendingForVendors: () => import('../components/PendingForVendors.vue'),
-    Loader: () => import('@/components/loader/Loader.vue'),
-    RequirementsCart: () => import('./RequirementsCart.vue'),
-}
+  Requirement: () => import("./components/modals/Requirement.vue"),
+  ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
+  ProgressRadialBar: () => import("./components/ProgressRadialBar.vue"),
+  AdditionalRequestModal: () => import("./components/modals/AdditionalRequest.vue"),
+  SpecialRequirementModal: () => import("./components/modals/SpecialRequirement.vue"),
+  PendingForVendors: () => import("../components/PendingForVendors.vue"),
+  Loader: () => import("@/components/loader/Loader.vue"),
+  RequirementsCart: () => import("./RequirementsCart.vue"),
+};
 
 export default {
   components,
   data() {
     return {
+      requirementModal: false,
       showCart: false,
       allRequirements: null,
       subCategory: null,
@@ -150,33 +153,30 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch('planningBoard/resetRequirements');
+    await this.$store.dispatch("planningBoard/resetRequirements");
     if (!this.allRequirements) {
       this.isLoading = true;
-      this.allRequirements = await this.$store
-        .dispatch("event/getRequirements")
+      this.allRequirements = await this.$store.dispatch("event/getRequirements");
 
       this.isLoading = false;
       this.isLoadingStoredData = true;
-      await this.$store
-        .dispatch("planningBoard/getRequirements", this.event.id)
+      await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
       this.isLoadingStoredData = false;
     }
-
   },
   computed: {
-    requirements(){
-      return this.$store.state.planningBoard.requirements
+    requirements() {
+      return this.$store.state.planningBoard.requirements;
     },
-    types(){
-      return this.$store.state.planningBoard.types
+    types() {
+      return this.$store.state.planningBoard.types;
     },
-    mainRequirements(){
-      return this.$store.state.planningBoard.mainRequirements
+    mainRequirements() {
+      return this.$store.state.planningBoard.mainRequirements;
     },
-    specialRequirements(){
-      return this.$store.state.planningBoard.specialRequirements
+    specialRequirements() {
+      return this.$store.state.planningBoard.specialRequirements;
     },
     step: {
       get() {
@@ -187,7 +187,7 @@ export default {
       },
     },
     serviceCategories() {
-      return this.$store.state.common.serviceCategories.map((service) => {
+      return this.$store.state.common.serviceCategories.map(service => {
         service["images"] = serviceCategoryImages[service.key];
         return service;
       });
@@ -204,14 +204,14 @@ export default {
       return this.$store.state.event.eventData;
     },
     percentOfBudgetCategories() {
-      console.log('percentOfBudgetCategories', Object.keys(this.requirements).length, this.event.components.length);
+      console.log("percentOfBudgetCategories", Object.keys(this.requirements).length, this.event.components.length);
       return Object.keys(this.requirements).length;
     },
   },
   methods: {
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
-    ...mapMutations("modal", ['setOpen']),
+    ...mapMutations("modal", ["setOpen"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements"]),
     findVendors() {
       this.isOpenedFinalModal = true;
@@ -219,7 +219,9 @@ export default {
     saveSpecialRequirements(data) {
       this.isOpenedFinalModal = false;
       this.setSpecialRequirements(data);
-      this.expiredTime = moment(new Date()).add(3, "days").valueOf();
+      this.expiredTime = moment(new Date())
+        .add(3, "days")
+        .valueOf();
       const requestRequirement = {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
@@ -227,7 +229,7 @@ export default {
       postReq(`/1/events/${this.event.id}/find-vendors`, {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
-      }).then((res) => {
+      }).then(res => {
         this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
         this.$store.dispatch(
           "event/saveEventAction",
@@ -236,12 +238,11 @@ export default {
       });
     },
     hasBudget(categoryKey) {
-      return !!this.event.components.find((item) => item.componentId == categoryKey);
+      return !!this.event.components.find(item => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
-
       this.selectedCategory = this.$store.state.common.serviceCategories.find(
-        (item) => item.key === category.serviceCategory,
+        item => item.key === category.serviceCategory,
       );
       this.isOpenedAdditionalModal = true;
 
@@ -252,7 +253,7 @@ export default {
       if (category.script) eval(category.script); //select relevant options using script
 
       for (let subCategory of Object.keys(requirements)) {
-        requirements[subCategory].forEach((item) => {
+        requirements[subCategory].forEach(item => {
           try {
             if (item.conditionScript) item.visible = eval(item.conditionScript);
             else item.visible = true;
@@ -276,27 +277,27 @@ export default {
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
       this.$store.commit("event/setEventData", {
-        requirementProgress: this.percentOfBudgetCategories / this.event.components.length * 100,
+        requirementProgress: (this.percentOfBudgetCategories / this.event.components.length) * 100,
       });
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     async saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
+    
 
-
-
-
-      const expiredTime = moment(new Date()).add(3, "days").valueOf();
-      this.$set(requirements, 'expiredBusinessTime', expiredTime)
+      const expiredTime = moment(new Date())
+        .add(3, "days")
+        .valueOf();
+      this.$set(requirements, "expiredBusinessTime", expiredTime);
 
       await this.saveMainRequirements({ category, event: this.event, requirements });
 
       // popup notification if requirement is issued
-      if (this.getRequirements(category).isIssued) this.setOpen('REQUIREMENT')
+      if (this.getRequirements(category).isIssued) this.setOpen("REQUIREMENT");
     },
 
     async addNewCategory(category) {
-      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
+      this.selectedCategory = this.$store.state.common.serviceCategories.find(item => item.key === category);
       // const event = new CalendarEvent({
       //   id: this.event.id,
       //   unexpectedBudget: this.event.unexpectedBudget - newCategory.allocatedBudget,
@@ -313,11 +314,11 @@ export default {
       this.showCart = true;
     },
   },
-  watch:{
-    requirements(newVal){
-      console.log('requirement.watch', newVal);
-    }
-  }
+  watch: {
+    requirements(newVal) {
+      console.log("requirement.watch", newVal);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

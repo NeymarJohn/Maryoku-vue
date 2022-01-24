@@ -189,7 +189,7 @@
         <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
       </div>
     </section>
-    <div class="card-section align-center px-20 py-30 mt-10">
+    <div class="card-section align-center px-20 py-30 mt-10" v-if="vendorProposal.vendor.seatingArrangement">
       <div class="px-40">
         <div class="d-flex justify-content-between align-center">
           <div class="proposal-section__title">

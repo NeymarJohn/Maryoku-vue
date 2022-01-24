@@ -35,7 +35,7 @@
             </div>
             <ProposalVersionsBar
             :versions="proposal.versions"
-            :selected="currentVersion"
+            :selected="proposal.currentVersion"
             @select="selectVersion"
             @save="saveVersion"
             @change="changeVersion"
@@ -189,8 +189,8 @@ export default {
         proposals(){
             return this.$store.state.comment.commentsProposals;
         },
-        currentVersion(){
-            return this.$store.state.commentProposal.currentVersion
+        selectedVersion(){
+
         },
     },
     watch: {
