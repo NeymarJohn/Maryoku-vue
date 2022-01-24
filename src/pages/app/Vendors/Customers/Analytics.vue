@@ -11,7 +11,7 @@
         <year-select :data="yearsList" width="60%" :initialValue="initialYear" @valueChanged="handleYearChange"/>
         </div>
         <div class="md-layout-item md-size-50 d-flex align-center font-size-16 color-gray text-right pr-50">
-          <span :style="'background-color: gray'" class="icon mr-10"></span>
+          <span :style="'background-color: rgb(159, 107, 144)'" class="icon mr-10"></span>
           No event incomes
         </div>
       </div>
