@@ -238,8 +238,9 @@ export default {
       });
     },
     handleYearChange(year) {
-    this.selectedYear = year;
-    this.getIncomingData();
+      this.selectedYear = year;
+      this.getIncomingData();
+      this.getServiceReport();
     },
     cancelIcon() {
       this.iconsModal = false;
@@ -253,7 +254,9 @@ export default {
     },
 
     getServiceReport() {
-      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then(res => {
+      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}?start=${new Date(
+        this.selectedYear + "-01-01",
+      ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`).then(res => {
         if (res.data.length) {
           this.serviceReportData = res.data;
         }
