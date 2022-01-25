@@ -41,7 +41,7 @@ export default {
     },
   },
   data() {
-    const date = new Date().getFullYear()
+    const date = Number(new Date().toLocaleString('ru',{year:'numeric'}));
     return {
       incomeList: [""],
       yearsList: [
