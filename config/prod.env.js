@@ -20,7 +20,7 @@ module.exports = {
     S3_URL: '"https://maryoku.s3.amazonaws.com/"',
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
-    RESOURCE_URL: '"https://s3.amazonaws.com/static.maryoku.com/"',
+    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
     MSAL_CLIENT_ID: '"f223fa12-662c-4b0c-b866-9eef6549e763"',
     STRIPE_PK: '"pk_live_51In2qMBvFPeKz0zXkrjRaKy88LH6qOq8Kohb7DvUhKEf8Yc4uFj45WI53rK2MHhtRrM3xhL5zBjuHKL7SIX0hEUx00FgFgBb2d"'
 };

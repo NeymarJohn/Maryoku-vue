@@ -43,87 +43,6 @@
                 <span>Guest Arrival Time</span>
                 <p>{{ event.arrival }}</p>
               </li>
-              <li>
-                <div class="time-box">
-                    <div class="time-layer">
-                        <div class="this-offer">
-                            This offer will expire in
-                        </div>
-                        <hr>
-                        <div v-if="showTimerInputs" class="time-display ">
-                            <div class="d-flex justify-content-center">
-                                <div class="days-num">
-                                    <input
-                                    id="days-input"
-                                    name="days-input"
-                                    type="number"
-                                    v-model="expiredDate"
-                                    />
-                                :
-                                </div>
-                                <div class="hours-num">
-                                    <input
-                                    id="hours-input"
-                                    name="hours-input"
-                                    type="number"
-                                    v-model="expiredHours"
-                                    />
-                                    :
-                                </div>
-                                <div class="mins-num">
-                                    <input
-                                    id="mins-input"
-                                    name="mins-input"
-                                    type="number"
-                                    v-model="expiredMinutes"
-                                    />
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <div class="days">
-                                   Days
-                                </div>
-                                <div class="hours">
-                                   Hours
-                                </div>
-                                <div class="mins">
-                                    Mins
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else class="time-display">
-                            <div class="d-flex justify-content-center">
-                                <div class="days-num">
-                                    {{expiredDate}} :
-                                </div>
-                                <div class="hours-num">
-                                    {{expiredHours}} :
-                                </div>
-                                <div class="mins-num">
-                                    {{expiredMinutes}}
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <div class="days">
-                                    Days
-                                </div>
-                                <div class="hours">
-                                    Hours
-                                </div>
-                                <div class="mins">
-                                    Mins
-                                </div>
-                            </div>
-                        </div>
-                        <button class="timer-btn" @click="changeTimer">
-                            Set timer
-                        </button>
-                        <!-- <div class="timer-btn">
-                            Set timer
-                        </div> -->
-                    </div>
-                </div>
-              </li>
             </ul>
           </div>
         </div>
@@ -512,7 +431,6 @@ import { PROPOSAL_DIRECTORY } from "@/constants/s3Directories";
 import S3Service from "@/services/s3.service";
 import carousel from "vue-owl-carousel";
 import { GuaranteedOptions, CancellationData } from "@/constants/options";
-import moment from "moment";
 
 export default {
   name: "proposal-event-summary",
@@ -548,10 +466,6 @@ export default {
       },
       guaranteedOptions: GuaranteedOptions,
       editingNewSeating: false,
-      showTimerInputs: false,
-      expiredDate:null,
-      expiredHours:null,
-      expiredMinutes:null,
     };
   },
   created() {
@@ -566,25 +480,8 @@ export default {
     this.additionalServices.forEach((service) => {
       this.categories.push(service);
     });
-
-    let end = moment(this.$store.state.proposalForNonMaryoku.expiredDate)
-    let diff = moment.duration(end.diff(new Date()));
-    let minutes = diff.asMinutes();
-    this.expiredDate = Math.floor(minutes/24/60);
-    this.expiredHours = Math.floor(minutes/60%24);
-    this.expiredMinutes = Math.floor(minutes%60);
-
-    console.log(this.$store.state.proposalForNonMaryoku,'test',this.expiredDate,this.expiredHours,this.expiredMinutes)
-
   },
   methods: {
-    changeTimer() {
-        if(this.showTimerInputs == false){
-            this.showTimerInputs = true;
-        } else {
-            this.showTimerInputs = false;
-        }
-    },
     chooseFiles() {
       document.getElementById("coverImage").click();
     },
@@ -778,20 +675,7 @@ export default {
       return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
     },
   },
-  watch: {
-    expiredDate(){
-      let date = moment(new Date(), "YYYY-MM-DD").add(this.expiredDate, 'days').add(this.expiredHours, 'hours').add(this.expiredMinutes, 'minutes').toDate();
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "expiredDate", value: date });
-    },
-    expiredHours(){
-      let date = moment(new Date(), "YYYY-MM-DD").add(this.expiredDate, 'days').add(this.expiredHours, 'hours').add(this.expiredMinutes, 'minutes').toDate();
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "expiredDate", value: date });
-    },
-    expiredMinutes(){
-      let date = moment(new Date(), "YYYY-MM-DD").add(this.expiredDate, 'days').add(this.expiredHours, 'hours').add(this.expiredMinutes, 'minutes').toDate();
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "expiredDate", value: date });
-    }
-  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>
@@ -891,160 +775,6 @@ export default {
               border: none;
             }
           }
-        }
-        .time-box {
-            width: 290.6px;
-            height: 201.5px;
-            margin: -120px 0 0 73px;
-            padding: 13.4px 27px 18.1px 27.5px;
-            border-radius: 3px;
-            background-color: #641856;
-            position: absolute;
-            right: 20px;
-
-            .time-layer {
-                width: 236.1px;
-                height: 170.1px;
-            }
-            .this-offer {
-                width: 150px;
-                height: 19px;
-                margin: 0 42.6px 13.7px 43.5px;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 14px;
-                font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: center;
-                color: #fff;
-            }
-
-            .time-display {
-                // width: 165px;
-                width: 174px;
-                height: 60.3px;
-                margin: 8px 35.1px 25.1px 36px;
-            }
-
-            .days-num {
-                width: 58px;
-                height: 41px;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 30px;
-                font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: left;
-                color: #fff;
-            }
-            .hours-num {
-                width: 58px;
-                height: 41px;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 30px;
-                font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: left;
-                color: #fff;
-            }
-            .mins-num {
-                // width: 36px;
-                width: 58px;
-                height: 41px;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 30px;
-                font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: left;
-                color: #fff;
-            }
-
-            #days-input {
-                width: 60%; height: 40%; padding: 4px 4px;
-            }
-            #hours-input {
-                width: 60%; height: 40%; padding: 4px 4px;
-            }
-            #mins-input {
-                width: 60%; height: 40%; padding: 4px 4px;
-            }
-
-            .days {
-                width: 32px;
-                height: 19px;
-                // margin: 10px 2px 0;
-                margin: 14px 28px 0 0;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: center;
-                color: #fff;
-            }
-            .hours {
-                width: 32px;
-                height: 19px;
-                margin: 14px 28px 0 0;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: center;
-                color: #fff;
-            }
-            .mins {
-                width: 32px;
-                height: 19px;
-                margin: 14px 28px 0 0;
-                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                // font-family: Manrope;
-                font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: center;
-                color: #fff;
-            }
-            .timer-btn {
-                width: 224.9px;
-                height: 44px;
-                margin: 7.1px 5.6px 0 5.5px;
-                padding: 11px 70.4px 11px 70.5px;
-                border-radius: 3px;
-                background-color: #fff;
-                color: #641856;
-                font-size: 16px;
-                font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: 0.34px;
-                text-align: center;
-            }
         }
       }
     }

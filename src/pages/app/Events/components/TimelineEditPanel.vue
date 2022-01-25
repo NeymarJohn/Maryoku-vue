@@ -21,7 +21,7 @@
           <md-button
             class="md-default md-simple md-just-icon md-wrapper edit-btn"
             style="font-size: 26px !important"
-            @click="askRemoveTimelineItem(scheduleDate.date)"
+            @click="askRemoveTimelineItem(dateIndex)"
           >
             <md-icon>delete_outline</md-icon>
           </md-button>
@@ -130,6 +130,7 @@ export default {
   data() {
     return {
       showDeleteConfirmModal: false,
+      delItem: null,
     };
   },
   props: {
@@ -190,7 +191,7 @@ export default {
       } else {
         new EventTimelineDate({
           date: newDate.format("YYYY-MM-DD"),
-          templates: timelineTempates,
+          templates: _.shuffle(timelineTempates),
           status: "editing",
           event: new CalendarEvent({ id: this.event.id }),
         })
@@ -202,6 +203,7 @@ export default {
       }
     },
     askRemoveTimelineItem(scheduleDate) {
+      this.delItem = scheduleDate;
       this.deletingDate = scheduleDate;
       this.showDeleteConfirmModal = true;
     },
@@ -211,8 +213,8 @@ export default {
     },
     removeTimelineItem() {
       // alert();
-      const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
-      this.timelineDates.splice(deletingDateIndedx, 1);
+      // const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
+      this.timelineDates.splice(this.delItem, 1);
       this.showDeleteConfirmModal = false;
     },
     addSlot(dateIndex, templateIndex, slotData) {
