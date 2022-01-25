@@ -12,10 +12,10 @@ module.exports = merge(prodEnv, {
     AWS_REGION: '"us-east-1"',
     AWS_ACCESSKEY: '"AKIAT5QXLXDJKEP27SUQ"',
     AWS_SECRETKEY: '"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"',
-    S3_URL: '"https://maryoku.s3.amazonaws.com/"',
+    S3_URL: '"https://s3.amazonaws.com/static.maryoku.com/"',
     // RESOURCE_URL: '"http://static.maryoku.com/"'
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
-    RESOURCE_URL: '"https://s3.amazonaws.com/static.maryoku.com/"',
+    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
     MSAL_CLIENT_ID: '"f223fa12-662c-4b0c-b866-9eef6549e763"',
     STRIPE_PK: '"pk_test_51HTal4EuCabDZWghILxtp69k5MG4RChq09khIJjnjtZecEii2ij5cc61td6m3GfGDLMzTA8ogTXxSurcDRTmZRpE00v99lC0TV"'
 });

@@ -569,10 +569,18 @@ export default {
 
     let end = moment(this.$store.state.proposalForNonMaryoku.expiredDate)
     let diff = moment.duration(end.diff(new Date()));
+
+    function pad(n) {
+        return (n < 10 && n >= 0) ? ("0" + n) : n;
+    }
+
     let minutes = diff.asMinutes();
     this.expiredDate = Math.floor(minutes/24/60);
+    this.expiredDate = pad(this.expiredDate);
     this.expiredHours = Math.floor(minutes/60%24);
+    this.expiredHours = pad(this.expiredHours);
     this.expiredMinutes = Math.floor(minutes%60);
+    this.expiredMinutes = pad(this.expiredMinutes);
 
     console.log(this.$store.state.proposalForNonMaryoku,'test',this.expiredDate,this.expiredHours,this.expiredMinutes)
 
@@ -930,7 +938,7 @@ export default {
             }
 
             .days-num {
-                width: 58px;
+                width: 68px;
                 height: 41px;
                 text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
                 // font-family: Manrope;
@@ -944,7 +952,7 @@ export default {
                 color: #fff;
             }
             .hours-num {
-                width: 58px;
+                width: 68px;
                 height: 41px;
                 text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
                 // font-family: Manrope;

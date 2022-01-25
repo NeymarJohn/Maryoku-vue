@@ -143,23 +143,20 @@ export default {
       const image = await getBase64(event.target.files[0]);
       const extension = event.target.files[0].type.split("/")[1];
       let imageName = "";
-      let imageUrl = "";
       let imageIndex = 0;
       if (this.selectedIndex > -1) {
         imageName = `${this.selectedIndex}`;
-        imageUrl = `https://maryoku.s3.amazonaws.com/campaigns/venues/${this.event.id}/${imageName}.${extension}`;
         this.images[this.selectedIndex].src = image;
         this.images[this.selectedIndex].default = false;
         imageIndex = this.selectedIndex;
       } else {
         imageName = `${this.images.length}`;
-        imageUrl = `https://maryoku.s3.amazonaws.com/campaigns/venues/${this.event.id}/${imageName}.${extension}`;
         this.images.push({ src: image, default: false });
         imageIndex = this.images.length - 1;
       }
       this.images[imageIndex].loading = true;
       S3Service.fileUpload(event.target.files[0], `${imageName}`, `campaigns/venues/${this.event.id}`).then((res) => {
-        this.images[imageIndex].src = `${imageUrl}?timestamp=${new Date().getTime()}`;
+        this.images[imageIndex].src = `${res}?timestamp=${new Date().getTime()}`;
         this.images[imageIndex].loading = false;
       });
       this.$emit("change", this.images);

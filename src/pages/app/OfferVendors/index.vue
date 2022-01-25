@@ -142,9 +142,9 @@ export default {
             this.proposal = res;
         },
         async getAllRequirements(){
-          let res = await getReq(`/1/vendor/property`);
-          this.allRequirements = res.data;
-          localStorage.setItem('all_requirements', JSON.stringify(this.allRequirements));
+            let res = await getReq(`/1/vendor/property`);
+            this.allRequirements = res.data;
+            localStorage.setItem('all_requirements', JSON.stringify(this.allRequirements));
         },
         async getProposal(){
             let res = await getReq(`/1/proposals/${this.$route.params.proposalId}`);
@@ -229,9 +229,9 @@ export default {
         async signIn({email, password}){
             console.log('signIn', email, password)
             await this.$store.dispatch("auth/login", {
-                    email,
-                    password,
-                })
+                email,
+                password,
+            })
             this.showSignupModal =  false;
 
             this.isLoading = true;
@@ -261,14 +261,14 @@ export default {
 
         async findVendors(){
 
-          if ( this.loggedInUser ) {
-            this.loading = true;
-            await this.save();
-            this.loading = false;
-            this.goToAccountPage();
-          } else {
-              this.showSignupModal = true;
-          }
+            if ( this.loggedInUser ) {
+                this.loading = true;
+                await this.save();
+                this.loading = false;
+                this.goToAccountPage();
+            } else {
+                this.showSignupModal = true;
+            }
 
         },
         async save(){
@@ -292,7 +292,7 @@ export default {
             localStorage.removeItem('proposal');
         },
         goToAccountPage(){
-          this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
+            this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
         },
         changePage(){
             this.page = this.page === 'signin' ? 'signup' : 'signin';

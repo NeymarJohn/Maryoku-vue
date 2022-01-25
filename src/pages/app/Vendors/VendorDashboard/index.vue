@@ -225,7 +225,7 @@ export default {
     },
 
     getServiceReport() {
-      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then(res => {
+        this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}`).then(res => {
         if (res.data.length) {
           this.serviceReportData = res.data;
         }
