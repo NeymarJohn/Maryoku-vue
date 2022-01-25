@@ -435,11 +435,9 @@ export default {
       const extension = file.type.split("/")[1];
       let fileName = new Date().getTime();
       this.fileName = file.name;
-      let fileUrl = `https://maryoku.s3.amazonaws.com/events/proposal/${fileName}.${extension}`;
-
       S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then(res => {
         this.isLoading = false;
-        this.fileUrl = fileUrl;
+        this.fileUrl = res;
       });
     },
   },

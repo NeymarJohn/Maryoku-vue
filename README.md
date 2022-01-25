@@ -1,8 +1,13 @@
-# two262-website
+# two262-app
+### Install dependencies
+- yarn install
+### Set enviroment variables
+- Create a .env file
+- Copy the content in .env.example and past them int .env
+- Set the enviroment values
+#### Run project for development
 
-#### Run project
-
-`./gradlew start`
+yarn dev
 
 This will start the project in dev environment.
 
