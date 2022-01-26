@@ -39,8 +39,8 @@
             <div class="width-66 mx-auto">
                 <div class="d-flex flex-column align-center mx-20" style="background-color: #f5f5f5">
                     <h5 class="font-size-20 font-bold-extra mb-0">Already Booked Vendors?</h5>
-                    <p class="font-size-14">With Maryoku you can easily plan and organize the event </p>
-                    <md-button class="md-gray my-20 w-max-350" disabled>Collaboration board</md-button>
+                    <p class="font-size-14">With Marioko you can easily plan and organize the event </p>
+                    <md-button class="md-red my-20 w-max-350">Collaboration board</md-button>
                 </div>
             </div>
             <div class="d-flex flex-column align-center mt-30 py-30" style="background-color: #f5f5f5">
@@ -142,9 +142,9 @@ export default {
             this.proposal = res;
         },
         async getAllRequirements(){
-            let res = await getReq(`/1/vendor/property`);
-            this.allRequirements = res.data;
-            localStorage.setItem('all_requirements', JSON.stringify(this.allRequirements));
+          let res = await getReq(`/1/vendor/property`);
+          this.allRequirements = res.data;
+          localStorage.setItem('all_requirements', JSON.stringify(this.allRequirements));
         },
         async getProposal(){
             let res = await getReq(`/1/proposals/${this.$route.params.proposalId}`);
@@ -229,9 +229,9 @@ export default {
         async signIn({email, password}){
             console.log('signIn', email, password)
             await this.$store.dispatch("auth/login", {
-                email,
-                password,
-            })
+                    email,
+                    password,
+                })
             this.showSignupModal =  false;
 
             this.isLoading = true;
@@ -261,14 +261,14 @@ export default {
 
         async findVendors(){
 
-            if ( this.loggedInUser ) {
-                this.loading = true;
-                await this.save();
-                this.loading = false;
-                this.goToAccountPage();
-            } else {
-                this.showSignupModal = true;
-            }
+          if ( this.loggedInUser ) {
+            this.loading = true;
+            await this.save();
+            this.loading = false;
+            this.goToAccountPage();
+          } else {
+              this.showSignupModal = true;
+          }
 
         },
         async save(){
@@ -292,7 +292,7 @@ export default {
             localStorage.removeItem('proposal');
         },
         goToAccountPage(){
-            this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
+          this.$router.push(`/user-events/${this.event.id}/booking/choose-vendor`);
         },
         changePage(){
             this.page = this.page === 'signin' ? 'signup' : 'signin';

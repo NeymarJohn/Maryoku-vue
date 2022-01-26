@@ -267,7 +267,7 @@
           </div>
         </div>
       </div>
-      <div class="card-section align-center px-20 py-30 mt-10">
+      <div class="card-section align-center px-20 py-30 mt-10" v-if="showSeatingAr">
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
@@ -584,7 +584,9 @@
         </md-button>
       </div>
     </div>
-    <MessageModal v-if="showMessage" @cancel="showMessage = false" />
+    <div v-if="proposal.status === 5 || proposal.status === '5' ">
+      <MessageModal v-if="showMessage" @cancel="showMessage = false" />
+    </div>
   </div>
 </template>
 
@@ -646,6 +648,7 @@ export default {
     return {
       storageIcon: `${this.$resourceURL}storage/icons/`,
       showMessage: true,
+      showSeatingAr: false,
       isHealth: false,
       isSeating: false,
       isPolicy: false,

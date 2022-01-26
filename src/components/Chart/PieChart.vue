@@ -7,7 +7,7 @@
       :height="options.height"
       v-if="sortedData"
       :class="{ 'd-none': showImage, 'd-block': !showImage }"
-      :style="`min-width: ${options.minWidth || options.width}px; height:${options.height}`"
+      :style="`min-width: ${options.width}px; height:${options.height}`"
     >
       <g
         v-for="(item, index) in reorderingData"
@@ -86,7 +86,7 @@
     <canvas id="pie-chart-canvas" v-if="showImage" width="300" height="300"></canvas>
     <div class="items-cont">
       <ul class="items-list">
-        <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns} pr-0`">
+        <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns}`">
           <div class="d-flex align-center">
             <span :style="`background-color: ${item.color};`" class="icon"></span>
             <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="24" />

@@ -282,15 +282,11 @@
   </div>
 </template>
 <script>
-import VueCsvImport from "vue-csv-import";
 import vue2Dropzone from "vue2-dropzone";
-
 import Multiselect from "vue-multiselect";
 import S3Service from "@/services/s3.service";
-
 import { getBase64 } from "@/utils/file.util";
 import success from "../../../../../static/img/good.svg";
-
 export default {
   props: {
     events: {
@@ -299,7 +295,6 @@ export default {
     },
   },
   components: {
-    VueCsvImport,
     Multiselect,
     vueDropzone: vue2Dropzone,
   },
@@ -406,7 +401,6 @@ export default {
         },
       },
     ],
-
     upload: true,
     header: false,
     done: false,
@@ -422,7 +416,6 @@ export default {
     showError: false,
     errorMessage: "",
   }),
-
   methods: {
     eventIcon(idx) {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
@@ -430,14 +423,14 @@ export default {
     close() {
       this.$emit("cancel");
     },
-
     async fileAdded(file) {
       const extension = file.type.split("/")[1];
       let fileName = new Date().getTime();
       this.fileName = file.name;
+      let fileUrl = `https://maryoku.s3.amazonaws.com/events/proposal/${fileName}.${extension}`;
       S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then(res => {
         this.isLoading = false;
-        this.fileUrl = res;
+        this.fileUrl = fileUrl;
       });
     },
   },
@@ -457,11 +450,9 @@ export default {
   align-items: center;
   margin: 8px 7px;
 }
-
 .md-table-row:hover:not(.md-header-row) .md-table-cell {
   background: unset !important;
 }
-
 .title {
   width: 237px;
   height: 40px;
@@ -472,18 +463,15 @@ export default {
   letter-spacing: normal;
   color: #050505;
 }
-
 .custom_border {
   border: solid 1px #e0e0e0;
 }
-
 table,
 th,
 td {
   border-left: none;
   border-right: none;
 }
-
 .md-table-head-container {
   font-size: 12px;
   padding-left: 10px;
@@ -494,7 +482,6 @@ td {
 .subtitle {
   width: 506px;
   height: 21px;
-
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -504,12 +491,10 @@ td {
   text-align: left;
   color: #000;
 }
-
 h2 {
   font-size: 16px;
   margin: 0px 5px;
 }
-
 #done_modal {
   background: #f3f7fd;
   height: 370px;
@@ -526,7 +511,6 @@ h2 {
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-
   color: #641856;
 }
 .s_text {

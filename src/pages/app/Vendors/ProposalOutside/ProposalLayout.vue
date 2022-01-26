@@ -104,7 +104,6 @@
       :link="proposalLink"
     ></SendProposalModal>
     <ProposalSubmitted
-      class="proposal-submitted"
       v-if="showSubmittedProposalModal"
       @close="showSubmittedProposalModal = false"
     ></ProposalSubmitted>
@@ -296,20 +295,23 @@ export default {
     async uploadCoverImage() {
       const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
 
-        let coverImageUrl = "";
+      let coverImageUrl = "";
 
-        if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
-            const fileObject = S3Service.dataURLtoFile(
-                proposalForNonMaryoku.coverImage,
-                `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-            );
-            const extenstion = fileObject.type.split("/")[1];
-            coverImageUrl = await S3Service.fileUpload(
-                fileObject,
-                `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-                "proposals/cover-images",
-            );
-        }
+      if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
+        const fileObject = S3Service.dataURLtoFile(
+          proposalForNonMaryoku.coverImage,
+          `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+        );
+        const extenstion = fileObject.type.split("/")[1];
+        await S3Service.fileUpload(
+          fileObject,
+          `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+          "proposals/cover-images",
+        );
+        coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${
+          proposalForNonMaryoku.vendor.id
+        }.${extenstion}`;
+      }
     },
 
     async uploadProposal(type) {
@@ -454,7 +456,7 @@ export default {
     versions() {
       return this.$store.state.proposalForNonMaryoku.versions;
     },
-
+    
     step: {
       get: function() {
         return this.$store.state.proposalForNonMaryoku.wizardStep;
