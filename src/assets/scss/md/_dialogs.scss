@@ -71,6 +71,44 @@
   }
 }
 
+.proposal-submitted {
+
+    .modal-container {
+      max-width: 1040px;
+      width: 1040px;
+      height: 535px;
+      margin: 0px auto;
+      z-index: 999999;
+      position: relative;
+      background-color: #fff;
+      transition: all .3s ease;
+      box-shadow: 0 27px 24px 0 rgba(0,0,0,.2), 0 40px 77px 0 rgba(0,0,0,.22);
+      border-radius: 6px;
+      border: none;
+      &.xl {
+        max-width: 1200px;
+      }
+      &.lg {
+        max-width: 1040px;
+      }
+      &.sl {
+        max-width: 900px;
+      }
+      &.sm {
+        max-width: 640px;
+      }
+      &.sign-in {
+        max-width: 492px;
+      }
+      &.border-radius-28 {
+        border-radius: 28px;
+      }
+      &.ml {
+        max-width: 1102px;
+      }
+    }
+}
+
 .modal-container-wizard {
     max-width: 80%;
     &.md{
@@ -166,6 +204,30 @@
   right: 9px;
   top: 12px;
 }
+
+.vendor-create-event{
+    .modal-container{
+        width: 832px !important;
+        max-width: 832px !important;
+        overflow: hidden;
+    }
+}
+
+.proposal-submitting-modal{
+    .modal-container{
+        width: 894px !important;
+        max-width: 894px !important;
+        height: 579px;
+        overflow: hidden;
+    }
+}
+.sync-calendar-modal-fix{
+    .modal-container{
+        width: 712px !important;
+        max-width: 712px !important;
+    }
+}
+
 
 @media (max-width: 960px) {
     .modal-mask{

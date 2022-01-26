@@ -193,36 +193,34 @@
             </template>
           </div>
         </div>
-        <div v-if="includedServices.length">
-          <div
-            class="extras-section md-layout"
-            v-for="(item, index) in extraServices.filter(item => item.price)"
-            :key="index"
-          >
-            <div class="md-layout-item md-size-80 md-small-size-100" v-if="item">
-              <div class="extras-section__title">
-                <h3 class="font-size-22">
-                  <img
-                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
-                    width="12"
-                  />
-                  Extras
-                </h3>
-                <div class="extras-section__header">
-                  <span>Would you like to upgrade & add one of these?</span>
-                  <div class="text-center">QTY</div>
-                  <div class="text-center">Price per unit</div>
-                </div>
+        <div
+          class="extras-section md-layout"
+          v-for="(item, index) in extraServices.filter(item => item.price)"
+          :key="index"
+        >
+          <div class="md-layout-item md-size-80 md-small-size-100" v-if="item">
+            <div class="extras-section__title">
+              <h3 class="font-size-22">
+                <img
+                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
+                  width="12"
+                />
+                Extras
+              </h3>
+              <div class="extras-section__header">
+                <span>Would you like to upgrade & add one of these?</span>
+                <div class="text-center">QTY</div>
+                <div class="text-center">Price per unit</div>
               </div>
-              <div class="extras-section__list">
-                <ExtraServiceItem
-                  class="extras-section__item"
-                  v-for="(item, index) in extraServices.filter(item => item.price)"
-                  :key="`extra-service-item-${index}`"
-                  :item="item"
-                  @add="addExtraService(item)"
-                ></ExtraServiceItem>
-              </div>
+            </div>
+            <div class="extras-section__list">
+              <ExtraServiceItem
+                class="extras-section__item"
+                v-for="(item, index) in extraServices.filter(item => item.price)"
+                :key="`extra-service-item-${index}`"
+                :item="item"
+                @add="addExtraService(item)"
+              ></ExtraServiceItem>
             </div>
           </div>
         </div>

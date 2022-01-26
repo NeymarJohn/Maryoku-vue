@@ -6,7 +6,7 @@
           <div
             style="margin-top: -90px; background-color: #f3f7fd
 
-              ; height: 225px; width: 100vw; margin-left: -40px; margin-right: -40px "
+              ; height: 250px; width: 100vw; margin-left: -40px; margin-right: -40px "
             class="text-center"
           >
             <div class="md-layout-item pl-0 md-size-100 mt-20 text-center px-20 ">
@@ -36,14 +36,11 @@
             </div>
           </div>
           <div class="md-layout-item pl-0 md-size-100 text-center">
-            <div class="mt-40">
-              <img :src="`${$iconURL}group-22314.svg`" alt="icon" />
-            </div>
             <div>
               <h2 class="title">We are very sorry that the match failed :(</h2>
               <p class="subtitle">
-                Let us help you find more vendors that are just right for your event. <br />
-                In addition, you can offer new dates to the vendor.
+                Let us help you find more vendors that are just right for your event. <br> In addition, you can offer new
+                dates to the vendor.
               </p>
             </div>
           </div>
@@ -75,6 +72,7 @@ export default {
 <style scoped>
 .title {
   height: 30px;
+  margin: 42.4px 120px 42px;
   font-size: 22px;
   font-weight: bold;
   font-stretch: normal;
