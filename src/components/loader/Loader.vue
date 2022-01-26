@@ -7,9 +7,9 @@
 import VueElementLoading from "vue-element-loading";
 export default {
   name: 'loader',
-  components:[
+  components:{
       VueElementLoading,
-  ],
+  },
   props: {
     active:{
       type: Boolean,
