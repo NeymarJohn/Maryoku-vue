@@ -85,15 +85,13 @@ export default {
             if (!this.event.location) return 0;
 
             let tax = 0
-            const arr = this.event.location.split(', ');
-            const withoutCity = arr.length === 2;
             this.taxes.map(it => {
-              const state = withoutCity ? it.state : it.code;
-              if (arr[arr.length - 1] === 'USA' && arr[arr.length - 2] === state && it.tax) {
-                tax = it.tax;
-              }
+                const arr = this.event.location.split(', ');
+                if (arr[arr.length - 1] === 'USA' && arr[arr.length - 2] === it.code) {
+                    tax = it.tax;
+                }
             })
-          return tax;
+            return tax;
         },
         setInitServices(serviceName, services, pricingPolicies) {
             let includedVendorServices = [];

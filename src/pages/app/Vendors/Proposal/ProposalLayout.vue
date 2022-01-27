@@ -223,9 +223,6 @@ export default {
     }
     this.isLoading = false
   },
-    mounted(){
-      this.submittedModal = true;
-    },
 
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "saveVendor", "setWizardStep"]),

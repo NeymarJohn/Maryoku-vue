@@ -1,5 +1,5 @@
 <template>
-  <modal>
+  <modal class="sync-calendar-event-modal">
     <template slot="header">
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>

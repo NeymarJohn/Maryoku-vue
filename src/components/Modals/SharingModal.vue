@@ -1,5 +1,5 @@
 <template>
-  <modal class="sharing-model">
+  <modal class="sharing-model adaptive">
     <template slot="header">
       <div class="title">
         <div v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</div>
@@ -36,7 +36,7 @@
           <div class="mt-10 mb-10">Email Address</div>
           <div class="d-flex">
             <!-- <maryoku-input class="flex-1" inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input> -->
-            <input-tag v-model="emails" class="flex-1"></input-tag>
+            <input-tag placeholder="Type email address here…" v-model="emails" class="flex-1"></input-tag>
             <div v-if="page === 'event'" class="email-role-button">
               <md-button
                 class="md-simple md-red role-editor"
@@ -73,7 +73,7 @@
         <md-button class="md-red md-bold add-category-btn" @click="sendEmail">Send</md-button>
       </template>
       <template v-else>
-        <md-button class="md-black" @click="onCancel()">Done</md-button>
+        <md-button class="md-button md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
       </template>
     </template>
   </modal>
@@ -185,7 +185,8 @@ export default {
   border: solid 1px #ffa4bc;
   margin-left: 15px;
   border-radius: 3px;
-  max-height: 56px;
+  max-height: 63px;
+  padding-top: 6px;
 }
 .spacer {
   border-bottom: solid 1px #dddddd;

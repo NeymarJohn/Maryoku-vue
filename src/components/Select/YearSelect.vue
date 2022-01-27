@@ -1,8 +1,8 @@
 <template>
-  <div class="select-wrapper" v-click-outside="close" @click="handleOpen">
+  <div class="select-wrapper" :style="{ width: width || '100%' }" v-click-outside="close" @click="handleOpen">
     <div class="select" :class="{ open: isOpen }">
       <div class="select__trigger">
-        <span style="display: inline-block; padding-left: 120px">{{ selected }}</span>
+        <span>{{ selected }}</span>
         <div class="arrow"></div>
       </div>
       <div class="custom-options">
@@ -59,7 +59,6 @@ export default {
 .select-wrapper {
   position: relative;
   user-select: none;
-  width: 177px
 }
 .select {
   position: relative;
@@ -67,11 +66,11 @@ export default {
   flex-direction: column;
 }
 .select__trigger {
-  font-family: 'Manrope-ExtraBold';
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 22px;
   font-size: 16px;
   color: white;
   cursor: pointer;
@@ -90,21 +89,16 @@ export default {
   visibility: hidden;
   pointer-events: none;
   z-index: 99;
-  width: 177px;
 }
 .select.open .custom-options {
   opacity: 1;
   visibility: visible;
   pointer-events: all;
-  width: 177px;
 }
 .custom-option {
-  font-family: 'Manrope-Bold';
-  font-size: 15px;
-  letter-spacing: -0.2px;
-  padding-left: 8px;
   position: relative;
   display: block;
+  padding: 0 22px 0 22px;
   font-size: 16px;
   color: #3b3b3b;
   cursor: pointer;

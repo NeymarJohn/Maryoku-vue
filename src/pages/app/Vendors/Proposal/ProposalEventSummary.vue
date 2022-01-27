@@ -62,7 +62,7 @@
                                     id="days-input"
                                     name="days-input"
                                     type="number"
-                                    v-model="expiredDate"
+                                    value="07"
                                     />
                                 :
                                 </div>
@@ -71,7 +71,7 @@
                                     id="hours-input"
                                     name="hours-input"
                                     type="number"
-                                    v-model="expiredHours"
+                                    value="11"
                                     />
                                     :
                                 </div>
@@ -80,7 +80,7 @@
                                     id="mins-input"
                                     name="mins-input"
                                     type="number"
-                                    v-model="expiredMinutes"
+                                    value="32"
                                     />
                                 </div>
                             </div>
@@ -102,10 +102,10 @@
                                     {{expiredDate}} :
                                 </div>
                                 <div class="hours-num">
-                                    {{expiredHours}} :
+                                    11 :
                                 </div>
                                 <div class="mins-num">
-                                    {{expiredMinutes}}
+                                    32
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center">
@@ -590,19 +590,9 @@ export default {
 
     let end = moment(this.$store.state.vendorProposal.expiredDate)
     let diff = moment.duration(end.diff(new Date()));
-
-    function pad(n) {
-        return (n < 10 && n >= 0) ? ("0" + n) : n;
-    }
-
-    let minutes = diff.asMinutes();
-    this.expiredDate = Math.floor(minutes/24/60);
-    this.expiredDate = pad(this.expiredDate);
-    this.expiredHours = Math.floor(minutes/60%24);
-    this.expiredHours = pad(this.expiredHours);
-    this.expiredMinutes = Math.floor(minutes%60);
-    this.expiredMinutes = pad(this.expiredMinutes);
-
+    this.expiredDate = Math.floor(diff.asDays());
+    this.expiredHours = Math.floor(diff.asHours());
+    this.expiredMinutes = Math.floor(diff.asMinutes());
   },
   computed: {
     ...mapGetters("vendorProposal", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),

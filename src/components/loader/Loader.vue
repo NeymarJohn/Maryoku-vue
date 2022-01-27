@@ -1,21 +1,17 @@
 <template>
-  <vue-element-loading
-    :active="active"
-    :isFullScreen="isFullScreen"
-    :style="{ height: height, backGroundColor: backGroundColor }"
-  >
-    <img :src="`${imgUrl}`" :width="width" />
-  </vue-element-loading>
+    <vue-element-loading :active="active" :isFullScreen="isFullScreen" :style="{height: height, backGroundColor: backGroundColor}">
+        <img :src="`${imgUrl}`" :width="width"/>
+    </vue-element-loading>
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
 export default {
   name: 'loader',
-  components:{
+  components:[
       VueElementLoading,
-  },
+  ],
   props: {
-    active: {
+    active:{
       type: Boolean,
       required: true,
     },
@@ -24,39 +20,44 @@ export default {
       required: false,
       default: false,
     },
-    height: {
+    height:{
       type: String,
       required: false,
-      default: "100vh",
+      default: '100vh',
     },
     width: {
-      type: Number,
+      type:Number,
       required: false,
       default: 250,
     },
     backGroundColor: {
       type: String,
       required: false,
-      default: "white",
+      default: 'white',
     },
     page: {
       type: String,
-      default: "planner",
-    },
+      default: 'planner',
+    }
   },
-  data() {
+  data(){
     return {
-      loaders: ["/static/icons/loader/Bus.gif", "/static/icons/loader/Screen.gif", "/static/icons/loader/Venue.gif"],
-    };
+      loaders: [
+          '/static/icons/loader/Bus.gif',
+          '/static/icons/loader/Dish.gif',
+          '/static/icons/loader/Screen.gif',
+          '/static/icons/loader/Venue.gif',
+      ]
+    }
   },
-  computed: {
-    imgUrl() {
-      if (this.page === "planner") {
-        return "/static/icons/loader/circular.gif";
-      } else if (this.page === "vendor") {
-        return "/static/icons/loader/vendor.gif";
-      }
-    },
-  },
-};
+  computed:{
+    imgUrl(){
+        if ( this.page === 'planner') {
+            return '/static/icons/loader/circular.gif';
+        } else if ( this.page === 'vendor' ) {
+            return '/static/icons/loader/vendor.gif';
+        }
+    }
+  }
+}
 </script>

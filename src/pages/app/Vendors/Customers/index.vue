@@ -279,7 +279,6 @@ export default {
     customerObject() {
       if (!this.customers) return {};
       let object = this.customers.reduce((r, e) => {
-        if (!e.companyName) return r;
         let group = e.companyName[0].toLowerCase();
         if (!r[group]) r[group] = { group, children: [e] };
         else r[group].children.push(e);

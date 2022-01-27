@@ -34,12 +34,12 @@
         </div>
           <div class="md-layout mt-30 selection-wrapper">
               <div class="md-layout-item md-size-50 p-0 text-left">
-                  <md-checkbox class="md-simple md-checkbox-circle md-vendor"  :value="false">
+                  <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isSyncEntireCalendar" :value="true">
                       Sync entire calendar
                   </md-checkbox>
               </div>
               <div class="md-layout-item md-size-50 p-0 text-left">
-                  <md-checkbox class="md-simple md-checkbox-circle md-vendor"  :value="true">
+                  <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isSyncEntireCalendar" :value="false">
                       Sync specific event
                   </md-checkbox>
               </div>
@@ -113,6 +113,7 @@ export default {
       showCalendar: false,
       emailAccount: "outlook",
       authorized: false,
+      isSyncEntireCalendar: true
     };
   },
   methods: {

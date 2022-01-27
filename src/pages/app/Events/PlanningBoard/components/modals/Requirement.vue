@@ -19,7 +19,7 @@
 
             <div class="md-layout-item pl-0 md-size-100 mt-20 text-center ">
               <div>
-                <img :src="`${$iconURL}group-8647.svg`" alt="icon" />
+                <img src="/static/img/Group 20954.svg" />
               </div>
               <div class="mt-20">
                 <h2 class="t_text">Requirements update completed successfully</h2>
@@ -28,8 +28,8 @@
             </div>
           </div>
           <div class="md-layout-item pl-0 md-size-100 mt-50">
-            <md-button class="px-50  md-primary " @click="$emit('cancel')">
-              Cool, Go To Booking
+            <md-button class="px-70  md-primary " @click="$emit('cancel')">
+              Done
             </md-button>
           </div>
         </div>
