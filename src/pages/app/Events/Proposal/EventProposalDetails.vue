@@ -645,7 +645,7 @@ export default {
   data() {
     return {
       storageIcon: `${this.$resourceURL}storage/icons/`,
-      showMessage: false,
+      showMessage: true,
       isHealth: false,
       isSeating: false,
       isPolicy: false,

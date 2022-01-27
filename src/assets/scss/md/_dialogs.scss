@@ -205,30 +205,6 @@
   top: 12px;
 }
 
-.vendor-create-event{
-    .modal-container{
-        width: 832px !important;
-        max-width: 832px !important;
-        overflow: hidden;
-    }
-}
-
-.proposal-submitting-modal{
-    .modal-container{
-        width: 894px !important;
-        max-width: 894px !important;
-        height: 579px;
-        overflow: hidden;
-    }
-}
-.sync-calendar-modal-fix{
-    .modal-container{
-        width: 712px !important;
-        max-width: 712px !important;
-    }
-}
-
-
 @media (max-width: 960px) {
     .modal-mask{
         align-items: flex-end;
