@@ -71,10 +71,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="daysDiff(commentComponent.dateCreated) > 1" class="time-color" >
-                    {{ commentComponent.dateCreated | date("DD/MM/YYYY") }}
-                        </div>
-                    <timeago v-else class="time-color" :datetime="commentComponent.dateCreated"></timeago>
+                    <timeago class="time-color" :datetime="commentComponent.dateCreated"></timeago>
                 </div>
                 <div class="d-flex sidebar__item__content">
                     <div class="dot"></div>
@@ -106,10 +103,7 @@
                                     </div>
                                 </div>
                             <!-- </div> -->
-                            <div v-if="daysDiff(comment.dateCreated) > 1" class="time-color" >
-                                {{ comment.dateCreated | date("DD/MM/YYYY") }}
-                            </div>
-                            <timeago v-else class="time-color" :datetime="comment.dateCreated"></timeago>
+                            <timeago class="time-color" :datetime="comment.dateCreated"></timeago>
                         </div>
                         <div class="commentDesc">
                             <span>{{comment.description}}</span>
@@ -176,7 +170,6 @@ import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 import { postReq, getReq } from "@/utils/token";
 import { FadeTransition } from "vue2-transitions";
 import {CommentMixins} from "@/mixins";
-import moment from 'moment'
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
@@ -212,8 +205,7 @@ export default {
     computed: {},
 
     created() {},
-    mounted() {
-    },
+    mounted() {},
     computed: {
         vendor() {
             return this.$store.state.vendor.profile;
@@ -391,9 +383,6 @@ export default {
 
           this.editingComment = queryArray.join('@') + ' ';
           this.showAddress = false
-        },
-        daysDiff(date){
-            return moment(moment()).diff(moment(date), 'days');
         }
     }
 };
