@@ -1,5 +1,5 @@
 <template>
-  <modal class="sync-calendar-modal">
+  <modal class="sync-calendar-modal sync-calendar-modal-fix">
     <template slot="header">
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
@@ -32,6 +32,18 @@
             </div>
           </div>
         </div>
+          <div class="md-layout mt-30 selection-wrapper">
+              <div class="md-layout-item md-size-50 p-0 text-left">
+                  <md-checkbox class="md-simple md-checkbox-circle md-vendor"  :value="false">
+                      Sync entire calendar
+                  </md-checkbox>
+              </div>
+              <div class="md-layout-item md-size-50 p-0 text-left">
+                  <md-checkbox class="md-simple md-checkbox-circle md-vendor"  :value="true">
+                      Sync specific event
+                  </md-checkbox>
+              </div>
+          </div>
         <div class="text-left tips">
           <div class="mb-20 d-flex">
             <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
@@ -204,7 +216,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sync-calendar-modal {
-  .header-text {
+    .header-text {
     line-height: 1.5em;
   }
   .sync_button {

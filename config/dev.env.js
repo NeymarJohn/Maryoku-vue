@@ -10,5 +10,5 @@ module.exports = merge(prodEnv, {
     SERVER_URL: '"https://api-dev.maryoku.com"',
     S3_BUCKET_NAME: '"maryoku"',
     S3_URL: '"https://maryoku.s3.amazonaws.com/"',
-    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
+    RESOURCE_URL: '"https://s3.amazonaws.com/static.maryoku.com/""',
 });

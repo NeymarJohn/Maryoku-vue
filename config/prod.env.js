@@ -6,7 +6,7 @@ module.exports = {
     SERVER_URL: '"https://api.maryoku.com"',
     HOST_URL: '"app.maryoku.com"',
     S3_BUCKET_NAME: '"maryoku"',
-    S3_URL: '"https://maryoku.s3.amazonaws.com/"',
+    S3_URL: '"https://s3.amazonaws.com/static.maryoku.com/"',
     RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
 
     // load from .env
