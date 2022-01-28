@@ -30,7 +30,13 @@
                     </ul>
                 </div>
                 <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
-                    <HeaderActions className="ml-auto" page="proposal" @toggleCommentMode="toggleCommentMode" @export="downProposal"></HeaderActions>
+                    <HeaderActions
+                        className="ml-auto"
+                        page="proposal"
+                        hideDownload
+                        hideShare
+                        @toggleCommentMode="toggleCommentMode"
+                    ></HeaderActions>
                 </div>
             </div>
             <ProposalVersionsBar

@@ -7,7 +7,7 @@
       :height="options.height"
       v-if="sortedData"
       :class="{ 'd-none': showImage, 'd-block': !showImage }"
-      :style="`min-width: ${options.width}px; height:${options.height}`"
+      :style="`min-width: ${options.minWidth || options.width}px; height:${options.height}`"
     >
       <g
         v-for="(item, index) in reorderingData"
