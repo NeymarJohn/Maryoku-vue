@@ -134,28 +134,17 @@
 
 .sharing-model{
     &.adaptive{
-        .modal-container {
-            width: 900px;
-            max-width: 900px;
-        }
         .modal-header{
             justify-content: flex-start;
             padding: 40px 60px 0
         }
-        .modal-header .md-button {
-            box-shadow: none;
-            margin-right: 30px;
-        }
         .modal-footer{
             .md-button{
-                width: 160px;
-                height: 44px;
+                height: 38px;
                 //box-shadow: 0 3px 17px 0 rgb(0 0 0 / 15%);
                 background-color: rgb(245, 19, 85) !important;
                 border-radius: 3px;
                 color: white !important;
-                margin: 0px 0px 40px 0px;
-
         }
     }
 }
