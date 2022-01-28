@@ -1,16 +1,10 @@
 <template>
   <modal container-class="modal-container w-max-600 bg-white">
-      <template slot="header">
-          <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
-              <md-icon>clear</md-icon>
-          </md-button>
-      </template>
-      <template slot="body">
-          <div class="text-left font-size-28 font-bold-extra pl-20">
-              <img :src="`${$iconURL}vendordashboard/group-
-10662.svg`" class="page-icon mr-10" />
-              Pricing Change
-          </div>
+    <template slot="body">
+      <div class="text-left font-size-28 font-bold-extra pl-20">
+        <img :src="`${$iconURL}common/email-dark.svg`" class="page-icon mr-10" />
+        Pricing Change
+      </div>
       <div class="my-40 pl-20 text-left">
         <p class="mb-5">You are trying to change a fixed price.</p>
         <p class="mt-0">Do you want to change the price set in profile?</p>
@@ -42,11 +36,7 @@ export default {
     };
   },
   created() {},
-  methods: {
-      close() {
-          this.$emit("cancel");
-      },
-  },
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>

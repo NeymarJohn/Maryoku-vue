@@ -38,7 +38,7 @@
         </div>
       </section>
 
-      <modal v-if="submittedModal" class="saved-it-modal proposal-submitting-modal" container-class="modal-container sl">
+      <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header">
             <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
@@ -51,7 +51,7 @@
         </template>
         <template slot="body">
           <div class="saved-it-modal__body">
-            <div class="pt-30">
+            <div>
               <md-button class="md-simple maryoku-btn md-vendor" @click="goToProcessingGuid">
                 How does our bidding process work?
               </md-button>
@@ -170,6 +170,7 @@ export default {
     };
   },
   async created() {
+
     if(this.$store.state.auth.user){
       this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
 
@@ -223,7 +224,6 @@ export default {
     }
     this.isLoading = false
   },
-
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "saveVendor", "setWizardStep"]),
     gotoNext() {

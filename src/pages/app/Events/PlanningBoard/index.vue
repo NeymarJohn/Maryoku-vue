@@ -110,7 +110,7 @@
         @close="showCart = false"
       ></RequirementsCart>
     </transition>
-    <requirement @cancel="requirementModal = false" v-if="requirementModal" />
+    <CustomPopup @cancel="popup = false" v-if="popup" />
   </div>
 </template>
 <script>
@@ -124,7 +124,7 @@ import moment from "moment";
 import { postReq, getReq } from "@/utils/token";
 
 const components = {
-  Requirement: () => import("./components/modals/Requirement.vue"),
+  CustomPopup: () => import("./components/modals/Popup.vue"),
   ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
   ProgressRadialBar: () => import("./components/ProgressRadialBar.vue"),
   AdditionalRequestModal: () => import("./components/modals/AdditionalRequest.vue"),
@@ -138,7 +138,7 @@ export default {
   components,
   data() {
     return {
-      requirementModal: false,
+      popup: false,
       showCart: false,
       allRequirements: null,
       subCategory: null,
@@ -222,6 +222,7 @@ export default {
       this.expiredTime = moment(new Date())
         .add(3, "days")
         .valueOf();
+
       const requestRequirement = {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
@@ -283,12 +284,12 @@ export default {
     },
     async saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
-    
 
       const expiredTime = moment(new Date())
         .add(3, "days")
         .valueOf();
       this.$set(requirements, "expiredBusinessTime", expiredTime);
+      this.popup = true;
 
       await this.saveMainRequirements({ category, event: this.event, requirements });
 

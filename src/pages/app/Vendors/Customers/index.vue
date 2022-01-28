@@ -89,9 +89,15 @@
     </modal>
     <modal v-if="importCustomersModal">
       <template slot="body">
-        <CustomerListModal @cancel="importCustomersModal = false" />
+        <CustomerListModal @cancel="importCustomersModal = false" @save="saveCustomers" />
       </template>
     </modal>
+    <modal v-if="DoneModal">
+      <template slot="body">
+        <DoneModal @cancel="DoneModal = false" />
+      </template>
+    </modal>
+
     <!-- <CustomerListModal v-if="importCustomersModal" :events="upcomingEvents" @cancel="importCustomersModal = false" /> -->
   </div>
 </template>
@@ -103,6 +109,7 @@ import { CUSTOMER_PAGE_PAGINATION } from "@/constants/pagination";
 const components = {
   CustomerListModal: () => import("./ImportCustomers.vue"),
   Modal: () => import("@/components/Modal.vue"),
+  DoneModal: () => import("./DoneModal.vue"),
   Insight: () => import("./insight.vue"),
   VsaList: () => import("vue-simple-accordion"),
   Loader: () => import("@/components/loader/Loader.vue"),
@@ -116,6 +123,7 @@ export default {
   components,
   data() {
     return {
+      DoneModal: false,
       importCustomersModal: false,
       loading: true,
       iconUrl: `${this.$resourceURL}storage/icons/`,
@@ -128,6 +136,7 @@ export default {
       selectedProposal: null,
       selectedCustomer: null,
       showNewCustomerModal: null,
+      customerArr: null,
       customerStatus: {
         show: 0,
         detail: 1,
@@ -251,6 +260,26 @@ export default {
         this.loading = false;
       }
     },
+    async saveCustomers(customer) {
+      customer.forEach(el => {
+        let data = {
+          email: el.email,
+          companyName: el.BusinessName,
+          name: el.ContactFullName,
+          type: 1,
+          ein: el.ServiceType,
+          vendorId: this.vendorData.id,
+        };
+        this.customerArr = data;
+      });
+      this.loading = true;
+      let customerInstance = new Customer(this.customerArr);
+      console.log(customerInstance);
+      await customerInstance.save();
+      await this.getCustomer();
+      this.loading = false;
+      this.DoneModal = true;
+    },
     openNewTab(link) {
       window.open(link, "_blank");
     },
@@ -279,6 +308,7 @@ export default {
     customerObject() {
       if (!this.customers) return {};
       let object = this.customers.reduce((r, e) => {
+        if (!e.companyName) return r;
         let group = e.companyName[0].toLowerCase();
         if (!r[group]) r[group] = { group, children: [e] };
         else r[group].children.push(e);

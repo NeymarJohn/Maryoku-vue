@@ -194,7 +194,6 @@
       v-if="addVendorModalOpened"
       :event="event"
       :selectedComponent="eventCategoryItem"
-      @closeModal="closeAddVendorModalOpened"
       @remindLater="addVendorModalOpened = false"
       @updateVendor="updateVendor"
     ></add-my-vendor-modal>
@@ -263,9 +262,6 @@ export default {
     });
   },
   methods: {
-      closeAddVendorModalOpened(){
-          this.addVendorModalOpened = false;
-      },
     switchExpand() {
       this.isExpanded = !this.isExpanded;
       this.$root.$emit("expandBudgetCategoryItem", this.eventCategoryItem);
