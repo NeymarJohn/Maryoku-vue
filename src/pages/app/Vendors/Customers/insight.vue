@@ -10,7 +10,7 @@
             ${{ Math.floor(totalPrice) | withComma(Number) }}
           </h2>
           <h2 class="font-size-50 color-white m-0" v-else>
-            ${{ Math.floor(adaptiveTotalPrice) | withComma(Number) }}
+            ${{ Math.floor(aggregate.totalPrice) | withComma(Number) }}
           </h2>
           <div v-if="customer" class="font-size-16 color-white py-20">
             {{ `${wonProposals.length}/${customer.proposals.length}` }} Successful proposals
@@ -183,13 +183,11 @@ export default {
       renderCustomer: false,
       serviceReportData: null,
       activeCategoryColors: ["#ffffff", "#21cfe0", "#ffc001", "#2cde6b"],
-      selectedYear: new Date().getFullYear(),
-      adaptiveTotalPrice: null,
+      selectedYear: new Date().getFullYear()
     };
   },
   mounted() {
     console.log(this.customerStatus);
-    console.log('AGGREGATE', this.aggregate);
     this.init();
   },
   methods: {
@@ -277,23 +275,12 @@ export default {
         }
       } else if (this.serviceReportData) {
         let colorIndex = 0;
-        const serviceCategories = Object.keys(this.$store.state.common.serviceCategoriesMap);
-        let excludeAmount = 0;
-        const filteredServiceReportData = this.serviceReportData.filter(item => {
-          const pass = serviceCategories.includes(item._id) && item.amount > 0;
-          if (!pass) {
-            excludeAmount += item.amount / 100;
-            return false;
-          }
-          return true;
-        });
-        this.adaptiveTotalPrice = this.aggregate.totalPrice - excludeAmount;
-        for (let i = 0; i < filteredServiceReportData.length; i++) {
-          const categoryData = filteredServiceReportData[i];
+        for (let i = 0; i < this.serviceReportData.length; i++) {
+          const categoryData = this.serviceReportData[i];
           console.log("categoryData", categoryData);
           chartData.push({
             label: "",
-            value: Math.round((categoryData.amount / 100 / this.adaptiveTotalPrice) * 100),
+            value: Math.round((categoryData.amount / 100 / this.aggregate.totalPrice) * 100),
             // color: this.$store.state.common.serviceCategoriesMap[categoryData._id].color,
             color: this.activeCategoryColors[colorIndex++],
             icon: `Budget+Elements/${categoryData._id}-white.svg`,

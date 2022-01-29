@@ -5,9 +5,6 @@
         <h2>Add my vendor</h2>
         <div class="header-description">So we could add it to your plan</div>
       </div>
-        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
-            <md-icon>clear</md-icon>
-        </md-button>
     </template>
     <template slot="body">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
@@ -169,9 +166,6 @@ export default {
     };
   },
   methods: {
-      close() {
-          this.$emit("closeModal");
-      },
     remindLater() {
       this.$emit("remindLater");
     },
@@ -254,8 +248,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .add-vendor-modal {
-    overflow: hidden;
-
   .error-message {
     background-color: #ffe5ec;
     padding: 10px;

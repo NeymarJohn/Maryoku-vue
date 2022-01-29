@@ -109,58 +109,6 @@
     }
 }
 
-.send-proposal-modal {
-    &.adaptive {
-        .modal-container {
-            width: 781px;
-            max-width: 781px;
-        }
-    }
-}
-.refer-vendor-modal{
-    &.adaptive {
-        .modal-container {
-            width: 900px;
-            max-width: 900px;
-        }
-    }
-}
-.header-description{
-    &.adaptive{
-        font-size: 14px !important;
-    }
-
-}
-
-.sharing-model{
-    &.adaptive{
-        .modal-header{
-            justify-content: flex-start;
-            padding: 40px 60px 0
-        }
-        .modal-footer{
-            .md-button{
-                height: 38px;
-                //box-shadow: 0 3px 17px 0 rgb(0 0 0 / 15%);
-                background-color: rgb(245, 19, 85) !important;
-                border-radius: 3px;
-                color: white !important;
-        }
-    }
-}
-}
-.sync-calendar-event-modal {
-    .modal-container {
-        width: 900px;
-        max-width: 900px;
-        height: 518px;
-    }
-    .modal-header .md-button {
-        box-shadow: none;
-    }
-}
-
-
 .modal-container-wizard {
     max-width: 80%;
     &.md{
@@ -256,30 +204,6 @@
   right: 9px;
   top: 12px;
 }
-
-.vendor-create-event{
-    .modal-container{
-        width: 832px !important;
-        max-width: 832px !important;
-        overflow: hidden;
-    }
-}
-
-.proposal-submitting-modal{
-    .modal-container{
-        width: 894px !important;
-        max-width: 894px !important;
-        height: 579px;
-        overflow: hidden;
-    }
-}
-.sync-calendar-modal-fix{
-    .modal-container{
-        width: 712px !important;
-        max-width: 712px !important;
-    }
-}
-
 
 @media (max-width: 960px) {
     .modal-mask{

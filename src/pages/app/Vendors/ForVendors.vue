@@ -122,7 +122,7 @@
         <button class="yes" @click="goToForm()">Submit Proposal</button>
       </div>
     </div>
-    <modal v-if="referModal" class="refer-vendor-modal adaptive" container-class="modal-container sl">
+    <modal v-if="referModal" class="refer-vendor-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="refer-vendor-modal__header">
           <h3>Refer a vendor</h3>
@@ -183,7 +183,7 @@
             <br />and would love to know,
             <strong>what's the reason?</strong>
           </h3>
-          <div class="header-description adaptive">You can choose more than one</div>
+          <div class="header-description">You can choose more than one</div>
         </div>
         <button class="close" @click="hideModal()">
           <img :src="`${iconsUrl}Group 3602.svg`" />
