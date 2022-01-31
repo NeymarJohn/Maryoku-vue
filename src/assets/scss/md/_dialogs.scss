@@ -280,7 +280,22 @@
     }
 }
 
+.event-icons-modal{
+    .content-wrapper {
+        width: 712px;
+    }
+    .modal-header{
+        width: 712px;
+        padding-left: 55px;
 
+    }
+    .modal-body{
+        padding-bottom: 0px;
+    }
+    .subtitle{
+        font-size: 16px !important;
+    }
+    }
 @media (max-width: 960px) {
     .modal-mask{
         align-items: flex-end;

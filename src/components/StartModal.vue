@@ -10,7 +10,7 @@
     >
       <div class="modal-wrapper ">
         <div :class="containerClass" v-click-outside="closeModal">
-          <div class=" d-flex flex-column align-center" style="width: 650px">
+          <div class=" d-flex flex-column align-center content-wrapper">
             <div class="modal-header">
               <slot name="header"></slot>
             </div>
@@ -75,6 +75,10 @@ export default {
 
 .modal-leave-active {
   opacity: 0;
+}
+
+.content-wrapper {
+    width: 650px;
 }
 
 .modal-enter .modal-container-wizard,
