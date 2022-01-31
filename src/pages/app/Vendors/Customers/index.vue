@@ -136,7 +136,7 @@ export default {
       selectedProposal: null,
       selectedCustomer: null,
       showNewCustomerModal: null,
-      customerArr: [],
+      customerArr: null,
       customerStatus: {
         show: 0,
         detail: 1,
@@ -270,13 +270,12 @@ export default {
           ein: el.ServiceType,
           vendorId: this.vendorData.id,
         };
-        this.customerArr.push(data);
+        this.customerArr = data;
       });
       this.loading = true;
       let customerInstance = new Customer(this.customerArr);
       console.log(customerInstance);
       await customerInstance.save();
-      this.importCustomersModal = false;
       await this.getCustomer();
       this.loading = false;
       this.DoneModal = true;

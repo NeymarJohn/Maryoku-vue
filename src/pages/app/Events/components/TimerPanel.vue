@@ -3,8 +3,7 @@
     <div class="font-bold" v-if="isExpired">This offer has expired</div>
     <div class="font-bold" v-else>This offer will expire in</div>
     <hr />
-    <timer size="big" :target="target" v-if="status !== 2"></timer>
-    <timer size="big" :target="new Date()" v-if="status === 2"></timer>
+    <timer size="big" :target="target"></timer>
     <template v-if="approved">
       <hr />
       <div class="font-bold font-size-14">More Time Granted</div>
@@ -17,13 +16,6 @@
       <hr />
       <div class="font-bold font-size-14">Waiting reply</div>
     </template>
-    <template v-else-if="status === 2">
-      <div class="button-wrapper">
-        <md-button class="maryoku-btn md-simple" :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled
-          >Ask for more time</md-button
-        >
-      </div>
-    </template>
     <div v-else-if="section !== 'card'" class="button-wrapper">
       <md-button
         class="maryoku-btn md-simple"
@@ -35,10 +27,11 @@
   </div>
 </template>
 <script>
+
 const components = {
-  Timer: () => import("@/components/Timer.vue"),
-  TimeCounter: () => import("./TimeCounter.vue"),
-};
+    Timer: () => import("@/components/Timer.vue"),
+    TimeCounter: () => import("./TimeCounter.vue"),
+}
 
 export default {
   components,
@@ -47,20 +40,15 @@ export default {
       type: [Date, Number],
       default: new Date(),
     },
-    approved: {
+    approved:{
       type: Boolean,
       default: false,
     },
-    declined: {
+    declined:{
       type: Boolean,
-      default: false,
+      default:false,
     },
-
-    status: {
-      type: Boolean,
-    },
-
-    pending: {
+    pending:{
       type: Boolean,
       default: false,
     },
@@ -70,8 +58,8 @@ export default {
     },
     section: {
       type: String,
-      default: "detail",
-    },
+      default: "detail"
+    }
   },
   methods: {
     updateExpireTime() {
@@ -100,7 +88,7 @@ export default {
     background-color: #641865;
   }
   &.mobile-red {
-    background-color: white;
+     background-color: white;
   }
   .button-wrapper {
     background-color: white !important;
@@ -128,20 +116,21 @@ export default {
       background-color: #f51355 !important;
       width: 100%;
       .md-button {
-        background-color: #f51355 !important;
-        &:hover {
           background-color: #f51355 !important;
-        }
+          &:hover {
+              background-color: #f51355 !important;
+          }
       }
     }
 
     /deep/ .md-button-content {
-      color: white !important;
+        color: white !important;
     }
 
-    hr {
-      background-color: #f51355;
+    hr{
+        background-color: #f51355;
     }
   }
 }
+
 </style>

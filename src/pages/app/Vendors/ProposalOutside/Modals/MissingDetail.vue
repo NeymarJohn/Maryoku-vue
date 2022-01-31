@@ -20,7 +20,7 @@
                     <img
                         class="mr-20"
                         :src="`${$iconURL}${option.icon}`"
-                        width="12"
+                        width="24"
                     />
                     {{ option.label }}</div>
             </div>
@@ -36,10 +36,10 @@
         </div>
         <div class="d-flex align-center">
             <md-button class="md-simple maryoku-btn md-vendor ml-auto" @click="$emit('send')">
-                Send Now
+                Send Anyway
             </md-button>
             <md-button class="maryoku-btn md-vendor" @click="$emit('close')"
-            >Correct Proposal</md-button
+            >Let me fix that</md-button
             >
         </div>
     </div>
