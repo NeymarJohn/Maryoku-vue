@@ -10,7 +10,7 @@
     >
       <div class="modal-wrapper">
         <div :class="containerClass" v-click-outside="closeModal">
-          <loader :active="true" page="vendor" height="100%"></loader>
+          <loader :active="loading" page="vendor" height="100%"></loader>
           <div class="modal-header position-relative">
             <md-button
                   class="md-simple position-absolute md-small-hide"
