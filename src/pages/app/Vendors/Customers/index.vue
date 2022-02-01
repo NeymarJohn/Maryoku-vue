@@ -105,7 +105,6 @@
 import Customer from "@/models/Customer";
 import { CUSTOMER_PAGE_TABS, CUSTOMER_TABLE_HEADERS } from "@/constants/list";
 import { CUSTOMER_PAGE_PAGINATION } from "@/constants/pagination";
-
 const components = {
   CustomerListModal: () => import("./ImportCustomers.vue"),
   Modal: () => import("@/components/Modal.vue"),
@@ -118,7 +117,6 @@ const components = {
   ProposalContent: () => import("../components/ProposalDetail.vue"),
   TablePagination: () => import("@/components/TablePagination.vue"),
 };
-
 export default {
   components,
   data() {
@@ -136,7 +134,7 @@ export default {
       selectedProposal: null,
       selectedCustomer: null,
       showNewCustomerModal: null,
-      customerArr: [],
+      customerArr: null,
       customerStatus: {
         show: 0,
         detail: 1,
@@ -171,7 +169,6 @@ export default {
         vendorId: this.vendorData.id,
         params,
       });
-
       this.pagination.total = data.total;
       this.customerTabs.map(t => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
@@ -190,12 +187,10 @@ export default {
       await this.getCustomer();
       this.loading = false;
     },
-
     selectCustomer(customer) {
       console.log("selectCustomer", customer);
       this.selectedCustomer = customer;
     },
-
     async handleCustomer(customer, action) {
       if (action === this.customerStatus.edit) {
         this.customerAction = "edit";
@@ -219,14 +214,11 @@ export default {
         this.loading = false;
       }
     },
-
     async handleProposal(data) {
       console.log("handleProposal", data);
-
       if (data.action === this.proposalStatus.show) {
         for (let i = 0; i < this.customers.length; i++) {
           this.selectedProposal = this.customers[i].proposals.find(p => p.id === data.proposalId);
-
           if (this.selectedProposal) {
             this.selectedProposal.proposalRequest = this.proposalRequests.find(
               it => it.id === this.selectedProposal.proposalRequestId,
@@ -255,7 +247,6 @@ export default {
         this.loading = true;
         let customerInstance = new Customer({ ...customer, vendorId: this.vendorData.id, type: 1 });
         await customerInstance.save();
-
         await this.getCustomer();
         this.loading = false;
       }
@@ -270,13 +261,12 @@ export default {
           ein: el.ServiceType,
           vendorId: this.vendorData.id,
         };
-        this.customerArr.push(data);
+        this.customerArr = data;
       });
       this.loading = true;
       let customerInstance = new Customer(this.customerArr);
       console.log(customerInstance);
       await customerInstance.save();
-      this.importCustomersModal = false;
       await this.getCustomer();
       this.loading = false;
       this.DoneModal = true;
@@ -290,7 +280,6 @@ export default {
     async init() {
       await this.getCustomer();
       this.loading = false;
-
       this.$nextTick(_ => {
         this.renderInsight = true;
       });
@@ -315,7 +304,6 @@ export default {
         else r[group].children.push(e);
         return r;
       }, {});
-
       // sort customer object with alphabetical order
       return Object.keys(object)
         .sort()
@@ -326,15 +314,11 @@ export default {
       let totalProposals = 0;
       let wonProposals = 0;
       let averagePrice = 0;
-
       if (!this.customers.length) return { totalPrice, totalProposals, wonProposals, averagePrice };
-
       this.customers.map(c => {
         let wonProposalsOfCustomer = c.proposals.filter(p => p.accepted);
-
         wonProposals += wonProposalsOfCustomer.length;
         totalProposals += c.proposals.length;
-
         if (wonProposalsOfCustomer.length) {
           let costOfCustomer = wonProposalsOfCustomer.reduce((cost, p) => {
             return cost + p.cost;
@@ -344,7 +328,6 @@ export default {
         }
       });
       averagePrice /= this.customers.length;
-
       return { totalPrice, totalProposals, wonProposals, averagePrice };
     },
   },

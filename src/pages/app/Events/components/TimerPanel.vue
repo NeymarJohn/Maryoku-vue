@@ -18,11 +18,12 @@
       <div class="font-bold font-size-14">Waiting reply</div>
     </template>
     <template v-else-if="status === 2">
-      <md-button class="maryoku-btn " :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled
-        >Ask for more time</md-button
-      >
+      <div class="button-wrapper">
+        <md-button class="maryoku-btn md-simple" :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled
+          >Ask for more time</md-button
+        >
+      </div>
     </template>
-
     <div v-else-if="section !== 'card'" class="button-wrapper">
       <md-button
         class="maryoku-btn md-simple"

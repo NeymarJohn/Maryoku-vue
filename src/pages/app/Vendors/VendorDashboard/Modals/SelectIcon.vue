@@ -1,5 +1,5 @@
 <template>
-  <start-modal container-class=" bg-white">
+  <start-modal container-class="event-icons-modal bg-white">
     <template slot="header">
       <div class="md-layout">
         <div class="md-layout-item pl-0 md-size-90">
@@ -17,7 +17,7 @@
               style="margin-top: -20px;
 "
               @click="close()"
-              ><md-icon>close</md-icon></md-button
+            ><md-icon>close</md-icon></md-button
             >
           </div>
         </div>
@@ -25,68 +25,39 @@
     </template>
     <template slot="body">
       <div>
-        <div
-          class="md-layout 
-            "
-        >
-          <div class="event-logo" v-for="(item, index) in icons" :key="index" @click="save(index)">
+        <div class="md-layout">
+          <div class="event-logo" :class="{selected: selectedIcon === index}" v-for="(item, index) in icons" :key="index" @click="selectIcon(index)">
+            <div v-if="selectedIcon === index" class="choose-item"></div>
             <img
               :src="`${$iconURL}CalendarIcons/${icons[index]}`"
               style="  width: 27.1px;
-             height: 31.1px;
-             object-fit: contain;
+              height: 31.1px;
+              object-fit: contain;
              "
             />
           </div>
         </div>
-        <div class="d-flex justify-content-end my-10">
+        <div class="d-flex justify-content-end mt-50 mr-20">
           <md-button class=" md-simple  text-decoration-none  " @click="cancel()">
             <span style="color: black">Cancel</span>
           </md-button>
-          <md-button class="md-vendor add-category-btn md-bold pa-20" @click="selected()" :disabled="select"
-            >Select Icon</md-button
+          <md-button class="md-vendor add-category-btn md-bold pa-20" @click="saveIcon()" :disabled="selectedIcon === null"
+          >Select Icon</md-button
           >
-        </div>
-
-        <div style="margin: 0px -40px">
-          <hr />
-        </div>
-      </div>
-      <div class="pl-10 py-3">
-        <span class="font-size-14px">In use:</span>
-      </div>
-      <div>
-        <div class="d-flex  align-center" v-for="(event, index) in events" :key="event.id">
-          <div class="event-logo1">
-            <img
-              :src="`${$iconURL}CalendarIcons/${eventIcon(index)}`"
-              style="  width: 27.1px;
-                 height: 31.1px;
-                 object-fit: contain;
-                   "
-            />
-          </div>
-          <h2>
-            <span style="font-weight: bold">{{ event.customer.name }}</span>
-          </h2>
-          <h2>{{ event.startTime | formatDate }}</h2>
-          |
-          <h2>{{ event.companyName }}</h2>
-          |
-          <h2>${{ event.totalBudget }}</h2>
         </div>
       </div>
     </template>
     <template slot="footer"> </template>
   </start-modal>
 </template>
+
 <script>
 import StartModal from "@/components/StartModal.vue";
-import moment from "moment";
+import {eventIcons} from "@/constants/event";
 
 export default {
   props: {
-    data: String,
+    eventId: String,
     events: {
       type: Array,
       default: [],
@@ -96,76 +67,55 @@ export default {
     StartModal,
   },
   data: () => ({
-    select: true,
-    data: null,
-    icons: [
-      "Group 20904.svg",
-      "Group 20909.svg",
-      "Group 20912.svg",
-      "Group 20915.svg",
-      "Group 20918.svg",
-      "Group 20919.svg",
-      "Group 20922.svg",
-      "Group 20925.svg",
-      "Group 20928.svg",
-      "Group 20929.svg",
-      "Group 20932.svg",
-      "Group 20935.svg",
-      "Group 20936.svg",
-      "Group 20941.svg",
-      "Group 20944.svg",
-      "Group 20951.svg",
-      "Group 20954.svg",
-      "Group 20957.svg",
-      "Page-1.svg",
-      "Page-1_2.svg",
-      "Page-1_3.svg",
-      "Page-1_4.svg",
-      "Page-1_5.svg",
-      "Page-1_6.svg",
-      "Page-1_7.svg",
-      "Page-1_8.svg",
-      "Page-1_9.svg",
-      "Page-1_10.svg",
-    ],
+    selectedIcon: null,
+    icons: eventIcons,
   }),
 
   methods: {
-    eventIcon(idx) {
-      return this.icons[Math.ceil(Math.random() * 10 * idx) % 28];
-    },
     close() {
       this.$emit("cancel");
     },
 
-    selected() {
-      this.$emit("icon", this.data);
+    saveIcon() {
+      this.$emit("iconSelected", {iconId: this.selectedIcon, eventId: this.eventId});
+      this.close();
     },
 
     cancel() {
-      this.data = null;
-      this.select = true;
-      this.$emit("icon", this.data);
+      this.selectedIcon = null;
     },
 
-    save(item) {
-      this.data = item;
-      this.select = false;
+    selectIcon(item) {
+      this.selectedIcon = item;
     },
   },
-  filters: {
-    formatDate: function(date) {
-      return moment(date).format("DD-MM-YYYY");
-    },
-  },
-
   mounted() {
-    this.cancel();
+    this.selectedIcon = null;
   },
 };
 </script>
 
+
 <style scoped>
+.selected {
+  position: relative;
+  border:1px solid #641856;
+  border-radius: 50%;
+  width: 41px !important;
+  height: 41px !important;
+
+
+}
+.choose-item {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  top: 0px;
+  right: 2px;
+  background-color: #f51355;
+}
+
 .event-logo {
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   width: 41px !important;
@@ -177,7 +127,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 8px 7px;
+  margin: 14px 14px;
 }
 .event-logo1 {
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
@@ -194,7 +144,6 @@ export default {
 
 .title {
   width: 205px;
-
   font-size: 28px;
   font-weight: bold;
   font-stretch: normal;
