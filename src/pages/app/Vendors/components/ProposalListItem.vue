@@ -28,7 +28,7 @@
         {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}
       </span>
     </div>
-    <div class="proposal-graph" @click="showGraph()"><img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" /></div>
+
     <div class="text-center" v-if="hasNegotiation">
       <md-button class="md-simple md-red md-vendor-text">
         <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" />
@@ -219,9 +219,6 @@ export default {
         })
       }, 0);
     },
-    showGraph(){
-      this.$emit("showGraphModal")
-    },
   },
   mounted() {
     console.log('mounted', this.proposal);
@@ -238,7 +235,7 @@ export default {
 
   &.proposal{
     padding: 32px 40px;
-    grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 3% 12% 5%;
+    grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
   }
   &.customer{
     background-color: rgba(255, 255, 255, 0.64);

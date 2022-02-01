@@ -98,7 +98,6 @@
                 class="row"
                 :color="colors[idx]"
                 @action="handleProposal"
-                @showGraphModal="showGraphModal"
               ></ProposalListItem>
             </div>
           </div>
@@ -280,11 +279,6 @@
       @submit="showResendProposalModal = false"
     >
     </ResendProposalResult>
-    <ProposalGraphModal
-    v-if="showProposalGraph"
-    @close="closeProposalGraph"
-    >
-    </ProposalGraphModal>
   </div>
 </template>
 <script>
@@ -318,12 +312,11 @@ const components = {
   Insight: () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
   ShareProposal: () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
   ResendProposalResult: () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
-  ProposalGraphModal: () => import("@/pages/app/Vendors/ProposalBoard/ProposalGraphModal.vue"),
   CentredModal,
 };
 
 export default {
-  components: { ...components, ProposalRequestCard,EmptyRequestCard, NoInsight },
+  components: { ...components, ProposalRequestCard, EmptyRequestCard, NoInsight },
   data() {
     return {
       showLessInsightModal: false,
@@ -334,7 +327,6 @@ export default {
       tab: "all",
       showProposalDetail: false,
       showShareProposalModal: false,
-      showProposalGraph : false,
       selectedProposal: null,
       selectedEventData: null,
       selectedProposalRequest: null,
@@ -715,13 +707,6 @@ export default {
       await this.getProposal();
       this.loading = false;
     },
-    showGraphModal() {
-      console.log('Open GraphModal')
-      this.showProposalGraph = true;
-    },
-    closeProposalGraph() {
-      this.showProposalGraph = false;
-    }
   },
   computed: {
     vendorData() {
