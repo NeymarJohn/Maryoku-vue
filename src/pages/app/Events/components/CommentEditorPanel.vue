@@ -32,7 +32,6 @@
           <div v-if="selectedCommentComponent && selectedCommentComponent.comments">
             <comment-item
               :comment="mainComment"
-              :proposal="proposal"
               :isEditing="editingCommentId == mainComment.id"
               :isMain="true"
               :replies="replies.length"
@@ -351,7 +350,7 @@ export default {
         if(!comment.viewed){
           comment.viewed = true;
         }
-      }
+      } 
       commentComponent = new EventCommentComponent({
             id: commentComponent.id,
             comments:commentComponent.comments

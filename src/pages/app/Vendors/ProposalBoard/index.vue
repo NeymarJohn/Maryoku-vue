@@ -788,13 +788,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .winning-rate {
-  width: 217px;
-  height: 41px;
-
+  
   font-size: 25px;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
+ 
   line-height: 1.53;
   letter-spacing: normal;
   text-align: center;

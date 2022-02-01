@@ -149,14 +149,7 @@
                     <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
                     <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
                     <div class="sidebar__item__details d-flex flex-column">
-
-                        <span class="productLaunchParty" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-                            {{ proposal.eventData.customer.companyName }}
-                        </span>
-                        <span class="productLaunchParty" v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle">
-                            {{proposal.vendor.eventCategory.fullTitle}}
-                        </span>
-      
+                        <span class="productLaunchParty">{{proposal.vendor.eventCategory.fullTitle}}</span>
                         <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
                     </div>
                 </div>
