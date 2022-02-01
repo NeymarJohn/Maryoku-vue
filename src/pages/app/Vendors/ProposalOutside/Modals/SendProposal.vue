@@ -1,5 +1,5 @@
 <template>
-  <modal class="send-proposal-modal adaptive">
+  <modal class="send-proposal-modal">
     <template slot="header">
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
@@ -170,7 +170,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .send-proposal-modal {
-
   .header-text {
     line-height: 1.5em;
   }
@@ -198,5 +197,4 @@ export default {
     // }
   }
 }
-
 </style>

@@ -62,7 +62,7 @@ export default {
   .notification-card{
     top: 20px;
     left: -110px;
-    width: 748px;
+    width: 600px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.26)
   }
 
@@ -82,10 +82,10 @@ export default {
         color: #050505;
       }
       &.next {
-        right: 10px;
+        right: 20px;
       }
       &.prev {
-        left: 10px;
+        left: 20px;
       }
     }
   }

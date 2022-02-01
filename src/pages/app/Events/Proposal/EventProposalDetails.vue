@@ -49,6 +49,7 @@
               </li>
             </ul>
           </div>
+
           <div class="d-flex flex-column align-center bg-white">
             <slot name="timer"></slot>
             <div class="d-block" v-if="step === 0 && isMobile">
@@ -584,6 +585,7 @@
         </md-button>
       </div>
     </div>
+  
     <div v-if="proposal.status === 5 || proposal.status === '5'">
       <MessageModal v-if="showMessage" @cancel="showMessage = false" />
     </div>

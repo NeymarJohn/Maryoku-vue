@@ -486,4 +486,7 @@ h2 {
   text-align: center;
   color: #050505;
 }
+.md-select::before {
+    color: blue !important;
+}
 </style>
