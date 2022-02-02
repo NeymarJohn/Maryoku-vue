@@ -10,8 +10,8 @@
     <template v-if="step < 7">
       <section class="footer-wrapper" :class="{ approved: step > 0 }" v-if="step > 0">
         <div class="left d-flex align-center">
-          <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
-            <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
+          <md-button class="md-vendor-signup md-simple md-vendor" @click="prev()">
+            <md-icon class="md-vendor font-size-30">keyboard_arrow_left</md-icon>
             Back
           </md-button>
           <md-button
@@ -25,16 +25,16 @@
           </md-button>
         </div>
         <div class="right">
-          <md-button class="save md-vendor-signup md-simple md-red md-outlined" @click="saveDraft()">
+          <md-button class="save md-vendor-signup md-simple md-vendor md-outlined" @click="saveDraft()">
             <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
             Save for later
           </md-button>
-          <md-button class="approve md-vendor-signup md-red" @click="next">{{ nextLabel }}</md-button>
+          <md-button class="approve md-vendor-signup md-vendor" @click="next">{{ nextLabel }}</md-button>
         </div>
       </section>
       <section class="footer-wrapper" v-else>
         <md-button
-          class="approve md-vendor-signup md-red"
+          class="approve md-vendor-signup md-vendor"
           @click="approve()"
           :class="{ disabled: !validateBasicFields }"
           >Approve & Begin
@@ -333,9 +333,9 @@ export default {
       text-align: center;
 
       &.approve {
-        border: 1px solid #f51355;
+        border: 1px solid #58154B;
         color: #ffffff;
-        background-color: #f51355;
+        background-color: #58154B;
 
         &.disabled {
           box-shadow: none;
@@ -379,8 +379,8 @@ export default {
       .right {
         a {
           &.save {
-            color: #f51355;
-            border: 1px solid #f51355;
+            color: #58154B;
+            border: 1px solid #58154B;
             margin-right: 40px;
             font: bold 20px Manrope-Regular, sans-serif;
             border-radius: 3px;
@@ -401,7 +401,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #f51355;
+        color: #58154B;
 
         img {
           width: 55px;
@@ -446,7 +446,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #f51355;
+    background-color: #58154B;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;

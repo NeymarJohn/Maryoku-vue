@@ -21,7 +21,7 @@
       <div class="arrow" :class="{ expanded: !collapsed }" @click="collapsed = !collapsed">
         <img
           class="mt-5"
-          :src="theme === 'red' ? `${iconUrl}Asset 519.svg` : `${$iconURL}common/arrow-right-purple.svg`"
+          :src="theme === 'pink' ? `${iconUrl}Asset 519.svg` : `${$iconURL}common/arrow-right-purple.svg`"
         />
       </div>
     </div>

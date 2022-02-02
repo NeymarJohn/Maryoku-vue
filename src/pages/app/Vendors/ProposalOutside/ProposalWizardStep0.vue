@@ -358,6 +358,8 @@ export default {
       }
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);
+      }).catch((err) => {
+        console.log(err)
       });
     },
     getAddressData(addressData, placeResultData, id) {

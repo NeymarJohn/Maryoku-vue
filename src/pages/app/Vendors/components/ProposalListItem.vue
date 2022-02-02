@@ -67,7 +67,7 @@
           </md-menu-item>
           <md-menu-item @click="edit(proposalStatus.cancel)" class="md-purple">
             <span>
-              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" />
+              <img src="/static/icons/vendor/proposal.svg" class="label-icon mr-10" />
               Cancel proposal
             </span>
           </md-menu-item>
@@ -77,6 +77,11 @@
               Copy Link
             </span>
             </md-menu-item>
+          <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
+            <span>
+              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
+            </span>
+          </md-menu-item>
         </md-menu-content>
       </md-menu>
     </div>

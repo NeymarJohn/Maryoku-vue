@@ -770,7 +770,7 @@ export default {
       }
       h3 {
         margin: 0;
-        color: #f51355;
+        color: #641856;;
         font: bold 20px Manrope-Regular, sans-serif;
       }
     }
@@ -820,7 +820,7 @@ export default {
             cursor: pointer;
 
             &.active {
-              border-top: 5px solid #f51355;
+              border-top: 5px solid #641856;
               font: bold 16px Manrope-Regular, sans-serif;
             }
           }

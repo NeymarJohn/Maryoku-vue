@@ -302,7 +302,7 @@
         </div>
       </div>
     </section>
-    <section class="proposal-section policy-section ">
+    <section class="proposal-section policy-section pb-5">
       <div class="card-section align-center px-20 py-30">
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">

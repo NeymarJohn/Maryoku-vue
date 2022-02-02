@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card p-30 insight-adaptive">
+  <div class="white-card p-30">
     <div class="font-size-20">Add more details to generate unique insights</div>
     <div style="margin: 0 -15px">
       <pie-chart
@@ -19,7 +19,7 @@
           <span class="mr-20 font-size-50">{{ `${Math.round((won / total) * 100)} %` }}</span>
           <span class="font-size-18">Winning rate</span>
         </div>
-        <div class="font-size-20 mt-50">
+        <div class="font-size-16 mt-50">
           You won <span class="font-bold">{{ won }} of {{ total }}</span> Proposals you applied to
         </div>
       </div>
@@ -90,14 +90,5 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-    .insight-adaptive{
-        width: 390px;
-        height: 750px;
-        .md-button{
-            margin: 36px 0 0 3px !important;
-            font-size: 16px;
-            font-weight: bold;
-        }
-    }
+<style type="scss">
 </style>

@@ -31,7 +31,7 @@
           <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
         </a>
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
-          <loader :active="isLoading"  page="vendor" height="70px" width="100px"></loader>
+          <loader :active="isLoading"  page="vendor" height="70px" :width="100"></loader>
 
           Next
         </a>

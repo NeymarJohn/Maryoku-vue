@@ -6,7 +6,7 @@
           <img
             v-if="checked"
             class="mr-20"
-            :src="theme === 'red' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
+            :src="theme === 'pink' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
             width="27"
           />
           <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
@@ -25,7 +25,7 @@
           <div class="included-cont" v-if="checked && !item.xIncluded">
             <div class="included" :class="{ active: included }" @click="updateIncluded()">
               <img
-                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                :src="theme === 'pink' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
                 v-if="included"
               />
 
@@ -35,7 +35,7 @@
             <div class="flex-1 ml-20">
               <div class="included" :class="{ active: !included }" @click="updateIncluded()">
                 <img
-                  :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                  :src="theme === 'pink' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
                   v-if="!included"
                 />
                 <span class="unchecked" v-else></span>
@@ -106,7 +106,7 @@
           <div class="included-cont mt-10">
             <div class="included mr-30" :class="{ active: currentItem.dry }" @click="updateValue('dry', true)">
               <img
-                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                :src="theme === 'pink' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
                 v-if="currentItem.dry"
               />
               <span class="unchecked" v-else></span>
@@ -130,7 +130,7 @@
             <img
               v-if="checked"
               class="mr-20"
-              :src="theme === 'red' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
+              :src="theme === 'pink' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
               width="27"
             />
             <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
@@ -144,7 +144,7 @@
         <div class="included-cont mt-10" v-if="checked && !item.xIncluded">
           <div class="included" :class="{ active: included }" @click="updateIncluded()">
             <img
-              :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+              :src="theme === 'pink' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
               v-if="included"
             />
             <span class="unchecked" v-else></span>
@@ -182,7 +182,7 @@
             <img
               v-if="checked"
               class="mr-20"
-              :src="theme === 'red' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
+              :src="theme === 'pink' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
               width="27"
             />
             <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
@@ -212,7 +212,7 @@
             <img
               v-if="checked"
               class="mr-20"
-              :src="theme === 'red' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
+              :src="theme === 'pink' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
               width="27"
             />
             <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
@@ -222,7 +222,7 @@
         <div class="included-cont" v-if="checked && !item.xIncluded">
           <div class="included" :class="{ active: included }" @click="updateIncluded()">
             <img
-              :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+              :src="theme === 'pink' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
               v-if="included"
             />
             <span class="unchecked" v-else></span>
@@ -298,7 +298,7 @@ export default {
     service: Object,
     theme: {
       type: String,
-      default: 'red',
+      default: 'pink',
     },
   },
   components: {
