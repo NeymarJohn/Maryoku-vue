@@ -49,6 +49,7 @@
               </li>
             </ul>
           </div>
+
           <div class="d-flex flex-column align-center bg-white">
             <slot name="timer"></slot>
             <div class="d-block" v-if="step === 0 && isMobile">
