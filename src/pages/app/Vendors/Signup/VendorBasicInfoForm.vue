@@ -160,7 +160,7 @@ export default {
             }
             h3 {
                 margin: 0;
-                color: #58154B;
+                color: #f51355;
                 font: bold 20px Manrope-Regular, sans-serif;
             }
         }

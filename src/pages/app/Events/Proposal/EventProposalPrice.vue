@@ -196,9 +196,10 @@
         <div v-if="includedServices.length">
           <div
             class="extras-section md-layout"
-        
+            v-for="(item, index) in extraServices.filter(item => item.price)"
+            :key="index"
           >
-            <div class="md-layout-item md-size-80 md-small-size-100" >
+            <div class="md-layout-item md-size-80 md-small-size-100" v-if="item">
               <div class="extras-section__title">
                 <h3 class="font-size-22">
                   <img
@@ -466,9 +467,6 @@ export default {
     },
     vendorCategory() {
       return this.categories.find(item => item.key === this.serviceCategory) || {};
-    },
-    extraArr() {
-      return this.extraServices.filter(item => item.price);
     },
   },
 };

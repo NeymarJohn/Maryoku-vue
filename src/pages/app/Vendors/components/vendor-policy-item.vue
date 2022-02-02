@@ -9,7 +9,7 @@
           <template v-if="item.type == 'Boolean'">
             <div class="item" @click="setPolicy(null, 'option', item.name, true)">
               <img
-                :src="theme === 'pink' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
                 v-if="item.value"
               />
               <span class="unchecked" v-else></span>
@@ -17,7 +17,7 @@
             </div>
             <div class="item" @click="setPolicy(null, 'option', item.name, false)">
               <img
-                :src="theme === 'pink' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
                 v-if="!item.value"
               />
               <span class="unchecked" v-else></span>
@@ -137,14 +137,14 @@
           <div
             class="cursor-pointer"
             @click="notable = !notable"
-            :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"
+            :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
           >
             <template v-if="!notable">
-              <md-icon :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"> add </md-icon>
+              <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"> add </md-icon>
               Add Note
             </template>
             <template v-else>
-              <md-icon :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"> remove </md-icon>
+              <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"> remove </md-icon>
               Add Note
             </template>
           </div>
@@ -262,7 +262,7 @@ export default {
           font: 800 16px Manrope-Regular, sans-serif;
           cursor: pointer;
           &.note {
-            color: #58154B;
+            color: #f51355;
           }
           &.cancel {
             color: #050505;

@@ -194,6 +194,7 @@
     <CommentEditorPanel
       v-if="showCommentEditorPanel"
       :commentComponents="commentComponents"
+      :proposal="proposal"
       @saveComment="saveCommentWithAuth"
       @updateComment="updateCommentWithAuth"
       @deleteComment="deleteCommentWithAuth"

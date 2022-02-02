@@ -388,7 +388,7 @@
         });
 
         const categoryName = proposal.vendor.eventCategory.key;
-        if (proposal.extraServices[categoryName] || proposal.extraServices[categoryName].length) {
+        if (proposal.extraServices[categoryName] && proposal.extraServices[categoryName].length) {
           let addedPrice = extraCost(proposal.extraServices[proposal.vendor.eventCategory.key]);
           return totalPrice + (addedPrice || 0);
         }
