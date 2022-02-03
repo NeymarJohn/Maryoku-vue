@@ -89,7 +89,7 @@ export default {
         return null;
       }
     },
-    addItem({serviceItem}) {
+    addItem(serviceItem) {
       if (!this.services) this.services = [];
       this.services.push(serviceItem);
       this.services = Object.assign([], this.services);

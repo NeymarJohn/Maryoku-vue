@@ -47,7 +47,7 @@
             @change="changeVersion"
             @remove="removeVersion"></ProposalVersionsBar>
             <div class="proposal-container event-proposal" >
-                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep" :sh="true">
+                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
                 </EventProposalDetails>
             </div>
         </template>
@@ -154,6 +154,7 @@ export default {
         selectProposal(){
             console.log("selectProposal")
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
+                // console.log("LogProposal", proposal)
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
                 this.showProposal = !!this.commentComponents.length
@@ -164,12 +165,14 @@ export default {
             }
         },
         selectVersion(index){
+            // console.log('myselect', index);
             this.$store.commit('commentProposal/selectVersion', index);
         },
         saveVersion(version){
             this.$store.dispatch('commentProposal/saveVersion', version);
         },
         changeVersion(versions){
+            // console.log('myversions', versions);
             this.$store.commit('commentProposal/setVersions', versions);
         },
         removeVersion(id){
@@ -190,7 +193,7 @@ export default {
             return this.proposal.vendor
         },
         proposal(){
-            return this.$store.state.commentProposal.selectedVersion ? this.$store.state.commentProposal.selectedVersion : this.$store.state.commentProposal.proposal;
+            return this.$store.state.commentProposal.proposal;
         },
         proposals(){
             return this.$store.state.comment.commentsProposals;
