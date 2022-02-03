@@ -426,7 +426,8 @@ export default {
 
     priceOfCostservices() {
       if (!this.costServices || this.costServices.length === 0) return 0;
-      return (
+
+      let calculatedValue = (
         this.costServices.reduce((s, item) => {
           if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
             // if 0 you selected main option
@@ -439,7 +440,10 @@ export default {
         this.addedServices.reduce((s, item) => {
           return s + item.requirementValue * item.price;
         }, 0)
+
       );
+      this.$emit("updateProposalCost", { updateProposalCost: calculatedValue });
+      return calculatedValue;
     },
     priceBeforeDiscount() {
       return this.priceOfCostservices - (this.priceOfCostservices * this.tax.percentage) / 100;

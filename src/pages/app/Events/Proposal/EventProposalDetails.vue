@@ -232,6 +232,7 @@
           :key="`${proposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
+          @updateProposalCost="updateProposalCost"
           :mandatory="true"
           :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} bg-light-gray`"
         ></EventProposalPrice>
@@ -241,6 +242,7 @@
           :serviceCategory="service"
           :key="`secondary-${service}-section`"
           @changeBookedServices="changeBookedServices"
+          @updateProposalCost="updateProposalCost"
           :class-name="`${isMobile ? 'p-0' : 'p-60 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
         ></EventProposalPrice>
         <div
@@ -830,6 +832,9 @@ export default {
         category: serviceCategory,
         proposal: this.proposal,
       });
+    },
+    async updateProposalCost({ updateProposalCost }) {
+      this.proposal.cost = updateProposalCost;
     },
     favorite() {
       this.$emit("favorite", !this.proposal.isFavorite);

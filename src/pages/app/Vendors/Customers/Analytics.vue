@@ -33,7 +33,7 @@ export default {
     IncomeBarChart,
     YearSelect
   },
-
+  
   props: {
     incomeChartData: {
       type: Array,
@@ -52,7 +52,7 @@ export default {
       date,
       initialYear: new Date().getFullYear()
     };
-  },
+  },	
   methods: {
       handleYearChange(value) {
         this.$emit('onYearChanged', value);
