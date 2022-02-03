@@ -187,7 +187,7 @@
             </div>
           </div>
           <template v-if="vendor.signature == null">
-            <div class="card red-border">
+            <div class="card pink-border">
               <div class="upload-cont">
                 <a class @click="uploadVendorSignature"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
                 <div class="or">Or</div>
@@ -662,17 +662,17 @@ export default {
         h5 {
           font: 800 16px Manrope-Regular, sans-serif;
         }
-        &.red-border {
-          border: 2px dashed #f51355;
+        &.pink-border {
+          border: 2px dashed #58154B;
 
           .upload-cont {
             text-align: center;
             a {
               display: inline-block;
               font: 800 14px Manrope-Regular, sans-serif;
-              border: 1px solid #f51355;
+              border: 1px solid #58154B;
               padding: 0.5rem;
-              color: #f51355;
+              color: #58154B;
               cursor: pointer;
               margin-bottom: 0.5rem;
 
@@ -687,7 +687,7 @@ export default {
             }
             .sign-here {
               margin-top: 1rem;
-              border: 1.5px dashed #f51355;
+              border: 1.5px dashed #58154B;
               font: normal 50px Manrope-Regular, sans-serif;
               color: #d5d5d5;
             }
@@ -695,7 +695,7 @@ export default {
         }
 
         &.drag-over {
-          border: 2px dotted #f51355;
+          border: 2px dotted #58154B;
           min-height: 210px;
 
           .drop-cont {
@@ -785,7 +785,7 @@ export default {
     }
 
     .no-image {
-      border: dashed 1px #f51355;
+      border: dashed 1px #58154B;
       background-color: #ffffff;
     }
 
@@ -796,7 +796,7 @@ export default {
     .add-more {
       text-align: center;
       padding: 3rem;
-      border: dashed 1px #f51355;
+      border: dashed 1px #58154B;
       background-color: #ffffff;
       cursor: pointer;
       font: normal 15px Manrope-Regular, sans-serif;
@@ -812,7 +812,7 @@ export default {
       }
 
       &.drag-over {
-        border: 2px dotted #f51355;
+        border: 2px dotted #58154B;
       }
     }
   }
@@ -826,9 +826,9 @@ export default {
         .clear {
           background-color: #ffffff;
           font: 800 14px Manrope-Regular, sans-serif;
-          border: 1px solid #f51355;
+          border: 1px solid #58154B;
           padding: 0.5rem;
-          color: #f51355;
+          color: #58154B;
           cursor: pointer;
           margin-bottom: 0.5rem;
         }
@@ -858,7 +858,7 @@ export default {
     display: none !important;
   }
   .red-border {
-    border: 1px solid #f51355 !important;
+    border: 1px solid #58154B !important;
   }
 }
 </style>

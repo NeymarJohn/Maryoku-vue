@@ -61,7 +61,7 @@
                 <div class="d-flex justify-content-between">
                     <!-- sidebar__item__content -->
                     <div class="sidebar__item__details2 d-flex">
-                        <img class="" src="/static/icons/Group-21554.png">
+                        <img class="" src="/static/icons/Group 21554.png">
                         <div class="productLaunchParty">
                             <div v-if="commentComponent.planner">
                                 {{commentComponent.planner.name}}
@@ -94,7 +94,7 @@
                         <div class="d-flex sidebar__item__content2 justify-content-between">
                             <!-- <div class="d-flex sidebar__item__content"> -->
                                 <div class="sidebar__item__details d-flex">
-                                    <img class="" src="/static/icons/Group-21554.png">
+                                    <img class="" src="/static/icons/Group 21554.png">
                                     <div class="productLaunchParty">
                                         <!-- {{selectedProposal.vendor.eventCategory.fullTitle}} -->
                                         <div v-if="comment.planner">

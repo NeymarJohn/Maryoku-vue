@@ -137,7 +137,7 @@ export default {
         h3 {
           margin: 0 0 20px 0;
           text-transform: uppercase;
-          color: #f51355;
+          color: #641856;
           font: 800 30px Manrope-Regular, sans-serif;
         }
         p {

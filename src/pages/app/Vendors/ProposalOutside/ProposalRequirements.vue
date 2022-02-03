@@ -82,7 +82,7 @@ export default {
       this.isExpanded = !this.isExpanded;
     },
     getFileByTag(tag) {
-      const file = this.files.filter((f) => f.tag == tag);
+      const file = this.files.filter(f => f.tag == tag);
       if (file.length > 0) {
         return file[0].filename;
       } else {
@@ -110,17 +110,17 @@ export default {
     },
     optionalRequirements() {
       if (!this.requirements) return [];
-      const multiSelectionCategories = this.requirements.filter((item) => item.subCategory === "service");
+      const multiSelectionCategories = this.requirements.filter(item => item.subCategory === "service");
       let optionalRequirements = [];
-      multiSelectionCategories.forEach((category) => {
-        const selectedOptions = category.options.filter((item) => item.selected);
+      multiSelectionCategories.forEach(category => {
+        const selectedOptions = category.options.filter(item => item.selected);
         optionalRequirements = optionalRequirements.concat(selectedOptions);
       });
       return optionalRequirements;
     },
     //all services that this kind of vendor can provide
     vendorServices() {
-      const vendorCategoryService = businessCategories.find((item) => item.name === this.vendorCategory);
+      const vendorCategoryService = businessCategories.find(item => item.name === this.vendorCategory);
       if (vendorCategoryService) {
         return vendorCategoryService.categories;
       }
@@ -131,7 +131,7 @@ export default {
       return this.vendor.services;
     },
     services: {
-      get: function () {
+      get: function() {
         if (this.tableCategory === "cost")
           return this.$store.state.proposalForNonMaryoku.costServices[this.vendorCategory];
         else if (this.tableCategory === "included")
@@ -139,7 +139,7 @@ export default {
         else if (this.tableCategory === "extra")
           return this.$store.state.proposalForNonMaryoku.extraServices[this.vendorCategory];
       },
-      set: function (newServices) {
+      set: function(newServices) {
         if (this.tableCategory === "cost")
           this.$store.commit("proposalForNonMaryoku/setCostServices", {
             category: this.vendorCategory,
@@ -158,9 +158,9 @@ export default {
       },
     },
   },
-  watch:{
-    vendorProfileServices(){}
-  }
+  watch: {
+    vendorProfileServices() {},
+  },
 };
 </script>
 <style lang="scss" scoped>

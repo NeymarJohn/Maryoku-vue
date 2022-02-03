@@ -20,7 +20,7 @@
             class="input-value description-input"
             :class="{ isFilled: !!serviceItem }"
             type="text"
-            placeholder="Type name of element here"
+            placeholder="Type name of element her"
             @keypress="startSearch"
             @blur="stopSearch"
           />
