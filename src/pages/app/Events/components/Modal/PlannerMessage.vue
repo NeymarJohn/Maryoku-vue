@@ -49,10 +49,8 @@
           </div>
           <div class="md-layout-item pl-0 md-size-100 mt-50">
             <div class="d-flex align-center justify-content-center">
-              <md-button class="px-20 py-5 md-simple " @click="$emit('cancel')">
-                <span style="color: black"> Show me more suggestions</span>
-              </md-button>
-              <md-button class="px-20 py-5  md-primary " @click="$emit('cancel')">
+             
+              <md-button class="px-20 py-5  md-primary " @click="go()">
                 Find More Vendors
               </md-button>
             </div>
@@ -69,6 +67,11 @@ export default {
   components: {
     Modal,
   },
+  methods: {
+    go() {
+     this.$emit("goVendors")
+    }
+  }
 };
 </script>
 

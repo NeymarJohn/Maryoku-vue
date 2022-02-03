@@ -1,13 +1,13 @@
 <template>
   <div class="d-flex align-center" style="background-color: #ffedb7">
-    <div class="d-flex align-center py-30 font-size-16 text-center cursor-pointer w-min-250 color-black-middle border-right"
+    <div class="d-flex align-center py-20 font-size-16 text-center cursor-pointer w-min-250 color-black-middle border-right"
          :class="{'selected': selected === -1}"
          @click="select(-1)">
         <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
         Original
     </div>
     <div v-for="(version, idx) in versions"
-         class="version d-flex align-center cursor-pointer text-center py-30 font-size-16 text-center w-min-250 color-black-middle border-right"
+         class="version d-flex align-center cursor-pointer text-center py-20 font-size-16 text-center w-min-250 color-black-middle border-right"
          :class="{'selected': selected === idx}"
          @click="select(idx)">
         <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
@@ -103,7 +103,7 @@ export default {
     border-right: 2px solid #707070;
 }
 .selected{
-    background-color: #ffe67e;
+    background-color: #ffe79f;
 }
 input{
     background: transparent;

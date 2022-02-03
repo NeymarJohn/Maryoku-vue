@@ -89,7 +89,7 @@
     </modal>
     <modal v-if="importCustomersModal">
       <template slot="body">
-        <CustomerListModal @cancel="importCustomersModal = false" @save="saveCustomers" @fileUploaded="fileUploaded" />
+        <CustomerListModal @cancel="importCustomersModal = false" @save="saveCustomers" />
       </template>
     </modal>
     <modal v-if="DoneModal">
@@ -284,10 +284,6 @@ export default {
         this.renderInsight = true;
       });
     },
-    fileUploaded(){
-      this.loading = true;
-      this.init();
-    }
   },
   computed: {
     vendorData() {

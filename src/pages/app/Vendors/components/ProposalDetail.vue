@@ -1,409 +1,412 @@
 <template>
-  <section class="proposal-content">
-    <section class="proposal-info">
-      <section class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
-        <div class="event-info">
-          <div class="section-header d-flex justify-content-start">
-            <h3>Event Information & Details</h3>
-            <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
-              <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
-                This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
-              </span>
-              <span v-else class="whitspace-nowrap">
-                This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
-              </span>
+    <section class="proposal-content pb-40">
+      <section class="proposal-info">
+        <section class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
+          <div class="event-info">
+            <div class="section-header d-flex justify-content-start">
+              <h3>Event Information & Details</h3>
+              <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
+                <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
+                  This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
+                </span>
+                <span v-else class="whitspace-nowrap">
+                  This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
+                </span>
+              </div>
             </div>
+            <ul class="event-details mt-20">
+              <li class="event-details__item">
+                <label>Name</label>
+                <div class="info-text">
+                  {{ eventData.title || (eventData.concept ? eventData.concept.title : "Untitled event") }}
+                </div>
+              </li>
+              <li class="event-details__item">
+                <label>Date</label>
+                <div class="info-text" v-if="vendorProposal.nonMaryoku">
+                  {{ (eventData.startTime * 1000) | date("MMM Do YYYY") }}
+                </div>
+                <div class="info-text" v-else-if="!vendorProposal.suggestionDate">
+                  {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
+                </div>
+                <div v-else>
+                  {{ eventDate() }}
+                  <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
+                </div>
+              </li>
+              <li class="event-details__item">
+                <label>Guest Arrival Time</label>
+                <div class="info-text" v-if="vendorProposal.nonMaryoku">
+                  {{ (eventData.startTime * 1000) | date("MMM Do YYYY") }}
+                </div>
+                <div class="info-text" v-else>
+                  {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
+                </div>
+              </li>
+            </ul>
           </div>
-          <ul class="event-details mt-20">
-            <li class="event-details__item">
-              <label>Name</label>
-              <div class="info-text">
-                {{ eventData.title || (eventData.concept ? eventData.concept.title : "Untitled event") }}
-              </div>
-            </li>
-            <li class="event-details__item">
-              <label>Date</label>
-              <div class="info-text" v-if="vendorProposal.nonMaryoku">
-                {{ (eventData.startTime * 1000) | date("MMM Do YYYY") }}
-              </div>
-              <div class="info-text" v-else-if="!vendorProposal.suggestionDate">
-                {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
-              </div>
-              <div v-else>
-                {{ eventDate() }}
-                <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
-              </div>
-            </li>
-            <li class="event-details__item">
-              <label>Guest Arrival Time</label>
-              <div class="info-text" v-if="vendorProposal.nonMaryoku">
-                {{ (eventData.startTime * 1000) | date("MMM Do YYYY") }}
-              </div>
-              <div class="info-text" v-else>
-                {{ eventData.eventStartMillis | date("MMM Do YYYY") }}
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
+        </section>
 
-      <section class="proposal-body">
-        <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner') && eventData.owner">
-          Dear {{ eventData.owner.name }},
-        </h1>
-        <h1 class="font-size-30 text-capitalize" v-else-if="eventData.hasOwnProperty('customer')">
-          Dear {{ eventData.customer.name }},
-        </h1>
-        <p class="mt-10">
-          {{ vendorProposal.personalMessage }}
+        <section class="proposal-body">
+          <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner') && eventData.owner">
+            Dear {{ eventData.owner.name }},
+          </h1>
+          <h1 class="font-size-30 text-capitalize" v-else-if="eventData.hasOwnProperty('customer')">
+            Dear {{ eventData.customer.name }},
+          </h1>
+          <p class="mt-10">
+            {{ vendorProposal.personalMessage }}
 
-          <!-- <br />Sincerely,
+            <!-- <br />Sincerely,
                     <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
-        </p>
-        <div class="vision mt-30 font-size-22 mb-40">
-          <div class="font-bold">
-            <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
-            Our vision for your event
+          </p>
+          <div class="vision mt-30 font-size-22 mb-40">
+            <div class="font-bold">
+              <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
+              Our vision for your event
+            </div>
+            <p class="mt-10">{{ vendorProposal.eventVision }}</p>
           </div>
-          <p class="mt-10">{{ vendorProposal.eventVision }}</p>
-        </div>
-        <div class="proposal-images mb-40">
-          <div class="font-bold mb-10">Some references to the experience you will get from us</div>
-          <div class="html2pdf__page-break" />
-          <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
-            <template slot="prev">
-              <span class="prev handle-btn">
-                <md-icon>keyboard_arrow_left</md-icon>
-              </span>
-            </template>
+          <div class="proposal-images mb-40">
+            <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+            <div class="html2pdf__page-break" />
+            <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
+              <template slot="prev">
+                <span class="prev handle-btn">
+                  <md-icon>keyboard_arrow_left</md-icon>
+                </span>
+              </template>
 
-            <template v-if="vendorProposal.inspirationalPhotos">
-              <div v-for="item in vendorProposal.inspirationalPhotos.filter(item => !!item)" :key="item.url">
-                <img class="item" :src="item.url" />
-                <div class="mt-5">{{ item.caption }}</div>
-              </div>
-            </template>
-            <template slot="next">
-              <span class="next handle-btn">
-                <md-icon>keyboard_arrow_right</md-icon>
+              <template v-if="vendorProposal.inspirationalPhotos">
+                <div v-for="item in vendorProposal.inspirationalPhotos.filter(item => !!item)" :key="item.url">
+                  <img class="item" :src="item.url" />
+                  <div class="mt-5">{{ item.caption }}</div>
+                </div>
+              </template>
+              <template slot="next">
+                <span class="next handle-btn">
+                  <md-icon>keyboard_arrow_right</md-icon>
+                </span>
+              </template>
+            </carousel>
+          </div>
+          <div class="about-us mb-40">
+            <md-button class="md-red edit-btn md-simple" @click="showAboutUs = !showAboutUs">
+              <span class="color-red font-bold">
+                About Us <md-icon class="color-red">keyboard_arrow_right</md-icon>
               </span>
-            </template>
-          </carousel>
-        </div>
-        <div class="about-us mb-40">
-          <md-button class="md-red edit-btn md-simple" @click="showAboutUs = !showAboutUs">
-            <span class="color-red font-bold">
-              About Us <md-icon class="color-red">keyboard_arrow_right</md-icon>
-            </span>
-          </md-button>
-          <div class="about-content mt-10" v-if="showAboutUs">{{ vendorProposal.vendor.about.company }}</div>
-        </div>
-        <div class="contact-section mb-40">
-          <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
-          <ul class="contact-list_items d-flex justify-content-start">
-            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
-              <a href>
-                <img :src="`${submitProposalIcon}Asset 286.svg`" />
-                {{ vendorProposal.vendor.vendorMainEmail }}
-              </a>
-            </li>
-            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
-              <a href>
-                <img :src="`${submitProposalIcon}Asset 285.svg`" />
-                {{ vendorProposal.vendor.vendorAddressLine1 }}
-                {{ vendorProposal.vendor.vendorAddressLine2 }}
-              </a>
-            </li>
-            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-              <a href>
-                <img :src="`${submitProposalIcon}Asset 284.svg`" />
-                {{ vendorProposal.vendor.vendorMainPhoneNumber }}
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="social-section mb-30" v-if="isSocial()">
-          <div>Website & social</div>
-          <div class="items mt-10">
-            <div
-              class="item"
-              v-for="(s, sIndex) in socialMediaBlocks"
-              :key="sIndex"
-              :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
-            >
-              <a
-                v-if="vendorProposal.vendor.social[s.name]"
-                :href="vendorProposal.vendor.social[s.name]"
-                target="_blank"
+            </md-button>
+            <div class="about-content mt-10" v-if="showAboutUs">{{ vendorProposal.vendor.about.company }}</div>
+          </div>
+          <div class="contact-section mb-40">
+            <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
+            <ul class="contact-list_items d-flex justify-content-start">
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                <a href>
+                  <img :src="`${submitProposalIcon}Asset 286.svg`" />
+                  {{ vendorProposal.vendor.vendorMainEmail }}
+                </a>
+              </li>
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                <a href>
+                  <img :src="`${submitProposalIcon}Asset 285.svg`" />
+                  {{ vendorProposal.vendor.vendorAddressLine1 }}
+                  {{ vendorProposal.vendor.vendorAddressLine2 }}
+                </a>
+              </li>
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                <a href>
+                  <img :src="`${submitProposalIcon}Asset 284.svg`" />
+                  {{ vendorProposal.vendor.vendorMainPhoneNumber }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="social-section mb-30" v-if="isSocial()">
+            <div>Website & social</div>
+            <div class="items mt-10">
+              <div
+                class="item"
+                v-for="(s, sIndex) in socialMediaBlocks"
+                :key="sIndex"
+                :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
               >
-                <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
-                {{ vendorProposal.vendor.social[s.name] }}
-              </a>
+                <a
+                  v-if="vendorProposal.vendor.social[s.name]"
+                  :href="vendorProposal.vendor.social[s.name]"
+                  target="_blank"
+                >
+                  <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
+                  {{ vendorProposal.vendor.social[s.name] }}
+                </a>
+              </div>
             </div>
           </div>
+          <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
+            <div class="attachment-tag-list">
+              <div
+                class="attachment-tag"
+                v-for="(attachment, index) in attachments.filter(attachement => attachement.url)"
+                :key="index"
+              >
+                <img :src="`${$iconURL}common/pin-red.svg`" />
+                <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section class="proposal-section pricing-section">
+        <div class="proposal-section__title font-size-22 font-bold-extra px-40">
+          <img
+            src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
+            width="15"
+          />
+          Pricing & Details
+          <span class="font-regular font-size-16">*We work only with our catering</span>
         </div>
-        <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
-          <div class="attachment-tag-list">
-            <div
-              class="attachment-tag"
-              v-for="(attachment, index) in attachments.filter(attachement => attachement.url)"
-              :key="index"
-            >
-              <img :src="`${$iconURL}common/pin-red.svg`" />
-              <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
-            </div>
+        <div class="px-40 mt-20 mb-10">What would you like to take from our suggested services?</div>
+        <EventProposalPrice
+          :proposalData="vendorProposal"
+          :serviceCategory="vendorProposal.vendor.vendorCategory"
+          :key="`${vendorProposal.vendor.vendorCategory}-section`"
+          @changeAddedServices="updateAddedServices"
+          :mandatory="true"
+        ></EventProposalPrice>
+        <EventProposalPrice
+          v-for="service in this.vendorProposal.additionalServices"
+          :proposalData="vendorProposal"
+          :serviceCategory="service"
+          :key="`secondary-${service}-section`"
+          :mandatory="true"
+        ></EventProposalPrice>
+        <div
+          class="bundle-section d-flex justify-content-between align-center"
+          v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
+        >
+          <div>
+            <span class="font-size-30 font-bold">Bundle offer</span>
+            <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
+            <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
           </div>
+          <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
       </section>
-    </section>
-    <section class="proposal-section pricing-section">
-      <div class="proposal-section__title font-size-22 font-bold-extra px-40">
-        <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg" width="15" />
-        Pricing & Details
-        <span class="font-regular font-size-16">*We work only with our catering</span>
-      </div>
-      <div class="px-40 mt-20 mb-10">What would you like to take from our suggested services?</div>
-      <EventProposalPrice
-        :proposalData="vendorProposal"
-        :serviceCategory="vendorProposal.vendor.vendorCategory"
-        :key="`${vendorProposal.vendor.vendorCategory}-section`"
-        @changeAddedServices="updateAddedServices"
-        :mandatory="true"
-      ></EventProposalPrice>
-      <EventProposalPrice
-        v-for="service in this.vendorProposal.additionalServices"
-        :proposalData="vendorProposal"
-        :serviceCategory="service"
-        :key="`secondary-${service}-section`"
-        :mandatory="true"
-      ></EventProposalPrice>
-      <div
-        class="bundle-section d-flex justify-content-between align-center"
-        v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
-      >
-        <div>
-          <span class="font-size-30 font-bold">Bundle offer</span>
-          <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
-          <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
-        </div>
-        <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
-      </div>
-    </section>
-    <div class="card-section align-center px-20 py-30 mt-10" v-if="vendorProposal.vendor.seatingArrangement">
-      <div class="px-40">
-        <div class="d-flex justify-content-between align-center">
-          <div class="proposal-section__title">
-            <img :src="`${$iconURL}VendorsProposalPage/group-8249.svg`" width="50" />
-            <span class="px-5">Seating Arrangement </span>
-          </div>
-
-          <div>
-            <md-button class="md-simple" @click="isSeating = !isSeating">
-              <md-icon style="font-size: 40px !important">
-                {{ isSeating ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
-              </md-icon>
-            </md-button>
-          </div>
-        </div>
-        <div v-if="isSeating" class="value">
-          <div class="md-layout">
-            <div class="md-layout-item pl-0 md-size-100">
-              <h3 class="font-bold font-size-16">Vendor Suggestion:</h3>
-            </div>
-            <div class="md-layout-item pl-0 md-size-40">
-              <div class="ml-10">
-                <h2 class="font-bold font-size-16">‘Theatre’</h2>
-              </div>
-
-              <img src="/static/img/nn1.webp" alt="image" />
-            </div>
-            <div class="md-layout-item pl-0 md-size-40">
-              <div class="ml-10">
-                <h2 class="font-bold font-size-16">‘U shape’</h2>
-              </div>
-              <img src="/static/img/nn2.webp" alt="image" />
-            </div>
-            <div class="md-layout-item pl-0 md-size-100">
-              <div class="d-flex align-center">
-                <div class="d-flex align-center mr-10">
-                  <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
-                  <h2 class="font-bold font-size-22">Group Work Planned</h2>
-                </div>
-                <div
-                  class="mx-15"
-                  style=" width: 0;
-                     height: 40px;
-                  border: solid 1px #707070;"
-                ></div>
-                <div class="d-flex align-center">
-                  <div><span class="font-size-16 mx-5">Group size:</span></div>
-                  <div class="mx-5">
-                    <img :src="`${$iconURL}NewSubmitPorposal/Group 3485.svg`" />
-                  </div>
-                  <h2 class="font-size-22 mx-5">14-18</h2>
-                  <h2 class="font-size-18 mx-5">People</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <section
-      v-if="
-        vendorProposal.vendor.healthPolicy ||
-          (vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length)
-      "
-      class="proposal-section policy-section"
-    >
-      <div class="card-section align-center px-20 py-30">
+      <div class="card-section align-center px-20 py-30 mt-10" v-if="vendorProposal.vendor.seatingArrangement">
         <div class="px-40">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
-              <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5"> Health Protocol </span>
+              <img :src="`${$iconURL}VendorsProposalPage/group-8249.svg`" width="50" />
+              <span class="px-5">Seating Arrangement </span>
             </div>
+
             <div>
-              <md-button class="md-simple" @click="isEdit = !isEdit">
+              <md-button class="md-simple" @click="isSeating = !isSeating">
                 <md-icon style="font-size: 40px !important">
-                  {{ isEdit ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
+                  {{ isSeating ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
                 </md-icon>
               </md-button>
             </div>
           </div>
-          <div v-if="isEdit" class="value">
-            <div class="">
-              <template v-if="vendorProposal.vendor.healthPolicy">
-                <div class="mt-20 font-bold-extra">
-                  <span class="color-red">COVID 19</span>
-                  - Exceptional Policy
+          <div v-if="isSeating" class="value">
+            <div class="md-layout">
+              <div class="md-layout-item pl-0 md-size-100">
+                <h3 class="font-bold font-size-16">Vendor Suggestion:</h3>
+              </div>
+              <div class="md-layout-item pl-0 md-size-40">
+                <div class="ml-10">
+                  <h2 class="font-bold font-size-16">‘Theatre’</h2>
                 </div>
-                <p class="my-10">
-                  {{ vendorProposal.vendor.healthPolicy }}
-                </p>
-              </template>
-              <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
-                <div class="mt-30 font-bold-extra ml-5 ">Guaranteed with every staff member:</div>
-                <div class="md-layout mt-20">
+
+                <img src="/static/img/nn1.webp" alt="image" />
+              </div>
+              <div class="md-layout-item pl-0 md-size-40">
+                <div class="ml-10">
+                  <h2 class="font-bold font-size-16">‘U shape’</h2>
+                </div>
+                <img src="/static/img/nn2.webp" alt="image" />
+              </div>
+              <div class="md-layout-item pl-0 md-size-100">
+                <div class="d-flex align-center">
+                  <div class="d-flex align-center mr-10">
+                    <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
+                    <h2 class="font-bold font-size-22">Group Work Planned</h2>
+                  </div>
                   <div
-                    v-for="option in guaranteedOptions"
-                    class="md-layout-item md-size-30 py-10"
-                    :key="option.value"
-                    :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
-                  >
-                    <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                      <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
-                      {{ option.label }}
+                    class="mx-15"
+                    style=" width: 0;
+                     height: 40px;
+                  border: solid 1px #707070;"
+                  ></div>
+                  <div class="d-flex align-center">
+                    <div><span class="font-size-16 mx-5">Group size:</span></div>
+                    <div class="mx-5">
+                      <img :src="`${$iconURL}NewSubmitPorposal/Group 3485.svg`" />
+                    </div>
+                    <h2 class="font-size-22 mx-5">14-18</h2>
+                    <h2 class="font-size-18 mx-5">People</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section
+        v-if="
+          vendorProposal.vendor.healthPolicy ||
+            (vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length)
+        "
+        class="proposal-section policy-section"
+      >
+        <div class="card-section align-center px-20 py-30">
+          <div class="px-40">
+            <div class="d-flex justify-content-between align-center">
+              <div class="proposal-section__title">
+                <img :src="`${$iconURL}union-12.svg`" width="27" /> <span class="px-5"> Health Protocol </span>
+              </div>
+              <div>
+                <md-button class="md-simple" @click="isEdit = !isEdit">
+                  <md-icon style="font-size: 40px !important">
+                    {{ isEdit ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
+                  </md-icon>
+                </md-button>
+              </div>
+            </div>
+            <div v-if="isEdit" class="value">
+              <div class="">
+                <template v-if="vendorProposal.vendor.healthPolicy">
+                  <div class="mt-20 font-bold-extra">
+                    <span class="color-red">COVID 19</span>
+                    - Exceptional Policy
+                  </div>
+                  <p class="my-10">
+                    {{ vendorProposal.vendor.healthPolicy }}
+                  </p>
+                </template>
+                <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
+                  <div class="mt-30 font-bold-extra ml-5 ">Guaranteed with every staff member:</div>
+                  <div class="md-layout mt-20">
+                    <div
+                      v-for="option in guaranteedOptions"
+                      class="md-layout-item md-size-30 py-10"
+                      :key="option.value"
+                      :style="{ display: vendorProposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+                    >
+                      <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                        <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px" />
+                        {{ option.label }}
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="proposal-section policy-section mb-15 ">
+        <div class="card-section align-center px-20 py-30">
+          <div class="px-40">
+            <div class="d-flex justify-content-between align-center">
+              <div class="proposal-section__title">
+                <img :src="`${submitProposalIcon}Asset 287.svg`" width="27" /> <span class="px-5">Our Policy </span>
+              </div>
+
+              <div>
+                <md-button class="md-simple" @click="isPolicy = !isPolicy">
+                  <md-icon style="font-size: 40px !important">
+                    {{ isPolicy ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
+                  </md-icon>
+                </md-button>
+              </div>
+            </div>
+            <div v-if="isPolicy" class="value">
+              <div class="">
+                <div class="rules">
+                  <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                    <div class="item">{{ policy.name }}</div>
+                    <div class="item" v-if="policy.type === 'MultiSelection'">
+                      <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                        `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                      }}</span>
+                    </div>
+                    <div class="item" v-else-if="policy.type === 'Including'">
+                      <span class="mr-10" v-if="policy.value"> Yes </span>
+                      <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                    </div>
+                    <div class="item text-right" v-else>
+                      <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                      <span v-if="policy.type === 'Boolean'">
+                        <img
+                          v-if="policy.value === true"
+                          :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                          class="page-icon"
+                        />
+                        <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
+                        <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                      </span>
+                      <span v-else>
+                        <img
+                          class="page-icon"
+                          v-if="policy.value === true"
+                          :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                        />
+                        <img
+                          class="page-icon"
+                          v-else-if="policy.value === false"
+                          :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                        />
+                        <span v-else>{{ policy.value }}</span>
+                      </span>
+                      <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                      <span v-if="policy.isPercentage">%</span>
+                      <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                        {{ policy.attendees }} attendees
+                      </span>
                     </div>
                   </div>
                 </div>
-              </template>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="proposal-section policy-section pb-5">
-      <div class="card-section align-center px-20 py-30">
-        <div class="px-40">
-          <div class="d-flex justify-content-between align-center">
-            <div class="proposal-section__title">
-              <img :src="`${submitProposalIcon}Asset 287.svg`" width="27" /> <span class="px-5">Our Policy </span>
-            </div>
-
-            <div>
-              <md-button class="md-simple" @click="isPolicy = !isPolicy">
-                <md-icon style="font-size: 40px !important">
-                  {{ isPolicy ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
-                </md-icon>
-              </md-button>
-            </div>
-          </div>
-          <div v-if="isPolicy" class="value">
-            <div class="">
-              <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                  <div class="item">{{ policy.name }}</div>
-                  <div class="item" v-if="policy.type === 'MultiSelection'">
-                    <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                    }}</span>
-                  </div>
-                  <div class="item" v-else-if="policy.type === 'Including'">
-                    <span class="mr-10" v-if="policy.value"> Yes </span>
-                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                  </div>
-                  <div class="item text-right" v-else>
-                    <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                    <span v-if="policy.type === 'Boolean'">
-                      <img
-                        v-if="policy.value === true"
-                        :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                        class="page-icon"
-                      />
-                      <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
-                      <!-- {{ policy.value === true ? "Yes" : "No" }} -->
-                    </span>
-                    <span v-else>
-                      <img
-                        class="page-icon"
-                        v-if="policy.value === true"
-                        :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                      />
-                      <img
-                        class="page-icon"
-                        v-else-if="policy.value === false"
-                        :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
-                      />
-                      <span v-else>{{ policy.value }}</span>
-                    </span>
-                    <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
-                    <span v-if="policy.isPercentage">%</span>
-                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                      {{ policy.attendees }} attendees
-                    </span>
+                <div class="rules" v-if="additionalRules && additionalRules.length > 0">
+                  <h5 class="font-bold font-size-20">Additional Rules</h5>
+                  <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+                    <div class="item">Event must be {{ policy }}</div>
                   </div>
                 </div>
-              </div>
-              <div class="rules" v-if="additionalRules && additionalRules.length > 0">
-                <h5 class="font-bold font-size-20">Additional Rules</h5>
-                <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                  <div class="item">Event must be {{ policy }}</div>
+                <div class="side-label">
+                  <div class="label-value">Our cancellation approach</div>
                 </div>
-              </div>
-              <div class="side-label">
-                <div class="label-value">Our cancellation approach</div>
-              </div>
-              <div class="proposal-section__subtitle">
-                <div class="subtitle">We allow free cancellation until:</div>
-                <div class="desc">30 days before the event</div>
-              </div>
-              <CancellationPolicy></CancellationPolicy>
-              <div class="side-label">
-                <div class="label-value">Act of God</div>
-              </div>
-              <div class="rules">
-                <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
-                is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
-                authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
-                quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
-              </div>
-              <div class="signature-section">
-                <div class="signature-section__vendor">
-                  {{ vendorProposal.vendor.vendorDisplayName }}
+                <div class="proposal-section__subtitle">
+                  <div class="subtitle">We allow free cancellation until:</div>
+                  <div class="desc">30 days before the event</div>
                 </div>
-                <div class="signature-section__image">
-                  <img :src="vendorProposal.vendor.signature" />
+                <CancellationPolicy></CancellationPolicy>
+                <div class="side-label">
+                  <div class="label-value">Act of God</div>
+                </div>
+                <div class="rules">
+                  <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
+                  is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
+                  authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
+                  quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
+                </div>
+                <div class="signature-section">
+                  <div class="signature-section__vendor">
+                    {{ vendorProposal.vendor.vendorDisplayName }}
+                  </div>
+                  <div class="signature-section__image">
+                    <img :src="vendorProposal.vendor.signature" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
+        <md-icon>close</md-icon>
+      </md-button>
     </section>
-    <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
-      <md-icon>close</md-icon>
-    </md-button>
-  </section>
 </template>
 <script>
 import moment from "moment";
@@ -612,9 +615,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .proposal-content {
-  position: relative;
   text-align: left !important;
-  background-color: white;
+  position: relative;
+  background-color: #ffffff;
 
   .proposal-info {
     background: #fff;

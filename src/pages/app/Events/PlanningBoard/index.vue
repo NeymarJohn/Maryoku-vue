@@ -289,12 +289,11 @@ export default {
         .add(3, "days")
         .valueOf();
       this.$set(requirements, "expiredBusinessTime", expiredTime);
-      this.popup = true;
 
       await this.saveMainRequirements({ category, event: this.event, requirements });
 
       // popup notification if requirement is issued
-      if (this.getRequirements(category).isIssued) this.setOpen("REQUIREMENT");
+      if (this.getRequirements(category).isIssued) (this.popup = true), this.setOpen("REQUIREMENT");
     },
 
     async addNewCategory(category) {
