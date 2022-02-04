@@ -61,7 +61,7 @@
                 <div class="d-flex justify-content-between">
                     <!-- sidebar__item__content -->
                     <div class="sidebar__item__details2 d-flex">
-                        <img class="" src="/static/icons/Group-21554.png">
+                        <img class="" src="/static/icons/Group 21554.png">
                         <div class="productLaunchParty">
                             <div v-if="commentComponent.planner">
                                 {{commentComponent.planner.name}}
@@ -94,7 +94,7 @@
                         <div class="d-flex sidebar__item__content2 justify-content-between">
                             <!-- <div class="d-flex sidebar__item__content"> -->
                                 <div class="sidebar__item__details d-flex">
-                                    <img class="" src="/static/icons/Group-21554.png">
+                                    <img class="" src="/static/icons/Group 21554.png">
                                     <div class="productLaunchParty">
                                         <!-- {{selectedProposal.vendor.eventCategory.fullTitle}} -->
                                         <div v-if="comment.planner">
@@ -156,7 +156,7 @@
                         <span class="productLaunchParty" v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle">
                             {{proposal.vendor.eventCategory.fullTitle}}
                         </span>
-      
+
                         <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
                     </div>
                 </div>

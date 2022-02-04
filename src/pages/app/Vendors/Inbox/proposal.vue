@@ -47,7 +47,7 @@
             @change="changeVersion"
             @remove="removeVersion"></ProposalVersionsBar>
             <div class="proposal-container event-proposal" >
-                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
+                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep" :sh="true">
                 </EventProposalDetails>
             </div>
         </template>
