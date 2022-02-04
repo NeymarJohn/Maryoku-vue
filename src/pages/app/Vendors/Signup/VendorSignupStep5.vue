@@ -2,7 +2,7 @@
   <div class="vendor-signup-step5-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img  :src="`${iconPurple}Purple Icons/Icon_RECOMMENDATIONS(Vendor).svg`" />
+        <img :src="`${$iconURL}Vendor+Signup/recommendation.png`" />
         <h2>
           ADD <br />
           RECOMMENDATIONS
@@ -77,7 +77,7 @@
         </div>
         <div class="card">
           <div class="d-flex align-center">
-            <img :src="`${iconPurple}Purple Icons/Group 17549.svg`" class="mr-20" />
+            <img :src="`${$iconURL}Vendor+Signup/priview-recommedation.png`" class="mr-20" />
             <div class="flex-1">
               <div class="color-purple font-size-22 font-bold">
                 PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER
@@ -213,8 +213,6 @@ export default {
   },
   data() {
     return {
-      iconPurple: `${this.$iconURL}`,
-
       companyName: "",
       contactPersonName: "",
       email: "",

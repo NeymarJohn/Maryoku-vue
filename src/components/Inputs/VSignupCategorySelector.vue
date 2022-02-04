@@ -29,7 +29,7 @@
           />
         </div>
         <div class="d-flex align-center py-10  font-bold cursor-pointer" @click="addNewValue" style="color: #58154B">
-          <img class="mr-10" :src="`/static/icons/vendor/Icon_+.svg`"  />
+          <img class="mr-10" :src="`${$iconURL}VendorSignup/Group%209632.svg`" />
           <span v-if="field === 'vendorAddresses'">Add another address</span>
           <span v-else>Add another category</span>
         </div>

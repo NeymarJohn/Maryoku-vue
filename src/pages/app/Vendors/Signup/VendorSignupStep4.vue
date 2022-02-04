@@ -2,7 +2,7 @@
   <div class="vendor-signup-step4-wrapper">
     <div class="md-layout inside-container">
       <div class="left-side md-layout-item md-size-25">
-        <img :src="`${iconPurple}Purple Icons/Icon_Summary(Vendor).svg`"/>
+        <img :src="`${iconUrl}Group 5225 (2).svg`" />
         <h2>SUMMARY</h2>
         <p>This is a summary of your company's info which we'll use in future proposal creating</p>
         <h2>4/5</h2>
@@ -62,18 +62,12 @@
             </div>
             <div class="block">
               <div class="title">
-                <img
-                  :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`"
-                  width="30px"
-                />
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" width="30px"/>
                 About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <vendor-images-list
-              :images="[...vendor.images.filter(it => it != null), ...vendor.images.filter(it => it != null)]"
-              class="images"
-            ></vendor-images-list>
+            <vendor-images-list :images="[...vendor.images.filter(it => it != null), ...vendor.images.filter(it => it != null)]" class="images"></vendor-images-list>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
               <div class="items">
@@ -196,24 +190,16 @@
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
                 </div>
                 <div class="item text-right" v-else>
-                  <span
-                    v-if="
-                      policy.type === 'Number' &&
-                        !policy.isPercentage &&
-                        policy.unit !== 'hour' &&
-                        policy.unit !== 'none'
-                    "
-                    >$</span
-                  >
+                  <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour' && policy.unit !== 'none'">$</span>
                   <span v-if="policy.type === 'Boolean'">
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                    <img v-else :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`"/>
+                    <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                     <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                   </span>
                   <span v-else>
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                    <img v-else-if="policy.value === false" :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`"/>
-                    <span v-else-if="policy.unit === 'none'">{{ policy.desc }}</span>
+                    <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <span v-else-if="policy.unit === 'none'">{{policy.desc}}</span>
                     <span v-else>{{ policy.value | withComma }}</span>
                   </span>
                   <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
@@ -245,50 +231,46 @@
             <div class="dont-work">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
               <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ d.holiday }}
               </div>
               <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ dontWorkDays() }}
               </div>
               <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ dontWorkTime() }}
               </div>
             </div>
-            <div v-if="vendor.healthPolicy || (vendor.guaranteed && vendor.guaranteed.length)" class="healthy-policy">
+            <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
+                 class="healthy-policy" >
               <h5 class="d-flex align-center">
-                <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px" />
-                Health policy
-              </h5>
+                <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
+                Health policy</h5>
               <template v-if="vendor.healthPolicy">
-                <div class="rule font-bold-extra my-20">
-                  <span class="color-red">COVID 19</span>
-                  - Exceptional Policy
-                </div>
-                <p class="width-66">
-                  {{ vendor.healthPolicy }}
-                </p>
+                  <div class="rule font-bold-extra my-20">
+                      <span class="color-red">COVID 19</span>
+                      - Exceptional Policy
+                  </div>
+                  <p class="width-66">
+                    {{vendor.healthPolicy}}
+                  </p>
               </template>
               <template v-if="vendor.guaranteed && vendor.guaranteed.length">
                 <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
                 <div class="md-layout mt-20">
-                  <div
-                    v-for="option in guaranteedOptions"
-                    class="md-layout-item md-size-30 py-10"
-                    :key="option.value"
-                    :style="{ display: vendor.guaranteed.includes(option.value) ? '' : 'none' }"
-                  >
-                    <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                      <img class="mr-10" :src="`/static/icons/vendor/Icon_V.svg`" width="30px" />
-                      {{ option.label }}
+                    <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
+                         :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
+                        <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                            <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
+                            {{option.label}}
+                        </div>
                     </div>
-                  </div>
                 </div>
               </template>
             </div>
@@ -344,15 +326,13 @@
               <div
                 class="sign"
                 v-if="vendor.signature"
-                :style="
-                  `
+                :style="`
                   background-image: url(${vendor.signature});
                   width: 100%;
                   background-repeat: no-repeat;
                   height: 162px;
                   background-size: contain;
-                `
-                "
+                `"
               />
             </div>
           </div>
@@ -402,8 +382,6 @@ export default {
   data() {
     return {
       tabs: ["About", "Pricing", "Rules", "Policy", "Contact"],
-      iconPurple: `${this.$iconURL}`,
-
       socialMediaBlocks: [
         {
           name: "website",
@@ -562,7 +540,7 @@ export default {
   mounted() {
     console.log("vendorSignup.step4", this.vendor);
     if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
-      this.vendor.images.forEach(item => {
+      this.vendor.images.forEach((item) => {
         this.medias.push({
           thumb: item,
           src: item,
@@ -574,14 +552,14 @@ export default {
   methods: {
     setAttachment(attachment) {
       const defaultAttachments = Object.assign([], this.attachments);
-      const currentIndex = defaultAttachments.findIndex(a => a.name === attachment.name);
+      const currentIndex = defaultAttachments.findIndex((a) => a.name === attachment.name);
       defaultAttachments[currentIndex] = attachment;
       this.$store.commit("vendorSignup/setField", { field: "attachments", value: defaultAttachments });
       // let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
       // this.$store.dispatch("vendor/updateProfile", updateData);
     },
     addNewAttachment(file) {
-      S3Service.fileUpload(file, file.name, `vendors/attachments/${this.vendor.id}`).then(res => {
+      S3Service.fileUpload(file, file.name, `vendors/attachments/${this.vendor.id}`).then((res) => {
         const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
         attachments.push({
           name: file.name,
@@ -594,7 +572,7 @@ export default {
     },
     removeAttachment(attachment) {
       const defaultAttachments = this.attachments;
-      const currentIndex = defaultAttachments.findIndex(a => a.name === attachment.name);
+      const currentIndex = defaultAttachments.findIndex((a) => a.name === attachment.name);
       defaultAttachments[currentIndex].fileName = "";
       defaultAttachments[currentIndex].url = "";
       let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
@@ -608,7 +586,7 @@ export default {
     isSocial() {
       let isBlank = true;
 
-      _.each(this.vendor.social, s => {
+      _.each(this.vendor.social, (s) => {
         isBlank &= s === null;
       });
 
@@ -617,7 +595,7 @@ export default {
     getExtraPayItems() {
       console.log("getExtraPayItems");
       let extraPayItems = [];
-      _.each(this.vendor.services, item => {
+      _.each(this.vendor.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
           extraPayItems.push(item);
         }
@@ -626,7 +604,7 @@ export default {
     },
     getStartingFeeItems() {
       let startingFeeItems = [];
-      _.each(this.vendor.services, item => {
+      _.each(this.vendor.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && item.included) {
           startingFeeItems.push(item);
         }
@@ -666,14 +644,14 @@ export default {
       });
     },
     getCategoryIconByValue(value) {
-      return this.categoryNames.filter(c => c.value == value)[0].icon;
+      return this.categoryNames.filter((c) => c.value == value)[0].icon;
     },
     getCategoryNameByValue(value) {
-      return this.categoryNames.filter(c => c.value == value)[0].name;
+      return this.categoryNames.filter((c) => c.value == value)[0].name;
     },
     mergeStringItems(items) {
       let naItems = "";
-      _.each(items, n => {
+      _.each(items, (n) => {
         if (n.constructor.name == "Object") {
           naItems += `${capitalize(n.name)}s, `;
         } else {
@@ -685,18 +663,14 @@ export default {
     },
     dontWorkDays() {
       let selectedDates = "";
-      _.each(this.vendor.dontWorkDays, s => {
+      _.each(this.vendor.dontWorkDays, (s) => {
         selectedDates += `${s.date}, `;
       });
       selectedDates = selectedDates.substring(0, selectedDates.length - 2);
       return selectedDates;
     },
     dontWorkTime() {
-      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${
-        this.vendor.dontWorkTime.amPack.start
-      } ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${
-        this.vendor.dontWorkTime.amPack.end
-      }`;
+      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
 
     view() {
@@ -706,7 +680,7 @@ export default {
     },
     changeServiceItem(item) {
       console.log("changeServiceItem", item);
-      _.each(this.vendor.services, s => {
+      _.each(this.vendor.services, (s) => {
         if (s.label === item.label) {
           this.vendor.services[s] = item;
         }
@@ -731,26 +705,26 @@ export default {
     validPricingPolicy() {
       if (this.vendor.pricingPolicies)
         return this.vendor.pricingPolicies.filter(
-          item => item.value || item.desc || (item.type === "Including" && item.cost),
+          (item) => item.value || item.desc || (item.type === "Including" && item.cost),
         );
       return null;
     },
     validPolicy() {
       if (this.vendor.policies)
         return this.vendor.policies.filter(
-          item => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
         );
       return null;
     },
     attachments() {
       if (this.vendor.attachments && this.vendor.attachments.length > 0) return this.vendor.attachments;
       if (this.vendor.eventCategory.legalDocuments) {
-        return this.vendor.eventCategory.legalDocuments.map(legal => {
+        return this.vendor.eventCategory.legalDocuments.map((legal) => {
           return {
             name: legal,
             isRequired:
               this.vendor.eventCategory.mandatoryLegalDocs &&
-              this.vendor.eventCategory.mandatoryLegalDocs.findIndex(item => item === legal) >= 0,
+              this.vendor.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legal) >= 0,
             fileName: "",
           };
         });
@@ -761,7 +735,7 @@ export default {
   filters: {},
   watch: {
     vendor: {
-      handler: function(newVal) {
+      handler: function (newVal) {
         console.log("handler", newVal);
       },
       deep: true,
@@ -796,7 +770,7 @@ export default {
       }
       h3 {
         margin: 0;
-        color: #641856;
+        color: #641856;;
         font: bold 20px Manrope-Regular, sans-serif;
       }
     }
@@ -1110,7 +1084,7 @@ export default {
               }
             }
           }
-          .healthy-policy {
+          .healthy-policy{
             margin-top: 50px;
             padding-top: 20px;
             border-top: 1px solid #dddddd;

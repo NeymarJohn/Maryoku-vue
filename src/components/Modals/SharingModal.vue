@@ -47,7 +47,7 @@
                 <md-icon v-if="showEmailRoleEditor">keyboard_arrow_down</md-icon>
                 <md-icon v-else>keyboard_arrow_right</md-icon>
               </md-button>
-              <sharing-role-options v-if="showEmailRoleEditor" align="right"></sharing-role-options>
+              <sharing-role-options v-if="showEmailRoleEditor" @change="setEmailRole" :value="emailRole" align="right"></sharing-role-options>
             </div>
           </div>
           <div v-if="emails.length > 0">
@@ -70,7 +70,7 @@
     <template slot="footer">
       <template v-if="emails.length > 0">
         <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="sendEmail">Send</md-button>
+        <md-button class="md-red md-bold add-category-btn ml-10" @click="sendEmail">Send</md-button>
       </template>
       <template v-else>
         <md-button class="md-button md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
@@ -112,8 +112,10 @@ export default {
       showEmailRoleEditor: false,
       isSendingMessage: false,
       shareLink: "",
+      shareLinkWithEmail: "",
       role: "view",
       statusMessage: "",
+      emailRole : "view"
     };
   },
   created() {
@@ -132,6 +134,17 @@ export default {
       }
       return this.shareLink;
     },
+      generateShareLinkEmail() {
+          const tenantId = this.$authService.resolveTenantId();
+          if (this.page === 'event') {
+              this.shareLinkWithEmail = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.emailRole}&event=${
+                  this.$route.params.id
+              }`;
+          } else if(this.page === 'proposal') {
+              this.shareLinkWithEmail = `${location.protocol}//${location.host}/#/unregistered/proposals/${this.$route.params.proposalId}`
+          }
+          return this.shareLinkWithEmail;
+      },
     selectOption() {
       this.$emit("select", this.selectedOption, this.value);
     },
@@ -148,7 +161,11 @@ export default {
 
           params.emails = this.emails;
           params.message = this.message;
-          params.link = this.generateShareLink();
+          if(this.shareLinkWithEmail){
+              params.link = this.generateShareLinkEmail();
+          } else{
+              params.link = this.generateShareLink();
+          }
           params.eventId = this.$route.params.id;
 
       } else if(this.page === 'proposal') {
@@ -167,6 +184,11 @@ export default {
       this.showLinkRoleEditor = false;
       this.generateShareLink();
     },
+      setEmailRole(role) {
+          this.emailRole = role;
+          this.showLinkRoleEditor = false;
+          this.generateShareLinkEmail();
+      },
   },
 };
 </script>
