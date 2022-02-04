@@ -233,7 +233,7 @@
 <script>
 import _ from "lodash";
 import axios from "axios";
-import Papa from "papaparse";
+// import Papa from "papaparse";
 import vue2Dropzone from "vue2-dropzone";
 import Multiselect from "vue-multiselect";
 import S3Service from "@/services/s3.service";
@@ -361,8 +361,8 @@ export default {
     load() {
       const _this = this;
       this.readFile(output => {
-        _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
-        _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
+        // _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
+        // _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
         console.log("load",_this.sample,_this.csv)
       });
       this.upload = false;

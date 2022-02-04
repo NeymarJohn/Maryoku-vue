@@ -18,11 +18,16 @@
           </div>
         </div>
         <div class="right_text">
-          <div class="proposal-pointer-wrapper">
-            <img src="/static/icons/vendor/proposalBoard/proposal-pointer.svg" class="proposal-pointer">
-          </div>
+          <img src="/static/icons/vendor/proposalBoard/proposal-pointer.svg" class="proposal-pointer">
             <proposal-pie-chart
-              :completed="86.2"
+              :chartData="chartData"
+              :columns="1"
+              :options="{
+              width: 130,
+              height: 135,
+              strokWidth: 25,
+              direction: 'row'
+              }"
               class="proposal-pie-chart"
             ></proposal-pie-chart>
           <div>
@@ -34,7 +39,6 @@
     </template>
     <template slot="body">
       <div class="graph-block">
-        <div></div>
         <proposal-chart :chartData="incomeChartData" class=""></proposal-chart>
       </div>
       <div class="send-message-block">
@@ -83,27 +87,16 @@ export default {
         { label: "7 Feb", value: 90, future: true },
         { label: "8 Feb", value: 0, future: true },
       ],
+      chartData: [
+        { title: "Application", value: 6, color: "#2cde6b" },
+        { title: "Winning", value: 1, color: "#9a9898" },
+      ],
     };
   },
 
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
-.proposal-pointer{
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  transform-origin:15% 85%;
-  transform: rotate(23deg);
-}
-
-.proposal-pointer-wrapper{
-  position: relative;
-  width: 40px;
-  height: 40px;
-  left: 97px;
-  top: 50px;
-}
 </style>
