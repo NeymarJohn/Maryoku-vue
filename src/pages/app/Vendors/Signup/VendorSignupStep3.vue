@@ -2,7 +2,8 @@
   <div class="vendor-signup-step3-wrapper">
     <div class="inside-container md-layout">
       <div class="left-side md-layout-item md-size-25">
-        <img :src="`${iconUrl}Group 5224 (2).svg`" />
+        <img :src="`${iconPurple}Purple Icons/Icon_Disclamer(Vendpr).svg`" />
+
         <h2>
           DISCLAMER &
           <br />POLICY
@@ -97,7 +98,7 @@
                     <img
                       :src="`${iconUrl}Group 5489 (4).svg`"
                       @click="updateNa(n)"
-                      v-if="vendor.notAllowed && vendor.notAllowed.filter((nt) => nt.value == n.value).length > 0"
+                      v-if="vendor.notAllowed && vendor.notAllowed.filter(nt => nt.value == n.value).length > 0"
                     />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else @click="updateNa(n)" />
                     <span @click="updateNa(n)">{{ n.name }}</span>
@@ -105,8 +106,8 @@
                       style="margin-top: 10px"
                       v-if="
                         vendor.notAllowed &&
-                        vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0 &&
-                        n.value == 'Other'
+                          vendor.notAllowed.filter(nt => nt.value == 'Other').length > 0 &&
+                          n.value == 'Other'
                       "
                     >
                       <input type="text" placeholder="Type vendor category..." />
@@ -134,12 +135,12 @@
             </div>
             <div class="checks-cont mt-2">
               <div class="check-item" @click="workAllDay = true">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="workAllDay" />
+                <img :src="`/static/icons/vendor/Icon_V.svg`" v-if="workAllDay" />
                 <span class="unchecked" v-else></span>
                 <span>I work all the time</span>
               </div>
               <div class="check-item" @click="workAllDay = false">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="!workAllDay" />
+                <img :src="`/static/icons/vendor/Icon_V.svg`" v-if="!workAllDay" />
                 <span class="unchecked" v-else></span>
                 <span>There are times I don't work ></span>
               </div>
@@ -161,7 +162,6 @@
                     :date-format="'yyyy-mm-dd'"
                     v-model="date"
                     ref="calendar"
-                    
                     @changedMonth="changeMonth"
                     @changedYear="changeYear"
                     v-on:dayClicked="updateDontWorkDays($event)"
@@ -174,17 +174,17 @@
               <div class="check-list ml-40">
                 <div class="block">
                   <div class="check-field" @click="exEvery = !exEvery">
-                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exEvery" />
+                    <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="exEvery" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                     <span :class="{ checked: exEvery }">Every:</span>
                   </div>
                   <div class="cdropdown ml-30" v-if="exEvery" @click="isWeekday = !isWeekday" style="margin-left: 3rem">
                     <span>Select Day</span>
-                    <img :src="`${iconUrl}Asset 519.svg`" />
+                    <md-icon class="font-size-30 color-vendor">keyboard_arrow_down</md-icon>
                   </div>
                   <div class="cdropdown-cont" v-if="isWeekday && exEvery" style="margin-left: 30px">
                     <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
-                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedWeekdays.includes(w)" />
+                      <img :src="`/static/icons/vendor/Icon_V.svg`" v-if="selectedWeekdays.includes(w)" />
                       <span class="unchecked" v-else></span>
                       {{ w }}
                     </div>
@@ -192,19 +192,19 @@
                 </div>
                 <div class="block border">
                   <div class="check-field" @click="exDont = !exDont">
-                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exDont" />
+                    <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="exDont" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                     <span :class="{ checked: exDont }">I don't work on these holidays:</span>
                   </div>
                   <div class="cdropdown" v-if="exDont" @click="isReligion = !isReligion" style="margin-left: 30px">
                     <span>Religion</span>
-                    <img :src="`${iconUrl}Asset 519.svg`" />
+                    <md-icon class="font-size-30 color-vendor">keyboard_arrow_down</md-icon>
                   </div>
                   <div class="cdropdown-cont" v-if="isReligion && exDont" style="margin-left: 30px">
                     <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
                       <img
-                        :src="`${iconUrl}Group 5479 (2).svg`"
-                        v-if="selectedReligion.find((sr) => sr.name === r.name)"
+                        :src="`/static/icons/vendor/Icon_V.svg`"
+                        v-if="selectedReligion.find(sr => sr.name === r.name)"
                       />
                       <span class="unchecked" v-else></span>
                       {{ r.name }}
@@ -214,9 +214,9 @@
                     class="holidays"
                     v-for="(r, rIndex) in religions"
                     :key="rIndex"
-                    :class="{ 'mt-1': selectedReligion.find((sr) => sr.name === r.name) }"
+                    :class="{ 'mt-1': selectedReligion.find(sr => sr.name === r.name) }"
                   >
-                    <template v-if="exDont && isReligion && selectedReligion.find((sr) => sr.name === r.name)">
+                    <template v-if="exDont && isReligion && selectedReligion.find(sr => sr.name === r.name)">
                       <div class="dont">
                         <img :src="`${iconUrl}Asset 524.svg`" />
                       </div>
@@ -224,14 +224,14 @@
                         <ul>
                           <li>
                             <div class="check-field" @click="selectAllHolidays(r)">
-                              <img :src="`${iconUrl}Group 6258.svg`" v-if="isAllHolidays(r)" />
+                              <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="isAllHolidays(r)" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                               <span :class="{ checked: isAllHolidays(r) }">{{ `All ${r.name}` }}</span>
                             </div>
                           </li>
                           <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
                             <div class="check-field" @click="updateExDonts(r, h)">
-                              <img :src="`${iconUrl}Group 6258.svg`" v-if="h.selected" />
+                              <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="h.selected" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                               <span :class="{ checked: h.selected }">{{ h.holiday }}</span>
                             </div>
@@ -244,7 +244,7 @@
                 <div class="block">
                   <div class="title">Additional Limitations</div>
                   <div class="check-field" @click="exLimitation = !exLimitation">
-                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exLimitation" />
+                    <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="exLimitation" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                     <span :class="{ checked: exLimitation }">Everyday between these hours:</span>
                   </div>
@@ -309,7 +309,9 @@
             </div>
             <div class="md-layout my-10">
               <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33 " :key="option.value">
-                <md-checkbox v-model="vendor.guaranteed" :value="option.value" class="md-vendor">{{option.label}}</md-checkbox>
+                <md-checkbox v-model="vendor.guaranteed" :value="option.value" class="md-vendor">{{
+                  option.label
+                }}</md-checkbox>
               </div>
             </div>
           </div>
@@ -357,6 +359,7 @@ export default {
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconPurple: `${this.$iconURL}`,
       allowThirdVendor: null,
       workAllDay: false,
       date: {
@@ -457,7 +460,7 @@ export default {
       pricingPolicies: VendorPricingPolicy,
       vendorPolicies: {},
       vendorPricingPolicies: {},
-      guaranteedOptions: GuaranteedOptions
+      guaranteedOptions: GuaranteedOptions,
     };
   },
   methods: {
@@ -469,15 +472,15 @@ export default {
       let day = moment(holiday.start).date();
 
       console.log("updateExDonts", day, date);
-      if (this.markedDates.find((m) => m === date)) {
-        this.markedDates = this.markedDates.filter((m) => m !== date);
+      if (this.markedDates.find(m => m === date)) {
+        this.markedDates = this.markedDates.filter(m => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
       } else {
         this.markedDates.push(date);
       }
 
-      if (this.vendor.exDonts.find((h) => h.holiday === holiday.holiday)) {
-        this.vendor.exDonts.filter((h) => h.holiday !== holiday.holiday);
+      if (this.vendor.exDonts.find(h => h.holiday === holiday.holiday)) {
+        this.vendor.exDonts.filter(h => h.holiday !== holiday.holiday);
       } else {
         this.vendor.exDonts.push({
           date: holiday.start,
@@ -495,7 +498,7 @@ export default {
     updateNa(item) {
       if (!this.notAllowed) this.notAllowed = [];
       if (this.notAllowed.includes(item)) {
-        this.notAllowed = this.notAllowed.filter((n) => n != item);
+        this.notAllowed = this.notAllowed.filter(n => n != item);
       } else {
         this.notAllowed.push(item);
       }
@@ -503,7 +506,7 @@ export default {
     },
     noteRule(item) {
       if (this.noteRules.includes(item)) {
-        this.noteRules = this.noteRules.filter((n) => n != item);
+        this.noteRules = this.noteRules.filter(n => n != item);
       } else {
         this.noteRules.push(item);
       }
@@ -511,7 +514,7 @@ export default {
     updateWeekdays(item) {
       // console.log("updateWeekdays", item);
       if (this.selectedWeekdays.includes(item)) {
-        this.selectedWeekdays = this.selectedWeekdays.filter((s) => s != item);
+        this.selectedWeekdays = this.selectedWeekdays.filter(s => s != item);
       } else {
         this.selectedWeekdays.push(item);
       }
@@ -520,8 +523,8 @@ export default {
     },
     updateReligion(item) {
       console.log("updateReligion", item);
-      if (this.selectedReligion.length && this.selectedReligion.find((s) => s.name === item.name)) {
-        this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
+      if (this.selectedReligion.length && this.selectedReligion.find(s => s.name === item.name)) {
+        this.selectedReligion = this.selectedReligion.filter(s => s.name !== item.name);
         this.updateAllExDonts(item, false);
       } else {
         this.selectedReligion.push(item);
@@ -532,10 +535,10 @@ export default {
       let day = moment(e.date).date();
       let date = moment(e.date).format("YYYY-M-D");
       let selectedDates = this.date.selectedDates;
-      if (this.markedDates.find((m) => m === date)) {
-        selectedDates = this.date.selectedDates.filter((s) => s.date !== e.date);
+      if (this.markedDates.find(m => m === date)) {
+        selectedDates = this.date.selectedDates.filter(s => s.date !== e.date);
 
-        this.markedDates = this.markedDates.filter((m) => m !== date);
+        this.markedDates = this.markedDates.filter(m => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
       }
       // console.log("selectedDays", day, e, this.markedDates, this.date);
@@ -577,7 +580,7 @@ export default {
 
       console.log("weekDays", weekDays);
       if (weekDays) {
-        weekDays.forEach((wd) => {
+        weekDays.forEach(wd => {
           res.push(wds[(wds.indexOf(capitalize(wd.slice(0, 2))) + 6) % 7]);
         });
       }
@@ -612,19 +615,19 @@ export default {
         this.$root.$emit("update-vendor-value", "policies", this.vendorPricingPolicies.items);
       }
     },
-    selectAllHolidays(data){
+    selectAllHolidays(data) {
       this.updateAllExDonts(data, !this.isAllHolidays(data));
     },
 
     updateAllExDonts(data, value) {
-      data.holidays.map((it) => {
+      data.holidays.map(it => {
         it.selected = value;
         let day = moment(it.start).date();
         let date = moment(it.start).format("YYYY-M-D");
         if (value) {
           this.markedDates.push(date);
         } else {
-          this.markedDates = this.markedDates.filter((m) => m !== date);
+          this.markedDates = this.markedDates.filter(m => m !== date);
           $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
         }
 
@@ -635,19 +638,19 @@ export default {
             religion: data.name,
           });
         } else {
-          console.log('updateAllExDonts', it.holiday);
-          this.vendor.exDonts = this.vendor.exDonts.filter((e) => e.holiday !== it.holiday);
+          console.log("updateAllExDonts", it.holiday);
+          this.vendor.exDonts = this.vendor.exDonts.filter(e => e.holiday !== it.holiday);
         }
       });
-      console.log('updateAllExDonts', this.vendor.exDonts);
+      console.log("updateAllExDonts", this.vendor.exDonts);
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     isAllHolidays(data) {
-      return data.holidays.every((it) => it.selected);
+      return data.holidays.every(it => it.selected);
     },
-    init: async function () {
+    init: async function() {
       // set vendorPricingPolicies from initial pricing policies
-      let vendorPricingPolicies = this.pricingPolicies.find((p) => p.category === this.vendor.vendorCategory);
+      let vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPricingPolicies with saved vendor
       if (this.vendor.pricingPolicies && this.vendor.pricingPolicies.length) {
@@ -660,15 +663,15 @@ export default {
               this.$set(it, "isExtraService", vendorPricingPolicies.items[idx].isExtraService);
               this.$set(it, "extraService", vendorPricingPolicies.items[idx].extraService);
             }
-            if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
+            if (it.type == "Boolean" && !it.hasOwnProperty("value")) {
               this.$set(it, "value", false);
             }
           }
         });
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
-        this.vendorPricingPolicies.items.map((it) => {
-          if (it.type == 'Boolean') {
+        this.vendorPricingPolicies.items.map(it => {
+          if (it.type == "Boolean") {
             this.$set(it, "value", false);
           }
         });
@@ -676,21 +679,21 @@ export default {
       // console.log("vendor.price.policy", this.vendorPricingPolicies);
 
       // set vendorPolicies from initial policies
-      let vendorPolicies = this.policies.find((p) => p.category === this.vendor.vendorCategory);
+      let vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPolices with saved vendor
       if (this.vendor.policies && this.vendor.policies.length) {
         this.$set(this.vendorPolicies, "items", this.vendor.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
-          if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
+          if (it.type == "Boolean" && !it.hasOwnProperty("value")) {
             this.$set(it, "value", false);
           }
         });
       } else {
         this.vendorPolicies = vendorPolicies;
-        this.vendorPolicies.items.map((it) => {
-          if (it.type == 'Boolean') {
+        this.vendorPolicies.items.map(it => {
+          if (it.type == "Boolean") {
             this.$set(it, "value", false);
           }
         });
@@ -713,16 +716,16 @@ export default {
       }
       // console.log('holidays', this.religions);
       if (this.vendor.exDonts && this.vendor.exDonts.length) {
-        this.religions.map((r) => {
-          r.holidays.map((h) => {
-            h.selected = this.vendor.exDonts.findIndex((e) => e.holiday === h.holiday) !== -1;
+        this.religions.map(r => {
+          r.holidays.map(h => {
+            h.selected = this.vendor.exDonts.findIndex(e => e.holiday === h.holiday) !== -1;
           });
         });
       }
 
       // set selectedWeekdays from saved vendor
       if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
-        this.selectedWeekdays = this.vendor.selectedWeekdays.map((item) => capitalize(item));
+        this.selectedWeekdays = this.vendor.selectedWeekdays.map(item => capitalize(item));
         this.exEvery = true;
       }
 
@@ -731,7 +734,7 @@ export default {
         this.$set(this.date, "selectedDates", this.vendor.dontWorkDays);
         if (this.vendor.dontWorkDays.length > 0) {
           this.markedDates = [];
-          _.each(this.vendor.dontWorkDays, (sd) => {
+          _.each(this.vendor.dontWorkDays, sd => {
             this.markedDates.push(sd.date);
           });
         }
@@ -739,7 +742,7 @@ export default {
 
       //
       if (this.vendor.exDonts && this.vendor.exDonts.length) {
-        this.vendor.exDonts.map((h) => {
+        this.vendor.exDonts.map(h => {
           // console.log("exdonts", moment(h.date).format("YYYY-M-D"));
           this.markedDates.push(moment(h.date).format("YYYY-M-D"));
         });
@@ -753,63 +756,151 @@ export default {
     },
 
     renderCalendar() {
-      $(".vfc-day").each(function (index, day) {
+      $(".vfc-day").each(function(index, day) {
         if (
-          $(day).find("span.vfc-span-day").hasClass("vfc-marked") ||
-          $(day).find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
+          $(day)
+            .find("span.vfc-span-day")
+            .hasClass("vfc-marked") ||
+          $(day)
+            .find("span.vfc-span-day")
+            .hasClass("vfc-cursor-not-allowed")
         ) {
           if (
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-marked")) ||
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-              $(day).prev().find("span.vfc-cursor-not-allowed").hasClass("vfc-cursor-not-allowed")) ||
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-marked")) ||
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed"))
+            ($(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") &&
+              $(day)
+                .prev()
+                .find("span.vfc-span-day")
+                .hasClass("vfc-marked")) ||
+            ($(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") &&
+              $(day)
+                .prev()
+                .find("span.vfc-cursor-not-allowed")
+                .hasClass("vfc-cursor-not-allowed")) ||
+            ($(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed") &&
+              $(day)
+                .prev()
+                .find("span.vfc-span-day")
+                .hasClass("vfc-marked")) ||
+            ($(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed") &&
+              $(day)
+                .prev()
+                .find("span.vfc-span-day")
+                .hasClass("vfc-cursor-not-allowed"))
           ) {
-            $(day).find("span.vfc-span-day").removeClass("vfc-end-marked");
-            $(day).find("span.vfc-span-day").removeClass("vfc-start-marked");
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
-            $(day).find("span.vfc-span-day").addClass("selected");
+            $(day)
+              .find("span.vfc-span-day")
+              .removeClass("vfc-end-marked");
+            $(day)
+              .find("span.vfc-span-day")
+              .removeClass("vfc-start-marked");
+            $(day)
+              .find("div.vfc-base-start")
+              .remove();
+            $(day)
+              .find("div.vfc-base-end")
+              .remove();
+            $(day)
+              .find("span.vfc-span-day")
+              .addClass("selected");
           }
 
           if (
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") ||
-              $(day).next().find("span.vfc-span-day").hasClass("vfc-marked")) &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
+            ($(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed") ||
+              $(day)
+                .next()
+                .find("span.vfc-span-day")
+                .hasClass("vfc-marked")) &&
+            !$(day)
+              .prev()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") &&
+            !$(day)
+              .prev()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed")
           ) {
-            $(day).find("span.vfc-span-day").addClass("vfc-start-marked");
+            $(day)
+              .find("span.vfc-span-day")
+              .addClass("vfc-start-marked");
             if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
           }
 
           if (
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-            ($(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") ||
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed"))
+            !$(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") &&
+            !$(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed") &&
+            ($(day)
+              .prev()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") ||
+              $(day)
+                .prev()
+                .find("span.vfc-span-day")
+                .hasClass("vfc-cursor-not-allowed"))
           ) {
             // console.log('vfc-end-mark', day)
-            $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
+            $(day)
+              .find("span.vfc-span-day")
+              .addClass("vfc-end-marked");
             if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
           }
 
           if (
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
+            !$(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") &&
+            !$(day)
+              .prev()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-marked") &&
+            !$(day)
+              .next()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed") &&
+            !$(day)
+              .prev()
+              .find("span.vfc-span-day")
+              .hasClass("vfc-cursor-not-allowed")
           ) {
             // console.log("alone", day);
-            $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
+            $(day)
+              .find("span.vfc-span-day")
+              .addClass("vfc-end-marked");
+            $(day)
+              .find("div.vfc-base-start")
+              .remove();
+            $(day)
+              .find("div.vfc-base-end")
+              .remove();
           }
         } else {
-          $(day).find("div.vfc-base-start").remove();
-          $(day).find("div.vfc-base-end").remove();
+          $(day)
+            .find("div.vfc-base-start")
+            .remove();
+          $(day)
+            .find("div.vfc-base-end")
+            .remove();
         }
       });
     },
@@ -868,7 +959,7 @@ export default {
       }
       h3 {
         margin: 0;
-        color: #58154B;
+        color: #58154b;
         font: bold 20px Manrope-Regular, sans-serif;
       }
     }
@@ -1060,8 +1151,8 @@ export default {
       /deep/ .vfc-arrow-right {
         width: 10px;
         height: 10px;
-        color: #58154B;
-        border-color: #58154B;
+        color: #58154b;
+        border-color: #58154b;
         border-top: 3px solid;
       }
       /deep/ .vfc-arrow-left {
@@ -1082,26 +1173,26 @@ export default {
       }
       /deep/ .vfc-base-start,
       .vfc-base-end {
-        background: #58154B;
+        background: #58154b;
         color: #ffffff;
       }
       /deep/ span.vfc-span-day {
         &.vfc-marked {
-          background-color: #58154B;
+          background-color: #58154b;
           color: #ffffff;
 
           &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-            background-color: #58154B !important;
+            background-color: #58154b !important;
           }
         }
 
         &.vfc-cursor-not-allowed {
           color: #fff !important;
-          background-color: #58154B;
+          background-color: #58154b;
           z-index: 1;
 
           &.selected:before {
-            background-color: #58154B !important;
+            background-color: #58154b !important;
             top: 0;
             left: 0;
             position: absolute;
@@ -1113,7 +1204,7 @@ export default {
         }
       }
       /deep/ .vfc-span-day.vfc-start-marked {
-        background-color: #58154B;
+        background-color: #58154b;
         color: #ffffff;
         z-index: 200;
 
@@ -1129,25 +1220,25 @@ export default {
         }
       }
       /deep/ .vfc-week .vfc-day .vfc-base-end {
-        background-color: #58154B;
+        background-color: #58154b;
         color: #ffffff;
       }
       /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-hovered {
-        background-color: #58154B;
+        background-color: #58154b;
         color: #ffffff;
       }
       /deep/ .vfc-today {
         background-color: #ffd9e4;
-        color: #58154B;
+        color: #58154b;
         font: 600 14px Manrope-Regular, sans-serif;
       }
 
       .vfc-select-start {
-        background: linear-gradient(90deg, #ffffff 50%, #58154B 50%);
+        background: linear-gradient(90deg, #ffffff 50%, #58154b 50%);
       }
 
       .vfc-half-end {
-        background: linear-gradient(90deg, #58154B 50%, #ffffff 50%);
+        background: linear-gradient(90deg, #58154b 50%, #ffffff 50%);
       }
     }
     .check-list {
@@ -1389,7 +1480,7 @@ export default {
               font: 800 16px Manrope-Regular, sans-serif;
               cursor: pointer;
               &.note {
-                color: #58154B;
+                color: #58154b;
               }
               &.cancel {
                 color: #050505;

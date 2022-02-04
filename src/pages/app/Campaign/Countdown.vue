@@ -2,6 +2,8 @@
   <div class="coundown-campaign">
     <div class="p-50">
       <div class="font-size-30 font-bold-extra text-transform-capitalize">send your guests a fun countdown</div>
+      <div>
+      </div>
       <div class="countdown-cover-image mt-50">
         <img :src="coverImage" />
         <div class="countdown-guests d-flex align-center p-20">

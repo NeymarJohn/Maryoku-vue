@@ -16,21 +16,21 @@
                     <div class=" d-flex justify-content-center align-item-center">
                         <div class="md-small-hide">
                             <p class="start-communicating">
-                                LET'S START TALKING!
+                                LET'S START COMMUNICATING..
                             </p>
                         </div>
                     </div>
                     <div class=" d-flex justify-content-center align-item-center">
                         <div class="md-small-hide">
                             <p class="to-start">
-                                Click on one of the planners on the left to respond to an existing message, or start a completely new conversation.
+                                To start communication, click on one of the planer on the left, or start a new conversation. more information
                             </p>
                         </div>
                     </div>
                     <div class=" d-flex justify-content-center align-item-center">
                         <div class="md-small-hide">
-                            <div class="md-vendor lets-begin" @click="$emit('show')">
-                                <a class="lets-text" >Let's Go</a>
+                            <div class="md-vendor lets-begin">
+                                <a class="lets-text" @click="$emit('show')">Let's Begin</a>
                             </div>
                         </div>
                     </div>

@@ -362,24 +362,8 @@ export default {
             subCat.items.forEach(item => {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
-              const camelized = this.camelize(capitalized);
-              const profileService = this.profileServices[camelized];
+              const profileService = this.profileServices[this.camelize(capitalized)];
               const requestItemByPlanner = null;
-
-              if (camelized === 'customService') {
-                const customServiceItems = profileService.data;
-                customServiceItems.forEach(service_item => {
-                  if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
-                    items.push({
-                      description: service_item.name.charAt(0).toUpperCase() + service_item.name.slice(1),
-                      qty: 1,
-                      included: false,
-                      price: `${service_item.price}`,
-                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-                    });
-                  }
-                })
-              }
 
               if (item.available) {
                 item.available.forEach(availableItem => {
@@ -399,7 +383,6 @@ export default {
                   }
                 });
               }
-
               if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
                 items.push({
                   description: capitalized,

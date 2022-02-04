@@ -1,14 +1,14 @@
 <template>
   <div class="md-layout event-campaign-section booking-section">
-      <comment-editor-panel
-          v-if="showCommentEditorPanel"
-          :commentComponents="commentComponents"
-          @saveComment="saveComment"
-          @updateComment="updateComment"
-          @deleteComment="deleteComment"
-          @updateCommentComponent="updateCommentComponent"
-      >
-      </comment-editor-panel>
+    <comment-editor-panel
+      v-if="showCommentEditorPanel"
+      :commentComponents="commentComponents"
+      @saveComment="saveComment"
+      @updateComment="updateComment"
+      @deleteComment="deleteComment"
+      @updateCommentComponent="updateCommentComponent"
+    >
+    </comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
@@ -20,7 +20,7 @@
       <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
     </div>
     <div class="campaign-content md-layout-item md-size-100 mt-30">
-      <loader :active="isLoading"/>
+      <loader :active="isLoading" />
       <div class="campaign-content-tab d-flex mb-40">
         <div
           class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
@@ -33,7 +33,7 @@
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                  <p>{{ campaignTabs[1].tooltip }}</p>
+                <p>{{ campaignTabs[1].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -49,7 +49,7 @@
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                  <p>{{ campaignTabs[2].tooltip }}</p>
+                <p>{{ campaignTabs[2].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -65,7 +65,7 @@
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                  <p>{{ campaignTabs[3].tooltip }}</p>
+                <p>{{ campaignTabs[3].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -81,7 +81,7 @@
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                  <p>{{ campaignTabs[4].tooltip }}</p>
+                <p>{{ campaignTabs[4].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -299,7 +299,7 @@ import { mapActions, mapGetters } from "vuex";
 import { Tabs, Modal } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import { CommentMixins, ShareMixins } from "@/mixins";
 const SaveDate = () => import("./SaveDate");
 const Rsvp = () => import("./Rsvp");
 const Countdown = () => import("./Countdown");
@@ -322,7 +322,7 @@ import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import FeedbackList from "./components/FeedbackList";
 import VueElementLoading from "vue-element-loading";
-import {Loader} from "@/components";
+import { Loader } from "@/components";
 const defaultSettings = {
   phone: {
     selected: false,
@@ -468,7 +468,11 @@ export default {
       if (coverImage && coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
-        let fileUpload = await S3Service.fileUpload(fileObject, `${this.event.id}-${campaignType}`, "campaigns/cover-images");
+        let fileUpload = await S3Service.fileUpload(
+          fileObject,
+          `${this.event.id}-${campaignType}`,
+          "campaigns/cover-images",
+        );
         coverImage = fileUpload;
       }
       let referenceUrl = "";
@@ -498,7 +502,7 @@ export default {
       });
       return new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
-          .then((res) => {
+          .then(res => {
             this.$store.commit("event/setEventData", res.item.event);
             this.isLoading = false;
             resolve();
@@ -545,7 +549,7 @@ export default {
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true,
-      ).then((res) => {});
+      ).then(res => {});
       Swal.fire({
         title: `You will receive a preview campaign email soon!`,
         buttonsStyling: false,
@@ -588,7 +592,7 @@ export default {
   },
   created() {
     this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
-    this.getCampaigns({ event: this.event }).then((campaigns) => {
+    this.getCampaigns({ event: this.event }).then(campaigns => {
       this.campaigns = campaigns;
       this.setDefaultSettings();
     });

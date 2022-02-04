@@ -72,14 +72,11 @@ const ResetPassword = () => import("@/pages/app/Planner/ResetPassword.vue");
 const SignOut = () => import("@/pages/app/Planner/SignOut.vue");
 const SignedIn = () => import("@/pages/app/Planner/SignedIn.vue");
 const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
-
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
 const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
 const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
-
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
-
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout")
 
 let testUI = {

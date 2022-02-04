@@ -63,7 +63,6 @@
 
         <div class="form-group  mt-30  md-layout-item pl-0 md-size-100 pb-20">
           <vue-dropzone
-          id="drop"
             ref="csv"
             :options="dropzoneOptions"
             :useCustomSlot="true"
@@ -163,7 +162,11 @@
             <div>
               <md-button
                 class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="showPreview()">Continue</md-button
+                @click="
+                  header = false;
+                  preview = true;
+                "
+                >Continue</md-button
               >
             </div>
           </div>
@@ -243,7 +246,7 @@ export default {
   props: {
     events: {
       type: Array,
-      default: () => [],
+      default: [],
     },
   },
   components: {
@@ -262,6 +265,8 @@ export default {
     sample: null,
     selected: null,
     csv: null,
+    done: false,
+
     upload: true,
     header: false,
     done: false,
@@ -277,7 +282,6 @@ export default {
     },
     showError: false,
     errorMessage: "",
-    url: "https://api-dev.maryoku.com/1/customersCSV",
   }),
   created() {
     this.hasHeaders = this.headers;
@@ -304,14 +308,9 @@ export default {
     close() {
       this.$emit("cancel");
     },
-    async handleAdded(file) {
-      // this.csv = file;
-      // this.fileName = file.name;
-      let data = {
-        vendorId:this.vendorData.id,
-        file: await getBase64(file)
-      }
-      this.submit(data);
+    handleAdded(file) {
+      this.csv = file;
+      this.fileName = file.name;
     },
     async fileAdded(file) {
       const extension = file.type.split("/")[1];
@@ -322,24 +321,21 @@ export default {
       this.$emit("save", item);
       this.preview = false;
     },
-    submit(data) {
+    submit() {
       const _this = this;
+      this.form.csv = this.buildMappedCsv();
 
       if (this.url) {
         axios
-          .post(this.url, data)
+          .post(this.url, this.form)
           .then(response => {
-            // _this.callback(response);
-            if(response.data.status){
-              this.close();
-              this.emit('fileUploaded');
-            }
+            _this.callback(response);
           })
           .catch(response => {
-            // _this.catch(response);
+            _this.catch(response);
           })
           .finally(response => {
-            // _this.finally(response);
+            _this.finally(response);
           });
       } else {
         _this.callback(this.form.csv);
@@ -363,7 +359,6 @@ export default {
       this.readFile(output => {
         _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
         _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
-        console.log("load",_this.sample,_this.csv)
       });
       this.upload = false;
       this.header = true;
@@ -379,11 +374,6 @@ export default {
         reader.onerror = function() {};
       }
     },
-    showPreview(){
-      this.form.csv = this.buildMappedCsv();
-      this.header = false;
-      this.preview = true;
-    }
   },
   watch: {
     map: {
@@ -393,7 +383,7 @@ export default {
             return newVal.hasOwnProperty(item);
           });
 
-          // this.submit();
+          this.submit();
         }
       },
       deep: true,
@@ -406,9 +396,6 @@ export default {
     preRow() {
       // this.form.csv.shift();
       // return this.form.csv
-    },
-    vendorData() {
-      return this.$store.state.vendor.profile;
     },
   },
 };
