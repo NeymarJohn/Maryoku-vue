@@ -277,7 +277,7 @@ export default {
         isComplimentary: false,
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
-  // this.suggestedItems.filter((item) => )
+
       if ( price !== this.selectedItem.price ) {
         this.showAskSaveChangeModal = true;
       } else {
