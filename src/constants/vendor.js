@@ -288,10 +288,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -792,10 +792,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -1147,10 +1147,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -1395,10 +1395,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -1599,10 +1599,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -1894,10 +1894,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -2082,10 +2082,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -2435,10 +2435,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -2708,10 +2708,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               }
@@ -2954,10 +2954,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -3168,10 +3168,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },
@@ -3304,10 +3304,10 @@ export const businessCategories = [
         name: "Custom service",
         subCategories: [
           {
-            name: "",
+            name: "custom service",
             items: [
               {
-                name: "",
+                name: "custom service",
                 type: 'custom_service',
                 value: null,
               },

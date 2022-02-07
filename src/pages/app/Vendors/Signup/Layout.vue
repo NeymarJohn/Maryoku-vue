@@ -17,16 +17,14 @@
           <md-button
             v-if="step != 6"
             @click="scrollToTop()"
-            class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
+            class="md-button md-button md-simple md-just-icon md-theme-default md-vendor custom_scroll_btn md-theme-default"
           >
-            <span>
-              <img :src="`${iconsUrl}Asset 602.svg`" />
-            </span>
+            <md-icon class="md-vendor font-size-30">keyboard_arrow_up</md-icon>
           </md-button>
         </div>
         <div class="right">
           <md-button class="save md-vendor-signup md-simple md-vendor md-outlined" @click="saveDraft()">
-            <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
+            <img :src="`${iconPurple}Purple Icons/Icon_Save.svg`" class="label-icon mr-10" />
             Save for later
           </md-button>
           <md-button class="approve md-vendor-signup md-vendor" @click="next">{{ nextLabel }}</md-button>
@@ -73,13 +71,15 @@ import { mapMutations, mapGetters } from "vuex";
 import VendorSignupState from "./state";
 
 const components = {
-    Modal: () => import('@/components/Modal.vue'),
-    VSignupSteps: () => import('./VSignupSteps.vue'),
-}
+  Modal: () => import("@/components/Modal.vue"),
+  VSignupSteps: () => import("./VSignupSteps.vue"),
+};
 export default {
   components,
   data() {
     return {
+      iconPurple: `${this.$iconURL}`,
+
       savedItModal: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -100,32 +100,29 @@ export default {
           this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
           this.$set(this.vendor, "isEditing", true);
           this.setLoading(true);
-          try{
-              const res = await this.$store.dispatch("vendorSignup/saveVendor", this.vendor)
+          try {
+            const res = await this.$store.dispatch("vendorSignup/saveVendor", this.vendor);
+            this.setEditing(true);
+            this.setStep(1);
+          } catch (e) {
+            const params = {};
+            params.companyName = this.vendor.companyName;
+            const vendors = await this.$store.dispatch("vendorSignup/searchVendor", params);
+
+            console.log("vendors", vendors);
+
+            if (vendors.length) {
+              this.setVendor(vendors[0]);
               this.setEditing(true);
-              this.setStep(1);
+              this.setStep(0);
+              this.isCompletedWizard = false;
 
-          }catch (e) {
-              const params = {}
-              params.companyName =  this.vendor.companyName;
-              const vendors = await this.$store
-                  .dispatch("vendorSignup/searchVendor", params)
-
-              console.log('vendors', vendors);
-
-              if(vendors.length) {
-                  this.setVendor(vendors[0]);
-                  this.setEditing(true);
-                  this.setStep(0);
-                  this.isCompletedWizard = false;
-
-                  this.$router.push(`/vendor/edit/${vendors[0].id}`);
-              }
+              this.$router.push(`/vendor/edit/${vendors[0].id}`);
+            }
           }
         } else {
-
         }
-          this.setLoading(false);
+        this.setLoading(false);
         this.scrollToTop();
       }
     },
@@ -136,7 +133,7 @@ export default {
         const title = "Success to update!";
         new Vendors({ ...this.vendor, isEditing: false })
           .save()
-          .then((res) => {
+          .then(res => {
             Swal.fire({
               title,
               buttonsStyling: false,
@@ -153,7 +150,7 @@ export default {
               }
             });
           })
-          .catch((error) => {});
+          .catch(error => {});
       } else {
         this.setStep(this.step + 1);
       }
@@ -175,20 +172,20 @@ export default {
       const title = "Success to save for later!";
       new Vendors({ ...this.vendor, isEditing: true })
         .save()
-        .then((res) => {
+        .then(res => {
           Swal.fire({
             title,
             buttonsStyling: false,
             confirmButtonClass: "md-button md-success",
           }).then(() => {});
         })
-        .catch((error) => {});
+        .catch(error => {});
     },
     hideModal() {
       this.$store.dispatch("vendorSignup/resetStatus");
     },
     camelize(str) {
-      let temp = str.replace(/\W+(.)/g, function (match, chr) {
+      let temp = str.replace(/\W+(.)/g, function(match, chr) {
         return chr.toUpperCase();
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
@@ -207,14 +204,14 @@ export default {
       };
 
       let registeredUser = await this.$store.dispatch("auth/register", tenantUser);
-      let query = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
+      let query = new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false });
       let res = await query.save();
 
       // send email to vendor to notify the customer decline the proposal.
       await this.$http.post(
-              `${process.env.SERVER_URL}/1/vendors/sendEmail`,
-              { type: "created", vendorId: this.vendor.id },
-              { headers: this.$auth.getAuthHeader() },
+        `${process.env.SERVER_URL}/1/vendors/sendEmail`,
+        { type: "created", vendorId: this.vendor.id },
+        { headers: this.$auth.getAuthHeader() },
       );
 
       this.isCompletedWizard = true;
@@ -238,17 +235,16 @@ export default {
             };
 
             this.$store.dispatch("auth/login", userData).then(
-                    () => {
-                      this.$router.push(`/vendor/dashboard`);
-                    },
-                    (error) => {
-                      this.$router.push(`/vendor/signin`);
-                    },
+              () => {
+                this.$router.push(`/vendor/dashboard`);
+              },
+              error => {
+                this.$router.push(`/vendor/signin`);
+              },
             );
           }
         }
       });
-
     },
   },
   beforeCreate() {
@@ -333,9 +329,9 @@ export default {
       text-align: center;
 
       &.approve {
-        border: 1px solid #58154B;
+        border: 1px solid #58154b;
         color: #ffffff;
-        background-color: #58154B;
+        background-color: #58154b;
 
         &.disabled {
           box-shadow: none;
@@ -379,8 +375,8 @@ export default {
       .right {
         a {
           &.save {
-            color: #58154B;
-            border: 1px solid #58154B;
+            color: #58154b;
+            border: 1px solid #58154b;
             margin-right: 40px;
             font: bold 20px Manrope-Regular, sans-serif;
             border-radius: 3px;
@@ -401,7 +397,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #58154B;
+        color: #58154b;
 
         img {
           width: 55px;
@@ -442,11 +438,16 @@ export default {
       padding: 10px 40px 40px 40px;
     }
   }
+
+  .custom_scroll_btn {
+    border-radius: 50%;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18) !important;
+  }
   .cool {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #58154B;
+    background-color: #58154b;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;

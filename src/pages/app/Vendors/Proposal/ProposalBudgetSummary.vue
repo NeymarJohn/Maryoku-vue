@@ -174,7 +174,7 @@
               :defaultNegotiation="negotiationDiscount"
               :defaultTax="defaultTax"
               field="discount"
-              :non-maryoku="true"
+              :non-maryoku="false"
               @saveDiscount="saveDiscount('discount', $event)"
           >
           </ItemForm>
@@ -184,7 +184,7 @@
               :defaultNegotiation="negotiationDiscount"
               :defaultTax="defaultTax"
               field="negotiation"
-              :non-maryoku="true"
+              :non-maryoku="false"
               @saveDiscount="saveDiscount('negotiation', $event)"
           >
           </ItemForm>
@@ -194,8 +194,8 @@
               :defaultNegotiation="negotiationDiscount"
               :defaultTax="defaultTax"
               field="tax"
-              :non-maryoku="true"
-              @saveDiscount="saveDiscount('tax', $event)"
+              :non-maryoku="false"
+              @saveDiscount="saveTax('tax', $event)"
           ></ItemForm>
         <div class="item bundle" v-if="isBundleDiscount">
           <div class="element">
@@ -508,10 +508,19 @@ export default {
     },
 
     totalPrice() {
+      // console.log('Info for calc totalPrice')
+      // console.log('totalPriceBeforeDiscount ' , this.totalPriceBeforeDiscount)
+      // console.log('defaultDiscount ' , this.defaultDiscount)
+      // console.log('defaultDiscount.price ' , this.defaultDiscount.price)
+      // console.log('defaultTax ' , this.defaultTax)
+      // console.log('defaultTax.price  ' , this.defaultTax.price )
+      // console.log('bundleDiscount.isApplied  ' , this.bundleDiscount.isApplied )
+      // console.log('bundleDiscount.price  ' , this.defaultTax.price )
+
       return (
         this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.defaultDiscount ? ((this.defaultDiscount.percentage * this.totalPriceBeforeDiscount)/100): 0) +
+        Number(this.defaultTax ? this.defaultTax.price : 0) -
         (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
       );
     },
@@ -556,6 +565,7 @@ export default {
       return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
     negotiationDiscount(){
+      console.log('negotiationDiscount', this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false});
       return this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
     },
   },

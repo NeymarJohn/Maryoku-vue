@@ -358,6 +358,8 @@ export default {
         requirements.special.push(item);
       }
       console.log('save', this.period);
+        console.log('save', this.period);
+        
       this.$emit("save", {
         category: this.selectedCategory.key,
         requirements: {

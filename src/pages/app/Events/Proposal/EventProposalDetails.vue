@@ -587,9 +587,8 @@
         </md-button>
       </div>
     </div>
-
-    <div v-if="proposal.status === 5 || proposal.status === '5'">
-      <MessageModal v-if="showMessage" @cancel="showMessage = false" />
+    <div v-if="proposal.status === 5 && !sh">
+      <MessageModal @cancel="showMessage = false" @goVendors="go()" />
     </div>
   </div>
 </template>
@@ -623,6 +622,12 @@ const components = {
 export default {
   components,
   props: {
+    sh: {
+      type: Boolean,
+      default: false,
+
+
+    },
     proposal: {
       type: Object,
       default: () => {},
@@ -651,7 +656,7 @@ export default {
   data() {
     return {
       storageIcon: `${this.$resourceURL}storage/icons/`,
-      showMessage: true,
+      showMessage: false,
       showSeatingAr: false,
       isHealth: false,
       isSeating: false,
@@ -705,6 +710,9 @@ export default {
         return this.getCategory(service).title;
       });
       return serviceNames.join(" + ");
+    },
+    go() {
+      this.$router.push("/vendor/offer/" + this.proposal.id);
     },
     getCategory(key) {
       return this.categories.find(item => item.key === key);

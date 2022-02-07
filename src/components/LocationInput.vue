@@ -31,7 +31,7 @@ export default {
     inputStyle: String,
     theme: {
       type: String,
-      default: "red",
+      default: "purple",
     },
   },
   data() {

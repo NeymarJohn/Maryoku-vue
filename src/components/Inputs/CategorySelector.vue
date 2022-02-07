@@ -21,7 +21,7 @@
           <div class="d-flex align-center">
             <img
               class="mr-10"
-              :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+              :src="theme === 'purple' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
               v-if="_includes(selectedCategory, category)"
             />
             <span class="unchecked" v-else></span>
