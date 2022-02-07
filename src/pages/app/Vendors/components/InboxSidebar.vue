@@ -61,7 +61,7 @@
                 <div class="d-flex justify-content-between">
                     <!-- sidebar__item__content -->
                     <div class="sidebar__item__details2 d-flex">
-                        <img class="" src="/static/icons/Group 21554.png">
+                        <img class="" src="/static/icons/Group-21554.png">
                         <div class="productLaunchParty">
                             <div v-if="commentComponent.planner">
                                 {{commentComponent.planner.name}}
@@ -94,7 +94,7 @@
                         <div class="d-flex sidebar__item__content2 justify-content-between">
                             <!-- <div class="d-flex sidebar__item__content"> -->
                                 <div class="sidebar__item__details d-flex">
-                                    <img class="" src="/static/icons/Group 21554.png">
+                                    <img class="" src="/static/icons/Group-21554.png">
                                     <div class="productLaunchParty">
                                         <!-- {{selectedProposal.vendor.eventCategory.fullTitle}} -->
                                         <div v-if="comment.planner">
@@ -156,12 +156,12 @@
                         <span class="productLaunchParty" v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle">
                             {{proposal.vendor.eventCategory.fullTitle}}
                         </span>
-
+      
                         <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
                     </div>
                 </div>
                 <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
-                <button class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(proposal,true)" v-if="proposal.unread_count == 0 && proposal.commentComponent.length">Full Discussion</button>
+                <button class="md-button md-vendor md-theme-default sidebar__item__btn" @click="fullDiscussion=true" v-if="proposal.unread_count == 0 && proposal.commentComponent.length">Full Discussion</button>
                 <span class="unread-count" v-if="proposal.unread_count">{{proposal.unread_count}}</span>
             </div>
         </div>
@@ -288,11 +288,8 @@ export default {
     },
     methods: {
         ...mapMutations("comment", ["setSelectedProposal"]),
-        changeProposal(proposal,fullDiscussion = false) {
+        changeProposal(proposal) {
             this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
-            setTimeout(() => {
-                this.fullDiscussion = fullDiscussion;
-            },100)
         },
         getViewCount(commentComponents = []) {
             let count = 0;

@@ -224,14 +224,15 @@
           ? 0
           : 1; // 0 : planner, 1: vendor
       const planner_loaders = [
-        "/static/icons/loader/circular.gif",
-       
+        "/static/icons/loader/Bus.gif",
+        "/static/icons/loader/Screen.gif",
+        "/static/icons/loader/Venue.gif",
       ];
       console.log("page", page);
       const vendor_loader = "/static/icons/loader/vendor.gif";
 
       var img = document.getElementById("maryoku_loader");
-      img.src = !page ? planner_loaders[Math.ceil(Math.random() * 10) % 1] : vendor_loader;
+      img.src = !page ? planner_loaders[Math.ceil(Math.random() * 10) % 3] : vendor_loader;
     </script>
 
     <script async defer src="https://apis.google.com/js/api.js"></script>

@@ -2,7 +2,7 @@
   <div class="vendor-signup-step5-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img  :src="`${iconPurple}Purple Icons/Icon_RECOMMENDATIONS(Vendor).svg`" />
+        <img :src="`${$iconURL}Vendor+Signup/recommendation.png`" />
         <h2>
           ADD <br />
           RECOMMENDATIONS
@@ -69,7 +69,7 @@
             </div>
           </div>
           <div>
-            <md-button class="edit-btn md-simple md-vendor" @click="addAnotherRecommendation">
+            <md-button class="edit-btn md-simple md-red" @click="addAnotherRecommendation">
               <md-icon class="color-red font-size-24">add_circle_outline</md-icon>
               Add Another Recommendation
             </md-button>
@@ -77,18 +77,16 @@
         </div>
         <div class="card">
           <div class="d-flex align-center">
-            <img :src="`${iconPurple}Purple Icons/Group 17549.svg`" class="mr-20" />
+            <img :src="`${$iconURL}Vendor+Signup/priview-recommedation.png`" class="mr-20" />
             <div class="flex-1">
-              <div class="color-purple font-size-22 font-bold">
-                PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER
-              </div>
-              <div class="color-purple font-size-16 mt-10">This is what your recommender will get in our email</div>
+              <div class="color-red font-size-22 font-bold">PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER</div>
+              <div class="color-red font-size-16 mt-10">This is what your recommender will get in our email</div>
             </div>
-            <div @click="open">
-              <md-icon class="color-purple font-size-40">
+            <a @click="open">
+              <md-icon class="color-red font-size-40">
                 {{ opened ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
               </md-icon>
-            </div>
+            </a>
           </div>
           <div v-if="opened" class="card-content">
             <h2 class="person-name">
@@ -146,7 +144,7 @@
       }
       h3 {
         margin: 0;
-        color: #641856;
+        color: #f51355;
         font: bold 20px Manrope-Regular, sans-serif;
       }
     }
@@ -213,8 +211,6 @@ export default {
   },
   data() {
     return {
-      iconPurple: `${this.$iconURL}`,
-
       companyName: "",
       contactPersonName: "",
       email: "",

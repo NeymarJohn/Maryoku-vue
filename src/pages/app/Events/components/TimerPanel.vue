@@ -18,19 +18,18 @@
       <div class="font-bold font-size-14">Waiting reply</div>
     </template>
     <template v-else-if="status === 2">
-      <div class="button-wrap">
-        <md-button class="maryoku-btn " :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled
-          ><span style="color: gray">Ask for more time</span></md-button
+      <div class="button-wrapper">
+        <md-button class="maryoku-btn md-simple" :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled
+          >Ask for more time</md-button
         >
       </div>
     </template>
-
     <div v-else-if="section !== 'card'" class="button-wrapper">
       <md-button
-        class="maryoku-btn md-simple "
+        class="maryoku-btn md-simple"
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
         @click="updateExpireTime"
-        ><span>Ask for more time</span></md-button
+        >Ask for more time</md-button
       >
     </div>
   </div>
@@ -106,20 +105,6 @@ export default {
   .button-wrapper {
     background-color: white !important;
     margin: auto;
-
-    width: max-content;
-    .md-button {
-      background-color: white !important;
-      &:hover {
-        background-color: white !important;
-      }
-    }
-  }
-  .button-wrap {
-    background-color: white !important;
-    margin: auto;
-    opacity: 0.5;
-
     width: max-content;
     .md-button {
       background-color: white !important;

@@ -63,7 +63,6 @@
 
         <div class="form-group  mt-30  md-layout-item pl-0 md-size-100 pb-20">
           <vue-dropzone
-          id="drop"
             ref="csv"
             :options="dropzoneOptions"
             :useCustomSlot="true"
@@ -163,13 +162,18 @@
             <div>
               <md-button
                 class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="showPreview()">Continue</md-button
+                @click="
+                  header = false;
+                  preview = true;
+                "
+                >Continue</md-button
               >
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="position-relative" v-if="preview">
       <div class="md-layout">
         <div class="md-layout-item pl-0 md-size-90">
@@ -232,7 +236,7 @@
 <script>
 import _ from "lodash";
 import axios from "axios";
-// import Papa from "papaparse";
+import Papa from "papaparse";
 import vue2Dropzone from "vue2-dropzone";
 import Multiselect from "vue-multiselect";
 import S3Service from "@/services/s3.service";
@@ -242,7 +246,7 @@ export default {
   props: {
     events: {
       type: Array,
-      default: () => [],
+      default: [],
     },
   },
   components: {
@@ -258,10 +262,11 @@ export default {
     map: {},
     mapFields: ["ContactFullName", "email", "PhoneNumber", "BusinessName", "ServiceType"],
     hasHeaders: true,
-    sample: [],
+    sample: null,
     selected: null,
     csv: null,
-    csv2: [],
+    done: false,
+
     upload: true,
     header: false,
     done: false,
@@ -277,7 +282,6 @@ export default {
     },
     showError: false,
     errorMessage: "",
-    url: "https://api-dev.maryoku.com/1/customersCSV",
   }),
   created() {
     this.hasHeaders = this.headers;
@@ -304,14 +308,9 @@ export default {
     close() {
       this.$emit("cancel");
     },
-    async handleAdded(file) {
+    handleAdded(file) {
       this.csv = file;
       this.fileName = file.name;
-      let data = {
-        vendorId:this.vendorData.id,
-        file: await getBase64(file)
-      }
-      this.submit(data);
     },
     async fileAdded(file) {
       const extension = file.type.split("/")[1];
@@ -322,38 +321,21 @@ export default {
       this.$emit("save", item);
       this.preview = false;
     },
-    submit(data) {
+    submit() {
       const _this = this;
+      this.form.csv = this.buildMappedCsv();
 
       if (this.url) {
         axios
-          .post(this.url, data)
+          .post(this.url, this.form)
           .then(response => {
-            if(response.data){
-                const { data } = response.data;
-
-                this.sample[0] = this.csv2[0] = _.map(data[0], (label, key) => {
-                    return key;
-                });
-
-                for( let index = data.length - 1; index >= 0; index--) {
-                    this.csv2.push(_.map(data[index], (label, key) => {
-                        return label;
-                    }));
-                }
-            }
-            // _this.callback(response);
-            if(response.data.status){
-              this.close();
-              this.emit('fileUploaded');
-            }
+            _this.callback(response);
           })
-          .catch(error => {
-              console.log('error', error)
-            // _this.catch(response);
+          .catch(response => {
+            _this.catch(response);
           })
-          .finally(res => {
-            // _this.finally(response);
+          .finally(response => {
+            _this.finally(response);
           });
       } else {
         _this.callback(this.form.csv);
@@ -361,8 +343,8 @@ export default {
     },
     buildMappedCsv() {
       const _this = this;
-      let mycsv = this.hasHeaders ? _.drop(this.csv2) : this.csv2;
-      return _.map(mycsv, row => {
+      let csv = this.hasHeaders ? _.drop(this.csv) : this.csv;
+      return _.map(csv, row => {
         let newRow = {};
 
         _.forEach(_this.map, (column, field) => {
@@ -375,8 +357,8 @@ export default {
     load() {
       const _this = this;
       this.readFile(output => {
-        // _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
-        // _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
+        _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
+        _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
       });
       this.upload = false;
       this.header = true;
@@ -392,11 +374,6 @@ export default {
         reader.onerror = function() {};
       }
     },
-    showPreview(){
-      this.form.csv = this.buildMappedCsv();
-      this.header = false;
-      this.preview = true;
-    }
   },
   watch: {
     map: {
@@ -406,7 +383,7 @@ export default {
             return newVal.hasOwnProperty(item);
           });
 
-          // this.submit();
+          this.submit();
         }
       },
       deep: true,
@@ -419,9 +396,6 @@ export default {
     preRow() {
       // this.form.csv.shift();
       // return this.form.csv
-    },
-    vendorData() {
-      return this.$store.state.vendor.profile;
     },
   },
 };
@@ -511,9 +485,5 @@ h2 {
   letter-spacing: normal;
   text-align: center;
   color: #050505;
-}
-
-.md-select::before {
-    color: blue !important;
 }
 </style>

@@ -262,13 +262,13 @@
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="isEdit = true" class="md-purple">
+            <md-menu-item @click="isEdit = true">
               <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
             </md-menu-item>
-            <md-menu-item @click="removeRequirement(item)" class="md-purple">
+            <md-menu-item @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="addPriceToIncludeItem" class="md-purple">
+            <md-menu-item @click="addPriceToIncludeItem">
               <span>
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
@@ -284,7 +284,7 @@
                 </span>
               </span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true" class="md-purple">
+            <md-menu-item @click="editingComment = true">
               <span>
                 <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />
                 {{ item.comment ? `Edit Comment` : `Add comment` }}

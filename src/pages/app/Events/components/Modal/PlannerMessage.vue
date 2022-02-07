@@ -40,18 +40,20 @@
               <img :src="`${$iconURL}group-22314.svg`" alt="icon" />
             </div>
             <div>
-              <h2 class="title">We’re so sorry that this match failed :(</h2>
+              <h2 class="title">We are very sorry that the match failed :(</h2>
               <p class="subtitle">
-                The vendor wasn’t able to work with you on this event <br />
-                What now? Well, we're happy to help you find more vendors that will suit your event perfectly.
+                Let us help you find more vendors that are just right for your event. <br />
+                In addition, you can offer new dates to the vendor.
               </p>
             </div>
           </div>
           <div class="md-layout-item pl-0 md-size-100 mt-50">
             <div class="d-flex align-center justify-content-center">
-             
-              <md-button class="px-20 py-5  md-primary " @click="go()">
-                Find More Vendors
+              <md-button class="px-20 py-5 md-simple " @click="$emit('cancel')">
+                <span style="color: black"> Show me more suggestions</span>
+              </md-button>
+              <md-button class="px-20 py-5  md-primary " @click="$emit('cancel')">
+                Offer me alternate dates
               </md-button>
             </div>
           </div>
@@ -67,11 +69,6 @@ export default {
   components: {
     Modal,
   },
-  methods: {
-    go() {
-     this.$emit("goVendors")
-    }
-  }
 };
 </script>
 

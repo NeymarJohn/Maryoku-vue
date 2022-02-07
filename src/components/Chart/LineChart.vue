@@ -1,25 +1,46 @@
 <template>
-  <div>
-    <canvas ref="line_chart" width="1000" />
-  </div>
+<canvas  :style="classStyle" :id="id" :width="width" :height="height"></canvas>
 </template>
-
-
 <script>
-import Chart from 'chart.js';
-
+import * as Chart from 'chart.js'
 export default {
-  props: ['chartData', 'options'],
-  mounted() {
-    new Chart(
-      this.$refs.line_chart,
-      {
-        type: "line",
-        data: this.chartData,
-        options: this.options,
+  name: 'LineChart',
+  data(){
+      return {
       }
-    );
   },
+  mounted () {
+    const chart = document.getElementById(this.id).getContext('2d');
+    new Chart(chart, {
+      type: this.type,
+      data: this.getData(),
+      options: this.optionChart
+    })
+  },
+  methods: {
+    getData (chart) {
+
+      return this.dataChart
+
+    }
+  },
+  props: {
+    dataChart: Object,
+    type: String,
+    optionChart: Object,
+    id: String,
+    width: String,
+    height: String,
+    classStyle: String
+
+  },
+  beforeUpdate () {
+    console.log('beforeUpdate')
+  },
+  updated () {
+    console.log('updated', this.data)
+  }
+
 }
 </script>
 <style lang="scss">

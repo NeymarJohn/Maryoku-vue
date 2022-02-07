@@ -6,7 +6,6 @@
             v-if="showCommentEditorPanel"
             :commentComponents="commentComponents"
             :proposal="proposal"
-            :url="`/unregistered/proposals/${proposal.id}`"
             @saveComment="saveComment"
             @updateComment="updateComment"
             @deleteComment="deleteComment"
@@ -48,7 +47,7 @@
             @change="changeVersion"
             @remove="removeVersion"></ProposalVersionsBar>
             <div class="proposal-container event-proposal" >
-                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep" :sh="true">
+                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep">
                 </EventProposalDetails>
             </div>
         </template>

@@ -13,7 +13,7 @@
       @remove="removeVersion"
     ></ProposalVersionsBar>
     <div class="main-cont">
-      <router-view> </router-view>
+      <router-view > </router-view>
     </div>
     <section class="footer-wrapper">
       <div>
@@ -31,7 +31,7 @@
           <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
         </a>
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
-          <loader :active="isLoading" page="vendor" height="70px" :width="100"></loader>
+          <loader :active="isLoading"  page="vendor" height="70px" width="100px"></loader>
 
           Next
         </a>
@@ -296,20 +296,20 @@ export default {
     async uploadCoverImage() {
       const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
 
-      let coverImageUrl = "";
+        let coverImageUrl = "";
 
-      if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
-        const fileObject = S3Service.dataURLtoFile(
-          proposalForNonMaryoku.coverImage,
-          `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-        );
-        const extenstion = fileObject.type.split("/")[1];
-        coverImageUrl = await S3Service.fileUpload(
-          fileObject,
-          `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-          "proposals/cover-images",
-        );
-      }
+        if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
+            const fileObject = S3Service.dataURLtoFile(
+                proposalForNonMaryoku.coverImage,
+                `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+            );
+            const extenstion = fileObject.type.split("/")[1];
+            coverImageUrl = await S3Service.fileUpload(
+                fileObject,
+                `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+                "proposals/cover-images",
+            );
+        }
     },
 
     async uploadProposal(type) {
@@ -338,8 +338,6 @@ export default {
         eventType: { id: this.event.eventType.id },
         companyName: this.event.customer.companyName,
         location: this.event.location,
-        field: "",
-        icon: "",
         guests: this.event.numberOfParticipants,
         vendor: new Vendor({ id: this.vendor.id }),
         customer: { id: this.event.customer.id },

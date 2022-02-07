@@ -20,7 +20,7 @@
             class="input-value description-input"
             :class="{ isFilled: !!serviceItem }"
             type="text"
-            placeholder="Type name of element her"
+            placeholder="Type name of element here"
             @keypress="startSearch"
             @blur="stopSearch"
           />
@@ -121,17 +121,13 @@
         </md-button>
       </div>
     </div>
-    <ask-save-change
-      v-if="showAskSaveChangeModal"
-      @cancel="showAskSaveChangeModal = false"
-      @save="handleSave"
-    ></ask-save-change>
+    <ask-save-change v-if="showAskSaveChangeModal" @cancel="showAskSaveChangeModal=false" @save="handleSave"></ask-save-change>
   </div>
 </template>
 
 <script>
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
-import AskSaveChange from "./Modals/AskSaveChangeModal";
+import AskSaveChange from "./Modals/AskSaveChangeModal"
 
 export default {
   components: { SelectProposalSubItem, AskSaveChange },
@@ -161,11 +157,14 @@ export default {
       serviceItem: "",
       serviceItemSize: "",
       qty: 1,
-      unit: 0,
+      unit: "",
       isRequiredPlannerChoice: false,
       isComplementary: false,
       ttpCommunicationException: "",
-      plannerChoices: [{ description: "", price: 0 }, { description: "", price: 0 }],
+      plannerChoices: [
+        { description: "", price: 0 },
+        { description: "", price: 0 },
+      ],
       isNumberVisible: true,
       currencyFormat: {
         decimal: ".",
@@ -198,7 +197,7 @@ export default {
     };
   },
   created() {
-    this.$root.$on("clear-slide-pos", item => {
+    this.$root.$on("clear-slide-pos", (item) => {
       this.serviceSlidePos = 0;
     });
   },
@@ -210,7 +209,7 @@ export default {
       this.serviceItem = this.filteredSuggestItems[index].description.slice(0, this.serviceItem.length);
     },
     selectSuggestItem(index) {
-      this.selectedItem = this.filteredSuggestItems[index];
+      this.selectedItem = this.filteredSuggestItems[index]
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
       this.serviceItem = this.filteredSuggestItems[index].description;
@@ -252,9 +251,11 @@ export default {
       this.serviceItem = item.name;
       this.size = "";
       this.qty = 1;
-      this.plannerChoices = [{ description: "", price: 0 }, { description: "", price: 0 }];
+      this.plannerChoices = [
+        { description: "", price: 0 },
+        { description: "", price: 0 },
+      ];
     },
-
     saveItem(serviceItem, size, qty, price) {
       const editingService = {
         comment: this.comment,
@@ -272,18 +273,18 @@ export default {
         requirementValue: `${qty}`,
         isComplementary: this.isComplementary,
         isComplimentary: false,
-        plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
+        plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
-
-      if (price !== this.selectedItem.price) {
+      if ( price !== this.selectedItem.price ) {
         this.showAskSaveChangeModal = true;
       } else {
         this.cancel();
       }
-      this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
+
+      this.$emit("addItem", editingService);
+
     },
     cancel() {
-      this.selectedItem = null;
       this.serviceItemSize = "";
       this.qty = 1;
       this.unit = 0;
@@ -292,35 +293,35 @@ export default {
       this.isComplementary = false;
       this.comment = "";
       this.isEditingComment = false;
-      this.plannerChoices = [{ description: "", price: 0 }, { description: "", price: 0 }];
+      this.plannerChoices = [
+        { description: "", price: 0 },
+        { description: "", price: 0 },
+      ];
     },
     camelize(str) {
-      let temp = str.replace(/\W+(.)/g, function(match, chr) {
+      let temp = str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
-    handleSave(val) {
-      if (val === "profile") {
+    handleSave(val){
+      if ( val ===  'profile' ) {
         let vendor = this.vendor;
         if (vendor.services.hasOwnProperty(this.camelize(this.serviceItem))) {
-          console.log("item", vendor.services[this.camelize(this.serviceItem)]);
-          this.$set(vendor.services, this.camelize(this.serviceItem), {
-            ...vendor.services[this.camelize(this.serviceItem)],
-            checked: true,
-            included: false,
-            value: this.unit,
-          });
+            console.log('item', vendor.services[this.camelize(this.serviceItem)]);
+          this.$set(vendor.services, this.camelize(this.serviceItem),
+                  {...vendor.services[this.camelize(this.serviceItem)], checked: true, included: false, value: this.unit});
         } else {
           // todo check how to add new service item when update price in cost services
-          this.$set(vendor.services, this.camelize(this.serviceItem), {
-            checked: true,
-            label: this.camelize(this.serviceItem),
-            included: false,
-            value: this.unit,
-          });
+          this.$set(vendor.services, this.camelize(this.serviceItem),
+                  {
+                    checked: true,
+                    label: this.camelize(this.serviceItem),
+                    included: false,
+                    value: this.unit
+                  });
         }
-        this.$store.dispatch("proposalForNonMaryoku/saveVendor", vendor);
+        this.$store.dispatch('proposalForNonMaryoku/saveVendor', vendor)
       }
       this.cancel();
       this.showAskSaveChangeModal = false;
@@ -338,11 +339,11 @@ export default {
     },
     filteredSuggestItems() {
       if (!this.serviceItem) return [];
-      return this.suggestedItems.filter(item =>
+      return this.suggestedItems.filter((item) =>
         item.description.toLowerCase().startsWith(this.serviceItem.toLowerCase()),
       );
     },
-    vendor() {
+    vendor(){
       return this.$store.state.proposalForNonMaryoku.vendor;
     },
     isAutoCompletedValue() {
@@ -350,62 +351,40 @@ export default {
     },
     suggestedItems() {
       const items = [];
-      this.vendorServices.forEach(category => {
+      this.vendorServices.forEach((category) => {
         if (category.name !== "accessibility") {
-          category.subCategories.forEach(subCat => {
+          category.subCategories.forEach((subCat) => {
             if (
               subCat.name.toLowerCase() === "inclusion" ||
               subCat.name.toLowerCase() === "sustainability" ||
               subCat.name.toLowerCase() === "diversity"
             )
               return;
-            subCat.items.forEach(item => {
+            subCat.items.forEach((item) => {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
-              const camelized = this.camelize(capitalized);
-              const profileService = this.profileServices[camelized];
+              const profileService = this.profileServices[this.camelize(capitalized)];
               const requestItemByPlanner = null;
 
-              if (camelized === 'customService') {
-                const customServiceItems = profileService.data;
-                customServiceItems.forEach(service_item => {
-                  if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
-                    items.push({
-                      description: service_item.name.charAt(0).toUpperCase() + service_item.name.slice(1),
-                      qty: 1,
-                      included: false,
-                      price: `${service_item.price}`,
-                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-                    });
-                  }
-                })
-              }
-
               if (item.available) {
-                item.available.forEach(availableItem => {
+                item.available.forEach((availableItem) => {
                   const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
-                  if (items.findIndex(it => it.description.toLowerCase() === description.toLowerCase()) < 0) {
+                  if (items.findIndex((it) => it.description.toLowerCase() === description.toLowerCase()) < 0) {
                     items.push({
                       description,
                       qty: item.value ? item.value : 1,
-                      included:
-                        profileService &&
-                        profileService.checked &&
-                        !profileService.xIncluded &&
-                        profileService.included,
+                      included: profileService && profileService.checked && !profileService.xIncluded && profileService.included,
                       price: profileService ? Number(profileService.value) : "",
                       requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                     });
                   }
                 });
               }
-
-              if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
+              if (items.findIndex((it) => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
                 items.push({
                   description: capitalized,
                   qty: item.value ? item.value : 1,
-                  included:
-                    profileService && profileService.checked && !profileService.xIncluded && profileService.included,
+                  included: profileService && profileService.checked && !profileService.xIncluded && profileService.included,
                   price: profileService ? Number(profileService.value) : "",
                   requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                 });
@@ -417,9 +396,9 @@ export default {
       return items;
     },
   },
-  watch: {
-    profileServices() {},
-  },
+  watch:{
+    profileServices(){}
+  }
 };
 </script>
 <style lang="scss" scoped>

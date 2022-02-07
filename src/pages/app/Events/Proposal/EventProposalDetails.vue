@@ -232,7 +232,6 @@
           :key="`${proposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
-          @updateProposalCost="updateProposalCost"
           :mandatory="true"
           :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} bg-light-gray`"
         ></EventProposalPrice>
@@ -242,7 +241,6 @@
           :serviceCategory="service"
           :key="`secondary-${service}-section`"
           @changeBookedServices="changeBookedServices"
-          @updateProposalCost="updateProposalCost"
           :class-name="`${isMobile ? 'p-0' : 'p-60 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
         ></EventProposalPrice>
         <div
@@ -587,8 +585,8 @@
         </md-button>
       </div>
     </div>
-    <div v-if="proposal.status === 5 && !sh">
-      <MessageModal @cancel="showMessage = false" @goVendors="go()" />
+    <div v-if="proposal.status === 5 || proposal.status === '5'">
+      <MessageModal v-if="showMessage" @cancel="showMessage = false" />
     </div>
   </div>
 </template>
@@ -622,12 +620,6 @@ const components = {
 export default {
   components,
   props: {
-    sh: {
-      type: Boolean,
-      default: false,
-
-
-    },
     proposal: {
       type: Object,
       default: () => {},
@@ -656,7 +648,7 @@ export default {
   data() {
     return {
       storageIcon: `${this.$resourceURL}storage/icons/`,
-      showMessage: false,
+      showMessage: true,
       showSeatingAr: false,
       isHealth: false,
       isSeating: false,
@@ -710,9 +702,6 @@ export default {
         return this.getCategory(service).title;
       });
       return serviceNames.join(" + ");
-    },
-    go() {
-      this.$router.push("/vendor/offer/" + this.proposal.id);
     },
     getCategory(key) {
       return this.categories.find(item => item.key === key);
@@ -841,9 +830,6 @@ export default {
         category: serviceCategory,
         proposal: this.proposal,
       });
-    },
-    async updateProposalCost({ updateProposalCost }) {
-      this.proposal.cost = updateProposalCost;
     },
     favorite() {
       this.$emit("favorite", !this.proposal.isFavorite);
