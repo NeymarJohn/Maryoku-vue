@@ -10,7 +10,7 @@
         <img :src="`${$iconURL}common/sync-calendar-purple.svg`" />
         <div class="font-size-30 font-bold mt-20">Calendar Sync</div>
         <div class="mt-20">Select the calendar you want to sync with</div>
-        <div class="mt-30 d-flex justify-content-center mb-30">
+        <div class="mt-30 d-flex justify-content-center mb-40">
           <div
             @click="emailAccount = 'google'"
             class="calendar-selector mr-40"
@@ -32,18 +32,6 @@
             </div>
           </div>
         </div>
-          <div class="md-layout mt-30 selection-wrapper">
-              <div class="md-layout-item md-size-50 p-0 text-left">
-                  <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isSyncEntireCalendar" :value="true">
-                      Sync entire calendar
-                  </md-checkbox>
-              </div>
-              <div class="md-layout-item md-size-50 p-0 text-left">
-                  <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isSyncEntireCalendar" :value="false">
-                      Sync specific event
-                  </md-checkbox>
-              </div>
-          </div>
         <div class="text-left tips">
           <div class="mb-20 d-flex">
             <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />

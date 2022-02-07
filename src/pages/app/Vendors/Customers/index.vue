@@ -32,14 +32,14 @@
             </md-button>
           </div>
           <div class="sort-bar px-40">
-            <span v-for="it in customerHeaders" class="sort-item font-size-18">
+            <span v-for="(it, k) in customerHeaders" :key="k" class="sort-item font-size-18">
               {{ it.title }}
             </span>
           </div>
 
           <div v-if="!loading">
             <div class="md-20 customer-list">
-              <template v-for="(object, key) in customerObject">
+              <template v-for="(object, key) in customerObject" >
                 <div class="customer-mark font-size-24 font-bold-extra mb-1">{{ object.group.toUpperCase() }}</div>
 
                 <CustomerListItem
@@ -89,7 +89,7 @@
     </modal>
     <modal v-if="importCustomersModal">
       <template slot="body">
-        <CustomerListModal @cancel="importCustomersModal = false" @save="saveCustomers" />
+        <CustomerListModal @cancel="importCustomersModal = false" @save="saveCustomers" @fileUploaded="fileUploaded" />
       </template>
     </modal>
     <modal v-if="DoneModal">
@@ -252,7 +252,8 @@ export default {
       }
     },
     async saveCustomers(customer) {
-      customer.forEach(el => {
+      this.loading = true;
+      customer.forEach(async el => {
         let data = {
           email: el.email,
           companyName: el.BusinessName,
@@ -262,14 +263,21 @@ export default {
           vendorId: this.vendorData.id,
         };
         this.customerArr = data;
+        console.log('this.customerArr', this.customerArr);
+        let customerInstance = new Customer(this.customerArr);
+        console.log('customerInstance', customerInstance);
+        await customerInstance.save();
       });
-      this.loading = true;
-      let customerInstance = new Customer(this.customerArr);
-      console.log(customerInstance);
-      await customerInstance.save();
+
       await this.getCustomer();
+      console.log('after await this.getCustomer()', await this.getCustomer());
+      await this.customers;
+      await this.customers;
       this.loading = false;
       this.DoneModal = true;
+      this.importCustomersModal = false;
+      await this.customers;
+      await this.customers;
     },
     openNewTab(link) {
       window.open(link, "_blank");
@@ -284,6 +292,10 @@ export default {
         this.renderInsight = true;
       });
     },
+    fileUploaded(){
+      this.loading = true;
+      this.init();
+    }
   },
   computed: {
     vendorData() {

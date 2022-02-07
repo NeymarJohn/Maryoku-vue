@@ -32,6 +32,7 @@
           <div v-if="selectedCommentComponent && selectedCommentComponent.comments">
             <comment-item
               :comment="mainComment"
+              :proposal="proposal"
               :isEditing="editingCommentId == mainComment.id"
               :isMain="true"
               :replies="replies.length"
@@ -109,6 +110,10 @@ export default {
       },
       proposal:{
         type: Object,
+        required: false,
+      },
+      url:{
+        type: String,
         required: false,
       }
   },
@@ -250,7 +255,7 @@ export default {
         positionY: event.clientY - 100 + window.scrollY,
         index: maxIndex + 1,
         isEditing: false,
-        url: this.$route.path
+        url: this.url ? this.url : this.$route.path,
       }
       this.commentComponents = this.commentComponents.concat([newComentComponent])
       this.selectedComponentIndex = this.commentComponents.length - 1;
@@ -350,7 +355,7 @@ export default {
         if(!comment.viewed){
           comment.viewed = true;
         }
-      } 
+      }
       commentComponent = new EventCommentComponent({
             id: commentComponent.id,
             comments:commentComponent.comments
