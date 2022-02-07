@@ -98,7 +98,6 @@
                 class="row"
                 :color="colors[idx]"
                 @action="handleProposal"
-                @showGraphModal="showGraphModal"
               ></ProposalListItem>
             </div>
           </div>
@@ -116,6 +115,7 @@
         <div class="md-layout-item md-size-75">
           <div class="text-center">
             <TablePagination
+            
               v-if="pagination.pageCount"
               class="mt-30"
               :pageCount="pagination.pageCount"
@@ -280,12 +280,6 @@
       @submit="showResendProposalModal = false"
     >
     </ResendProposalResult>
-    <ProposalGraphModal
-    v-if="showProposalGraph"
-    @close="closeProposalGraph"
-    :proposal="selectedProposalForGraph"
-    >
-    </ProposalGraphModal>
   </div>
 </template>
 <script>
@@ -319,11 +313,11 @@ const components = {
   Insight: () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
   ShareProposal: () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
   ResendProposalResult: () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
-  ProposalGraphModal: () => import("@/pages/app/Vendors/ProposalBoard/ProposalGraphModal.vue"),
+  CentredModal,
 };
 
 export default {
-  components: { ...components, ProposalRequestCard,EmptyRequestCard, NoInsight },
+  components: { ...components, ProposalRequestCard, EmptyRequestCard, NoInsight },
   data() {
     return {
       showLessInsightModal: false,
@@ -334,10 +328,8 @@ export default {
       tab: "all",
       showProposalDetail: false,
       showShareProposalModal: false,
-      showProposalGraph : false,
       selectedProposal: null,
       selectedEventData: null,
-      selectedProposalForGraph : null,
       selectedProposalRequest: null,
       showRequestNegotiationModal: false,
       showResendProposalModal: false,
@@ -469,6 +461,7 @@ export default {
           data: { ...this.selectedProposal, status: PROPOSAL_STATUS.INACTIVE },
           vendorId: this.selectedProposal.vendor.id,
         });
+        
         await this.sendEmail({ type: "inactive", url, proposalId: this.selectedProposal.id });
         this.loading = false;
       }
@@ -716,14 +709,6 @@ export default {
       await this.getProposal();
       this.loading = false;
     },
-    showGraphModal(proposal) {
-      console.log('Open GraphModal', proposal);
-      this.showProposalGraph = true;
-      this.selectedProposalForGraph = proposal;
-    },
-    closeProposalGraph() {
-      this.showProposalGraph = false;
-    }
   },
   computed: {
     vendorData() {
