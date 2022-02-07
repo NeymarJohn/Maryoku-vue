@@ -2,7 +2,8 @@
   <div class="vendor-signup-step1-wrapper">
     <div class="md-layout inside-container">
       <div class="md-layout-item md-size-25 left-side">
-        <img :src="`${iconUrl}Group 5219 (2).svg`" />
+        <img :src="`${iconPurple}Purple Icons/Icon_About (Vendor).svg`" />
+
         <h2>
           ABOUT YOUR
           <br />COMPANY
@@ -23,17 +24,20 @@
                 <div class="top d-flex align-center">
                   <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
                   <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
-                    <div class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer" @click="showCompanyText=true">
-                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea</div>
+                    <div
+                      class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer"
+                      @click="showCompanyText = true"
+                    >
+                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea
+                    </div>
 
                     <tooltip-notification
-                            v-if="showCompanyText"
-                            :about="getDescription('company')"
-                            @copy='handleCopy($event, "company")'
-                            @cancel="showCompanyText = false"
+                      v-if="showCompanyText"
+                      :about="getDescription('company')"
+                      @copy="handleCopy($event, 'company')"
+                      @cancel="showCompanyText = false"
                     ></tooltip-notification>
                   </div>
-
                 </div>
                 <div class="bottom">
                   <p>Include history & background</p>
@@ -52,18 +56,22 @@
               <div class="title-cont">
                 <div class="top d-flex align-center">
                   <h5>
-                    <img :src="`${getCategoryIconbyValue(vendor.vendorCategory)}`" style="width: 32px"/>
+                    <img :src="`${getCategoryIconbyValue(vendor.vendorCategory)}`" style="width: 32px" />
                     about your {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </h5>
                   <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
-                    <div class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer" @click="showServiceText=true">
-                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea</div>
+                    <div
+                      class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer"
+                      @click="showServiceText = true"
+                    >
+                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea
+                    </div>
 
                     <tooltip-notification
-                            v-if="showServiceText"
-                            :about="getDescription('service')"
-                            @copy='handleCopy($event, "category")'
-                            @cancel="showServiceText = false"
+                      v-if="showServiceText"
+                      :about="getDescription('service')"
+                      @copy="handleCopy($event, 'category')"
+                      @cancel="showServiceText = false"
                     ></tooltip-notification>
                   </div>
                 </div>
@@ -83,7 +91,7 @@
             <div class="field mb-50">
               <label>Company Services</label>
               <company-service-selector
-                :options="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
+                :options="companyServices.filter(cs => cs.name == vendor.vendorCategories[0])[0]"
                 :defaultValue="vendor.companyServices"
                 @change="updateCompanyServices"
                 class="mt-10"
@@ -138,14 +146,18 @@
               <div class=" d-flex align-center">
                 <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
                 <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
-                  <div class="color-purple font-size-14 font-bold-extra ml-20 pb-10 cursor-pointer" @click="showPersonalMessage=true">
-                    <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" class="mr-10"/> Get an Idea</div>
+                  <div
+                    class="color-purple font-size-14 font-bold-extra ml-20 pb-10 cursor-pointer"
+                    @click="showPersonalMessage = true"
+                  >
+                    <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" class="mr-10" /> Get an Idea
+                  </div>
 
                   <tooltip-notification
-                          v-if="showPersonalMessage"
-                          :about="getDescription('personal')"
-                          @copy='handleCopy($event, "personalMessage")'
-                          @cancel="showPersonalMessage = false"
+                    v-if="showPersonalMessage"
+                    :about="getDescription('personal')"
+                    @copy="handleCopy($event, 'personalMessage')"
+                    @cancel="showPersonalMessage = false"
                   ></tooltip-notification>
                 </div>
               </div>
@@ -187,9 +199,9 @@
             </div>
           </div>
           <template v-if="vendor.signature == null">
-            <div class="card red-border">
+            <div class="card pink-border">
               <div class="upload-cont">
-                <a class @click="uploadVendorSignature"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
+                <a class @click="uploadVendorSignature"> <img :src="`${iconPurple}Purple Icons/Icon_ChooseFile.svg`" /> Choose File </a>
                 <div class="or">Or</div>
                 <div class="sign-here">
                   <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
@@ -210,13 +222,15 @@
           <template v-else>
             <div
               class
-              :style="`
+              :style="
+                `
                 background-image: url(${vendor.signature});width: 100%;
                 background-position: center;
                 background-repeat: no-repeat;
                 height: 162px;
                 background-size: contain;
-              `"
+              `
+              "
             />
             <!-- <img :src="vendor.signature"/> -->
             <img
@@ -277,7 +291,7 @@
             <h5>Other:</h5>
             <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
               <div @click="updateSocialMedia(s)">
-                <img :src="`${iconUrl}Group 6258.svg`" v-if="socialMedia.includes(s) || vendor.social[s]" />
+                <img :src="`${iconPurple}Purple Icons/Icon_V.svg`"  v-if="socialMedia.includes(s) || vendor.social[s]" />
                 <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                 {{ s }}
                 <br />
@@ -310,7 +324,7 @@ import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 import CompanyServiceSelector from "../components/CompanyServiceSelector.vue";
-import { TooltipNotification } from "@/components"
+import { TooltipNotification } from "@/components";
 export default {
   name: "vendor-signup-step1",
   components: {
@@ -331,6 +345,7 @@ export default {
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconPurple: `${this.$iconURL}`,
       socialMedia: [],
       defSocialMedia: ["youtube", "linkedin", "google", "pinterest", "foursquare", "reddit", "tiktok"],
       reg: /^(ftp|http|https):\/\/[^ "]+$/,
@@ -387,7 +402,7 @@ export default {
     },
     updateSocialMedia(item) {
       if (this.socialMedia.includes(item)) {
-        this.socialMedia = this.socialMedia.filter((s) => s != item);
+        this.socialMedia = this.socialMedia.filter(s => s != item);
       } else {
         this.socialMedia.push(item);
       }
@@ -425,7 +440,7 @@ export default {
     },
     updateVendorImage({ index, photo }) {
       const fileId = `${new Date().getTime()}_${makeid()}`;
-      S3Service.fileUpload(photo, fileId, "vendor/cover-images").then((uploadedName) => {
+      S3Service.fileUpload(photo, fileId, "vendor/cover-images").then(uploadedName => {
         console.log("createImage", uploadedName);
         this.$root.$emit("update-vendor-value", "images", {
           index,
@@ -440,21 +455,17 @@ export default {
 
       this.isLoading = true;
 
-      reader.onload = (e) => {
+      reader.onload = e => {
         if (type == "vendorSignature") {
           const fileId = `${new Date().getTime()}_${makeid()}`;
-          S3Service.fileUpload(file, fileId, "vendor/signatures").then((uploadedName) => {
-            this.$root.$emit(
-              "update-vendor-value",
-              "signature",
-              `${uploadedName}`,
-            );
+          S3Service.fileUpload(file, fileId, "vendor/signatures").then(uploadedName => {
+            this.$root.$emit("update-vendor-value", "signature", `${uploadedName}`);
           });
           this.$root.$emit("update-vendor-value", "signature", e.target.result);
         } else {
           const fileId = `${new Date().getTime()}_${makeid()}`;
           const currentIndex = this.vendor.images.length;
-          S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
+          S3Service.fileUpload(file, fileId, "vendor/cover-images").then(uploadedName => {
             console.log("createImage", uploadedName);
             this.$root.$emit("update-vendor-value", "images", {
               index: currentIndex,
@@ -474,26 +485,28 @@ export default {
       this.$root.$emit("update-vendor-value", "removeImage", image);
     },
     getCategoryNameByValue(value) {
-      return this.categoryNames.filter((c) => c.value == value)[0].name;
+      return this.categoryNames.filter(c => c.value == value)[0].name;
     },
-    getCategoryIconbyValue(value){
+    getCategoryIconbyValue(value) {
       return VendorCategories.find(it => it.value === value).icon;
     },
     updateVendor(event, fieldName) {
       // this.$root.$emit("update-vendor-value", fieldName, event.target.value);
       this.$store.commit("vendorSignup/setField", { field: fieldName, value: event.target.value });
     },
-    getDescription(field){
-        return this.categoryDescriptions[this.vendor.vendorCategory][field].map(desc => desc.replace('company_name', this.vendor.companyName));
+    getDescription(field) {
+      return this.categoryDescriptions[this.vendor.vendorCategory][field].map(desc =>
+        desc.replace("company_name", this.vendor.companyName),
+      );
     },
     handleCopy(value, field) {
       this.showCompanyText = false;
       this.showServiceText = false;
       this.showPersonalMessage = false;
       let vendor = JSON.parse(JSON.stringify(this.vendor));
-      if ( field === 'company' ) this.$set(vendor.about, field, value);
-      if ( field === 'category' ) this.$set(vendor.about, field, value);
-      if ( field === 'personalMessage' ) this.$set(vendor, field, value);
+      if (field === "company") this.$set(vendor.about, field, value);
+      if (field === "category") this.$set(vendor.about, field, value);
+      if (field === "personalMessage") this.$set(vendor, field, value);
       this.$store.commit("vendorSignup/setVendor", vendor);
     },
     save() {
@@ -525,7 +538,7 @@ export default {
   },
   filters: {},
   created() {
-    console.log('step2.created');
+    console.log("step2.created");
     this.$store.dispatch("vendorSignup/checkImages");
     // refactoring vendor data in vuex
     const vendorData = Object.assign({}, this.vendor);
@@ -662,17 +675,17 @@ export default {
         h5 {
           font: 800 16px Manrope-Regular, sans-serif;
         }
-        &.red-border {
-          border: 2px dashed #f51355;
+        &.pink-border {
+          border: 2px dashed #58154b;
 
           .upload-cont {
             text-align: center;
             a {
               display: inline-block;
               font: 800 14px Manrope-Regular, sans-serif;
-              border: 1px solid #f51355;
+              border: 1px solid #58154b;
               padding: 0.5rem;
-              color: #f51355;
+              color: #58154b;
               cursor: pointer;
               margin-bottom: 0.5rem;
 
@@ -687,7 +700,7 @@ export default {
             }
             .sign-here {
               margin-top: 1rem;
-              border: 1.5px dashed #f51355;
+              border: 1.5px dashed #58154b;
               font: normal 50px Manrope-Regular, sans-serif;
               color: #d5d5d5;
             }
@@ -695,7 +708,7 @@ export default {
         }
 
         &.drag-over {
-          border: 2px dotted #f51355;
+          border: 2px dotted #58154b;
           min-height: 210px;
 
           .drop-cont {
@@ -785,7 +798,7 @@ export default {
     }
 
     .no-image {
-      border: dashed 1px #f51355;
+      border: dashed 1px #58154b;
       background-color: #ffffff;
     }
 
@@ -796,7 +809,7 @@ export default {
     .add-more {
       text-align: center;
       padding: 3rem;
-      border: dashed 1px #f51355;
+      border: dashed 1px #58154b;
       background-color: #ffffff;
       cursor: pointer;
       font: normal 15px Manrope-Regular, sans-serif;
@@ -812,7 +825,7 @@ export default {
       }
 
       &.drag-over {
-        border: 2px dotted #f51355;
+        border: 2px dotted #58154b;
       }
     }
   }
@@ -826,9 +839,9 @@ export default {
         .clear {
           background-color: #ffffff;
           font: 800 14px Manrope-Regular, sans-serif;
-          border: 1px solid #f51355;
+          border: 1px solid #58154b;
           padding: 0.5rem;
-          color: #f51355;
+          color: #58154b;
           cursor: pointer;
           margin-bottom: 0.5rem;
         }
@@ -858,7 +871,7 @@ export default {
     display: none !important;
   }
   .red-border {
-    border: 1px solid #f51355 !important;
+    border: 1px solid #58154b !important;
   }
 }
 </style>

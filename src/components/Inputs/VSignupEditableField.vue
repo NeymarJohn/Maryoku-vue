@@ -31,13 +31,13 @@
       </div>
       <div class="action-cont" v-if="isEdit" :class="{ 'width-66': field === 'vendorCategories' }">
         <md-button class="maryoku-btn md-simple md-black" @click="cancel">Cancel</md-button>
-        <md-button class="maryoku-btn md-red" :disabled="!isValidValue" @click="save()">Save</md-button>
+        <md-button class="maryoku-btn md-vendor" :disabled="!isValidValue" @click="save()">Save</md-button>
       </div>
     </div>
-    <div class="right" v-if="!isEdit">
-      <a @click="isEdit = true">
+    <div class="right md-vendor" v-if="!isEdit">
+      <a @click="isEdit = true" style="color: #58154B">
         Edit
-        <md-icon>navigate_next</md-icon>
+        <md-icon class="md-vendor" >navigate_next</md-icon>
       </a>
     </div>
   </div>
@@ -99,7 +99,7 @@ export default {
       this.value = category.value;
       this.expanded = false;
     },
-    isEmailValid: function () {
+    isEmailValid: function() {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
       return this.reg.test(this.value) ? "" : "";
     },
@@ -156,7 +156,7 @@ export default {
           padding-left: 60px;
         }
         &.has-error {
-          border-color: #f51355;
+          border-color: #58154B;
         }
         &.has-success {
           border-color: green;
@@ -234,7 +234,7 @@ export default {
         &.save {
           color: #ffffff;
           font: 800 16px Manrope-Regular, sans-serif;
-          background-color: #f51355;
+          background-color: #58154B;
           &:hover {
             color: #ffffff !important;
           }
@@ -248,15 +248,18 @@ export default {
   .right {
     a {
       font: 800 16px Manrope-Regular, sans-serif;
-      color: #f51355;
+      color: #58154B;
       cursor: pointer;
       text-decoration: none !important;
       i {
-        color: #f51355 !important;
+        color: #58154B !important;
         position: relative;
         top: -1px;
       }
     }
   }
+}
+.md-icon.md-theme-default.md-icon-font {
+    color: var(--md-theme-default-icon-on-background, #58154b);
 }
 </style>

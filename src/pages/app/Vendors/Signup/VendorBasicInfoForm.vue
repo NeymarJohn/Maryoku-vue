@@ -2,7 +2,7 @@
     <div class="vendor-basic-info-form-wrapper">
         <div class="inside-container">
             <div class="left-side">
-                <img :src="`${iconUrl}Group 5213 (2).svg`" />
+                <img :src="`${iconPurple}Purple Icons/Icon_UserSignUp (Vendor).svg`" />
                 <h4>Hi,</h4>
                 <p>
                     We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with
@@ -93,6 +93,7 @@ export default {
     },
     data() {
         return {
+            iconPurple: `${this.$iconURL}`,
             iconUrl: `${this.$iconURL}Vendor Signup/`,
             secondUrl: `${this.$iconURL}VendorSignup/`,
         };
@@ -160,7 +161,7 @@ export default {
             }
             h3 {
                 margin: 0;
-                color: #f51355;
+                color: #58154B;
                 font: bold 20px Manrope-Regular, sans-serif;
             }
         }

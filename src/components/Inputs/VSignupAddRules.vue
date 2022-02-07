@@ -183,7 +183,7 @@ export default {
         cursor: pointer;
 
         &.red {
-          background-color: #f51355;
+          background-color:  #641856;
         }
         &.purple {
           background-color: #641856;
@@ -286,7 +286,7 @@ export default {
           display: inline-block;
           font: 800 16px Manrope-Regular, sans-serif;
           color: #ffffff;
-          background-color: #f51355;
+          background-color:  #641856;
           border-radius: 3px;
           padding: 13px 2rem;
           cursor: pointer;

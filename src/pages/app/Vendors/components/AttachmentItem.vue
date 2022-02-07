@@ -53,7 +53,7 @@ export default {
     },
     theme: {
       type: String,
-      default: "red",
+      default: "purple",
     },
   },
   data() {

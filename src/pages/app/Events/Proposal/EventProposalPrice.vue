@@ -196,10 +196,9 @@
         <div v-if="includedServices.length">
           <div
             class="extras-section md-layout"
-            v-for="(item, index) in extraServices.filter(item => item.price)"
-            :key="index"
+        
           >
-            <div class="md-layout-item md-size-80 md-small-size-100" v-if="item">
+            <div class="md-layout-item md-size-80 md-small-size-100" >
               <div class="extras-section__title">
                 <h3 class="font-size-22">
                   <img
@@ -426,7 +425,8 @@ export default {
 
     priceOfCostservices() {
       if (!this.costServices || this.costServices.length === 0) return 0;
-      return (
+
+      let calculatedValue = (
         this.costServices.reduce((s, item) => {
           if (item.plannerOptions.length > 0 && item.selectedPlannerOption > 0) {
             // if 0 you selected main option
@@ -439,7 +439,10 @@ export default {
         this.addedServices.reduce((s, item) => {
           return s + item.requirementValue * item.price;
         }, 0)
+
       );
+      this.$emit("updateProposalCost", { updateProposalCost: calculatedValue });
+      return calculatedValue;
     },
     priceBeforeDiscount() {
       return this.priceOfCostservices - (this.priceOfCostservices * this.tax.percentage) / 100;
@@ -467,6 +470,9 @@ export default {
     },
     vendorCategory() {
       return this.categories.find(item => item.key === this.serviceCategory) || {};
+    },
+    extraArr() {
+      return this.extraServices.filter(item => item.price);
     },
   },
 };

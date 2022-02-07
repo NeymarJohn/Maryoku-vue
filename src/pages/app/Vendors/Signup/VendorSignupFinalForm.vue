@@ -3,7 +3,7 @@
     <div class="inside-cont">
       <div class="title-cont">
         <div class="half text-center">
-          <img :src="`${iconUrl}Group 5278 (2).svg`" />
+          <img :src="`${iconPurple}Purple Icons/Icon_ALMOST DONE(Vendor).svg`" />
         </div>
         <div class="half">
           <h3>almost done!</h3>
@@ -13,8 +13,8 @@
       <div class="card">
         <div class="text-center my-30">
           <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-              <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20"/>
-              <span>Sign up with Google</span>
+            <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20" />
+            <span>Sign up with Google</span>
           </md-button>
         </div>
         <p>Email</p>
@@ -62,6 +62,8 @@ export default {
   },
   data() {
     return {
+      iconPurple: `${this.$iconURL}`,
+
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       serverURL: process.env.SERVER_URL,
     };
@@ -74,11 +76,15 @@ export default {
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?vendorId=${this.vendor.id}&token=`,
+        `${document.location.protocol}//${document.location.hostname}:${
+          document.location.port
+        }/#/vendor/signedin?vendorId=${this.vendor.id}&token=`,
       );
 
       console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+      document.location.href = `${
+        this.$data.serverURL
+      }/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     updateVendor(fieldName) {
       this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
@@ -137,7 +143,7 @@ export default {
         h3 {
           margin: 0 0 20px 0;
           text-transform: uppercase;
-          color: #f51355;
+          color: #641856;
           font: 800 30px Manrope-Regular, sans-serif;
         }
         p {

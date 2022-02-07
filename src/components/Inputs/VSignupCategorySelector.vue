@@ -28,8 +28,8 @@
             @click="removeValue(index)"
           />
         </div>
-        <div class="d-flex align-center py-10 color-red font-bold cursor-pointer" @click="addNewValue">
-          <img class="mr-10" :src="`${$iconURL}VendorSignup/Group%209632.svg`" />
+        <div class="d-flex align-center py-10  font-bold cursor-pointer" @click="addNewValue" style="color: #58154B">
+          <img class="mr-10" :src="`/static/icons/vendor/Icon_+.svg`"  />
           <span v-if="field === 'vendorAddresses'">Add another address</span>
           <span v-else>Add another category</span>
         </div>
@@ -49,7 +49,7 @@
       </div>
       <div class="action-cont" v-if="isEdit">
         <md-button class="md-black maryoku-btn md-simple" @click="cancel">Cancel</md-button>
-        <md-button class="md-red maryoku-btn" :disabled="!isInputValid" @click="save">Save</md-button>
+        <md-button class="md-vendor maryoku-btn" :disabled="!isInputValid" @click="save">Save</md-button>
       </div>
     </div>
     <div class="right" v-if="!isEdit">
@@ -235,7 +235,7 @@ export default {
         &.save {
           color: #ffffff;
           font: 800 16px Manrope-Regular, sans-serif;
-          background-color: #f51355;
+          background-color: #58154B;
           &:hover {
             color: #ffffff !important;
           }
@@ -250,11 +250,11 @@ export default {
   .right {
     a {
       font: 800 16px Manrope-Regular, sans-serif;
-      color: #f51355;
+      color: #58154B;
       cursor: pointer;
       text-decoration: none !important;
       i {
-        color: #f51355 !important;
+        color: #58154B !important;
         position: relative;
         top: -1px;
       }

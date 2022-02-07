@@ -2,7 +2,8 @@
   <div class="vendor-signup-step2-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconUrl}Group 5222 (2).svg`" />
+        <img :src="`${iconPurple}Purple Icons/Icon_Services (Vendor).svg`" />
+
         <h2>
           SERVICES &
           <br />AMENTITIES
@@ -22,7 +23,7 @@
           </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.find((category) => category.name == vendor.vendorCategory).categories"
+          v-for="(c, cIndex) in categories.find(category => category.name == vendor.vendorCategory).categories"
           :key="cIndex"
           :serviceItem="c"
           :vendor="vendor"
@@ -53,6 +54,7 @@ export default {
   },
   data() {
     return {
+      iconPurple: `${this.$iconURL}`,
       filteredCategories: [],
       vendorCategories: VendorCategories,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -64,10 +66,10 @@ export default {
   },
   methods: {
     getCategoryNameByValue(value) {
-      return this.vendorCategories.filter((c) => c.value == value)[0].name;
+      return this.vendorCategories.filter(c => c.value == value)[0].name;
     },
     getCategoryIconByValue(value) {
-      return this.vendorCategories.filter((c) => c.value == value)[0].icon;
+      return this.vendorCategories.filter(c => c.value == value)[0].icon;
     },
   },
   computed: {},
@@ -105,7 +107,7 @@ export default {
       }
       h3 {
         margin: 0;
-        color: #f51355;
+        color: #58154b;
         font: bold 20px Manrope-Regular, sans-serif;
       }
     }

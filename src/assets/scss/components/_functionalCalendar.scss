@@ -12,9 +12,9 @@
 }
 .vfc-calendars-container {
   & > .vfc-navigation-buttons div, .vfc-separately-navigation-buttons div {
-    color: #f51355 !important;
+    color:  #050505 !important;
     margin: 10px 20px !important;
-    border-color: #f51355 !important;
+    border-color:  #050505 !important;
   }
 }
 
@@ -23,8 +23,8 @@
   font-size: 14px;
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-today {
-  background-color: #ffd9e4 !important;
-  color: #f51355;
+  background-color: #642a56 !important;
+  color: #43425d ;
   // font-family: "Manrope-Bold";
   font-weight: bold;
 }
@@ -90,18 +90,18 @@ span.vfc-span-day {
   width: 40px !important;
   line-height: 40px !important;
   &.vfc-today {
-    color: #f51355 !important;
+    color: white  !important;
   }
 }
 .vfc-day .vfc-base-start, .vfc-base-end {
-  background-color: #f51355 !important;
+  background-color: #43425d  !important;
 }
 span.vfc-span-day.vfc-marked,
 .vfc-today.vfc-marked {
   color: white !important;
 
   &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-    background-color: #f51355 !important;
+    background-color: #43425d  !important;
     border-radius: unset;
   }
 }

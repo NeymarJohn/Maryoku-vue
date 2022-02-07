@@ -56,7 +56,7 @@
 <script>
     import _ from 'lodash';
     import axios from 'axios';
-    import Papa from 'papaparse';
+    // import Papa from 'papaparse';
 
     export default {
         props: {
@@ -184,10 +184,10 @@
             load() {
                 const _this = this;
 
-                this.readFile((output) => {
-                    _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
-                    _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
-                });
+                // this.readFile((output) => {
+                //     _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
+                //     _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
+                // });
             },
             readFile(callback) {
                 let file = this.$refs.csv.files[0];
