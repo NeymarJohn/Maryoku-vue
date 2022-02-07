@@ -5,7 +5,7 @@
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
   margin: auto;
-  background-color: $red !important;
+  background-color: #59244C !important;
   border-radius: 50%;
   opacity: 1;
   z-index: 1;
@@ -23,13 +23,13 @@
   font-size: 14px;
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-today {
-  background-color: #642a56 !important;
-  color: #43425d ;
+  background-color: #D8C5D4 !important;
+  color: #642A56 ;
   // font-family: "Manrope-Bold";
   font-weight: bold;
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-today.vfc-marked {
-  color: white !important;
+  color: #642A56  !important;
 }
 .vfc-top-date a.vfc-underline {
   font-family: "Manrope-Bold";
