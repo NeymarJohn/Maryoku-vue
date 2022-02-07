@@ -1,17 +1,28 @@
 <template>
     <div>
-        <md-button
-            class="md-xs md-just-icon md-round md-info md-icon-button md-fileinput"
-        >
-            <md-icon>edit</md-icon>
-            <input ref="logoImageInput" type="file" @change="onFileChange" />
-        </md-button>
+        <md-table v-model="users.mdData" md-card>
+            <md-table-toolbar>
+                <h1 className="md-title">Users</h1>
+            </md-table-toolbar>
+
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
+                <md-table-cell className="avatar" md-label="Avatar"><img :src="item.avatar" width="30px"></md-table-cell>
+                <md-table-cell md-label="Name">{{ item.first_name }}</md-table-cell>
+                <md-table-cell md-label="Last name">{{ item.last_name }}</md-table-cell>
+            </md-table-row>
+
+            <md-table-pagination
+                :md-page-size="rowsPerPage"
+                :md-page-options="[3, 5, 10, 15]"
+                :md-update="updatePagination"
+                :md-data.sync="users"/>
+        </md-table>
     </div>
 </template>
 
 <script>
 
-import CustomersCSV from "@/models/CustomersCSV";
 export default {
     name: 'TablePaginationRemote',
     data: () => ({
@@ -23,32 +34,21 @@ export default {
         rowsPerPage: 3,
     }),
     created() {
-        if(this.$store.state.auth.user){
-            this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
-                console.log('user', user)
-            })
-        }
+        this.updatePagination(1, this.rowsPerPage)
     },
     methods: {
-        onFileChange(e) {
-            let files = e.target.files || e.dataTransfer.files;
-            if (!files.length) return;
-            this.uploadCustomersCSV(files[0]);
-
-        },
-        uploadCustomersCSV(file, type) {
-
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                console.log('file', e)
-                return new CustomersCSV({ file: e.target.result, vendorId: '60c21d02cfefec3756b70f17' })
-                    .save()
-                    .then((result) => {
-                        console.log('upload.res', result)
-                    })
-            }
-
-            reader.readAsDataURL(file);
+        updatePagination(page, pageSize, sort, sortOrder) {
+            console.log('pagination has updated', page, pageSize, sort, sortOrder);
+            // Example of response - in case the service goes down.
+            // {"page":1,"per_page":5,"total":12,"total_pages":3,"data":[{"id":1,"first_name":"George","last_name":"Bluth","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg"},{"id":2,"first_name":"Janet","last_name":"Weaver","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg"},{"id":3,"first_name":"Emma","last_name":"Wong","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/olegpogodaev/128.jpg"},{"id":4,"first_name":"Eve","last_name":"Holt","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"},{"id":5,"first_name":"Charles","last_name":"Morris","avatar":"https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"}]}
+            this.$http.get(`https://reqres.in/api/users?page=${page}&per_page=${pageSize}`).then(({data: resp}) => {
+                this.rowsPerPage = resp.per_page
+                this.users = {
+                    mdCount: resp.total,
+                    mdPage: resp.page,
+                    mdData: resp.data
+                }
+            })
         }
     },
 }

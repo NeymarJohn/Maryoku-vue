@@ -83,6 +83,7 @@
                   v-if="upcomingEvents && upcomingEvents.length > 0"
                   :events="upcomingEvents"
                   @showEvent="showEvent"
+                  :datas="hola"
                   @show="show($event)"
                 ></upcoming-event>
                 <template v-else>
@@ -102,9 +103,9 @@
     <select-icons
       v-if="iconsModal"
       :events="upcomingEvents"
-      @iconSelected="applySelectedIcon"
+      @icon="icon($event)"
       @cancel="cancelIcon()"
-      :eventId="selectedEvent"
+      :data="selectedEvent"
     >
     </select-icons>
     <vendor-create-event-modal
@@ -132,7 +133,6 @@ import EventCalendar from "./EventCalendar.vue";
 import ProposalRequestSection from "./Components/ProposalRequestSection.vue";
 import Modal from "@/components/Modal.vue";
 import YearSelect from "../../../../components/Select/YearSelect.vue";
-import {eventIcons} from "@/constants/event";
 
 export default {
   components: {
@@ -190,6 +190,7 @@ export default {
         date,
         date + 1
       ],
+      date,
       selectedYear: new Date().getFullYear(),
     };
   },
@@ -204,38 +205,38 @@ export default {
   },
   methods: {
     getIncomingData() {
-      if (this.customer) {
-        customerQuery = `&customerId=${this.customer.id}`;
-      }
-      if (this.customerStatus) {
-        customerQuery += `&customerStatus=${this.customerStatus}`;
-      }
-      for (let i in this.incomeChartData) {
-        this.incomeChartData[i].value = 0;
-      }
-      this.$http
-        .get(
-          `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendorData.id}?start=${new Date(
-            this.selectedYear + "-01-01",
-          ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`,
-        )
-        .then(res => {
-          if (res.data.length) {
-            this.monthlyReport = res.data;
-            res.data.forEach(item => {
-              this.incomeChartData[Number(item._id) - 1].value = item.amount;
-              this.incomeChartData[Number(item._id) - 1].future = false;
-            });
-            this.incomeChartData = [...this.incomeChartData];
-          } else {
-            // TODO: fake data, mb delete it
-            this.incomeChartData.forEach((item, index) => {
-              this.incomeChartData[index].value = 1000 * Math.random() + 200;
-              this.incomeChartData[index].future = true;
-            });
-            this.incomeChartData = [...this.incomeChartData];
-          }
-        });
+    if (this.customer) {
+      customerQuery = `&customerId=${this.customer.id}`;
+    }
+    if (this.customerStatus) {
+      customerQuery += `&customerStatus=${this.customerStatus}`;
+    }
+    for (let i in this.incomeChartData) {
+      this.incomeChartData[i].value = 0;
+    }
+    this.$http
+      .get(
+      `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendorData.id}?start=${new Date(
+        this.selectedYear + "-01-01",
+      ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`,
+    )
+      .then(res => {
+        if (res.data.length) {
+          this.monthlyReport = res.data;
+          res.data.forEach(item => {
+            this.incomeChartData[Number(item._id) - 1].value = item.amount;
+            this.incomeChartData[Number(item._id) - 1].future = false;
+          });
+          this.incomeChartData = [...this.incomeChartData];
+        } else {
+          // TODO: fake data, mb delete it
+          this.incomeChartData.forEach((item, index) => {
+            this.incomeChartData[index].value = 1000 * Math.random() + 200;
+            this.incomeChartData[index].future = true;
+          });
+          this.incomeChartData = [...this.incomeChartData];
+        }
+      });
     },
     handleYearChange(year) {
       this.selectedYear = year;
@@ -245,20 +246,8 @@ export default {
     cancelIcon() {
       this.iconsModal = false;
     },
-    applySelectedIcon({iconId, eventId}) {
-      this.upcomingEvents = this.upcomingEvents.map(event => {
-        if (event.id === eventId) {
-          const updated = {...event, icon: eventIcons[iconId]};
-          this.updateEventIcon(updated);
-          return updated;
-        }
-        return event;
-      })
-    },
-    updateEventIcon(event) {
-      new UserEvent(event).save().then((res) => {
-        console.log('res', res);
-      }).catch((error) => {console.log('error', error);});
+    icon(ev) {
+      this.hola = ev;
     },
     show(ev) {
       this.iconsModal = true;
@@ -343,10 +332,29 @@ export default {
       })
         .get()
         .then(events => {
-          this.upcomingEvents = events.map((event, index) => {
-            const randomId = Math.floor(Math.random() * 28) + 1;
-            const randomIconId = Math.ceil(Math.random() * 10 * randomId) % 28;
-            return { ...event, icon: event.icon || eventIcons[randomIconId] }
+          const r = Math.floor(Math.random() * 28) + 1;
+
+          events.forEach(element => {
+            const lp = {
+              date: element.date,
+              fileName: element.fileName,
+              totalBudget: element.totalBudget,
+              companyName: element.companyName,
+              eventType: element.eventType,
+              customerName: element.customerName,
+              guests: element.guests,
+              startTime: element.startTime,
+              fileUrl: element.fileUrl,
+              location: element.location,
+              id: element.id,
+              endTime: element.endTime,
+              isRegisteredCustomer: element.isRegisteredCustomer,
+              email: element.email,
+              customer: element.customer,
+              status: element.status,
+              idx: r,
+            };
+            this.upcomingEvents.push(lp);
           });
         });
     },

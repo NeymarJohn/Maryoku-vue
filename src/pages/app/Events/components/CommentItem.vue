@@ -2,8 +2,7 @@
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
       <div class="comment-item-avatar">
-        <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
-        <img v-else class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
+        <img class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
       </div>
       <div class="comment-item-description">
         <div v-if="comment.planner">{{comment.planner.name}}</div>
@@ -80,19 +79,10 @@
   </div>
 </template>
 <script>
-
-import Avartar from "@/components/Avartar.vue";
-
 export default {
   name: "comment-item",
-  components: {
-    Avartar,
-  },
   props: {
     comment: {
-      type: Object
-    },
-    proposal: {
       type: Object
     },
     replies: {
@@ -176,7 +166,6 @@ export default {
   .comment-item-description {
     color: black !important;
     flex-grow: 1;
-    padding-left: 10px;
   }
   .post-date {
     font-family: "Manrope-Regular";
