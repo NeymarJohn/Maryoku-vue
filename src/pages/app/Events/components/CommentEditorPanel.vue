@@ -1,5 +1,5 @@
 <template>
-  <div @click="addFromEvent( $event )" class="click-capture">
+  <div @click="addFromEvent( $event )" class="click-capture" >
     <comment-circle-button
       class="item"
       v-for="(item, index) in unresolvedComponents"
@@ -115,11 +115,6 @@ export default {
       url:{
         type: String,
         required: false,
-      },
-      ignoreXOffset:{
-        type: Number,
-        required: false,
-        default:0
       }
   },
   data() {
@@ -205,14 +200,14 @@ export default {
 
     setEditPanePosition(x, y) {
       const deviceWidth = window.innerWidth;
-      if (x + 700 > deviceWidth) {
+      if (x > deviceWidth - 700) {
         this.panelPosition = {
-          x: x - this.ignoreXOffset - 580,
+          x: x - 580,
           y: y
         };
       } else {
         this.panelPosition = {
-          x: x - this.ignoreXOffset + 40,
+          x: x + 40,
           y: y
         };
       }
@@ -494,7 +489,6 @@ export default {
 
 .click-capture {
   bottom: 0px;
-  cursor: pointer;
   left: 0px;
   position: absolute;
   right: 0;
