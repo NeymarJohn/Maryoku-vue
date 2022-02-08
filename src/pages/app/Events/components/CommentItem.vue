@@ -2,7 +2,8 @@
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
       <div class="comment-item-avatar">
-        <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
+        <Avartar :name="comment.planner.name" :color="proposal.avatar_color" v-if="proposal.nonMaryoku && comment.planner.name"></Avartar>
+        <Avartar :name="comment.customer.name" :color="proposal.avatar_color" v-else-if="proposal.nonMaryoku && comment.customer.name"></Avartar>
         <img v-else class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
       </div>
       <div class="comment-item-description">

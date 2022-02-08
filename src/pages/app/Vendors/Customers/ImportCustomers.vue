@@ -13,25 +13,25 @@
               Don't have a compatible document?
               <strong>
                 <a
-                  href=""
+                  href="static/Vendorlist_template.csv"
                   style="color: #641856; text-decoration: none;
                    border-bottom: 1px solid  #641856; padding: 0px;"
-                  >download our template</a
+                  >Download our template</a
                 ></strong
               >
             </p>
           </div>
         </div>
         <div class="md-layout-item pl-0 md-size-10">
-          <md-button class="md-simple " style="margin-top: -10px" @click="$emit('cancel')">
-            <md-icon>close</md-icon>
+          <md-button  class="md-simple " style="margin-top: -10px" @click="$emit('cancel')">
+            <md-icon id="x_mark">close</md-icon>
           </md-button>
         </div>
         <div class="md-layout-item pl-0 md-size-100 mt-30 ">
           <p class="d-flex font-size-15 font-bold-extra">Attach File</p>
         </div>
         <div class="md-layout-item pl-0 md-size-100">
-          <p class="d-flex">
+          <div class="d-flex">
             <span class="font-size-14" style="cursor: pointer;">
               <img class="" :src="`${$iconURL}Campaign/Group 9087.svg`" />
               <md-tooltip class="custom_right ">
@@ -44,7 +44,7 @@
                   <div class="mb-10 mt-10">
                     <p>
                       • Your file needs to contain columns that have the following information:<br />
-                      service type, business name, contact person’s full name, phone number, <br />
+                      business name, contact person’s full name, phone number, <br />
                       and email (it’s ok if you have other information too).
                     </p>
                   </div>
@@ -58,7 +58,7 @@
               </md-tooltip>
               <span class="pl-5"> Make sure your file is ready to be imported</span>
             </span>
-          </p>
+          </div>
         </div>
 
         <div class="form-group  mt-30  md-layout-item pl-0 md-size-100 pb-20">
@@ -84,10 +84,10 @@
             <i class="fas fa-paperclip md-simple md-vendor pr-5"></i>
 
             <a :href="`${fileUrl}`" class="color-black" target="_blank">{{ fileName }}</a>
-            <span class="attach-trash" @click="fileName = null"><md-icon>close</md-icon></span>
+            <span class="attach-trash" @click="fileName = null; csv = null;"><md-icon>close</md-icon></span>
           </div>
         </div>
-        <div v-if="showError" class="md-error">{{ this.errorMessage }}</div>
+        <div v-if="showError&&!csv" class="md-error error_text">{{ this.errorMessage }}</div>
       </div>
       <div class="md-layout-item pl-0 md-size-100 mt-40">
         <div
@@ -117,7 +117,7 @@
 
         <div class="md-layout-item pl-0 md-size-10">
           <md-button class="md-simple " style="margin-top: -7px;" @click="$emit('cancel')">
-            <md-icon>close</md-icon>
+            <md-icon id="x_mark">close</md-icon>
           </md-button>
         </div>
         <div class="md-layout-item pl-0 md-size-100 mt-20 ">
@@ -131,7 +131,7 @@
 
               <md-table-row v-for="(field, key) in fieldsToMap" :key="key" class="text-left font-normal">
                 <md-table-cell md-numeric class="pr-20"> <img :src="img" v-if="map[field.key]"/></md-table-cell>
-                <md-table-cell> {{ field.label }} </md-table-cell>
+                <md-table-cell :id="field.label">{{mapFieldsNames[key]}} </md-table-cell>
                 <md-table-cell>
                   <md-field>
                     <md-select v-model="map[field.key]" style="border: solid 2px #E0E0E0;" class="pt-5 px-5 md-vendor">
@@ -147,7 +147,7 @@
         </div>
 
         <div class="mt-20">
-          <strong>*You have {{ Object.keys(map).length }}/5 mandatory matched columns</strong>
+          <strong>*You have {{requiredFieldsNumber}}/2 mandatory matched columns</strong>
         </div>
 
         <div class="md-layout-item pl-0 md-size-100 mt-20">
@@ -161,9 +161,13 @@
               </span>
             </div>
             <div>
+                <md-button
+                class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
+                @click="showPreview2()">Back</md-button
+            >
               <md-button
                 class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="showPreview()">Continue</md-button
+                @click="showPreview()">continue</md-button
               >
             </div>
           </div>
@@ -181,7 +185,7 @@
         </div>
         <div class="md-layout-item pl-0 md-size-10">
           <md-button class="md-simple " style="" @click="$emit('cancel')">
-            <md-icon>close</md-icon>
+            <md-icon id="x_mark">close</md-icon>
           </md-button>
         </div>
 
@@ -196,7 +200,7 @@
             </md-table-row>
 
             <md-table-row class="text-center" v-for="(item, index) in form.csv" :key="index">
-              <md-table-cell md-numeric>{{ item.ServiceType }}</md-table-cell>
+              <md-table-cell md-numeric></md-table-cell>
               <md-table-cell>{{ item.BusinessName }}</md-table-cell>
               <md-table-cell> {{ item.PhoneNumber }}</md-table-cell>
               <md-table-cell>{{ item.email }}</md-table-cell>
@@ -219,8 +223,11 @@
               </span>
             </div>
             <div>
+              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="showPreview3()"
+                >Back</md-button
+              >
               <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="saveCustomers(form.csv)"
-                >Save</md-button
+                >Done</md-button
               >
             </div>
           </div>
@@ -234,7 +241,7 @@ import _ from "lodash";
 import axios from "axios";
 // import Papa from "papaparse";
 import vue2Dropzone from "vue2-dropzone";
-import Multiselect from "vue-multiselect";
+// import Multiselect from "vue-multiselect";
 import S3Service from "@/services/s3.service";
 import { getBase64 } from "@/utils/file.util";
 import success from "../../../../../static/img/good.svg";
@@ -246,7 +253,7 @@ export default {
     },
   },
   components: {
-    Multiselect,
+    // Multiselect,
     vueDropzone: vue2Dropzone,
   },
   data: () => ({
@@ -256,7 +263,9 @@ export default {
     img: success,
     fieldsToMap: [],
     map: {},
-    mapFields: ["ContactFullName", "email", "PhoneNumber", "BusinessName", "ServiceType"],
+    requiredFieldsNumber: 0,
+    mapFields: ["ContactFullName", "email", "PhoneNumber", "BusinessName"],
+    mapFieldsNames: ["Contact Full Name*", "Email*", "Phone Number", "Business Name"],
     hasHeaders: true,
     sample: [],
     selected: null,
@@ -374,10 +383,16 @@ export default {
     },
     load() {
       const _this = this;
+      if (!_this.csv) {
+          this.errorMessage = 'Choose File';
+          this.showError = true;
+            return
+      }
       this.readFile(output => {
         // _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
         // _this.csv = _.get(Papa.parse(output, { skipEmptyLines: true }), "data");
       });
+      this.showError = false;
       this.upload = false;
       this.header = true;
     },
@@ -393,19 +408,33 @@ export default {
       }
     },
     showPreview(){
+      if(this.requiredFieldsNumber !== 2)return;
       this.form.csv = this.buildMappedCsv();
       this.header = false;
       this.preview = true;
+    },
+    showPreview2() {
+      this.upload = true;
+      this.header = false;
+      this.done = false;
+      this.headers = true;
+      this.preview = false;
+    },
+    showPreview3() {
+      this.upload = false;
+      this.header = true;
+      this.preview = false;
     }
   },
-  watch: {
+    watch: {
     map: {
       handler: function(newVal) {
         if (this.headers === true) {
           var hasAllKeys = this.mapFields.every(function(item) {
             return newVal.hasOwnProperty(item);
           });
-
+            this.requiredFieldsNumber = newVal.ContactFullName && newVal.email ? 2 :
+                newVal.ContactFullName || newVal.email ? 1 : 0
           // this.submit();
         }
       },
@@ -469,6 +498,12 @@ td {
 .custom_right {
   margin-left: 290px;
 }
+#x_mark{
+    margin-top: 6px;
+    font-size: 31px !important;
+    font-weight: 100;
+    color: #050505 !important;
+}
 .subtitle {
   width: 506px;
   height: 21px;
@@ -484,6 +519,9 @@ td {
 h2 {
   font-size: 16px;
   margin: 0px 5px;
+}
+.error_text{
+ color: red;
 }
 #done_modal {
   background: #f3f7fd;

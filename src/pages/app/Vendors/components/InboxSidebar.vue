@@ -216,6 +216,7 @@ export default {
         selectedComponent:null,
         customers: [],
     }),
+    computed: {},
 
     created() {},
     mounted() {
@@ -268,7 +269,6 @@ export default {
             return proposals;
         },
         proposals() {
-            console.log('checkpoint', this.$store.state.comment.commentsProposals)
             return this.$store.state.comment.commentsProposals;
         },
         selectedProposal() {
