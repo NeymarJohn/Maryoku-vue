@@ -24,7 +24,7 @@ export const discounting = (cost, {price, percentage}) => {
 }
 
 export const addingTax = (cost, {price, percentage}) => {
-    let tax = percentage ? Math.round((cost * percentage) / 100) : price;
+    let tax = price || Math.round((cost * percentage) / 100) ;
 
     return cost + tax;
 }
