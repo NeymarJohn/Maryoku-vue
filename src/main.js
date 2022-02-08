@@ -48,7 +48,7 @@ import authService from "@/services/auth.service";
 import "./assets/scss/main.scss";
 import dateUtil from "./utils/date.util";
 import stringUtil from "./utils/string.util"
-import VueYoutube from "vue-youtube";
+// import VueYoutube from "vue-youtube";
 
 import helper from "@/utils/helperFunction";
 import moment from "moment";
@@ -72,7 +72,7 @@ Vue.use(VueGmaps, {
   libraries: ["places"],
 });
 Vue.use(VueScrollTo);
-Vue.use(VueYoutube);
+// Vue.use(VueYoutube);
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
