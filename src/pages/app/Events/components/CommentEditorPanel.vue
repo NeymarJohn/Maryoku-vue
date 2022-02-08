@@ -115,6 +115,11 @@ export default {
       url:{
         type: String,
         required: false,
+      },
+      ignoreXOffset:{
+        type: Number,
+        required: false,
+        default:0
       }
   },
   data() {
@@ -200,14 +205,14 @@ export default {
 
     setEditPanePosition(x, y) {
       const deviceWidth = window.innerWidth;
-      if (x > deviceWidth - 700) {
+      if (x + 700 > deviceWidth) {
         this.panelPosition = {
-          x: x - 580,
+          x: x - this.ignoreXOffset - 580,
           y: y
         };
       } else {
         this.panelPosition = {
-          x: x + 40,
+          x: x - this.ignoreXOffset + 40,
           y: y
         };
       }
