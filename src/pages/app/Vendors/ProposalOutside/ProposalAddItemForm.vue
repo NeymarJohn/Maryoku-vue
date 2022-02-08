@@ -348,38 +348,107 @@ export default {
     isAutoCompletedValue() {
       return this.selectedSuggestItemIndex >= 0;
     },
-    suggestedItems() {
+    // suggestedItems() {
+    //   const items = [];
+    //   this.vendorServices.forEach(category => {
+    //     if (category.name !== "accessibility") {
+    //       category.subCategories.forEach(subCat => {
+    //         if (
+    //           subCat.name.toLowerCase() === "inclusion" ||
+    //           subCat.name.toLowerCase() === "sustainability" ||
+    //           subCat.name.toLowerCase() === "diversity"
+    //         )
+    //           return;
+    //         subCat.items.forEach(item => {
+    //           if (item.hideOnAutoComplete) return;
+    //           const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+    //           const camelized = this.camelize(capitalized);
+    //           const profileService = this.profileServices[camelized];
+    //           const requestItemByPlanner = null;
+
+    //           if (camelized === 'customService') {
+    //             const customServiceItems = profileService.data;
+    //             customServiceItems.forEach(service_item => {
+    //               if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
+    //                 items.push({
+    //                   description: service_item.name.charAt(0).toUpperCase() + service_item.name.slice(1),
+    //                   qty: 1,
+    //                   included: false,
+    //                   price: `${service_item.price}`,
+    //                   requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+    //                 });
+    //               }
+    //             })
+    //           }
+
+    //           if (item.available) {
+    //             item.available.forEach(availableItem => {
+    //               const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
+    //               if (items.findIndex(it => it.description.toLowerCase() === description.toLowerCase()) < 0) {
+    //                 items.push({
+    //                   description,
+    //                   qty: item.value ? item.value : 1,
+    //                   included:
+    //                     profileService &&
+    //                     profileService.checked &&
+    //                     !profileService.xIncluded &&
+    //                     profileService.included,
+    //                   price: profileService ? Number(profileService.value) : "",
+    //                   requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+    //                 });
+    //               }
+    //             });
+    //           }
+
+    //           if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
+    //             items.push({
+    //               description: capitalized,
+    //               qty: item.value ? item.value : 1,
+    //               included:
+    //                 profileService && profileService.checked && !profileService.xIncluded && profileService.included,
+    //               price: profileService ? Number(profileService.value) : "",
+    //               requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+    //             });
+    //           }
+    //         });
+    //       });
+    //     }
+    //   });
+    //   return items;
+    // },
+        suggestedItems() {
       const items = [];
-      this.vendorServices.forEach(category => {
+      this.vendorServices.forEach((category) => {
         if (category.name !== "accessibility") {
-          category.subCategories.forEach(subCat => {
+          category.subCategories.forEach((subCat) => {
             if (
               subCat.name.toLowerCase() === "inclusion" ||
               subCat.name.toLowerCase() === "sustainability" ||
               subCat.name.toLowerCase() === "diversity"
             )
               return;
-            subCat.items.forEach(item => {
+            subCat.items.forEach((item) => {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
-              const camelized = this.camelize(capitalized);
-              const profileService = this.profileServices[camelized];
-              const requestItemByPlanner = null;
+              const profileService = this.profileServices[this.camelize(capitalized)];
 
-              if (camelized === 'customService') {
-                const customServiceItems = profileService.data;
-                customServiceItems.forEach(service_item => {
-                  if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
+              const requestItemByPlanner = null;
+              console.log("requestItemByPlanner", requestItemByPlanner);
+              if (item.available) {
+                item.available.forEach((availableItem) => {
+                  const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
+                  if (items.findIndex((it) => it.description.toLowerCase() === description.toLowerCase()) < 0) {
                     items.push({
-                      description: service_item.name.charAt(0).toUpperCase() + service_item.name.slice(1),
-                      qty: 1,
-                      included: false,
-                      price: `${service_item.price}`,
+                      description,
+                      qty: item.value ? item.value : 1,
+                      included: profileService && profileService.checked && !profileService.xIncluded && profileService.included,
+                      price: profileService ? Number(profileService.value) : "",
                       requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                     });
                   }
-                })
+                });
               }
+              
 
               if (item.available) {
                 item.available.forEach(availableItem => {
@@ -399,13 +468,11 @@ export default {
                   }
                 });
               }
-
-              if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
+              if (items.findIndex((it) => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
                 items.push({
                   description: capitalized,
                   qty: item.value ? item.value : 1,
-                  included:
-                    profileService && profileService.checked && !profileService.xIncluded && profileService.included,
+                  included: profileService  && profileService.checked && !profileService.xIncluded && profileService.included,
                   price: profileService ? Number(profileService.value) : "",
                   requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                 });

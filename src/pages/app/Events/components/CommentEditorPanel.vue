@@ -111,6 +111,10 @@ export default {
       proposal:{
         type: Object,
         required: false,
+      },
+      url:{
+        type: String,
+        required: false,
       }
   },
   data() {
@@ -251,7 +255,7 @@ export default {
         positionY: event.clientY - 100 + window.scrollY,
         index: maxIndex + 1,
         isEditing: false,
-        url: this.$route.path
+        url: this.url ? this.url : this.$route.path,
       }
       this.commentComponents = this.commentComponents.concat([newComentComponent])
       this.selectedComponentIndex = this.commentComponents.length - 1;
