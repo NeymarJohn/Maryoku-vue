@@ -30,6 +30,7 @@
       <div class="comment_item align-items-center justify-content-between cursor-pointer"
            v-for="(commentComponent, commentIndex) in commentComponents"
            :key="commentIndex"
+           v-if="commentComponent.comments && commentComponent.comments.length"
       >
         <div class="d-flex justify-content-between">
           <div class="sidebar__item__details2 d-flex">
@@ -117,6 +118,7 @@ import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 import { FadeTransition } from "vue2-transitions";
 import {CommentMixins} from "@/mixins";
 import moment from 'moment'
+import { getReq } from "@/utils/token";
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
@@ -154,19 +156,85 @@ export default {
   mounted() {
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
   },
-  computed: {
-    selectedProposal() {
-      if(this.$store.state.comment.selectedProposal){
-        this.commentComponents = this.$store.state.comment.selectedProposal.commentComponent
-      }
-      return this.$store.state.comment.selectedProposal;
-    },
-  },
+  computed: {},
 
   methods: {
+    changeCommentSortType(sortByType) {
+      if(sortByType == 'name'){
+        this.commentSortType = this.commentSortType == 'asc' ? 'desc' : 'asc'
+      }
+
+      if(sortByType == 'status'){
+        this.commentStatusSortType = this.commentStatusSortType == 'asc' ? 'desc' : 'asc'
+      }
+
+      this.commentSortBy = sortByType;
+
+      let components2 = [];
+
+      for (let component of this.commentComponents) {
+        if (component.comments.length) {
+          component.unread_count = this.getViewCount(component.comments);
+          components2.push(component);
+        }
+      }
+      if(sortByType == 'name'){
+        if (this.commentSortBy == 'name') {
+          components2.sort((a, b) => {
+            let name1 = a.customer ? a.customer.name : a.planner.name;
+            let name2 = b.customer ? b.customer.name : b.planner.name;
+            if (this.commentSortType == 'asc') {
+              return name1 > name2 ? 1 : -1;
+            }else{
+              return name1 < name2 ? 1 : -1;
+            }
+          });
+        }
+      }
+
+
+      if(sortByType == 'status'){
+        if (this.commentSortBy == 'status') {
+          components2.sort((a, b) => {
+            if (this.commentStatusSortType == 'asc') {
+              return b.unread_count - a.unread_count;
+            }
+
+            return a.unread_count - b.unread_count;
+          });
+        }
+      }
+
+      this.commentComponents = components2;
+    },
+    async getMessage(e) {
+      if (e.target.value.includes('@')) {
+        let queryArray = e.target.value.split('@')
+
+        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
+        console.log('customers', res);
+        this.customers = res.data;
+
+        this.showAddress = true;
+      }
+    },
     toggleshowReply(commentIndex) {
-      this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex
-      this.selectedComponent = this.selectedProposal.commentComponent[commentIndex];
+      this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
+      this.selectedComponent = this.commentComponents[commentIndex];
+
+    },
+    async saveCommentReply(event, type) {
+      let selectedComponent = this.selectedComponent;
+      console.log('saveComment', selectedComponent);
+      const comment = {
+        commentComponent: { id: selectedComponent.id },
+        description: this.editingComment,
+        parentId: this.mainComment ? this.mainComment.id : null,
+        email: this.selectedCustomer ? this.selectedCustomer.email : null,
+      };
+      this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
+      this.editingComment = ""
+      event.stopPropagation();
     },
     daysDiff(date){
       return moment(moment()).diff(moment(date), 'days');
