@@ -137,7 +137,7 @@ export default {
             Swal.fire({
               title,
               buttonsStyling: false,
-              confirmButtonClass: "md-button md-vendor",
+              confirmButtonClass: "md-button md-success",
             }).then(() => {
               const proposalRequest = this.$route.query.proposalRequest;
               this.setVendor({});
