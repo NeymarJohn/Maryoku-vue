@@ -162,7 +162,7 @@ export default {
       return []
     },
     unresolvedComponents() {
-      return this.commentComponents.filter(item => !item.isResolved);
+      return this.commentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
     }
   },
   created() {

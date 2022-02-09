@@ -113,11 +113,7 @@
 
 <script>
 
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import EventCommentComponent from "@/models/EventCommentComponent";
-import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
-import { postReq, getReq } from "@/utils/token";
 import { FadeTransition } from "vue2-transitions";
 import {CommentMixins} from "@/mixins";
 import moment from 'moment'
@@ -159,57 +155,6 @@ export default {
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
   },
   computed: {
-    vendor() {
-      return this.$store.state.vendor.profile;
-    },
-    commentsProposals() {
-
-      let proposals = []
-
-      for (let proposal of this.proposals) {
-        // if (proposal.commentComponent.length) {
-        proposal.unread_count = this.getViewCount(proposal.commentComponent);
-        proposals.push(proposal);
-        // }
-        proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
-      }
-
-      if (this.sortBy == 'status') {
-        proposals.sort((a, b) => {
-          if (this.statusSortType == 'asc') {
-            return b.unread_count - a.unread_count;
-          }
-
-          return a.unread_count - b.unread_count;
-        });
-      }
-
-      if (this.sortBy == 'date') {
-        proposals.sort((a, b) => {
-          if (this.sortType == 'asc') {
-            return a.dateCreated - b.dateCreated;
-          }
-
-          return b.dateCreated - a.dateCreated;
-        });
-      }
-
-      if (this.sortBy == 'name') {
-        proposals.sort((a, b) => {
-          if (this.sortType == 'asc') {
-            return a.eventData.customer.name > b.eventData.customer.name ? 1 : -1;
-          }
-
-          return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
-        });
-      }
-
-      return proposals;
-    },
-    proposals() {
-      console.log('checkpoint', this.$store.state.comment.commentsProposals)
-      return this.$store.state.comment.commentsProposals;
-    },
     selectedProposal() {
       if(this.$store.state.comment.selectedProposal){
         this.commentComponents = this.$store.state.comment.selectedProposal.commentComponent
@@ -217,129 +162,11 @@ export default {
       return this.$store.state.comment.selectedProposal;
     },
   },
-  watch: {
-    proposals() {
-      console.log("this.commentsProposals", this.commentsProposals.length)
-      if (this.commentsProposals.length && this.selectedProposal == null) {
-        this.changeProposal(this.commentsProposals[0]);
-      }
-    }
-  },
+
   methods: {
-    ...mapMutations("comment", ["setSelectedProposal"]),
-    changeProposal(proposal,fullDiscussion = false) {
-      this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
-      setTimeout(() => {
-        this.fullDiscussion = fullDiscussion;
-      },100)
-    },
-    getViewCount(commentComponents = []) {
-      let count = 0;
-      for (let commentComponent of commentComponents) {
-        for (let comment of (commentComponent.comments || [])) {
-          if (!comment.viewed) {
-            count++;
-          }
-        }
-      }
-
-      return count;
-    },
-    changeStatusSortType() {
-      this.statusSortType = this.statusSortType == 'asc' ? 'desc' : 'asc'
-      this.sortBy = 'status';
-    },
-    changeSortType() {
-      this.sortType = this.sortType == 'asc' ? 'desc' : 'asc'
-      if (this.sortBy == '') {
-        this.sortBy = 'date';
-      }
-    },
-    changeCommentSortType(sortByType) {
-      if(sortByType == 'name'){
-        this.commentSortType = this.commentSortType == 'asc' ? 'desc' : 'asc'
-      }
-
-      if(sortByType == 'status'){
-        this.commentStatusSortType = this.commentStatusSortType == 'asc' ? 'desc' : 'asc'
-      }
-
-      this.commentSortBy = sortByType;
-
-      let components2 = [];
-
-      for (let component of this.commentComponents) {
-        if (component.comments.length) {
-          component.unread_count = this.getViewCount(component.comments);
-          components2.push(component);
-        }
-      }
-      if(sortByType == 'name'){
-        if (this.commentSortBy == 'name') {
-          components2.sort((a, b) => {
-            let name1 = a.customer ? a.customer.name : a.planner.name;
-            let name2 = b.customer ? b.customer.name : b.planner.name;
-            if (this.commentSortType == 'asc') {
-              return name1 > name2 ? 1 : -1;
-            }else{
-              return name1 < name2 ? 1 : -1;
-            }
-          });
-        }
-      }
-
-
-      if(sortByType == 'status'){
-        if (this.commentSortBy == 'status') {
-          components2.sort((a, b) => {
-            if (this.commentStatusSortType == 'asc') {
-              return b.unread_count - a.unread_count;
-            }
-
-            return a.unread_count - b.unread_count;
-          });
-        }
-      }
-
-      this.commentComponents = components2;
-    },
     toggleshowReply(commentIndex) {
       this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex
       this.selectedComponent = this.selectedProposal.commentComponent[commentIndex];
-    },
-    async getMessage(e) {
-      if (e.target.value.includes('@')) {
-        let queryArray = e.target.value.split('@')
-
-        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
-        console.log('customers', res);
-        this.customers = res.data;
-
-        this.showAddress = true;
-      }
-    },
-    async saveCommentReply(event, type) {
-      let selectedComponent = this.selectedComponent;
-      console.log('saveComment', selectedComponent);
-      const comment = {
-        commentComponent: { id: selectedComponent.id },
-        description: this.editingComment,
-        parentId: this.mainComment ? this.mainComment.id : null,
-        email: this.selectedCustomer ? this.selectedCustomer.email : null,
-      };
-      this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
-      this.editingComment = ""
-      event.stopPropagation();
-    },
-    toAddress(customer){
-      console.log('toAddress', customer, this.editingComment);
-
-      this.selectedCustomer = customer;
-      let queryArray = this.editingComment.split('@');
-      queryArray[1] = customer.name;
-
-      this.editingComment = queryArray.join('@') + ' ';
-      this.showAddress = false
     },
     daysDiff(date){
       return moment(moment()).diff(moment(date), 'days');
@@ -354,26 +181,8 @@ export default {
   margin-right: 10px;
 }
 
-.title-text span {
-  font-size: 27px !important;
-}
-
 .sidebar__items {
   height: calc(100% - 10rem);
-}
-
-.sidebar__item {
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
-  transition: 0.3s ease-in-out all;
-  height: 100px;
-  position: relative;
-}
-
-.sidebar__item:hover,
-.sidebar__item.active {
-  background-color: #f6eef6;
 }
 
 .sidebar__item__details {
@@ -399,41 +208,6 @@ export default {
   margin-left: -1rem;
 }
 
-.sidebar__item__btn {
-  padding: 5px 25px 5px 25px;
-  font-size: 11.5px;
-  font-weight: 800;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.88;
-  letter-spacing: 1px;
-  text-transform: capitalize;
-  margin-right: 10px;
-}
-
-.sidebar__item__badge {
-  width: 25px;
-  height: 25px;
-  background: #f51355;
-  text-align: center;
-  color: #fff;
-  border-radius: 30px;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.commentMode {
-  width: 247px;
-  height: 40px;
-  font-size: 30px;
-  font-weight: 800;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #050505;
-}
 
 .productLaunchParty {
   height: 21px;
@@ -449,45 +223,6 @@ export default {
 }
 .progress-sidebar{
   height: 80vh;
-}
-
-.progress-sidebar-content {
-  position: absolute;
-  left: 0;
-  top: 133px;
-}
-
-.inbox-sidebar {
-  overflow-y: hidden;
-  left: 0;
-  width: 25vw;
-  height: 100%;
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-  border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
-}
-
-.summer-party .title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.5rem;
-}
-
-.summer-party .dropdown {
-  position: absolute;
-  bottom: 3rem;
-}
-
-.summer-party .dropdown2 {
-  position: absolute;
-  bottom: 1rem;
-  margin-left: 25px;
-}
-
-.summer-party .dropdown select {
-  padding: 0 !important;
-  border: none !important;
-  margin-right: 10px;
 }
 
 .summer-party2 {
@@ -524,63 +259,8 @@ export default {
   margin-right: 10px;
 }
 
-.summer-party3 {
-  position: inherit !important;
-  border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
-  box-shadow: none !important;
-  height: 10rem;
-  display: flex;
-  align-items: center;
-  width: 100% !important;
-}
-
-.summer-party3 .title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 3rem;
-  margin-right: 5rem;
-}
-
-.summer-party3 .dropdown {
-  position: absolute;
-  bottom: 1rem;
-  margin-right: 5.5rem;
-}
-
-.summer-party3 .dropdown2 {
-  position: absolute;
-  bottom: 1rem;
-  margin-left: 25px;
-}
-
-.summer-party3 .dropdown select {
-  padding: 0 !important;
-  border: none !important;
-  margin-right: 10px;
-}
-
 .sidebar__items::-webkit-scrollbar-thumb {
   border-radius: 0 !important;
-}
-
-.unread-count {
-  width: 28px;
-  height: 28px;
-  margin: 37px 34px 57px 13px;
-  padding: 3px 11px 3px 10px;
-  background-color: #f51355;
-  font-size: 16px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #fff;
-  border-radius: 50%;
-  position: absolute;
-  right: 40px;
 }
 
 .unread-count2 {
@@ -601,33 +281,6 @@ export default {
   position: absolute;
   right: 0;
   top: 75px;
-}
-
-.event-plan .progress-sidebar {
-  left: 0 !important;
-  overflow-y: hidden;
-}
-
-.sort-bar {
-  height: 50px;
-  display: grid;
-  align-items: center;
-  grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
-
-  .sort-item {
-    cursor: pointer;
-    color: #707070;
-    font-size: 14px;
-
-    &.selected {
-      color: #050505;
-      font-weight: bold;
-    }
-  }
-}
-
-.mr-1 {
-  margin-right: 1rem;
 }
 
 .myr-1 {
@@ -749,15 +402,6 @@ img.header-img {
   }
 }
 
-.align-item-center {
-  align-items: center;
-}
-
-.md-button2.md-vendor2 {
-  background-color: #fff !important;
-  border-color: #fff !important;
-  color: #050505 !important;
-}
 .md-button.md-simple i.my-chevron {
   color: #050505 !important;
 }
