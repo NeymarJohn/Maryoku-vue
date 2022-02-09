@@ -1,8 +1,8 @@
 <template>
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
-      <div class="comment-item-avatar" v-if="proposal">
-        <Avartar :name="comment.planner.name" :color="proposal.avatar_color" v-if="proposal.nonMaryoku && comment.planner.name"></Avartar>
+      <div class="comment-item-avatar">
+        <Avartar :name="comment.planner.name" :color="proposal.avatar_color" v-if="proposal.nonMaryoku && comment.planner && comment.planner.name"></Avartar>
         <Avartar :name="comment.customer.name" :color="proposal.avatar_color" v-else-if="proposal.nonMaryoku && comment.customer.name"></Avartar>
         <img v-else class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
       </div>
@@ -135,6 +135,7 @@ export default {
   computed: {
     getTimeDiffString() {},
     myFavorite() {
+      console.log("auth", this.$auth)
       if (!this.comment.favoriteUsers) return false
       if (this.comment.favoriteUsers.findIndex(userId => userId === this.$auth.user.id) < 0) {
         return false

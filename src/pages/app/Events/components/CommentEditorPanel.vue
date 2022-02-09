@@ -1,5 +1,5 @@
 <template>
-  <div @click="addFromEvent( $event )" class="click-capture">
+  <div @click="addFromEvent( $event )" class="click-capture" >
     <comment-circle-button
       class="item"
       v-for="(item, index) in unresolvedComponents"
@@ -123,7 +123,6 @@ export default {
       }
   },
   data() {
-    let updatedCommentComponents = JSON.parse(JSON.stringify(this.commentComponents));
     return {
       items: [],
       mostRecentClickCoordinates: null,
@@ -144,30 +143,30 @@ export default {
       showAddress: false,
       customers: [],
       selectedCustomer: null,
-      updatedCommentComponents:updatedCommentComponents
     };
   },
   computed: {
     selectedCommentComponent() {
-      return this.updatedCommentComponents[this.selectedComponentIndex]
+      return this.commentComponents[this.selectedComponentIndex]
     },
     mainComment() {
-      if (this.updatedCommentComponents[this.selectedComponentIndex].comments) {
-        return this.updatedCommentComponents[this.selectedComponentIndex].comments[0]
+      if (this.commentComponents[this.selectedComponentIndex].comments) {
+        return this.commentComponents[this.selectedComponentIndex].comments[0]
       }
       return {}
     },
     replies() {
-      if (this.updatedCommentComponents[this.selectedComponentIndex].comments) {
-        return this.updatedCommentComponents[this.selectedComponentIndex].comments.filter((item, index)=>index>0)
+      if (this.commentComponents[this.selectedComponentIndex].comments) {
+        return this.commentComponents[this.selectedComponentIndex].comments.filter((item, index)=>index>0)
       }
       return []
     },
     unresolvedComponents() {
-      return this.updatedCommentComponents.filter(item => !item.isResolved);
+      return this.commentComponents.filter(item => !item.isResolved);
     }
   },
   created() {
+    console.log('commentPanel.created', this.$auth);
   },
   methods: {
     ...mapActions("comment", [
@@ -188,8 +187,10 @@ export default {
     showComments(commentComponent) {
       if (this.isOpenCommentListsPane) return;
       this.comments = commentComponent.comments
-      this.selectedComponentIndex = this.updatedCommentComponents.findIndex(item=>item.index === commentComponent.index);
+      this.selectedComponentIndex = this.commentComponents.findIndex(item=>item.index === commentComponent.index);
       this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY )
+      console.log(this.commentComponents);
+      console.log(this.selectedComponentIndex)
       this.isOpenCommentListsPane = true;
 
       // this.getCommentsAction(commentComponent.id).then(comments => {
@@ -217,6 +218,7 @@ export default {
       }
     },
     toggleEditPane(commentComponent, isEditing) {
+      console.log('toggleEditPane', commentComponent, isEditing);
       if (isEditing) {
         this.showComments(commentComponent)
       } else {
@@ -227,8 +229,8 @@ export default {
     },
     clearStatus() {
       if (this.selectedComponentIndex >=0 ) {
-        if (!this.updatedCommentComponents[this.selectedComponentIndex].comments || this.updatedCommentComponents[this.selectedComponentIndex].comments.length === 0 ) {
-          this.updatedCommentComponents.splice(this.selectedComponentIndex, 1)
+        if (!this.commentComponents[this.selectedComponentIndex].comments || this.commentComponents[this.selectedComponentIndex].comments.length === 0 ) {
+          this.commentComponents.splice(this.selectedComponentIndex, 1)
         }
       }
       this.isCommentEditing = false;
@@ -238,14 +240,15 @@ export default {
       this.comments = [];
     },
     addFromEvent(event) {
+      console.log('addFromEvent');
       if (this.isOpenCommentListsPane) {
         this.clearStatus();
         return;
       }
       var element = document.querySelector(".click-capture");
       var top = element.offsetTop;
-      const maxIndex = this.updatedCommentComponents
-        ? this.updatedCommentComponents.reduce((index, item) => {
+      const maxIndex = this.commentComponents
+        ? this.commentComponents.reduce((index, item) => {
             if (item.index > index) index = item.index;
             return index;
           }, 0)
@@ -259,8 +262,8 @@ export default {
         isEditing: false,
         url: this.url ? this.url : this.$route.path,
       }
-      this.updatedCommentComponents = this.updatedCommentComponents.concat([newComentComponent])
-      this.selectedComponentIndex = this.updatedCommentComponents.length - 1;
+      this.commentComponents = this.commentComponents.concat([newComentComponent])
+      this.selectedComponentIndex = this.commentComponents.length - 1;
       // this.addCommentComponent({
       //   dateTime: Date.now(),
       //   positionX: event.clientX - 80,
@@ -303,7 +306,8 @@ export default {
       event.stopPropagation();
     },
     async saveComment(event, type) {
-      let selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
+      let selectedComponent = this.commentComponents[this.selectedComponentIndex];
+      console.log('saveComment', selectedComponent);
       const comment = {
             commentComponent: { id: selectedComponent.id },
             description: this.editingComment,
@@ -330,7 +334,7 @@ export default {
       this.editingCommentId = comment.id;
     },
     markAsFavorite(comment, isFavorite) {
-      const hoveredComponent = this.updatedCommentComponents[this.selectedComponentIndex]
+      const hoveredComponent = this.commentComponents[this.selectedComponentIndex]
       comment.eventCommentComponent.id = hoveredComponent.id;
       if (isFavorite) {
         if (!comment.favoriteUsers) comment.favoriteUsers = [];
@@ -343,13 +347,15 @@ export default {
         comment.favoriteUsers.splice(index, 1);
         comment.myFavorite = false;
       }
-      const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
+      console.log(comment)
+      const selectedComponent = this.commentComponents[this.selectedComponentIndex];
       const commentIndex = hoveredComponent.comments.findIndex(item=>item.id===comment.id)
-      this.updatedCommentComponents[this.selectedComponentIndex].comments[commentIndex] = comment
+      this.commentComponents[this.selectedComponentIndex].comments[commentIndex] = comment
       this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
     },
 
     /*markAsRead(commentComponent){
+      console.log("this.commentComponents",commentComponent)
       for(let comment of commentComponent.comments){
         if(!comment.viewed){
           comment.viewed = true;
@@ -367,9 +373,10 @@ export default {
       this.$emit('deleteComment', {comment, index:this.selectedComponentIndex} )
     },
     updateComment(comment) {
+      console.log('panel.updateComment', comment);
       this.editingCommentId = "";
 
-      const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
+      const selectedComponent = this.commentComponents[this.selectedComponentIndex];
       this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
     },
     movedCommentComponent(movedCommentComponent) {
@@ -384,6 +391,7 @@ export default {
       // });
     },
     draggingButton(component, position) {
+      console.log(position);
       if (this.isCommentEditing && this.selectedCommentComponent) {
         if (position.x < 600) {
           this.$refs.editingPanel.style.left = `${position.x - 20}px`;
@@ -405,12 +413,14 @@ export default {
         let queryArray = e.target.value.split('@')
 
         let res = await getReq(`/1/customers?name=${queryArray[1]}`);
+        console.log('customers', res);
         this.customers = res.data;
 
         this.showAddress = true;
       }
     },
     toAddress(customer){
+      console.log('toAddress', customer, this.editingComment);
 
       this.selectedCustomer = customer;
       let queryArray = this.editingComment.split('@');
@@ -422,7 +432,7 @@ export default {
   },
   watch:{
     commentComponents(newVal){
-      this.updatedCommentComponents = JSON.parse(JSON.stringify(newVal))
+        console.log('commentComponent', newVal)
     }
   }
 };
@@ -484,7 +494,6 @@ export default {
 
 .click-capture {
   bottom: 0px;
-  cursor: pointer;
   left: 0px;
   position: absolute;
   right: 0;

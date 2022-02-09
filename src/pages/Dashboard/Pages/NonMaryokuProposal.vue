@@ -53,32 +53,45 @@
           </md-card>
         </div>
       </div>
-      <div class="proposal-container" :class="isMobile ? 'mt-10' : 'mt-40'">
-        <EventProposalDetails
-          :proposal="proposal"
-          :landingPage="true"
-          :nonMaryoku="true"
-          :step="step"
-          v-if="proposal"
-          @change="handleStep"
-          @updateProposal="handleUpdate"
-          @ask="handleAsk"
-          @favorite="handleFavorite"
-        >
-          <template slot="timer">
-            <TimerPanel
-              v-if="!isMobile || (isMobile && step === 0)"
-              :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
-              :target="targetTime"
-              :pending="negotiationPending"
-              :status="proposal.status"
-              :declined="negotiationDeclined"
-              :approved="negotiationProcessed"
-              @updateExpireDate="handleAsk('expiredDate')"
-              :theme="isMobile ? 'mobile red' : 'red'"
-            ></TimerPanel>
-          </template>
-        </EventProposalDetails>
+      <div style="display: flex">
+        <CommentSidebar v-if="showCommentEditorPanel" class="comment-sidebar"></CommentSidebar>
+        <div class="proposal-container"  :class="{'margin-auto':showCommentEditorPanel===false}">
+          <CommentEditorPanel
+            v-if="showCommentEditorPanel"
+            :commentComponents="commentComponents"
+            :proposal="proposal"
+            @saveComment="saveCommentWithAuth"
+            @updateComment="updateCommentWithAuth"
+            @deleteComment="deleteCommentWithAuth"
+            @updateCommentComponent="updateCommentComponentWithAuth"
+          >
+          </CommentEditorPanel>
+          <EventProposalDetails
+            :proposal="proposal"
+            :landingPage="true"
+            :nonMaryoku="true"
+            :step="step"
+            v-if="proposal"
+            @change="handleStep"
+            @updateProposal="handleUpdate"
+            @ask="handleAsk"
+            @favorite="handleFavorite"
+          >
+            <template slot="timer">
+              <TimerPanel
+                v-if="!isMobile || (isMobile && step === 0)"
+                :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
+                :target="targetTime"
+                :pending="negotiationPending"
+                :status="proposal.status"
+                :declined="negotiationDeclined"
+                :approved="negotiationProcessed"
+                @updateExpireDate="handleAsk('expiredDate')"
+                :theme="isMobile ? 'mobile red' : 'red'"
+              ></TimerPanel>
+            </template>
+          </EventProposalDetails>
+        </div>
       </div>
 
       <div class="text-center logo-area" :class="isMobile ? 'font-size-12 py-10' : 'font-size-18 p-40 mt-40'">
@@ -191,17 +204,6 @@
         </template>
       </div>
     </template>
-    <CommentEditorPanel
-      v-if="showCommentEditorPanel"
-      :commentComponents="commentComponents"
-      :proposal="proposal"
-      @saveComment="saveCommentWithAuth"
-      @updateComment="updateCommentWithAuth"
-      @deleteComment="deleteCommentWithAuth"
-      @updateCommentComponent="updateCommentComponentWithAuth"
-    >
-    </CommentEditorPanel>
-
     <GuestSignUpModal
       v-if="showGuestSignupModal"
       :onlyAuth="onlyAuth"
@@ -237,6 +239,7 @@ const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
   SignInContent: () => import("@/components/SignInContent/index.vue"),
   CollapsePanel: () => import("@/components/CollapsePanel.vue"),
+  CommentSidebar: () => import("@/components/CommentSidebar")
 };
 
 export default {
@@ -570,7 +573,8 @@ export default {
   }
   .proposal-container {
     max-width: 1280px;
-    margin: auto;
+    margin-top: 90px;
+    position: relative;
   }
   .logo-area {
     color: #a0a0a0;
@@ -611,5 +615,13 @@ export default {
     transform-origin: 0 0;
     transform: rotate(135deg);
   }
+}
+.comment-sidebar{
+  width: 555px;
+  margin-right: 63px;
+  left: 0;
+}
+.margin-auto{
+  margin: auto;
 }
 </style>

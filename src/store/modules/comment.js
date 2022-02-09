@@ -35,6 +35,7 @@ const mutations = {
     state.commentComponents = commentComponents
   },
   setCommentsProposals(state, commentsProposals) {
+    console.log("setCommentsProposals",commentsProposals)
     state.commentsProposals = commentsProposals
   },
   setSelectedProposal(state, commentsProposal) {
