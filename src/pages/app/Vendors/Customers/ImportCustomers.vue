@@ -121,7 +121,7 @@
           </md-button>
         </div>
         <div class="md-layout-item pl-0 md-size-100 mt-20 ">
-          <div class="custom_border">
+          <div id="headers_to_categories_mapping" class="custom_border">
             <md-table>
               <md-table-row class="font-size-17">
                 <md-table-head md-numeric>Matched</md-table-head>
@@ -132,15 +132,9 @@
               <md-table-row v-for="(field, key) in fieldsToMap" :key="key" class="text-left font-normal">
                 <md-table-cell md-numeric class="pr-20"> <img :src="img" v-if="map[field.key]"/></md-table-cell>
                 <md-table-cell :id="field.label">{{mapFieldsNames[key]}} </md-table-cell>
-                <md-table-cell>
-                  <md-field>
-                    <md-select v-model="map[field.key]" style="border: solid 2px #E0E0E0;" class="pt-5 px-5 md-vendor">
-                      <md-option v-for="(column, key) in firstRow" :key="key" :value="key" class="md-vendor">{{
-                        column
-                      }}</md-option>
-                    </md-select>
-                  </md-field>
-                </md-table-cell>
+                  <md-table-cell>
+                      <customizable-select @valueChanged="onValueChanged($event, field.key)" :initial-value="'Choose ' + mapSelectNames[key]" :data="firstRow"></customizable-select>
+                  </md-table-cell>
               </md-table-row>
             </md-table>
           </div>
@@ -161,13 +155,15 @@
               </span>
             </div>
             <div>
-                <md-button
-                class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="showPreview2()">Back</md-button
-            >
               <md-button
                 class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="showPreview()">continue</md-button
+                @click="backToUpload()">Back
+              </md-button
+              >
+              <md-button
+                class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
+                @click="showPreview()">continue
+              </md-button
               >
             </div>
           </div>
@@ -200,7 +196,7 @@
             </md-table-row>
 
             <md-table-row class="text-center" v-for="(item, index) in form.csv" :key="index">
-              <md-table-cell md-numeric></md-table-cell>
+              <md-table-cell> {{ item.EIN }}</md-table-cell>
               <md-table-cell>{{ item.BusinessName }}</md-table-cell>
               <md-table-cell> {{ item.PhoneNumber }}</md-table-cell>
               <md-table-cell>{{ item.email }}</md-table-cell>
@@ -223,7 +219,7 @@
               </span>
             </div>
             <div>
-              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="showPreview3()"
+              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="backToPreview()"
                 >Back</md-button
               >
               <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="saveCustomers(form.csv)"
@@ -239,10 +235,8 @@
 <script>
 import _ from "lodash";
 import axios from "axios";
-// import Papa from "papaparse";
 import vue2Dropzone from "vue2-dropzone";
-// import Multiselect from "vue-multiselect";
-import S3Service from "@/services/s3.service";
+import CustomizableSelect from "../../../../components/Select/CustomizableSelect";
 import { getBase64 } from "@/utils/file.util";
 import success from "../../../../../static/img/good.svg";
 export default {
@@ -253,7 +247,7 @@ export default {
     },
   },
   components: {
-    // Multiselect,
+    CustomizableSelect,
     vueDropzone: vue2Dropzone,
   },
   data: () => ({
@@ -262,10 +256,17 @@ export default {
     },
     img: success,
     fieldsToMap: [],
-    map: {},
+    map: {
+      "ContactFullName": null,
+      "email": null,
+      "PhoneNumber": null,
+      "BusinessName": null,
+      "EIN": null
+    },
     requiredFieldsNumber: 0,
-    mapFields: ["ContactFullName", "email", "PhoneNumber", "BusinessName"],
-    mapFieldsNames: ["Contact Full Name*", "Email*", "Phone Number", "Business Name"],
+    mapFields: ["ContactFullName", "email", "PhoneNumber", "BusinessName", "EIN"],
+    mapFieldsNames: ["Contact Full Name*", "Email*", "Phone Number", "Business Name", "EIN"],
+    mapSelectNames: ["Name", "Email", "Phone Number", "Business Name", "Headers"],
     hasHeaders: true,
     sample: [],
     selected: null,
@@ -307,6 +308,9 @@ export default {
     }
   },
   methods: {
+    onValueChanged(value, key) {
+      this.map[key] = value;
+    },
     eventIcon(idx) {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
     },
@@ -338,18 +342,18 @@ export default {
         axios
           .post(this.url, data)
           .then(response => {
-            if(response.data){
-                const { data } = response.data;
+            if (response.data) {
+              const {data} = response.data;
 
-                this.sample[0] = this.csv2[0] = _.map(data[0], (label, key) => {
-                    return key;
-                });
+              this.sample[0] = this.csv2[0] = _.map(data[0], (label, key) => {
+                return key;
+              });
 
-                for( let index = data.length - 1; index >= 0; index--) {
-                    this.csv2.push(_.map(data[index], (label, key) => {
-                        return label;
-                    }));
-                }
+              for (let index = data.length - 1; index >= 0; index--) {
+                this.csv2.push(_.map(data[index], (label, key) => {
+                  return label;
+                }));
+              }
             }
             // _this.callback(response);
             if(response.data.status){
@@ -413,14 +417,14 @@ export default {
       this.header = false;
       this.preview = true;
     },
-    showPreview2() {
+    backToUpload() {
       this.upload = true;
       this.header = false;
       this.done = false;
       this.headers = true;
       this.preview = false;
     },
-    showPreview3() {
+    backToPreview() {
       this.upload = false;
       this.header = true;
       this.preview = false;
@@ -430,7 +434,7 @@ export default {
     map: {
       handler: function(newVal) {
         if (this.headers === true) {
-          var hasAllKeys = this.mapFields.every(function(item) {
+          this.mapFields.every(function(item) {
             return newVal.hasOwnProperty(item);
           });
             this.requiredFieldsNumber = newVal.ContactFullName && newVal.email ? 2 :
