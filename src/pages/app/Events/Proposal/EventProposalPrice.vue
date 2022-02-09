@@ -51,14 +51,14 @@
                     {{ service.requirementTitle }}
                     <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
                   </div>
-                  <div class="md-layout-item md-size-20 md-small-size-50 p-0 text-right">
-                    {{ service.requirementValue }}
-                  </div>
                   <div
                     class="md-layout-item md-size-20 md-small-size-50 p-0 text-right"
                     :class="{ crosslinedText: service.isComplimentary }"
                   >
                     ${{ service.price | withComma }}
+                  </div>
+                  <div class="md-layout-item md-size-20 md-small-size-50 p-0 text-right">
+                    {{ service.requirementValue }}
                   </div>
                   <div
                     class="md-layout-item md-size-20 md-small-size-50 text-right"
@@ -196,7 +196,7 @@
         <div v-if="includedServices.length">
           <div
             class="extras-section md-layout"
-        
+
           >
             <div class="md-layout-item md-size-80 md-small-size-100" >
               <div class="extras-section__title">
@@ -275,7 +275,7 @@
             </div>
           </template>
         </CollapsePanel>
-        <CollapsePanel :spacing="10">
+        <CollapsePanel v-if="extraServices.length" :spacing="10">
           <template slot="header">
             <div class="px-20 py-10 font-size-16 font-bold-extra border-top">Offered Extras</div>
           </template>
@@ -354,7 +354,6 @@ export default {
       }
       this.extraServices = [...this.extraServices];
 
-      console.log("this.extraServices", this.extraServices);
       this.$emit("changeAddedServices", {
         category: this.serviceCategory,
         costServices: this.costServices,

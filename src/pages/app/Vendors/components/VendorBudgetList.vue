@@ -20,8 +20,7 @@
             <img :src="`${$iconURL}Budget Elements/${r.icon}`" />
             {{ r.title }}
           </span>
-          <span v-if="r.allocatedBudget">${{ r.allocatedBudget | withComma }}</span>
-          <span v-else>${{ averageBudget | withComma }}</span>
+          <span>${{ r.allocatedBudget | withComma }}</span>
         </div>
       </div>
       <div class="total">
@@ -54,8 +53,7 @@ export default {
   }),
   created() {},
   mounted() {
-    console.log('validRequirements', this.validRequirements);
-    console.log('proposalReq', this.proposalRequest);
+    console.log(this.validRequirements);
   },
   methods: {
       getServiceCategory(category) {
@@ -79,7 +77,6 @@ export default {
     averageBudget(){
           let service = this.getServiceCategory(this.vendor.eventCategory.key);
 
-          console.log('service', service)
           let budget = this.proposalRequest.eventData.numberOfParticipants * service.basicCostPerGuest;
           if (service.minCost && budget < service.minCost) {
               return service.minCost;
