@@ -333,8 +333,8 @@
         </div>
       </div>
 
-      <div class="card-section align-center py-30" :class="{'px-20':windowWidth>350}">
-        <div class="px-15" >
+      <div class="card-section align-center px-20 py-30">
+        <div class="px-15">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
               <img :src="`${$iconURL}union-12.svg`" width="30" /> <span class="px-5"> Health Protocol</span>
@@ -385,7 +385,7 @@
         </div>
       </div>
 
-      <div class="card-section align-center  py-30 mt-10" :class="{'px-20':windowWidth>350}">
+      <div class="card-section align-center px-20 py-30 mt-10">
         <div class="px-15">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
