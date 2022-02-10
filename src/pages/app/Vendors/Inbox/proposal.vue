@@ -7,7 +7,6 @@
             :commentComponents="commentComponents"
             :proposal="proposal"
             :url="`/unregistered/proposals/${proposal.id}`"
-            :ignoreXOffset="400"
             @saveComment="saveComment"
             @updateComment="updateComment"
             @deleteComment="deleteComment"

@@ -6,7 +6,7 @@
       <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
-    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests" v-if="!loading">
+    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests">
       <template slot="prev">
         <button class="nav-left nav-btn">
           <span><md-icon class="color-vendor">arrow_back</md-icon></span>

@@ -5,7 +5,7 @@
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
   margin: auto;
-  background-color: #59244c !important;
+  background-color: #F0464D !important;
   border-radius: 50%;
   opacity: 1;
   z-index: 1;
@@ -23,14 +23,15 @@
   font-family: "Manrope-Regular";
   font-size: 14px;
 }
+
 .vfc-week .vfc-day span.vfc-span-day.vfc-today {
-  background-color: #d8c5d4 !important;
-  color: #642a56;
+  background-color:  #FEE5EC !important;
+  color: #F0464D !important;
   // font-family: "Manrope-Bold";
   font-weight: bold;
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-today.vfc-marked {
-  color: #642a56 !important;
+  color:  #F0464D !important;
 }
 .vfc-top-date a.vfc-underline {
   font-family: "Manrope-Bold";
@@ -105,7 +106,7 @@ span.vfc-span-day.vfc-marked,
   color: white !important;
 
   &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-    background-color: #43425d !important;
+    background-color: #F0464D !important;
     border-radius: unset;
   }
 }
