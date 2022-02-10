@@ -7,6 +7,8 @@
             :commentComponents="commentComponents"
             :proposal="proposal"
             :url="`/unregistered/proposals/${proposal.id}`"
+            :ignoreXOffset="400"
+            :isVendor="true"
             @saveComment="saveComment"
             @updateComment="updateComment"
             @deleteComment="deleteComment"
@@ -53,7 +55,7 @@
             </div>
         </template>
         <template v-else>
-            <div class="proposal-container no-proposal">
+            <div class="proposal-container no-proposal" v-if="proposal">
                 <NoProposal :proposal="proposal" @show="showProposal = true">
                 </NoProposal>
             </div>
@@ -94,7 +96,6 @@ export default {
     },
     mixins: [CommentMixins, ShareMixins],
     async created() {
-        console.log("created")
         this.loading = true;
         let tenantUser = null;
         if (this.loggedInUser) {
@@ -106,7 +107,6 @@ export default {
         this.loading = false;
     },
     mounted(){
-        console.log("mounted");
         this.selectProposal();
     },
     methods: {
@@ -153,9 +153,7 @@ export default {
             // this.proposalComments = await this.getCommentComponents(url);
         },
         selectProposal(){
-            console.log("selectProposal")
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
-                // console.log("LogProposal", proposal)
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
                 this.showProposal = !!this.commentComponents.length
@@ -166,14 +164,12 @@ export default {
             }
         },
         selectVersion(index){
-            // console.log('myselect', index);
             this.$store.commit('commentProposal/selectVersion', index);
         },
         saveVersion(version){
             this.$store.dispatch('commentProposal/saveVersion', version);
         },
         changeVersion(versions){
-            // console.log('myversions', versions);
             this.$store.commit('commentProposal/setVersions', versions);
         },
         removeVersion(id){
@@ -205,7 +201,6 @@ export default {
     },
     watch: {
         $route: function() {
-            console.log("route")
             this.selectProposal();
             // this.getProposal(this.$route.params.proposalId);
             if(this.showCommentEditorPanel){
@@ -216,7 +211,6 @@ export default {
             }
         },
         proposals(){
-            console.log("proposals")
             this.selectProposal();
         }
     }
