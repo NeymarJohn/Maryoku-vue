@@ -6,7 +6,7 @@
       <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
-    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests" v-if="!loading">
+    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests">
       <template slot="prev">
         <button class="nav-left nav-btn">
           <span><md-icon class="color-vendor">arrow_back</md-icon></span>
@@ -98,7 +98,6 @@
                 class="row"
                 :color="colors[idx]"
                 @action="handleProposal"
-                @showGraphModal="showGraphModal"
               ></ProposalListItem>
             </div>
           </div>
@@ -116,7 +115,7 @@
         <div class="md-layout-item md-size-75">
           <div class="text-center">
             <TablePagination
-
+            
               v-if="pagination.pageCount"
               class="mt-30"
               :pageCount="pagination.pageCount"
@@ -281,12 +280,6 @@
       @submit="showResendProposalModal = false"
     >
     </ResendProposalResult>
-    <ProposalGraphModal
-      v-if="showProposalGraph"
-      @close="closeProposalGraph"
-      :proposal="selectedProposalForGraph"
-    >
-    </ProposalGraphModal>
   </div>
 </template>
 <script>
@@ -320,7 +313,7 @@ const components = {
   Insight: () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
   ShareProposal: () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
   ResendProposalResult: () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
-  ProposalGraphModal: () => import("@/pages/app/Vendors/ProposalBoard/ProposalGraphModal.vue"),
+  CentredModal,
 };
 
 export default {
@@ -335,11 +328,9 @@ export default {
       tab: "all",
       showProposalDetail: false,
       showShareProposalModal: false,
-      showProposalGraph : false,
       selectedProposal: null,
       selectedEventData: null,
       selectedProposalRequest: null,
-      selectedProposalForGraph : null,
       showRequestNegotiationModal: false,
       showResendProposalModal: false,
       showInsightModal: false,
@@ -470,7 +461,7 @@ export default {
           data: { ...this.selectedProposal, status: PROPOSAL_STATUS.INACTIVE },
           vendorId: this.selectedProposal.vendor.id,
         });
-
+        
         await this.sendEmail({ type: "inactive", url, proposalId: this.selectedProposal.id });
         this.loading = false;
       }
@@ -718,14 +709,6 @@ export default {
       await this.getProposal();
       this.loading = false;
     },
-    showGraphModal(proposal) {
-        console.log('Open GraphModal', proposal);
-        this.showProposalGraph = true;
-        this.selectedProposalForGraph = proposal;
-    },
-    closeProposalGraph() {
-      this.showProposalGraph = false;
-    }
   },
   computed: {
     vendorData() {
@@ -807,10 +790,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .winning-rate {
-
+  
   font-size: 25px;
   font-weight: bold;
-
+ 
   line-height: 1.53;
   letter-spacing: normal;
   text-align: center;
