@@ -57,6 +57,7 @@ export default {
     updateValue: function(value) {
     },
     toggleEditPane: function(event) {
+      console.log("click Button", this.commentComponent)
       event.stopPropagation();
       event.preventDefault();
       if (this.isDragging) return;
@@ -75,6 +76,7 @@ export default {
 
     },
     onDropped(component) {
+      console.log("left", this.$refs.draggingComp);
       if (!this.$refs.draggingComp.left && !this.$refs.draggingComp.top ) return
       if (this.$refs.draggingComp.left != component.positionX || this.$refs.draggingComp.top != component.positionY ) {
         component.positionX = this.$refs.draggingComp.left
@@ -86,12 +88,15 @@ export default {
       }
     },
     onDragging(component) {
+      console.log("started dragging")
       this.isDragging = true
       if (this.$refs.draggingComp.left > 0 && this.$refs.draggingComp.top > 0){
         this.$emit("dragging", component, {x: this.$refs.draggingComp.left,y:this.$refs.draggingComp.top })
       }
     },
     onActivated(component) {
+      console.log(this.$refs.draggingComp)
+      console.log("started dragging")
       //this.isDragging = true
       // this.$emit("onDragginStart",component)
     }
@@ -100,6 +105,7 @@ export default {
   },
   watch: {
     selectedComponet(newValue, oldValue) {
+      // console.log(newValue)
       if (!newValue) {
         this.showEditPane = false
       } else {
