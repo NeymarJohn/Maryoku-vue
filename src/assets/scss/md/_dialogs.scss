@@ -473,3 +473,18 @@
         }
     }
 }
+
+#headers_to_categories_mapping {
+    .md-table{
+        overflow-x: unset !important;
+        .md-table-content {
+            overflow-x: unset !important;
+            &.md-theme-default {
+                overflow-x: unset !important;
+            }
+            table{
+                overflow: unset !important;
+            }
+        }
+    }
+}
