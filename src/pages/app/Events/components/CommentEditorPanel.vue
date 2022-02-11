@@ -1,5 +1,5 @@
 <template>
-  <div @click="addFromEvent( $event )" class="click-capture" >
+  <div @click="addFromEvent( $event )" class="click-capture">
     <comment-circle-button
       class="item"
       v-for="(item, index) in unresolvedComponents"
@@ -111,15 +111,6 @@ export default {
       proposal:{
         type: Object,
         required: false,
-      },
-      url:{
-        type: String,
-        required: false,
-      },
-      ignoreXOffset:{
-        type: Number,
-        required: false,
-        default:0
       }
   },
   data() {
@@ -162,7 +153,7 @@ export default {
       return []
     },
     unresolvedComponents() {
-      return this.commentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
+      return this.commentComponents.filter(item => !item.isResolved);
     }
   },
   created() {
@@ -205,14 +196,14 @@ export default {
 
     setEditPanePosition(x, y) {
       const deviceWidth = window.innerWidth;
-      if (x + 700 > deviceWidth) {
+      if (x > deviceWidth - 700) {
         this.panelPosition = {
-          x: x - this.ignoreXOffset - 580,
+          x: x - 580,
           y: y
         };
       } else {
         this.panelPosition = {
-          x: x - this.ignoreXOffset + 40,
+          x: x + 40,
           y: y
         };
       }
@@ -260,7 +251,7 @@ export default {
         positionY: event.clientY - 100 + window.scrollY,
         index: maxIndex + 1,
         isEditing: false,
-        url: this.url ? this.url : this.$route.path,
+        url: this.$route.path
       }
       this.commentComponents = this.commentComponents.concat([newComentComponent])
       this.selectedComponentIndex = this.commentComponents.length - 1;
@@ -494,6 +485,7 @@ export default {
 
 .click-capture {
   bottom: 0px;
+  cursor: pointer;
   left: 0px;
   position: absolute;
   right: 0;

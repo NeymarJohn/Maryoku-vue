@@ -16,7 +16,7 @@
     <div class="service-item is-edit" v-else>
       <div class="flex-1">
         <img :src="`${$iconURL}${icons[field]}`" style="width: 20px" class="mr-10" />
-        <span class="text-capitalize">{{ field }} </span>
+        <span class="text-capitalize">{{ field }}</span>
       </div>
       <money
         v-model="editingDiscount.percentage"
@@ -98,6 +98,8 @@ export default {
       };
     },
     created() {
+
+      console.log('CREATED', this.field);
       if ( this.field === 'discount' ) {
         this.discount = JSON.parse(JSON.stringify(this.defaultDiscount))
         this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount))
@@ -131,15 +133,14 @@ export default {
         }
         if (this.field === "negotiation") {
           this.editingDiscount.percentage = value;
-          this.editingDiscount.price = ((this.sumOfPrices - this.defaultDiscount.price)  * (value / 100)).toFixed(2);
+          const discountedTotal = (this.sumOfPrices * (1 - this.defaultDiscount.percentage / 100)).toFixed(2);
+          this.editingDiscount.price = (discountedTotal * (value / 100)).toFixed(2);
         } else if (this.field === "tax") {
           this.editingDiscount.percentage = value;
-          this.editingDiscount.price = (
-            (
-              this.sumOfPrices -
-              this.defaultDiscount.price -
-              (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0)
-          ) * (value / 100)).toFixed(2);
+          const discountedTotal = (this.sumOfPrices * (1 - this.defaultDiscount.percentage / 100)).toFixed(2);
+          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ?
+            (discountedTotal * (1 - this.defaultNegotiation.percentage / 100)).toFixed(2) : discountedTotal;
+          this.editingDiscount.price = ((negotiatedTotal - this.editingDiscount.price) * (value / 100)).toFixed(2);
         }
       },
       setPriceRange(val) {
@@ -148,12 +149,23 @@ export default {
         } else if (this.field === 'negotiation') {
           this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price)) * 100).toFixed(2);
         } else if (this.field === "tax") {
-          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price -
+          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.editingDiscount.price -
             (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0))) * 100).toFixed(2);
         }
       },
     },
     watch: {
+      defaultDiscount(newValue, oldValue) {
+        console.log('watch.discount', newValue)
+      },
+      defaultTax(newVal,oldValue){
+        if(newVal.percentage != oldValue.percentage){
+          this.setPercentRange(newVal.percentage);
+          this.discount.price = this.editingDiscount.price;
+        }
+
+        console.log('watch.tax', newVal,oldValue)
+      },
       sumOfPrices(newValue, oldValue) {
         // console.log({ newValue, oldValue });
         if (newValue !== oldValue) {

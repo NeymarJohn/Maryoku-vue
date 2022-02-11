@@ -1,5 +1,5 @@
 <template>
-  <div class="non-maryoku-proposal" :class="{'x-mouse':showCommentEditorPanel}" @mousemove="handleMouseMove">
+  <div class="non-maryoku-proposal">
     <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
     <template v-if="proposal">
       <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
@@ -53,52 +53,32 @@
           </md-card>
         </div>
       </div>
-      <div style="display: flex">
-        <CommentSidebar v-if="showCommentEditorPanel" class="comment-sidebar"></CommentSidebar>
-        <div class="proposal-container"  :class="{'margin-auto':showCommentEditorPanel===false}">
-          <div
-            v-if="showCursorHelper"
-            class="cursor_helper"
-            :style="{position: 'fixed', top: cursorTopPosition, left: cursorLeftPosition}"
-          >
-            Click to leave comment
-          </div>
-          <CommentEditorPanel
-            v-if="showCommentEditorPanel"
-            :commentComponents="commentComponents"
-            :proposal="proposal"
-            @saveComment="saveCommentWithAuth"
-            @updateComment="updateCommentWithAuth"
-            @deleteComment="deleteCommentWithAuth"
-            @updateCommentComponent="updateCommentComponentWithAuth"
-          >
-          </CommentEditorPanel>
-          <EventProposalDetails
-            :proposal="proposal"
-            :landingPage="true"
-            :nonMaryoku="true"
-            :step="step"
-            v-if="proposal"
-            @change="handleStep"
-            @updateProposal="handleUpdate"
-            @ask="handleAsk"
-            @favorite="handleFavorite"
-          >
-            <template slot="timer">
-              <TimerPanel
-                v-if="!isMobile || (isMobile && step === 0)"
-                :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
-                :target="targetTime"
-                :pending="negotiationPending"
-                :status="proposal.status"
-                :declined="negotiationDeclined"
-                :approved="negotiationProcessed"
-                @updateExpireDate="handleAsk('expiredDate')"
-                :theme="isMobile ? 'mobile red' : 'red'"
-              ></TimerPanel>
-            </template>
-          </EventProposalDetails>
-        </div>
+      <div class="proposal-container" :class="isMobile ? 'mt-10' : 'mt-40'">
+        <EventProposalDetails
+          :proposal="proposal"
+          :landingPage="true"
+          :nonMaryoku="true"
+          :step="step"
+          v-if="proposal"
+          @change="handleStep"
+          @updateProposal="handleUpdate"
+          @ask="handleAsk"
+          @favorite="handleFavorite"
+        >
+          <template slot="timer">
+            <TimerPanel
+              v-if="!isMobile || (isMobile && step === 0)"
+              :class="!isMobile ? 'time-counter' : 'time-counter-mobile'"
+              :target="targetTime"
+              :pending="negotiationPending"
+              :status="proposal.status"
+              :declined="negotiationDeclined"
+              :approved="negotiationProcessed"
+              @updateExpireDate="handleAsk('expiredDate')"
+              :theme="isMobile ? 'mobile red' : 'red'"
+            ></TimerPanel>
+          </template>
+        </EventProposalDetails>
       </div>
 
       <div class="text-center logo-area" :class="isMobile ? 'font-size-12 py-10' : 'font-size-18 p-40 mt-40'">
@@ -211,6 +191,17 @@
         </template>
       </div>
     </template>
+    <CommentEditorPanel
+      v-if="showCommentEditorPanel"
+      :commentComponents="commentComponents"
+      :proposal="proposal"
+      @saveComment="saveCommentWithAuth"
+      @updateComment="updateCommentWithAuth"
+      @deleteComment="deleteCommentWithAuth"
+      @updateCommentComponent="updateCommentComponentWithAuth"
+    >
+    </CommentEditorPanel>
+
     <GuestSignUpModal
       v-if="showGuestSignupModal"
       :onlyAuth="onlyAuth"
@@ -246,12 +237,9 @@ const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
   SignInContent: () => import("@/components/SignInContent/index.vue"),
   CollapsePanel: () => import("@/components/CollapsePanel.vue"),
-  CommentSidebar: () => import("@/components/CommentSidebar"),
-  CommentCursor: () => import("@/components/CommentCursor")
 };
 
 export default {
-
   components,
   mixins: [CommentMixins, ShareMixins, MobileMixins, TimerMixins],
   data() {
@@ -265,9 +253,6 @@ export default {
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
       showGuestSignupModal: false,
-      showCursorHelper: false,
-      cursorTopPosition: '0px',
-      cursorLeftPosition: '0px',
     };
   },
   async created() {
@@ -354,12 +339,6 @@ export default {
         this.onlyAuth = true;
         this.showGuestSignupModal = true;
       }
-    },
-    handleMouseMove(event) {
-      if (!this.showCommentEditorPanel) return;
-      this.showCursorHelper = event.target.className === 'click-capture';
-      this.cursorTopPosition = `${event.clientY - 5}px`;
-      this.cursorLeftPosition = `${event.clientX + 25}px`;
     },
     handleStep(step) {
       this.step = step;
@@ -591,11 +570,7 @@ export default {
   }
   .proposal-container {
     max-width: 1280px;
-    margin-top: 90px;
-    position: relative;
-    &:hover .cursor_helper {
-      display: block;
-    }
+    margin: auto;
   }
   .logo-area {
     color: #a0a0a0;
@@ -605,17 +580,6 @@ export default {
     height: 80px;
     width: 100%;
     background: white;
-  }
-  .cursor_helper{
-    display: none;
-    width: 204px;
-    height: 31px;
-    margin: 0 0 0 7.8px;
-    padding: 5px 9px 5px 10px;
-    border-radius: 3px;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #e3e3e3;
-    z-index: 99999999;
   }
 }
 .header-bg {
@@ -647,17 +611,5 @@ export default {
     transform-origin: 0 0;
     transform: rotate(135deg);
   }
-}
-.comment-sidebar{
-  width: 555px;
-  margin-right: 63px;
-  left: 0;
-}
-.margin-auto{
-  margin: auto;
-}
-.x-mouse{
-  cursor: url("/static/icons/comments-cursor.svg"), auto;
-
 }
 </style>
