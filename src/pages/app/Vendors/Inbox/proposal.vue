@@ -6,6 +6,7 @@
             v-if="showCommentEditorPanel"
             :commentComponents="commentComponents"
             :proposal="proposal"
+            :url="`/unregistered/proposals/${proposal.id}`"
             @saveComment="saveComment"
             @updateComment="updateComment"
             @deleteComment="deleteComment"

@@ -206,7 +206,7 @@
                     >$</span
                   >
                   <span v-if="policy.type === 'Boolean'">
-                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-if="policy.value === true" :src="`${$iconURL}common/checked-circle-purple.svg`" />
                     <img v-else :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`"/>
                     <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                   </span>

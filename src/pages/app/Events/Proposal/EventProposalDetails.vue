@@ -587,7 +587,7 @@
         </md-button>
       </div>
     </div>
-    <div v-if="proposal.status === 5 && !sh">
+    <div v-if="proposal.status === 5 || proposal.status === 6 && !sh">
       <MessageModal @cancel="showMessage = false" @goVendors="go()" />
     </div>
   </div>

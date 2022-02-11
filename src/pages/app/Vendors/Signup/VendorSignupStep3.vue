@@ -1176,6 +1176,23 @@ export default {
         background: #58154b;
         color: #ffffff;
       }
+      /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-today {
+        background-color: #d7c4d4 !important;
+        color: #642a56 !important ;
+        // font-family: "Manrope-Bold";
+        font-weight: bold;
+      }
+      /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-today.vfc-marked {
+        color: #fff !important;
+      }
+      
+      /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
+        margin: auto;
+        background-color: #642a56 !important;
+        border-radius: 50%;
+        opacity: 1;
+        z-index: 1;
+      }
       /deep/ span.vfc-span-day {
         &.vfc-marked {
           background-color: #58154b;

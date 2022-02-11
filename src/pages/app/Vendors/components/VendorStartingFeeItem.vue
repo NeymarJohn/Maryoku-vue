@@ -43,7 +43,7 @@ export default {
     item: Object,
     theme: {
       type: String,
-      default: "red",
+      default: "purple",
     },
   },
   components: {},

@@ -34,13 +34,12 @@ export default {
   },
   mounted() {
     this.$refs.checkoutRef.redirectToCheckout();
-    console.log('stripe.checkout', this.publishableKey)
   },
   data() {
+    this.publishableKey = process.env.STRIPE_PK;
 
     return {
       loading: false,
-      publishableKey: process.env.STRIPE_PK,
       lineItems: this.items.map((it) => {
         return {
           price: it.id,

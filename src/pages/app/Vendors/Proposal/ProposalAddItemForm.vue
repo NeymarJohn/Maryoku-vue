@@ -1,6 +1,5 @@
 <template>
   <div class="title-cont default add-item-form">
-
     <div class="add-item-cont">
       <div class="fields-cont font-bold mb-20">
         <span>Description</span>
@@ -9,7 +8,7 @@
         <span v-if="serviceType !== 'included'" class="text-right">Subtotal</span>
       </div>
       <hr style="background-color: #b2b2b2; height: 2px" />
-      <div class="fields-cont mt-20">
+      <div class="fields-cont mt-20" v-if="serviceType !== 'included'">
         <div class="field description-field">
           <input
             v-if="filteredSuggestItems[selectedSuggestItemIndex] && serviceItem"
@@ -70,6 +69,67 @@
           </md-button>
         </div>
       </div>
+      <div class="fields-cont mt-20" v-if="serviceType === 'included'">
+        <div class="field description-field">
+          <input
+            v-if="filteredSuggestItems[selectedSuggestItemIndex] && serviceItem"
+            class="suggested-place-holder"
+            :value="filteredSuggestItems[selectedSuggestItemIndex].description"
+          />
+          <input
+            v-model="serviceItem"
+            class="input-value description-input"
+            :class="{ isFilled: !!serviceItem }"
+            type="text"
+            placeholder="Type name of element here"
+            @keypress="startSearch"
+            @blur="stopSearch"
+          />
+          <div class="auto-complete-panel" v-if="showAutoCompletePanel && filteredSuggestItems.length > 0">
+            <div
+              class="suggest-item font-bold"
+              v-for="(item, index) in filteredSuggestItems"
+              :key="item.description"
+              @mouseenter="hoverSuggestItem(index)"
+              @click="selectSuggestItem(index)"
+            >
+              <div>{{ item.description }}</div>
+              <div class="color-red font-regular">{{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}</div>
+              <div v-if="item.included" class="text-right">{{ "Included" }}</div>
+              <div v-else class="text-right">${{ item.price | withComma }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty, isSuggeted: isAutoCompletedValue }" />
+        </div>
+        <div class="field">
+          <money
+            v-model="unit"
+            v-bind="currencyFormat"
+            :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
+          />
+        </div>
+        <div class="field">
+          <money
+            :value="qty * unit"
+            v-bind="currencyFormat"
+            :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
+            readonly
+          />
+        </div>
+        <div class="field">
+          <md-button
+            class="md-vendor maryoku-btn width-100"
+            :disabled="isDisabledAdd"
+            @click="saveItems(serviceItem, serviceItemSize, qty, unit)"
+          >
+            Add Line
+          </md-button>
+        </div>
+      </div>
 
       <div v-if="isRequiredPlannerChoice" class="d-flex align-start mt-20">
         <img :src="`${$iconURL}Onboarding/enter-gray.svg`" style="margin-right: 10px" />
@@ -122,13 +182,17 @@
         </md-button>
       </div>
     </div>
-    <ask-save-change v-if="showAskSaveChangeModal" @cancel="showAskSaveChangeModal=false" @save="handleSave"></ask-save-change>
+    <ask-save-change
+      v-if="showAskSaveChangeModal"
+      @cancel="showAskSaveChangeModal = false"
+      @save="handleSave"
+    ></ask-save-change>
   </div>
 </template>
 
 <script>
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
-import AskSaveChange from "./Modals/AskSaveChangeModal"
+import AskSaveChange from "./Modals/AskSaveChangeModal";
 
 export default {
   components: { SelectProposalSubItem, AskSaveChange },
@@ -153,7 +217,11 @@ export default {
   },
   data() {
     return {
-      selectedItem: null,
+      selectedItem: {
+        price: null,
+        show: false,
+      },
+      selected: null,
       serviceSlidePos: 0,
       serviceItem: "",
       serviceItemSize: "",
@@ -162,10 +230,7 @@ export default {
       isRequiredPlannerChoice: false,
       isComplementary: false,
       ttpCommunicationException: "",
-      plannerChoices: [
-        { description: "", price: 0 },
-        { description: "", price: 0 },
-      ],
+      plannerChoices: [{ description: "", price: 0 }, { description: "", price: 0 }],
       isNumberVisible: true,
       currencyFormat: {
         decimal: ".",
@@ -198,7 +263,7 @@ export default {
     };
   },
   created() {
-    this.$root.$on("clear-slide-pos", (item) => {
+    this.$root.$on("clear-slide-pos", item => {
       this.serviceSlidePos = 0;
     });
   },
@@ -210,7 +275,10 @@ export default {
       this.serviceItem = this.filteredSuggestItems[index].description.slice(0, this.serviceItem.length);
     },
     selectSuggestItem(index) {
+      this.selectedItem.price = this.filteredSuggestItems[index].price;
       this.selectedItem = this.filteredSuggestItems[index];
+      this.selectedItem.show = true;
+      this.selected = this.filteredSuggestItems[index];
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
       this.serviceItem = this.filteredSuggestItems[index].description;
@@ -252,10 +320,7 @@ export default {
       this.serviceItem = item.name;
       this.size = "";
       this.qty = 1;
-      this.plannerChoices = [
-        { description: "", price: 0 },
-        { description: "", price: 0 },
-      ];
+      this.plannerChoices = [{ description: "", price: 0 }, { description: "", price: 0 }];
     },
     saveItem(serviceItem, size, qty, price) {
       const editingService = {
@@ -275,56 +340,84 @@ export default {
         requirementValue: `${qty}`,
         isComplementary: this.isComplementary,
         isComplimentary: false,
-        plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
+        plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
       };
-  // this.suggestedItems.filter((item) => )
-      if ( price !== this.selectedItem.price ) {
+      // this.suggestedItems.filter((item) => )
+      if (price !== this.selectedItem.price && this.selectedItem.show === true) {
         this.showAskSaveChangeModal = true;
       } else {
         this.cancel();
       }
 
-      this.$emit("addItem", {serviceItem: editingService, option: this.savedUnitChange} );
+      this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
+    },
+    saveItems(serviceItem, size, qty, price) {
+      const editingService = {
+        comment: this.comment,
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: price,
+        priceUnit: "qty",
+        proposalRequest: { id: this.proposalRequest.id },
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: serviceItem,
+        requirementSize: size,
+        requirementValue: `${qty}`,
+        isComplementary: this.isComplementary,
+        isComplimentary: false,
+        plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
+      };
+      // this.suggestedItems.filter((item) => )
+      if (price !== this.selected.price) {
+        this.showAskSaveChangeModal = true;
+      } else {
+        this.cancel();
+      }
 
+      this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },
     cancel() {
-      this.selectedItem = null
+      this.selectedItem.price = null;
+      this.selected = null;
       this.serviceItemSize = "";
       this.qty = 1;
+
       this.unit = 0;
       this.serviceItem = "";
       this.isRequiredPlannerChoice = false;
       this.isComplementary = false;
       this.comment = "";
       this.isEditingComment = false;
-      this.plannerChoices = [
-        { description: "", price: 0 },
-        { description: "", price: 0 },
-      ];
+      this.plannerChoices = [{ description: "", price: 0 }, { description: "", price: 0 }];
     },
     camelize(str) {
-      let temp = str.replace(/\W+(.)/g, function (match, chr) {
+      let temp = str.replace(/\W+(.)/g, function(match, chr) {
         return chr.toUpperCase();
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
-    handleSave(val){
-      if ( val ===  'profile' ) {
+    handleSave(val) {
+      if (val === "profile") {
         let vendor = this.vendor;
         if (vendor.services.hasOwnProperty(this.camelize(this.serviceItem))) {
-          this.$set(vendor.services, this.camelize(this.serviceItem),
-                  {...vendor.services[this.camelize(this.serviceItem)], value: this.unit});
+          this.$set(vendor.services, this.camelize(this.serviceItem), {
+            ...vendor.services[this.camelize(this.serviceItem)],
+            value: this.unit,
+          });
         } else {
           // todo check how to add new service item when update price in cost services
-          this.$set(vendor.services, this.camelize(this.serviceItem),
-                  {
-                    checked: true,
-                    label: this.camelize(this.serviceItem),
-                    value: this.unit
-                  });
+          this.$set(vendor.services, this.camelize(this.serviceItem), {
+            checked: true,
+            label: this.camelize(this.serviceItem),
+            value: this.unit,
+          });
         }
 
-        this.$store.dispatch('vendorProposal/saveVendor', vendor)
+        this.$store.dispatch("vendorProposal/saveVendor", vendor);
       }
       this.cancel();
       this.showAskSaveChangeModal = false;
@@ -345,11 +438,11 @@ export default {
     },
     filteredSuggestItems() {
       if (!this.serviceItem) return [];
-      return this.suggestedItems.filter((item) =>
+      return this.suggestedItems.filter(item =>
         item.description.toLowerCase().startsWith(this.serviceItem.toLowerCase()),
       );
     },
-    vendor(){
+    vendor() {
       return this.$store.state.vendorProposal.vendor;
     },
     isAutoCompletedValue() {
@@ -357,16 +450,16 @@ export default {
     },
     suggestedItems() {
       const items = [];
-      this.vendorServices.forEach((category) => {
+      this.vendorServices.forEach(category => {
         if (category.name !== "accessibility") {
-          category.subCategories.forEach((subCat) => {
+          category.subCategories.forEach(subCat => {
             if (
               subCat.name.toLowerCase() === "inclusion" ||
               subCat.name.toLowerCase() === "sustainability" ||
               subCat.name.toLowerCase() === "diversity"
             )
               return;
-            subCat.items.forEach((item) => {
+            subCat.items.forEach(item => {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
               const profileService = this.profileServices[this.camelize(capitalized)];
@@ -374,24 +467,29 @@ export default {
               const requestItemByPlanner = null;
               console.log("requestItemByPlanner", requestItemByPlanner);
               if (item.available) {
-                item.available.forEach((availableItem) => {
+                item.available.forEach(availableItem => {
                   const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
-                  if (items.findIndex((it) => it.description.toLowerCase() === description.toLowerCase()) < 0) {
+                  if (items.findIndex(it => it.description.toLowerCase() === description.toLowerCase()) < 0) {
                     items.push({
                       description,
                       qty: item.value ? item.value : 1,
-                      included: profileService && profileService.checked && !profileService.xIncluded && profileService.included,
+                      included:
+                        profileService &&
+                        profileService.checked &&
+                        !profileService.xIncluded &&
+                        profileService.included,
                       price: profileService ? Number(profileService.value) : "",
                       requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                     });
                   }
                 });
               }
-              if (items.findIndex((it) => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
+              if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
                 items.push({
                   description: capitalized,
                   qty: item.value ? item.value : 1,
-                  included: profileService  && profileService.checked && !profileService.xIncluded && profileService.included,
+                  included:
+                    profileService && profileService.checked && !profileService.xIncluded && profileService.included,
                   price: profileService ? Number(profileService.value) : "",
                   requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                 });
@@ -403,9 +501,9 @@ export default {
       return items;
     },
   },
-  watch:{
-    profileServices(){}
-  }
+  watch: {
+    profileServices() {},
+  },
 };
 </script>
 <style lang="scss" scoped>

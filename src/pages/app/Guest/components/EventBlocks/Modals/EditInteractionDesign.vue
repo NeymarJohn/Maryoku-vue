@@ -70,6 +70,7 @@ import EventInvitee from "@/models/EventInvitee";
 import EventInteraction from "@/models/EventInteraction";
 
 import Swal from "sweetalert2";
+import { error } from "util";
 import moment from "moment";
 import _ from "underscore";
 
