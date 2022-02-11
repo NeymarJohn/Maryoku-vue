@@ -5,7 +5,11 @@
             <InboxSidebar />
         </div>
         <router-view></router-view>
-        <section class="footer-wrapper" v-if="selectedProposal">
+      <div class="proposal-container no-proposal" >
+       <img src="static/img/Group%2022588@3x.png">
+      </div>
+
+      <section class="footer-wrapper" v-if="selectedProposal">
             <div>
                 <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
                     <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button>
@@ -66,6 +70,17 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.no-proposal {
+  position: absolute;
+  height: 25em;
+  img{
+    display: block;
+    width: 65vw;
+    position: relative;
+    top: 50%;
+    left: 40%;
+  }
+}
 section.footer-wrapper {
     padding: 11px 100px 11px 20px;
     background-color: #ffffff;
