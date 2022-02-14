@@ -244,7 +244,7 @@
                     ${{ service.price | withComma }}
                   </div>
                 </div>
-                <div class="d-flex align-center font-size-14" style="color: #939299">
+                <div class="d-flex align-center font-size-14 unit-wrapper" style="color: #939299">
                   <div class="">{{ service.requirementValue }} Unit</div>
                   <div class="ml-auto" :class="{ crosslinedText: service.isComplimentary }">
                     ${{ (service.requirementValue * service.price) | withComma }}
@@ -261,12 +261,12 @@
           <template slot="content">
             <div class="px-30 py-10">
               <div v-for="item in includedServices" class="align-center included-service-item">
-                <div class="d-flex align-center">
+                <div class="d-flex align-center py-10">
                   <img :src="`${$iconURL}Submit%20Proposal/Group 4781.svg`" width="20px" class="mr-10" />
                   {{ item.requirementTitle }}
+                  <span class="ml-auto">{{ item.requirementValue }}</span>
                 </div>
                 <div class="d-flex align-center">
-                  <span class="ml-auto">{{ item.requirementValue }}</span>
                 </div>
                 <div class="item-description text-center">
                   {{ item.description }}

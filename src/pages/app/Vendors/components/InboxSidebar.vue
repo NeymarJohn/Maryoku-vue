@@ -396,7 +396,6 @@ export default {
                 description: this.editingComment,
                 parentId: this.mainComment ? this.mainComment.id : null,
                 email: this.selectedCustomer ? this.selectedCustomer.email : null,
-                viewed:true
           };
           this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
           this.editingComment = ""

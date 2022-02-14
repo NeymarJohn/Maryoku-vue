@@ -1,3 +1,4 @@
+
 import EventComment from '@/models/EventComment'
 import EventCommentComponent from '@/models/EventCommentComponent'
 import { reject } from 'promise-polyfill'
@@ -65,6 +66,7 @@ const mutations = {
   },
   setComments(state, { commentComponentId, comments }) {
     const index = state.commentComponents.findIndex(item => item.id == commentComponentId)
+    console.log(commentComponentId)
     state.commentComponents[index].comments = comments
   },
 
@@ -77,6 +79,7 @@ const mutations = {
   updateComment(state, comment) {
   },
   setVersions: (state, versions) => {
+    console.log("setVersions",versions);
     state.selectedProposal.versions = versions;
   },
 }
@@ -217,6 +220,7 @@ const actions = {
       if (state.guestName) comment = {...comment, name: state.guestName};
       let query = new EventComment(comment);
       let res = await query.for(eventCommentComponent).delete();
+      console.log('deleteCommentAction', res);
         if(res.data.success) {
             // save customer when user comment as guest
             if(res.data.customer) commit('setCustomer', res.data.customer);
@@ -229,35 +233,18 @@ const actions = {
 
   markAsRead({commit, state}, {proposal,commentComponent}){
 
+      console.log("this.commentComponents",commentComponent)
       for(let comment of commentComponent.comments){
           if(!comment.viewed){
             comment.viewed = true;
           }
       }
 
-      let commentComponentObj = new EventCommentComponent({
+      commentComponent = new EventCommentComponent({
         id: commentComponent.id,
         comments:commentComponent.comments
       });
-      commentComponentObj.save();
-
-      let proposals = state.commentsProposals;
-
-      for (let p of proposals){
-
-        if(p.id != proposal.id){
-          continue;
-        }
-        for (let index in p.commentComponent){
-              if(p.commentComponent[index].id == commentComponent.id){
-                p.commentComponent[index] = commentComponent;
-                break;
-              }
-        }
-        break;
-      }
-
-      commit("setCommentsProposals",JSON.parse(JSON.stringify(proposals)))
+      commentComponent.save()
   },
 
   saveVersion({ commit, state }, data) {

@@ -4,7 +4,7 @@
       class="item"
       v-for="(item, index) in unresolvedComponents"
       :key="index"
-      :style="getCirclePosition(item)"
+      :style="{left: `${item.positionX}px`, top: `${item.positionY}px`}"
       :commentComponent="item"
       @save="saveComment"
       @show="showComments"
@@ -208,26 +208,17 @@ export default {
     },
 
     setEditPanePosition(x, y) {
-      x -= $('.click-capture').offset().left;
-      y -= $('.click-capture').offset().top;
-      const deviceWidth = $('.click-capture').width();
+      const deviceWidth = window.innerWidth;
       if (x + 700 > deviceWidth) {
         this.panelPosition = {
           x: x - this.ignoreXOffset - 580,
           y: y
         };
       } else {
-        if(x < 0){
-          this.panelPosition = {
-            x: 10,
-            y: y
-          };
-        }else{
-          this.panelPosition = {
-            x: x - this.ignoreXOffset + 40,
-            y: y
-          };
-        }
+        this.panelPosition = {
+          x: x - this.ignoreXOffset + 40,
+          y: y
+        };
       }
     },
     toggleEditPane(commentComponent, isEditing) {
@@ -433,13 +424,6 @@ export default {
 
       this.editingComment = queryArray.join('@') + ' ';
       this.showAddress = false
-    },
-    getCirclePosition(item){
-
-      if(item.positionX > $(".click-capture").width()){
-        item.positionX = $(".click-capture").width() - 20;
-      }
-      return {left: `${item.positionX}px`, top: `${item.positionY}px`}
     }
   },
   watch:{
@@ -510,6 +494,7 @@ export default {
   position: absolute;
   right: 0;
   top: 100px;
+  overflow: hidden;
   // Since clicking around the document will often lead to text-selection, let's just
   // remove the ability to select text in this demo.
   user-select: none;

@@ -54,10 +54,15 @@
         </div>
       </div>
       <div style="display: flex">
-
-        <CommentSidebar v-if="showCommentEditorPanel" class="comment-sidebar position-fixed"></CommentSidebar>
-        <div class="proposal-container"  :class="{'margin-auto':!showCommentEditorPanel,'w-75':showCommentEditorPanel}">
-
+        <CommentSidebar v-if="showCommentEditorPanel" class="comment-sidebar"></CommentSidebar>
+        <div class="proposal-container"  :class="{'margin-auto':showCommentEditorPanel===false}">
+          <div
+            v-if="showCursorHelper"
+            class="cursor_helper"
+            :style="{position: 'fixed', top: cursorTopPosition, left: cursorLeftPosition}"
+          >
+            Click to leave comment
+          </div>
           <CommentEditorPanel
             v-if="showCommentEditorPanel"
             :commentComponents="commentComponents"
@@ -187,7 +192,7 @@
             @click="declineProposal"
             >Decline</a
           >
-          <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
+          <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none" @click="bookProposal">Book now</a>
         </template>
         <template v-else>
           <a
@@ -585,10 +590,12 @@ export default {
     position: relative;
   }
   .proposal-container {
-    margin-top: 90px;
+    max-width: 1280px;
+    margin-top: 12px;
     position: relative;
-    padding-left:10em;
-    padding-right:10em;
+    &:hover .cursor_helper {
+      display: block;
+    }
   }
   .logo-area {
     color: #a0a0a0;
@@ -642,13 +649,15 @@ export default {
   }
 }
 .comment-sidebar{
-  width: 25%;
+  width: 555px;
+  margin-right: 63px;
   left: 0;
 }
 .margin-auto{
   margin: auto;
 }
-.w-75{
-  width:75%;
+.x-mouse{
+  cursor: url("/static/icons/comments-cursor.svg"), auto;
+
 }
 </style>

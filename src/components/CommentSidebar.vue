@@ -51,7 +51,7 @@
         </div>
         <div class="d-flex sidebar__item__content">
           <div class="dot"></div>
-          <span class="comment">{{(commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ''}} </span>
+          <span class="comment">{{commentComponent.comments.length ? commentComponent.comments[0].description : ''}} </span>
         </div>
         <div class="d-flex sidebar__item__content justify-content-between mt-1 mb-1">
                     <span class="replay" @click="toggleshowReply(commentIndex)">{{commentComponent.comments.length-1}} Reply

@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout md-elevation-1">
+    <div class="md-layout md-elevation-1" style="width: 100vw;">
         <div
             v-for="option in options"
             class="md-layout-item text-center font-size-14 border-right p-5 flex-1"
