@@ -77,7 +77,7 @@ export default {
   components: {
     VueElementLoading,
     UploadVendorsModal,
-    // ManageBlockVendors,
+    ManageBlockVendors,
     ViewProposals
   },
   props: {
@@ -94,15 +94,15 @@ export default {
       this.$refs.uploadModal.toggleModal(true)
     },
     manageBlockVendors () {
-      // window.currentPanel = this.$showPanel({
-      //   component: ManageBlockVendors,
-      //   cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
-      //   openOn: 'right',
-      //   props: {
-      //     event: this.event,
-      //     selectedBlock: this.selectedBlock
-      //   }
-      // })
+      window.currentPanel = this.$showPanel({
+        component: ManageBlockVendors,
+        cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+        openOn: 'right',
+        props: {
+          event: this.event,
+          selectedBlock: this.selectedBlock
+        }
+      })
     },
     getBlockVendors () {
       let calendar = new Calendar({

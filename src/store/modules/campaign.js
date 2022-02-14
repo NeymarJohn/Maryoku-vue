@@ -92,7 +92,7 @@ const defaultCampaignData = {
         showLogo: true,
         showComing: true,
         showCountdown: true,
-        visible: {
+        visibleSettings: {
             showLogo: true,
             showComing: true,
             showCountdown: true,
