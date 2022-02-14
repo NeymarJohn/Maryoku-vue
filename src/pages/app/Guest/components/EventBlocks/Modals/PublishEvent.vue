@@ -67,7 +67,6 @@ import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
 
 import Swal from "sweetalert2";
-import { error } from "util";
 import moment from "moment";
 
 export default {

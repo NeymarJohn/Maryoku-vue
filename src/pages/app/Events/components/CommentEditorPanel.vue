@@ -4,7 +4,7 @@
       class="item"
       v-for="(item, index) in unresolvedComponents"
       :key="index"
-      :style="{left: `${item.positionX}px`, top: `${item.positionY}px`}"
+      :style="getCirclePosition(item)"
       :commentComponent="item"
       @save="saveComment"
       @show="showComments"
@@ -208,17 +208,26 @@ export default {
     },
 
     setEditPanePosition(x, y) {
-      const deviceWidth = window.innerWidth;
+      x -= $('.click-capture').offset().left;
+      y -= $('.click-capture').offset().top;
+      const deviceWidth = $('.click-capture').width();
       if (x + 700 > deviceWidth) {
         this.panelPosition = {
           x: x - this.ignoreXOffset - 580,
           y: y
         };
       } else {
-        this.panelPosition = {
-          x: x - this.ignoreXOffset + 40,
-          y: y
-        };
+        if(x < 0){
+          this.panelPosition = {
+            x: 10,
+            y: y
+          };
+        }else{
+          this.panelPosition = {
+            x: x - this.ignoreXOffset + 40,
+            y: y
+          };
+        }
       }
     },
     toggleEditPane(commentComponent, isEditing) {
@@ -424,6 +433,13 @@ export default {
 
       this.editingComment = queryArray.join('@') + ' ';
       this.showAddress = false
+    },
+    getCirclePosition(item){
+
+      if(item.positionX > $(".click-capture").width()){
+        item.positionX = $(".click-capture").width() - 20;
+      }
+      return {left: `${item.positionX}px`, top: `${item.positionY}px`}
     }
   },
   watch:{

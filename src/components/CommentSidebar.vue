@@ -51,7 +51,7 @@
         </div>
         <div class="d-flex sidebar__item__content">
           <div class="dot"></div>
-          <span class="comment">{{commentComponent.comments.length ? commentComponent.comments[0].description : ''}} </span>
+          <span class="comment">{{(commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ''}} </span>
         </div>
         <div class="d-flex sidebar__item__content justify-content-between mt-1 mb-1">
                     <span class="replay" @click="toggleshowReply(commentIndex)">{{commentComponent.comments.length-1}} Reply
@@ -101,8 +101,8 @@
             <textarea rows="4" class="form-control reply-text-area" placeholder="Write reply here" v-model="editingComment" ref="commentEditor" @input="getMessage"></textarea>
             <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
             <div class="footer text-right my-top my-bottom">
-              <md-button class="md-simple normal-btn" @click="">Cancel</md-button>
-              <md-button class="md-simple md-black normal-btn" @click="saveCommentReply($event, 'reply')">Submit</md-button>
+              <md-button class="md-simple normal-btn md-black" @click="">Cancel</md-button>
+              <md-button class="normal-btn background-red" @click="saveCommentReply($event, 'reply')">Submit</md-button>
             </div>
           </div>
         </div>
@@ -119,6 +119,7 @@ import { FadeTransition } from "vue2-transitions";
 import {CommentMixins} from "@/mixins";
 import moment from 'moment'
 import { getReq } from "@/utils/token";
+
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
@@ -155,6 +156,7 @@ export default {
   created() {},
   mounted() {
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
+
   },
   computed: {},
 
@@ -484,6 +486,9 @@ img.header-img {
 }
 .adaptive{
   overflow-y: hidden !important;
+}
+.background-red{
+  background-color: #f51355!important;
 }
 
 </style>
