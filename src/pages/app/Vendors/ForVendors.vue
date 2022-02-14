@@ -498,19 +498,6 @@ export default {
     goToForm() {
       if (this.isAgreed) {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form/submit`);
-        // if (this.proposalRequest) {
-        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // } else {
-        //   this.proposalRequest = new ProposalRequest({
-        //     id: this.$route.params.id,
-        //   });
-        //   this.$router.push({
-        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-        //     props: {
-        //       proposalRequest: this.proposalRequest,
-        //     },
-        //   });
-        // }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;

@@ -22,6 +22,7 @@
               class="hover-row"
               @click="routeToEvent(item, $event)"
             >
+              <md-table-cell md-label="Id">{{ item.id }}</md-table-cell>
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
               <md-table-cell md-label="Event Type">{{

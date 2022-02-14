@@ -102,9 +102,11 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 import Customer from "@/models/Customer";
 import { CUSTOMER_PAGE_TABS, CUSTOMER_TABLE_HEADERS } from "@/constants/list";
 import { CUSTOMER_PAGE_PAGINATION } from "@/constants/pagination";
+
 const components = {
   CustomerListModal: () => import("./ImportCustomers.vue"),
   Modal: () => import("@/components/Modal.vue"),
@@ -134,7 +136,6 @@ export default {
       selectedProposal: null,
       selectedCustomer: null,
       showNewCustomerModal: null,
-      customerArr: null,
       customerStatus: {
         show: 0,
         detail: 1,
@@ -176,7 +177,6 @@ export default {
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
     gotoPage(selectedPage) {
-      console.log(selectedPage);
       this.pagination.page = selectedPage;
       this.getCustomer();
     },
@@ -188,7 +188,6 @@ export default {
       this.loading = false;
     },
     selectCustomer(customer) {
-      console.log("selectCustomer", customer);
       this.selectedCustomer = customer;
     },
     async handleCustomer(customer, action) {
@@ -215,7 +214,6 @@ export default {
       }
     },
     async handleProposal(data) {
-      console.log("handleProposal", data);
       if (data.action === this.proposalStatus.show) {
         for (let i = 0; i < this.customers.length; i++) {
           this.selectedProposal = this.customers[i].proposals.find(p => p.id === data.proposalId);
@@ -252,32 +250,36 @@ export default {
       }
     },
     async saveCustomers(customer) {
-      this.loading = true;
-      customer.forEach(async el => {
-        let data = {
-          email: el.email,
-          companyName: el.BusinessName,
-          name: el.ContactFullName,
-          type: 1,
-          ein: el.ServiceType,
-          vendorId: this.vendorData.id,
-        };
-        this.customerArr = data;
-        console.log('this.customerArr', this.customerArr);
-        let customerInstance = new Customer(this.customerArr);
-        console.log('customerInstance', customerInstance);
-        await customerInstance.save();
-      });
 
-      await this.getCustomer();
-      console.log('after await this.getCustomer()', await this.getCustomer());
-      await this.customers;
-      await this.customers;
-      this.loading = false;
-      this.DoneModal = true;
-      this.importCustomersModal = false;
-      await this.customers;
-      await this.customers;
+        let urlcustomer = `${process.env.SERVER_URL}/1/customers/multiple`;
+        let customerArray = {
+            vendorId: this.vendorData.id,
+            customers:[],
+        };
+        this.loading = true;
+
+        customer.forEach(async el => {
+            let data = {
+            name: el.ContactFullName,
+            email: el.email,
+            phone: el.PhoneNumber,
+            companyName: el.BusinessName,
+            ein: el.ServiceType,
+            type: 1,
+            };
+            customerArray['customers'].push(data);
+        });
+
+        this.importCustomersModal = false;
+
+        axios.post(urlcustomer, customerArray).then(async response => {
+            await this.getCustomer();
+            this.loading = false;
+            this.DoneModal = true;
+        }).catch(async error => {
+            this.loading = false;
+        }).finally(res => {
+        });
     },
     openNewTab(link) {
       window.open(link, "_blank");

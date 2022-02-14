@@ -62,7 +62,7 @@
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
-            {{proposalRequest.proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
+            {{this.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
           </div>
         </div>
         <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">New</div>
@@ -122,6 +122,9 @@ export default {
         return "Make Changes"
       }
     },
+    negotiations(){
+      return this.proposalRequest.proposal.negotiations.filter(it => it.status === 0 && it.remainingTime > 0);
+    }
   },
   methods: {
     gotoProposalRequest() {
@@ -129,7 +132,7 @@ export default {
       this.$emit('handle');
     },
     getLeftDays() {
-      let expiredTime = !this.hasNegotiation ? this.proposalRequest.expiredTime : this.proposalRequest.proposal.negotiations[0].expiredTime;
+      let expiredTime = !this.hasNegotiation ? this.proposalRequest.expiredTime : this.negotiations[0].expiredTime;
       let diffSeconds = (expiredTime - new Date().getTime()) / 1000;
       const hours = diffSeconds / 3600;
       const days = Math.round(hours / 24);
@@ -146,11 +149,11 @@ export default {
       } else if (type === "expiredDate") {
         return this.size === 1 ? "font-size-12" : "font-size-16";
       }
-
     },
   },
   mounted() {
     console.log('proposal.card.mounted', this.proposalRequest);
+    console.log('proposal.card.hasNegotiation', this.hasNegotiation);
   },
 };
 </script>

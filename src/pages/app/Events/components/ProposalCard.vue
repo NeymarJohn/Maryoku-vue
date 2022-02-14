@@ -10,11 +10,16 @@
                   @updateExpireDate="updateExpireDate"
               ></timer-panel>
               <md-button
-                  class="maryoku-btn md-simple md-outlined md-red mt-30"
+                  v-if="!negotiationPending"
+                  class="maryoku-btn md-simple md-outlined md-red mt-30 bg-white"
                   style="background: white!important;width: 300px;max-width: 90%"
                   @click="updateExpireDate"
               >
                   Ask vendor for more time</md-button>
+              <div v-else
+                   class="bg-white color-red text-center text-bold-extra py-15 mt-20"
+                   style="width: 300px;max-width: 90%;border: 2px solid"
+                >Awaiting reply</div>
               <p class="color-white mt-20">Show me an alternative offer</p>
           </div>
     </template>
@@ -90,6 +95,7 @@ import Proposal from "@/models/Proposal"
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest"
 
 import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
+import { TimerMixins } from "@/mixins";
 
 const components = {
     Timer: () => import("@/components/Timer.vue"),
@@ -98,6 +104,7 @@ const components = {
 
 export default {
   components,
+  mixins: [TimerMixins],
   props: {
     proposal: {
       type: Object,
@@ -147,7 +154,7 @@ export default {
     updateExpireDate(){
         let expiredTime = 0;
         if (this.proposal.expiredDate) {
-            expiredTime = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
+            expiredTime = new Date().getTime() + 2 * 3600 * 24 * 1000;
         } else {
             expiredTime = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
         }
@@ -224,27 +231,11 @@ export default {
         return "";
       }
     },
-    targetTime() {
-      if (this.proposal.expiredDate) {
-          return new Date(this.proposal.expiredDate);
-      }
-      return new Date(this.proposal.dateCreated);
-    },
-    remainingTime(){
-      let today = new Date()
-      let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
-      return expiredDate - today
-    },
-    negotiationProcessed(){
-      // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
-      //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-      return false
-    },
-    negotiationPending(){
-      console.log('negotiationPending', this.proposal.id);
-      return !!this.proposal.negotiations.length && this.proposal.negotiations.some(it =>
-          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-    },
+    remainingTime() {
+        let today = new Date()
+        let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
+        return expiredDate - today
+    }
   },
 };
 </script>

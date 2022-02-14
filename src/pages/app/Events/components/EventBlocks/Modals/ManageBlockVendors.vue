@@ -63,8 +63,7 @@
   </div>
 </template>
 <script>
-// import auth from '@/auth';
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
@@ -78,10 +77,8 @@ import UploadVendorsModal from "../../../../Vendors/ImportVendors";
 import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
 
 import Swal from "sweetalert2";
-import { error } from "util";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
-import _ from "underscore";
 
 export default {
   components: {
