@@ -22,20 +22,17 @@
             <div class="hide-circle-for-img">
               <img class="hide-svg-icon-long-button" src="static/icons/hide-comments.svg" />
             </div>
-            <div class="hide-comments-text">Hide comments</div>
+            <div class="comments-text">Hide comments</div>
           </md-button>
           <md-button
             v-else
             class="md-simple md-just-icon show-long-button"
             @click="click('comment')">
-            <div class="show-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">Show comments</div>
+            <div class="comments-text">Show comments</div>
             <div class="show-circle-for-img">
               <img class="show-svg-icon-long-button" src="static/icons/show-comments.svg" />
             </div>
           </md-button>
-        </li>
-        <li>
-          <img class="svg-icon-more-header-action" :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Group%2019186.svg`" />
         </li>
       </template>
     </ul>
@@ -71,10 +68,6 @@ export default {
     page: {
       type: String,
       default: 'event',
-    },
-    customStyles: {
-      type: Object,
-      default: () => ({})
     }
   },
   data() {
@@ -147,16 +140,7 @@ export default {
     background-color: #ffe5ec!important;
   }
 }
-.hide-comments-text{
-  padding-left: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 0.34px;
-  text-align: center;
-  text-transform: none;
-  color: #f51355;
-}
-.show-comments-text{
+.comments-text{
   padding-left: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -198,10 +182,6 @@ export default {
   margin-left: 2px;
   margin-top: 5px;
 }
-.svg-icon-more-header-action {
-  width: 8px;
-  height: 40px;
-  margin-left: 5px;
-}
+
 
 </style>
