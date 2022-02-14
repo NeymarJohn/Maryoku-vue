@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout event-campaign-section booking-section">
+  <div class="md-layout event-campaign-section booking-section event-campaign-width">
     <comment-editor-panel
       v-if="showCommentEditorPanel"
       :commentComponents="commentComponents"
@@ -17,11 +17,11 @@
         </div>
         <p class="font-size-16">Get your guests super exited by giving them a taste of what's waiting for them</p>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
+      <header-actions :customStyles="{showCommentsText: {paddingLeft: '2px'}}" @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
     </div>
     <div class="campaign-content md-layout-item md-size-100 mt-30">
       <loader :active="isLoading" />
-      <div class="campaign-content-tab d-flex mb-40">
+      <div class="campaign-content-tab d-flex">
         <div
           class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
           :class="{ selected: selectedTab === 1 }"
@@ -702,5 +702,8 @@ export default {
       height: 100%;
     }
   }
+}
+.event-campaign-width{
+  width: 1700px;
 }
 </style>

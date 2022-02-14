@@ -459,10 +459,9 @@ export default {
         this.showResendProposalModal = true;
       } else if (action === this.proposalStatus.cancel) {
         this.loading = true;
-
         let url = `${location.protocol}//${location.host}/#/signin`;
         await this.$store.dispatch("vendorDashboard/updateProposal", {
-          data: { ...this.selectedProposal, status: PROPOSAL_STATUS.INACTIVE },
+          data: { ...this.selectedProposal, status: PROPOSAL_STATUS.CANCEL },
           vendorId: this.selectedProposal.vendor.id,
         });
 
