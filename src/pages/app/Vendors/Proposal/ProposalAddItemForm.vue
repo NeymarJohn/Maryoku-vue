@@ -465,7 +465,7 @@ export default {
               const camelized = this.camelize(capitalized);
               const profileService = this.profileServices[camelized];
 
-              if (camelized === 'customService' && profileService) {
+              if (camelized === 'customService') {
                 const customServiceItems = profileService.data;
                 customServiceItems.forEach(service_item => {
                   if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
@@ -481,6 +481,7 @@ export default {
               }
 
               const requestItemByPlanner = null;
+              console.log("requestItemByPlanner", requestItemByPlanner);
               if (item.available) {
                 item.available.forEach(availableItem => {
                   const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);

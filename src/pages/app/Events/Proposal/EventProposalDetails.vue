@@ -333,7 +333,7 @@
         </div>
       </div>
 
-      <div class="card-section align-center py-30" :class="{'px-20':windowWidth>350}">
+      <div class="card-section align-center py-30" v-if="step===0" :class="{'px-20':windowWidth>350}">
         <div class="px-15" >
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
@@ -381,11 +381,12 @@
                 </template>
               </div>
             </div>
+            <div v-else> hmm...seems that vendor did not include that information</div>
           </div>
         </div>
       </div>
 
-      <div class="card-section align-center  py-30 mt-10" :class="{'px-20':windowWidth>350}">
+      <div class="card-section align-center  py-30 mt-10" v-if="step===0" :class="{'px-20':windowWidth>350}">
         <div class="px-15">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">

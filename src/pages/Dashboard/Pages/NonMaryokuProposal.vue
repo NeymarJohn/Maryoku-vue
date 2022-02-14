@@ -187,7 +187,7 @@
             @click="declineProposal"
             >Decline</a
           >
-          <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none">Book now</a>
+          <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none" @click="bookProposal">Book now</a>
         </template>
         <template v-else>
           <a
@@ -585,7 +585,7 @@ export default {
     position: relative;
   }
   .proposal-container {
-    margin-top: 90px;
+    margin-top: 12px;
     position: relative;
     padding-left:10em;
     padding-right:10em;
@@ -650,5 +650,14 @@ export default {
 }
 .w-75{
   width:75%;
+}
+@media (max-width: 960px) {
+  .non-maryoku-proposal {
+    .proposal-container {
+
+      padding-left:0;
+      padding-right:0;
+    }
+  }
 }
 </style>

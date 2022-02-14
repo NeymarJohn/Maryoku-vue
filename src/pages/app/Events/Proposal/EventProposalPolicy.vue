@@ -36,6 +36,9 @@
                             </div>
                         </div>
                     </template>
+                  <template v-if="(!proposal.vendor.guaranteed || !proposal.vendor.guaranteed.length) && !proposal.vendor.healthPolicy">
+                    <div class="py-10"> hmm...seems that vendor did not include that information</div>
+                  </template>
                 </div>
 
             </template>
