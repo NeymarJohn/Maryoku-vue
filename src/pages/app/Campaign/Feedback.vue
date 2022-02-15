@@ -50,12 +50,7 @@
       </div>
       <maryoku-textarea :placeholder="placeHolder" v-model="campaignData.description"></maryoku-textarea>
     </div>
-    <!--    <feedback-image-carousel-->
-    <!--      class="p-50"-->
-    <!--      :images="campaignData.images"-->
-    <!--      @addImage="addNewImage"-->
-    <!--    ></feedback-image-carousel>-->
-    <div class="p-50">
+    <div class="feedback-campaign-list p-50">
       <div>
         <div class="d-flex justify-content-between" >
           <div class="d-flex align-center justify-content-between" >
@@ -82,11 +77,39 @@
           Cancel
         </md-button>
       </div>
-      <div class="mt-60" v-else>
+      <div class="mt-60 d-flex justify-content-between" v-else>
         <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
-          <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Feel free to add more questions
+          <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Add Another Qestion
         </md-button>
+        <div class="wrapper-icon-edit-dark pt-50" >
+          <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
+        </div>
       </div>
+    </div>
+    <div class="feedback-campaign-carousel p-50">
+      <div class="d-flex align-center pt-50 pb-50" >
+        <!--        <img class="icon-pictures-of-all-the-fun-we-experienced" :src="`${$iconURL}Campaign/group-7321.svg`" />-->
+        <div class="icon-pictures">
+          <img class="icon-book" src="static/icons/Path%2013540.svg" />
+          <img class="icon-picture" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor+Landing+Page/art.svg" />
+        </div>
+        <div class="ml-20 d-flex flex-wrap flex-column" >
+          <div class="d-flex" >
+            <span class="font-size-30 font-bold line-height-1">PICTURES OF ALL THE FUN WE EXPERIENCED</span>
+            <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
+          </div>
+          <span class="Include-photos-details-of-the-event">
+            (Include photos & details of the event)
+          </span>
+        </div>
+      </div>
+      <feedback-image-carousel
+        class="p-10"
+        :items="2.5"
+        :margin-items="10"
+        :images="campaignData.images"
+        @addImage="addNewImage"
+      />
     </div>
     <div class="green-block-wrapper">
       <div class="p-50 d-flex">
@@ -291,6 +314,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.feedback-campaign {
+  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+}
 .wrapper-change-cover {
   display: flex;
   flex-direction: column;
@@ -445,4 +471,59 @@ export default {
   margin-top: 25px;
   margin-left: 15px;
 }
+.feedback-campaign-list {
+  background: #f5f5f5;
+
+  .icon-feedback {
+    width: 65px;
+    height: 57px;
+  }
+
+  .wrapper-icon-edit-dark {
+    display: flex;
+    justify-content: flex-end;
+
+    .icon-edit-dark {
+      width: 24px;
+      height: 24px;
+      align-self: flex-end;
+      margin-left: 15px;
+    }
+  }
+}
+.feedback-campaign-carousel {
+
+  .icon-pictures {
+    width: 57px;
+    height: 57px;
+    position: relative;
+    border-radius: 50%;
+    background: #ffc001;
+
+    .icon-book {
+      width: 43px;
+      height: 48px;
+      background: #fff;
+      position: absolute;
+      top: 13px;
+      left: -13px;
+    }
+
+    .icon-picture {
+      position: absolute;
+      top: 25px;
+      left: -8px;
+      z-index: 1;
+    }
+  }
+
+  .icon-edit-dark {
+    width: 24px;
+    height: 24px;
+    align-self: flex-end;
+    margin-left: 15px;
+  }
+}
+
+
 </style>
