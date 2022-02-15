@@ -41,8 +41,7 @@ export default {
   },
   methods: {
     viewContract(vendor) {
-      console.log(vendor);
-      window.open(`https://static-maryoku.s3.amazonaws.com/${vendor.attachments[0].url}`, "_blank");
+      window.open(`https://maryoku.s3.amazonaws.com/${vendor.attachments[0].url}`, "_blank");
     },
     deleteVendor(vendor) {},
   },

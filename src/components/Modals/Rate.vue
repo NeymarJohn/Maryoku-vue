@@ -2,10 +2,10 @@
     <div>
         <h5 class="font-size-20 font-bold-extra">Please rate your experience?</h5>
         <div class="d-flex align-center mt-10 mb-40">
-<!--            <img v-for="rate in rates"-->
-<!--                 class="rate-image-smiles cursor-pointer"-->
-<!--                 :src="`${$iconURL}popups/${rate.url}${score == rate.score ? '_red' : ''}.svg`"-->
-<!--                 @click="selectRate(rate.score)">-->
+            <img v-for="rate in rates"
+                 class="ml-20 cursor-pointer"
+                 :src="`${$iconURL}popups/${rate.url}${score == rate.score ? '_red' : ''}.svg`"
+                 @click="selectRate(rate.score)">
         </div>
     </div>
 </template>
@@ -32,13 +32,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.rate-image-smiles{
-  margin-left: 20px;
-}
-@media (max-width: 450px) {
-  .rate-image-smiles{
-    margin-left: 5px;
-    width: 50px;
-  }
-}
+
 </style>

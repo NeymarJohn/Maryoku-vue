@@ -93,7 +93,7 @@ let authPages = {
         {
             path: "/signin",
             name: "SignIn",
-            component: SignUp,
+            component: SignInSignUp,
             meta: {
                 requiresAuth: false,
                 gtm: "SignIn",
