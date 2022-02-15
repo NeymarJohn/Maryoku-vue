@@ -56,35 +56,6 @@
     <!--      @addImage="addNewImage"-->
     <!--    ></feedback-image-carousel>-->
     <div class="p-50">
-      <!--      <div class="d-flex align-center font-bold">-->
-      <!--        Allow guests to upload photos form the event-->
-      <!--        <md-switch class="large-switch" v-model="campaignData.visibleSettings.allowUploadPhoto"></md-switch>-->
-      <!--      </div>-->
-      <!--      <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>-->
-      <!--      <div class="mb-20">Like presentation</div>-->
-      <!--      <div v-if="campaignData.files && campaignData.files.length > 1">-->
-      <!--        <span class="font-bold">{{ campaignData.files[0].name }}</span>-->
-      <!--      </div>-->
-      <!--      <md-button class="md-simple edit-btn md-red" @click="uploadFile">-->
-      <!--        <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File-->
-      <!--      </md-button>-->
-      <!--      <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />-->
-      <!--      <hr class="mt-50 mb-70" />-->
-      <!--      <div class="share-panel">-->
-      <!--        <div class="d-flex mb-60 align-center">-->
-      <!--          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />-->
-      <!--          <div>-->
-      <!--            <div class="font-size-30 font-bold line-height-2">share event participation</div>-->
-      <!--            <div>(Include photos & details of the event)</div>-->
-      <!--          </div>-->
-      <!--          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>-->
-      <!--        </div>-->
-      <!--        <sharing-button-group-->
-      <!--          class="mb-50"-->
-      <!--          v-if="campaignData.visibleSettings.showSharingOption"-->
-      <!--        ></sharing-button-group>-->
-      <!--      </div>-->
-      <!--      <hr />-->
       <div>
         <div class="d-flex justify-content-between" >
           <div class="d-flex align-center justify-content-between" >
@@ -117,7 +88,62 @@
         </md-button>
       </div>
     </div>
-    <hr />
+    <div class="green-block-wrapper">
+      <div class="p-50 d-flex">
+        <div class="mr-80">
+          <div class="icon-and-text">
+            <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
+            <div class="right-text-style">share with us photos you took from the event</div>
+          </div>
+          <div class="d-flex align-center font-bold">
+            Allow guests to upload photos form the event
+            <md-switch class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style" v-model="campaignData.visibleSettings.allowUploadPhoto" >
+              <span v-if="campaignData.visibleSettings.allowUploadPhoto">Hide</span>
+              <span v-if="!campaignData.visibleSettings.allowUploadPhoto">Show</span>
+            </md-switch>
+          </div>
+        </div>
+
+        <div>
+          <div class="icon-and-text">
+            <img class="left-icon" src="/static/icons/green-block-icon-2.svg">
+            <div class="right-text-style">Material from the event</div>
+          </div>
+          <div class="d-flex align-center font-bold">
+            Download files related to the event
+            <img class="lightbulb" src="https://static-maryoku.s3.amazonaws.com/storage/icons/common/light.svg" >
+            <md-switch class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style" v-model="campaignData.visibleSettings.downloadFiles" >
+              <span v-if="campaignData.visibleSettings.downloadFiles">Hide</span>
+              <span v-if="!campaignData.visibleSettings.downloadFiles">Show</span>
+            </md-switch>
+          </div>
+          <div class="mb-20">Like presentation</div>
+          <div v-if="campaignData.files && campaignData.files.length > 1">
+            <span class="font-bold">{{ campaignData.files[0].name }}</span>
+          </div>
+          <md-button class="md-simple edit-btn md-red" @click="uploadFile">
+            <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File
+          </md-button>
+          <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />
+        </div>
+      </div>
+
+    </div>
+    <div class="p-50 mt-10">
+      <div class="share-panel">
+        <div class="d-flex mb-10 align-center">
+          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />
+          <div class="ml-30 mr-40">
+            <div class="font-size-30 font-bold line-height-2">SHARE EVENT PARTICIPATION</div>
+            <div>(Include photos & details of the event)</div>
+          </div>
+          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
+        </div>
+        <sharing-button-group
+          v-if="campaignData.visibleSettings.showSharingOption"
+        ></sharing-button-group>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -388,5 +414,35 @@ export default {
   position: absolute;
   top: 25%;
   left: 40%;
+}
+.green-block-wrapper{
+  background-color: rgba(87, 242, 195, 0.23);
+}
+.right-text-style{
+  text-transform: uppercase;
+  font-size: 30px;
+  font-weight: 800;
+  width: 431px;
+  height: 82px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+}
+.icon-and-text{
+  display: flex;
+  align-items: start;
+}
+.left-icon{
+  margin-right: 20px;
+}
+.lightbulb{
+  width: 27px;
+  margin: 0 65px 0 15px;
+}
+.switch-button-style{
+  margin-top: 25px;
+  margin-left: 15px;
 }
 </style>

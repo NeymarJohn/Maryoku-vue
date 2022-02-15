@@ -108,6 +108,7 @@ const defaultCampaignData = {
             showSharingOption: true,
             showFeedback: true,
             allowUploadPhoto: true,
+            downloadFiles:true,
         },
         images: [
             {
