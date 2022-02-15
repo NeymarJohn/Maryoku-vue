@@ -89,10 +89,7 @@
     <div class="feedback-campaign-carousel p-50">
       <div class="d-flex align-center pt-50 pb-50" >
         <!--        <img class="icon-pictures-of-all-the-fun-we-experienced" :src="`${$iconURL}Campaign/group-7321.svg`" />-->
-        <div class="icon-pictures">
-          <img class="icon-book" src="static/icons/Path%2013540.svg" />
-          <img class="icon-picture" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor+Landing+Page/art.svg" />
-        </div>
+        <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
         <div class="ml-20 d-flex flex-wrap flex-column" >
           <div class="d-flex" >
             <span class="font-size-30 font-bold line-height-1">PICTURES OF ALL THE FUN WE EXPERIENCED</span>
