@@ -347,15 +347,13 @@ export default {
     markAsFavorite(comment, isFavorite) {
       const hoveredComponent = this.updatedCommentComponents[this.selectedComponentIndex]
       comment.eventCommentComponent.id = hoveredComponent.id;
-
       if (isFavorite) {
         if (!comment.favoriteUsers) comment.favoriteUsers = [];
-        comment.favoriteUsers.push(this.$store.state.auth.user.id);
+        comment.favoriteUsers.push(this.$auth.user.id);
         comment.myFavorite = true;
       } else {
-        console.log('##-356, CommentEditorPanel.vue',comment.favoriteUsers)
         const index = comment.favoriteUsers.findIndex(
-          item => item? item.id === this.$store.state.auth.user.id:false
+          item => item.id == this.$auth.id
         );
         comment.favoriteUsers.splice(index, 1);
         comment.myFavorite = false;
