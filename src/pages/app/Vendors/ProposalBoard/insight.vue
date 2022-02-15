@@ -1,19 +1,21 @@
 <template>
-  <div class="white-card p-30 insight-adaptive">
-    <div class="font-size-20">Add more details to generate unique insights</div>
-    <div style="margin: 0 -15px">
-      <pie-chart
-        :chartData="chartData"
-        :columns="1"
-        :options="{
-          width: 130,
-          height: 180,
-          strokWidth: 30,
-          direction: 'row',
-        }"
-      ></pie-chart>
+  <div class="white-card insight-adaptive">
+    <div class="font-size-20 p-30 ">Add more details to generate unique insights</div>
+    <div style="margin-left: -52px">
+      <div style="margin: 0 80px">
+        <pie-chart
+          :chartData="chartData"
+          :columns="1"
+          :options="{
+            width: 135,
+            height: 180,
+            strokWidth: 30,
+            direction: 'row',
+          }"
+        ></pie-chart>
+      </div>
     </div>
-    <div>
+    <div class="p-30 ">
       <div v-if="total > 0 && won > 0">
         <div class="color-won d-flex align-center">
           <span class="mr-20 font-size-50">{{ `${Math.round((won / total) * 100)} %` }}</span>
@@ -26,8 +28,8 @@
       <div v-else class="d-flex align-center">
         <img :src="`${$iconURL}VendorsProposalPage/group-18762.svg`" width="50" />
         <div class="ml-10">
-          <div class="color-vendor font-size-14 m-0">There is not yet enough</div>
-          <div class="color-vendor font-size-14 mt-10">information to present insights</div>
+          <div class="color-vendor font-size-14 m-0">There is not yet enough information</div>
+          <div class="color-vendor font-size-14 mt-10">to present insights</div>
         </div>
       </div>
       <hr class="mt-50 mb-50" />
@@ -91,13 +93,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    .insight-adaptive{
-        width: 390px;
-        height: 750px;
-        .md-button{
-            margin: 36px 0 0 3px !important;
-            font-size: 16px;
-            font-weight: bold;
-        }
-    }
+.insight-adaptive {
+  width: 390px;
+  height: 800px;
+  .md-button {
+    margin: 36px 0 0 3px !important;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+#pie_chart {
+  width: 50%;
+}
 </style>

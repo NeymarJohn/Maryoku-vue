@@ -5,7 +5,11 @@
             <InboxSidebar />
         </div>
         <router-view></router-view>
-        <section class="footer-wrapper" v-if="selectedProposal">
+      <div class="proposal-container no-proposal" v-if="!selectedProposal" >
+       <img src="static/img/Group%2022588@3x.png">
+      </div>
+
+      <section class="footer-wrapper" v-if="selectedProposal">
             <div>
                 <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
                     <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button>
@@ -13,7 +17,7 @@
                     <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
                 </md-button>
             </div>
-            <div class="next-cont">
+            <div class="next-cont" >
                 <a class="save" @click="">
                     <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
                 </a>
@@ -66,6 +70,17 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.no-proposal {
+  position: absolute;
+  height: 90vh;
+  img{
+    display: block;
+    width: calc(90% - 700px);
+    position: relative;
+    top: 10%;
+    left: 650px;
+  }
+}
 section.footer-wrapper {
     padding: 11px 100px 11px 20px;
     background-color: #ffffff;

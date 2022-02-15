@@ -89,6 +89,9 @@ const defaultCampaignData = {
             4) +
             1}.png`,
         campaignStatus: "EDITING",
+        showLogo: true,
+        showComing: true,
+        showCountdown: true,
         visibleSettings: {
             showLogo: true,
             showComing: true,

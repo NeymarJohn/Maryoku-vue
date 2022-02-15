@@ -1,60 +1,63 @@
 <template>
-  <div class="md-layout">
-    <loader :active="loading" :isFullScreen="true"/>
-    <div class="md-layout-item">
-      <signup-card>
-        <div
-          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain"
-          slot="content-right"
-        >
-          <div class="social-line text-center">
-            <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-              <img :src="`${$iconURL}Signup/google-icon.jpg`" />
-              <span>Sign in with Google</span>
-            </md-button>
-            <h4 class="mt-1">Or</h4>
-          </div>
-          <maryoku-input
-            class="form-input"
-            v-validate="modelValidations.email"
-            inputStyle="email"
-            v-model="user.email"
-            placeholder="Type email address here..."
-          ></maryoku-input>
-          <maryoku-input
-            class="form-input"
-            v-validate="modelValidations.password"
-            type="password"
-            inputStyle="password"
-            v-model="user.password"
-            placeholder="Type password here..."
-          ></maryoku-input>
-          <div class="md-error">
-            <div v-if="notFoundUser" class="font-size-16">
-              Sorry, we couldn’t find you.
-              <br />
-              If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
-            </div>
-            <div>{{ error }}</div>
-          </div>
-          <div class="terms-and-conditions mt-2">
-            <md-checkbox v-model="keepMe"> Keep me signed in </md-checkbox>
-          </div>
-          <div class="form-buttons">
-            <div>
-              <md-button @click="signIn" class="md-default md-red md-maryoku mt-4" slot="footer">Sign In</md-button>
-              <md-button @click="toSingUp" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
-                Sign Up
-              </md-button>
-            </div>
-            <md-button @click="toForgotPassword" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
-              Forgot my password?
-            </md-button>
-          </div>
-        </div>
-      </signup-card>
+<!--  <div class="md-layout">-->
+<!--    <loader :active="loading" :isFullScreen="true"/>-->
+<!--    <div class="md-layout-item">-->
+<!--      <signup-card>-->
+<!--        <div-->
+<!--          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain"-->
+<!--          slot="content-right"-->
+<!--        >-->
+  <div>
+    <div class="social-line text-center">
+      <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+        <img :src="`${$iconURL}Signup/google-icon.jpg`"/>
+        <span>Sign in with Google</span>
+      </md-button>
+      <h4 class="mt-1">Or</h4>
+    </div>
+    <maryoku-input
+      class="form-input"
+      v-validate="modelValidations.email"
+      inputStyle="email"
+      v-model="user.email"
+      placeholder="Type email address here..."
+    ></maryoku-input>
+    <maryoku-input
+      class="form-input"
+      v-validate="modelValidations.password"
+      type="password"
+      inputStyle="password"
+      v-model="user.password"
+      placeholder="Type password here..."
+    ></maryoku-input>
+    <div class="md-error">
+      <div v-if="notFoundUser" class="font-size-16">
+        Sorry, we couldn’t find you.
+        <br/>
+        If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
+      </div>
+      <div>{{ error }}</div>
+    </div>
+    <div class="terms-and-conditions mt-2">
+      <md-checkbox v-model="keepMe"> Keep me signed in</md-checkbox>
+    </div>
+    <div class="form-buttons">
+      <div>
+        <md-button @click="toForgotPassword" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
+        Forgot my password?
+      </md-button>
+        <br/>
+        <md-button @click="signIn" class="md-default md-red md-maryoku mt-4" slot="footer">Sign In</md-button>
+        <md-button @click="toSingUp" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
+          Sign Up
+        </md-button>
+      </div>
+
     </div>
   </div>
+<!--      </signup-card>-->
+<!--    </div>-->
+<!--  </div>-->
 </template>
 
 <script>
