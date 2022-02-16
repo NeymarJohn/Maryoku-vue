@@ -35,7 +35,7 @@ export default {
       return this.$store.state.auth.user;
     },
     barItems() {
-      if (!this.event.checkList) {
+      // if (!this.event.checkList) {
       const overview = {
         title: "Create an event to remember",
         status: "completed",
@@ -57,7 +57,7 @@ export default {
       const budget = {
         title: "Craft Event Budget",
         status: "not-complete",
-        route: this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget",
+        route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
         progress: this.event.budgetProgress,
         componentId: "budget",
@@ -101,7 +101,8 @@ export default {
       };
       const elements = [];
 
-      if (this.user.currentUserType === 'planner' || this.user.currentUserType === 'vendor') {
+      console.log('user', this.user);
+      if (this.user.currentUserType === 'planner') {
           elements.push(overview);
           elements.push(concept);
           elements.push(budget);
@@ -135,14 +136,16 @@ export default {
       //   });
       // }
 
+      console.log("elemetes", elements);
       return elements;
-      } else {
-        return this.event.checkList;
-      }
+      // } else {
+      //   return this.event.checkList;
+      // }
     },
   },
   methods: {
     setConstantStates(event) {
+      console.log("setConstantStates");
       const overviewIndex = this.eventElements.findIndex((item) => item.componentId === "overview");
       const conceptIndex = this.eventElements.findIndex((item) => item.componentId === "concept");
       const budgetIndex = this.eventElements.findIndex((item) => item.componentId === "budget");
@@ -173,8 +176,10 @@ export default {
     },
     fetchData() {
       this.pageId = this.$route.params.blockId ? this.$route.params.blockId : "timeline";
+      console.log('eventPlan', this.event);
     },
     changeCheckList(e) {
+      console.log("changeCheckList", e);
       const updatedEvent = new CalendarEvent({
         id: this.event.id,
         calendar: new Calendar({
@@ -185,6 +190,7 @@ export default {
         reCalculate: false,
       });
       this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
+        console.log("plan.updateEvent", res);
       });
     },
   },
@@ -192,9 +198,11 @@ export default {
   watch: {
     $route: "fetchData",
     event(newValue) {
+      console.log("event");
       this.setConstantStates(newValue);
     },
     eventData(newValue) {
+      console.log("eventData");
       this.setConstantStates(newValue);
     },
   },

@@ -1,10 +1,10 @@
 <template>
   <div class="event-component-vedor-item">
+    <div class="vendor-title">{{ vendor.vendor.vendorDisplayName }}</div>
     <div class="vendor-actions">
-      <div class="vendor-title">{{ vendor.vendor.vendorDisplayName }}</div>
-<!--      <md-button class="md-button md-red md-simple md-theme-default edit-btn-1" @click="viewContract(vendor)"-->
-<!--        ></md-button-->
-<!--      >-->
+      <md-button class="md-button md-red md-simple md-theme-default edit-btn-1" @click="viewContract(vendor)"
+        >View Contract</md-button
+      >
       <div style="position: relative">
         <md-button class="md-button md-black md-simple md-theme-default edit-btn-1">Request Changes</md-button>
         <span class="divider"></span>
@@ -41,7 +41,8 @@ export default {
   },
   methods: {
     viewContract(vendor) {
-      window.open(`https://maryoku.s3.amazonaws.com/${vendor.attachments[0].url}`, "_blank");
+      console.log(vendor);
+      window.open(`https://static-maryoku.s3.amazonaws.com/${vendor.attachments[0].url}`, "_blank");
     },
     deleteVendor(vendor) {},
   },

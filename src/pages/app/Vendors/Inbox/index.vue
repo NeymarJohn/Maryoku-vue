@@ -6,7 +6,7 @@
         </div>
         <router-view></router-view>
       <div class="proposal-container no-proposal" v-if="!selectedProposal" >
-       <img :src="`${$iconURL}CommentsMode/ZeroState/Group 22588.svg`">
+       <img src="static/img/Group%2022588@3x.png">
       </div>
 
       <section class="footer-wrapper" v-if="selectedProposal">
@@ -75,8 +75,9 @@ export default {
   height: 90vh;
   img{
     display: block;
+    width: calc(90% - 700px);
     position: relative;
-    top: 15%;
+    top: 10%;
     left: 650px;
   }
 }

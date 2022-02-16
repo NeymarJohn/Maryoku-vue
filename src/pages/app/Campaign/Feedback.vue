@@ -123,7 +123,6 @@
             </md-switch>
           </div>
         </div>
-
         <div>
           <div class="icon-and-text">
             <img class="left-icon" src="/static/icons/green-block-icon-2.svg">
@@ -147,7 +146,6 @@
           <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />
         </div>
       </div>
-
     </div>
     <div class="p-50 mt-10">
       <div class="share-panel">

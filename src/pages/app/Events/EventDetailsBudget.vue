@@ -2,7 +2,7 @@
   <div>
     <budget-notifications></budget-notifications>
     <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
     <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important">
         <comment-editor-panel
             v-if="showCommentEditorPanel"
@@ -382,20 +382,6 @@ export default {
       "setEventData",
     ]),
     ...mapMutations("event", ["setBudgetNotification"]),
-    changeCheckList(e) {
-      const updatedEvent = new CalendarEvent({
-        id: this.event.id,
-        calendar: new Calendar({
-          id: this.event.calendar.id,
-        }),
-        checkList: e,
-        reSchedule: false,
-        reCalculate: false,
-      });
-      this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
-        this.event = res
-      });
-    },
     getCalendar() {
       return new Calendar({ id: this.currentUser.profile.defaultCalendarId });
     },
@@ -407,7 +393,9 @@ export default {
       let event = new CalendarEvent({ id: this.event.id });
       let eventComponent = new EventComponent().for(_calendar, event);
       let components = await eventComponent.get();
+      console.log("getEventComponents", components);
       components.sort((a, b) => a.order - b.order);
+      // console.log(components);
       this.event.components = components;
       this.selectedComponents = components;
     },
@@ -418,7 +406,12 @@ export default {
       let calendar = this.getCalendar();
       await this.getEvent(calendar);
       await this.getEventComponents(calendar);
-
+      console.log(
+        "showBudgetNotification",
+        this.event.id,
+        this.showBudgetNotification,
+        this.showBudgetNotification.indexOf(this.event.id) === -1,
+      );
       // notify budget states
       if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
         // this.notifyStates();
@@ -583,6 +576,7 @@ export default {
         unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        console.log("updateTotalBudget.res", res);
         this.event = res;
         this.checkMessageStatus();
         this.showBudgetModal = false;
@@ -633,7 +627,7 @@ export default {
         const budget = {
           title: "Craft Event Budget",
           status: "not-complete",
-          route: this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget",
+          route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
           icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
           progress: this.event.budgetProgress,
           componentId: "budget",
@@ -710,7 +704,7 @@ export default {
       }
     },
     pieChartData() {
-      return this.$store.state.event.eventData.components.filter(item => item.vendorsCount>0);
+      return this.$store.state.event.eventData.components;
     },
     // check permission
     permission() {
@@ -763,4 +757,11 @@ export default {
 
 <style scoped lang="scss">
 @import "../../styles/EventDetailsBudget.scss";
+// .md-layout, .md-layout-item {
+//     width: initial;
+// }
+
+// .tab-content {
+//     background-color: transparent !important;
+// }
 </style>
