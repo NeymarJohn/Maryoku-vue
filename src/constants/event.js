@@ -222,6 +222,7 @@ export const serviceCategoryImages = {
     "other": [],
 }
 
+// added for modifications in requirement-pages
 export const ServiceCards = [
     [
         [
@@ -263,8 +264,6 @@ export const ServiceCards = [
                 imageTitles: ["Florals", "Interior Design", "Lighting"],
                 icon: "NewRequirements/Group 18012.svg",
             },
-        ],
-        [
             {
                 name: "Cuisine Speciality",
                 serviceCategory: "foodandbeverage",
@@ -349,8 +348,6 @@ export const ServiceCards = [
                 ],
                 icon: "NewRequirements/Group 18017.svg",
             },
-        ],
-        [
             {
                 name: "Photography  Videography",
                 serviceCategory: "videographyandphotography",
@@ -422,10 +419,6 @@ export const ServiceCards = [
                   requirements['multi-selection'][0]['options'][1]['selected'] = true;
                 `,
             },
-        ],
-    ],
-    [
-        [
             {
                 name: "Giveaways",
                 serviceCategory: "giveaways",
@@ -471,8 +464,6 @@ export const ServiceCards = [
                   requirements['multi-selection'][0]['options'][2]['selected'] = true;
                 `,
             },
-        ],
-        [
             {
                 name: "Outdoor Activities",
                 serviceCategory: "entertainment",
@@ -509,8 +500,6 @@ export const ServiceCards = [
                 imageTitles: ["Lighting", "Plasma TV", "Projector"],
                 icon: "NewRequirements/Group 18073.svg",
             },
-        ],
-        [
             {
                 name: "Guest Serivces & Staffing",
                 serviceCategory: "administration",
@@ -571,6 +560,7 @@ export const ServiceCards = [
         ],
     ],
 ]
+// added for modifications in requirement-pages
 
 export const eventIcons = [
     "Group 20904.svg",

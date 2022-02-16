@@ -39,6 +39,7 @@
 import carousel from "vue-owl-carousel";
 import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
+import moment from "moment";
 export default {
   components: {
     carousel,
@@ -103,6 +104,7 @@ export default {
       }
       const extension = event.target.files[0].type.split("/")[1];
       if (!this.photo) this.photo = {};
+      const timeStamp = new Date().valueOf();
       const photoData = await getBase64(event.target.files[0]);
       this.$set(this.photo, "url", photoData);
       this.$root.$emit("update-inspirational-photo", {

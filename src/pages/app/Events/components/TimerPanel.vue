@@ -58,7 +58,7 @@ export default {
     },
 
     status: {
-      type: Boolean,
+      type: Number,
     },
 
     pending: {

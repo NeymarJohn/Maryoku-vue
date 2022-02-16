@@ -38,7 +38,7 @@ export const ACTION = {
         title: false,
         description: false,
         cancel: true,
-        action: false,
+        action: 'Done',
     },
     NEGOTIATION: {
         title: 'Negotiation rate',

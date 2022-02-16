@@ -871,8 +871,8 @@ export default {
       /deep/ .vfc-arrow-right {
         width: 10px;
         height: 10px;
-        color: #f51355;
-        border-color: #f51355;
+        color: #59244C;
+        border-color: #59244C;
         border-top: 3px solid;
       }
       /deep/ .vfc-arrow-left {
@@ -893,26 +893,26 @@ export default {
       }
       /deep/ .vfc-base-start,
       .vfc-base-end {
-        background: #f51355;
+        background: #59244C;
         color: #ffffff;
       }
       /deep/ span.vfc-span-day {
         &.vfc-marked {
-          background-color: #f51355;
+          background-color: #59244C;
           color: #ffffff;
 
           &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-            background-color: #f51355 !important;
+            background-color: #59244C !important;
           }
         }
 
         &.vfc-cursor-not-allowed {
           color: #fff !important;
-          background-color: #f51355;
+          background-color: #59244C;
           z-index: 1;
 
           &.selected:before {
-            background-color: #f51355 !important;
+            background-color: #59244C !important;
             top: 0;
             left: 0;
             position: absolute;
@@ -924,7 +924,7 @@ export default {
         }
       }
       /deep/ .vfc-span-day.vfc-start-marked {
-        background-color: #fc1355;
+        background-color: #59244C;
         color: #ffffff;
         z-index: 200;
 
@@ -940,25 +940,25 @@ export default {
         }
       }
       /deep/ .vfc-week .vfc-day .vfc-base-end {
-        background-color: #fc1355;
+        background-color: #59244C;
         color: #ffffff;
       }
       /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-hovered {
-        background-color: #fc1355;
+        background-color: #59244C;
         color: #ffffff;
       }
       /deep/ .vfc-today {
         background-color: #ffd9e4;
-        color: #f51355;
+        color: #59244C;
         font: 600 14px Manrope-Regular, sans-serif;
       }
 
       .vfc-select-start {
-        background: linear-gradient(90deg, #ffffff 50%, #f51355 50%);
+        background: linear-gradient(90deg, #ffffff 50%, #59244C 50%);
       }
 
       .vfc-half-end {
-        background: linear-gradient(90deg, #f51355 50%, #ffffff 50%);
+        background: linear-gradient(90deg, #59244C 50%, #ffffff 50%);
       }
     }
     .check-list {
@@ -1200,7 +1200,7 @@ export default {
               font: 800 16px Manrope-Regular, sans-serif;
               cursor: pointer;
               &.note {
-                color: #f51355;
+                color: #59244C;
               }
               &.cancel {
                 color: #050505;
