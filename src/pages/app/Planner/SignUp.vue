@@ -23,10 +23,7 @@
             </div>
           </div>
         </div>
-        <div v-show="$router.currentRoute.path === '/signin'" class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto" style="min-height: 626px; padding: 50px 66px 22px" slot="content-right">
-          <SignedIn></SignedIn>
-        </div>
-        <div v-show="$router.currentRoute.path === '/signup'" class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto" slot="content-right">
+        <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto" slot="content-right">
           <div class="social-line text-center">
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
               <img :src="`${$iconURL}Signup/google-icon.jpg`" />
@@ -85,11 +82,11 @@
             <div v-if="errorMsg">{{ errorMsg }}</div>
           </div>
           <div class="text-center">
+            <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
             <div>
-              <md-button @click="toSignin" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
-              Sign In
-            </md-button>
-              <md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button>
+              <md-button @click="toSignin" class="md-black md-maryoku mt-4 md-simple mt-4">
+                Already a User?
+              </md-button>
             </div>
           </div>
         </div>
@@ -103,10 +100,9 @@
 import TenantUser from "@/models/TenantUser";
 
 const components = {
-  Loader: () => import('@/components/loader/Loader.vue'),
-  SignupCard: () => import('@/components/Cards/SignupCard.vue'),
-  MaryokuInput: () => import('@/components/Inputs/MaryokuInput.vue'),
-  SignedIn:()=>import('./SignInSignUp.vue')
+    Loader: () => import('@/components/loader/Loader.vue'),
+    SignupCard: () => import('@/components/Cards/SignupCard.vue'),
+    MaryokuInput: () => import('@/components/Inputs/MaryokuInput.vue'),
 }
 
 export default {

@@ -77,7 +77,7 @@
         </div>
         <div class="card">
           <div class="d-flex align-center">
-            <img :src="`${iconPurple}Purple Icons/group-17549 (1).svg`" class="mr-20" />
+            <img :src="`${iconPurple}Purple Icons/Group 17549.svg`" class="mr-20" />
             <div class="flex-1">
               <div class="color-purple font-size-22 font-bold">
                 PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER

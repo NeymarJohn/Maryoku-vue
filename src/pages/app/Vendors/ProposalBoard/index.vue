@@ -6,7 +6,7 @@
       <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
-    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests" v-if="!loading">
+    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests">
       <template slot="prev">
         <button class="nav-left nav-btn">
           <span><md-icon class="color-vendor">arrow_back</md-icon></span>
@@ -110,7 +110,6 @@
         <div class="md-layout-item md-size-75">
           <div class="text-center">
             <TablePagination
-
               v-if="pagination.pageCount"
               class="mt-30"
               :pageCount="pagination.pageCount"
@@ -276,9 +275,9 @@
     >
     </ResendProposalResult>
     <ProposalGraphModal
-      v-if="showProposalGraph"
-      @close="closeProposalGraph"
-      :proposal="selectedProposalForGraph"
+    v-if="showProposalGraph"
+    @close="closeProposalGraph"
+    :proposal="selectedProposalForGraph"
     >
     </ProposalGraphModal>
   </div>
@@ -318,7 +317,7 @@ const components = {
 };
 
 export default {
-  components: { ...components, ProposalRequestCard, EmptyRequestCard, NoInsight },
+  components: { ...components, ProposalRequestCard,EmptyRequestCard, NoInsight },
   data() {
     return {
       showLessInsightModal: false,
@@ -332,8 +331,8 @@ export default {
       showProposalGraph : false,
       selectedProposal: null,
       selectedEventData: null,
-      selectedProposalRequest: null,
       selectedProposalForGraph : null,
+      selectedProposalRequest: null,
       showRequestNegotiationModal: false,
       showResendProposalModal: false,
       showInsightModal: false,
@@ -459,12 +458,12 @@ export default {
         this.showResendProposalModal = true;
       } else if (action === this.proposalStatus.cancel) {
         this.loading = true;
+
         let url = `${location.protocol}//${location.host}/#/signin`;
         await this.$store.dispatch("vendorDashboard/updateProposal", {
-          data: { ...this.selectedProposal, status: PROPOSAL_STATUS.CANCEL },
+          data: { ...this.selectedProposal, status: PROPOSAL_STATUS.INACTIVE },
           vendorId: this.selectedProposal.vendor.id,
         });
-
         await this.sendEmail({ type: "inactive", url, proposalId: this.selectedProposal.id });
         this.loading = false;
       }
@@ -722,9 +721,9 @@ export default {
       this.loading = false;
     },
     showGraphModal(proposal) {
-        console.log('Open GraphModal', proposal);
-        this.showProposalGraph = true;
-        this.selectedProposalForGraph = proposal;
+      console.log('Open GraphModal', proposal);
+      this.showProposalGraph = true;
+      this.selectedProposalForGraph = proposal;
     },
     closeProposalGraph() {
       this.showProposalGraph = false;

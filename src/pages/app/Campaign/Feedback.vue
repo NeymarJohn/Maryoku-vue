@@ -1,99 +1,58 @@
 <template>
   <div class="feedback-campaign">
     <div class="p-50">
-      <!--      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>-->
-      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Create Feedback Campaign</div>
-      <!--      <hr />-->
-      <div class="wrapper-change-cover" >
-        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10" />
-        <div class="change-cover-feedback">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
-            Change Cover
-          </md-button>
-        </div>
-        <div class="view-event-photos" >
-          <div class="wrapper-icon-play" >
-            <img class="icon-play" src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg" />
-          </div>
-          <div class="wrapper-btn-switch" >
-            <hide-switch class="btn-switch" label="View A Presentation From The Event Photos" />
-          </div>
-        </div>
-        <div class="footer-change-cover" >
-          <div class="wrapper-logo-microsoft" >
-            <div class="logo-microsoft" >
-              <div class="icon-microsoft" >
-                <div class="block block1" />
-                <div class="block block2" />
-                <div class="block block3" />
-                <div class="block block4" />
-              </div>
-              <h2>
-                Microsoft
-              </h2>
-            </div>
-            <hide-switch label="Hide Logo" />
-          </div>
-          <span class="hello-microsoft-special-employee">
-            Hello Microsoft special employee!
-          </span>
-        </div>
-      </div>
-      <div class="mt-70 mb-40">
-        <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`" />
-        <div class="mt-10">
-          <div class="font-size-40 font-bold line-height-1 mb-20">THANKS FOR PARTICIPATING!</div>
+      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>
+      <hr />
+      <div class="d-flex mt-70 mb-40">
+        <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20" />
+        <div class="ml-20">
+          <div class="font-size-40 font-bold line-height-1 mb-20">It was great seeing you!</div>
           <div class="font-size-22 line-height-1">{{ campaignData.name }}</div>
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
       </div>
       <maryoku-textarea :placeholder="placeHolder" v-model="campaignData.description"></maryoku-textarea>
     </div>
-    <!--    <feedback-image-carousel-->
-    <!--      class="p-50"-->
-    <!--      :images="campaignData.images"-->
-    <!--      @addImage="addNewImage"-->
-    <!--    ></feedback-image-carousel>-->
+    <feedback-image-carousel
+      class="p-50"
+      :images="campaignData.images"
+      @addImage="addNewImage"
+    ></feedback-image-carousel>
     <div class="p-50">
-      <!--      <div class="d-flex align-center font-bold">-->
-      <!--        Allow guests to upload photos form the event-->
-      <!--        <md-switch class="large-switch" v-model="campaignData.visibleSettings.allowUploadPhoto"></md-switch>-->
-      <!--      </div>-->
-      <!--      <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>-->
-      <!--      <div class="mb-20">Like presentation</div>-->
-      <!--      <div v-if="campaignData.files && campaignData.files.length > 1">-->
-      <!--        <span class="font-bold">{{ campaignData.files[0].name }}</span>-->
-      <!--      </div>-->
-      <!--      <md-button class="md-simple edit-btn md-red" @click="uploadFile">-->
-      <!--        <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File-->
-      <!--      </md-button>-->
-      <!--      <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />-->
-      <!--      <hr class="mt-50 mb-70" />-->
-      <!--      <div class="share-panel">-->
-      <!--        <div class="d-flex mb-60 align-center">-->
-      <!--          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />-->
-      <!--          <div>-->
-      <!--            <div class="font-size-30 font-bold line-height-2">share event participation</div>-->
-      <!--            <div>(Include photos & details of the event)</div>-->
-      <!--          </div>-->
-      <!--          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>-->
-      <!--        </div>-->
-      <!--        <sharing-button-group-->
-      <!--          class="mb-50"-->
-      <!--          v-if="campaignData.visibleSettings.showSharingOption"-->
-      <!--        ></sharing-button-group>-->
-      <!--      </div>-->
-      <!--      <hr />-->
-      <div>
-        <div class="d-flex justify-content-between" >
-          <div class="d-flex align-center justify-content-between" >
-            <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
-            <span class="font-size-30 font-bold line-height-1">WE WOULD LOVE TO HEAR YOUR FEEDBACK</span>
-          </div>
+      <div class="d-flex align-center font-bold">
+        Allow guests to upload photos form the event
+        <md-switch class="large-switch" v-model="campaignData.visibleSettings.allowUploadPhoto"></md-switch>
+      </div>
+      <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
+      <div class="mb-20">Like presentation</div>
+      <div v-if="campaignData.files && campaignData.files.length > 1">
+        <span class="font-bold">{{ campaignData.files[0].name }}</span>
+      </div>
+      <md-button class="md-simple edit-btn md-red" @click="uploadFile">
+        <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File
+      </md-button>
+      <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />
+      <hr class="mt-50 mb-70" />
+      <div class="share-panel">
+        <div class="d-flex mb-60 align-center">
+          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />
           <div>
-            <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
+            <div class="font-size-30 font-bold line-height-2">share event participation</div>
+            <div>(Include photos & details of the event)</div>
           </div>
+          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
+        </div>
+        <sharing-button-group
+          class="mb-50"
+          v-if="campaignData.visibleSettings.showSharingOption"
+        ></sharing-button-group>
+      </div>
+      <hr />
+      <div>
+        <div class="font-size-30 font-bold line-height-1 d-flex align-center">
+          <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20" />
+          We'd love to get your feedback
+          <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
         </div>
         <div v-if="campaignData.visibleSettings.showFeedback">
           <feedback-question
@@ -107,9 +66,9 @@
       <div class="mt-60 d-flex align-center" v-if="isEditingNewQuestion">
         <input v-model="newQuestion" style="width: 40%" />
         <md-button class="md-simple md-red maryoku-btn" @click="addNewQuestion">Add</md-button>
-        <md-button class="md-simple md-red maryoku-btn md-outlined" @click="isEditingNewQuestion = false">
-          Cancel
-        </md-button>
+        <md-button class="md-simple md-red maryoku-btn md-outlined" @click="isEditingNewQuestion = false"
+          >Cancel</md-button
+        >
       </div>
       <div class="mt-60" v-else>
         <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
@@ -265,128 +224,4 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.wrapper-change-cover {
-  display: flex;
-  flex-direction: column;
-  height: 540px;
-  position: relative;
-
-  .change-cover {
-    width: 1133px;
-    height: 350px;
-    filter: brightness(50%);
-    object-fit: none;
-    border-radius: 20px;
-  }
-
-  .view-event-photos {
-    width: 477px;
-    height: 267px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: absolute;
-    top: 250px;
-    right: 65px;
-    background-color: #fff;
-    border-radius: 30px;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-
-    .wrapper-icon-play {
-      width: 40%;
-      display: flex;
-      justify-content: flex-end;
-
-      img.icon-play {
-        width: 77px;
-        height: 77px;
-      }
-    }
-
-    .wrapper-btn-switch {
-      width: 50%;
-    }
-  }
-
-  .footer-change-cover {
-
-    .wrapper-logo-microsoft {
-      height: 150px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-grow: 1;
-
-      .logo-microsoft {
-        width: 250px;
-        height: 75px;
-        display: flex;
-        align-items: center;
-
-        .icon-microsoft {
-          width: 45px;
-          height: 45px;
-          display: flex;
-          justify-content: space-around;
-          flex-wrap: wrap;
-
-          .block {
-            width: 20px;
-            height: 20px;
-          }
-
-          .block1 {
-            background: #f25022;
-          }
-
-          .block2 {
-            background: #7fba00;
-          }
-
-          .block3 {
-            background: #00a4ef;
-          }
-
-          .block4 {
-            background: #ffb600;
-          }
-        }
-
-        h2 {
-          font-size: 30px;
-          color: #737373;
-          font-weight: 900;
-          margin-left: 10px;
-          flex-grow: 1;
-        }
-      }
-    }
-
-    .hello-microsoft-special-employee {
-      font-size: 30px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: normal;
-      text-align: left;
-      color: #050505;
-    }
-  }
-
-  .icon-thanks-for-participating {
-    width: 92px;
-    height: 95px;
-  }
-
-  .icon-feedback {
-    width: 65px;
-    height: 57px;
-  }
-}
-.change-cover-feedback{
-  position: absolute;
-  top: 25%;
-  left: 40%;
-}
 </style>
