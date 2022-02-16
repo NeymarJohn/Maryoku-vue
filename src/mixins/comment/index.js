@@ -45,11 +45,10 @@ export default {
             await this.updateCommentComponent(component);
         },
         async deleteComment({comment, index}) {
-            console.log('deleteComment', this.commentComponents[index].comments);
-            let res = await this.deleteCommentAction(comment)
-            console.log('deleteComment.result', res);
-            const commentIndex = this.commentComponents[index].comments.findIndex(item=>item.id === res.id)
-            this.commentComponents[index].comments.splice(commentIndex, 1)
+            let res = await this.deleteCommentAction(comment);
+            let comments = [...this.commentComponents];
+            comments[index].comments = comments[index].comments.filter(item=>item.id !== res.id)
+            this.commentComponents = comments;
         },
     },
     computed: {

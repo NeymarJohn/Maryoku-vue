@@ -333,7 +333,7 @@
         </div>
       </div>
 
-      <div class="card-section align-center py-30" :class="{'px-20':windowWidth>350}">
+      <div class="card-section align-center py-30" v-if="step===0" :class="{'px-20':windowWidth>350}">
         <div class="px-15" >
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
@@ -381,11 +381,12 @@
                 </template>
               </div>
             </div>
+            <div v-else> hmm...seems that vendor did not include that information</div>
           </div>
         </div>
       </div>
 
-      <div class="card-section align-center  py-30 mt-10" :class="{'px-20':windowWidth>350}">
+      <div class="card-section align-center  py-30 mt-10" v-if="step===0" :class="{'px-20':windowWidth>350}">
         <div class="px-15">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
@@ -415,7 +416,7 @@
                         <span class="mr-10" v-if="policy.value"> Yes </span>
                         <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                         </div>
-                        <div class="item text-right" v-else>
+                        <div class="item text-right" style="margin-top: -30px; padding-bottom: 25px" v-else>
                         <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                         <span v-if="policy.type === 'Boolean'">
                             <img
@@ -587,7 +588,7 @@
         </md-button>
       </div>
     </div>
-    <div v-if="false">
+    <div v-if="proposal.status === 5 || (proposal.status === 6 && !sh)">
       <MessageModal @cancel="showMessage = false" @goVendors="go()" />
     </div>
   </div>
@@ -625,8 +626,6 @@ export default {
     sh: {
       type: Boolean,
       default: false,
-
-
     },
     proposal: {
       type: Object,

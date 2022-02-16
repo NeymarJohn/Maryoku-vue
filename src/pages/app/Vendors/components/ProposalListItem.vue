@@ -1,11 +1,8 @@
 <template>
-  <div v-if="page === 'proposal'" class="proposal-list-item proposal"
-       :class="hasNegotiation ? 'negotiation-item' : ''">
+  <div v-if="page === 'proposal'" class="proposal-list-item proposal" :class="hasNegotiation ? 'negotiation-item' : ''">
     <div>
-
-    <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName"  :color="color"></Avartar>
-    <img v-else :src="`${$iconURL}group-22441.svg`" width="52px"/>
-
+      <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="color"></Avartar>
+      <img v-else :src="`${$iconURL}group-22441.svg`" width="52px" />
     </div>
     <div class="font-bold font-size-16 ml-10">
       <div v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
@@ -21,18 +18,26 @@
     <div class="font-size-14 color-black-middle">{{ proposal.lastUpdated | date("DD/MM/YYYY") }}</div>
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle text-capitalize">
-      <span v-if="proposal.proposalRequest && proposal.proposalRequest.eventData && proposal.proposalRequest.eventData.owner">
+      <span
+        v-if="
+          proposal.proposalRequest && proposal.proposalRequest.eventData && proposal.proposalRequest.eventData.owner
+        "
+      >
         {{ proposal.proposalRequest.eventData.owner.name }}
       </span>
       <span v-else-if="proposal.eventData">
         {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}
       </span>
     </div>
-    <div class="proposal-graph" @click="showGraph"><img src="/static/icons/vendor/proposalBoard/proposal-statistic.svg" class="label-icon mr-10" /></div>
+    <div class="proposal-graph" @click="showGraph">
+      <img src="/static/icons/vendor/proposalBoard/proposal-statistic.svg" class="label-icon mr-10" />
+    </div>
     <div class="text-center" v-if="hasNegotiation">
       <md-button class="md-simple md-red md-vendor-text">
         <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" />
-          {{proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Request for change'}}
+        {{
+          proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? "Additional time request" : "Request for change"
+        }}
       </md-button>
       <md-button class="md-vendor" @click="edit(proposalStatus.negotiation)"> Respond </md-button>
     </div>
@@ -47,7 +52,10 @@
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="edit(proposalStatus.edit)" :class="{'md-gray disabled': proposal.accepted, 'md-purple': !proposal.accepted}">
+          <md-menu-item
+            @click="edit(proposalStatus.edit)"
+            :class="{ 'md-gray disabled': proposal.accepted, 'md-purple': !proposal.accepted }"
+          >
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
@@ -76,63 +84,65 @@
               <img :src="`${$iconURL}Share/link-dark.svg`" class="label-icon mr-10" />
               Copy Link
             </span>
-            </md-menu-item>
+          </md-menu-item>
         </md-menu-content>
       </md-menu>
     </div>
   </div>
   <div v-else class="proposal-list-item customer ml-40">
-      <div class="font-size-14" >{{proposal.id}}</div>
-      <div class="font-size-14 color-black-middle">{{ proposal.dateCreated | date("DD/MM/YYYY") }}</div>
-      <div>
-          <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData">
-              {{ 'New Event' }}
-          </div>
-          <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
-              {{ proposal.proposalRequest.eventData.title }}
-          </div>
-          <div class="font-bold font-size-16" v-else>New Event</div>
+    <div class="font-size-14">{{ proposal.id }}</div>
+    <div class="font-size-14 color-black-middle">{{ proposal.dateCreated | date("DD/MM/YYYY") }}</div>
+    <div>
+      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData">
+        {{ "New Event" }}
       </div>
-      <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
-      <div class="font-size-14 color-black-middle">${{ proposal.cost | withComma }}</div>
-      <div class="font-size-14 color-black-middle text-capitalize">
-        <span v-if="proposal.proposalRequest && proposal.proposalRequest.eventData">
-          {{ proposal.proposalRequest.eventData.owner.name }}
-        </span>
-        <span v-else-if="proposal.eventData">
-          {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}
-        </span>
+      <div
+        class="font-bold font-size-16"
+        v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title"
+      >
+        {{ proposal.proposalRequest.eventData.title }}
       </div>
-      <div class="text-right">
-          <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
-              <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
-                  <md-icon style="font-size: 30px !important">more_vert</md-icon>
-              </md-button>
-            <md-menu-content>
-              <md-menu-item @click="edit(proposalStatus.show)" class="md-purple">
-                    <span>
-                      <img src="/static/icons/vendor/proposalBoard/see-proposal-black.svg" class="label-icon mr-10" />
-                      See Proposal</span
-                    >
-              </md-menu-item>
-              <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
-                    <span>
-                      <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
-                      Download
-                    </span>
-              </md-menu-item>
-              <md-menu-item @click="edit(proposalStatus.duplicate)" class="md-purple">
-                <span>
-                  <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Duplicate
-                </span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
-      </div>
+      <div class="font-bold font-size-16" v-else>New Event</div>
+    </div>
+    <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
+    <div class="font-size-14 color-black-middle">${{ proposal.cost | withComma }}</div>
+    <div class="font-size-14 color-black-middle text-capitalize">
+      <span v-if="proposal.proposalRequest && proposal.proposalRequest.eventData">
+        {{ proposal.proposalRequest.eventData.owner.name }}
+      </span>
+      <span v-else-if="proposal.eventData">
+        {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}
+      </span>
+    </div>
+    <div class="text-right">
+      <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
+        <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
+          <md-icon style="font-size: 30px !important">more_vert</md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item @click="edit(proposalStatus.show)" class="md-purple">
+            <span>
+              <img src="/static/icons/vendor/proposalBoard/see-proposal-black.svg" class="label-icon mr-10" />
+              See Proposal</span
+            >
+          </md-menu-item>
+          <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
+            <span>
+              <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
+              Download
+            </span>
+          </md-menu-item>
+          <md-menu-item @click="edit(proposalStatus.duplicate)" class="md-purple">
+            <span>
+              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Duplicate
+            </span>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
   </div>
 </template>
 <script>
-
 import Button from "@/components/Button/ButtonDiv";
 import Avartar from "@/components/Avartar.vue";
 import { PROPOSAL_STATUS } from "@/constants/status";
@@ -146,7 +156,7 @@ export default {
     },
     page: {
       type: String,
-      default: 'proposal',
+      default: "proposal",
     },
     hasNegotiation: {
       type: Boolean,
@@ -154,13 +164,13 @@ export default {
     },
     color: {
       type: String,
-      default: '#ff0066',
-    }
+      default: "#ff0066",
+    },
   },
   data() {
     return {
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
-      proposalStatus:{
+      proposalStatus: {
         show: 0,
         edit: 1,
         download: 2,
@@ -174,92 +184,102 @@ export default {
       requestType: {
         ADD_MORE_TIME: 0,
         NEGOTIATION: 1,
-      }
+      },
     };
   },
   methods: {
     getStatusIcon(status) {
-          let path = "/static/icons/vendor/proposalBoard/";
-        if ( status === PROPOSAL_STATUS.DRAFT ) {
-            return `${path}filter-draft.svg`;
-        } else if ( status === PROPOSAL_STATUS.PENDING ) {
-            return `${path}filter-pending.svg`;
-        } else if ( status === PROPOSAL_STATUS.TOP3) {
-            return `${path}filter-top3.svg`;
-        } else if ( status === PROPOSAL_STATUS.LOST ) {
-            return `${path}filter-reject.svg`;
-        } else if ( status === PROPOSAL_STATUS.WON ) {
-            return `${path}filter-won.svg`;
-        } else {
-            return `${path}filter-${status}.svg`;
-        }
+      let path = "/static/icons/vendor/proposalBoard/";
+      if (status === PROPOSAL_STATUS.DRAFT) {
+        return `${path}filter-draft.svg`;
+      } else if (status === PROPOSAL_STATUS.PENDING) {
+        return `${path}filter-pending.svg`;
+      } else if (status === PROPOSAL_STATUS.TOP3) {
+        return `${path}filter-top3.svg`;
+      } else if (status === PROPOSAL_STATUS.LOST) {
+        return `${path}filter-reject.svg`;
+      } else if (status === PROPOSAL_STATUS.WON) {
+        return `${path}filter-won.svg`;
+      } else if (status === PROPOSAL_STATUS.CANCEL) {
+        return `${path}filter-reject.svg`;
+      } else {
+        return `${path}filter-${status}.svg`;
+      }
     },
     edit(action) {
-      if ( this.proposal.accepted && action === this.proposalStatus.edit) return;
+      if (this.proposal.accepted && action === this.proposalStatus.edit) return;
       this.$emit("action", action, this.proposal.id);
     },
     leave(item) {
       console.log("leave", item);
     },
     isOpened() {
-      setTimeout((_) => {
+      setTimeout(_ => {
+        $("li.md-list-item").each(function(idx, el) {
+          let disabled = $(el).hasClass("disabled");
 
-        $("li.md-list-item").each(function(idx, el){
-            let disabled = $(el).hasClass('disabled');
-
-            if ( disabled ) $(el).find("img").attr("style", "filter:brightness(0) invert(50%)");
-            $(el).hover(
-                function () {
-                    if(!disabled) $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
-                },
-                function () {
-                    if(!disabled) $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
-                },
-            );
-        })
+          if (disabled)
+            $(el)
+              .find("img")
+              .attr("style", "filter:brightness(0) invert(50%)");
+          $(el).hover(
+            function() {
+              if (!disabled)
+                $(this)
+                  .find("img")
+                  .attr("style", "filter:brightness(0) invert(1)");
+            },
+            function() {
+              if (!disabled)
+                $(this)
+                  .find("img")
+                  .attr("style", "filter:brightness(0) invert(0)");
+            },
+          );
+        });
       }, 0);
     },
-    showGraph(){
-      this.$emit("showGraphModal", this.proposal)
+    showGraph() {
+      this.$emit("showGraphModal", this.proposal);
     },
   },
   mounted() {
-    console.log('mounted', this.proposal);
+    console.log("mounted", this.proposal);
   },
-  watch:{
-    proposal(newVal){}
-  }
+  watch: {
+    proposal(newVal) {},
+  },
 };
 </script>
 <style lang="scss" scoped>
- .proposal-graph {
-   position: relative;
-   &::after {
-     position: absolute;
-     top: 0;
-     right: -5px;
-     content: '';
-     width: 1px;
-     height: 27px;
-     background-color: #707070;
-   }
- }
+.proposal-graph {
+  position: relative;
+  &::after {
+    position: absolute;
+    top: 0;
+    right: -5px;
+    content: "";
+    width: 1px;
+    height: 27px;
+    background-color: #707070;
+  }
+}
 .proposal-list-item {
   display: grid;
   align-items: center;
 
-  &.proposal{
+  &.proposal {
     padding: 32px 40px;
     grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 3% 12% 5%;
   }
-  &.customer{
+  &.customer {
     background-color: rgba(255, 255, 255, 0.64);
     padding: 16px 20px;
     grid-template-columns: 20% 10% 20% 10% 15% 15% 10%;
   }
 
-  &.negotiation-item{
-    background-color: #ffefff!important;
+  &.negotiation-item {
+    background-color: #ffefff !important;
   }
 }
 img.negotiation {

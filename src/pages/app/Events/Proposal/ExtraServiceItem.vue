@@ -44,7 +44,7 @@
             <md-button class="md-simple md-icon-button" @click="expanded = !expanded">
                 <md-icon class="color-black"> {{expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}} </md-icon>
             </md-button>
-            <md-button class="md-simple md-outlined md-red ml-auto" v-if="!item.added">
+            <md-button class="md-simple md-outlined md-red ml-auto" @click="addService"  v-if="!item.added">
                 <md-icon class="mr-10">add_circle_outline</md-icon>Add
             </md-button>
             <div v-else class="md-layout-item">

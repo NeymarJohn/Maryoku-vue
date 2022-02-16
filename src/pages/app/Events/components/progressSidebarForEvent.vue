@@ -40,14 +40,14 @@
     <div class="progress-sidebar-content">
       <!-- Sidebar Elements -->
       <div class="event-elements">
-        <draggable :list="elements" @change="changeItem">
+        <draggable :list="localElements" @change="changeItem">
           <div
             class="event-elements__item"
             @click="goToRoute(item, index)"
             :class="{
               current: isActiveRoute(item),
             }"
-            v-for="(item, index) in elements"
+            v-for="(item, index) in localElements"
             :key="index"
             :id="item.id"
           >
@@ -121,11 +121,12 @@ export default {
     isOpenNote: false,
     currentUrl: "",
     event: {},
+    localElements: [],
   }),
   created() {
     this.fetchUrl();
     this.event = this.$store.state.event.eventData;
-
+    this.localElements = this.elements
     setTimeout(_ => {
       this.renderProgress();
     }, 50)
@@ -154,9 +155,10 @@ export default {
       }
       return "";
     },
-    changeItem(option = null) {
-      let params = option == "refresh" ? null : this.elements;
+    changeItem(option) {
+      const params = option === "refresh" ? null : this.localElements;
       this.$emit("change", params);
+
     },
     renderProgress(){
       let self = this;
@@ -167,10 +169,10 @@ export default {
     }
   },
   updated(){
+    this.localElements = this.elements
     this.renderProgress();
   },
   mounted() {
-    console.log('progressbar.mounted', this.elements);
   },
   watch: {
     $route: "fetchUrl",

@@ -68,7 +68,7 @@
                   </div>
                   <div class="md-layout-item md-size-10 p-0 element-actions">
                     <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
-                      <img :src="`${$iconURL}common/trash-dark.svg`" />
+                      <img :src="`${$iconURL}common/trash-dark.svg`" />d
                     </md-button>
                   </div>
                 </div>
@@ -112,7 +112,7 @@
                       </div>
                       <div class="element-actions">
                         <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
-                          <img :src="`${$iconURL}common/trash-dark.svg`" />
+                          <img :src="`${$iconURL}common/trash-dark.svg`" /> b
                         </md-button>
                       </div>
                     </div>
@@ -236,7 +236,6 @@
               <div class="px-30 py-10 border-bottom" :key="`cost-service-${index}`">
                 <div class="d-flex align-center font-size-14" style="color: #535353">
                   <div>
-                    <md-icon class="color-red" v-if="service.isExtra">add_circle_outline</md-icon>
                     {{ service.requirementTitle }}
                     <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
                   </div>
@@ -244,7 +243,11 @@
                     ${{ service.price | withComma }}
                   </div>
                 </div>
-                <div class="d-flex align-center font-size-14" style="color: #939299">
+                <span class="extras-mobile-label" v-if="service.isExtra">Extras</span>
+                <button class="md-simple edit-btn  remove-service-button" @click="removeService(service)" v-if="service.isExtra">
+                 Remove
+                </button>
+                <div class="d-flex align-center font-size-14 unit-wrapper" style="color: #939299">
                   <div class="">{{ service.requirementValue }} Unit</div>
                   <div class="ml-auto" :class="{ crosslinedText: service.isComplimentary }">
                     ${{ (service.requirementValue * service.price) | withComma }}
@@ -261,12 +264,12 @@
           <template slot="content">
             <div class="px-30 py-10">
               <div v-for="item in includedServices" class="align-center included-service-item">
-                <div class="d-flex align-center">
+                <div class="d-flex align-center py-10">
                   <img :src="`${$iconURL}Submit%20Proposal/Group 4781.svg`" width="20px" class="mr-10" />
                   {{ item.requirementTitle }}
+                  <span class="ml-auto">{{ item.requirementValue }}</span>
                 </div>
                 <div class="d-flex align-center">
-                  <span class="ml-auto">{{ item.requirementValue }}</span>
                 </div>
                 <div class="item-description text-center">
                   {{ item.description }}
@@ -477,6 +480,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.extras-mobile-label{
+  font-size: 10px;
+  font-family: "Manrope-Bold", sans-serif;
+  color: #c30039;
+  padding: 3px 8px 3px 8px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: solid 1px #f51355;
+}
+.remove-service-button{
+  border: none;
+  background-color: unset;
+  margin: 13px 2px 13px 4px;
+  font-family: "Manrope-Regular", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #818080;
+}
 .element-block {
   color: #050505;
   border-radius: 3px 3px 0 0;

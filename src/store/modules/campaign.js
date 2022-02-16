@@ -92,7 +92,7 @@ const defaultCampaignData = {
         showLogo: true,
         showComing: true,
         showCountdown: true,
-        visible: {
+        visibleSettings: {
             showLogo: true,
             showComing: true,
             showCountdown: true,
@@ -108,6 +108,7 @@ const defaultCampaignData = {
             showSharingOption: true,
             showFeedback: true,
             allowUploadPhoto: true,
+            downloadFiles:true,
         },
         images: [
             {
