@@ -5,7 +5,7 @@
       <event-notes-filter @filter="filterNotes" :filterUsers="getFilterUsers"></event-notes-filter>
     </div>
     <div class="note-panel-content" v-if="notes.length === 0">
-      <div style="width: fit-content; margin: 10px auto ;">
+      <div>
         <img :src="`${$iconURL}Notes/note-background.svg`" width="120px" />
       </div>
       <span class="color-red">
@@ -117,6 +117,7 @@ export default {
       this.$forceUpdate();
     },
     setEditNote(note) {
+      console.log(note);
       this.editingNote = {
         id: note.id,
         description: note.description,
@@ -126,6 +127,7 @@ export default {
         remindingTime: note.remindingTime,
         givingEmail: note.givingEmail
       };
+      console.log(this.editingNote);
       this.showEditor = true;
     },
     filterNotes(filters) {
@@ -178,7 +180,6 @@ export default {
     margin-bottom: 20px;
   }
   &-content {
-    text-align: center;
     padding: 20px 0px;
   }
   .setting-item {
