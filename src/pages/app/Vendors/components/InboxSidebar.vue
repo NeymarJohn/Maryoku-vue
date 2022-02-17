@@ -171,7 +171,7 @@
             <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" alt="no icon"/>
             <p class="no-comments-text">We just started our journey
               together, No proposals yet</p>
-            <md-button class="md-vendor bold">Find Me Planners</md-button>
+            <md-button class="md-vendor bold" @click="createNewProposal" >create New Proposal</md-button>
           </div>
         </div>
         <!-- <div class="sidebar__items d-flex flex-column">
@@ -297,6 +297,15 @@ export default {
     },
     methods: {
         ...mapMutations("comment", ["setSelectedProposal"]),
+      createNewProposal() {
+        let routeData = this.$router.resolve({
+          name: "outsideProposalCreate",
+          params: {
+            vendorId: this.vendor.id,
+          },
+        });
+        window.open(routeData.href, "_blank");
+      },
         changeProposal(proposal,fullDiscussion = false) {
             this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
             setTimeout(() => {
@@ -429,7 +438,6 @@ export default {
   font-weight: bold;
   font-size: 22px;
   text-align: center;
-  text-transform: uppercase;
   .md-button{
     font-weight: bold;
     font-size: 16px;

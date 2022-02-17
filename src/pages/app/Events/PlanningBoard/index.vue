@@ -3,65 +3,104 @@
     <div class="p-50" v-if="!showCounterPage">
       <loader :active="isLoading || isLoadingStoredData" />
       <template v-if="!isLoading && !isLoadingStoredData">
-        <div class="d-flex justify-content-between">
-          <div class="font-size-30 font-bold text-transform-uppercase">
-            {{ $stringUtil.getTwoDigits(step) }}.
-            <span v-if="step === 1">We'd love to know your style</span>
-            <span v-if="step === 2">What kind of services would you like us to find you?</span>
-          </div>
+        <div class="d-flex justify-content-between align-center">
+            <div>
+                <ResizableToggleButton
+                    class="mr-20 mb-10"
+                    :key="component.componentId"
+                    :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
+                    :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
+                    :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+                    :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
+                    :disabled="!eventRequirements[component.componentId]"
+                    :hasBadge="hasBadge(component)"
+                    iconStyle="opacity:0.8"
+                    v-for="component in categories"
+                    @click="selectCategory(component)"
+                ></ResizableToggleButton>
+                <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
+            </div>
           <ProgressRadialBar
             :value="percentOfBudgetCategories"
             :total="event.components.length"
             @click="openCart"
           ></ProgressRadialBar>
         </div>
-        <div class="md-layout md-gutter mt-40" v-if="step === 1">
-          <div
-            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-            v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
-            :key="`serviceGroup-${groupIndex}`"
-          >
-            <ServiceCategoryCard
-              v-for="(service, serviceIndex) in serviceGroup"
-              class="mb-40"
-              :serviceCategory="service"
-              :key="service.name"
-              :isLong="(serviceIndex + groupIndex) % 2 === 1"
-              :hasBudget="hasBudget(service.serviceCategory)"
-              :musicPlayer="service.musicPlayer"
-              :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-              :isSentRequest="
-                $store.state.planningBoard.requirements[service.serviceCategory] &&
-                  $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-              "
-              @showSpecific="getSpecification"
-              @update="setServiceStyles"
-            ></ServiceCategoryCard>
-          </div>
+        <div class="booking-proposals">
+            <template v-if="selectedCategory">
+                <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
+                    <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
+                    {{ selectedCategory.fullTitle }}
+                </div>
+            </template>
         </div>
-        <div class="md-layout md-gutter mt-40" v-if="step === 2">
-          <div
-            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-            v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
-            :key="`serviceGroup-${groupIndex}`"
-          >
-            <service-category-card
-              v-for="(service, serviceIndex) in serviceGroup"
-              class="mb-40"
-              :serviceCategory="service"
-              :key="`${service.name}`"
-              :isLong="(serviceIndex + groupIndex) % 2 === 1"
-              :hasBudget="hasBudget(service.serviceCategory)"
-              :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-              :isSentRequest="
-                $store.state.planningBoard.requirements[service.serviceCategory] &&
-                  $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-              "
-              @showSpecific="getSpecification"
-              @update="setServiceStyles"
-            ></service-category-card>
-          </div>
-        </div>
+        <template v-for="(service, serviceIndex) in serviceCards[0]" >
+              <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
+                <div :key="`serviceGroup-${serviceIndex}` ">
+                    <div class="booking-proposals">
+                        <template v-if="selectedCategory">
+                            <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
+                                <div class="font-size-30 font-bold text-transform-uppercase">
+                                    {{ serviceIndex+1 }}.
+                                    {{ service.name }}
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="md-layout md-gutter mt-40 d-flex flex-row" style="align-items: center;">
+                <!-- <div
+                    class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+                    v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory"
+                    :key="`serviceGroup-${serviceIndex}`"
+                    > -->
+                    <template v-if="service.musicPlayer">
+                        <template v-for="(clip, clipindx) in service.clips">
+                            <ServiceCategoryCard
+                            class="mb-0 mr-0 ml-0"
+                            :clip="clip"
+                            :index="clipindx"
+                            :serviceCategory="service"
+                            :key="service.name+clipindx"
+                            :isLong="(serviceIndex + clipindx) % 2 === 1"
+                            :hasBudget="hasBudget(service.serviceCategory)"
+                            :musicPlayer="service.musicPlayer"
+                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                            :isSentRequest="
+                                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                            "
+                            @showSpecific="getSpecification"
+                            @update="setServiceStyles"
+                            ></ServiceCategoryCard>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <template v-for="(image, indx) in service.images">
+                            <ServiceCategoryCard
+                            class="mb-0 mr-0 ml-0"
+                            :image="image"
+                            :index="indx"
+                            :serviceCategory="service"
+                            :key="service.name+indx"
+                            :isLong="(serviceIndex + indx) % 2 === 1"
+                            :hasBudget="hasBudget(service.serviceCategory)"
+                            :musicPlayer="service.musicPlayer"
+                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                            :isSentRequest="
+                                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                            "
+                            @showSpecific="getSpecification"
+                            @update="setServiceStyles"
+                            ></ServiceCategoryCard>
+                        </template>
+                    </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+
       </template>
     </div>
     <template v-else>
@@ -69,18 +108,11 @@
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
-        <md-button v-if="step === 2" @click="step = step - 1" class="md-simple edit-btn md-black">
-          <md-icon>arrow_back</md-icon>
-          Back
-        </md-button>
-      </div>
-      <div>
         <md-button class="md-simple md-outlined md-red maryoku-btn">
           <img :src="`${$iconURL}common/save-red.svg`" />
           Save Draft
         </md-button>
-        <md-button class="md-red maryoku-btn" v-if="step === 1" @click="step = step + 1"> Next </md-button>
-        <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
+        <md-button class="md-red maryoku-btn" v-if="step === 1" @click="findVendors"> Find Me Vendors </md-button>
       </div>
     </div>
     <AdditionalRequestModal
@@ -132,6 +164,9 @@ const components = {
   PendingForVendors: () => import("../components/PendingForVendors.vue"),
   Loader: () => import("@/components/loader/Loader.vue"),
   RequirementsCart: () => import("./RequirementsCart.vue"),
+
+  ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
+
 };
 
 export default {
@@ -150,6 +185,8 @@ export default {
       isLoadingStoredData: false,
       showCounterPage: false,
       expiredTime: 0,
+
+      proposalsByCategory: {},
     };
   },
   async created() {
@@ -163,9 +200,18 @@ export default {
       await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
       this.isLoadingStoredData = false;
+      this.selectCategory(this.categories[0]);
     }
   },
   computed: {
+    ...mapState({
+      eventRequirements: (state) => state.planningBoard.requirements || {},
+    }),
+    categories() {
+      const categories = this.event.components;
+      categories.sort((a, b) => a.order - b.order);
+      return categories;
+    },
     requirements() {
       return this.$store.state.planningBoard.requirements;
     },
@@ -209,6 +255,9 @@ export default {
     },
   },
   methods: {
+
+    ...mapMutations("event", [ "setProposalsByCategory"]),
+
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
     ...mapMutations("modal", ["setOpen"]),
@@ -242,9 +291,10 @@ export default {
       return !!this.event.components.find(item => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
-      this.selectedCategory = this.$store.state.common.serviceCategories.find(
+      let getSelectedCategory = this.$store.state.common.serviceCategories.find(
         item => item.key === category.serviceCategory,
       );
+      this.selectedCategory = {...this.selectedCategory, ...getSelectedCategory};
       this.isOpenedAdditionalModal = true;
 
       let requirements = this.allRequirements[category.serviceCategory].requirements;
@@ -313,6 +363,29 @@ export default {
     openCart() {
       this.showCart = true;
     },
+    hasBadge(component) {
+      if (!this.proposalsByCategory[component.componentId]) return false;
+      if (this.proposalsByCategory[component.componentId].length === 0) return false;
+      const notViewedProposals = this.proposalsByCategory[component.componentId].filter((item) => !item.viewed);
+      if (notViewedProposals.length === 0) return false;
+      console.log(notViewedProposals);
+      return true;
+    },
+    addRequirements() {
+      this.$router.push(`/events/${this.event.id}/booking/planningboard`);
+    },
+    selectCategory(category, clicked) {
+      this.currentRequirement = this.eventRequirements[category.componentId];
+      this.selectedCategory = category;
+      let proposals = this.$store.state.event.proposals;
+      if (proposals[category.componentId]) {
+        proposals[category.componentId].forEach((proposal, index) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
+            this.$set(proposal, "viewed", true);
+          });
+        });
+      }
+    },
   },
   watch: {
     requirements(newVal) {
@@ -323,6 +396,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
+  .booking-proposals {
+    .category-title {
+        img {
+        width: 30px;
+        }
+    }
+  }
   .loading-screen {
     height: 100vh;
   }
@@ -335,6 +415,19 @@ export default {
         width: 22px;
         margin-right: 10px;
       }
+    }
+  }
+  .add-category-button {
+    border: none;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    border-radius: 50%;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    cursor: pointer;
+    i {
+      font-size: 40px !important;
     }
   }
   .slide-fade-enter-active {
