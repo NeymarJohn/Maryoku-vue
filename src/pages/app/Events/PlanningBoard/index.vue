@@ -34,72 +34,33 @@
                 </div>
             </template>
         </div>
-        <template v-for="(service, serviceIndex) in serviceCards[0]" >
-              <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
-                <div :key="`serviceGroup-${serviceIndex}` ">
-                    <div class="booking-proposals">
-                        <template v-if="selectedCategory">
-                            <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
-                                <div class="font-size-30 font-bold text-transform-uppercase">
-                                    {{ serviceIndex+1 }}.
-                                    {{ service.name }}
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-
-                    <div class="md-layout md-gutter mt-40 d-flex flex-row" style="align-items: center;">
-                <!-- <div
-                    class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-                    v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory"
-                    :key="`serviceGroup-${serviceIndex}`"
-                    > -->
-                    <template v-if="service.musicPlayer">
-                        <template v-for="(clip, clipindx) in service.clips">
-                            <ServiceCategoryCard
-                            class="mb-0 mr-0 ml-0"
-                            :clip="clip"
-                            :index="clipindx"
-                            :serviceCategory="service"
-                            :key="service.name+clipindx"
-                            :isLong="(serviceIndex + clipindx) % 2 === 1"
-                            :hasBudget="hasBudget(service.serviceCategory)"
-                            :musicPlayer="service.musicPlayer"
-                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                            :isSentRequest="
-                                $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                            "
-                            @showSpecific="getSpecification"
-                            @update="setServiceStyles"
-                            ></ServiceCategoryCard>
-                        </template>
-                    </template>
-                    <template v-else>
-                        <template v-for="(image, indx) in service.images">
-                            <ServiceCategoryCard
-                            class="mb-0 mr-0 ml-0"
-                            :image="image"
-                            :index="indx"
-                            :serviceCategory="service"
-                            :key="service.name+indx"
-                            :isLong="(serviceIndex + indx) % 2 === 1"
-                            :hasBudget="hasBudget(service.serviceCategory)"
-                            :musicPlayer="service.musicPlayer"
-                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                            :isSentRequest="
-                                $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                            "
-                            @showSpecific="getSpecification"
-                            @update="setServiceStyles"
-                            ></ServiceCategoryCard>
-                        </template>
-                    </template>
-                    </div>
-                </div>
+        <div class="md-layout md-gutter mt-40" v-if="step === 1">
+          <div
+            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+            v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
+            :key="`serviceGroup-${groupIndex}`"
+          >
+            <template v-for="(service, serviceIndex) in serviceGroup">
+                <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
+                    <ServiceCategoryCard
+                    class="mb-40"
+                    :serviceCategory="service"
+                    :key="service.name"
+                    :isLong="(serviceIndex + groupIndex) % 2 === 1"
+                    :hasBudget="hasBudget(service.serviceCategory)"
+                    :musicPlayer="service.musicPlayer"
+                    :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                    :isSentRequest="
+                        $store.state.planningBoard.requirements[service.serviceCategory] &&
+                        $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                    "
+                    @showSpecific="getSpecification"
+                    @update="setServiceStyles"
+                    ></ServiceCategoryCard>
+                </template>
             </template>
-        </template>
+          </div>
+        </div>
 
       </template>
     </div>
@@ -187,6 +148,7 @@ export default {
       expiredTime: 0,
 
       proposalsByCategory: {},
+
     };
   },
   async created() {

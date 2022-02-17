@@ -1,23 +1,13 @@
 <template>
-    <div class="offervendors-layout">
+    <div>
         <loader :active="isLoading" is-full-screen page="vendor"/>
         <template v-if="showOffers">
             <div class="d-flex justify-content-between pt-50 pl-100 pr-80">
                 <div>
-                    <ResizableToggleButton
-                        class="mr-20 mb-10"
-                        :key="component.componentId"
-                        :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
-                        :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-                        :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
-                        :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
-                        :disabled="!eventRequirements[component.componentId]"
-                        :hasBadge="hasBadge(component)"
-                        iconStyle="opacity:0.8"
-                        v-for="component in categories"
-                        @click="selectCategory(component)"
-                    ></ResizableToggleButton>
-                    <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
+                    <div class="font-size-30 font-bold text-transform-capitalize">
+                        Can we offer you more vendors for your event?
+                    </div>
+                    <p>Mark the services & specify if needed. Each category has more than one option so use the arrows to navigate</p>
                 </div>
 
                 <ProgressRadialBar
@@ -25,67 +15,27 @@
                     :total="allRequirements.length"
                     @click="showRequirementCart = true"></ProgressRadialBar>
             </div>
-            <div class="pl-100 booking-proposals">
-                <template v-if="selectedCategory">
-                    <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
-                        <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
-                        {{ selectedCategory.fullTitle }}
-                    </div>
-                </template>
+            <div class="md-layout md-gutter mt-60 width-70 mx-auto" v-for="cards in serviceCards">
+                <div
+                    class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+                    v-for="(serviceGroup, groupIndex) in cards"
+                    :key="`serviceGroup-0-${groupIndex}`"
+                >
+                    <ServiceCategoryCard
+                        v-for="(service, serviceIndex) in serviceGroup"
+                        class="mb-40"
+                        :serviceCategory="service"
+                        :key="service.name"
+                        :isLong="(serviceIndex + groupIndex) % 2 === 1"
+                        :musicPlayer="service.musicPlayer"
+                        :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                        :has-budget="true"
+                        :booked="service.serviceCategory === proposal.vendor.vendorCategory"
+                        @showSpecific="getSpecification"
+                        @update="setServiceStyles"
+                    ></ServiceCategoryCard>
+                </div>
             </div>
-            <template v-for="(service, serviceIndex) in serviceCards[0]">
-                <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
-                        <div :key="`serviceGroup-${serviceIndex}` ">
-                            <div class="pl-100 booking-proposals">
-                                <template v-if="selectedCategory">
-                                    <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
-                                        <div class="font-size-30 font-bold text-transform-uppercase">
-                                            {{ serviceIndex+1 }}.
-                                            {{ service.name }}
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                            <!-- <div class="md-layout md-gutter mt-60 width-70 ml-80 mx-auto"> -->
-                            <div class="md-layout md-gutter mt-60 width-80 ml-80 mx-auto d-flex flex-row" style="align-items: center;">
-                                <template v-if="service.musicPlayer">
-                                    <template v-for="(clip, clipindx) in service.clips">
-                                        <ServiceCategoryCard
-                                            class="mb-0 mr-0 ml-0"
-                                            :clip="clip"
-                                            :index="clipindx"
-                                            :serviceCategory="service"
-                                            :key="service.name+clipindx"
-                                            :isLong="(serviceIndex + clipindx) % 2 === 1"
-                                            :has-budget="true"
-                                            :musicPlayer="service.musicPlayer"
-                                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                            @showSpecific="getSpecification"
-                                            @update="setServiceStyles"
-                                        ></ServiceCategoryCard>
-                                    </template>
-                                </template>
-                                <template v-else>
-                                    <template v-for="(image, indx) in service.images">
-                                        <ServiceCategoryCard
-                                            class="mb-0 mr-0 ml-0"
-                                            :image="image"
-                                            :index="indx"
-                                            :serviceCategory="service"
-                                            :key="service.name+indx"
-                                            :isLong="(serviceIndex + indx) % 2 === 1"
-                                            :has-budget="true"
-                                            :musicPlayer="service.musicPlayer"
-                                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                            @showSpecific="getSpecification"
-                                            @update="setServiceStyles"
-                                        ></ServiceCategoryCard>
-                                    </template>
-                                </template>
-                            </div>
-                        </div>
-                </template>
-            </template>
             <div class="width-66 mx-auto">
                 <div class="d-flex flex-column align-center mx-20" style="background-color: #f5f5f5">
                     <h5 class="font-size-20 font-bold-extra mb-0">Already Booked Vendors?</h5>
@@ -118,13 +68,6 @@
             @cancel="isOpenedAdditionalModal = false"
             @close="isOpenedAdditionalModal = false"
         ></AdditionalRequestModal>
-        <special-requirement-modal
-            v-if="isOpenedFinalModal"
-            :defaultData="specialRequirements"
-            @cancel="isOpenedFinalModal = false"
-            @save="saveSpecialRequirements"
-        >
-        </special-requirement-modal>
         <modal v-if="showSignupModal" container-class="modal-container offer-vendors bg-white w-max-450">
             <template slot="body">
                 <sign-in-content
@@ -156,7 +99,7 @@ import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
 import _ from "underscore";
 import moment from "moment";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import {mapMutations} from "vuex";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
@@ -166,9 +109,6 @@ const components = {
     ProgressRadialBar: () => import('@/pages/app/Events/PlanningBoard/components/ProgressRadialBar.vue'),
     AdditionalRequestModal: () => import('@/pages/app/Events/PlanningBoard/components/modals/AdditionalRequest.vue'),
     RequirementsCart: () => import('@/pages/app/Events/PlanningBoard/RequirementsCart.vue'),
-
-    ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
-    SpecialRequirementModal: () => import("./components/modals/SpecialRequirement.vue"),
 }
 
 export default {
@@ -180,7 +120,6 @@ export default {
             page: 'signup',
             showSignupModal: false,
             isOpenedAdditionalModal: false,
-            isOpenedFinalModal: false,
             showRequirementCart: false,
             showOffers: false,
             serviceCards: ServiceCards,
@@ -190,14 +129,9 @@ export default {
             vendorEvent : null,
             requirements: {},
             proposal: null,
-
-            expiredTime: 0,
-            proposalsByCategory: {},
         }
     },
     methods: {
-        ...mapMutations("event", [ "setProposalsByCategory"]),
-        ...mapMutations("planningBoard", ["setSpecialRequirements"]),
         ...mapMutations('modal', ['setOpen', 'setProposal']),
         async handleRate(score){
             await this.saveProposal({...this.proposal, score})
@@ -252,10 +186,9 @@ export default {
             return this.requirements[category];
         },
         getSpecification({ category, services }){
-            let getSelectedCategory = this.serviceCategories.find(
-                item => item.key === category.serviceCategory,
+            this.selectedCategory = this.serviceCategories.find(
+                (item) => item.key === category.serviceCategory,
             );
-            this.selectedCategory = {...this.selectedCategory, ...getSelectedCategory};
             this.isOpenedAdditionalModal = true;
             console.log(category.serviceCategory);
             let requirements = this.allRequirements[category.serviceCategory].requirements;
@@ -284,6 +217,7 @@ export default {
             this.saveRequirements(requirement)
         },
         saveAdditionalRequest({ category, requirements }) {
+
             this.isOpenedAdditionalModal = false;
             this.saveRequirements({...this.requirements[category], ...requirements})
         },
@@ -325,13 +259,17 @@ export default {
             this.isLoading = false;
         },
 
-        findVendors() {
+        async findVendors(){
+
             if ( this.loggedInUser ) {
-                this.isOpenedFinalModal = true;
-            }
-            else {
+                this.loading = true;
+                await this.save();
+                this.loading = false;
+                this.goToAccountPage();
+            } else {
                 this.showSignupModal = true;
             }
+
         },
         async save(){
             if(!this.event.id){
@@ -367,53 +305,7 @@ export default {
             );
             console.log(`${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
             document.location.href = `${process.env.SERVER_URL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
-        },
-
-        hasBadge(component) {
-            if (!this.proposalsByCategory[component.componentId]) return false;
-            if (this.proposalsByCategory[component.componentId].length === 0) return false;
-            const notViewedProposals = this.proposalsByCategory[component.componentId].filter((item) => !item.viewed);
-            if (notViewedProposals.length === 0) return false;
-            console.log(notViewedProposals);
-            return true;
-        },
-        addRequirements() {
-        },
-        selectCategory(category, clicked) {
-            this.currentRequirement = this.eventRequirements[category.componentId];
-            this.selectedCategory = category;
-            let proposals = this.$store.state.event.proposals;
-            if (proposals[category.componentId]) {
-                proposals[category.componentId].forEach((proposal, index) => {
-                new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
-                    this.$set(proposal, "viewed", true);
-                });
-                });
-            }
-        },
-        saveSpecialRequirements(data) {
-            this.isOpenedFinalModal = false;
-            this.setSpecialRequirements(data);
-            this.expiredTime = moment(new Date())
-                .add(3, "days")
-                .valueOf();
-
-            const requestRequirement = {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-            };
-            postReq(`/1/events/${this.event.id}/find-vendors`, {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-            }).then(res => {
-                this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
-                this.$store.dispatch(
-                "event/saveEventAction",
-                new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
-                );
-            });
-        },
-
+        }
     },
     computed:{
         loggedInUser(){
@@ -424,25 +316,7 @@ export default {
         },
         serviceCategories(){
             return this.$store.state.common.serviceCategories;
-        },
-        requirements() {
-            return this.$store.state.event.requirements;
-        },
-        eventRequirements() {
-            return this.$store.state.event.requirements;
-        },
-
-        categories() {
-            console.log('this.event.components', this.event.components);
-            const categories = this.event.components;
-            if(categories){
-                categories.sort((a, b) => a.order - b.order);
-            }
-            return categories;
-        },
-        specialRequirements() {
-            return this.$store.state.planningBoard.specialRequirements;
-        },
+        }
     },
     async created() {
         let redirect = this.$route.query.redirect
@@ -464,10 +338,6 @@ export default {
             }
 
             this.isLoading = false;
-
-            this.$store.dispatch("event/getEventById", this.$route.params.proposalId);
-            await this.$store.dispatch("event/getRequirements", this.$route.params.proposalId);
-
         } else {
             this.showBookedVendorModal = true;
 
@@ -476,55 +346,26 @@ export default {
             }
             await this.getProposal();
             this.isLoading = false;
-
-            this.$store.dispatch("event/getEventById", this.$route.params.proposalId);
-            await this.$store.dispatch("event/getRequirements", this.$route.params.proposalId);
-
         }
         this.showOffers = true;
         this.setProposal(this.proposal);
         this.setOpen('BOOKED');
-        this.selectCategory(this.categories[0]);
-
-    },
+    }
 
 }
 </script>
 <style lang="scss" scoped>
-.offervendors-layout{
-    .booking-proposals {
-        .category-title {
-            img {
-            width: 30px;
-            }
-        }
-    }
-    .add-category-button {
-        border: none;
-        width: 60px;
-        height: 60px;
-        display: inline-block;
-        border-radius: 50%;
-        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-        background-color: #ffffff;
-        cursor: pointer;
-        i {
-            font-size: 40px !important;
-        }
-    }
-    .md-dialog.singin-form {
-        border-radius: 10px;
-        padding: 2em 40px;
-        z-index: 9999999;
-        height: auto;
-    }
-    .arrow-right{
-        border-radius: 100%;
-        width: 25px;
-        height: 25px;
-        min-width: 25px;
-    }
-    /deep/ .md-icon{color: #f51355}
+.md-dialog.singin-form {
+    border-radius: 10px;
+    padding: 2em 40px;
+    z-index: 9999999;
+    height: auto;
 }
-
+.arrow-right{
+    border-radius: 100%;
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+}
+/deep/ .md-icon{color: #f51355}
 </style>

@@ -20,34 +20,18 @@
       </div>
       <div class="small-label" v-if="page === 'plan'">Things are warming up!</div>
       <div class="small-label" v-if="page === 'event'">Only 4 more vendors to close!</div>
-      <transition name="slide">
-        <event-note-panel v-if="isOpenNote"></event-note-panel>
-      </transition>
-
-      <div class="my-notes">
-        <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote = true">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
-          On my plate
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_down</md-icon>
-        </md-button>
-        <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote = false">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
-          Close
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_up</md-icon>
-        </md-button>
-      </div>
     </div>
     <div class="progress-sidebar-content">
       <!-- Sidebar Elements -->
       <div class="event-elements">
-        <draggable :list="elements" @change="changeItem">
+        <draggable :list="localElements" @change="changeItem">
           <div
             class="event-elements__item"
             @click="goToRoute(item, index)"
             :class="{
               current: isActiveRoute(item),
             }"
-            v-for="(item, index) in elements"
+            v-for="(item, index) in localElements"
             :key="index"
             :id="item.id"
           >
@@ -121,11 +105,12 @@ export default {
     isOpenNote: false,
     currentUrl: "",
     event: {},
+    localElements: [],
   }),
   created() {
     this.fetchUrl();
     this.event = this.$store.state.event.eventData;
-
+    this.localElements = this.elements
     setTimeout(_ => {
       this.renderProgress();
     }, 50)
@@ -154,9 +139,10 @@ export default {
       }
       return "";
     },
-    changeItem(option = null) {
-      let params = option == "refresh" ? null : this.elements;
+    changeItem(option) {
+      const params = option === "refresh" ? null : this.localElements;
       this.$emit("change", params);
+
     },
     renderProgress(){
       let self = this;
@@ -167,10 +153,10 @@ export default {
     }
   },
   updated(){
+    this.localElements = this.elements
     this.renderProgress();
   },
   mounted() {
-    console.log('progressbar.mounted', this.elements);
   },
   watch: {
     $route: "fetchUrl",

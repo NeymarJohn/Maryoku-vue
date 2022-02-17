@@ -197,8 +197,7 @@ export const serviceCategoryImages = {
     ],
     "meetingorganizationfees": ["A-V/Lighting_Shutterstock.jpg",
         "A-V/Plasma TV_Canva Pro.png",
-        "A-V/Projector_Shutterstock.jpg",
-    ],
+        "A-V/Projector_Shutterstock.jpg",],
     "transportation": [
         "Transportation/Air Services_Canva Pro.png",
         "Transportation/ATV_Canva Pro.png",
@@ -223,9 +222,10 @@ export const serviceCategoryImages = {
     "other": [],
 }
 
-
+// added for modifications in requirement-pages
 export const ServiceCards = [
     [
+        [
             {
                 name: "Venue Type",
                 serviceCategory: "venuerental",
@@ -411,21 +411,7 @@ export const ServiceCards = [
                     "Rock.jpg",
                     "SOUL.jpg",
                 ],
-                imageTitles: [
-                    "Asian",
-                    "Blues",
-                    "Classical",
-                    "Country",
-                    "Electronic",
-                    "Folk",
-                    "Hip Hop",
-                    "Jazz",
-                    "Latin Beat",
-                    "Pop Funday",
-                    "RB Heart",
-                    "Rock",
-                    "Soul",
-                ],
+                imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
                 icon: "NewRequirements/Group 18013.svg",
                 script: `
                   requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
@@ -571,9 +557,10 @@ export const ServiceCards = [
                 imageTitles: ["Furniture", "Tech Equipment", "Tent"],
                 icon: "NewRequirements/Group 18016.svg",
             },
+        ],
     ],
 ]
-
+// added for modifications in requirement-pages
 
 export const eventIcons = [
     "Group 20904.svg",
