@@ -117,7 +117,6 @@ export default {
       this.$forceUpdate();
     },
     setEditNote(note) {
-      console.log(note);
       this.editingNote = {
         id: note.id,
         description: note.description,
@@ -127,7 +126,6 @@ export default {
         remindingTime: note.remindingTime,
         givingEmail: note.givingEmail
       };
-      console.log(this.editingNote);
       this.showEditor = true;
     },
     filterNotes(filters) {

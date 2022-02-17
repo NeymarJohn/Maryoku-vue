@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <div class="form-group  mt-30  md-layout-item pl-0 md-size-100 pb-20">
+        <div class="form-group  mt-30  md-layout-item pl-0 md-size-100 pb-20" :class="{hasFile: csv, opened: showErrors}">
           <vue-dropzone
           id="drop"
             ref="csv"
@@ -80,11 +80,25 @@
             <div class="font-size-14">Drag your file here</div>
           </vue-dropzone>
 
-          <div class="form-group attach-file text-left mt-30" v-else>
-            <i class="fas fa-paperclip md-simple md-vendor pr-5"></i>
-
-            <a :href="`${fileUrl}`" class="color-black" target="_blank">{{ fileName }}</a>
-            <span class="attach-trash" @click="fileName = null; csv = null;"><md-icon>close</md-icon></span>
+          <div class="added-file-wrapper" :class="{'opened': showErrors}" v-else>
+            <div class="file">
+              <div>
+                <i class="fas fa-paperclip md-simple md-vendor pr-5"></i>
+                <a :href="`${fileUrl}`" class="color-black" target="_blank"> {{ fileName }} </a>
+              </div>
+              <div>
+                <div class="progressbar color-won"></div>
+                <span class=" color-won"> 100% </span>
+              </div>
+              <div>
+                <span class=" color-red" :class=" {'color-won': !errors}"> {{ errors ? 1 : 'NO ' }} </span>
+                <span class="color-black-heavy"> ERROR </span>
+                <span v-if="errors" @click="showErrors=!showErrors"><md-icon>{{
+                    showErrors ? 'expand_less' : 'expand_more'
+                  }}</md-icon></span>
+              </div>
+            </div>
+            <span class="attach-trash" @click="fileName = null; csv = null;"><md-icon>delete</md-icon></span>
           </div>
         </div>
         <div v-if="showError&&!csv" class="md-error error_text">{{ this.errorMessage }}</div>
@@ -272,6 +286,8 @@ export default {
     selected: null,
     csv: null,
     csv2: [],
+    showErrors: false,
+    errors: 1,
     upload: true,
     header: false,
     done: false,
@@ -343,6 +359,7 @@ export default {
           .post(this.url, data)
           .then(response => {
             if (response.data) {
+              this.errors = response.data.success ? 0 : 1;
               const {data} = response.data;
 
               this.sample[0] = this.csv2[0] = _.map(data[0], (label, key) => {
@@ -363,11 +380,7 @@ export default {
           })
           .catch(error => {
               console.log('error', error)
-            // _this.catch(response);
           })
-          .finally(res => {
-            // _this.finally(response);
-          });
       } else {
         _this.callback(this.form.csv);
       }
@@ -386,6 +399,7 @@ export default {
       });
     },
     load() {
+      if (this.errors) return;
       const _this = this;
       if (!_this.csv) {
           this.errorMessage = 'Choose File';
@@ -461,6 +475,50 @@ export default {
 </script>
 
 <style scoped>
+.hasFile{
+  width: 100%;
+  border-radius: 3px;
+  margin-bottom: 80px;
+  background-color: #f3f7fd;
+}
+.hasFile.opened{
+  min-height: 100px;
+  margin-bottom: 0;
+}
+.hasFile .added-file-wrapper{
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
+  background-color: #fff;
+  width: 95%;
+  margin-left: 15px;
+}
+.hasFile .added-file-wrapper.opened{
+  min-height: 130px;
+  margin-bottom: 0;
+}
+.hasFile .added-file-wrapper .file{
+  height: 50px;
+  display: flex;
+  margin-top: 15px;
+  padding: 0 17px;
+  justify-content: space-between;
+  align-items: center;
+}
+.hasFile .added-file-wrapper .attach-trash{
+  position: absolute;
+  right: -30px;
+  top: 10px;
+}
+.progressbar{
+  width: 232px;
+  margin: 1px 18px 1px;
+  display: inline-block;
+  height: 8px;
+  border: #2cde6b 2px solid;
+  border-radius: 120px;
+  background-color: #2cde6b;
+}
 .event-logo {
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   width: 41px !important;

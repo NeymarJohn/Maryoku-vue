@@ -62,11 +62,10 @@
                     v-for="(question, index) in feedbackQuestions"
                     :key="index"
                     :feedbackData="question"
-                    :disabled="false"
+                    :disabled="true"
                     :show-switch="false"
                   ></feedback-question>
                 </div>
-                <md-button class="yellow-button-send-feedback">Send feedback</md-button>
               </div>
             </div>
           </div>
@@ -186,6 +185,47 @@ export default {
     FeedbackQuestion,
     FeedbackImageCarousel,
   },
+  methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+    gotoWeb() {
+      window.open("https://www.maryoku.com", "_blank");
+    },
+    ...mapActions("campaign", ["getCampaigns"]),
+    setDefaultSettings() {
+      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
+      const currentCampaign = this.$store.state.campaign[currentCampaignType];
+      if (currentCampaign && currentCampaign.settings) {
+        this.deliverySettings = {
+          ...currentCampaign.settings,
+        };
+      } else {
+        this.deliverySettings = { ...this.defaultSettings };
+      }
+    },
+    addNewQuestion() {
+      const newQuestion = {
+        icon: "",
+        label: this.newQuestion,
+        question: this.newQuestion,
+        rank: 0,
+        showQuestion: true,
+      };
+      this.feedbackQuestions.push(newQuestion);
+      this.newQuestion = "";
+      this.isEditingNewQuestion = false;
+    },
+    editNewQuestion() {
+      this.isEditingNewQuestion = true;
+    },
+    addNewImage(image) {
+      console.log(image);
+      const images = this.campaignData.images;
+      images.unshift({ src: image.imageString });
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
+    }
+  },
   data() {
     return {
       feedbackQuestions: [],
@@ -237,47 +277,6 @@ export default {
       key: "feedbackQuestions",
       value: this.feedbackQuestions,
     });
-  },
-  methods: {
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    gotoWeb() {
-      window.open("https://www.maryoku.com", "_blank");
-    },
-    ...mapActions("campaign", ["getCampaigns"]),
-    setDefaultSettings() {
-      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
-      const currentCampaign = this.$store.state.campaign[currentCampaignType];
-      if (currentCampaign && currentCampaign.settings) {
-        this.deliverySettings = {
-          ...currentCampaign.settings,
-        };
-      } else {
-        this.deliverySettings = { ...this.defaultSettings };
-      }
-    },
-    addNewQuestion() {
-      const newQuestion = {
-        icon: "",
-        label: this.newQuestion,
-        question: this.newQuestion,
-        rank: 0,
-        showQuestion: true,
-      };
-      this.feedbackQuestions.push(newQuestion);
-      this.newQuestion = "";
-      this.isEditingNewQuestion = false;
-    },
-    editNewQuestion() {
-      this.isEditingNewQuestion = true;
-    },
-    addNewImage(image) {
-      console.log(image);
-      const images = this.campaignData.images;
-      images.unshift({ src: image.imageString });
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
-    }
   },
   computed: {
     event() {
@@ -592,16 +591,4 @@ export default {
       }
     }
   }}
-.yellow-button-send-feedback{
-  margin-top: 63px;
-  width: 281px;
-  height: 61px;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 31px;
-  border: solid 1px #fec02d;
-  background-color: #fec02d !important;
-  margin-left: 920px;
-  text-transform: none;
-}
 </style>
