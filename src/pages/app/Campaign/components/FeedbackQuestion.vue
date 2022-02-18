@@ -7,7 +7,7 @@
           class="icon-question"
           :src="`${$iconURL}Budget+Elements/${data.icon}`"
         />
-        <div class="font-size-20 ml-10 mb-20 font-bold" >{{ data.label || 'In general, Rank Your Total Experience' }}</div>
+        <div class="font-size-20 ml-10 mb-20 font-bold" >{{ data.label }}</div>
       </div>
       <star-rating
         :border-width="0"
@@ -18,14 +18,14 @@
         v-if="!disabled"
       ></star-rating>
       <star-rating :border-width="0" :star-size="30" :show-rating="false" read-only v-else></star-rating>
-      <div class="font-size-12 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
+      <div class="font-size-15 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
     </div>
     <div class="feedback-message">
       <div class="font-size-20 font-bold mb-20">
         {{ data.question }}
       </div>
       <div>
-        <maryoku-textarea size="narrow" v-model="data.comment" :disabled="disabled"></maryoku-textarea>
+        <maryoku-textarea size="narrow" :placeholder="placeholder" v-model="data.comment" :disabled="disabled"></maryoku-textarea>
       </div>
     </div>
     <md-switch v-if="showSwitch" class="feedback-btn-switch section below-label large-switch md-switch-rose" v-model="data.showQuestion" :value="true">
@@ -51,6 +51,10 @@ export default {
     feedbackData: {
       type: Object,
       default: {},
+    },
+    placeholder: {
+      type: String,
+      default: "",
     },
     showSwitch: {
       type: Boolean,
@@ -79,15 +83,15 @@ export default {
       if (this.data.rank) {
         switch (this.data.rank) {
           case 1:
-            return "poor";
+            return "Poor";
           case 2:
-            return "bad";
+            return "Okay";
           case 3:
-            return "good";
+            return "Good";
           case 4:
-            return "very good";
+            return "Very Good";
           case 5:
-            return "amazing!";
+            return "Amazing!";
         }
       }
       return "";

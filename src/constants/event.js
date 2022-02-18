@@ -227,7 +227,6 @@ export const serviceCategoryImages = {
 export const ServiceCards = [
     [
             {
-                seqNo: "1/1",
                 name: "Venue Type",
                 serviceCategory: "venuerental",
                 images: [
@@ -259,7 +258,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18008.svg",
             },
             {
-                seqNo: "1/1",
                 name: "Decor",
                 serviceCategory: "decor",
                 images: ["Decor/Florals.png", "Decor/Interior Design.png", "Decor/Lighting.png"],
@@ -267,7 +265,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18012.svg",
             },
             {
-                seqNo: "1/2",
                 name: "Cuisine Speciality",
                 serviceCategory: "foodandbeverage",
                 script:
@@ -309,7 +306,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18012.svg",
             },
             {
-                seqNo: "2/2",
                 name: "Liquor Stations",
                 serviceCategory: "foodandbeverage",
                 script:
@@ -353,7 +349,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18017.svg",
             },
             {
-                seqNo: "1/1",
                 name: "Photography  Videography",
                 serviceCategory: "videographyandphotography",
                 images: [
@@ -368,7 +363,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18009.svg",
             },
             {
-                seqNo: "1/3",
                 name: "Music",
                 serviceCategory: "entertainment",
                 musicPlayer: true,
@@ -440,7 +434,6 @@ export const ServiceCards = [
                 `,
             },
             {
-                seqNo: "1/1",
                 name: "Giveaways",
                 serviceCategory: "giveaways",
                 images: [
@@ -470,7 +463,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18014.svg",
             },
             {
-                seqNo: "2/3",
                 name: "Indoor Activities",
                 serviceCategory: "entertainment",
                 images: [
@@ -487,7 +479,6 @@ export const ServiceCards = [
                 `,
             },
             {
-                seqNo: "3/3",
                 name: "Outdoor Activities",
                 serviceCategory: "entertainment",
                 images: [
@@ -517,7 +508,6 @@ export const ServiceCards = [
                 `,
             },
             {
-                seqNo: "1/1",
                 name: "AV",
                 serviceCategory: "audiovisualstagingservices",
                 images: ["A-V/Lighting.jpg", "A-V/Plasma TV.jpeg", "A-V/Projector.jpg"],
@@ -525,7 +515,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18073.svg",
             },
             {
-                seqNo: "1/1",
                 name: "Guest Serivces & Staffing",
                 serviceCategory: "administration",
                 images: [
@@ -549,7 +538,6 @@ export const ServiceCards = [
                 icon: "NewRequirements/Group 18026.svg",
             },
             //  {
-            //   seqNo: "1/1",
             //   name: "Transportation",
             //   serviceCategory: "transportation",
             //   images: [
@@ -577,7 +565,6 @@ export const ServiceCards = [
             //   icon: "NewRequirements/Group 18016.svg",
             // },
             {
-                seqNo: "1/1",
                 name: "Equipment Rentals",
                 serviceCategory: "equipmentrentals",
                 images: ["Rentals/Furniture.jpg", "Rentals/Tech Equpiment.jpg", "Rentals/Tent.jpg"],

@@ -25,7 +25,7 @@
                     :total="allRequirements.length"
                     @click="showRequirementCart = true"></ProgressRadialBar>
             </div>
-            <div class="pl-100 pr-80 booking-proposals">
+            <div class="pl-100 booking-proposals">
                 <template v-if="selectedCategory">
                     <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
                         <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
@@ -36,50 +36,21 @@
             <template v-for="(service, serviceIndex) in serviceCards[0]">
                 <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
                         <div :key="`serviceGroup-${serviceIndex}` ">
-                            <div class="pl-100 pr-80 booking-proposals">
+                            <div class="pl-100 booking-proposals">
                                 <template v-if="selectedCategory">
-                                    <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory.eventCategory">
-                                        <div class="font-size-30 font-bold-extra text-transform-uppercase">
-                                            <div style="float: left;">
-                                                {{ service.seqNo }}
-                                                &nbsp;&nbsp;
-                                                {{ service.name }}
-                                            </div>
-                                            <div style="float: right;">
-                                                <template v-if="!booked && (!(getDefaultTypes(service.serviceCategory, service.name) || []).length)">
-                                                    <template v-if="hasBudget(service.serviceCategory)">
-                                                        <md-button class="md-red maryoku-btn" @click="getSpecification({ category: service, services: getDefaultTypes(service.serviceCategory, service.name) })">
-                                                            Get Specific
-                                                        </md-button>
-                                                    </template>
-                                                    <template v-else>
-                                                        <md-button class="md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </md-button>
-                                                    </template>
-                                                </template>
-                                                <template v-else>
-                                                    <div class="d-flex align-center justify-content-center">
-                                                        <div v-if="booked" class="color-red">
-                                                            Already booked
-                                                        </div>
-                                                        <md-button v-if="(getDefaultTypes(service.serviceCategory, service.name) || []).length > 0" class="md-red maryoku-btn" @click="getSpecification({ category: service, services: getDefaultTypes(service.serviceCategory, service.name) })">
-                                                            Change specifications
-                                                        </md-button>
-                                                    </div>
-                                                </template>
-                                            </div>
-                                        </div>
-                                        <div class="font-size-10 ">
-                                            <p>
-                                                {{ "What suits your event best? Help vendors understand your needs by selecting your favorites and adding more details if needed." }}
-                                            </p>
+                                    <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
+                                        <div class="font-size-30 font-bold text-transform-uppercase">
+                                            {{ serviceIndex+1 }}.
+                                            {{ service.name }}
                                         </div>
                                     </div>
                                 </template>
                             </div>
-                            <div class="md-layout md-gutter mt-60 pl-100 pr-80 d-flex flex-row align-center" >
+                            <!-- <div class="md-layout md-gutter mt-60 width-70 ml-80 mx-auto"> -->
+                            <div class="md-layout md-gutter mt-60 width-80 ml-80 mx-auto d-flex flex-row" style="align-items: center;">
                                 <template v-if="service.musicPlayer">
                                     <template v-for="(clip, clipindx) in service.clips">
-                                    <ServiceCategoryCard
+                                        <ServiceCategoryCard
                                             class="mb-0 mr-0 ml-0"
                                             :clip="clip"
                                             :index="clipindx"
@@ -174,18 +145,6 @@
                 :total="Object.keys(allRequirements).length"
                 @close="showRequirementCart = false"></requirements-cart>
         </transition>
-        <AddBudgetModal
-        v-if="showAddNewCategory"
-        :serviceCategory="selectedCategory"
-        @cancel="showAddNewCategory = false"
-        @save="saveBudget"
-        ></AddBudgetModal>
-        <AddBudgetConfirmModal
-        v-if="showAddBudgetConfirm"
-        :serviceCategory="selectedCategory"
-        @cancel="showAddBudgetConfirm = false"
-        @addNewBudget="addBudget"
-        ></AddBudgetConfirmModal>
     </div>
 </template>
 <script>
@@ -209,8 +168,6 @@ const components = {
     RequirementsCart: () => import('@/pages/app/Events/PlanningBoard/RequirementsCart.vue'),
 
     ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
-    AddBudgetModal: () => import("@/pages/app/Events/PlanningBoard/components/modals/AddBudget.vue"),
-    AddBudgetConfirmModal: () => import("@/pages/app/Events/PlanningBoard/components/modals/AddBudgetConfirm.vue"),
     SpecialRequirementModal: () => import("./components/modals/SpecialRequirement.vue"),
 }
 
@@ -231,13 +188,11 @@ export default {
             subCategory: null,
             selectedCategory: null,
             vendorEvent : null,
+            requirements: {},
             proposal: null,
 
             expiredTime: 0,
             proposalsByCategory: {},
-            showAddNewCategory: false,
-            showAddBudgetConfirm: false,
-            booked: false,
         }
     },
     methods: {
@@ -458,16 +413,6 @@ export default {
                 );
             });
         },
-        hasBudget(categoryKey) {
-            return !!this.event.components.find(item => item.componentId == categoryKey);
-        },
-        addBudget() {
-            this.showAddBudgetConfirm = false;
-            this.showAddNewCategory = true;
-        },
-        saveBudget() {
-            this.showAddNewCategory = false;
-        },
 
     },
     computed:{
@@ -493,10 +438,6 @@ export default {
             if(categories){
                 categories.sort((a, b) => a.order - b.order);
             }
-
-            if(categories && this.selectedCategory == null){
-                this.selectCategory(categories[0]);
-            }
             return categories;
         },
         specialRequirements() {
@@ -505,7 +446,7 @@ export default {
     },
     async created() {
         let redirect = this.$route.query.redirect
-        await this.$store.dispatch("planningBoard/resetRequirements");
+
         if (this.loggedInUser) {
             await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
 
@@ -514,7 +455,7 @@ export default {
                 await this.getAllRequirements()
             }
 
-            // this.requirements = JSON.parse(localStorage.getItem('requirements')) || {};
+            this.requirements = JSON.parse(localStorage.getItem('requirements')) || {};
 
             await this.getProposal();
             if (redirect) {
@@ -543,6 +484,8 @@ export default {
         this.showOffers = true;
         this.setProposal(this.proposal);
         this.setOpen('BOOKED');
+        this.selectCategory(this.categories[0]);
+
     },
 
 }

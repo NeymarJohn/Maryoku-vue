@@ -5,11 +5,11 @@
         <div class="d-flex align-center p-50">
           <img class="mr-30" :src="`${$iconURL}Campaign/Group 9136.svg`" />
           <div>
-            <div class="font-size-30 font-bold-extra color-red">Sending settings</div>
+            <div class="font-size-30 font-bold-extra color-red">Message Settings</div>
             <div class="mt-2 d-flex align-center">
               <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
 
-              <span>In your invitees list</span>
+              <span>in your current invitee list</span>
             </div>
           </div>
         </div>
