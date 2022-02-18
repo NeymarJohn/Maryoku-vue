@@ -66,7 +66,7 @@
             v-for="(question, index) in feedbackQuestions"
             :key="index"
             :feedbackData="question"
-            :disabled="false"
+            :disabled="true"
           ></feedback-question>
         </div>
       </div>
@@ -81,6 +81,9 @@
         <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
           <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Add Another Qestion
         </md-button>
+        <div class="wrapper-icon-edit-dark pt-50" >
+          <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
+        </div>
       </div>
     </div>
     <div class="feedback-campaign-carousel p-50">

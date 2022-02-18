@@ -712,14 +712,14 @@ let feedbackPages = {
             },
         },
         {
-            path: "/feedback/:eventId",
+            path: "/feedback/:feedbackId",
             name: "Event Feedback",
             component: FeedbackLandingPage,
             meta: {
                 title: "Feedback",
                 gtm: "Feedback",
             },
-        }
+        },
     ],
 };
 

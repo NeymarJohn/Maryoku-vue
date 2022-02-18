@@ -18,7 +18,7 @@
         v-if="!disabled"
       ></star-rating>
       <star-rating :border-width="0" :star-size="30" :show-rating="false" read-only v-else></star-rating>
-      <div class="font-size-15 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
+      <div class="font-size-12 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
     </div>
     <div class="feedback-message">
       <div class="font-size-20 font-bold mb-20">

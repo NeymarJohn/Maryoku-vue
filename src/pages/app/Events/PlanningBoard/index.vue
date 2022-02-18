@@ -36,24 +36,49 @@
         </div>
         <template v-for="(service, serviceIndex) in serviceCards[0]" >
               <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
-                <div :key="`serviceGroup-${serviceIndex}` ">
+                <div class="mt-80 mb-80" :key="`serviceGroup-${serviceIndex}` ">
                     <div class="booking-proposals">
                         <template v-if="selectedCategory">
-                            <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
-                                <div class="font-size-30 font-bold text-transform-uppercase">
-                                    {{ serviceIndex+1 }}.
-                                    {{ service.name }}
+                            <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory.eventCategory">
+                                <div class="font-size-30 font-bold-extra text-transform-uppercase">
+                                    <div style="float: left;">
+                                        {{ service.seqNo }}
+                                        &nbsp;&nbsp;
+                                        {{ service.name }}
+                                    </div>
+                                    <div style="float: right;">
+                                        <template v-if="!booked && (!($store.state.planningBoard.requirements[service.serviceCategory] && $store.state.planningBoard.requirements[service.serviceCategory].isIssued) || !getDefaultTypes(service.serviceCategory, service.name).length)">
+                                            <template v-if="hasBudget(service.serviceCategory)">
+                                                <md-button v-show="getDefaultTypes(service.serviceCategory, service.name).length > 0" class="md-red maryoku-btn" @click="getSpecification({ category: service, services: getDefaultTypes(service.serviceCategory, service.name) })">
+                                                    Get Specific
+                                                </md-button>
+                                            </template>
+                                            <template v-else>
+                                                <md-button class="md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </md-button>
+                                            </template>
+                                        </template>
+                                        <template v-else>
+                                            <div class="d-flex align-center justify-content-center">
+                                                <div v-if="booked" class="color-red">
+                                                    Already booked
+                                                </div>
+                                                <md-button v-if="getDefaultTypes(service.serviceCategory, service.name).length > 0" class="md-red maryoku-btn" @click="getSpecification({ category: service, services: getDefaultTypes(service.serviceCategory, service.name) })">
+                                                    Change specifications
+                                                </md-button>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="font-size-10 ">
+                                    <p>
+                                        {{ "What suits your event best? Help vendors understand your needs by selecting your favorites and adding more details if needed." }}
+                                    </p>
                                 </div>
                             </div>
                         </template>
                     </div>
 
-                    <div class="md-layout md-gutter mt-40 d-flex flex-row" style="align-items: center;">
-                <!-- <div
-                    class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-                    v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory"
-                    :key="`serviceGroup-${serviceIndex}`"
-                    > -->
+                    <div class="md-layout md-gutter mt-40 d-flex flex-row align-center">
                     <template v-if="service.musicPlayer">
                         <template v-for="(clip, clipindx) in service.clips">
                             <ServiceCategoryCard
@@ -143,6 +168,18 @@
       ></RequirementsCart>
     </transition>
     <CustomPopup @cancel="popup = false" v-if="popup" />
+    <AddBudgetModal
+      v-if="showAddNewCategory"
+      :serviceCategory="selectedCategory"
+      @cancel="showAddNewCategory = false"
+      @save="saveBudget"
+    ></AddBudgetModal>
+    <AddBudgetConfirmModal
+      v-if="showAddBudgetConfirm"
+      :serviceCategory="selectedCategory"
+      @cancel="showAddBudgetConfirm = false"
+      @addNewBudget="addBudget"
+    ></AddBudgetConfirmModal>
   </div>
 </template>
 <script>
@@ -166,6 +203,8 @@ const components = {
   RequirementsCart: () => import("./RequirementsCart.vue"),
 
   ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
+  AddBudgetModal: () => import("./components/modals/AddBudget.vue"),
+  AddBudgetConfirmModal: () => import("./components/modals/AddBudgetConfirm.vue"),
 
 };
 
@@ -187,6 +226,9 @@ export default {
       expiredTime: 0,
 
       proposalsByCategory: {},
+      showAddNewCategory: false,
+      showAddBudgetConfirm: false,
+      booked: false,
     };
   },
   async created() {
@@ -204,9 +246,9 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      eventRequirements: (state) => state.planningBoard.requirements || {},
-    }),
+    eventRequirements() {
+        return this.$store.state.planningBoard.requirements;
+    },
     categories() {
       const categories = this.event.components;
       categories.sort((a, b) => a.order - b.order);
@@ -259,8 +301,8 @@ export default {
     ...mapMutations("event", [ "setProposalsByCategory"]),
 
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
-    ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
     ...mapMutations("modal", ["setOpen"]),
+    ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements"]),
     findVendors() {
       this.isOpenedFinalModal = true;
@@ -317,13 +359,13 @@ export default {
       return _.property([category, "types", camelize(name)])(this.requirements);
     },
     getSelectedTypes(category) {
-      let typesList = [];
-      // this.requirements
-      const types = this.requirements[category].types;
-      for (const t in types) {
-        typesList = [...typesList, ...types[t]];
-      }
-      return typesList;
+        let typesList = [];
+        // this.requirements
+        const types = this.requirements[category].types;
+        for (const t in types) {
+            typesList = [...typesList, ...types[t]];
+        }
+        return typesList;
     },
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
@@ -385,6 +427,13 @@ export default {
           });
         });
       }
+    },
+    addBudget() {
+      this.showAddBudgetConfirm = false;
+      this.showAddNewCategory = true;
+    },
+    saveBudget() {
+      this.showAddNewCategory = false;
     },
   },
   watch: {
