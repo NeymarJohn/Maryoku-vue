@@ -584,7 +584,7 @@ export default {
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
         this.event = res;
-        this.checkMessageStatus();
+        // this.checkMessageStatus();
         this.showBudgetModal = false;
       });
     },

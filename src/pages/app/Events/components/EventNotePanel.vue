@@ -5,7 +5,7 @@
       <event-notes-filter @filter="filterNotes" :filterUsers="getFilterUsers"></event-notes-filter>
     </div>
     <div class="note-panel-content" v-if="notes.length === 0">
-      <div>
+      <div style="width: fit-content; margin: 10px auto ;">
         <img :src="`${$iconURL}Notes/note-background.svg`" width="120px" />
       </div>
       <span class="color-red">
@@ -178,6 +178,7 @@ export default {
     margin-bottom: 20px;
   }
   &-content {
+    text-align: center;
     padding: 20px 0px;
   }
   .setting-item {

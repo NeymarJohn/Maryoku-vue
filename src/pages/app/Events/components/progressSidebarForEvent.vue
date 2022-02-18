@@ -20,22 +20,6 @@
       </div>
       <div class="small-label" v-if="page === 'plan'">Things are warming up!</div>
       <div class="small-label" v-if="page === 'event'">Only 4 more vendors to close!</div>
-      <transition name="slide">
-        <event-note-panel v-if="isOpenNote"></event-note-panel>
-      </transition>
-
-      <div class="my-notes">
-        <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote = true">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
-          On my plate
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_down</md-icon>
-        </md-button>
-        <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote = false">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
-          Close
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_up</md-icon>
-        </md-button>
-      </div>
     </div>
     <div class="progress-sidebar-content">
       <!-- Sidebar Elements -->
