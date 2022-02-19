@@ -6,36 +6,10 @@
 
         <div class="header-carousel">
             <div v-if="!musicPlayer" class="carousel-item">
-                <md-button
-                class="md-simple md-icon-button md-raised save-btn"
-                :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
-                @click="addService(serviceCategory.imageTitles[index])"
-                v-show="hasBudget"
-                >
-                    <img
-                        v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
-                        class="non-selected"
-                        :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-                    />
-                    <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
-                </md-button>
                 <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${serviceCategory.images[index]}`" />
                 <label>{{ serviceCategory.imageTitles[index] }}</label>
             </div>
             <div v-else class="carousel-item">
-                <md-button
-                    class="md-simple md-icon-button md-raised save-btn"
-                    :class="{ isSelected: selectedServices.includes(serviceCategory.clipTitles[index]) }"
-                    @click="addService(serviceCategory.clipTitles[index])"
-                    v-show="hasBudget"
-                >
-                    <img
-                    v-if="!selectedServices.includes(serviceCategory.clipTitles[index])"
-                    class="non-selected"
-                    :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-                    />
-                    <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
-                </md-button>
                 <img
                     class="carousel-image"
                     :src="`${$storageURL}RequirementsImages/thumbnails/Music Images/${serviceCategory.images[index]}`"
@@ -52,17 +26,41 @@
       <div class="p-20 font-bold d-flex align-center justify-content-between card-info">
         <template v-if="!musicPlayer">
             <span class="service-name">{{ serviceCategory.imageTitles[index] }}</span>
+            <md-button
+            class="md-red maryoku-btn save-btn"
+            :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]), notSelected: !selectedServices.includes(serviceCategory.imageTitles[index]) }"
+            @click="addService(serviceCategory.imageTitles[index])"
+            v-show="hasBudget"
+            >
+                I like &nbsp;&nbsp;
+                <img
+                    v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
+                    class="non-selected"
+                    :src="`${$iconURL}Requirements/Group+16153.svg`"
+
+                />
+                <img v-else style="" :src="`${$iconURL}common/heart-red.svg`" />
+                <md-tooltip md-direction="top">Click here to show vendors your vision for the event</md-tooltip>
+            </md-button>
         </template>
         <template v-else>
             <span class="service-name">{{ serviceCategory.clipTitles[index] }}</span>
-        </template>
-        <template v-if="hasBudget">
-          <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
-            Get Specific
-          </md-button>
-        </template>
-        <template v-else>
-          <md-button class="md-simple edit-btn md-red" @click="showAddBudgetConfirm = true"> Add To Budget </md-button>
+            <md-button
+                class="md-red maryoku-btn save-btn"
+                :class="{ isSelected: selectedServices.includes(serviceCategory.clipTitles[index]), notSelected: !selectedServices.includes(serviceCategory.imageTitles[index]) }"
+                @click="addService(serviceCategory.clipTitles[index])"
+                v-show="hasBudget"
+            >
+                I like &nbsp;&nbsp;
+                <img
+                v-if="!selectedServices.includes(serviceCategory.clipTitles[index])"
+                class="non-selected"
+                :src="`${$iconURL}Requirements/Group+16153.svg`"
+
+                />
+                <img v-else :src="`${$iconURL}common/heart-red.svg`" />
+                <md-tooltip md-direction="top">Click here to show vendors your vision for the event</md-tooltip>
+            </md-button>
         </template>
       </div>
     </template>
@@ -71,14 +69,6 @@
       <div class="flex-1 icon-section d-flex align-center flex-column justify-content-center">
         <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`" />
         <div class="service-name color-red font-size-20 font-bold">{{ serviceCategory.imageTitles[index] }}</div>
-      </div>
-      <div class="p-20 font-bold d-flex align-center justify-content-center card-info">
-        <div v-if="booked" class="d-flex align-center justify-content-center color-red">
-            Already booked
-        </div>
-        <md-button v-if="selectedServices.length > 0" class="md-red maryoku-btn md-simple" @click="getSpecification">
-          Change specifications
-        </md-button>
       </div>
     </div>
     <AddBudgetModal
@@ -286,19 +276,25 @@ export default {
   .save-btn {
     position: absolute;
     right: 20px;
-    top: 20px;
-    width: 50px;
     height: 50px;
     z-index: 2;
-    background: white !important;
-    border-radius: 50%;
+    border: 1px solid #f51355;
     &.isSelected {
-      background-color: transparent !important;
       padding: 0;
       // /deep/ .md-ripple {
       //   padding: 0 !important;
       // }
       // border: solid 1px #f51355;
+      img {
+        background-color: white;
+        border-radius: 50%;
+      }
+    }
+    &.notSelected {
+      background-color: white !important;
+      color: #f51355 !important;
+      padding: 0;
+
     }
     /deep/ .md-ripple {
       padding: 0;
@@ -307,8 +303,9 @@ export default {
       padding: 3px;
     }
     img {
-      width: 50px;
-      height: 50px;
+      width: 42px;
+      height: 42px;
+      padding: 3px;
     }
   }
   .header-carousel {

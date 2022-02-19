@@ -24,10 +24,10 @@
         </md-button>
       </template>
     </carousel>
-    <div v-if="showUploadFile" class="upload-button-wrapper" >
+    <div class="upload-button-wrapper">
       <md-button class="md-red maryoku-btn" @click="uploadImage">
         <img :src="`${$iconURL}Campaign/arrow-circle-white.svg`" class="mr-10" />
-        Upload photos from the event
+        Upload Photos from your event
       </md-button>
       <input
         style="display: none"
@@ -61,10 +61,6 @@ export default {
     marginItems: {
       type: Number,
       default: 25,
-    },
-    showUploadFile: {
-      type: Boolean,
-      default: false,
     },
     images: {
       type: Array,

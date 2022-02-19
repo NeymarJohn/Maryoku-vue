@@ -65,6 +65,7 @@ const RSVPEvent = () => import("@/pages/app/RSVP/RSVPEvent.vue");
 const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.vue");
 
 const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
+const FeedbackLandingPageOld = () => import("@/pages/app/Events/FeedbackLandingPageOld.vue");
 // User authentication pages
 const SignInSignUp = () => import("@/pages/app/Planner/SignInSignUp.vue");
 const SignUp = () => import("@/pages/app/Planner/SignUp.vue");
@@ -719,7 +720,16 @@ let feedbackPages = {
                 title: "Feedback",
                 gtm: "Feedback",
             },
-        }
+        },
+        {
+            path: "/feedback/old/:eventId",
+            name: "Event Feedback",
+            component: FeedbackLandingPageOld,
+            meta: {
+                title: "Feedback",
+                gtm: "Feedback",
+            },
+        },
     ],
 };
 

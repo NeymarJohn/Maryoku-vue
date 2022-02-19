@@ -4,7 +4,7 @@
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra">
           <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" style="width: 30px; margin-right: 0.5em" />
-          Add Budet To {{ selectedCategory.fullTitle }}
+          Add Budget To {{ selectedCategory.fullTitle }}
         </h2>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -119,7 +119,7 @@ export default {
     },
     selectedCategory() {
       return this.$store.state.common.serviceCategories.find(
-        (item) => item.key === this.serviceCategory.serviceCategory,
+        (item) => item.key === this.serviceCategory.componentId,
       );
     },
   },
