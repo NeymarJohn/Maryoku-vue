@@ -303,7 +303,7 @@ export default {
     },
     showError: false,
     errorMessage: "",
-    url: `${process.env.SERVER_URL}/1/customersCSV`,
+    url: "https://api-dev.maryoku.com/1/customersCSV",
   }),
   created() {
     this.hasHeaders = this.headers;
