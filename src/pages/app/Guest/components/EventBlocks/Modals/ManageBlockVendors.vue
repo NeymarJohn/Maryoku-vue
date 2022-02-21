@@ -78,7 +78,6 @@ import UploadVendorsModal from "../../../../Vendors/ImportVendors";
 import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
 
 import Swal from "sweetalert2";
-import { error } from "util";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import _ from "underscore";

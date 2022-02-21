@@ -2,7 +2,7 @@
   <div>
     <budget-notifications></budget-notifications>
     <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
     <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important">
         <comment-editor-panel
             v-if="showCommentEditorPanel"
@@ -187,11 +187,24 @@
       ></budget-edit-modal>
       <modal v-if="budgetConfirmationModal" class="add-category-model">
         <template slot="header">
-          <div class="add-category-model__header">
+          <div v-if="extra<0" class="add-category-model__header">
             <h2 class="black">Are you sure?</h2>
             <div class="header-description">
-              <img :src="`${iconsURL}Asset 150.svg`" width="20" /> Decreasing your budget may cause program changes
+              <img :src="`${iconsURL}Asset%150.svg`" width="20" /> Decreasing your budget may cause program changes
             </div>
+          </div>
+          <div v-else class="add-category-model__header">
+            <h2 class="black">What would you like to do with extra ${{ extra }} to your budget? </h2>
+            <input v-model="manageExtraBudgetMethod" type="radio" name="extraMoney" id="onUnexpected"
+                   value="onUnexpected">
+            <label class="header-description" for="onUnexpected">
+              Re-calculate budget break down
+            </label>
+            <input v-model="manageExtraBudgetMethod" type="radio" name="extraMoney" id="betweenCategories"
+                   value="betweenCategories">
+            <label class="header-description" for="betweenCategories">
+              Store budget on unexpected
+            </label>
           </div>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button"
@@ -202,7 +215,7 @@
         </template>
         <template slot="body"></template>
         <template slot="footer">
-          <md-button class="md-rose md-outline md-simple cancel-btn" @click="budgetConfirmationModal = false"
+          <md-button class="md-rose md-outline md-simple cancel-btn" @click="()=>{budgetConfirmationModal = false; editBudgetElementsModal = true }"
             >Yes I’m sure</md-button
           >
           <md-button class="md-rose add-category-btn" :class="{ disabled: !newBudget }" @click="updateBudget"
@@ -237,6 +250,7 @@
                   :event.sync="event"
                   :event-components="selectedComponents"
                   type="total"
+                  @change="test"
                 ></edit-event-blocks-budget>
               </template>
               <template slot="tab-pane-2">
@@ -342,6 +356,8 @@ export default {
       showHandleMinus: false,
       showCommentEditorPanel: false,
       showMessage: false,
+      extra:'0',
+      manageExtraBudgetMethod:'betweenCategories',
     };
   },
   created() {
@@ -382,6 +398,20 @@ export default {
       "setEventData",
     ]),
     ...mapMutations("event", ["setBudgetNotification"]),
+    changeCheckList(e) {
+      const updatedEvent = new CalendarEvent({
+        id: this.event.id,
+        calendar: new Calendar({
+          id: this.event.calendar.id,
+        }),
+        checkList: e,
+        reSchedule: false,
+        reCalculate: false,
+      });
+      this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
+        this.event = res
+      });
+    },
     getCalendar() {
       return new Calendar({ id: this.currentUser.profile.defaultCalendarId });
     },
@@ -393,9 +423,7 @@ export default {
       let event = new CalendarEvent({ id: this.event.id });
       let eventComponent = new EventComponent().for(_calendar, event);
       let components = await eventComponent.get();
-      console.log("getEventComponents", components);
       components.sort((a, b) => a.order - b.order);
-      // console.log(components);
       this.event.components = components;
       this.selectedComponents = components;
     },
@@ -406,12 +434,7 @@ export default {
       let calendar = this.getCalendar();
       await this.getEvent(calendar);
       await this.getEventComponents(calendar);
-      console.log(
-        "showBudgetNotification",
-        this.event.id,
-        this.showBudgetNotification,
-        this.showBudgetNotification.indexOf(this.event.id) === -1,
-      );
+
       // notify budget states
       if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
         // this.notifyStates();
@@ -518,11 +541,14 @@ export default {
     openUploadModal() {
       this.$refs.uploadModal.toggleModal(true);
     },
+    test(ll){
+      console.log('##-545, EventDetailsBudget.vue',ll)
+    },
     updateBudget(eventBudget) {
       let _calendar = new Calendar({
         id: this.currentUser.profile.defaultCalendarId,
       });
-      let editedEvent = new CalendarEvent({ id: this.event.id }).for(_calendar);
+      let editedEvent = new CalendarEvent({ id: this.event.id });
       const newBudget = eventBudget.totalBudget; //Number(eventBudget.totalBudget.replace(/,/g, ""))
       if (newBudget < this.calendarEvent.totalBudget) {
         this.showBudgetModal = false;
@@ -568,6 +594,7 @@ export default {
       } else {
         this.showBudgetModal = false;
       }
+      this.editBudgetElementsModal = false
     },
     updateTotalBudget(newBudget) {
       const event = new CalendarEvent({
@@ -576,11 +603,13 @@ export default {
         unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
-        console.log("updateTotalBudget.res", res);
         this.event = res;
-        this.checkMessageStatus();
+        // this.checkMessageStatus();
         this.showBudgetModal = false;
       });
+      this.extra = newBudget.totalBudget - this.event.totalBudget;
+      if(this.extra === 0) return
+      this.budgetConfirmationModal = true;
     },
     onChangeComponent(event) {
       this.loadEventData("update");
@@ -627,7 +656,7 @@ export default {
         const budget = {
           title: "Craft Event Budget",
           status: "not-complete",
-          route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
+          route: this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget",
           icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
           progress: this.event.budgetProgress,
           componentId: "budget",
@@ -704,7 +733,7 @@ export default {
       }
     },
     pieChartData() {
-      return this.$store.state.event.eventData.components;
+      return this.$store.state.event.eventData.components.filter(item => item.vendorsCount>0);
     },
     // check permission
     permission() {
@@ -757,11 +786,4 @@ export default {
 
 <style scoped lang="scss">
 @import "../../styles/EventDetailsBudget.scss";
-// .md-layout, .md-layout-item {
-//     width: initial;
-// }
-
-// .tab-content {
-//     background-color: transparent !important;
-// }
 </style>

@@ -69,6 +69,13 @@
             startLink: `/events/${event.id}/edit/budget`,
           }"
         ></sidebar-item>
+        <li class="show-note-list-item" @click="isOpenNote = !isOpenNote" >
+          <div class="my-notes left-menu-yearly-plan disabled show-note-wrapper"  >
+            <button>
+              <img :class="{active: isOpenNote} " :src="`${$iconURL}Event Page/note-light.svg`" width="22" style="margin: 0 3px"/>
+            </button>
+          </div>
+        </li>
         <!-- <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan disabled"
@@ -84,20 +91,38 @@
         </div>
       </a>
     </div>
+    <transition name="slide-fade">
+      <div class="note-wrapper" v-show="isOpenNote">
+        <div style="height:40px; margin-right:25px" class="text-right">
+          <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="isOpenNote = false">
+            <md-icon class="font-size-30">clear</md-icon>
+          </md-button>
+        </div>
+        <br/>
+        <event-note-panel></event-note-panel>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
 import SidebarItem from "./NewSidebarItem";
 import eventService from "@/services/event.service";
-
+import EventNotePanel from "../../pages/app/Events/components/EventNotePanel";
+import Button from "../Button/ControlPanel";
 export default {
   name: "sidebar",
+  components: {
+    Button,
+    SidebarItem,
+    EventNotePanel,
+  },
   data: () => {
     return {
       newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
       menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
       toggleMenu: false,
       currentUrl: "",
+      isOpenNote:false,
     };
   },
   props: {
@@ -187,17 +212,11 @@ export default {
     isEventPage() {
       return this.currentUrl.indexOf("event") >= 0;
     },
-    isEventPage() {
-      return this.$router.history.current.path.indexOf("event") >= 0;
-    },
   },
   beforeDestroy() {
     if (this.$sidebar.showSidebar) {
       this.$sidebar.showSidebar = false;
     }
-  },
-  components: {
-    SidebarItem,
   },
   created() {
     this.fetchUrl();
@@ -215,6 +234,44 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.note-wrapper{
+  position: fixed;
+  background-color: white;
+  width: 410px;
+  left: 85px;
+  height: 90vh;
+  top: 5vh;
+  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0,  0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.20);
+}
+.show-note-list-item{
+  height: 57px;
+  cursor: pointer;
+  .show-note-wrapper{
+    width: fit-content;
+    margin: auto;
+    button{
+      padding-top: 16px;
+      background-color: white;
+      border: none;
+      cursor: pointer;
+      img {
+        filter: brightness(0) saturate(100%) invert(0%) sepia(100%) saturate(7500%) hue-rotate(193deg) brightness(110%) contrast(107%);
+      }
+      img.active{
+        filter: brightness(0) saturate(100%) invert(13%) sepia(60%) saturate(7249%) hue-rotate(336deg) brightness(113%) contrast(92%);      }
+    }
+  }
+}
+.slide-fade-enter-active {
+  transition: all .5s ease;
+}
+.slide-fade-leave-active {
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to{
+  transform: translateX(10px);
+  opacity: 0;
+}
 .new-event-side-bar {
   display: block;
   font-weight: 200;

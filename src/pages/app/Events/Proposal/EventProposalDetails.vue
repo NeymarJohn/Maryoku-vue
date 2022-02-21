@@ -243,7 +243,7 @@
           :key="`secondary-${service}-section`"
           @changeBookedServices="changeBookedServices"
           @updateProposalCost="updateProposalCost"
-          :class-name="`${isMobile ? 'p-0' : 'p-60 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
+          :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
         ></EventProposalPrice>
         <div
           class="bundle-section d-flex justify-content-between align-center"
@@ -259,19 +259,19 @@
         <div v-if="isMobile" class="total-section p-30">
           <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
             Current bid
-            <p class="font-size-18 font-bold-extra color-white m-0">{{ discounedAndTaxedPrice }}</p>
+            <p class="font-size-18 font-bold-extra color-white m-0">${{ discounedAndTaxedPrice | withComma }}</p>
           </div>
           <div
             v-if="discount.percentage"
             class="d-flex align-center justify-content-between my-10 font-size-15 color-gray"
           >
             Before discount
-            <p class="color-white m-0">({{ discount.percentage }}% off) {{ totalPriceOfProposal }}</p>
+            <p class="color-white m-0">({{ discount.percentage }}% off) ${{ totalPriceOfProposal }}</p>
           </div>
         </div>
       </div>
       <div class="card-section align-center px-20 py-30 mt-10" v-if="showSeatingAr">
-        <div class="px-40">
+        <div class="px-15">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
               <img :src="`${$iconURL}VendorsProposalPage/group-8249.svg`" width="50" />
@@ -333,15 +333,15 @@
         </div>
       </div>
 
-      <div class="card-section align-center px-20 py-30">
-        <div class="px-40">
+      <div class="card-section align-center py-30" v-if="step===0" :class="{'px-20':windowWidth>350}">
+        <div class="px-15" >
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
               <img :src="`${$iconURL}union-12.svg`" width="30" /> <span class="px-5"> Health Protocol</span>
             </div>
 
             <div>
-              <md-button class="md-simple" @click="isHealth = !isHealth">
+              <md-button class="md-simple md-just-icon" @click="isHealth = !isHealth">
                 <md-icon style="font-size: 40px !important">
                   {{ isHealth ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
                 </md-icon>
@@ -381,19 +381,20 @@
                 </template>
               </div>
             </div>
+            <div v-else> hmm...seems that vendor did not include that information</div>
           </div>
         </div>
       </div>
 
-      <div class="card-section align-center px-20 py-30 mt-10">
-        <div class="px-40">
+      <div class="card-section align-center  py-30 mt-10" v-if="step===0" :class="{'px-20':windowWidth>350}">
+        <div class="px-15">
           <div class="d-flex justify-content-between align-center">
             <div class="proposal-section__title">
               <img :src="`${submitProposalIcon}Asset 287.svg`" width="27" /> <span class="px-5">Our Policy </span>
             </div>
 
             <div>
-              <md-button class="md-simple" @click="isPolicy = !isPolicy">
+              <md-button class="md-simple md-just-icon" @click="isPolicy = !isPolicy">
                 <md-icon style="font-size: 40px !important">
                   {{ isPolicy ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
                 </md-icon>
@@ -401,87 +402,87 @@
             </div>
           </div>
           <div v-if="isPolicy" class="value">
-            <div class="proposal-section policy-section mt-40 md-small-hide">
-              <div class="">
-                <div class="rules">
-                  <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                    <div class="item">{{ policy.name }}</div>
-                    <div class="item" v-if="policy.type === 'MultiSelection'">
-                      <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                        `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                      }}</span>
+            <div class="proposal-section ">
+              <div class="policy-content">
+                    <div class="rules">
+                    <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                        <div class="item">{{ policy.name }}</div>
+                        <div class="item" v-if="policy.type === 'MultiSelection'">
+                        <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                            `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                        }}</span>
+                        </div>
+                        <div class="item" v-else-if="policy.type === 'Including'">
+                        <span class="mr-10" v-if="policy.value"> Yes </span>
+                        <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                        </div>
+                        <div class="item text-right" style="margin-top: -30px; padding-bottom: 25px" v-else>
+                        <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                        <span v-if="policy.type === 'Boolean'">
+                            <img
+                            v-if="policy.value === true"
+                            :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                            class="page-icon"
+                            />
+                            <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
+                            <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                        </span>
+                        <span v-else>
+                            <img
+                            class="page-icon"
+                            v-if="policy.value === true"
+                            :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                            />
+                            <img
+                            class="page-icon"
+                            v-else-if="policy.value === false"
+                            :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                            />
+                            <span v-else>{{ policy.value }}</span>
+                        </span>
+                        <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                        <span v-if="policy.isPercentage">%</span>
+                        <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                            {{ policy.attendees }} attendees
+                        </span>
+                        </div>
                     </div>
-                    <div class="item" v-else-if="policy.type === 'Including'">
-                      <span class="mr-10" v-if="policy.value"> Yes </span>
-                      <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                     </div>
-                    <div class="item text-right" v-else>
-                      <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                      <span v-if="policy.type === 'Boolean'">
-                        <img
-                          v-if="policy.value === true"
-                          :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                          class="page-icon"
-                        />
-                        <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
-                        <!-- {{ policy.value === true ? "Yes" : "No" }} -->
-                      </span>
-                      <span v-else>
-                        <img
-                          class="page-icon"
-                          v-if="policy.value === true"
-                          :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
-                        />
-                        <img
-                          class="page-icon"
-                          v-else-if="policy.value === false"
-                          :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
-                        />
-                        <span v-else>{{ policy.value }}</span>
-                      </span>
-                      <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
-                      <span v-if="policy.isPercentage">%</span>
-                      <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                        {{ policy.attendees }} attendees
-                      </span>
+                    <div class="rules" v-if="additionalRules && additionalRules.length > 0">
+                    <h5 class="font-bold font-size-20">Additional Rules</h5>
+                    <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+                        <div class="item">Event must be {{ policy }}</div>
                     </div>
-                  </div>
-                </div>
-                <div class="rules" v-if="additionalRules && additionalRules.length > 0">
-                  <h5 class="font-bold font-size-20">Additional Rules</h5>
-                  <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                    <div class="item">Event must be {{ policy }}</div>
-                  </div>
-                </div>
-                <div class="side-label">
-                  <div class="label-value">Our cancellation approach</div>
-                </div>
+                    </div>
+                    <div class="side-label">
+                    <div class="label-value">Our cancellation approach</div>
+                    </div>
 
-                <div class="proposal-section__subtitle">
-                  <div class="subtitle">We allow free cancellation until:</div>
-                  <div class="desc">30 days before the event</div>
-                </div>
+                    <div class="proposal-section__subtitle">
+                    <div class="subtitle">We allow free cancellation until:</div>
+                    <div class="desc">30 days before the event</div>
+                    </div>
 
-                <CancellationPolicy></CancellationPolicy>
+                    <CancellationPolicy></CancellationPolicy>
 
-                <div class="side-label">
-                  <div class="label-value">Act of God</div>
-                </div>
-                <div class="rules">
-                  <span class="font-bold"> {{ proposal.vendor.companyName }}</span>
-                  is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
-                  authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
-                  quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
-                </div>
+                    <div class="side-label">
+                    <div class="label-value">Act of God</div>
+                    </div>
+                    <div class="rules">
+                    <span class="font-bold"> {{ proposal.vendor.companyName }}</span>
+                    is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
+                    authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
+                    quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
+                    </div>
 
-                <div class="signature-section">
-                  <div class="signature-section__vendor">
-                    {{ proposal.vendor.vendorDisplayName }}
-                  </div>
-                  <div class="signature-section__image">
-                    <img :src="proposal.vendor.signature" />
-                  </div>
-                </div>
+                    <div class="signature-section">
+                    <div class="signature-section__vendor">
+                        {{ proposal.vendor.vendorDisplayName }}
+                    </div>
+                    <div class="signature-section__image">
+                        <img :src="proposal.vendor.signature" />
+                    </div>
+                    </div>
               </div>
             </div>
           </div>
@@ -587,7 +588,7 @@
         </md-button>
       </div>
     </div>
-    <div v-if="proposal.status === 5 && !sh">
+    <div v-if="proposal.status === 5 || (proposal.status === 6 && !sh)">
       <MessageModal @cancel="showMessage = false" @goVendors="go()" />
     </div>
   </div>
@@ -625,8 +626,6 @@ export default {
     sh: {
       type: Boolean,
       default: false,
-
-
     },
     proposal: {
       type: Object,

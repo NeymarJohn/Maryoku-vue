@@ -1,9 +1,13 @@
 <template>
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
-      <div class="comment-item-avatar">
-        <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
-        <img v-else class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
+      <div class="comment-item-avatar" >
+        <Avartar :name="comment.planner.name"
+                 v-if="comment.planner && comment.planner.name"></Avartar>
+        <Avartar :name="comment.customer.name"
+                 v-else-if="comment.customer && comment.customer.name"></Avartar>
+        <img v-else-if="!comment.customer && !comment.planner " class="user-avatar"
+             :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px"/>
       </div>
       <div class="comment-item-description">
         <div v-if="comment.planner">{{comment.planner.name}}</div>
@@ -30,20 +34,22 @@
           <span v-if="isMain">{{replies}} Replies</span>
           <span v-if="comment.favoriteUsers && comment.favoriteUsers.length>0">
             <img
-                :src="`${$iconURL}comments/SVG/heart-gray.svg`"
-                class="comment-actions-icon"
-                width="25px"
-              />
-              {{comment.favoriteUsers.length}}
+              :src="`${$iconURL}comments/SVG/heart-gray.svg`"
+              class="comment-actions-icon"
+              width="25px"
+            />
+              {{ comment.favoriteUsers.length }}
             </span>
-            <span v-else></span>
+          <span v-else></span>
           <div class="comment-actions">
             <md-button
               class="edit-btn md-simple md-black comment-action-btn"
               @click="resolveCommentComonent(comment)"
-            >Resolve</md-button>
+            >Resolve
+            </md-button>
             <md-button
               class="edit-btn md-simple comment-action-btn"
+              v-if="comment.planner.name === user.name"
               @click="editComment(comment)"
             >
               <img
@@ -54,15 +60,8 @@
             </md-button>
             <md-button class="edit-btn md-simple comment-action-btn">
               <img
-                :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-                v-if="!myFavorite"
-                @click="markAsFavorite(comment, true)"
-                class="comment-actions-icon"
-              />
-              <img
-                :src="`${$iconURL}comments/SVG/heart-yellow.svg`"
-                v-if="myFavorite"
-                @click="markAsFavorite(comment, false)"
+                :src="`${$iconURL}comments/SVG/${!myFavorite?'heart-dark.svg':'heart-yellow.svg'}`"
+                @click="markAsFavorite(comment, !myFavorite)"
                 class="comment-actions-icon"
               />
             </md-button>
@@ -105,7 +104,8 @@ export default {
   data() {
     return {
       editingDescription: this.comment.description,
-      isEditing:false
+      isEditing: false,
+      user: this.$store.state.auth.user
     };
   },
   methods: {
@@ -132,11 +132,11 @@ export default {
     },
   },
   computed: {
-    getTimeDiffString() {},
+    getTimeDiffString() {
+    },
     myFavorite() {
-      console.log("auth", this.$auth)
       if (!this.comment.favoriteUsers) return false
-      if (this.comment.favoriteUsers.findIndex(userId => userId === this.$auth.user.id) < 0) {
+      if (this.comment.favoriteUsers.findIndex(userId => userId === this.user.id) < 0) {
         return false
       }
       return true

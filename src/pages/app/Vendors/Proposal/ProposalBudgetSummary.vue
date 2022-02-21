@@ -12,7 +12,7 @@
             <span class="font-bold font-size-22">${{ (totalPrice - bundleDiscountAmount) | withComma }}</span>
             <br />
             <span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
-            <span class="font-size-14"> ${{ totalPrice | withComma }} </span>
+            <span class="font-size-14"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
           </div>
         </div>
         <div class="d-flex justify-content-between flex-1 font-size-22 font-bold" v-else>Summary</div>
@@ -508,15 +508,6 @@ export default {
     },
 
     totalPrice() {
-      // console.log('Info for calc totalPrice')
-      // console.log('totalPriceBeforeDiscount ' , this.totalPriceBeforeDiscount)
-      // console.log('defaultDiscount ' , this.defaultDiscount)
-      // console.log('defaultDiscount.price ' , this.defaultDiscount.price)
-      // console.log('defaultTax ' , this.defaultTax)
-      // console.log('defaultTax.price  ' , this.defaultTax.price )
-      // console.log('bundleDiscount.isApplied  ' , this.bundleDiscount.isApplied )
-      // console.log('bundleDiscount.price  ' , this.defaultTax.price )
-
       return (
         this.totalPriceBeforeDiscount -
         (this.defaultDiscount ? ((this.defaultDiscount.percentage * this.totalPriceBeforeDiscount)/100): 0) +
