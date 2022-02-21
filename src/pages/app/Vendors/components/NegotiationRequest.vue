@@ -117,7 +117,7 @@
           }
         },
         mounted() {
-          console.log('negotiation.request.mounted', this.negotiation, this.type);
+          console.log('mounted', this.negotiation, this.type);
           this.init()
         },
         methods: {

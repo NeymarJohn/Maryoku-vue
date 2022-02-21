@@ -39,7 +39,7 @@
           <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
             item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
             }}</md-table-cell>
-          <md-table-cell md-label="Count" md-sort-by="proposals">{{
+          <md-table-cell md-label="Count" md-sort-by="proposalAggregation.total">{{
                 item.proposals
             }}</md-table-cell>
           <md-table-cell>

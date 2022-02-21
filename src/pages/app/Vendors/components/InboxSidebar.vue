@@ -143,8 +143,7 @@
                 </div> -->
             </div>
         </div>
-
-        <div class="sidebar__items d-flex flex-column" v-if="!fullDiscussion && commentsProposals.length > 0">
+        <div class="sidebar__items d-flex flex-column" v-if="!fullDiscussion">
             <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="(proposal, pindex) in commentsProposals" :key="pindex" @click="changeProposal(proposal)" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}">
                 <div class="d-flex align-item-center sidebar__item__content">
                     <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
@@ -166,14 +165,6 @@
                 <span class="unread-count" v-if="proposal.unread_count">{{proposal.unread_count}}</span>
             </div>
         </div>
-        <div class="no-comments-wrapper">
-          <div v-if="commentsProposals.length < 1" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" alt="no icon"/>
-            <p class="no-comments-text">We just started our journey
-              together, No proposals yet</p>
-            <md-button class="md-vendor bold" @click="createNewProposal" >create New Proposal</md-button>
-          </div>
-        </div>
         <!-- <div class="sidebar__items d-flex flex-column">
             <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="proposal in commentsProposals" @click="changeProposal(proposal)" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}">
 
@@ -185,13 +176,14 @@
 
 <script>
 
-import {mapMutations} from "vuex";
-import {PROPOSAL_PAGE_PAGINATION} from "@/constants/pagination";
-import {getReq} from "@/utils/token";
-import {FadeTransition} from "vue2-transitions";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import EventCommentComponent from "@/models/EventCommentComponent";
+import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
+import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
+import { postReq, getReq } from "@/utils/token";
+import { FadeTransition } from "vue2-transitions";
 import {CommentMixins} from "@/mixins";
 import moment from 'moment'
-import {IconURL} from "../../../../globalVariables";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
@@ -204,27 +196,27 @@ export default {
     components,
     props: {},
     mixins: [CommentMixins],
-  data: () => ({
-    loading: false,
-    pagination: PROPOSAL_PAGE_PAGINATION,
-    sortFields: {sort: "cost", order: "desc"},
-    iconUrl: IconURL,
-    tab: "all",
-    sortBy: '',
-    sortType: 'asc',
-    statusSortType: 'asc',
-    commentSortBy: '',
-    commentSortType: 'asc',
-    commentStatusSortType: 'asc',
-    fullDiscussion: false,
-    showReply: false,
-    showReplyComment: null,
-    colors: ['#428dfc', '#21cfe0', '#a3809d', '#ff5888', '#77ad8c', '#fdbe00'],
-    editingComment: "",
-    showAddress: false,
-    selectedComponent: null,
-    customers: [],
-  }),
+    data: () => ({
+        loading: false,
+        pagination: PROPOSAL_PAGE_PAGINATION,
+        sortFields: { sort: "cost", order: "desc" },
+        tab: "all",
+        sortBy: '',
+        sortType: 'asc',
+        statusSortType: 'asc',
+        commentSortBy: '',
+        commentSortType: 'asc',
+        commentStatusSortType: 'asc',
+        fullDiscussion: false,
+        showReply: false,
+        showReplyComment: null,
+        colors: ['#428dfc', '#21cfe0', '#a3809d', '#ff5888', '#77ad8c', '#fdbe00'],
+        editingComment: "",
+        showAddress: false,
+        selectedComponent:null,
+        customers: [],
+    }),
+    computed: {},
 
     created() {},
     mounted() {
@@ -277,7 +269,6 @@ export default {
             return proposals;
         },
         proposals() {
-            console.log('checkpoint', this.$store.state.comment.commentsProposals)
             return this.$store.state.comment.commentsProposals;
         },
         selectedProposal() {
@@ -297,15 +288,6 @@ export default {
     },
     methods: {
         ...mapMutations("comment", ["setSelectedProposal"]),
-      createNewProposal() {
-        let routeData = this.$router.resolve({
-          name: "outsideProposalCreate",
-          params: {
-            vendorId: this.vendor.id,
-          },
-        });
-        window.open(routeData.href, "_blank");
-      },
         changeProposal(proposal,fullDiscussion = false) {
             this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
             setTimeout(() => {
@@ -405,7 +387,6 @@ export default {
                 description: this.editingComment,
                 parentId: this.mainComment ? this.mainComment.id : null,
                 email: this.selectedCustomer ? this.selectedCustomer.email : null,
-                viewed:true
           };
           this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
           this.editingComment = ""
@@ -430,20 +411,6 @@ export default {
 </script>
 
 <style lang="scss">
-.no-comments-wrapper{
-  width: 358px;
-  height: 271px;
-  margin: 248px 25px 376px;
-  font-family: 'Manrope-Regular';
-  font-weight: bold;
-  font-size: 22px;
-  text-align: center;
-  .md-button{
-    font-weight: bold;
-    font-size: 16px;
-    text-transform: capitalize;
-  }
-}
 .title-icon {
     margin-right: 10px;
 }

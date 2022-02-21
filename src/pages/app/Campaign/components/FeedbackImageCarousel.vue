@@ -1,8 +1,8 @@
 <template>
   <div class="feedback-images">
     <carousel
-      :items="items"
-      :margin="marginItems"
+      :items="3"
+      :margin="25"
       :dots="false"
       :nav="false"
       class="feedback-carousel"
@@ -10,24 +10,24 @@
       v-if="images.length > 0"
       :key="Math.random()"
     >
-      <template slot="prev" >
-        <md-button class="btn-prev edit-btn md-round nav-left nav-btn md-raised md-white" >
-          <md-icon class="icon-arrow-left" >keyboard_arrow_left</md-icon>
+      <template slot="prev">
+        <md-button class="edit-btn md-round nav-left nav-btn md-raised md-white">
+          <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
       </template>
       <div class="carousel-item" v-for="(item, index) in images" :key="index">
         <img :src="item.src" class="carousel-image" @error="setAltImg($event, item)" />
       </div>
-      <template slot="next" >
-        <md-button class="btn-next edit-btn md-round nav-right nav-btn md-raised md-white" >
-          <md-icon class="icon-arrow-right" >keyboard_arrow_right</md-icon>
+      <template slot="next">
+        <md-button class="edit-btn md-round nav-right nav-btn md-raised md-white">
+          <md-icon>keyboard_arrow_right</md-icon>
         </md-button>
       </template>
     </carousel>
-    <div v-if="showUploadFile" class="upload-button-wrapper" >
+    <div class="upload-button-wrapper">
       <md-button class="md-red maryoku-btn" @click="uploadImage">
         <img :src="`${$iconURL}Campaign/arrow-circle-white.svg`" class="mr-10" />
-        Upload photos from the event
+        Upload Photos from your event
       </md-button>
       <input
         style="display: none"
@@ -38,13 +38,8 @@
         @change="onFileChange"
       />
     </div>
-    <div class="feedback-images-footer" >
-      <img class="icon-photography-white" src="static/icons/Group%209348.svg" />
-      <span class="description" >All Photos / video (5)</span>
-    </div>
   </div>
 </template>
-
 <script>
 import carousel from "vue-owl-carousel";
 import { getBase64 } from "@/utils/file.util";
@@ -54,18 +49,6 @@ export default {
     carousel,
   },
   props: {
-    items: {
-      type: Number,
-      default: 3,
-    },
-    marginItems: {
-      type: Number,
-      default: 25,
-    },
-    showUploadFile: {
-      type: Boolean,
-      default: false,
-    },
     images: {
       type: Array,
       default: () => [],
@@ -90,23 +73,9 @@ export default {
   },
 };
 </script>
-
 <style lang="scss" scoped>
 .feedback-images {
   position: relative;
-
-  .btn-next, .btn-prev {
-    width: 31px;
-    height: 31px;
-    padding-left: 4px;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.45);
-
-    .icon-arrow-right, .icon-arrow-left {
-      font-size: 31px !important;
-      color: #050505 !important;
-    }
-  }
-
   .upload-button-wrapper {
     position: absolute;
     left: 50%;
@@ -120,33 +89,10 @@ export default {
     transform: translateY(-50%);
     z-index: 10;
     &.nav-right {
-      right: 40px;
+      right: 60px;
     }
     &.nav-left {
       left: 60px;
-    }
-  }
-
-  .feedback-images-footer {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    z-index: 1;
-    padding: 21px;
-
-    .icon-photography-white {
-      width: 26px;
-      height: 24px;
-      fill: #fff !important;
-    }
-
-    .description {
-      color: #fff;
-      margin-left: 10px;
-      font-size: 16px;
-      font-weight: 500;
     }
   }
 }
@@ -162,7 +108,6 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: brightness(80%);
       position: absolute;
       top: 0;
       left: 0;

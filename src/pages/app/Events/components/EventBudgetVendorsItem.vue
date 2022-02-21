@@ -83,7 +83,7 @@
                     "
                   >
                     <template v-if="type === 'total'"
-                      >$ {{ eventCategoryItem.bookedBudget ? eventCategoryItem.bookedBudget : 0 | withComma(Number) }}</template
+                      >$ {{ eventCategoryItem.bookedBudget ? eventCategoryItem.bookedBudget : 0 | withComma }}</template
                     >
                     <template v-else>
                       $
@@ -120,7 +120,7 @@
                 </div>
               </td>
               <td class="expand">
-                <div @click="switchExpand" class="text-right" v-if="canExpand && eventCategoryItem.bookedBudget">
+                <div @click="switchExpand" class="text-right" v-if="canExpand">
                   <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: isExpanded }" />
                 </div>
               </td>
@@ -166,13 +166,13 @@
               ></event-component-vendor-item>
             </td>
           </tr>
-<!--          <tr class="item-actions" v-if="!eventCategoryItem.bookedBudget">-->
-<!--            <td colspan="5" class="actions-list text-right" style="position: relative">-->
-<!--              <md-button class="md-simple md-red edit-btn-1" @click="addMyVendor">Add My Vendor</md-button>-->
-<!--              <span class="button-split"></span>-->
-<!--              <md-button class="md-simple md-red edit-btn-1" @click="showDeleteModal">Delete Category</md-button>-->
-<!--            </td>-->
-<!--          </tr>-->
+          <tr class="item-actions" v-if="!eventCategoryItem.bookedBudget">
+            <td colspan="5" class="actions-list text-right" style="position: relative">
+              <md-button class="md-simple md-red edit-btn-1" @click="addMyVendor">Add My Vendor</md-button>
+              <span class="button-split"></span>
+              <md-button class="md-simple md-red edit-btn-1" @click="showDeleteModal">Delete Category</md-button>
+            </td>
+          </tr>
         </template>
       </tbody>
     </table>
@@ -250,6 +250,7 @@ export default {
     };
   },
   created() {
+    console.log('budget.vendor.item', this.eventCategoryItem);
     this.$root.$on("expandBudgetCategoryItem", (category) => {
       if (category.id != this.eventCategoryItem.id) {
         this.isExpanded = false;

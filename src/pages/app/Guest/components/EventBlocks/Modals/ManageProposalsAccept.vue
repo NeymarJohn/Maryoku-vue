@@ -133,6 +133,7 @@ import EventComponent from "@/models/EventComponent";
 import { Tabs } from "@/components";
 
 import Swal from "sweetalert2";
+import { error } from "util";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import _ from "underscore";

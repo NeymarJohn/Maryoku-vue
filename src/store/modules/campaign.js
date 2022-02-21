@@ -89,9 +89,6 @@ const defaultCampaignData = {
             4) +
             1}.png`,
         campaignStatus: "EDITING",
-        showLogo: true,
-        showComing: true,
-        showCountdown: true,
         visibleSettings: {
             showLogo: true,
             showComing: true,
@@ -108,7 +105,6 @@ const defaultCampaignData = {
             showSharingOption: true,
             showFeedback: true,
             allowUploadPhoto: true,
-            downloadFiles:true,
         },
         images: [
             {

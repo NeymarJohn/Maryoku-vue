@@ -1,36 +1,35 @@
 <template>
-  <div class="md-layout event-campaign-section booking-section event-campaign-width">
-    <div class="inner-container">
-      <comment-editor-panel
-        v-if="showCommentEditorPanel"
-        :commentComponents="commentComponents"
-        @saveComment="saveComment"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent"
-      >
-      </comment-editor-panel>
-      <div class="event-page-header md-layout-item md-size-100">
-        <div class="header-name">
-          <div class="font-size-30 font-bold text-transform-capitalize mb-20">
-            <img class="mr-10" :src="`${$iconURL}Campaign/Group 8857.svg`" />
-            your event's brilliant campaign
-          </div>
-          <p class="font-size-16">Get your guests super exited by giving them a taste of what's waiting for them</p>
+  <div class="md-layout event-campaign-section booking-section">
+    <comment-editor-panel
+      v-if="showCommentEditorPanel"
+      :commentComponents="commentComponents"
+      @saveComment="saveComment"
+      @updateComment="updateComment"
+      @deleteComment="deleteComment"
+      @updateCommentComponent="updateCommentComponent"
+    >
+    </comment-editor-panel>
+    <div class="event-page-header md-layout-item md-size-100">
+      <div class="header-name">
+        <div class="font-size-30 font-bold text-transform-capitalize mb-20">
+          <img class="mr-10" :src="`${$iconURL}Campaign/Group 8857.svg`" />
+          your event's brilliant campaign
         </div>
-        <header-actions :customStyles="{showCommentsText: {paddingLeft: '2px'}}" @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
+        <p class="font-size-16">Get your guests super exited by giving them a taste of what's waiting for them</p>
       </div>
-      <div class="campaign-content md-layout-item md-size-100 mt-30">
-        <loader :active="isLoading" />
-        <div class="campaign-content-tab d-flex">
-          <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
-            :class="{ selected: selectedTab === 1 }"
-            @click="selectTab(1)"
-          >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['SAVING_DATE']" />
-            <span :class="{ completedCampaign: campaignIssued['SAVING_DATE'] }">Save The Date</span>
-            <span>
+      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
+    </div>
+    <div class="campaign-content md-layout-item md-size-100 mt-30">
+      <loader :active="isLoading" />
+      <div class="campaign-content-tab d-flex mb-40">
+        <div
+          class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+          :class="{ selected: selectedTab === 1 }"
+          @click="selectTab(1)"
+        >
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['SAVING_DATE']" />
+          <span :class="{ completedCampaign: campaignIssued['SAVING_DATE'] }">Save The Date</span>
+          <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
@@ -38,15 +37,15 @@
               </div>
             </md-tooltip>
           </span>
-          </div>
-          <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
-            :class="{ selected: selectedTab === 2 }"
-            @click="selectTab(2)"
-          >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['RSVP']" />
-            <span :class="{ completedCampaign: campaignIssued['RSVP'] }">RSVP</span>
-            <span>
+        </div>
+        <div
+          class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+          :class="{ selected: selectedTab === 2 }"
+          @click="selectTab(2)"
+        >
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['RSVP']" />
+          <span :class="{ completedCampaign: campaignIssued['RSVP'] }">RSVP</span>
+          <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
@@ -54,15 +53,15 @@
               </div>
             </md-tooltip>
           </span>
-          </div>
-          <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
-            :class="{ selected: selectedTab === 3 }"
-            @click="selectTab(3)"
-          >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['COMING_SOON']" />
-            <span :class="{ completedCampaign: campaignIssued['COMING_SOON'] }">Coming Soon</span>
-            <span>
+        </div>
+        <div
+          class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+          :class="{ selected: selectedTab === 3 }"
+          @click="selectTab(3)"
+        >
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['COMING_SOON']" />
+          <span :class="{ completedCampaign: campaignIssued['COMING_SOON'] }">Coming Soon</span>
+          <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
@@ -70,15 +69,15 @@
               </div>
             </md-tooltip>
           </span>
-          </div>
-          <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
-            :class="{ selected: selectedTab === 4 }"
-            @click="selectTab(4)"
-          >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['FEEDBACK']" />
-            <span :class="{ completedCampaign: campaignIssued['FEEDBACK'] }">Feedback</span>
-            <span>
+        </div>
+        <div
+          class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+          :class="{ selected: selectedTab === 4 }"
+          @click="selectTab(4)"
+        >
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['FEEDBACK']" />
+          <span :class="{ completedCampaign: campaignIssued['FEEDBACK'] }">Feedback</span>
+          <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
@@ -86,87 +85,82 @@
               </div>
             </md-tooltip>
           </span>
-          </div>
         </div>
-        <savedate-analytics v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"></savedate-analytics>
-        <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']"></rsvp-analytics>
-        <comingsoon-analytics v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"></comingsoon-analytics>
-        <feedback-analytics v-if="selectedTab == 4 && campaignIssued['FEEDBACK']"></feedback-analytics>
-
-        <!-- Save the date -->
-        <template v-if="selectedTab == 1">
-          <collapse-panel class="white-card" v-if="campaignIssued['SAVING_DATE']" :defaultStatus="false">
-            <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Save The Date’ Campaign</div>
-            </template>
-            <template slot="content">
-              <save-date :info="{ ...campaignTabs[1], ...campaignInfo }" @changeInfo="changeInfo"></save-date>
-            </template>
-          </collapse-panel>
-          <save-date
-            v-else
-            :info="{ ...campaignTabs[1], ...campaignInfo }"
-            @changeInfo="changeInfo"
-            ref="savedateCampaign"
-            class="white-card"
-          ></save-date>
-        </template>
-
-        <template v-if="selectedTab == 2">
-          <collapse-panel v-if="campaignIssued['RSVP']" class="white-card" :defaultStatus="false">
-            <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘RSVP’ Campaign</div>
-            </template>
-            <template slot="content">
-              <rsvp :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
-            </template>
-          </collapse-panel>
-          <rsvp v-else :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
-        </template>
-
-        <template v-if="selectedTab == 3">
-          <collapse-panel v-if="campaignIssued['COMING_SOON']" class="white-card" :defaultStatus="false">
-            <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Cooming Soon’ Campaign</div>
-            </template>
-            <template slot="content">
-              <countdown :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
-            </template>
-          </collapse-panel>
-          <countdown
-            v-else
-            :info="{ ...campaignTabs[3], ...campaignInfo }"
-            ref="countdown"
-            class="white-card"
-          ></countdown>
-        </template>
-
-        <template v-if="selectedTab == 4">
-          <collapse-panel v-if="campaignIssued['FEEDBACK']" class="white-card" :defaultStatus="false">
-            <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Feedback’ Campaign</div>
-            </template>
-            <template slot="content">
-              <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
-            </template>
-          </collapse-panel>
-          <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback" class="white-card"></feedback>
-        </template>
-
-        <delivery-settings
-          :defaultSettings="deliverySettings"
-          @change="changeSettings"
-          :campaign="campaignTabs[selectedTab]"
-        ></delivery-settings>
       </div>
-      <campaign-schedule-modal
-        v-if="showScheduleModal"
-        :campaigns="campaignTabs"
-        :currentCampaign="campaignTabs[selectedTab]"
-        :currentCampaignIndex="selectedTab"
-        @changeTime="saveScheduleTime"
-        @cancel="showScheduleModal = false"
-      ></campaign-schedule-modal>
+      <savedate-analytics v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"></savedate-analytics>
+      <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']"></rsvp-analytics>
+      <comingsoon-analytics v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"></comingsoon-analytics>
+      <feedback-analytics v-if="selectedTab == 4 && campaignIssued['FEEDBACK']"></feedback-analytics>
+
+      <!-- Save the date -->
+      <template v-if="selectedTab == 1">
+        <collapse-panel class="white-card" v-if="campaignIssued['SAVING_DATE']" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Save The Date’ Campaign</div>
+          </template>
+          <template slot="content">
+            <save-date :info="{ ...campaignTabs[1], ...campaignInfo }" @changeInfo="changeInfo"></save-date>
+          </template>
+        </collapse-panel>
+        <save-date
+          v-else
+          :info="{ ...campaignTabs[1], ...campaignInfo }"
+          @changeInfo="changeInfo"
+          ref="savedateCampaign"
+          class="white-card"
+        ></save-date>
+      </template>
+
+      <template v-if="selectedTab == 2">
+        <collapse-panel v-if="campaignIssued['RSVP']" class="white-card" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘RSVP’ Campaign</div>
+          </template>
+          <template slot="content">
+            <rsvp :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
+          </template>
+        </collapse-panel>
+        <rsvp v-else :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
+      </template>
+
+      <template v-if="selectedTab == 3">
+        <collapse-panel v-if="campaignIssued['COMING_SOON']" class="white-card" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Cooming Soon’ Campaign</div>
+          </template>
+          <template slot="content">
+            <countdown :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
+          </template>
+        </collapse-panel>
+        <countdown
+          v-else
+          :info="{ ...campaignTabs[3], ...campaignInfo }"
+          ref="countdown"
+          class="white-card"
+        ></countdown>
+      </template>
+
+      <template v-if="selectedTab == 4">
+        <collapse-panel v-if="campaignIssued['FEEDBACK']" class="white-card" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Feedback’ Campaign</div>
+          </template>
+          <template slot="content">
+            <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+          </template>
+        </collapse-panel>
+        <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback" class="white-card"></feedback>
+      </template>
+
+      <delivery-settings
+        :defaultSettings="deliverySettings"
+        @change="changeSettings"
+        :campaign="campaignTabs[selectedTab]"
+      ></delivery-settings>
+      <template v-if="selectedTab == 4">
+        <div class="mt-50 font-size-22 font-bold">Feedback from guests:</div>
+        <feedback-list class="mt-20" v-if="campaignIssued['FEEDBACK']"> </feedback-list>
+      </template>
     </div>
     <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
@@ -289,6 +283,14 @@
         </div>
       </div>
     </div>
+    <campaign-schedule-modal
+      v-if="showScheduleModal"
+      :campaigns="campaignTabs"
+      :currentCampaign="campaignTabs[selectedTab]"
+      :currentCampaignIndex="selectedTab"
+      @changeTime="saveScheduleTime"
+      @cancel="showScheduleModal = false"
+    ></campaign-schedule-modal>
   </div>
 </template>
 
@@ -609,7 +611,7 @@ export default {
 <style lang="scss" scoped>
 .campaign-content {
   padding: 0 3em;
-  margin-bottom: 83px;
+  margin-bottom: 150px;
   &-tab {
     height: 140px;
     line-height: 140px;
@@ -638,12 +640,14 @@ export default {
   .campaign-footer {
     height: 100px;
     background-color: white;
+    margin-top: 100px;
     padding: 0px 50px;
-    min-width: calc(100%);
+    width: calc(100% - 480px);
+    position: fixed;
     bottom: 0;
     z-index: 100;
     &-content {
-      max-width: 1300px;
+      max-width: 1520px;
       margin: auto;
       display: flex;
       justify-content: space-between;
@@ -698,12 +702,5 @@ export default {
       height: 100%;
     }
   }
-}
-.event-campaign-width{
-  width: 100%;
-}
-.inner-container{
-  width: 1300px;
-  margin: 0 auto;
 }
 </style>

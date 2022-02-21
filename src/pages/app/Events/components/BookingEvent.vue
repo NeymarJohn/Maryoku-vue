@@ -224,7 +224,7 @@ export default {
     getAllRequirements: async function () {
       this.allRequirements = this.storedRequirements[this.event.id];
       if (!this.allRequirements) {
-        this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property?eventId=${this.event.id}`);
+        this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
         // set default value by conditionSript
         let event = this.$store.state.event.eventData;
 
