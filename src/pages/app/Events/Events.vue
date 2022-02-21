@@ -24,7 +24,6 @@
             >
               <md-table-cell md-label="Id">{{ item.id }}</md-table-cell>
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
-              <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
               <md-table-cell md-label="Event Type">{{
                 item.eventType ? item.eventType.name : item.eventType
               }}</md-table-cell>
@@ -48,17 +47,9 @@
               <md-table-cell md-label="Budget Per Participant">$ {{ item.budgetPerPerson }}</md-table-cell>
               <md-table-cell md-label="Location">{{ item.location }}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap">
-                <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
-                  <md-icon>visibility</md-icon>
-                </md-button>-->
-                <!-- <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
-                  <md-icon>edit</md-icon>
-                </md-button>-->
-                <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
-                  <md-icon>delete</md-icon>
-                </md-button>
-
-                <!-- <div class="float-right"><md-icon>share</md-icon></div>-->
+              <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
+                <md-icon>delete</md-icon>
+              </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>

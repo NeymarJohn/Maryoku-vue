@@ -9,7 +9,7 @@
         <div class="change-cover-feedback">
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
-            Change Cover
+            Change Campaign Cover
           </md-button>
         </div>
         <div class="view-event-photos" >
@@ -17,7 +17,7 @@
             <img class="icon-play" src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg" />
           </div>
           <div class="wrapper-btn-switch" >
-            <hide-switch class="btn-switch" label="View A Presentation From The Event Photos" />
+            <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
           </div>
         </div>
         <div class="footer-change-cover" >
@@ -33,7 +33,7 @@
                 Microsoft
               </h2>
             </div>
-            <hide-switch label="Hide Logo" />
+            <hide-switch v-model="campaignData.visibleSettings.showLogo" label=" Logo" />
           </div>
           <span class="hello-microsoft-special-employee">
             Hello Microsoft special employee!
@@ -55,7 +55,7 @@
         <div class="d-flex justify-content-between" >
           <div class="d-flex align-center justify-content-between" >
             <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
-            <span class="font-size-30 font-bold line-height-1">WE WOULD LOVE TO HEAR YOUR FEEDBACK</span>
+            <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
           </div>
           <div>
             <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
@@ -67,6 +67,7 @@
             :key="index"
             :feedbackData="question"
             :disabled="false"
+            placeholder="Enter your feedback here"
           ></feedback-question>
         </div>
       </div>
@@ -85,15 +86,14 @@
     </div>
     <div class="feedback-campaign-carousel p-50">
       <div class="d-flex align-center pt-50 pb-50" >
-        <!--        <img class="icon-pictures-of-all-the-fun-we-experienced" :src="`${$iconURL}Campaign/group-7321.svg`" />-->
         <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
         <div class="ml-20 d-flex flex-wrap flex-column" >
           <div class="d-flex" >
-            <span class="font-size-30 font-bold line-height-1">PICTURES OF ALL THE FUN WE EXPERIENCED</span>
+            <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
             <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
           </div>
           <span class="Include-photos-details-of-the-event">
-            (Include photos & details of the event)
+            (See photos and details about the event)
           </span>
         </div>
       </div>
@@ -102,45 +102,24 @@
         :items="2.5"
         :margin-items="10"
         :images="campaignData.images"
+        :show-upload-file="true"
         @addImage="addNewImage"
       />
     </div>
     <div class="green-block-wrapper">
       <div class="p-50 d-flex">
-        <div class="mr-80">
+        <div>
           <div class="icon-and-text">
             <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
             <div class="right-text-style">share with us photos you took from the event</div>
           </div>
-          <div class="d-flex align-center font-bold">
-            Allow guests to upload photos form the event
+          <div class="d-flex align-center font-bold ml-60">
+            Allow guests to upload photos from the event
             <md-switch class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style" v-model="campaignData.visibleSettings.allowUploadPhoto" >
               <span v-if="campaignData.visibleSettings.allowUploadPhoto">Hide</span>
               <span v-if="!campaignData.visibleSettings.allowUploadPhoto">Show</span>
             </md-switch>
           </div>
-        </div>
-        <div>
-          <div class="icon-and-text">
-            <img class="left-icon" src="/static/icons/green-block-icon-2.svg">
-            <div class="right-text-style">Material from the event</div>
-          </div>
-          <div class="d-flex align-center font-bold">
-            Download files related to the event
-            <img class="lightbulb" src="https://static-maryoku.s3.amazonaws.com/storage/icons/common/light.svg" >
-            <md-switch class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style" v-model="campaignData.visibleSettings.downloadFiles" >
-              <span v-if="campaignData.visibleSettings.downloadFiles">Hide</span>
-              <span v-if="!campaignData.visibleSettings.downloadFiles">Show</span>
-            </md-switch>
-          </div>
-          <div class="mb-20">Like presentation</div>
-          <div v-if="campaignData.files && campaignData.files.length > 1">
-            <span class="font-bold">{{ campaignData.files[0].name }}</span>
-          </div>
-          <md-button class="md-simple edit-btn md-red" @click="uploadFile">
-            <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File
-          </md-button>
-          <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />
         </div>
       </div>
     </div>
@@ -150,7 +129,7 @@
           <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />
           <div class="ml-30 mr-40">
             <div class="font-size-30 font-bold line-height-2">SHARE EVENT PARTICIPATION</div>
-            <div>(Include photos & details of the event)</div>
+            <div>(Share photos and details about the event)</div>
           </div>
           <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
         </div>
@@ -192,26 +171,22 @@ export default {
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
+      editingContent: [],
     };
   },
   created() {
-    this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
-    Please take a moment to help us improve future events by taking a brief survey.
-    Your feedback is extremely valuable to our ongoing effort to offer great ${
-      this.event.guestType || "employee"
-    } experience.
-
-    If you have photos, documents or other event materials that you want to share, you can upload them here.
-    All materials is also available for download from this page.
-
-    We look forward to seeing you again soon!
+    this.placeHolder = `
+      Thanks for attending this recent event – we hope you had a wonderful, productive experience!
+      Your feedback is important to help us understand what worked especially well, on top of
+      anything you feel could be improved in the future.
     `;
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
     this.feedbackQuestions = [
       {
-        question: "What did you like or dislike about this event?",
+        label: "Rate your overall experience",
+        question: "How was the event?",
         showQuestion: true,
         rank: 0,
         icon: "",
@@ -266,7 +241,6 @@ export default {
       });
     },
     addNewImage(image) {
-      console.log(image);
       const images = this.campaignData.images;
       images.unshift({ src: image.imageString });
       this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
@@ -438,9 +412,8 @@ export default {
 }
 .right-text-style{
   text-transform: uppercase;
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 800;
-  width: 431px;
   height: 82px;
   font-stretch: normal;
   font-style: normal;
@@ -454,10 +427,6 @@ export default {
 }
 .left-icon{
   margin-right: 20px;
-}
-.lightbulb{
-  width: 27px;
-  margin: 0 65px 0 15px;
 }
 .switch-button-style{
   margin-top: 25px;

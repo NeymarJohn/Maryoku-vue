@@ -85,7 +85,7 @@
                 <div class="d-flex justify-content-between" >
                   <div class="d-flex align-center justify-content-between" >
                     <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
-                    <span class="font-size-30 font-bold line-height-1">WE WOULD LOVE TO HEAR YOUR FEEDBACK</span>
+                    <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
                   </div>
                 </div>
                 <div v-if="campaign && campaign.visibleSettings.showFeedback">
@@ -107,7 +107,7 @@
               <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
               <div class="ml-20 d-flex flex-wrap flex-column" >
                 <div class="d-flex" >
-                  <span class="font-size-30 font-bold line-height-1">PICTURES OF ALL THE FUN WE EXPERIENCED</span>
+                  <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
                 </div>
               </div>
             </div>
@@ -123,49 +123,25 @@
           </div>
         </div>
       </div>
-      <div class="green-block-wrapper">
+      <div v-if="campaign && campaign.visibleSettings.allowUploadPhoto" class="green-block-wrapper">
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
-            <div v-if="campaign && campaign.visibleSettings.allowUploadPhoto" class="icon-and-text">
+            <div  class="icon-and-text">
               <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
               <div class="right-text-style">share with us photos you took from the event</div>
             </div>
-            <div class="white-cube">
-              <div class="border-cube">
-                <div class="title-text-drag-and-drop">Drag and drop your photos from event</div>
-                <div class="or-section">\ Or \</div>
-                <md-button class="md-red border-cube-button">
-                  <img src="/static/icons/white-arrow-up.svg" class="mr-10" />
-                  Upload photos from your computer
-                </md-button>
-              </div>
-            </div>
-          </div>
-          <div class="margin-left-style-second-block position-relative">
-            <div v-if="campaign && campaign.visibleSettings.downloadFiles" class="icon-and-text" >
-              <img class="left-icon" src="/static/icons/green-block-icon-2.svg">
-              <div class="right-text-style">Material from the event</div>
-            </div>
-            <div class="white-cube">
-              <div class="mt-60">
-                <div class="right-white-cube-item">
-                  <img src="/static/icons/black-arrow-down.svg" class="mr-10" />
-                  <span>The name of the presentation at the event.ppx</span>
-                </div>
-                <div class="right-white-cube-item">
-                  <img src="/static/icons/black-arrow-down.svg" class="mr-10" />
-                  <span>The name of the presentation at the event.doc</span>
-                </div>
-                <div class="right-white-cube-item">
-                  <img src="/static/icons/black-arrow-down.svg" class="mr-10" />
-                  <span>The name of the presentation at the event.exe</span>
+            <drop @drop="handleDrop">
+              <div class="white-cube drop" >
+                <div class="border-cube">
+                  <div class="title-text-drag-and-drop">Drag & Drop</div>
+                  <div class="or-section">\\ Or \\</div>
+                  <div class="upload-text-area">
+                    <img src="/static/icons/arrow-up-red.svg" class="mr-10" />
+                    Upload Files
+                  </div>
                 </div>
               </div>
-              <div class="red-text-margin">
-                <img src="/static/icons/red-arrow-down.svg" class="mr-10">
-                <span class="underline-red-text">Download all the Files from event</span>
-              </div>
-            </div>
+            </drop>
           </div>
         </div>
       </div>
@@ -181,6 +157,7 @@
     <div class="text-center logo maryoku_provided_by" @click="gotoWeb">
       <span class="mr-10">Provided by   </span>
       <img  :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
+      <span class="mb-10">&#169</span>
     </div>
     <div class="landing-footer">
       <div class="landing-footer-item">
@@ -210,6 +187,7 @@ import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import S3Service from "@/services/s3.service";
+import { Drag, Drop } from 'vue-drag-drop';
 
 export default {
   components: {
@@ -221,7 +199,9 @@ export default {
     HideSwitch,
     FeedbackLogo,
     ViewPresentation,
-  },
+    Drag,
+    Drop,
+},
 
   data() {
     return {
@@ -236,16 +216,15 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.query.email);
     this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
       Please take a moment to help us improve future events by taking a brief survey.
       Your feedback is extremely valuable to our ongoing effort to offer great experience.
 
-  If you have photos, documents or other event materials that you want to share, you can upload them here.
-  All materials is also available for download from this page.
+      If you have photos, documents or other event materials that you want to share, you can upload them here.
+      All materials is also available for download from this page.
 
-  We look forward to seeing you again soon!
-`;
+      We look forward to seeing you again soon!
+    `;
 
     const eventId = this.$route.params.eventId;
     const calendarEvent = new CalendarEvent({ id: eventId });
@@ -304,7 +283,6 @@ export default {
       if(email === undefined){
         email = "test@gmail.com"
       }
-      console.log(email);
       const feedbackQuestions = [];
       this.campaign.feedbackQuestions.forEach((item) => {
         if (!item.showQuestion) return;
@@ -353,7 +331,16 @@ export default {
     },
     openFeedbackMessageSuccessful() {
       this.showFeedbackMessageSuccessful = true;
-    }
+    },
+    handleDrop(data, event) {
+      event.preventDefault();
+      const files = event.dataTransfer.files;
+      const filenames = [];
+      for (let i = 0; i < files.length; i++) {
+        filenames.push(files.item(i).name);
+      }
+      alert(`You dropped files: ${JSON.stringify(filenames)}`);
+    },
   },
   computed: {
     availableQuestions() {
@@ -426,8 +413,7 @@ export default {
 }
 .landing-footer-item{
   width: 1520px;
-  margin: 0 auto;
-  margin-top: 40px;
+  margin: 40px auto;
 }
 .upward-button {
   width: 20px;
@@ -443,7 +429,6 @@ export default {
   margin: 100px auto;
 }
 .lets_share_text{
-  font-family: Manrope;
   font-size: 30px;
   font-weight: 800;
   font-stretch: normal;
@@ -464,12 +449,12 @@ export default {
 }
 .left-icon{
   margin-right: 20px;
+  width: 36px;
 }
 .right-text-style{
   text-transform: uppercase;
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 800;
-  width: 431px;
   height: 82px;
   font-stretch: normal;
   font-style: normal;
@@ -478,40 +463,29 @@ export default {
   text-align: left;
 }
 .white-cube{
-  width: 575px;
+  width: 1200px;
   height: 303px;
   background-color: #fff;
   position: absolute;
-  top: 150px;
+  top: 80px;
   border-radius: 3px;
   box-shadow: 0 0 41px 0 rgba(0, 0, 0, 0.08);
-}
-.border-cube{
-  width: 551px;
-  height: 279px;
-  margin: 12px;
-  border: 2px dashed #808080;
 }
 .margin-left-style-first-block{
   margin-left: 113px;
 }
-.margin-left-style-second-block{
-  margin-left: 160px;
-}
 .title-text-drag-and-drop{
-  font-family: Manrope;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 800;
   font-stretch: normal;
   font-style: normal;
   line-height: 2.56;
   letter-spacing: normal;
   text-align: center;
-  color: black;
   margin-top: 50px;
+  color: #707070;
 }
 .or-section{
-  font-family: Manrope;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -519,15 +493,16 @@ export default {
   line-height: normal;
   letter-spacing: 0.38px;
   text-align: center;
-  color: #171717;
-  margin-top: 20px;
+  color: #707070;
 }
-.border-cube-button{
-  margin: 30px 0 0 30px;
-  font-family: Manrope;
-  font-size: 18px;
+.upload-text-area{
+  width: 136px;
+  font-size: 16px;
   font-weight: 800;
-  color: #fff;
+  color: #f51355 !important;
+  text-transform: none;
+  text-decoration: underline;
+  margin: 20px auto;
 }
 .right-white-cube-item{
   margin: 23px 0 0 67px;
