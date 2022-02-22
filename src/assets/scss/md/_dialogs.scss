@@ -11,20 +11,7 @@
   align-items: center;
   transition: opacity .15s ease;
 }
-.non-vendor-add-more-time-popup-modal {
-  .swal2-popup{
-    .swal2-header {
-      text-align: center;
-      align-items: center;
-      .swal2-title{
-        width: unset;
-      }
-    }
-    .swal2-content {
-      padding: unset;
-    }
-  }
-}
+
 .modal-wrapper {
   max-height: 100vh;
   overflow: auto;
