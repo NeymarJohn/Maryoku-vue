@@ -74,6 +74,7 @@ const SignOut = () => import("@/pages/app/Planner/SignOut.vue");
 const SignedIn = () => import("@/pages/app/Planner/SignedIn.vue");
 const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
+const Planners = () => import("@/pages/Dashboard/Pages/PlannersList.vue");
 const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
 const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
@@ -741,8 +742,18 @@ let others = {
     ],
 };
 
+let plannerListPage = {
+    path: "/admin/planners",
+    name: "PlannerList",
+    component: Planners,
+    meta: {
+        title: "Planners",
+        gtm: "Planners",
+    },
+};
+
 let vendorListPage = {
-    path: "/admin/vendorlist",
+    path: "/admin/vendors",
     name: "VendorList",
     component: Vendors,
     meta: {
@@ -835,6 +846,7 @@ const routes = [
     UserEventPages,
     landingPages,
     rsvpFeedback,
+    plannerListPage,
     vendorListPage,
     feedbackPages,
     welcomeEventPage,

@@ -70,14 +70,6 @@
         <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`" />
         <div class="service-name color-red font-size-20 font-bold">{{ serviceCategory.imageTitles[index] }}</div>
       </div>
-      <div class="p-20 font-bold d-flex align-center justify-content-center card-info">
-        <div v-if="booked" class="d-flex align-center justify-content-center color-red">
-            Already booked
-        </div>
-        <md-button v-if="selectedServices.length > 0" class="md-red maryoku-btn md-simple" @click="getSpecification">
-          Change specifications
-        </md-button>
-      </div>
     </div>
     <AddBudgetModal
       v-if="showAddNewCategory"

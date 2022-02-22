@@ -18,7 +18,13 @@
           </div>
           <div class="wrapper-btn-switch" >
             <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
+
           </div>
+            <div class="view-presentation-description" >
+                <img class="mr-10" src="static/icons/red-arrow-down.svg" />
+                <span class="text-description" >Download all the attachments (3) </span>
+                <img class="view-presentation-description-edit-icon" :src="`${$iconURL}common/edit-dark.svg`" />
+            </div>
         </div>
         <div class="footer-change-cover" >
           <div class="wrapper-logo-microsoft" >
@@ -71,12 +77,19 @@
           ></feedback-question>
         </div>
       </div>
-      <div class="mt-60 d-flex align-center" v-if="isEditingNewQuestion">
-        <input v-model="newQuestion" style="width: 40%" />
-        <md-button class="md-simple md-red maryoku-btn" @click="addNewQuestion">Add</md-button>
-        <md-button class="md-simple md-red maryoku-btn md-outlined" @click="isEditingNewQuestion = false">
-          Cancel
-        </md-button>
+      <div class="mt-60 d-flex align-center add-new-question-block" v-if="isEditingNewQuestion">
+        <div>
+            <div class="add-new-question-title">Rank The...Vendor</div>
+            <input v-model="newQuestion" class="add-new-question-input-1" placeholder="Rank The Catering Vendor |" />
+        </div>
+        <div>
+            <div class="add-new-question-title">Write Your Question Here</div>
+            <input v-model="newQuestion" class="add-new-question-input-2" placeholder="How was the activity?" />
+        </div>
+        <div class="add-new-question-button-block">
+            <md-button class="md-button md-red maryoku-btn md-theme-default maryoku-btn add-button-style" @click="addNewQuestion">Add</md-button>
+            <img :src="`${$iconURL}Campaign/Group+3602.svg`" @click="isEditingNewQuestion = false" />
+        </div>
       </div>
       <div class="mt-60 d-flex justify-content-between" v-else>
         <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
@@ -485,6 +498,55 @@ export default {
     margin-left: 15px;
   }
 }
+.add-new-question-block{
+    height: 172px;
+    border-top: dashed 1px #818080;
+    border-bottom: dashed 2px #818080;
 
-
+}
+.add-button-style{
+    width: 87.6px;
+    height: 50px;
+    margin-right: 14px;
+}
+.add-new-question-input-1{
+    width: 438px;
+    height: 51px;
+    margin-right: 46px;
+}
+.add-new-question-input-2{
+    width: 476px;
+    height: 51px;
+    margin-right: 33px;
+}
+.add-new-question-title{
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 16px;
+}
+.add-new-question-button-block{
+    display: flex;
+    margin-top: 38px;
+}
+.view-presentation-description {
+    display: flex;
+    position: absolute;
+    bottom: -50px;
+    .text-description {
+        margin-left: 10px;
+        font-size: 16px;
+        font-weight: 800;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.34px;
+        text-align: left;
+        color: #f51355;
+    }
+}
+.view-presentation-description-edit-icon{
+    width: 18px;
+    margin-left: 10px;
+}
 </style>

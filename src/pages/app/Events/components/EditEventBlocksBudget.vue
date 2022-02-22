@@ -19,7 +19,7 @@
             <tr>
               <td width="40%" class="event-block-element" :class="block.title.toLowerCase().replace(/ /g, '-')">
                 <img
-                  :src="`${$iconURL}Budget Elements/${block.icon}`"
+                  :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.title}.svg`"
                 />
                 {{ block.title }}
               </td>
@@ -295,6 +295,7 @@ export default {
             ? (parseInt(item.allocatedBudget) / parseInt(item.numberOfParticipants)) * 0.12
             : (parseInt(item.allocatedBudget) / parseInt(vm.event.numberOfParticipants)) * 0.12;
         }
+        console.log("vm.totalBudget ", vm.totalBudget);
 
         // if (item.allocatedBudget) {
         //     vm.totalBudget += parseInt(item.allocatedBudget);
