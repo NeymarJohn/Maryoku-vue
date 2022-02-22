@@ -76,53 +76,49 @@
                         </template>
                     </div>
 
-                    <div class="md-layout md-gutter mt-40 grid">
-                        <template v-if="service.musicPlayer">
-                            <template v-for="(clip, clipindx) in service.clips">
-                                <ServiceCategoryCard
-                                class="mb-0 mr-0 ml-0"
-                                :clip="clip"
-                                :index="clipindx"
-                                :serviceCategory="service"
-                                :key="service.name+clipindx"
-                                :isLong="(clipindx) % 2 === 1"
-                                :isRow="getIsRow(clipindx)"
-                                :rowNum="getRowNum(clipindx, service)"
-                                :hasBudget="hasBudget(service.serviceCategory)"
-                                :musicPlayer="service.musicPlayer"
-                                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                :isSentRequest="
-                                    $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                    $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                "
-                                @showSpecific="getSpecification"
-                                @update="setServiceStyles"
-                                ></ServiceCategoryCard>
-                            </template>
+                    <div class="md-layout md-gutter mt-40 d-flex flex-row align-center">
+                    <template v-if="service.musicPlayer">
+                        <template v-for="(clip, clipindx) in service.clips">
+                            <ServiceCategoryCard
+                            class="mb-0 mr-0 ml-0"
+                            :clip="clip"
+                            :index="clipindx"
+                            :serviceCategory="service"
+                            :key="service.name+clipindx"
+                            :isLong="(serviceIndex + clipindx) % 2 === 1"
+                            :hasBudget="hasBudget(service.serviceCategory)"
+                            :musicPlayer="service.musicPlayer"
+                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                            :isSentRequest="
+                                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                            "
+                            @showSpecific="getSpecification"
+                            @update="setServiceStyles"
+                            ></ServiceCategoryCard>
                         </template>
-                        <template v-else>
-                            <template v-for="(image, indx) in service.images">
-                                <ServiceCategoryCard
-                                class="mb-0 mr-0 ml-0"
-                                :image="image"
-                                :index="indx"
-                                :serviceCategory="service"
-                                :key="service.name+indx"
-                                :isLong="(indx) % 2 === 1"
-                                :isRow="getIsRow(indx)"
-                                :rowNum="getRowNum(indx, service)"
-                                :hasBudget="hasBudget(service.serviceCategory)"
-                                :musicPlayer="service.musicPlayer"
-                                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                :isSentRequest="
-                                    $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                    $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                "
-                                @showSpecific="getSpecification"
-                                @update="setServiceStyles"
-                                ></ServiceCategoryCard>
-                            </template>
+                    </template>
+                    <template v-else>
+                        <template v-for="(image, indx) in service.images">
+                            <ServiceCategoryCard
+                            class="mb-0 mr-0 ml-0"
+                            :image="image"
+                            :index="indx"
+                            :serviceCategory="service"
+                            :key="service.name+indx"
+                            :isLong="(serviceIndex + indx) % 2 === 1"
+                            :hasBudget="hasBudget(service.serviceCategory)"
+                            :musicPlayer="service.musicPlayer"
+                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                            :isSentRequest="
+                                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                            "
+                            @showSpecific="getSpecification"
+                            @update="setServiceStyles"
+                            ></ServiceCategoryCard>
                         </template>
+                    </template>
                     </div>
                 </div>
             </template>
@@ -436,35 +432,6 @@ export default {
     saveBudget() {
       this.showAddNewCategory = false;
     },
-    getIsRow(indx){
-        if(indx == 0){
-            return true;
-        }
-
-        if(indx % 3){
-            return true;
-        }
-        else{
-            if(indx % 4) {return true;}
-            else{
-                if(indx % 5) {return true;}
-                else return false
-            };
-        }
-    },
-    getRowNum(indx, service){
-        for(let x=0; x < service.imageTitles.length; x++){
-            if(indx == 3*x || indx == (3*x)+2){
-                return Math.floor((3*x)/2)+1;
-            }
-            else{
-                if(indx == (3*x)+1){
-                    return Math.floor(((3*x)+1)/2)+1;
-                }
-            }
-        }
-        return null;
-    },
   },
   watch: {
     requirements(newVal) {
@@ -519,13 +486,6 @@ export default {
 /* .slide-fade-leave-active below version 2.1.8 */ {
     transform: translateX(10px);
     opacity: 0;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-auto-rows: auto;
-    row-gap: 30px;
-    column-gap: 0px;
   }
 }
 </style>

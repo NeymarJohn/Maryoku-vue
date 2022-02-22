@@ -87,7 +87,6 @@
                                             :has-budget="true"
                                             :musicPlayer="service.musicPlayer"
                                             :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                            :booked="service.serviceCategory === proposal.vendor.vendorCategory"
                                             @showSpecific="getSpecification"
                                             @update="setServiceStyles"
                                         ></ServiceCategoryCard>
@@ -105,7 +104,6 @@
                                             :has-budget="true"
                                             :musicPlayer="service.musicPlayer"
                                             :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                            :booked="service.serviceCategory === proposal.vendor.vendorCategory"
                                             @showSpecific="getSpecification"
                                             @update="setServiceStyles"
                                         ></ServiceCategoryCard>
