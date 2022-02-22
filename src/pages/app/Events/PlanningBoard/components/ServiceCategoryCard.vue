@@ -1,7 +1,7 @@
 <template>
-<div class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+<div class="grid-item md-layout-item " :style="isRow ? {gridRowStart: rowNum, gridRowEnd: 'span '+(!isLong ? '1' : '2') } : {gridRowEnd: 'span '+(!isLong ? '1' : '2')} ">
 
-  <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
+  <div class="grid-content plannig-service-category-card white-card" :class="{ 'longer-card': isLong}">
     <template v-if="!booked && (!isSentRequest || !selectedServices.length)">
 
         <div class="header-carousel">
@@ -70,14 +70,6 @@
         <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`" />
         <div class="service-name color-red font-size-20 font-bold">{{ serviceCategory.imageTitles[index] }}</div>
       </div>
-      <div class="p-20 font-bold d-flex align-center justify-content-center card-info">
-        <div v-if="booked" class="d-flex align-center justify-content-center color-red">
-            Already booked
-        </div>
-        <md-button v-if="selectedServices.length > 0" class="md-red maryoku-btn md-simple" @click="getSpecification">
-          Change specifications
-        </md-button>
-      </div>
     </div>
     <AddBudgetModal
       v-if="showAddNewCategory"
@@ -97,8 +89,6 @@
 <script>
 import "vue-popperjs/dist/vue-popper.css";
 import { camelize } from "@/utils/string.util";
-
-
 const components = {
     carousel: () => import("vue-owl-carousel"),
     Popper: () => import("vue-popperjs"),
@@ -106,7 +96,6 @@ const components = {
     AddBudgetModal: () => import("./modals/AddBudget.vue"),
     AddBudgetConfirmModal: () => import("./modals/AddBudgetConfirm.vue")
 }
-
 export default {
   components,
   data() {
@@ -153,6 +142,14 @@ export default {
     },
     isLong: {
       type: Boolean,
+      default: false,
+    },
+    isRow: {
+      type: Boolean,
+      default: false,
+    },
+    rowNum: {
+      type: Number,
       default: false,
     },
     booked: {
@@ -302,7 +299,6 @@ export default {
       background-color: white !important;
       color: #f51355 !important;
       padding: 0;
-
     }
     /deep/ .md-ripple {
       padding: 0;
@@ -321,7 +317,6 @@ export default {
     /deep/ span[id*="carousel_prev_"] {
       display: block !important;
     }
-
     /deep/ .carousel-item,
     /deep/ .owl-item,
     /deep/ .owl-carousel,

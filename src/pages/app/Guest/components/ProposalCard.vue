@@ -160,13 +160,17 @@ export default {
             .save()
             .then((res) => {
                 Swal.fire({
-                    title: "We received your request!",
-                    text: `Vendor will contact you!`,
-                    showCancelButton: false,
-                    confirmButtonClass: "md-button md-success btn-fill",
-                    cancelButtonClass: "md-button md-danger btn-fill",
-                    confirmButtonText: "OK",
-                    buttonsStyling: false,
+                  title: "Thanks, we sent your request to the vendor!",
+                  html: 'You’ll receive a notification as soon as the vendor makes a decision'+
+                    ' <br/>' +
+                    'Don’t worry – if the vendor isn’t able to give you more time,'+
+                    ' we’ll provide you with alternative options',
+                  showCancelButton: false,
+                  confirmButtonClass: "md-button md-success btn-fill",
+                  cancelButtonClass: "md-button md-danger btn-fill",
+                  confirmButtonText: "OK",
+                  customClass: {container: 'non-vendor-add-more-time-popup-modal'},
+                  buttonsStyling: false,
                 }).then((result) => {});
             });
 
@@ -194,8 +198,8 @@ export default {
     period() {
       try {
         const requirement = this.$store.state.EventGuestVuex.requirements[this.proposal.vendor.vendorCategories[0]];
-        const period = requirement.period;
-        if (requirement.isEntireEvent) {
+        const period = requirement ? requirement.period : null;
+        if (requirement && requirement.isEntireEvent) {
           return "For Whole Event";
         }
         if (!period) return "";

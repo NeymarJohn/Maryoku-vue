@@ -79,7 +79,7 @@
               />
             </div>
           </div>
-          <div v-if="!showFeedbackMessageSuccessful" class="content-article-main-content" >
+          <div v-if="!showFeedbackMessageSuccessful && campaign.visibleSettings.showFeedback" class="content-article-main-content" >
             <div class="feedback-question-list">
               <div>
                 <div class="d-flex justify-content-between" >
