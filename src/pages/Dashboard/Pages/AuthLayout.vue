@@ -1,20 +1,5 @@
 <template>
   <div :class="{ 'nav-open': $sidebar.showSidebar }">
-    <!-- <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute radius-bk">
-      <div class="md-toolbar-row md-offset">
-        <div class="md-toolbar-section-start">
-          <h3 class="md-title">{{$route.name}}</h3>
-          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a> </h3>
-        </div>
-        <div class="md-toolbar-section-end">
-          <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </md-button>
-        </div>
-      </div>
-    </md-toolbar>-->
     <div class="wrapper wrapper-full-page" @click="toggleSidebarPage">
       <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
         <div class="container md-offset">

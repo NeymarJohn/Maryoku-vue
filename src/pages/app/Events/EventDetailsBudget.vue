@@ -31,7 +31,7 @@
               <div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #b7b7b7">
                 <div class="label-title mb-0">Budget</div>
                 <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
-                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
+                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">
                   Edit
                 </md-button>
               </div>
@@ -121,7 +121,7 @@
                 <div class="budget-list__item">
                   <div class="label-title">Budget</div>
                   <div class="budget-value">${{ budgetStatistics.total | withComma(Number) }}</div>
-                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')"
+                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"
                     >Edit</md-button
                   >
                 </div>
@@ -180,55 +180,58 @@
       </vue-html2pdf>
       <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
       <budget-edit-modal
-        v-if="editBudgetModalStep === 1"
+        v-if="showBudgetModal"
         :event="event"
-        @cancel="closeEditBudgetModal"
-        @save="onBudgetChangeModal"
+        @cancel="showBudgetModal = false"
+        @save="updateTotalBudget"
       ></budget-edit-modal>
-      <modal v-if="editBudgetModalStep===2" class="add-category-model">
+      <modal v-if="budgetConfirmationModal" class="add-category-model">
         <template slot="header">
-          <div class="add-budget-modal-header">
-            <button @click="setModalStep('previous')">
-              <md-icon :class="'material-icons-two-tone'">west</md-icon>
-            </button>
-            <button
-              @click="closeEditBudgetModal"
-            >
-              <md-icon>clear</md-icon>
-            </button>
+          <div v-if="extra<0" class="add-category-model__header">
+            <h2 class="black">Are you sure?</h2>
+            <div class="header-description">
+              <img :src="`${iconsURL}Asset%150.svg`" width="20" /> Decreasing your budget may cause program changes
+            </div>
           </div>
-        </template>
-        <template slot="body">
-          <div class="add-category-model__header">
-            <h2 v-if="extra<0" class="black">How would you like to compensate <span style="color: red; display: inline-block">-${{ -extra }}</span>  to your budget? </h2>
-            <h2 v-else class="black">What would you like to do with extra  <span style="color: green; display: inline-block">${{ extra }}</span>  to your budget? </h2>
-            <input v-model="extraBudgetMethod" type="radio" name="extraMoney" id="betweenCategories"
-                   value="betweenCategories">
-            <label class="header-description" for="betweenCategories">
-              Re-calculate budget break down
-            </label>
-            <input v-model="extraBudgetMethod" type="radio" name="extraMoney" id="onUnexpected"
+          <div v-else class="add-category-model__header">
+            <h2 class="black">What would you like to do with extra ${{ extra }} to your budget? </h2>
+            <input v-model="manageExtraBudgetMethod" type="radio" name="extraMoney" id="onUnexpected"
                    value="onUnexpected">
             <label class="header-description" for="onUnexpected">
-              {{extra>0?'Store budget on unexpected': 'Subtract from unexpected'}}
+              Re-calculate budget break down
+            </label>
+            <input v-model="manageExtraBudgetMethod" type="radio" name="extraMoney" id="betweenCategories"
+                   value="betweenCategories">
+            <label class="header-description" for="betweenCategories">
+              Store budget on unexpected
             </label>
           </div>
+          <md-button
+            class="md-simple md-just-icon md-round modal-default-button"
+            @click="budgetConfirmationModal = false"
+          >
+            <md-icon>clear</md-icon>
+          </md-button>
         </template>
+        <template slot="body"></template>
         <template slot="footer">
-          <md-button class="md-rose add-category-btn" @click="handleBudgetMethod()"
-            >Select</md-button
+          <md-button class="md-rose md-outline md-simple cancel-btn" @click="()=>{budgetConfirmationModal = false; editBudgetElementsModal = true }"
+            >Yes I’m sure</md-button
+          >
+          <md-button class="md-rose add-category-btn" :class="{ disabled: !newBudget }" @click="updateBudget"
+            >No, take me back</md-button
           >
         </template>
       </modal>
 
-      <modal v-if="editBudgetModalStep===3" class="add-category-model edit-elements-budget-modal">
+      <modal v-if="editBudgetElementsModal" class="add-category-model edit-elements-budget-modal">
         <template slot="header">
           <div class="add-category-model__header">
             <h2 class="black">Edit budget per category</h2>
           </div>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button"
-            @click="closeEditBudgetModal"
+            @click="editBudgetElementsModal = false"
           >
             <md-icon>clear</md-icon>
           </md-button>
@@ -246,26 +249,22 @@
                 <edit-event-blocks-budget
                   :event.sync="event"
                   :event-components="selectedComponents"
-                  :handle-budget-update="test"
                   type="total"
-                  ref="editEventBlocksBudget"
                   @change="test"
                 ></edit-event-blocks-budget>
               </template>
               <template slot="tab-pane-2">
                 <edit-event-blocks-budget
                   :event.sync="event"
-                  :handle-budget-update="test"
                   :event-components="selectedComponents"
                   type="perGuest"
-                  ref="editEventBlocksBudget"
                 ></edit-event-blocks-budget>
               </template>
             </tabs>
           </div>
         </template>
         <template slot="footer">
-          <md-button class="md-default md-simple cancel-btn" @click="closeEditBudgetModal">Cancel</md-button>
+          <md-button class="md-default md-simple cancel-btn" @click="editBudgetElementsModal = false">Cancel</md-button>
           <md-button class="md-rose add-category-btn" @click="updateBudget">Save</md-button>
         </template>
       </modal>
@@ -349,7 +348,7 @@ export default {
       totalBudget: 0,
       menuIconsURL: `${this.$iconURL}menu%20_%20checklist/SVG/`,
       iconsURL: `${this.$iconURL}Event%20Page/`,
-      editBudgetModalStep: 0,
+      showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
       budgetState: null,
@@ -358,7 +357,7 @@ export default {
       showCommentEditorPanel: false,
       showMessage: false,
       extra:'0',
-      extraBudgetMethod:'betweenCategories',
+      manageExtraBudgetMethod:'betweenCategories',
     };
   },
   created() {
@@ -414,7 +413,7 @@ export default {
       });
     },
     getCalendar() {
-      return new Calendar();
+      return new Calendar({ id: this.currentUser.profile.defaultCalendarId });
     },
     getEvent: async function (_calendar) {
       let event = await _calendar.calendarEvents().find(this.$route.params.id);
@@ -544,18 +543,15 @@ export default {
     },
     test(ll){
       console.log('##-545, EventDetailsBudget.vue',ll)
-
     },
     updateBudget(eventBudget) {
-      const editEventBlocksBudget = this.$refs.editEventBlocksBudget
-      editEventBlocksBudget.test()
-      return
       let _calendar = new Calendar({
         id: this.currentUser.profile.defaultCalendarId,
       });
       let editedEvent = new CalendarEvent({ id: this.event.id });
       const newBudget = eventBudget.totalBudget; //Number(eventBudget.totalBudget.replace(/,/g, ""))
       if (newBudget < this.calendarEvent.totalBudget) {
+        this.showBudgetModal = false;
         const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
         const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
         const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
@@ -575,6 +571,7 @@ export default {
             editedEvent
               .save()
               .then((response) => {
+                this.showBudgetModal = false;
                 this.loadEventData("update");
               })
               .catch((error) => {
@@ -588,37 +585,31 @@ export default {
         editedEvent
           .save()
           .then((response) => {
+            this.showBudgetModal = false;
             this.loadEventData("update");
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
+        this.showBudgetModal = false;
       }
       this.editBudgetElementsModal = false
     },
-    onBudgetChangeModal(newBudget){
+    updateTotalBudget(newBudget) {
+      const event = new CalendarEvent({
+        id: this.event.id,
+        totalBudget: newBudget.totalBudget,
+        unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
+      });
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        this.event = res;
+        // this.checkMessageStatus();
+        this.showBudgetModal = false;
+      });
       this.extra = newBudget.totalBudget - this.event.totalBudget;
-      if (this.extra === 0) {
-        return this.closeEditBudgetModal()
-      }
-      this.newBudget = newBudget.totalBudget
-      this.setModalStep('next');
-    },
-    handleBudgetMethod(){
-      if(this.extraBudgetMethod==='onUnexpected'){
-        const event = new CalendarEvent({
-          id: this.event.id,
-          totalBudget: this.newBudget,
-          unexpectedBudget: this.event.unexpectedBudget + (this.newBudget - this.event.totalBudget),
-        });
-        this.$store.dispatch("event/saveEventAction", event).then((res) => {
-          this.event = res;
-        });
-        this.closeEditBudgetModal();
-      }else {
-        this.setModalStep('next')
-      }
+      if(this.extra === 0) return
+      this.budgetConfirmationModal = true;
     },
     onChangeComponent(event) {
       this.loadEventData("update");
@@ -632,18 +623,6 @@ export default {
     },
     exportToPdf() {
       this.$refs.html2Pdf.generatePdf();
-    },
-    closeEditBudgetModal(){
-      this.editBudgetModalStep = 0;
-    },
-    setModalStep(stepAction){
-      if(stepAction === 'next'){
-        this.editBudgetModalStep++
-      } else if (stepAction === 'previous'){
-        this.editBudgetModalStep--
-      }else{
-        console.log('##-751, EventDetailsBudget.vue', 'error wrong step action')
-      }
     },
   },
   computed: {
@@ -797,13 +776,10 @@ export default {
     },
   },
   watch: {
-
-    //not sure why we need it but it makes errors
-    //
-    // newBudget: function (newValue) {
-    //   const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //   this.newBudget = result;
-    // },
+    newBudget: function (newValue) {
+      const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.newBudget = result;
+    },
   },
 };
 </script>

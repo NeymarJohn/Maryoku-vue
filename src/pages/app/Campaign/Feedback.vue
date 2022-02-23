@@ -20,16 +20,11 @@
             <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
 
           </div>
-            <div v-if="isUploadedFiles" class="view-presentation-description" >
+            <div class="view-presentation-description" >
                 <img class="mr-10" src="static/icons/red-arrow-down.svg" />
                 <span class="text-description" >Download all the attachments (3) </span>
+                <img class="view-presentation-description-edit-icon" :src="`${$iconURL}common/edit-dark.svg`" />
             </div>
-            <div v-else class="view-presentation-description" >
-                <img  src="static/icons/red-arrow-down.svg" />
-                <div class="text-description-upload-files" @click="openModalWindow" >Upload Files </div>
-                <div class="add-attachments-text">Add attachments to the event</div>
-            </div>
-            <FeedbackUploadFilesModal v-if="showModalWindowOpen" @close="closeModalWindow"/>
         </div>
         <div class="footer-change-cover" >
           <div class="wrapper-logo-microsoft" >
@@ -52,16 +47,9 @@
         </div>
       </div>
       <div class="mt-70 mb-40">
-        <img class="icon-thanks-for-participating-feedback" :src="`${$iconURL}Campaign/group-9380.svg`" />
+        <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`" />
         <div class="mt-10">
-          <div class="wrapper-thanks-for-participating">
-              <div class="font-size-60 font-bold line-height-1 mb-20">THANKS FOR PARTICIPATING!</div>
-              <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
-          </div>
-            <div class="disco-party">
-                80’s Disco Party
-                <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
-            </div>
+          <div class="font-size-40 font-bold line-height-1 mb-20">THANKS FOR PARTICIPATING!</div>
           <div class="font-size-22 line-height-1">{{ campaignData.name }}</div>
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
@@ -92,7 +80,7 @@
       <div class="mt-60 d-flex align-center add-new-question-block" v-if="isEditingNewQuestion">
         <div>
             <div class="add-new-question-title">Rank The...Vendor</div>
-            <input v-model="newQuestionLabel" class="add-new-question-input-1" placeholder="Rank The Catering Vendor |" />
+            <input v-model="newQuestion" class="add-new-question-input-1" placeholder="Rank The Catering Vendor |" />
         </div>
         <div>
             <div class="add-new-question-title">Write Your Question Here</div>
@@ -105,7 +93,7 @@
       </div>
       <div class="mt-60 d-flex justify-content-between" v-else>
         <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
-          <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Add Another Question
+          <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Add Another Qestion
         </md-button>
       </div>
     </div>
@@ -173,7 +161,6 @@ import FeedbackQuestion from "./components/FeedbackQuestion";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
-import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 
 export default {
   components: {
@@ -183,7 +170,6 @@ export default {
     FeedbackQuestion,
     TitleEditor,
     HideSwitch,
-    FeedbackUploadFilesModal,
   },
   props: {
     info: {
@@ -198,10 +184,7 @@ export default {
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
-      newQuestionLabel : "",
       editingContent: [],
-      isUploadedFiles: false,
-      showModalWindowOpen : false,
     };
   },
   created() {
@@ -290,7 +273,7 @@ export default {
     addNewQuestion() {
       const newQuestion = {
         icon: "",
-        label: this.newQuestionLabel,
+        label: this.newQuestion,
         question: this.newQuestion,
         rank: 0,
         showQuestion: true,
@@ -306,12 +289,6 @@ export default {
       // });
       this.isEditingNewQuestion = false;
     },
-    openModalWindow(){
-        this.showModalWindowOpen = true;
-    },
-      closeModalWindow(){
-          this.showModalWindowOpen = false;
-      },
   },
 };
 </script>
@@ -428,7 +405,10 @@ export default {
     }
   }
 
-
+  .icon-thanks-for-participating {
+    width: 92px;
+    height: 95px;
+  }
 
   .icon-feedback {
     width: 65px;
@@ -485,9 +465,6 @@ export default {
     }
   }
 }
-.icon-thanks-for-participating-feedback {
-    width: 92px !important;
-}
 .feedback-campaign-carousel {
 
   .icon-pictures {
@@ -514,6 +491,12 @@ export default {
     }
   }
 
+  .icon-edit-dark {
+    width: 24px;
+    height: 24px;
+    align-self: flex-end;
+    margin-left: 15px;
+  }
 }
 .add-new-question-block{
     height: 172px;
@@ -565,61 +548,5 @@ export default {
 .view-presentation-description-edit-icon{
     width: 18px;
     margin-left: 10px;
-}
-.icon-edit-dark {
-    width: 24px;
-    height: 24px;
-    align-self: flex-end;
-    margin-left: 20px;
-    &:hover{
-        cursor: pointer;
-    }
-
-}
-.wrapper-thanks-for-participating{
-    display: flex;
-    .icon-edit-dark {
-        width: 24px;
-        height: 24px;
-        align-self: center;
-        margin-left: 20px;
-    }
-}
-.disco-party{
-    font-size: 22px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 3.18;
-    letter-spacing: normal;
-    text-align: left;
-    color: #050505;
-}
-.text-description-upload-files{
-    margin-left: 10px;
-    font-size: 16px;
-    font-weight: 800;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.34px;
-    text-align: left;
-    text-decoration: underline;
-    color: #f51355;
-    text-decoration: underline;
-    cursor: pointer;
-}
-.add-attachments-text{
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.43;
-    letter-spacing: normal;
-    text-align: left;
-    color: #050505;
-    position: relative;
-    bottom: -34px;
-    right: 95px;
 }
 </style>
