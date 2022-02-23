@@ -1,6 +1,6 @@
 <template>
     <div class="md-layout justify-content-center align-center height-100vh">
-        <Loader :active="loading" isFullScreen page="vendor"/>
+        <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
         <div class="md-layout-item md-size-30">
             <div class="d-flex flex-column">
                 <img class="mx-auto" :src="`${$iconURL}Vendor%20Signup/Group%2019453.svg`"/>
@@ -69,13 +69,15 @@
 <script>
     import { SignupCard, MaryokuInput } from '@/components'
     import InputText from '@/components/Inputs/InputText.vue'
-    import Loader from '@/components/loader/Loader.vue'
+    import VueElementLoading from 'vue-element-loading'
+    import Tenant from '@/models/Tenant'
 
     export default {
         components: {
             SignupCard,
             InputText,
-            Loader,
+            VueElementLoading,
+            MaryokuInput
         },
         data () {
             return {

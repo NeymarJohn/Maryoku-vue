@@ -1,7 +1,7 @@
 <template>
     <div class="md-layout justify-content-center align-center height-100vh">
-        <Loader :active="loading" isFullScreen page="vendor"/>
-        <div class="md-layout-item md-size-30">
+        <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
+        <div class="md-layout-item md-size-35">
             <div class="d-flex flex-column">
                 <img class="mx-auto" :src="`${$iconURL}Vendor%20Signup/Group%2019453.svg`"/>
                 <div v-if="!submitted" class="text-center font-size-30 font-bold color-black my-20">Forgot your Password?</div>
@@ -52,14 +52,15 @@
 <script>
     import { SignupCard, MaryokuInput } from '@/components'
     import InputText from '@/components/Inputs/InputText.vue'
-    import Loader from '@/components/loader/Loader.vue'
+    import VueElementLoading from 'vue-element-loading'
+    import Tenant from '@/models/Tenant'
 
     export default {
         components: {
             SignupCard,
             InputText,
-            MaryokuInput,
-            Loader,
+            VueElementLoading,
+            MaryokuInput
         },
         data () {
             return {
