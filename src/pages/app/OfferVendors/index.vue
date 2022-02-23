@@ -16,32 +16,7 @@
                         v-for="component in categories"
                         @click="selectCategory(component)"
                     ></ResizableToggleButton>
-                    <drop-down class="d-inline-block">
-                        <button class="add-category-button mb-10" @click="addRequirements" data-toggle="dropdown">
-                            <md-icon>add</md-icon>
-                        </button>
-                        <ul class="dropdown-width dropdown-menu dropdown-menu-left " >
-                            <li class="category-list" >
-                                <div class="category-heading font-size-16 font-bold" >
-                                    &nbsp;&nbsp;
-                                    {{'Additional Categories'}}
-                                </div>
-                            </li>
-                            <li class="category-list" v-for="(otherCategory,i) in otherCategories" :key="i">
-                                <a class="category-item font-size-16" @click="selectCategory(otherCategory)">
-                                    <div class="category-name">
-                                        <img :src="`${$iconURL}Budget+Elements/${otherCategory.icon}`" />
-                                        &nbsp;&nbsp;
-                                        {{otherCategory.title}}
-                                    </div>
-                                    &nbsp;&nbsp;
-                                    <div class="category-plus">
-                                        <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </drop-down>
+                    <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
                 </div>
 
                 <ProgressRadialBar
@@ -99,7 +74,7 @@
                                     </div>
                                 </template>
                             </div>
-                            <div class="md-layout md-gutter mt-60 pl-100 pr-80 grid" >
+                            <div class="md-layout md-gutter mt-60 pl-100 pr-80 d-flex flex-row align-center" >
                                 <template v-if="service.musicPlayer">
                                     <template v-for="(clip, clipindx) in service.clips">
                                     <ServiceCategoryCard
@@ -108,13 +83,10 @@
                                             :index="clipindx"
                                             :serviceCategory="service"
                                             :key="service.name+clipindx"
-                                            :isLong="(clipindx) % 2 === 1"
-                                            :isRow="getIsRow(clipindx)"
-                                            :rowNum="getRowNum(clipindx, service)"
+                                            :isLong="(serviceIndex + clipindx) % 2 === 1"
                                             :has-budget="true"
                                             :musicPlayer="service.musicPlayer"
                                             :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                            :booked="service.serviceCategory === proposal.vendor.vendorCategory"
                                             @showSpecific="getSpecification"
                                             @update="setServiceStyles"
                                         ></ServiceCategoryCard>
@@ -128,13 +100,10 @@
                                             :index="indx"
                                             :serviceCategory="service"
                                             :key="service.name+indx"
-                                            :isLong="(indx) % 2 === 1"
-                                            :isRow="getIsRow(indx)"
-                                            :rowNum="getRowNum(indx, service)"
+                                            :isLong="(serviceIndex + indx) % 2 === 1"
                                             :has-budget="true"
                                             :musicPlayer="service.musicPlayer"
                                             :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                            :booked="service.serviceCategory === proposal.vendor.vendorCategory"
                                             @showSpecific="getSpecification"
                                             @update="setServiceStyles"
                                         ></ServiceCategoryCard>
@@ -496,35 +465,7 @@ export default {
         saveBudget() {
             this.showAddNewCategory = false;
         },
-        getIsRow(indx){
-            if(indx == 0){
-                return true;
-            }
 
-            if(indx % 3){
-                return true;
-            }
-            else{
-                if(indx % 4) {return true;}
-                else{
-                    if(indx % 5) {return true;}
-                    else return false
-                };
-            }
-        },
-        getRowNum(indx, service){
-            for(let x=0; x < service.imageTitles.length; x++){
-                if(indx == 3*x || indx == (3*x)+2){
-                    return Math.floor((3*x)/2)+1;
-                }
-                else{
-                    if(indx == (3*x)+1){
-                        return Math.floor(((3*x)+1)/2)+1;
-                    }
-                }
-            }
-            return null;
-        },
     },
     computed:{
         loggedInUser(){
@@ -541,7 +482,7 @@ export default {
         },
 
         categories() {
-            const categories = this.event.components;
+            const categories = this.serviceCategories;
             if(categories){
                 categories.sort((a, b) => a.order - b.order);
             }
@@ -550,18 +491,6 @@ export default {
                 this.selectCategory(categories[0]);
             }
             return categories;
-        },
-        otherCategories() {
-            let otherCategories;
-            if(this.event.components){
-                otherCategories = this.$store.state.common.serviceCategories.filter(ar => !this.event.components.find(rm => (rm.componentId === ar.key) ))
-            }
-            else{
-                otherCategories = this.$store.state.common.serviceCategories.map(service => {
-                    return service;
-                });
-            }
-        return otherCategories;
         },
         specialRequirements() {
             return this.$store.state.planningBoard.specialRequirements;
@@ -633,33 +562,6 @@ export default {
             font-size: 40px !important;
         }
     }
-    .dropdown-width{
-        width: max-content;
-    }
-    .category-list{
-        border-bottom: 2px ridge;
-        img {
-            width: 30px;
-        }
-        .category-heading{
-            padding: 10px 1.5rem;
-            margin: 0 5px;
-        }
-        .category-item{
-            display: flow-root;
-            .category-name{
-                float: left;
-            }
-            .category-plus{
-                width: 20px;
-                height: 20px;
-                display: inline-block;
-                box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-                float: right;
-                cursor: pointer;
-            }
-        }
-    }
     .md-dialog.singin-form {
         border-radius: 10px;
         padding: 2em 40px;
@@ -673,13 +575,6 @@ export default {
         min-width: 25px;
     }
     /deep/ .md-icon{color: #f51355}
-    .grid {
-        display: grid;
-        grid-template-columns: auto auto auto;
-        grid-auto-rows: auto;
-        row-gap: 30px;
-        column-gap: 0px;
-    }
 }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
-<div class="grid-item md-layout-item " :style="isRow ? {gridRowStart: rowNum, gridRowEnd: 'span '+(!isLong ? '1' : '2') } : {gridRowEnd: 'span '+(!isLong ? '1' : '2')} ">
+<div class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100">
 
-  <div class="grid-content plannig-service-category-card white-card" :class="{ 'longer-card': isLong}">
+  <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
     <template v-if="!booked && (!isSentRequest || !selectedServices.length)">
 
         <div class="header-carousel">
@@ -89,6 +89,8 @@
 <script>
 import "vue-popperjs/dist/vue-popper.css";
 import { camelize } from "@/utils/string.util";
+
+
 const components = {
     carousel: () => import("vue-owl-carousel"),
     Popper: () => import("vue-popperjs"),
@@ -96,6 +98,7 @@ const components = {
     AddBudgetModal: () => import("./modals/AddBudget.vue"),
     AddBudgetConfirmModal: () => import("./modals/AddBudgetConfirm.vue")
 }
+
 export default {
   components,
   data() {
@@ -142,14 +145,6 @@ export default {
     },
     isLong: {
       type: Boolean,
-      default: false,
-    },
-    isRow: {
-      type: Boolean,
-      default: false,
-    },
-    rowNum: {
-      type: Number,
       default: false,
     },
     booked: {
@@ -250,7 +245,6 @@ export default {
   img.carousel-image {
     height: 100%;
     object-fit: cover;
-    width: -webkit-fill-available;
   }
   .carousel-item {
     position: relative;
@@ -300,6 +294,7 @@ export default {
       background-color: white !important;
       color: #f51355 !important;
       padding: 0;
+
     }
     /deep/ .md-ripple {
       padding: 0;
@@ -318,6 +313,7 @@ export default {
     /deep/ span[id*="carousel_prev_"] {
       display: block !important;
     }
+
     /deep/ .carousel-item,
     /deep/ .owl-item,
     /deep/ .owl-carousel,

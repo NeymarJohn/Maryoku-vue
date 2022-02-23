@@ -1,25 +1,49 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
+    <Loader :active="loading" isFullScreen/>
     <div class="md-layout-item">
-      <div class="text-center font-size-40" style="text-align: center;color:#050505;">Reset Password</div>
+        <div class="d-flex flex-column">
+            <img class="mx-auto" :src="`${$iconURL}PinkIcons/icon-reset-password-planner.svg`"/>
+            <div class="text-center font-size-30 font-bold color-black my-20">Forgot your Password?</div>
+        </div>
       <signup-card>
-        <div v-if="!submitted" class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
-          <!-- <div class="social-line text-center">
-            <h4 class="mt-3">Forgot Password</h4>
-          </div> -->
-          <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
-          <div class="md-error">{{error}}</div>
-          <div class="form-buttons">
-            <md-button @click="forgotPassword" class="md-default md-red md-maryoku mt-4" slot="footer">ResetPassword</md-button>
-            <!-- <br/>
-            <md-button @click="isForgot=true" class="md-black md-maryoku mt-4  md-simple mt-4" slot="footer">Forgot my password?</md-button> -->
+          <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain w-max-600" slot="content-right">
+              <p class="font-size-16 text-center font-bold" v-if="!submitted">Please enter the email address you used to create your Maryoku account:</p>
+              <p class="font-size-16 font-bold" v-else>We have sent a temporary password & instructions to your email.</p>
+              <maryoku-input
+                  :disabled="submitted"
+                  class="form-input mb-10"
+                  v-validate="modelValidations.email"
+                  inputStyle="email"
+                  v-model="email"
+                  @change="changeEmail"
+                  placeholder="Email address"
+              ></maryoku-input>
+              <div v-if="submitted" class="color-red font-size-14">Please check your email</div>
+              <div v-if="error" class="md-error">{{error}}</div>
+              <div class="form-buttons">
+                  <md-button
+                      @click="forgotPassword"
+                      class="md-default md-red md-maryoku mt-4"
+                      slot="footer"
+                      :disabled="submitted"
+                  >Send</md-button>
+              </div>
+              <div v-if="!submitted">
+                  <p class="text-center">
+                      If your email address is in our records, you will receive an email enabling you to create a temporary password that will be valid for 24 hours. Simply sign in using this temporary password and then replace it with a new permanent one.
+                  </p>
+              </div>
+              <div class="d-flex flex-column" v-else>
+                  <p class="text-center font-size-16 font-bold">Did not receive the email?</p>
+                  <span class="text-center font-size-16 font-bold">Check your spam filter, or
+                            <a class="color-vendor font-size-18" @click="reset">try another email address</a></span>
+              </div>
           </div>
-        </div>
-        <div v-else class="font-size-20 md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
-          You will get an email, and follow instructions in order reset your password.
-        </div>
       </signup-card>
+        <div class="d-flex flex-column">
+            <img class="mx-auto mt-100" :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" width="200px">
+        </div>
     </div>
   </div>
 </template>
@@ -27,94 +51,100 @@
 <script>
 import { SignupCard, MaryokuInput } from '@/components'
 import InputText from '@/components/Inputs/InputText.vue'
-import VueElementLoading from 'vue-element-loading'
-import Tenant from '@/models/Tenant'
+import Loader from '@/components/loader/Loader.vue'
 
 export default {
   components: {
     SignupCard,
     InputText,
-    VueElementLoading,
-    MaryokuInput
+    MaryokuInput,
+    Loader,
   },
-  methods: {
-    forgotPassword () {
-      this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email }, { 'ContentType': 'application/json' })
-        .then((resp) => {
-          console.log(resp)
-          this.loading = false
-          if (resp.data.status) {
-            this.submitted = true
-          } else {
-            this.error = resp.data.message
-          }
-        })
-        .catch((error) => {
-          console.error(error)
-          this.loading = false
-          if (error.response.status === 401) {
-            this.error = 'Sorry, No such user name or email address.'
-          } else {
-            this.error = 'Temporary failure, try again later'
-          }
-        })
-    },
-    toSingUp() {
-      this.$router.push({ path: '/signup' })
-    }
-  },
-  watch: {
-    email () {
-      this.touched.email = true
-    }
-  },
-  data () {
-    return {
-      error: '',
-      loading: false,
-      firstname: null,
-      terms: false,
-      email: null,
-      password: null,
-      isForgot: false,
-      serverURL: process.env.SERVER_URL,
-      // auth: auth,
-      touched: {
-        email: false,
-        password: false
-      },
-      modelValidations: {
-        email: {
-          required: true,
-          email: true
+    data () {
+        return {
+            error: '',
+            loading: false,
+            firstname: null,
+            terms: false,
+            email: null,
+            password: null,
+            isForgot: false,
+            serverURL: process.env.SERVER_URL,
+            // auth: auth,
+            touched: {
+                email: false,
+                password: false
+            },
+            modelValidations: {
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            forgotPasswordValidations: {
+                email: {
+                    required: true,
+                    email: true
+                },
+            },
+            submitted:false
         }
-      },
-      forgotPasswordValidations: {
-        email: {
-          required: true,
-          email: true
+    },
+    methods: {
+        forgotPassword () {
+            this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email }, { 'ContentType': 'application/json' })
+                .then((resp) => {
+                    console.log(resp)
+                    this.loading = false
+                    if (resp.data.status) {
+                        this.submitted = true
+                    } else {
+                        this.error = resp.data.message
+                    }
+                })
+                .catch((error) => {
+                    console.error(error)
+                    this.loading = false
+                    if (error.response.status === 401) {
+                        this.error = 'Sorry, No such user name or email address.'
+                    } else {
+                        this.error = 'Temporary failure, try again later'
+                    }
+                })
         },
-      },
-      submitted:false
-    }
-  }
+        changeEmail(){
+            this.error = null;
+        },
+        reset(){
+            this.email = null;
+            this.submitted = false;
+        },
+        toSingUp() {
+            this.$router.push({ path: '/signup' })
+        }
+    },
+    watch: {
+        email () {
+            this.touched.email = true
+        }
+    },
 }
 </script>
 <style lang="scss" scoped>
     p.description {
-      font-size: 16px;
+        font-size: 16px;
     }
     .md-error {
-      color: red;
+        color: red;
     }
     .form-input{
-      margin:30px 0px;
-      min-width: 300px;
+        margin:30px 0px;
+        min-width: 300px;
     }
     .form-buttons {
-      text-align: center;
+        text-align: center;
     }
     .signin-contain {
-      padding: 20px 60px;
+        padding: 20px 60px;
     }
 </style>

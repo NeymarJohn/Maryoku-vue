@@ -459,7 +459,19 @@
   width: 150px;
   text-align: left;
 }
-
+.upload-files-modal{
+    .modal-container{
+        width: 1170px !important;
+        max-width: 1170px !important;
+        height: 894px;
+        overflow: hidden;
+        border-radius: 0;
+}
+    .modal-header{
+        padding: 70px;
+        justify-content: start;
+    }
+}
 
 @media (max-width: 960px) {
   .modal-mask {

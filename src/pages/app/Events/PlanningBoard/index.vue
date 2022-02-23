@@ -17,32 +17,7 @@
                     v-for="(component,index) in categories"
                     @click="selectCategory(component)"
                 ></ResizableToggleButton>
-                <drop-down class="d-inline-block">
-                    <button class="add-category-button mb-10" @click="addRequirements" data-toggle="dropdown">
-                        <md-icon>add</md-icon>
-                    </button>
-                    <ul class="dropdown-width dropdown-menu dropdown-menu-left " >
-                        <li class="category-list" >
-                            <div class="category-heading font-size-16 font-bold" >
-                                &nbsp;&nbsp;
-                                {{'Additional Categories'}}
-                            </div>
-                        </li>
-                        <li class="category-list" v-for="(otherCategory,i) in otherCategories" :key="i">
-                            <a class="category-item font-size-16" @click="selectCategory(otherCategory)">
-                                <div class="category-name">
-                                    <img :src="`${$iconURL}Budget+Elements/${otherCategory.icon}`" />
-                                    &nbsp;&nbsp;
-                                    {{otherCategory.title}}
-                                </div>
-                                &nbsp;&nbsp;
-                                <div class="category-plus">
-                                    <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </drop-down>
+                <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
             </div>
           <ProgressRadialBar
             :value="percentOfBudgetCategories"
@@ -52,9 +27,9 @@
         </div>
         <div class="booking-proposals">
             <template v-if="selectedCategory">
-                <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory">
+                <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory.eventCategory">
                     <md-tooltip class="custom-tooltip-1" md-direction="top">Here’s where you can set your expectations and requirements for your event</md-tooltip>
-                    <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
+                    <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
                     {{ selectedCategory.fullTitle }}
                     <template v-if="!booked && (!($store.state.planningBoard.requirements[selectedCategory.componentId] && $store.state.planningBoard.requirements[selectedCategory.componentId].isIssued) || !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)">
                         <template v-if="hasBudget(selectedCategory.componentId)">
@@ -84,7 +59,7 @@
                 <div class="mt-80 mb-80" :key="`serviceGroup-${serviceIndex}` ">
                     <div class="booking-proposals">
                         <template v-if="selectedCategory">
-                            <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory">
+                            <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory.eventCategory">
                                 <div class="font-size-30 font-bold-extra text-transform-uppercase">
                                     <div style="float: left;">
                                         {{ service.seqNo }}
@@ -101,53 +76,49 @@
                         </template>
                     </div>
 
-                    <div class="md-layout md-gutter mt-40 grid">
-                        <template v-if="service.musicPlayer">
-                            <template v-for="(clip, clipindx) in service.clips">
-                                <ServiceCategoryCard
-                                class="mb-0 mr-0 ml-0"
-                                :clip="clip"
-                                :index="clipindx"
-                                :serviceCategory="service"
-                                :key="service.name+clipindx"
-                                :isLong="(clipindx) % 2 === 1"
-                                :isRow="getIsRow(clipindx)"
-                                :rowNum="getRowNum(clipindx, service)"
-                                :hasBudget="hasBudget(service.serviceCategory)"
-                                :musicPlayer="service.musicPlayer"
-                                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                :isSentRequest="
-                                    $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                    $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                "
-                                @showSpecific="getSpecification"
-                                @update="setServiceStyles"
-                                ></ServiceCategoryCard>
-                            </template>
+                    <div class="md-layout md-gutter mt-40 d-flex flex-row align-center">
+                    <template v-if="service.musicPlayer">
+                        <template v-for="(clip, clipindx) in service.clips">
+                            <ServiceCategoryCard
+                            class="mb-0 mr-0 ml-0"
+                            :clip="clip"
+                            :index="clipindx"
+                            :serviceCategory="service"
+                            :key="service.name+clipindx"
+                            :isLong="(serviceIndex + clipindx) % 2 === 1"
+                            :hasBudget="hasBudget(service.serviceCategory)"
+                            :musicPlayer="service.musicPlayer"
+                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                            :isSentRequest="
+                                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                            "
+                            @showSpecific="getSpecification"
+                            @update="setServiceStyles"
+                            ></ServiceCategoryCard>
                         </template>
-                        <template v-else>
-                            <template v-for="(image, indx) in service.images">
-                                <ServiceCategoryCard
-                                class="mb-0 mr-0 ml-0"
-                                :image="image"
-                                :index="indx"
-                                :serviceCategory="service"
-                                :key="service.name+indx"
-                                :isLong="(indx) % 2 === 1"
-                                :isRow="getIsRow(indx)"
-                                :rowNum="getRowNum(indx, service)"
-                                :hasBudget="hasBudget(service.serviceCategory)"
-                                :musicPlayer="service.musicPlayer"
-                                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                :isSentRequest="
-                                    $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                    $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                "
-                                @showSpecific="getSpecification"
-                                @update="setServiceStyles"
-                                ></ServiceCategoryCard>
-                            </template>
+                    </template>
+                    <template v-else>
+                        <template v-for="(image, indx) in service.images">
+                            <ServiceCategoryCard
+                            class="mb-0 mr-0 ml-0"
+                            :image="image"
+                            :index="indx"
+                            :serviceCategory="service"
+                            :key="service.name+indx"
+                            :isLong="(serviceIndex + indx) % 2 === 1"
+                            :hasBudget="hasBudget(service.serviceCategory)"
+                            :musicPlayer="service.musicPlayer"
+                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                            :isSentRequest="
+                                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                            "
+                            @showSpecific="getSpecification"
+                            @update="setServiceStyles"
+                            ></ServiceCategoryCard>
                         </template>
+                    </template>
                     </div>
                 </div>
             </template>
@@ -256,7 +227,6 @@ export default {
       showAddNewCategory: false,
       showAddBudgetConfirm: false,
       booked: false,
-      requirements:{},
     };
   },
   async created() {
@@ -267,14 +237,7 @@ export default {
 
       this.isLoading = false;
       this.isLoadingStoredData = true;
-
-        await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
-        if(localStorage.getItem('requirements')){
-            this.requirements = JSON.parse(localStorage.getItem('requirements')) || {};
-        }
-        else{
-            this.requirements = this.$store.state.planningBoard.requirements
-        }
+      await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
       this.isLoadingStoredData = false;
       this.selectCategory(this.categories[0]);
@@ -288,6 +251,9 @@ export default {
       const categories = this.event.components;
       categories.sort((a, b) => a.order - b.order);
       return categories;
+    },
+    requirements() {
+      return this.$store.state.planningBoard.requirements;
     },
     types() {
       return this.$store.state.planningBoard.types;
@@ -311,18 +277,6 @@ export default {
         service["images"] = serviceCategoryImages[service.key];
         return service;
       });
-    },
-    otherCategories() {
-        let otherCategories;
-        if(this.event.components){
-            otherCategories = this.$store.state.common.serviceCategories.filter(ar => !this.event.components.find(rm => (rm.componentId === ar.key) ))
-        }
-        else{
-            otherCategories = this.$store.state.common.serviceCategories.map(service => {
-                return service;
-            });
-        }
-      return otherCategories;
     },
     serviceCategoriesForGrid() {
       const services = [[], [], []];
@@ -416,15 +370,7 @@ export default {
       this.$store.commit("event/setEventData", {
         requirementProgress: (this.percentOfBudgetCategories / this.event.components.length) * 100,
       });
-            let requirement = this.requirements[category.serviceCategory];
-            if(!requirement) {
-                requirement = {event: this.event, category: category.serviceCategory, types: { [type]: services }}
-            } else {
-                requirement = {...requirement, types: { [type]: services }};
-            }
-        this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
-        this.$set(this.requirements, category.serviceCategory, requirement)
-        localStorage.setItem('requirements', JSON.stringify(this.requirements));
+      this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     async saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
@@ -466,11 +412,9 @@ export default {
       return true;
     },
     addRequirements() {
+      this.$router.push(`/events/${this.event.id}/booking/planningboard`);
     },
     selectCategory(category, clicked) {
-        if(category.key){
-            category['componentId'] = category.key;
-        }
       this.selectedCategory = category;
       let proposals = this.$store.state.event.proposals;
       if (proposals[category.componentId]) {
@@ -487,35 +431,6 @@ export default {
     },
     saveBudget() {
       this.showAddNewCategory = false;
-    },
-    getIsRow(indx){
-        if(indx == 0){
-            return true;
-        }
-
-        if(indx % 3){
-            return true;
-        }
-        else{
-            if(indx % 4) {return true;}
-            else{
-                if(indx % 5) {return true;}
-                else return false
-            };
-        }
-    },
-    getRowNum(indx, service){
-        for(let x=0; x < service.imageTitles.length; x++){
-            if(indx == 3*x || indx == (3*x)+2){
-                return Math.floor((3*x)/2)+1;
-            }
-            else{
-                if(indx == (3*x)+1){
-                    return Math.floor(((3*x)+1)/2)+1;
-                }
-            }
-        }
-        return null;
     },
   },
   watch: {
@@ -561,33 +476,6 @@ export default {
       font-size: 40px !important;
     }
   }
-  .dropdown-width{
-      width: max-content;
-  }
-  .category-list{
-    border-bottom: 2px ridge;
-    img {
-        width: 30px;
-    }
-    .category-heading{
-        padding: 10px 1.5rem;
-        margin: 0 5px;
-    }
-    .category-item{
-        display: flow-root;
-        .category-name{
-            float: left;
-        }
-        .category-plus{
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-            float: right;
-            cursor: pointer;
-        }
-    }
-  }
   .slide-fade-enter-active {
     transition: all 0.3s ease;
   }
@@ -598,13 +486,6 @@ export default {
 /* .slide-fade-leave-active below version 2.1.8 */ {
     transform: translateX(10px);
     opacity: 0;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-auto-rows: auto;
-    row-gap: 30px;
-    column-gap: 0px;
   }
 }
 </style>

@@ -61,4 +61,23 @@
       transform: rotate(-90deg);
     }
   }
+  .add-category-model{
+       .add-budget-modal-header{
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         width: 100%;
+         button{
+           display: block;
+           border: none;
+           background: unset;
+           i{
+             font-size: 40px !important;
+             color: black;
+           }
+         }
+
+       }
+     }
+
 }
