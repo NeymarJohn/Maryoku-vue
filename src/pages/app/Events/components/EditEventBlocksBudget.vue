@@ -38,7 +38,7 @@
               </td>
 
               <td class="new-element-budget" width="15%">
-                <input v-if="type === 'total'" v-model="block.newTotalBudget"   @change="(e)=>handleTotalChange(e,block,index)"/>
+                <input v-if="type === 'total'" v-model="block.newTotalBudget" />
                 <input v-else :value="`${block.numberOfParticipants?block.newTotalBudget
                 /block.numberOfParticipants:block.allocatedBudget / event.numberOfParticipants}`"
                 @change="(e)=>handlePerGuestChange(e,block,index)"
@@ -74,69 +74,47 @@
     <table class="event-blocks__table event-block-table">
       <tbody>
         <tr>
-          <td class="event-block-element unexpected" width="35%">
+          <td class="event-block-element unexpected" width="40%">
             <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png" />
             Unexpected
           </td>
           <td class="planned" width="20%">${{event.unexpectedBudget}}</td>
           <td class="new-element-budget" width="15%">
-<!--            <input v-model="event.unexpectedBudget" />-->
+            <input v-model="event.unexpectedBudget" />
           </td>
           <td class="actual red-label" width="15%">
           </td>
         </tr>
       </tbody>
     </table>
-    <table class="event-blocks__table event-block-table">
-      <tbody>
-      <tr>
-        <td class="event-block-element unexpected" width="35%">
-          <img
-            src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
-            width="20"
-          />
-          Extras
-        </td>
-        <td class="planned" width="20%">${{extras}}</td>
-        <td class="new-element-budget" width="15%">
-          <!--            <input v-model="event.unexpectedBudget" />-->
-        </td>
-        <td class="actual red-label" width="15%">
-        </td>
-      </tr>
-      </tbody>
-    </table>
 
-    <table class="event-blocks__table actions-table" style="border-spacing: 0 1px; ">
+    <table class="event-blocks__table actions-table">
       <tbody>
-<!--        <tr class="taxes">-->
-<!--          <td class="taxes-title">-->
-<!--            <img-->
-<!--              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"-->
-<!--              width="20"-->
-<!--            />-->
-<!--            Extras-->
-<!--          </td>-->
-<!--          <td class="actual green-label">-->
-<!--          </td>-->
-<!--          <td>${{ extras.toFixed(2) }}</td>-->
-<!--          <td></td>-->
-<!--          <td class="expand" style="text-align: right; padding-right: 1em">-->
-<!--          </td>-->
-<!--        </tr>-->
-        <tr class="total">
-          <td class="total-title"></td>
-          <td>Old budget</td>
-          <td colspan="3" >Planed budget</td>
-          <td colspan="3" >New budget</td>
-          <td colspan="3" >Leftover</td>
+        <tr class="taxes">
+          <td class="taxes-title">
+            <img
+              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+              width="20"
+            />
+            Tips
+            <span class="percent">12%</span>
+          </td>
+          <td>${{ totalBudgetTaxes.toFixed(2) }}</td>
+          <td class="actual green-label">
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+30.png" />
+            $0
+          </td>
+          <td></td>
+          <td class="expand" style="text-align: right; padding-right: 1em">
+            <a href>
+              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+24.png" />
+            </a>
+          </td>
         </tr>
         <tr class="total">
           <td class="total-title">Total</td>
-          <td>${{ event.totalBudget | withComma }}</td>
-          <td colspan="3" >${{ eventNewBudget | withComma }}</td>
-          <td colspan="3" >${{ newTotalBudget | withComma }}</td>
-          <td colspan="3" class="total-value">${{ (eventNewBudget - newTotalBudget) | withComma }}</td>
+          <td>${{ totalBudget | withComma }}</td>
+          <td colspan="3" class="total-value">${{ totalActual | withComma }}</td>
         </tr>
       </tbody>
     </table>
@@ -189,7 +167,10 @@ export default {
         return { statistics: {} };
       },
     },
-    eventNewBudget: Number,
+    handleBudgetUpdate:{
+      type: Function,
+      default: () => console.log('##-166, EditEventBlocksBudget.vue','no function passed')
+    },
     eventComponents: [Array, Function],
     type: {
       type: String,
@@ -197,6 +178,7 @@ export default {
     },
   },
   data: () => ({
+    // auth: auth,
     isLoading: false,
     allocatedBudget: 0,
     eventBuildingBlocks: [],
@@ -204,13 +186,13 @@ export default {
     currentBlockId: null,
     elementsBudget: "event",
     show: false,
-    extras:0,
     totalBudget: 0,
-    leftover:0,
-    newTotalBudget: 0,
     totalActual: 0,
     totalBudgetTaxes: 0,
     showCategoryModal: false,
+    timelineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
+    iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
+    menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
     locationsList: [
       "San Francisco, California",
       "Los Angeles, California",
@@ -230,14 +212,81 @@ export default {
   }),
   methods: {
     ...mapMutations("EventPlannerVuex", ["setBuildingBlockModal"]),
+    // expandBlock(item) {
+    //   if (item.expanded) {
+    //     item.expanded = false;
+    //   } else {
+    //     this.eventBuildingBlocks.forEach((g) => {
+    //       g.expanded = false;
+    //     });
+    //     item.expanded = true;
+    //   }
+    //   this.$forceUpdate();
+    // },
+    // deleteBlock(blockId) {
+    //   Swal.fire({
+    //     title: "Are you sure?",
+    //     text: `You won't be able to revert this!`,
+    //     showCancelButton: true,
+    //     confirmButtonClass: "md-button md-success",
+    //     cancelButtonClass: "md-button md-danger",
+    //     confirmButtonText: "Yes, delete it!",
+    //     buttonsStyling: false,
+    //   }).then((result) => {
+    //     if (result.value) {
+    //       this.isLoading = true;
+    //
+    //       let calendar = new Calendar({
+    //         id: this.$auth.user.defaultCalendarId,
+    //       });
+    //       let event = new CalendarEvent({ id: this.event.id });
+    //       let selected_block = new EventComponent({ id: blockId });
+    //
+    //       selected_block
+    //         .for(calendar, event)
+    //         .delete()
+    //         .then((resp) => {
+    //           this.isLoading = false;
+    //           this.event.components.splice(
+    //             _.findIndex(this.eventBuildingBlocks, (b) => {
+    //               return b.id === selected_block.id;
+    //             }),
+    //             1,
+    //           );
+    //           this.getEventBuildingBlocks();
+    //           this.$root.$emit("RefreshStatistics");
+    //           this.$root.$emit("event-building-block-budget-changed", this.event.components);
+    //           this.$forceUpdate();
+    //
+    //           let allocatedBudget = 0;
+    //           this.eventBuildingBlocks.forEach((item) => {
+    //             allocatedBudget += Number(item.allocatedBudget);
+    //           });
+    //
+    //           this.allocatedBudget = allocatedBudget;
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //         });
+    //     }
+    //   });
+    // },
+    /**
+     * Get Event building blocks
+     */
     getEventBuildingBlocks() {
       if (!this.event.id) return;
+
+      let vm = this;
+
       this.isLoading = true;
-      this.totalBudget = 0;
-      this.totalBudgetTaxes = 0;
-      this.extras = this.event.allocatedTips + this.event.allocatedFees
+
+      vm.totalBudget = 0;
+      vm.totalBudgetTaxes = 0;
+
       let res = this.event.components;
       this.$set(this, "eventBuildingBlocks", res);
+      console.log('##-282, EditEventBlocksBudget.vue',res , this.eventBuildingBlocks)
 
       setTimeout(() => {
         this.isLoading = false;
@@ -246,19 +295,24 @@ export default {
       this.eventBuildingBlocks.forEach((item) => {
         item.newTotalBudget = item.allocatedBudget;
 
-        if (item.allocatedBudget && this.type === "total") {
-          this.totalBudget += parseInt(item.allocatedBudget);
-          this.totalBudgetTaxes += parseInt(item.allocatedBudget) * 0.12;
+        if (item.allocatedBudget && vm.type === "total") {
+          vm.totalBudget += parseInt(item.allocatedBudget);
+          vm.totalBudgetTaxes += parseInt(item.allocatedBudget) * 0.12;
         } else if (item.allocatedBudget) {
-          this.totalBudget += item.numberOfParticipants
+          vm.totalBudget += item.numberOfParticipants
             ? parseInt(item.allocatedBudget) / parseInt(item.numberOfParticipants)
-            : parseInt(item.allocatedBudget) / parseInt(this.event.numberOfParticipants);
-          this.totalBudgetTaxes += item.numberOfParticipants
+            : parseInt(item.allocatedBudget) / parseInt(vm.event.numberOfParticipants);
+          vm.totalBudgetTaxes += item.numberOfParticipants
             ? (parseInt(item.allocatedBudget) / parseInt(item.numberOfParticipants)) * 0.12
-            : (parseInt(item.allocatedBudget) / parseInt(this.event.numberOfParticipants)) * 0.12;
+            : (parseInt(item.allocatedBudget) / parseInt(vm.event.numberOfParticipants)) * 0.12;
         }
+
+        // if (item.allocatedBudget) {
+        //     vm.totalBudget += parseInt(item.allocatedBudget);
+        //     vm.totalBudgetTaxes  += parseInt(item.allocatedBudget) * .12;
+        // }
       });
-      this.handleTotalChange()
+
       this.$forceUpdate();
     },
     showAddBuildingBlocksModal() {
@@ -297,67 +351,43 @@ export default {
       this.eventBuildingBlocks[index].newTotalBudget = event.numberOfParticipants?
         value*event.numberOfParticipants:value*this.event.numberOfParticipants
     },
-    handleTotalChange(){
-      this.newTotalBudget = 0;
-      this.event.components.forEach((item)=>{
-        this.newTotalBudget += +item.newTotalBudget
-      })
-      this.newTotalBudget += (this.extras + this.event.unexpectedBudget);
-      this.leftover = this.eventNewBudget - this.newTotalBudget;
-      console.log('##-307, EditEventBlocksBudget.vue',this.leftover)
+    test(e){
+      console.log('##-345, EditEventBlocksBudget.vue', this.eventBuildingBlocks, e)
+      this.blockBudgetChanged()
     },
-    checkLeftovers() {
-      if (this.leftover !== 0) {
-        return Swal.fire({
-          text: `You have $ ${this.leftover} left over. Would you like handle it by changing 'Unexpected'?`,
-          showCancelButton: true,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success confirm-btn-bg ",
-          cancelButtonClass: "md-button md-danger cancel-btn-bg",
-          confirmButtonText: "Yes!",
-          buttonsStyling: false,
-        }).then((result) => {
-          if (result.value) {
-            this.blockBudgetChanged()
-           return true
-          }
-          return false
-        });
-      } else {
-        return Promise.resolve(this.blockBudgetChanged())
-      }
-    },
-    blockBudgetChanged  ()  {
-      const event = new CalendarEvent({
-        id: this.event.id,
-        allocatedBudget: this.eventNewBudget,
-        totalBudget:  this.eventNewBudget,
-        unexpectedBudget: this.event.unexpectedBudget + this.leftover
-      });
+    blockBudgetChanged() {
+      let event = new CalendarEvent({ id: this.event.id });
+      // let calendar = new Calendar();
 
       this.eventBuildingBlocks.forEach((item) => {
         if (item.allocatedBudget !== item.newTotalBudget) {
+          console.log('##-351, EditEventBlocksBudget.vue', item)
 
-          let selected_block = new EventComponent({id: item.id, allocatedBudget: item.newTotalBudget});
+          let selected_block = new EventComponent({...item, allocatedBudget: item.newTotalBudget});
           selected_block
             .for(event)
             .save()
             .then((resp) => {
+              console.log('##-371, EditEventBlocksBudget.vue',resp)
               this.isLoading = false;
               this.$root.$emit("RefreshStatistics");
               this.getEventBuildingBlocks();
               this.$root.$emit("event-building-block-budget-changed", this.event.components);
               this.$forceUpdate();
+              let allocatedBudget = 0;
+              this.eventBuildingBlocks.forEach((item) => {
+                if (item.allocatedBudget) {
+                  allocatedBudget += Number(item.allocatedBudget);
+                }
+              });
+              this.allocatedBudget = allocatedBudget;
             })
             .catch((error) => {
               console.log(error);
             });
         }
       })
-      this.$store.dispatch("event/saveEventAction", event).then((res) => {
-        this.$emit("change", event);
-      });
-      return true
+       return
     },
 
     addRequirements(item) {
@@ -503,6 +533,7 @@ export default {
     },
   },
   created() {
+    console.log(this.event);
   },
   mounted() {
     this.getEventBuildingBlocks();

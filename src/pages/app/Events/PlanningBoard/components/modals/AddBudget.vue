@@ -3,8 +3,8 @@
     <template slot="header">
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra">
-          <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" style="width: 30px; margin-right: 0.5em" />
-          Add Budget To {{ selectedCategory.fullTitle }}
+          <img :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" style="width: 30px; margin-right: 0.5em" />
+          Add Budget To {{ serviceCategory.fullTitle }}
         </h2>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -75,13 +75,13 @@ export default {
     },
     async addNewBudget() {
       let newBlock = {
-        componentId: this.selectedCategory.key,
-        componentCategoryId: this.selectedCategory.key,
+        componentId: this.serviceCategory.key,
+        componentCategoryId: this.serviceCategory.key,
         calendarEvent: { id: this.event.id },
         allocatedBudget: this.budget,
-        order: this.event.components.length,
-        icon: this.selectedCategory.icon,
-        category: this.selectedCategory,
+        order: this.event.components ? this.event.components.length : 0,
+        icon: this.serviceCategory.icon,
+        category: this.serviceCategory,
       };
 
       let event = new CalendarEvent({

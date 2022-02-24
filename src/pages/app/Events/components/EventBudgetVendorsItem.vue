@@ -136,7 +136,8 @@
                 ></maryoku-input>
                 <md-button class="md-simple md-black normal-btn" @click="switchEdit">Cancel</md-button>
                 <md-button class="md-red normal-btn" :disabled="!isUpdated" @click="showResizeBudgetModal"
-                  >Save</md-button>
+                  >Save</md-button
+                >
               </td>
             </template>
           </tr>
@@ -274,6 +275,7 @@ export default {
     },
     showResizeBudgetModal() {
       this.resizeModalOpened = true;
+      console.log(this.newBudget);
     },
     resizeBudget(selectedOption) {
       this.resizeModalOpened = false;

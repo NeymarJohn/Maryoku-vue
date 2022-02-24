@@ -10,6 +10,7 @@ const getDefaultState = () => {
         specialRequirements: {},
         cart:{},
         favorite:{},
+        types:{},
     }
 }
 const state = getDefaultState();
@@ -25,20 +26,20 @@ const actions = {
   },
   getRequirements({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
-      new ProposalRequestRequirement()
-        .for(new CalendarEvent({ id: eventId }))
-        .get()
-        .then((res) => {
-          if(res && res.length) {
-            res.forEach(requirements => {
-              commit("setCategoryRequirements", { category: requirements.category, requirements })
+        new ProposalRequestRequirement()
+            .for(new CalendarEvent({ id: eventId }))
+            .get()
+            .then((res) => {
+            if(res && res.length) {
+                res.forEach(requirements => {
+                commit("setCategoryRequirements", { category: requirements.category, requirements })
+                })
+            }
+            resolve(res)
             })
-          }
-          resolve(res)
-        })
-        .catch(err => {
-          reject(err)
-        });
+            .catch(err => {
+            reject(err)
+            });
     });
   },
   getCartItems({ commit, state }, eventId) {

@@ -91,6 +91,7 @@ export default {
   computed: {
     updateAvailable() {
       const newBudget = Number(this.newBudget.replace(/,/g, ""));
+      console.log("newBudgdt", newBudget);
       return this.newBudget && this.event.totalBudget - newBudget <= this.event.unexpectedBudget;
     },
     minBudget() {
