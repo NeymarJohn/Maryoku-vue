@@ -185,7 +185,7 @@
         @cancel="closeEditBudgetModal"
         @save="onBudgetChangeModal"
       ></budget-edit-modal>
-      <modal v-if="editBudgetModalStep===2" class="add-category-model">
+      <modal v-show="editBudgetModalStep===2" class="add-category-model">
         <template slot="header">
           <div class="add-budget-modal-header">
             <button @click="setModalStep('previous')">
@@ -246,16 +246,17 @@
                 <edit-event-blocks-budget
                   :event.sync="event"
                   :event-components="selectedComponents"
-                  :handle-budget-update="test"
+                  :event-new-budget="newBudget"
+                  :change="handleBudgetMethod"
                   type="total"
                   ref="editEventBlocksBudget"
-                  @change="test"
                 ></edit-event-blocks-budget>
               </template>
               <template slot="tab-pane-2">
                 <edit-event-blocks-budget
                   :event.sync="event"
-                  :handle-budget-update="test"
+                  :change="handleBudgetMethod"
+                  :event-new-budget="newBudget"
                   :event-components="selectedComponents"
                   type="perGuest"
                   ref="editEventBlocksBudget"
@@ -266,7 +267,7 @@
         </template>
         <template slot="footer">
           <md-button class="md-default md-simple cancel-btn" @click="closeEditBudgetModal">Cancel</md-button>
-          <md-button class="md-rose add-category-btn" @click="updateBudget">Save</md-button>
+          <md-button class="md-rose add-category-btn" @click="handleUpdateBudget">Save</md-button>
         </template>
       </modal>
       <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
@@ -542,17 +543,15 @@ export default {
     openUploadModal() {
       this.$refs.uploadModal.toggleModal(true);
     },
-    test(ll){
-      console.log('##-545, EventDetailsBudget.vue',ll)
-
+    handleUpdateBudget() {
+      const editEventBlocksBudget = this.$refs.editEventBlocksBudget
+      editEventBlocksBudget.checkLeftovers().then((res) => {
+        if (res) {
+          this.editBudgetModalStep = 0;
+        }
+      });
     },
     updateBudget(eventBudget) {
-      const editEventBlocksBudget = this.$refs.editEventBlocksBudget
-      editEventBlocksBudget.test()
-      return
-      let _calendar = new Calendar({
-        id: this.currentUser.profile.defaultCalendarId,
-      });
       let editedEvent = new CalendarEvent({ id: this.event.id });
       const newBudget = eventBudget.totalBudget; //Number(eventBudget.totalBudget.replace(/,/g, ""))
       if (newBudget < this.calendarEvent.totalBudget) {

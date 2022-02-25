@@ -57,6 +57,7 @@
             />
             Extras
           </td>
+
           <td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma(Number) }}</td>
           <td width="15%" class="actual red-label"></td>
           <td width="15%" class="status"></td>

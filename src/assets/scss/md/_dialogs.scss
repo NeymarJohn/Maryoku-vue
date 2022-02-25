@@ -280,6 +280,11 @@
   right: 9px;
   top: 12px;
 }
+.modal-upload-files-close-button {
+    position: absolute !important;
+    right: 70px!important;
+    top: 50px!important;
+}
 
 .vendor-create-event{
     .modal-container{
@@ -461,14 +466,14 @@
 }
 .upload-files-modal{
     .modal-container{
-        width: 1170px !important;
-        max-width: 1170px !important;
+        width: 1070px !important;
+        max-width: 1070px !important;
         height: 894px;
         overflow: hidden;
         border-radius: 0;
 }
     .modal-header{
-        padding: 70px;
+        padding: 50px 70px;
         justify-content: start;
     }
 }

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="9.773" height="16.288" viewBox="0 0 9.773 16.288">
+    <defs>
+        <clipPath id="3jeqsjepba">
+            <path data-name="Path 2636" d="M488.889-297.712a4.774 4.774 0 0 1-4.886-4.64v-8.282a3.454 3.454 0 0 1 3.528-3.366 3.454 3.454 0 0 1 3.53 3.365v8.288a2.135 2.135 0 0 1-2.172 2.089 2.134 2.134 0 0 1-2.171-2.09v-7.648a.815.815 0 0 1 .814-.814.814.814 0 0 1 .814.815v7.647a.507.507 0 0 0 .542.46.508.508 0 0 0 .543-.461v-8.288a1.826 1.826 0 0 0-1.9-1.735 1.826 1.826 0 0 0-1.9 1.736v8.282a3.145 3.145 0 0 0 3.258 3.012 3.145 3.145 0 0 0 3.258-3.012v-8.282a.814.814 0 0 1 .814-.814.814.814 0 0 1 .814.814v8.282a4.774 4.774 0 0 1-4.886 4.64" transform="translate(-484.002 314)" style="fill:#e20c4b"/>
+        </clipPath>
+        <clipPath id="a71nlblm0b">
+            <path data-name="Rectangle 1112" style="fill:#e20c4b" d="M0 0h20v24H0z"/>
+        </clipPath>
+        <clipPath id="05wxb3pksc">
+            <path data-name="Path 2635" d="M484-297.712h10.587V-314H484z" transform="translate(-484 314)" style="fill:#e20c4b"/>
+        </clipPath>
+    </defs>
+    <g data-name="Group 4345" style="clip-path:url(#3jeqsjepba)">
+        <g data-name="Group 4344" style="isolation:isolate">
+            <g data-name="Group 4343" style="clip-path:url(#a71nlblm0b)" transform="translate(-4.198 -3.504)">
+                <g data-name="Group 4342" transform="translate(4.196 3.504)" style="clip-path:url(#05wxb3pksc)">
+                    <path data-name="Path 2634" d="M479-319h17.917v24.432H479z" transform="translate(-483.072 314.928)" style="fill:#e20c4b"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

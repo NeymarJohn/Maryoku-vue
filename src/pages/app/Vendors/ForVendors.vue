@@ -178,12 +178,11 @@
     <modal v-if="notBiddingModal" class="not-bidding-modal" container-class="modal-container lg">
       <template slot="header">
         <div class="not-bidding-modal__header">
-          <h3>
-            <strong>We are sorry to hear you're not bidding,</strong>
-            <br />and would love to know,
-            <strong>what's the reason?</strong>
+          <h3 class="font-bold-extra">
+            Sorry to hear you’re not bidding
+            <br/>can you tell us why not?
           </h3>
-          <div class="header-description adaptive">You can choose more than one</div>
+          <div class="header-description adaptive">You can select more than one reason</div>
         </div>
         <button class="close" @click="hideModal()">
           <img :src="`${iconsUrl}Group 3602.svg`" />
@@ -198,7 +197,7 @@
                 :style="`border-color: ${reasonIsDate ? '#fc1355!important;' : 'inherit'}`"
               >
                 <span class="colored" :class="[{ bold: reasonIsDate }]"
-                  >I'm fully booked around the date of the event</span
+                  >I’m fully booked around the event date</span
                 >
               </md-checkbox>
               <a class="another-date" @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
@@ -211,7 +210,7 @@
                 v-model="reasonIsBudget"
                 :style="`border-color: ${reasonIsBudget ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{ bold: reasonIsBudget }]">I'm way out of your budget</span>
+                <span class="colored" :class="[{ bold: reasonIsBudget }]">I’m way outside your budget</span>
               </md-checkbox>
             </li>
             <li>
@@ -220,7 +219,7 @@
                 :style="`border-color: ${reasonIsService ? '#fc1355!important;' : 'inherit'}`"
               >
                 <span class="colored" :class="[{ bold: reasonIsService }]"
-                  >I don't think my services are compatible to your requirements</span
+                  >My services aren’t in line with your needs</span
                 >
               </md-checkbox>
             </li>
@@ -230,7 +229,7 @@
                 :style="`border-color: ${reasonIsInfo ? '#fc1355!important;' : 'inherit'}`"
               >
                 <span class="colored" :class="[{ bold: reasonIsInfo }]"
-                  >I don't enough information about the event</span
+                  >I don’t have enough information</span
                 >
               </md-checkbox>
             </li>
@@ -249,8 +248,9 @@
             maxlength="500"
             type="text"
             class="form-control"
-            placeholder="Type your reason here..."
+            placeholder="Tell us more here..."
           />
+          <p class="text-left mt-10 ml-50">We’ll use this information to improve our analysis of your Maryoku statistics</p>
         </div>
       </template>
       <template slot="footer">
