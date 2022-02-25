@@ -1,7 +1,7 @@
 <template>
   <div class="booking-section planning-board-layout">
     <div class="p-50" v-if="!showCounterPage">
-      <loader :active="isLoading || isLoadingStoredData" />
+      <loader :active="isLoading || isLoadingStoredData || isLoadingProposal" />
       <template v-if="!isLoading && !isLoadingStoredData">
         <div class="d-flex justify-content-between align-center">
             <div>
@@ -44,113 +44,187 @@
                     </ul>
                 </drop-down>
             </div>
-          <ProgressRadialBar
-            :value="percentOfBudgetCategories"
-            :total="event.components.length"
-            @click="openCart"
-          ></ProgressRadialBar>
+            <div v-if="requirementSection">
+                <ProgressRadialBar
+                    :value="percentOfBudgetCategories"
+                    :total="event.components.length"
+                    @click="openRCart"
+                ></ProgressRadialBar>
+            </div>
+            <div v-else>
+                <ProgressRadialBar
+                :value="proposals.length"
+                :total="3"
+                icon="common/checked-calendar-red.svg"
+                @click="openCart"
+                ></ProgressRadialBar>
+            </div>
+            <div class="md-layout-item">
+                <header-actions :requirement="true" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
+            </div>
         </div>
-        <div class="booking-proposals">
-            <template v-if="selectedCategory">
-                <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory">
-                    <md-tooltip class="custom-tooltip-1" md-direction="top">Here’s where you can set your expectations and requirements for your event</md-tooltip>
-                    <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
-                    {{ selectedCategory.fullTitle }}
-                    <template v-if="!booked && (!($store.state.planningBoard.requirements[selectedCategory.componentId] && $store.state.planningBoard.requirements[selectedCategory.componentId].isIssued) || !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)">
-                        <template v-if="hasBudget(selectedCategory.componentId)">
-                            <a class="font-size-18 md-red maryoku-btn" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
-                                Get Specific
-                            </a>
+
+        <template v-if="requirementSection">
+            <div class="booking-proposals">
+                <template v-if="selectedCategory">
+                    <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory">
+                        <md-tooltip class="custom-tooltip-1" md-direction="top">Here’s where you can set your expectations and requirements for your event</md-tooltip>
+                        <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
+                        {{ selectedCategory.fullTitle }}
+                        <template v-if="!booked && (!($store.state.planningBoard.requirements[selectedCategory.componentId] && $store.state.planningBoard.requirements[selectedCategory.componentId].isIssued) || !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)">
+                            <template v-if="hasBudget(selectedCategory.componentId)">
+                                <a class="font-size-18 md-red maryoku-btn" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
+                                    Get Specific
+                                </a>
+                            </template>
+                            <template v-else>
+                                <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
+                            </template>
                         </template>
                         <template v-else>
-                            <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
-                        </template>
-                    </template>
-                    <template v-else>
-                        <div class="d-flex align-center justify-content-center">
-                            <div v-if="booked" class="color-red">
-                                Already booked
+                            <div class="d-flex align-center justify-content-center">
+                                <div v-if="booked" class="color-red">
+                                    Already booked
+                                </div>
+                                <a  class="font-size-18 md-red maryoku-btn" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
+                                    Change specifications
+                                </a>
                             </div>
-                            <a  class="font-size-18 md-red maryoku-btn" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
-                                Change specifications
-                            </a>
-                        </div>
-                    </template>
-                </div>
-            </template>
-        </div>
-        <template v-for="(service, serviceIndex) in serviceCards[0]" >
-              <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
-                <div class="mt-80 mb-80" :key="`serviceGroup-${serviceIndex}` ">
-                    <div class="booking-proposals">
-                        <template v-if="selectedCategory">
-                            <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory">
-                                <div class="font-size-30 font-bold-extra text-transform-uppercase">
-                                    <div style="float: left;">
-                                        {{ service.seqNo }}
-                                        &nbsp;&nbsp;
-                                        {{ service.name }}
+                        </template>
+                    </div>
+                </template>
+            </div>
+            <template v-for="(service, serviceIndex) in serviceCards[0]" >
+                <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
+                    <div class="mt-80 mb-80" :key="`serviceGroup-${serviceIndex}` ">
+                        <div class="booking-proposals">
+                            <template v-if="selectedCategory">
+                                <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory">
+                                    <div class="font-size-30 font-bold-extra text-transform-uppercase">
+                                        <div style="float: left;">
+                                            {{ service.seqNo }}
+                                            &nbsp;&nbsp;
+                                            {{ service.name }}
+                                        </div>
+                                    </div>
+                                    <div class="font-size-10 ">
+                                        <p>
+                                            {{ "What suits your event best? Help vendors understand your needs by selecting your favorites and adding more details if needed." }}
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="font-size-10 ">
-                                    <p>
-                                        {{ "What suits your event best? Help vendors understand your needs by selecting your favorites and adding more details if needed." }}
-                                    </p>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
+                            </template>
+                        </div>
 
-                    <div class="md-layout md-gutter mt-40 grid">
-                        <template v-if="service.musicPlayer">
-                            <template v-for="(clip, clipindx) in service.clips">
-                                <ServiceCategoryCard
-                                class="mb-0 mr-0 ml-0"
-                                :clip="clip"
-                                :index="clipindx"
-                                :serviceCategory="service"
-                                :key="service.name+clipindx"
-                                :isLong="(clipindx) % 2 === 1"
-                                :isRow="getIsRow(clipindx)"
-                                :rowNum="getRowNum(clipindx, service)"
-                                :hasBudget="hasBudget(service.serviceCategory)"
-                                :musicPlayer="service.musicPlayer"
-                                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                :isSentRequest="
-                                    $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                    $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                "
-                                @showSpecific="getSpecification"
-                                @update="setServiceStyles"
-                                ></ServiceCategoryCard>
+                        <div class="md-layout md-gutter mt-40 grid">
+                            <template v-if="service.musicPlayer">
+                                <template v-for="(clip, clipindx) in service.clips">
+                                    <ServiceCategoryCard
+                                    class="mb-0 mr-0 ml-0"
+                                    :clip="clip"
+                                    :index="clipindx"
+                                    :serviceCategory="service"
+                                    :key="service.name+clipindx"
+                                    :isLong="(clipindx) % 2 === 1"
+                                    :isRow="getIsRow(clipindx)"
+                                    :rowNum="getRowNum(clipindx, service)"
+                                    :hasBudget="hasBudget(service.serviceCategory)"
+                                    :musicPlayer="service.musicPlayer"
+                                    :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                                    :isSentRequest="
+                                        $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                        $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                                    "
+                                    @showSpecific="getSpecification"
+                                    @update="setServiceStyles"
+                                    ></ServiceCategoryCard>
+                                </template>
                             </template>
-                        </template>
-                        <template v-else>
-                            <template v-for="(image, indx) in service.images">
-                                <ServiceCategoryCard
-                                class="mb-0 mr-0 ml-0"
-                                :image="image"
-                                :index="indx"
-                                :serviceCategory="service"
-                                :key="service.name+indx"
-                                :isLong="(indx) % 2 === 1"
-                                :isRow="getIsRow(indx)"
-                                :rowNum="getRowNum(indx, service)"
-                                :hasBudget="hasBudget(service.serviceCategory)"
-                                :musicPlayer="service.musicPlayer"
-                                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                :isSentRequest="
-                                    $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                    $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                "
-                                @showSpecific="getSpecification"
-                                @update="setServiceStyles"
-                                ></ServiceCategoryCard>
+                            <template v-else>
+                                <template v-for="(image, indx) in service.images">
+                                    <ServiceCategoryCard
+                                    class="mb-0 mr-0 ml-0"
+                                    :image="image"
+                                    :index="indx"
+                                    :serviceCategory="service"
+                                    :key="service.name+indx"
+                                    :isLong="(indx) % 2 === 1"
+                                    :isRow="getIsRow(indx)"
+                                    :rowNum="getRowNum(indx, service)"
+                                    :hasBudget="hasBudget(service.serviceCategory)"
+                                    :musicPlayer="service.musicPlayer"
+                                    :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                                    :isSentRequest="
+                                        $store.state.planningBoard.requirements[service.serviceCategory] &&
+                                        $store.state.planningBoard.requirements[service.serviceCategory].isIssued
+                                    "
+                                    @showSpecific="getSpecification"
+                                    @update="setServiceStyles"
+                                    ></ServiceCategoryCard>
+                                </template>
                             </template>
-                        </template>
+                        </div>
                     </div>
+                </template>
+            </template>
+        </template>
+        <template v-else>
+            <template v-if="proposals.length > 0">
+                    <div>
+                        <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
+                            <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
+                            {{ selectedCategory.fullTitle }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between">
+                            <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
+                            <div class="header-actions">
+                            <md-button class="md-simple normal-btn md-red" @click="compareProposal">
+                                <md-icon>bar_chart</md-icon>
+                                Compare Proposals
+                            </md-button>
+                            <span class="seperator"></span>
+                            <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
+                                <md-icon>edit</md-icon>
+                                I Want Something Different
+                            </md-button>
+                            </div>
+                        </div>
+                    </div>
+            </template>
+            <template v-if="proposals.length > 0">
+                <div>
+                    <!-- Event Booking Items -->
+                    <div class="events-booking-items" v-if="proposals.length">
+                        <ProposalCard
+                            @goDetail="goDetailPage"
+                            v-for="(proposal, index) in proposals.slice(0, 3)"
+                            :key="index"
+                            :proposal="proposal"
+                            :component="selectedCategory"
+                            :probability="getProbability(index)"
+                            :isCollapsed="showDetails"
+                            :isSelected="selectedProposal && selectedProposal.id === proposal.id"
+                        >
+                        </ProposalCard>
+                    </div>
+                    <template v-if="showDetails">
+                        <transition name="component-fade" mode="out-in">
+                            <EventProposalDetails
+                            class="mt-20"
+                            :proposal="selectedProposal"
+                            :category="selectedCategory"
+                            :key="selectedProposal.id"
+                            @favorite="favoriteProposal"
+                            @close="closeProposal"
+                            @ask="handleAsk"
+                            ></EventProposalDetails>
+                        </transition>
+                    </template>
                 </div>
             </template>
+            <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
         </template>
 
       </template>
@@ -158,13 +232,41 @@
     <template v-else>
       <PendingForVendors :expiredTime="expiredTime"></PendingForVendors>
     </template>
-    <div class="proposal-footer white-card d-flex justify-content-between">
+    <div v-if="requirementSection" class="proposal-footer white-card d-flex justify-content-between">
         <div>
             <md-button class="md-simple md-outlined md-red maryoku-btn">
-            <img :src="`${$iconURL}common/save-red.svg`" />
-            Save Draft
+                <img :src="`${$iconURL}common/save-red.svg`" />
+                Save Draft
             </md-button>
-            <md-button class="md-red maryoku-btn" v-if="step === 1" @click="findVendors"> Find Me Vendors </md-button>
+            <md-button class="md-red maryoku-btn" v-if="step === 1" @click="findVendors">
+                Find Me Vendors
+            </md-button>
+        </div>
+    </div>
+    <div v-else class="proposal-footer white-card d-flex justify-content-between">
+        <div>
+            <md-button class="md-simple maryoku-btn md-black">
+                <span class="text-transform-capitalize">I already have a vendor</span>
+            </md-button>
+            <md-button
+                class="md-simple maryoku-btn md-black text-transform-capitalize"
+                @click="isOpenedAdditionalModal = true"
+                >
+                <span class="text-transform-capitalize">Chanage requirements</span>
+            </md-button>
+        </div>
+        <div>
+            <md-button
+                class="md-simple md-outlined md-red maryoku-btn"
+                :disabled="proposals.length === 0 || !selectedProposal"
+                @click="bookVendor"
+            >
+            Book Now
+            </md-button>
+            <md-button class="md-red maryoku-btn"
+                    :disabled="proposals.length === 0 || !selectedProposal"
+                    @click="addToCart">Add To Cart
+            </md-button>
         </div>
     </div>
     <AdditionalRequestModal
@@ -187,13 +289,17 @@
     </special-requirement-modal>
     <transition name="slide-fade">
       <RequirementsCart
-        v-if="showCart"
+        v-if="showRCart"
         :requirements="requirements"
         :service-categories="serviceCategories"
         :total="event.components.length"
-        @close="showCart = false"
+        @close="showRCart = false"
       ></RequirementsCart>
     </transition>
+    <ServicesCart
+        v-if="showCart"
+        @close="showCart = false"
+    ></ServicesCart>
     <CustomPopup @cancel="popup = false" v-if="popup" />
     <AddBudgetModal
       v-if="showAddNewCategory"
@@ -219,6 +325,8 @@ import moment from "moment";
 
 import { postReq, getReq } from "@/utils/token";
 
+import Proposal from "@/models/Proposal";
+
 const components = {
   CustomPopup: () => import("./components/modals/Popup.vue"),
   ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
@@ -233,30 +341,41 @@ const components = {
   AddBudgetModal: () => import("./components/modals/AddBudget.vue"),
   AddBudgetConfirmModal: () => import("./components/modals/AddBudgetConfirm.vue"),
 
+  ProposalCard: () => import("../components/ProposalCard"),
+  EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
+  HeaderActions: () => import("@/components/HeaderActions"),
+  ServicesCart: () => import("./ServicesCart.vue"),
+
 };
 
 export default {
   components,
   data() {
     return {
-      popup: false,
-      showCart: false,
-      allRequirements: null,
-      subCategory: null,
-      serviceCards: ServiceCards,
-      isOpenedAdditionalModal: false,
-      isOpenedFinalModal: false,
-      selectedCategory: null,
-      isLoading: false,
-      isLoadingStoredData: false,
-      showCounterPage: false,
-      expiredTime: 0,
+        popup: false,
+        showRCart: false,
+        showCart: false,
+        allRequirements: null,
+        subCategory: null,
+        serviceCards: ServiceCards,
+        isOpenedAdditionalModal: false,
+        isOpenedFinalModal: false,
+        selectedCategory: null,
+        isLoading: false,
+        isLoadingStoredData: false,
+        isLoadingProposal: false,
+        showCounterPage: false,
+        expiredTime: 0,
 
-      proposalsByCategory: {},
-      showAddNewCategory: false,
-      showAddBudgetConfirm: false,
-      booked: false,
-      requirements:{},
+        requirementSection: true,
+        proposalsByCategory: {},
+        showAddNewCategory: false,
+        showAddBudgetConfirm: false,
+        booked: false,
+
+        showDifferentProposals: false,
+        showDetails: false,
+        selectedProposal: null,
     };
   },
   async created() {
@@ -269,19 +388,21 @@ export default {
       this.isLoadingStoredData = true;
 
         await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
-        if(localStorage.getItem('planner-requirements') && JSON.parse(localStorage.getItem('eventId')) == this.event.id){
-            this.requirements = JSON.parse(localStorage.getItem('planner-requirements')) || {};
-        }
-        else{
-            this.requirements = this.$store.state.planningBoard.requirements
-        }
 
       this.isLoadingStoredData = false;
       this.selectCategory(this.categories[0]);
+
     }
+    this.isLoadingProposal = true;
+    const tenantId = this.$authService.resolveTenantId()
+    await this.getProposals({eventId: this.event.id, tenantId});
+    this.isLoadingProposal = false;
   },
   computed: {
     eventRequirements() {
+        return this.$store.state.planningBoard.requirements;
+    },
+    requirements() {
         return this.$store.state.planningBoard.requirements;
     },
     categories() {
@@ -339,12 +460,17 @@ export default {
       console.log("percentOfBudgetCategories", Object.keys(this.requirements).length, this.event.components.length);
       return Object.keys(this.requirements).length;
     },
+
+    proposals() {
+      let proposals = this.$store.state.event.proposals;
+      if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
+      return proposals[this.selectedCategory.componentId];
+    },
   },
   methods: {
-
     ...mapMutations("event", [ "setProposalsByCategory"]),
-
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
+    ...mapActions("event", ["getProposals"]),
     ...mapMutations("modal", ["setOpen"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements"]),
@@ -352,26 +478,28 @@ export default {
       this.isOpenedFinalModal = true;
     },
     saveSpecialRequirements(data) {
-      this.isOpenedFinalModal = false;
-      this.setSpecialRequirements(data);
-      this.expiredTime = moment(new Date())
-        .add(3, "days")
-        .valueOf();
+        this.isOpenedFinalModal = false;
 
-      const requestRequirement = {
-        issuedTime: new Date().getTime(),
-        expiredBusinessTime: this.expiredTime,
-      };
-      postReq(`/1/events/${this.event.id}/find-vendors`, {
-        issuedTime: new Date().getTime(),
-        expiredBusinessTime: this.expiredTime,
-      }).then(res => {
-        this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
-        this.$store.dispatch(
-          "event/saveEventAction",
-          new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
-        );
-      });
+        this.setSpecialRequirements(data);
+        this.expiredTime = moment(new Date())
+            .add(3, "days")
+            .valueOf();
+
+        const requestRequirement = {
+            issuedTime: new Date().getTime(),
+            expiredBusinessTime: this.expiredTime,
+        };
+        postReq(`/1/events/${this.event.id}/find-vendors`, {
+            issuedTime: new Date().getTime(),
+            expiredBusinessTime: this.expiredTime,
+        }).then(res => {
+            this.$store.dispatch(
+                "event/saveEventAction",
+            new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
+            );
+        });
+
+        this.requirementSection = false;
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find(item => item.componentId == categoryKey);
@@ -455,6 +583,9 @@ export default {
       if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },
+    openRCart() {
+      this.showRCart = true;
+    },
     openCart() {
       this.showCart = true;
     },
@@ -473,9 +604,9 @@ export default {
             category['componentId'] = category.key;
         }
       this.selectedCategory = category;
-      let proposals = this.$store.state.event.proposals;
-      if (proposals[category.componentId]) {
-        proposals[category.componentId].forEach((proposal, index) => {
+      let getProposals = this.$store.state.event.proposals;
+      if (getProposals[category.componentId]) {
+        getProposals[category.componentId].forEach((proposal, index) => {
           new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
             this.$set(proposal, "viewed", true);
           });
@@ -518,6 +649,49 @@ export default {
         }
         return null;
     },
+
+    compareProposal() {
+      this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
+    },
+    getProbability(index) {
+      return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
+    },
+    goDetailPage(proposal) {
+      this.showDetails = true;
+
+      if(proposal.selectedVersion > -1)
+        this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
+      else this.selectedProposal = proposal;
+      console.log('selectedProposal', proposal, this.selectedProposal);
+
+    },
+    closeProposal() {
+      this.showDetails = false;
+      this.selectedProposal = null;
+    },
+    async bookVendor() {
+      if(!this.selectedProposal) return;
+      await new Proposal({ ...this.selectedProposal }).save();
+      this.$router.push({
+        name: "CheckoutWithVendor",
+        params: {
+            proposalId: this.selectedProposal.id,
+            proposalType: 'planner',
+        },
+      });
+    },
+    async addToCart() {
+      if(!this.selectedProposal) return;
+      this.updateCartItem({
+          category: this.selectedCategory.componentId,
+          event: {id: this.event.id},
+          proposalId: this.selectedProposal.id,
+      })
+      this.$store.dispatch('event/updateProposal', {
+         proposal: {...this.selectedProposal, isFavorite: false},
+         category: this.selectedProposal.vendor.vendorCategory,
+      });
+    },
   },
   watch: {
     requirements(newVal) {
@@ -535,18 +709,43 @@ export default {
             }
         }
     }
+    .category-title {
+        img {
+        width: 30px;
+        }
+    }
+    .header-actions {
+        display: flex;
+        height: max-content;
+    }
+    .seperator {
+        border-left: solid 1px #050505;
+    }
+    .events-booking-items {
+        padding: 0 0em;
+        margin-bottom: 1em;
+        align-items: stretch;
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
     .loading-screen {
         height: 100vh;
     }
     .proposal-footer {
         padding: 40px 50px;
+        position: fixed;
+        bottom: 0;
+        width: 75%;
+        z-index: 3;
         button {
-        width: 250px;
-        margin-left: 20px;
-        img {
-            width: 22px;
-            margin-right: 10px;
-        }
+            width: 250px;
+            margin-left: 20px;
+            img {
+                width: 22px;
+                margin-right: 10px;
+            }
         }
     }
     .add-category-button {
@@ -571,6 +770,7 @@ export default {
     }
     .category-list{
         border-bottom: 2px ridge;
+        cursor: pointer;
         img {
             width: 30px;
         }

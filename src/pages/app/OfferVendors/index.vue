@@ -642,6 +642,7 @@ export default {
     }
     .category-list{
         border-bottom: 2px ridge;
+        cursor: pointer;
         img {
             width: 30px;
         }

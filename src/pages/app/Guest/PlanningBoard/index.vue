@@ -554,6 +554,10 @@
     }
     .proposal-footer {
         padding: 40px 50px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 3;
         button {
             width: 250px;
             margin-left: 20px;
@@ -585,6 +589,7 @@
     }
     .category-list{
         border-bottom: 2px ridge;
+        cursor: pointer;
         img {
             width: 30px;
         }

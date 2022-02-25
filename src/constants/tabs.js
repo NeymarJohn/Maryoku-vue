@@ -10,3 +10,13 @@ export const HeaderActions = [
     {key: 'share', icon: 'common/share-dark.svg'},
 ]
 
+export const HeaderActionsRequirements = [
+    {key: 'like', icon: 'common/heart-red.svg'},
+    {key: 'cart', icon: 'common/heart-red.svg'},
+]
+
+export const HeaderActionsDropdown = [
+    {key: 'download', icon: 'common/download-dark.svg'},
+    {key: 'share', icon: 'common/share-dark.svg'},
+]
+

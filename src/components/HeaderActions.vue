@@ -2,16 +2,32 @@
   <div class="header-actions" :class="className">
     <ul class="d-flex list-style-none">
       <template >
-        <li v-for="action in actions" v-if="action.key === 'share' && !hideShare || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment"
-            :class="{'md-small-hide':action.key !== 'share'}"
-        >
-          <md-button
-            class="md-simple md-just-icon adaptive-button"
-            :class="{active: action.key === 'comment' && isCommentMode}"
-            @click="click(action.key)">
-            <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`" />
-          </md-button>
-        </li>
+          <template v-if="requirement">
+            <li v-for="(singleAction, i) in requirementActions" v-if="singleAction.key === 'like' || singleAction.key === 'cart'  || singleAction.key === 'comment' && canComment"
+                :class="{'md-small-hide':singleAction.key !== 'like'}"
+                :key="i"
+            >
+                <md-button
+                    class="md-simple md-just-icon adaptive-button"
+                    :class="{active: singleAction.key === 'comment' && isCommentMode}"
+                    @click="click(singleAction.key)">
+                    <img class="svg-icon-header-action" :src="`${$iconURL}${singleAction.icon}`" />
+                </md-button>
+            </li>
+          </template>
+          <template v-else>
+            <li v-for="(action, j) in actions" v-if="action.key === 'share' && !hideShare || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment"
+                :class="{'md-small-hide':action.key !== 'share'}"
+                :key="j"
+            >
+                <md-button
+                    class="md-simple md-just-icon adaptive-button"
+                    :class="{active: action.key === 'comment' && isCommentMode}"
+                    @click="click(action.key)">
+                    <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`" />
+                </md-button>
+            </li>
+          </template >
         <li
           class="md-small-hide"
         >
@@ -34,9 +50,6 @@
             </div>
           </md-button>
         </li>
-        <li>
-          <img class="svg-icon-more-header-action" :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Group%2019186.svg`" />
-        </li>
       </template>
     </ul>
     <sharing-modal
@@ -48,7 +61,7 @@
 </template>
 <script>
 import SharingModal from "@/components/Modals/SharingModal";
-import { HeaderActions } from "@/constants/tabs";
+import { HeaderActions, HeaderActionsRequirements, HeaderActionsDropdown } from "@/constants/tabs";
 
 export default {
   name: "header-actions",
@@ -68,6 +81,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    requirement: {
+      type: Boolean,
+      default: false,
+    },
     page: {
       type: String,
       default: 'event',
@@ -80,6 +97,8 @@ export default {
   data() {
     return {
       actions: HeaderActions,
+      requirementActions: HeaderActionsRequirements,
+      dropdownActions: HeaderActionsDropdown,
       isCommentMode: false,
       isSharing: false,
     };
@@ -203,5 +222,29 @@ export default {
   height: 40px;
   margin-left: 5px;
 }
+    .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active {
+        background-color: #ffedb7 !important;
+        color: #000 !important;
+    }
+    .dropdown-width{
+        // width: max-content;
+    }
+    .category-list{
+        border-bottom: 2px ridge;
+        cursor: pointer;
+        img {
+            width: 30px;
+        }
+        .category-heading{
+            padding: 10px 1.5rem;
+            margin: 0 5px;
+        }
+        .category-item{
+            // display: flow-root;
+            .category-name{
+                float: left;
+            }
+        }
+    }
 
 </style>
