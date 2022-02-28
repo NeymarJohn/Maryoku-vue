@@ -11,9 +11,7 @@
                     class="md-simple md-just-icon adaptive-button"
                     :class="{active: singleAction.key === 'comment' && isCommentMode}"
                     @click="click(singleAction.key)">
-                    <img class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
-                    <span v-if="singleAction.key === 'like'" :class="{'like-dot': proposalUnviewed ==true}"></span>
-                    <span v-if="singleAction.key === 'cart'" :class="'cart-dot'">1</span>
+                    <img class="svg-icon-header-action" :src="`${$iconURL}${singleAction.icon}`" />
                 </md-button>
             </li>
           </template>
@@ -84,10 +82,6 @@ export default {
       default: false,
     },
     requirement: {
-      type: Boolean,
-      default: false,
-    },
-    proposalUnviewed: {
       type: Boolean,
       default: false,
     },
@@ -251,44 +245,6 @@ export default {
                 float: left;
             }
         }
-    }
-    .svg-icon-header{
-        width: 30px !important;
-    }
-
-    .like-dot {
-        width: 20px;
-        height: 20px;
-        margin: 37px 34px 57px 13px;
-        padding: 3px 11px 3px 10px;
-        background-color: #f51355;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: left;
-        color: #fff;
-        border-radius: 50%;
-        position: absolute;
-    }
-    .cart-dot {
-        width: 28px;
-        height: 28px;
-        margin: 37px 34px 57px 13px;
-        padding: 3px 11px 3px 10px;
-        background-color: #f51355;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: left;
-        color: #fff;
-        border-radius: 50%;
-        position: absolute;
     }
 
 </style>

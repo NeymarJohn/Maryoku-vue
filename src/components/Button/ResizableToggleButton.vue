@@ -4,7 +4,6 @@
       <img :src="selectedIcon" v-if="clicked && selectedIcon" />
       <img :src="icon" :style="iconStyle" v-else />
       <span class="label-text">{{ label }}</span>
-      <span v-if="proposalCategory" class="badge-mark"></span>
     </button>
     <span class="badge-mark" v-if="hasBadge && !clicked"></span>
   </div>
@@ -37,10 +36,6 @@ export default {
       default: false,
     },
     hasBadge: {
-      type: Boolean,
-      default: false,
-    },
-    proposalCategory: {
       type: Boolean,
       default: false,
     },
