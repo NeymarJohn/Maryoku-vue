@@ -87,18 +87,20 @@
                 <a :href="`${fileUrl}`" class="color-black" target="_blank"> {{ fileName }} </a>
               </div>
               <div>
-                <div class="progressbar color-won"></div>
-                <span class=" color-won"> 100% </span>
+                <div class="progressbar color-yellow-dark">
+                  <div class="progress-inner-bar" :class="{fileIsLoading}"></div>
+                </div>
+                <span class=" color-won">{{fileIsLoading?'90%':'100%'}}</span>
               </div>
               <div>
-                <span class=" color-red" :class=" {'color-won': !errors}"> {{ errors ? 1 : 'NO ' }} </span>
+                <span v-show="!fileIsLoading" class=" color-red" :class=" {'color-won': !errors}"> {{ errors ? 1 : 'NO ' }} </span>
                 <span class="color-black-heavy"> ERROR </span>
                 <span v-if="errors" @click="showErrors=!showErrors"><md-icon>{{
                     showErrors ? 'expand_less' : 'expand_more'
                   }}</md-icon></span>
               </div>
             </div>
-            <span class="attach-trash" @click="fileName = null; csv = null;"><md-icon>delete</md-icon></span>
+            <span class="attach-trash" @click="deleteFile"><md-icon>delete</md-icon></span>
           </div>
         </div>
         <div v-if="showError&&!csv" class="md-error error_text">{{ this.errorMessage }}</div>
@@ -287,6 +289,7 @@ export default {
     csv: null,
     csv2: [],
     showErrors: false,
+    fileIsLoading: true,
     errors: 1,
     upload: true,
     header: false,
@@ -330,10 +333,17 @@ export default {
     eventIcon(idx) {
       return this.icons[Math.ceil(Math.random() * 10 * idx) % this.icons.length];
     },
+    deleteFile(){
+      this.fileName = null;
+      this.csv = null;
+      this.csv2 = []
+      this.sample = []
+    },
     close() {
       this.$emit("cancel");
     },
     async handleAdded(file) {
+      this.fileIsLoading = true
       this.csv = file;
       this.fileName = file.name;
       let data = {
@@ -358,6 +368,7 @@ export default {
         axios
           .post(this.url, data)
           .then(response => {
+            this.fileIsLoading = false
             if (response.data) {
               this.errors = response.data.success ? 0 : 1;
               const {data} = response.data;
@@ -517,7 +528,16 @@ export default {
   height: 8px;
   border: #2cde6b 2px solid;
   border-radius: 120px;
+}
+.progress-inner-bar{
+  width: 100%;
+  height: 100%;
+  border-radius: 120px;
   background-color: #2cde6b;
+}
+.progress-inner-bar.fileIsLoading{
+  width: 90%;
+
 }
 .event-logo {
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);

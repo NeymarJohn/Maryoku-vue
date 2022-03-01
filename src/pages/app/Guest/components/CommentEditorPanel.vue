@@ -322,15 +322,16 @@ export default {
       comment.eventCommentComponent.id = hoveredComponent.id;
       if (isFavorite) {
         if (!comment.favoriteUsers) comment.favoriteUsers = [];
-        comment.favoriteUsers.push(this.$store.state.auth.user.id);
+        comment.favoriteUsers.push(this.$auth.user.id);
         comment.myFavorite = true;
       } else {
         const index = comment.favoriteUsers.findIndex(
-          item => item? item.id === this.$store.state.auth.user.id:false
+          item => item.id == this.$auth.id
         );
         comment.favoriteUsers.splice(index, 1);
         comment.myFavorite = false;
       }
+      console.log(comment)
       const selectedComponent = this.commentComponents[this.selectedComponentIndex];
       const commentIndex = hoveredComponent.comments.findIndex(item=>item.id===comment.id)
       this.commentComponents[this.selectedComponentIndex].comments[commentIndex] = comment
@@ -341,6 +342,7 @@ export default {
       this.$emit('deleteComment', {comment, index:this.selectedComponentIndex} )
     },
     updateComment(comment) {
+      console.log('panel.updateComment', comment);
       this.editingCommentId = "";
 
       const selectedComponent = this.commentComponents[this.selectedComponentIndex];
@@ -398,6 +400,11 @@ export default {
       this.showAddress = false
     }
   },
+  watch:{
+    commentComponents(newVal){
+        console.log('commentComponent', newVal)
+    }
+  }
 };
 </script>
 
