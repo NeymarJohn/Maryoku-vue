@@ -22,9 +22,6 @@
                         <img src="/static/icons/red-clip.svg">
                         <div class="ml-10">Choose File</div>
                     </md-button>
-<!--                    <form enctype="multipart/form-data">-->
-<!--                        <input type="file">-->
-<!--                    </form>-->
                     <div class="font-size-14">Or</div>
                     <div class="drag-your-file-text">Drag your file here</div>
                 </div>
@@ -44,13 +41,10 @@
 
 <script>
 import { Modal } from "@/components";
-import vue2Dropzone from "vue2-dropzone";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
     name: "FeedbackUploadFilesModal",
     components: {
         Modal,
-        vueDropzone: vue2Dropzone,
     },
     methods: {
         close() {
