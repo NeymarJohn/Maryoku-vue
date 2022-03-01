@@ -80,7 +80,6 @@
           </td>
           <td class="planned" width="20%">${{event.unexpectedBudget}}</td>
           <td class="new-element-budget" width="15%">
-<!--            <input v-model="event.unexpectedBudget" />-->
           </td>
           <td class="actual red-label" width="15%">
           </td>
@@ -99,7 +98,6 @@
         </td>
         <td class="planned" width="20%">${{extras}}</td>
         <td class="new-element-budget" width="15%">
-          <!--            <input v-model="event.unexpectedBudget" />-->
         </td>
         <td class="actual red-label" width="15%">
         </td>
@@ -109,21 +107,6 @@
 
     <table class="event-blocks__table actions-table" style="border-spacing: 0 1px; ">
       <tbody>
-<!--        <tr class="taxes">-->
-<!--          <td class="taxes-title">-->
-<!--            <img-->
-<!--              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"-->
-<!--              width="20"-->
-<!--            />-->
-<!--            Extras-->
-<!--          </td>-->
-<!--          <td class="actual green-label">-->
-<!--          </td>-->
-<!--          <td>${{ extras.toFixed(2) }}</td>-->
-<!--          <td></td>-->
-<!--          <td class="expand" style="text-align: right; padding-right: 1em">-->
-<!--          </td>-->
-<!--        </tr>-->
         <tr class="total">
           <td class="total-title"></td>
           <td>Old budget</td>
