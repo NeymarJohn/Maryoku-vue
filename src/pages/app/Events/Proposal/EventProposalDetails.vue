@@ -131,7 +131,7 @@
               class="proposal-images-carousel"
             >
               <template slot="prev">
-                <span class="prev handle-btn">
+                <span v-if="!isMobile" class="prev handle-btn">
                   <md-icon>keyboard_arrow_left</md-icon>
                 </span>
               </template>
@@ -141,7 +141,7 @@
                 <div class="mt-5">{{ item.caption }}</div>
               </div>
               <template slot="next">
-                <span class="next handle-btn">
+                <span v-if="!isMobile" class="next handle-btn">
                   <md-icon>keyboard_arrow_right</md-icon>
                 </span>
               </template>
@@ -368,7 +368,7 @@
                   <div class="md-layout mt-20">
                     <div
                       v-for="option in guaranteedOptions"
-                      class="md-layout-item md-size-30 py-10"
+                      class="md-layout-item py-10"
                       :key="option.value"
                       :style="{ display: proposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
                     >
@@ -1042,6 +1042,7 @@ export default {
       }
 
       .proposal-body {
+        min-height: 500px;
         position: relative;
 
         h1 {

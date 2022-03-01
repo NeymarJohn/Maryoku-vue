@@ -185,7 +185,7 @@
         @cancel="closeEditBudgetModal"
         @save="onBudgetChangeModal"
       ></budget-edit-modal>
-      <modal v-if="editBudgetModalStep===2" class="add-category-model">
+      <modal v-show="editBudgetModalStep===2" class="add-category-model">
         <template slot="header">
           <div class="add-budget-modal-header">
             <button @click="setModalStep('previous')">
@@ -730,6 +730,23 @@ export default {
         if (this.event.processingStatus === "accept-proposal") {
           elements.push(chooseVendor);
         }
+        // show when you approve budget
+        // if (this.event.budgetProgress == 100) {
+        //     this.event.components.sort((a, b) => a.order - b.order);
+        //     this.event.components.forEach((item) => {
+        //         if (item.componentId !== "unexpected") {
+        //             elements.push({
+        //                 title: item.bookTitle,
+        //                 status: "not-complete",
+        //                 route: "booking/" + item.id,
+        //                 icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
+        //                 progress: item.progress ? item.progress : 0,
+        //                 id: item.id,
+        //             });
+        //         }
+        //     });
+        // }
+
         return elements;
       } else {
         return this.event.checkList;
@@ -777,6 +794,15 @@ export default {
     roundNumber(amount) {
       return Math.round(amount / 10) * 10;
     },
+  },
+  watch: {
+
+    //not sure why we need it but it makes errors
+    //
+    // newBudget: function (newValue) {
+    //   const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //   this.newBudget = result;
+    // },
   },
 };
 </script>
