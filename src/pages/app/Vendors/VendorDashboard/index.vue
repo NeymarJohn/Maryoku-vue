@@ -152,6 +152,7 @@ export default {
   data() {
     const date = new Date().getFullYear()
     return {
+      yearlyRevenue :0,
       hola: null,
       iconUrl: `${this.$resourceURL}storage/icons/`,
       storageIcon: `${this.$IconURL}storage/icons/`,
@@ -266,11 +267,12 @@ export default {
     },
 
     getServiceReport() {
-      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/service/${this.vendorData.id}?start=${new Date(
+      this.$http.get(`${process.env.SERVER_URL}/1/transaction/report/yearly/${this.vendorData.id}?start=${new Date(
         this.selectedYear + "-01-01",
       ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`).then(res => {
-        if (res.data.length) {
-          this.serviceReportData = res.data;
+        if (res.data.services && res.data.services.length) {
+          this.serviceReportData = res.data.services;
+          this.yearlyRevenue = res.data.total
         }
       });
     },
@@ -404,12 +406,12 @@ export default {
     proposalRequests() {
       return this.$store.state.vendorDashboard.proposalRequests;
     },
-    yearlyRevenue() {
-      if (!this.serviceReportData || this.serviceReportData.length === 0) return 0;
-      return this.serviceReportData.reduce((s, item) => {
-        return s + item.amount / 100;
-      }, 0);
-    },
+    // yearlyRevenue() {
+    //   if (!this.serviceReportData || this.serviceReportData.length === 0) return 0;
+    //   return this.serviceReportData.reduce((s, item) => {
+    //     return s + item.amount / 100;
+    //   }, 0);
+    // },
     proposals() {
       return this.$store.state.vendorDashboard.proposals;
     },

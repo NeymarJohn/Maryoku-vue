@@ -5,7 +5,7 @@
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
   margin: auto;
-  background-color: #F0464D !important;
+  background-color: #f51355 !important;
   border-radius: 50%;
   opacity: 1;
   z-index: 1;
@@ -25,9 +25,8 @@
 }
 
 .vfc-week .vfc-day span.vfc-span-day.vfc-today {
-  background-color:  #FEE5EC !important;
-  color: #F0464D;
-  // font-family: "Manrope-Bold";
+  background-color:  #FEE5EC;
+  color: #f51355;
   font-weight: bold;
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-today.vfc-marked {
@@ -106,7 +105,7 @@ span.vfc-span-day.vfc-marked,
   color: white !important;
 
   &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-    background-color: #F0464D !important;
+    background-color: #f51355 !important;
     border-radius: unset;
   }
 }
@@ -164,7 +163,7 @@ span.vfc-span-day.vfc-hide {
     background-color: white !important;
     &.vfc-today {
       color: $vendorColor !important;
-      background-color: white !important;
+      background-color:  #d7c4d4!important;
       font-family: "Manrope-Bold";
       box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.15);
     }

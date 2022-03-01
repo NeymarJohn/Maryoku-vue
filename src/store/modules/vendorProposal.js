@@ -391,7 +391,7 @@ const actions = {
         dispatch("getTimelineDates", resp.eventData.id);
         if (resp.proposal) {
           commit("setProposal", resp.proposal);
-          if (resp.proposal.selectedVersion && resp.proposal.selectedVersion > -1) commit("selectVersion", resp.proposal.selectedVersion)
+          if (resp.proposal.selectedVersion && resp.proposal.selectedVersion > -1) commit("selectVersion", proposal.selectedVersion)
         }
         resolve(resp);
       });
