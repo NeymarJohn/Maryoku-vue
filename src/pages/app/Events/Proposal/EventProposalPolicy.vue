@@ -19,25 +19,24 @@
                             {{ proposal.vendor.healthPolicy }}
                         </p>
                     </template>
-                  <template v-if="proposal.vendor.guaranteed && proposal.vendor.guaranteed.length">
-                    <md-divider></md-divider>
-                    <div class="mt-10 font-bold-extra">Guaranteed with every staff member:</div>
-                    <div class="md-layout mt-10">
-                      <div
-                        v-for="option in guaranteedOptions"
-                        class="md-layout-item md-size-30 md-small-size-100 py-10"
-                        :key="option.value"
-                        :style="{ display: proposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
-                      >
-                        <div v-if="proposal.vendor.guaranteed.includes(option.value)"
-                             class="d-flex align-center font-size-14">
-                          <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="24px"/>
-                          {{ option.label }}
+                    <template v-if="proposal.vendor.guaranteed && proposal.vendor.guaranteed.length">
+                        <md-divider></md-divider>
+                        <div class="mt-10 font-bold-extra">Guaranteed with every staff member:</div>
+                        <div class="md-layout mt-10">
+                            <div
+                                v-for="option in guaranteedOptions"
+                                class="md-layout-item md-size-30 md-small-size-100 py-10"
+                                :key="option.value"
+                                :style="{ display: proposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+                            >
+                                <div v-if="proposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center font-size-14">
+                                    <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="24px" />
+                                    {{ option.label }}
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else>
+                    </template>
+                  <template v-if="(!proposal.vendor.guaranteed || !proposal.vendor.guaranteed.length) && !proposal.vendor.healthPolicy">
                     <div class="py-10"> hmm...seems that vendor did not include that information</div>
                   </template>
                 </div>

@@ -353,7 +353,6 @@ export default {
         comment.favoriteUsers.push(this.$store.state.auth.user.id);
         comment.myFavorite = true;
       } else {
-        console.log('##-356, CommentEditorPanel.vue',comment.favoriteUsers)
         const index = comment.favoriteUsers.findIndex(
           item => item? item.id === this.$store.state.auth.user.id:false
         );

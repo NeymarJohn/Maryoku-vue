@@ -299,6 +299,7 @@
         this.cart = await this.getCartItems(eventId);
         this.pageType = CART;
       }
+      console.log("checkout.proposal", this.proposal, this.successURL);
       this.loading = false;
 
     },
