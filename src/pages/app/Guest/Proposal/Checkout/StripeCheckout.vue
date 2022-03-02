@@ -36,9 +36,8 @@ export default {
     this.$refs.checkoutRef.redirectToCheckout();
   },
   data() {
-    this.publishableKey = process.env.STRIPE_PK;
-
     return {
+      publishableKey: process.env.STRIPE_PK,
       loading: false,
       lineItems: this.items.map((it) => {
         return {

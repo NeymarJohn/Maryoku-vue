@@ -165,13 +165,6 @@
               ></event-component-vendor-item>
             </td>
           </tr>
-<!--          <tr class="item-actions" v-if="!eventCategoryItem.bookedBudget">-->
-<!--            <td colspan="5" class="actions-list text-right" style="position: relative">-->
-<!--              <md-button class="md-simple md-red edit-btn-1" @click="addMyVendor">Add My Vendor</md-button>-->
-<!--              <span class="button-split"></span>-->
-<!--              <md-button class="md-simple md-red edit-btn-1" @click="showDeleteModal">Delete Category</md-button>-->
-<!--            </td>-->
-<!--          </tr>-->
         </template>
       </tbody>
     </table>

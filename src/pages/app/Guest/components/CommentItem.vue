@@ -2,7 +2,12 @@
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
       <div class="comment-item-avatar">
-        <img class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
+        <Avartar :name="comment.planner.name"
+                 v-if="comment.planner && comment.planner.name"></Avartar>
+        <Avartar :name="comment.customer.name"
+                 v-else-if="comment.customer && comment.customer.name"></Avartar>
+        <img v-else-if="!comment.customer && !comment.planner "  class="user-avatar"
+             :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
       </div>
       <div class="comment-item-description">
         <div v-if="comment.planner">{{comment.planner.name}}</div>
@@ -79,10 +84,18 @@
   </div>
 </template>
 <script>
+import Avartar from "@/components/Avartar.vue";
+
 export default {
   name: "comment-item",
+  components: {
+    Avartar,
+  },
   props: {
     comment: {
+      type: Object
+    },
+    proposal: {
       type: Object
     },
     replies: {
@@ -95,7 +108,8 @@ export default {
   data() {
     return {
       editingDescription: this.comment.description,
-      isEditing:false
+      isEditing:false,
+      user: this.$store.state.auth.user
     };
   },
   methods: {
@@ -124,9 +138,8 @@ export default {
   computed: {
     getTimeDiffString() {},
     myFavorite() {
-      console.log("auth", this.$auth)
       if (!this.comment.favoriteUsers) return false
-      if (this.comment.favoriteUsers.findIndex(userId => userId === this.$auth.user.id) < 0) {
+      if (this.comment.favoriteUsers.findIndex(userId => userId === this.user.id) < 0) {
         return false
       }
       return true

@@ -14,7 +14,7 @@
         </md-table-toolbar>
 
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ pagination.limit * (pagination.page - 1) + getIndex(item) + 1 }}</md-table-cell>
+          <md-table-cell md-label="ID" md-sort-by="_id" md-numeric>{{ pagination.limit * (pagination.page - 1) + getIndex(item) + 1 }}</md-table-cell>
           <md-table-cell md-label="Company" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
           <md-table-cell md-label="URL" md-sort-by="id">
             <div class="d-flex align-center">
@@ -39,14 +39,14 @@
           <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
             item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
             }}</md-table-cell>
-          <md-table-cell md-label="Count" md-sort-by="proposalAggregation.total">{{
-                item.proposals
-            }}</md-table-cell>
-          <md-table-cell>
-            <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect(item)">
-              <md-icon>{{`${selectedIdx !== item.id ? 'keyboard_arrow_right' : 'keyboard_arrow_down'}`}} </md-icon>
-            </md-button>
-          </md-table-cell>
+          <md-table-cell md-label="RFP(s)">
+              <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect('RFPs', item)">{{
+                      0
+            }}</md-button></md-table-cell>
+          <md-table-cell md-label="Count" md-sort-by="proposalAggregation.total">
+            <md-button class="md-icon-button md-simple collapse-button" @click="handleSelect('PR', item)">{{
+                    item.proposals
+            }}</md-button></md-table-cell>
         </md-table-row>
     </md-table>
       <div class="d-flex align-center">
@@ -74,16 +74,22 @@
         <ProposalTable :proposals="vendorProposals" @close="closeModal()"></ProposalTable>
       </template>
     </Modal>
+      <Modal containerClass="modal-container w-max-1100 no-header no-footer" v-if="showRFPTable">
+          <template slot="body">
+            <RFPTable :rfps="vendorRFPs" @close="closeModal()"></RFPTable>
+          </template>
+      </Modal>
   </div>
 </template>
 <script>
 import Vendor from "@/models/Vendors";
 import Proposal from "@/models/Proposal";
+import ProposalRequest from "@/models/ProposalRequest";
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
 import { VENDOR_PAGE_PAGINATION } from "@/constants/pagination";
 const ProposalTable = () => import('./components/ProposalTable')
-import { PROPOSAL_STATUS } from "@/constants/status";
+const RFPTable = () => import('./components/RFPTable')
 
 const components = {
     Loader: () => import('@/components/loader/Loader.vue'),
@@ -94,7 +100,7 @@ const components = {
 
 
 export default {
-  components : {...components, ProposalTable},
+  components : {...components, ProposalTable, RFPTable},
   data() {
     return {
       vendors: [],
@@ -106,7 +112,9 @@ export default {
       pagination: VENDOR_PAGE_PAGINATION,
       sortFields: { sort: "url", order: "asc" },
       vendorProposals: [],
+      vendorRFPs: [],
       showProposalTable: false,
+      showRFPTable: false,
     };
   },
   async created() {
@@ -159,15 +167,23 @@ export default {
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, "vendors.xlsx");
     },
-    async handleSelect(item){
+    async handleSelect(type, item){
+      if (type === 'RFPs' && parseInt(item.rpfs) === 0 || type === 'PR' && parseInt(item.proposals) === 0) return
       if ( this.selectedIdx !== item.id) {
         this.loading = true;
         this.selectedIdx = item.id;
 
-        let query = new Proposal().for(new Vendor({ id: item.id }));
-        this.vendorProposals = await query.get();
+        if (type === 'PR') {
+            const query = new Proposal().for(new Vendor({ id: item.id }));
+            this.vendorProposals = await query.get();
+            this.showProposalTable = true;
 
-        this.showProposalTable = true;
+        } else if (type === 'RFPs') {
+            const query = new ProposalRequest().for(new Vendor({ id: item.id }));
+            this.vendorRFPs = await query.get();
+            this.showRFPTable = true;
+        }
+
         this.loading = false;
       } else {
         this.selectedIdx = null;
@@ -203,6 +219,7 @@ export default {
     },
     closeModal () {
         this.showProposalTable = false;
+        this.showRFPTable = false;
         this.selectedIdx = null;
     }
   },

@@ -47,7 +47,7 @@
             </div>
             <div v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true">
                 <ProgressRadialBar
-                :value="proposals[selectedCategory.componentId].length"
+                :value="proposals.length"
                 :total="3"
                 icon="common/checked-calendar-red.svg"
                 @click="openCart"
@@ -61,7 +61,7 @@
                 ></ProgressRadialBar>
             </div>
             <div class="md-layout-itemm">
-                <header-actions :anyLiked="isAnyLiked" :requirement="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
+                <header-actions :requirement="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
             </div>
                 <drop-down class="d-inline-block" >
                     <button data-toggle="dropdown">
@@ -109,8 +109,9 @@
                 </drop-down>
         </div>
 
+        <!-- <template v-if="event.vendorCategory && event.vendorCategory.componentId == selectedCategory.componentId"> -->
         <template v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true">
-            <template v-if="proposals[selectedCategory.componentId].length > 0">
+            <template v-if="proposals.length > 0">
                 <div>
                     <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                         <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
@@ -119,11 +120,22 @@
                 </div>
                 <div>
                     <div class="d-flex justify-content-between">
-                        <div>We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book now before it’s too late</div>
+                        <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
+                        <!-- <div class="header-actions">
+                            <md-button class="md-simple normal-btn md-red" @click="compareProposal">
+                                <md-icon>bar_chart</md-icon>
+                                Compare Proposals
+                            </md-button>
+                            <span class="seperator"></span>
+                            <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
+                                <md-icon>edit</md-icon>
+                                I Want Something Different
+                            </md-button>
+                        </div> -->
                     </div>
                 </div>
             </template>
-            <template v-if="proposals[selectedCategory.componentId].length > 0">
+            <template v-if="proposals.length > 0">
                 <div class="mt-30">
                     <!-- Event Booking Items -->
                     <!-- <div class="events-booking-items" v-if="proposals.length">
@@ -140,50 +152,31 @@
                         </ProposalCard>
                     </div> -->
 
-                    <div class="proposals-booking-items">
+                    <div class="d-flex">
                         <ProposalHeader
-                            v-for="(ourproposal, index) in proposals[selectedCategory.componentId].slice(0, 3)"
+                            v-for="(proposal, index) in totalProposals"
                             :key="index"
                             :event="event"
-                            :proposalSelected="selectedProposal && ourproposal.id === selectedProposal.id"
-                            :proposalRequest="ourproposal"
-                            @click.native="selectProposal(ourproposal)"
-                            ></ProposalHeader>
+
+                            :proposalRequest="getproposalRequest()"></ProposalHeader>
                     </div>
 
-                    <div class="bg-white proposalHeader proposalTitle d-flex align-center">
-                        <div class="company-logo">
-                            <img
-                                alt=""
-                                v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
-                                :src="`${selectedProposal.vendor.vendorLogoImage}`"
-                            />
-                            <img
-                                alt=""
-                                v-else
-                                src=""
-                            />
-                        </div>
-                        <div class="category-title">
-                            <img :src="`${$iconURL}Budget+Elements/${selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''}`" alt="category-logo" />
-                            <span class="text-decoration-underline">
-                                &nbsp;&nbsp;
-                                <u>
-                                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : '' }}
-                                </u>
-                            </span>
-                            <span class="">&nbsp;&nbsp;{{ 'Proposal' }}</span>
-                        </div>
-                    </div>
-
-                    <EventProposalDetails
-                    :proposal="selectedProposal"
-                    :category="selectedCategory"
-                    :key="selectedProposal.id"
-                    @favorite="favoriteProposal"
-                    @close="closeProposal"
-                    @ask="handleAsk"
-                    ></EventProposalDetails>
+                    <!-- <template v-if="showDetails">
+                        <transition name="component-fade" mode="out-in"> -->
+                          <div class="bg-white proposalHeader proposalTitle">
+                            {{ proposalRequest.vendor ? proposalRequest.vendor.eventCategory.fullTitle : '' }}
+                          </div>
+                            <EventProposalDetails
+                            class="mt-20"
+                            :proposal="selectedProposal"
+                            :category="selectedCategory"
+                            :key="selectedProposal.id"
+                            @favorite="favoriteProposal"
+                            @close="closeProposal"
+                            @ask="handleAsk"
+                            ></EventProposalDetails>
+                        <!-- </transition>
+                    </template> -->
                 </div>
             </template>
             <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
@@ -292,6 +285,7 @@
                 </template>
             </template>
         </template>
+        <!-- v-if="requirementSection" -->
 
       </template>
     </div>
@@ -314,13 +308,13 @@
         <div>
             <md-button
                 class="md-simple md-outlined md-red maryoku-btn"
-                :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal"
+                :disabled="proposals.length === 0 || !selectedProposal"
                 @click="bookVendor"
             >
             Book Now
             </md-button>
             <md-button class="md-red maryoku-btn"
-                    :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal"
+                    :disabled="proposals.length === 0 || !selectedProposal"
                     @click="addToCart">Add To Cart
             </md-button>
         </div>
@@ -463,6 +457,7 @@ export default {
         await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
       this.isLoadingStoredData = false;
+      this.selectCategory(this.categories[0]);
 
     }
     this.isLoadingProposal = true;
@@ -471,7 +466,6 @@ export default {
     await this.getProposals({eventId: this.event.id, tenantId});
     await this.getCartItems(this.event.id);
     this.isLoadingProposal = false;
-      this.selectCategory(this.categories[0]);
   },
   computed: {
     eventRequirements() {
@@ -537,6 +531,12 @@ export default {
     },
 
     proposals() {
+      let proposals = this.$store.state.event.proposals;
+      if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
+      this.selectedProposal = proposals[this.selectedCategory.componentId][0];
+      return proposals[this.selectedCategory.componentId];
+    },
+    totalProposals() {
       return this.$store.state.event.proposals;
     },
     cart(){
@@ -549,24 +549,6 @@ export default {
                 count++;
                 return true;
             }
-        }
-        return false;
-    },
-    isAnyLiked(){
-        let categories = this.event.components;
-        let requirements = this.$store.state.planningBoard.requirements;
-
-        if(categories.length == 0){
-          return false;
-        }
-
-        for(let category of categories){
-            if(!requirements[category.componentId]){
-              continue;
-            }
-
-            let types = requirements[category.componentId].types;
-            return Object.keys(types).length > 0;
         }
         return false;
     },
@@ -729,7 +711,6 @@ export default {
             this.$set(proposal, "viewed", true);
           });
         });
-        this.selectedProposal = getProposals[category.componentId][0];
       }
     },
     addBudget() {
@@ -854,9 +835,6 @@ export default {
         this.proposalRequest = getProposals[this.selectedCategory.componentId][0]
         return this.proposalRequest
     },
-    selectProposal(thisProposal){
-        this.selectedProposal = thisProposal;
-    },
   },
   watch: {
     requirements(newVal) {
@@ -887,13 +865,6 @@ export default {
         width: 30px;
         }
     }
-    .company-logo {
-        margin-right: 30px;
-        max-height: 50px;
-        max-width: 70px;
-        height: 50px;
-        width: 70px;
-    }
     .header-actions {
         display: flex;
         height: max-content;
@@ -909,14 +880,6 @@ export default {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 30px;
-    }
-    .proposals-booking-items {
-        padding: 0 0em;
-        margin-bottom: 0em;
-        align-items: stretch;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
     }
     .loading-screen {
         height: 100vh;

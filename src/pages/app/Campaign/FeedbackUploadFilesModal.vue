@@ -13,20 +13,40 @@
                         <md-icon>clear</md-icon>
                     </md-button>
                 </div>
+                <div v-if="fileName" class="uploaded-files-block">
+                    <div class="uploaded-files-text">
+                        {{fileName}}
+                    </div>
+                    <span @click="fileName = null"><md-icon class="close-icon-style">close</md-icon></span>
+                </div>
             </div>
         </template>
         <template slot="body">
             <div class="upload-files-cube">
                 <div class="upload-files-white-cube">
-                    <md-button class="choose-file-button" @click="chooseFiles">
-                        <img src="/static/icons/red-clip.svg">
-                        <div class="ml-10">Choose File</div>
-                    </md-button>
-<!--                    <form enctype="multipart/form-data">-->
-<!--                        <input type="file">-->
-<!--                    </form>-->
-                    <div class="font-size-14">Or</div>
-                    <div class="drag-your-file-text">Drag your file here</div>
+                    <vue-dropzone
+                        ref="myVueDropzone"
+                        id="dropzone"
+                        :options="dropzoneOptions"
+                        :useCustomSlot="true"
+                        @vdropzone-file-added="fileAdded"
+                        class="file-drop-zone upload-section text-center drop feedback-drop-zone"
+                        v-if="!fileName"
+                    >
+                        <md-button class="choose-file-button">
+                            <img src="/static/icons/red-clip.svg">
+                            <div class="ml-10">Choose File</div>
+                        </md-button>
+                        <div class="font-size-14">Or</div>
+                        <div class="drag-your-file-text">Drag your file here</div>
+                    </vue-dropzone>
+
+<!--                    <md-button class="choose-file-button" @click="chooseFiles">-->
+<!--                        <img src="/static/icons/red-clip.svg">-->
+<!--                        <div class="ml-10">Choose File</div>-->
+<!--                    </md-button>-->
+<!--                    <div class="font-size-14">Or</div>-->
+<!--                    <div class="drag-your-file-text">Drag your file here</div>-->
                 </div>
             </div>
             <div class="feedback-modal-bottom-block">
@@ -46,6 +66,7 @@
 import { Modal } from "@/components";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import S3Service from "@/services/s3.service";
 export default {
     name: "FeedbackUploadFilesModal",
     components: {
@@ -59,9 +80,26 @@ export default {
         chooseFiles() {
             document.getElementById("coverImage").click();
         },
+        async fileAdded(file) {
+            const extension = file.type.split("/")[1];
+            let fileName = new Date().getTime();
+            this.fileName = file.name;
+            S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then((res) => {
+                this.isLoading = false;
+                this.fileUrl = res;
+            });
+        },
     },
     data() {
-        return {};
+        return {
+            dropzoneOptions: {
+                url: "https://httpbin.org/post",
+                thumbnailWidth: 150,
+                maxFilesize: 0.5,
+                headers: { "My-Awesome-Header": "header value" },
+            },
+            fileName: null,
+        };
     },
 
 };
@@ -113,7 +151,6 @@ export default {
     color: #f51355!important;
     font-size: 14px;
     font-weight: 800;
-    margin-top: 177px;
 }
 .drag-your-file-text{
     font-size: 16px;
@@ -150,6 +187,40 @@ export default {
     color: #f51355;
     margin-left: 14px;
     margin-top: 7px;
+    cursor: pointer;
+}
+.feedback-drop-zone{
+    border: none;
+    height: 100%;
+    background-color: #fff;
+}
+.uploaded-files-block{
+    position: absolute;
+    top:160px;
+    width: 200px;
+    height: 51px;
+    border: 1px solid #f51355;
+    border-radius: 20px;
+    display: flex;
+}
+.uploaded-files-text{
+    width: 160px;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.29px;
+    text-align: left;
+    color: #707070;
+    padding: 13px 0px 0px 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.close-icon-style{
+    padding: 15px 0px 0px 5px;
+    color: #0caf50;
     cursor: pointer;
 }
 </style>

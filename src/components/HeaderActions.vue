@@ -11,9 +11,7 @@
                     class="md-simple md-just-icon adaptive-button"
                     :class="{active: singleAction.key === 'comment' && isCommentMode}"
                     @click="click(singleAction.key)">
-                    <img v-if="singleAction.key === 'like' && anyLiked" class="svg-icon-header" :src="`${$iconURL}Booking-New/Path+6363.svg`" />
-                    <img v-if="singleAction.key === 'like' && !anyLiked" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
-                    <img v-if="singleAction.key === 'cart'" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
+                    <img class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
                     <span v-if="singleAction.key === 'like'" :class="{'like-dot': proposalUnviewed == true}"></span>
                     <span v-if="singleAction.key === 'cart'" :class="'cart-dot'">{{ cartCount+1 }}</span>
                 </div>
@@ -96,10 +94,6 @@ export default {
     cartCount: {
       type: Number,
       default: 0,
-    },
-    anyLiked: {
-      type: Boolean,
-      default: false,
     },
     page: {
       type: String,
@@ -284,8 +278,8 @@ export default {
         position: absolute;
     }
     .cart-dot {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         margin: 0px 0px 0px -22px;
         padding: 0px 0px 0px 7px;
         background-color: #f51355;

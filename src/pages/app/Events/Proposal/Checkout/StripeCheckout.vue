@@ -34,7 +34,6 @@ export default {
   },
   mounted() {
     this.$refs.checkoutRef.redirectToCheckout();
-    console.log('stripe.checkout', this.publishableKey)
   },
   data() {
 
