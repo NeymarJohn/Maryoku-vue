@@ -7,12 +7,16 @@
                 :class="{'md-small-hide':singleAction.key !== 'like'}"
                 :key="i"
             >
-                <md-button
+                <div
                     class="md-simple md-just-icon adaptive-button"
                     :class="{active: singleAction.key === 'comment' && isCommentMode}"
                     @click="click(singleAction.key)">
-                    <img class="svg-icon-header-action" :src="`${$iconURL}${singleAction.icon}`" />
-                </md-button>
+                    <img v-if="singleAction.key === 'like' && anyLiked" class="svg-icon-header" :src="`${$iconURL}Booking-New/Path+6363.svg`" />
+                    <img v-if="singleAction.key === 'like' && !anyLiked" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
+                    <img v-if="singleAction.key === 'cart'" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
+                    <span v-if="singleAction.key === 'like'" :class="{'like-dot': proposalUnviewed == true}"></span>
+                    <span v-if="singleAction.key === 'cart'" :class="'cart-dot'">{{ cartCount+1 }}</span>
+                </div>
             </li>
           </template>
           <template v-else>
@@ -82,6 +86,18 @@ export default {
       default: false,
     },
     requirement: {
+      type: Boolean,
+      default: false,
+    },
+    proposalUnviewed: {
+      type: Boolean,
+      default: false,
+    },
+    cartCount: {
+      type: Number,
+      default: 0,
+    },
+    anyLiked: {
       type: Boolean,
       default: false,
     },
@@ -245,6 +261,44 @@ export default {
                 float: left;
             }
         }
+    }
+    .svg-icon-header{
+        width: 50px !important;
+    }
+
+    .like-dot {
+        width: 20px;
+        height: 20px;
+        margin: 37px 34px 57px 13px;
+        padding: 3px 11px 3px 10px;
+        background-color: #f51355;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+        border-radius: 50%;
+        position: absolute;
+    }
+    .cart-dot {
+        width: 22px;
+        height: 22px;
+        margin: 0px 0px 0px -22px;
+        padding: 0px 0px 0px 7px;
+        background-color: #f51355;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+        border-radius: 50%;
+        position: absolute;
     }
 
 </style>
