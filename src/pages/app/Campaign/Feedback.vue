@@ -54,16 +54,14 @@
       <div class="mt-70 mb-40">
         <img class="icon-thanks-for-participating-feedback" :src="`${$iconURL}Campaign/group-9380.svg`" />
         <div class="mt-10">
-            <custom-title-editor
-                :defaultValue="feedbackTitle"
-                @change="handleChangeData('feedbackTitle', ...arguments)"
-                class="font-size-60 font-bold line-height-1 mb-20"
-            ></custom-title-editor>
-            <custom-title-editor
-                :defaultValue="feedbackSubTitle"
-                @change="handleChangeData('feedbackSubTitle', ...arguments)"
-                class="disco-party"
-            ></custom-title-editor>
+          <div class="wrapper-thanks-for-participating">
+              <div class="font-size-60 font-bold line-height-1 mb-20">THANKS FOR PARTICIPATING!</div>
+              <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
+          </div>
+            <div class="disco-party">
+                80’s Disco Party
+                <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
+            </div>
           <div class="font-size-22 line-height-1">{{ campaignData.name }}</div>
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
@@ -115,11 +113,10 @@
       <div class="d-flex align-center pt-50 pb-50" >
         <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
         <div class="ml-20 d-flex flex-wrap flex-column" >
-            <custom-title-editor
-                :defaultValue="feedbackSliderTitle"
-                @change="handleChangeData('feedbackSliderTitle', ...arguments)"
-                class="font-size-30 font-bold line-height-1 pt-20"
-            ></custom-title-editor>
+          <div class="d-flex" >
+            <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
+            <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" />
+          </div>
           <span class="Include-photos-details-of-the-event">
             (See photos and details about the event)
           </span>
@@ -177,7 +174,6 @@ import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
-import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
 
 export default {
   components: {
@@ -188,7 +184,6 @@ export default {
     TitleEditor,
     HideSwitch,
     FeedbackUploadFilesModal,
-    CustomTitleEditor,
   },
   props: {
     info: {
@@ -207,9 +202,6 @@ export default {
       editingContent: [],
       isUploadedFiles: false,
       showModalWindowOpen : false,
-      feedbackTitle : "THANKS FOR PARTICIPATING!",
-      feedbackSubTitle : "80’s Disco Party ",
-      feedbackSliderTitle : "EVENT PHOTOS – RELIVE THE BEST MOMENTS"
     };
   },
   created() {
@@ -256,7 +248,6 @@ export default {
       return this.$store.state.event.eventData;
     },
     campaignData() {
-        console.log('this.$store.state.campaign.FEEDBACK', this.$store.state.campaign.FEEDBACK)
       return this.$store.state.campaign.FEEDBACK;
     },
     campaignTitle() {
@@ -320,9 +311,6 @@ export default {
     },
       closeModalWindow(){
           this.showModalWindowOpen = false;
-      },
-      handleChangeData(key, value) {
-          this.key = value
       },
   },
 };
