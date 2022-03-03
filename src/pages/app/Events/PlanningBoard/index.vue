@@ -8,14 +8,14 @@
                 <ResizableToggleButton
                     class="mr-20 mb-10"
                     :key="index"
-                    :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
+                    :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
                     :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
                     :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
                     :defaultStatus="selectedCategory && component.id === selectedCategory.id"
                     :hasBadge="hasBadge(component)"
                     :proposalCategory="findProposalUnviewed(component)"
                     iconStyle="opacity:0.8"
-                    v-for="(component,index) in categories"
+                    v-for="(component,index) in topCategories"
                     @click="selectCategory(component)"
                 ></ResizableToggleButton>
                 <drop-down class="d-inline-block">
@@ -23,18 +23,26 @@
                         <md-icon>add</md-icon>
                     </button>
                     <ul class="dropdown-width dropdown-menu dropdown-color dropdown-menu-right " >
-                        <li class="category-list" >
+                        <li class="remaining-list" v-for="(remainingCategory,i) in remainingCategories" :key="remainingCategory.title+i">
+                            <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory)">
+                                <div class="remaining-name">
+                                    <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`" />
+                                    &nbsp;&nbsp;
+                                    {{remainingCategory.title}}
+                                </div>
+                            </a>
+                        </li>
+                        <div class="category-list" >
                             <div class="category-heading font-size-16 font-bold" >
-                                &nbsp;&nbsp;
                                 {{'Additional Categories'}}
                             </div>
-                        </li>
-                        <li class="category-list" v-for="(otherCategory,i) in otherCategories" :key="i">
-                            <a class="category-item font-size-16" @click="selectCategory(otherCategory)">
+                        </div>
+                        <li class="category-list" v-for="(additionalCategory,i) in additionalCategories" :key="additionalCategory.title+i">
+                            <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory)">
                                 <div class="category-name">
-                                    <img :src="`${$iconURL}Budget+Elements/${otherCategory.icon}`" />
+                                    <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`" />
                                     &nbsp;&nbsp;
-                                    {{otherCategory.title}}
+                                    {{additionalCategory.title}}
                                 </div>
                                 &nbsp;&nbsp;
                                 <div class="category-plus">
@@ -45,36 +53,38 @@
                     </ul>
                 </drop-down>
             </div>
-            <div v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true">
-                <ProgressRadialBar
-                :value="proposals.length"
-                :total="3"
-                icon="common/checked-calendar-red.svg"
-                @click="openCart"
-                ></ProgressRadialBar>
-            </div>
-            <div v-else>
-                <ProgressRadialBar
-                    :value="percentOfBudgetCategories"
-                    :total="event.components.length"
-                    @click="openRCart"
-                ></ProgressRadialBar>
-            </div>
-            <div class="md-layout-itemm">
-                <header-actions :requirement="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
-            </div>
+            <div class="functional-bar">
+                <div class="header-actions">
+                    <ul class="d-flex list-style-none">
+                        <li>
+                            <div class="md-simple md-just-icon adaptive-button">
+                                <img @click="openChoice" v-if="isAnyLiked" class="svg-icon-header cursor-pointer" :src="`${$iconURL}Booking-New/Path+6363.svg`" />
+                                <img @click="openChoice" v-if="!isAnyLiked" class="svg-icon-header cursor-pointer" :src="`${$iconURL}Booking-New/Group+28553.svg`" />
+                                <span :class="{'like-dot': this.proposalUnviewed == true}"></span>
+                            </div>
+                        </li>
+                        <li class="md-small-hide">
+                            <div class="md-simple md-just-icon adaptive-button">
+                                <img @click="openCart" class="svg-icon-header cursor-pointer" :src="`${$iconURL}Booking-New/Path+13791.svg`" />
+                                <!-- <span class="cart-dot">{{ cartCount+1 }}</span> -->
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <header-actions :anyLiked="isAnyLiked" :requirement="false" :hideDownload="true" :hideShare="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
                 <drop-down class="d-inline-block" >
-                    <button data-toggle="dropdown">
-                        <img class="svg-icon-more-header-action" :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Group%2019186.svg`" />
+                    <button class="more-button" data-toggle="dropdown">
+                        <md-icon style="font-size: 40px !important">more_vert</md-icon>
                     </button>
                     <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
                         <li class="other-list" >
                             <a class="other-item font-size-16">
                                 <div class="other-name">
-                                    <!-- <img class="svg-icon-header-action" :src="`${$iconURL}`+'common/share-dark.svg'" /> -->
                                     <md-icon>share</md-icon>
                                     &nbsp;&nbsp;
+                                    <span>
                                     {{'Share Proposals'}}
+                                    </span>
                                 </div>
                             </a>
                         </li>
@@ -83,7 +93,9 @@
                                 <div class="other-name">
                                     <md-icon>equalizer</md-icon>
                                     &nbsp;&nbsp;
-                                    {{'Compare Proposals'}}
+                                    <span>
+                                        {{'Compare Proposals'}}
+                                    </span>
                                 </div>
                             </a>
                         </li>
@@ -92,7 +104,9 @@
                                 <div class="other-name">
                                     <md-icon >add_circle_outline</md-icon>
                                     &nbsp;&nbsp;
-                                    {{'I already have a vendor'}}
+                                    <span>
+                                        {{'I Already Have a venue fo my Event'}}
+                                    </span>
                                 </div>
                             </a>
                         </li>
@@ -101,17 +115,19 @@
                                 <div class="other-name">
                                     <md-icon >autorenew</md-icon>
                                     &nbsp;&nbsp;
-                                    {{'I Want Something Different'}}
+                                    <span>
+                                        {{'I Want Something Different'}}
+                                    </span>
                                 </div>
                             </a>
                         </li>
                     </ul>
                 </drop-down>
+            </div>
         </div>
 
-        <!-- <template v-if="event.vendorCategory && event.vendorCategory.componentId == selectedCategory.componentId"> -->
         <template v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true">
-            <template v-if="proposals.length > 0">
+            <template v-if="proposals[selectedCategory.componentId].length > 0">
                 <div>
                     <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                         <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
@@ -120,22 +136,11 @@
                 </div>
                 <div>
                     <div class="d-flex justify-content-between">
-                        <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
-                        <!-- <div class="header-actions">
-                            <md-button class="md-simple normal-btn md-red" @click="compareProposal">
-                                <md-icon>bar_chart</md-icon>
-                                Compare Proposals
-                            </md-button>
-                            <span class="seperator"></span>
-                            <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
-                                <md-icon>edit</md-icon>
-                                I Want Something Different
-                            </md-button>
-                        </div> -->
+                        <div>We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book now before it’s too late</div>
                     </div>
                 </div>
             </template>
-            <template v-if="proposals.length > 0">
+            <template v-if="proposals[selectedCategory.componentId].length > 0">
                 <div class="mt-30">
                     <!-- Event Booking Items -->
                     <!-- <div class="events-booking-items" v-if="proposals.length">
@@ -152,31 +157,51 @@
                         </ProposalCard>
                     </div> -->
 
-                    <div class="d-flex">
+                    <div class="proposals-booking-items">
                         <ProposalHeader
-                            v-for="(proposal, index) in totalProposals"
+                            v-for="(ourproposal, index) in proposals[selectedCategory.componentId].slice(0, 3)"
                             :key="index"
                             :event="event"
-
-                            :proposalRequest="getproposalRequest()"></ProposalHeader>
+                            :proposalSelected="selectedProposal && ourproposal.id === selectedProposal.id"
+                            :proposalRequest="ourproposal"
+                            @click.native="selectProposal(ourproposal)"
+                            ></ProposalHeader>
                     </div>
 
-                    <!-- <template v-if="showDetails">
-                        <transition name="component-fade" mode="out-in"> -->
-                          <div class="bg-white proposalHeader proposalTitle">
-                            {{ proposalRequest.vendor ? proposalRequest.vendor.eventCategory.fullTitle : '' }}
-                          </div>
-                            <EventProposalDetails
-                            class="mt-20"
-                            :proposal="selectedProposal"
-                            :category="selectedCategory"
-                            :key="selectedProposal.id"
-                            @favorite="favoriteProposal"
-                            @close="closeProposal"
-                            @ask="handleAsk"
-                            ></EventProposalDetails>
-                        <!-- </transition>
-                    </template> -->
+                    <div class="bg-white proposalHeader proposalTitle d-flex align-center">
+                        <div class="company-logo">
+                            <img
+                                alt=""
+                                v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
+                                :src="`${selectedProposal.vendor.vendorLogoImage}`"
+                            />
+                            <img
+                                alt=""
+                                v-else
+                                src=""
+                            />
+                        </div>
+                        <div class="category-title">
+                            <img :src="`${$iconURL}Budget+Elements/${selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''}`" alt="category-logo" />
+                            <span class="text-decoration-underline">
+                                &nbsp;&nbsp;
+                                <u>
+                                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : '' }}
+                                </u>
+                            </span>
+                            <span class="">&nbsp;&nbsp;{{ 'Proposal' }}</span>
+                        </div>
+                    </div>
+
+                    <EventProposalDetails
+                    :proposal="selectedProposal"
+                    :category="selectedCategory"
+                    :key="selectedProposal.id"
+                    :showTimerBox="true"
+                    @favorite="favoriteProposal"
+                    @close="closeProposal"
+                    @ask="handleAsk"
+                    ></EventProposalDetails>
                 </div>
             </template>
             <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
@@ -190,7 +215,7 @@
                         {{ selectedCategory.fullTitle }}
                         <template v-if="!booked && (!($store.state.planningBoard.requirements[selectedCategory.componentId] && $store.state.planningBoard.requirements[selectedCategory.componentId].isIssued) || !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)">
                             <template v-if="hasBudget(selectedCategory.componentId)">
-                                <a class="font-size-18 md-red maryoku-btn" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
+                                <a class="font-size-18 md-red maryoku-btn cursor-pointer" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
                                     Get Specific
                                 </a>
                             </template>
@@ -203,7 +228,7 @@
                                 <div v-if="booked" class="color-red">
                                     Already booked
                                 </div>
-                                <a  class="font-size-18 md-red maryoku-btn" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
+                                <a  class="font-size-18 md-red maryoku-btn cursor-pointer" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
                                     Change specifications
                                 </a>
                             </div>
@@ -285,7 +310,6 @@
                 </template>
             </template>
         </template>
-        <!-- v-if="requirementSection" -->
 
       </template>
     </div>
@@ -294,7 +318,7 @@
     </template>
 
     <div v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true" class="proposal-footer white-card d-flex justify-content-between">
-        <div>
+        <!-- <div>
             <md-button class="md-simple maryoku-btn md-black">
                 <span class="text-transform-capitalize">I already have a vendor</span>
             </md-button>
@@ -304,26 +328,73 @@
                 >
                 <span class="text-transform-capitalize">Chanage requirements</span>
             </md-button>
+        </div> -->
+        <div class="d-flex justify-content-start">
+                <drop-down class="d-inline-block" >
+                    <button class="more-button cursor-pointer" data-toggle="dropdown">
+                        <span style="font-size: 16px !important; font-weight: 800;">
+                            {{ "More actions" }}
+                        </span>
+                        <md-icon style="font-size: 22px !important font-weight: 800;">keyboard_arrow_up</md-icon>
+                    </button>
+                    <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright " >
+                        <li class="other-list" >
+                            <a class="other-item font-size-16">
+                                <div class="other-name">
+                                    <md-icon>download</md-icon>
+                                    &nbsp;&nbsp;
+                                    {{'Download Proposals'}}
+                                </div>
+                            </a>
+                        </li>
+                        <li class="other-list" >
+                            <a class="other-item font-size-16" @click="compareProposal">
+                                <div class="other-name">
+                                    <md-icon>attach_money</md-icon>
+                                    &nbsp;&nbsp;
+                                    <span>
+                                        {{'Negotiate Rate'}}
+                                    </span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="other-list" >
+                            <a class="other-item font-size-16" >
+                                <div class="other-name">
+                                    <md-icon >textsms</md-icon>
+                                    &nbsp;&nbsp;
+                                    <span>
+                                        {{'Contact Vendor'}}
+                                    </span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </drop-down>
         </div>
-        <div>
-            <md-button
-                class="md-simple md-outlined md-red maryoku-btn"
-                :disabled="proposals.length === 0 || !selectedProposal"
-                @click="bookVendor"
-            >
-            Book Now
+        <div class="d-flex justify-content-end">
+                <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
+            <md-button class="md-simple maryoku-btn" @click="bookVendor">
+                Book This Vendor
+                <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
+                    <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
             <md-button class="md-red maryoku-btn"
-                    :disabled="proposals.length === 0 || !selectedProposal"
                     @click="addToCart">Add To Cart
             </md-button>
         </div>
     </div>
-    <div v-else class="proposal-footer white-card d-flex justify-content-between">
+    <div v-else class="proposal-footer white-card d-flex justify-content-end">
         <div>
-            <md-button class="md-simple md-outlined md-red maryoku-btn">
+            <!-- <md-button class="md-simple md-outlined md-red maryoku-btn">
                 <img :src="`${$iconURL}common/save-red.svg`" />
                 Save Draft
+            </md-button> -->
+            <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
+                <!-- <img :src="`${$iconURL}Booking-New/Path+13791.svg`" /> -->
+                <md-icon>shopping_cart</md-icon>
+                &nbsp;&nbsp;
+                Add To Cart
             </md-button>
             <md-button class="md-red maryoku-btn" v-if="step === 1" @click="findVendors">
                 Find Me Vendors
@@ -351,11 +422,11 @@
     </special-requirement-modal>
     <transition name="slide-fade">
       <RequirementsCart
-        v-if="showRCart"
+        v-if="showChoice"
         :requirements="requirements"
         :service-categories="serviceCategories"
         :total="event.components.length"
-        @close="showRCart = false"
+        @close="showChoice = false"
       ></RequirementsCart>
     </transition>
     <ServicesCart
@@ -417,7 +488,7 @@ export default {
   data() {
     return {
         popup: false,
-        showRCart: false,
+        showChoice: false,
         showCart: false,
         allRequirements: null,
         subCategory: null,
@@ -429,7 +500,8 @@ export default {
         isLoadingStoredData: false,
         isLoadingProposal: false,
         showCounterPage: false,
-        expiredTime: 0,
+        // expiredTime: 0,
+        currentRequirement: null,
 
         requirementSection: true,
         proposalsByCategory: {},
@@ -437,6 +509,7 @@ export default {
         showAddBudgetConfirm: false,
         booked: false,
 
+        requirements: {},
         showDifferentProposals: false,
         showDetails: false,
         selectedProposal: null,
@@ -456,8 +529,15 @@ export default {
 
         await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
+        await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
+        if(localStorage.getItem('planner-requirements') && JSON.parse(localStorage.getItem('eventId')) == this.event.id){
+            this.requirements = JSON.parse(localStorage.getItem('planner-requirements')) || {};
+        }
+        else{
+            this.requirements = this.$store.state.planningBoard.requirements
+        }
+
       this.isLoadingStoredData = false;
-      this.selectCategory(this.categories[0]);
 
     }
     this.isLoadingProposal = true;
@@ -466,12 +546,10 @@ export default {
     await this.getProposals({eventId: this.event.id, tenantId});
     await this.getCartItems(this.event.id);
     this.isLoadingProposal = false;
+      this.selectCategory(this.categories[0]);
   },
   computed: {
     eventRequirements() {
-        return this.$store.state.planningBoard.requirements;
-    },
-    requirements() {
         return this.$store.state.planningBoard.requirements;
     },
     categories() {
@@ -502,17 +580,16 @@ export default {
         return service;
       });
     },
-    otherCategories() {
-        let otherCategories;
-        if(this.event.components){
-            otherCategories = this.$store.state.common.serviceCategories.filter(ar => !this.event.components.find(rm => (rm.componentId === ar.key) ))
-        }
-        else{
-            otherCategories = this.$store.state.common.serviceCategories.map(service => {
-                return service;
-            });
-        }
-      return otherCategories;
+    remainingCategories() {
+        return this.categories.slice(5,this.categories.length);
+    },
+    additionalCategories() {
+      let additionalCategories = this.$store.state.common.serviceCategories
+
+      if(this.event.components){
+        additionalCategories = additionalCategories.filter(ar => !this.event.components.find(rm => (rm.componentId === ar.key) ))
+      }
+      return additionalCategories;
     },
     serviceCategoriesForGrid() {
       const services = [[], [], []];
@@ -531,12 +608,6 @@ export default {
     },
 
     proposals() {
-      let proposals = this.$store.state.event.proposals;
-      if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
-      this.selectedProposal = proposals[this.selectedCategory.componentId][0];
-      return proposals[this.selectedCategory.componentId];
-    },
-    totalProposals() {
       return this.$store.state.event.proposals;
     },
     cart(){
@@ -552,6 +623,44 @@ export default {
         }
         return false;
     },
+    isAnyLiked(){
+        let categories = this.event.components;
+        let requirements = this.$store.state.planningBoard.requirements;
+
+        if(categories.length == 0){
+          return false;
+        }
+
+        for(let category of categories){
+            if(!requirements[category.componentId]){
+              continue;
+            }
+
+            let types = requirements[category.componentId].types;
+            return Object.keys(types).length > 0;
+        }
+        return false;
+    },
+    expiredTime() {
+      console.log('expiredTime()', this.currentRequirement);
+      if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
+      return 0;
+    },
+    topCategories(){
+      let categories = this.categories.slice(0,5);
+
+      if(!this.selectedCategory){
+        return categories;
+      }
+
+      let index = categories.findIndex(x => x.id == this.selectedCategory.id);
+
+      if(index == -1){
+        categories = [...this.categories.slice(0,4),...[this.selectedCategory]];
+      }
+
+      return categories;
+    }
   },
   methods: {
     ...mapMutations("event", [ "setProposalsByCategory"]),
@@ -605,14 +714,17 @@ export default {
       return !!this.event.components.find(item => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
+      console.log("category",category)
       let getSelectedCategory = this.$store.state.common.serviceCategories.find(
         item => item.key === category.componentId,
       );
+      let actualId = this.selectedCategory.id;
       this.selectedCategory = {...this.selectedCategory, ...getSelectedCategory};
+      this.selectedCategory.id = actualId;
       this.isOpenedAdditionalModal = true;
 
       let requirements = this.allRequirements[category.componentId].requirements;
-      const storedRequirements = this.requirements[category.componentId].mainRequirements;
+      const storedRequirements = this.requirements[category.componentId] ? this.requirements[category.componentId].mainRequirements : {};
 
       requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
@@ -633,7 +745,7 @@ export default {
     getSelectedTypes(category) {
         let typesList = [];
         // this.requirements
-        const types = this.requirements[category].types;
+        const types = this.requirements[category] ? this.requirements[category].types : [];
         for (const t in types) {
             typesList = [...typesList, ...types[t]];
         }
@@ -683,8 +795,8 @@ export default {
       if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },
-    openRCart() {
-      this.showRCart = true;
+    openChoice() {
+      this.showChoice = true;
     },
     openCart() {
       this.showCart = true;
@@ -703,6 +815,7 @@ export default {
         if(category.key){
             category['componentId'] = category.key;
         }
+      this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
       let getProposals = this.$store.state.event.proposals;
       if (getProposals[category.componentId]) {
@@ -711,6 +824,22 @@ export default {
             this.$set(proposal, "viewed", true);
           });
         });
+        this.selectedProposal = getProposals[category.componentId][0];
+      }
+    },
+    selectRemainingCategory(category, clicked) {
+        if(category.key){
+            category['componentId'] = category.key;
+        }
+      this.selectedCategory = category;
+      let getProposals = this.$store.state.event.proposals;
+      if (getProposals[category.componentId]) {
+        getProposals[category.componentId].forEach((proposal, index) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
+            this.$set(proposal, "viewed", true);
+          });
+        });
+        this.selectedProposal = getProposals[category.componentId][0];
       }
     },
     addBudget() {
@@ -835,6 +964,9 @@ export default {
         this.proposalRequest = getProposals[this.selectedCategory.componentId][0]
         return this.proposalRequest
     },
+    selectProposal(thisProposal){
+        this.selectedProposal = thisProposal;
+    },
   },
   watch: {
     requirements(newVal) {
@@ -846,13 +978,13 @@ export default {
 <style lang="scss" scoped>
 .planning-board-layout {
 
-  .proposalTitle{
-    font-size: 30px;
-  font-weight: 800;
-  }
-  .proposalHeader{
-    padding:3rem;
-  }
+    .proposalTitle{
+        font-size: 30px;
+    font-weight: 800;
+    }
+    .proposalHeader{
+        padding:3rem;
+    }
     .booking-proposals {
         .category-title {
             img {
@@ -864,6 +996,13 @@ export default {
         img {
         width: 30px;
         }
+    }
+    .company-logo {
+        margin-right: 30px;
+        max-height: 50px;
+        max-width: 70px;
+        height: 50px;
+        width: 70px;
     }
     .header-actions {
         display: flex;
@@ -881,14 +1020,22 @@ export default {
         grid-template-columns: repeat(3, 1fr);
         gap: 30px;
     }
+    .proposals-booking-items {
+        padding: 0 0em;
+        margin-bottom: 0em;
+        align-items: stretch;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+    }
     .loading-screen {
         height: 100vh;
     }
     .proposal-footer {
         padding: 40px 50px;
-        position: fixed;
+        position: sticky;
         bottom: 0;
-        width: 75%;
+        width: 100%;
         z-index: 3;
         button {
             width: 250px;
@@ -912,30 +1059,67 @@ export default {
         font-size: 40px !important;
         }
     }
-    .dropdown-color li a:hover, .dropdown-color li a:focus, .dropdown-color li a:active {
+    .functional-bar {
+        display: inline-flex;
+        align-items: center;
+    }
+    .more-button {
+        border: none;
+        background: none;
+        display: inline-flex;
+        i {
+            margin: 0px;
+        }
+    }
+    .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active {
+        background-color: transparent !important;
+        color: initial !important;
+        box-shadow: none !important;
+    }
+    .dropdown-color li:hover, .dropdown-color li:focus, .dropdown-color li:active {
         background-color: #ffedb7 !important;
         color: #000 !important;
+    }
+    .dropdown-other{
+        padding: 27px 0px !important;
     }
     .dropdown-other li a:hover, .dropdown-other li a:focus, .dropdown-other li a:active {
         background-color: transparent !important;
         color: #f51355 !important;
-        box-shadow: none;
+        box-shadow: none !important;
+        font-weight: 800 !important;
+        i {
+            background-color: transparent !important;
+            color: #f51355 !important;
+        }
     }
     .dropdown-width{
-        width: max-content;
+        // width: max-content;
+        width: 385px;
+    }
+    .dropdown-width-2{
+        width: 270px;
     }
     .category-list{
-        border-bottom: 2px ridge;
         cursor: pointer;
         img {
             width: 30px;
         }
         .category-heading{
-            padding: 10px 1.5rem;
-            margin: 0 5px;
+            padding: 20px 27px;
+            margin: 0 0;
+            background-color: transparent !important;
+            color: #000 !important;
+            border-bottom: 1px ridge #d7d5d6;
         }
         .category-item{
             display: flow-root;
+            padding: 15px 20px 15px 2px !important;
+            margin: 0 0 !important;
+            border-bottom: 1px ridge #d7d5d6;
+            width: 90%;
+            left: 10%;
+            position: relative;
             .category-name{
                 float: left;
             }
@@ -946,6 +1130,22 @@ export default {
                 box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
                 float: right;
                 cursor: pointer;
+            }
+        }
+    }
+    .remaining-list{
+        cursor: pointer;
+        img {
+            width: 30px;
+            color: #818080 !important;
+        }
+        .remaining-item{
+            display: flow-root;
+            color: #818080 !important;
+            padding: 15px 37px !important;
+            margin: 0 0 !important;
+            .remaining-name{
+                float: left;
             }
         }
     }
@@ -984,8 +1184,8 @@ export default {
         column-gap: 0px;
     }
     .like-dot {
-        width: 28px;
-        height: 28px;
+        width: 20px;
+        height: 20px;
         margin: 37px 34px 57px 13px;
         padding: 3px 11px 3px 10px;
         background-color: #f51355;
@@ -1002,10 +1202,10 @@ export default {
         right: 40px;
     }
     .cart-dot {
-        width: 28px;
-        height: 28px;
-        margin: 37px 34px 57px 13px;
-        padding: 3px 11px 3px 10px;
+        width: 22px;
+        height: 22px;
+        margin: 0px 0px 0px -22px;
+        padding: 0px 0px 0px 7px;
         background-color: #f51355;
         font-size: 16px;
         font-weight: bold;
@@ -1018,6 +1218,9 @@ export default {
         border-radius: 50%;
         position: absolute;
         right: 40px;
+    }
+    .md-menu-content .md-list {
+        padding: 37px 37px !important;
     }
 }
 </style>
