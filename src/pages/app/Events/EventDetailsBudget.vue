@@ -200,76 +200,35 @@
         </template>
         <template slot="body">
           <div class="add-category-model__header">
-            <h2 v-if="extra<0" class="black">How would you like to compensate <span style="color: red; display: inline-block">-${{ -extra }}</span>  to your budget? </h2>
-            <h2 v-else class="black">What would you like to do with extra  <span style="color: green; display: inline-block">${{ extra }}</span>  to your budget? </h2>
-            <input v-model="extraBudgetMethod" type="radio" name="extraMoney" id="betweenCategories"
-                   value="betweenCategories">
-            <label class="header-description" for="betweenCategories">
-              Re-calculate budget break down
-            </label>
-            <input v-model="extraBudgetMethod" type="radio" name="extraMoney" id="onUnexpected"
-                   value="onUnexpected">
-            <label class="header-description" for="onUnexpected">
-              {{extra>0?'Store budget on unexpected': 'Subtract from unexpected'}}
-            </label>
+            <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra }}</span></h2>
+              <h2 v-if="extra<0">Oops, The changes you made have got you in the minus</h2>
+              <h2 v-else>Your edits changed the total budget.</h2>
+              <span class="black">What would you like to do? </span>
+            <br/>
+            <md-checkbox v-show="extra>0" class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="betweenCategories">  Add new category</md-checkbox>
+            <br/>
+            <md-checkbox class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="onUnexpected">
+              {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Take that money from ‘Unexpected’ category' }}
+            </md-checkbox>
+            <br/>
+            <md-checkbox  v-show="extra<0"  class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="goBack">
+              Add more money
+            </md-checkbox>
           </div>
         </template>
         <template slot="footer">
-          <md-button class="md-rose add-category-btn" @click="handleBudgetMethod()"
+          <md-button class="add-category-btn" @click="handleBudgetMethod()"
             >Select</md-button
           >
         </template>
       </modal>
-
-      <modal v-if="editBudgetModalStep===3" class="add-category-model edit-elements-budget-modal">
-        <template slot="header">
-          <div class="add-category-model__header">
-            <h2 class="black">Edit budget per category</h2>
-          </div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button"
-            @click="closeEditBudgetModal"
-          >
-            <md-icon>clear</md-icon>
-          </md-button>
-        </template>
-        <template slot="body">
-          <div class="event-blocks-table edit-elements-budget-table">
-            <tabs
-              :tab-name="[
-                '<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total',
-                ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest',
-              ]"
-            >
-              <!-- here you can add your content for tab-content -->
-              <template slot="tab-pane-1">
-                <edit-event-blocks-budget
-                  :event.sync="event"
-                  :event-components="selectedComponents"
-                  :event-new-budget="newBudget"
-                  :change="handleBudgetMethod"
-                  type="total"
-                  ref="editEventBlocksBudget"
-                ></edit-event-blocks-budget>
-              </template>
-              <template slot="tab-pane-2">
-                <edit-event-blocks-budget
-                  :event.sync="event"
-                  :change="handleBudgetMethod"
-                  :event-new-budget="newBudget"
-                  :event-components="selectedComponents"
-                  type="perGuest"
-                  ref="editEventBlocksBudget"
-                ></edit-event-blocks-budget>
-              </template>
-            </tabs>
-          </div>
-        </template>
-        <template slot="footer">
-          <md-button class="md-default md-simple cancel-btn" @click="closeEditBudgetModal">Cancel</md-button>
-          <md-button class="md-rose add-category-btn" @click="handleUpdateBudget">Save</md-button>
-        </template>
-      </modal>
+      <add-new-category-modal
+        v-if="editBudgetModalStep===3"
+        :event="event"
+        :components="categoryList"
+        @cancel="closeEditBudgetModal"
+        @save="addNewCategory"
+      ></add-new-category-modal>
       <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
     </div>
   </div>
@@ -360,6 +319,7 @@ export default {
       showMessage: false,
       extra:'0',
       extraBudgetMethod:'betweenCategories',
+      addNewCategoryLoading:false,
     };
   },
   created() {
@@ -551,6 +511,16 @@ export default {
         }
       });
     },
+    async addNewCategory(newCategory) {
+      this.addNewCategoryLoading = true;
+      const event = new CalendarEvent({
+        id: this.event.id,
+        unexpectedBudget: this.event.unexpectedBudget - newCategory.allocatedBudget,
+        calendar: new Calendar({ id: this.event.calendar.id }),
+      });
+      this.closeEditBudgetModal();
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {this.addNewCategoryLoading = false});
+    },
     updateBudget(eventBudget) {
       let editedEvent = new CalendarEvent({ id: this.event.id });
       const newBudget = eventBudget.totalBudget; //Number(eventBudget.totalBudget.replace(/,/g, ""))
@@ -616,7 +586,7 @@ export default {
         });
         this.closeEditBudgetModal();
       }else {
-        this.setModalStep('next')
+        this.setModalStep(this.extraBudgetMethod === 'goBack' ? 'previous' : 'next')
       }
     },
     onChangeComponent(event) {
@@ -745,6 +715,9 @@ export default {
       } catch (e) {
         return "edit";
       }
+    },
+    categoryList() {
+      return this.$store.state.event.eventData.components.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
     },
     canComment() {
       return this.permission === "edit" || this.permission === "comment";

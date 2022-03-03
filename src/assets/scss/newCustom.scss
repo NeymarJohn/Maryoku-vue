@@ -3,7 +3,9 @@
     width: calc(100% - 80px);
     //background-color : #f5f5f5;
 }
-
+.add-category-btn{
+    background-color: #f51355 !important;
+}
 .main-panel > .content {
     min-height: auto;
 }
@@ -627,7 +629,7 @@
     // height: calc(100vh - 80px);
     overflow-x: hidden;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 1;
     height: 100%;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     .summer-party {
@@ -1144,6 +1146,7 @@
     .modal-footer {
         margin-top: 3em;
         .md-button {
+            opacity: 1;
             padding: 0px;
             .md-ripple {
                 width: 160px;
@@ -1170,6 +1173,7 @@
     }
 
     .modal-body {
+        min-width: 700px;
         text-align: left;
 
         .md-layout-item {

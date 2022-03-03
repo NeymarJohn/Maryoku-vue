@@ -59,6 +59,7 @@ export default {
     this.loading = true;
     let vendor = await this.$store.dispatch("vendor/getProfile");
     await this.$store.dispatch("vendorDashboard/getProposalRequests", vendor.id);
+    await this.$store.dispatch("comment/getCommentsProposalsByVendor", vendor.id);
     this.loading = false;
   },
 };
