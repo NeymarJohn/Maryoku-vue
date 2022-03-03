@@ -100,7 +100,10 @@
               <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Save The Date’ Campaign</div>
             </template>
             <template slot="content">
-              <save-date :info="{ ...campaignTabs[1], ...campaignInfo }" @changeInfo="changeInfo"></save-date>
+              <save-date :info="{ ...campaignTabs[1], ...campaignInfo }"
+                         @changeInfo="changeInfo"
+                         :show-change-cover="true"
+              ></save-date>
             </template>
           </collapse-panel>
           <save-date
@@ -109,6 +112,7 @@
             @changeInfo="changeInfo"
             ref="savedateCampaign"
             class="white-card"
+            :show-change-cover="true"
           ></save-date>
         </template>
 
