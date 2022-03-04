@@ -71,10 +71,10 @@
                         </li>
                     </ul>
                 </div>
-                <header-actions :anyLiked="isAnyLiked" :requirement="false" :hideDownload="true" :hideShare="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
+                <HeaderActions :anyLiked="isAnyLiked" :requirement="false" :hideDownload="true" :hideShare="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></HeaderActions>
                 <drop-down class="d-inline-block" >
                     <button class="more-button" data-toggle="dropdown">
-                        <md-icon style="font-size: 40px !important">more_vert</md-icon>
+                        <md-icon class="font-size-40">more_vert</md-icon>
                     </button>
                     <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
                         <li class="other-list" >
@@ -127,7 +127,7 @@
         </div>
 
         <template v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true">
-            <template v-if="proposals[selectedCategory.componentId].length > 0">
+            <div v-if="proposals[selectedCategory.componentId].length > 0">
                 <div>
                     <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                         <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
@@ -139,9 +139,6 @@
                         <div>We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book now before it’s too late</div>
                     </div>
                 </div>
-            </template>
-            <template v-if="proposals[selectedCategory.componentId].length > 0">
-                <div class="mt-30">
                     <!-- Event Booking Items -->
                     <!-- <div class="events-booking-items" v-if="proposals.length">
                         <ProposalCard
@@ -156,54 +153,65 @@
                         >
                         </ProposalCard>
                     </div> -->
+                <div class="mt-30">
 
-                    <div class="proposals-booking-items">
-                        <ProposalHeader
-                            v-for="(ourproposal, index) in proposals[selectedCategory.componentId].slice(0, 3)"
-                            :key="index"
-                            :event="event"
-                            :proposalSelected="selectedProposal && ourproposal.id === selectedProposal.id"
-                            :proposalRequest="ourproposal"
-                            @click.native="selectProposal(ourproposal)"
-                            ></ProposalHeader>
-                    </div>
-
-                    <div class="bg-white proposalHeader proposalTitle d-flex align-center">
-                        <div class="company-logo">
-                            <img
-                                alt=""
-                                v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
-                                :src="`${selectedProposal.vendor.vendorLogoImage}`"
-                            />
-                            <img
-                                alt=""
-                                v-else
-                                src=""
-                            />
-                        </div>
-                        <div class="category-title">
-                            <img :src="`${$iconURL}Budget+Elements/${selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''}`" alt="category-logo" />
-                            <span class="text-decoration-underline">
-                                &nbsp;&nbsp;
-                                <u>
-                                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : '' }}
-                                </u>
-                            </span>
-                            <span class="">&nbsp;&nbsp;{{ 'Proposal' }}</span>
+                    <div class="proposals-booking-items" >
+                        <div class="" v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index">
+                            <ProposalHeader
+                                :event="event"
+                                :proposalSelected="selectedProposal && ourproposal.id === selectedProposal.id"
+                                :proposalRequest="ourproposal"
+                                @click.native="selectProposal(ourproposal)"
+                                ></ProposalHeader>
                         </div>
                     </div>
 
-                    <EventProposalDetails
-                    :proposal="selectedProposal"
-                    :category="selectedCategory"
-                    :key="selectedProposal.id"
-                    :showTimerBox="true"
-                    @favorite="favoriteProposal"
-                    @close="closeProposal"
-                    @ask="handleAsk"
-                    ></EventProposalDetails>
+                    <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
+                        <div class="d-flex align-center">
+                            <div class="company-logo">
+                                <img
+                                    alt=""
+                                    v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
+                                    :src="`${selectedProposal.vendor.vendorLogoImage}`"
+                                />
+                                <img
+                                    alt=""
+                                    v-else
+                                    src=""
+                                />
+                            </div>
+                            <div class="category-title">
+                                <img :src="`${$iconURL}Budget+Elements/${selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''}`" alt="category-logo" />
+                                <span class="text-decoration-underline">
+                                    &nbsp;&nbsp;
+                                    <u>
+                                        {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : '' }}
+                                    </u>
+                                </span>
+                                <span class="">&nbsp;&nbsp;{{ 'Proposal' }}</span>
+                            </div>
+                        </div>
+                        <ProposalVersionsDropdown
+                            v-if="selectedProposal"
+                            :versions="selectedProposal.versions"
+                            :selected="selectedVersion"
+                            @select="selectVersion"
+                        ></ProposalVersionsDropdown>
+                    </div>
+
+                    <div>
+                        <EventProposalDetails
+                        :proposal="selectedProposal"
+                        :category="selectedCategory"
+                        :key="selectedProposal.id"
+                        :showTimerBox="true"
+                        @favorite="favoriteProposal"
+                        @close="closeProposal"
+                        @ask="handleAsk"
+                        ></EventProposalDetails>
+                    </div>
                 </div>
-            </template>
+            </div>
             <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
         </template>
         <template v-else>
@@ -243,7 +251,7 @@
                             <template v-if="selectedCategory">
                                 <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory">
                                     <div class="font-size-30 font-bold-extra text-transform-uppercase">
-                                        <div style="float: left;">
+                                        <div class="float-left" >
                                             {{ service.seqNo }}
                                             &nbsp;&nbsp;
                                             {{ service.name }}
@@ -330,51 +338,54 @@
             </md-button>
         </div> -->
         <div class="d-flex justify-content-start">
-                <drop-down class="d-inline-block" >
-                    <button class="more-button cursor-pointer" data-toggle="dropdown">
-                        <span style="font-size: 16px !important; font-weight: 800;">
-                            {{ "More actions" }}
-                        </span>
-                        <md-icon style="font-size: 22px !important font-weight: 800;">keyboard_arrow_up</md-icon>
-                    </button>
-                    <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright " >
-                        <li class="other-list" >
-                            <a class="other-item font-size-16">
-                                <div class="other-name">
-                                    <md-icon>download</md-icon>
-                                    &nbsp;&nbsp;
-                                    {{'Download Proposals'}}
-                                </div>
-                            </a>
-                        </li>
-                        <li class="other-list" >
-                            <a class="other-item font-size-16" @click="compareProposal">
-                                <div class="other-name">
-                                    <md-icon>attach_money</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'Negotiate Rate'}}
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="other-list" >
-                            <a class="other-item font-size-16" >
-                                <div class="other-name">
-                                    <md-icon >textsms</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'Contact Vendor'}}
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </drop-down>
+            <md-button @click="scrollToTop" class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button">
+                <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+            </md-button>
+            <drop-down class="d-inline-block" >
+                <button class="more-button cursor-pointer" data-toggle="dropdown">
+                    <span class="more-actions font-size-16" >
+                        {{ "More actions" }}
+                    </span>
+                    <md-icon class="more-actions font-size-22" >keyboard_arrow_up</md-icon>
+                </button>
+                <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright " >
+                    <li class="other-list" >
+                        <a class="other-item font-size-16">
+                            <div class="other-name">
+                                <md-icon>download</md-icon>
+                                &nbsp;&nbsp;
+                                {{'Download Proposals'}}
+                            </div>
+                        </a>
+                    </li>
+                    <li class="other-list" >
+                        <a class="other-item font-size-16" @click="compareProposal">
+                            <div class="other-name">
+                                <md-icon>attach_money</md-icon>
+                                &nbsp;&nbsp;
+                                <span>
+                                    {{'Negotiate Rate'}}
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="other-list" >
+                        <a class="other-item font-size-16" >
+                            <div class="other-name">
+                                <md-icon >textsms</md-icon>
+                                &nbsp;&nbsp;
+                                <span>
+                                    {{'Contact Vendor'}}
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </drop-down>
         </div>
         <div class="d-flex justify-content-end">
                 <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
-            <md-button class="md-simple maryoku-btn" @click="bookVendor">
+            <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor">
                 Book This Vendor
                 <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
@@ -479,6 +490,7 @@ const components = {
   HeaderActions: () => import("@/components/HeaderActions"),
   ServicesCart: () => import("./ServicesCart.vue"),
   ProposalHeader: () => import('./ProposalHeader.vue'),
+  ProposalVersionsDropdown: () => import('../components/ProposalVersionsDropdown.vue'),
   CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
 
 };
@@ -610,6 +622,13 @@ export default {
     proposals() {
       return this.$store.state.event.proposals;
     },
+    categoryProposals() {
+        let categoryProposals = this.$store.state.event.proposals;
+        if(this.selectedCategory){
+            return categoryProposals[this.selectedCategory.componentId];
+        }
+        return [];
+    },
     cart(){
       return this.$store.state.planningBoard.cart;
     },
@@ -624,20 +643,19 @@ export default {
         return false;
     },
     isAnyLiked(){
-        let categories = this.event.components;
-        let requirements = this.$store.state.planningBoard.requirements;
-
-        if(categories.length == 0){
+        let category = this.selectedCategory;
+        if(category == null){
           return false;
         }
 
-        for(let category of categories){
-            if(!requirements[category.componentId]){
-              continue;
-            }
 
-            let types = requirements[category.componentId].types;
-            return Object.keys(types).length > 0;
+        if(this.requirements[category.componentId]){
+            let types = this.requirements[category.componentId].types;
+            console.log("types",types)
+            for(let type of Object.keys(types)){
+              return types[type].length > 0
+            }
+            // return Object.keys(types).length > 0;
         }
         return false;
     },
@@ -660,7 +678,10 @@ export default {
       }
 
       return categories;
-    }
+    },
+    selectedVersion(){
+      return this.$store.state.planningBoard.currentVersion;
+    },
   },
   methods: {
     ...mapMutations("event", [ "setProposalsByCategory"]),
@@ -669,6 +690,9 @@ export default {
     ...mapMutations("modal", ["setOpen"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements", "setCategoryCartItem"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem"]),
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
     findVendors() {
       this.isOpenedFinalModal = true;
     },
@@ -824,7 +848,7 @@ export default {
             this.$set(proposal, "viewed", true);
           });
         });
-        this.selectedProposal = getProposals[category.componentId][0];
+        this.selectProposal(getProposals[category.componentId][0]);
       }
     },
     selectRemainingCategory(category, clicked) {
@@ -839,7 +863,7 @@ export default {
             this.$set(proposal, "viewed", true);
           });
         });
-        this.selectedProposal = getProposals[category.componentId][0];
+        this.selectProposal(getProposals[category.componentId][0]);
       }
     },
     addBudget() {
@@ -966,12 +990,23 @@ export default {
     },
     selectProposal(thisProposal){
         this.selectedProposal = thisProposal;
+        let proposal = thisProposal;
+        if(proposal){
+            // this.commentComponents = proposal.commentComponent;
+            // this.showProposal = !!this.commentComponents.length
+            proposal.versions = !proposal.versions ? [] : proposal.versions;
+            this.$store.dispatch("planningBoard/setProposal",{...proposal});
+        }
+    },
+    selectVersion(index){
+        this.$store.commit('planningBoard/selectVersion', index);
     },
   },
   watch: {
     requirements(newVal) {
       console.log("requirement.watch", newVal);
     },
+    event(newVal){console.log('event.watch', newVal)},
   },
 };
 </script>
@@ -1045,6 +1080,14 @@ export default {
                 margin-right: 10px;
             }
         }
+        .scroll-top {
+            width: 41px !important;
+            margin-left: 20px;
+            img {
+                width: 17px;
+                margin-right: 0px;
+            }
+        }
     }
     .add-category-button {
         border: none;
@@ -1066,10 +1109,21 @@ export default {
     .more-button {
         border: none;
         background: none;
+        cursor: pointer;
         display: inline-flex;
         i {
             margin: 0px;
         }
+        .more-actions {
+            font-weight: 800;
+        }
+    }
+    .book-this-vendor{
+        color: #000 !important;
+        font-weight: 800 !important;
+    }
+    .float-left{
+        float: left;
     }
     .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active {
         background-color: transparent !important;

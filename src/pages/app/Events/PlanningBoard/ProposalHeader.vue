@@ -1,15 +1,14 @@
 <template>
-  <section class="proposal-header" :class="{selected: proposalSelected === true}">
+  <div class="proposal-header cursor-pointer" :class="{selected: proposalSelected === true}">
     <div class="cost">
       ${{ proposalRequest.cost | withComma }}
     </div>
     <div class="title">
         {{ proposalRequest.vendor ? proposalRequest.vendor.companyName : '' }}
     </div>
-  </section>
+  </div>
 </template>
 <script>
-import moment from "moment";
 export default {
   props: {
     event: {
@@ -31,19 +30,16 @@ export default {
     };
   },
   computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.proposalRequest.vendor;
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
-section.proposal-header.selected {
+.selected {
     box-shadow: none;
     background: white;
     border-top: 3px solid #f51355;
 }
-section.proposal-header {
+.proposal-header {
 
     .cost{
         color: #000;
