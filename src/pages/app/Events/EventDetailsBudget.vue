@@ -706,7 +706,7 @@ export default {
       }
     },
     pieChartData() {
-      return this.$store.state.event.eventData.components.filter(item => item.bookTitle !== "Book Equipment");
+      return this.$store.state.event.eventData.components.filter(item => item.vendorsCount>0);
     },
     // check permission
     permission() {

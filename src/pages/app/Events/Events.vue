@@ -161,10 +161,6 @@ export default {
         console.log(e);
       });
     }
-    // if (currentUser.currentTenant) {
-    // } else {
-    //   this.$router.push({ path: "/choose-workspace" });
-    // }
   },
   data() {
     return {

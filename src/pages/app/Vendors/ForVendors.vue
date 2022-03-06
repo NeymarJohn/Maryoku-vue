@@ -105,10 +105,10 @@
         Refer Another Vendor
         <div class="refer-tooltip" v-if="referTooltip">
           <h5>
-            Refer a new vendor
-            <br />and get a commission!
+              Refer someone else
+            <br />and still get your commission!
           </h5>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>
         </div>
         <img :src="`${iconsUrl}Group 5522.svg`" @mouseover="referTooltip = true" @mouseleave="referTooltip = false" />
       </button>
@@ -913,10 +913,10 @@ export default {
     .refer-tooltip {
       position: absolute;
       background-color: #ffedb7;
-      max-width: 301px;
-      padding: 26px 36px 36px 36px;
+      width: 310px;
+      padding: 26px;
       color: #050505;
-      margin-top: -260px;
+      margin-top: -280px;
 
       h5 {
         margin: 0;
@@ -935,9 +935,8 @@ export default {
         position: absolute;
         width: 0;
         height: 0;
-        margin-left: -0.5em;
         bottom: -20px;
-        left: 80%;
+        left: 70%;
         box-sizing: border-box;
 
         border: 12px solid black;
