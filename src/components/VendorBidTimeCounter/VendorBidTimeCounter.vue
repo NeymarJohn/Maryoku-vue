@@ -104,7 +104,8 @@ export default {
         }
 
         &.fix-digit {
-          width: 36px;
+          width: 38px;
+          padding: 10px 0;
         }
 
         &:last-child {
@@ -114,11 +115,11 @@ export default {
     }
   }
   .action-cont {
-    font-size: 14px;
-    font-weight: bold;
-    padding: 12px 0;
+    font-size: 13px;
+    padding: 16px 0;
+    margin: 0 20px;
   }
-  .border-top{border-top: 2px solid rgba(255, 255, 255, 0.64);}
-  .border-bottom{border-bottom: 2px solid rgba(255, 255, 255, 0.64);}
+  .border-top{border-top: .5px solid rgba(255, 255, 255, 0.64);}
+  .border-bottom{border-bottom: .5px solid rgba(255, 255, 255, 0.64);}
 }
 </style>

@@ -98,22 +98,36 @@ export default {
               });
       });
     },
-    getProposals({commit, state}, payload) {
-      return new Promise((resolve, reject) => {
-          new Proposal()
-              .params(payload)
-              .get()
-              .then((result) => {
-                  console.log('getProposals.result', result);
-                  if (result.length) {
-                      Object.keys(state.requirements).map(r => {
-                          let proposals = result.filter(it => it.requirementId == state.requirements[r].id) || [];
-                          commit("setProposalsByCategory", {category: r, proposals});
-                      })
-                  }
-                  resolve(result)
-          })
-      })
+    // getProposals({commit, state}, payload) {
+    //   return new Promise((resolve, reject) => {
+    //       new Proposal()
+    //           .params(payload)
+    //           .get()
+    //           .then((result) => {
+    //               console.log('getProposals.result', result);
+    //               if (result.length) {
+    //                   Object.keys(state.requirements).map(r => {
+    //                       let proposals = result.filter(it => it.requirementId == state.requirements[r].id) || [];
+    //                       commit("setProposalsByCategory", {category: r, proposals});
+    //                   })
+    //               }
+    //               resolve(result)
+    //       })
+    //   })
+    // },
+    getProposals({ commit, state }, payload) {
+        return new Promise((resolve, reject) => {
+            new Proposal()
+                .params(payload)
+                .get()
+                .then((result) => {
+                    state.eventData.components.map(c => {
+                        let proposals = result.filter(it => it.eventComponentId == c.id) || [];
+                        commit("setProposalsByCategory", { category: c.componentId, proposals });
+                    })
+                    resolve(result)
+                })
+        })
     },
     saveRequirement({ commit, state }, payload) {
       return new Promise((resolve, reject) => {

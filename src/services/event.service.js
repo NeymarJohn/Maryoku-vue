@@ -27,12 +27,13 @@ class EventService {
   getFirstTaskLink(event) {
     if (event.conceptProgress !== 100 && event.eventType && event.eventType.hasConcept) {
       return `/events/${event.id}/booking/concept`;
-    // } else if (event.budgetProgress !== 100) {
-    //   return `/events/${event.id}/booking/budget`;
+
     } else if (event.timelineProgress !== 100) {
       return `/events/${event.id}/booking/timeline`;
+
     } else if (event.campaignProgress !== 100) {
       return `/events/${event.id}/booking/campaign`;
+
     } else {
       const workingComponent = `/events/${event.id}/booking/timeline`;
       if (event.components) {
