@@ -128,7 +128,7 @@
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header">
-        <div class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
+        <div class="border-right font-bold-extra text-center pr-10 mr-10">
           <div
             v-if="
               selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.concept
@@ -146,13 +146,13 @@
           <div v-else>New Event</div>
         </div>
 
-        <div v-if="selectedProposal.nonMaryoku" class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
+        <div v-if="selectedProposal.nonMaryoku" class="border-right font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime, "MM/DD/YY") }}
         </div>
-        <div v-else class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
+        <div v-else class="border-right font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
         </div>
-        <div class="text-center font-size-20 font-bold-extra">
+        <div class="text-center font-bold-extra">
           $
           {{ selectedProposal.cost | withComma(Number) }}
         </div>
@@ -304,9 +304,11 @@ const components = {
   Modal: () => import("@/components/Modal.vue"),
   CentredModal: () => import("@/components/CentredModal.vue"),
   carousel: () => import("vue-owl-carousel"),
+  // ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
   NegotiationRequest: () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
   ProposalContent: () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
   ProposalListItem: () => import("@/pages/app/Vendors/components/ProposalListItem.vue"),
+  // EmptyRequestCard : () => import("@/pages/app/Vendors/components/EmptyRequestCard.vue"),
   InsightDetail: () => import("@/pages/app/Vendors/components/InsightDetail.vue"),
   TablePagination: () => import("@/components/TablePagination.vue"),
   Insight: () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),

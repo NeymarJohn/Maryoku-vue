@@ -671,7 +671,7 @@ export default {
           id: "campaign-item",
         };
         const planningBoard = {
-          title: "Set Requirements",
+          title: "Booking Vendors",
           status: this.event.requirementProgress === 100 ? "completed" : "not-complete",
           route: "booking/planningboard",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
@@ -679,15 +679,15 @@ export default {
           componentId: "planningboard",
           id: "planningboard-item",
         };
-        const chooseVendor = {
-          title: "Booking Vendors",
-          status: "not-complete",
-          route: "booking/choose-vendor",
-          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-          progress: this.event.campaignProgress,
-          componentId: "chooseVendor",
-          id: "bookingboard-item",
-        };
+        // const chooseVendor = {
+        //   title: "Booking Vendors",
+        //   status: "not-complete",
+        //   route: "booking/choose-vendor",
+        //   icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+        //   progress: this.event.campaignProgress,
+        //   componentId: "chooseVendor",
+        //   id: "bookingboard-item",
+        // };
         const elements = [];
         elements.push(overview);
         // if (this.event.eventType.hasConcept) {
@@ -697,8 +697,8 @@ export default {
         elements.push(timeline);
         elements.push(campaign);
         elements.push(planningBoard);
-        if (this.event.processingStatus === "accept-proposal") {
-          elements.push(chooseVendor);
+        if (this.event.budgetProgress > 0) {
+          elements.push(planningBoard);
         }
         return elements;
       } else {
