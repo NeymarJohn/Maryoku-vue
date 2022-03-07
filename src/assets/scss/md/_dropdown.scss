@@ -168,18 +168,6 @@
   }
 }
 
-.dropdown-menu.dropdown-menu-upright{
-  right: -50px;
-  left: auto;
-  top: -200px;
-  bottom: auto;
-  transform-origin: 0 100%;
-
-  .dropup &{
-    transform-origin: 100% 100%;
-  }
-}
-
 .dropdown .dropdown-menu .dropdown-menu{
   transform: scale(0);
   transform-origin: 100% 0;
@@ -188,11 +176,6 @@
   left: auto;
 
   &.dropdown-menu-right{
-    transform-origin: 0 0;
-    left: 102%;
-    right: auto;
-  }
-  &.dropdown-menu-upright{
     transform-origin: 0 0;
     left: 102%;
     right: auto;

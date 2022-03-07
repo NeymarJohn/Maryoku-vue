@@ -298,7 +298,7 @@ export default {
     ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
     async bookProposal() {
       await this.saveProposal(this.proposal);
-      window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, this.isMobile?"_self":"_blank");
+      window.open(`/#/checkout/proposal/${this.proposal.id}/customer`, "_blank");
     },
     async handleAsk(ask) {
       let expiredTime =
