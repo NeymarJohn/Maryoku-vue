@@ -170,6 +170,7 @@ export default {
     };
   },
   async created() {
+
     if(this.$store.state.auth.user){
       this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
 

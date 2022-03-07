@@ -696,7 +696,6 @@ export default {
         elements.push(budget);
         elements.push(timeline);
         elements.push(campaign);
-        elements.push(planningBoard);
         if (this.event.budgetProgress > 0) {
           elements.push(planningBoard);
         }
@@ -706,7 +705,7 @@ export default {
       }
     },
     pieChartData() {
-      return this.$store.state.event.eventData.components.filter(item => item.vendorsCount>0);
+      return this.$store.state.event.eventData.components.filter(item => item.bookTitle !== "Book Equipment");
     },
     // check permission
     permission() {
