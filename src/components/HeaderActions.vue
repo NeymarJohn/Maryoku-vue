@@ -11,9 +11,7 @@
                     class="md-simple md-just-icon adaptive-button"
                     :class="{active: singleAction.key === 'comment' && isCommentMode}"
                     @click="click(singleAction.key)">
-                    <img v-if="singleAction.key === 'like' && anyLiked" class="svg-icon-header" :src="`${$iconURL}Booking-New/Path+6363.svg`" />
-                    <img v-if="singleAction.key === 'like' && !anyLiked" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
-                    <img v-if="singleAction.key === 'cart'" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
+                    <img class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
                     <span v-if="singleAction.key === 'like'" :class="{'like-dot': proposalUnviewed == true}"></span>
                     <span v-if="singleAction.key === 'cart'" :class="'cart-dot'">{{ cartCount+1 }}</span>
                 </div>
@@ -36,21 +34,24 @@
           class="md-small-hide"
         >
           <md-button
-            v-if="isCommentMode"
-            class="md-simple md-just-icon hide-long-button"
+            v-if="!isCommentMode"
+            class="md-simple md-just-icon show-long-button"
             @click="click('comment')">
-            <div class="hide-circle-for-img">
-              <img class="hide-svg-icon-long-button" src="static/icons/hide-comments.svg" />
+            <div class="show-circle-for-img">
+              <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
             </div>
-            <div class="hide-comments-text">Hide comments</div>
+            <div class="show-comments-text">Show comments</div>
           </md-button>
           <md-button
             v-else
-            class="md-simple md-just-icon show-long-button"
-            @click="click('comment')">
-            <div class="show-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">Show comments</div>
-            <div class="show-circle-for-img">
-              <img class="show-svg-icon-long-button" src="static/icons/show-comments.svg" />
+            class="md-simple md-just-icon hide-long-button"
+            @click="click('comment')"
+          >
+            <div class="d-flex" >
+              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">Hide comments</div>
+              <div class="hide-circle-for-img">
+                <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
+              </div>
             </div>
           </md-button>
         </li>
@@ -97,10 +98,6 @@ export default {
       type: Number,
       default: 0,
     },
-    anyLiked: {
-      type: Boolean,
-      default: false,
-    },
     page: {
       type: String,
       default: 'event',
@@ -114,6 +111,7 @@ export default {
     return {
       actions: HeaderActions,
       requirementActions: HeaderActionsRequirements,
+      dropdownActions: HeaderActionsDropdown,
       isCommentMode: false,
       isSharing: false,
     };
@@ -169,26 +167,25 @@ export default {
   width: 214px;
   height: 56px;
   border-radius: 30px;
-  border: solid 1px #f51355;
-
+  border: solid 1px #ffc001;
+  background-color: #f5f5f5;
 }
 .hide-long-button{
   width: 214px;
   height: 56px;
   border-radius: 30px;
-  background-color: #ffe5ec!important;
-  &:focus {
-    background-color: #ffe5ec!important;
-  }
+  border: solid 1px #ffc001;
 }
 .hide-comments-text{
+  margin-left: 10px;
   padding-left: 10px;
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0.34px;
   text-align: center;
   text-transform: none;
-  color: #f51355;
+  color: #4e4e4e;
+  flex-grow: 1;
 }
 .show-comments-text{
   padding-left: 10px;
@@ -197,21 +194,27 @@ export default {
   letter-spacing: 0.34px;
   text-align: center;
   text-transform: none;
-  color: #f51355;
+  color: #4e4e4e;
 }
 .show-circle-for-img{
-  width: 56px;
-  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-left: 10px;
-  background-color: #ffe5ec;
+  margin-left: -7px;
+  background-color: #ffc001;
 }
 .hide-circle-for-img{
-  width: 56px;
-  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-left: -10px;
-  background-color: #f51355;
+  margin-left: 10px;
+  background-color: #ffc001;
 }
 .d-flex{
   align-items: center;
@@ -223,14 +226,12 @@ export default {
 }
 
 .hide-svg-icon-long-button{
-  width: 28px !important;
-  margin-left: 2px;
-  margin-top: 5px;
+  width: 32px !important;
+  height: 32px !important;
 }
 .show-svg-icon-long-button{
-  width: 28px !important;
-  margin-left: 2px;
-  margin-top: 5px;
+  width: 32px !important;
+  height: 32px !important;
 }
 .svg-icon-more-header-action {
   width: 8px;
@@ -270,7 +271,7 @@ export default {
         height: 20px;
         margin: 37px 34px 57px 13px;
         padding: 3px 11px 3px 10px;
-        background-color: #f51355;
+        background-color: #ffc001;
         font-size: 16px;
         font-weight: bold;
         font-stretch: normal;
@@ -283,11 +284,11 @@ export default {
         position: absolute;
     }
     .cart-dot {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         margin: 0px 0px 0px -22px;
         padding: 0px 0px 0px 7px;
-        background-color: #f51355;
+        background-color: #ffc001;
         font-size: 16px;
         font-weight: bold;
         font-stretch: normal;

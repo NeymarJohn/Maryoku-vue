@@ -351,39 +351,34 @@ export default {
 
       this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },
-    async saveItems(serviceItem, size, qty, price) {
-        const editingService = {
-            comment: this.comment,
-            dateCreated: "",
-            includedInPrice: true,
-            itemNotAvailable: false,
-            price: price,
-            priceUnit: "qty",
-            requirementComment: null,
-            requirementId: "",
-            requirementMandatory: false,
-            requirementPriority: null,
-            requirementTitle: serviceItem,
-            requirementSize: size,
-            requirementValue: `${qty}`,
-            isComplementary: this.isComplementary,
-            isComplimentary: false,
-            plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
-        };
+    saveItems(serviceItem, size, qty, price) {
+      const editingService = {
+        comment: this.comment,
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: price,
+        priceUnit: "qty",
+        proposalRequest: { id: this.proposalRequest.id },
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: serviceItem,
+        requirementSize: size,
+        requirementValue: `${qty}`,
+        isComplementary: this.isComplementary,
+        isComplimentary: false,
+        plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
+      };
+      // this.suggestedItems.filter((item) => )
+      if (price !== this.selected.price) {
+        this.showAskSaveChangeModal = true;
+      } else {
+        this.cancel();
+      }
 
-        let vendor = this.vendor;
-        const newServiceItem = {
-            checked: true,
-            label: this.camelize(this.serviceItem),
-            included: true,
-            value: null,
-            xIncluded: true,
-        }
-        this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
-
-        console.log('vendor', vendor);
-        await this.$store.dispatch("vendorProposal/saveVendor", vendor);
-        this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
+      this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },
     cancel() {
       this.selectedItem.price = null;
