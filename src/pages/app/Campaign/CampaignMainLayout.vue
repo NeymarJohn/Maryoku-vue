@@ -397,7 +397,7 @@ export default {
       deliverySettings: this.defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
-      showChangeCoverModal:true,
+      showChangeCoverModal:false,
       showScheduleModal: false,
       campaignTabs: {
         1: {
