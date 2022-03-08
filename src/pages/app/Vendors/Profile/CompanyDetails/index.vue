@@ -4,6 +4,8 @@
       <template slot="tab-pane-1">
         <vendor-company-detail></vendor-company-detail>
       </template>
+      <template slot="tab-pane-2"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-3"> <invoices></invoices> </template>
     </tabs>
   </div>
 </template>
