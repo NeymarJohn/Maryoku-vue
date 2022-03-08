@@ -8,13 +8,21 @@
       >
         let's start with a "save the date"
       </div>
-      <concept-image-block
-        v-if="concept"
-        class="ml-50 hidden"
-        :images="concept.images"
-        :colors="concept.colors"
-        border="no-border"
-      ></concept-image-block>
+      <div v-if="showChangeCover" class="change-cover-feedback" @click="test">
+        <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
+          <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+          Change Campaign Cover
+        </md-button>
+      </div>
+      <div class="concept-image-block-wrapper">
+        <concept-image-block
+          v-if="concept"
+          class="ml-50 hidden"
+          :images="concept.images"
+          :colors="concept.colors"
+          border="no-border"
+        ></concept-image-block>
+      </div>
       <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept" style="display: none"> </concept-canvas>
       <div class="cover-preview" v-else>
         <img :src="coverImage" />
@@ -93,6 +101,8 @@
       </div>
     </div>
   </div>
+
+
 </template>
 <script>
 import vue2Dropzone from "vue2-dropzone";
@@ -125,6 +135,7 @@ export default {
       type: Object,
       default: () => {},
     },
+    showChangeCover: Boolean,
     defaultData: {
       type: Object,
       default: () => {},
@@ -139,6 +150,7 @@ export default {
         headers: { "My-Awesome-Header": "header value" },
       },
       logo: null,
+      showChangeCoverModal: false,
       logoImageData: "",
       placeHolder: placeHolder,
       description: placeHolder,
@@ -187,6 +199,9 @@ export default {
     },
   },
   methods: {
+    test(){
+      this.showChangeCoverModal = true;
+    },
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
@@ -246,6 +261,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.concept-image-block-wrapper{
+  overflow: auto;
+}
+.change-cover-feedback{
+  position: absolute;
+  width: fit-content;
+  left: 30%;
+  top: 14%;
+  z-index: 15;
+}
 .campaign-save-date {
   .cover-preview {
     position: relative;

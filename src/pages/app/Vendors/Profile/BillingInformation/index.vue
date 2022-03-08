@@ -1,27 +1,31 @@
 <template>
   <div class="company-details-container">
-    <tabs :tab-name="['Company Details']" color-button="info" theme="purple">
+    <tabs :tab-name="['Payment Setting', 'Invoices']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
-        <vendor-company-detail></vendor-company-detail>
+        <PaymentSettings></PaymentSettings>
       </template>
-      <template slot="tab-pane-2"> <div class="p-40"></div> </template>
-      <template slot="tab-pane-3"> <invoices></invoices> </template>
+      <template slot="tab-pane-2">
+        <div class="p-40">
+          <invoices></invoices>
+        </div>
+      </template>
     </tabs>
   </div>
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
-import VendorCompanyDetail from "./VendorCompanyDetail";
 import Invoices from "./Invoices";
-
+import MyCompanyBilling from "../../../MyCompany/MyCompanyBilling";
+import PaymentSettings from "./PaymentSettings";
 export default {
   components: {
     VueElementLoading,
     LabelEdit,
     Tabs,
-    VendorCompanyDetail,
     Invoices,
+    MyCompanyBilling,
+    PaymentSettings,
   },
   data() {
     return {

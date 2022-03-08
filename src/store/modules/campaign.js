@@ -110,18 +110,6 @@ const defaultCampaignData = {
             allowUploadPhoto: true,
             downloadFiles:true,
         },
-        sections: [
-            {
-                sectionName: "review",
-                title: "",
-                description: ""
-            },
-            {
-                sectionName: "photos",
-                title: "",
-                description: ""
-            }
-        ],
         images: [
             {
                 src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg`,
