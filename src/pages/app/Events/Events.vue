@@ -147,30 +147,19 @@ export default {
     EventModal,
   },
   created() {
-    const query = this.$route.query;
-
     const currentUser = this.$store.state.auth.user;
     if (!currentUser) {
       this.$store.dispatch("auth/logout");
       this.$router.push("/signin");
     } else {
-
-    const params = query && query.type == 1 ?
-      {
-        filters: {myEvents: true}
-      } : null
-
-    this.$http
-        .get(`${process.env.SERVER_URL}/1/events`, {
-            params,
-        })
-        .then((response) => {
-            this.upcomingEvents = response.data;
-            this.isLoading = false;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
+      let m = new CalendarEvent().get();
+      m.then((allEvents) => {
+        this.upcomingEvents = allEvents;
+        this.isLoading = false;
+      }).catch((e) => {
+        console.log(e);
+      });
     }
   },
   data() {
@@ -212,6 +201,7 @@ export default {
       Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
+        showCancelButton: true,
         icon: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -252,9 +242,7 @@ export default {
     },
     routeToEvent(event) {
       const gotoLink = eventService.getFirstTaskLink(event);
-      this.$router.push({
-          path: this.$store.state.auth.user.currentUserType === 'planner' ? gotoLink : `/user-events/${event.id}/booking/overview`
-      });
+      this.$router.push({ path: gotoLink });
     },
     chooseWorkspace() {
       this.$router.push({ path: "/choose-workspace" });
@@ -295,6 +283,23 @@ export default {
     },
     routeToNewEvent() {
       this.$router.push(`/create-event-wizard`);
+      // window.currentPanel = this.$showPanel({
+      //   component: EventSidePanel,
+      //   cssClass: 'md-layout-item md-size-40 transition36 ',
+      //   openOn: 'right',
+      //   disableBgClick: false,
+      //   props: {
+      //     modalSubmitTitle: 'Save',
+      //     editMode: false,
+      //     sourceEventData: {
+      //       eventStartMillis: new Date().getTime(),
+      //       numberOfParticipants: currentUser.customer.numberOfEmployees
+      //     },
+      //     refreshEvents: null,
+      //     occasionsOptions: null,
+      //     openInPlannerOption: false
+      //   }
+      // })
     },
     getExtraFields(allEvents) {
       allEvents.forEach((item) => {

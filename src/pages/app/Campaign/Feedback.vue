@@ -29,7 +29,7 @@
                 <div class="text-description-upload-files" @click="openModalWindow" >Upload Files </div>
                 <div class="add-attachments-text">Add attachments to the event</div>
             </div>
-            <feedback-upload-files-modal v-if="showModalWindowOpen" @close="closeModalWindow"/>
+            <FeedbackUploadFilesModal v-if="showModalWindowOpen" @close="closeModalWindow"/>
         </div>
         <div class="footer-change-cover" >
           <div class="wrapper-logo-microsoft" >
@@ -131,7 +131,6 @@
         :margin-items="10"
         :images="campaignData.images"
         :show-upload-file="true"
-        :show-images-details="true"
         @addImage="addNewImage"
       />
     </div>

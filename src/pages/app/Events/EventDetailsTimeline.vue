@@ -628,13 +628,20 @@ export default {
     },
     async revert() {
       Swal.fire({
-        title: "Do you really want to revert all?",
+        title: "Do you really want to start again from scratch?",
+        text: "Any changes you have made will not be saved\n" +
+            "and you’ll start over with an empty board.",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
-        confirmButtonText: "Ok",
+        confirmButtonText: "Yes, start over",
         cancelButtonClass: "md-button md-danger md-simple md-red ",
         cancelButtonText: "Cancel",
         buttonsStyling: false,
+        customClass: {
+          popup:'swal-alert-container',
+          header: 'swal-alert-header',
+          htmlContainer: 'swal-alert-html',
+        }
       }).then(async (result) => {
         if (result.value === true) {
           await this.clearTimeline();

@@ -571,17 +571,23 @@ export default {
     },
     sendPreviewEmail() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      console.log(campaignData.campaignStatus);
+      console.log(campaignData);
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true,
       ).then(res => {});
       Swal.fire({
-        title: `You will receive a preview campaign email soon!`,
+        title: `Your preview email is on the way!`,
+        text: `The preview email for ${this.campaignTabs[this.selectedTab].name} has been sent to ${this.event.owner.name}.You should receive it shortly.`,
         buttonsStyling: false,
         type: "success",
         confirmButtonClass: "md-button md-success",
+        customClass: {
+          popup:'swal-alert-container',
+          header: 'swal-alert-header',
+          htmlContainer: 'swal-alert-html',
+        }
       });
     },
     sendToAddtionalGuests() {

@@ -3,11 +3,12 @@
     <template slot="header">
       <div class="delete-timeline-model__header">
         <h2>
-          Are you sure you want to say 
+          Are you sure you want to say
           goodbye to your changes?
         </h2>
         <div class="header-description">
-          <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" /> Changing the time on your status might cause price changes
+          <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" /> The changes you made will not be saved,
+            so you’ll go back to the previous version.
         </div>
       </div>
       <md-button
@@ -54,7 +55,7 @@
               required>
             </md-datepicker>
           </div>
-        </div> 
+        </div>
         <div class="md-layout-item md-size-100 margin-bottom text-left">
           <label>Number Of Guests</label>
           <div class="form-group with-icon">

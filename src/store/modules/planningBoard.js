@@ -11,19 +11,9 @@ const getDefaultState = () => {
         cart:{},
         favorite:{},
         types:{},
-        proposal: null,
-        original: null,
-        currentVersion: -1,
     }
 }
 const state = getDefaultState();
-
-const setStateFromData = (proposal, data) => {
-    Object.keys(data).map(key => {
-        Vue.set(proposal, key, JSON.parse(JSON.stringify(data[key])));
-    })
-}
-
 const getters = {
 
 }
@@ -163,10 +153,7 @@ const actions = {
                 reject(err)
             });
     });
-  },
-  setProposal: ({ commit, state }, proposal) => {
-    commit("setProposal", proposal);
-  },
+  }
 }
 const mutations = {
   resetRequirements(state){
@@ -203,25 +190,7 @@ const mutations = {
   },
   removeCategoryCartItem(state, {category}){
     Vue.delete(state.cart, category);
-  },
-  selectVersion: (state, index) => {
-    state.currentVersion = index;
-    if (index === -1) {
-        setStateFromData(state.proposal, JSON.parse(JSON.stringify(state.original)));
-    }
-    if (index > -1) {
-        setStateFromData(state.proposal, JSON.parse(JSON.stringify(state.proposal.versions[index].data)));
-    }
-  },
-  setVersions: (state, versions) => {
-    state.proposal.versions = versions;
-  },
-  setProposal: (state, proposal) => {
-    state.proposal = proposal;
-    state.proposal.versions = proposal.versions || [];
-    state.currentVersion = -1;
-    Vue.set(state, 'original', proposal);
-  },
+  }
 }
 export default {
   namespaced: true,
