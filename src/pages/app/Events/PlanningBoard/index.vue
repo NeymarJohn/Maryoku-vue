@@ -1,452 +1,540 @@
 <template>
-  <div class="booking-section planning-board-layout">
-    <div class="p-50" v-if="!showCounterPage">
-      <loader :active="isLoading || isLoadingStoredData || isLoadingProposal" />
-      <template v-if="!isLoading && !isLoadingStoredData">
-        <div class="d-flex justify-content-between align-center">
-            <div>
-                <ResizableToggleButton
-                    class="mr-20 mb-10"
-                    :key="index"
-                    :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
-                    :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-                    :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
-                    :defaultStatus="selectedCategory && component.id === selectedCategory.id"
-                    :hasBadge="hasBadge(component)"
-                    :proposalCategory="findProposalUnviewed(component)"
-                    iconStyle="opacity:0.8"
-                    v-for="(component,index) in topCategories"
-                    @click="selectCategory(component)"
-                ></ResizableToggleButton>
-                <drop-down class="d-inline-block">
-                    <button class="add-category-button mb-10" @click="addRequirements" data-toggle="dropdown">
-                        <md-icon>add</md-icon>
-                    </button>
-                    <ul class="dropdown-width dropdown-menu dropdown-color dropdown-menu-right " >
-                        <li class="remaining-list" v-for="(remainingCategory,i) in remainingCategories" :key="remainingCategory.title+i">
-                            <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory)">
-                                <div class="remaining-name">
-                                    <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`" />
-                                    &nbsp;&nbsp;
-                                    {{remainingCategory.title}}
+    <div class="booking-section planning-board-layout">
+        <div class="p-50" v-if="!showCounterPage">
+            <loader :active="isLoading || isLoadingStoredData || isLoadingProposal" />
+            <template v-if="!isLoading && !isLoadingStoredData">
+                <div class="d-flex justify-content-between align-center">
+                    <div>
+                        <ResizableToggleButton
+                        class="mr-20 mb-10"
+                        :key="index"
+                        :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
+                        :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
+                        :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+                        :defaultStatus="selectedCategory && component.id === selectedCategory.id"
+                        :hasBadge="hasBadge(component)"
+                        iconStyle="opacity:0.8"
+                        v-for="(component, index) in topCategories"
+                        @click="selectCategory(component)"
+                        ></ResizableToggleButton>
+                        <drop-down class="d-inline-block">
+                            <button class="add-category-button mb-10" @click="addRequirements" data-toggle="dropdown">
+                                <md-icon>add</md-icon>
+                            </button>
+                            <ul class="dropdown-width dropdown-menu dropdown-color dropdown-menu-right ">
+                                <li
+                                class="remaining-list"
+                                v-for="(remainingCategory, i) in remainingCategories"
+                                :key="remainingCategory.title + i"
+                                >
+                                    <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory)">
+                                        <div class="remaining-name">
+                                        <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`" />
+                                        &nbsp;&nbsp;
+                                        {{ remainingCategory.title }}
+                                        </div>
+                                    </a>
+                                </li>
+                                <div class="category-list">
+                                    <div class="category-heading font-size-16 font-bold">
+                                        {{ "Additional Categories" }}
+                                    </div>
                                 </div>
-                            </a>
-                        </li>
-                        <div class="category-list" >
-                            <div class="category-heading font-size-16 font-bold" >
-                                {{'Additional Categories'}}
-                            </div>
-                        </div>
-                        <li class="category-list" v-for="(additionalCategory,i) in additionalCategories" :key="additionalCategory.title+i">
-                            <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory)">
-                                <div class="category-name">
-                                    <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`" />
-                                    &nbsp;&nbsp;
-                                    {{additionalCategory.title}}
-                                </div>
-                                &nbsp;&nbsp;
-                                <div class="category-plus">
-                                    <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </drop-down>
-            </div>
-            <div class="functional-bar">
-                <div class="header-actions">
-                    <ul class="d-flex list-style-none">
-                        <li>
+                                <li
+                                class="category-list"
+                                v-for="(additionalCategory, i) in additionalCategories"
+                                :key="additionalCategory.title + i"
+                                >
+                                    <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory)">
+                                        <div class="category-name">
+                                            <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`" />
+                                            &nbsp;&nbsp;
+                                            {{ additionalCategory.title }}
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <div class="category-plus">
+                                            <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </drop-down>
+                    </div>
+                    <div class="functional-bar">
+                        <div class="header-actions">
+                        <ul class="d-flex list-style-none">
+                            <li>
                             <div class="md-simple md-just-icon adaptive-button">
-                                <img @click="openChoice" v-if="isAnyLiked" class="svg-icon-header cursor-pointer" :src="`${$iconURL}Booking-New/Path+6363.svg`" />
-                                <img @click="openChoice" v-if="!isAnyLiked" class="svg-icon-header cursor-pointer" :src="`${$iconURL}Booking-New/Group+28553.svg`" />
-                                <span :class="{'like-dot': this.proposalUnviewed == true}"></span>
+                                <img
+                                @click="openChoice"
+                                v-if="isAnyLiked"
+                                class="svg-icon-header cursor-pointer"
+                                :src="`${$iconURL}Booking-New/Path+6363.svg`"
+                                />
+                                <img
+                                @click="openChoice"
+                                v-if="!isAnyLiked"
+                                class="svg-icon-header cursor-pointer"
+                                :src="`${$iconURL}Booking-New/Group+28553.svg`"
+                                />
+                                <span :class="{ 'like-dot': this.proposalUnviewed == true }"></span>
                             </div>
-                        </li>
-                        <li class="md-small-hide">
+                            </li>
+                            <li class="md-small-hide">
                             <div class="md-simple md-just-icon adaptive-button">
-                                <img @click="openCart" class="svg-icon-header cursor-pointer" :src="`${$iconURL}Booking-New/Path+13791.svg`" />
-                                <!-- <span class="cart-dot">{{ cartCount+1 }}</span> -->
+                                <img
+                                @click="openCart"
+                                class="svg-icon-header cursor-pointer"
+                                :src="`${$iconURL}Booking-New/Path+13791.svg`"
+                                />
+                                <span v-if="isAnyCart || isCart" class="cart-dot">{{ cartCount }}</span>
                             </div>
                         </li>
                     </ul>
                 </div>
-                <header-actions :anyLiked="isAnyLiked" :requirement="false" :hideDownload="true" :hideShare="true" :proposalUnviewed="this.proposalUnviewed" :cartCount="this.cart.length" :customStyles="{showCommentsText: {paddingLeft: '2px'}}" ></header-actions>
+                <HeaderActions
+                :anyLiked="isAnyLiked"
+                :requirement="false"
+                :hideDownload="true"
+                :hideShare="true"
+                :proposalUnviewed="this.proposalUnviewed"
+                :cartCount="cartCount"
+                :customStyles="{showCommentsText: {paddingLeft: '2px'}}"
+                @toggleCommentMode="toggleCommentMode"></HeaderActions>
                 <drop-down class="d-inline-block" >
                     <button class="more-button" data-toggle="dropdown">
-                        <md-icon style="font-size: 40px !important">more_vert</md-icon>
+                        <md-icon class="font-size-40">more_vert</md-icon>
                     </button>
                     <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
                         <li class="other-list" >
+
                             <a class="other-item font-size-16">
                                 <div class="other-name">
-                                    <md-icon>share</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                    {{'Share Proposals'}}
-                                    </span>
+                                <md-icon>share</md-icon>
+                                &nbsp;&nbsp;
+                                <span>
+                                    {{ "Share Proposals" }}
+                                </span>
                                 </div>
                             </a>
-                        </li>
-                        <li class="other-list" >
+                            </li>
+                            <li class="other-list">
                             <a class="other-item font-size-16" @click="compareProposal">
                                 <div class="other-name">
-                                    <md-icon>equalizer</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'Compare Proposals'}}
-                                    </span>
+                                <md-icon>equalizer</md-icon>
+                                &nbsp;&nbsp;
+                                <span>
+                                    {{ "Compare Proposals" }}
+                                </span>
                                 </div>
                             </a>
-                        </li>
-                        <li class="other-list" >
-                            <a class="other-item font-size-16" >
+                            </li>
+                            <li class="other-list">
+                            <a class="other-item font-size-16">
                                 <div class="other-name">
-                                    <md-icon >add_circle_outline</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'I Already Have a venue fo my Event'}}
-                                    </span>
+                                <md-icon>add_circle_outline</md-icon>
+                                &nbsp;&nbsp;
+                                <span>
+                                    {{ "I Already Have a venue fo my Event" }}
+                                </span>
                                 </div>
                             </a>
-                        </li>
-                        <li class="other-list" >
+                            </li>
+                            <li class="other-list">
                             <a class="other-item font-size-16" @click="showDifferentProposals = true">
                                 <div class="other-name">
-                                    <md-icon >autorenew</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'I Want Something Different'}}
-                                    </span>
+                                <md-icon>autorenew</md-icon>
+                                &nbsp;&nbsp;
+                                <span>
+                                    {{ "I Want Something Different" }}
+                                </span>
                                 </div>
                             </a>
-                        </li>
-                    </ul>
-                </drop-down>
-            </div>
-        </div>
-
-        <template v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true">
-            <template v-if="proposals[selectedCategory.componentId].length > 0">
-                <div>
-                    <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
-                        <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
-                        {{ selectedCategory.fullTitle }}
+                            </li>
+                        </ul>
+                        </drop-down>
                     </div>
                 </div>
-                <div>
-                    <div class="d-flex justify-content-between">
-                        <div>We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book now before it’s too late</div>
-                    </div>
-                </div>
-            </template>
-            <template v-if="proposals[selectedCategory.componentId].length > 0">
-                <div class="mt-30">
-                    <!-- Event Booking Items -->
-                    <!-- <div class="events-booking-items" v-if="proposals.length">
-                        <ProposalCard
-                            @goDetail="goDetailPage"
-                            v-for="(proposal, index) in proposals.slice(0, 3)"
-                            :key="index"
-                            :proposal="proposal"
-                            :component="selectedCategory"
-                            :probability="getProbability(index)"
-                            :isCollapsed="showDetails"
-                            :isSelected="selectedProposal && selectedProposal.id === proposal.id"
-                        >
-                        </ProposalCard>
-                    </div> -->
 
-                    <div class="proposals-booking-items">
-                        <ProposalHeader
-                            v-for="(ourproposal, index) in proposals[selectedCategory.componentId].slice(0, 3)"
-                            :key="index"
-                            :event="event"
-                            :proposalSelected="selectedProposal && ourproposal.id === selectedProposal.id"
-                            :proposalRequest="ourproposal"
-                            @click.native="selectProposal(ourproposal)"
+                <template v-if="
+                    selectedCategory &&
+                    requirements[selectedCategory.componentId] &&
+                    requirements[selectedCategory.componentId].isIssued == true"
+                >
+                    <div v-if="proposals[selectedCategory.componentId].length > 0">
+                        <div>
+                        <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
+                            <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
+                            {{ selectedCategory.fullTitle }}
+                        </div>
+                        </div>
+                        <div>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                            We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book
+                            now before it’s too late
+                            </div>
+                        </div>
+                        </div>
+                        <!-- Event Booking Items -->
+                        <!-- <div class="events-booking-items" v-if="proposals.length">
+                                    <ProposalCard
+                                        @goDetail="goDetailPage"
+                                        v-for="(proposal, index) in proposals.slice(0, 3)"
+                                        :key="index"
+                                        :proposal="proposal"
+                                        :component="selectedCategory"
+                                        :probability="getProbability(index)"
+                                        :isCollapsed="showDetails"
+                                        :isSelected="selectedProposal && selectedProposal.id === proposal.id"
+                                    >
+                                    </ProposalCard>
+                                </div> -->
+                        <div class="mt-30">
+                        <div class="proposals-booking-items">
+                            <div class="" v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index">
+                            <ProposalHeader
+                                :event="event"
+                                :proposalSelected="selectedProposal && ourproposal.id === selectedProposal.id"
+                                :proposalRequest="ourproposal"
+                                @click.native="selectProposal(ourproposal)"
                             ></ProposalHeader>
-                    </div>
+                            </div>
+                        </div>
 
-                    <div class="bg-white proposalHeader proposalTitle d-flex align-center">
-                        <div class="company-logo">
-                            <img
+                        <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
+                            <div class="d-flex align-center">
+                            <div class="company-logo">
+                                <img
                                 alt=""
                                 v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
                                 :src="`${selectedProposal.vendor.vendorLogoImage}`"
-                            />
-                            <img
-                                alt=""
-                                v-else
-                                src=""
-                            />
-                        </div>
-                        <div class="category-title">
-                            <img :src="`${$iconURL}Budget+Elements/${selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''}`" alt="category-logo" />
-                            <span class="text-decoration-underline">
+                                />
+                                <img alt="" v-else src="" />
+                            </div>
+                            <div class="category-title">
+                                <img
+                                :src="
+                                    `${$iconURL}Budget+Elements/${
+                                    selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
+                                    }`
+                                "
+                                alt="category-logo"
+                                />
+                                <span class="text-decoration-underline">
                                 &nbsp;&nbsp;
                                 <u>
-                                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : '' }}
+                                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
                                 </u>
-                            </span>
-                            <span class="">&nbsp;&nbsp;{{ 'Proposal' }}</span>
+                                </span>
+                                <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
+                            </div>
+                            </div>
+                            <ProposalVersionsDropdown
+                            v-if="selectedProposal"
+                            :versions="selectedProposal.versions"
+                            :selected="selectedVersion"
+                            @select="selectVersion"
+                            ></ProposalVersionsDropdown>
+                        </div>
+
+                        <div>
+                            <EventProposalDetails
+                            :proposal="selectedProposal"
+                            :category="selectedCategory"
+                            :key="selectedProposal.id"
+                            :showTimerBox="true"
+                            @favorite="favoriteProposal"
+                            @close="closeProposal"
+                            @ask="handleAsk"
+                            ></EventProposalDetails>
+                        </div>
                         </div>
                     </div>
-
-                    <EventProposalDetails
-                    :proposal="selectedProposal"
-                    :category="selectedCategory"
-                    :key="selectedProposal.id"
-                    :showTimerBox="true"
-                    @favorite="favoriteProposal"
-                    @close="closeProposal"
-                    @ask="handleAsk"
-                    ></EventProposalDetails>
-                </div>
-            </template>
-            <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
-        </template>
-        <template v-else>
-            <div class="booking-proposals">
-                <template v-if="selectedCategory">
-                    <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory">
-                        <md-tooltip class="custom-tooltip-1" md-direction="top">Here’s where you can set your expectations and requirements for your event</md-tooltip>
-                        <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
-                        {{ selectedCategory.fullTitle }}
-                        <template v-if="!booked && (!($store.state.planningBoard.requirements[selectedCategory.componentId] && $store.state.planningBoard.requirements[selectedCategory.componentId].isIssued) || !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)">
-                            <template v-if="hasBudget(selectedCategory.componentId)">
-                                <a class="font-size-18 md-red maryoku-btn cursor-pointer" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
+                    <PendingForVendors v-else :expiredTime="expireTime"></PendingForVendors>
+                </template>
+                <template v-else-if="!( selectedCategory &&
+                                        requirements[selectedCategory.componentId] &&
+                                        requirements[selectedCategory.componentId].isIssued)
+                                        ||
+                                    !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length">
+                    <div class="booking-proposals">
+                        <template v-if="selectedCategory">
+                            <div class="font-size-30 font-bold-extra category-title mt-30 mb-30" v-if="selectedCategory">
+                                <md-tooltip class="custom-tooltip-1" md-direction="top"
+                                >Here’s where you can set your expectations and requirements for your event</md-tooltip
+                                >
+                                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" />
+                                {{ selectedCategory.fullTitle }}
+                                <template
+                                v-if="
+                                    !booked &&
+                                    (!(
+                                        requirements[selectedCategory.componentId] &&
+                                        requirements[selectedCategory.componentId].isIssued
+                                    ) ||
+                                        !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)
+                                "
+                                >
+                                <template v-if="hasBudget(selectedCategory.componentId)">
+                                    <a
+                                    class="font-size-18 md-red maryoku-btn cursor-pointer"
+                                    @click="
+                                        getSpecification({
+                                        category: selectedCategory,
+                                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                                        })
+                                    "
+                                    >
                                     Get Specific
-                                </a>
-                            </template>
-                            <template v-else>
-                                <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
-                            </template>
-                        </template>
-                        <template v-else>
-                            <div class="d-flex align-center justify-content-center">
-                                <div v-if="booked" class="color-red">
+                                    </a>
+                                </template>
+                                <template v-else>
+                                    <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
+                                </template>
+                                </template>
+                                <template v-else>
+                                <div class="d-flex align-center justify-content-center">
+                                    <div v-if="booked" class="color-red">
                                     Already booked
-                                </div>
-                                <a  class="font-size-18 md-red maryoku-btn cursor-pointer" @click="getSpecification({ category: selectedCategory, services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title) })">
+                                    </div>
+                                    <a
+                                    class="font-size-18 md-red maryoku-btn cursor-pointer"
+                                    @click="
+                                        getSpecification({
+                                        category: selectedCategory,
+                                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                                        })
+                                    "
+                                    >
                                     Change specifications
-                                </a>
+                                    </a>
+                                </div>
+                                </template>
                             </div>
                         </template>
                     </div>
-                </template>
-            </div>
-            <template v-for="(service, serviceIndex) in serviceCards[0]" >
-                <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
-                    <div class="mt-80 mb-80" :key="`serviceGroup-${serviceIndex}` ">
-                        <div class="booking-proposals">
-                            <template v-if="selectedCategory">
-                                <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory">
-                                    <div class="font-size-30 font-bold-extra text-transform-uppercase">
-                                        <div style="float: left;">
-                                            {{ service.seqNo }}
-                                            &nbsp;&nbsp;
-                                            {{ service.name }}
+                    <template v-for="(service, serviceIndex) in serviceCards[0]">
+                        <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
+                            <div class="mt-80 mb-80" :key="`serviceGroup-${serviceIndex}`">
+                                <div class="booking-proposals">
+                                    <template v-if="selectedCategory">
+                                        <div class="category-title mt-30 mb-30 d-flex flex-column" v-if="selectedCategory">
+                                            <div class="font-size-30 font-bold-extra text-transform-uppercase">
+                                                <div class="float-left">
+                                                {{ service.seqNo }}
+                                                &nbsp;&nbsp;
+                                                {{ service.name }}
+                                                </div>
+                                            </div>
+                                            <div class="font-size-10 ">
+                                                <p>
+                                                {{
+                                                    "What suits your event best? Help vendors understand your needs by selecting your favorites and adding more details if needed."
+                                                }}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="font-size-10 ">
-                                        <p>
-                                            {{ "What suits your event best? Help vendors understand your needs by selecting your favorites and adding more details if needed." }}
-                                        </p>
-                                    </div>
+                                    </template>
                                 </div>
-                            </template>
-                        </div>
 
-                        <div class="md-layout md-gutter mt-40 grid">
-                            <template v-if="service.musicPlayer">
-                                <template v-for="(clip, clipindx) in service.clips">
-                                    <ServiceCategoryCard
-                                    class="mb-0 mr-0 ml-0"
-                                    :clip="clip"
-                                    :index="clipindx"
-                                    :serviceCategory="service"
-                                    :key="service.name+clipindx"
-                                    :isLong="(clipindx) % 2 === 1"
-                                    :isRow="getIsRow(clipindx)"
-                                    :rowNum="getRowNum(clipindx, service)"
-                                    :hasBudget="hasBudget(service.serviceCategory)"
-                                    :musicPlayer="service.musicPlayer"
-                                    :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                    :isSentRequest="
-                                        $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                        $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                    "
-                                    @showSpecific="getSpecification"
-                                    @update="setServiceStyles"
-                                    ></ServiceCategoryCard>
-                                </template>
-                            </template>
-                            <template v-else>
-                                <template v-for="(image, indx) in service.images">
-                                    <ServiceCategoryCard
-                                    class="mb-0 mr-0 ml-0"
-                                    :image="image"
-                                    :index="indx"
-                                    :serviceCategory="service"
-                                    :key="service.name+indx"
-                                    :isLong="(indx) % 2 === 1"
-                                    :isRow="getIsRow(indx)"
-                                    :rowNum="getRowNum(indx, service)"
-                                    :hasBudget="hasBudget(service.serviceCategory)"
-                                    :musicPlayer="service.musicPlayer"
-                                    :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-                                    :isSentRequest="
-                                        $store.state.planningBoard.requirements[service.serviceCategory] &&
-                                        $store.state.planningBoard.requirements[service.serviceCategory].isIssued
-                                    "
-                                    @showSpecific="getSpecification"
-                                    @update="setServiceStyles"
-                                    ></ServiceCategoryCard>
-                                </template>
-                            </template>
-                        </div>
-                    </div>
+                                <div class="md-layout md-gutter mt-40 grid">
+                                    <template v-if="service.musicPlayer">
+                                        <template v-for="(clip, clipindx) in service.clips">
+                                        <ServiceCategoryCard
+                                            class="mb-0 mr-0 ml-0"
+                                            :clip="clip"
+                                            :index="clipindx"
+                                            :serviceCategory="service"
+                                            :key="service.name + clipindx"
+                                            :isLong="clipindx % 2 === 1"
+                                            :isRow="getIsRow(clipindx)"
+                                            :rowNum="getRowNum(clipindx, service)"
+                                            :hasBudget="hasBudget(service.serviceCategory)"
+                                            :musicPlayer="service.musicPlayer"
+                                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                                            :isSentRequest="
+                                            requirements[service.serviceCategory] &&
+                                            requirements[service.serviceCategory].isIssued
+                                            "
+                                            @showSpecific="getSpecification"
+                                            @update="setServiceStyles"
+                                        ></ServiceCategoryCard>
+                                        </template>
+                                    </template>
+                                    <template v-else>
+                                        <template v-for="(image, indx) in service.images">
+                                        <ServiceCategoryCard
+                                            class="mb-0 mr-0 ml-0"
+                                            :image="image"
+                                            :index="indx"
+                                            :serviceCategory="service"
+                                            :key="service.name + indx"
+                                            :isLong="indx % 2 === 1"
+                                            :isRow="getIsRow(indx)"
+                                            :rowNum="getRowNum(indx, service)"
+                                            :hasBudget="hasBudget(service.serviceCategory)"
+                                            :musicPlayer="service.musicPlayer"
+                                            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                                            :isSentRequest="
+                                            requirements[service.serviceCategory] &&
+                                            requirements[service.serviceCategory].isIssued
+                                            "
+                                            @showSpecific="getSpecification"
+                                            @update="setServiceStyles"
+                                        ></ServiceCategoryCard>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </template>
+                <template v-else>
+                    <PendingForVendors :expiredTime="expireTime"></PendingForVendors>
                 </template>
             </template>
+        </div>
+        <template v-else>
+            <PendingForVendors :expiredTime="expireTime"></PendingForVendors>
         </template>
 
-      </template>
-    </div>
-    <template v-else>
-        <PendingForVendors :expiredTime="expiredTime"></PendingForVendors>
-    </template>
-
-    <div v-if="selectedCategory && requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued == true" class="proposal-footer white-card d-flex justify-content-between">
-        <!-- <div>
-            <md-button class="md-simple maryoku-btn md-black">
-                <span class="text-transform-capitalize">I already have a vendor</span>
-            </md-button>
-            <md-button
-                class="md-simple maryoku-btn md-black text-transform-capitalize"
-                @click="isOpenedAdditionalModal = true"
+        <div v-if="
+            selectedCategory &&
+            requirements[selectedCategory.componentId] &&
+            requirements[selectedCategory.componentId].isIssued == true"
+            class="proposal-footer white-card d-flex justify-content-between"
+        >
+            <!-- <div>
+                    <md-button class="md-simple maryoku-btn md-black">
+                        <span class="text-transform-capitalize">I already have a vendor</span>
+                    </md-button>
+                    <md-button
+                        class="md-simple maryoku-btn md-black text-transform-capitalize"
+                        @click="isOpenedAdditionalModal = true"
+                        >
+                        <span class="text-transform-capitalize">Chanage requirements</span>
+                    </md-button>
+                </div> -->
+            <div class="d-flex justify-content-start">
+                <md-button
+                @click="scrollToTop"
+                class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
                 >
-                <span class="text-transform-capitalize">Chanage requirements</span>
-            </md-button>
-        </div> -->
-        <div class="d-flex justify-content-start">
-                <drop-down class="d-inline-block" >
-                    <button class="more-button cursor-pointer" data-toggle="dropdown">
-                        <span style="font-size: 16px !important; font-weight: 800;">
-                            {{ "More actions" }}
+                <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+                </md-button>
+                <drop-down class="d-inline-block">
+                <button class="more-button cursor-pointer" data-toggle="dropdown">
+                    <span class="more-actions font-size-16">
+                    {{ "More actions" }}
+                    </span>
+                    <md-icon class="more-actions font-size-22">keyboard_arrow_up</md-icon>
+                </button>
+                <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
+                    <li class="other-list">
+                    <a class="other-item font-size-16">
+                        <div class="other-name">
+                        <md-icon>download</md-icon>
+                        &nbsp;&nbsp;
+                        {{ "Download Proposals" }}
+                        </div>
+                    </a>
+                    </li>
+                    <li class="other-list">
+                    <a class="other-item font-size-16">
+                        <div class="other-name">
+                        <md-icon>attach_money</md-icon>
+                        &nbsp;&nbsp;
+                        <span>
+                            {{ "Negotiate Rate" }}
                         </span>
-                        <md-icon style="font-size: 22px !important font-weight: 800;">keyboard_arrow_up</md-icon>
-                    </button>
-                    <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright " >
-                        <li class="other-list" >
-                            <a class="other-item font-size-16">
-                                <div class="other-name">
-                                    <md-icon>download</md-icon>
-                                    &nbsp;&nbsp;
-                                    {{'Download Proposals'}}
-                                </div>
-                            </a>
-                        </li>
-                        <li class="other-list" >
-                            <a class="other-item font-size-16" @click="compareProposal">
-                                <div class="other-name">
-                                    <md-icon>attach_money</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'Negotiate Rate'}}
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="other-list" >
-                            <a class="other-item font-size-16" >
-                                <div class="other-name">
-                                    <md-icon >textsms</md-icon>
-                                    &nbsp;&nbsp;
-                                    <span>
-                                        {{'Contact Vendor'}}
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+                        </div>
+                    </a>
+                    </li>
+                    <li class="other-list">
+                    <a class="other-item font-size-16">
+                        <div class="other-name">
+                        <md-icon>textsms</md-icon>
+                        &nbsp;&nbsp;
+                        <span>
+                            {{ "Contact Vendor" }}
+                        </span>
+                        </div>
+                    </a>
+                    </li>
+                </ul>
                 </drop-down>
-        </div>
-        <div class="d-flex justify-content-end">
+            </div>
+            <div class="d-flex justify-content-end">
                 <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
-            <md-button class="md-simple maryoku-btn" @click="bookVendor">
+                <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor">
                 Book This Vendor
                 <md-icon>keyboard_arrow_right</md-icon>
-            </md-button>
-                    <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
-            <md-button class="md-red maryoku-btn"
-                    @click="addToCart">Add To Cart
-            </md-button>
+                </md-button>
+                <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
+                <md-button class="md-red maryoku-btn" @click="addToCart">Add To Cart </md-button>
+            </div>
         </div>
-    </div>
-    <div v-else class="proposal-footer white-card d-flex justify-content-end">
+        <div v-else class="proposal-footer white-card d-flex justify-content-end">
         <div>
             <!-- <md-button class="md-simple md-outlined md-red maryoku-btn">
-                <img :src="`${$iconURL}common/save-red.svg`" />
-                Save Draft
-            </md-button> -->
+                    <img :src="`${$iconURL}common/save-red.svg`" />
+                    Save Draft
+                </md-button> -->
             <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
-                <!-- <img :src="`${$iconURL}Booking-New/Path+13791.svg`" /> -->
-                <md-icon>shopping_cart</md-icon>
-                &nbsp;&nbsp;
-                Add To Cart
+            <!-- <img :src="`${$iconURL}Booking-New/Path+13791.svg`" /> -->
+            <md-icon>shopping_cart</md-icon>
+            &nbsp;&nbsp; Add To Cart
             </md-button>
             <md-button class="md-red maryoku-btn" v-if="step === 1" @click="findVendors">
-                Find Me Vendors
+            Find Me Vendors
             </md-button>
         </div>
-    </div>
+        </div>
 
-    <AdditionalRequestModal
-      class="lg"
-      v-if="isOpenedAdditionalModal"
-      :subCategory="subCategory"
-      :selectedCategory="selectedCategory"
-      :defaultData="getRequirements(selectedCategory.key) || {}"
-      :selectedTypes="getSelectedTypes(selectedCategory.key)"
-      @save="saveAdditionalRequest"
-      @cancel="isOpenedAdditionalModal = false"
-      @close="isOpenedAdditionalModal = false"
-    ></AdditionalRequestModal>
-    <special-requirement-modal
-      v-if="isOpenedFinalModal"
-      :defaultData="specialRequirements"
-      @cancel="isOpenedFinalModal = false"
-      @save="saveSpecialRequirements"
-    >
-    </special-requirement-modal>
-    <transition name="slide-fade">
-      <RequirementsCart
-        v-if="showChoice"
-        :requirements="requirements"
-        :service-categories="serviceCategories"
-        :total="event.components.length"
-        @close="showChoice = false"
-      ></RequirementsCart>
-    </transition>
-    <ServicesCart
-        v-if="showCart"
-        @close="showCart = false"
-    ></ServicesCart>
-    <CustomPopup @cancel="popup = false" v-if="popup" />
-    <AddBudgetModal
-      v-if="showAddNewCategory"
-      :serviceCategory="selectedCategory"
-      @cancel="showAddNewCategory = false"
-      @save="saveBudget"
-    ></AddBudgetModal>
-    <AddBudgetConfirmModal
-      v-if="showAddBudgetConfirm"
-      :serviceCategory="selectedCategory"
-      @cancel="showAddBudgetConfirm = false"
-      @addNewBudget="addBudget"
-    ></AddBudgetConfirmModal>
-  </div>
+        <AdditionalRequestModal
+        class="lg"
+        v-if="isOpenedAdditionalModal"
+        :subCategory="subCategory"
+        :selectedCategory="selectedCategory"
+        :defaultData="getRequirements(selectedCategory.key) || {}"
+        :selectedTypes="getSelectedTypes(selectedCategory.key)"
+        @save="saveAdditionalRequest"
+        @cancel="isOpenedAdditionalModal = false"
+        @close="isOpenedAdditionalModal = false"
+        ></AdditionalRequestModal>
+        <special-requirement-modal
+        v-if="isOpenedFinalModal"
+        :defaultData="specialRequirements"
+        @cancel="isOpenedFinalModal = false"
+        @save="saveSpecialRequirements"
+        >
+        </special-requirement-modal>
+        <transition name="slide-fade">
+            <RequirementsCart
+                v-if="showChoice"
+                :requirements="requirements"
+                :service-categories="serviceCategories"
+                :total="event.components.length"
+                @close="showChoice = false"
+            ></RequirementsCart>
+        </transition>
+        <ServicesCart v-if="showCart" @close="showCart = false">
+        </ServicesCart>
+        <CustomPopup @cancel="popup = false" v-if="popup" />
+        <AddBudgetModal
+        v-if="showAddNewCategory"
+        :serviceCategory="selectedCategory"
+        @cancel="showAddNewCategory = false"
+        @save="saveBudget"
+        ></AddBudgetModal>
+        <AddBudgetConfirmModal
+        v-if="showAddBudgetConfirm"
+        :serviceCategory="selectedCategory"
+        @cancel="showAddBudgetConfirm = false"
+        @addNewBudget="addBudget"
+        ></AddBudgetConfirmModal>
+    </div>
 </template>
 <script>
 import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
@@ -478,47 +566,50 @@ const components = {
   EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
   HeaderActions: () => import("@/components/HeaderActions"),
   ServicesCart: () => import("./ServicesCart.vue"),
-  ProposalHeader: () => import('./ProposalHeader.vue'),
-  CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
-
+  ProposalHeader: () => import("./ProposalHeader.vue"),
+  ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
+  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel"),
 };
 
 export default {
   components,
   data() {
     return {
-        popup: false,
-        showChoice: false,
-        showCart: false,
-        allRequirements: null,
-        subCategory: null,
-        serviceCards: ServiceCards,
-        isOpenedAdditionalModal: false,
-        isOpenedFinalModal: false,
-        selectedCategory: null,
-        isLoading: false,
-        isLoadingStoredData: false,
-        isLoadingProposal: false,
-        showCounterPage: false,
-        // expiredTime: 0,
-        currentRequirement: null,
+      popup: false,
+      showChoice: false,
+      showCart: false,
+      allRequirements: null,
+      subCategory: null,
+      serviceCards: ServiceCards,
+      isOpenedAdditionalModal: false,
+      isOpenedFinalModal: false,
+      selectedCategory: null,
+      isLoading: false,
+      isLoadingStoredData: false,
+      isLoadingProposal: false,
+      showCounterPage: false,
+      expiredTime: 0,
+      currentRequirement: null,
 
-        requirementSection: true,
-        proposalsByCategory: {},
-        showAddNewCategory: false,
-        showAddBudgetConfirm: false,
-        booked: false,
+      requirementSection: true,
+      proposalsByCategory: {},
+      showAddNewCategory: false,
+      showAddBudgetConfirm: false,
+      booked: false,
 
-        requirements: {},
-        showDifferentProposals: false,
-        showDetails: false,
-        selectedProposal: null,
-        proposalRequest: null,
+      requirements: {},
+      showDifferentProposals: false,
+      showDetails: false,
+      selectedProposal: null,
+      proposalRequest: null,
+      originalProposal: {},
+      isCart: false,
+      cartCount: 0,
     };
   },
   async created() {
     await this.$store.dispatch("planningBoard/resetRequirements");
-    await this.$store.dispatch('planningBoard/resetCartItems');
+    await this.$store.dispatch("planningBoard/resetCartItems");
 
     if (!this.allRequirements) {
       this.isLoading = true;
@@ -527,30 +618,30 @@ export default {
       this.isLoading = false;
       this.isLoadingStoredData = true;
 
-        await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
+      await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
-        await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
-        if(localStorage.getItem('planner-requirements') && JSON.parse(localStorage.getItem('eventId')) == this.event.id){
-            this.requirements = JSON.parse(localStorage.getItem('planner-requirements')) || {};
-        }
-        else{
-            this.requirements = this.$store.state.planningBoard.requirements
-        }
+      if (
+        localStorage.getItem("planner-requirements") &&
+        JSON.parse(localStorage.getItem("eventId")) == this.event.id
+      ) {
+        this.requirements = JSON.parse(localStorage.getItem("planner-requirements")) || {};
+      } else {
+        this.requirements = this.$store.state.planningBoard.requirements;
+      }
 
       this.isLoadingStoredData = false;
-
     }
     this.isLoadingProposal = true;
-    const tenantId = this.$authService.resolveTenantId()
+    const tenantId = this.$authService.resolveTenantId();
     await this.getRequirements(this.event.id);
-    await this.getProposals({eventId: this.event.id, tenantId});
+    await this.getProposals({ eventId: this.event.id, tenantId });
     await this.getCartItems(this.event.id);
     this.isLoadingProposal = false;
-      this.selectCategory(this.categories[0]);
+    this.selectCategory(this.categories[0]);
   },
   computed: {
     eventRequirements() {
-        return this.$store.state.planningBoard.requirements;
+      return this.$store.state.planningBoard.requirements;
     },
     categories() {
       const categories = this.event.components;
@@ -581,13 +672,15 @@ export default {
       });
     },
     remainingCategories() {
-        return this.categories.slice(5,this.categories.length);
+      return this.categories.slice(5, this.categories.length);
     },
     additionalCategories() {
-      let additionalCategories = this.$store.state.common.serviceCategories
+      let additionalCategories = this.$store.state.common.serviceCategories;
 
-      if(this.event.components){
-        additionalCategories = additionalCategories.filter(ar => !this.event.components.find(rm => (rm.componentId === ar.key) ))
+      if (this.event.components) {
+        additionalCategories = additionalCategories.filter(
+          ar => !this.event.components.find(rm => rm.componentId === ar.key),
+        );
       }
       return additionalCategories;
     },
@@ -610,121 +703,147 @@ export default {
     proposals() {
       return this.$store.state.event.proposals;
     },
-    cart(){
+    versionProposal() {
+      return this.$store.state.planningBoard.proposal;
+    },
+    categoryProposals() {
+      let categoryProposals = this.$store.state.event.proposals;
+      if (this.selectedCategory) {
+        return categoryProposals[this.selectedCategory.componentId];
+      }
+      return [];
+    },
+    cart() {
       return this.$store.state.planningBoard.cart;
     },
-    proposalUnviewed(){
-        let count = 0;
-        for(let proposal in this.proposals){
-            if(proposal.viewed == false){
-                count++;
-                return true;
-            }
+    proposalUnviewed() {
+      let count = 0;
+      for (let proposal in this.proposals) {
+        if (proposal.viewed == false) {
+          count++;
+          return true;
         }
-        return false;
+      }
+      return false;
     },
-    isAnyLiked(){
-        let categories = this.event.components;
-        let requirements = this.$store.state.planningBoard.requirements;
-
-        if(categories.length == 0){
-          return false;
-        }
-
-        for(let category of categories){
-            if(!requirements[category.componentId]){
-              continue;
-            }
-
-            let types = requirements[category.componentId].types;
-            return Object.keys(types).length > 0;
-        }
+    isAnyLiked() {
+      let category = this.selectedCategory;
+      if (category == null) {
         return false;
+      }
+
+      if (this.requirements[category.componentId]) {
+        let types = this.requirements[category.componentId].types;
+        for (let type of Object.keys(types)) {
+          return types[type].length > 0;
+        }
+        // return Object.keys(types).length > 0;
+      }
+      return false;
     },
-    expiredTime() {
-      console.log('expiredTime()', this.currentRequirement);
+    expireTime() {
+      console.log("expiredTime()", this.currentRequirement);
       if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
-      return 0;
+      return this.expiredTime;
     },
-    topCategories(){
-      let categories = this.categories.slice(0,5);
+    topCategories() {
+      let categories = this.categories.slice(0, 5);
 
-      if(!this.selectedCategory){
+      if (!this.selectedCategory) {
         return categories;
       }
-
       let index = categories.findIndex(x => x.id == this.selectedCategory.id);
-
-      if(index == -1){
-        categories = [...this.categories.slice(0,4),...[this.selectedCategory]];
+      if (index == -1) {
+        categories = [...this.categories.slice(0, 4), ...[this.selectedCategory]];
       }
-
       return categories;
-    }
+    },
+    selectedVersion() {
+      return this.$store.state.planningBoard.currentVersion;
+    },
+    isAnyCart(){
+        let cartItems = Object.keys(this.cart);
+        if(cartItems){
+            this.cartCount = cartItems.length;
+            return cartItems.length > 0;
+        }
+        this.cartCount = 0;
+        return false;
+    },
   },
   methods: {
-    ...mapMutations("event", [ "setProposalsByCategory"]),
-    ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory", ]),
+    ...mapMutations("event", ["setProposalsByCategory"]),
+    ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapActions("event", ["getProposals"]),
     ...mapMutations("modal", ["setOpen"]),
+    ...mapMutations("eventPlan", ["toggleCommentMode"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements", "setCategoryCartItem"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem"]),
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
     findVendors() {
       this.isOpenedFinalModal = true;
     },
     async saveSpecialRequirements(data) {
-        let requirementId = null;
-        if(this.requirements[this.selectedCategory.componentId]){
-            requirementId = this.requirements[this.selectedCategory.componentId].id;
-        }
-        this.isOpenedFinalModal = false;
+      let issuedState = false;
+      let requirementId = null;
+      if (this.requirements[this.selectedCategory.componentId]) {
+        requirementId = this.requirements[this.selectedCategory.componentId].id;
+      }
+      this.isOpenedFinalModal = false;
 
-        if(requirementId){
+      if (requirementId) {
+        this.setSpecialRequirements(data);
+        this.expiredTime = moment(new Date())
+          .add(3, "days")
+          .valueOf();
 
-            this.setSpecialRequirements(data);
-            this.expiredTime = moment(new Date())
-                .add(3, "days")
-                .valueOf();
+        const requestRequirement = {
+          issuedTime: new Date().getTime(),
+          expiredBusinessTime: this.expiredTime,
+          vendorCategory: this.selectedCategory,
+        };
+        // postReq(`/1/events/${this.event.id}/find-vendors`, {
+        postReq(`/1/requirements/${requirementId}/find-vendors`, {
+          issuedTime: new Date().getTime(),
+          expiredBusinessTime: this.expiredTime,
+          vendorCategory: this.selectedCategory,
+        }).then(res => {
+          this.$store.dispatch(
+            "event/saveEventAction",
+            new CalendarEvent({
+              id: this.event.id,
+              vendorCategory: this.selectedCategory,
+              processingStatus: "accept-proposal",
+            }),
+          );
+          issuedState = true;
+          this.requirements[this.selectedCategory.componentId].isIssued = issuedState;
+          localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
+        });
 
-            const requestRequirement = {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-                vendorCategory: this.selectedCategory,
-            };
-            // postReq(`/1/events/${this.event.id}/find-vendors`, {
-            postReq(`/1/requirements/${requirementId}/find-vendors`, {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-                vendorCategory: this.selectedCategory,
-            }).then(res => {
-                this.$store.dispatch(
-                    "event/saveEventAction",
-                new CalendarEvent({ id: this.event.id, vendorCategory: this.selectedCategory, processingStatus: "accept-proposal", }),
-                );
-            });
+        await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
-            await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
-
-            this.requirementSection = false;
-        }
-
-
+      }
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find(item => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
-      console.log("category",category)
+      console.log("category", category);
       let getSelectedCategory = this.$store.state.common.serviceCategories.find(
         item => item.key === category.componentId,
       );
       let actualId = this.selectedCategory.id;
-      this.selectedCategory = {...this.selectedCategory, ...getSelectedCategory};
+      this.selectedCategory = { ...this.selectedCategory, ...getSelectedCategory };
       this.selectedCategory.id = actualId;
       this.isOpenedAdditionalModal = true;
 
       let requirements = this.allRequirements[category.componentId].requirements;
-      const storedRequirements = this.requirements[category.componentId] ? this.requirements[category.componentId].mainRequirements : {};
+      const storedRequirements = this.requirements[category.componentId]
+        ? this.requirements[category.componentId].mainRequirements
+        : {};
 
       requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
@@ -743,29 +862,23 @@ export default {
       return _.property([category, "types", camelize(name)])(this.requirements);
     },
     getSelectedTypes(category) {
-        let typesList = [];
-        // this.requirements
-        const types = this.requirements[category] ? this.requirements[category].types : [];
-        for (const t in types) {
-            typesList = [...typesList, ...types[t]];
-        }
-        return typesList;
+      let typesList = [];
+      // this.requirements
+      const types = this.requirements[category] ? this.requirements[category].types : [];
+      for (const t in types) {
+        typesList = [...typesList, ...types[t]];
+      }
+      return typesList;
     },
     setServiceStyles({ category, services, type }) {
-    // this.setTypes({ category: category.serviceCategory, data: services, type });
+      // this.setTypes({ category: category.serviceCategory, data: services, type });
       this.$store.commit("event/setEventData", {
+        ...this.event,
         requirementProgress: (this.percentOfBudgetCategories / this.event.components.length) * 100,
       });
-        let requirement = this.requirements[category.serviceCategory];
-        if(!requirement) {
-            requirement = {event: this.event, category: category.serviceCategory, types: { [type]: services }}
-        } else {
-            requirement = {...requirement, types: { [type]: services }};
-        }
-        this.$set(this.requirements, category.serviceCategory, requirement)
-        localStorage.setItem('planner-requirements', JSON.stringify(this.requirements));
-        localStorage.setItem('eventId', JSON.stringify(this.event.id));
-        this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
+      localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
+      localStorage.setItem("eventId", JSON.stringify(this.event.id));
+      this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     async saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
@@ -778,7 +891,8 @@ export default {
       await this.saveMainRequirements({ category, event: this.event, requirements });
 
       // popup notification if requirement is issued
-      if (this.getRequirements(category).isIssued) this.popup = true; //this.setOpen("REQUIREMENT");
+      if (this.getRequirements(category).isIssued) this.popup = true;
+      //this.setOpen("REQUIREMENT");
     },
 
     async addNewCategory(category) {
@@ -802,44 +916,43 @@ export default {
       this.showCart = true;
     },
     hasBadge(component) {
+      this.proposalsByCategory = this.proposals;
       if (!this.proposalsByCategory[component.componentId]) return false;
       if (this.proposalsByCategory[component.componentId].length === 0) return false;
-      const notViewedProposals = this.proposalsByCategory[component.componentId].filter((item) => !item.viewed);
+      const notViewedProposals = this.proposalsByCategory[component.componentId].filter(item => !item.viewed);
       if (notViewedProposals.length === 0) return false;
-      console.log(notViewedProposals);
       return true;
     },
-    addRequirements() {
-    },
+    addRequirements() {},
     selectCategory(category, clicked) {
-        if(category.key){
-            category['componentId'] = category.key;
-        }
+      if (category.key) {
+        category["componentId"] = category.key;
+      }
       this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
-      let getProposals = this.$store.state.event.proposals;
+      let getProposals = this.proposals;
       if (getProposals[category.componentId]) {
         getProposals[category.componentId].forEach((proposal, index) => {
-          new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
             this.$set(proposal, "viewed", true);
           });
         });
-        this.selectedProposal = getProposals[category.componentId][0];
+        this.selectProposal(getProposals[category.componentId][0]);
       }
     },
     selectRemainingCategory(category, clicked) {
-        if(category.key){
-            category['componentId'] = category.key;
-        }
+      if (category.key) {
+        category["componentId"] = category.key;
+      }
       this.selectedCategory = category;
-      let getProposals = this.$store.state.event.proposals;
+      let getProposals = this.proposals;
       if (getProposals[category.componentId]) {
         getProposals[category.componentId].forEach((proposal, index) => {
-          new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
             this.$set(proposal, "viewed", true);
           });
         });
-        this.selectedProposal = getProposals[category.componentId][0];
+        this.selectProposal(getProposals[category.componentId][0]);
       }
     },
     addBudget() {
@@ -849,34 +962,34 @@ export default {
     saveBudget() {
       this.showAddNewCategory = false;
     },
-    getIsRow(indx){
-        if(indx == 0){
-            return true;
-        }
+    getIsRow(indx) {
+      if (indx == 0) {
+        return true;
+      }
 
-        if(indx % 3){
+      if (indx % 3) {
+        return true;
+      } else {
+        if (indx % 4) {
+          return true;
+        } else {
+          if (indx % 5) {
             return true;
+          } else return false;
         }
-        else{
-            if(indx % 4) {return true;}
-            else{
-                if(indx % 5) {return true;}
-                else return false
-            };
-        }
+      }
     },
-    getRowNum(indx, service){
-        for(let x=0; x < service.imageTitles.length; x++){
-            if(indx == 3*x || indx == (3*x)+2){
-                return Math.floor((3*x)/2)+1;
-            }
-            else{
-                if(indx == (3*x)+1){
-                    return Math.floor(((3*x)+1)/2)+1;
-                }
-            }
+    getRowNum(indx, service) {
+      for (let x = 0; x < service.imageTitles.length; x++) {
+        if (indx == 3 * x || indx == 3 * x + 2) {
+          return Math.floor((3 * x) / 2) + 1;
+        } else {
+          if (indx == 3 * x + 1) {
+            return Math.floor((3 * x + 1) / 2) + 1;
+          }
         }
-        return null;
+      }
+      return null;
     },
 
     compareProposal() {
@@ -888,339 +1001,373 @@ export default {
     goDetailPage(proposal) {
       this.showDetails = true;
 
-      if(proposal.selectedVersion > -1)
+      if (proposal.selectedVersion > -1)
         this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
       else this.selectedProposal = proposal;
-      console.log('selectedProposal', proposal, this.selectedProposal);
-
     },
     async bookVendor() {
-      if(!this.selectedProposal) return;
+      if (!this.selectedProposal) return;
       await new Proposal({ ...this.selectedProposal }).save();
       this.$router.push({
         name: "CheckoutWithVendor",
         params: {
-            proposalId: this.selectedProposal.id,
-            proposalType: 'planner',
+          proposalId: this.selectedProposal.id,
+          proposalType: "planner",
         },
       });
     },
     async addToCart() {
-      if(!this.selectedProposal) return;
+      if (!this.selectedProposal || !this.selectedCategory) return;
       this.updateCartItem({
-          category: this.selectedCategory.componentId,
-          event: {id: this.event.id},
-          proposalId: this.selectedProposal.id,
-      })
-      this.$store.dispatch('event/updateProposal', {
-         proposal: {...this.selectedProposal, isFavorite: false},
-         category: this.selectedProposal.vendor.vendorCategory,
+        category: this.selectedCategory.componentId,
+        event: { id: this.event.id },
+        proposalId: this.selectedProposal.id,
       });
+      this.$store.dispatch("event/updateProposal", {
+        proposal: { ...this.selectedProposal, isFavorite: false },
+        category: this.selectedProposal.vendor.vendorCategory,
+      });
+      this.isCart = true;
     },
-    async favoriteProposal(isFavorite){
-      this.selectedProposal = await this.$store.dispatch('event/updateProposal', {
-          proposal: {...this.selectedProposal, isFavorite},
-          category: this.selectedCategory.componentId
+    async favoriteProposal(isFavorite) {
+      this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
+        proposal: { ...this.selectedProposal, isFavorite },
+        category: this.selectedCategory.componentId,
       });
       this.setCategoryCartItem({
-          category: this.selectedCategory.componentId,
-          item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.selectedProposal, isFavorite}}
+        category: this.selectedCategory.componentId,
+        item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.selectedProposal, isFavorite } },
       });
     },
-    async handleAsk(ask){
-        if (ask === 'expiredDate') {
-            let expiredTime = moment().add(2, 'days').unix() * 1000;
-            let query = new ProposalNegotiationRequest({
-                eventId: this.event.id,
-                proposalId: this.selectedProposal.id,
-                proposal: new Proposal({id: this.selectedProposal.id}),
-                expiredTime,
-                type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
-                url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
-            });
+    async handleAsk(ask) {
+      if (ask === "expiredDate") {
+        let expiredTime =
+          moment()
+            .add(2, "days")
+            .unix() * 1000;
+        let query = new ProposalNegotiationRequest({
+          eventId: this.event.id,
+          proposalId: this.selectedProposal.id,
+          proposal: new Proposal({ id: this.selectedProposal.id }),
+          expiredTime,
+          type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
+          url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`,
+        });
 
-            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save()
-            console.log('ask.result', res);
-            this.selectedProposal.negotiations.push(res);
-        }
+        let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save();
+        console.log("ask.result", res);
+        this.selectedProposal.negotiations.push(res);
+      }
     },
     closeProposal() {
       this.showDetails = false;
       this.selectedProposal = null;
     },
-    findProposalUnviewed(category) {
-        let getProposals = this.$store.state.event.proposals;
-        if (getProposals[category.componentId]) {
-            getProposals[category.componentId].forEach((singleProposal, index) => {
-                if(singleProposal && singleProposal.vendor.vendorCategory == category.componentId && singleProposal.viewed){
-                    return true;
-                }
-            });
-        }
-        return false;
-    },
     getproposalRequest() {
-        let getProposals = this.$store.state.event.proposals;
-        this.proposalRequest = getProposals[this.selectedCategory.componentId][0]
-        return this.proposalRequest
+      let getProposals = this.proposals;
+      this.proposalRequest = getProposals[this.selectedCategory.componentId][0];
+      return this.proposalRequest;
     },
     selectProposal(thisProposal){
         this.selectedProposal = thisProposal;
+        this.originalProposal = thisProposal;
+        let proposal = thisProposal;
+        if(proposal){
+            // this.commentComponents = proposal.commentComponent;
+            // this.showProposal = !!this.commentComponents.length
+            proposal.versions = !proposal.versions ? [] : proposal.versions;
+            this.$store.dispatch("planningBoard/setProposal",{...proposal});
+            this.$store.dispatch("eventPlan/setProposal",{...proposal});
+        }
+    },
+    selectVersion(index) {
+      this.$store.commit("planningBoard/selectVersion", index);
+      this.selectedProposal = this.originalProposal;
+      if (index >= 0 && this.versionProposal.versions) {
+        this.selectedProposal = this.versionProposal;
+      }
     },
   },
   watch: {
     requirements(newVal) {
       console.log("requirement.watch", newVal);
     },
+    event(newVal) {
+      console.log("event.watch", newVal);
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
-
-    .proposalTitle{
-        font-size: 30px;
+  .proposalTitle {
+    font-size: 30px;
     font-weight: 800;
-    }
-    .proposalHeader{
-        padding:3rem;
-    }
-    .booking-proposals {
-        .category-title {
-            img {
-            width: 30px;
-            }
-        }
-    }
+  }
+  .proposalHeader {
+    padding: 3rem;
+  }
+  .booking-proposals {
     .category-title {
-        img {
+      img {
         width: 30px;
-        }
+      }
     }
-    .company-logo {
-        margin-right: 30px;
-        max-height: 50px;
-        max-width: 70px;
-        height: 50px;
-        width: 70px;
+  }
+  .category-title {
+    img {
+      width: 30px;
     }
-    .header-actions {
-        display: flex;
-        height: max-content;
+  }
+  .company-logo {
+    margin-right: 30px;
+    max-height: 50px;
+    max-width: 70px;
+    height: 50px;
+    width: 70px;
+  }
+  .header-actions {
+    display: flex;
+    height: max-content;
+  }
+  .seperator {
+    border-left: solid 1px #050505;
+  }
+  .events-booking-items {
+    padding: 0 0em;
+    margin-bottom: 1em;
+    align-items: stretch;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  .proposals-booking-items {
+    padding: 0 0em;
+    margin-bottom: 0em;
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .loading-screen {
+    height: 100vh;
+  }
+  .proposal-footer {
+    padding: 40px 50px;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 3;
+    button {
+      width: 250px;
+      margin-left: 20px;
+      img {
+        width: 22px;
+        margin-right: 10px;
+      }
     }
-    .seperator {
-        border-left: solid 1px #050505;
+    .scroll-top {
+      width: 41px !important;
+      margin-left: 20px;
+      img {
+        width: 17px;
+        margin-right: 0px;
+      }
     }
-    .events-booking-items {
-        padding: 0 0em;
-        margin-bottom: 1em;
-        align-items: stretch;
-        margin-top: 30px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
+  }
+  .add-category-button {
+    border: none;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    border-radius: 50%;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    cursor: pointer;
+    i {
+      font-size: 40px !important;
     }
-    .proposals-booking-items {
-        padding: 0 0em;
-        margin-bottom: 0em;
-        align-items: stretch;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
+  }
+  .functional-bar {
+    display: inline-flex;
+    align-items: center;
+  }
+  .more-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: inline-flex;
+    i {
+      margin: 0px;
     }
-    .loading-screen {
-        height: 100vh;
+    .more-actions {
+      font-weight: 800;
     }
-    .proposal-footer {
-        padding: 40px 50px;
-        position: sticky;
-        bottom: 0;
-        width: 100%;
-        z-index: 3;
-        button {
-            width: 250px;
-            margin-left: 20px;
-            img {
-                width: 22px;
-                margin-right: 10px;
-            }
-        }
+  }
+  .book-this-vendor {
+    color: #000 !important;
+    font-weight: 800 !important;
+  }
+  .float-left {
+    float: left;
+  }
+  .dropdown-menu li a:hover,
+  .dropdown-menu li a:focus,
+  .dropdown-menu li a:active {
+    background-color: transparent !important;
+    color: initial !important;
+    box-shadow: none !important;
+  }
+  .dropdown-color li:hover,
+  .dropdown-color li:focus,
+  .dropdown-color li:active {
+    background-color: #ffedb7 !important;
+    color: #000 !important;
+  }
+  .dropdown-other {
+    padding: 27px 0px !important;
+  }
+  .dropdown-other li a:hover,
+  .dropdown-other li a:focus,
+  .dropdown-other li a:active {
+    background-color: transparent !important;
+    color: #f51355 !important;
+    box-shadow: none !important;
+    font-weight: 800 !important;
+    i {
+      background-color: transparent !important;
+      color: #f51355 !important;
     }
-    .add-category-button {
-        border: none;
-        width: 60px;
-        height: 60px;
-        display: inline-block;
-        border-radius: 50%;
-        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-        background-color: #ffffff;
-        cursor: pointer;
-        i {
-        font-size: 40px !important;
-        }
+  }
+  .dropdown-width {
+    // width: max-content;
+    width: 385px;
+  }
+  .dropdown-width-2 {
+    width: 270px;
+  }
+  .category-list {
+    cursor: pointer;
+    img {
+      width: 30px;
     }
-    .functional-bar {
-        display: inline-flex;
-        align-items: center;
+    .category-heading {
+      padding: 20px 27px;
+      margin: 0 0;
+      background-color: transparent !important;
+      color: #000 !important;
+      border-bottom: 1px ridge #d7d5d6;
     }
-    .more-button {
-        border: none;
-        background: none;
-        display: inline-flex;
-        i {
-            margin: 0px;
-        }
-    }
-    .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active {
-        background-color: transparent !important;
-        color: initial !important;
-        box-shadow: none !important;
-    }
-    .dropdown-color li:hover, .dropdown-color li:focus, .dropdown-color li:active {
-        background-color: #ffedb7 !important;
-        color: #000 !important;
-    }
-    .dropdown-other{
-        padding: 27px 0px !important;
-    }
-    .dropdown-other li a:hover, .dropdown-other li a:focus, .dropdown-other li a:active {
-        background-color: transparent !important;
-        color: #f51355 !important;
-        box-shadow: none !important;
-        font-weight: 800 !important;
-        i {
-            background-color: transparent !important;
-            color: #f51355 !important;
-        }
-    }
-    .dropdown-width{
-        // width: max-content;
-        width: 385px;
-    }
-    .dropdown-width-2{
-        width: 270px;
-    }
-    .category-list{
-        cursor: pointer;
-        img {
-            width: 30px;
-        }
-        .category-heading{
-            padding: 20px 27px;
-            margin: 0 0;
-            background-color: transparent !important;
-            color: #000 !important;
-            border-bottom: 1px ridge #d7d5d6;
-        }
-        .category-item{
-            display: flow-root;
-            padding: 15px 20px 15px 2px !important;
-            margin: 0 0 !important;
-            border-bottom: 1px ridge #d7d5d6;
-            width: 90%;
-            left: 10%;
-            position: relative;
-            .category-name{
-                float: left;
-            }
-            .category-plus{
-                width: 20px;
-                height: 20px;
-                display: inline-block;
-                box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-                float: right;
-                cursor: pointer;
-            }
-        }
-    }
-    .remaining-list{
-        cursor: pointer;
-        img {
-            width: 30px;
-            color: #818080 !important;
-        }
-        .remaining-item{
-            display: flow-root;
-            color: #818080 !important;
-            padding: 15px 37px !important;
-            margin: 0 0 !important;
-            .remaining-name{
-                float: left;
-            }
-        }
-    }
-    .other-list{
-        cursor: pointer;
-        img {
-            width: 30px;
-        }
-        .other-heading{
-            padding: 10px 1.5rem;
-            margin: 0 5px;
-        }
-        .other-item{
-            display: flow-root;
-            .other-name{
-                float: left;
-            }
-        }
-    }
-    .slide-fade-enter-active {
-        transition: all 0.3s ease;
-    }
-    .slide-fade-leave-active {
-        transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-    }
-    /* .slide-fade-leave-active below version 2.1.8 { */
-    .slide-fade-enter, .slide-fade-leave-to {
-        transform: translateX(10px);
-        opacity: 0;
-    }
-    .grid {
-        display: grid;
-        grid-template-columns: auto auto auto;
-        grid-auto-rows: auto;
-        row-gap: 30px;
-        column-gap: 0px;
-    }
-    .like-dot {
+    .category-item {
+      display: flow-root;
+      padding: 15px 20px 15px 2px !important;
+      margin: 0 0 !important;
+      border-bottom: 1px ridge #d7d5d6;
+      width: 90%;
+      left: 10%;
+      position: relative;
+      .category-name {
+        float: left;
+      }
+      .category-plus {
         width: 20px;
         height: 20px;
-        margin: 37px 34px 57px 13px;
-        padding: 3px 11px 3px 10px;
-        background-color: #f51355;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: left;
-        color: #fff;
-        border-radius: 50%;
-        position: absolute;
-        right: 40px;
+        display: inline-block;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        float: right;
+        cursor: pointer;
+      }
     }
-    .cart-dot {
-        width: 22px;
-        height: 22px;
-        margin: 0px 0px 0px -22px;
-        padding: 0px 0px 0px 7px;
-        background-color: #f51355;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: left;
-        color: #fff;
-        border-radius: 50%;
-        position: absolute;
-        right: 40px;
+  }
+  .remaining-list {
+    cursor: pointer;
+    img {
+      width: 30px;
+      color: #818080 !important;
     }
-    .md-menu-content .md-list {
-        padding: 37px 37px !important;
+    .remaining-item {
+      display: flow-root;
+      color: #818080 !important;
+      padding: 15px 37px !important;
+      margin: 0 0 !important;
+      .remaining-name {
+        float: left;
+      }
     }
+  }
+  .other-list {
+    cursor: pointer;
+    img {
+      width: 30px;
+    }
+    .other-heading {
+      padding: 10px 1.5rem;
+      margin: 0 5px;
+    }
+    .other-item {
+      display: flow-root;
+      .other-name {
+        float: left;
+      }
+    }
+  }
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  /* .slide-fade-leave-active below version 2.1.8 { */
+  .slide-fade-enter,
+  .slide-fade-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-auto-rows: auto;
+    row-gap: 30px;
+    column-gap: 0px;
+  }
+  .like-dot {
+    width: 20px;
+    height: 20px;
+    margin: 37px 34px 57px 13px;
+    padding: 3px 11px 3px 10px;
+    background-color: #f51355;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    right: 40px;
+  }
+  .cart-dot {
+    width: 22px;
+    height: 22px;
+    margin: 0px 0px 0px -22px;
+    padding: 0px 0px 0px 7px;
+    background-color: #f51355;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #fff;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .md-menu-content .md-list {
+    padding: 37px 37px !important;
+  }
 }
 </style>
