@@ -1,6 +1,5 @@
 <template>
   <div class="md-layout event-campaign-section booking-section event-campaign-width">
-    <budget-notifications></budget-notifications>
     <div class="inner-container">
       <comment-editor-panel
         v-if="showCommentEditorPanel"
@@ -572,26 +571,18 @@ export default {
     },
     sendPreviewEmail() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      console.log(campaignData);
+      console.log(campaignData.campaignStatus);
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true,
       ).then(res => {});
-        this.$notify({
-            message: {
-                title: 'Your preview email is on the way!',
-                content: `The preview email for ${this.campaignTabs[this.selectedTab].name.split('_').join(' ')} has been sent to ${this.event.owner.name}.You should receive it shortly.`,
-            },
-            icon: `${this.$iconURL}messages/info.svg`,
-            horizontalAlign: "right",
-            verticalAlign: "top",
-            type: 'info',
-            cancelBtn: false,
-            sendBtn: false,
-            closeBtn: true,
-            timeout: 5000,
-        });
+      Swal.fire({
+        title: `You will receive a preview campaign email soon!`,
+        buttonsStyling: false,
+        type: "success",
+        confirmButtonClass: "md-button md-success",
+      });
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {

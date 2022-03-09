@@ -482,7 +482,6 @@ export default {
       return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
     },
     negotiationDiscount(){
-      console.log('negotiationDiscount', this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false});
       return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
     },
     bundleDiscount() {

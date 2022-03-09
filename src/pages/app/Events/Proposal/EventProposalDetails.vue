@@ -8,6 +8,18 @@
       >
         <md-icon>close</md-icon>
       </md-button>
+       <comment-editor-panel
+        v-if="showCommentPanel"
+        :commentComponents="commentComponents"
+        :proposal="proposal"
+        :url="`/unregistered/proposals/${proposal.id}`"
+        :ignoreXOffset="400"
+        :isVendor="false"
+        @saveComment="saveComment"
+        @updateComment="updateComment"
+        @deleteComment="deleteComment"
+        @updateCommentComponent="updateCommentComponent">
+        </comment-editor-panel>
       <div class="proposal-info">
         <div
           class="proposal-header"
@@ -712,6 +724,7 @@ const components = {
   EventProposalPolicy: () => import("./EventProposalPolicy.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
   MessageModal: () => import("../components/Modal/PlannerMessage.vue"),
+  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
 };
 
 export default {
@@ -798,6 +811,7 @@ export default {
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
   mounted() {
+    this.commentComponents = this.proposal.commentComponent;
     let end = moment(this.proposal.expiredDate)
     let diff = moment.duration(end.diff(new Date()));
 
@@ -1017,6 +1031,10 @@ export default {
     },
     categories() {
       return this.$store.state.common.serviceCategories;
+    },
+    showCommentPanel(){
+      console.log("showCommentPanel",this.$store.state.eventPlan)
+      return this.$store.state.eventPlan.showCommentPanel;
     },
   },
   filters: {
@@ -1793,5 +1811,9 @@ export default {
 }
 .bg-light-gray {
   background-color: #f8fafb;
+}
+
+.click-capture{
+  top: 0px !important;
 }
 </style>

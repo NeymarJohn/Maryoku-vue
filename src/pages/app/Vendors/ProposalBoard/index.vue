@@ -534,25 +534,21 @@ export default {
           console.log('negotiation', negotiation)
         if (this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
             this.showRequestNegotiationModal = false;
-
-            if (status === this.negotiationRequestStatus.approve) {
-
-                const version = await this.saveVersion(this.selectedProposal);
-                this.selectedProposal.versions.push(version)
-                console.log('version', version)
-                let routeData = this.$router.resolve({
-                    name: "outsideProposalEdit",
-                    params: {
-                        vendorId: this.selectedProposal.vendor.id,
-                        id: this.selectedProposal.id,
-                        type: 'edit',
-                    },
-                    query: {
-                        version: version.id,
-                    },
-                });
-                this.openNewTab(routeData.href);
-            }
+            const version = await this.saveVersion(this.selectedProposal);
+            this.selectedProposal.versions.push(version)
+            console.log('version', version)
+            let routeData = this.$router.resolve({
+                name: "outsideProposalEdit",
+                params: {
+                    vendorId: this.selectedProposal.vendor.id,
+                    id: this.selectedProposal.id,
+                    type: 'edit',
+                },
+                query: {
+                    version: version.id,
+                },
+            });
+            this.openNewTab(routeData.href);
         }
 
         this.selectedProposal.negotiations[0] = negotiation;
@@ -645,8 +641,8 @@ export default {
         name: `Ver${proposal.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
         data,
       };
-      console.log('versionData', versionData)
       const version = await this.$store.dispatch("vendorDashboard/saveVersion", { version: versionData, proposal });
+      // console.log('version1', version)
       return version;
     },
     editProposal(params = null, query = null) {
