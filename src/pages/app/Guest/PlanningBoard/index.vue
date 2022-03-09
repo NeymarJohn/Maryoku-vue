@@ -14,7 +14,6 @@
                             :defaultStatus="selectedCategory && component.id === selectedCategory.id"
                             :hasBadge="hasBadge(component)"
                             iconStyle="opacity:0.8"
-                            :proposalCategory="findProposalUnviewed(component)"
                             v-for="(component, index) in topCategories"
                             @click="selectCategory(component)"
                         ></ResizableToggleButton>
@@ -88,7 +87,7 @@
                                     class="svg-icon-header cursor-pointer"
                                     :src="`${$iconURL}Booking-New/Path+13791.svg`"
                                     />
-                                    <!-- <span class="cart-dot">{{ cartCount+1 }}</span> -->
+                                    <span v-if="isAnyCart || isCart" class="cart-dot">{{ cartCount }}</span>
                                 </div>
                                 </li>
                             </ul>
@@ -99,8 +98,9 @@
                         :hideDownload="true"
                         :hideShare="true"
                         :proposalUnviewed="this.proposalUnviewed"
-                        :cartCount="this.cart.length"
+                        :cartCount="cartCount"
                         :customStyles="{ showCommentsText: { paddingLeft: '2px' } }"
+                        @toggleCommentMode="toggleCommentMode"
                         ></HeaderActions>
                         <drop-down class="d-inline-block">
                             <button class="more-button" data-toggle="dropdown">
@@ -558,6 +558,8 @@
                 requirements:{},
                 showChoice: false,
                 showDifferentProposals: false,
+                isCart: false,
+                cartCount: 0,
             };
         },
         async created() {
@@ -733,11 +735,21 @@
             selectedVersion() {
                 return this.$store.state.planningBoard.currentVersion;
             },
+            isAnyCart(){
+                let cartItems = Object.keys(this.cart);
+                if(cartItems){
+                    this.cartCount = cartItems.length;
+                    return cartItems.length > 0;
+                }
+                this.cartCount = 0;
+                return false;
+            },
         },
         methods: {
             ...mapMutations("EventGuestVuex", []),
             ...mapMutations("EventGuestVuex", [ "setProposalsByCategory"]),
             ...mapMutations("modal", ['setOpen']),
+            ...mapMutations("EventGuestVuex", ["toggleCommentMode"]),
             ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
             ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements","getCartItems"]),
             ...mapActions("EventGuestVuex", [ "getProposals", "updateProposal"]),
@@ -748,6 +760,7 @@
                 this.isOpenedFinalModal = true;
             },
             async saveSpecialRequirements(data) {
+                let issuedState = false;
                 let requirementId = null;
                 if (this.requirements[this.selectedCategory.componentId]) {
                     requirementId = this.requirements[this.selectedCategory.componentId].id;
@@ -776,6 +789,9 @@
                                 vendorCategory: this.selectedCategory,
                                 processingStatus: "accept-proposal" }),
                         );
+                        issuedState = true;
+                        this.requirements[this.selectedCategory.componentId].isIssued = issuedState;
+                        localStorage.setItem("guest-requirements", JSON.stringify(this.requirements));
                     });
 
                     await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
@@ -835,13 +851,6 @@
                     ...this.event,
                     requirementProgress: this.percentOfBudgetCategories / this.event.components.length * 100,
                 });
-                let requirement = this.requirements[category.serviceCategory];
-                if(!requirement) {
-                    requirement = {event: this.event, category: category.serviceCategory, types: { [type]: services }}
-                } else {
-                    requirement = {...requirement, types: { [type]: services }};
-                }
-                this.$set(this.requirements, category.serviceCategory, requirement)
                 localStorage.setItem('guest-requirements', JSON.stringify(this.requirements));
                 localStorage.setItem('eventId', JSON.stringify(this.event.id));
                 this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
@@ -872,6 +881,7 @@
                 this.showCart = true;
             },
             hasBadge(component) {
+                this.proposalsByCategory = this.proposals;
                 if (!this.proposalsByCategory[component.componentId]) return false;
                 if (this.proposalsByCategory[component.componentId].length === 0) return false;
                 const notViewedProposals = this.proposalsByCategory[component.componentId].filter((item) => !item.viewed);
@@ -886,7 +896,7 @@
                 }
                 this.currentRequirement = this.eventRequirements[category.componentId];
                 this.selectedCategory = category;
-                let getProposals = this.$store.state.EventGuestVuex.proposals;
+                let getProposals = this.proposals;
                 if (getProposals[category.componentId]) {
                     getProposals[category.componentId].forEach((proposal, index) => {
                     new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
@@ -901,7 +911,7 @@
                     category["componentId"] = category.key;
                 }
                 this.selectedCategory = category;
-                let getProposals = this.$store.state.EventGuestVuex.proposals;
+                let getProposals = this.proposals;
                 if (getProposals[category.componentId]) {
                     getProposals[category.componentId].forEach((proposal, index) => {
                     new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
@@ -951,17 +961,6 @@
               return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
             },
 
-            findProposalUnviewed(category) {
-                let getProposals = this.$store.state.EventGuestVuex.proposals;
-                if (getProposals[category.componentId]) {
-                    getProposals[category.componentId].forEach((singleProposal, index) => {
-                    if (singleProposal && singleProposal.vendor.vendorCategory == category.componentId && singleProposal.viewed) {
-                        return true;
-                    }
-                    });
-                }
-                return false;
-            },
             compareProposal() {
                 this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
             },
@@ -977,7 +976,7 @@
                 });
             },
             async addToCart() {
-                if (!this.selectedProposal) return;
+                if (!this.selectedProposal || !this.selectedCategory) return;
                 this.updateCartItem({
                     category: this.selectedCategory.componentId,
                     event: { id: this.event.id },
@@ -987,9 +986,10 @@
                     proposal: { ...this.selectedProposal, isFavorite: false },
                     category: this.selectedProposal.vendor.vendorCategory,
                 });
+                this.isCart = true;
             },
             getproposalRequest() {
-                let getProposals = this.$store.state.EventGuestVuex.proposals;
+                let getProposals = this.proposals;
                 this.proposalRequest = getProposals[this.selectedCategory.componentId][0];
                 return this.proposalRequest;
             },
@@ -1002,6 +1002,8 @@
                     // this.showProposal = !!this.commentComponents.length
                     proposal.versions = !proposal.versions ? [] : proposal.versions;
                     this.$store.dispatch("planningBoard/setProposal", { ...proposal });
+                    // this.$store.dispatch("eventGuestPlan/setProposal",{...proposal});
+                    this.$store.dispatch("EventGuestVuex/setProposal",{...proposal});
                 }
             },
             selectVersion(index) {
@@ -1319,7 +1321,6 @@
         color: #fff;
         border-radius: 50%;
         position: absolute;
-        right: 40px;
     }
     .md-menu-content .md-list {
         padding: 37px 37px !important;
