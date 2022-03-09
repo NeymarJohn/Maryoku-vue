@@ -54,12 +54,12 @@
           <span class="comment">{{(commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ''}} </span>
         </div>
         <div class="d-flex sidebar__item__content justify-content-between mt-1 mb-1">
-            <span class="replay" @click="toggleshowReply(commentIndex)">{{commentComponent.comments.length-1}} Reply
-                <i class="fas fa-chevron-down"></i>
-            </span>
-            <span class="unread-count2">02</span>
+                    <span class="replay" @click="toggleshowReply(commentIndex)">{{commentComponent.comments.length-1}} Reply
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+          <span class="unread-count2">02</span>
         </div>
-        <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4">
+        <div v-if="showReplyComment == commentIndex " class="commentsReplies p-4">
           <div class="commentItem" v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
             <div class="d-flex sidebar__item__content2 justify-content-between">
               <!-- <div class="d-flex sidebar__item__content"> -->
@@ -85,7 +85,7 @@
             </div>
           </div>
         </div>
-        <div v-if="showReplyComment == commentIndex">
+        <div v-if="showReplyComment == commentIndex ">
           <div class="form-group position-relative reply-form my-top">
             <fade-transition v-if="showAddress">
               <md-card class="position-absolute notification-card">
@@ -156,6 +156,7 @@ export default {
   created() {},
   mounted() {
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
+
   },
   computed: {},
 

@@ -13,6 +13,7 @@
                         :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
                         :defaultStatus="selectedCategory && component.id === selectedCategory.id"
                         :hasBadge="hasBadge(component)"
+                        :proposalCategory="findProposalUnviewed(component)"
                         iconStyle="opacity:0.8"
                         v-for="(component, index) in topCategories"
                         @click="selectCategory(component)"
@@ -87,27 +88,26 @@
                                 class="svg-icon-header cursor-pointer"
                                 :src="`${$iconURL}Booking-New/Path+13791.svg`"
                                 />
-                                <span v-if="isAnyCart || isCart" class="cart-dot">{{ cartCount }}</span>
+                                <!-- <span class="cart-dot">{{ cartCount+1 }}</span> -->
                             </div>
-                        </li>
-                    </ul>
-                </div>
-                <HeaderActions
-                :anyLiked="isAnyLiked"
-                :requirement="false"
-                :hideDownload="true"
-                :hideShare="true"
-                :proposalUnviewed="this.proposalUnviewed"
-                :cartCount="cartCount"
-                :customStyles="{showCommentsText: {paddingLeft: '2px'}}"
-                @toggleCommentMode="toggleCommentMode"></HeaderActions>
-                <drop-down class="d-inline-block" >
-                    <button class="more-button" data-toggle="dropdown">
-                        <md-icon class="font-size-40">more_vert</md-icon>
-                    </button>
-                    <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
-                        <li class="other-list" >
-
+                            </li>
+                        </ul>
+                        </div>
+                        <HeaderActions
+                        :anyLiked="isAnyLiked"
+                        :requirement="false"
+                        :hideDownload="true"
+                        :hideShare="true"
+                        :proposalUnviewed="this.proposalUnviewed"
+                        :cartCount="this.cart.length"
+                        :customStyles="{ showCommentsText: { paddingLeft: '2px' } }"
+                        ></HeaderActions>
+                        <drop-down class="d-inline-block">
+                        <button class="more-button" data-toggle="dropdown">
+                            <md-icon class="font-size-40">more_vert</md-icon>
+                        </button>
+                        <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
+                            <li class="other-list">
                             <a class="other-item font-size-16">
                                 <div class="other-name">
                                 <md-icon>share</md-icon>
@@ -603,8 +603,6 @@ export default {
       selectedProposal: null,
       proposalRequest: null,
       originalProposal: {},
-      isCart: false,
-      cartCount: 0,
     };
   },
   async created() {
@@ -761,24 +759,27 @@ export default {
     selectedVersion() {
       return this.$store.state.planningBoard.currentVersion;
     },
-    isAnyCart(){
-        let cartItems = Object.keys(this.cart);
-        if(cartItems){
-            this.cartCount = cartItems.length;
-            return cartItems.length > 0;
-        }
-        this.cartCount = 0;
-        return false;
-    },
   },
   methods: {
     ...mapMutations("event", ["setProposalsByCategory"]),
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapActions("event", ["getProposals"]),
     ...mapMutations("modal", ["setOpen"]),
-    ...mapMutations("eventPlan", ["toggleCommentMode"]),
-    ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements", "setCategoryCartItem"]),
-    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem"]),
+    ...mapMutations("planningBoard", [
+      "setData",
+      "setMainRequirements",
+      "setTypes",
+      "setSpecialRequirements",
+      "setCategoryCartItem",
+    ]),
+    ...mapActions("planningBoard", [
+      "saveMainRequirements",
+      "saveRequiementSheet",
+      "saveTypes",
+      "updateRequirements",
+      "getCartItems",
+      "updateCartItem",
+    ]),
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -786,7 +787,6 @@ export default {
       this.isOpenedFinalModal = true;
     },
     async saveSpecialRequirements(data) {
-      let issuedState = false;
       let requirementId = null;
       if (this.requirements[this.selectedCategory.componentId]) {
         requirementId = this.requirements[this.selectedCategory.componentId].id;
@@ -818,9 +818,6 @@ export default {
               processingStatus: "accept-proposal",
             }),
           );
-          issuedState = true;
-          this.requirements[this.selectedCategory.componentId].isIssued = issuedState;
-          localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
         });
 
         await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
@@ -876,6 +873,13 @@ export default {
         ...this.event,
         requirementProgress: (this.percentOfBudgetCategories / this.event.components.length) * 100,
       });
+      let requirement = this.requirements[category.serviceCategory];
+      if (!requirement) {
+        requirement = { event: this.event, category: category.serviceCategory, types: { [type]: services } };
+      } else {
+        requirement = { ...requirement, types: { [type]: services } };
+      }
+      this.$set(this.requirements, category.serviceCategory, requirement);
       localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
       localStorage.setItem("eventId", JSON.stringify(this.event.id));
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
@@ -916,11 +920,11 @@ export default {
       this.showCart = true;
     },
     hasBadge(component) {
-      this.proposalsByCategory = this.proposals;
       if (!this.proposalsByCategory[component.componentId]) return false;
       if (this.proposalsByCategory[component.componentId].length === 0) return false;
       const notViewedProposals = this.proposalsByCategory[component.componentId].filter(item => !item.viewed);
       if (notViewedProposals.length === 0) return false;
+      console.log(notViewedProposals);
       return true;
     },
     addRequirements() {},
@@ -930,7 +934,7 @@ export default {
       }
       this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
-      let getProposals = this.proposals;
+      let getProposals = this.$store.state.event.proposals;
       if (getProposals[category.componentId]) {
         getProposals[category.componentId].forEach((proposal, index) => {
           new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
@@ -945,7 +949,7 @@ export default {
         category["componentId"] = category.key;
       }
       this.selectedCategory = category;
-      let getProposals = this.proposals;
+      let getProposals = this.$store.state.event.proposals;
       if (getProposals[category.componentId]) {
         getProposals[category.componentId].forEach((proposal, index) => {
           new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
@@ -1004,6 +1008,7 @@ export default {
       if (proposal.selectedVersion > -1)
         this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
       else this.selectedProposal = proposal;
+      console.log("selectedProposal", proposal, this.selectedProposal);
     },
     async bookVendor() {
       if (!this.selectedProposal) return;
@@ -1017,7 +1022,7 @@ export default {
       });
     },
     async addToCart() {
-      if (!this.selectedProposal || !this.selectedCategory) return;
+      if (!this.selectedProposal) return;
       this.updateCartItem({
         category: this.selectedCategory.componentId,
         event: { id: this.event.id },
@@ -1027,7 +1032,6 @@ export default {
         proposal: { ...this.selectedProposal, isFavorite: false },
         category: this.selectedProposal.vendor.vendorCategory,
       });
-      this.isCart = true;
     },
     async favoriteProposal(isFavorite) {
       this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
@@ -1063,22 +1067,32 @@ export default {
       this.showDetails = false;
       this.selectedProposal = null;
     },
+    findProposalUnviewed(category) {
+      let getProposals = this.$store.state.event.proposals;
+      if (getProposals[category.componentId]) {
+        getProposals[category.componentId].forEach((singleProposal, index) => {
+          if (singleProposal && singleProposal.vendor.vendorCategory == category.componentId && singleProposal.viewed) {
+            return true;
+          }
+        });
+      }
+      return false;
+    },
     getproposalRequest() {
-      let getProposals = this.proposals;
+      let getProposals = this.$store.state.event.proposals;
       this.proposalRequest = getProposals[this.selectedCategory.componentId][0];
       return this.proposalRequest;
     },
-    selectProposal(thisProposal){
-        this.selectedProposal = thisProposal;
-        this.originalProposal = thisProposal;
-        let proposal = thisProposal;
-        if(proposal){
-            // this.commentComponents = proposal.commentComponent;
-            // this.showProposal = !!this.commentComponents.length
-            proposal.versions = !proposal.versions ? [] : proposal.versions;
-            this.$store.dispatch("planningBoard/setProposal",{...proposal});
-            this.$store.dispatch("eventPlan/setProposal",{...proposal});
-        }
+    selectProposal(thisProposal) {
+      this.selectedProposal = thisProposal;
+      this.originalProposal = thisProposal;
+      let proposal = thisProposal;
+      if (proposal) {
+        // this.commentComponents = proposal.commentComponent;
+        // this.showProposal = !!this.commentComponents.length
+        proposal.versions = !proposal.versions ? [] : proposal.versions;
+        this.$store.dispatch("planningBoard/setProposal", { ...proposal });
+      }
     },
     selectVersion(index) {
       this.$store.commit("planningBoard/selectVersion", index);
@@ -1365,6 +1379,7 @@ export default {
     color: #fff;
     border-radius: 50%;
     position: absolute;
+    right: 40px;
   }
   .md-menu-content .md-list {
     padding: 37px 37px !important;

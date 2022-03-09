@@ -696,7 +696,6 @@ export default {
         elements.push(budget);
         elements.push(timeline);
         elements.push(campaign);
-        elements.push(planningBoard);
         if (this.event.budgetProgress > 0) {
           elements.push(planningBoard);
         }

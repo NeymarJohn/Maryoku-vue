@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
+    <budget-notifications></budget-notifications>
     <comment-editor-panel
         v-if="showCommentEditorPanel"
         :commentComponents="commentComponents"
@@ -702,20 +703,22 @@ export default {
       this.$store
         .dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineProgress: 0 }))
         .then((event) => {
-          Swal.fire({
-            title: "Good Job! ",
-            text: "Your working timeline is saved successfully! You can change it anytime!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-          })
-            .then((result) => {
-              if (result.value === true) {
-                return;
-              }
-            })
-            .catch((err) => {});
+          this.$notify({
+                message: {
+                    title: 'Good Job!',
+                    content: `Your timeline has been saved successfully!
+                        Feel free to come back and work on it at any time.`,
+                },
+                icon: `${this.$iconURL}messages/info.svg`,
+                horizontalAlign: "right",
+                verticalAlign: "top",
+                type: 'info',
+                cancelBtn: false,
+                confirmBtn: 'OK',
+                closeBtn: true,
+                timeout: 5000,
+          });
+
         });
     },
     finalize() {

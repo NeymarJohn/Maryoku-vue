@@ -15,8 +15,6 @@ export default {
       proposals:{},
       favorite:{},
       bookingRequirements:{},
-      showCommentPanel: false,
-      proposal: null,
     }
   },
 
@@ -48,15 +46,6 @@ export default {
       setCategoryRequirements(state, { category, requirements }) {
           Vue.set(state.requirements, category, requirements)
       },
-
-    toggleCommentMode: (state, showCommentPanel) => {
-        console.log("toggleCommentMode", showCommentPanel)
-        state.showCommentPanel = showCommentPanel;
-    },
-    setProposal: (state, proposal) => {
-        console.log("setProposal");
-        state.proposal = proposal;
-    },
   },
   actions: {
     resetRequirements({commit}){
@@ -155,9 +144,5 @@ export default {
               });
       });
     },
-    setProposal: ({ commit, state }, proposal) => {
-        commit("setProposal", proposal);
-    }
   },
 }
-
