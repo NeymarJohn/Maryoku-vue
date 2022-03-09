@@ -9,8 +9,8 @@ const state = {
 const mutations = {
 
     toggleCommentMode: (state, showCommentPanel) => {
-        console.log("toggleCommentMode", showCommentPanel,state.showCommentPanel)
-        state.showCommentPanel = !state.showCommentPanel;
+        console.log("toggleCommentMode", showCommentPanel)
+        state.showCommentPanel = showCommentPanel;
     },
     setProposal: (state, proposal) => {
         console.log("setProposal");

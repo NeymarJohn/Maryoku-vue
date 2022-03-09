@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
+    <budget-notifications></budget-notifications>
     <comment-editor-panel
         v-if="showCommentEditorPanel"
         :commentComponents="commentComponents"
@@ -628,13 +629,20 @@ export default {
     },
     async revert() {
       Swal.fire({
-        title: "Do you really want to revert all?",
+        title: "Do you really want to start again from scratch?",
+        text: "Any changes you have made will not be saved\n" +
+            "and you’ll start over with an empty board.",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
-        confirmButtonText: "Ok",
+        confirmButtonText: "Yes, start over",
         cancelButtonClass: "md-button md-danger md-simple md-red ",
         cancelButtonText: "Cancel",
         buttonsStyling: false,
+        customClass: {
+          popup:'swal-alert-container',
+          header: 'swal-alert-header',
+          htmlContainer: 'swal-alert-html',
+        }
       }).then(async (result) => {
         if (result.value === true) {
           await this.clearTimeline();
@@ -695,20 +703,22 @@ export default {
       this.$store
         .dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineProgress: 0 }))
         .then((event) => {
-          Swal.fire({
-            title: "Good Job! ",
-            text: "Your working timeline is saved successfully! You can change it anytime!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-          })
-            .then((result) => {
-              if (result.value === true) {
-                return;
-              }
-            })
-            .catch((err) => {});
+          this.$notify({
+                message: {
+                    title: 'Good Job!',
+                    content: `Your timeline has been saved successfully!
+                        Feel free to come back and work on it at any time.`,
+                },
+                icon: `${this.$iconURL}messages/info.svg`,
+                horizontalAlign: "right",
+                verticalAlign: "top",
+                type: 'info',
+                cancelBtn: false,
+                confirmBtn: 'OK',
+                closeBtn: true,
+                timeout: 5000,
+          });
+
         });
     },
     finalize() {

@@ -7,6 +7,11 @@
           class="icon-question"
           :src="`${$iconURL}Budget+Elements/${data.icon}`"
         />
+        <img
+          v-else
+          class="icon-question"
+          src="https://static-maryoku.s3.amazonaws.com/storage/icons/Campaign/path-13703.svg"
+        />
         <div class="font-size-20 ml-10 mb-20 font-bold" >{{ data.label }}</div>
       </div>
       <star-rating

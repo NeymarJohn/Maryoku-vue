@@ -34,7 +34,8 @@
               <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma(Number) }}</span>
               <span v-else>$ {{ (eventCategoryItem.allocatedBudget / event.numberOfParticipants).toFixed(2) | withComma}}</span>
               <md-button class="md-rose md-sm md-simple edit-btn" v-if="isEditable && editingMode" @click="switchEdit"
-                >Edit</md-button
+                >                <img :src="`${$iconURL}Requirements/edit-dark.svg`" style="width: 20px" />
+              </md-button
               >
               <img
                 :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
@@ -98,20 +99,20 @@
               </td>
               <td class="status" width="10%">
                 <div class="text-left">
-                  <md-button
-                    class="book-btn md-sm"
-                    :class="{
-                      disabled: eventCategoryItem.proposalsState !== 'get-offers',
-                    }"
-                    @click="bookVendors(eventCategoryItem)"
-                    v-if="
-                      !eventCategoryItem.fixed &&
-                      eventCategoryItem.componentId != 'unexpected' &&
-                      !eventCategoryItem.bookedBudget &&
-                      editingMode
-                    "
-                    >Book</md-button
-                  >
+<!--                  <md-button-->
+<!--                    class="book-btn md-sm"-->
+<!--                    :class="{-->
+<!--                      disabled: eventCategoryItem.proposalsState !== 'get-offers',-->
+<!--                    }"-->
+<!--                    @click="bookVendors(eventCategoryItem)"-->
+<!--                    v-if="-->
+<!--                      !eventCategoryItem.fixed &&-->
+<!--                      eventCategoryItem.componentId != 'unexpected' &&-->
+<!--                      !eventCategoryItem.bookedBudget &&-->
+<!--                      editingMode-->
+<!--                    "-->
+<!--                    >Book</md-button-->
+<!--                  >-->
                   <img
                     :src="`${$iconURL}common/check-circle-green.svg`"
                     width="32"
@@ -120,9 +121,9 @@
                 </div>
               </td>
               <td class="expand">
-                <div @click="switchExpand" class="text-right" v-if="canExpand && eventCategoryItem.bookedBudget">
-                  <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: isExpanded }" />
-                </div>
+<!--                <div @click="switchExpand" class="text-right" v-if="canExpand && eventCategoryItem.bookedBudget">-->
+<!--                  <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: isExpanded }" />-->
+<!--                </div>-->
               </td>
             </template>
             <template v-else>
@@ -146,7 +147,9 @@
           <tr class="details-row" v-for="(requirement, index) in eventCategoryItem.predefinedRequirements" :key="index">
             <td>
               {{ requirement.title }}
-              <md-button class="md-rose md-simple md-sm edit-requirement">Edit</md-button>
+              <md-button class="md-rose md-simple md-sm edit-requirement">
+                Edit
+              </md-button>
             </td>
             <td>$0</td>
             <td class="actions" colspan="3">

@@ -2804,6 +2804,21 @@
         }
     }
 
+    &[x-placement^="top"] {
+        margin-bottom: 5px;
+
+        .tooltip-arrow {
+            border-width: 10px 10px 0 10px !important;
+            border-right-color: transparent !important;
+            border-top-color: transparent !important;
+            border-left-color: transparent !important;
+            bottom: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
     .tooltip-arrow {
         width: 0;
         height: 0;
@@ -2834,5 +2849,24 @@
             padding: 0;
             font: normal 16px Manrope-Regular, sans-serif;
         }
+    }
+}
+
+// custom swal
+.swal-alert-container {
+    max-width: 600px !important;
+    padding: 30px !important;
+    min-height: 320px !important;
+
+    .swal-alert-header {
+        .swal2-title {
+            text-align: left !important;
+        }
+    }
+    .swal-alert-html {
+        text-align: left !important;
+        color: #000;
+        font-size: 18px;
+        font-family: Manrope-Regular, sans-serif !important;
     }
 }

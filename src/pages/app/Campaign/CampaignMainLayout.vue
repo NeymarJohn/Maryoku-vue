@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout event-campaign-section booking-section event-campaign-width">
+    <budget-notifications></budget-notifications>
     <div class="inner-container">
       <comment-editor-panel
         v-if="showCommentEditorPanel"
@@ -102,6 +103,7 @@
             <template slot="content">
               <save-date :info="{ ...campaignTabs[1], ...campaignInfo }"
                          @changeInfo="changeInfo"
+                         @showModal="test"
                          :show-change-cover="true"
               ></save-date>
             </template>
@@ -110,6 +112,7 @@
             v-else
             :info="{ ...campaignTabs[1], ...campaignInfo }"
             @changeInfo="changeInfo"
+            @showModal="test"
             ref="savedateCampaign"
             class="white-card"
             :show-change-cover="true"
@@ -397,7 +400,7 @@ export default {
       deliverySettings: this.defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
-      showChangeCoverModal:true,
+      showChangeCoverModal:false,
       showScheduleModal: false,
       campaignTabs: {
         1: {
@@ -430,7 +433,6 @@ export default {
   methods: {
     test(){
       this.showChangeCoverModal = !this.showChangeCoverModal
-      console.log('##-433, CampaignMainLayout.vue',)
     },
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     toggleCommentMode(mode) {
@@ -571,18 +573,26 @@ export default {
     },
     sendPreviewEmail() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      console.log(campaignData.campaignStatus);
+      console.log(campaignData);
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true,
       ).then(res => {});
-      Swal.fire({
-        title: `You will receive a preview campaign email soon!`,
-        buttonsStyling: false,
-        type: "success",
-        confirmButtonClass: "md-button md-success",
-      });
+        this.$notify({
+            message: {
+                title: 'Your preview email is on the way!',
+                content: `The preview email for ${this.campaignTabs[this.selectedTab].name.split('_').join(' ')} has been sent to ${this.event.owner.name}.You should receive it shortly.`,
+            },
+            icon: `${this.$iconURL}messages/info.svg`,
+            horizontalAlign: "right",
+            verticalAlign: "top",
+            type: 'info',
+            cancelBtn: false,
+            sendBtn: false,
+            closeBtn: true,
+            timeout: 5000,
+        });
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {
