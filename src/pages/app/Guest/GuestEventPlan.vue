@@ -7,7 +7,7 @@
 </template>
 <script>
 import ProgressSidebar from "./components/progressSidebarForEvent";
-import CommentSidebar from "./components/CommentSidebar.vue";
+import CommentSidebar from "./components/commentSidebar.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
