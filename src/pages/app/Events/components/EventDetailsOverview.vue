@@ -150,23 +150,13 @@ export default {
       const description = `<div class="description">Your edits changed the event, do you want to change it?</div>`;
 
       Swal.fire({
-        title: `Are Your Sure?`,
-        text: 'You’re changing significant details about the event.\n' +
-            '\n' +
-            'This will nullify any agreements you already have with vendors, who will be notified and may need to alter/withdraw their proposals and pricing.\n' +
-            '\n' +
-            'Haven’t booked vendors yet? No problem. The event details will simply be updated.',
+        title: `<div class="text-left">${arrow}<div>Are Your Sure?</div>${description}</div>`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
         confirmButtonText: "Yes I'm sure",
         cancelButtonText: "No, take me back",
         buttonsStyling: false,
-          customClass: {
-              popup:'swal-alert-container',
-              header: 'swal-alert-header',
-              htmlContainer: 'swal-alert-html',
-          }
       }).then((result) => {
         if (result.dismiss != "cancel") {
           this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {

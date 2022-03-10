@@ -23,7 +23,7 @@
           name="left-menu-events-list"
           class="left-menu-events-list"
           :link="{
-            name: 'Vendor Dashboard',
+            name: 'Event Details',
             iconUrl: '/static/icons/vendor/dashboard.svg',
             iconActiveUrl: '/static/icons/vendor/dashboard-active.svg',
             path: `/vendor/dashboard`,
@@ -35,7 +35,7 @@
           class="left-menu-events-list"
           :has-badge="!!proposalRequests.length"
           :link="{
-            name: 'Vendor Proposals',
+            name: 'Events Lists',
             iconUrl: '/static/icons/vendor/proposal.svg',
             iconActiveUrl: '/static/icons/vendor/proposal-active.svg',
             path: `/vendor/proposals`,
@@ -46,7 +46,7 @@
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
           :link="{
-            name: 'Vendor Profile',
+            name: 'Event Budget',
             iconUrl: '/static/icons/vendor/profile.svg',
             iconActiveUrl: '/static/icons/vendor/profile-active.svg',
             path: `/vendor/profile/settings`,
@@ -57,7 +57,7 @@
           class="left-menu-events-list"
           :disabled="true"
           :link="{
-            name: 'Vendor Revenue',
+            name: 'Event Budget',
             iconUrl: '/static/icons/vendor/revenue.svg',
             iconActiveUrl: '/static/icons/vendor/revenue-active.svg',
             path: `/vendor/dashboard`,
@@ -67,9 +67,8 @@
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
-          :has-badge="!!comments.length"
           :link="{
-            name: 'Inbox',
+            name: 'inbox',
             iconUrl: '/static/icons/vendor/message.svg',
             iconActiveUrl: '/static/icons/vendor/message-active.svg',
             path: `/vendor/inbox`,
@@ -204,17 +203,6 @@ export default {
       return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
           p.remainingTime > 0 && !p.viewed
       })
-    },
-    proposalComments(){
-      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          p.remainingTime > 0 && !p.viewed
-      })
-    },
-    comments(){
-      const commentsComponents = this.$store.state.comment.commentsProposals.map(p => p.commentComponent).flat();
-      const comments = commentsComponents.map(c => c.comments).flat();
-      console.log('comments', comments);
-      return comments.filter(c => !c.viewed)
     }
   },
   beforeDestroy() {

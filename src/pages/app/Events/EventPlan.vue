@@ -1,22 +1,18 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
-    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar>
+    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
     <router-view></router-view>
   </div>
 </template>
 <script>
 import ProgressSidebar from "./components/progressSidebarForEvent";
-import CommentSidebar from "./components/CommentSidebar.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
-import state from "./state";
 
 export default {
   components: {
     ProgressSidebar,
-    CommentSidebar
   },
   data() {
     return {
@@ -24,9 +20,6 @@ export default {
       pageId: "",
       resevedPages: [],
     };
-  },
-  beforeCreate() {
-      this.$store.registerModule("eventPlan", state);
   },
   mounted() {
     this.fetchData();
@@ -40,9 +33,6 @@ export default {
     },
     user(){
       return this.$store.state.auth.user;
-    },
-    showCommentPanel(){
-      return this.$store.state.eventPlan.showCommentPanel;
     },
     barItems() {
       if (!this.event.checkList) {
@@ -92,7 +82,7 @@ export default {
         id: "campaign-item",
       };
       const planningBoard = {
-        title: "Booking Vendors",
+        title: "Set Requirements",
         status: this.event.requirementProgresss === 100 ? "completed" : "not-complete",
         route: "booking/planningboard",
         icon: `${this.$iconURL}Campaign/Group 8857.svg`,
@@ -100,15 +90,15 @@ export default {
         componentId: "planningboard",
         id: "planningboard-item",
       };
-      // const chooseVendor = {
-      //   title: "Booking Vendors",
-      //   status: "not-complete",
-      //   route: "booking/choose-vendor",
-      //   icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-      //   progress: this.event.campaignProgress,
-      //   componentId: "chooseVendor",
-      //   id: "bookingboard-item",
-      // };
+      const chooseVendor = {
+        title: "Booking Vendors",
+        status: "not-complete",
+        route: "booking/choose-vendor",
+        icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+        progress: this.event.campaignProgress,
+        componentId: "chooseVendor",
+        id: "bookingboard-item",
+      };
       const elements = [];
 
       if (this.user.currentUserType === 'planner' || this.user.currentUserType === 'vendor') {
@@ -117,12 +107,14 @@ export default {
           elements.push(budget);
           elements.push(timeline);
           elements.push(campaign);
-          if (this.event.budgetProgress > 0) {
-              elements.push(planningBoard);
+          elements.push(planningBoard);
+          if (this.event.processingStatus === "accept-proposal") {
+              elements.push(chooseVendor);
           }
       } else if(this.user.currentUserType === 'guest') {
           elements.push(overview);
           elements.push(planningBoard);
+          elements.push(chooseVendor);
       }
 
 

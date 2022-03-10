@@ -2,7 +2,7 @@
   <div class="md-layout p-20 planner-profile">
     <loader :active="loading" page="vendor"/>
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
-      <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20"/>
+      <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
       PROFILE & SETTINGS
     </div>
     <div class="md-layout-item md-size-25">
@@ -41,6 +41,7 @@
               <span class="pl-20 font-size-20">My Services</span>
             </label>
           </md-list-item>
+
           <md-list-item
             :md-ripple="false"
             class="mb-30"
@@ -48,23 +49,13 @@
             :class="{ 'font-bold-extra': pageName === 'details' }"
           >
             <label class="menu-label"
-            ><img
-              :src="
+              ><img
+                :src="
                   pageName === 'details' ? `${$iconURL}common/setting-dark.svg` : `${$iconURL}common/setting-gray.svg`
                 "
-              class="page-icon"
-            />
+                class="page-icon"
+              />
               <span class="pl-20 font-size-20">Company Details</span>
-            </label>
-          </md-list-item>
-          <md-list-item
-            :md-ripple="false"
-            @click="goTo('billing')"
-            :class="{ 'font-bold-extra': pageName === 'billing' }">
-            <label class="menu-label">
-              <img class="page-icon" :src="`/static/icons/vendor/${
-              pageName === 'billing' ? 'revenue-active.svg':'revenue.svg'}`"/>
-              <span class="pl-20 font-size-20">Billing Information</span>
             </label>
           </md-list-item>
           <md-list-item
@@ -81,9 +72,12 @@
             </label>
           </md-list-item>
           <md-divider></md-divider>
+          <!--<md-list-item :md-ripple="false">-->
+            <!--<md-button class="maryoku-btn md-vendor width-100" :disabled="true">Create Your Landing Page</md-button>-->
+          <!--</md-list-item>-->
           <md-list-item :md-ripple="false" @click="logout">
             <label class="menu-label">
-              <img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon"/>
+              <img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon" />
               <span class="pl-20 font-size-20"> Log Out </span>
             </label>
           </md-list-item>
@@ -94,7 +88,6 @@
       <VendorAccountSettings v-if="pageName === 'settings'"></VendorAccountSettings>
       <CompanyDetails v-if="pageName === 'details'"></CompanyDetails>
       <MyServices v-if="pageName === 'services'"></MyServices>
-      <BillingInformation v-if="pageName==='billing'"></BillingInformation>
     </div>
   </div>
 </template>
@@ -102,21 +95,26 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import StarRating from "vue-star-rating";
-import {LabelEdit, Tabs, Loader} from "@/components";
+import { LabelEdit, Tabs, Loader } from "@/components";
 
-import {mapGetters, mapState} from "vuex";
+// import auth from '@/auth';
+import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
 import UserAvatar from "@/components/UserAvatar.vue";
 import CompanyLogo from "@/components/CompanyLogo.vue";
 
 import VendorAccountSettings from "./Account";
 import CompanyDetails from "./CompanyDetails";
 import MyServices from "./MyServices";
-import BillingInformation from "./BillingInformation"
 
 const components = {
-  Loader: () => import('@/components/loader/Loader.vue'),
-  Tabs: () => import('@/components/Tabs.vue'),
-  LabelEdit: () => import('@/components/LabelEdit.vue'),
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Tabs: () => import('@/components/Tabs.vue'),
+    LabelEdit: () => import('@/components/LabelEdit.vue'),
+    StarRating: () => import('vue-star-rating'),
+    UserAvatar: () => import('@/components/UserAvatar.vue'),
+    CompanyLogo: () => import('@/components/CompanyLogo.vue'),
+    VendorAccountSettings: () => import('./CompanyDetails'),
+    MyServices: () => import('./MyServices'),
 }
 
 export default {
@@ -129,12 +127,12 @@ export default {
     CompanyLogo,
     CompanyDetails,
     MyServices,
-    BillingInformation,
     StarRating,
     Loader,
   },
   data() {
     return {
+      // auth: auth,
       loading: false,
       chips: [],
       user: null,
@@ -145,6 +143,7 @@ export default {
   computed: {
     ...mapGetters({
       upComingEvents: "user/getUpcomingEvents",
+      // user:'user/getUser'
     }),
     ...mapState("event", ["eventData"]),
     userData() {
@@ -163,10 +162,10 @@ export default {
   },
   methods: {
     setAvatar(avatar) {
-      this.$store.dispatch("auth/updateProfile", {avatar, id: this.userData.id});
+      this.$store.dispatch("auth/updateProfile", { avatar, id: this.userData.id });
     },
     setLogo(companyLogo) {
-      this.$store.dispatch("vendor/updateProfile", {vendorLogoImage: companyLogo, id: this.vendorData.id});
+      this.$store.dispatch("vendor/updateProfile", { vendorLogoImage: companyLogo, id: this.vendorData.id });
     },
     getPageName() {
       this.pageName = this.$route.params.pageName ? this.$route.params.pageName : "timeline";
@@ -183,12 +182,12 @@ export default {
 
       reader.onload = (e) => {
         this.loaded = false;
-        return new CustomerFile({customerFile: e.target.result})
+        return new CustomerFile({ customerFile: e.target.result })
           .save()
           .then((result) => {
             let customer = this.$auth.user.customer;
             customer.logoFileId = result.id;
-            new Customer({id: customer.id, logoFileId: result.id}).save();
+            new Customer({ id: customer.id, logoFileId: result.id }).save();
             this.companyProfile.companyLogo = customer.logoFileId
               ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}`
               : "https://static-maryoku.s3.amazonaws.com/storage/img/image_placeholder.jpg";
@@ -205,7 +204,7 @@ export default {
     removeImage: function (type) {
       this.loaded = false;
       let customer = this.$auth.user.customer;
-      new CustomerFile({id: customer.logoFileId})
+      new CustomerFile({ id: customer.logoFileId })
         .delete()
         .then((res) => {
           this.loaded = true;
@@ -235,25 +234,20 @@ export default {
 .planner-profile {
   align-items: stretch;
 }
-
 .left-sidebar {
   .page-icon {
     max-height: 30px;
   }
-
   /deep/ .md-list-item-button {
     &:hover {
       background-color: transparent !important;
     }
   }
-
   .profile {
     position: relative;
     padding: 50px;
-
     .avatar {
       position: relative;
-
       .company-logo {
         width: 140px;
         height: 140px;
@@ -271,18 +265,15 @@ export default {
 
   .md-list-item {
     margin: 20px 0;
-
     /deep/ .md-list-item-content {
       padding: 10px 50px;
     }
   }
-
   .logout {
     padding: 10px 25px;
     font-size: 16px;
     font-weight: 400;
   }
-
   .menu-label {
     cursor: pointer;
   }

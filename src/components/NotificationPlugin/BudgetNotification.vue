@@ -7,26 +7,17 @@
     :class="[verticalAlign, horizontalAlign]"
     :style="customPosition"
     data-notify-position="top-center">
-      <md-button
-          v-if="closeBtn"
-          class="md-simple position-absolute md-small-hide"
-          style="top: 20px;right:20px"
-          @click="close"
-      >
-          <md-icon>close</md-icon>
-      </md-button>
-      <div v-if="icon" class="event-state-message-image">
+      <div class="event-state-message-image">
           <img :src="icon" />
       </div>
       <div class="event-state-message-content">
-          <div class="message-title" :style="{color: type === 'info' ? '#000' : ''}">{{message.title}}</div>
+          <div class="message-title">{{message.title}}</div>
           <div class="message-content">{{message.content}}</div>
           <div class="message-action">
               <div class="message-action-content">{{message.action}}</div>
               <div class="message-action-button">
-                  <md-button v-if="cancelBtn" class="md-bold add-category-btn md-black md-simple" @click="close">Cancel</md-button>
-                  <md-button v-if="confirmBtn && type !== 'positive'" class="md-red md-bold add-category-btn" @click="send">
-                      {{ confirmBtn }}</md-button>
+                  <md-button class="md-bold add-category-btn md-black md-simple" @click="close">Cancel</md-button>
+                  <md-button v-if="type !== 'positive'" class="md-red md-bold add-category-btn" @click="send">Send</md-button>
               </div>
           </div>
       </div>
@@ -62,22 +53,10 @@ export default {
       type: Number,
       default: 5000,
     },
-    cancelBtn: {
-      type: Boolean,
-      default: true,
-    },
-      confirmBtn: {
-      type: Boolean,
-      default: false,
-    },
-    closeBtn: {
-       type: Boolean,
-       default: false,
-    },
     timestamp: {
       type: Date,
       default: () => new Date()
-    },
+    }
   },
   data () {
     return {
@@ -121,11 +100,6 @@ export default {
   },
   mounted () {
     this.elmHeight = this.$el.clientHeight
-    if (this.timeout) {
-        setTimeout(_ => {
-            this.$emit('on-close');
-        }, this.timeout)
-    }
   }
 }
 </script>
@@ -135,7 +109,7 @@ export default {
         min-width: 94%;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         background-color: #ffffff;
-        padding:20px 60px 20px 150px;
+        padding:20px 60px;
         display: flex;
         align-items: center;
 
@@ -151,9 +125,6 @@ export default {
             font-size: 20px;
             color: #0fac4c;
             margin-bottom: 15px;
-            &.info{
-                color: #000;
-            }
             &.benchmark {
                 color: #e0ae17;
             }
@@ -162,8 +133,8 @@ export default {
             }
         }
         .message-content {
-            margin-bottom: 16px;
-            color: #050505;
+            margin-bottom: 15px;
+            color: #333333;
             &.benchmark {
                 font-family: "Manrope-ExtraBold";
             }
@@ -218,8 +189,7 @@ export default {
   z-index: 100;
   cursor: pointer;
   position: fixed;
-  width: 100%;
-  top: -10px !important;
+  width: 41%;
 
   &.center {
     left: 0;
@@ -236,10 +206,10 @@ export default {
   }
 
   &.left {
-    left: 0;
+    left: 20px;
   }
   &.right {
-    right: 0;
+    right: 20px;
   }
 }
 </style>

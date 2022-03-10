@@ -55,13 +55,13 @@
         <img class="icon-thanks-for-participating-feedback" :src="`${$iconURL}Campaign/group-9380.svg`" />
         <div class="mt-10">
             <custom-title-editor
-                :defaultValue="sectionReview.title"
-                @change="handleChangeData('review', 'title', ...arguments)"
+                :defaultValue="additionalData.sectionReview.title"
+                @change="handleChangeData('sectionReview', 'title', ...arguments)"
                 class="font-size-60 font-bold line-height-1 mb-20"
             ></custom-title-editor>
             <custom-title-editor
-                :defaultValue="sectionReview.description"
-                @change="handleChangeData('review', 'description', ...arguments)"
+                :defaultValue="additionalData.sectionReview.description"
+                @change="handleChangeData('sectionReview', 'description', ...arguments)"
                 class="disco-party"
             ></custom-title-editor>
           <div class="font-size-22 line-height-1">{{ campaignData.name }}</div>
@@ -116,8 +116,8 @@
         <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
         <div class="ml-20 d-flex flex-wrap flex-column" >
             <custom-title-editor
-                :defaultValue="sectionPhotos.title"
-                @change="handleChangeData('photos', 'title', ...arguments)"
+                :defaultValue="additionalData.sectionEventPhotos.title"
+                @change="handleChangeData('sectionEventPhotos', 'title', ...arguments)"
                 class="font-size-30 font-bold line-height-1 pt-20"
             ></custom-title-editor>
           <span class="Include-photos-details-of-the-event">
@@ -208,18 +208,6 @@ export default {
       editingContent: [],
       isUploadedFiles: false,
       showModalWindowOpen : false,
-      sections: [
-        {
-          name: "review",
-          title: "THANKS FOR PARTICIPATING!",
-          description: "80’s Disco Party "
-        },
-        {
-          name: "photos",
-          title: "EVENT PHOTOS – RELIVE THE BEST MOMENTS",
-          description: ""
-        }
-      ],
       feedbackTitle : "",
       feedbackSubTitle : "",
       feedbackSliderTitle : ""
@@ -275,12 +263,19 @@ export default {
     campaignTitle() {
       return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
     },
-    sectionReview() {
-      return this.sections.find(({ name }) => name === "review");
+    additionalData() {
+      const defaultAdditionalData = {
+        sectionReview: {
+          title: "THANKS FOR PARTICIPATING!",
+          description: "80’s Disco Party",
+        },
+        sectionEventPhotos: {
+          title: "EVENT PHOTOS – RELIVE THE BEST MOMENTS",
+          description: "",
+        }
+      };
+      return this.campaignData.additionalData || defaultAdditionalData;
     },
-    sectionPhotos() {
-      return this.sections.find(({ name }) => name === "photos");
-    }
   },
   methods: {
     setDefault() {
@@ -341,12 +336,8 @@ export default {
         this.showModalWindowOpen = false;
     },
     handleChangeData(sectionName, key, value) {
-      this.sections = this.sections.map((section) => {
-        return section.name === sectionName
-          ? { ...section, [key]: value }
-          : section;
-      });
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "sections", value: this.sections });
+      this.additionalData[sectionName][key] = value;
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "additionalData", value: this.additionalData });
     },
   },
 };
@@ -463,8 +454,6 @@ export default {
       color: #050505;
     }
   }
-
-
 
   .icon-feedback {
     width: 65px;

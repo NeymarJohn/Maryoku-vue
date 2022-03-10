@@ -1,6 +1,5 @@
 <template>
   <div class="md-layout event-campaign-section booking-section event-campaign-width">
-    <budget-notifications></budget-notifications>
     <div class="inner-container">
       <comment-editor-panel
         v-if="showCommentEditorPanel"
@@ -101,21 +100,15 @@
               <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Save The Date’ Campaign</div>
             </template>
             <template slot="content">
-              <save-date :info="{ ...campaignTabs[1], ...campaignInfo }"
-                         @changeInfo="changeInfo"
-                         @showModal="test"
-                         :show-change-cover="true"
-              ></save-date>
+              <save-date :info="{ ...campaignTabs[1], ...campaignInfo }" @changeInfo="changeInfo"></save-date>
             </template>
           </collapse-panel>
           <save-date
             v-else
             :info="{ ...campaignTabs[1], ...campaignInfo }"
             @changeInfo="changeInfo"
-            @showModal="test"
             ref="savedateCampaign"
             class="white-card"
-            :show-change-cover="true"
           ></save-date>
         </template>
 
@@ -296,29 +289,6 @@
         </div>
       </div>
     </div>
-    <modal v-if="showChangeCoverModal" container-class="modal-container-wizard lg">
-      <template slot="header">
-        <div class="model__header">
-          <div class="font-size-30 arrow"><md-icon  @click="test" >close</md-icon></div>
-          <h2>
-            Change Cover
-          </h2>
-          <div class="header-description">
-            Select the image that will appear on “Save the Date” cover.
-            If you want to change the collage you can always go back to concept page
-          </div>
-        </div>
-
-      </template>
-      <template slot="body">
-        <div class="md-layout">
-        </div>
-      </template>
-      <template slot="footer">
-        <md-button class="add-category-btn" @click="test">Cancel</md-button>
-        <md-button class="md-red add-category-btn"  @click="test" >Choose Image</md-button>
-      </template>
-    </modal>
   </div>
 </template>
 
@@ -332,6 +302,10 @@ const SaveDate = () => import("./SaveDate");
 const Rsvp = () => import("./Rsvp");
 const Countdown = () => import("./Countdown");
 const Feedback = () => import("./Feedback");
+// import SaveDate from "./SaveDate";
+// import Rsvp from "./Rsvp";
+// import Countdown from "./Countdown";
+// import Feedback from "./Feedback";
 import DeliverySettings from "./DeliverySettings";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 import Campaign from "@/models/Campaign";
@@ -373,7 +347,6 @@ export default {
     Loader,
     VueElementLoading,
     Tabs,
-    Modal,
     HeaderActions,
     CommentEditorPanel,
     SaveDate,
@@ -400,7 +373,6 @@ export default {
       deliverySettings: this.defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
-      showChangeCoverModal:false,
       showScheduleModal: false,
       campaignTabs: {
         1: {
@@ -431,9 +403,6 @@ export default {
     };
   },
   methods: {
-    test(){
-      this.showChangeCoverModal = !this.showChangeCoverModal
-    },
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
@@ -573,26 +542,18 @@ export default {
     },
     sendPreviewEmail() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      console.log(campaignData);
+      console.log(campaignData.campaignStatus);
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true,
       ).then(res => {});
-        this.$notify({
-            message: {
-                title: 'Your preview email is on the way!',
-                content: `The preview email for ${this.campaignTabs[this.selectedTab].name.split('_').join(' ')} has been sent to ${this.event.owner.name}.You should receive it shortly.`,
-            },
-            icon: `${this.$iconURL}messages/info.svg`,
-            horizontalAlign: "right",
-            verticalAlign: "top",
-            type: 'info',
-            cancelBtn: false,
-            sendBtn: false,
-            closeBtn: true,
-            timeout: 5000,
-        });
+      Swal.fire({
+        title: `You will receive a preview campaign email soon!`,
+        buttonsStyling: false,
+        type: "success",
+        confirmButtonClass: "md-button md-success",
+      });
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {
@@ -646,9 +607,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header-description{
-  font-size: 16px;
-}
 .campaign-content {
   padding: 0 3em;
   margin-bottom: 83px;

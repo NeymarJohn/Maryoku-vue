@@ -2,7 +2,7 @@
   <div class="event-vendor-checkout">
     <loader :active="loading" is-full-screen :page="proposalType ? 'planner' : 'vendor'"/>
     <div class="checkout-content md-layout" v-if="!loading">
-      <div class="md-layout-item md-size-45 left-panel responsive-class-left-block">
+      <div class="md-layout-item md-size-45 left-panel">
         <div
                 class="background-section"
                 :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg) `"
@@ -23,11 +23,11 @@
           <div class="white-card p-40 font-size-22 font-bold mt-50 d-flex justify-content-between">
             <span v-if="pageType === 0">What does this proposal include?</span>
             <span v-else>What Do We Include In This Proposals?</span>
+            <md-icon>keyboard_arrow_right</md-icon>
           </div>
         </div>
       </div>
-      <div class="md-size-55 right-panel responsive-class-right-block"
-           :class="windowWidth>960?'md-layout-item':''">
+      <div class="md-layout-item md-size-55 right-panel">
         <div class="white-card">
           <template v-if="pageType === 0">
             <div v-if="proposal.bookedServices.length">
@@ -86,14 +86,12 @@
             </checkout-proposal-table>
           </template>
         </div>
-        <collapse-panel :defaultStatus="false"
-                        class="checkout-additional white-card mt-20"
-                        :spacing="windowWidth>960?50:1">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
-              On Day Coordinator ($1,000 Per Day)
+              On Day Coordinator($1,000 Per Day)
             </div>
           </template>
           <template slot="content">
@@ -103,9 +101,7 @@
             </div>
           </template>
         </collapse-panel>
-        <collapse-panel :defaultStatus="false"
-                        class="checkout-additional white-card mt-20"
-                        :spacing="windowWidth>960?50:1">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center disabled">
               <md-checkbox class="m-0 mr-10" :disabeld="true"></md-checkbox>
@@ -116,9 +112,7 @@
             <div class="price-table-content"></div>
           </template>
         </collapse-panel>
-        <collapse-panel :defaultStatus="false"
-                        class="checkout-additional white-card mt-20"
-                        :spacing="windowWidth>960?50:1">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="checkedGiveBack"></md-checkbox>
@@ -155,9 +149,7 @@
             </div>
           </template>
         </collapse-panel>
-        <collapse-panel :defaultStatus="false"
-                        class="checkout-additional white-card mt-20"
-                        :spacing="windowWidth>960?50:1">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center disabled">
               <md-checkbox class="m-0 mr-10"></md-checkbox>
@@ -220,7 +212,7 @@
             </div>
           </div>
         </div>
-        <div class="mt-40 policy-confirmation-block">
+        <div class="mt-40">
           <md-checkbox class="m-0" v-model="agreedCancellationPolicy">
             <span class="font-regular">I agree to the</span>
             <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
@@ -533,7 +525,7 @@
         this.showStripeCheckout = true;
       },
       back() {
-        this.$router.go(-1);
+        this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
       },
     },
   };
@@ -616,32 +608,5 @@
     text-align: left;
     color: #999999;
     width: 80px;
-  }
-
-  @media (max-width: 960px) {
-    .policy-confirmation-block {
-      margin-left: 20px;
-    }
-    .align-center {
-      max-width: 75vw;
-    }
-    .md-layout-item {
-      padding: unset;
-    }
-    .event-vendor-checkout {
-      .checkout-content {
-        .left-panel {
-          min-width: unset;
-          max-width: unset;
-          flex: unset;
-          height: 350px;
-        }
-      }
-    }
-    .responsive-class-right-block {
-      max-width: unset;
-      min-width: unset;
-      flex: unset;
-    }
   }
 </style>
