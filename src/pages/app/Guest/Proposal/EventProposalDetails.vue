@@ -650,7 +650,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-    <div v-if="!landingPage" class="proposal-footer white-card d-flex justify-content-between">
+    <div v-if="!landingPage && !hideFooter" class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -745,6 +745,10 @@ export default {
       default: "red",
     },
     showTimerBox: {
+      type: Boolean,
+      default: false,
+    },
+    hideFooter: {
       type: Boolean,
       default: false,
     },

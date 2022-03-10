@@ -8,6 +8,18 @@
       >
         <md-icon>close</md-icon>
       </md-button>
+       <comment-editor-panel
+        v-if="showCommentPanel"
+        :commentComponents="commentComponents"
+        :proposal="proposal"
+        :url="`/unregistered/proposals/${proposal.id}`"
+        :ignoreXOffset="400"
+        :isVendor="false"
+        @saveComment="saveComment"
+        @updateComment="updateComment"
+        @deleteComment="deleteComment"
+        @updateCommentComponent="updateCommentComponent">
+        </comment-editor-panel>
       <div class="proposal-info">
         <div
           class="proposal-header"
@@ -650,7 +662,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-    <div v-if="!landingPage" class="proposal-footer white-card d-flex justify-content-between">
+    <div v-if="!landingPage && !hideFooter" class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -712,6 +724,7 @@ const components = {
   EventProposalPolicy: () => import("./EventProposalPolicy.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
   MessageModal: () => import("../components/Modal/PlannerMessage.vue"),
+  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
 };
 
 export default {
@@ -745,6 +758,10 @@ export default {
       default: "red",
     },
     showTimerBox: {
+      type: Boolean,
+      default: false,
+    },
+    hideFooter: {
       type: Boolean,
       default: false,
     },
@@ -798,6 +815,7 @@ export default {
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
   mounted() {
+    this.commentComponents = this.proposal.commentComponent;
     let end = moment(this.proposal.expiredDate)
     let diff = moment.duration(end.diff(new Date()));
 
@@ -1017,6 +1035,10 @@ export default {
     },
     categories() {
       return this.$store.state.common.serviceCategories;
+    },
+    showCommentPanel(){
+      console.log("showCommentPanel",this.$store.state.eventPlan)
+      return this.$store.state.eventPlan.showCommentPanel;
     },
   },
   filters: {
@@ -1793,5 +1815,9 @@ export default {
 }
 .bg-light-gray {
   background-color: #f8fafb;
+}
+
+.click-capture{
+  top: 0px !important;
 }
 </style>

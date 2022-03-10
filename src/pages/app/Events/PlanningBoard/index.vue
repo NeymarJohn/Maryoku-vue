@@ -244,6 +244,7 @@
                             :category="selectedCategory"
                             :key="selectedProposal.id"
                             :showTimerBox="true"
+                            :hideFooter="true"
                             @favorite="favoriteProposal"
                             @close="closeProposal"
                             @ask="handleAsk"
@@ -568,7 +569,6 @@ const components = {
   ServicesCart: () => import("./ServicesCart.vue"),
   ProposalHeader: () => import("./ProposalHeader.vue"),
   ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
-  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel"),
 };
 
 export default {
@@ -742,8 +742,9 @@ export default {
       return false;
     },
     expireTime() {
-      console.log("expiredTime()", this.currentRequirement);
-      if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
+      if(this.currentRequirement){
+        return (this.currentRequirement.expiredBusinessTime > 0) ? this.currentRequirement.expiredBusinessTime : this.expiredTime;
+      }
       return this.expiredTime;
     },
     topCategories() {
@@ -770,6 +771,9 @@ export default {
         this.cartCount = 0;
         return false;
     },
+    showCommentPanel(){
+      return this.$store.state.eventPlan.showCommentPanel;
+    },
   },
   methods: {
     ...mapMutations("event", ["setProposalsByCategory"]),
@@ -790,6 +794,10 @@ export default {
       let requirementId = null;
       if (this.requirements[this.selectedCategory.componentId]) {
         requirementId = this.requirements[this.selectedCategory.componentId].id;
+      }
+      else if (this.eventRequirements[this.selectedCategory.componentId]) {
+        this.requirements = this.eventRequirements;
+        requirementId = this.eventRequirements[this.selectedCategory.componentId].id;
       }
       this.isOpenedFinalModal = false;
 
@@ -938,6 +946,10 @@ export default {
           });
         });
         this.selectProposal(getProposals[category.componentId][0]);
+      }
+
+      if(this.showCommentPanel){
+        this.toggleCommentMode();
       }
     },
     selectRemainingCategory(category, clicked) {

@@ -36,8 +36,9 @@
           class="md-small-hide"
         >
           <md-button
-            v-if="!isCommentMode"
-            class="md-simple md-just-icon show-long-button"
+
+            v-if="showCommentPanel"
+            class="md-simple md-just-icon hide-long-button"
             @click="click('comment')">
             <div class="show-circle-for-img">
               <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
@@ -157,6 +158,9 @@ export default {
     },
     canEdit() {
       return !this.permission || this.permission === "edit";
+    },
+    showCommentPanel(){
+      return this.$store.state.eventPlan.showCommentPanel;
     },
   },
 };
