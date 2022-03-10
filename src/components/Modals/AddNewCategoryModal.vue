@@ -3,7 +3,7 @@
     <template slot="header">
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra">
-          <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" /> Add new category
+          <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> Add new category
         </h2>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -24,7 +24,16 @@
               placeholder="Type to search category"
               label="title"
               track-by="id"
-            ></multiselect>
+              :show-labels="false">
+              <template slot="singleLabel" slot-scope="props">
+                <img style="width: 20px"  :src="`${$iconURL}Budget Elements/${props.option.icon}`">
+                <span >{{ props.option.title }}</span>
+              </template>
+              <template slot="option" slot-scope="props">
+                <img  style="width: 20px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
+                <span>{{ props.option.title }}</span>
+              </template>
+            </multiselect>
           </div>
         </div>
 
@@ -33,36 +42,37 @@
           <div class="form-group" style="flex-grow: 1; margin-left: 10px">
             <label class="font-size-16 font-bold-extra color-black">Name</label>
             <small class="font-size-14">(2 words top)</small>
-            <input type="text" class="form-control" v-model="newBuildingBlock.name" />
+            <input type="text" class="form-control" v-model="newBuildingBlock.name"/>
           </div>
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">
             Budget
-            <br />
+            <br/>
           </label>
           <div class="mb-10">
             <small class="font-size-14">You have ${{ availableBudget | withComma }} to use</small>
           </div>
-          <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget" />
+          <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget"/>
         </div>
         <div class="md-error d-flex align-center" v-if="availableBudget < newBuildingBlock.budget && !addMoreBudget">
-          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" />
+          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px"/>
           <span style="padding: 0 15px">Oops! Seems like you don’t have enough cash in your “Unexpected” category</span>
           <md-button
             class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra"
             @click="addMoreMoney"
-            >Add More Money</md-button
+          >Add More Money
+          </md-button
           >
         </div>
       </div>
       <div v-if="addMoreBudget" class="md-layout mt-10">
         <div v-if="addMoreMoney" class="md-layout-item md-size-50 form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">
-              Additional Budget
-              <br />
+            Additional Budget
+            <br/>
           </label>
-          <maryoku-input inputStyle="budget" v-model="additionalBudget" />
+          <maryoku-input inputStyle="budget" v-model="additionalBudget"/>
         </div>
       </div>
     </template>
@@ -75,7 +85,7 @@
   </modal>
 </template>
 <script>
-import { Modal } from "@/components";
+import {Modal} from "@/components";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -146,7 +156,7 @@ export default {
       let newBlock = {
         componentId: newComponent ? newComponent.key : "other",
         componentCategoryId: newComponent ? newComponent.key : "other",
-        calendarEvent: { id: this.event.id },
+        calendarEvent: {id: this.event.id},
         allocatedBudget: this.newBuildingBlock.budget,
         order: this.event.components.length,
         icon: newComponent.icon,

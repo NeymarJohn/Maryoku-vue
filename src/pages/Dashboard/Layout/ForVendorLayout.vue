@@ -156,7 +156,14 @@ export default {
     };
   },
   async mounted() {
+      console.log('proposal.layout.created', this.$store.state.auth.user);
+      if(this.$store.state.auth.user){
+          this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
 
+          }).catch(err => this.$router.push({ path: `/vendor/signin`}));
+      } else {
+          this.$router.push({ path: `/vendor/signin`});
+      }
     this.vendor = await this.getVendor(this.$route.params.vendorId)
 
     if (this.vendor.isEditing) {
