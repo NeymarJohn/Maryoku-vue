@@ -26,11 +26,11 @@
               track-by="id"
               :show-labels="false">
               <template slot="singleLabel" slot-scope="props">
-                <img width="20px" :src="`${$iconURL}Budget Elements/${props.option.icon}`">
+                <img style="width: 20px"  :src="`${$iconURL}Budget Elements/${props.option.icon}`">
                 <span >{{ props.option.title }}</span>
               </template>
               <template slot="option" slot-scope="props">
-                <img  width="20px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
+                <img  style="width: 20px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
                 <span>{{ props.option.title }}</span>
               </template>
             </multiselect>
