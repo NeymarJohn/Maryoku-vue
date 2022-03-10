@@ -1,13 +1,13 @@
 <template>
   <div class="event-plan">
     <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
-    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar>
+    <!-- <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar> -->
     <router-view></router-view>
   </div>
 </template>
 <script>
 import ProgressSidebar from "./components/progressSidebarForEvent";
-import CommentSidebar from "./components/CommentSidebar";
+import CommentSidebar from "./components/CommentSidebar.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";

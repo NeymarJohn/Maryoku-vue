@@ -103,6 +103,7 @@
             <template slot="content">
               <save-date :info="{ ...campaignTabs[1], ...campaignInfo }"
                          @changeInfo="changeInfo"
+                         @showModal="test"
                          :show-change-cover="true"
               ></save-date>
             </template>
@@ -111,6 +112,7 @@
             v-else
             :info="{ ...campaignTabs[1], ...campaignInfo }"
             @changeInfo="changeInfo"
+            @showModal="test"
             ref="savedateCampaign"
             class="white-card"
             :show-change-cover="true"
@@ -398,7 +400,7 @@ export default {
       deliverySettings: this.defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
-      showChangeCoverModal:true,
+      showChangeCoverModal:false,
       showScheduleModal: false,
       campaignTabs: {
         1: {
@@ -431,7 +433,6 @@ export default {
   methods: {
     test(){
       this.showChangeCoverModal = !this.showChangeCoverModal
-      console.log('##-433, CampaignMainLayout.vue',)
     },
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     toggleCommentMode(mode) {

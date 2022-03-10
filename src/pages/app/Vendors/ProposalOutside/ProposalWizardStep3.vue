@@ -582,6 +582,8 @@ export default {
     this.expiredMinutes = Math.floor(minutes%60);
     this.expiredMinutes = pad(this.expiredMinutes);
 
+    console.log(this.$store.state.proposalForNonMaryoku,'test',this.expiredDate,this.expiredHours,this.expiredMinutes)
+
   },
   methods: {
     changeTimer() {

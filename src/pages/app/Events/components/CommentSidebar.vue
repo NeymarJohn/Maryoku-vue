@@ -158,7 +158,7 @@
                                 </md-card-content>
                             </md-card>
                         </fade-transition>
-                        <textarea rows="4" class="form-control reply-text-area" placeholder="Write reply here" v-model="editingComment" ref="commentEditor" @input="getMessage"></textarea>
+                        <textarea rows="4" class="form-control reply-text-area" placeholder="Write reply here" v-model="editingCommentReply" ref="commentEditor" @input="getMessage"></textarea>
                         <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
                         <div class="footer text-right my-top my-bottom d-flex">
                             <md-icon class="" >attach_file</md-icon>
@@ -169,18 +169,18 @@
                     </div>
                 </div>
             </div>
-            <div class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer" style="float: right;">
+            <!-- <div class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer" style="float: right;">
                 <div class="form-group position-relative reply-form my-top">
                     <textarea rows="4" class="form-control reply-text-area" placeholder="Write comment here" v-model="editingComment" ref="commentEditor" @input="getMessage"></textarea>
                     <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
                     <div class="footer text-right my-top my-bottom d-flex">
                         <md-icon class="" >attach_file</md-icon>
                         <md-icon class="" >sentiment_satisfied_alt</md-icon>
-                        <md-button class="md-simple md-black normal-btn" @click="cancelCommentReply()">Cancel</md-button>
-                        <md-button class="md-red maryoku-btn" @click="saveCommentReply($event, 'reply')">Submit</md-button>
+                        <md-button class="md-simple md-black normal-btn" @click="cancelNewComment()">Cancel</md-button>
+                        <md-button class="md-red maryoku-btn" @click="saveNewComment($event, 'reply')">Submit</md-button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -209,6 +209,7 @@ export default {
         showReply: false,
         showReplyComment: null,
         editingComment: "",
+        editingCommentReply: "",
         showAddress: false,
         selectedComponent:null,
         customers: [],
@@ -219,9 +220,12 @@ export default {
     },
     computed: {
         proposal(){
-        this.commentComponents = this.$store.state.eventPlan.proposal.commentComponent;
+            this.commentComponents = this.$store.state.eventPlan.proposal.commentComponent;
             return this.$store.state.eventPlan.proposal
         },
+        url(){
+            return `/proposals/${this.$store.state.eventPlan.proposal.id}`
+        }
     },
     methods: {
         async getMessage(e) {
@@ -239,7 +243,7 @@ export default {
             this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
             this.selectedComponent = this.commentComponents[commentIndex];
         },
-        async saveCommentReply(event, type) {
+        async saveNewComment(event, type) {
             let selectedComponent = this.selectedComponent;
             console.log('saveComment', selectedComponent);
             const comment = {
@@ -250,6 +254,19 @@ export default {
             };
             this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
             this.editingComment = ""
+            event.stopPropagation();
+        },
+        async saveCommentReply(event, type) {
+            let selectedComponent = this.selectedComponent;
+            console.log('saveComment', selectedComponent);
+            const comment = {
+                commentComponent: { id: selectedComponent.id },
+                description: this.editingCommentReply,
+                parentId: this.selectedComponent ? this.selectedComponent.comments[0].id : null,
+                email: this.selectedCustomer ? this.selectedCustomer.email : null,
+            };
+            this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
+            this.editingCommentReply = ""
             event.stopPropagation();
         },
         daysDiff(date){

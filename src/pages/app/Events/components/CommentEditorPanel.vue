@@ -169,7 +169,7 @@ export default {
       return []
     },
     unresolvedComponents() {
-      return this.updatedCommentComponents.filter(item => !item.isResolved);
+      return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
     }
   },
   created() {
