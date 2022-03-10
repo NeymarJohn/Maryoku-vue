@@ -91,7 +91,7 @@
             </div>
           </div>
           <div class="card-content-invoice-right">
-
+            <invoice-budget-summary />
           </div>
         </div>
       </div>
@@ -109,8 +109,8 @@
             </div>
           </div>
           <div class="card-accept-conditions-actions">
-            <md-button class="card-accept-conditions-actions-button">
-              I would more details
+            <md-button class="card-accept-conditions-actions-button md-button md-red maryoku-btn">
+              I Would More Details
             </md-button>
             <span class="card-accept-conditions-actions-description">
               Thank You, But No.
@@ -136,16 +136,28 @@
         <div class="footer-content-text">
           Who are we and why are we great?
         </div>
-        <div class="footer-content-icon" >
-
-        </div>
+        <md-button class="footer-content-action edit-btn md-round nav-right nav-btn md-raised md-white">
+          <md-icon class="footer-content-action-icon">keyboard_arrow_right</md-icon>
+        </md-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import InvoiceBudgetSummary from "@/pages/app/Invoices/InvoiceBudgetSummary";
 
+export default {
+  name: "invoice-page",
+  components: {
+    InvoiceBudgetSummary,
+  },
+  data() {
+    return {
+
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -292,7 +304,6 @@
 
     .card-content-invoice {
       display: flex;
-      min-height: 1374px;
       padding: 130px 0 110px;
       border: solid 1px #707070;
       background-color: #f2f2f2;
@@ -370,10 +381,6 @@
               display: flex;
               padding: 10px 0;
 
-              .card-content-invoice-left-customer-details-contact-item-icon {
-
-              }
-
               .card-content-invoice-left-customer-details-contact-item {
                 max-width: 295px;
                 margin-left: 10px;
@@ -391,7 +398,6 @@
         }
 
         .card-content-invoice-left-signature {
-
 
           .card-content-invoice-left-signature-img {
             width: 315.3px;
@@ -543,6 +549,7 @@
   width: 100%;
   background: #333;
   padding: 37px 65px;
+  margin-top: -115px;
 
   .footer-content {
     max-width: 1920px;
@@ -566,8 +573,17 @@
       color: #fff;
     }
 
-    .footer-content-icon {
+    .footer-content-action {
+      width: 37px;
+      height: 37px;
+      margin-left: 20px !important;
 
+      .footer-content-action-icon {
+        width: 37px;
+        height: 37px;
+        font-size: 37px !important;
+        color: #641856 !important;
+      }
     }
   }
 }

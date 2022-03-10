@@ -9,16 +9,12 @@ const state = {
 const mutations = {
 
     toggleCommentMode: (state, showCommentPanel) => {
-        // console.trace("toggleCommentMode", showCommentPanel,state.showCommentPanel)
-        state.showCommentPanel = !state.showCommentPanel;
+        console.log("toggleCommentMode", showCommentPanel)
+        state.showCommentPanel = showCommentPanel;
     },
     setProposal: (state, proposal) => {
         console.log("setProposal");
         state.proposal = proposal;
-    },
-    updateCommentComponents: (state, commentComponents) => {
-        console.log("updateCommentComponents");
-        state.proposal.commentComponent = commentComponents;
     },
 }
 

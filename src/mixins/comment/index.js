@@ -57,7 +57,7 @@ export default {
       }
     },
     async created(){
-        console.log('comment.mixin.created',this.url);
-        this.commentComponents = await this.getCommentComponents(this.url ? this.url : this.$route.path);
+        console.log('comment.mixin.created');
+        this.commentComponents = await this.getCommentComponents(this.$route.path);
     }
 }

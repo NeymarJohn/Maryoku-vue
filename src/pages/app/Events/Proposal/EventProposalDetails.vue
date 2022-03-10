@@ -8,18 +8,6 @@
       >
         <md-icon>close</md-icon>
       </md-button>
-       <comment-editor-panel
-        v-if="showCommentPanel"
-        :commentComponents="commentComponents"
-        :proposal="proposal"
-        :url="`/proposals/${proposal.id}`"
-        :ignoreXOffset="400"
-        :isVendor="false"
-        @saveComment="saveCommentComponent"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent">
-        </comment-editor-panel>
       <div class="proposal-info">
         <div
           class="proposal-header"
@@ -662,7 +650,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-    <div v-if="!landingPage && !hideFooter" class="proposal-footer white-card d-flex justify-content-between">
+    <div v-if="!landingPage" class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -724,7 +712,6 @@ const components = {
   EventProposalPolicy: () => import("./EventProposalPolicy.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
   MessageModal: () => import("../components/Modal/PlannerMessage.vue"),
-  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
 };
 
 export default {
@@ -758,10 +745,6 @@ export default {
       default: "red",
     },
     showTimerBox: {
-      type: Boolean,
-      default: false,
-    },
-    hideFooter: {
       type: Boolean,
       default: false,
     },
@@ -809,7 +792,6 @@ export default {
       expiredHours:null,
       expiredMinutes:null,
       expiredSeconds:null,
-      url:`/proposals/${this.proposal.id}`
     };
   },
   created() {
@@ -833,12 +815,9 @@ export default {
     this.expiredMinutes = pad(this.expiredMinutes);
     this.expiredSeconds = Math.floor(seconds%60);
     this.expiredSeconds = pad(this.expiredSeconds);
-    console.log("eventProposaldetail",this.proposal.commentComponent);
-    this.commentComponents = this.proposal.commentComponent;
   },
 
   methods: {
-    ...mapMutations("eventPlan", ["updateCommentComponents"]),
     ...mapMutations("EventPlannerVuex", [
       "setEventModal",
       "setEditMode",
@@ -1001,11 +980,6 @@ export default {
             this.showTimerInputs = false;
         }
     },
-    async saveCommentComponent(data){
-      await this.saveComment(data)
-      console.log("this.commentComponents",this.commentComponents)
-      this.updateCommentComponents(this.commentComponents);
-    }
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -1044,10 +1018,6 @@ export default {
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-    showCommentPanel(){
-      console.log("showCommentPanel",this.$store.state.eventPlan)
-      return this.$store.state.eventPlan.showCommentPanel;
-    },
   },
   filters: {
     formatDate: function(date) {
@@ -1061,8 +1031,8 @@ export default {
     },
   },
   watch: {
-    proposal() {
-      console.log("proposal.watch",this.proposal);
+    proposal(newVal) {
+      console.log("proposal.watch", newVal);
     },
     step(newVal) {},
   },
@@ -1823,9 +1793,5 @@ export default {
 }
 .bg-light-gray {
   background-color: #f8fafb;
-}
-
-.click-capture{
-  top: 0px !important;
 }
 </style>

@@ -155,7 +155,6 @@ export default {
 
   created() {},
   mounted() {
-    console.log("Commentside bar mounted")
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
   },
   computed: {},

@@ -1,7 +1,7 @@
 <template>
   <div class="event-plan">
     <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
-    <!-- <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar> -->
+    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar>
     <router-view></router-view>
   </div>
 </template>

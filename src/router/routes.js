@@ -81,7 +81,7 @@ const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vu
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout")
 
-const InvoicePage = () => import('@/pages/app/InvoicePage.vue')
+const InvoicePage = () => import('@/pages/app/Invoices/InvoicePage.vue')
 
 let testUI = {
     path: '/testui',
