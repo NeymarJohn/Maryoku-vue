@@ -53,7 +53,6 @@ export default {
   methods: {
     change(event) {
       const itemIndex = event.item.index;
-      console.log({ itemIndex });
       this.$emit('change-item-index', itemIndex);
     },
     uploadImage(index) {

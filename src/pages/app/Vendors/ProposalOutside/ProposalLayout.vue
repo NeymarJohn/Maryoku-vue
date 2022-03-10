@@ -189,6 +189,11 @@ export default {
       let index = this.$store.state.proposalForNonMaryoku.versions.findIndex(v => v.id === this.$route.query.version);
       this.$store.commit("proposalForNonMaryoku/selectVersion", index);
     }
+
+    if (this.$route.query.step) {
+       this.$store.commit("proposalForNonMaryoku/setWizardStep", parseInt(this.$route.query.step));
+    }
+
     setTimeout(_ => {}, 10000);
     this.isLoading = false;
   },

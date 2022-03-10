@@ -24,7 +24,6 @@
             v-for="(file, index) in files"
             :class="{
               'upload-files-list-item': true,
-              'upload-files-list-item-active': carouselItemIndex === index,
             }"
           >
             <span class="upload-files-list-item-text">
@@ -135,16 +134,7 @@ export default {
       });
     },
     deleteFile(fileURL) {
-      const deleteItemIndex = this.files.findIndex(file => file.url === fileURL);
-      const deleteCurrentItem = (deleteItemIndex === currentItemIndex);
-      const currentItemIndex = this.carouselItemIndex;
-      if (deleteCurrentItem) {
-        this.carouselItemIndex = 0;
-      }
-      if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
-        this.carouselItemIndex = this.carouselItemIndex - 1;
-      }
-      this.files = this.files.filter((file, index) => index !== deleteItemIndex);
+      this.files = this.files.filter(file => file.url !== fileURL);
     },
     changeCarouselItemIndex(itemIndex) {
       this.carouselItemIndex = itemIndex;

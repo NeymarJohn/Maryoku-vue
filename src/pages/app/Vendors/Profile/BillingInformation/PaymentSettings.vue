@@ -26,37 +26,36 @@
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Beneficiary Name</label>
-                          <md-input id="name" v-model="bankDetails.holderName" type="text"></md-input>
+                          <md-input id="name" type="text"></md-input>
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Account No.</label>
-                          <md-input id="email" v-model="bankDetails.accountNumber"  type="text"></md-input>
+                          <md-input id="email" type="text"></md-input>
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Bank No.</label>
-                          <md-input type="text" v-model="bankDetails.routingNumber" ></md-input>
+                          <md-input type="text"></md-input>
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Branch No.</label>
-                          <md-input type="text" v-model="bankDetails.branch" ></md-input>
+                          <md-input type="text"></md-input>
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-100">
                         <md-field>
                           <label>Address and name of the bank</label>
-                          <md-input v-model="bankDetails.address" type="text"></md-input>
+                          <md-input type="text"></md-input>
                         </md-field>
                       </div>
                     </div>
                   </div>
                 </div>
-                <md-button @click="test" class="md-vendor md-vendor-review">Save details</md-button>
               </md-card-content>
             </md-card>
           </div>
@@ -71,7 +70,6 @@ import { Tabs } from "@/components";
 
 import VueElementLoading from "vue-element-loading";
 import EventBlockRequirements from "../../../Guest/components/EventBlocks/Modals/EventBlockRequirements";
-import axios from "axios";
 var card = undefined;
 
 export default {
@@ -81,10 +79,25 @@ export default {
     EventBlockRequirements,
   },
   props: {
+    event: Object,
+    selectedBlock: Object,
+    proposal: Object,
+    winnerId: {
+      type: String,
+      default: null,
+    },
   },
   data: () => ({
     isLoaded: false,
-    bankDetails:{}
+    proposalsToDisplay: 1,
+    ratings: [1, 2, 3, 4, 5],
+    feedbackRating: 3,
+    proposalAccepted: false,
+    image: "https://i.imgur.com/HhqxVCW.jpg",
+    name: "Shut up and take my money!",
+    description: "Cats are the best dog!",
+    currency: "PHP",
+    amount: 99999,
   }),
 
   created() {},
@@ -116,17 +129,6 @@ export default {
     }, 100);
   },
   methods: {
-    test(){
-
-      axios.post( process.env.SERVER_URL +'/v1/customer/destinations/account', {
-        ...this.bankDetails,
-        accept:'application/json'
-        }).then(res=>{
-        console.log('##-125, PaymentSettings.vue',res)
-      })
-      console.log('##-119, PaymentSettings.vue',this.bankDetails,  process.env.SERVER_URL )
-
-    },
     submitPayment(event) {
       let self = this;
     },

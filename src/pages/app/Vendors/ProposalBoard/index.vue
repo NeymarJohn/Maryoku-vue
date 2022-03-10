@@ -539,7 +539,7 @@ export default {
 
                 const version = await this.saveVersion(this.selectedProposal);
                 this.selectedProposal.versions.push(version)
-                console.log('version', version)
+
                 let routeData = this.$router.resolve({
                     name: "outsideProposalEdit",
                     params: {
@@ -549,6 +549,8 @@ export default {
                     },
                     query: {
                         version: version.id,
+                        step: 3,
+                        negotiation: true,
                     },
                 });
                 this.openNewTab(routeData.href);
@@ -567,7 +569,7 @@ export default {
 
         let proposalRequest = this.selectedProposalRequest
           ? this.selectedProposalRequest
-          : this.proposalRequests.find(p => p.proposal.id === this.selectedProposal.id);
+          : this.proposalRequests.find(p => p.proposal && p.proposal.id === this.selectedProposal.id);
         this.$set(proposalRequest, "proposal", this.selectedProposal);
         await this.$store.commit("vendorDashboard/setProposalRequest", proposalRequest);
 

@@ -8,13 +8,13 @@
       >
         let's start with a "save the date"
       </div>
+      <div v-if="showChangeCover" class="change-cover-feedback" @click="test">
+        <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
+          <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+          Change Campaign Cover
+        </md-button>
+      </div>
       <div class="concept-image-block-wrapper">
-        <div v-show="showChangeCover" class="change-cover-feedback" @click="test">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
-            Change Campaign Cover
-          </md-button>
-        </div>
         <concept-image-block
           v-if="concept"
           class="ml-50 hidden"
@@ -201,7 +201,6 @@ export default {
   methods: {
     test(){
       this.showChangeCoverModal = true;
-      this.$emit('showModal', this.showChangeCoverModal)
     },
     setDefault() {
       Swal.fire({
@@ -263,15 +262,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .concept-image-block-wrapper{
-  position: relative;
-  height: fit-content;
   overflow: auto;
 }
 .change-cover-feedback{
   position: absolute;
   width: fit-content;
-  left: 40%;
-  top: 50%;
+  left: 30%;
+  top: 14%;
   z-index: 15;
 }
 .campaign-save-date {

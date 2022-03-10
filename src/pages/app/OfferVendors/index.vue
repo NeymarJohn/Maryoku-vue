@@ -464,10 +464,7 @@ export default {
                 });
             }
         },
-        async saveSpecialRequirements(data) {
-            if(!this.event.id){
-                await this.createEvent();
-            }
+        saveSpecialRequirements(data) {
             this.isOpenedFinalModal = false;
             this.setSpecialRequirements(data);
             this.expiredTime = moment(new Date())

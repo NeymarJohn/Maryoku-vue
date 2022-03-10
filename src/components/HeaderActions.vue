@@ -36,25 +36,21 @@
           class="md-small-hide"
         >
           <md-button
-
-            v-if="showCommentPanel"
+            v-if="isCommentMode"
             class="md-simple md-just-icon hide-long-button"
             @click="click('comment')">
-            <div class="show-circle-for-img">
-              <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
+            <div class="hide-circle-for-img">
+              <img class="hide-svg-icon-long-button" src="static/icons/hide-comments.svg" />
             </div>
-            <div class="show-comments-text">Show comments</div>
+            <div class="hide-comments-text">Hide comments</div>
           </md-button>
           <md-button
             v-else
-            class="md-simple md-just-icon hide-long-button"
-            @click="click('comment')"
-          >
-            <div class="d-flex" >
-              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">Hide comments</div>
-              <div class="hide-circle-for-img">
-                <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
-              </div>
+            class="md-simple md-just-icon show-long-button"
+            @click="click('comment')">
+            <div class="show-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">Show comments</div>
+            <div class="show-circle-for-img">
+              <img class="show-svg-icon-long-button" src="static/icons/show-comments.svg" />
             </div>
           </md-button>
         </li>
@@ -159,9 +155,6 @@ export default {
     canEdit() {
       return !this.permission || this.permission === "edit";
     },
-    showCommentPanel(){
-      return this.$store.state.eventPlan.showCommentPanel;
-    },
   },
 };
 </script>
@@ -176,25 +169,26 @@ export default {
   width: 214px;
   height: 56px;
   border-radius: 30px;
-  border: solid 1px #ffc001;
-  background-color: #f5f5f5;
+  border: solid 1px #f51355;
+
 }
 .hide-long-button{
   width: 214px;
   height: 56px;
   border-radius: 30px;
-  border: solid 1px #ffc001;
+  background-color: #ffe5ec!important;
+  &:focus {
+    background-color: #ffe5ec!important;
+  }
 }
 .hide-comments-text{
-  margin-left: 10px;
   padding-left: 10px;
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0.34px;
   text-align: center;
   text-transform: none;
-  color: #4e4e4e;
-  flex-grow: 1;
+  color: #f51355;
 }
 .show-comments-text{
   padding-left: 10px;
@@ -203,27 +197,21 @@ export default {
   letter-spacing: 0.34px;
   text-align: center;
   text-transform: none;
-  color: #4e4e4e;
+  color: #f51355;
 }
 .show-circle-for-img{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-left: -7px;
-  background-color: #ffc001;
-}
-.hide-circle-for-img{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   margin-left: 10px;
-  background-color: #ffc001;
+  background-color: #ffe5ec;
+}
+.hide-circle-for-img{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-left: -10px;
+  background-color: #f51355;
 }
 .d-flex{
   align-items: center;
@@ -235,12 +223,14 @@ export default {
 }
 
 .hide-svg-icon-long-button{
-  width: 32px !important;
-  height: 32px !important;
+  width: 28px !important;
+  margin-left: 2px;
+  margin-top: 5px;
 }
 .show-svg-icon-long-button{
-  width: 32px !important;
-  height: 32px !important;
+  width: 28px !important;
+  margin-left: 2px;
+  margin-top: 5px;
 }
 .svg-icon-more-header-action {
   width: 8px;
@@ -280,7 +270,7 @@ export default {
         height: 20px;
         margin: 37px 34px 57px 13px;
         padding: 3px 11px 3px 10px;
-        background-color: #ffc001;
+        background-color: #f51355;
         font-size: 16px;
         font-weight: bold;
         font-stretch: normal;
@@ -297,7 +287,7 @@ export default {
         height: 22px;
         margin: 0px 0px 0px -22px;
         padding: 0px 0px 0px 7px;
-        background-color: #ffc001;
+        background-color: #f51355;
         font-size: 16px;
         font-weight: bold;
         font-stretch: normal;
