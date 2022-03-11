@@ -2,7 +2,7 @@
   <collapse-panel class="policy">
     <template slot="header">
       <div class="d-flex align-center">
-        <img :src="`${$iconURL}Vendor Signup/Asset 560.svg`" style="width: 25px" class="mr-10" />
+        <img :src="`${$iconURL}Vendor Signup/Asset 560.svg`" style="width: 25px" class="mr-10">
         OUR POLICY
       </div>
     </template>
@@ -11,7 +11,7 @@
         class="pr-50 pl-50 pb-40 policy-content"
         :vendor="vendorData"
         :service="serviceData"
-      ></policy-section>
+      />
     </template>
   </collapse-panel>
 </template>
@@ -20,13 +20,13 @@
 import PolicySection from "./PolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
+  components: { CollapsePanel, PolicySection },
   props: {
     serviceCategory: {
       type: String,
       default: "",
     },
   },
-  components: { CollapsePanel, PolicySection },
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;

@@ -1,25 +1,27 @@
 <template>
   <div class="non-maryoku-proposal" :class="{'x-mouse':showCommentEditorPanel}" @mousemove="handleMouseMove">
-    <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
+    <loader :active="loading" :is-full-screen="true" page="vendor" />
     <template v-if="proposal">
       <div class="proposal-header md-layout md-alignment-center " :class="isMobile ? 'pt-20' : 'p-30 bg-pale-grey'">
-        <img v-if="step === 0" :src="headerBackgroundImage" class="position-absolute mobile-show header-bg" />
+        <img v-if="step === 0" :src="headerBackgroundImage" class="position-absolute mobile-show header-bg">
         <div
           class="md-layout-item md-large-size-80 md-small-size-80 d-flex align-center"
           :class="isMobile ? 'justify-content-center' : ''"
         >
           <div v-if="vendor.vendorLogoImage">
-            <img :src="`${vendor.vendorLogoImage}`" style="max-height: 40px" />
+            <img :src="`${vendor.vendorLogoImage}`" style="max-height: 40px">
           </div>
 
           <img
             class="md-small-hide ml-10"
             :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`"
             width="30px"
-          />
+          >
           <b class="font-size-30 ml-10 md-small-hide">{{ proposal.vendor.eventCategory.fullTitle }}</b>
 
-          <div :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">{{ proposal.vendor.companyName }}</div>
+          <div :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">
+            {{ proposal.vendor.companyName }}
+          </div>
           <div v-if="contract" class="text-uppercase" :class="isMobile ? 'font-size-16 ml-10' : 'font-size-30 ml-10'">
             contract
           </div>
@@ -27,53 +29,51 @@
 
         <div class="md-layout-item md-large-size-20 md-small-size-20 d-flex">
           <HeaderActions
-            className="ml-auto"
+            class-name="ml-auto"
             page="proposal"
             @toggleCommentMode="toggleCommentMode"
             @share="shareWithAuth"
             @export="downProposal"
-          ></HeaderActions>
+          />
         </div>
 
         <div class="md-layout-item md-small-size-100 mobile-show">
           <md-card v-if="step === 0" class="d-flex flex-column text-center border-radius-none py-20 my-10">
             <div v-if="vendor.vendorLogoImage">
-              <img :src="`${vendor.vendorLogoImage}`" style="max-height: 30px;width: auto" />
+              <img :src="`${vendor.vendorLogoImage}`" style="max-height: 30px;width: auto">
             </div>
             <h2 v-if="vendor.companyName" class="font-size-24 font-bold-extra text-uppercase my-10">
               {{ `${vendor.companyName} proposal` }}
             </h2>
-            <p class="text-center font-bold-extra m-0 px-10">You have received an offer for the</p>
+            <p class="text-center font-bold-extra m-0 px-10">
+              You have received an offer for the
+            </p>
             <span class="text-center font-bold-extra m-0 px-10">
               <b class="font-size-16 font-bold-extra text-capitalize">{{
                 ` ${proposal.eventData.customer.companyName}`
               }}</b>
-              event. Let's start..</span
-            >
+              event. Let's start..</span>
           </md-card>
         </div>
       </div>
       <div style="display: flex">
-
-        <CommentSidebar v-if="showCommentEditorPanel" class="comment-sidebar position-fixed"></CommentSidebar>
-        <div class="proposal-container"  :class="{'margin-auto':!showCommentEditorPanel,'w-75':showCommentEditorPanel}">
-
+        <CommentSidebar v-if="showCommentEditorPanel" class="comment-sidebar position-fixed" />
+        <div class="proposal-container" :class="{'margin-auto':!showCommentEditorPanel,'w-75':showCommentEditorPanel}">
           <CommentEditorPanel
             v-if="showCommentEditorPanel"
-            :commentComponents="commentComponents"
+            :comment-components="commentComponents"
             :proposal="proposal"
             @saveComment="saveCommentWithAuth"
             @updateComment="updateCommentWithAuth"
             @deleteComment="deleteCommentWithAuth"
             @updateCommentComponent="updateCommentComponentWithAuth"
-          >
-          </CommentEditorPanel>
+          />
           <EventProposalDetails
-            :proposal="proposal"
-            :landingPage="true"
-            :nonMaryoku="true"
-            :step="step"
             v-if="proposal"
+            :proposal="proposal"
+            :landing-page="true"
+            :non-maryoku="true"
+            :step="step"
             @change="handleStep"
             @updateProposal="handleUpdate"
             @ask="handleAsk"
@@ -88,9 +88,9 @@
                 :status="proposal.status"
                 :declined="negotiationDeclined"
                 :approved="negotiationProcessed"
-                @updateExpireDate="handleAsk('expiredDate')"
                 :theme="isMobile ? 'mobile red' : 'red'"
-              ></TimerPanel>
+                @updateExpireDate="handleAsk('expiredDate')"
+              />
             </template>
           </EventProposalDetails>
         </div>
@@ -98,8 +98,10 @@
 
       <div class="text-center logo-area" :class="isMobile ? 'font-size-12 py-10' : 'font-size-18 p-40 mt-40'">
         Provided By
-        <img class="ml-10" :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-        <p class="m-0 align-baseline text-underline">Who are we and why are we great?</p>
+        <img class="ml-10" :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
+        <p class="m-0 align-baseline text-underline">
+          Who are we and why are we great?
+        </p>
       </div>
 
       <a
@@ -122,19 +124,19 @@
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
                   class="mr-10"
                   style="width: 20px; height: 28px"
-                />
+                >
                 Negotiate Rate
               </span>
             </md-menu-item>
             <md-menu-item class="text-center" @click="showModal('REMINDER')">
               <span class="font-size-16 font-bold-extra pl-20">
-                <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px" />
+                <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px">
                 Remind me later
               </span>
             </md-menu-item>
             <md-menu-item class="text-center" @click="showModal('EVENT_CHANGE')">
               <span class="font-size-16 font-bold-extra pl-20">
-                <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
+                <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px">
                 Change event details
               </span>
             </md-menu-item>
@@ -142,13 +144,13 @@
           <md-menu-content v-else>
             <md-menu-item class="text-center" @click="showModal('CANCEL_BOOKING')">
               <span class="font-size-16 font-bold-extra text-capitalize pl-20">
-                <img :src="`${$iconURL}Contract/group-21003.svg`" class="mr-10" style="width: 20px; height: 28px" />
+                <img :src="`${$iconURL}Contract/group-21003.svg`" class="mr-10" style="width: 20px; height: 28px">
                 cancel booking
               </span>
             </md-menu-item>
             <md-menu-item class="text-center" @click="showModal('DOWNLOAD_INVOICE')">
               <span class="font-size-16 font-bold-extra text-capitalize pl-20">
-                <img :src="`${$iconURL}Contract/group-8864.svg`" class="mr-10" style="width: 20px; height: 28px" />
+                <img :src="`${$iconURL}Contract/group-8864.svg`" class="mr-10" style="width: 20px; height: 28px">
                 download invoices
               </span>
             </md-menu-item>
@@ -156,10 +158,12 @@
         </md-menu>
 
         <template v-if="!contract">
-          <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal"
-            >Decline Proposal</md-button
-          >
-          <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">Book Now</md-button>
+          <md-button class="md-simple md-red md-outlined maryoku-btn ml-auto" @click="declineProposal">
+            Decline Proposal
+          </md-button>
+          <md-button class="md-red maryoku-btn ml-10" @click="bookProposal">
+            Book Now
+          </md-button>
         </template>
         <template v-else>
           <div>
@@ -167,7 +171,7 @@
               src="/static/icons/vendor/proposalBoard/filter-won.svg"
               class="mr-10"
               style="width: 20px; height: 28px"
-            />
+            >
             Vendor is Booked
           </div>
         </template>
@@ -179,28 +183,25 @@
             v-if="step < 3"
             class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none"
             @click="showModal('MORE_ACTIONS')"
-            >More actions</a
-          >
+          >More actions</a>
           <a
             v-else
             class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none"
             @click="declineProposal"
-            >Decline</a
-          >
+          >Decline</a>
           <a class="md-layout-item md-size-50 bg-red color-white text-center py-15 text-decoration-none" @click="bookProposal">Book now</a>
         </template>
         <template v-else>
           <a
             class="md-layout-item md-size-50 color-red md-outlined text-center py-15 text-decoration-none"
             @click="showModal('MORE_ACTIONS')"
-            >More actions</a
-          >
+          >More actions</a>
           <div class="md-layout-item md-size-50 font-size-14 d-flex justify-content-center align-center">
             <img
               src="/static/icons/vendor/proposalBoard/filter-won.svg"
               class="mr-10"
               style="width: 20px; height: 28px"
-            />
+            >
             Vendor is Booked
           </div>
         </template>
@@ -208,14 +209,13 @@
     </template>
     <GuestSignUpModal
       v-if="showGuestSignupModal"
-      :onlyAuth="onlyAuth"
+      :only-auth="onlyAuth"
       @signIn="signIn"
       @signUp="signUp"
       @save="saveGuestComment"
       @authenticate="auth"
       @cancel="showGuestSignupModal = false"
-    >
-    </GuestSignUpModal>
+    />
   </div>
 </template>
 <script>
@@ -261,8 +261,8 @@ export default {
       showCommentEditorPanel: false,
       showGuestSignupModal: false,
       showCursorHelper: false,
-      cursorTopPosition: '0px',
-      cursorLeftPosition: '0px',
+      cursorTopPosition: "0px",
+      cursorLeftPosition: "0px",
     };
   },
   async created() {
@@ -352,7 +352,7 @@ export default {
     },
     handleMouseMove(event) {
       if (!this.showCommentEditorPanel) return;
-      this.showCursorHelper = event.target.className === 'click-capture';
+      this.showCursorHelper = event.target.className === "click-capture";
       this.cursorTopPosition = `${event.clientY - 5}px`;
       this.cursorLeftPosition = `${event.clientX + 25}px`;
     },

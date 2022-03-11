@@ -1,46 +1,50 @@
 <template>
   <div class="vendor-signup-layout-wrapper">
-    <section class="header-wrapper" v-if="step > 0">
+    <section v-if="step > 0" class="header-wrapper">
       <a href="https://www.maryoku.com">
-        <img src="/static/img/maryoku-logo-dark.png" />
+        <img src="/static/img/maryoku-logo-dark.png">
       </a>
-      <v-signup-steps :step="step"></v-signup-steps>
+      <v-signup-steps :step="step" />
     </section>
-    <router-view></router-view>
+    <router-view />
     <section class="footer-wrapper">
       <div class="left d-flex align-center">
         <md-button class="md-vendor-signup md-simple md-vendor" @click="prev()">
-          <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
+          <md-icon class="color-red font-size-30">
+            keyboard_arrow_left
+          </md-icon>
           Back
         </md-button>
         <md-button
           v-if="step != 6"
-          @click="scrollToTop()"
           class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
+          @click="scrollToTop()"
         >
           <span>
-            <img :src="`${$iconURL}common/arrow-right-purple.svg`" class="upward-button" />
+            <img :src="`${$iconURL}common/arrow-right-purple.svg`" class="upward-button">
           </span>
         </md-button>
       </div>
       <div class="right">
         <md-button class="save md-vendor-signup md-simple md-vendor md-outlined" @click="saveDraft()">
-          <img :src="`${$iconURL}common/save-purple.svg`" class="label-icon mr-10" />
+          <img :src="`${$iconURL}common/save-purple.svg`" class="label-icon mr-10">
           Save for later
         </md-button>
-        <md-button class="approve md-vendor-signup md-vendor" @click="next">{{ nextLabel }}</md-button>
+        <md-button class="approve md-vendor-signup md-vendor" @click="next">
+          {{ nextLabel }}
+        </md-button>
       </div>
     </section>
     <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3>
-            <img :src="`${proposalIconsUrl}Asset 588.svg`" />
+            <img :src="`${proposalIconsUrl}Asset 588.svg`">
             {{ status.title }}
           </h3>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`">
         </button>
       </template>
       <template slot="body">
@@ -50,7 +54,9 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button class="cool" @click="hideModal()">Ok, Thanks</button>
+          <button class="cool" @click="hideModal()">
+            Ok, Thanks
+          </button>
         </div>
       </template>
     </modal>
@@ -98,13 +104,13 @@ export default {
             .catch((error) => {
               if (error.message.indexOf("companyName") >= 0) {
                 Swal.fire({
-                  title: `Sorry, Company Name is duplicated. Please choose another.`,
+                  title: "Sorry, Company Name is duplicated. Please choose another.",
                   buttonsStyling: false,
                   confirmButtonClass: "md-button md-success",
                 }).then(() => {});
               } else {
                 Swal.fire({
-                  title: `An account with the name you entered already exists. Please choose a different name.`,
+                  title: "An account with the name you entered already exists. Please choose a different name.",
                   buttonsStyling: false,
                   confirmButtonClass: "md-button md-success",
                 }).then(() => {});
@@ -182,7 +188,7 @@ export default {
         .for(new Vendors({ id: this.vendor.id }))
         .save()
         .then((res) => {
-          this.$router.push(`/vendor/profile/services`);
+          this.$router.push("/vendor/profile/services");
         });
     },
   },

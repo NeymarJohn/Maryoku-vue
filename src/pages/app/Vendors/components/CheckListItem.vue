@@ -2,42 +2,47 @@
   <div 
     class="check-list-item-wrapper" 
     :class="[{'extra': extra}]" 
-    @click="isExpanded=!isExpanded">
+    @click="isExpanded=!isExpanded"
+  >
     <template v-if="!extra">
       <div class="check-item">
         <div class="left">
-          <img :src="`${iconUrl}Group 4781 (3).svg`"/>
-          <span>{{name}}</span>
+          <img :src="`${iconUrl}Group 4781 (3).svg`">
+          <span>{{ name }}</span>
         </div>
         <div class="right">
-          <span v-if="qty">{{qty}}</span>
-          <span class="placeholder" v-else>QTY</span>
-          <img v-if="!isExpanded" :src="`${iconUrl}Group 4770 (2).svg`"/>
-          <img v-else :src="`${iconUrl}Asset 568.svg`"/>
+          <span v-if="qty">{{ qty }}</span>
+          <span v-else class="placeholder">QTY</span>
+          <img v-if="!isExpanded" :src="`${iconUrl}Group 4770 (2).svg`">
+          <img v-else :src="`${iconUrl}Asset 568.svg`">
         </div>
       </div>
-      <p v-if="isExpanded">{{desc}}</p>
+      <p v-if="isExpanded">
+        {{ desc }}
+      </p>
     </template>
     <template v-else>
       <div class="extra-item">
         <div class="left">
-          <span class="name">{{name}}</span>
-          <span v-if="qty">{{qty}}</span>
-          <span class="placeholder" v-else>QTY</span>
-          <span class="price" v-if="price">{{price}}</span>
+          <span class="name">{{ name }}</span>
+          <span v-if="qty">{{ qty }}</span>
+          <span v-else class="placeholder">QTY</span>
+          <span v-if="price" class="price">{{ price }}</span>
         </div>
         <div class="right">
-          <img v-if="!isExpanded" :src="`${iconUrl}Group 4770 (2).svg`"/>
-          <img v-else :src="`${iconUrl}Asset 568.svg`"/>
+          <img v-if="!isExpanded" :src="`${iconUrl}Group 4770 (2).svg`">
+          <img v-else :src="`${iconUrl}Asset 568.svg`">
         </div>
       </div>
-      <p v-if="isExpanded">{{desc}}</p>
+      <p v-if="isExpanded">
+        {{ desc }}
+      </p>
     </template>
   </div>
 </template>
 <script>
   export default {
-    name: 'proposal-add-files',
+    name: "ProposalAddFiles",
     components: {
     },
     props: {
@@ -51,20 +56,20 @@
     data () {
       return {
         isExpanded: false,
-      }
+      };
     },
-    methods: {
+    computed: {
+    },
+    watch: {
     },
     created() {
 
     },
     mounted() {
     },
-    computed: {
-    },
-    watch: {
+    methods: {
     }
-  }
+  };
 </script>
 <style lang="scss" scoped>
   .check-list-item-wrapper {

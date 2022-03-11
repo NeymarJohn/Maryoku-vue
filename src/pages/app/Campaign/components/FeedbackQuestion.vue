@@ -1,39 +1,43 @@
 <template>
   <div class="d-flex mt-50 feedback-question" :class="{ isHidden: !data.showQuestion }">
     <div class="feedback-rating ml-50 mr-50">
-      <div class="d-flex" >
+      <div class="d-flex">
         <img
           v-if="data.icon"
           class="icon-question"
           :src="`${$iconURL}Budget+Elements/${data.icon}`"
-        />
+        >
         <img
           v-else
           class="icon-question"
           src="https://static-maryoku.s3.amazonaws.com/storage/icons/Campaign/path-13703.svg"
-        />
-        <div class="font-size-20 ml-10 mb-20 font-bold" >{{ data.label }}</div>
+        >
+        <div class="font-size-20 ml-10 mb-20 font-bold">
+          {{ data.label }}
+        </div>
       </div>
       <star-rating
+        v-if="!disabled"
+        v-model="data.rank"
         :border-width="0"
         :star-size="30"
         :show-rating="false"
         @rating-selected="setRating"
-        v-model="data.rank"
-        v-if="!disabled"
-      ></star-rating>
-      <star-rating :border-width="0" :star-size="30" :show-rating="false" read-only v-else></star-rating>
-      <div class="font-size-15 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
+      />
+      <star-rating v-else :border-width="0" :star-size="30" :show-rating="false" read-only />
+      <div class="font-size-15 mt-10 text-transform-capitalize">
+        {{ rankLabel }}
+      </div>
     </div>
     <div class="feedback-message">
       <div class="font-size-20 font-bold mb-20">
         {{ data.question }}
       </div>
       <div>
-        <maryoku-textarea size="narrow" :placeholder="placeholder" v-model="data.comment" :disabled="disabled"></maryoku-textarea>
+        <maryoku-textarea v-model="data.comment" size="narrow" :placeholder="placeholder" :disabled="disabled" />
       </div>
     </div>
-    <md-switch v-if="showSwitch" class="feedback-btn-switch section below-label large-switch md-switch-rose" v-model="data.showQuestion" :value="true">
+    <md-switch v-if="showSwitch" v-model="data.showQuestion" class="feedback-btn-switch section below-label large-switch md-switch-rose" :value="true">
       <span v-if="data.showQuestion">Hide this question</span>
       <span v-if="!data.showQuestion">Show this question</span>
     </md-switch>
@@ -75,14 +79,6 @@ export default {
       data: {},
     };
   },
-  methods: {
-    setRating(rating) {
-      this.rating = rating;
-    },
-  },
-  created() {
-    this.data = this.feedbackData;
-  },
   computed: {
     rankLabel() {
       if (this.data.rank) {
@@ -108,6 +104,14 @@ export default {
         this.$emit("change", newValue);
       },
       deep: true,
+    },
+  },
+  created() {
+    this.data = this.feedbackData;
+  },
+  methods: {
+    setRating(rating) {
+      this.rating = rating;
     },
   },
 };

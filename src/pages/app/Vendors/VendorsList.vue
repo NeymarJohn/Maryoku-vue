@@ -1,56 +1,69 @@
 <template>
   <md-card class="md-card-plain clear-margins vendors-pool-list">
     <md-card-content>
-      <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-model="filteredVendorsList">
-        <md-table-toolbar >
+      <md-table v-model="filteredVendorsList" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" class="clear-margins">
+        <md-table-toolbar>
           <div class="md-toolbar-section-start">
             <md-field>
               <md-input
+                v-model="searchQuery"
                 type="search"
                 class="mb-1"
                 clearable
                 placeholder="Search vendors"
-                v-model="searchQuery">
-              </md-input>
+              />
             </md-field>
           </div>
-          <div class="md-toolbar-section-end" v-if="false">
+          <div v-if="false" class="md-toolbar-section-end">
             <md-button class="md-icon-button">
               <md-icon>delete</md-icon>
             </md-button>
           </div>
         </md-table-toolbar>
         <md-table-empty-state :md-description="`No vendors found for '${searchQuery}'. Try a different search term or create add new vendor.`">
-          <md-button style="display: inline-block;" class="md-info md-sm" @click="$emit('add-new-vendor')">Add Vendor</md-button>
-          <md-button style="display: inline-block;" class="md-purple md-sm" @click="$emit('open-upload-modal')">Import Vendors From Spreadsheet</md-button>
+          <md-button style="display: inline-block;" class="md-info md-sm" @click="$emit('add-new-vendor')">
+            Add Vendor
+          </md-button>
+          <md-button style="display: inline-block;" class="md-purple md-sm" @click="$emit('open-upload-modal')">
+            Import Vendors From Spreadsheet
+          </md-button>
         </md-table-empty-state>
-        <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" class="table-striped">
+        <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }" class="table-striped">
           <md-table-cell md-label="Vendor Name" class="text-bold">
             <a href="javascript: void(null);" @click="routeToVendor(item.id, $event)">
-              {{ item.vendorDisplayName}}
+              {{ item.vendorDisplayName }}
             </a>
           </md-table-cell>
-          <md-table-cell md-label="Email">{{ item.vendorMainEmail }}</md-table-cell>
-          <md-table-cell md-label="Phone">{{ item.vendorMainPhoneNumber }}</md-table-cell>
-          <md-table-cell md-label="Website">{{ item.vendorWebsite }}</md-table-cell>
-          <md-table-cell md-label="Vendor Category">{{ categoryTitle(item.vendorCategory, buildingBlocksList) }}</md-table-cell>
+          <md-table-cell md-label="Email">
+            {{ item.vendorMainEmail }}
+          </md-table-cell>
+          <md-table-cell md-label="Phone">
+            {{ item.vendorMainPhoneNumber }}
+          </md-table-cell>
+          <md-table-cell md-label="Website">
+            {{ item.vendorWebsite }}
+          </md-table-cell>
+          <md-table-cell md-label="Vendor Category">
+            {{ categoryTitle(item.vendorCategory, buildingBlocksList) }}
+          </md-table-cell>
           <md-table-cell md-label="Tags">
             <md-chips
+              id="tagging"
               v-model="item.vendorTagging"
               style="padding: 0; margin: 0;"
               class="md-primary"
               name="tagging"
-              id="tagging"
               :md-deletable="false"
-              :md-static="true"/>
+              :md-static="true"
+            />
           </md-table-cell>
           <md-table-cell style="white-space: nowrap;" class="hover">
-            <md-button  @click.prevent="editVendorDetails(item)" class="md-info md-xs md-just-icon md-round">
+            <md-button class="md-info md-xs md-just-icon md-round" @click.prevent="editVendorDetails(item)">
               <md-icon>edit</md-icon>
             </md-button>
             <md-button
-              @click.prevent="remove(item)"
               class="md-danger md-xs md-just-icon md-round"
+              @click.prevent="remove(item)"
             >
               <md-icon>delete</md-icon>
             </md-button>
@@ -100,44 +113,44 @@
   </md-table>-->
 </template>
 <script>
-import { categoryTitle } from './helpers'
+import { categoryTitle } from "./helpers";
 
 export default {
-  props: ['vendorsList', 'buildingBlocksList'],
+  props: ["vendorsList", "buildingBlocksList"],
   data () {
     return {
-      searchQuery: '',
+      searchQuery: "",
       filteredVendorsList: []
+    };
+  },
+  watch: {
+    searchQuery (newVal, oldVal) {
+      this.filterVendors();
     }
   },
   mounted () {
-    this.filteredVendorsList = this.vendorsList
+    this.filteredVendorsList = this.vendorsList;
   },
   methods: {
     categoryTitle,
     editVendorDetails (vendor) {
-      this.$emit('editVendorDetails', vendor)
+      this.$emit("editVendorDetails", vendor);
     },
     routeToVendor (vendorId) {
-      this.$router.push({ name: 'VendorDetails', params: { id: vendorId } })
+      this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
     },
     remove (vendor) {
-      this.$emit('delete', vendor)
+      this.$emit("delete", vendor);
     },
     filterVendors () {
       this.filteredVendorsList = _.filter(this.vendorsList, (v) => {
-        let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
-        let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
-        return byDisplayName || byCategory
-      })
-    }
-  },
-  watch: {
-    searchQuery (newVal, oldVal) {
-      this.filterVendors()
+        let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+        let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+        return byDisplayName || byCategory;
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 </style>

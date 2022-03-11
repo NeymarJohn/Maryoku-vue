@@ -3,55 +3,55 @@
     <div class="form-main">
       <div class="form-block">
         <div>
-          <Title class="emp-title" title="Oh, wow so thats you" titleText="titleStyle" />
+          <Title class="emp-title" title="Oh, wow so thats you" title-text="titleStyle" />
         </div>
         <InputText
-          labelStyle="label_input"
+          label-style="label_input"
           label="Full Name"
-          fieldStyle="field_input"
+          field-style="field_input"
           required
           name="full_name"
-          :onChange="onChange"
-          :isErrors="isErrors"
+          :on-change="onChange"
+          :is-errors="isErrors"
           :value="full_name"
         />
         <InputText
-          labelStyle="label_input"
+          label-style="label_input"
           label="Email Address"
           required
           name="email"
-          :onChange="onChange"
-          :isErrors="isErrors"
+          :on-change="onChange"
+          :is-errors="isErrors"
           :value="email"
         />
         <div class="om_phone-block">
           <div class="phone_country-code">
             <Select
               label="Country code"
-              labelStyle="om_label_input"
+              label-style="om_label_input"
               :list="list_code"
               name="country_code"
               required
-              :onChange="onChange"
-              :valueName="['name','dial_code']"
-              withSpan
+              :on-change="onChange"
+              :value-name="['name','dial_code']"
+              with-span
               :trim="isTrim"
-              :isErrors="isErrors"
+              :is-errors="isErrors"
             />
           </div>
           <InputText
-            labelStyle="om_label_input"
+            label-style="om_label_input"
             label="Phone Number"
             :value="phone"
             name="phone"
-            :onChange="onChange"
-            :isErrors="isErrors"
+            :on-change="onChange"
+            :is-errors="isErrors"
             required
           />
         </div>
       </div>
       <div class="button-block">
-        <Button text="next" :onClick="submitForm" class="md-success md-fileinput button-md-common" />
+        <Button text="next" :on-click="submitForm" class="md-success md-fileinput button-md-common" />
       </div>
     </div>
     <div class="logo-main">
@@ -59,8 +59,8 @@
         <img
           class="emp-logo"
           src="https://static-maryoku.s3.amazonaws.com/storage/img/secure_booker.png"
-        />
-        <Title title="Join the Hive" titleBlock="titleBlock" titleText="titleStyle" />
+        >
+        <Title title="Join the Hive" title-block="titleBlock" title-text="titleStyle" />
       </div>
     </div>
   </div>

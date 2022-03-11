@@ -1,19 +1,19 @@
 <template>
   <div class="dot-label">
-    <span class="color-dot" v-if="color" :style="`background-color:${color}`"></span>
-    <slot></slot>
+    <span v-if="color" class="color-dot" :style="`background-color:${color}`" />
+    <slot />
   </div>
 </template>
 <script>
 export default {
-  name: 'badge',
+  name: "Badge",
   props: {
     color: {
       type: String,
-      default: ''
+      default: ""
     },
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .dot-label {

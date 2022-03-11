@@ -1,16 +1,16 @@
 <template>
   <div class="music-card-root">
     <div class="music-card" :class="{selected: checked}">
-      <img :src="`${$storageURL}${data.thumb}`" />
+      <img :src="`${$storageURL}${data.thumb}`">
       <div class="mask" :class="{playing:isPlaying}">
-        <span class="player-icon" @click="playMusic" v-if="!isPlaying">
+        <span v-if="!isPlaying" class="player-icon" @click="playMusic">
           <md-icon>play_arrow</md-icon>
         </span>
         <radial-progress-bar
           v-if="isPlaying"
-          innerStrokeColor="white"
-          startColor="#f51355"
-          stopColor="#f51355"
+          inner-stroke-color="white"
+          start-color="#f51355"
+          stop-color="#f51355"
           :diameter="212"
           :completed-steps="completedSteps"
           :total-steps="totalSteps"
@@ -22,10 +22,14 @@
       </div>
     </div>
     <div class="music-infor">
-      <md-checkbox class="md-checkbox-circle md-red" v-model="checked"></md-checkbox>
+      <md-checkbox v-model="checked" class="md-checkbox-circle md-red" />
       <div>
-        <div class="music-title">{{this.data.title}}</div>
-        <div class="music-singer">{{this.data.singer}}</div>
+        <div class="music-title">
+          {{ this.data.title }}
+        </div>
+        <div class="music-singer">
+          {{ this.data.singer }}
+        </div>
       </div>
     </div>
   </div>
@@ -57,12 +61,6 @@ export default {
       player: null,
     };
   },
-  created() {
-    this.player = new Audio(
-      `https://static-maryoku.s3.amazonaws.com/storage/${this.data.src}`,
-    );
-    this.checked = this.selected;
-  },
   watch: {
     checked(newValue, oldValue) {
       if (newValue) {
@@ -72,6 +70,12 @@ export default {
     selected(newValue, oldValue) {
       this.checked = newValue;
     },
+  },
+  created() {
+    this.player = new Audio(
+      `https://static-maryoku.s3.amazonaws.com/storage/${this.data.src}`,
+    );
+    this.checked = this.selected;
   },
   methods: {
     playMusic() {

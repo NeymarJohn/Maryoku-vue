@@ -2,58 +2,62 @@
   <div class="note-panel">
     <div class="note-panel-header d-flex justify-content-between">
       Notes
-      <event-notes-filter @filter="filterNotes" :filterUsers="getFilterUsers"></event-notes-filter>
+      <event-notes-filter :filter-users="getFilterUsers" @filter="filterNotes" />
     </div>
-    <div class="note-panel-content" v-if="notes.length === 0">
+    <div v-if="notes.length === 0" class="note-panel-content">
       <div style="width: fit-content; margin: 10px auto ;">
-        <img :src="`${$iconURL}Notes/note-background.svg`" width="120px" />
+        <img :src="`${$iconURL}Notes/note-background.svg`" width="120px">
       </div>
       <span class="color-red">
         Add your personal tasks & notes
-        <br />to get things done
+        <br>to get things done
       </span>
     </div>
-    <maryoku-input v-model="editingNote.description" placeholder="Add new note..."></maryoku-input>
+    <maryoku-input v-model="editingNote.description" placeholder="Add new note..." />
     <div v-if="showEditor">
       <div class="setting-item">
         <div class="d-flex justify-content-between align-center">
           <div>
-            <img :src="`${$iconURL}Notes/bell-dark.svg`" />Remind me on
+            <img :src="`${$iconURL}Notes/bell-dark.svg`">Remind me on
           </div>
-          <md-switch v-model="editingNote.isReminding"></md-switch>
+          <md-switch v-model="editingNote.isReminding" />
         </div>
-        <div class="d-flex" v-if="editingNote.isReminding">
+        <div v-if="editingNote.isReminding" class="d-flex">
           <maryoku-input
             v-model="editingNote.remindingDateString"
-            inputStyle="date"
+            input-style="date"
             placeholder="DD/MM/YY"
             readonly
-          ></maryoku-input>
-          <div style="width:20px"></div>
+          />
+          <div style="width:20px" />
           <maryoku-input
             v-model="editingNote.remindingTimeString"
-            inputStyle="time"
+            input-style="time"
             placeholder="00:00 PM"
             readonly
-          ></maryoku-input>
+          />
         </div>
       </div>
       <div class="setting-item">
         <div class="d-flex justify-content-between align-center">
           <div>
-            <img :src="`${$iconURL}Notes/users-dark.svg`" />Give it to someone else
+            <img :src="`${$iconURL}Notes/users-dark.svg`">Give it to someone else
           </div>
-          <md-switch v-model="editingNote.isGivenEmail"></md-switch>
+          <md-switch v-model="editingNote.isGivenEmail" />
         </div>
-        <maryoku-input v-if="editingNote.isGivenEmail" v-model="editingNote.givingEmail"></maryoku-input>
+        <maryoku-input v-if="editingNote.isGivenEmail" v-model="editingNote.givingEmail" />
       </div>
       <div class="text-right">
-        <md-button class="md-simple md-black normal-btn" @click="clear">Clear</md-button>
-        <md-button class="md-default md-red normal-btn" @click="saveNote" type="email">Save</md-button>
+        <md-button class="md-simple md-black normal-btn" @click="clear">
+          Clear
+        </md-button>
+        <md-button class="md-default md-red normal-btn" type="email" @click="saveNote">
+          Save
+        </md-button>
       </div>
     </div>
     <div class="note-items">
-      <event-note-item v-for="(note) in notes" :key="note.id" :note="note" @edit="setEditNote"></event-note-item>
+      <event-note-item v-for="(note) in notes" :key="note.id" :note="note" @edit="setEditNote" />
     </div>
   </div>
 </template>
@@ -69,7 +73,7 @@ import EventNotesFilter from "./EventNotesFilter";
 import moment from "moment";
 
 export default {
-  name: "event-note-panel",
+  name: "EventNotePanel",
   components: {
     MaryokuInput,
     TimeInput,

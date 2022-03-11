@@ -1,5 +1,5 @@
 <template>
-  <svg class="chart" width="630" height="300" aria-labelledby="title desc" role="img" id="bar_chart" ref="bar_chart">
+  <svg id="bar_chart" ref="bar_chart" class="chart" width="630" height="300" aria-labelledby="title desc" role="img">
     <title id="title">A bar chart showing information</title>
     <desc id="desc">4 apples; 8 bananas; 15 kiwis; 16 oranges; 23 lemons</desc>
     <g
@@ -25,18 +25,18 @@
         {{ chartDataItem.label }}
       </text>
     </g>
-    <g :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`" ref="tooltip">
+    <g ref="tooltip" :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`">
       <path
+        v-if="toolTipPosition == 'left'"
         id="svgMask"
         d="M3,72 L182,72 182,53 190,47 182,42 182,23 3,23 z"
         fill="#e6e5e5"
-        v-if="toolTipPosition == 'left'"
       />
       <path
+        v-if="toolTipPosition == 'right'"
         id="svgMask"
         d="M12,72 L190,72 190,23 12,23 12,52 3,47 12,42 z"
         fill="#e6e5e5"
-        v-if="toolTipPosition == 'right'"
       />
       <text
         id="tooltip"

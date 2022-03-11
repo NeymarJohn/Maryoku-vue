@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-service-table-wrapper" v-if="services.length > 0">
+  <div v-if="services.length > 0" class="proposal-service-table-wrapper">
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
@@ -9,10 +9,10 @@
       </div>
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
-        :serviceType="tableCategory"
         :key="req.requirementTitle"
+        :service-type="tableCategory"
         :index="rIndex"
-        :defaultItem="req"
+        :default-item="req"
         :active="true"
         :step="1"
         @save="updateItem"
@@ -107,10 +107,10 @@
           </div>
         </div>
       </div> -->
-      <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
+      <div v-if="tableCategory === 'cost'" class="editable-sub-items-footer">
         <span class="text-right">Total</span>
-        <span> </span>
-        <span> </span>
+        <span />
+        <span />
         <span class="text-right"> ${{ totalPrice | withComma }} </span>
       </div>
     </div>
@@ -130,13 +130,18 @@ import S3Service from "@/services/s3.service";
 import _ from "underscore";
 
 export default {
-  name: "proposal-service-table",
+  name: "ProposalServiceTable",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
     ProposalServiceTableItem,
     Money,
     vueDropzone: vue2Dropzone,
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
   },
   props: {
     category: String,
@@ -203,6 +208,109 @@ export default {
       },
       proposalData: {},
     };
+  },
+  computed: {
+    requirements() {
+      console.log(this.category);
+      return this.proposalRequest.componentRequirements[this.category];
+    },
+    optionalRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    mandatoryRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => item.mustHave);
+    },
+    proposalRequest() {
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+    },
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    },
+    services: {
+      get: function () {
+        if (this.tableCategory === "cost") return this.$store.state.proposalForNonMaryoku.costServices[this.category];
+        else if (this.tableCategory === "included") {
+          console.log("object", this.$store.state.proposalForNonMaryoku.includedServices[this.category]);
+          return this.$store.state.proposalForNonMaryoku.includedServices[this.category];
+        } else if (this.tableCategory === "extra")
+          return this.$store.state.proposalForNonMaryoku.extraServices[this.category];
+      },
+      set: function (newServices) {
+        if (this.tableCategory === "cost")
+          this.$store.commit("proposalForNonMaryoku/setCostServices", {
+            category: this.category,
+            services: newServices,
+          });
+        else if (this.tableCategory === "included")
+          this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
+            category: this.category,
+            services: newServices,
+          });
+        else if (this.tableCategory === "extra")
+          this.$store.commit("proposalForNonMaryoku/setExtraServices", {
+            category: this.category,
+            services: newServices,
+          });
+      },
+    },
+    calculatedTotal() {
+      return this.totalPrice - this.discount.price + this.taxPrice;
+    },
+    taxPrice() {
+      return Math.round(((this.totalPrice - this.discount.price) * this.tax) / 100);
+    },
+    totalPrice() {
+      if (!this.services) {
+        return 0;
+      }
+      const sumPrice = this.services.reduce((s, item) => {
+        return s + (item.isComplimentary ? 0 : item.requirementValue * item.price);
+      }, 0);
+      return sumPrice;
+    },
+  },
+  watch: {},
+  created() {
+    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+    this.$root.$on("remove-proposal-requirement", (item) => {
+      this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
+        (req) => req.requirementTitle != item.requirementTitle,
+      );
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      this.$forceUpdate();
+      this.cancel();
+    });
+
+    this.$root.$on("add-service-item", (item) => {
+      this.clickedItem = !this.clickedItem;
+      this.serviceItem = item;
+      this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+      this.proposalRequest.requirements[index] = item;
+      this.proposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      this.$forceUpdate();
+    });
+
+    if (this.$refs.servicesCont) {
+      this.servicesWidth = this.$refs.servicesCont.clientWidth;
+    }
+    this.tax = this.$store.state.proposalForNonMaryoku.taxes[this.category];
+    if (!this.tax) this.tax = 0;
+    this.discount = this.$store.state.proposalForNonMaryoku.discounts[this.category];
+    if (!this.discount) {
+      this.discount = {
+        percentage: 0,
+        price: 0,
+      };
+    } else if (!this.discount.price) {
+      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
+    }
   },
   methods: {
     getObject(item) {
@@ -361,114 +469,6 @@ export default {
       const extension = file.type.split("/")[1];
     },
   },
-  created() {
-    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-    this.$root.$on("remove-proposal-requirement", (item) => {
-      this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
-        (req) => req.requirementTitle != item.requirementTitle,
-      );
-      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      this.$forceUpdate();
-      this.cancel();
-    });
-
-    this.$root.$on("add-service-item", (item) => {
-      this.clickedItem = !this.clickedItem;
-      this.serviceItem = item;
-      this.qty = this.unit = this.subTotal = 0;
-      this.selectedQuickButton = item;
-    });
-
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.proposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      this.$forceUpdate();
-    });
-
-    if (this.$refs.servicesCont) {
-      this.servicesWidth = this.$refs.servicesCont.clientWidth;
-    }
-    this.tax = this.$store.state.proposalForNonMaryoku.taxes[this.category];
-    if (!this.tax) this.tax = 0;
-    this.discount = this.$store.state.proposalForNonMaryoku.discounts[this.category];
-    if (!this.discount) {
-      this.discount = {
-        percentage: 0,
-        price: 0,
-      };
-    } else if (!this.discount.price) {
-      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
-    }
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  computed: {
-    requirements() {
-      console.log(this.category);
-      return this.proposalRequest.componentRequirements[this.category];
-    },
-    optionalRequirements() {
-      if (!this.requirements) return [];
-      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    mandatoryRequirements() {
-      if (!this.requirements) return [];
-      return this.requirements.filter((item) => item.mustHave);
-    },
-    proposalRequest() {
-      return this.$store.state.proposalForNonMaryoku.proposalRequest;
-    },
-    vendor() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
-    },
-    services: {
-      get: function () {
-        if (this.tableCategory === "cost") return this.$store.state.proposalForNonMaryoku.costServices[this.category];
-        else if (this.tableCategory === "included") {
-          console.log("object", this.$store.state.proposalForNonMaryoku.includedServices[this.category]);
-          return this.$store.state.proposalForNonMaryoku.includedServices[this.category];
-        } else if (this.tableCategory === "extra")
-          return this.$store.state.proposalForNonMaryoku.extraServices[this.category];
-      },
-      set: function (newServices) {
-        if (this.tableCategory === "cost")
-          this.$store.commit("proposalForNonMaryoku/setCostServices", {
-            category: this.category,
-            services: newServices,
-          });
-        else if (this.tableCategory === "included")
-          this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
-            category: this.category,
-            services: newServices,
-          });
-        else if (this.tableCategory === "extra")
-          this.$store.commit("proposalForNonMaryoku/setExtraServices", {
-            category: this.category,
-            services: newServices,
-          });
-      },
-    },
-    calculatedTotal() {
-      return this.totalPrice - this.discount.price + this.taxPrice;
-    },
-    taxPrice() {
-      return Math.round(((this.totalPrice - this.discount.price) * this.tax) / 100);
-    },
-    totalPrice() {
-      if (!this.services) {
-        return 0;
-      }
-      const sumPrice = this.services.reduce((s, item) => {
-        return s + (item.isComplimentary ? 0 : item.requirementValue * item.price);
-      }, 0);
-      return sumPrice;
-    },
-  },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

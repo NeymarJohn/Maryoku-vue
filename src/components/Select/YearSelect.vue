@@ -1,19 +1,19 @@
 <template>
-  <div class="select-wrapper" v-click-outside="close" @click="handleOpen">
+  <div v-click-outside="close" class="select-wrapper" @click="handleOpen">
     <div class="select" :class="{ open: isOpen }">
       <div class="select__trigger">
         <span style="display: inline-block; padding-left: 120px">{{ selected }}</span>
-        <div class="arrow"></div>
+        <div class="arrow" />
       </div>
       <div class="custom-options">
         <span
           v-for="(item, index) of data"
+          :key="index"
           class="custom-option"
           :class="{ selected: item == selected }"
-          :key="index"
           :data-value="item"
           @click="handleClick"
-          >{{ item }}
+        >{{ item }}
         </span>
       </div>
     </div>
@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'YearSelect',
+  name: "YearSelect",
   props: {
     width: String,
     data: Array,
@@ -30,29 +30,29 @@ export default {
   },
   data () {
     return {
-      selected: '',
+      selected: "",
       isOpen: false,
-    }
+    };
   },
   mounted () {
-    this.selected = this.initialValue
+    this.selected = this.initialValue;
   },
   methods: {
     close () {
-      this.isOpen = false
+      this.isOpen = false;
     },
     handleOpen () {
-      this.isOpen = !this.isOpen
+      this.isOpen = !this.isOpen;
     },
     handleClick (e) {
-      e.stopPropagation()
-      const value = e.target.dataset.value
-      this.selected = value
-      this.$emit('valueChanged', value)
-      this.close()
+      e.stopPropagation();
+      const value = e.target.dataset.value;
+      this.selected = value;
+      this.$emit("valueChanged", value);
+      this.close();
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">

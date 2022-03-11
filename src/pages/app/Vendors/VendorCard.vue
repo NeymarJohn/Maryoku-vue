@@ -2,8 +2,12 @@
   <div :class="!grid && 'list'">
     <md-card class="md-elevation" :class="!grid && 'list'">
       <md-card-header>
-        <div class="md-title">{{ vendor.vendorDisplayName }}</div>
-        <div class="md-subhead">{{ vendor.vendorCategory }}</div>
+        <div class="md-title">
+          {{ vendor.vendorDisplayName }}
+        </div>
+        <div class="md-subhead">
+          {{ vendor.vendorCategory }}
+        </div>
       </md-card-header>
 
       <md-card-content>{{ vendor.vendorMainEmail || "-" }}</md-card-content>
@@ -43,6 +47,7 @@ import EventComponentVendor from "@/models/EventComponentVendor";
 import _ from "underscore";
 
 export default {
+  name: "VendorCard",
   props: {
     vendor: Object,
     grid: Boolean,
@@ -84,7 +89,6 @@ export default {
       default: null,
     },
   },
-  name: "vendor-card",
   methods: {
     async setRanking(id, ranking) {
       console.log("sss");

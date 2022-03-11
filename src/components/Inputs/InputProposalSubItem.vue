@@ -1,7 +1,10 @@
 <template>
   <div class="input-proposal-sub-item-wrapper">
-    <h6 class="title" v-if="title">{{ title }}</h6>
+    <h6 v-if="title" class="title">
+      {{ title }}
+    </h6>
     <input
+      v-if="!items"
       type="text"
       :name="name"
       class="input-proposal"
@@ -9,9 +12,9 @@
       :placeholder="placeholder"
       :style="`padding-left: ${icon || img ? '3rem' : '1.2rem'}`"
       @change="changeValue"
-      v-if="!items"
-    />
+    >
     <input
+      v-else
       type="text"
       :name="name"
       class="input-proposal category"
@@ -20,10 +23,11 @@
       :value="selectedItem"
       readonly
       @click="expanded = !expanded"
-      v-else
-    />
-    <md-icon v-if="icon">{{ icon }}</md-icon>
-    <img v-if="img != '' && !items" :src="img" />
+    >
+    <md-icon v-if="icon">
+      {{ icon }}
+    </md-icon>
+    <img v-if="img != '' && !items" :src="img">
     <img
       v-else
       :src="img"
@@ -33,7 +37,7 @@
         transform: rotate(90deg);
         width: 12px;
       `"
-    />
+    >
     <ul v-if="expanded && items">
       <li v-for="(item, index) in items" :key="index" @click="selectValue(item)">
         {{ item }}
@@ -43,7 +47,7 @@
 </template>
 <script>
 export default {
-  name: "input-proposal-sub-item",
+  name: "InputProposalSubItem",
   model: {},
   props: {
     name: String,

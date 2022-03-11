@@ -3,13 +3,19 @@
     <div class="authentification">
       <h2>VueJS + Google Calendar Example</h2>
       Authentification
-      <button v-if="!authorized" @click="handleAuthClick">Sign In</button>
-      <button v-if="authorized" @click="handleSignoutClick">Sign Out</button>
+      <button v-if="!authorized" @click="handleAuthClick">
+        Sign In
+      </button>
+      <button v-if="authorized" @click="handleSignoutClick">
+        Sign Out
+      </button>
     </div>
-    <hr />
-    <button v-if="authorized" @click="getData">Get Data</button>
-    <div class="item-container" v-if="authorized && items">
-      <pre v-html="items"></pre>
+    <hr>
+    <button v-if="authorized" @click="getData">
+      Get Data
+    </button>
+    <div v-if="authorized && items" class="item-container">
+      <pre v-html="items" />
     </div>
   </div>
 </template>
@@ -160,7 +166,7 @@ export default {
           } else if (/null/.test(match)) {
             cls = "null";
           }
-          return '<span class="' + cls + '">' + match + "</span>";
+          return "<span class=\"" + cls + "\">" + match + "</span>";
         },
       );
     },

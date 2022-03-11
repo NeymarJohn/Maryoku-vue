@@ -7,57 +7,69 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}common/sync-calendar-purple.svg`" />
-        <div class="font-size-30 font-bold mt-20">Calendar Sync</div>
-        <div class="mt-20">Select the calendar you want to sync with</div>
+        <img :src="`${$iconURL}common/sync-calendar-purple.svg`">
+        <div class="font-size-30 font-bold mt-20">
+          Calendar Sync
+        </div>
+        <div class="mt-20">
+          Select the calendar you want to sync with
+        </div>
         <div class="mt-30 d-flex justify-content-center mb-40">
           <div
-            @click="emailAccount = 'google'"
             class="calendar-selector mr-40"
             :class="{ active: emailAccount === 'google' }"
+            @click="emailAccount = 'google'"
           >
             <div>
-              <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
-              <div class="font-bold mt-20">Google</div>
+              <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px">
+              <div class="font-bold mt-20">
+                Google
+              </div>
             </div>
           </div>
           <div
-            @click="emailAccount = 'outlook'"
             class="calendar-selector"
             :class="{ active: emailAccount === 'outlook' }"
+            @click="emailAccount = 'outlook'"
           >
             <div>
-              <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
-              <div class="font-bold mt-20">Outlook</div>
+              <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px">
+              <div class="font-bold mt-20">
+                Outlook
+              </div>
             </div>
           </div>
         </div>
         <div class="text-left tips">
           <div class="mb-20 d-flex">
-            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
+            <img :src="`${$iconURL}common/hint.svg`" class="mr-10">
             <div>
               Sync with your regular calendar to keep your Maryoku calendar up to date with all the latest additions &
               deletions.
             </div>
           </div>
           <div class="mb-20 d-flex">
-            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
+            <img :src="`${$iconURL}common/hint.svg`" class="mr-10">
             <div>
               This sync is one-way – any changes you make to your Maryoku calendar won’t show up on your regular
               calendar
             </div>
           </div>
           <div class="d-flex">
-            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
+            <img :src="`${$iconURL}common/hint.svg`" class="mr-10">
             <div>Remember to always check your Maryoku calendar for in-depth event information</div>
           </div>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-simple md-vendor mt-20" @click="close">Cancel</md-button>
-      <md-button class="md-vendor mt-20 sync_button" @click="syncCalendar">Sync</md-button></template
-    >
+      <md-button class="md-simple md-vendor mt-20" @click="close">
+        Cancel
+      </md-button>
+      <md-button class="md-vendor mt-20 sync_button" @click="syncCalendar">
+        Sync
+      </md-button>
+    </template>
   </modal>
 </template>
 <script>
@@ -91,10 +103,6 @@ export default {
     },
     events: [Array],
   },
-  created() {
-    this.api = gapi;
-    this.api.load("client:auth2", this.initClient);
-  },
   data() {
     return {
       showZoomLink: false,
@@ -103,6 +111,10 @@ export default {
       authorized: false,
       isSyncEntireCalendar: true
     };
+  },
+  created() {
+    this.api = gapi;
+    this.api.load("client:auth2", this.initClient);
   },
   methods: {
     close() {

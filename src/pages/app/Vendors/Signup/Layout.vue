@@ -1,41 +1,48 @@
 <template>
   <div class="vendor-signup-layout-wrapper">
-    <section class="header-wrapper" v-if="step > 0">
+    <section v-if="step > 0" class="header-wrapper">
       <a href="https://www.maryoku.com">
-        <img src="/static/img/maryoku-logo-dark.png" />
+        <img src="/static/img/maryoku-logo-dark.png">
       </a>
-      <VSignupSteps :step="step"></VSignupSteps>
+      <VSignupSteps :step="step" />
     </section>
-    <router-view></router-view>
+    <router-view />
     <template v-if="step < 7">
-      <section class="footer-wrapper" :class="{ approved: step > 0 }" v-if="step > 0">
+      <section v-if="step > 0" class="footer-wrapper" :class="{ approved: step > 0 }">
         <div class="left d-flex align-center">
           <md-button class="md-vendor-signup md-simple md-vendor" @click="prev()">
-            <md-icon class="md-vendor font-size-30">keyboard_arrow_left</md-icon>
+            <md-icon class="md-vendor font-size-30">
+              keyboard_arrow_left
+            </md-icon>
             Back
           </md-button>
           <md-button
             v-if="step != 6"
-            @click="scrollToTop()"
             class="md-button md-button md-simple md-just-icon md-theme-default md-vendor custom_scroll_btn md-theme-default"
+            @click="scrollToTop()"
           >
-            <md-icon class="md-vendor font-size-30">keyboard_arrow_up</md-icon>
+            <md-icon class="md-vendor font-size-30">
+              keyboard_arrow_up
+            </md-icon>
           </md-button>
         </div>
         <div class="right">
           <md-button class="save md-vendor-signup md-simple md-vendor md-outlined" @click="saveDraft()">
-            <img :src="`${iconPurple}Purple Icons/Icon_Save.svg`" class="label-icon mr-10" />
+            <img :src="`${iconPurple}Purple Icons/Icon_Save.svg`" class="label-icon mr-10">
             Save for later
           </md-button>
-          <md-button class="approve md-vendor-signup md-vendor" @click="next">{{ nextLabel }}</md-button>
+          <md-button class="approve md-vendor-signup md-vendor" @click="next">
+            {{ nextLabel }}
+          </md-button>
         </div>
       </section>
-      <section class="footer-wrapper" v-else>
+      <section v-else class="footer-wrapper">
         <md-button
           class="approve md-vendor-signup md-vendor"
-          @click="approve()"
           :class="{ disabled: !validateBasicFields }"
-          >Approve & Begin
+          @click="approve()"
+        >
+          Approve & Begin
         </md-button>
       </section>
     </template>
@@ -43,12 +50,12 @@
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3>
-            <img :src="`${proposalIconsUrl}Asset 588.svg`" />
+            <img :src="`${proposalIconsUrl}Asset 588.svg`">
             {{ status.title }}
           </h3>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`">
         </button>
       </template>
       <template slot="body">
@@ -58,7 +65,9 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button class="cool" @click="hideModal()">Ok, Thanks</button>
+          <button class="cool" @click="hideModal()">
+            Ok, Thanks
+          </button>
         </div>
       </template>
     </modal>
@@ -146,7 +155,7 @@ export default {
               if (proposalRequest) {
                 this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
               } else {
-                this.$router.push(`/vendor/signin`);
+                this.$router.push("/vendor/signin");
               }
             });
           })
@@ -236,10 +245,10 @@ export default {
 
             this.$store.dispatch("auth/login", userData).then(
               () => {
-                this.$router.push(`/vendor/dashboard`);
+                this.$router.push("/vendor/dashboard");
               },
               error => {
-                this.$router.push(`/vendor/signin`);
+                this.$router.push("/vendor/signin");
               },
             );
           }

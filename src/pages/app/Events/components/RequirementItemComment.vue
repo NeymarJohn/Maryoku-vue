@@ -1,24 +1,32 @@
 <template>
   <div class="comment-editor">
     <template v-if="showComponent">
-      <div class="comment-title"> Add note</div>
-      <textarea v-model="note" class="comment"></textarea>
+      <div class="comment-title">
+        Add note
+      </div>
+      <textarea v-model="note" class="comment" />
       <div v-if="showComponent" class="comment-action">
-        <button class="md-button md-black md-bold md-simple" style="margin-left: auto" @click="cancel">Cancel</button>
-        <button class="md-button md-red md-bold" @click="save">Save</button>
+        <button class="md-button md-black md-bold md-simple" style="margin-left: auto" @click="cancel">
+          Cancel
+        </button>
+        <button class="md-button md-red md-bold" @click="save">
+          Save
+        </button>
       </div>
     </template>
     <template v-else>
       <div class="comment-add md-bold" @click="show">
-        <md-icon class="icon color-red">{{ note ? 'remove_circle_outline' : 'add_circle_outline'}} </md-icon>
-        {{ note ? 'Show' : 'Add'}} Note
+        <md-icon class="icon color-red">
+          {{ note ? 'remove_circle_outline' : 'add_circle_outline' }}
+        </md-icon>
+        {{ note ? 'Show' : 'Add' }} Note
       </div>
     </template>
   </div>
 </template>
 <script>
   export default {
-    name: "requirement-item-comment",
+    name: "RequirementItemComment",
     props: {
       property: {
         type: Object,
@@ -30,19 +38,7 @@
       return {
         note: null,
         showComponent: false
-      }
-    },
-    methods: {
-      save() {
-        this.showComponent = false;
-        this.$emit('save', this.property, this.note);
-      },
-      show() {
-        this.showComponent = true;
-      },
-      cancel(){
-        this.showComponent = false;
-      },
+      };
     },
     watch: {
       property:{
@@ -57,6 +53,18 @@
       if (this.property) {
         this.note = this.property.defaultNote;
       }
+    },
+    methods: {
+      save() {
+        this.showComponent = false;
+        this.$emit("save", this.property, this.note);
+      },
+      show() {
+        this.showComponent = true;
+      },
+      cancel(){
+        this.showComponent = false;
+      },
     }
   };
 </script>

@@ -12,46 +12,53 @@
         >
           <!--<iframe src="https://static-maryoku.s3.amazonaws.com/storage/img/interactions/interaction-1.html"></iframe>-->
 
-          <h2 class="interaction-title">{{ selectedInteraction.line1 }}</h2>
-          <h4 class="interaction-date">{{ selectedInteraction.line2 }}</h4>
-          <p class="interaction-desc">{{ selectedInteraction.line3 }}</p>
+          <h2 class="interaction-title">
+            {{ selectedInteraction.line1 }}
+          </h2>
+          <h4 class="interaction-date">
+            {{ selectedInteraction.line2 }}
+          </h4>
+          <p class="interaction-desc">
+            {{ selectedInteraction.line3 }}
+          </p>
         </div>
 
         <div class="interaction-images md-layout-item md-size-100">
           <h4>Select Image for your interaction</h4>
           <ul class="images-list">
             <li
-              class="list-item"
               v-for="(image, index) in selectedInteraction.options"
+              class="list-item"
               @click="selectTemplateImage(image)"
             >
               <div
                 class="image-item"
                 :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/img/interactions/${image}.png)`"
                 :class="{ selected: selectedInteraction.templateImage === image }"
-              ></div>
+              />
             </li>
           </ul>
         </div>
 
         <md-field>
           <label>Title</label>
-          <md-input v-model="selectedInteraction.line1" type="text"></md-input>
+          <md-input v-model="selectedInteraction.line1" type="text" />
         </md-field>
         <md-field>
           <label>Date</label>
-          <md-input v-model="selectedInteraction.line2" type="text"></md-input>
+          <md-input v-model="selectedInteraction.line2" type="text" />
         </md-field>
         <md-field>
           <label>Your Message</label>
-          <md-textarea v-model="selectedInteraction.line3" type="text"></md-textarea>
+          <md-textarea v-model="selectedInteraction.line3" type="text" />
         </md-field>
         <md-button
           name="event-planner-tab-invitees-management-interaction-save"
           class="event-planner-tab-invitees-management-interaction-save md-success pull-right"
           @click="editInteractionDesign()"
-          >Save</md-button
         >
+          Save
+        </md-button>
       </div>
     </div>
   </div>
@@ -84,6 +91,7 @@ export default {
   data: () => ({
     auth: auth,
   }),
+  computed: {},
 
   created() {},
   mounted() {
@@ -139,7 +147,6 @@ export default {
       return eventStartTime;
     },
   },
-  computed: {},
 };
 </script>
 <style lang="scss" scope>

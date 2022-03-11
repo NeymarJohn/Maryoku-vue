@@ -1,58 +1,63 @@
 <template>
   <div class="vendor-category-editor" :class="[{ 'border-bottom': borderBottom }]">
     <div class="left" :class="[{ 'full-width': isEdit }]">
-      <div class="title">{{ title }}<span v-if="required"> *</span></div>
+      <div class="title">
+        {{ title }}<span v-if="required"> *</span>
+      </div>
       <div v-if="isEdit">
-        <div class="d-flex position-relative" v-for="(item, index) of selectedValue" :key="item || index + 1">
+        <div v-for="(item, index) of selectedValue" :key="item || index + 1" class="d-flex position-relative">
           <!-- <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" /> -->
           <category-selector
             v-if="field === 'vendorCategories'"
             :value="item || ''"
             :categories="vendorCategories"
             column="2"
-            trackBy="name"
+            track-by="name"
             class="my-10"
             @change="updateCategory(index, ...arguments)"
-          >
-          </category-selector>
+          />
           <location-input
             v-else-if="field === 'vendorAddresses'"
             :value="item"
-            @change="changeAddress(index, ...arguments)"
             class="my-10 width-100 address"
-          ></location-input>
+            @change="changeAddress(index, ...arguments)"
+          />
           <img
+            v-if="selectedValue.length > 1"
             class="ml-10 close-btn"
             :src="`${$iconURL}Requirements/delete-dark.svg`"
-            v-if="selectedValue.length > 1"
             @click="removeValue(index)"
-          />
+          >
         </div>
-        <div class="d-flex align-center py-10  font-bold cursor-pointer" @click="addNewValue" style="color: #58154B">
-          <img class="mr-10" :src="`/static/icons/vendor/Icon_+.svg`"  />
+        <div class="d-flex align-center py-10  font-bold cursor-pointer" style="color: #58154B" @click="addNewValue">
+          <img class="mr-10" :src="`/static/icons/vendor/Icon_+.svg`">
           <span v-if="field === 'vendorAddresses'">Add another address</span>
           <span v-else>Add another category</span>
         </div>
       </div>
       <div v-else>
         <template v-if="selectedValue.length">
-          <div class="content mt-10" v-for="item of selectedValue">
+          <div v-for="item of selectedValue" class="content mt-10">
             <img
+              v-if="field === 'vendorCategories' && item"
               class="mr-10"
               :src="vendorCategories.find((v) => v.name === item).icon"
-              v-if="field === 'vendorCategories' && item"
-            />
-            <img class="mr-10" :src="img" v-if="img != '' && item" />
+            >
+            <img v-if="img != '' && item" class="mr-10" :src="img">
             {{ item }}
           </div>
         </template>
       </div>
-      <div class="action-cont" v-if="isEdit">
-        <md-button class="md-black maryoku-btn md-simple" @click="cancel">Cancel</md-button>
-        <md-button class="md-vendor maryoku-btn" :disabled="!isInputValid" @click="save">Save</md-button>
+      <div v-if="isEdit" class="action-cont">
+        <md-button class="md-black maryoku-btn md-simple" @click="cancel">
+          Cancel
+        </md-button>
+        <md-button class="md-vendor maryoku-btn" :disabled="!isInputValid" @click="save">
+          Save
+        </md-button>
       </div>
     </div>
-    <div class="right" v-if="!isEdit">
+    <div v-if="!isEdit" class="right">
       <a @click="isEdit = true">
         Edit
         <md-icon>navigate_next</md-icon>
@@ -67,7 +72,7 @@ import { VendorCategories } from "@/constants/vendor";
 import LocationInput from "../LocationInput.vue";
 
 export default {
-  name: "v-signup-editable-field",
+  name: "VSignupEditableField",
   components: {
     VueGoogleAutocomplete,
     CategorySelector,
@@ -94,8 +99,24 @@ export default {
     vendorCategories: VendorCategories,
     selectedValue: [],
   }),
+  computed: {
+    isInputValid() {
+      console.log(this.selectedValue);
+      if (!this.selectedValue) return false;
+      return this.selectedValue.length > 0 && this.selectedValue.every((item) => item);
+    },
+  },
+  watch: {
+    value(newValue) {
+      // console.log("signup.category.selector.watch", newValue, this.field);
+      this.init();
+    },
+  },
   mounted() {
     this.init();
+  },
+  beforeDestroy() {
+    // this.$root.$off('update-vendor-value')
   },
   methods: {
     updateCategory(index, data) {
@@ -157,22 +178,6 @@ export default {
       if (!value) return;
       this.selectedValue[index] = value.name;
       this.selectedValue = [...this.selectedValue];
-    },
-  },
-  beforeDestroy() {
-    // this.$root.$off('update-vendor-value')
-  },
-  watch: {
-    value(newValue) {
-      // console.log("signup.category.selector.watch", newValue, this.field);
-      this.init();
-    },
-  },
-  computed: {
-    isInputValid() {
-      console.log(this.selectedValue);
-      if (!this.selectedValue) return false;
-      return this.selectedValue.length > 0 && this.selectedValue.every((item) => item);
     },
   },
 };

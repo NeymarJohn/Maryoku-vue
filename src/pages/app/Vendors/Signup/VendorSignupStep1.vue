@@ -2,11 +2,11 @@
   <div class="vendor-signup-step1-wrapper">
     <div class="md-layout inside-container">
       <div class="md-layout-item md-size-25 left-side">
-        <img :src="`${iconPurple}Purple Icons/Icon_About (Vendor).svg`" />
+        <img :src="`${iconPurple}Purple Icons/Icon_About (Vendor).svg`">
 
         <h2>
           ABOUT YOUR
-          <br />COMPANY
+          <br>COMPANY
         </h2>
         <p>This your chance to Impress! All information will appear on your business page</p>
         <h2>1/5</h2>
@@ -15,20 +15,20 @@
         <div class="about-wrapper">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
+              <h5><img :src="`${iconUrl}Asset 542.svg`"> Tell us about your business</h5>
             </div>
           </div>
           <div class="card">
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top d-flex align-center">
-                  <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
-                  <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
+                  <h5><img :src="`${iconUrl}Asset 542.svg`"> Tell us about your business</h5>
+                  <div v-if="categoryDescriptions[vendor.vendorCategory]" class="position-relative">
                     <div
                       class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer"
                       @click="showCompanyText = true"
                     >
-                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea
+                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`"> Get an Idea
                     </div>
 
                     <tooltip-notification
@@ -36,7 +36,7 @@
                       :about="getDescription('company')"
                       @copy="handleCopy($event, 'company')"
                       @cancel="showCompanyText = false"
-                    ></tooltip-notification>
+                    />
                   </div>
                 </div>
                 <div class="bottom">
@@ -45,26 +45,26 @@
               </div>
               <div class="main-cont">
                 <textarea
+                  v-model="vendor.about.company"
                   placeholder="Type 'about your business' here"
                   rows="5"
                   @blur="updateVendor($event, 'about.company')"
-                  v-model="vendor.about.company"
-                ></textarea>
+                />
               </div>
             </div>
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top d-flex align-center">
                   <h5>
-                    <img :src="`${getCategoryIconbyValue(vendor.vendorCategory)}`" style="width: 32px" />
+                    <img :src="`${getCategoryIconbyValue(vendor.vendorCategory)}`" style="width: 32px">
                     about your {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </h5>
-                  <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
+                  <div v-if="categoryDescriptions[vendor.vendorCategory]" class="position-relative">
                     <div
                       class="color-purple font-size-14 font-bold-extra ml-20 cursor-pointer"
                       @click="showServiceText = true"
                     >
-                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" /> Get an Idea
+                      <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`"> Get an Idea
                     </div>
 
                     <tooltip-notification
@@ -72,7 +72,7 @@
                       :about="getDescription('service')"
                       @copy="handleCopy($event, 'category')"
                       @cancel="showServiceText = false"
-                    ></tooltip-notification>
+                    />
                   </div>
                 </div>
                 <div class="bottom">
@@ -81,10 +81,10 @@
               </div>
               <div class="main-cont">
                 <textarea
+                  v-model="vendor.about.category"
                   :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.vendorCategories[0])}' here`"
                   rows="5"
                   @blur="updateVendor($event, 'about.category')"
-                  v-model="vendor.about.category"
                 />
               </div>
             </div>
@@ -92,15 +92,15 @@
               <label>Company Services</label>
               <company-service-selector
                 :options="companyServices.filter(cs => cs.name == vendor.vendorCategories[0])[0]"
-                :defaultValue="vendor.companyServices"
-                @change="updateCompanyServices"
+                :default-value="vendor.companyServices"
                 class="mt-10"
-              ></company-service-selector>
+                @change="updateCompanyServices"
+              />
             </div>
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 545.svg`" /> capacity</h5>
+                  <h5><img :src="`${iconUrl}Asset 545.svg`"> capacity</h5>
                 </div>
                 <div class="bottom">
                   <p>How many guests can you acommodate?</p>
@@ -109,26 +109,26 @@
               <div class="main-cont">
                 <div class="suffix">
                   <input
+                    v-model="vendor.capacity.low"
                     type="number"
                     placeholder="100"
-                    v-model="vendor.capacity.low"
                     min="100"
                     max="1000"
                     @change="updateVendor($event, 'capacity.low')"
-                  />
+                  >
                 </div>
                 <div class="arrow">
-                  <img :src="`${iconUrl}Group 4585 (2).svg`" />
+                  <img :src="`${iconUrl}Group 4585 (2).svg`">
                 </div>
                 <div class="suffix">
                   <input
+                    v-model="vendor.capacity.high"
                     type="number"
                     placeholder="1000"
-                    v-model="vendor.capacity.high"
                     min="100"
                     max="1000"
                     @change="updateVendor($event, 'capacity.high')"
-                  />
+                  >
                 </div>
               </div>
             </div>
@@ -137,20 +137,24 @@
         <div class="my-30">
           <div class="title-cont d-flex align-center mb-20">
             <h5 class="my-0">
-              <img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30" /> Add a Personal message to your clients
+              <img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30"> Add a Personal message to your clients
             </h5>
-            <p class="my-0 pl-20">This paragraph will be added automatically to your proposals</p>
+            <p class="my-0 pl-20">
+              This paragraph will be added automatically to your proposals
+            </p>
           </div>
           <div class="card">
             <div class="field">
               <div class=" d-flex align-center">
-                <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
-                <div class="position-relative" v-if="categoryDescriptions[vendor.vendorCategory]">
+                <h5 class="my-0 pb-10">
+                  DEAR PLANNER...
+                </h5>
+                <div v-if="categoryDescriptions[vendor.vendorCategory]" class="position-relative">
                   <div
                     class="color-purple font-size-14 font-bold-extra ml-20 pb-10 cursor-pointer"
                     @click="showPersonalMessage = true"
                   >
-                    <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" class="mr-10" /> Get an Idea
+                    <img :src="`${$iconURL}Vendor Signup/group-5280(1).svg`" class="mr-10"> Get an Idea
                   </div>
 
                   <tooltip-notification
@@ -158,23 +162,23 @@
                     :about="getDescription('personal')"
                     @copy="handleCopy($event, 'personalMessage')"
                     @cancel="showPersonalMessage = false"
-                  ></tooltip-notification>
+                  />
                 </div>
               </div>
               <textarea
+                v-model="vendor.personalMessage"
                 placeholder="Type 'about your personal message' here"
                 class="width-100"
                 rows="5"
                 @blur="updateVendor($event, 'personalMessage')"
-                v-model="vendor.personalMessage"
-              ></textarea>
+              />
             </div>
           </div>
         </div>
         <div class="upload-wrapper">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}art (2).svg`" /> Upload your best images</h5>
+              <h5><img :src="`${iconUrl}art (2).svg`"> Upload your best images</h5>
             </div>
             <div class="right">
               <p>(15 photos top, under 5MB)</p>
@@ -186,7 +190,7 @@
               @addImage="addVendorImage"
               @setPhoto="updateVendorImage"
               @removeImage="removeVendorImage"
-            ></vendor-photos-carousel>
+            />
           </div>
         </div>
         <div class="signature-wrapper mt-40">
@@ -201,21 +205,27 @@
           <template v-if="vendor.signature == null">
             <div class="card pink-border">
               <div class="upload-cont">
-                <a class @click="uploadVendorSignature"> <img :src="`${iconPurple}Purple Icons/Icon_ChooseFile.svg`" /> Choose File </a>
-                <div class="or">Or</div>
+                <a class @click="uploadVendorSignature"> <img :src="`${iconPurple}Purple Icons/Icon_ChooseFile.svg`"> Choose File </a>
+                <div class="or">
+                  Or
+                </div>
                 <div class="sign-here">
-                  <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
-                  <button class="save" @click="save">Save</button>
-                  <button class="clear" @click="clear">Clear</button>
+                  <vueSignature ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
+                  <button class="save" @click="save">
+                    Save
+                  </button>
+                  <button class="clear" @click="clear">
+                    Clear
+                  </button>
                 </div>
                 <input
+                  ref="signatureFile"
                   type="file"
                   class="hide"
-                  ref="signatureFile"
                   name="vendorSignature"
                   accept="image/gif, image/jpg, image/png"
                   @change="onVendorImageFilePicked"
-                />
+                >
               </div>
             </div>
           </template>
@@ -234,11 +244,11 @@
             />
             <!-- <img :src="vendor.signature"/> -->
             <img
+              v-if="vendor.signature"
               class="remove"
               :src="`${iconUrl}Asset 529.svg`"
-              v-if="vendor.signature"
               @click="removeSignature(vendor.signature)"
-            />
+            >
           </template>
         </div>
         <div class="social-wrapper">
@@ -254,55 +264,55 @@
           <div class="card">
             <div class="field">
               <div class="label">
-                <img :src="`${iconUrl}Asset 539.svg`" />
+                <img :src="`${iconUrl}Asset 539.svg`">
                 <span>website</span>
               </div>
               <input
+                v-model="vendor.social.website"
                 type="text"
                 placeholder="Paste link here"
                 @change="updateVendor($event, 'social.website')"
-                v-model="vendor.social.website"
-              />
+              >
             </div>
             <div class="field">
               <div class="label">
-                <img :src="`${iconUrl}Asset 540.svg`" class="w-16" />
+                <img :src="`${iconUrl}Asset 540.svg`" class="w-16">
                 <span>facebook</span>
               </div>
               <input
+                v-model="vendor.social.facebook"
                 type="text"
                 placeholder="Paste link here"
                 @change="updateVendor($event, 'social.facebook')"
-                v-model="vendor.social.facebook"
-              />
+              >
             </div>
             <div class="field">
               <div class="label">
-                <img :src="`${iconUrl}Group 4569 (2).svg`" />
+                <img :src="`${iconUrl}Group 4569 (2).svg`">
                 <span>instagram</span>
               </div>
               <input
+                v-model="vendor.social.instagram"
                 type="text"
                 placeholder="Paste link here"
                 @change="updateVendor($event, 'social.instagram')"
-                v-model="vendor.social.instagram"
-              />
+              >
             </div>
             <h5>Other:</h5>
-            <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
+            <div v-for="(s, sIndex) in defSocialMedia" :key="sIndex" class="social-item">
               <div @click="updateSocialMedia(s)">
-                <img :src="`${iconPurple}Purple Icons/Icon_V.svg`"  v-if="socialMedia.includes(s) || vendor.social[s]" />
-                <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                <img v-if="socialMedia.includes(s) || vendor.social[s]" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
+                <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
                 {{ s }}
-                <br />
+                <br>
               </div>
               <input
+                v-if="socialMedia.includes(s) || vendor.social[s]"
+                v-model="vendor.social[s]"
                 type="text"
                 placeholder="Paste link here"
-                v-model="vendor.social[s]"
-                v-if="socialMedia.includes(s) || vendor.social[s]"
                 @change="updateVendor($event, `social.${s}`)"
-              />
+              >
             </div>
           </div>
         </div>
@@ -326,7 +336,7 @@ import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 import CompanyServiceSelector from "../components/CompanyServiceSelector.vue";
 import { TooltipNotification } from "@/components";
 export default {
-  name: "vendor-signup-step1",
+  name: "VendorSignupStep1",
   components: {
     Drop,
     VueElementLoading,
@@ -337,6 +347,7 @@ export default {
     CompanyServiceSelector,
     TooltipNotification,
   },
+  filters: {},
   props: {
     categories: Array,
     generalInfos: Array,
@@ -362,6 +373,26 @@ export default {
       showServiceText: false,
       showPersonalMessage: false,
     };
+  },
+  computed: {
+    vendor() {
+      return this.$store.state.vendorSignup.vendor;
+    },
+  },
+  created() {
+    console.log("step2.created");
+    this.$store.dispatch("vendorSignup/checkImages");
+    // refactoring vendor data in vuex
+    const vendorData = Object.assign({}, this.vendor);
+    try {
+      const companyServices = vendorData.services.companyServices;
+      if (companyServices) {
+        this.$set(vendorData, "companyServices", companyServices.value);
+      }
+      delete vendorData.services.companyServices;
+      delete vendorData.services.companySerivces;
+    } catch (e) {}
+    this.$store.commit("vendorSignup/setVendor", vendorData);
   },
   methods: {
     handleDrop(data, event) {
@@ -530,27 +561,6 @@ export default {
     removeVendorImage(index) {
       this.$store.commit("vendorSignup/removeImage", index);
     },
-  },
-  computed: {
-    vendor() {
-      return this.$store.state.vendorSignup.vendor;
-    },
-  },
-  filters: {},
-  created() {
-    console.log("step2.created");
-    this.$store.dispatch("vendorSignup/checkImages");
-    // refactoring vendor data in vuex
-    const vendorData = Object.assign({}, this.vendor);
-    try {
-      const companyServices = vendorData.services.companyServices;
-      if (companyServices) {
-        this.$set(vendorData, "companyServices", companyServices.value);
-      }
-      delete vendorData.services.companyServices;
-      delete vendorData.services.companySerivces;
-    } catch (e) {}
-    this.$store.commit("vendorSignup/setVendor", vendorData);
   },
 };
 </script>

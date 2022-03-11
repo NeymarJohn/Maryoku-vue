@@ -1,14 +1,22 @@
 <template>
   <div class="rsvp-info-item">
     <div class="rsvp-info-item-header">
-      <slot name="header"> This is the default header! </slot>
+      <slot name="header">
+        This is the default header!
+      </slot>
       <button class="expand-button" @click="opened = !opened">
-        <md-icon v-if="!opened">keyboard_arrow_down</md-icon>
-        <md-icon v-if="opened">keyboard_arrow_up</md-icon>
+        <md-icon v-if="!opened">
+          keyboard_arrow_down
+        </md-icon>
+        <md-icon v-if="opened">
+          keyboard_arrow_up
+        </md-icon>
       </button>
     </div>
     <div v-if="opened" class="rsvp-info-item-content">
-      <slot name="content"> This is the default text! </slot>
+      <slot name="content">
+        This is the default text!
+      </slot>
     </div>
   </div>
 </template>

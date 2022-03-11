@@ -1,15 +1,20 @@
 <template>
   <span v-if="customStyle" :style="customStyleContents">
-    {{prefix}}{{animatedNumber | withComma}}{{suffix}}
+    {{ prefix }}{{ animatedNumber | withComma }}{{ suffix }}
   </span>
   <span v-else :class="[{'text-color-pink': isNegative}]">
-    {{prefix}}{{animatedNumber | withComma}}{{suffix}}
+    {{ prefix }}{{ animatedNumber | withComma }}{{ suffix }}
   </span>
 </template>
 <script>
-import TWEEN from '@tweenjs/tween.js'
+import TWEEN from "@tweenjs/tween.js";
 
 export default {
+  filters: {
+    withComma (amount) {
+      return amount ? amount.toLocaleString() : 0;
+    }
+  },
   props: {
     value: {
       default: 0,
@@ -21,11 +26,11 @@ export default {
     },
     prefix: {
       type: String,
-      default: ''
+      default: ""
     },
     suffix: {
       type: String,
-      default: ''
+      default: ""
     },
     customStyle: {
       type: Boolean,
@@ -33,21 +38,37 @@ export default {
     },
     customStyleContents: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   data () {
     return {
       animatedNumber: 0
+    };
+  },
+  computed: {
+    decimalDigits () {
+      return (`${this.value}`.split(".")[1] || []).length > 2 ? 2 : (`${this.value}`.split(".")[1] || []).length;
+    },
+    isNegative () {
+      return this.animatedNumber <= 0;
     }
+  },
+  watch: {
+    value (newValue, oldValue) {
+      this.initAnimation(newValue, oldValue);
+    }
+  },
+  mounted () {
+    this.initAnimation(this.value, 0);
   },
   methods: {
     initAnimation (newValue, oldValue) {
-      let vm = this
+      let vm = this;
 
       function animate () {
         if (TWEEN.update()) {
-          requestAnimationFrame(animate)
+          requestAnimationFrame(animate);
         }
       }
 
@@ -55,35 +76,14 @@ export default {
         .easing(TWEEN.Easing.Quadratic.Out)
         .to({ tweeningNumber: newValue }, this.duration)
         .onUpdate(function (object) {
-          vm.animatedNumber = parseFloat(object.tweeningNumber.toFixed(vm.decimalDigits))
+          vm.animatedNumber = parseFloat(object.tweeningNumber.toFixed(vm.decimalDigits));
         })
-        .start()
+        .start();
 
-      animate()
-    }
-  },
-  computed: {
-    decimalDigits () {
-      return (`${this.value}`.split('.')[1] || []).length > 2 ? 2 : (`${this.value}`.split('.')[1] || []).length
-    },
-    isNegative () {
-      return this.animatedNumber <= 0
-    }
-  },
-  mounted () {
-    this.initAnimation(this.value, 0)
-  },
-  filters: {
-    withComma (amount) {
-      return amount ? amount.toLocaleString() : 0
-    }
-  },
-  watch: {
-    value (newValue, oldValue) {
-      this.initAnimation(newValue, oldValue)
+      animate();
     }
   }
-}
+};
 </script>
 <style scoped>
   span {

@@ -1,9 +1,9 @@
 <template>
-	<div class="adding-building-blocks-panel mh-240">
-		<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee" />
-		<div class="manage-proposals_proposals-list manage-proposals-wrapper" v-if="!isLoading">
-			<div class="md-toolbar-section-start">
-				<!-- <md-field>
+  <div class="adding-building-blocks-panel mh-240">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee" />
+    <div v-if="!isLoading" class="manage-proposals_proposals-list manage-proposals-wrapper">
+      <div class="md-toolbar-section-start">
+        <!-- <md-field>
           <md-input
             type="search"
             class="mb-3"
@@ -12,107 +12,122 @@
             v-model="searchQuery">
           </md-input>
         </md-field>-->
-				<div class="proposals-name">
-					<template v-if="activeList === 'vendors'">{{ vendors.length }} Vendors</template>
-					<template v-else>{{ proposals.length }} Received Proposals</template>
-				</div>
-				<div class="sub-tabs">
-					<md-button :class="{ 'md-info': activeList === 'vendors' }" @click="switchList('vendors')">Vendors</md-button>
-					<md-button :class="{ 'md-info': activeList === 'proposals' }" @click="switchList('proposals')"
-						>Proposals</md-button
-					>
-				</div>
-			</div>
-			<div class="proposals-list_items" v-if="!isLoading">
-				<div class="proposals-list_item" v-for="(item, index) in filteredBlockVendors" :key="index">
-					<div class="vendor-avatar">
-						<md-avatar class="md-avatar-icon">
-							<md-icon>people</md-icon>
-						</md-avatar>
-					</div>
-					<div class="proposal-info text-left">
-						<div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">
-							{{ item.vendor ? item.vendor.vendorDisplayName : "No Vendor Title" }}
-							<div class="star-rating">
-								<label
-									class="star-rating__star"
-									v-for="(rating, ratingIndex) in ratings"
-									:key="ratingIndex"
-									:class="{
-										'is-selected': item.vendor.rank >= rating && item.vendor.rank != null,
-									}"
-								>
-									<input class="star-rating star-rating__checkbox" type="radio" />★
-								</label>
-							</div>
-						</div>
-						<div class="proposal-property-list">
-							<ul class="list-items">
-								<li><md-icon>check</md-icon>Insurance</li>
-							</ul>
-						</div>
-						<div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
-							<ul class="list-items">
-								<li v-for="(pro, proIndex) in item.proposals[0].pros" :key="proIndex">
-									{{ pro }}
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="more-details">
-						<md-button
-							class="md-danger md-simple md-sm"
-							@click="routeToVendorsProposal(item.vendor.id, item.proposals[0].id)"
-							>see more details</md-button
-						>
-					</div>
-					<div class="proposal-actions text-right">
-						<template v-if="item.proposals && item.proposals[0]">
-							<div class="cost">${{ item.proposals[0].cost }}</div>
-							<md-button
-								class="md-rose md-sm md-simple"
-								v-if="addedToCompare(item.proposals[0].id)"
-								@click="removeFromCompare(item.proposals[0].id)"
-								>Remove from compare</md-button
-							>
-							<md-button
-								class="md-success md-sm md-simple"
-								v-if="!addedToCompare(item.proposals[0].id)"
-								@click="addToCompare(item.proposals[0].id)"
-								>Add to compare</md-button
-							>
-							<md-button class="md-primary md-sm md-simple" @click="manageProposalsAccept(item.proposals[0])"
-								>Accept</md-button
-							>
-							<md-button class="md-rose md-sm" @click="viewProposal(item.proposals[0])">View</md-button>
-						</template>
-						<md-button
-							v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus === null)"
-							class="md-primary md-sm hover"
-							@click="sendVendor(item)"
-						>
-							<md-icon>near_me</md-icon>Send
-						</md-button>
-						<template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
-							<span class="fw-300">Request sent</span>
-							{{ getProposalDate(item.rfpSentMillis) }}
-							<!--<a href="javascript: void(null);" class="small hover" style="display: block;">Request again &rarr;</a>-->
-						</template>
-					</div>
-				</div>
-			</div>
-		</div>
-		<md-card class="md-card-plain" v-if="!vendors.length && !proposals.length && !isLoading">
-			<md-card-content>
-				<div class="text-center">
-					<img class="w-120" src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png" />
-					<h4>No vendors found that match '{{ selectedBlock.title }}'</h4>
-					<md-button class="md-purple md-sm" @click="manageVendors">Manage Vendors Pool</md-button>
-				</div>
-			</md-card-content>
-		</md-card>
-		<manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
-	</div>
+        <div class="proposals-name">
+          <template v-if="activeList === 'vendors'">
+            {{ vendors.length }} Vendors
+          </template>
+          <template v-else>
+            {{ proposals.length }} Received Proposals
+          </template>
+        </div>
+        <div class="sub-tabs">
+          <md-button :class="{ 'md-info': activeList === 'vendors' }" @click="switchList('vendors')">
+            Vendors
+          </md-button>
+          <md-button :class="{ 'md-info': activeList === 'proposals' }" @click="switchList('proposals')">
+            Proposals
+          </md-button>
+        </div>
+      </div>
+      <div v-if="!isLoading" class="proposals-list_items">
+        <div v-for="(item, index) in filteredBlockVendors" :key="index" class="proposals-list_item">
+          <div class="vendor-avatar">
+            <md-avatar class="md-avatar-icon">
+              <md-icon>people</md-icon>
+            </md-avatar>
+          </div>
+          <div class="proposal-info text-left">
+            <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">
+              {{ item.vendor ? item.vendor.vendorDisplayName : "No Vendor Title" }}
+              <div class="star-rating">
+                <label
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  class="star-rating__star"
+                  :class="{
+                    'is-selected': item.vendor.rank >= rating && item.vendor.rank != null,
+                  }"
+                >
+                  <input class="star-rating star-rating__checkbox" type="radio">★
+                </label>
+              </div>
+            </div>
+            <div class="proposal-property-list">
+              <ul class="list-items">
+                <li><md-icon>check</md-icon>Insurance</li>
+              </ul>
+            </div>
+            <div v-if="item.proposals && item.proposals[0]" class="proposal-benefits-list">
+              <ul class="list-items">
+                <li v-for="(pro, proIndex) in item.proposals[0].pros" :key="proIndex">
+                  {{ pro }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="more-details">
+            <md-button
+              class="md-danger md-simple md-sm"
+              @click="routeToVendorsProposal(item.vendor.id, item.proposals[0].id)"
+            >
+              see more details
+            </md-button>
+          </div>
+          <div class="proposal-actions text-right">
+            <template v-if="item.proposals && item.proposals[0]">
+              <div class="cost">
+                ${{ item.proposals[0].cost }}
+              </div>
+              <md-button
+                v-if="addedToCompare(item.proposals[0].id)"
+                class="md-rose md-sm md-simple"
+                @click="removeFromCompare(item.proposals[0].id)"
+              >
+                Remove from compare
+              </md-button>
+              <md-button
+                v-if="!addedToCompare(item.proposals[0].id)"
+                class="md-success md-sm md-simple"
+                @click="addToCompare(item.proposals[0].id)"
+              >
+                Add to compare
+              </md-button>
+              <md-button class="md-primary md-sm md-simple" @click="manageProposalsAccept(item.proposals[0])">
+                Accept
+              </md-button>
+              <md-button class="md-rose md-sm" @click="viewProposal(item.proposals[0])">
+                View
+              </md-button>
+            </template>
+            <md-button
+              v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus === null)"
+              class="md-primary md-sm hover"
+              @click="sendVendor(item)"
+            >
+              <md-icon>near_me</md-icon>Send
+            </md-button>
+            <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
+              <span class="fw-300">Request sent</span>
+              {{ getProposalDate(item.rfpSentMillis) }}
+              <!--<a href="javascript: void(null);" class="small hover" style="display: block;">Request again &rarr;</a>-->
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <md-card v-if="!vendors.length && !proposals.length && !isLoading" class="md-card-plain">
+      <md-card-content>
+        <div class="text-center">
+          <img class="w-120" src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png">
+          <h4>No vendors found that match '{{ selectedBlock.title }}'</h4>
+          <md-button class="md-purple md-sm" @click="manageVendors">
+            Manage Vendors Pool
+          </md-button>
+        </div>
+      </md-card-content>
+    </md-card>
+    <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event" />
+  </div>
 </template>
 <script>
 import Swal from "sweetalert2";
@@ -143,7 +158,7 @@ import ManageProposalsVendors from "./ManageProposalsVendors";
 import ViewProposal from "./ViewProposal.vue";
 
 export default {
-	name: "event-block-proposal-vendors",
+	name: "EventBlockProposalVendors",
 	components: {
 		MdCardHeader,
 		MdCardContent,
@@ -175,6 +190,20 @@ export default {
 		proposals: [],
 		activeList: "vendors",
 	}),
+	computed: {},
+	watch: {
+		searchQuery(newVal, oldVal) {
+			this.filterVendors();
+		},
+		blockVendors(newVal, oldVal) {
+			// this.getBlockVendors();
+			this.isLoading = false;
+		},
+	},
+	created() {},
+	mounted() {
+		this.getBlockVendors();
+	},
 	methods: {
 		getBlockVendors() {
 			if (true) {
@@ -456,20 +485,6 @@ export default {
 				name: "VendorProposals",
 				params: { id: proposalId, vendorId: vendorId },
 			});
-		},
-	},
-	created() {},
-	mounted() {
-		this.getBlockVendors();
-	},
-	computed: {},
-	watch: {
-		searchQuery(newVal, oldVal) {
-			this.filterVendors();
-		},
-		blockVendors(newVal, oldVal) {
-			// this.getBlockVendors();
-			this.isLoading = false;
 		},
 	},
 };

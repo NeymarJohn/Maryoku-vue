@@ -1,6 +1,6 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
-    <notifications></notifications>
+    <notifications />
     <!-- <side-bar> -->
     <!--<user-menu></user-menu>-->
     <!-- <mobile-menu></mobile-menu> -->
@@ -142,12 +142,12 @@
     <!-- </side-bar> -->
     <div class="main-panel" style="height: 50%">
       <div class="top-navbar-section" style="background: #fff">
-        <top-navbar></top-navbar>
+        <top-navbar />
       </div>
       <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
-          <router-view></router-view>
+          <router-view />
         </zoom-center-transition>
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
@@ -245,6 +245,7 @@ export default {
       });
     },
   },
+  computed: {},
   created() {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
@@ -264,7 +265,6 @@ export default {
     //   }
     // });
   },
-  computed: {},
 };
 </script>
 <style lang="scss">

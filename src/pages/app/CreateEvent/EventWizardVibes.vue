@@ -1,24 +1,29 @@
 <template>
   <div class="event-wizard-vibes">
     <div class="container">
-      <div class="title">5/5</div>
+      <div class="title">
+        5/5
+      </div>
       <div class="event-basic-info">
-        <div class="text-center mt-2">Here is a fun question for you,</div>
-        <div class="setting-title mt-2">Try describing your guest’s vibes using a song</div>
+        <div class="text-center mt-2">
+          Here is a fun question for you,
+        </div>
+        <div class="setting-title mt-2">
+          Try describing your guest’s vibes using a song
+        </div>
         <div class="mt-3 types">
           <music-card
-            :class="{ selected: song.id == selectedSong.id }"
             v-for="song in songs"
             :key="song.id"
+            :class="{ selected: song.id == selectedSong.id }"
             :data="song"
             :selected="song.id == selectedSong.id"
             @select="selectSong"
-          >
-          </music-card>
+          />
         </div>
       </div>
     </div>
-    <wizard-status-bar :currentStep="5" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+    <wizard-status-bar :current-step="5" @next="goToNext" @skip="skip" @back="back" />
   </div>
 </template>
 
@@ -50,7 +55,7 @@ export default {
           localStorage.setItem("currentEventId", newEvent.id);
           localStorage.removeItem("event");
           if (newEvent.isFirstEvent) {
-            this.$router.push({ path: `/welcome/event` });
+            this.$router.push({ path: "/welcome/event" });
           } else {
             this.$router.push({ path: `/events/${newEvent.id}/booking/concept` });
           }
@@ -134,7 +139,7 @@ export default {
       const tenantId = this.$authService.resolveTenantId();
       if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants.includes(tenantId)) {
         localStorage.setItem("event", JSON.stringify(this.getEventData()));
-        this.$router.push({ path: `/create-workspace` });
+        this.$router.push({ path: "/create-workspace" });
       } else {
         const eventData = this.getEventData();
         eventService
@@ -142,14 +147,14 @@ export default {
           .then((newEvent) => {
             localStorage.setItem("currentEventId", newEvent.id);
             if (newEvent.isFirstEvent) {
-              this.$router.push({ path: `/welcome/event` });
+              this.$router.push({ path: "/welcome/event" });
             } else {
               this.$router.push({ path: `/events/${newEvent.id}/booking/concept` });
             }
           })
           .catch((err) => {
             Swal.fire({
-              title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
+              title: "<div style=\"text-align:center; width:100%;\">Sorry, Some informations are invalid. <br/> Please check your information. </div>",
               buttonsStyling: false,
               icon: "warning",
               confirmButtonClass: "md-button md-success",
@@ -163,11 +168,11 @@ export default {
     },
     back() {
       if (this.publicEventData.religion) {
-        this.$router.push({ path: `/event-wizard-religion` });
+        this.$router.push({ path: "/event-wizard-religion" });
       } else if (this.publicEventData.occasion) {
-        this.$router.push({ path: `/event-wizard-celebrating` });
+        this.$router.push({ path: "/event-wizard-celebrating" });
       } else {
-        this.$router.push({ path: `/event-wizard-type` });
+        this.$router.push({ path: "/event-wizard-type" });
       }
     },
     selectSong(song) {

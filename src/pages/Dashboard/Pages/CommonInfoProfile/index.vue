@@ -5,7 +5,7 @@
         <div class="md-toolbar-section-start">
           <h3 class="md-title">
             <a href="https://www.maryoku.com">
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/img/262Logo2.png" />
+              <img src="https://static-maryoku.s3.amazonaws.com/storage/img/262Logo2.png">
             </a>
           </h3>
         </div>
@@ -15,9 +15,9 @@
             :class="{toggled: $sidebar.showSidebar}"
             @click="toggleSidebar"
           >
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="icon-bar" />
+            <span class="icon-bar" />
+            <span class="icon-bar" />
           </md-button>
         </div>
       </div>
@@ -31,7 +31,7 @@
       >
         <div class="container md-offset" style="padding-bottom: 80px !important;">
           <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
-            <router-view></router-view>
+            <router-view />
           </zoom-center-transition>
         </div>
         <footer class="footer">
@@ -102,6 +102,14 @@ export default {
       return `${this.$route.name}-page`.toLowerCase();
     },
   },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeDestroy() {
+    this.closeMenu();
+    window.removeEventListener("resize", this.onResponsiveInverted);
+  },
   methods: {
     toggleSidebarPage() {
       if (this.$sidebar.showSidebar) {
@@ -135,14 +143,6 @@ export default {
         this.responsive = false;
       }
     },
-  },
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  },
-  beforeDestroy() {
-    this.closeMenu();
-    window.removeEventListener("resize", this.onResponsiveInverted);
   },
   beforeRouteUpdate(to, from, next) {
     // Close the mobile menu first then transition to next page

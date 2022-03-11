@@ -3,11 +3,19 @@
     <table class="event-blocks__table">
       <thead>
         <tr>
-          <th width="40%">Vendor</th>
-          <th width="25%">Planned</th>
-          <th width="15%">Booked</th>
-          <th width="10%">Status</th>
-          <th></th>
+          <th width="40%">
+            Vendor
+          </th>
+          <th width="25%">
+            Planned
+          </th>
+          <th width="15%">
+            Booked
+          </th>
+          <th width="10%">
+            Status
+          </th>
+          <th />
         </tr>
       </thead>
     </table>
@@ -16,15 +24,15 @@
     <!-- <draggable :list="eventBuildingBlocks"> -->
     <event-budget-vendors-item
       v-for="block in eventCategoryList"
-      :event="event"
-      :eventCategoryItem="block"
       :key="block.id"
+      :event="event"
+      :event-category-item="block"
       :type="type"
-      :editingMode="editingMode"
+      :editing-mode="editingMode"
       @update="updateCategoryBudget"
       @delete="deleteCategory"
       @addVendor="addMyVendor"
-    ></event-budget-vendors-item>
+    />
 
     <table
       class="event-blocks__table event-block-table"
@@ -35,13 +43,15 @@
           <td width="40%" class="event-block-element unexpected">
             <img
               :src="editingMode ? `${$iconURL}Budget Elements/unexpected.svg` : `/static/icons/budget/unexpected.png`"
-            />
+            >
             Unexpected
           </td>
-          <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma(Number) }}</td>
-          <td width="15%" class="actual red-label"></td>
-          <td width="15%" class="status"></td>
-          <td class="expand"></td>
+          <td width="20%" class="planned unexpected">
+            $ {{ event.unexpectedBudget | withComma(Number) }}
+          </td>
+          <td width="15%" class="actual red-label" />
+          <td width="15%" class="status" />
+          <td class="expand" />
         </tr>
       </tbody>
     </table>
@@ -54,16 +64,18 @@
           <td width="40%" class="event-block-element extra">
             <img
               :src="editingMode ? `${$iconURL}budget screen/SVG/extra-gray.svg` : `/static/icons/budget/extra-gray.png`"
-            />
+            >
             Extras
           </td>
 
-          <td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma(Number) }}</td>
-          <td width="15%" class="actual red-label"></td>
-          <td width="15%" class="status"></td>
+          <td width="20%" class="planned">
+            $ {{ (event.allocatedTips + event.allocatedFees) | withComma(Number) }}
+          </td>
+          <td width="15%" class="actual red-label" />
+          <td width="15%" class="status" />
           <td class="expand">
-            <div @click="showTips = !showTips" class="text-right">
-              <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: showTips }" />
+            <div class="text-right" @click="showTips = !showTips">
+              <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: showTips }">
             </div>
           </td>
         </tr>
@@ -72,60 +84,64 @@
             <td width="40%" class="event-block-element extra">
               <img
                 :src="editingMode ? `${$iconURL}budget screen/SVG/tips-gray.png` : `/static/icons/budget/tips-gray.png`"
-              />
+              >
 
               Tips 12%
             </td>
             <td width="20%" class="planned">
               $ {{ event.allocatedTips | withComma(Number) }}
-              <md-button class="md-rose md-sm md-simple edit-btn" @click="showEditElementBudget()" v-if="!editTips"
-                >Edit</md-button
-              >
+              <md-button v-if="!editTips" class="md-rose md-sm md-simple edit-btn" @click="showEditElementBudget()">
+                Edit
+              </md-button>
               <img
-                :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
                 v-else
+                :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
                 style="width: 25px; float: right; margin: 3px 0px"
-              />
+              >
             </td>
             <template v-if="!editTips">
-              <td width="15%" class="actual red-label"></td>
-              <td width="15%" class="status"></td>
-              <td class="expand"></td>
+              <td width="15%" class="actual red-label" />
+              <td width="15%" class="status" />
+              <td class="expand" />
             </template>
             <template v-if="editTips">
               <td colspan="3" align="right" style="white-space: nowrap">
                 <!-- <input class="inline-input" v-model="newAllocatedTips" /> -->
                 <maryoku-input
                   v-model="newAllocatedTips"
-                  inputStyle="budget"
+                  input-style="budget"
                   size="small"
                   style="width: 150px; display: inline-block"
                   @focus="$event.target.select()"
-                ></maryoku-input>
-                <md-button class="md-simple md-black normal-btn" @click="editTips = false" style="height: 50px"
-                  >cancel</md-button
-                >
-                <md-button class="md-red normal-btn" @click="updateTips()" style="height: 50px">save</md-button>
+                />
+                <md-button class="md-simple md-black normal-btn" style="height: 50px" @click="editTips = false">
+                  cancel
+                </md-button>
+                <md-button class="md-red normal-btn" style="height: 50px" @click="updateTips()">
+                  save
+                </md-button>
               </td>
             </template>
           </tr>
           <tr class="extra">
             <td colspan="5">
-              <hr />
+              <hr>
             </td>
           </tr>
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
               <img
                 :src="editingMode ? `${$iconURL}budget screen/SVG/fees-gray.svg` : `/static/icons/budget/fees-gray.png`"
-              />
+              >
 
               Fees 3%
             </td>
-            <td width="20%" class="planned">$ {{ event.allocatedFees | withComma(Number) }}</td>
-            <td width="15%" class="actual red-label"></td>
-            <td width="15%" class="status"></td>
-            <td class="expand"></td>
+            <td width="20%" class="planned">
+              $ {{ event.allocatedFees | withComma(Number) }}
+            </td>
+            <td width="15%" class="actual red-label" />
+            <td width="15%" class="status" />
+            <td class="expand" />
           </tr>
         </template>
       </tbody>
@@ -139,13 +155,15 @@
           <td width="40%" class="event-block-element unused-budget">
             <img
               :src="editingMode ? `${$iconURL}budget+screen/SVG/Asset+487.svg` : `/static/icons/budget/unused.png`"
-            />
+            >
             Unused
           </td>
-          <td width="20%" class="planned">$ {{ unusedBudget | withComma(Number) }}</td>
-          <td width="15%" class="actual red-label"></td>
-          <td width="15%" class="status"></td>
-          <td class="expand"></td>
+          <td width="20%" class="planned">
+            $ {{ unusedBudget | withComma(Number) }}
+          </td>
+          <td width="15%" class="actual red-label" />
+          <td width="15%" class="status" />
+          <td class="expand" />
         </tr>
       </tbody>
     </table>
@@ -154,15 +172,21 @@
     <table class="event-blocks__table actions-table">
       <tbody>
         <tr class="total">
-          <td class="total-title" width="40%">Total</td>
-          <td width="20%" class="total-value">${{ Math.round(event.totalBudget) | roundNumber | withComma(Number) }}</td>
-          <td width="15%" class="total-value">${{ bookedTotal | withComma(Number) }}</td>
-          <td colspan="2"></td>
+          <td class="total-title" width="40%">
+            Total
+          </td>
+          <td width="20%" class="total-value">
+            ${{ Math.round(event.totalBudget) | roundNumber | withComma(Number) }}
+          </td>
+          <td width="15%" class="total-value">
+            ${{ bookedTotal | withComma(Number) }}
+          </td>
+          <td colspan="2" />
         </tr>
-        <tr class="add-category" v-if="canEdit && editingMode">
+        <tr v-if="canEdit && editingMode" class="add-category">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
+              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg">
               Add new category
             </md-button>
           </td>
@@ -176,13 +200,13 @@
       :components="filteredEventBlocks"
       @cancel="showCategoryModal = false"
       @save="addBuildingBlock"
-    ></add-new-category-modal>
+    />
 
     <budget-handle-minus-modal
       v-if="showMinusHandleModal"
       :value="overAddedValue"
       @select="handleMinusBudget"
-    ></budget-handle-minus-modal>
+    />
   </div>
 </template>
 
@@ -215,7 +239,7 @@ import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
 import Swal from "sweetalert2";
 import EventBudgetVendorsItem from "./EventBudgetVendorsItem";
 export default {
-  name: "event-budget-vendors",
+  name: "EventBudgetVendors",
   components: {
     LabelEdit,
     EventActualCostIconTooltip,
@@ -538,7 +562,7 @@ export default {
     addRequirements(item) {
       if (item.proposalsCount) {
         Swal.fire({
-          text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
+          text: "You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?",
           showCancelButton: true,
           icon: "warning",
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -627,8 +651,8 @@ export default {
 
     addBuildingBlock() {
       this.showCategoryModal = false;
-      console.log('addBuildingBlock')
-      this.$root.$emit('clearVendorRequirement', this.event);
+      console.log("addBuildingBlock");
+      this.$root.$emit("clearVendorRequirement", this.event);
       this.$emit("change");
     },
     getCategoryBlocks() {
@@ -642,9 +666,9 @@ export default {
         });
     },
     addbudget() {
-      const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
+      const arrow = "<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
       const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
-      const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
+      const description = "<div class=\"description\">Your edits changed the total budget, do you want to change it?</div>";
       Swal.fire({
         title: `<div class="text-left">${arrow}${budgetString}<div>Are You Sure?</div>${description}</div>`,
         showCancelButton: true,
@@ -676,7 +700,7 @@ export default {
           break;
         case "add":
           const budgetString = `<div class="font-size-40 font-regular color-red" style="margin-bottom:20px">+$${formattedValue}</div>`;
-          const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
+          const description = "<div class=\"description\">Your edits changed the total budget, do you want to change it?</div>";
           Swal.fire({
             title: `<div class="text-left">${budgetString}<div>Would you like to add extra $${formattedValue} to your budget?</div>${description}</div>`,
             showCancelButton: true,
@@ -709,7 +733,7 @@ export default {
         id: this.event.id,
         allocatedTips: this.newAllocatedTips,
       });
-      console.log('updateTips', event, this.calendar);
+      console.log("updateTips", event, this.calendar);
       event
         // .for(this.calendar)
         .save()
@@ -725,17 +749,6 @@ export default {
       this.updateTips();
     },
   },
-  mounted() {
-    this.calendar = new Calendar({
-      id: this.$store.state.auth.user.profile.defaultCalendarId,
-    });
-    this.getEventBuildingBlocks();
-    this.getRemainingBudget();
-    this.getCategoryBlocks();
-    this.$on("refreshBuildingBlock", () => {
-      this.getEventBuildingBlocks();
-    });
-  },
   watch: {
     event(newVal, oldVal) {
       // Get default event building blocks
@@ -750,6 +763,17 @@ export default {
     elementsBudget(val) {
       this.switchingBudgetAndCost();
     },
+  },
+  mounted() {
+    this.calendar = new Calendar({
+      id: this.$store.state.auth.user.profile.defaultCalendarId,
+    });
+    this.getEventBuildingBlocks();
+    this.getRemainingBudget();
+    this.getCategoryBlocks();
+    this.$on("refreshBuildingBlock", () => {
+      this.getEventBuildingBlocks();
+    });
   },
   filters: {
     roundNumber(amount) {

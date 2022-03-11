@@ -4,7 +4,7 @@
       <div class="d-flex align-center justify-content-between">
         <div class="text-cont d-flex">
           <h3 class="title font-bold">
-            <img :src="`${$iconURL}NewSubmitPorposal/${icon}`" class="page-icon mr-10" />
+            <img :src="`${$iconURL}NewSubmitPorposal/${icon}`" class="page-icon mr-10">
             {{ label }}
           </h3>
         </div>
@@ -13,23 +13,23 @@
             :src="`${$iconURL}NewSubmitPorposal/Component 36 (2).svg`"
             :class="{ isExpanded: isExpanded }"
             class="arrow-img"
-          />
+          >
         </div>
       </div>
       <div>
         {{ description }}
       </div>
     </div>
-    <div class="collapse-panel-content" v-if="isExpanded">
+    <div v-if="isExpanded" class="collapse-panel-content">
       <proposal-add-item-form
         v-if="canAdd"
-        :optionalRequirements="[]"
-        :serviceType="tableCategory"
-        :profileServices="vendorProfileServices"
-        :vendorServices="vendorServices"
+        :optional-requirements="[]"
+        :service-type="tableCategory"
+        :profile-services="vendorProfileServices"
+        :vendor-services="vendorServices"
         @addItem="addItem"
-      ></proposal-add-item-form>
-      <proposal-service-table :category="vendorCategory" :tableCategory="tableCategory"></proposal-service-table>
+      />
+      <proposal-service-table :category="vendorCategory" :table-category="tableCategory" />
     </div>
   </div>
 </template>
@@ -76,24 +76,6 @@ export default {
       isExpanded: false,
       files: [],
     };
-  },
-  methods: {
-    toggle() {
-      this.isExpanded = !this.isExpanded;
-    },
-    getFileByTag(tag) {
-      const file = this.files.filter(f => f.tag == tag);
-      if (file.length > 0) {
-        return file[0].filename;
-      } else {
-        return null;
-      }
-    },
-    addItem({serviceItem}) {
-      if (!this.services) this.services = [];
-      this.services.push(serviceItem);
-      this.services = Object.assign([], this.services);
-    },
   },
   computed: {
     categoryName() {
@@ -160,6 +142,24 @@ export default {
   },
   watch: {
     vendorProfileServices() {},
+  },
+  methods: {
+    toggle() {
+      this.isExpanded = !this.isExpanded;
+    },
+    getFileByTag(tag) {
+      const file = this.files.filter(f => f.tag == tag);
+      if (file.length > 0) {
+        return file[0].filename;
+      } else {
+        return null;
+      }
+    },
+    addItem({serviceItem}) {
+      if (!this.services) this.services = [];
+      this.services.push(serviceItem);
+      this.services = Object.assign([], this.services);
+    },
   },
 };
 </script>

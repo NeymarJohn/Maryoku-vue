@@ -1,89 +1,102 @@
 <template>
-  <div class="policy-cont" id="Policy">
+  <div id="Policy" class="policy-cont">
     <div class="rules">
       <div class="rules">
-        <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-          <div class="item">{{ policy.name }}</div>
-          <div class="item" v-if="policy.type === 'MultiSelection'">
-            <span class="mr-10" v-for="(v, vIndex) in policy.value">
+        <div v-for="(policy, yIndex) in validPolicy" :key="yIndex" class="rule">
+          <div class="item">
+            {{ policy.name }}
+          </div>
+          <div v-if="policy.type === 'MultiSelection'" class="item">
+            <span v-for="(v, vIndex) in policy.value" class="mr-10">
               {{ `${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}
             </span>
           </div>
-          <div class="item" v-else-if="policy.type === 'Including'">
-            <span class="mr-10" v-if="policy.value"> Yes </span>
-            <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+          <div v-else-if="policy.type === 'Including'" class="item">
+            <span v-if="policy.value" class="mr-10"> Yes </span>
+            <span v-if="!policy.value && policy.cost" class="mr-10"> {{ `$ ${policy.cost}` }} </span>
           </div>
-          <div class="item" v-else>
+          <div v-else class="item">
             <span v-if="policy.type === 'Number' && !policy.isPercentage">$</span>
             <span v-if="policy.value === true">Yes</span>
             <span v-else>{{ policy.value }}</span>
             <span v-if="policy.isPercentage">%</span>
-            <span class="ml-50" v-if="policy.hasOwnProperty('attendees')"> {{ policy.attendees }} attendees </span>
+            <span v-if="policy.hasOwnProperty('attendees')" class="ml-50"> {{ policy.attendees }} attendees </span>
           </div>
         </div>
       </div>
     </div>
-    <div class="rules" v-if="additionalRules && additionalRules.length">
-      <h5 class="font-bold font-size-20">Additional Rules</h5>
-      <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-        <div class="item">Event must be {{ policy }}</div>
+    <div v-if="additionalRules && additionalRules.length" class="rules">
+      <h5 class="font-bold font-size-20">
+        Additional Rules
+      </h5>
+      <div v-for="(policy, yIndex) in additionalRules" :key="yIndex" class="rule">
+        <div class="item">
+          Event must be {{ policy }}
+        </div>
       </div>
     </div>
-    <div class="not-allowed" v-if="service.vendorCategory == 'venuerental'">
+    <div v-if="service.vendorCategory == 'venuerental'" class="not-allowed">
       <h5>We don't allow these 3rd party vendor:</h5>
       <p>{{ mergeStringItems(service.notAllowed) }}</p>
     </div>
     <div class="dont-work">
       <h5>We don't work on:</h5>
-      <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+      <div v-if="mergeStringItems(vendor.selectedWeekdays)" class="item">
+        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`">
         {{ mergeStringItems(vendor.selectedWeekdays) }}
       </div>
-      <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+      <div v-for="(d, dIndex) in vendor.exDonts" :key="dIndex" class="item">
+        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`">
         {{ d.holiday }}
       </div>
-      <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+      <div v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0" class="item">
+        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`">
         {{ dontWorkDays() }}
       </div>
-      <div class="item" v-if="vendor.dontWorkTime">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+      <div v-if="vendor.dontWorkTime" class="item">
+        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`">
         {{ dontWorkTime() }}
       </div>
     </div>
     <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-       class="healthy-policy my-20">
+         class="healthy-policy my-20"
+    >
       <h5 class="d-flex align-center">
-          <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-          Health policy</h5>
+        <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
+        Health policy
+      </h5>
       <template v-if="vendor.healthPolicy">
-          <div class="rule font-bold-extra my-20">
-              <span class="color-vendor">COVID 19</span>
-              - Exceptional Policy
-          </div>
-          <p class="width-66">
-              {{vendor.healthPolicy}}
-          </p>
+        <div class="rule font-bold-extra my-20">
+          <span class="color-vendor">COVID 19</span>
+          - Exceptional Policy
+        </div>
+        <p class="width-66">
+          {{ vendor.healthPolicy }}
+        </p>
       </template>
       <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-          <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-          <div class="md-layout mt-20">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                   :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                  <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                      <img class="mr-10" :src="`${$iconURL}common/checked-circle-purple.svg`" width="20px">
-                      {{option.label}}
-                  </div>
-              </div>
+        <div class="mt-30 font-bold-extra">
+          Guaranteed with every staff member:
+        </div>
+        <div class="md-layout mt-20">
+          <div v-for="option in guaranteedOptions" :key="option.value" class="md-layout-item md-size-30 py-10"
+               :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}"
+          >
+            <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+              <img class="mr-10" :src="`${$iconURL}common/checked-circle-purple.svg`" width="20px">
+              {{ option.label }}
+            </div>
           </div>
+        </div>
       </template>
     </div>
     <div class="section">
-      <h5 class="subtitle">Our cancellation approach</h5>
+      <h5 class="subtitle">
+        Our cancellation approach
+      </h5>
       <div id="Policy">
         <div class="rules">
-          <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
+          <div v-for="(policy, yIndex) in cancellationData" :key="yIndex" class="rule">
             <div class="item">
               <span class="font-bold-extra">If</span> {{ policy.notice }}
               <span class="font-bold-extra">Then</span>
@@ -116,6 +129,16 @@ export default {
       guaranteedOptions: GuaranteedOptions,
     };
   },
+  computed: {
+    validPolicy() {
+      if (this.service.policies)
+        return this.service.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
+      return null;
+    },
+    additionalRules() {
+      return this.service.additionalRules;
+    },
+  },
   methods: {
     mergeStringItems(items) {
       let naItems = "";
@@ -139,16 +162,6 @@ export default {
     },
     dontWorkTime() {
       return `${this.service.dontWorkTime.startTime.hh}:${this.service.dontWorkTime.startTime.mm}:${this.service.dontWorkTime.amPack.start} ~ ${this.service.dontWorkTime.endTime.hh}:${this.service.dontWorkTime.endTime.mm}:${this.service.dontWorkTime.amPack.end}`;
-    },
-  },
-  computed: {
-    validPolicy() {
-      if (this.service.policies)
-        return this.service.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
-      return null;
-    },
-    additionalRules() {
-      return this.service.additionalRules;
     },
   },
 };

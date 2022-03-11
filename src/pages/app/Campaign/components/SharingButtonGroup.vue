@@ -1,15 +1,27 @@
 <template>
   <div class="d-flex sharing-button-group-content">
     <ul class="d-flex sharing-button-group">
-      <li @click="shareSocial('linkedin')" data-social="linkedin"><img src="/static/icons/linkedin.svg" /></li>
-      <li @click="shareSocial('pinterest')" data-social="pinterest"><img src="/static/icons/pintrerst.svg" /></li>
-      <li @click="shareSocial('gmail')" data-social="gmail"><img src="/static/icons/gmail.svg" /></li>
-      <li @click="shareSocial('whatsapp')" data-social="whatsapp"><img src="/static/icons/whatsapp.svg" /></li>
-      <li @click="shareSocial('outlook')" data-social="outlook"><img src="/static/icons/outlook.svg" /></li>
-      <li @click="shareSocial('facebook')" data-social="facebook"><img src="/static/icons/facebook.svg" /></li>
+      <li data-social="linkedin" @click="shareSocial('linkedin')">
+        <img src="/static/icons/linkedin.svg">
+      </li>
+      <li data-social="pinterest" @click="shareSocial('pinterest')">
+        <img src="/static/icons/pintrerst.svg">
+      </li>
+      <li data-social="gmail" @click="shareSocial('gmail')">
+        <img src="/static/icons/gmail.svg">
+      </li>
+      <li data-social="whatsapp" @click="shareSocial('whatsapp')">
+        <img src="/static/icons/whatsapp.svg">
+      </li>
+      <li data-social="outlook" @click="shareSocial('outlook')">
+        <img src="/static/icons/outlook.svg">
+      </li>
+      <li data-social="facebook" @click="shareSocial('facebook')">
+        <img src="/static/icons/facebook.svg">
+      </li>
     </ul>
-    <md-button class="md-simple md-red normal-btn copy-link-button" v-if="copyLink">
-      <img :src="`${$iconURL}Campaign/Path 2639.svg`" /><span class="ml-10 mr-20">Copy Link</span>
+    <md-button v-if="copyLink" class="md-simple md-red normal-btn copy-link-button">
+      <img :src="`${$iconURL}Campaign/Path 2639.svg`"><span class="ml-10 mr-20">Copy Link</span>
     </md-button>
   </div>
 </template>

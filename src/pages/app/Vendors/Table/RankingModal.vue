@@ -1,45 +1,54 @@
 <template>
   <div class="md-layout">
-    <popover v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
+    <popover v-if="inviteModalOpen" container-class="modal-container" @close="noticeModalHide">
       <template slot="header" class="header-position">
-        <h3 class="title">Ranking</h3>
-        <button class="btn-position" @click="closeModal">X</button>
+        <h3 class="title">
+          Ranking
+        </h3>
+        <button class="btn-position" @click="closeModal">
+          X
+        </button>
       </template>
       <template slot="body">
         <div class="md-layout">
           <div class="md-layout-item md-size-95 md-small-size-100">
-            <div v-for="(item, index) in rankingParameters" class="space-between box-rate" :key="item.id">
-              <h3 class="">{{ item.name }}</h3>
+            <div v-for="(item, index) in rankingParameters" :key="item.id" class="space-between box-rate">
+              <h3 class="">
+                {{ item.name }}
+              </h3>
               <div class="pull-right">
                 <div class="star-rating">
                   <label
-                    class="star-rating__star"
                     v-for="rating in ratings"
+                    class="star-rating__star"
                     :class="{ 'is-selected': item.value >= rating && item.value != null }"
-                    v-on:click="setRanking(rating, index)"
+                    @click="setRanking(rating, index)"
                   >
                     <input
+                      v-model="item.value"
                       class="star-rating star-rating__checkbox"
                       type="radio"
                       :value="rating"
                       :name="name"
-                      v-model="item.value"
-                    />★</label
-                  >
+                    >★</label>
                 </div>
               </div>
             </div>
 
             <md-field class="border-field">
               <label class="label-right">Your review</label>
-              <md-textarea v-model="textarea" md-counter="80"></md-textarea>
+              <md-textarea v-model="textarea" md-counter="80" />
             </md-field>
           </div>
         </div>
       </template>
       <template slot="footer">
-        <md-button class="move-left md-red md-simple" @click="closeModal">Close</md-button>
-        <md-button class="md-success">Submit</md-button>
+        <md-button class="move-left md-red md-simple" @click="closeModal">
+          Close
+        </md-button>
+        <md-button class="md-success">
+          Submit
+        </md-button>
       </template>
     </popover>
   </div>

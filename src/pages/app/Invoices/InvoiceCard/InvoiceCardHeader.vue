@@ -5,25 +5,25 @@
     </span>
     <div class="card-header-invoice-details">
       <div class="card-header-invoice-details-logo">
-        <img width="90" height="90" src="../../../../../static/icons/maryoku_icon_yellow.png" />
+        <img width="90" height="90" src="../../../../../static/icons/maryoku_icon_yellow.png">
       </div>
       <div class="card-header-invoice-details-campaign">
         <h2 class="card-header-invoice-details-campaign-title">
           Maryoku Company Ltd.
         </h2>
         <span class="card-header-invoice-details-campaign-number">
-            Company No. GST-200506877R
-          </span>
+          Company No. GST-200506877R
+        </span>
         <div class="card-header-invoice-details-campaign-P_O_Box">
-            <span class="icon">
-              <img width="26" height="21" src="../../../../../static/icons/mail-outline.svg" />
-            </span>
+          <span class="icon">
+            <img width="26" height="21" src="../../../../../static/icons/mail-outline.svg">
+          </span>
           <span class="label">
-              P.O. Box:
-            </span>
+            P.O. Box:
+          </span>
           <span class="value">
-              51 Ellcott St. Batavia | Trump World Tower # 14-02 NY, USA 74812
-            </span>
+            51 Ellcott St. Batavia | Trump World Tower # 14-02 NY, USA 74812
+          </span>
         </div>
       </div>
     </div>
@@ -32,8 +32,8 @@
 
 <script>
 export default {
-  name: "invoice-card-header"
-}
+  name: "InvoiceCardHeader"
+};
 </script>
 
 <style lang="scss" scoped>

@@ -6,7 +6,7 @@
       column="2"
       :multiple="true"
       @change="updateExChecked"
-    ></category-selector>
+    />
   </div>
 </template>
 <script>
@@ -25,16 +25,16 @@ export default {
       default: () => [],
     },
   },
-  created() {
-    console.log(this.defaultValue);
-    this.value = this.defaultValue;
-  },
   data() {
     return {
       checked: true,
       value: "",
       categories: [],
     };
+  },
+  created() {
+    console.log(this.defaultValue);
+    this.value = this.defaultValue;
   },
   methods: {
     updateExChecked(selectedValues) {

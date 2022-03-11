@@ -1,20 +1,22 @@
 <template>
-  <collapse-panel :defaultStatus="false" class="checkout-proposal-table" v-if="extraServices && extraServices.length">
+  <collapse-panel v-if="extraServices && extraServices.length" :default-status="false" class="checkout-proposal-table">
     <template slot="header">
       <div class="price-header">
         <div class="d-flex align-center">
-          <img class="mr-10" :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" width="35px" />
+          <img class="mr-10" :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" width="35px">
           {{ serviceCategory.fullTitle }}
         </div>
         <div class="ml-auto">
-          <div class="element-price">${{ finalPrice | withComma }}</div>
+          <div class="element-price">
+            ${{ finalPrice | withComma }}
+          </div>
         </div>
       </div>
     </template>
-    <template slot="content" v-if="extraServices && extraServices.length">
+    <template v-if="extraServices && extraServices.length" slot="content">
       <div class="proposal-table-content">
         <div>Would you like to upgrade & add one of those?</div>
-        <div class="mb-30" v-if="proposal.serviceCategory">
+        <div v-if="proposal.serviceCategory" class="mb-30">
           You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from your
           original defined budget.
         </div>
@@ -22,14 +24,16 @@
           Simply select anything that you would like to add. Please note that any item or service you choose here will
           be added to the overall vendor cost.
         </div>
-        <div class="pt-10 pb-10" v-for="service in extraServices" :key="service.subCategory">
+        <div v-for="service in extraServices" :key="service.subCategory" class="pt-10 pb-10">
           <div class="d-flex align-center">
             <div class="d-flex align-center">
-              <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
+              <md-checkbox v-model="service.addedOnProposal" class="m-0 mr-10" />
               <span>{{ service.requirementTitle }}</span>
             </div>
             <div class="ml-auto pr-100">
-              <div class="element-price">${{ service.price | withComma }}</div>
+              <div class="element-price">
+                ${{ service.price | withComma }}
+              </div>
             </div>
           </div>
         </div>
@@ -39,11 +43,13 @@
   <div v-else class="checkout-proposal-table">
     <div class="price-header">
       <div class="d-flex align-center">
-        <img class="mr-10" :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" width="35px" />
+        <img class="mr-10" :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" width="35px">
         {{ serviceCategory.fullTitle }}
       </div>
       <div class="ml-auto">
-        <div class="element-price">${{ finalPrice | withComma }}</div>
+        <div class="element-price">
+          ${{ finalPrice | withComma }}
+        </div>
       </div>
     </div>
   </div>

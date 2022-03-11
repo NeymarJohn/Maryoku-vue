@@ -4,17 +4,29 @@
       <md-card>
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
-            <h4 class="title">لتكاليف يبق</h4>
-            <p class="category">بالإنزال وفي. خيار ومضى العمليات تم ذلك, تم معقل مرمى</p>
+            <h4 class="title">
+              لتكاليف يبق
+            </h4>
+            <p class="category">
+              بالإنزال وفي. خيار ومضى العمليات تم ذلك, تم معقل مرمى
+            </p>
           </div>
         </md-card-header>
         <md-card-content>
           <md-table v-model="users" table-header-color="orange">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
-              <md-table-cell md-label="وتم">{{ item.id }}</md-table-cell>
-              <md-table-cell md-label="لأمريكية هذا">{{ item.name }}</md-table-cell>
-              <md-table-cell md-label="شاسعالأمريكية">{{ item.salary }}</md-table-cell>
-              <md-table-cell md-label="الأمريكية">{{ item.country }}</md-table-cell>
+              <md-table-cell md-label="وتم">
+                {{ item.id }}
+              </md-table-cell>
+              <md-table-cell md-label="لأمريكية هذا">
+                {{ item.name }}
+              </md-table-cell>
+              <md-table-cell md-label="شاسعالأمريكية">
+                {{ item.salary }}
+              </md-table-cell>
+              <md-table-cell md-label="الأمريكية">
+                {{ item.country }}
+              </md-table-cell>
             </md-table-row>
           </md-table>
         </md-card-content>
@@ -37,11 +49,15 @@
                   <md-table-cell>
                     <md-button class="md-just-icon md-simple md-primary">
                       <md-icon>edit</md-icon>
-                      <md-tooltip md-direction="left">Edit</md-tooltip>
+                      <md-tooltip md-direction="left">
+                        Edit
+                      </md-tooltip>
                     </md-button>
                     <md-button class="md-just-icon md-simple md-danger">
                       <md-icon>close</md-icon>
-                      <md-tooltip md-direction="left">Close</md-tooltip>
+                      <md-tooltip md-direction="left">
+                        Close
+                      </md-tooltip>
                     </md-button>
                   </md-table-cell>
                 </md-table-row>
@@ -60,11 +76,15 @@
                   <md-table-cell>
                     <md-button class="md-just-icon md-simple md-primary">
                       <md-icon>edit</md-icon>
-                      <md-tooltip md-direction="left">Edit</md-tooltip>
+                      <md-tooltip md-direction="left">
+                        Edit
+                      </md-tooltip>
                     </md-button>
                     <md-button class="md-just-icon md-simple md-danger">
                       <md-icon>close</md-icon>
-                      <md-tooltip md-direction="left">Close</md-tooltip>
+                      <md-tooltip md-direction="left">
+                        Close
+                      </md-tooltip>
                     </md-button>
                   </md-table-cell>
                 </md-table-row>
@@ -83,11 +103,15 @@
                   <md-table-cell>
                     <md-button class="md-just-icon md-simple md-primary">
                       <md-icon>edit</md-icon>
-                      <md-tooltip md-direction="left">Edit</md-tooltip>
+                      <md-tooltip md-direction="left">
+                        Edit
+                      </md-tooltip>
                     </md-button>
                     <md-button class="md-just-icon md-simple md-danger">
                       <md-icon>close</md-icon>
-                      <md-tooltip md-direction="left">Close</md-tooltip>
+                      <md-tooltip md-direction="left">
+                        Close
+                      </md-tooltip>
                     </md-button>
                   </md-table-cell>
                 </md-table-row>
@@ -101,42 +125,70 @@
       <div class="md-layout">
         <div class="md-layout-item">
           <pricing-card icon-color="icon-success">
-            <h6 slot="category" class="category">جيوب سليمان، الإنزال</h6>
-            <md-icon slot="icon">home</md-icon>
-            <h3 slot="title" class="title">29$</h3>
+            <h6 slot="category" class="category">
+              جيوب سليمان، الإنزال
+            </h6>
+            <md-icon slot="icon">
+              home
+            </md-icon>
+            <h3 slot="title" class="title">
+              29$
+            </h3>
             <p
               slot="description"
               class="card-description"
-            >الأجل المتساقطة، من. عرض بسبب وأكثرها الاندونيسية بـ.</p>
-            <md-button slot="footer" class="md-success md-round">حاملات فعل</md-button>
+            >
+              الأجل المتساقطة، من. عرض بسبب وأكثرها الاندونيسية بـ.
+            </p>
+            <md-button slot="footer" class="md-success md-round">
+              حاملات فعل
+            </md-button>
           </pricing-card>
         </div>
         <div class="md-layout-item">
           <pricing-card card-class="md-card-plain" icon-color="icon-black">
-            <h6 slot="category" class="category">المتحدة لتقليعة</h6>
-            <md-icon slot="icon">weekend</md-icon>
-            <h3 slot="title" class="title black-color">قائمة</h3>
+            <h6 slot="category" class="category">
+              المتحدة لتقليعة
+            </h6>
+            <md-icon slot="icon">
+              weekend
+            </md-icon>
+            <h3 slot="title" class="title black-color">
+              قائمة
+            </h3>
             <p
               slot="description"
               class="card-description"
-            >الأجل المتساقطة، من. عرض بسبب وأكثرها الاندونيسية بـ.</p>
-            <md-button slot="footer" class="md-white md-round">حاملات فعل</md-button>
+            >
+              الأجل المتساقطة، من. عرض بسبب وأكثرها الاندونيسية بـ.
+            </p>
+            <md-button slot="footer" class="md-white md-round">
+              حاملات فعل
+            </md-button>
           </pricing-card>
         </div>
         <div class="md-layout-item md-size-90">
           <testimonial-card>
-            <template slot="header-icon">format_quote</template>
+            <template slot="header-icon">
+              format_quote
+            </template>
             <template slot="content">
               <h5
                 class="description"
-              >بعد و وسوء الأحمر, دون عقبت الهادي أم, قد حول قادة حكومة يتعلّق. أخذ حصدت اوروبا أن, كلا مهمّات اسبوعين التخطيط عل. وإيطالي الأوروبي و نفس. صفحة احداث أضف ان, هو مرجع نهاية لهيمنة كما. تم مايو لفشل المدن دول, جعل أن عسكرياً التّحول استرجاع.</h5>
+              >
+                بعد و وسوء الأحمر, دون عقبت الهادي أم, قد حول قادة حكومة يتعلّق. أخذ حصدت اوروبا أن, كلا مهمّات اسبوعين التخطيط عل. وإيطالي الأوروبي و نفس. صفحة احداث أضف ان, هو مرجع نهاية لهيمنة كما. تم مايو لفشل المدن دول, جعل أن عسكرياً التّحول استرجاع.
+              </h5>
             </template>
             <template slot="footer">
-              <h4 class="title">أليك طومسون</h4>
-              <h6 class="category">@أليك طومسون</h6>
+              <h4 class="title">
+                أليك طومسون
+              </h4>
+              <h6 class="category">
+                @أليك طومسون
+              </h6>
               <div class="avatar">
                 <a href="#pablo">
-                  <img class="img" :src="profileCard" />
+                  <img class="img" :src="profileCard">
                 </a>
               </div>
             </template>
@@ -150,10 +202,12 @@
           <span slot="header" class="badge badge-danger">جهة أي</span>
           <p
             slot="content"
-          >قام كل ماذا العصبة اوروبا. أي جورج العالمي أخر, كان تم أطراف القوى استبدال. أسر ميناء تكتيكاً الجديدة، كل. جُل اللا التكاليف بـ, عرفها النزاع لليابان بـ أضف. انتهت المدن الثالث من وقد.وقبل قادة إحتار عن أخر. حين ونتج أخرى قد. بالعمل بالمطالبة فقد قد. عن جنوب ومضى الشتاء.</p>
+          >
+            قام كل ماذا العصبة اوروبا. أي جورج العالمي أخر, كان تم أطراف القوى استبدال. أسر ميناء تكتيكاً الجديدة، كل. جُل اللا التكاليف بـ, عرفها النزاع لليابان بـ أضف. انتهت المدن الثالث من وقد.وقبل قادة إحتار عن أخر. حين ونتج أخرى قد. بالعمل بالمطالبة فقد قد. عن جنوب ومضى الشتاء.
+          </p>
 
           <h6 slot="footer">
-            <i class="ti-time"></i>
+            <i class="ti-time" />
             مدن أن هُزم سكان, مكن.
           </h6>
         </time-line-item>
@@ -162,7 +216,9 @@
           <span slot="header" class="badge badge-success">جُل حكومة</span>
           <p
             slot="content"
-          >عل فكانت الثقيلة بلا. شيء بخطوط بالرّغم التبرعات عن, يطول بأيدي لم كلّ. معقل الغالي واتّجه لم وتم, أن الصفحة بالمحور حول, بال مرمى الصفحات قُدُماً و. الأخذ سبتمبر العالم من ذلك. ان يبق شدّت الأبرياء, الى الربيع، والمانيا كل.ودول الأهداف التقليدي عل أضف, كلا يقوم الأخذ الآلاف بل.</p>
+          >
+            عل فكانت الثقيلة بلا. شيء بخطوط بالرّغم التبرعات عن, يطول بأيدي لم كلّ. معقل الغالي واتّجه لم وتم, أن الصفحة بالمحور حول, بال مرمى الصفحات قُدُماً و. الأخذ سبتمبر العالم من ذلك. ان يبق شدّت الأبرياء, الى الربيع، والمانيا كل.ودول الأهداف التقليدي عل أضف, كلا يقوم الأخذ الآلاف بل.
+          </p>
         </time-line-item>
 
         <time-line-item inverted badge-type="info" badge-icon="fingerprint">
@@ -173,7 +229,7 @@
               الجو جديداً الأوروبيّون أم به،. ثم التي نتيجة الآلاف جعل, عن المارق السادس قام. ما أخر فقامت الأجل الشرق،, فصل كل وسوء الأرواح. ثم بعد وشعار بأيدي. قبل وكسبت الغالي الولايات بل, ٣٠ أمّا أخرى لأداء أضف.
               هو منتصف معزّزة على. بـ أفريقيا التغييرات مما, أثره،.
             </p>
-            <hr />
+            <hr>
             <drop-down>
               <md-button
                 slot="title"

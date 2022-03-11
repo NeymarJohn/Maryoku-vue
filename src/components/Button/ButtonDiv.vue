@@ -1,9 +1,11 @@
 <template>
-<div @click.prevent='triggerFunc' :class='[classChenger?buttonStyle:secondClass]'>{{text}}</div>
+  <div :class="[classChenger?buttonStyle:secondClass]" @click.prevent="triggerFunc">
+    {{ text }}
+  </div>
 </template>
 <script>
 export default {
-  name: 'Button',
+  name: "Button",
   model: {
   },
   props: {
@@ -11,17 +13,17 @@ export default {
     buttonStyle: String,
     onClick: Function,
     filter: String,
-    secondClass: {type: String, default: ''},
+    secondClass: {type: String, default: ""},
     classChenger: {type: Boolean, default: true}
   },
   methods: {
     triggerFunc: function () {
-      if (this.filter) { this.onClick(this.filter) }
-      this.onClick()
+      if (this.filter) { this.onClick(this.filter); }
+      this.onClick();
     }
   }
 
-}
+};
 </script>
 <style lang="scss">
 

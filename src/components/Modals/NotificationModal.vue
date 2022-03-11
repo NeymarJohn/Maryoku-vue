@@ -1,53 +1,62 @@
 <template>
-    <transition name="modal">
-        <div
-            class="modal-mask"
-            @click="modalMaskClick"
-            @dragstart="modalMaskClick"
-            @dragenter="modalMaskClick"
-            @dragover="modalMaskClick"
-            @dragleave="modalMaskClick"
-        >
-            <div class="modal-wrapper">
-                <div class="modal-container no-header no-footer w-min-800" v-click-outside="closeModal">
-                    <loader :active="loading" page="vendor" :height="'100%'"></loader>
-                    <div class="modal-header position-relative">
-                        <md-button
-                            class="md-simple position-absolute"
-                            style="top: 20px;right:20px"
-                            @click="closeModal"
-                        >
-                            <md-icon>close</md-icon>
-                        </md-button>
+  <transition name="modal">
+    <div
+      class="modal-mask"
+      @click="modalMaskClick"
+      @dragstart="modalMaskClick"
+      @dragenter="modalMaskClick"
+      @dragover="modalMaskClick"
+      @dragleave="modalMaskClick"
+    >
+      <div class="modal-wrapper">
+        <div v-click-outside="closeModal" class="modal-container no-header no-footer w-min-800">
+          <loader :active="loading" page="vendor" :height="'100%'" />
+          <div class="modal-header position-relative">
+            <md-button
+              class="md-simple position-absolute"
+              style="top: 20px;right:20px"
+              @click="closeModal"
+            >
+              <md-icon>close</md-icon>
+            </md-button>
 
-                        <div class="py-40 d-flex justify-content-center width-100 header-bg">
-                            <div class="w-max-600 text-center">
-                                <img :src="`${$iconURL}${notification[name].icon}`">
-                                <h3 class="font-size-30 font-bold-extra color-won">{{ notification[name].title }}</h3>
+            <div class="py-40 d-flex justify-content-center width-100 header-bg">
+              <div class="w-max-600 text-center">
+                <img :src="`${$iconURL}${notification[name].icon}`">
+                <h3 class="font-size-30 font-bold-extra color-won">
+                  {{ notification[name].title }}
+                </h3>
 
-                                <p class="font-size-14 m-0"> {{notification[name].description}}</p>
+                <p class="font-size-14 m-0">
+                  {{ notification[name].description }}
+                </p>
 
-                                <md-button v-if="notification[name].action" class="md-red maryoku-btn mb-20 ml-60" >
-                                    {{ notification[name].action }}</md-button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-body text-center" v-if="notification[name].content">
-                        <div class="d-flex flex-column align-center">
-                            <h5 v-if="notification[name].content.title" class="font-size-20 font-bold-extra color-red">
-                                {{ 'Can we offer you more vendors for your event ?' }}</h5>
-                            <p class="font-size-14 p-0">Let us help you find more vendors that are just right for your event</p>
-                            <md-button class="md-red maryoku-btn my-20" @click="closeModal">Show me more vendors</md-button>
-
-                            <Rate v-if="notification[name].content.rate" @rate="selectRate"></Rate>
-                        </div>
-
-                    </div>
-                </div>
+                <md-button v-if="notification[name].action" class="md-red maryoku-btn mb-20 ml-60">
+                  {{ notification[name].action }}
+                </md-button>
+              </div>
             </div>
+          </div>
+
+          <div v-if="notification[name].content" class="modal-body text-center">
+            <div class="d-flex flex-column align-center">
+              <h5 v-if="notification[name].content.title" class="font-size-20 font-bold-extra color-red">
+                {{ 'Can we offer you more vendors for your event ?' }}
+              </h5>
+              <p class="font-size-14 p-0">
+                Let us help you find more vendors that are just right for your event
+              </p>
+              <md-button class="md-red maryoku-btn my-20" @click="closeModal">
+                Show me more vendors
+              </md-button>
+
+              <Rate v-if="notification[name].content.rate" @rate="selectRate" />
+            </div>
+          </div>
         </div>
-    </transition>
+      </div>
+    </div>
+  </transition>
 </template>
 <script>
 
@@ -55,9 +64,9 @@ import { NOTIFICATION } from "@/constants/modal";
 import {mapMutations} from "vuex";
 
 const components = {
-    Rate: () => import('./Rate'),
-    loader: () => import('@/components/loader/Loader.vue'),
-}
+    Rate: () => import("./Rate"),
+    loader: () => import("@/components/loader/Loader.vue"),
+};
 
 export default {
     components,
@@ -78,10 +87,10 @@ export default {
         return {
             notification: NOTIFICATION,
             loading: false,
-        }
+        };
     },
     methods:{
-        ...mapMutations('modal', ['setOpen']),
+        ...mapMutations("modal", ["setOpen"]),
         closeModal: function () {
             this.setOpen(null);
         },
@@ -95,7 +104,7 @@ export default {
             this.score = score;
             this.proposal = {...this.proposal, score};
 
-            await this.$store.dispatch('modal/saveProposal', this.proposal);
+            await this.$store.dispatch("modal/saveProposal", this.proposal);
             this.loading = false;
         }
     },
@@ -104,7 +113,7 @@ export default {
             return this.$store.state.modal.proposal;
         }
     }
-}
+};
 </script>
 <style lang="scss">
 .modal-enter {

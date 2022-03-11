@@ -1,22 +1,22 @@
 <template>
   <div class="main-layout">
     <div class="paper-layout">
-      <div class="header-cover-image" >
-        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" />
+      <div class="header-cover-image">
+        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png">
       </div>
-      <div class="content" >
-        <div class="decoration-line" >
+      <div class="content">
+        <div class="decoration-line">
           <div class="decoration-item-line item-line-1" />
           <div class="decoration-item-line item-line-2" />
           <div class="decoration-item-line item-line-3" />
           <div class="decoration-item-line item-line-4" />
         </div>
-        <div class="content-article" >
-          <div class="content-article-header" >
-            <div class="d-flex mb-70" >
+        <div class="content-article">
+          <div class="content-article-header">
+            <div class="d-flex mb-70">
               <feedback-logo class="mt-30" />
-              <div class="wrapper-view-presentation" >
-                <div class="view-presentation" >
+              <div class="wrapper-view-presentation">
+                <div class="view-presentation">
                   <view-presentation
                     cover-image="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/fde9a712-f55d-4a96-b0ce-7df0ac9c1661.png"
                   />
@@ -24,12 +24,16 @@
               </div>
             </div>
             <div class="wrapper-thanks-for-participating">
-              <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`" />
+              <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`">
               <div class="mt-10">
-                <div class="font-size-40 font-bold line-height-1">THANKS FOR PARTICIPATING!</div>
-                <div class="subtitle">80’s Disco Party</div>
+                <div class="font-size-40 font-bold line-height-1">
+                  THANKS FOR PARTICIPATING!
+                </div>
+                <div class="subtitle">
+                  80’s Disco Party
+                </div>
               </div>
-              <div class="message" >
+              <div class="message">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                 sed diam nonumy eirmod tempor invidunt ut labore et
                 dolore magna aliquyam erat, sed diam voluptua.
@@ -45,15 +49,15 @@
                 width="27"
                 height="37"
                 src="static/icons/double-arrow-down-gray.svg"
-              />
+              >
             </div>
           </div>
-          <div class="content-article-main-content" >
+          <div class="content-article-main-content">
             <div class="feedback-question-list">
               <div>
-                <div class="d-flex justify-content-between" >
-                  <div class="d-flex align-center justify-content-between" >
-                    <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex align-center justify-content-between">
+                    <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20">
                     <span class="font-size-30 font-bold line-height-1">WE WOULD LOVE TO HEAR YOUR FEEDBACK</span>
                   </div>
                 </div>
@@ -61,25 +65,27 @@
                   <feedback-question
                     v-for="(question, index) in feedbackQuestions"
                     :key="index"
-                    :feedbackData="question"
+                    :feedback-data="question"
                     :disabled="false"
                     :show-switch="false"
-                  ></feedback-question>
+                  />
                 </div>
-                <md-button class="yellow-button-send-feedback">Send feedback</md-button>
+                <md-button class="yellow-button-send-feedback">
+                  Send feedback
+                </md-button>
               </div>
             </div>
           </div>
-          <div class="content-article-footer" >
-            <div class="d-flex align-center pt-50 pb-50" >
-              <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
-              <div class="ml-20 d-flex flex-wrap flex-column" >
-                <div class="d-flex" >
+          <div class="content-article-footer">
+            <div class="d-flex align-center pt-50 pb-50">
+              <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`">
+              <div class="ml-20 d-flex flex-wrap flex-column">
+                <div class="d-flex">
                   <span class="font-size-30 font-bold line-height-1">PICTURES OF ALL THE FUN WE EXPERIENCED</span>
                 </div>
               </div>
             </div>
-            <div class="wrapper-carousel" >
+            <div class="wrapper-carousel">
               <feedback-image-carousel
                 class="p-10"
                 :items="2.5"
@@ -98,14 +104,20 @@
           <div class="margin-left-style-first-block position-relative">
             <div class="icon-and-text">
               <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
-              <div class="right-text-style">share with us photos you took from the event</div>
+              <div class="right-text-style">
+                share with us photos you took from the event
+              </div>
             </div>
             <div class="white-cube">
               <div class="border-cube">
-                <div class="title-text-drag-and-drop">Drag and drop your photos from event</div>
-                <div class="or-section">\\ Or \\</div>
+                <div class="title-text-drag-and-drop">
+                  Drag and drop your photos from event
+                </div>
+                <div class="or-section">
+                  \\ Or \\
+                </div>
                 <md-button class="md-red border-cube-button">
-                  <img src="/static/icons/white-arrow-up.svg" class="mr-10" />
+                  <img src="/static/icons/white-arrow-up.svg" class="mr-10">
                   Upload photos from your computer
                 </md-button>
               </div>
@@ -114,20 +126,22 @@
           <div class="margin-left-style-second-block position-relative">
             <div class="icon-and-text">
               <img class="left-icon" src="/static/icons/green-block-icon-2.svg">
-              <div class="right-text-style">Material from the event</div>
+              <div class="right-text-style">
+                Material from the event
+              </div>
             </div>
             <div class="white-cube">
               <div class="mt-60">
                 <div class="right-white-cube-item">
-                  <img src="/static/icons/black-arrow-down.svg" class="mr-10" />
+                  <img src="/static/icons/black-arrow-down.svg" class="mr-10">
                   <span>The name of the presentation at the event.ppx</span>
                 </div>
                 <div class="right-white-cube-item">
-                  <img src="/static/icons/black-arrow-down.svg" class="mr-10" />
+                  <img src="/static/icons/black-arrow-down.svg" class="mr-10">
                   <span>The name of the presentation at the event.doc</span>
                 </div>
                 <div class="right-white-cube-item">
-                  <img src="/static/icons/black-arrow-down.svg" class="mr-10" />
+                  <img src="/static/icons/black-arrow-down.svg" class="mr-10">
                   <span>The name of the presentation at the event.exe</span>
                 </div>
               </div>
@@ -139,35 +153,39 @@
           </div>
         </div>
       </div>
-        <div class="lets_share_block">
-          <div class="lets_share_text">Let's share all this fun :)</div>
-          <sharing-button-group
-            class="sharing-button-group-wrapper"
-            :copyLink="true"
-          ></sharing-button-group>
+      <div class="lets_share_block">
+        <div class="lets_share_text">
+          Let's share all this fun :)
         </div>
-      <div style="color:#fff" class="ml-50" >last block</div>
+        <sharing-button-group
+          class="sharing-button-group-wrapper"
+          :copy-link="true"
+        />
+      </div>
+      <div style="color:#fff" class="ml-50">
+        last block
+      </div>
     </div>
     <div class="text-center logo maryoku_provided_by" @click="gotoWeb">
       <span>Provided by  &nbsp;</span>
-      <img  :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
+      <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
     </div>
     <div class="landing-footer">
       <div class="landing-footer-item">
         <md-button
+          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default mt-40"
           @click="scrollToTop()"
-          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default mt-40">
+        >
           <span>
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Requirements/Asset+49.svg" class="upward-button" />
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Requirements/Asset+49.svg" class="upward-button">
           </span>
         </md-button>
       </div>
     </div>
   </div>
-
 </template>
 <script>
-import ViewPresentation from '@/pages/app/Campaign/components/ViewPresentation';
+import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import HideSwitch from "@/components/HideSwitch";
@@ -176,7 +194,7 @@ import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImage
 import { mapActions } from "vuex";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup.vue";
 export default {
-  name: "Landing.vue",
+  name: "LandingVue",
   components:{
     SharingButtonGroup,
     FeedbackLogo,
@@ -191,10 +209,10 @@ export default {
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
-    }
+    };
   },
   created() {
-    console.log("this.$store.state", this.$store.state)
+    console.log("this.$store.state", this.$store.state);
     this.getCampaigns({ event: this.event });
     this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
       Please take a moment to help us improve future events by taking a brief survey.
@@ -284,7 +302,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     campaignData () {
-      return this.$store.state.campaign.FEEDBACK
+      return this.$store.state.campaign.FEEDBACK;
     }
   },
 };

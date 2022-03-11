@@ -3,7 +3,9 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <md-card class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-20 md-large-size-20 md-small-size-30">
       <md-card-content class="md-layout time-line-blocks_items">
-        <h5 class="section-desc">Create a timeline of your event by dragging timeline items.</h5>
+        <h5 class="section-desc">
+          Create a timeline of your event by dragging timeline items.
+        </h5>
         <div v-for="(block, index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
           <drag
             :transfer-data="{ block }"
@@ -16,13 +18,13 @@
         </div>
       </md-card-content>
     </md-card>
-    <div class="md-layout-item md-size-5"></div>
+    <div class="md-layout-item md-size-5" />
     <div class="md-layout-item md-xlarge-size-70 md-large-size-70 md-small-size-60 time-line-section mr-auto" style>
       <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
               Preview
       </md-button>-->
 
-      <drop @drop="handleDrop" style="height: 100%">
+      <drop style="height: 100%" @drop="handleDrop">
         <draggable
           :list="timelineItems"
           class="time-line-blocks_selected-items"
@@ -33,56 +35,58 @@
             :key="index"
             class="time-line-blocks_selected-items_item time-line-item"
           >
-            <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{ item.icon }}</md-icon>
-            <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit'">
+            <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">
+              {{ item.icon }}
+            </md-icon>
+            <md-card v-if="!item.dateCreated || item.mode === 'edit'" class="block-form">
               <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C" />
               <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-50">
                   <md-field>
                     <input-mask
+                      v-model="item.startTime"
                       v-focus
                       placeholder="From Time e.g:08:00 AM"
                       class="md-input"
-                      v-model="item.startTime"
                       mask="99:99 aa"
-                      maskChar="_"
-                    ></input-mask>
+                      mask-char="_"
+                    />
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
                   <md-field>
                     <input-mask
+                      v-model="item.endTime"
                       placeholder="To Time e.g:10:00 PM"
                       class="md-input"
-                      v-model="item.endTime"
                       mask="99:99 aa"
-                      maskChar="_"
-                    ></input-mask>
+                      mask-char="_"
+                    />
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                   <md-field>
                     <label>Title</label>
-                    <md-input v-model="item.title" type="text"></md-input>
+                    <md-input v-model="item.title" type="text" />
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                   <md-field>
                     <label>Description</label>
-                    <md-input v-model="item.description" type="text"></md-input>
+                    <md-input v-model="item.description" type="text" />
                   </md-field>
                 </div>
 
                 <div class="md-layout-item md-size-100 margin-bottom">
                   <md-field>
                     <label>Link</label>
-                    <md-input v-model="item.link" type="text"></md-input>
+                    <md-input v-model="item.link" type="text" />
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                   <label>Attchement</label>
                   <md-field>
-                    <md-input name="attachment" type="file" @change="onFileChange"></md-input>
+                    <md-input name="attachment" type="file" @change="onFileChange" />
                   </md-field>
                 </div>
               </md-card-content>
@@ -91,28 +95,31 @@
                   name="event-planner-tab-timeline-item-save"
                   class="event-planner-tab-timeline-item-save md-danger md-simple"
                   @click="cancelTimelineItem(item, index)"
-                  >Cancel</md-button
                 >
+                  Cancel
+                </md-button>
                 <md-button
+                  v-if="!item.dateCreated"
                   :disabled="item.isItemLoading"
                   name="event-planner-tab-timeline-item-save"
                   class="event-planner-tab-timeline-item-save md-info"
-                  v-if="!item.dateCreated"
                   @click="saveTimelineItem(item, index)"
-                  >Save</md-button
                 >
+                  Save
+                </md-button>
                 <md-button
+                  v-else
                   :disabled="item.isItemLoading"
                   name="event-planner-tab-timeline-item-edit"
                   class="event-planner-tab-timeline-item-edit md-info"
-                  v-else
                   @click="updateTimelineItem(item)"
-                  >Save</md-button
                 >
+                  Save
+                </md-button>
               </md-card-actions>
             </md-card>
 
-            <md-card class="block-info" v-if="!item.mode || item.mode === 'saved'">
+            <md-card v-if="!item.mode || item.mode === 'saved'" class="block-info">
               <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C" />
               <md-card-content style="min-height: 80px">
                 <div class="card-actions" style="width: 100%; text-align: right">
@@ -126,8 +133,7 @@
                       font-size: 1.6vmin;
                     "
                     :style="`background : ` + item.color"
-                    >{{ item.startTime }} - {{ item.endTime }}</span
-                  >
+                  >{{ item.startTime }} - {{ item.endTime }}</span>
                   <md-button
                     name="event-planner-tab-timeline-item-edit"
                     class="event-planner-tab-timeline-item-edit md-info md-xs md-just-icon md-round"
@@ -144,23 +150,25 @@
                   </md-button>
                 </div>
                 <div class="item-title-and-time" style="padding-top: 32px !important; padding-left: 4px">
-                  <span class="item-title" style="font-weight: 500; display: inline-block" v-if="item.title">{{
+                  <span v-if="item.title" class="item-title" style="font-weight: 500; display: inline-block">{{
                     item.title
                   }}</span>
-                  <p class="item-desc">{{ item.description }}</p>
+                  <p class="item-desc">
+                    {{ item.description }}
+                  </p>
                 </div>
               </md-card-content>
             </md-card>
           </div>
 
-          <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">
+          <div v-if="!timelineItems.length" class="time-line-blocks_selected-items_item">
             <div class="drag-here">
               <p>
                 <img
                   src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop.png"
                   alt="drag and drop"
                   style="width: 62px"
-                />
+                >
               </p>
               <p style="font-style: italic; font-size: 18px">
                 Start building your event timeline by dropping timeline items here
@@ -168,11 +176,15 @@
             </div>
           </div>
 
-          <div class="time-line-blocks_selected-items_item" v-if="timelineItems.length">
-            <md-icon class="time-line-blocks_icon">add</md-icon>
+          <div v-if="timelineItems.length" class="time-line-blocks_selected-items_item">
+            <md-icon class="time-line-blocks_icon">
+              add
+            </md-icon>
             <div class="drag-here">
               Continue building your event timeline by dropping more timeline items here
-              <div class="small">You can change the order of items by dragging them to the right place</div>
+              <div class="small">
+                You can change the order of items by dragging them to the right place
+              </div>
             </div>
           </div>
         </draggable>
@@ -199,7 +211,7 @@ import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
 
 export default {
-  name: "event-timeline",
+  name: "EventTimeline",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -265,6 +277,26 @@ export default {
     disabledDragging: false,
     timelineAttachment: null,
   }),
+  watch: {
+    event(newVal, oldVal) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      this.getTimelineItems();
+    },
+  },
+  created() {
+    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 PM") : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 AM") : this.hoursArray.push(`${x}:00 AM`)));
+
+    this.hoursArray.push();
+  },
+  mounted() {
+    this.isLoading = true;
+    if (this.event && this.event.id) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      this.getTimelineItems();
+    }
+  },
   methods: {
     /**
      * Handle drop block to time line items
@@ -536,26 +568,6 @@ export default {
         }
       };
       reader.readAsDataURL(file);
-    },
-  },
-  created() {
-    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
-
-    this.hoursArray.push();
-  },
-  mounted() {
-    this.isLoading = true;
-    if (this.event && this.event.id) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-      this.getTimelineItems();
-    }
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-      this.getTimelineItems();
     },
   },
 };

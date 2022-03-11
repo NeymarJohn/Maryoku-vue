@@ -2,45 +2,45 @@
   <div class="card-content-invoice">
     <div class="card-content-invoice-left">
       <div class="card-content-invoice-left-header">
-        <span class="card-content-invoice-left-header-invoice-number" >INVOICE.NO#00012</span>
+        <span class="card-content-invoice-left-header-invoice-number">INVOICE.NO#00012</span>
         <span class="card-content-invoice-left-header-invoice-date">Date Issued January 1, 2022</span>
       </div>
       <div class="card-content-invoice-left-customer-details">
-          <span class="card-content-invoice-left-customer-details-title">
-            CUSTOMER DETAILS
-          </span>
+        <span class="card-content-invoice-left-customer-details-title">
+          CUSTOMER DETAILS
+        </span>
         <span class="card-content-invoice-left-customer-details-subtitle">
-            MICROSOFT MARKETING EVENT
-          </span>
+          MICROSOFT MARKETING EVENT
+        </span>
         <ul class="card-content-invoice-left-customer-details-contact-list">
           <li>
-              <span class="card-content-invoice-left-customer-details-contact-item-icon">
-                <img width="26" height="21" src="../../../../../static/icons/mail-outline.svg"/>
-              </span>
+            <span class="card-content-invoice-left-customer-details-contact-item-icon">
+              <img width="26" height="21" src="../../../../../static/icons/mail-outline.svg">
+            </span>
             <span class="card-content-invoice-left-customer-details-contact-item">
-                Racheli@microsoft-r&d.com
-              </span>
+              Racheli@microsoft-r&d.com
+            </span>
           </li>
           <li>
-              <span class="card-content-invoice-left-customer-details-contact-item-icon">
-                <img width="21" height="26" src="../../../../../static/icons/location-outline.svg"/>
-              </span>
+            <span class="card-content-invoice-left-customer-details-contact-item-icon">
+              <img width="21" height="26" src="../../../../../static/icons/location-outline.svg">
+            </span>
             <span class="card-content-invoice-left-customer-details-contact-item">
-                Microsoft R&D, 51 Ellicott St. Batavia NY, USA 74812
-              </span>
+              Microsoft R&D, 51 Ellicott St. Batavia NY, USA 74812
+            </span>
           </li>
           <li>
-              <span class="card-content-invoice-left-customer-details-contact-item-icon">
-                <img width="26" height="26" src="../../../../../static/icons/phone-outline.svg" />
-              </span>
+            <span class="card-content-invoice-left-customer-details-contact-item-icon">
+              <img width="26" height="26" src="../../../../../static/icons/phone-outline.svg">
+            </span>
             <span class="card-content-invoice-left-customer-details-contact-item">
-                077-3000293
-              </span>
+              077-3000293
+            </span>
           </li>
         </ul>
       </div>
       <div class="card-content-invoice-left-signature">
-        <img class="card-content-invoice-left-signature-img" src="../../../../../static/img/maryoku-signature.png" />
+        <img class="card-content-invoice-left-signature-img" src="../../../../../static/img/maryoku-signature.png">
         <h3 class="card-content-invoice-left-signature-title">
           Authorized Stamp & Signature
         </h3>
@@ -56,11 +56,11 @@
 import InvoiceBudgetSummary from "@/pages/app/Invoices/invoiceBudgetSummary";
 
 export default {
-  name: "invoice-card-content",
+  name: "InvoiceCardContent",
   components: {
     InvoiceBudgetSummary,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

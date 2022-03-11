@@ -3,21 +3,21 @@
     <div class="container">
       <div class="title">
         2/5
-        <br />
+        <br>
         How many lucky guests are you expecting?
       </div>
       <div class="event-guests event-basic-info">
         <div class="mt-5">
           <maryoku-input
-            class="form-input"
-            inputStyle="users"
             v-model="numberOfGuests"
+            class="form-input"
+            input-style="users"
             placeholder="Type number…..."
-          ></maryoku-input>
+          />
         </div>
       </div>
     </div>
-    <wizard-status-bar :currentStep="2" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+    <wizard-status-bar :current-step="2" @next="goToNext" @skip="skip" @back="back" />
   </div>
 </template>
 
@@ -44,17 +44,17 @@ export default {
         key: "numberOfParticipants",
         actualValue: this.numberOfGuests ? this.numberOfGuests : 0,
       });
-      this.$router.push({ path: `/event-wizard-guests-type` });
+      this.$router.push({ path: "/event-wizard-guests-type" });
     },
     skip() {
       this.setEventProperty({
         key: "numberOfParticipants",
         actualValue: 0,
       });
-      this.$router.push({ path: `/event-wizard-guests-type` });
+      this.$router.push({ path: "/event-wizard-guests-type" });
     },
     back() {
-      this.$router.push({ path: `/event-wizard-flexibility` });
+      this.$router.push({ path: "/event-wizard-flexibility" });
     },
   },
   data() {

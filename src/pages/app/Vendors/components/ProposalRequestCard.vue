@@ -2,16 +2,24 @@
   <div class="proposal-request-card white-card p-20" :class="hasNegotiation ? 'negotiation' : ''">
     <div class="d-flex align-center">
       <div class="font-bold py-10" :class="getFontSize('title')" style="min-height: 44px">
-        <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
-        <template v-else-if="proposalRequest.eventData.title">{{ proposalRequest.eventData.title }}</template>
-        <template v-else>New Event</template>
+        <template v-if="proposalRequest.eventData.concept">
+          {{ proposalRequest.eventData.concept.name }}
+        </template>
+        <template v-else-if="proposalRequest.eventData.title">
+          {{ proposalRequest.eventData.title }}
+        </template>
+        <template v-else>
+          New Event
+        </template>
       </div>
       <md-button class="md-icon-button md-simple" @click="expanded = !expanded">
-        <md-icon class="color-black ml-5">keyboard_arrow_right</md-icon></md-button
-      >
-      <span class="d-flex align-center ml-auto whitspace-nowrap font-bold-extra" :class="hasNegotiation ? 'color-vendor' : 'color-yellow-dark'" >
-        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px" />
-        <span :class="getFontSize('expiredDate')">{{`${getLeftDays()} Days Left`}}</span>
+        <md-icon class="color-black ml-5">
+          keyboard_arrow_right
+        </md-icon>
+      </md-button>
+      <span class="d-flex align-center ml-auto whitspace-nowrap font-bold-extra" :class="hasNegotiation ? 'color-vendor' : 'color-yellow-dark'">
+        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px">
+        <span :class="getFontSize('expiredDate')">{{ `${getLeftDays()} Days Left` }}</span>
       </span>
     </div>
     <div class="d-flex align-center justify-content-start" :class="getFontSize('title')">
@@ -23,21 +31,21 @@
     <div v-if="expanded" :class="getFontSize('subTitle')">
       <div class="d-flex align-center mt-1">
         <div class="width-50 d-flex align-center">
-          <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px" />
+          <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px">
           {{ proposalRequest.eventData.dateCreated | date("MM/DD/YY") }}
         </div>
         <div class="width-50 d-flex align-center">
-          <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4341.svg`" style="width: 18px" />
+          <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4341.svg`" style="width: 18px">
           {{ proposalRequest.eventData.location }}
         </div>
       </div>
       <div class="d-flex align-center mt-1 mb-1">
         <div class="width-50 d-flex align-center">
-          <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4392.svg`" style="width: 18px" /> 11:00 AM ~
+          <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4392.svg`" style="width: 18px"> 11:00 AM ~
           4:00PM
         </div>
         <div class="width-50 d-flex align-center">
-          <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-3485.svg`" style="width: 18px" />
+          <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-3485.svg`" style="width: 18px">
           {{ proposalRequest.eventData.numberOfParticipants | withComma(Number) }}
         </div>
       </div>
@@ -53,19 +61,21 @@
       </md-button>
       <div :class="type == 'proposal' ? 'ml-auto d-flex flex-column align-center' : 'd-flex align-center width-100'">
         <div v-if="proposalRequest.proposal">
-        <div v-if="proposalRequest.proposal.status === proposalStatus.DRAFT">
+          <div v-if="proposalRequest.proposal.status === proposalStatus.DRAFT">
             <span class="font-bold color-vendor">{{ proposalRequest.proposal.progress }} %</span> completed
-            <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="proposalRequest.proposal.progress"></md-progress-bar>
+            <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="proposalRequest.proposal.progress" />
           </div>
           <div
             v-else-if="hasNegotiation"
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
-            <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
-            {{this.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
+            <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px">
+            {{ this.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request' }}
           </div>
         </div>
-        <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">New</div>
+        <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">
+          New
+        </div>
         <md-button class="md-vendor" :class="type === 'proposal' ? 'h-30' : 'ml-auto h-40'" @click="gotoProposalRequest">
           {{ actionName }}
         </md-button>
@@ -79,7 +89,7 @@ import {PROPOSAL_STATUS} from "@/constants/status";
 
 const components = {
     TimelineEmpty: () => import("@/pages/app/Events/components/TimelineEmpty.vue")
-}
+};
 export default {
   components,
   props: {
@@ -119,17 +129,21 @@ export default {
       } else if (this.hasNegotiation) {
         return "Respond";
       } else {
-        return "Make Changes"
+        return "Make Changes";
       }
     },
     negotiations(){
       return this.proposalRequest.proposal.negotiations.filter(it => it.status === 0 && it.remainingTime > 0);
     }
   },
+  mounted() {
+    console.log("proposal.card.mounted", this.proposalRequest);
+    console.log("proposal.card.hasNegotiation", this.hasNegotiation);
+  },
   methods: {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
-      this.$emit('handle');
+      this.$emit("handle");
     },
     getLeftDays() {
       let expiredTime = !this.hasNegotiation ? this.proposalRequest.expiredTime : this.negotiations[0].expiredTime;
@@ -150,10 +164,6 @@ export default {
         return this.size === 1 ? "font-size-12" : "font-size-16";
       }
     },
-  },
-  mounted() {
-    console.log('proposal.card.mounted', this.proposalRequest);
-    console.log('proposal.card.hasNegotiation', this.hasNegotiation);
   },
 };
 </script>

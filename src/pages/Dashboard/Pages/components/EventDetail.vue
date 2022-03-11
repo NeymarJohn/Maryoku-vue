@@ -7,7 +7,7 @@
           :key="index"
           :section="section"
           @change="changeEvent"
-        ></event-overview-section>
+        />
       </div>
     </div>
   </div>
@@ -17,7 +17,7 @@
 import EventOverviewSection from "./EventOverviewSection";
 
 export default {
-  name: "event-detail",
+  name: "EventDetail",
   components: {
     EventOverviewSection,
   },
@@ -29,6 +29,23 @@ export default {
       // auth: auth,
       sections: [],
     };
+  },
+  computed: {
+    eventTypeList() {
+      return this.$store.state.common.eventTypes;
+    },
+  },
+  watch: {
+    event(newVal, oldVal) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      console.log("event.detail.watch", newVal);
+    },
+    eventTypeList(newVal) {
+      this.init();
+    },
+  },
+  mounted() {
+    this.init();
   },
   methods: {
     changeEvent(e) {
@@ -47,7 +64,7 @@ export default {
         this.event.eventType.key = eventType.key;
         this.event.eventType.id = eventType.id;
       }
-      this.$emit('change', this.event);
+      this.$emit("change", this.event);
       this.setSection();
     },
     setSection() {
@@ -87,23 +104,6 @@ export default {
     init() {
       this.isLoading = false;
       this.setSection();
-    },
-  },
-  mounted() {
-    this.init();
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-      console.log('event.detail.watch', newVal);
-    },
-    eventTypeList(newVal) {
-      this.init();
-    },
-  },
-  computed: {
-    eventTypeList() {
-      return this.$store.state.common.eventTypes;
     },
   },
 };

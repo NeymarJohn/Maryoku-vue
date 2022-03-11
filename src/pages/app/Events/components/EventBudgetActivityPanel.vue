@@ -8,20 +8,24 @@
       Want to upgrade your event and get a fantastic clip?
     </p>
     <p class="card-activity-buttons">
-      <md-button class="md-default md-maryoku md-simple md-theme-default"> No, Thanks</md-button>
-      <md-button class="md-default md-red md-maryoku"> Get Video Proposals</md-button>
+      <md-button class="md-default md-maryoku md-simple md-theme-default">
+        No, Thanks
+      </md-button>
+      <md-button class="md-default md-red md-maryoku">
+        Get Video Proposals
+      </md-button>
     </p>
   </div>
 </template>
 <script>
 export default {
-  name: "event-budget-activity-panel",
+  name: "EventBudgetActivityPanel",
   data() {
     return {
       title: "",
       description: "",
       isNeededAction: false,
-    }
+    };
   },
 };
 </script>

@@ -10,27 +10,33 @@
                   ? `${$iconURL}Vendor Signup/Group 5479 (2).svg`
                   : `${$iconURL}common/checked-circle-purple.svg`
               "
-            />
+            >
             <span class="value label">{{ item.label }}</span>
           </div>
-          <div v-if="item.dry === true" class="mt-5">Allowed Dry Run</div>
-          <div v-if="item.dry === false" class="mt-5">Not Allowed Dry Run</div>
+          <div v-if="item.dry === true" class="mt-5">
+            Allowed Dry Run
+          </div>
+          <div v-if="item.dry === false" class="mt-5">
+            Not Allowed Dry Run
+          </div>
         </div>
         <div class="qty text-transform-capitalize">
           <span v-if="this.item.value && this.item.value.constructor.name !== 'Array'">{{ getQty() }}</span>
-          <img v-if="item.desc" :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`" />
-          <img v-else :src="`${$iconURL}Vendor Signup/Asset 528.svg`" />
+          <img v-if="item.desc" :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`">
+          <img v-else :src="`${$iconURL}Vendor Signup/Asset 528.svg`">
         </div>
       </div>
       <div
-        class="text-transform-capitalize pl-40"
         v-if="this.item.value && this.item.value.constructor.name == 'Array'"
+        class="text-transform-capitalize pl-40"
       >
         {{ getQty() }}
       </div>
     </div>
 
-    <div class="expanded" v-if="expanded">{{ item.desc }}</div>
+    <div v-if="expanded" class="expanded">
+      {{ item.desc }}
+    </div>
   </div>
 </template>
 
@@ -38,7 +44,9 @@
 import moment from "moment";
 
 export default {
-  name: "vendor-starting-fee-item",
+  name: "VendorStartingFeeItem",
+  components: {},
+  filters: {},
   props: {
     item: Object,
     theme: {
@@ -46,12 +54,13 @@ export default {
       default: "purple",
     },
   },
-  components: {},
   data() {
     return {
       expanded: false,
     };
   },
+  computed: {},
+  watch: {},
   created() {},
   mounted() {},
   methods: {
@@ -74,9 +83,6 @@ export default {
       }
     },
   },
-  computed: {},
-  filters: {},
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

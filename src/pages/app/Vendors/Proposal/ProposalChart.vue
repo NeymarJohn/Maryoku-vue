@@ -1,6 +1,6 @@
 <template>
-  <div :style="{ width: '100%', height: '100%', zIndex: 9999 }" >
-    <svg class="chart" width="1000" height="341" aria-labelledby="title desc" role="img" id="bar_chart" ref="bar_chart">
+  <div :style="{ width: '100%', height: '100%', zIndex: 9999 }">
+    <svg id="bar_chart" ref="bar_chart" class="chart" width="1000" height="341" aria-labelledby="title desc" role="img">
       <title id="title">A bar chart showing information</title>
       <desc id="desc">4 apples; 8 bananas; 15 kiwis; 16 oranges; 23 lemons</desc>
       <g
@@ -17,8 +17,7 @@
           :height="260"
           rx="8"
           :style="`fill: rgb(129, 128, 128, 0.12)`"
-        >
-        </rect>
+        />
         <rect
           :x="45 + 80 * index"
           y="40"
@@ -37,18 +36,18 @@
         </text>
         <image v-if="index === chartData.length-1" href="/static/icons/vendor/proposalBoard/proposal-after.svg" :x="90 + 80 * index" y="265" />
       </g>
-      <g :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`" ref="tooltip">
+      <g ref="tooltip" :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`">
         <path
+          v-if="toolTipPosition == 'left'"
           id="svgMask"
           d="M3,72 L182,72 182,53 190,47 182,42 182,23 3,23 z"
           fill="#e6e5e5"
-          v-if="toolTipPosition == 'left'"
         />
         <path
+          v-if="toolTipPosition == 'right'"
           id="svgMask"
           d="M12,72 L190,72 190,23 12,23 12,52 3,47 12,42 z"
           fill="#e6e5e5"
-          v-if="toolTipPosition == 'right'"
         />
         <text
           id="tooltip"
@@ -66,11 +65,13 @@
       :options="lineChartOptions"
     />
     <div v-for="(item,index) in lineChartData.datasets" :key="index" class="proposal-chart-legend">
-      <span class="proposal-chart-legend-line" :style="`border-color:${item.backgroundColor}`" />{{item.label}}
+      <span class="proposal-chart-legend-line" :style="`border-color:${item.backgroundColor}`" />{{ item.label }}
     </div>
-    <div class="proposal-chart-divider"></div>
-    <div class="proposal-status">The proposal have
-      been updated</div>
+    <div class="proposal-chart-divider" />
+    <div class="proposal-status">
+      The proposal have
+      been updated
+    </div>
   </div>
 </template>
 
@@ -91,13 +92,13 @@ export default {
         labels: [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
         datasets: [
           {
-            label: 'Industry Benchmark',
+            label: "Industry Benchmark",
             borderDashOffset: 0,
             borderDash: [7, 2],
             fill: false,
             lineTension: 0,
-            backgroundColor: 'rgb(255,219,99)',
-            borderColor: 'rgb(255,219,99)',
+            backgroundColor: "rgb(255,219,99)",
+            borderColor: "rgb(255,219,99)",
             data: [
               {
                 x: 0,
@@ -126,13 +127,13 @@ export default {
             ],
           },
           {
-            label: 'Average Of My Proposal',
+            label: "Average Of My Proposal",
             borderDashOffset: 0,
             borderDash: [7, 2],
             fill: false,
             lineTension: 0,
-            backgroundColor: 'rgb(99,219,255)',
-            borderColor: 'rgb(99,219,255)',
+            backgroundColor: "rgb(99,219,255)",
+            borderColor: "rgb(99,219,255)",
             data: [
               {
                 x: 0,

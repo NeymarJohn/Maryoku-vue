@@ -1,72 +1,75 @@
 <template>
-    <div class="mt-50">
-        <div class="container">
-            <div class="form-section event-basic-info">
-                <div>
-                  <img :src="`${$iconURL}Onboarding/balloon-calendar.svg`">
-                </div>
-                <div class="title">
-                  HELLO There
-                  <div v-if="isLoggedIn">{{tenantUser.name}}!</div>
-                  <span v-else>!</span>
-                </div>
-                <div>
-                  Please answer a few questions to complete the background we need!
-                </div>
-                <div class="font-bold mt-4rem">
-                  <img :src="`${$iconURL}Onboarding/clover.svg`">
-                  Only 5 simple steps & you're signed!
-                </div>
-                <div class="font-bold mt-4rem">
-                    <md-button @click="goToNext" class="md-default md-red md-maryoku mt-4">Let's Begin</md-button>
-                </div>
-
-            </div>
+  <div class="mt-50">
+    <div class="container">
+      <div class="form-section event-basic-info">
+        <div>
+          <img :src="`${$iconURL}Onboarding/balloon-calendar.svg`">
         </div>
+        <div class="title">
+          HELLO There
+          <div v-if="isLoggedIn">
+            {{ tenantUser.name }}!
+          </div>
+          <span v-else>!</span>
+        </div>
+        <div>
+          Please answer a few questions to complete the background we need!
+        </div>
+        <div class="font-bold mt-4rem">
+          <img :src="`${$iconURL}Onboarding/clover.svg`">
+          Only 5 simple steps & you're signed!
+        </div>
+        <div class="font-bold mt-4rem">
+          <md-button class="md-default md-red md-maryoku mt-4" @click="goToNext">
+            Let's Begin
+          </md-button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   created () {
-    this.$set(this.eventData, 'location', this.publicEventData.location)
-    this.$set(this.eventData, 'eventType', this.publicEventData.eventType)
-    this.$set(this.eventData, 'date', this.publicEventData.date)
-    this.$set(this.eventData, 'eventDayPart', this.publicEventData.eventDayPart)
-    this.$set(this.eventData, 'eventPlaceNeeded', this.publicEventData.eventPlaceNeeded)
-    this.$set(this.eventData, 'flexibleWithDates', this.publicEventData.flexibleWithDates)
+    this.$set(this.eventData, "location", this.publicEventData.location);
+    this.$set(this.eventData, "eventType", this.publicEventData.eventType);
+    this.$set(this.eventData, "date", this.publicEventData.date);
+    this.$set(this.eventData, "eventDayPart", this.publicEventData.eventDayPart);
+    this.$set(this.eventData, "eventPlaceNeeded", this.publicEventData.eventPlaceNeeded);
+    this.$set(this.eventData, "flexibleWithDates", this.publicEventData.flexibleWithDates);
   },
   methods: {
-    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
     goToNext () {
-      this.$router.push({path: `/event-wizard-day`})
+      this.$router.push({path: "/event-wizard-day"});
     },
     validateDate () {
-      return this.$refs.datePicker.$el.classList.contains('md-has-value')
+      return this.$refs.datePicker.$el.classList.contains("md-has-value");
     },
     validateAndSubmit () {
       // this.$emit('goToNextPage');
       //  return;
-      let vm = this
+      let vm = this;
 
-      this.cerrors = {}
-      this.validating = true
+      this.cerrors = {};
+      this.validating = true;
 
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           // this.$parent.isLoading = true;
 
           if (this.eventId) {
-            vm.updateEvent()
+            vm.updateEvent();
           } else {
-            vm.createEvent()
+            vm.createEvent();
           }
         } else {
-          this.showNotify()
+          this.showNotify();
         }
-      })
+      });
 
       if (!this.eventType) {
 
@@ -76,12 +79,12 @@ export default {
     },
     showNotify () {
       this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
+        message: "Please, check all required fields",
+        icon: "warning",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
     }
   },
   data () {
@@ -107,23 +110,23 @@ export default {
           required: true
         }
       },
-      options: ['ameed', 'ahmad']
-    }
+      options: ["ameed", "ahmad"]
+    };
   },
   computed: {
-    ...mapState('PublicEventPlanner', [
-      'publicEventData'
+    ...mapState("PublicEventPlanner", [
+      "publicEventData"
     ]),
     isLoggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
     tenantUser() {
-        console.log('user', this.$store.state.auth.user);
-      return this.$store.state.auth.user
+        console.log("user", this.$store.state.auth.user);
+      return this.$store.state.auth.user;
     }
   }
 
-}
+};
 </script>
 <style lang="scss">
     .form-section.event-basic-info {

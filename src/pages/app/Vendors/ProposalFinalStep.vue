@@ -1,20 +1,26 @@
 <template>
   <div class="proposal-final-step">
-    <div class="font-size-40 font-bold header">How does our bidding process work?</div>
+    <div class="font-size-40 font-bold header">
+      How does our bidding process work?
+    </div>
     <div class="tabs d-flex">
       <div
-        class="tab"
         v-for="(tab, index) in tabs"
+        :key="tab.title"
+        class="tab"
         :class="{ active: selectedTab == index }"
         @click="selectTab(index)"
-        :key="tab.title"
       >
-        <img :src="`${$iconURL}Submit+Proposal/${tab.icon}`" />
-        <div class="font-bold font-size-22">{{ tab.title }}</div>
+        <img :src="`${$iconURL}Submit+Proposal/${tab.icon}`">
+        <div class="font-bold font-size-22">
+          {{ tab.title }}
+        </div>
       </div>
     </div>
     <div class="tab-content">
-      <h2 class="font-bold-extra">{{ tabs[selectedTab].title }}</h2>
+      <h2 class="font-bold-extra">
+        {{ tabs[selectedTab].title }}
+      </h2>
       <div v-if="selectedTab == 0">
         <div>
           Now we review the suitability of your proposal with the requirements of the event and budget. We also weigh in
@@ -27,15 +33,15 @@
           Maryoku's policy. Within 7 days of the event, if there are no appeals/ complaints, you will receive the rest
           of the payment to your account.
         </div>
-        <br />
+        <br>
         <div>Every offer you submit is kept with us, so we can better learn your price range.</div>
-        <br />
+        <br>
         <div>
           When you are chosen to do an event, you will get a link to the area where you can create a dialogue with the
           other vendors working the event, so you can work together and make sure everything is in sync. If you cancel,
           for any reason, you will have to return the down payment, in accordance with Maryoku's policy.
         </div>
-        <br />
+        <br>
         <div>
           If the event is canceled, you will receive compensation in accordance Maryoku's policy.Any change in the
           number of people, date, location, etc. will be reflected to you as soon as the planner defines a change. Some
@@ -52,7 +58,9 @@
       </template>
       <template v-if="selectedTab === 2">
         <div>
-          <h3 class="font-size-22 font-bold">I got the job, what's next?</h3>
+          <h3 class="font-size-22 font-bold">
+            I got the job, what's next?
+          </h3>
           <div>
             According to our policy, you'll now receive your down payment. If all goes well and there are no complaints
             or disputes filed, then you'll get fully paid within 7 days of the event. Next, you'll get a link connecting
@@ -60,14 +68,18 @@
           </div>
         </div>
         <div>
-          <h3 class="font-size-22 font-bold">What if the event gets cancelled?</h3>
+          <h3 class="font-size-22 font-bold">
+            What if the event gets cancelled?
+          </h3>
           <div>
             According to our policy, if from any reason you decide to cancel, then you'll have to give back your down
             payment. If the client cancels, then you'll be Compensated according to our policy.
           </div>
         </div>
         <div>
-          <h3 class="font-size-22 font-bold">Changes</h3>
+          <h3 class="font-size-22 font-bold">
+            Changes
+          </h3>
           <div>
             If any changes were made in the number of guests, location, date etc. you'll be informed immediately. Some
             changes may require a new and updated proposal. In that case, you'll receive a link to the proposal and you
@@ -82,7 +94,9 @@
       </template>
       <template v-if="selectedTab == 4">
         <div>
-          <h3 class="font-size-22 font-bold">Can I improve my chances?</h3>
+          <h3 class="font-size-22 font-bold">
+            Can I improve my chances?
+          </h3>
           <div>
             Sure. Once we finish our thorough examination and it's down to you and one more vendor, then you can tweet
             our post and share it with as many friends as possible. By doing so, you'll improve your chances to win
@@ -91,15 +105,17 @@
         </div>
         <div class="white-card sharing-form">
           <div class="upoad-photo">
-            <img :src="imageData" v-if="imageData" class="uploaded-image" />
-            <md-button v-else class="md-simple maryoku-btn md-red" @click="openPhotoDialog"
-              ><md-icon>add</md-icon><br />
-              <div>Add Photo</div></md-button
-            >
-            <input type="file" id="fileSelector" class="d-none" @change="onFileChange" />
+            <img v-if="imageData" :src="imageData" class="uploaded-image">
+            <md-button v-else class="md-simple maryoku-btn md-red" @click="openPhotoDialog">
+              <md-icon>add</md-icon><br>
+              <div>Add Photo</div>
+            </md-button>
+            <input id="fileSelector" type="file" class="d-none" @change="onFileChange">
           </div>
           <div>
-            <h3 class="font-size-22 font-bold">POST TO SHARE</h3>
+            <h3 class="font-size-22 font-bold">
+              POST TO SHARE
+            </h3>
             <div>
               Sure. Once we finish our thorough examination and it's down to you and one more vendor, then you can tweet
               our post and share it with as many friends as possible. By doing so, you'll improve your chances to win
@@ -139,7 +155,7 @@ export default {
       const file = event.target.files[0];
       this.imageData = await getBase64(file);
       const extension = file.type.split("/")[1];
-      const logoName = `xxxxxx`;
+      const logoName = "xxxxxx";
       S3Service.fileUpload(file, logoName, "logos").then((res) => {
         this.$store.dispatch("sharing", { logoUrl: res });
       });

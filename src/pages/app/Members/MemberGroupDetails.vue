@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout member-group-details" v-if="groupData">
+  <div v-if="groupData" class="md-layout member-group-details">
     <div class="md-layout-item">
       <md-card style="height: auto">
         <md-card-header class="md-card-header-text md-card-header-warning">
@@ -12,27 +12,28 @@
           <md-button
             class="md-info md-sm pull-right"
             style="margin: 16px 6px"
-            @click="inviteMembers"
             :disabled="working || noActions"
-            >Invite Members</md-button
+            @click="inviteMembers"
           >
+            Invite Members
+          </md-button>
           <md-button
             class="md-purple md-sm pull-right"
             style="margin: 16px 6px"
-            @click="uploadMembers"
             :disabled="working || noActions"
-            >Import from spreadsheet</md-button
+            @click="uploadMembers"
           >
+            Import from spreadsheet
+          </md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
 
           <div class="md-layout md-gutter" style="margin: 0">
-            <div class="md-layout-item md-size-100" v-if="groupData.id !== 'all'">
+            <div v-if="groupData.id !== 'all'" class="md-layout-item md-size-100">
               <md-field style="border: none">
                 <multiselect
                   :reset-after="true"
-                  @select="selectMember"
                   :close-on-select="false"
                   :preserve-search="true"
                   placeholder="Search members"
@@ -41,33 +42,36 @@
                   :searchable="true"
                   :options="availableMembers"
                   :multiple="true"
+                  @select="selectMember"
                 >
                   <template slot="option" slot-scope="props">
-                    <div class="md-menu-item" v-if="props.option.firstName || props.option.lastName">
+                    <div v-if="props.option.firstName || props.option.lastName" class="md-menu-item">
                       {{ props.option.firstName }} {{ props.option.lastName }}
                       <span class="text-gray">&nbsp;({{ props.option.emailAddress }})</span>
                     </div>
-                    <div class="md-menu-item" v-else>
+                    <div v-else class="md-menu-item">
                       {{ props.option.emailAddress }}
                     </div>
                   </template>
                   <template slot="tag" slot-scope="{ option }">
-                    <span style="display: none"></span>
+                    <span style="display: none" />
                   </template>
-                  <template slot="noOptions"> All the available members are selected. </template>
+                  <template slot="noOptions">
+                    All the available members are selected.
+                  </template>
                 </multiselect>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-100" style="margin-top: 8px" v-if="groupData.members.length">
+            <div v-if="groupData.members.length" class="md-layout-item md-size-100" style="margin-top: 8px">
               <md-table
+                v-model="groupData.members"
                 :md-fixed-header="false"
                 :md-height="groupData.id === 'all' ? 550 : 480"
                 :md-card="false"
-                v-model="groupData.members"
                 class="table-striped table-hover"
               >
-                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
+                <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item }">
                   <!--<md-table-cell md-label="First Name">
                                         <label-edit tabindex="2" empty="" :scope="item" :text="item.firstName" field-name="firstName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
                                         {{item.firstName}}
@@ -97,62 +101,66 @@
                   <md-table-cell md-label="" style="white-space: nowrap; width: 20%" class="text-right">
                     <div style="white-space: nowrap">
                       <md-button
+                        v-if="item.id === 'new'"
                         tabindex="4"
                         class="md-success md-sm"
                         style="width: auto"
                         :disabled="noActions"
                         @click="saveMember(item)"
-                        v-if="item.id === 'new'"
                       >
                         Save
                       </md-button>
                       <md-button
+                        v-if="item.id === 'new'"
                         tabindex="5"
                         class="md-danger md-simple md-sm"
                         style="width: auto"
                         @click="cancelAddMember(item)"
-                        v-if="item.id === 'new'"
                       >
                         Cancel
                       </md-button>
                     </div>
                     <md-button
+                      v-if="item.id !== 'new'"
                       class="md-warning md-round md-just-icon"
                       :disabled="noActions"
                       @click="editMember(item)"
-                      v-if="item.id !== 'new'"
                     >
                       <md-icon>edit</md-icon>
                     </md-button>
                     <md-button
+                      v-if="item.id !== 'new'"
                       class="md-danger md-round md-just-icon"
                       :disabled="noActions"
                       @click="removeMember(item)"
-                      v-if="item.id !== 'new'"
                     >
                       <md-icon>delete</md-icon>
-                      <md-tooltip md-direction="bottom">Remove from this group</md-tooltip>
+                      <md-tooltip md-direction="bottom">
+                        Remove from this group
+                      </md-tooltip>
                     </md-button>
                   </md-table-cell>
                 </md-table-row>
               </md-table>
             </div>
             <div
+              v-if="!groupData.members.length"
               class="md-layout-item md-size-100 text-center"
               style="margin-top: 8px"
-              v-if="!groupData.members.length"
             >
               <md-icon>arrow_upward</md-icon>
               <h4>Search members and add them to this group</h4>
             </div>
           </div>
 
-          <div v-if="!groupData">Select group to see its details</div>
+          <div v-if="!groupData">
+            Select group to see its details
+          </div>
         </md-card-content>
       </md-card>
     </div>
 
-    <import-members-panel ref="importModalOpen"></import-members-panel>
+    <import-members-panel ref="importModalOpen" />
   </div>
 </template>
 <script>
@@ -167,7 +175,7 @@ import MemberEditorPanel from "./MemberEditorPanel";
 import ImportMembersPanel from "./ImportMembersPanel";
 
 export default {
-  name: "member-group-details",
+  name: "MemberGroupDetails",
   components: { LabelEdit, MemberEditorPanel, ImportMembersPanel },
   props: {
     groupData: {

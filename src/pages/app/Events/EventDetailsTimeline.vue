@@ -1,59 +1,61 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
-    <budget-notifications></budget-notifications>
+    <budget-notifications />
     <comment-editor-panel
-        v-if="showCommentEditorPanel"
-        :commentComponents="commentComponents"
-        @saveComment="saveComment"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent"
-    >
-    </comment-editor-panel>
+      v-if="showCommentEditorPanel"
+      :comment-components="commentComponents"
+      @saveComment="saveComment"
+      @updateComment="updateComment"
+      @deleteComment="deleteComment"
+      @updateCommentComponent="updateCommentComponent"
+    />
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
-          <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
+          <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon">
           CREATE TIMELINE
         </div>
-        <div class="font-size-16" v-if="isEditMode">
-          <b>Things are warming up!</b> It’s time to create your event timeline! <br />We helped you with the basic
+        <div v-if="isEditMode" class="font-size-16">
+          <b>Things are warming up!</b> It’s time to create your event timeline! <br>We helped you with the basic
           structure
         </div>
-        <div class="font-size-16" v-if="!isEditMode">
-          Now that you’re making progress with building the timeline- <br />you can <b>assign slots to vendors</b> so
+        <div v-if="!isEditMode" class="font-size-16">
+          Now that you’re making progress with building the timeline- <br>you can <b>assign slots to vendors</b> so
           that your invitees will know what to expect!
         </div>
       </div>
       <header-actions
-          @toggleCommentMode="toggleCommentMode"
-          @share="share"
-          @export="exportToPdf"></header-actions>
+        @toggleCommentMode="toggleCommentMode"
+        @share="share"
+        @export="exportToPdf"
+      />
     </div>
     <div class="md-layout">
       <div
-        class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"
         ref="content"
+        class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"
       >
-        <button v-scroll-to="'#timeline-edit-card'" ref="scrollBtn" style="display: none">
+        <button ref="scrollBtn" v-scroll-to="'#timeline-edit-card'" style="display: none">
           Scroll to the editing card
         </button>
-        <timeline-edit-panel :isEditMode="isEditMode" :editingMode="editingMode"></timeline-edit-panel>
+        <timeline-edit-panel :is-edit-mode="isEditMode" :editing-mode="editingMode" />
       </div>
       <md-card
+        v-if="isEditMode"
         class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
         style="margin-top: 16px; padding-right: 3em"
-        v-if="isEditMode"
       >
         <md-card-content class="md-layout time-line-blocks_items mb-60">
-          <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Time Slots timeline</div>
+          <div class="text-center width-100 p-10 font-size-16 mb-10">
+            Drag Time Slots timeline
+          </div>
 
           <div v-for="(section, index) in blocksList" :key="index" class="md-layout-item md-size-100 mb-30">
             <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
               <drag :transfer-data="{ block }" class="time-line-blocks_item" :style="`color :` + block.color">
                 <div class="font-size-16 font-bold text-transform-capitalize d-flex align-center">
                   <md-icon>drag_indicator</md-icon>
-                  <img :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`" class="label-icon mr-10" />
+                  <img :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`" class="label-icon mr-10">
                   {{ block.buildingBlockType }}
                 </div>
               </drag>
@@ -64,49 +66,50 @@
     </div>
     <timeline-gap-modal
       v-if="showTimelineGapModal"
-      :timelineGap="timelineGaps[0]"
+      :timeline-gap="timelineGaps[0]"
       @close="showTimelineGapModal = false"
       @yes="finalize"
-    ></timeline-gap-modal>
+    />
 
     <planner-event-footer id="footer-panel">
       <template slot="buttons">
         <template v-if="isEditMode">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
+              <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`">Revert to original
             </span>
           </md-button>
-          <span class="seperator"></span>
+          <span class="seperator" />
           <md-button class="md-simple md-button md-black maryoku-btn" @click="startFromScratch">
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+              <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`">
               Start from scratch
             </span>
           </md-button>
           <md-button class="md-simple md-button md-red maryoku-btn md-outlined" @click="saveDraft">
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`" />
+              <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`">
               Save Draft
             </span>
           </md-button>
-          <md-button class="md-button md-red maryoku-btn" @click="finalize" key="finalize-button">
+          <md-button key="finalize-button" class="md-button md-red maryoku-btn" @click="finalize">
             <span class="font-size-16 text-transform-capitalize">Finalize timeline</span>
           </md-button>
         </template>
         <template v-else>
           <div class="ml-40 mr-40">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
+            <img :src="`${$iconURL}Campaign/Group 9222.svg`">
             Timeline Is Finalized.
           </div>
-          <span class="seperator" style="margin-top: 0; margin-left: 30px"></span>
-          <md-button class="md-button md-red md-simple maryoku-btn" @click="isEditMode = true" key="edit-button">
+          <span class="seperator" style="margin-top: 0; margin-left: 30px" />
+          <md-button key="edit-button" class="md-button md-red md-simple maryoku-btn" @click="isEditMode = true">
             <span class="font-size-16 text-transform-capitalize">Edit Timeline</span>
           </md-button>
         </template>
       </template>
     </planner-event-footer>
     <vue-html2pdf
+      ref="html2Pdf"
       :show-layout="false"
       :float-layout="true"
       :enable-download="true"
@@ -121,11 +124,10 @@
       @progress="onProgress($event)"
       @hasStartedGeneration="hasStartedGeneration()"
       @hasGenerated="hasGenerated($event)"
-      ref="html2Pdf"
     >
       <section slot="pdf-content">
         <!-- PDF Content Here -->
-        <timeline-pdf-panel></timeline-pdf-panel>
+        <timeline-pdf-panel />
       </section>
     </vue-html2pdf>
   </div>
@@ -168,7 +170,7 @@ import { timelineTempates } from "@/constants/event.js";
 import {CommentMixins, ShareMixins} from "@/mixins";
 import { postReq, getReq } from "@/utils/token";
 export default {
-  name: "event-details-timeline",
+  name: "EventDetailsTimeline",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -191,11 +193,11 @@ export default {
     VueHtml2pdf,
     TimelinePdfPanel,
   },
+  mixins: [CommentMixins, ShareMixins],
   props: {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  mixins: [CommentMixins, ShareMixins],
   data: () => ({
     // auth: auth,
     editingMode: "template",
@@ -239,7 +241,7 @@ export default {
     hasGenerated() {},
     download() {
       this.$router.push({
-        path: `/events/` + this.eventData.id + `/edit/timeline/export`,
+        path: "/events/" + this.eventData.id + "/edit/timeline/export",
       });
     },
     /**
@@ -639,9 +641,9 @@ export default {
         cancelButtonText: "Cancel",
         buttonsStyling: false,
         customClass: {
-          popup:'swal-alert-container',
-          header: 'swal-alert-header',
-          htmlContainer: 'swal-alert-html',
+          popup:"swal-alert-container",
+          header: "swal-alert-header",
+          htmlContainer: "swal-alert-html",
         }
       }).then(async (result) => {
         if (result.value === true) {
@@ -705,16 +707,16 @@ export default {
         .then((event) => {
           this.$notify({
                 message: {
-                    title: 'Good Job!',
+                    title: "Good Job!",
                     content: `Your timeline has been saved successfully!
                         Feel free to come back and work on it at any time.`,
                 },
                 icon: `${this.$iconURL}messages/info.svg`,
                 horizontalAlign: "right",
                 verticalAlign: "top",
-                type: 'info',
+                type: "info",
                 cancelBtn: false,
-                confirmBtn: 'OK',
+                confirmBtn: "OK",
                 closeBtn: true,
                 timeout: 5000,
           });
@@ -810,10 +812,10 @@ export default {
     },
   },
   created() {
-    console.log('timeline.created');
+    console.log("timeline.created");
     [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 PM") : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 AM") : this.hoursArray.push(`${x}:00 AM`)));
     this.calendar = new Calendar({
       id: this.currentUser.profile.defaultCalendarId,
     });

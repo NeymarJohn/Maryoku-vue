@@ -2,32 +2,35 @@
   <div class="weclome-event-page">
     <div class="welcome-event-content white-card">
       <div class="header d-flex justify-content-between">
-        <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" />
+        <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`">
         <md-button class="md-simple edit-btn" @click="closePanel">
-          <md-icon class="color-black">close</md-icon>
+          <md-icon class="color-black">
+            close
+          </md-icon>
         </md-button>
       </div>
       <div class="title text-center">
-        <img :src="`${$iconURL}common/welcome-header.png`" />
-        <h1 class="font-size-50 font-bold">Welcome to your event rachel!</h1>
+        <img :src="`${$iconURL}common/welcome-header.png`">
+        <h1 class="font-size-50 font-bold">
+          Welcome to your event rachel!
+        </h1>
         <div class="summary">
           <span>Your on board summary:</span>
           <span class="font-bold summary-item">
-            <img :src="`${$iconURL}common/calendar-dark.svg`" class="label-icon" />
-            {{ $dateUtil.formatScheduleDay(event.eventStartMills, "MMMM DD, YYYY") }}(Flexible)</span
-          >
+            <img :src="`${$iconURL}common/calendar-dark.svg`" class="label-icon">
+            {{ $dateUtil.formatScheduleDay(event.eventStartMills, "MMMM DD, YYYY") }}(Flexible)</span>
           <span class="font-bold summary-item">
-            <img :src="`${$iconURL}common/users-dark.svg`" class="label-icon" />{{
+            <img :src="`${$iconURL}common/users-dark.svg`" class="label-icon">{{
               event.numberOfParticipants | withComma
             }}
-            Invited</span
-          >
+            Invited</span>
           <span class="font-bold summary-item">
-            <img :src="`${$iconURL}common/location-dark.svg`" class="label-icon" />{{ event.location }}</span
-          >
+            <img :src="`${$iconURL}common/location-dark.svg`" class="label-icon">{{ event.location }}</span>
         </div>
       </div>
-      <div class="text-center mt-100 font-size-22 font-bold">Explore Mayroku's Main Features</div>
+      <div class="text-center mt-100 font-size-22 font-bold">
+        Explore Mayroku's Main Features
+      </div>
       <div class="video-list mt-50">
         <div v-for="(video, index) in videos" :key="video.title" class="video-item">
           <div class="video-item-wrapper">
@@ -38,14 +41,16 @@
               <md-icon>play_arrow</md-icon>
             </md-button>
           </div>
-          <img :src="video.thumbnail" />
+          <img :src="video.thumbnail">
         </div>
       </div>
 
-      <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player>
+      <youtube-player v-if="openPlayer" :video-id="selectedVideoId" @close="openPlayer = false" />
     </div>
     <div class="weclome-event-page-footer white-card">
-      <md-button class="md-red maryoku-btn" @click="gotoEvent">Let's Begin</md-button>
+      <md-button class="md-red maryoku-btn" @click="gotoEvent">
+        Let's Begin
+      </md-button>
     </div>
     <!-- <youtube video-id="BBJa32lCaaY" /> -->
   </div>

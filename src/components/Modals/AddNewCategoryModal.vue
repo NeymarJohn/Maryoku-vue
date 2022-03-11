@@ -3,7 +3,7 @@
     <template slot="header">
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra">
-          <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> Add new category
+          <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"> Add new category
         </h2>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -13,7 +13,7 @@
     <template slot="body">
       <div class="md-layout">
         <div class="md-layout-item md-size-70">
-          <div class="form-group maryoku-field" v-if="filteredEventBlocks">
+          <div v-if="filteredEventBlocks" class="form-group maryoku-field">
             <label class="font-size-16 font-bold-extra color-black">Category</label>
             <multiselect
               v-model="newBuildingBlock.category"
@@ -24,60 +24,65 @@
               placeholder="Type to search category"
               label="title"
               track-by="id"
-              :show-labels="false">
+              :show-labels="false"
+            >
               <template slot="singleLabel" slot-scope="props">
-                <img style="width: 20px"  :src="`${$iconURL}Budget Elements/${props.option.icon}`">
-                <span >{{ props.option.title }}</span>
+                <img style="width: 20px" :src="`${$iconURL}Budget Elements/${props.option.icon}`">
+                <span>{{ props.option.title }}</span>
               </template>
               <template slot="option" slot-scope="props">
-                <img  style="width: 20px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
+                <img style="width: 20px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
                 <span>{{ props.option.title }}</span>
               </template>
             </multiselect>
           </div>
         </div>
 
-        <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category.id === 'other'">
-          <md-icon class="font-size-20">subdirectory_arrow_right</md-icon>
+        <div v-if="newBuildingBlock.category.id === 'other'" class="md-layout-item md-size-70 d-flex">
+          <md-icon class="font-size-20">
+            subdirectory_arrow_right
+          </md-icon>
           <div class="form-group" style="flex-grow: 1; margin-left: 10px">
             <label class="font-size-16 font-bold-extra color-black">Name</label>
             <small class="font-size-14">(2 words top)</small>
-            <input type="text" class="form-control" v-model="newBuildingBlock.name"/>
+            <input v-model="newBuildingBlock.name" type="text" class="form-control">
           </div>
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">
             Budget
-            <br/>
+            <br>
           </label>
           <div class="mb-10">
             <small class="font-size-14">You have ${{ availableBudget | withComma }} to use</small>
           </div>
-          <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget"/>
+          <maryoku-input v-model="newBuildingBlock.budget" input-style="budget" />
         </div>
-        <div class="md-error d-flex align-center" v-if="availableBudget < newBuildingBlock.budget && !addMoreBudget">
-          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px"/>
+        <div v-if="availableBudget < newBuildingBlock.budget && !addMoreBudget" class="md-error d-flex align-center">
+          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px">
           <span style="padding: 0 15px">Oops! Seems like you don’t have enough cash in your “Unexpected” category</span>
           <md-button
             class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra"
             @click="addMoreMoney"
-          >Add More Money
-          </md-button
           >
+            Add More Money
+          </md-button>
         </div>
       </div>
       <div v-if="addMoreBudget" class="md-layout mt-10">
         <div v-if="addMoreMoney" class="md-layout-item md-size-50 form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">
             Additional Budget
-            <br/>
+            <br>
           </label>
-          <maryoku-input inputStyle="budget" v-model="additionalBudget"/>
+          <maryoku-input v-model="additionalBudget" input-style="budget" />
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
+      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">
+        Cancel
+      </md-button>
       <md-button :disabled="!isAvailable" class="md-red add-category-btn md-bold" @click="addNewCategory">
         Add Category
       </md-button>
@@ -106,6 +111,27 @@ export default {
       default: [],
     },
   },
+  data() {
+    return {
+      filteredEventBlocks: null,
+      addMoreBudget: false,
+      additionalBudget: 0,
+      newBuildingBlock: {
+        category: "",
+        name: "",
+        budget: "",
+      },
+    };
+  },
+  computed: {
+    availableBudget() {
+      return this.event.unexpectedBudget;
+    },
+    isAvailable() {
+      const budget = this.newBuildingBlock.budget;
+      return budget > 0 && this.availableBudget + this.additionalBudget >= budget;
+    },
+  },
   created: async function () {
     const availableComponents = JSON.parse(localStorage.getItem("budget_categories")) || [];
     if (!availableComponents.length) {
@@ -119,18 +145,6 @@ export default {
       localStorage.setItem("budget_categories", JSON.stringify(availableComponents));
     }
     this.filteredEventBlocks = availableComponents.filter(it => !this.event.components.find(c => c.title === it.title));
-  },
-  data() {
-    return {
-      filteredEventBlocks: null,
-      addMoreBudget: false,
-      additionalBudget: 0,
-      newBuildingBlock: {
-        category: "",
-        name: "",
-        budget: "",
-      },
-    };
   },
   methods: {
     close() {
@@ -147,7 +161,7 @@ export default {
           color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
             Math.random() * 255,
           )})`,
-          icon: `other.svg`,
+          icon: "other.svg",
           type: "customized",
           categoryId: "other",
         };
@@ -187,16 +201,7 @@ export default {
     },
     addMoreMoney() {
       this.addMoreBudget = true;
-      this.additionalBudget = this.newBuildingBlock.budget - this.availableBudget
-    },
-  },
-  computed: {
-    availableBudget() {
-      return this.event.unexpectedBudget;
-    },
-    isAvailable() {
-      const budget = this.newBuildingBlock.budget;
-      return budget > 0 && this.availableBudget + this.additionalBudget >= budget;
+      this.additionalBudget = this.newBuildingBlock.budget - this.availableBudget;
     },
   },
 };

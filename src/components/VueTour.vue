@@ -18,8 +18,8 @@
       <!--Default slot {{ currentStep }}-->
       <v-step
         v-if="steps[currentStep]"
-        :step="steps[currentStep]"
         :key="currentStep"
+        :step="steps[currentStep]"
         :previous-step="previousStep"
         :next-step="nextStep"
         :stop="stop"
@@ -46,7 +46,7 @@
 import { DEFAULT_CALLBACKS, DEFAULT_OPTIONS, KEYS } from "vue-tour/src/shared/constants";
 
 export default {
-  name: "v-tour",
+  name: "VTour",
   props: {
     steps: {
       type: Array,
@@ -72,19 +72,6 @@ export default {
     return {
       currentStep: -1,
     };
-  },
-  mounted() {
-    this.$tours[this.name] = this;
-
-    if (this.customOptions.useKeyboardNavigation) {
-      window.addEventListener("keyup", this.handleKeyup);
-    }
-  },
-  beforeDestroy() {
-    // Remove the keyup listener if it has been defined
-    if (this.customOptions.useKeyboardNavigation) {
-      window.removeEventListener("keyup", this.handleKeyup);
-    }
   },
   computed: {
     // Allow us to define custom options and merge them with the default options.
@@ -117,6 +104,19 @@ export default {
     step() {
       return this.steps[this.currentStep];
     },
+  },
+  mounted() {
+    this.$tours[this.name] = this;
+
+    if (this.customOptions.useKeyboardNavigation) {
+      window.addEventListener("keyup", this.handleKeyup);
+    }
+  },
+  beforeDestroy() {
+    // Remove the keyup listener if it has been defined
+    if (this.customOptions.useKeyboardNavigation) {
+      window.removeEventListener("keyup", this.handleKeyup);
+    }
   },
   methods: {
     async start(startStep) {

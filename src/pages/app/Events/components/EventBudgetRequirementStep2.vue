@@ -8,47 +8,50 @@
         <div class="font-size-40 font-bold text-transform-uppercase mt-3">
           Who’s calling the shots? 
         </div>
-        <div class="mt-1">What character would you say he or she resembles?</div>
-          <div class="mt-1 movies">
-            <div 
-              v-for="(movie) in movies" :key="movie.label"
-              class="movie-card"
-              :class="{selected:movie.label == selectedMovie.label}" 
-              @click="selectedMovie=movie" 
-              >
-              <div class="movie-tip">
-                <img :src="`${$iconURL}Event%20Page/light.svg`" width="18" >
-                <transition name="fade">
-                  <div class="tool-tip" v-html="movie.description">
-                    <!-- {{movie.description}} -->
-                      <!-- <b class="font-weight-bold">{{movie.label}}</b> is a queen bee. She likes things 
+        <div class="mt-1">
+          What character would you say he or she resembles?
+        </div>
+        <div class="mt-1 movies">
+          <div 
+            v-for="(movie) in movies" :key="movie.label"
+            class="movie-card"
+            :class="{selected:movie.label == selectedMovie.label}" 
+            @click="selectedMovie=movie" 
+          >
+            <div class="movie-tip">
+              <img :src="`${$iconURL}Event%20Page/light.svg`" width="18">
+              <transition name="fade">
+                <div class="tool-tip" v-html="movie.description">
+                  <!-- {{movie.description}} -->
+                  <!-- <b class="font-weight-bold">{{movie.label}}</b> is a queen bee. She likes things 
                       the way she likes them. At times she can seem 
                       bossy or hard to please - her standards are 
                       extremely high and your budget better be 
                       impeccable for her to approve it -->
-                  </div>
-                </transition>
-              </div>
-              <div class="movie-thumb">
-                <img :src="`${$storageURL}${movie.icon}`"/>
-              </div>
-              <div class="movie-title" >
-                <md-checkbox class="md-checkbox-circle md-red " v-model="selectedMovie" :value="movie"><span class="movie-label">{{movie.label}}</span></md-checkbox>
-              </div>
-              
+                </div>
+              </transition>
+            </div>
+            <div class="movie-thumb">
+              <img :src="`${$storageURL}${movie.icon}`">
+            </div>
+            <div class="movie-title">
+              <md-checkbox v-model="selectedMovie" class="md-checkbox-circle md-red " :value="movie">
+                <span class="movie-label">{{ movie.label }}</span>
+              </md-checkbox>
             </div>
           </div>
+        </div>
       </div>
     </div>
   </div>  
 </template>
 <script>
 
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { MaryokuInput } from '@/components'
-import 'vue-range-slider/dist/vue-range-slider.css'
-import RangeSlider from 'vue-range-slider'
-import moment from 'moment'
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { MaryokuInput } from "@/components";
+import "vue-range-slider/dist/vue-range-slider.css";
+import RangeSlider from "vue-range-slider";
+import moment from "moment";
 
 export default {
   components: {
@@ -61,13 +64,6 @@ export default {
       default: {}
     },
   },
-  created () {
-    console.log(this.defaultData)
-    if (this.defaultData && this.defaultData.label) {
-      this.selectedMovie = this.movies.find(item => item.label == this.defaultData.label)
-      console.log(this.selectedMovie)
-    }
-  },
   data() {
     return {
       selectedMovie:{},
@@ -75,11 +71,11 @@ export default {
         {
           icon: "movies/captain-kirk2.jpg",
           label: "Captain kirk",
-          description: `When <b>Kirk</b> walks into a room, all eyes are on him. He is charismatic, charming, and confident. Though he is comfortable delegating responsibilities, Kirk typically lead by example and is never afraid to get into the trenches to fight alongside his crew. He is super inclusive and will likely care more about RSVP and participants feedback than about cost`
+          description: "When <b>Kirk</b> walks into a room, all eyes are on him. He is charismatic, charming, and confident. Though he is comfortable delegating responsibilities, Kirk typically lead by example and is never afraid to get into the trenches to fight alongside his crew. He is super inclusive and will likely care more about RSVP and participants feedback than about cost"
         },{
           icon: "movies/dirty-harry2.jpg",
           label: "Dirty Harry",
-          description: `<b>Harry</b> is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he'll track RSVP like a hawk and deal personally with non comers`
+          description: "<b>Harry</b> is not a \"company man\" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he'll track RSVP like a hawk and deal personally with non comers"
         },{
           icon: "movies/jerry-seinfeld.jpg",
           label: "Jerry Seinfeld",
@@ -98,18 +94,25 @@ export default {
           description: "<b>Tony Soprano</b> doesn't like to wait, Impatience is a key characteristic for him. With visibility over how the plan is advancing, you will gain his trust and ensure a smooth approval"
         },
       ]
-    }
+    };
   },
   watch: {
     selectedMovie: {
       handler(val){
-        console.log(val)
-        this.$emit("change", val)
+        console.log(val);
+        this.$emit("change", val);
       },
       deep: true
     }
+  },
+  created () {
+    console.log(this.defaultData);
+    if (this.defaultData && this.defaultData.label) {
+      this.selectedMovie = this.movies.find(item => item.label == this.defaultData.label);
+      console.log(this.selectedMovie);
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
   .movies {

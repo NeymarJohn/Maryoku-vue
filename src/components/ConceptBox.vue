@@ -1,9 +1,11 @@
 <template>
   <div class="concept-box">
     <div class="concept-box-header">
-      <div class="concept-name">{{ concept.name }}</div>
+      <div class="concept-name">
+        {{ concept.name }}
+      </div>
       <ul class="tag-list">
-        <li class="tag-list__item" v-for="tag in concept.tags" :key="tag.name">
+        <li v-for="tag in concept.tags" :key="tag.name" class="tag-list__item">
           {{ tag.name }}
         </li>
       </ul>
@@ -12,19 +14,19 @@
     <div class="images-box" :style="`transform:scale(${scale});transform-origin:left`">
       <div class="image-backgrounds">
         <div
-          class="image-background"
           v-for="(bg, bgIndex) in concept.colors"
           :key="bgIndex"
+          class="image-background"
           :style="`background:${bg.color}; opacity:${bg.opacity}`"
-        ></div>
+        />
       </div>
       <div>
-        <div :class="`images-list__item`" v-for="(image, imageIndex) in concept.images" :key="imageIndex">
+        <div v-for="(image, imageIndex) in concept.images" :key="imageIndex" :class="`images-list__item`">
           <img
             class="image-section"
             :src="`${image.url}`"
             @error="imageUrlAlt(concept.imageData[imageIndex], $event)"
-          />
+          >
         </div>
       </div>
     </div>

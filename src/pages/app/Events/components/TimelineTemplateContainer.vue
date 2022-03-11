@@ -10,44 +10,46 @@
           :key="index"
           :item="item"
           :index="index"
-          :timelineDate="timelineDate"
+          :timeline-date="timelineDate"
           class="mt-10 mb-10"
           @remove="removeItem"
           @cancel="cancelItem"
           @save="saveItem"
-        ></timeline-item>
+        />
       </template>
 
       <drop
         v-if="template.type === 'group'"
         style="height: 100%; min-height: 50px"
         class="empty-template"
+        :class="{ dropping: isHover }"
         @drop="handleDrop(groupedItems.length, ...arguments)"
         @dragenter="hadleDragEnter"
         @dragleave="handleDragLeave"
-        :class="{ dropping: isHover }"
       >
         <div
+          v-if="groupedItems.length == 0"
           class="empty-template-icon"
           :style="hoverStyle"
           :class="{ hovering: isHover }"
-          v-if="groupedItems.length == 0"
         >
-          <img :src="`${$iconURL}Timeline-New/templates/${template.name.split('-')[0]}.svg`" />
+          <img :src="`${$iconURL}Timeline-New/templates/${template.name.split('-')[0]}.svg`">
         </div>
 
         <div class="empty-template-panel" :class="{ adding: groupedItems.length > 0 }" :style="hoverStyle">
           <span v-if="isEmpty">{{ template.name }}</span>
           <span v-else><md-icon>add</md-icon>{{ template.name }}</span>
-        </div></drop
-      >
+        </div>
+      </drop>
     </template>
     <md-button
+      v-if="template.type === 'group' && groupedItems.length == 0"
       class="md-icon-button md-simple close-btn"
       @click="remove(template)"
-      v-if="template.type === 'group' && groupedItems.length == 0"
     >
-      <md-icon class="close-icon">close</md-icon>
+      <md-icon class="close-icon">
+        close
+      </md-icon>
     </md-button>
   </div>
 </template>
@@ -68,11 +70,6 @@ export default {
     TimelineEmpty,
     Drop,
   },
-  data() {
-    return {
-      isHover: false,
-    };
-  },
   props: {
     timelines: {
       type: Array,
@@ -81,6 +78,11 @@ export default {
     template: [Object],
     groupIndex: [Number],
     timelineDate: [Object],
+  },
+  data() {
+    return {
+      isHover: false,
+    };
   },
   computed: {
     event() {

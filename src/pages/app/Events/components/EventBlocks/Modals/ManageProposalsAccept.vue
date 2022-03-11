@@ -3,14 +3,14 @@
     <div class="md-layout" style="max-height: 50vh">
       <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
         <h4 class="md-title">
-          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
+          <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
             <md-icon>arrow_back</md-icon>
           </md-button>
         </h4>
       </div>
       <div class="md-layout-item md-size-95" style="max-height: 50vh">
         <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize">
-          Accept Proposal <small></small>
+          Accept Proposal <small />
         </h4>
         <div class="tabs-section">
           <tabs
@@ -24,26 +24,27 @@
               <md-card class="text-left acceptance-section">
                 <md-card-header class="acceptance-section-header">
                   <div class="header-title">
-                    <div class="md-title">{{ proposal.vendor.vendorDisplayName }}</div>
+                    <div class="md-title">
+                      {{ proposal.vendor.vendorDisplayName }}
+                    </div>
                     <div class="star-rating">
                       <label
-                        class="star-rating__star"
                         v-for="(rating, rIndex) in ratings"
-                        :value="rating"
                         :key="rIndex"
+                        class="star-rating__star"
+                        :value="rating"
                         :class="{ 'is-selected': proposal.vendor.rank >= rating && proposal.vendor.rank != null }"
                       >
-                        <input class="star-rating star-rating__checkbox" type="radio" />★</label
-                      >
+                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
                     </div>
                   </div>
                   <div class="header-actions">
-                    <md-button class="md-danger" @click="acceptProposal(false)" v-if="proposalAccepted"
-                      >UNDO ACCEPT THIS PROPOSAL</md-button
-                    >
-                    <md-button class="md-primary" @click="acceptProposal(true)" v-if="!proposalAccepted"
-                      >I ACCEPT THIS PROPOSAL</md-button
-                    >
+                    <md-button v-if="proposalAccepted" class="md-danger" @click="acceptProposal(false)">
+                      UNDO ACCEPT THIS PROPOSAL
+                    </md-button>
+                    <md-button v-if="!proposalAccepted" class="md-primary" @click="acceptProposal(true)">
+                      I ACCEPT THIS PROPOSAL
+                    </md-button>
                   </div>
                 </md-card-header>
                 <md-card-content>
@@ -53,22 +54,38 @@
                         <md-card-content class="proposal-payments">
                           <ul class="proposal-payments-details">
                             <li>
-                              <div class="details-label">Provided Service</div>
-                              <div class="details-desc">{{ selectedBlock.category }}</div>
+                              <div class="details-label">
+                                Provided Service
+                              </div>
+                              <div class="details-desc">
+                                {{ selectedBlock.category }}
+                              </div>
                             </li>
                             <li>
-                              <div class="details-label">Event</div>
-                              <div class="details-desc">{{ event.title }}, {{ event.eventEndMillis }}</div>
+                              <div class="details-label">
+                                Event
+                              </div>
+                              <div class="details-desc">
+                                {{ event.title }}, {{ event.eventEndMillis }}
+                              </div>
                             </li>
                             <li>
-                              <div class="details-label">Payment Method</div>
-                              <div class="details-desc">Wiretransfer</div>
+                              <div class="details-label">
+                                Payment Method
+                              </div>
+                              <div class="details-desc">
+                                Wiretransfer
+                              </div>
                             </li>
                             <li>
-                              <div class="details-label">Cancellation Policy</div>
+                              <div class="details-label">
+                                Cancellation Policy
+                              </div>
                               <div class="details-desc">
                                 {{ proposal.candellationPolicy }}
-                                <md-button class="md-rose md-sm md-simple no-uppercase">(Learn more)</md-button>
+                                <md-button class="md-rose md-sm md-simple no-uppercase">
+                                  (Learn more)
+                                </md-button>
                               </div>
                             </li>
                           </ul>
@@ -80,19 +97,31 @@
                         <md-card-content>
                           <div class="cost-info">
                             <div class="cost-info_desc full-width">
-                              <div class="cost-label">Subtotal</div>
-                              <div class="cost-value">${{ (proposal.cost - proposal.cost * 0.1).toFixed(2) }}</div>
+                              <div class="cost-label">
+                                Subtotal
+                              </div>
+                              <div class="cost-value">
+                                ${{ (proposal.cost - proposal.cost * 0.1).toFixed(2) }}
+                              </div>
                             </div>
                           </div>
                           <div class="payment-details">
-                            <ul class="payment-details_list-items" v-if="proposal.costBreakdown">
+                            <ul v-if="proposal.costBreakdown" class="payment-details_list-items">
                               <li v-for="(item, index) in proposal.costBreakdown" :key="index">
-                                <div class="details-title">{{ item.service }}</div>
-                                <div class="details-cost">${{ item.cost.toFixed(2) }}</div>
+                                <div class="details-title">
+                                  {{ item.service }}
+                                </div>
+                                <div class="details-cost">
+                                  ${{ item.cost.toFixed(2) }}
+                                </div>
                               </li>
                               <li>
-                                <div class="details-title">Down payment (10%)</div>
-                                <div class="details-cost">${{ (proposal.cost * 0.1).toFixed(2) }}</div>
+                                <div class="details-title">
+                                  Down payment (10%)
+                                </div>
+                                <div class="details-cost">
+                                  ${{ (proposal.cost * 0.1).toFixed(2) }}
+                                </div>
                               </li>
                             </ul>
                           </div>
@@ -101,7 +130,9 @@
                       <div class="payment-policy">
                         By accepting the proposal, you agree to its terms and cancellation policy. Not sure what’s
                         included in this proposal?
-                        <md-button class="md-rose md-sm md-simple no-uppercase">Learn more</md-button>
+                        <md-button class="md-rose md-sm md-simple no-uppercase">
+                          Learn more
+                        </md-button>
                       </div>
                     </div>
                   </div>
@@ -111,10 +142,10 @@
             <template slot="tab-pane-2" style="width: 50%">
               <proposal-payment
                 :event="event"
-                :selectedBlock="selectedBlock"
+                :selected-block="selectedBlock"
                 :proposal="proposal"
                 :winner-id="winnerId"
-              ></proposal-payment>
+              />
             </template>
           </tabs>
         </div>
@@ -170,6 +201,7 @@ export default {
     currency: "PHP",
     amount: 99999,
   }),
+  computed: {},
   created() {},
   mounted() {
     EventComponentProposal.find(this.proposal.id)
@@ -208,6 +240,5 @@ export default {
         });
     },
   },
-  computed: {},
 };
 </script>

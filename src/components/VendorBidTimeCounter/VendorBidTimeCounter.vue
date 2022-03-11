@@ -1,24 +1,41 @@
 <template>
   <div class="vendor-bid-time-counter-wrapper event" :class="customClass">
-    <div v-if="topContent" class="action-cont border-bottom">{{ topContent }}</div>
+    <div v-if="topContent" class="action-cont border-bottom">
+      {{ topContent }}
+    </div>
     <div class="time-cont">
       <ul>
-        <li class="fix-digit">{{ d | attachZero }}<br /><span>Days</span></li>
+        <li class="fix-digit">
+          {{ d | attachZero }}<br><span>Days</span>
+        </li>
         <li>:</li>
-        <li class="fix-digit">{{ h | attachZero }}<br /><span>Hours</span></li>
+        <li class="fix-digit">
+          {{ h | attachZero }}<br><span>Hours</span>
+        </li>
         <li>:</li>
-        <li class="fix-digit">{{ m | attachZero }}<br /><span>Min</span></li>
+        <li class="fix-digit">
+          {{ m | attachZero }}<br><span>Min</span>
+        </li>
         <li>:</li>
-        <li class="fix-digit">{{ s | attachZero }}<br /><span>Sec</span></li>
+        <li class="fix-digit">
+          {{ s | attachZero }}<br><span>Sec</span>
+        </li>
       </ul>
     </div>
-    <div v-if="bottomContent" class="action-cont border-top">{{ bottomContent }}</div>
+    <div v-if="bottomContent" class="action-cont border-top">
+      {{ bottomContent }}
+    </div>
   </div>
 </template>
 <script>
 export default {
-  name: "vendor-bit-time-counter",
+  name: "VendorBitTimeCounter",
   components: {},
+  filters: {
+    attachZero(number) {
+      return number > 9 ? number : "0" + number.toString();
+    },
+  },
   props: {
     days: Number,
     hours: Number,
@@ -36,6 +53,17 @@ export default {
       m: 0,
       s: 0,
     };
+  },
+  computed: {},
+  watch: {
+    days(newVal){this.init();},
+    hours(newVal){this.init();},
+    minutes(newVal){this.init();},
+    seconds(newVal){this.init();},
+  },
+  created() {},
+  mounted() {
+    this.init();
   },
   methods: {
     timerCount: function () {
@@ -58,22 +86,6 @@ export default {
             }, 1000);
         }
     }
-  },
-  created() {},
-  mounted() {
-    this.init();
-  },
-  computed: {},
-  watch: {
-    days(newVal){this.init()},
-    hours(newVal){this.init()},
-    minutes(newVal){this.init()},
-    seconds(newVal){this.init()},
-  },
-  filters: {
-    attachZero(number) {
-      return number > 9 ? number : "0" + number.toString();
-    },
   },
 };
 </script>

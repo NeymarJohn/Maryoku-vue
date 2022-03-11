@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="header" >
+    <div class="header">
       <div class="header-content">
         <div class="header-content-logo">
-          <img src="static/img/maryoku-logo-light.png" />
+          <img src="static/img/maryoku-logo-light.png">
         </div>
         <div class="header-content-icon">
-          <img width="88" height="88" src="static/icons/vendor/proposalBoard/filter-won.svg" />
+          <img width="88" height="88" src="static/icons/vendor/proposalBoard/filter-won.svg">
         </div>
         <h1 class="header-content-title">
           Thank you for your business! Now that Time to pour  yourself a drink
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="card-rate-experience">
-          <h2 class="card-rate-experience-title" >
+          <h2 class="card-rate-experience-title">
             Please Rate your experience?
           </h2>
           <select-smile-rate-experience
@@ -53,13 +53,15 @@
     <div class="footer">
       <div class="footer-content">
         <div class="footer-content-logo">
-          <img src="static/img/maryoku-logo-light.png" />
+          <img src="static/img/maryoku-logo-light.png">
         </div>
         <div class="footer-content-text">
           Who are we and why are we great?
         </div>
         <md-button class="footer-content-action edit-btn md-round nav-right nav-btn md-raised md-white">
-          <md-icon class="footer-content-action-icon">keyboard_arrow_right</md-icon>
+          <md-icon class="footer-content-action-icon">
+            keyboard_arrow_right
+          </md-icon>
         </md-button>
       </div>
     </div>
@@ -68,10 +70,10 @@
 
 <script>
 import InvoiceCard from "@/pages/app/Invoices/InvoiceCard";
-import SelectSmileRateExperience from "@/pages/app/Invoices/SelectSmileRateExperience.vue"
+import SelectSmileRateExperience from "@/pages/app/Invoices/SelectSmileRateExperience.vue";
 
 export default {
-  name: "invoice-page",
+  name: "InvoicePage",
   components: {
     InvoiceCard,
     SelectSmileRateExperience,
@@ -80,9 +82,9 @@ export default {
     return {
       acceptConditions: false,
       rateExperience: 5,
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

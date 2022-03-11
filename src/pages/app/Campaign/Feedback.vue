@@ -2,39 +2,44 @@
   <div class="feedback-campaign">
     <div class="p-50">
       <!--      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>-->
-      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Create Feedback Campaign</div>
+      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">
+        Create Feedback Campaign
+      </div>
       <!--      <hr />-->
-      <div class="wrapper-change-cover" >
-        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10" />
+      <div class="wrapper-change-cover">
+        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
         <div class="change-cover-feedback">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
           </md-button>
         </div>
-        <div class="view-event-photos" >
-          <div class="wrapper-icon-play" >
-            <img class="icon-play" src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg" />
+        <div class="view-event-photos">
+          <div class="wrapper-icon-play">
+            <img class="icon-play" src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg">
           </div>
-          <div class="wrapper-btn-switch" >
+          <div class="wrapper-btn-switch">
             <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
-
           </div>
-            <div v-if="isUploadedFiles" class="view-presentation-description" >
-                <img class="mr-10" src="static/icons/red-arrow-down.svg" />
-                <span class="text-description" >Download all the attachments (3) </span>
+          <div v-if="isUploadedFiles" class="view-presentation-description">
+            <img class="mr-10" src="static/icons/red-arrow-down.svg">
+            <span class="text-description">Download all the attachments (3) </span>
+          </div>
+          <div v-else class="view-presentation-description">
+            <img src="static/icons/red-arrow-down.svg">
+            <div class="text-description-upload-files" @click="openModalWindow">
+              Upload Files
             </div>
-            <div v-else class="view-presentation-description" >
-                <img  src="static/icons/red-arrow-down.svg" />
-                <div class="text-description-upload-files" @click="openModalWindow" >Upload Files </div>
-                <div class="add-attachments-text">Add attachments to the event</div>
+            <div class="add-attachments-text">
+              Add attachments to the event
             </div>
-            <feedback-upload-files-modal v-if="showModalWindowOpen" @close="closeModalWindow"/>
+          </div>
+          <feedback-upload-files-modal v-if="showModalWindowOpen" @close="closeModalWindow" />
         </div>
-        <div class="footer-change-cover" >
-          <div class="wrapper-logo-microsoft" >
-            <div class="logo-microsoft" >
-              <div class="icon-microsoft" >
+        <div class="footer-change-cover">
+          <div class="wrapper-logo-microsoft">
+            <div class="logo-microsoft">
+              <div class="icon-microsoft">
                 <div class="block block1" />
                 <div class="block block2" />
                 <div class="block block3" />
@@ -52,74 +57,82 @@
         </div>
       </div>
       <div class="mt-70 mb-40">
-        <img class="icon-thanks-for-participating-feedback" :src="`${$iconURL}Campaign/group-9380.svg`" />
+        <img class="icon-thanks-for-participating-feedback" :src="`${$iconURL}Campaign/group-9380.svg`">
         <div class="mt-10">
-            <custom-title-editor
-                :defaultValue="additionalData.sectionReview.title"
-                @change="handleChangeData('sectionReview', 'title', ...arguments)"
-                class="font-size-60 font-bold line-height-1 mb-20"
-            ></custom-title-editor>
-            <custom-title-editor
-                :defaultValue="additionalData.sectionReview.description"
-                @change="handleChangeData('sectionReview', 'description', ...arguments)"
-                class="disco-party"
-            ></custom-title-editor>
-          <div class="font-size-22 line-height-1">{{ campaignData.name }}</div>
+          <custom-title-editor
+            :default-value="additionalData.sectionReview.title"
+            class="font-size-60 font-bold line-height-1 mb-20"
+            @change="handleChangeData('sectionReview', 'title', ...arguments)"
+          />
+          <custom-title-editor
+            :default-value="additionalData.sectionReview.description"
+            class="disco-party"
+            @change="handleChangeData('sectionReview', 'description', ...arguments)"
+          />
+          <div class="font-size-22 line-height-1">
+            {{ campaignData.name }}
+          </div>
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
       </div>
-      <maryoku-textarea :placeholder="placeHolder" v-model="campaignData.description"></maryoku-textarea>
+      <maryoku-textarea v-model="campaignData.description" :placeholder="placeHolder" />
     </div>
     <div class="feedback-campaign-list p-50">
       <div>
-        <div class="d-flex justify-content-between" >
-          <div class="d-flex align-center justify-content-between" >
-            <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-center justify-content-between">
+            <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20">
             <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
           </div>
           <div>
-            <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
+            <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section" />
           </div>
         </div>
         <div v-if="campaignData.visibleSettings.showFeedback">
           <feedback-question
             v-for="(question, index) in feedbackQuestions"
             :key="index"
-            :feedbackData="question"
+            :feedback-data="question"
             :disabled="false"
             placeholder="Enter your feedback here"
-          ></feedback-question>
+          />
         </div>
       </div>
-      <div class="mt-60 d-flex align-center add-new-question-block" v-if="isEditingNewQuestion">
+      <div v-if="isEditingNewQuestion" class="mt-60 d-flex align-center add-new-question-block">
         <div>
-            <div class="add-new-question-title">Rank The...Vendor</div>
-            <input v-model="newQuestionLabel" class="add-new-question-input-1" placeholder="Rank The Catering Vendor |" />
+          <div class="add-new-question-title">
+            Rank The...Vendor
+          </div>
+          <input v-model="newQuestionLabel" class="add-new-question-input-1" placeholder="Rank The Catering Vendor |">
         </div>
         <div>
-            <div class="add-new-question-title">Write Your Question Here</div>
-            <input v-model="newQuestion" class="add-new-question-input-2" placeholder="How was the activity?" />
+          <div class="add-new-question-title">
+            Write Your Question Here
+          </div>
+          <input v-model="newQuestion" class="add-new-question-input-2" placeholder="How was the activity?">
         </div>
         <div class="add-new-question-button-block">
-            <md-button class="md-button md-red maryoku-btn md-theme-default maryoku-btn add-button-style" @click="addNewQuestion">Add</md-button>
-            <img :src="`${$iconURL}Campaign/Group+3602.svg`" @click="isEditingNewQuestion = false" />
+          <md-button class="md-button md-red maryoku-btn md-theme-default maryoku-btn add-button-style" @click="addNewQuestion">
+            Add
+          </md-button>
+          <img :src="`${$iconURL}Campaign/Group+3602.svg`" @click="isEditingNewQuestion = false">
         </div>
       </div>
-      <div class="mt-60 d-flex justify-content-between" v-else>
+      <div v-else class="mt-60 d-flex justify-content-between">
         <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
-          <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Add Another Question
+          <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20">Add Another Question
         </md-button>
       </div>
     </div>
     <div class="feedback-campaign-carousel p-50">
-      <div class="d-flex align-center pt-50 pb-50" >
-        <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
-        <div class="ml-20 d-flex flex-wrap flex-column" >
-            <custom-title-editor
-                :defaultValue="additionalData.sectionEventPhotos.title"
-                @change="handleChangeData('sectionEventPhotos', 'title', ...arguments)"
-                class="font-size-30 font-bold line-height-1 pt-20"
-            ></custom-title-editor>
+      <div class="d-flex align-center pt-50 pb-50">
+        <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`">
+        <div class="ml-20 d-flex flex-wrap flex-column">
+          <custom-title-editor
+            :default-value="additionalData.sectionEventPhotos.title"
+            class="font-size-30 font-bold line-height-1 pt-20"
+            @change="handleChangeData('sectionEventPhotos', 'title', ...arguments)"
+          />
           <span class="Include-photos-details-of-the-event">
             (See photos and details about the event)
           </span>
@@ -140,11 +153,13 @@
         <div>
           <div class="icon-and-text">
             <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
-            <div class="right-text-style">share with us photos you took from the event</div>
+            <div class="right-text-style">
+              share with us photos you took from the event
+            </div>
           </div>
           <div class="d-flex align-center font-bold ml-60">
             Allow guests to upload photos from the event
-            <md-switch class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style" v-model="campaignData.visibleSettings.allowUploadPhoto" >
+            <md-switch v-model="campaignData.visibleSettings.allowUploadPhoto" class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style">
               <span v-if="campaignData.visibleSettings.allowUploadPhoto">Hide</span>
               <span v-if="!campaignData.visibleSettings.allowUploadPhoto">Show</span>
             </md-switch>
@@ -155,16 +170,18 @@
     <div class="p-50 mt-10">
       <div class="share-panel">
         <div class="d-flex mb-10 align-center">
-          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />
+          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20">
           <div class="ml-30 mr-40">
-            <div class="font-size-30 font-bold line-height-2">SHARE EVENT PARTICIPATION</div>
+            <div class="font-size-30 font-bold line-height-2">
+              SHARE EVENT PARTICIPATION
+            </div>
             <div>(Share photos and details about the event)</div>
           </div>
-          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
+          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option" />
         </div>
         <sharing-button-group
           v-if="campaignData.visibleSettings.showSharingOption"
-        ></sharing-button-group>
+        />
       </div>
     </div>
   </div>
@@ -213,6 +230,31 @@ export default {
       feedbackSliderTitle : ""
     };
   },
+  computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    campaignData() {
+        console.log("this.$store.state.campaign.FEEDBACK", this.$store.state.campaign.FEEDBACK);
+      return this.$store.state.campaign.FEEDBACK;
+    },
+    campaignTitle() {
+      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
+    },
+    additionalData() {
+      const defaultAdditionalData = {
+        sectionReview: {
+          title: "THANKS FOR PARTICIPATING!",
+          description: "80’s Disco Party",
+        },
+        sectionEventPhotos: {
+          title: "EVENT PHOTOS – RELIVE THE BEST MOMENTS",
+          description: "",
+        }
+      };
+      return this.campaignData.additionalData || defaultAdditionalData;
+    },
+  },
   created() {
     this.placeHolder = `
       Thanks for attending this recent event – we hope you had a wonderful, productive experience!
@@ -252,36 +294,11 @@ export default {
       value: this.feedbackQuestions,
     });
   },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    campaignData() {
-        console.log('this.$store.state.campaign.FEEDBACK', this.$store.state.campaign.FEEDBACK)
-      return this.$store.state.campaign.FEEDBACK;
-    },
-    campaignTitle() {
-      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
-    },
-    additionalData() {
-      const defaultAdditionalData = {
-        sectionReview: {
-          title: "THANKS FOR PARTICIPATING!",
-          description: "80’s Disco Party",
-        },
-        sectionEventPhotos: {
-          title: "EVENT PHOTOS – RELIVE THE BEST MOMENTS",
-          description: "",
-        }
-      };
-      return this.campaignData.additionalData || defaultAdditionalData;
-    },
-  },
   methods: {
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
-        text: `You won't be able to revert this feedback!`,
+        text: "You won't be able to revert this feedback!",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success btn-fill",
         cancelButtonClass: "md-button md-danger btn-fill",

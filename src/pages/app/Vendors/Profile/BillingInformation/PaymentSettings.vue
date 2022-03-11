@@ -3,16 +3,20 @@
     <md-card class="text-left acceptance-section billing-information-block">
       <md-card-header class="acceptance-section-header">
         <div class="header-title">
-          <img class="bank-details-icon" :src="`/static/icons/vendor/bank.svg`"/>
-          <p class="md-title">Bank Details</p>
+          <img class="bank-details-icon" :src="`/static/icons/vendor/bank.svg`">
+          <p class="md-title">
+            Bank Details
+          </p>
         </div>
       </md-card-header>
       <md-card-content>
         <div class="info-block">
-          <img class="info-icon" :src="`/static/icons/vendor/info.svg`"/>
-          <p>Please write down the details of the bank to which you would like us to transfer the money.
+          <img class="info-icon" :src="`/static/icons/vendor/info.svg`">
+          <p>
+            Please write down the details of the bank to which you would like us to transfer the money.
             iriure dolor in hendrerit in vulputate velit esse
-            molestie consequat Vel illum dolore eu feugiat nulla.</p>
+            molestie consequat Vel illum dolore eu feugiat nulla.
+          </p>
         </div>
       </md-card-content>
       <md-card-content>
@@ -23,55 +27,57 @@
                 <div class="payment-details">
                   <div class="form-section">
                     <div class="md-layout-item">
-                        <label>ID Number</label>
-                      <br/>
-                      <input  style="width: 50px; margin-right: 5px"
-                              v-model="bankDetails.id[index]"  v-for="(option, index) in bankDetails.id"
-                              maxlength="1" pattern="([12345])\w{0}"
-                              :key="index"
-                              :name="index"
-                      />
+                      <label>ID Number</label>
+                      <br>
+                      <input v-for="(option, index) in bankDetails.id"
+                             :key="index" v-model="bankDetails.id[index]"
+                             style="width: 50px; margin-right: 5px" maxlength="1"
+                             pattern="([12345])\w{0}"
+                             :name="index"
+                      >
                       <label>-</label>
-                      <input  style="width: 50px"
-                              v-model="bankDetails.adId"
-                              maxlength="1" pattern="([12345])\w{0}"
-                      />
+                      <input v-model="bankDetails.adId"
+                             style="width: 50px"
+                             maxlength="1" pattern="([12345])\w{0}"
+                      >
                     </div>
                     <div class="md-layout">
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Beneficiary Name</label>
-                          <md-input id="name" v-model="bankDetails.holderName" type="text"></md-input>
+                          <md-input id="name" v-model="bankDetails.holderName" type="text" />
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Account No.</label>
-                          <md-input id="email" v-model="bankDetails.accountNumber"  type="text"></md-input>
+                          <md-input id="email" v-model="bankDetails.accountNumber" type="text" />
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Bank No.</label>
-                          <md-input type="text" v-model="bankDetails.routingNumber" ></md-input>
+                          <md-input v-model="bankDetails.routingNumber" type="text" />
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-50">
                         <md-field>
                           <label>Branch No.</label>
-                          <md-input type="text" v-model="bankDetails.branch" ></md-input>
+                          <md-input v-model="bankDetails.branch" type="text" />
                         </md-field>
                       </div>
                       <div class="md-layout-item md-size-100">
                         <md-field>
                           <label>Address and name of the bank</label>
-                          <md-input v-model="bankDetails.address" type="text"></md-input>
+                          <md-input v-model="bankDetails.address" type="text" />
                         </md-field>
                       </div>
                     </div>
                   </div>
                 </div>
-                <md-button @click="sendBankInfo" class="md-vendor md-vendor-review">Save details</md-button>
+                <md-button class="md-vendor md-vendor-review" @click="sendBankInfo">
+                  Save details
+                </md-button>
               </md-card-content>
             </md-card>
           </div>
@@ -104,6 +110,7 @@ export default {
       adId:0
     }
   }),
+  computed: {},
 
   created() {},
   mounted() {
@@ -113,7 +120,7 @@ export default {
       var style = {
         base: {
           color: "#32325d",
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+          fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
           fontSmoothing: "antialiased",
           fontSize: "16px",
           "::placeholder": {
@@ -135,28 +142,27 @@ export default {
   },
   methods: {
      test (e){
-      console.log('##-133, PaymentSettings.vue',e)
+      console.log("##-133, PaymentSettings.vue",e);
     },
     sendBankInfo(){
 
-      axios.post( process.env.SERVER_URL +'/stripe/v1/customer/destinations/account', {
+      axios.post( process.env.SERVER_URL +"/stripe/v1/customer/destinations/account", {
         ...this.bankDetails,
-        accept:'application/json',
+        accept:"application/json",
         headers:{
-          token: 'lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3'
+          token: "lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3"
         }
         }).then(res=>{
-        console.log('##-125, PaymentSettings.vue',res)
+        console.log("##-125, PaymentSettings.vue",res);
       }).catch(error => {
-        console.log('##-126, PaymentSettings.vue',error)})
-      console.log('##-119, PaymentSettings.vue',this.bankDetails,  process.env.SERVER_URL )
+        console.log("##-126, PaymentSettings.vue",error);});
+      console.log("##-119, PaymentSettings.vue",this.bankDetails,  process.env.SERVER_URL );
 
     },
     submitPayment(event) {
       let self = this;
     },
   },
-  computed: {},
 };
 </script>
 <style scoped lang="scss">

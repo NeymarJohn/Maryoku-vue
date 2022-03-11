@@ -2,10 +2,10 @@
   <div class="new-event-side-bar" :data-color="activeColor" :data-background-color="backgroundColor">
     <div class="sidebar-menu">
       <md-button class="md-round md-simple md-just-icon md-transparent menu-button" @click="toggleMenu = !toggleMenu">
-        <img v-if="toggleMenu === false" :src="`${menuIconsURL}Group 2763.svg`" />
-        <img v-else :src="`${menuIconsURL}Group 2763 (2).svg`" />
+        <img v-if="toggleMenu === false" :src="`${menuIconsURL}Group 2763.svg`">
+        <img v-else :src="`${menuIconsURL}Group 2763 (2).svg`">
       </md-button>
-      <div class="sidebar-menu__list" v-if="toggleMenu">
+      <div v-if="toggleMenu" class="sidebar-menu__list">
         <!-- <div class="sidebar-menu__item">
           <div class="item-route">
             <img :src="`${menuIconsURL}Asset 115.svg`" /> Search
@@ -13,30 +13,36 @@
         </div> -->
         <div class="sidebar-menu__item">
           <div class="item-route" @click="goTo('/profile/settings')">
-            <img :src="`${menuIconsURL}Asset 117.svg`" /> Profile
+            <img :src="`${menuIconsURL}Asset 117.svg`"> Profile
           </div>
           <div class="item-action" @click="goTo('/signout')">
             Sign Out
-            <img :src="`${menuIconsURL}Asset 118.svg`" />
+            <img :src="`${menuIconsURL}Asset 118.svg`">
           </div>
         </div>
         <div class="sidebar-menu__item">
-          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>
+          <div class="item-route" @click="goTo('/events')">
+            <img :src="`${menuIconsURL}Asset 114.svg`"> My Events
+          </div>
         </div>
         <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">
-          <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>
+          <div class="item-route">
+            <img :src="`${menuIconsURL}Asset 116.svg`"> Product tour
+          </div>
         </div>
         <div class="sidebar-menu__item" @click="goToHelp">
-          <div class="item-route"><img :src="`${menuIconsURL}Asset 117.svg`" /> About the product</div>
+          <div class="item-route">
+            <img :src="`${menuIconsURL}Asset 117.svg`"> About the product
+          </div>
         </div>
         <div class="sidebar-menu__item">
           <div class="item-route" @click="goTo('/vendors-pool')">
-            <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
+            <img :src="`${menuIconsURL}Asset 117.svg`"> Vendors Pool
           </div>
         </div>
       </div>
     </div>
-    <div class="sidebar-wrapper" ref="sidebarScrollArea">
+    <div ref="sidebarScrollArea" class="sidebar-wrapper">
       <md-list class="nav">
         <sidebar-item
           name="left-menu-events-list"
@@ -47,7 +53,7 @@
             path: `/events/${event.id}/overview`,
             startLink: `/events/${event.id}/overview`,
           }"
-        ></sidebar-item>
+        />
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
@@ -57,7 +63,7 @@
             path: taskUrl,
             startLink: `/events/${event.id}/booking`,
           }"
-        ></sidebar-item>
+        />
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan"
@@ -68,11 +74,11 @@
             path: `/events/${event.id}/edit/budget`,
             startLink: `/events/${event.id}/edit/budget`,
           }"
-        ></sidebar-item>
-        <li class="show-note-list-item" @click="isOpenNote = !isOpenNote" >
-          <div class="my-notes left-menu-yearly-plan disabled show-note-wrapper"  >
+        />
+        <li class="show-note-list-item" @click="isOpenNote = !isOpenNote">
+          <div class="my-notes left-menu-yearly-plan disabled show-note-wrapper">
             <button>
-              <img :class="{active: isOpenNote} " :src="`${$iconURL}Event Page/note-light.svg`" width="22" style="margin: 0 3px"/>
+              <img :class="{active: isOpenNote} " :src="`${$iconURL}Event Page/note-light.svg`" width="22" style="margin: 0 3px">
             </button>
           </div>
         </li>
@@ -86,20 +92,22 @@
     <div class="logo">
       <a href="https://maryoku.com/" target="_blank" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
-          <img :src="logo" />
+          <img :src="logo">
           <!--<md-icon>calendar_today</md-icon>-->
         </div>
       </a>
     </div>
     <transition name="slide-fade">
-      <div class="note-wrapper" v-show="isOpenNote">
+      <div v-show="isOpenNote" class="note-wrapper">
         <div style="height:40px; margin-right:25px" class="text-right">
           <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="isOpenNote = false">
-            <md-icon class="font-size-30">clear</md-icon>
+            <md-icon class="font-size-30">
+              clear
+            </md-icon>
           </md-button>
         </div>
-        <br/>
-        <event-note-panel></event-note-panel>
+        <br>
+        <event-note-panel />
       </div>
     </transition>
   </div>
@@ -110,20 +118,11 @@ import eventService from "@/services/event.service";
 import EventNotePanel from "../../pages/app/Events/components/EventNotePanel";
 import Button from "../Button/ControlPanel";
 export default {
-  name: "sidebar",
+  name: "Sidebar",
   components: {
     Button,
     SidebarItem,
     EventNotePanel,
-  },
-  data: () => {
-    return {
-      newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
-      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
-      toggleMenu: false,
-      currentUrl: "",
-      isOpenNote:false,
-    };
   },
   props: {
     title: {
@@ -175,10 +174,47 @@ export default {
       default: {},
     },
   },
+  data: () => {
+    return {
+      newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
+      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
+      toggleMenu: false,
+      currentUrl: "",
+      isOpenNote:false,
+    };
+  },
   provide() {
     return {
       autoClose: this.autoClose,
     };
+  },
+  computed: {
+    sidebarStyle() {
+      return {
+        backgroundImage: `url(${this.backgroundImage})`,
+      };
+    },
+    isEventPage() {
+      return this.currentUrl.indexOf("event") >= 0;
+    },
+  },
+  watch: {
+    $route: "fetchUrl",
+    event: {
+      handler(newEvent) {
+        this.taskUrl = eventService.getFirstTaskLink(newEvent);
+      },
+      deep: true,
+    },
+  },
+  beforeDestroy() {
+    if (this.$sidebar.showSidebar) {
+      this.$sidebar.showSidebar = false;
+    }
+  },
+  created() {
+    this.fetchUrl();
+    this.taskUrl = eventService.getFirstTaskLink(this.event);
   },
   methods: {
     minimizeSidebar() {
@@ -201,34 +237,6 @@ export default {
       location.href = `/#/events/${this.event.id}/booking/overview?walkWithMe=true`;
       location.reload();
       this.toggleMenu = false;
-    },
-  },
-  computed: {
-    sidebarStyle() {
-      return {
-        backgroundImage: `url(${this.backgroundImage})`,
-      };
-    },
-    isEventPage() {
-      return this.currentUrl.indexOf("event") >= 0;
-    },
-  },
-  beforeDestroy() {
-    if (this.$sidebar.showSidebar) {
-      this.$sidebar.showSidebar = false;
-    }
-  },
-  created() {
-    this.fetchUrl();
-    this.taskUrl = eventService.getFirstTaskLink(this.event);
-  },
-  watch: {
-    $route: "fetchUrl",
-    event: {
-      handler(newEvent) {
-        this.taskUrl = eventService.getFirstTaskLink(newEvent);
-      },
-      deep: true,
     },
   },
 };

@@ -32,9 +32,6 @@ export default {
       default: false,
     },
   },
-  mounted() {
-    this.$refs.checkoutRef.redirectToCheckout();
-  },
   data() {
     return {
       publishableKey: process.env.STRIPE_PK,
@@ -47,6 +44,9 @@ export default {
       }),
       cancelURL: `${window.location.href}?checkout=cancel`,
     };
+  },
+  mounted() {
+    this.$refs.checkoutRef.redirectToCheckout();
   },
   methods: {
     submit() {

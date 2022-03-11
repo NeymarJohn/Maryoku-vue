@@ -1,21 +1,25 @@
 <template>
   <div class="discount-form">
-    <div class="service-item" v-if="!isDiscountEditing">
+    <div v-if="!isDiscountEditing" class="service-item">
       <div class="flex-1">
-        <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />
+        <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10">
         <span>Discount</span>
       </div>
-      <div class="text-right">{{ discount.percentage }}%</div>
-      <div class="text-right">-${{ discount.price || calcedDiscont | withComma }}</div>
+      <div class="text-right">
+        {{ discount.percentage }}%
+      </div>
+      <div class="text-right">
+        -${{ discount.price || calcedDiscont | withComma }}
+      </div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="toggleEditMode('discount')">
-          <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
+          <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px">
         </md-button>
       </div>
     </div>
-    <div class="service-item is-edit" v-else>
+    <div v-else class="service-item is-edit">
       <div class="flex-1">
-        <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />
+        <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10">
         <span>Discount</span>
       </div>
       <money
@@ -45,77 +49,79 @@
         @keyup.native="setPriceRange(editingDiscount.price, 'discount')"
       />
     </div>
-<!--    <div class="text-right mb-10" v-if="isDiscountEditing">-->
-<!--      <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>-->
-<!--      <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>-->
-<!--    </div>-->
-<!--      <div class="service-item" v-if="!isDiscountEditing">-->
-<!--          <div class="flex-1">-->
-<!--              <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />-->
-<!--              <span>Discount</span>-->
-<!--          </div>-->
-<!--          <div class="text-right">{{ discount.percentage }}%</div>-->
-<!--          <div class="text-right">-${{ discount.price || calcedDiscont | withComma }}</div>-->
-<!--          <div class="text-right">-->
-<!--              <md-button class="md-simple edit-btn" @click="toggleEditMode('discount')">-->
-<!--                  <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />-->
-<!--              </md-button>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="service-item is-edit" v-else>-->
-<!--          <div class="flex-1">-->
-<!--              <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />-->
-<!--              <span>Discount</span>-->
-<!--          </div>-->
-<!--          <money-->
-<!--              v-model="editingDiscount.percentage"-->
-<!--              v-bind="{-->
-<!--          decimal: '.',-->
-<!--          thousands: ',',-->
-<!--          prefix: '',-->
-<!--          suffix: ' %',-->
-<!--          precision: 2,-->
-<!--          masked: false,-->
-<!--        }"-->
-<!--              class="bundle-discount-input mr-10"-->
-<!--              @keyup.native="setPercentRange(editingDiscount.percentage, 'discount')"-->
-<!--          />-->
-<!--          <money-->
-<!--              v-model="editingDiscount.price"-->
-<!--              v-bind="{-->
-<!--          decimal: '.',-->
-<!--          thousands: ',',-->
-<!--          prefix: '$ ',-->
-<!--          suffix: '',-->
-<!--          precision: 2,-->
-<!--          masked: false,-->
-<!--        }"-->
-<!--              class="bundle-discount-input"-->
-<!--              @keyup.native="setPriceRange(editingDiscount.price, 'discount')"-->
-<!--          />-->
-<!--      </div>-->
-<!--      <div class="text-right mb-10" v-if="isDiscountEditing">-->
-<!--          <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>-->
-<!--          <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>-->
-<!--      </div>-->
-    <div class="service-item" v-if="!isTaxEditing">
+    <!--    <div class="text-right mb-10" v-if="isDiscountEditing">-->
+    <!--      <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>-->
+    <!--      <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>-->
+    <!--    </div>-->
+    <!--      <div class="service-item" v-if="!isDiscountEditing">-->
+    <!--          <div class="flex-1">-->
+    <!--              <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />-->
+    <!--              <span>Discount</span>-->
+    <!--          </div>-->
+    <!--          <div class="text-right">{{ discount.percentage }}%</div>-->
+    <!--          <div class="text-right">-${{ discount.price || calcedDiscont | withComma }}</div>-->
+    <!--          <div class="text-right">-->
+    <!--              <md-button class="md-simple edit-btn" @click="toggleEditMode('discount')">-->
+    <!--                  <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />-->
+    <!--              </md-button>-->
+    <!--          </div>-->
+    <!--      </div>-->
+    <!--      <div class="service-item is-edit" v-else>-->
+    <!--          <div class="flex-1">-->
+    <!--              <img :src="`${$iconURL}NewSubmitPorposal/Asset 612.svg`" style="width: 20px" class="mr-10" />-->
+    <!--              <span>Discount</span>-->
+    <!--          </div>-->
+    <!--          <money-->
+    <!--              v-model="editingDiscount.percentage"-->
+    <!--              v-bind="{-->
+    <!--          decimal: '.',-->
+    <!--          thousands: ',',-->
+    <!--          prefix: '',-->
+    <!--          suffix: ' %',-->
+    <!--          precision: 2,-->
+    <!--          masked: false,-->
+    <!--        }"-->
+    <!--              class="bundle-discount-input mr-10"-->
+    <!--              @keyup.native="setPercentRange(editingDiscount.percentage, 'discount')"-->
+    <!--          />-->
+    <!--          <money-->
+    <!--              v-model="editingDiscount.price"-->
+    <!--              v-bind="{-->
+    <!--          decimal: '.',-->
+    <!--          thousands: ',',-->
+    <!--          prefix: '$ ',-->
+    <!--          suffix: '',-->
+    <!--          precision: 2,-->
+    <!--          masked: false,-->
+    <!--        }"-->
+    <!--              class="bundle-discount-input"-->
+    <!--              @keyup.native="setPriceRange(editingDiscount.price, 'discount')"-->
+    <!--          />-->
+    <!--      </div>-->
+    <!--      <div class="text-right mb-10" v-if="isDiscountEditing">-->
+    <!--          <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>-->
+    <!--          <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>-->
+    <!--      </div>-->
+    <div v-if="!isTaxEditing" class="service-item">
       <div class="flex-1">
-        <img :src="`${$iconURL}NewSubmitPorposal/Asset 613.svg`" style="width: 20px" class="mr-10" />
+        <img :src="`${$iconURL}NewSubmitPorposal/Asset 613.svg`" style="width: 20px" class="mr-10">
         <span>Taxes</span>
       </div>
       <div class="text-right">
         <span>{{ tax.percentage }}%</span>
       </div>
-      <div class="text-right">${{ calcedTax | withComma }}</div>
+      <div class="text-right">
+        ${{ calcedTax | withComma }}
+      </div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="toggleEditMode('tax')">
-          <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
+          <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px">
         </md-button>
       </div>
     </div>
-    <div class="service-item is-edit" v-else>
+    <div v-else class="service-item is-edit">
       <div class="flex-1">
-        <img :src="`${$iconURL}NewSubmitPorposal/Asset 613.svg`" style="width: 20px" class="mr-10" />
+        <img :src="`${$iconURL}NewSubmitPorposal/Asset 613.svg`" style="width: 20px" class="mr-10">
         <span>Taxes</span>
       </div>
       <money
@@ -145,9 +151,13 @@
         @keyup.native="setPriceRange(editingTax.price, 'tax')"
       />
     </div>
-    <div class="text-right mb-10" v-if="isTaxEditing">
-      <md-button class="md-simple normal-btn md-vendor" @click="cancel('tax')">Cancel</md-button>
-      <md-button class="normal-btn md-vendor" @click="saveTax">Save</md-button>
+    <div v-if="isTaxEditing" class="text-right mb-10">
+      <md-button class="md-simple normal-btn md-vendor" @click="cancel('tax')">
+        Cancel
+      </md-button>
+      <md-button class="normal-btn md-vendor" @click="saveTax">
+        Save
+      </md-button>
     </div>
   </div>
 </template>
@@ -194,6 +204,37 @@ export default {
       isTaxEditing: false,
       isDiscountEditing: false,
     };
+  },
+  computed: {
+    // ...mapGetters("vendorProposal", ["sumOfPrices"]),
+    calcedTax() {
+      this.tax.price = Math.round(((this.sumOfPrices - this.calcedDiscont) * this.tax.percentage) / 100);
+      return this.tax.price;
+    },
+    calcedDiscont() {
+      this.discount.price = Math.round((this.sumOfPrices * this.discount.percentage) / 100);
+      return this.discount.price;
+    },
+    sumOfPrices(){
+      return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"]:
+        this.$store.getters["vendorProposal/sumOfPrices"];
+    }
+  },
+  watch: {
+    defaultTax(newValue, oldValue) {
+      this.tax = newValue;
+    },
+    defaultDiscount(newValue, oldValue) {
+      this.discount = newValue;
+    },
+    sumOfPrices(newValue, oldValue) {
+      console.log(newValue);
+      console.log(oldValue);
+      if (newValue !== oldValue) {
+        this.discount.price = (newValue * this.discount.percentage) / 100;
+        this.tax.price = ((newValue - this.discount.price) * this.tax.percentage) / 100;
+      }
+    },
   },
   created() {
     if (this.defaultTax) this.tax = this.defaultTax;
@@ -267,37 +308,6 @@ export default {
         this.discount.price = ((this.sumOfPrices * val) / 100).toFixed(0);
       }
     },
-  },
-  watch: {
-    defaultTax(newValue, oldValue) {
-      this.tax = newValue;
-    },
-    defaultDiscount(newValue, oldValue) {
-      this.discount = newValue;
-    },
-    sumOfPrices(newValue, oldValue) {
-      console.log(newValue);
-      console.log(oldValue);
-      if (newValue !== oldValue) {
-        this.discount.price = (newValue * this.discount.percentage) / 100;
-        this.tax.price = ((newValue - this.discount.price) * this.tax.percentage) / 100;
-      }
-    },
-  },
-  computed: {
-    // ...mapGetters("vendorProposal", ["sumOfPrices"]),
-    calcedTax() {
-      this.tax.price = Math.round(((this.sumOfPrices - this.calcedDiscont) * this.tax.percentage) / 100);
-      return this.tax.price;
-    },
-    calcedDiscont() {
-      this.discount.price = Math.round((this.sumOfPrices * this.discount.percentage) / 100);
-      return this.discount.price;
-    },
-    sumOfPrices(){
-      return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"]:
-        this.$store.getters["vendorProposal/sumOfPrices"]
-    }
   },
 };
 </script>

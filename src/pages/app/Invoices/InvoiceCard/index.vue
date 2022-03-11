@@ -10,12 +10,12 @@ import InvoiceCardHeader from "@/pages/app/Invoices/InvoiceCard/InvoiceCardHeade
 import InvoiceCardContent from "@/pages/app/Invoices/InvoiceCard/InvoiceCardContent";
 
 export default {
-  name: "invoice-card",
+  name: "InvoiceCard",
   components: {
     InvoiceCardHeader,
     InvoiceCardContent,
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

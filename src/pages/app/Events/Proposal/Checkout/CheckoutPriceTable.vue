@@ -1,15 +1,18 @@
 <template>
-  <collapse-panel :defaultStatus="false" class="checkout-price-table"
-                  :spacing="windowWidth>960?50:20">
+  <collapse-panel :default-status="false" class="checkout-price-table"
+                  :spacing="windowWidth>960?50:20"
+  >
     <template slot="header">
       <div class="price-header">
         <div class="d-flex align-center">
-          <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" class="mr-10" />
+          <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" class="mr-10">
           {{ vendorCategory.fullTitle }}
         </div>
         <div class="ml-auto">
-          <div class="element-price">${{ totalPrice | withComma }}</div>
-          <div class="discount-details font-size-16 font-regular" v-if="discount.percentage">
+          <div class="element-price">
+            ${{ totalPrice | withComma }}
+          </div>
+          <div v-if="discount.percentage" class="discount-details font-size-16 font-regular">
             ({{ discount.percentage }}% off)
             <span class="crosslinedText">${{ priceOfCostservices | withComma }}</span>
           </div>
@@ -20,8 +23,8 @@
       <div class="price-table-content">
         <div
           v-for="service in costServices"
-          class="d-flex justify-content-between price-item"
           :key="service.requirementTitle"
+          class="d-flex justify-content-between price-item"
         >
           <span>
             {{ service.requirementTitle }}

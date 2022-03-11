@@ -2,44 +2,44 @@
   <md-card class="md-card-profile" :class="{'md-card-hidden': cardHidden}">
     <md-card-header>
       <div class="md-card-avatar">
-        <slot name="imageProfile"></slot>
+        <slot name="imageProfile" />
       </div>
     </md-card-header>
 
     <md-card-content>
-      <slot name="title"></slot>
-      <slot name="content"></slot>
+      <slot name="title" />
+      <slot name="content" />
     </md-card-content>
 
     <md-card-actions>
-      <slot name="footer"></slot>
+      <slot name="footer" />
     </md-card-actions>
   </md-card>
 </template>
 
 <script>
 export default {
-  name: 'lock-card',
+  name: "LockCard",
   props: {
     imageProfile: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   data () {
     return {
       cardHidden: true
-    }
+    };
   },
   beforeMount () {
-    setTimeout(this.showCard, 400)
+    setTimeout(this.showCard, 400);
   },
   methods: {
     showCard: function () {
-      this.cardHidden = false
+      this.cardHidden = false;
     }
   }
-}
+};
 </script>
 
 <style lang="css">

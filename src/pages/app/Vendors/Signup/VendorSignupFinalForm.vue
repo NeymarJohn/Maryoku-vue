@@ -3,7 +3,7 @@
     <div class="inside-cont">
       <div class="title-cont">
         <div class="half text-center">
-          <img :src="`${iconPurple}Purple Icons/Icon_ALMOST DONE(Vendor).svg`" />
+          <img :src="`${iconPurple}Purple Icons/Icon_ALMOST DONE(Vendor).svg`">
         </div>
         <div class="half">
           <h3>almost done!</h3>
@@ -13,28 +13,28 @@
       <div class="card">
         <div class="text-center my-30">
           <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-            <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20" />
+            <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20">
             <span>Sign up with Google</span>
           </md-button>
         </div>
         <p>Email</p>
-        <input class="field" placeholder="Type your email here" v-model="email" />
+        <input v-model="email" class="field" placeholder="Type your email here">
         <p>Set Password</p>
         <input
+          v-model="password"
           class="field"
           :class="{ 'red-border': password != confirmPassword && confirmPassword }"
           placeholder="Type password here"
           type="password"
-          v-model="password"
-        />
+        >
         <p>Confirm Password</p>
         <input
+          v-model="confirmPassword"
           class="field"
           :class="{ 'red-border': password != confirmPassword }"
           placeholder="Type password here"
           type="password"
-          v-model="confirmPassword"
-        />
+        >
       </div>
     </div>
   </div>
@@ -50,15 +50,16 @@ import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "../components/VendorServiceItem.vue";
 
 export default {
-  name: "vendor-signup-final-form",
+  name: "VendorSignupFinalForm",
+  components: {
+    VueElementLoading,
+    VendorServiceItem,
+  },
+  filters: {},
   props: {
     categories: Array,
     icon: String,
     vendor: Object,
-  },
-  components: {
-    VueElementLoading,
-    VendorServiceItem,
   },
   data() {
     return {
@@ -67,28 +68,6 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       serverURL: process.env.SERVER_URL,
     };
-  },
-  created() {},
-  mounted() {},
-  methods: {
-    authenticate(provider) {
-      let action = this.$route.query.action;
-      let tenantId = this.$authService.resolveTenantId();
-
-      let callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${
-          document.location.port
-        }/#/vendor/signedin?vendorId=${this.vendor.id}&token=`,
-      );
-
-      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
-      document.location.href = `${
-        this.$data.serverURL
-      }/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
-    },
-    updateVendor(fieldName) {
-      this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
-    },
   },
   computed: {
     email: {
@@ -116,8 +95,29 @@ export default {
       },
     },
   },
-  filters: {},
   watch: {},
+  created() {},
+  mounted() {},
+  methods: {
+    authenticate(provider) {
+      let action = this.$route.query.action;
+      let tenantId = this.$authService.resolveTenantId();
+
+      let callback = btoa(
+        `${document.location.protocol}//${document.location.hostname}:${
+          document.location.port
+        }/#/vendor/signedin?vendorId=${this.vendor.id}&token=`,
+      );
+
+      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
+      document.location.href = `${
+        this.$data.serverURL
+      }/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+    },
+    updateVendor(fieldName) {
+      this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

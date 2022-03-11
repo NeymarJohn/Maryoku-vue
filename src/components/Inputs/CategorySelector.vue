@@ -1,42 +1,42 @@
 <template>
   <div class="selector-wrapper" :style="{ width: multiple ? '150px' : '' }">
-    <div class="droplist" v-if="!expanded">
+    <div v-if="!expanded" class="droplist">
       <template v-if="multiple">
-        <input readonly class="default" v-model="_value" @click="expanded = true" />
+        <input v-model="_value" readonly class="default" @click="expanded = true">
       </template>
       <template v-else>
-        <img class="inside-img cursor-pointer" :src="`${selectedCategory.icon}`" v-if="selectedCategory && selectedCategory.icon" @click="expanded = true"/>
-        <input readonly class="default with-img" v-model="_value" @click="expanded = true" />
+        <img v-if="selectedCategory && selectedCategory.icon" class="inside-img cursor-pointer" :src="`${selectedCategory.icon}`" @click="expanded = true">
+        <input v-model="_value" readonly class="default with-img" @click="expanded = true">
       </template>
-      <img class="dropdown cursor-pointer" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" @click="expanded = true"/>
+      <img class="dropdown cursor-pointer" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" @click="expanded = true">
     </div>
-    <ul :style="{ 'column-count': column, 'min-width': column > 1 ? '670px' : '350px' }" v-click-outside="close" v-else>
+    <ul v-else v-click-outside="close" :style="{ 'column-count': column, 'min-width': column > 1 ? '670px' : '350px' }">
       <li
         v-for="(category, cIndex) in categories"
         :key="cIndex"
-        @click="updateCategory(category)"
         :class="{ 'mb-40': cIndex < categories.length - 1 }"
+        @click="updateCategory(category)"
       >
         <template v-if="multiple">
           <div class="d-flex align-center">
             <img
+              v-if="_includes(selectedCategory, category)"
               class="mr-10"
               :src="theme === 'purple' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
-              v-if="_includes(selectedCategory, category)"
-            />
-            <span class="unchecked" v-else></span>
+            >
+            <span v-else class="unchecked" />
             <span class="text-transform-capitalize">{{ _option(category) }}</span>
           </div>
         </template>
         <template v-else>
-          <img class="mr-10" v-if="category.icon" :src="`${category.icon}`" />
+          <img v-if="category.icon" class="mr-10" :src="`${category.icon}`">
           {{ _option(category) }}
         </template>
       </li>
       <li v-if="additional">
         <div class="mt-20">
           <p>Other</p>
-          <input class="default with-img" v-model="additionalValue" @input="input" />
+          <input v-model="additionalValue" class="default with-img" @input="input">
         </div>
       </li>
     </ul>
@@ -45,7 +45,7 @@
 <script>
 import { capitalize } from "@/utils/string.util";
 export default {
-  name: "category-selector",
+  name: "CategorySelector",
   props: {
     value: {
       type: [String, Array],
@@ -87,10 +87,6 @@ export default {
     additionalValue: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
   }),
-  mounted() {
-    // console.log("category-selector.mounted", this.value);
-    this.getSelectedCategory(this.value);
-  },
   computed: {
     _value() {
       if (!this.selectedCategory) return null;
@@ -108,6 +104,15 @@ export default {
         }
       }
     },
+  },
+  watch: {
+    value(newValue, oldValue) {
+      this.getSelectedCategory(newValue);
+    },
+  },
+  mounted() {
+    // console.log("category-selector.mounted", this.value);
+    this.getSelectedCategory(this.value);
   },
   methods: {
     updateCategory(category) {
@@ -179,11 +184,6 @@ export default {
       } else {
         if (this.multiple) this.selectedCategory = [];
       }
-    },
-  },
-  watch: {
-    value(newValue, oldValue) {
-      this.getSelectedCategory(newValue);
     },
   },
 };

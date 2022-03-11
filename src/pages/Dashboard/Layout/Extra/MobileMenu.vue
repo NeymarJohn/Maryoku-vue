@@ -3,12 +3,13 @@
     <li>
       <md-field>
         <label>Search</label>
-        <md-input v-model="search" type="text"></md-input>
+        <md-input v-model="search" type="text" />
       </md-field>
     </li>
-    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      <i class="material-icons">dashboard</i>
-      <p>Stats</p></a>
+    <li>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="material-icons">dashboard</i>
+        <p>Stats</p></a>
     </li>
     <li>
       <drop-down>
@@ -28,7 +29,7 @@
     </li>
     <li>
       <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="material-icons">person</i>
-      <p>Account</p></a>
+        <p>Account</p></a>
     </li>
   </ul>
 </template>
@@ -39,16 +40,16 @@ export default {
       search: null,
       selectedEmployee: null,
       employees: [
-        'Jim Halpert',
-        'Dwight Schrute',
-        'Michael Scott',
-        'Pam Beesly',
-        'Angela Martin',
-        'Kelly Kapoor',
-        'Ryan Howard',
-        'Kevin Malone'
+        "Jim Halpert",
+        "Dwight Schrute",
+        "Michael Scott",
+        "Pam Beesly",
+        "Angela Martin",
+        "Kelly Kapoor",
+        "Ryan Howard",
+        "Kevin Malone"
       ]
-    }
+    };
   }
-}
+};
 </script>

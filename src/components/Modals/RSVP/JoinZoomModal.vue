@@ -2,7 +2,7 @@
   <modal class="rsvp-modal join-zoom-modal">
     <template slot="header">
       <div class="">
-        <img :src="`${$iconURL}RSVP/Group 9565.svg`" class="mr-30 logo" style="margin-top: -10px" />
+        <img :src="`${$iconURL}RSVP/Group 9565.svg`" class="mr-30 logo" style="margin-top: -10px">
         <span class="font-size-30 font-bold-extra header-title">CELEBRATE WITH US VIRTUALLY ON ZOOM</span>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -13,7 +13,7 @@
       <div class="text-left">
         <div class="information-section">
           <div class="mb-20">
-            <img :src="`${$iconURL}RSVP/Path+251.svg`" class="mr-10" />
+            <img :src="`${$iconURL}RSVP/Path+251.svg`" class="mr-10">
             <span class="font-bold font-size-20">Join Zoom Event</span>
           </div>
           <div>Just fill & approve, We will add event to your calendar & Remind you before</div>
@@ -24,35 +24,37 @@
             <maryoku-input
               v-model="name"
               v-validate.initial="validations.name"
-              inputStyle="username"
+              input-style="username"
               placeholder="Type your name here..."
-            ></maryoku-input>
+            />
           </div>
           <div class="text-left flex-1 input-wrapper">
             <label class="font-bold">Email</label>
             <maryoku-input
               v-model="email"
               v-validate.initial="validations.email"
-              inputStyle="email"
+              input-style="email"
               placeholder="Type email address here..."
-            ></maryoku-input>
+            />
           </div>
         </div>
-        <div class="d-flex user-info" v-if="isCustomerEvent">
+        <div v-if="isCustomerEvent" class="d-flex user-info">
           <div class="text-left flex-1 input-wrapper mr-10">
             <label class="font-bold">Role</label>
-            <maryoku-input v-model="role" placeholder="Type your role here..."></maryoku-input>
+            <maryoku-input v-model="role" placeholder="Type your role here..." />
           </div>
           <div class="text-left flex-1 input-wrapper">
             <label class="font-bold">Company Name</label>
-            <maryoku-input v-model="companyName" placeholder="Type company name here..."></maryoku-input>
+            <maryoku-input v-model="companyName" placeholder="Type company name here..." />
           </div>
         </div>
       </div>
     </template>
     <template slot="footer">
       <div class="text-center w-100">
-        <md-button class="md-red md-bold" @click="setRsvpToZoom" :disabled="!canSet">RSVP TO ZOOM</md-button>
+        <md-button class="md-red md-bold" :disabled="!canSet" @click="setRsvpToZoom">
+          RSVP TO ZOOM
+        </md-button>
       </div>
     </template>
   </modal>
@@ -68,6 +70,10 @@ const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v
 // included, separated by spaces.
 const SCOPES = "https://www.googleapis.com/auth/calendar";
 export default {
+  components: {
+    Modal,
+    MaryokuInput,
+  },
   props: {
     event: {
       type: Object,
@@ -77,15 +83,6 @@ export default {
       type: Object,
       default: () => {},
     },
-  },
-  components: {
-    Modal,
-    MaryokuInput,
-  },
-  created() {
-    this.api = window.gapi;
-    console.log(this.api);
-    this.handleClientLoad();
   },
   data() {
     return {
@@ -109,6 +106,19 @@ export default {
       api: undefined,
       authorized: false,
     };
+  },
+  computed: {
+    canSet() {
+      return this.errors.items.length == 0;
+    },
+    isCustomerEvent() {
+      return this.event.guestType === "Customers" || this.event.guestType === "Business Associates";
+    },
+  },
+  created() {
+    this.api = window.gapi;
+    console.log(this.api);
+    this.handleClientLoad();
   },
   methods: {
     close() {
@@ -203,17 +213,9 @@ export default {
           } else if (/null/.test(match)) {
             cls = "null";
           }
-          return '<span class="' + cls + '">' + match + "</span>";
+          return "<span class=\"" + cls + "\">" + match + "</span>";
         },
       );
-    },
-  },
-  computed: {
-    canSet() {
-      return this.errors.items.length == 0;
-    },
-    isCustomerEvent() {
-      return this.event.guestType === "Customers" || this.event.guestType === "Business Associates";
     },
   },
 };

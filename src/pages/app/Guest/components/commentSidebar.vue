@@ -1,175 +1,188 @@
 <template>
-    <div class="comment-sidebar">
-        <div class="d-flex flex-column">
-            <div class="header-section d-flex justify-content-start align-center">
-                <span class="title-label">
-                    All Comments
-                </span>
-                <div class="dropdown">
-                    <span class="subText">
-                        Last Update
-                    </span>
-                    <i class="fas fa-chevron-down my-chevron" ></i>
-                </div>
-            </div>
-            <div class="header-tabs d-flex justify-content-around ">
-                <div class="header-tab">
-                    {{ 'All' }}
-                </div>
-                <div class="header-tab">
-                    {{ 'Internal' }}
-                </div>
-                <div class="header-tab tab-selected">
-                    {{ 'Vendors' }}
-                </div>
-                <div class="header-tab">
-                    {{ '@ Mensions' }}
-                </div>
-            </div>
+  <div class="comment-sidebar">
+    <div class="d-flex flex-column">
+      <div class="header-section d-flex justify-content-start align-center">
+        <span class="title-label">
+          All Comments
+        </span>
+        <div class="dropdown">
+          <span class="subText">
+            Last Update
+          </span>
+          <i class="fas fa-chevron-down my-chevron" />
         </div>
-        <div class="sidebar__items d-flex flex-column ">
-            <div class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer"
-            v-for="(commentComponent, commentIndex) in commentComponents"
-            :key="commentIndex"
-            v-if="commentComponent.comments && commentComponent.comments.length">
-                <div class="d-flex justify-content-between">
-                    <!-- sidebar__item__content -->
-                    <div class="sidebar__item__details2 d-flex">
-                        <img class="" src="/static/icons/Group 21554.png">
-                        <div class="productLaunchParty">
-                            <div v-if="commentComponent.planner">
-                                {{commentComponent.planner.name}}
-                            </div>
-                            <div v-if="commentComponent.customer">
-                                {{commentComponent.customer.name}}
-                            </div>
-                            <div v-if="daysDiff(commentComponent.dateCreated) > 1" class="time-color" >
-                                {{ commentComponent.dateCreated | date("DD/MM/YYYY") }}
-                            </div>
-                            <timeago v-else class="d-block time-color" :datetime="commentComponent.dateCreated"></timeago>
-                        </div>
-                    </div>
-                    <drop-down class="d-flex" >
-                        <button class="more-button" data-toggle="dropdown">
-                            <md-icon class="font-size-30">more_vert</md-icon>
-                        </button>
-                        <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
-                            <li class="other-list" >
-                                <a class="other-item font-size-16">
-                                    <div class="other-name font-size-16">
-                                        <md-icon>share</md-icon>
+      </div>
+      <div class="header-tabs d-flex justify-content-around ">
+        <div class="header-tab">
+          {{ 'All' }}
+        </div>
+        <div class="header-tab">
+          {{ 'Internal' }}
+        </div>
+        <div class="header-tab tab-selected">
+          {{ 'Vendors' }}
+        </div>
+        <div class="header-tab">
+          {{ '@ Mensions' }}
+        </div>
+      </div>
+    </div>
+    <div class="sidebar__items d-flex flex-column ">
+      <div v-for="(commentComponent, commentIndex) in commentComponents"
+           v-if="commentComponent.comments && commentComponent.comments.length"
+           :key="commentIndex"
+           class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer"
+      >
+        <div class="d-flex justify-content-between">
+          <!-- sidebar__item__content -->
+          <div class="sidebar__item__details2 d-flex">
+            <img class="" src="/static/icons/Group 21554.png">
+            <div class="productLaunchParty">
+              <div v-if="commentComponent.planner">
+                {{ commentComponent.planner.name }}
+              </div>
+              <div v-if="commentComponent.customer">
+                {{ commentComponent.customer.name }}
+              </div>
+              <div v-if="daysDiff(commentComponent.dateCreated) > 1" class="time-color">
+                {{ commentComponent.dateCreated | date("DD/MM/YYYY") }}
+              </div>
+              <timeago v-else class="d-block time-color" :datetime="commentComponent.dateCreated" />
+            </div>
+          </div>
+          <drop-down class="d-flex">
+            <button class="more-button" data-toggle="dropdown">
+              <md-icon class="font-size-30">
+                more_vert
+              </md-icon>
+            </button>
+            <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
+              <li class="other-list">
+                <a class="other-item font-size-16">
+                  <div class="other-name font-size-16">
+                    <md-icon>share</md-icon>
                                             &nbsp;&nbsp;
-                                        <span>
-                                            {{ "Share" }}
-                                        </span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="other-list" >
-                                <a class="other-item font-size-16">
-                                    <div class="other-name font-size-16">
-                                        <md-icon>edit</md-icon>
-                                            &nbsp;&nbsp;
-                                        <span>
-                                            {{ "Edit" }}
-                                        </span>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </drop-down>
-                </div>
-                <div class="sidebar__item__content w-90">
-                    <div class="dot"></div>
-                    <span class="comment">{{(commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ''}} </span>
-                </div>
-                <div class="d-flex sidebar__item__content_2 justify-content-between mt-1 mb-1">
-                    <span class="replay" @click="toggleshowReply(commentIndex)">{{commentComponent.comments.length-1}} Reply
-                        <i class="fas fa-chevron-down"></i>
+                    <span>
+                      {{ "Share" }}
                     </span>
-                    <span class="unread-count"><center>{{commentComponent.comments.length-1}}</center></span>
-                    <!-- <span>
+                  </div>
+                </a>
+              </li>
+              <li class="other-list">
+                <a class="other-item font-size-16">
+                  <div class="other-name font-size-16">
+                    <md-icon>edit</md-icon>
+                                            &nbsp;&nbsp;
+                    <span>
+                      {{ "Edit" }}
+                    </span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </drop-down>
+        </div>
+        <div class="sidebar__item__content w-90">
+          <div class="dot" />
+          <span class="comment">{{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : '' }} </span>
+        </div>
+        <div class="d-flex sidebar__item__content_2 justify-content-between mt-1 mb-1">
+          <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length-1 }} Reply
+            <i class="fas fa-chevron-down" />
+          </span>
+          <span class="unread-count"><center>{{ commentComponent.comments.length-1 }}</center></span>
+          <!-- <span>
                         <Avartar :name="activeProposal.eventData.customer.companyName"></Avartar>
                     </span> -->
+        </div>
+        <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4" :class="{'commentsNoReply':(commentComponent.comments.length <= 1)}">
+          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
+            <div class="d-flex sidebar__item__content2 justify-content-between">
+              <div class="sidebar__item__details d-flex">
+                <img class="" src="/static/icons/Group 21554.png">
+                <div class="productLaunchParty">
+                  <div v-if="comment.planner">
+                    {{ comment.planner.name }}
+                  </div>
+                  <div v-if="comment.customer">
+                    {{ comment.customer.name }}
+                  </div>
+                  <div v-if="daysDiff(comment.dateCreated) > 1" class="time-color">
+                    {{ comment.dateCreated | date("DD/MM/YYYY") }}
+                  </div>
+                  <timeago v-else class="d-block time-color" :datetime="comment.dateCreated" />
                 </div>
-                <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4" :class="{'commentsNoReply':(commentComponent.comments.length <= 1)}">
-                    <div class="commentItem" v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
-                        <div class="d-flex sidebar__item__content2 justify-content-between">
-                            <div class="sidebar__item__details d-flex">
-                                <img class="" src="/static/icons/Group 21554.png">
-                                <div class="productLaunchParty">
-                                    <div v-if="comment.planner">
-                                        {{comment.planner.name}}
-                                    </div>
-                                    <div v-if="comment.customer">
-                                        {{comment.customer.name}}
-                                    </div>
-                                    <div v-if="daysDiff(comment.dateCreated) > 1" class="time-color" >
-                                        {{ comment.dateCreated | date("DD/MM/YYYY") }}
-                                    </div>
-                                    <timeago v-else class="d-block time-color" :datetime="comment.dateCreated"></timeago>
-                                </div>
-                            </div>
-                            <drop-down class="d-flex" >
-                                <button class="more-button" data-toggle="dropdown">
-                                    <md-icon class="font-size-30">more_vert</md-icon>
-                                </button>
-                                <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
-                                    <li class="other-list" >
-                                        <a class="other-item font-size-16">
-                                            <div class="other-name font-size-16">
-                                                <md-icon>share</md-icon>
+              </div>
+              <drop-down class="d-flex">
+                <button class="more-button" data-toggle="dropdown">
+                  <md-icon class="font-size-30">
+                    more_vert
+                  </md-icon>
+                </button>
+                <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
+                  <li class="other-list">
+                    <a class="other-item font-size-16">
+                      <div class="other-name font-size-16">
+                        <md-icon>share</md-icon>
                                                     &nbsp;&nbsp;
-                                                <span>
-                                                    {{ "Share" }}
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="other-list" >
-                                        <a class="other-item font-size-16">
-                                            <div class="other-name font-size-16">
-                                                <md-icon>edit</md-icon>
+                        <span>
+                          {{ "Share" }}
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="other-list">
+                    <a class="other-item font-size-16">
+                      <div class="other-name font-size-16">
+                        <md-icon>edit</md-icon>
                                                     &nbsp;&nbsp;
-                                                <span>
-                                                    {{ "Edit" }}
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </drop-down>
-                        </div>
-                        <div class="commentDesc">
-                            <span>{{comment.description}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="showReplyComment == commentIndex">
-                    <div class="form-group position-relative reply-form my-top">
-                        <fade-transition v-if="showAddress">
-                            <md-card class="position-absolute notification-card">
-                                <md-card-content class="d-flex align-center position-relative p-10">
-                                    <md-menu md-size="medium" class="action-menu">
-                                        <md-menu-item v-for="c in customers" :key="c.id" @click="toAddress(c)">
-                                            {{c.name}}
-                                        </md-menu-item>
-                                    </md-menu>
-                                </md-card-content>
-                            </md-card>
-                        </fade-transition>
-                        <textarea rows="4" class="form-control reply-text-area" placeholder="Write reply here" v-model="editingCommentReply" ref="commentEditor" @input="getMessage"></textarea>
-                        <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
-                        <div class="footer text-right my-top my-bottom d-flex">
-                            <md-icon class="" >attach_file</md-icon>
-                            <md-icon class="" >sentiment_satisfied_alt</md-icon>
-                            <md-button class="md-simple md-black normal-btn" @click="cancelCommentReply()">Cancel</md-button>
-                            <md-button class="md-red maryoku-btn" @click="saveCommentReply($event, 'reply')">Submit</md-button>
-                        </div>
-                    </div>
-                </div>
+                        <span>
+                          {{ "Edit" }}
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </drop-down>
             </div>
-            <!-- <div class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer" style="float: right;">
+            <div class="commentDesc">
+              <span>{{ comment.description }}</span>
+            </div>
+          </div>
+        </div>
+        <div v-if="showReplyComment == commentIndex">
+          <div class="form-group position-relative reply-form my-top">
+            <fade-transition v-if="showAddress">
+              <md-card class="position-absolute notification-card">
+                <md-card-content class="d-flex align-center position-relative p-10">
+                  <md-menu md-size="medium" class="action-menu">
+                    <md-menu-item v-for="c in customers" :key="c.id" @click="toAddress(c)">
+                      {{ c.name }}
+                    </md-menu-item>
+                  </md-menu>
+                </md-card-content>
+              </md-card>
+            </fade-transition>
+            <textarea ref="commentEditor" v-model="editingCommentReply" rows="4" class="form-control reply-text-area" placeholder="Write reply here" @input="getMessage" />
+            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
+            <div class="footer text-right my-top my-bottom d-flex">
+              <md-icon class="">
+                attach_file
+              </md-icon>
+              <md-icon class="">
+                sentiment_satisfied_alt
+              </md-icon>
+              <md-button class="md-simple md-black normal-btn" @click="cancelCommentReply()">
+                Cancel
+              </md-button>
+              <md-button class="md-red maryoku-btn" @click="saveCommentReply($event, 'reply')">
+                Submit
+              </md-button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer" style="float: right;">
                 <div class="form-group position-relative reply-form my-top">
                     <textarea rows="4" class="form-control reply-text-area" placeholder="Write comment here" v-model="editingComment" ref="commentEditor" @input="getMessage"></textarea>
                     <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
@@ -181,23 +194,23 @@
                     </div>
                 </div>
             </div> -->
-        </div>
     </div>
+  </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import {CommentMixins} from "@/mixins";
-import moment from 'moment';
+import moment from "moment";
 import { FadeTransition } from "vue2-transitions";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 
 const components = {
 //   Avartar: () => import("@/components/Avartar.vue"),
   FadeTransition
-}
+};
 
 export default {
-    name: "comment-sidebar",
+    name: "CommentSidebar",
     components,
     mixins: [CommentMixins],
     props: {
@@ -214,25 +227,31 @@ export default {
         selectedComponent:null,
         customers: [],
     }),
-    created(){
-    },
-    mounted() {
-    },
     computed: {
         proposal(){
         // this.commentComponents = this.$store.state.eventGuestPlan.proposal.commentComponent;
         //     return this.$store.state.eventGuestPlan.proposal
         this.commentComponents = this.$store.state.EventGuestVuex.proposal.commentComponent;
-            return this.$store.state.EventGuestVuex.proposal
+            return this.$store.state.EventGuestVuex.proposal;
         },
+    },
+    watch: {
+        proposal(){
+        console.log("proposal");
+            // this.commentComponents = this.proposal.commentComponent;
+        }
+    },
+    created(){
+    },
+    mounted() {
     },
     methods: {
         async getMessage(e) {
-            if (e.target.value.includes('@')) {
-                let queryArray = e.target.value.split('@')
+            if (e.target.value.includes("@")) {
+                let queryArray = e.target.value.split("@");
 
                 let res = await getReq(`/1/customers?name=${queryArray[1]}`);
-                console.log('customers', res);
+                console.log("customers", res);
                 this.customers = res.data;
 
                 this.showAddress = true;
@@ -244,7 +263,7 @@ export default {
         },
         async saveNewComment(event, type) {
             let selectedComponent = this.selectedComponent;
-            console.log('saveComment', selectedComponent);
+            console.log("saveComment", selectedComponent);
             const comment = {
                 commentComponent: { id: selectedComponent.id },
                 description: this.editingComment,
@@ -252,12 +271,12 @@ export default {
                 email: this.selectedCustomer ? this.selectedCustomer.email : null,
             };
             this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
-            this.editingComment = ""
+            this.editingComment = "";
             event.stopPropagation();
         },
         async saveCommentReply(event, type) {
             let selectedComponent = this.selectedComponent;
-            console.log('saveComment', selectedComponent);
+            console.log("saveComment", selectedComponent);
             const comment = {
                 commentComponent: { id: selectedComponent.id },
                 description: this.editingCommentReply,
@@ -265,17 +284,11 @@ export default {
                 email: this.selectedCustomer ? this.selectedCustomer.email : null,
             };
             this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
-            this.editingCommentReply = ""
+            this.editingCommentReply = "";
             event.stopPropagation();
         },
         daysDiff(date){
-            return moment(moment()).diff(moment(date), 'days');
-        }
-    },
-    watch: {
-        proposal(){
-        console.log("proposal")
-            // this.commentComponents = this.proposal.commentComponent;
+            return moment(moment()).diff(moment(date), "days");
         }
     },
 };

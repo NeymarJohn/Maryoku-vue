@@ -4,13 +4,15 @@
       <div class="left-sidebar white-card">
         <div class="profile">
           <div class="avatar" style="">
-            <user-avatar :user="userData" @set="setAvatar"></user-avatar>
-            <company-logo :user="userData" @set="setLogo"></company-logo>
+            <user-avatar :user="userData" @set="setAvatar" />
+            <company-logo :user="userData" @set="setLogo" />
           </div>
-          <h3 class="name font-bold">{{ userData.profile.displayName }}</h3>
+          <h3 class="name font-bold">
+            {{ userData.profile.displayName }}
+          </h3>
         </div>
         <md-list>
-          <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
+          <md-list-item :class="{ 'font-bold-extra': pageName === 'settings' }" @click="goTo('settings')">
             <label>
               <img
                 :src="
@@ -19,63 +21,56 @@
                     : `${$iconURL}Profile/settings-gray.svg`
                 "
                 class="page-icon"
-              />
+              >
               <span class="pl-20 font-size-20">Profile Settings</span>
             </label>
           </md-list-item>
-          <md-list-item @click="goTo('events')" :class="{ 'font-bold-extra': pageName === 'events' }">
+          <md-list-item :class="{ 'font-bold-extra': pageName === 'events' }" @click="goTo('events')">
             <label>
               <img
                 :src="
                   pageName === 'events' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
                 "
                 class="page-icon"
-              />
+              >
               <span class="pl-20 font-size-20">My Events</span>
             </label>
           </md-list-item>
-          <md-list-item @click="goTo('points')" :class="{ 'font-bold-extra': pageName === 'points' }">
-            <label
-              ><img
-                :src="
-                  pageName === 'points' ? `${$iconURL}Profile/points-dark.svg` : `${$iconURL}Profile/points-gray.svg`
-                "
-                class="page-icon"
-              /><span class="pl-20 font-size-20">My Points</span></label
-            >
+          <md-list-item :class="{ 'font-bold-extra': pageName === 'points' }" @click="goTo('points')">
+            <label><img
+              :src="
+                pageName === 'points' ? `${$iconURL}Profile/points-dark.svg` : `${$iconURL}Profile/points-gray.svg`
+              "
+              class="page-icon"
+            ><span class="pl-20 font-size-20">My Points</span></label>
           </md-list-item>
           <md-list-item
             class="mb-30"
-            @click="goTo('inspirations')"
             :class="{ 'font-bold-extra': pageName === 'inspirations' }"
+            @click="goTo('inspirations')"
           >
-            <label
-              ><img
-                :src="
-                  pageName === 'inspirations'
-                    ? `${$iconURL}Profile/inspirations-dark.svg`
-                    : `${$iconURL}Profile/inspirations-gray.svg`
-                "
-                class="page-icon"
-              /><span class="pl-20 font-size-20">Saved inspirations</span></label
-            >
+            <label><img
+              :src="
+                pageName === 'inspirations'
+                  ? `${$iconURL}Profile/inspirations-dark.svg`
+                  : `${$iconURL}Profile/inspirations-gray.svg`
+              "
+              class="page-icon"
+            ><span class="pl-20 font-size-20">Saved inspirations</span></label>
           </md-list-item>
-          <md-divider></md-divider>
+          <md-divider />
           <md-list-item @click="logout">
-            <label
-              ><img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon" /><span
-                class="pl-20 font-size-20"
-                >Log Out</span
-              ></label
-            >
+            <label><img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon"><span
+              class="pl-20 font-size-20"
+            >Log Out</span></label>
           </md-list-item>
         </md-list>
       </div>
     </div>
     <div class="md-layout-item md-size-70">
-      <profile-settings v-if="pageName === 'settings'"></profile-settings>
-      <my-events v-if="pageName === 'events'"></my-events>
-      <inspirations v-if="pageName === 'inspirations'"></inspirations>
+      <profile-settings v-if="pageName === 'settings'" />
+      <my-events v-if="pageName === 'events'" />
+      <inspirations v-if="pageName === 'inspirations'" />
     </div>
   </div>
 </template>
@@ -139,7 +134,7 @@ export default {
         this.user = this.$auth.user;
       })
       .catch(() => {
-        this.$router.push({ path: `/signin` });
+        this.$router.push({ path: "/signin" });
       });
   },
   methods: {

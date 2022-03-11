@@ -3,25 +3,27 @@
     <div class="container">
       <div class="title">
         <span class="">1/5</span>
-        <br />WHEN IS THE BIG DAY?
+        <br>WHEN IS THE BIG DAY?
       </div>
       <div class="event-date event-basic-info">
-        <md-checkbox v-model="multiple">More than one day event</md-checkbox>
+        <md-checkbox v-model="multiple">
+          More than one day event
+        </md-checkbox>
         <div class="date-picker picker-panel bg-white">
           <div class="d-flex pl-10 justify-content-center">
-            <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="21px" />
+            <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="21px">
             <span class="date-string">{{ getFormattedDate }}</span>
           </div>
           <div>
             <calendar
-                :multiple="multiple"
-                @select="selectDay"
-            ></calendar>
+              :multiple="multiple"
+              @select="selectDay"
+            />
           </div>
         </div>
       </div>
     </div>
-    <wizard-status-bar class="mt-10" :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+    <wizard-status-bar class="mt-10" :current-step="1" @next="goToNext" @skip="skip" @back="back" />
   </div>
 </template>
 
@@ -41,7 +43,7 @@ export default {
   data() {
     return {
         multiple: false,
-        dateData: {selectedDate: moment().format('YYYY-M-D')},
+        dateData: {selectedDate: moment().format("YYYY-M-D")},
     };
   },
   methods: {
@@ -95,7 +97,7 @@ export default {
           actualValue: timelineDates,
         });
         this.setEventProperty({ key: "dateData", actualValue: this.dateData });
-        this.$router.push({ path: `/event-wizard-flexibility` });
+        this.$router.push({ path: "/event-wizard-flexibility" });
 
     },
     skip() {
@@ -107,13 +109,13 @@ export default {
         key: "eventEndMillis",
         actualValue: 0,
       });
-      this.$router.push({ path: `/event-wizard-flexibility` });
+      this.$router.push({ path: "/event-wizard-flexibility" });
     },
     selectDay(e){
       this.dateData = e;
     },
     back() {
-      this.$router.push({ path: `/create-event-wizard` });
+      this.$router.push({ path: "/create-event-wizard" });
     },
   },
 

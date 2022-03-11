@@ -1,32 +1,36 @@
 <template>
   <div class="event-wizard-type">
     <div class="container">
-      <div class="title">4/5</div>
+      <div class="title">
+        4/5
+      </div>
       <div class="event-type event-basic-info">
-        <div class="setting-title mt-3">What type of event are you planning on?</div>
+        <div class="setting-title mt-3">
+          What type of event are you planning on?
+        </div>
         <div class="mt-3 types">
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
           <div
-            class="type-card"
-            @click="selectedType = type"
-            :class="{ selected: selectedType && selectedType.key == type.key }"
             v-for="type in eventTypes"
             :key="type.value"
+            class="type-card"
+            :class="{ selected: selectedType && selectedType.key == type.key }"
+            @click="selectedType = type"
           >
             <div>
-              <img :src="`${$iconURL}Onboarding/${type.key}.svg`" />
+              <img :src="`${$iconURL}Onboarding/${type.key}.svg`">
             </div>
             <div>
               {{ type.name }}
             </div>
             <div>
-              <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type"></md-checkbox>
+              <md-checkbox v-model="selectedType" class="md-checkbox-circle md-red" :value="type" />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <wizard-status-bar :currentStep="4" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+    <wizard-status-bar :current-step="4" @next="goToNext" @skip="skip" @back="back" />
   </div>
 </template>
 
@@ -72,15 +76,15 @@ export default {
       if (this.selectedType) {
         this.setEventProperty({ key: "eventType", actualValue: this.selectedType });
         if (this.selectedType.key === "reception" || this.selectedType.key === "establishment-activity-day")
-          this.$router.push({ path: `/event-wizard-celebrating` });
-        else this.$router.push({ path: `/event-wizard-vibes` });
+          this.$router.push({ path: "/event-wizard-celebrating" });
+        else this.$router.push({ path: "/event-wizard-vibes" });
       }
     },
     skip() {
-      this.$router.push({ path: `/event-wizard-vibes` });
+      this.$router.push({ path: "/event-wizard-vibes" });
     },
     back() {
-      this.$router.push({ path: `/event-wizard-building` });
+      this.$router.push({ path: "/event-wizard-building" });
     },
   },
   data() {

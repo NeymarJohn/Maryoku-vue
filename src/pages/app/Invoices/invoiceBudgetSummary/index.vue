@@ -1,6 +1,6 @@
 <template>
   <div class="invoice-budget-summary">
-    <div class="invoice-budget-summary-service-list" >
+    <div class="invoice-budget-summary-service-list">
       <invoice-budget-summary-service
         v-for="(service, index) in services"
         :key="service.id"
@@ -17,7 +17,7 @@ import InvoiceBudgetSummaryTotal from "@/pages/app/Invoices/invoiceBudgetSummary
 import InvoiceBudgetSummaryService from "@/pages/app/Invoices/invoiceBudgetSummary/InvoiceBudgetSummaryService";
 
 export default {
-  name: "invoice-budget-summary",
+  name: "InvoiceBudgetSummary",
   components: {
     InvoiceBudgetSummaryTotal,
     InvoiceBudgetSummaryService,
@@ -74,9 +74,9 @@ export default {
           status: "Before discount"
         },
       ]
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

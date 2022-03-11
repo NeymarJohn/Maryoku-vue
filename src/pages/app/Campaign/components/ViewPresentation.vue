@@ -1,32 +1,32 @@
 <template>
   <div class="view-presentation-main">
-    <img v-if="coverImage" class="view-presentation-cover-image" :src="coverImage" />
+    <img v-if="coverImage" class="view-presentation-cover-image" :src="coverImage">
     <div class="view-presentation-content">
-      <div v-if="isEdit" >
+      <div v-if="isEdit">
         <div class="wrapper-icon-play">
           <img
             width="77"
             height="77"
             src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg"
-          />
+          >
         </div>
         <div class="wrapper-btn-switch">
           <hide-switch class="btn-switch" label="View A Presentation From The Event Photos" />
         </div>
       </div>
-      <div v-else >
+      <div v-else>
         <img
           width="77"
           height="77"
           src="static/icons/play-white.svg"
-        />
+        >
       </div>
     </div>
     <div v-if="!isEdit" class="view-presentation-footer">
       <img
         class="view-presentation-footer-icon-arrow-up"
         src="static/icons/arrow-up-red.svg"
-      />
+      >
       <div class="view-presentation-footer-action-download">
         <span class="view-presentation-footer-action-download-text">
           Download the presentation
@@ -42,19 +42,19 @@
         <div v-if="showMenuSelectDownloadFiles" class="view-presentation-footer-menu-select-download-files">
           <ul class="view-presentation-footer-menu-select-download-files-checkbox-list">
             <li
+              v-for="listItem of listMenu"
+              :key="listItem.id"
               :class="{
                 'view-presentation-footer-menu-select-download-files-checkbox-list-item': true,
                 'view-presentation-footer-menu-select-download-files-checkbox-list-item-active': listItem.checkbox
               }"
-              v-for="listItem of listMenu"
-              :key="listItem.id"
             >
               <md-checkbox
-                class="checkbox"
                 v-model="listItem.checkbox"
+                class="checkbox"
               />
               <span class="text">
-                {{listItem.title}}
+                {{ listItem.title }}
               </span>
             </li>
           </ul>
@@ -72,7 +72,7 @@
 import HideSwitch from "@/components/HideSwitch";
 
 export default {
-  name: "view-presentation",
+  name: "ViewPresentation",
   components: {
     HideSwitch,
   },
@@ -103,14 +103,14 @@ export default {
           title: "Lecture by Dr. Ronit Ronel: 'Social Networks and Cyber'",
         },
       ]
-    }
+    };
   },
   methods: {
     toggleMenuSelectDownloadFiles() {
       this.showMenuSelectDownloadFiles = !this.showMenuSelectDownloadFiles;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

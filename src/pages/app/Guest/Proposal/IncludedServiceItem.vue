@@ -2,14 +2,14 @@
   <div>
     <div class="align-center included-service-item">
       <div class="item-title font-bold">
-        <img :src="`${$iconURL}Submit%20Proposal/Group 4781.svg`" />
+        <img :src="`${$iconURL}Submit%20Proposal/Group 4781.svg`">
         {{ item.requirementTitle }}
       </div>
       <div class="item-qty text-center">
         {{ item.requirementValue }}
       </div>
-      <div class="item-price text-center"></div>
-      <div class="item-actions" :class="{ expanded: expanded }" v-if="item.description">
+      <div class="item-price text-center" />
+      <div v-if="item.description" class="item-actions" :class="{ expanded: expanded }">
         <md-button
           class="md-sm normal-btn md-simple md-just-icon expand-extra-item color-black"
           @click="expanded = !expanded"
@@ -19,7 +19,7 @@
         </md-button>
       </div>
     </div>
-    <div class="item-description" v-if="expanded">
+    <div v-if="expanded" class="item-description">
       {{ item.description }}
     </div>
   </div>

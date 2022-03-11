@@ -17,8 +17,12 @@
         <div class="md-layout md-gutter" style="justify-content: flex-end">
           <div class="md-layout-item md-size-70" style="text-align: right; padding-right: 0">
             Attending
-            <button class="attending-button"><span class="attending">Yes</span></button>
-            <button class="attending-button"><span class="attending">No</span></button>
+            <button class="attending-button">
+              <span class="attending">Yes</span>
+            </button>
+            <button class="attending-button">
+              <span class="attending">No</span>
+            </button>
           </div>
         </div>
       </div>
@@ -35,7 +39,9 @@
 
     <div class="md-layout">
       <div class="md-layout-item md-size-70" style="padding-left: 10px; margin-right: 1%">
-        <md-icon style="font-size: 15px !important">face</md-icon>
+        <md-icon style="font-size: 15px !important">
+          face
+        </md-icon>
         <label> Dress code </label>
       </div>
     </div>
@@ -47,9 +53,9 @@
     </div>
 
     <div class="md-layout" style="margin-bottom: 8%; margin-top: 2%">
-      <div class="md-layout-item md-size-70"></div>
-      <div class="md-layout-item"></div>
-      <div class="md-layout-item"></div>
+      <div class="md-layout-item md-size-70" />
+      <div class="md-layout-item" />
+      <div class="md-layout-item" />
     </div>
 
     <!-- <div class="md-layout">
@@ -94,12 +100,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      eventDate: "",
-      endHourDateEvent: "",
-    };
-  },
   props: {
     where: {
       type: String,
@@ -110,6 +110,12 @@ export default {
     dressCode: {
       type: String,
     },
+  },
+  data() {
+    return {
+      eventDate: "",
+      endHourDateEvent: "",
+    };
   },
   mounted() {
     let options = { day: "numeric", year: "numeric", month: "long", weekday: "long" };

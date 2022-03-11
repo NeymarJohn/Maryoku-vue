@@ -2,24 +2,26 @@
   <div class="vendor-signup-step3-wrapper">
     <div class="inside-container md-layout">
       <div class="left-side md-layout-item md-size-25">
-        <img :src="`${iconPurple}Purple Icons/Icon_Disclamer(Vendpr).svg`" />
+        <img :src="`${iconPurple}Purple Icons/Icon_Disclamer(Vendpr).svg`">
 
         <h2>
           DISCLAMER &
-          <br />POLICY
+          <br>POLICY
         </h2>
         <p>
           Don’t worry, you’ll only have to do this once. After that all elements will appear on your future proposals
           automatically
         </p>
         <h2>3/5</h2>
-        <p class="color-pink font-bold">Good job, you're almost done!</p>
+        <p class="color-pink font-bold">
+          Good job, you're almost done!
+        </p>
       </div>
       <div class="right-side md-layout-item md-size-75">
         <div class="policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Asset 560.svg`" /> Policy</h5>
+              <h5><img :src="`${iconUrl}Asset 560.svg`"> Policy</h5>
             </div>
             <div class="bottom">
               <p>Set venue rules for your guests</p>
@@ -32,16 +34,15 @@
                 :key="rIndex + 'component'"
                 :item="r"
                 @update="setPolicy($event, rIndex)"
-              >
-              </vendor-policy-item>
+              />
             </div>
-            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" />
+            <v-signup-add-rules :com-type="`rule`" :title="rulesDesc" :default-rules="additionalRules" />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Asset 536.svg`" /> pricing policy</h5>
+              <h5><img :src="`${iconUrl}Asset 536.svg`"> pricing policy</h5>
             </div>
             <div class="bottom">
               <p>use the suggested element or add your own itmes to your disclaimer</p>
@@ -54,11 +55,11 @@
                 :key="pIndex + 'component'"
                 :item="p"
                 @update="setPricePolicy($event, pIndex)"
-              ></vendor-pricing-policy-item>
+              />
             </div>
           </div>
         </div>
-        <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.vendorCategories[0] == 'venuerental'">
+        <div v-if="vendor.vendorCategories[0] == 'venuerental'" class="3rd-party-vendor-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
               <h5>3rd party vendor</h5>
@@ -75,42 +76,42 @@
             </div>
             <div class="checks-cont">
               <div class="check-item" @click="setDontAllowThirdParty(0)">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentVendorData.notAllowedThirdParty == 0" />
-                <span class="unchecked" v-else></span>
+                <img v-if="currentVendorData.notAllowedThirdParty == 0" :src="`${iconUrl}Group 5479 (2).svg`">
+                <span v-else class="unchecked" />
                 <span>Yes</span>
               </div>
               <div class="check-item" @click="setDontAllowThirdParty(1)">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentVendorData.notAllowedThirdParty == 1" />
-                <span class="unchecked" v-else></span>
+                <img v-if="currentVendorData.notAllowedThirdParty == 1" :src="`${iconUrl}Group 5479 (2).svg`">
+                <span v-else class="unchecked" />
                 <span>No</span>
               </div>
               <div class="check-item" @click="setDontAllowThirdParty(2)">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentVendorData.notAllowedThirdParty == 2" />
-                <span class="unchecked" v-else></span>
+                <img v-if="currentVendorData.notAllowedThirdParty == 2" :src="`${iconUrl}Group 5479 (2).svg`">
+                <span v-else class="unchecked" />
                 <span>Some</span>
               </div>
             </div>
-            <div class="not-allow-cont" v-if="currentVendorData.notAllowedThirdParty == 2">
+            <div v-if="currentVendorData.notAllowedThirdParty == 2" class="not-allow-cont">
               <h4>Which of the vendors do you not allow to work in your venue?</h4>
               <div class="na-check-list">
                 <ul>
                   <li v-for="(n, nIndex) in defNa" :key="nIndex">
                     <img
+                      v-if="vendor.notAllowed && vendor.notAllowed.filter(nt => nt.value == n.value).length > 0"
                       :src="`${iconUrl}Group 5489 (4).svg`"
                       @click="updateNa(n)"
-                      v-if="vendor.notAllowed && vendor.notAllowed.filter(nt => nt.value == n.value).length > 0"
-                    />
-                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else @click="updateNa(n)" />
+                    >
+                    <img v-else :src="`${iconUrl}Rectangle 1245.svg`" @click="updateNa(n)">
                     <span @click="updateNa(n)">{{ n.name }}</span>
                     <div
-                      style="margin-top: 10px"
                       v-if="
                         vendor.notAllowed &&
                           vendor.notAllowed.filter(nt => nt.value == 'Other').length > 0 &&
                           n.value == 'Other'
                       "
+                      style="margin-top: 10px"
                     >
-                      <input type="text" placeholder="Type vendor category..." />
+                      <input type="text" placeholder="Type vendor category...">
                     </div>
                   </li>
                 </ul>
@@ -135,104 +136,112 @@
             </div>
             <div class="checks-cont mt-2">
               <div class="check-item" @click="workAllDay = true">
-                <img :src="`/static/icons/vendor/Icon_V.svg`" v-if="workAllDay" />
-                <span class="unchecked" v-else></span>
+                <img v-if="workAllDay" :src="`/static/icons/vendor/Icon_V.svg`">
+                <span v-else class="unchecked" />
                 <span>I work all the time</span>
               </div>
               <div class="check-item" @click="workAllDay = false">
-                <img :src="`/static/icons/vendor/Icon_V.svg`" v-if="!workAllDay" />
-                <span class="unchecked" v-else></span>
+                <img v-if="!workAllDay" :src="`/static/icons/vendor/Icon_V.svg`">
+                <span v-else class="unchecked" />
                 <span>There are times I don't work ></span>
               </div>
             </div>
-            <div class="calendar-cont" v-if="!workAllDay">
+            <div v-if="!workAllDay" class="calendar-cont">
               <div class="calendar">
-                <div class="calendar-title">Mark the blackout days</div>
+                <div class="calendar-title">
+                  Mark the blackout days
+                </div>
                 <!-- dateFormat='yyyy-mm-dd'  -->
                 <template>
                   <functional-calendar
                     :key="componentKey"
+                    ref="calendar"
+                    v-model="date"
                     :change-month-function="true"
                     :change-year-function="true"
                     :is-multiple-date-picker="true"
-                    :minSelDays="1"
+                    :min-sel-days="1"
                     :marked-dates="markedDates"
                     :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
-                    :sundayStart="true"
+                    :sunday-start="true"
                     :date-format="'yyyy-mm-dd'"
-                    v-model="date"
-                    ref="calendar"
                     @changedMonth="changeMonth"
                     @changedYear="changeYear"
-                    v-on:dayClicked="updateDontWorkDays($event)"
-                    v-on:daychoseDay="updateDontWorkDays($event)"
+                    @dayClicked="updateDontWorkDays($event)"
+                    @daychoseDay="updateDontWorkDays($event)"
                   />
                   <!-- todo update page when month change -->
-                  <div style="display: none">{{ this.month }}</div>
+                  <div style="display: none">
+                    {{ this.month }}
+                  </div>
                 </template>
               </div>
               <div class="check-list ml-40">
                 <div class="block">
                   <div class="check-field" @click="exEvery = !exEvery">
-                    <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="exEvery" />
-                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                    <img v-if="exEvery" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
+                    <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
                     <span :class="{ checked: exEvery }">Every:</span>
                   </div>
-                  <div class="cdropdown ml-30" v-if="exEvery" @click="isWeekday = !isWeekday" style="margin-left: 3rem">
+                  <div v-if="exEvery" class="cdropdown ml-30" style="margin-left: 3rem" @click="isWeekday = !isWeekday">
                     <span>Select Day</span>
-                    <md-icon class="font-size-30 color-vendor">keyboard_arrow_down</md-icon>
+                    <md-icon class="font-size-30 color-vendor">
+                      keyboard_arrow_down
+                    </md-icon>
                   </div>
-                  <div class="cdropdown-cont" v-if="isWeekday && exEvery" style="margin-left: 30px">
-                    <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
-                      <img :src="`/static/icons/vendor/Icon_V.svg`" v-if="selectedWeekdays.includes(w)" />
-                      <span class="unchecked" v-else></span>
+                  <div v-if="isWeekday && exEvery" class="cdropdown-cont" style="margin-left: 30px">
+                    <div v-for="(w, wIndex) in weekdays" :key="wIndex" class="weekdays" @click="updateWeekdays(w)">
+                      <img v-if="selectedWeekdays.includes(w)" :src="`/static/icons/vendor/Icon_V.svg`">
+                      <span v-else class="unchecked" />
                       {{ w }}
                     </div>
                   </div>
                 </div>
                 <div class="block border">
                   <div class="check-field" @click="exDont = !exDont">
-                    <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="exDont" />
-                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                    <img v-if="exDont" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
+                    <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
                     <span :class="{ checked: exDont }">I don't work on these holidays:</span>
                   </div>
-                  <div class="cdropdown" v-if="exDont" @click="isReligion = !isReligion" style="margin-left: 30px">
+                  <div v-if="exDont" class="cdropdown" style="margin-left: 30px" @click="isReligion = !isReligion">
                     <span>Religion</span>
-                    <md-icon class="font-size-30 color-vendor">keyboard_arrow_down</md-icon>
+                    <md-icon class="font-size-30 color-vendor">
+                      keyboard_arrow_down
+                    </md-icon>
                   </div>
-                  <div class="cdropdown-cont" v-if="isReligion && exDont" style="margin-left: 30px">
-                    <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
+                  <div v-if="isReligion && exDont" class="cdropdown-cont" style="margin-left: 30px">
+                    <div v-for="(r, rIndex) in religions" :key="rIndex" class="weekdays" @click="updateReligion(r)">
                       <img
-                        :src="`/static/icons/vendor/Icon_V.svg`"
                         v-if="selectedReligion.find(sr => sr.name === r.name)"
-                      />
-                      <span class="unchecked" v-else></span>
+                        :src="`/static/icons/vendor/Icon_V.svg`"
+                      >
+                      <span v-else class="unchecked" />
                       {{ r.name }}
                     </div>
                   </div>
                   <div
-                    class="holidays"
                     v-for="(r, rIndex) in religions"
                     :key="rIndex"
+                    class="holidays"
                     :class="{ 'mt-1': selectedReligion.find(sr => sr.name === r.name) }"
                   >
                     <template v-if="exDont && isReligion && selectedReligion.find(sr => sr.name === r.name)">
                       <div class="dont">
-                        <img :src="`${iconUrl}Asset 524.svg`" />
+                        <img :src="`${iconUrl}Asset 524.svg`">
                       </div>
                       <div class="flex-1">
                         <ul>
                           <li>
                             <div class="check-field" @click="selectAllHolidays(r)">
-                              <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="isAllHolidays(r)" />
-                              <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                              <img v-if="isAllHolidays(r)" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
+                              <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
                               <span :class="{ checked: isAllHolidays(r) }">{{ `All ${r.name}` }}</span>
                             </div>
                           </li>
                           <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
                             <div class="check-field" @click="updateExDonts(r, h)">
-                              <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="h.selected" />
-                              <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                              <img v-if="h.selected" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
+                              <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
                               <span :class="{ checked: h.selected }">{{ h.holiday }}</span>
                             </div>
                           </li>
@@ -242,41 +251,43 @@
                   </div>
                 </div>
                 <div class="block">
-                  <div class="title">Additional Limitations</div>
+                  <div class="title">
+                    Additional Limitations
+                  </div>
                   <div class="check-field" @click="exLimitation = !exLimitation">
-                    <img :src="`${iconPurple}Purple Icons/Icon_V.svg`" v-if="exLimitation" />
-                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                    <img v-if="exLimitation" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
+                    <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
                     <span :class="{ checked: exLimitation }">Everyday between these hours:</span>
                   </div>
-                  <div class="exLimitation" v-if="exLimitation">
+                  <div v-if="exLimitation" class="exLimitation">
                     <div class="select-time-cont">
-                      <img :src="`${iconUrl}Asset 522.svg`" />
+                      <img :src="`${iconUrl}Asset 522.svg`">
                       <vue-timepicker
+                        v-model="startTime"
                         manual-input
                         input-class="time-class"
                         hide-dropdown
                         format="hh:mm"
-                        v-model="startTime"
                         hide-clear-button
-                        v-on:input="updateDontWorkTime"
-                        v-on:change="updateDontWorkTime"
+                        @input="updateDontWorkTime"
+                        @change="updateDontWorkTime"
                       />
                       <div class="am-field" @click="updateStartA()">
-                        <input type="text" v-model="amPack.start" readonly />
+                        <input v-model="amPack.start" type="text" readonly>
                       </div>
-                      <div class="border-line"></div>
+                      <div class="border-line" />
                       <vue-timepicker
+                        v-model="endTime"
                         manual-input
                         input-class="time-class"
                         hide-dropdown
                         format="hh:mm"
-                        v-model="endTime"
                         hide-clear-button
-                        v-on:input="updateDontWorkTime"
-                        v-on:change="updateDontWorkTime"
+                        @input="updateDontWorkTime"
+                        @change="updateDontWorkTime"
                       />
                       <div class="am-field" @click="updateEndA()">
-                        <input type="text" v-model="amPack.end" readonly />
+                        <input v-model="amPack.end" type="text" readonly>
                       </div>
                     </div>
                   </div>
@@ -288,12 +299,14 @@
         <div class="health-policy-wrapper">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Union 12.svg`" />Health Policy</h5>
+              <h5><img :src="`${iconUrl}Union 12.svg`">Health Policy</h5>
             </div>
           </div>
           <div class="card">
             <div class="title-cont">
-              <div class="top">COVID 19 - Exceptional Policy</div>
+              <div class="top">
+                COVID 19 - Exceptional Policy
+              </div>
               <div class="bottom mb-10">
                 <p>
                   Please indicate any policy related to Corona - observing and complying with rules within your own
@@ -302,16 +315,18 @@
               </div>
             </div>
             <div class="main-cont">
-              <textarea v-model="vendor.healthPolicy"></textarea>
+              <textarea v-model="vendor.healthPolicy" />
             </div>
             <div class="my-20">
               Guaranteed with every staff member:
             </div>
             <div class="md-layout my-10">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33 " :key="option.value">
-                <md-checkbox v-model="vendor.guaranteed" :value="option.value" class="md-vendor">{{
-                  option.label
-                }}</md-checkbox>
+              <div v-for="option in guaranteedOptions" :key="option.value" class="md-layout-item md-size-33 ">
+                <md-checkbox v-model="vendor.guaranteed" :value="option.value" class="md-vendor">
+                  {{
+                    option.label
+                  }}
+                </md-checkbox>
               </div>
             </div>
           </div>
@@ -340,12 +355,7 @@ import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
 
 export default {
-  name: "vendor-signup-step3",
-  props: {
-    categories: Array,
-    icon: String,
-    vendor: Object,
-  },
+  name: "VendorSignupStep3",
   components: {
     VendorPricingPolicyItem,
     VendorPolicyItem,
@@ -355,6 +365,12 @@ export default {
     FunctionalCalendar,
     VueTimepicker,
     Multiselect,
+  },
+  filters: {},
+  props: {
+    categories: Array,
+    icon: String,
+    vendor: Object,
   },
   data() {
     return {
@@ -462,6 +478,31 @@ export default {
       vendorPricingPolicies: {},
       guaranteedOptions: GuaranteedOptions,
     };
+  },
+  computed: {
+    additionalRules() {
+      return this.$store.state.vendorSignup.vendor.additionalRules;
+    },
+    currentVendorData() {
+      return this.$store.state.vendorSignup.vendor;
+    },
+  },
+  watch: {
+    vendor: {
+      handler(newVal) {
+        console.log("signup.step3", newVal);
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.init();
+  },
+  updated() {
+    this.renderCalendar();
+  },
+  beforeDestroy() {
+    // this.$root.$off("update-vendor-value");
   },
   methods: {
     updateExDonts(religion, holiday) {
@@ -903,32 +944,6 @@ export default {
             .remove();
         }
       });
-    },
-  },
-  computed: {
-    additionalRules() {
-      return this.$store.state.vendorSignup.vendor.additionalRules;
-    },
-    currentVendorData() {
-      return this.$store.state.vendorSignup.vendor;
-    },
-  },
-  filters: {},
-  mounted() {
-    this.init();
-  },
-  updated() {
-    this.renderCalendar();
-  },
-  beforeDestroy() {
-    // this.$root.$off("update-vendor-value");
-  },
-  watch: {
-    vendor: {
-      handler(newVal) {
-        console.log("signup.step3", newVal);
-      },
-      deep: true,
     },
   },
 };

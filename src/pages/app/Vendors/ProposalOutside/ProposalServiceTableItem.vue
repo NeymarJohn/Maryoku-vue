@@ -1,9 +1,9 @@
 <template>
-  <div class="proposal-service-table-item" v-if="serviceType == 'cost'">
-    <div class="proposal-service-item-wrapper align-start" v-if="!isEdit">
+  <div v-if="serviceType == 'cost'" class="proposal-service-table-item">
+    <div v-if="!isEdit" class="proposal-service-item-wrapper align-start">
       <div class="item-cont">
         {{ item.requirementTitle }}
-        <span class="complementary-badge" v-if="item.isComplimentary">
+        <span v-if="item.isComplimentary" class="complementary-badge">
           Complimentary
           <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplimentary', false)">
             <md-icon>close</md-icon>
@@ -20,29 +20,30 @@
         $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
       </div>
       <div class="action-cont editor-wrapper">
-        <md-menu md-size="medium"
+        <md-menu v-if="!isEdit"
+                 md-size="medium"
                  :md-offset-x="240"
                  :md-offset-y="-36"
                  class="action-menu"
-                 v-if="!isEdit"
                  @md-opened="isOpened"
         >
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
-            <md-icon style="font-size: 40px !important">more_vert</md-icon>
+            <md-icon style="font-size: 40px !important">
+              more_vert
+            </md-icon>
           </md-button>
           <md-menu-content>
             <md-menu-item class="md-purple" @click="isEdit = true">
-              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
+              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10">Edit</span>
             </md-menu-item>
             <md-menu-item class="md-purple" @click="removeRequirement(item)">
-              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
+              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10">Delete</span>
             </md-menu-item>
             <md-menu-item class="md-purple" @click="editingComment = true">
               <span>
-                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
+                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10">{{
                   item.comment ? `Edit Comment` : `Add comment`
-                }}</span
-              >
+                }}</span>
             </md-menu-item>
             <md-menu-item class="md-purple" @click="addAlternative">
               <span>
@@ -52,7 +53,7 @@
             </md-menu-item>
             <md-menu-item class="md-purple" @click="setValue('isComplimentary', !item.isComplimentary)">
               <span>
-                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
+                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10">
                 {{ !item.isComplimentary ? "Mark as complimentary" : "Remove complimentary" }}
               </span>
             </md-menu-item>
@@ -60,12 +61,12 @@
         </md-menu>
       </div>
     </div>
-    <div class="proposal-service-item-wrapper" v-else>
+    <div v-else class="proposal-service-item-wrapper">
       <div class="item-cont">
-        <input v-model="item.requirementTitle" />
+        <input v-model="item.requirementTitle">
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        <input class="input-value" type="number" v-model="item.requirementValue" />
+        <input v-model="item.requirementValue" class="input-value" type="number">
       </div>
       <div class="price-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
         <money
@@ -111,30 +112,42 @@
           class="input-value mr-10"
         />
       </div>
-      <div class="action-cont editor-wrapper"></div>
+      <div class="action-cont editor-wrapper" />
     </div>
     <div class="proposal-service-item-wrapper">
-      <div class="comment-area font-regular" v-if="!editingComment">{{ item.comment }}</div>
-      <div class="text-right" v-else>
-        <textarea class="mt-20" v-model="item.comment"></textarea>
+      <div v-if="!editingComment" class="comment-area font-regular">
+        {{ item.comment }}
+      </div>
+      <div v-else class="text-right">
+        <textarea v-model="item.comment" class="mt-20" />
         <div>
-          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">
+            Cancel
+          </md-button>
+          <md-button class="md-vendor maryoku-btn" @click="save(item)">
+            Save
+          </md-button>
         </div>
       </div>
     </div>
     <div v-if="isEdit" class="text-right save-button mt-10">
-      <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-vendor maryoku-btn save" @click="save(item)">Save</md-button>
+      <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">
+        Cancel
+      </md-button>
+      <md-button class="md-vendor maryoku-btn save" @click="save(item)">
+        Save
+      </md-button>
     </div>
-    <div class="planner-options" v-if="item.plannerOptions.length > 0">
+    <div v-if="item.plannerOptions.length > 0" class="planner-options">
       <img
         :src="`${$iconURL}Onboarding/enter-gray.svg`"
         style="margin-right: 10px; position: absolute; margin-top: 30px"
-      />
+      >
       <div v-for="(plannerOption, index) in item.plannerOptions" :key="`planner-${index}`" class="planner-options-item">
-        <div class="font-size-14 font-regular color-gray pl-50">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
-        <div class="planner-options-item-row" v-if="plannerOption.isEdit">
+        <div class="font-size-14 font-regular color-gray pl-50">
+          Option {{ ("0" + (index + 1)).slice(-2) }}
+        </div>
+        <div v-if="plannerOption.isEdit" class="planner-options-item-row">
           <div class="ml-50">
             <input
               v-model="plannerOption.description"
@@ -142,7 +155,7 @@
               type="text"
               :placeholder="`Type option here`"
               :class="{ isFilled: !!plannerOption.description }"
-            />
+            >
           </div>
           <div>
             <input
@@ -150,7 +163,7 @@
               class="input-value text-center"
               type="text"
               :placeholder="`Type qty here`"
-            />
+            >
           </div>
           <money
             v-model="plannerOption.price"
@@ -172,28 +185,36 @@
             <md-button class="maryoku-btn md-vendor" @click="saveAlternative(index)"> Save </md-button> -->
           </div>
         </div>
-        <div class="planner-options-item-row" v-else>
+        <div v-else class="planner-options-item-row">
           <div class="pl-50">
             {{ plannerOption.description }}
           </div>
-          <div class="text-center">{{ plannerOption.qty | formatQty }}</div>
-          <div class="text-right">${{ plannerOption.price | withComma }}</div>
+          <div class="text-center">
+            {{ plannerOption.qty | formatQty }}
+          </div>
+          <div class="text-right">
+            ${{ plannerOption.price | withComma }}
+          </div>
           <div class="font-size-16 font-regular color-gray text-right">
             $ {{ (plannerOption.price * plannerOption.qty) | withComma }}
           </div>
           <div class="text-right">
             <md-button class="md-simple edit-btn" @click="editAlternative(index)">
-              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
+              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10">
             </md-button>
 
             <md-button class="md-simple edit-btn" @click="removeAlternative(index)">
-              <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
+              <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10">
             </md-button>
           </div>
         </div>
-        <div class="text-right pt-10" v-if="plannerOption.isEdit">
-          <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
-          <md-button class="maryoku-btn md-vendor" @click="saveAlternative(index)"> Save </md-button>
+        <div v-if="plannerOption.isEdit" class="text-right pt-10">
+          <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)">
+            Cancel
+          </md-button>
+          <md-button class="maryoku-btn md-vendor" @click="saveAlternative(index)">
+            Save
+          </md-button>
         </div>
       </div>
       <div class="planner-options-item">
@@ -212,7 +233,7 @@
         <img :src="`${$storageURL}ok%20check%20V.svg`" class="mr-10">
         {{ item.requirementTitle }}
         <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
-        <span class="complementary-badge" v-if="item.isComplimentary">
+        <span v-if="item.isComplimentary" class="complementary-badge">
           Complementary
           <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplimentary', false)">
             <md-icon>close</md-icon>
@@ -220,9 +241,11 @@
         </span>
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
+        <template v-if="!isEdit">
+          {{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}
+        </template>
         <template v-else>
-          <input class="input-value" type="number" v-model="item.requirementValue" />
+          <input v-model="item.requirementValue" class="input-value" type="number">
         </template>
       </div>
       <div class="price-cont editor-wrapper text-right">
@@ -241,52 +264,54 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper text-right"></div>
+      <div class="total-cont editor-wrapper text-right" />
       <div class="action-cont editor-wrapper text-right">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
-<!--        <md-button class="md-simple edit-btn md-dark" @click="isExpanded = !isExpanded">-->
-<!--          <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>-->
-<!--          <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>-->
-<!--        </md-button>-->
-        <md-menu md-size="medium"
+        <!--        <md-button class="md-simple edit-btn md-dark" @click="isExpanded = !isExpanded">-->
+        <!--          <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>-->
+        <!--          <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>-->
+        <!--        </md-button>-->
+        <md-menu v-if="!isEdit"
+                 md-size="medium"
                  :md-offset-x="240"
                  :md-offset-y="-36"
                  class="action-menu"
-                 v-if="!isEdit"
                  @md-opened="isOpened"
         >
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
-            <md-icon style="font-size: 40px !important">more_vert</md-icon>
+            <md-icon style="font-size: 40px !important">
+              more_vert
+            </md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="isEdit = true" class="md-purple">
-              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
+            <md-menu-item class="md-purple" @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10">Edit</span>
             </md-menu-item>
-            <md-menu-item @click="removeRequirement(item)" class="md-purple">
-              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
+            <md-menu-item class="md-purple" @click="removeRequirement(item)">
+              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10">Delete</span>
             </md-menu-item>
-            <md-menu-item @click="addPriceToIncludeItem" class="md-purple">
+            <md-menu-item class="md-purple" @click="addPriceToIncludeItem">
               <span>
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
                   class="label-icon mr-10"
                   style="height: 30px"
-                />
+                >
                 Add price
                 <span>
                   <md-icon class="color-gray" style="font-size: 40px; margin-left: 10px">help_outline</md-icon>
                   <md-tooltip md-direction="top" class="bg-gray">
-                    Clicking ‘Add price’ will move this item to <br />the “Paid elements” table above
+                    Clicking ‘Add price’ will move this item to <br>the “Paid elements” table above
                   </md-tooltip>
                 </span>
               </span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true" class="md-purple">
+            <md-menu-item class="md-purple" @click="editingComment = true">
               <span>
-                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />
+                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10">
                 {{ item.comment ? `Edit Comment` : `Add comment` }}
               </span>
             </md-menu-item>
@@ -295,12 +320,18 @@
       </div>
     </div>
     <div class="proposal-service-item-wrapper">
-      <div class="comment-area font-regular" v-if="!editingComment">{{ item.comment }}</div>
-      <div class="text-right" v-else>
-        <textarea class="mt-20" v-model="item.comment"></textarea>
+      <div v-if="!editingComment" class="comment-area font-regular">
+        {{ item.comment }}
+      </div>
+      <div v-else class="text-right">
+        <textarea v-model="item.comment" class="mt-20" />
         <div>
-          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">
+            Cancel
+          </md-button>
+          <md-button class="md-vendor maryoku-btn" @click="save(item)">
+            Save
+          </md-button>
         </div>
       </div>
     </div>
@@ -312,13 +343,17 @@
         {{ item.requirementTitle }}
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
+        <template v-if="!isEdit">
+          {{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}
+        </template>
         <template v-else>
-          <input class="input-value" type="number" v-model="item.requirementValue" />
+          <input v-model="item.requirementValue" class="input-value" type="number">
         </template>
       </div>
       <div class="price-cont editor-wrapper text-right">
-        <template v-if="!isEdit">+${{ item.price | withComma }} </template>
+        <template v-if="!isEdit">
+          +${{ item.price | withComma }}
+        </template>
         <template v-else>
           <money
             v-model="item.price"
@@ -334,7 +369,9 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper pl-10 text-right" v-if="!isEdit">${{ subTotal | withComma }}</div>
+      <div v-if="!isEdit" class="total-cont editor-wrapper pl-10 text-right">
+        ${{ subTotal | withComma }}
+      </div>
       <money
         v-else
         :value="subTotal"
@@ -350,51 +387,62 @@
         class="input-value mr-10 text-center"
       />
       <div class="action-cont editor-wrapper">
-<!--        <md-button class="md-simple edit-btn md-dark" @click="isExpanded = !isExpanded">-->
-<!--          <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>-->
-<!--          <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>-->
-<!--        </md-button>-->
-        <md-menu md-size="medium"
+        <!--        <md-button class="md-simple edit-btn md-dark" @click="isExpanded = !isExpanded">-->
+        <!--          <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>-->
+        <!--          <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>-->
+        <!--        </md-button>-->
+        <md-menu v-if="!isEdit"
+                 md-size="medium"
                  :md-offset-x="240"
                  :md-offset-y="-36"
                  class="action-menu"
-                 v-if="!isEdit"
                  @md-opened="isOpened"
         >
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
-            <md-icon style="font-size: 40px !important">more_vert</md-icon>
+            <md-icon style="font-size: 40px !important">
+              more_vert
+            </md-icon>
           </md-button>
           <md-menu-content>
             <md-menu-item class="md-purple" @click="isEdit = true">
-              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
+              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10">Edit</span>
             </md-menu-item>
             <md-menu-item class="md-purple" @click="removeRequirement(item)">
-              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
+              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10">Delete</span>
             </md-menu-item>
             <md-menu-item class="md-purple" @click="editingComment = true">
               <span>
-                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
+                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10">{{
                   item.comment ? `Edit Comment` : `Add comment`
-                }}</span
-              >
+                }}</span>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>
     </div>
     <div class="proposal-service-item-wrapper">
-      <div class="comment-area font-regular" v-if="!editingComment">{{ item.comment }}</div>
-      <div class="text-right" v-else>
-        <textarea class="mt-20" v-model="item.comment"></textarea>
+      <div v-if="!editingComment" class="comment-area font-regular">
+        {{ item.comment }}
+      </div>
+      <div v-else class="text-right">
+        <textarea v-model="item.comment" class="mt-20" />
         <div>
-          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">
+            Cancel
+          </md-button>
+          <md-button class="md-vendor maryoku-btn" @click="save(item)">
+            Save
+          </md-button>
         </div>
       </div>
     </div>
     <div v-if="isEdit" class="text-right save-button mt-10">
-      <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-vendor maryoku-btn save" @click="save(item)">Save</md-button>
+      <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">
+        Cancel
+      </md-button>
+      <md-button class="md-vendor maryoku-btn save" @click="save(item)">
+        Save
+      </md-button>
     </div>
   </div>
 </template>
@@ -402,7 +450,7 @@
 import { Money } from "v-money";
 
 export default {
-  name: "proposal-service-item",
+  name: "ProposalServiceItem",
   components: {
     Money,
   },
@@ -432,13 +480,14 @@ export default {
       isAddingPrice: false,
     };
   },
-  created() {
-    this.item = Object.assign({}, this.defaultItem);
-  },
   computed: {
     subTotal() {
       return Math.round(this.item.price * this.item.requirementValue * 100) / 100;
     },
+  },
+  watch: {},
+  created() {
+    this.item = Object.assign({}, this.defaultItem);
   },
   methods: {
     removeRequirement(item) {
@@ -495,27 +544,26 @@ export default {
     },
     isOpened(){
       setTimeout(_ => {
-          $('li.md-list-item').hover(function(el){
-              if ($(this).find('img').length) {
-                  $(this).find('img').attr('style', "filter:brightness(0) invert(1)")
-              } else if ($(this).find('i')) {
-                  $(this).find('i').addClass("color-white");
-                  $(this).find('i').removeClass("color-black");
+          $("li.md-list-item").hover(function(el){
+              if ($(this).find("img").length) {
+                  $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
+              } else if ($(this).find("i")) {
+                  $(this).find("i").addClass("color-white");
+                  $(this).find("i").removeClass("color-black");
               }
-              $(this).find('button').addClass('bg-purple');
+              $(this).find("button").addClass("bg-purple");
           }, function(){
-              if ($(this).find('img').length) {
-                  $(this).find('img').attr('style', "filter:brightness(0) invert(0)")
-              } else if ($(this).find('i')) {
-                  $(this).find('i').removeClass("color-white")
-                  $(this).find('i').addClass("color-black")
+              if ($(this).find("img").length) {
+                  $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
+              } else if ($(this).find("i")) {
+                  $(this).find("i").removeClass("color-white");
+                  $(this).find("i").addClass("color-black");
               }
-              $(this).find('button').removeClass('bg-purple');
-          })
-      }, 0)
+              $(this).find("button").removeClass("bg-purple");
+          });
+      }, 0);
     }
   },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

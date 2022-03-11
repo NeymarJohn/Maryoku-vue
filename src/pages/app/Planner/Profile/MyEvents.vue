@@ -1,11 +1,13 @@
 <template>
   <div class="profile-my-events white-card">
     <div class="title profile-title font-size-30 font-bold-extra d-flex justify-content-between align-center">
-      <span> <img :src="`${$iconURL}Planner Profile/group-9901.svg`" class="mr-10" />My Events</span>
-      <md-button class="md-simple md-outlined md-red maryoku-btn" @click="createNewEvent">Create New Event</md-button>
+      <span> <img :src="`${$iconURL}Planner Profile/group-9901.svg`" class="mr-10">My Events</span>
+      <md-button class="md-simple md-outlined md-red maryoku-btn" @click="createNewEvent">
+        Create New Event
+      </md-button>
     </div>
     <div>
-      <my-event-item v-for="event in myEvents" :key="event.id" :event="event"></my-event-item>
+      <my-event-item v-for="event in myEvents" :key="event.id" :event="event" />
     </div>
   </div>
 </template>
@@ -23,6 +25,9 @@ export default {
     VueElementLoading,
     MyEventItem,
   },
+  props: {
+    userInfo: Object,
+  },
   data() {
     return {
       isLoading: true,
@@ -33,9 +38,6 @@ export default {
       emptyEvents: "",
       eventTitleFromCollaps: "",
     };
-  },
-  props: {
-    userInfo: Object,
   },
   mounted() {
     if (!this.userInfo) {

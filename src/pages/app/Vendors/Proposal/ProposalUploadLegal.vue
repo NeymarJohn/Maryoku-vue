@@ -11,62 +11,61 @@
       <h5>And add additional if you want</h5>
     </div>
     <div class="files-cont">
-      <div class="item" v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc">
+      <div v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc" class="item">
         <div class="left">
           <span class="filename">{{ legalDoc }}</span>
           <span
-            class="req"
             v-if="
               vendor.eventCategory.mandatoryLegalDocs &&
-              vendor.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legalDoc) >= 0
+                vendor.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legalDoc) >= 0
             "
-            >*Required</span
-          >
-          <span class="req" v-else>Optional</span>
+            class="req"
+          >*Required</span>
+          <span v-else class="req">Optional</span>
         </div>
-        <div class="right" @click="uploadDocument(legalDoc)" v-if="!legalDocs[legalDoc]">
-          <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
+        <div v-if="!legalDocs[legalDoc]" class="right" @click="uploadDocument(legalDoc)">
+          <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`">Upload
         </div>
-        <div class="right" v-else>
+        <div v-else class="right">
           <span class="filename">{{ legalDocs[legalDoc].filename }}</span>
-          <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
+          <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`">
           <img
             class="remove"
             :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
             @click="removeFileByTag(legalDoc)"
-          />
+          >
         </div>
       </div>
       <input
+        ref="legalDocument"
         type="file"
         class="d-none"
-        ref="legalDocument"
         accept="application/text, application/pdf"
         @change="onFilePicked"
-      />
+      >
       <div class="option">
         <div class="left">
           <span class="filename">Other</span>
           <span class="req">*Optional</span>
         </div>
-        <div class="right" @click="uploadDocument('other')" v-if="!legalDocs['other']">
-          <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
+        <div v-if="!legalDocs['other']" class="right" @click="uploadDocument('other')">
+          <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`">Upload
           <input
+            ref="optionDocument"
             type="file"
             class="d-none"
-            ref="optionDocument"
             accept="application/text, application/pdf"
             @change="onFilePicked"
-          />
+          >
         </div>
-        <div class="right" v-else>
+        <div v-else class="right">
           <span class="filename">{{ legalDocs["other"].filename }}</span>
-          <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
+          <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`">
           <img
             class="remove"
             :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
             @click="removeFileByTag('other')"
-          />
+          >
         </div>
       </div>
     </div>
@@ -78,6 +77,21 @@ export default {
     return {
       uploadedLegalDocs: {},
     };
+  },
+  computed: {
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    legalDocs: {
+      get: function () {
+        if (this.$store.state.vendorProposal.legalDocs[this.category])
+          return this.$store.state.vendorProposal.legalDocs[this.category];
+        return {};
+      },
+      set: function (files) {
+        this.$store.commit("vendorProposal/setLegalDocs", { category: this.category, files });
+      },
+    },
   },
   created() {
     if (Object.keys(this.legalDocs).length == 0) this.legalDocs = {};
@@ -144,21 +158,6 @@ export default {
     removeFileByTag(tag) {
       this.files = this.files.filter((f) => f.tag != tag);
       this.$store.commit("vendorProposal/addLegalDoc", { category: this.category, docTag: tag, obj: null });
-    },
-  },
-  computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    legalDocs: {
-      get: function () {
-        if (this.$store.state.vendorProposal.legalDocs[this.category])
-          return this.$store.state.vendorProposal.legalDocs[this.category];
-        return {};
-      },
-      set: function (files) {
-        this.$store.commit("vendorProposal/setLegalDocs", { category: this.category, files });
-      },
     },
   },
 };

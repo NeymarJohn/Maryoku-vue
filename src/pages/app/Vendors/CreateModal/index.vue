@@ -1,9 +1,13 @@
 <template>
   <div class="md-layout">
-    <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
+    <modal v-if="inviteModalOpen" container-class="modal-container" @close="noticeModalHide">
       <template slot="header" class="header-position">
-        <h3 class="title">Create new Vendor</h3>
-        <button class="btn-position" @click="closeModal">X</button>
+        <h3 class="title">
+          Create new Vendor
+        </h3>
+        <button class="btn-position" @click="closeModal">
+          X
+        </button>
       </template>
       <template slot="body">
         <div class="md-layout">
@@ -20,28 +24,33 @@
                 <md-input
                   ref="focusable"
                   v-model="name"
+                  v-validate="modelValidations.displayName"
                   data-vv-name="displayName"
                   type="text"
                   name="displayName"
                   required
                   autofocus
-                  v-validate="modelValidations.displayName"
-                >
-                </md-input>
+                />
                 <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('displayName')">close</md-icon>
+                  <md-icon v-show="errors.has('displayName')" class="error">
+                    close
+                  </md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('displayName') && touched.displayName">done</md-icon>
+                  <md-icon v-show="!errors.has('displayName') && touched.displayName" class="success">
+                    done
+                  </md-icon>
                 </slide-y-down-transition>
               </md-field>
 
               <md-field class="no-margin">
                 <label for="select">Category</label>
                 <md-select v-model="category" name="select">
-                  <md-option v-for="(option, index) in vendorCategory" :key="index" :value="option.id">{{
-                    option.value
-                  }}</md-option>
+                  <md-option v-for="(option, index) in vendorCategory" :key="index" :value="option.id">
+                    {{
+                      option.value
+                    }}
+                  </md-option>
                 </md-select>
               </md-field>
             </div>
@@ -54,18 +63,21 @@
               <label>Email Address</label>
               <md-input
                 v-model="email"
+                v-validate="modelValidations.vendorEmail"
                 data-vv-name="vendorEmail"
                 type="text"
                 name="email"
                 required
-                v-validate="modelValidations.vendorEmail"
-              >
-              </md-input>
+              />
               <slide-y-down-transition>
-                <md-icon class="error" v-show="errors.has('vendorEmail')">close</md-icon>
+                <md-icon v-show="errors.has('vendorEmail')" class="error">
+                  close
+                </md-icon>
               </slide-y-down-transition>
               <slide-y-down-transition>
-                <md-icon class="success" v-show="!errors.has('vendorEmail') && touched.vendorEmail">done</md-icon>
+                <md-icon v-show="!errors.has('vendorEmail') && touched.vendorEmail" class="success">
+                  done
+                </md-icon>
               </slide-y-down-transition>
             </md-field>
 
@@ -78,18 +90,21 @@
               <label>Business Address</label>
               <md-input
                 v-model="address"
+                v-validate="modelValidations.vendorAddress"
                 data-vv-name="vendorAddress"
                 type="text"
                 name="vendorAddress"
                 required
-                v-validate="modelValidations.vendorAddress"
-              >
-              </md-input>
+              />
               <slide-y-down-transition>
-                <md-icon class="error" v-show="errors.has('vendorAddress')">close</md-icon>
+                <md-icon v-show="errors.has('vendorAddress')" class="error">
+                  close
+                </md-icon>
               </slide-y-down-transition>
               <slide-y-down-transition>
-                <md-icon class="success" v-show="!errors.has('vendorAddress') && touched.vendorAddress">done</md-icon>
+                <md-icon v-show="!errors.has('vendorAddress') && touched.vendorAddress" class="success">
+                  done
+                </md-icon>
               </slide-y-down-transition>
             </md-field>
           </div>
@@ -104,20 +119,21 @@
               <label>Phone Number</label>
               <md-input
                 v-model="phoneNumber"
+                v-validate="modelValidations.vendorPhoneNumber"
                 data-vv-name="vendorPhoneNumber"
                 type="number"
                 name="vendorPhoneNumber"
                 required
-                v-validate="modelValidations.vendorPhoneNumber"
-              >
-              </md-input>
+              />
               <slide-y-down-transition>
-                <md-icon class="error" v-show="errors.has('vendorPhoneNumber')">close</md-icon>
+                <md-icon v-show="errors.has('vendorPhoneNumber')" class="error">
+                  close
+                </md-icon>
               </slide-y-down-transition>
               <slide-y-down-transition>
-                <md-icon class="success" v-show="!errors.has('vendorPhoneNumber') && touched.vendorPhoneNumber"
-                  >done</md-icon
-                >
+                <md-icon v-show="!errors.has('vendorPhoneNumber') && touched.vendorPhoneNumber" class="success">
+                  done
+                </md-icon>
               </slide-y-down-transition>
             </md-field>
             <md-field
@@ -129,26 +145,33 @@
               <label>Web site address</label>
               <md-input
                 v-model="web"
+                v-validate="modelValidations.webSite"
                 data-vv-name="webSite"
                 type="email"
                 name="webSite"
                 required
-                v-validate="modelValidations.webSite"
-              >
-              </md-input>
+              />
               <slide-y-down-transition>
-                <md-icon class="error" v-show="errors.has('webSite')">close</md-icon>
+                <md-icon v-show="errors.has('webSite')" class="error">
+                  close
+                </md-icon>
               </slide-y-down-transition>
               <slide-y-down-transition>
-                <md-icon class="success" v-show="!errors.has('webSite') && touched.webSite">done</md-icon>
+                <md-icon v-show="!errors.has('webSite') && touched.webSite" class="success">
+                  done
+                </md-icon>
               </slide-y-down-transition>
             </md-field>
           </div>
         </div>
       </template>
       <template slot="footer">
-        <md-button class="move-left md-red md-simple" @click="closeModal">Close</md-button>
-        <md-button class="md-rose text-rose pull-right" @click="addVendor">Create</md-button>
+        <md-button class="move-left md-red md-simple" @click="closeModal">
+          Close
+        </md-button>
+        <md-button class="md-rose text-rose pull-right" @click="addVendor">
+          Create
+        </md-button>
       </template>
     </modal>
   </div>

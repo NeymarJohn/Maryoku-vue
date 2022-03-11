@@ -3,7 +3,7 @@
     <div class="inside-cont">
       <div class="title-cont">
         <div class="half text-center">
-          <img :src="`${iconUrl}Group 5278 (2).svg`" />
+          <img :src="`${iconUrl}Group 5278 (2).svg`">
         </div>
         <div class="half">
           <h3>almost done!</h3>
@@ -12,25 +12,25 @@
       </div>
       <div class="card">
         <p>Email</p>
-        <input class="field" placeholder="Type your email here" v-model="vendor.email" @input="updateVendor('email')" />
+        <input v-model="vendor.email" class="field" placeholder="Type your email here" @input="updateVendor('email')">
         <p>Set Password</p>
         <input
+          v-model="vendor.password"
           class="field"
           :class="{ 'red-border': password != confirmPassword && confirmPassword }"
           placeholder="Type password here"
           type="password"
-          v-model="vendor.password"
           @input="updateVendor('password')"
-        />
+        >
         <p>Confirm Password</p>
         <input
+          v-model="vendor.confirmPassword"
           class="field"
           :class="{ 'red-border': password != confirmPassword }"
           placeholder="Type password here"
           type="password"
-          v-model="vendor.confirmPassword"
           @input="updateVendor('confirmPassword')"
-        />
+        >
       </div>
     </div>
   </div>
@@ -46,15 +46,16 @@ import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "../components/VendorServiceItem.vue";
 
 export default {
-  name: "vendor-signup-final-form",
+  name: "VendorSignupFinalForm",
+  components: {
+    VueElementLoading,
+    VendorServiceItem,
+  },
+  filters: {},
   props: {
     categories: Array,
     icon: String,
     vendor: Object,
-  },
-  components: {
-    VueElementLoading,
-    VendorServiceItem,
   },
   data() {
     return {
@@ -63,6 +64,8 @@ export default {
       confirmPassword: null,
     };
   },
+  computed: {},
+  watch: {},
   created() {},
   mounted() {},
   methods: {
@@ -70,9 +73,6 @@ export default {
       this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
     },
   },
-  computed: {},
-  filters: {},
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

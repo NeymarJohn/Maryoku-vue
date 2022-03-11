@@ -8,22 +8,26 @@
           class="md-button md-red md-just-icon md-theme-default share-button"
           @click="showSharingModal = true"
         >
-          <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
+          <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17">
         </md-button>
-        <div class="concept-color-bar" :style="`background-image:${backgroundImage}`"></div>
-        <div class="rsvp-event-header" :style="`background-image: url('${headerImage}');`"></div>
+        <div class="concept-color-bar" :style="`background-image:${backgroundImage}`" />
+        <div class="rsvp-event-header" :style="`background-image: url('${headerImage}');`" />
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
-              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40 logo-image" />
+              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40 logo-image">
               <div class="greeting-word">
                 <!-- Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}! -->
                 {{ campaign.additionalData.greetingWords }}
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="mb-20">{{ campaign.additionalData.prefixEvent }}</div>
-              <div class="font-bold-extra mb-30 campaign-title">{{ campaign.title }}</div>
+              <div class="mb-20">
+                {{ campaign.additionalData.prefixEvent }}
+              </div>
+              <div class="font-bold-extra mb-30 campaign-title">
+                {{ campaign.title }}
+              </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="word-break mb-30 font-size-20 campaign-description">
@@ -32,48 +36,56 @@
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
               <rsvp-event-info-panel
+                v-if="!isLoading"
                 :event="event"
                 :editable="false"
-                :zoomLink="campaign.additionalData.zoomlink"
-                :startTime="eventStartTime"
-                v-if="!isLoading"
-              ></rsvp-event-info-panel>
+                :zoom-link="campaign.additionalData.zoomlink"
+                :start-time="eventStartTime"
+              />
             </div>
           </div>
           <div>
-            <div class="font-size-22 font-bold mb-30 mt-30">{{ campaign.additionalData.carouselTitle }}</div>
+            <div class="font-size-22 font-bold mb-30 mt-30">
+              {{ campaign.additionalData.carouselTitle }}
+            </div>
             <rsvp-venue-carousel
               v-if="campaign.images"
               :editable="false"
               :event="event"
-              :defaultImages="campaign.images"
-            ></rsvp-venue-carousel>
+              :default-images="campaign.images"
+            />
           </div>
         </div>
       </div>
-      <div class="p-20" v-if="isMobile">
-        <div style="color: #818080; font-size: 13px; margin-bottom: 20px">More Info</div>
-        <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide">
+      <div v-if="isMobile" class="p-20">
+        <div style="color: #818080; font-size: 13px; margin-bottom: 20px">
+          More Info
+        </div>
+        <more-info-item v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide" class="mb-20">
           <template slot="header">
-            <img :src="`${$iconURL}RSVP/Path 3728.svg`" class="label-icon" />
+            <img :src="`${$iconURL}RSVP/Path 3728.svg`" class="label-icon">
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold">
               {{ campaign.additionalData.wearingGuideTitle }}
             </span>
           </template>
-          <template slot="content">{{ campaign.additionalData.wearingGuide }}</template>
+          <template slot="content">
+            {{ campaign.additionalData.wearingGuide }}
+          </template>
         </more-info-item>
-        <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge">
+        <more-info-item v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge" class="mb-20">
           <template slot="header">
-            <img :src="`${$iconURL}RSVP/Path 2369.svg`" class="label-icon" />
+            <img :src="`${$iconURL}RSVP/Path 2369.svg`" class="label-icon">
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold">
               {{ campaign.additionalData.knowledgeTitle }}
             </span>
           </template>
-          <template slot="content">{{ campaign.additionalData.knowledge }}</template>
+          <template slot="content">
+            {{ campaign.additionalData.knowledge }}
+          </template>
         </more-info-item>
-        <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline">
+        <more-info-item v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline" class="mb-20">
           <template slot="header">
-            <img :src="`${$iconURL}Timeline-New/timeline-title.svg`" class="label-icon" />
+            <img :src="`${$iconURL}Timeline-New/timeline-title.svg`" class="label-icon">
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold"> AGENDA </span>
           </template>
           <template slot="content">
@@ -92,37 +104,40 @@
                   v-for="(timeline, index) in schedule.timelineItems"
                   :key="index"
                   :timeline="timeline"
-                ></rsvp-timeline-item>
+                />
               </div>
             </div>
           </template>
         </more-info-item>
-        <div style="color: #818080; font-size: 13px; margin: 40px 0 20px">Can't make it?</div>
-        <md-button class="md-simple md-red maryoku-btn edit-btn" @click="reject"> <u>I Can't Make It</u></md-button
-        ><br /><br />
+        <div style="color: #818080; font-size: 13px; margin: 40px 0 20px">
+          Can't make it?
+        </div>
+        <md-button class="md-simple md-red maryoku-btn edit-btn" @click="reject">
+          <u>I Can't Make It</u>
+        </md-button><br><br>
         <md-button class="md-simple md-red maryoku-btn edit-btn" @click="thinkLater">
-          <u>I Need To Think About It</u></md-button
-        >
-        <hr style="margin-top: 40px" />
+          <u>I Need To Think About It</u>
+        </md-button>
+        <hr style="margin-top: 40px">
         <div class="text-center mb-50 mt-30 logo" @click="gotoWeb">
           Powered by &nbsp;
-          <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
+          <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
           <span style="text-transform: uppercase">&#169;</span>
         </div>
       </div>
       <template v-else>
         <div class="rsvp-event-guid md-layout">
           <div
-            class="rsvp-event-guid-background"
             v-if="event.concept && event.concept.colors[0]"
+            class="rsvp-event-guid-background"
             :style="`background-color:${event.concept.colors[0].color}`"
-          ></div>
+          />
           <div
-            class="md-layout-item md-size-50 md-small-size-100"
             v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
+            class="md-layout-item md-size-50 md-small-size-100"
           >
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
-              <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
+              <img :src="`${$iconURL}RSVP/Path 3728.svg`">
               <span class="text-transform-uppercase" style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
                 campaign.additionalData.wearingGuideTitle
               }}</span>
@@ -132,11 +147,11 @@
             </div>
           </div>
           <div
-            class="md-layout-item md-size-50 md-small-size-100"
             v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge"
+            class="md-layout-item md-size-50 md-small-size-100"
           >
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
-              <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
+              <img :src="`${$iconURL}RSVP/Path 2369.svg`">
               <span class="text-transform-uppercase" style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
                 campaign.additionalData.knowledgeTitle
               }}</span>
@@ -147,8 +162,8 @@
           </div>
         </div>
         <div
-          class="rsvp-event-timeline md-layout"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline"
+          class="rsvp-event-timeline md-layout"
         >
           <div
             class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
@@ -168,68 +183,72 @@
                 v-for="(timeline, index) in schedule.timelineItems"
                 :key="index"
                 :timeline="timeline"
-              ></rsvp-timeline-item>
+              />
             </div>
           </div>
         </div>
         <div class="text-center mb-50 mt-30 logo" @click="gotoWeb">
           Powered by &nbsp;
-          <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
+          <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
         </div>
       </template>
     </div>
 
     <div v-if="isMobile" class="d-flex rsvp-footer">
       <template v-if="isVirtualEvent">
-        <md-button class="md-red maryoku-btn flex-1" @click="showZoomModal = true"> RSVP Now</md-button>
+        <md-button class="md-red maryoku-btn flex-1" @click="showZoomModal = true">
+          RSVP Now
+        </md-button>
       </template>
       <template v-else>
         <md-button class="md-simple md-outlined md-red maryoku-btn flex-1" @click="showZoomModal = true">
           Virutal Event
         </md-button>
-        <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true"> RSVP Now</md-button>
+        <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true">
+          RSVP Now
+        </md-button>
       </template>
     </div>
     <div v-else class="rsvp-footer white-card">
       <div class="rsvp-footer-content">
         <div>
-          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+          <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
           </md-button>
           <md-button
             class="md-button md-red md-just-icon md-theme-default scroll-top-button"
             @click="showSharingModal = true"
           >
-            <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
+            <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17">
           </md-button>
         </div>
         <div class="d-flex align-center btn-group">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="reject">
             <span class="font-size-20">I Can't make it</span>
           </md-button>
-          <span class="seperator"></span>
+          <span class="seperator" />
           <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
 
           <template v-if="isVirtualEvent">
-            <md-button v-if="!isSentRsvp" @click="showZoomModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+            <md-button v-if="!isSentRsvp" class="md-button md-red maryoku-btn rsvp-btn" @click="showZoomModal = true">
               <span class="font-size-20">RSVP Now</span>
             </md-button>
           </template>
           <template v-else>
             <md-button
-              @click="showZoomModal = true"
               v-if="campaign.allowOnline"
               class="md-simple md-button md-black maryoku-btn virtual-btn"
+              @click="showZoomModal = true"
             >
               <span class="font-size-20">Virtual Participation</span>
             </md-button>
-            <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+            <md-button v-if="!isSentRsvp" class="md-button md-red maryoku-btn rsvp-btn" @click="showRsvpModal = true">
               <span class="font-size-20">RSVP Now</span>
             </md-button>
             <div v-else class="font-size-20 ml-20">
-              <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
+              <img :src="`${$iconURL}Campaign/Group 9222.svg`">
               Sent Already
             </div>
           </template>
@@ -238,54 +257,54 @@
     </div>
     <md-button
       v-if="isMobile"
-      @click="scrollToTop"
       class="md-button md-simple md-just-icon md-theme-default scroll-top-button"
+      @click="scrollToTop"
     >
-      <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+      <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
     </md-button>
     <rsvp-information-modal
       v-if="showRsvpModal"
       :event="event"
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
-    ></rsvp-information-modal>
+    />
     <join-zoom-modal
       v-if="showZoomModal"
       :event="event"
+      :campaign="campaign"
       @close="showZoomModal = false"
       @setRsvp="setZoomRsvp"
-      :campaign="campaign"
-    ></join-zoom-modal>
+    />
     <sync-calendar-event-modal
       v-if="showSyncCalendarModal"
-      @close="showSyncCalendarModal = false"
       :campaign="campaign"
       :rsvp="rsvpData"
-    ></sync-calendar-event-modal>
+      @close="showSyncCalendarModal = false"
+    />
     <setting-reminder-modal
       v-if="showReminderModal"
+      :rsvp-request="rsvpRequest"
+      :campaign="campaign"
       @close="showReminderModal = false"
       @setRemind="onSetReminder"
-      :rsvpRequest="rsvpRequest"
-      :campaign="campaign"
-    ></setting-reminder-modal>
+    />
 
     <sync-calendar-modal
       v-if="showSyncCalendarForZoom"
-      @close="showSyncCalendarForZoom = false"
-      @scheduled="showSyncCalendarForZoom = false"
       :campaign="campaign"
       :rsvp="rsvpData"
       class="rsvp-modal"
-    ></sync-calendar-modal>
+      @close="showSyncCalendarForZoom = false"
+      @scheduled="showSyncCalendarForZoom = false"
+    />
     <social-sharing-modal
       v-if="showSharingModal"
-      @cancel="showSharingModal = false"
       class="rsvp-modal"
-      :defaultSharingData="{
+      :default-sharing-data="{
         mediaUrl: headerImage,
       }"
-    ></social-sharing-modal>
+      @cancel="showSharingModal = false"
+    />
     <modal v-if="showRejectConformModal" class="rsvp-modal reject-modal">
       <template slot="header">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showRejectConformModal = false">
@@ -293,9 +312,13 @@
         </md-button>
       </template>
       <template slot="body">
-        <img :src="`${$iconURL}RSVP/reject-icon.svg`" />
-        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">You’ll be missed</div>
-        <div class="mt-30 font-size-20">We’re sorry you can’t make it. If anything changes please let us know</div>
+        <img :src="`${$iconURL}RSVP/reject-icon.svg`">
+        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">
+          You’ll be missed
+        </div>
+        <div class="mt-30 font-size-20">
+          We’re sorry you can’t make it. If anything changes please let us know
+        </div>
       </template>
     </modal>
   </div>
@@ -371,6 +394,50 @@ export default {
       timelineDates: [],
     };
   },
+  computed: {
+    isMobile() {
+      return this.windowWidth < 960;
+    },
+    backgroundImage() {
+      if (this.event.concept) {
+        const color1 = this.event.concept.colors[0].color;
+        const color2 = this.event.concept.colors[1].color;
+        const color3 = this.event.concept.colors[2].color;
+        const color4 = this.event.concept.colors[3].color;
+        console.log(
+          `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`,
+        );
+        return `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`;
+      } else {
+        return "";
+      }
+    },
+    headerImage() {
+      console.log(this.event.concept);
+      if (this.campaign) {
+        return this.campaign.coverImage || this.campaign.defaultCoverImage;
+      }
+      return "";
+    },
+    scheduledDays() {
+      return this.event.timelineDates;
+    },
+    eventStartTime() {
+      if (this.timelineDates[0]) {
+        return Number(this.timelineDates[0].timelineItems[0] ? this.timelineDates[0].timelineItems[0].startTime : 0);
+      }
+      return 0;
+    },
+    isVirtualEvent() {
+      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
+    },
+    conceptColor() {
+      if (!this.event.concept || !this.event.concept.colors[0]) {
+        return "rgba(87, 242, 195, 0.23)";
+      }
+      return this.event.concept.colors[0].color;
+    },
+  },
   created() {
     const rsvpRequestId = this.$route.params.rsvpRequestId;
     const tenantId = this.$route.params.tenantId;
@@ -427,50 +494,6 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.onResize);
-  },
-  computed: {
-    isMobile() {
-      return this.windowWidth < 960;
-    },
-    backgroundImage() {
-      if (this.event.concept) {
-        const color1 = this.event.concept.colors[0].color;
-        const color2 = this.event.concept.colors[1].color;
-        const color3 = this.event.concept.colors[2].color;
-        const color4 = this.event.concept.colors[3].color;
-        console.log(
-          `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`,
-        );
-        return `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`;
-      } else {
-        return "";
-      }
-    },
-    headerImage() {
-      console.log(this.event.concept);
-      if (this.campaign) {
-        return this.campaign.coverImage || this.campaign.defaultCoverImage;
-      }
-      return "";
-    },
-    scheduledDays() {
-      return this.event.timelineDates;
-    },
-    eventStartTime() {
-      if (this.timelineDates[0]) {
-        return Number(this.timelineDates[0].timelineItems[0] ? this.timelineDates[0].timelineItems[0].startTime : 0);
-      }
-      return 0;
-    },
-    isVirtualEvent() {
-      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
-    },
-    conceptColor() {
-      if (!this.event.concept || !this.event.concept.colors[0]) {
-        return "rgba(87, 242, 195, 0.23)";
-      }
-      return this.event.concept.colors[0].color;
-    },
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns"]),

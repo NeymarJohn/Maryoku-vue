@@ -8,7 +8,8 @@
     chart-inside-content
     no-footer
     background-color="rose"
-    :show-loader="loading">
+    :show-loader="loading"
+  >
     <template slot="chartInsideHeader">
       <div class="card-icon">
         <md-icon>timeline</md-icon>
@@ -21,40 +22,20 @@
 </template>
 <script>
 // import auth from '@/auth';
-import Chartist from 'chartist'
+import Chartist from "chartist";
 import {
   ChartCard
-} from '@/components'
+} from "@/components";
 
 export default {
-  name: 'company-dashboard-costs-chart',
+  name: "CompanyDashboardCostsChart",
   components: {
     ChartCard
   },
   props: {
     eventCostPerEmployeePerYearMonth: {
       type: Object,
-      default: () => { return {} }
-    }
-  },
-  watch: {
-    eventCostPerEmployeePerYearMonth (newVal, oldVal) {
-      this.loading = false
-      let labels = []
-      let series = []
-      let keys = Object.keys(newVal)
-      if (keys.length > 0) {
-        for (const key of keys) {
-          let parts = key.split('__')
-          labels.push(`${parts[0]}-${parts[1]}`)
-          series.push(newVal[key])
-        }
-      }
-
-      this.colouredLineChart.data = {
-        labels: labels,
-        series: [series]
-      }
+      default: () => { return {}; }
     }
   },
   data () {
@@ -81,15 +62,35 @@ export default {
           low: 0,
           /* high: 50, */
           showPoint: true,
-          height: '100%',
+          height: "100%",
           plugins: [
             // this.$Chartist.plugins.tooltip()
           ]
         }
       }
+    };
+  },
+  watch: {
+    eventCostPerEmployeePerYearMonth (newVal, oldVal) {
+      this.loading = false;
+      let labels = [];
+      let series = [];
+      let keys = Object.keys(newVal);
+      if (keys.length > 0) {
+        for (const key of keys) {
+          let parts = key.split("__");
+          labels.push(`${parts[0]}-${parts[1]}`);
+          series.push(newVal[key]);
+        }
+      }
+
+      this.colouredLineChart.data = {
+        labels: labels,
+        series: [series]
+      };
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 

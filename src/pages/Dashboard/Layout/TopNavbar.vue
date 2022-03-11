@@ -9,7 +9,9 @@
   >
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start event-top-bar">
-        <h3 v-if="topBarTitle" class="md-title">{{ topBarTitle }}</h3>
+        <h3 v-if="topBarTitle" class="md-title">
+          {{ topBarTitle }}
+        </h3>
         <!--<drop-down direction="down" v-if="topBarTitle" :has-caret="false" :hover="true">
           <md-button slot="title" class="md-button md-simple md-red dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
@@ -60,8 +62,10 @@
             </li>
           </ul>
         </drop-down>-->
-        <h3 class="md-title cst-style" v-if="isEventDetails">
-          <md-icon class="text-rose" v-if="topBarTitle">arrow_right</md-icon>
+        <h3 v-if="isEventDetails" class="md-title cst-style">
+          <md-icon v-if="topBarTitle" class="text-rose">
+            arrow_right
+          </md-icon>
           {{ $route.meta.title ? $route.meta.title : $route.name }}
         </h3>
       </div>
@@ -71,9 +75,9 @@
           :class="{ toggled: $sidebar.showSidebar }"
           @click="toggleSidebar"
         >
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+          <span class="icon-bar" />
+          <span class="icon-bar" />
+          <span class="icon-bar" />
         </md-button>
 
         <div class="md-collapse">
@@ -152,7 +156,7 @@
             <!--              </md-button>-->
             <!--            </li>-->
 
-            <li class="md-list-item import-vendor" v-if="topBarEventId">
+            <li v-if="topBarEventId" class="md-list-item import-vendor">
               <a class="import" @click="gotoVendorsPool"> <md-icon>file_upload</md-icon>import your vendors </a>
               <a class="import"> <md-icon>play_arrow</md-icon>learn more </a>
               <!-- <md-button class="md-danger md-xs no-padding btn-learn-more">
@@ -167,8 +171,8 @@
                 <div class="md-list-item-content">
                   <drop-down direction="down" :hover="true">
                     <md-button
-                      name="user-top-menu"
                       slot="title"
+                      name="user-top-menu"
                       class="user-top-menu md-button md-simple no-padding"
                       data-toggle="dropdown"
                     >
@@ -188,8 +192,7 @@
                           name="user-top-menu-my-profile"
                           class="user-top-menu-my-profile"
                           @click="openMyProfile"
-                          >My Profile</a
-                        >
+                        >My Profile</a>
                       </li>
                       <li>
                         <a
@@ -197,25 +200,22 @@
                           name="user-top-menu-account-settings"
                           class="user-top-menu-account-settings"
                           @click="openAccountSettings"
-                          >My Company</a
-                        >
+                        >My Company</a>
                       </li>
                       <li>
                         <router-link
                           name="user-top-menu-my-profile"
                           class="user-top-menu-my-profile"
                           :to="{ name: 'Team' }"
-                          >Manage Team</router-link
-                        >
+                        >Manage Team</router-link>
                       </li>
-                      <li class="divider"></li>
+                      <li class="divider" />
                       <li>
                         <router-link
                           name="user-top-menu-sign-out"
                           class="user-top-menu-sign-out"
                           :to="{ path: '/signout' }"
-                          >Sign Out</router-link
-                        >
+                        >Sign Out</router-link>
                       </li>
                     </ul>
                   </drop-down>
@@ -272,6 +272,15 @@ export default {
         "Kevin Malone",
       ],
     };
+  },
+  computed: {
+    isEventDetails() {
+      if (this.$route.name === "EditEvent" || this.$route.title === "Event Details") {
+        return false;
+      } else {
+        return true;
+      }
+    },
   },
   mounted() {
     setTimeout(
@@ -408,15 +417,6 @@ export default {
         params: { id: this.topBarEventId },
       });
       window.open(routeData.href, "_blank");
-    },
-  },
-  computed: {
-    isEventDetails() {
-      if (this.$route.name === "EditEvent" || this.$route.title === "Event Details") {
-        return false;
-      } else {
-        return true;
-      }
     },
   },
 };

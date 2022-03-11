@@ -4,7 +4,7 @@
       <div class="position-relative">
         <div v-if="showFeedbackMessageSuccessful" class="feedback-message-successful">
           <div class="feedback-message-successful-logo">
-            <img width="75" height="78" :src="`${$iconURL}FeedbackForm/Group 28058.svg`" />
+            <img width="75" height="78" :src="`${$iconURL}FeedbackForm/Group 28058.svg`">
             <h3>The feedback was sent successfully!</h3>
           </div>
           <div class="feedback-message-successful-text">
@@ -15,12 +15,12 @@
             </div>
           </div>
           <button class="feedback-message-successful-btn-close bg-white" @click="closeFeedbackMessageSuccessful">
-            <img width="34" height="34" src="static/icons/vendor/proposalBoard/filter-inactive.svg" />
+            <img width="34" height="34" src="static/icons/vendor/proposalBoard/filter-inactive.svg">
           </button>
         </div>
       </div>
       <div class="header-cover-image">
-        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" />
+        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png">
       </div>
       <div class="content">
         <div class="decoration-line">
@@ -42,10 +42,14 @@
               </div>
             </div>
             <div class="wrapper-thanks-for-participating">
-              <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`" />
+              <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`">
               <div class="mt-10">
-                <div class="font-size-40 font-bold line-height-1">THANKS FOR PARTICIPATING!</div>
-                <div class="subtitle">80’s Disco Party</div>
+                <div class="font-size-40 font-bold line-height-1">
+                  THANKS FOR PARTICIPATING!
+                </div>
+                <div class="subtitle">
+                  80’s Disco Party
+                </div>
               </div>
               <div class="message">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
@@ -54,7 +58,7 @@
                 dolor sit amet, consetetur sadipscing elitr, sed diam. Clita kasd gubergren, no sea takimata sanctus est
                 Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
               </div>
-              <img width="27" height="37" src="static/icons/double-arrow-down-gray.svg" />
+              <img width="27" height="37" src="static/icons/double-arrow-down-gray.svg">
             </div>
           </div>
           <div
@@ -65,7 +69,7 @@
               <div>
                 <div class="d-flex justify-content-between">
                   <div class="d-flex align-center justify-content-between">
-                    <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
+                    <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20">
                     <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
                   </div>
                 </div>
@@ -74,18 +78,20 @@
                     v-for="(question, index) in feedbackQuestions"
                     v-if="question.showQuestion"
                     :key="index"
-                    :feedbackData="question"
+                    :feedback-data="question"
                     :disabled="false"
                     :show-switch="false"
-                  ></feedback-question>
+                  />
                 </div>
-                <md-button class="yellow-button-send-feedback" @click="sendFeedback">Send feedback</md-button>
+                <md-button class="yellow-button-send-feedback" @click="sendFeedback">
+                  Send feedback
+                </md-button>
               </div>
             </div>
           </div>
           <div class="content-article-footer">
             <div class="d-flex align-center pt-50 pb-50">
-              <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
+              <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`">
               <div class="ml-20 d-flex flex-wrap flex-column">
                 <div class="d-flex">
                   <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
@@ -108,16 +114,22 @@
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
             <div class="icon-and-text">
-              <img class="left-icon" src="/static/icons/green-block-icon-1.svg" />
-              <div class="right-text-style">share with us photos you took from the event</div>
+              <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
+              <div class="right-text-style">
+                share with us photos you took from the event
+              </div>
             </div>
             <drop @drop="handleDrop">
               <div class="white-cube drop">
                 <div class="border-cube">
-                  <div class="title-text-drag-and-drop">Drag & Drop</div>
-                  <div class="or-section">\\ Or \\</div>
+                  <div class="title-text-drag-and-drop">
+                    Drag & Drop
+                  </div>
+                  <div class="or-section">
+                    \\ Or \\
+                  </div>
                   <div class="upload-text-area">
-                    <img src="/static/icons/arrow-up-red.svg" class="mr-10" />
+                    <img src="/static/icons/arrow-up-red.svg" class="mr-10">
                     Upload Files
                   </div>
                 </div>
@@ -127,27 +139,31 @@
         </div>
       </div>
       <div v-if="campaign && campaign.visibleSettings.showSharingOption" class="lets_share_block">
-        <div class="lets_share_text">Let's share all this fun :)</div>
-        <sharing-button-group class="sharing-button-group-wrapper" :copyLink="true"></sharing-button-group>
+        <div class="lets_share_text">
+          Let's share all this fun :)
+        </div>
+        <sharing-button-group class="sharing-button-group-wrapper" :copy-link="true" />
       </div>
-      <div style="color: #fff" class="ml-50">last block</div>
+      <div style="color: #fff" class="ml-50">
+        last block
+      </div>
     </div>
     <div class="text-center logo maryoku_provided_by" @click="gotoWeb">
       <span class="mr-10">Provided by </span>
-      <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
+      <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
       <!-- <span class="mb-10">&#169</span> -->
     </div>
     <div class="landing-footer">
       <div class="landing-footer-item">
         <md-button
-          @click="scrollToTop()"
           class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default mt-40"
+          @click="scrollToTop()"
         >
           <span>
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Requirements/Asset+49.svg"
               class="upward-button"
-            />
+            >
           </span>
         </md-button>
       </div>
@@ -230,7 +246,7 @@ export default {
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
-        text: `You won't be able to revert this feedback!`,
+        text: "You won't be able to revert this feedback!",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success btn-fill",
         cancelButtonClass: "md-button md-danger btn-fill",
@@ -249,7 +265,7 @@ export default {
         src: `${process.env.S3_URL}feedback/${this.campaign.id}/${fileName}.${extension}`,
         imageData: imageString,
       });
-      S3Service.fileUpload(file, `fileName`, `feedback/${this.campaign.id}`).then((res) => {});
+      S3Service.fileUpload(file, "fileName", `feedback/${this.campaign.id}`).then((res) => {});
     },
     uploadFile() {
       document.getElementById("file-uploader").click();

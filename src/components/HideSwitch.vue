@@ -1,8 +1,8 @@
 <template>
-  <md-switch class="below-label large-switch md-switch-rose" v-model="data">
+  <md-switch v-model="data" class="below-label large-switch md-switch-rose">
     <template v-if="label">
-      <span v-if="data">Show {{label}}</span>
-      <span v-if="!data">Hide {{label}}</span>
+      <span v-if="data">Show {{ label }}</span>
+      <span v-if="!data">Hide {{ label }}</span>
     </template>
   </md-switch>
 </template>
@@ -23,9 +23,6 @@ export default {
       data: true,
     };
   },
-  created() {
-    this.data = this.value;
-  },
   watch: {
     data(newValue, oldValue) {
       this.$emit("input", newValue);
@@ -33,6 +30,9 @@ export default {
     value(newValue, oldValue) {
       this.data = this.value;
     },
+  },
+  created() {
+    this.data = this.value;
   },
 };
 </script>

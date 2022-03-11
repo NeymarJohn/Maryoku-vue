@@ -1,90 +1,93 @@
 <template>
-<div class="grid-item md-layout-item " :style="isRow ? {gridRowStart: rowNum, gridRowEnd: 'span '+(!isLong ? '1' : '2') } : {gridRowEnd: 'span '+(!isLong ? '1' : '2')} ">
-
-  <div class="grid-content plannig-service-category-card white-card" :class="{ 'longer-card': isLong}">
-    <template v-if="!booked && (!isSentRequest || !selectedServices.length)">
-
+  <div class="grid-item md-layout-item " :style="isRow ? {gridRowStart: rowNum, gridRowEnd: 'span '+(!isLong ? '1' : '2') } : {gridRowEnd: 'span '+(!isLong ? '1' : '2')} ">
+    <div class="grid-content plannig-service-category-card white-card" :class="{ 'longer-card': isLong}">
+      <template v-if="!booked && (!isSentRequest || !selectedServices.length)">
         <div class="header-carousel">
-            <div v-if="!musicPlayer" class="carousel-item">
-                <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${serviceCategory.images[index]}`" />
-                <label>{{ serviceCategory.imageTitles[index] }}</label>
-            </div>
-            <div v-else class="carousel-item">
-                <img
-                    class="carousel-image"
-                    :src="`${$storageURL}RequirementsImages/thumbnails/Music Images/${serviceCategory.images[index]}`"
-                />
-                <music-player
-                    class="player"
-                    :title="serviceCategory.clipTitles[index]"
-                    :src="`${$storageURL}RequirementsImages/thumbnails/${serviceCategory.clips[index]}`"
-                    @next="next"
-                    @prev="prev"
-                ></music-player>
-            </div>
+          <div v-if="!musicPlayer" class="carousel-item">
+            <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${serviceCategory.images[index]}`">
+            <label>{{ serviceCategory.imageTitles[index] }}</label>
+          </div>
+          <div v-else class="carousel-item">
+            <img
+              class="carousel-image"
+              :src="`${$storageURL}RequirementsImages/thumbnails/Music Images/${serviceCategory.images[index]}`"
+            >
+            <music-player
+              class="player"
+              :title="serviceCategory.clipTitles[index]"
+              :src="`${$storageURL}RequirementsImages/thumbnails/${serviceCategory.clips[index]}`"
+              @next="next"
+              @prev="prev"
+            />
+          </div>
         </div>
-      <div class="p-20 font-bold d-flex align-center justify-content-between card-info">
-        <template v-if="!musicPlayer">
+        <div class="p-20 font-bold d-flex align-center justify-content-between card-info">
+          <template v-if="!musicPlayer">
             <span class="service-name">{{ serviceCategory.imageTitles[index] }}</span>
             <md-button
-            class="md-red maryoku-btn save-btn"
-            :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]), notSelected: !selectedServices.includes(serviceCategory.imageTitles[index]) }"
-            @click="addService(serviceCategory.imageTitles[index])"
-            v-show="hasBudget"
+              v-show="hasBudget"
+              class="md-red maryoku-btn save-btn"
+              :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]), notSelected: !selectedServices.includes(serviceCategory.imageTitles[index]) }"
+              @click="addService(serviceCategory.imageTitles[index])"
             >
-                I like &nbsp;&nbsp;
-                <img
-                    v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
-                    class="non-selected"
-                    :src="`${$iconURL}Req/group-22450-2.svg`"
-
-                />
-                <img v-else style="" :src="`${$iconURL}Req/group-22450-2.svg`" />
-                <md-tooltip md-direction="top">Click here to show vendors your vision for the event</md-tooltip>
+              I like &nbsp;&nbsp;
+              <img
+                v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
+                class="non-selected"
+                :src="`${$iconURL}Req/group-22450-2.svg`"
+              >
+              <img v-else style="" :src="`${$iconURL}Req/group-22450-2.svg`">
+              <md-tooltip md-direction="top">
+                Click here to show vendors your vision for the event
+              </md-tooltip>
             </md-button>
-        </template>
-        <template v-else>
+          </template>
+          <template v-else>
             <span class="service-name">{{ serviceCategory.clipTitles[index] }}</span>
             <md-button
-                class="md-red maryoku-btn save-btn"
-                :class="{ isSelected: selectedServices.includes(serviceCategory.clipTitles[index]), notSelected: !selectedServices.includes(serviceCategory.imageTitles[index]) }"
-                @click="addService(serviceCategory.clipTitles[index])"
-                v-show="hasBudget"
+              v-show="hasBudget"
+              class="md-red maryoku-btn save-btn"
+              :class="{ isSelected: selectedServices.includes(serviceCategory.clipTitles[index]), notSelected: !selectedServices.includes(serviceCategory.imageTitles[index]) }"
+              @click="addService(serviceCategory.clipTitles[index])"
             >
-                I like &nbsp;&nbsp;
-                <img
+              I like &nbsp;&nbsp;
+              <img
                 v-if="!selectedServices.includes(serviceCategory.clipTitles[index])"
                 class="non-selected"
                 :src="`${$iconURL}Requirements/Group+16153.svg`"
                 width="30px"
-                />
-                <img v-else :src="`${$iconURL}common/heart-red.svg`" width="30px"/>
-                <md-tooltip md-direction="top">Click here to show vendors your vision for the event</md-tooltip>
+              >
+              <img v-else :src="`${$iconURL}common/heart-red.svg`" width="30px">
+              <md-tooltip md-direction="top">
+                Click here to show vendors your vision for the event
+              </md-tooltip>
             </md-button>
-        </template>
-      </div>
-    </template>
+          </template>
+        </div>
+      </template>
 
-    <div class="issued-card flex-1 d-flex" v-else>
-      <div class="flex-1 icon-section d-flex align-center flex-column justify-content-center">
-        <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`" />
-        <div class="service-name color-red font-size-20 font-bold">{{ serviceCategory.imageTitles[index] }}</div>
+      <div v-else class="issued-card flex-1 d-flex">
+        <div class="flex-1 icon-section d-flex align-center flex-column justify-content-center">
+          <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`">
+          <div class="service-name color-red font-size-20 font-bold">
+            {{ serviceCategory.imageTitles[index] }}
+          </div>
+        </div>
       </div>
+      <AddBudgetModal
+        v-if="showAddNewCategory"
+        :service-category="serviceCategory"
+        @cancel="showAddNewCategory = false"
+        @save="saveBudget"
+      />
+      <AddBudgetConfirmModal
+        v-if="showAddBudgetConfirm"
+        :service-category="serviceCategory"
+        @cancel="showAddBudgetConfirm = false"
+        @addNewBudget="addBudget"
+      />
     </div>
-    <AddBudgetModal
-      v-if="showAddNewCategory"
-      :serviceCategory="serviceCategory"
-      @cancel="showAddNewCategory = false"
-      @save="saveBudget"
-    ></AddBudgetModal>
-    <AddBudgetConfirmModal
-      v-if="showAddBudgetConfirm"
-      :serviceCategory="serviceCategory"
-      @cancel="showAddBudgetConfirm = false"
-      @addNewBudget="addBudget"
-    ></AddBudgetConfirmModal>
   </div>
-</div>
 </template>
 <script>
 import "vue-popperjs/dist/vue-popper.css";
@@ -95,34 +98,9 @@ const components = {
     MusicPlayer: () => import("./MusicPlayer.vue"),
     AddBudgetModal: () => import("./modals/AddBudget.vue"),
     AddBudgetConfirmModal: () => import("./modals/AddBudgetConfirm.vue")
-}
+};
 export default {
   components,
-  data() {
-    return {
-      showAddNewCategory: false,
-      showAddBudgetConfirm: false,
-      selected: false,
-      selectedServices: [],
-      popperIcons: {
-        venuerental: "SentReqIcn/Group 18964.svg",
-        decor: "SentReqIcn/Group 18012.svg",
-        foodandbeverage: "SentReqIcn/group-18973.svg",
-        entertainment: "SentReqIcn/Group 18967.svg",
-        swag: "SentReqIcn/Group 18008.svg",
-        audiovisualstagingservices: "SentReqIcn/Group 18015.svg",
-        administration: "SentReqIcn/Group 18026.svg",
-        transportation: "SentReqIcn/Group 18016.svg",
-        giveaways: "SentReqIcn/Group 18014.svg",
-        meetingorganizationfees: "SentReqIcn/Group 18008.svg",
-        shipping: "SentReqIcn/Group 18008.svg",
-        signageprinting: "SentReqIcn/Group 19854.svg",
-        securityservices: "SentReqIcn/Group 19857.svg",
-        videographyandphotography: "SentReqIcn/Group 18009.svg",
-        equipmentrentals: "SentReqIcn/Group 18010.svg",
-      },
-    };
-  },
   props: {
     index: {
       type: Number,
@@ -173,6 +151,36 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      showAddNewCategory: false,
+      showAddBudgetConfirm: false,
+      selected: false,
+      selectedServices: [],
+      popperIcons: {
+        venuerental: "SentReqIcn/Group 18964.svg",
+        decor: "SentReqIcn/Group 18012.svg",
+        foodandbeverage: "SentReqIcn/group-18973.svg",
+        entertainment: "SentReqIcn/Group 18967.svg",
+        swag: "SentReqIcn/Group 18008.svg",
+        audiovisualstagingservices: "SentReqIcn/Group 18015.svg",
+        administration: "SentReqIcn/Group 18026.svg",
+        transportation: "SentReqIcn/Group 18016.svg",
+        giveaways: "SentReqIcn/Group 18014.svg",
+        meetingorganizationfees: "SentReqIcn/Group 18008.svg",
+        shipping: "SentReqIcn/Group 18008.svg",
+        signageprinting: "SentReqIcn/Group 19854.svg",
+        securityservices: "SentReqIcn/Group 19857.svg",
+        videographyandphotography: "SentReqIcn/Group 18009.svg",
+        equipmentrentals: "SentReqIcn/Group 18010.svg",
+      },
+    };
+  },
+  watch:{
+    defaultData(newVal){
+        this.selectedServices = [...this.defaultData];
+    }
+  },
   created() {
     this.selectedServices = [...this.defaultData];
   },
@@ -207,11 +215,6 @@ export default {
     saveBudget() {
       this.showAddNewCategory = false;
     },
-  },
-  watch:{
-    defaultData(newVal){
-        this.selectedServices = [...this.defaultData];
-    }
   }
 };
 </script>

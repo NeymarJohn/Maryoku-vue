@@ -1,55 +1,51 @@
 <template>
   <div class="vlabeledit">
     <div
+      v-if="!edit"
       tabindex="1"
       class="vlabeledit-label"
       :class="{'vlabeledit-empty' : this.vlabel === empty}"
       @click="onLabelClick"
-      v-if="!edit"
     >
-      <span>{{showCurrency}}</span>
-      <span v-if="numeric">{{vlabel | numeral('0,0')}}</span>
-      <span v-else>{{vlabel}}</span>
-      <md-icon v-if="icon" class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon>
+      <span>{{ showCurrency }}</span>
+      <span v-if="numeric">{{ vlabel | numeral('0,0') }}</span>
+      <span v-else>{{ vlabel }}</span>
+      <md-icon v-if="icon" class="pull-right text-gray small md-sm vlabeledit-label-icon">
+        edit
+      </md-icon>
     </div>
     <input
-      type="text"
       v-if="edit && !mask"
-      v-model="label"
-      v-on:blur="updateTextBlur"
       ref="labeledit"
-      :placeholder="vplaceholder"
-      class="vlabeledit-input"
-      @keyup.enter="updateTextEnter"
-    />
-    <input-mask
+      v-model="label"
       type="text"
-      v-if="edit && mask"
-      :mask="mask"
-      maskChar="_"
-      v-model="label"
-      v-on:blur="updateTextBlur"
-      ref="labeledit"
       :placeholder="vplaceholder"
       class="vlabeledit-input"
+      @blur="updateTextBlur"
+      @keyup.enter="updateTextEnter"
+    >
+    <input-mask
+      v-if="edit && mask"
+      ref="labeledit"
+      v-model="label"
+      type="text"
+      :mask="mask"
+      mask-char="_"
+      :placeholder="vplaceholder"
+      class="vlabeledit-input"
+      @blur="updateTextBlur"
       @keyup.enter="updateTextEnter"
     />
-    <br v-if="edit && !mask" />
-    <span v-if="edit && !mask" class="span-per-guest">{{showSubDescription}}</span>
+    <br v-if="edit && !mask">
+    <span v-if="edit && !mask" class="span-per-guest">{{ showSubDescription }}</span>
   </div>
 </template>
 <script>
-import InputMask from 'vue-input-mask'
+import InputMask from "vue-input-mask";
 export default {
-  name: 'LabelEdit',
+  name: "LabelEdit",
   components: {
     InputMask
-  },
-  data: function () {
-    return {
-      edit: false, // define whether it is in edit mode or not
-      label: '' // v-bind data model for input text
-    }
   },
   props: {
     text: [String, Number],
@@ -58,7 +54,7 @@ export default {
     fieldName: [String, Object],
     mask: String,
     scope: [String, Object],
-    empty: { type: String, default: 'Click to set' },
+    empty: { type: String, default: "Click to set" },
     numeric: Boolean,
     subDescription: String,
     currency: String,
@@ -66,112 +62,118 @@ export default {
       type: Boolean,
       default: true
     }
-  }, // parent should provide :text or :placeholder
-  methods: {
-    initText: function () {
-      if (this.text === '' || this.text === undefined) {
-        this.label = this.vlabel
-      } else {
-        this.label = this.text
-      }
-    },
-    // when the div label got clicked and trigger the text box
-    onLabelClick: function () {
-      this.edit = true
-      this.label = this.text
-      setTimeout(() => {
-        this.$refs.labeledit.select()
-      }, 100)
-    },
-    // trigger when textbox got lost focus
-    updateTextBlur: function () {
-      // update the edit mode to false .. display div label text
-      if (!this.edit) return
-
-      this.edit = false
-      if (this.label === this.text) {
-        this.$emit('no-change', this.text, this.fieldName, this.scope)
-        return
-      }
-      // emit text updated callback
-      if (this.required && this.label === '') {
-        this.label = this.text
-        this.$emit('no-change', this.text, this.fieldName, this.scope)
-      } else {
-        this.$emit('text-updated-blur', this.label, this.fieldName, this.scope)
-      }
-    },
-    updateTextEnter: function () {
-      if (!this.edit) return
-
-      this.edit = false
-      if (this.label === this.text) {
-        this.$emit('no-change', this.text, this.fieldName, this.scope)
-        return
-      }
-      if (this.required && this.label === '') {
-        this.label = this.text
-        this.$emit('no-change', this.text, this.fieldName, this.scope)
-      } else {
-        this.$emit(
-          'text-updated-enter',
-          this.label,
-          this.fieldName,
-          this.scope
-        )
-      }
-    }
+  },
+  data: function () {
+    return {
+      edit: false, // define whether it is in edit mode or not
+      label: "" // v-bind data model for input text
+    };
   },
   computed: {
     vplaceholder: function () {
       // check if the placeholder is undefined or empty
-      if (this.placeholder === undefined || this.placeholder === '') {
+      if (this.placeholder === undefined || this.placeholder === "") {
         // if it is empty or undefined, pre-populate with built-in place holder text
-        return this.empty
+        return this.empty;
       } else {
-        return this.placeholder
+        return this.placeholder;
       }
     },
     vlabel: function () {
       // after text has been updated
       // return text value or place holder value depends on value of the text
-      if (this.text === undefined || this.text === '') {
-        return this.vplaceholder
+      if (this.text === undefined || this.text === "") {
+        return this.vplaceholder;
       } else {
-        return this.label
+        return this.label;
       }
     },
     showCurrency: function () {
-      if (this.currency !== undefined && this.currency != '') {
-        return this.currency
+      if (this.currency !== undefined && this.currency != "") {
+        return this.currency;
       }
     },
     showSubDescription: function () {
-      if (this.subDescription !== undefined && this.subDescription != '') {
-        return 'Per ' + this.subDescription
+      if (this.subDescription !== undefined && this.subDescription != "") {
+        return "Per " + this.subDescription;
       }
-    }
-  },
-  mounted: function () {
-    // initiate the label view
-    this.initText()
-  },
-  updated: function () {
-    var ed = this.$refs.labeledit
-    if (ed != null) {
-      ed.focus()
     }
   },
   watch: {
     text: function (newVal, oldValue) {
-      console.log(`'text' changed from ${oldValue} to ${newVal}`)
-      if (newVal === '' || newVal === undefined) {
-        this.label = this.vplaceholder
+      console.log(`'text' changed from ${oldValue} to ${newVal}`);
+      if (newVal === "" || newVal === undefined) {
+        this.label = this.vplaceholder;
       }
-      this.initText()
+      this.initText();
+    }
+  },
+  mounted: function () {
+    // initiate the label view
+    this.initText();
+  },
+  updated: function () {
+    var ed = this.$refs.labeledit;
+    if (ed != null) {
+      ed.focus();
+    }
+  }, // parent should provide :text or :placeholder
+  methods: {
+    initText: function () {
+      if (this.text === "" || this.text === undefined) {
+        this.label = this.vlabel;
+      } else {
+        this.label = this.text;
+      }
+    },
+    // when the div label got clicked and trigger the text box
+    onLabelClick: function () {
+      this.edit = true;
+      this.label = this.text;
+      setTimeout(() => {
+        this.$refs.labeledit.select();
+      }, 100);
+    },
+    // trigger when textbox got lost focus
+    updateTextBlur: function () {
+      // update the edit mode to false .. display div label text
+      if (!this.edit) return;
+
+      this.edit = false;
+      if (this.label === this.text) {
+        this.$emit("no-change", this.text, this.fieldName, this.scope);
+        return;
+      }
+      // emit text updated callback
+      if (this.required && this.label === "") {
+        this.label = this.text;
+        this.$emit("no-change", this.text, this.fieldName, this.scope);
+      } else {
+        this.$emit("text-updated-blur", this.label, this.fieldName, this.scope);
+      }
+    },
+    updateTextEnter: function () {
+      if (!this.edit) return;
+
+      this.edit = false;
+      if (this.label === this.text) {
+        this.$emit("no-change", this.text, this.fieldName, this.scope);
+        return;
+      }
+      if (this.required && this.label === "") {
+        this.label = this.text;
+        this.$emit("no-change", this.text, this.fieldName, this.scope);
+      } else {
+        this.$emit(
+          "text-updated-enter",
+          this.label,
+          this.fieldName,
+          this.scope
+        );
+      }
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .vlabeledit-empty {

@@ -1,23 +1,26 @@
 <template>
   <radial-progress-bar
-    innerStrokeColor="#A0A0A0"
-    startColor="#f51355"
-    stopColor="#f51355"
-    :strokeWidth="8"
+    inner-stroke-color="#A0A0A0"
+    start-color="#f51355"
+    stop-color="#f51355"
+    :stroke-width="8"
     :completed-steps="value"
     :diameter="80"
     :total-steps="total"
-    :animateSpeed="100"
-    :isClockwise="false"
+    :animate-speed="100"
+    :is-clockwise="false"
   >
     <div class="loading-budget-image" @click="handleClick">
-      <img :src="`${$iconURL}${icon}`" />
+      <img :src="`${$iconURL}${icon}`">
     </div>
   </radial-progress-bar>
 </template>
 <script>
 import RadialProgressBar from "vue-radial-progress";
 export default {
+  components: {
+    RadialProgressBar,
+  },
   props: {
     value: {
       type: Number,
@@ -29,11 +32,8 @@ export default {
     },
     icon: {
       type: String,
-      default: `common/heart-red.svg`,
+      default: "common/heart-red.svg",
     },
-  },
-  components: {
-    RadialProgressBar,
   },
   methods: {
     handleClick() {

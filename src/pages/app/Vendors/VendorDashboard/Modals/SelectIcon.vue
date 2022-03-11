@@ -17,8 +17,9 @@
               style="margin-top: -20px;
 "
               @click="close()"
-            ><md-icon>close</md-icon></md-button
             >
+              <md-icon>close</md-icon>
+            </md-button>
           </div>
         </div>
       </div>
@@ -26,28 +27,28 @@
     <template slot="body">
       <div>
         <div class="md-layout">
-          <div class="event-logo" :class="{selected: selectedIcon === index}" v-for="(item, index) in icons" :key="index" @click="selectIcon(index)">
-            <div v-if="selectedIcon === index" class="choose-item"></div>
+          <div v-for="(item, index) in icons" :key="index" class="event-logo" :class="{selected: selectedIcon === index}" @click="selectIcon(index)">
+            <div v-if="selectedIcon === index" class="choose-item" />
             <img
               :src="`${$iconURL}CalendarIcons/${icons[index]}`"
               style="  width: 27.1px;
               height: 31.1px;
               object-fit: contain;
              "
-            />
+            >
           </div>
         </div>
         <div class="d-flex justify-content-end mt-50 mr-20">
           <md-button class=" md-simple  text-decoration-none  " @click="cancel()">
             <span style="color: black">Cancel</span>
           </md-button>
-          <md-button class="md-vendor add-category-btn md-bold pa-20" @click="saveIcon()" :disabled="selectedIcon === null"
-          >Select Icon</md-button
-          >
+          <md-button class="md-vendor add-category-btn md-bold pa-20" :disabled="selectedIcon === null" @click="saveIcon()">
+            Select Icon
+          </md-button>
         </div>
       </div>
     </template>
-    <template slot="footer"> </template>
+    <template slot="footer" />
   </start-modal>
 </template>
 
@@ -56,6 +57,9 @@ import StartModal from "@/components/StartModal.vue";
 import {eventIcons} from "@/constants/event";
 
 export default {
+  components: {
+    StartModal,
+  },
   props: {
     eventId: String,
     events: {
@@ -63,13 +67,13 @@ export default {
       default: [],
     },
   },
-  components: {
-    StartModal,
-  },
   data: () => ({
     selectedIcon: null,
     icons: eventIcons,
   }),
+  mounted() {
+    this.selectedIcon = null;
+  },
 
   methods: {
     close() {
@@ -88,9 +92,6 @@ export default {
     selectIcon(item) {
       this.selectedIcon = item;
     },
-  },
-  mounted() {
-    this.selectedIcon = null;
   },
 };
 </script>

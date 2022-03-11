@@ -1,36 +1,41 @@
 <template>
   <div>
-    <budget-notifications></budget-notifications>
+    <budget-notifications />
     <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList" />
     <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important">
-        <comment-editor-panel
-            v-if="showCommentEditorPanel"
-            :commentComponents="commentComponents"
-            @saveComment="saveComment"
-            @updateComment="updateComment"
-            @deleteComment="deleteComment"
-            @updateCommentComponent="updateCommentComponent"
-        >
-        </comment-editor-panel>
+      <comment-editor-panel
+        v-if="showCommentEditorPanel"
+        :comment-components="commentComponents"
+        @saveComment="saveComment"
+        @updateComment="updateComment"
+        @deleteComment="deleteComment"
+        @updateCommentComponent="updateCommentComponent"
+      />
       <!-- Event Header -->
       <div class="event-header d-flex justify-content-between">
         <div class="header-title">
           <h3>
-            <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15" />
+            <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
             Budget
           </h3>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf" />
       </div>
       <div class="md-layout justify-content-between">
         <div class="md-layout-item md-size-40">
           <div class="card-section card-overview">
-            <div class="section-header">Overview</div>
+            <div class="section-header">
+              Overview
+            </div>
             <div class="budget-list d-flex justify-content-center">
               <div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #b7b7b7">
-                <div class="label-title mb-0">Budget</div>
-                <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
+                <div class="label-title mb-0">
+                  Budget
+                </div>
+                <div class="budget-value">
+                  ${{ budgetStatistics.total | withComma }}
+                </div>
                 <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
                   Edit
                 </md-button>
@@ -38,29 +43,45 @@
             </div>
             <div class="budget-list d-flex justify-content-between">
               <div class="budget-list__item width-50">
-                <div class="label-title">Allocated</div>
-                <div class="budget-value">${{ budgetStatistics.allocated | withComma }}</div>
-                <div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
+                <div class="label-title">
+                  Allocated
+                </div>
+                <div class="budget-value">
+                  ${{ budgetStatistics.allocated | withComma }}
+                </div>
+                <div class="percent">
+                  {{ budgetStatistics.allocatedPercentage }} %
+                </div>
               </div>
               <div class="budget-list__item width-50">
-                <div class="label-title">Booked</div>
-                <div class="budget-value">${{ budgetStatistics.booked | withComma }}</div>
-                <div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
+                <div class="label-title">
+                  Booked
+                </div>
+                <div class="budget-value">
+                  ${{ budgetStatistics.booked | withComma }}
+                </div>
+                <div class="percent">
+                  {{ budgetStatistics.bookedPercentage }}%
+                </div>
               </div>
             </div>
           </div>
           <div class="card-section card-overview-saved text-center d-flex justify-center align-center">
             <span>So far you saved :</span>
-            <md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="budgetStatistics.saved >= 0"
-              >add_circle_outline</md-icon
-            >
-            <md-icon class="card-overview-saved-icon color-red" v-else>remove_circle_outline</md-icon>
+            <md-icon v-if="budgetStatistics.saved >= 0" class="card-overview-saved-icon" style="color: #167c3a">
+              add_circle_outline
+            </md-icon>
+            <md-icon v-else class="card-overview-saved-icon color-red">
+              remove_circle_outline
+            </md-icon>
             <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma }}</span>
           </div>
           <div class="card-section card-expense">
-            <div class="section-header">Expenses</div>
+            <div class="section-header">
+              Expenses
+            </div>
             <div>
-              <pie-chart-round :event.sync="$store.state.event.eventData" :items="pieChartData"></pie-chart-round>
+              <pie-chart-round :event.sync="$store.state.event.eventData" :items="pieChartData" />
             </div>
           </div>
         </div>
@@ -80,7 +101,7 @@
                   type="total"
                   @change="onChangeComponent"
                   @add="onAddMoreBudget"
-                ></event-budget-vendors>
+                />
               </template>
               <template slot="tab-pane-2">
                 <event-budget-vendors
@@ -89,13 +110,14 @@
                   type="perGuest"
                   @change="onChangeComponent"
                   @add="onAddMoreBudget"
-                ></event-budget-vendors>
+                />
               </template>
             </tabs>
           </div>
         </div>
       </div>
       <vue-html2pdf
+        ref="html2Pdf"
         :show-layout="false"
         :float-layout="true"
         :enable-download="true"
@@ -107,89 +129,112 @@
         pdf-format="a4"
         pdf-orientation="portrait"
         pdf-content-width="800px"
-        ref="html2Pdf"
       >
         <section slot="pdf-content">
           <div class="p-20 pdf-content">
             <h3 class="font-bold-extra font-size-30">
-              <img :src="`/static/icons/budget/budget.png`" width="15" />
+              <img :src="`/static/icons/budget/budget.png`" width="15">
               Budget
             </h3>
             <div class="card-section card-overview" style="border: solid 2px #dbdbdb !important">
-              <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Overview</div>
+              <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">
+                Overview
+              </div>
               <div class="budget-list d-flex justify-content-between">
                 <div class="budget-list__item">
-                  <div class="label-title">Budget</div>
-                  <div class="budget-value">${{ budgetStatistics.total | withComma(Number) }}</div>
-                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')"
-                    >Edit</md-button
-                  >
+                  <div class="label-title">
+                    Budget
+                  </div>
+                  <div class="budget-value">
+                    ${{ budgetStatistics.total | withComma(Number) }}
+                  </div>
+                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
+                    Edit
+                  </md-button>
                 </div>
                 <div class="budget-list__item">
-                  <div class="label-title">Allocated</div>
-                  <div class="budget-value">${{ budgetStatistics.allocated | withComma(Number) }}</div>
-                  <div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
+                  <div class="label-title">
+                    Allocated
+                  </div>
+                  <div class="budget-value">
+                    ${{ budgetStatistics.allocated | withComma(Number) }}
+                  </div>
+                  <div class="percent">
+                    {{ budgetStatistics.allocatedPercentage }} %
+                  </div>
                 </div>
                 <div class="budget-list__item">
-                  <div class="label-title">Booked</div>
-                  <div class="budget-value">${{ budgetStatistics.booked | withComma(Number) }}</div>
-                  <div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
+                  <div class="label-title">
+                    Booked
+                  </div>
+                  <div class="budget-value">
+                    ${{ budgetStatistics.booked | withComma(Number) }}
+                  </div>
+                  <div class="percent">
+                    {{ budgetStatistics.bookedPercentage }}%
+                  </div>
                 </div>
               </div>
             </div>
             <div class="card-section card-overview-saved text-center">
               <span>So far you saved :</span>
-              <md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="budgetStatistics.saved >= 0"
-                >add_circle_outline</md-icon
-              >
-              <md-icon class="card-overview-saved-icon color-red" v-else>remove_circle_outline</md-icon>
+              <md-icon v-if="budgetStatistics.saved >= 0" class="card-overview-saved-icon" style="color: #167c3a">
+                add_circle_outline
+              </md-icon>
+              <md-icon v-else class="card-overview-saved-icon color-red">
+                remove_circle_outline
+              </md-icon>
               <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma(Number) }}</span>
             </div>
             <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
-              <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>
+              <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">
+                Expenses
+              </div>
               <div>
-                <pie-chart-round :event.sync="event" :items="pieChartData" :showImage="true"></pie-chart-round>
+                <pie-chart-round :event.sync="event" :items="pieChartData" :show-image="true" />
               </div>
             </div>
           </div>
-          <div class="html2pdf__page-break"></div>
+          <div class="html2pdf__page-break" />
           <div class="p-20 event-blocks-table">
             <label class="font-size-26 font-bold">Total</label>
             <event-budget-vendors
               :event.sync="event"
               :event-components="selectedComponents"
-              :editingMode="false"
+              :editing-mode="false"
               type="total"
               @change="onChangeComponent"
               @add="onAddMoreBudget"
-            ></event-budget-vendors>
+            />
           </div>
-          <div class="html2pdf__page-break"></div>
+          <div class="html2pdf__page-break" />
           <div class="p-20 event-blocks-table">
             <label class="font-size-26 font-bold">Per Guest</label>
             <event-budget-vendors
               :event.sync="event"
               :event-components="selectedComponents"
-              :editingMode="false"
+              :editing-mode="false"
               type="perGuest"
               @change="onChangeComponent"
               @add="onAddMoreBudget"
-            ></event-budget-vendors>
+            />
           </div>
         </section>
       </vue-html2pdf>
-      <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+      <upload-vendors-modal ref="uploadModal" />
       <budget-edit-modal
         v-if="editBudgetModalStep === 1"
         :event="event"
         @cancel="closeEditBudgetModal"
         @save="onBudgetChangeModal"
-      ></budget-edit-modal>
+      />
       <modal v-if="editBudgetModalStep===2" class="add-category-model">
         <template slot="header">
           <div class="add-budget-modal-header">
             <button @click="setModalStep('previous')">
-              <md-icon :class="'material-icons-two-tone'">west</md-icon>
+              <md-icon :class="'material-icons-two-tone'">
+                west
+              </md-icon>
             </button>
             <button
               @click="closeEditBudgetModal"
@@ -201,24 +246,28 @@
         <template slot="body">
           <div class="add-category-model__header">
             <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra }}</span></h2>
-              <h2 v-if="extra<0">Oops, these changes have put you in the red!</h2>
-              <span class="black">What would you like to do? </span>
-            <br/>
-            <md-checkbox v-show="extra>0" class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="betweenCategories"> Add new category</md-checkbox>
-            <br/>
-            <md-checkbox class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="onUnexpected">
+            <h2 v-if="extra<0">
+              Oops, these changes have put you in the red!
+            </h2>
+            <span class="black">What would you like to do? </span>
+            <br>
+            <md-checkbox v-show="extra>0" v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="betweenCategories">
+              Add new category
+            </md-checkbox>
+            <br>
+            <md-checkbox v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="onUnexpected">
               {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Allocate funds from the “Unexpected” category' }}
             </md-checkbox>
-            <br/>
-            <md-checkbox  v-show="extra<0"  class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="goBack">
+            <br>
+            <md-checkbox v-show="extra<0" v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="goBack">
               Add more money to my budget
             </md-checkbox>
           </div>
         </template>
         <template slot="footer">
-          <md-button class="add-category-btn" @click="handleBudgetMethod()"
-            >Select</md-button
-          >
+          <md-button class="add-category-btn" @click="handleBudgetMethod()">
+            Select
+          </md-button>
         </template>
       </modal>
       <add-new-category-modal
@@ -227,8 +276,8 @@
         :components="categoryList"
         @cancel="closeEditBudgetModal"
         @save="addNewCategory"
-      ></add-new-category-modal>
-      <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
+      />
+      <BudgetHandleMinusModal v-if="showHandleMinus" value="50" />
     </div>
   </div>
 </template>
@@ -316,8 +365,8 @@ export default {
       showHandleMinus: false,
       showCommentEditorPanel: false,
       showMessage: false,
-      extra:'0',
-      extraBudgetMethod:'betweenCategories',
+      extra:"0",
+      extraBudgetMethod:"betweenCategories",
       addNewCategoryLoading:false,
     };
   },
@@ -370,14 +419,14 @@ export default {
         reCalculate: false,
       });
       this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
-        this.event = res
+        this.event = res;
       });
     },
     getCalendar() {
       return new Calendar();
     },
     getEvent: async function (_calendar) {
-      console.log('getEvent', this.$route.params.id);
+      console.log("getEvent", this.$route.params.id);
       let event = await _calendar.calendarEvents().find(this.$route.params.id);
       this.event = event;
     },
@@ -496,7 +545,7 @@ export default {
     },
     goToComponent(route) {
       this.$router.push({
-        path: `/events/` + this.event.id + route,
+        path: "/events/" + this.event.id + route,
       });
       location.reload();
     },
@@ -504,7 +553,7 @@ export default {
       this.$refs.uploadModal.toggleModal(true);
     },
     handleUpdateBudget() {
-      const editEventBlocksBudget = this.$refs.editEventBlocksBudget
+      const editEventBlocksBudget = this.$refs.editEventBlocksBudget;
       editEventBlocksBudget.checkLeftovers().then((res) => {
         if (res) {
           this.editBudgetModalStep = 0;
@@ -519,15 +568,15 @@ export default {
         calendar: new Calendar({ id: this.event.calendar.id }),
       });
       this.closeEditBudgetModal();
-      this.$store.dispatch("event/saveEventAction", event).then((res) => {this.addNewCategoryLoading = false});
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {this.addNewCategoryLoading = false;});
     },
     updateBudget(eventBudget) {
       let editedEvent = new CalendarEvent({ id: this.event.id });
       const newBudget = eventBudget.totalBudget; //Number(eventBudget.totalBudget.replace(/,/g, ""))
       if (newBudget < this.calendarEvent.totalBudget) {
-        const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
+        const arrow = "<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
         const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
-        const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
+        const description = "<div class=\"description\">Your edits changed the total budget, do you want to change it?</div>";
         Swal.fire({
           title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
           showCancelButton: true,
@@ -564,18 +613,18 @@ export default {
           });
       } else {
       }
-      this.editBudgetElementsModal = false
+      this.editBudgetElementsModal = false;
     },
     onBudgetChangeModal(newBudget){
       this.extra = newBudget.totalBudget - this.event.totalBudget;
       if (this.extra === 0) {
-        return this.closeEditBudgetModal()
+        return this.closeEditBudgetModal();
       }
-      this.newBudget = newBudget.totalBudget
-      this.setModalStep('next');
+      this.newBudget = newBudget.totalBudget;
+      this.setModalStep("next");
     },
     handleBudgetMethod(){
-      if(this.extraBudgetMethod==='onUnexpected'){
+      if(this.extraBudgetMethod==="onUnexpected"){
         const event = new CalendarEvent({
           id: this.event.id,
           totalBudget: this.newBudget,
@@ -586,7 +635,7 @@ export default {
         });
         this.closeEditBudgetModal();
       }else {
-        this.setModalStep(this.extraBudgetMethod === 'goBack' ? 'previous' : 'next')
+        this.setModalStep(this.extraBudgetMethod === "goBack" ? "previous" : "next");
       }
     },
     onChangeComponent(event) {
@@ -606,12 +655,12 @@ export default {
       this.editBudgetModalStep = 0;
     },
     setModalStep(stepAction){
-      if(stepAction === 'next'){
-        this.editBudgetModalStep++
-      } else if (stepAction === 'previous'){
-        this.editBudgetModalStep--
+      if(stepAction === "next"){
+        this.editBudgetModalStep++;
+      } else if (stepAction === "previous"){
+        this.editBudgetModalStep--;
       }else{
-        console.log('##-751, EventDetailsBudget.vue', 'error wrong step action')
+        console.log("##-751, EventDetailsBudget.vue", "error wrong step action");
       }
     },
   },

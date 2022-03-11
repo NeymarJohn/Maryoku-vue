@@ -5,20 +5,31 @@
       :key="index"
       :data="feedbackAnswers[question.label]"
       class="mb-20"
-    ></feedback-answer>
+    />
   </div>
 </template>
 <script>
 import FeedbackAnswer from "./FeedbackAnswer";
 export default {
+  components: {
+    FeedbackAnswer,
+  },
   data() {
     return {
       feedbackQuestions: [],
       feedbackAnswers: {},
     };
   },
-  components: {
-    FeedbackAnswer,
+  computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    campaignData() {
+      return this.$store.state.campaign.FEEDBACK;
+    },
+    campaignTitle() {
+      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
+    },
   },
   created() {
     this.feedbackQuestions = [
@@ -64,17 +75,6 @@ export default {
         this.$set(this.feedbackAnswers, item._id, { ...item, icon: icon });
       });
     });
-  },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    campaignData() {
-      return this.$store.state.campaign.FEEDBACK;
-    },
-    campaignTitle() {
-      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
-    },
   },
 };
 </script>

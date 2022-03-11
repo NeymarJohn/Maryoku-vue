@@ -4,41 +4,44 @@
       <md-card>
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
-            <h4 class="title" style="color: white">Vendors Pool</h4>
-            <div class="ct-label">See all vendors uploaded below</div>
+            <h4 class="title" style="color: white">
+              Vendors Pool
+            </h4>
+            <div class="ct-label">
+              See all vendors uploaded below
+            </div>
           </div>
           <div class="table table-stats vendors-actions-list">
             <md-button name="vendors-add-vendor" class="vendors-add-vendor md-info" @click="openInviteModal">
               Add Vendor
             </md-button>
-            <md-button name="vendors-upload-vendors" @click="openUploadModal" class="vendors-upload-vendors md-info">
+            <md-button name="vendors-upload-vendors" class="vendors-upload-vendors md-info" @click="openUploadModal">
               Upload Excel File
             </md-button>
           </div>
         </md-card-header>
         <md-switch
+          v-model="myVendors"
           class="md-switch-info pull-right text-right"
           style="padding: 0; margin: 12px"
           @change="fetchData(1)"
-          v-model="myVendors"
         >
           My vendors
         </md-switch>
         <md-card-content style="min-height: 60px">
-          <Loader :active="loadingData" page="vendor"/>
+          <Loader :active="loadingData" page="vendor" />
           <vendors-table
             v-if="vendorsList"
-            :tooltipModels="tooltipModels"
+            ref="VendorsTable"
+            :tooltip-models="tooltipModels"
+            :vendors-list="vendorsList"
+            :fetch-vendors="fetchData"
+            mode="listing"
+            :building-blocks-list="buildingBlocksList"
             @select-vendor="onSelectVendor"
             @close-vendor="onCloseVendorForm"
-            :vendorsList="vendorsList"
-            :fetchVendors="fetchData"
-            mode="listing"
-            ref="VendorsTable"
-            :buildingBlocksList="buildingBlocksList"
-          >
-          </vendors-table>
-          <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">
+          />
+          <md-card-actions v-if="pagination.limit < pagination.total" md-alignment="space-between">
             <div class="">
               <p class="card-category">
                 Showing {{ pagination.from }} to
@@ -47,28 +50,27 @@
               </p>
             </div>
             <pagination
-              class="pagination-no-border pagination-info"
-              @input="pageChanged($event)"
               v-model="pagination.page"
+              class="pagination-no-border pagination-info"
               :per-page="pagination.limit"
               :total="pagination.total"
-            >
-            </pagination>
+              @input="pageChanged($event)"
+            />
           </md-card-actions>
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-50" v-if="vendor_selected || add_vendor">
+    <div v-if="vendor_selected || add_vendor" class="md-layout-item md-size-50">
       <company-form
         :categories.sync="buildingBlocksList"
         :selected_vendor="selected_vendor"
         :creation_mode="add_vendor"
         @vendorCreated="fetchData(1)"
         @selectVendor="onSelectVendor"
-      ></company-form>
+      />
     </div>
-    <create-modal @vendorCreated="fetchData(1)" ref="inviteModal"></create-modal>
-    <upload-modal @vendorImported="fetchData(1)" ref="uploadModal"></upload-modal>
+    <create-modal ref="inviteModal" @vendorCreated="fetchData(1)" />
+    <upload-modal ref="uploadModal" @vendorImported="fetchData(1)" />
   </div>
 </template>
 

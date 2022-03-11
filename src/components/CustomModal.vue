@@ -9,10 +9,10 @@
       @dragleave="modalMaskClick"
     >
       <div class="modal-wrapper ">
-        <div :class="containerClass" v-click-outside="closeModal">
+        <div v-click-outside="closeModal" :class="containerClass">
           <div class="d-flex flex-column align-center" style="width: 750px">
             <div class="modal-body">
-              <slot name="body"></slot>
+              <slot name="body" />
             </div>
           </div>
         </div>

@@ -11,9 +11,9 @@
     >
       <img
         :src="smile.url"
-      />
+      >
       <span class="select-smile-rate-experience-item-status">
-        {{smile.status}}
+        {{ smile.status }}
       </span>
     </div>
   </div>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "select-smile-rate-experience",
+  name: "SelectSmileRateExperience",
   props: {
     value: {
       type: String,
@@ -37,14 +37,14 @@ export default {
         { url: "static/img/smile-28046.png", rate: 4, status: "Very Good" },
         { url: "static/img/smile-enjoyable.png", rate: 5, status: "Enjoyable!" },
       ]
-    }
+    };
   },
   methods: {
     selectSmile(rate) {
-      this.$emit('input', rate);
+      this.$emit("input", rate);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

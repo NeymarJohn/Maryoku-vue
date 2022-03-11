@@ -1,13 +1,21 @@
 <template>
   <div class="card-section align-center">
     <div class="left">
-      <img class="mr-30" :src="section.img_src" />
+      <img class="mr-30" :src="section.img_src">
       <div class="mr-30" style="width: 30%">
-        <h3 class="title">{{ section.title }}</h3>
+        <h3 class="title">
+          {{ section.title }}
+        </h3>
 
-        <p class="content" v-if="!isEdit && section.location">{{ section.location }}</p>
-        <p v-if="!isEdit && section.numberOfParticipants" class="content">{{ section.numberOfParticipants }} Guests</p>
-        <p v-if="!isEdit && section.eventType" class="content">{{ section.eventType }}</p>
+        <p v-if="!isEdit && section.location" class="content">
+          {{ section.location }}
+        </p>
+        <p v-if="!isEdit && section.numberOfParticipants" class="content">
+          {{ section.numberOfParticipants }} Guests
+        </p>
+        <p v-if="!isEdit && section.eventType" class="content">
+          {{ section.eventType }}
+        </p>
 
         <location-input
           v-if="isEdit && section.hasOwnProperty('location')"
@@ -15,58 +23,57 @@
           placeholder="Type city / region or specific address here…"
           class="my-10"
           @change="changeLocation"
-        >
-        </location-input>
+        />
 
         <maryoku-input
           v-if="isEdit && section.hasOwnProperty('numberOfParticipants')"
           class="form-input my-10"
           placeholder="Type number…..."
-          inputStyle="users"
-          @change="guestNumberChange"
+          input-style="users"
           :value="section.numberOfParticipants.toString()"
-        ></maryoku-input>
+          @change="guestNumberChange"
+        />
 
         <category-selector
           v-if="isEdit && section.hasOwnProperty('eventType')"
           :value="section.eventType"
           :categories="eventTypes"
-          trackBy="name"
+          track-by="name"
           class="my-10"
           @change="eventTypeChange"
-        ></category-selector>
+        />
 
         <div v-if="isEdit && section.warning" class="warning">
-          <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20" />
+          <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20">
           {{ section.warning }}
         </div>
       </div>
 
       <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value align-self-center d-flex">
-        <div class="mr-50" v-for="item in section.inOutDoor">
-          <img :src="getIconUrl(item.toLowerCase())" />
+        <div v-for="item in section.inOutDoor" class="mr-50">
+          <img :src="getIconUrl(item.toLowerCase())">
           {{ item.toLowerCase() }}
         </div>
       </div>
       <div v-if="!isEdit && section.hasOwnProperty('guestType')" class="value align-self-center d-flex">
-        <img v-if="this.section.guestType" :src="getIconUrl('guestType')" />
+        <img v-if="this.section.guestType" :src="getIconUrl('guestType')">
         {{ section.guestType }}
       </div>
       <div v-if="!isEdit && section.hasOwnProperty('occasion')" class="value align-self-center d-flex">
-        <img v-if="this.section.occasion" :src="getIconUrl('occasion')" />
+        <img v-if="this.section.occasion" :src="getIconUrl('occasion')">
         {{ section.occasion }}
       </div>
       <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center">
         <md-checkbox
           v-for="(item, index) in inOutDoorTypes"
+          :key="index"
           v-model="section.inOutDoor"
           class="md-checkbox-circle md-red"
-          @change="inOutDoorChange"
-          :key="index"
           :value="item.value"
+          @change="inOutDoorChange"
         >
           <div class="checkbox-label-wrapper">
-            <img :src="getIconUrl(item.value)" />
+            <img :src="getIconUrl(item.value)">
             {{ item.label }}
           </div>
         </md-checkbox>
@@ -79,10 +86,10 @@
           column="2"
           :categories="guestsTypes"
           :additional="additional"
-          trackBy="name"
+          track-by="name"
           @change="guestTypeChange"
           @input="inputQuestType"
-        ></category-selector>
+        />
       </div>
 
       <div v-if="isEdit && section.hasOwnProperty('occasion')" class="value">
@@ -90,17 +97,16 @@
         <category-selector
           :value="section.occasion"
           :categories="occasions"
-          trackBy="name"
+          track-by="name"
           @change="occasionChange"
-        ></category-selector>
+        />
 
         <HolidayInput
           v-if="section.occasion === 'Holiday'"
           :value="section.holiday"
           :options="holidays"
           @change="holidayChange"
-        >
-        </HolidayInput>
+        />
       </div>
     </div>
     <div class="right">
@@ -124,7 +130,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {
-  name: "event-overview-section",
+  name: "EventOverviewSection",
   components: {
     Multiselect,
     HeaderActions,
@@ -133,6 +139,11 @@ export default {
     LocationInput,
     HolidayInput,
     CategorySelector,
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("MMMM DD, YYYY");
+    },
   },
   props: {
     section: {
@@ -312,11 +323,6 @@ export default {
       });
     },
   },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMMM DD, YYYY");
-    },
-  },
   computed: {
     ...mapGetters({
       eventTypesList: "event/getEventTypesList",
@@ -326,9 +332,6 @@ export default {
       return inOutDoor ? inOutDoor["label"] : "";
     },
   },
-  mounted() {
-    this.init();
-  },
   watch: {
     section: {
       handler(newVal) {
@@ -336,6 +339,9 @@ export default {
       },
       deep: true,
     },
+  },
+  mounted() {
+    this.init();
   },
 };
 </script>

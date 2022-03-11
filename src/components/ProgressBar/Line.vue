@@ -3,10 +3,10 @@
     <div class="progress-bar">
       <div class="line-progress d-flex justify-content-center align-center">
         <div class="line-progress__item header-status red" style="width: 22%; height: 8px">
-          <div class="progress"></div>
+          <div class="progress" />
         </div>
         <div class="line-progress__item header-status gray" style="width: 78%; height: 8px">
-          <div class="progress"></div>
+          <div class="progress" />
         </div>
       </div>
     </div>

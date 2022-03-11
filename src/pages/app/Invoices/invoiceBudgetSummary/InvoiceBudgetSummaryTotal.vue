@@ -24,8 +24,8 @@
 
 <script>
 export default {
-  name: "invoice-budget-summary-total",
-}
+  name: "InvoiceBudgetSummaryTotal",
+};
 </script>
 
 <style lang="scss" scoped>

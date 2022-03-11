@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="card-wrapper">
-      <md-card v-for="(item, index) in similarItems" :value="item" :key="index">
+      <md-card v-for="(item, index) in similarItems" :key="index" :value="item">
         <md-card-media>
-          <img :src="item.image" />
+          <img :src="item.image">
         </md-card-media>
 
         <md-card-header>
@@ -11,15 +11,16 @@
             <md-icon>fullscreen</md-icon>
           </md-avatar>
 
-          <div class="md-title">{{ item.title }}</div>
+          <div class="md-title">
+            {{ item.title }}
+          </div>
           <div class="md-subhead">
             <label
-              class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
+              class="star-rating__star"
               :class="{ 'is-selected': true }"
-              >★</label
-            >
+            >★</label>
             {{ item.score }}
           </div>
         </md-card-header>
@@ -32,7 +33,7 @@
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "vendor-similar-item",
+  name: "VendorSimilarItem",
   components: {
     VueElementLoading,
   },
@@ -43,13 +44,13 @@ export default {
   data: () => ({
     isLoading: true,
   }),
-  methods: {},
+  computed: {},
+  watch: {},
   created() {},
   mounted() {
     this.isLoading = false;
   },
-  computed: {},
-  watch: {},
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>

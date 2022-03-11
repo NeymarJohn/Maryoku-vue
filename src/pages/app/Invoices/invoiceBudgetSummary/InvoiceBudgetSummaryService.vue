@@ -28,7 +28,7 @@
           :src="service.icon"
           width="100%"
           height="100%"
-        />
+        >
       </span>
       <h3 class="invoice-budget-summary-service-list-item-header-original-price-title">
         {{ service.title }}
@@ -47,7 +47,7 @@
           width="100%"
           height="100%"
           :src="service.icon"
-        />
+        >
       </span>
       <h3 class="invoice-budget-summary-service-list-item-header-title">
         {{ service.title }}
@@ -101,7 +101,7 @@
 
 <script>
 export default {
-  name: "invoice-budget-summary-service",
+  name: "InvoiceBudgetSummaryService",
   props: {
     service: {
       type: Object,
@@ -112,7 +112,7 @@ export default {
       required: true,
     }
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

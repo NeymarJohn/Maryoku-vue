@@ -1,12 +1,18 @@
 <template>
   <modal class="signup-request-model">
     <template slot="header">
-      <div class="add-category-model__header text-center">Before we move on...</div>
+      <div class="add-category-model__header text-center">
+        Before we move on...
+      </div>
     </template>
     <template slot="body">
       <div class="md-layout">
-        <div class="md-layout-item md-size-100"><img :src="`${$iconURL}NewSubmitPorposal/signup-logo.png`" /></div>
-        <div class="md-layout-item md-size-100 font-size-40 font-bold mt-40">SIGN UP & LET’S BEGIN</div>
+        <div class="md-layout-item md-size-100">
+          <img :src="`${$iconURL}NewSubmitPorposal/signup-logo.png`">
+        </div>
+        <div class="md-layout-item md-size-100 font-size-40 font-bold mt-40">
+          SIGN UP & LET’S BEGIN
+        </div>
         <div class="md-layout-item md-size-60 md-offset mt-40">
           <div class="mt-50">
             Before getting to your proposal, please sign up with 5 simple steps - we promise it will save you a lot of
@@ -22,7 +28,7 @@
     </template>
     <template slot="footer">
       <div style="width: 100%" class="text-center">
-        <img style="width: 100px" :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" />
+        <img style="width: 100px" :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`">
       </div>
     </template>
   </modal>
@@ -51,6 +57,25 @@ export default {
       default: [],
     },
   },
+  data() {
+    return {
+      filteredEventBlocks: null,
+      newBuildingBlock: {
+        category: "",
+        name: "",
+        budget: "",
+      },
+    };
+  },
+  computed: {
+    remainedBudget() {
+      let allocatedBudget = this.components.reduce((s, item) => {
+        return s + item.allocatedBudget;
+      }, 0);
+      // allocatedBudget = allocatedBudget + this.event.allocatedFees + this.event.allocatedTips;
+      return Math.round((this.event.totalBudget - allocatedBudget) / 10) * 10;
+    },
+  },
   created() {
     EventComponent.get()
       .then((components) => {
@@ -67,16 +92,6 @@ export default {
         console.log("Error ", error);
       });
   },
-  data() {
-    return {
-      filteredEventBlocks: null,
-      newBuildingBlock: {
-        category: "",
-        name: "",
-        budget: "",
-      },
-    };
-  },
   methods: {
     close() {
       this.$emit("cancel");
@@ -92,15 +107,6 @@ export default {
           path: `/vendor-signup/edit/${this.vendor.id}?proposalRequest=${this.$route.params.rfpId}`,
         });
       }
-    },
-  },
-  computed: {
-    remainedBudget() {
-      let allocatedBudget = this.components.reduce((s, item) => {
-        return s + item.allocatedBudget;
-      }, 0);
-      // allocatedBudget = allocatedBudget + this.event.allocatedFees + this.event.allocatedTips;
-      return Math.round((this.event.totalBudget - allocatedBudget) / 10) * 10;
     },
   },
 };

@@ -7,7 +7,7 @@
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/img/homepage/maryoku-logo-white@2x.png"
               width="118"
-            />
+            >
           </a>
         </div>
       </div>
@@ -15,7 +15,7 @@
 
     <FadeTransition :duration="200" mode="out-in">
       <!-- your content here -->
-      <router-view></router-view>
+      <router-view />
     </FadeTransition>
   </div>
 </template>
@@ -24,11 +24,11 @@ import { FadeTransition } from "vue2-transitions";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  data() {
-    return {};
-  },
   components: {
     FadeTransition,
+  },
+  data() {
+    return {};
   },
   created() {},
   methods: {},

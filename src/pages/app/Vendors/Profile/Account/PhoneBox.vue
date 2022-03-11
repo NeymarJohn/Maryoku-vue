@@ -1,13 +1,17 @@
 <template>
   <div class="phone-box p-30 font-size-16">
-    <div><img :src="`/static/icons/vendor/message-dark.svg`" /></div>
-    <div class="font-bold mt-10">Where would you like to get text message?</div>
+    <div><img :src="`/static/icons/vendor/message-dark.svg`"></div>
+    <div class="font-bold mt-10">
+      Where would you like to get text message?
+    </div>
     <div class="mt-30">
       By checking an SMS box, you agree to receive autodialed promotional texts from Mayuko and Airbnb’s partners at:
     </div>
     <div>
-      <div class="mt-40">Phone Number</div>
-      <maryoku-input inputStyle="phone" :value="phoneNumer" @input="inputPhone"></maryoku-input>
+      <div class="mt-40">
+        Phone Number
+      </div>
+      <maryoku-input input-style="phone" :value="phoneNumer" @input="inputPhone" />
     </div>
   </div>
 </template>

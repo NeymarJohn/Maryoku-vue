@@ -2,9 +2,9 @@
   <div class="vendor-signup-step5-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${$iconURL}Vendor+Signup/step-5.svg`" />
+        <img :src="`${$iconURL}Vendor+Signup/step-5.svg`">
         <h2>
-          ADD <br />
+          ADD <br>
           RECOMMENDATIONS
         </h2>
         <p>
@@ -19,7 +19,7 @@
           <div class="title-cont mb-50">
             <div class="top">
               <div class="font-size-22 font-bold">
-                <img :src="`${$iconURL}common/user-dark.svg`" class="page-icon" /> Customer details
+                <img :src="`${$iconURL}common/user-dark.svg`" class="page-icon"> Customer details
               </div>
             </div>
             <div class="bottom">
@@ -27,62 +27,68 @@
             </div>
           </div>
           <div
-            class="recommendations"
             v-for="(recommendation, rIndex) in recommendations"
             :key="recommendation.contactPersonName"
+            class="recommendations"
           >
             <span>{{ recommendation.companyName }}</span>
             <span>{{ recommendation.contactPersonName }}</span>
             <span>{{ recommendation.email }}</span>
             <div>
-              <md-button @click="deleteRecommendation(rIndex)" class="md-simple edit-btn md-red">Delete</md-button>
+              <md-button class="md-simple edit-btn md-red" @click="deleteRecommendation(rIndex)">
+                Delete
+              </md-button>
             </div>
           </div>
           <div class="mt-30">
             <div class="mb-50">
               <label class="font-bold">Company Name</label>
               <maryoku-input
-                class="form-input mt-10"
-                inputStyle="company"
                 v-model="companyName"
+                class="form-input mt-10"
+                input-style="company"
                 placeholder="Type name of company here..."
-              ></maryoku-input>
+              />
             </div>
             <div class="mb-50">
               <label class="font-bold">Contact Person's Name</label>
               <maryoku-input
-                class="form-input mt-10"
-                inputStyle="username"
                 v-model="contactPersonName"
+                class="form-input mt-10"
+                input-style="username"
                 placeholder="Type your name here..."
-              ></maryoku-input>
+              />
             </div>
             <div class="mb-50">
               <label class="font-bold">Email</label>
               <maryoku-input
+                v-model="email"
                 class="form-input mt-10"
                 data-vv-name="email"
-                v-model="email"
-                inputStyle="email"
+                input-style="email"
                 placeholder="Type email address here..."
-              ></maryoku-input>
+              />
             </div>
           </div>
           <div>
             <md-button class="edit-btn md-simple md-vendor" @click="addAnotherRecommendation">
-              <md-icon class="color-purple font-size-24">add_circle_outline</md-icon>
+              <md-icon class="color-purple font-size-24">
+                add_circle_outline
+              </md-icon>
               Add Another Recommendation
             </md-button>
           </div>
         </div>
         <div class="card">
           <div class="d-flex align-center">
-            <img :src="`${$iconURL}Vendor+Signup/preview-recommendation-purple.png`" class="mr-20" />
+            <img :src="`${$iconURL}Vendor+Signup/preview-recommendation-purple.png`" class="mr-20">
             <div class="flex-1">
               <div class="color-purple font-size-22 font-bold">
                 PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER
               </div>
-              <div class="color-purple font-size-16 mt-10">This is what your recommender will get in our email</div>
+              <div class="color-purple font-size-16 mt-10">
+                This is what your recommender will get in our email
+              </div>
             </div>
             <a @click="open">
               <md-icon class="color-purple font-size-40">
@@ -94,17 +100,29 @@
             <h2 class="person-name">
               Hey <span>{{ contactPersonName }}</span>
             </h2>
-            <h5 class="pt-20 font-size-18">How are you?</h5>
-            <h5 class="font-size-18">I hope this email finds you well & happy!</h5>
+            <h5 class="pt-20 font-size-18">
+              How are you?
+            </h5>
+            <h5 class="font-size-18">
+              I hope this email finds you well & happy!
+            </h5>
             <p class="pt-20 font-size-18">
               I'm writing to let you know I recently started working with maryoku –an awesome web platform for
               non-professional event planners, helping them plan events like pros. These days, I’m looking for people
               who can speak positively about my services and help me gain credibility as a business.
             </p>
-            <p class="font-size-18">Hope you can spare some time.</p>
-            <md-button class="my-30 md-vendor-review md-simple md-outlined">Write A Review</md-button>
-            <h5 class="font-size-18">Many thanks</h5>
-            <h5 class="font-size-18">{{ vendor.companyName }}</h5>
+            <p class="font-size-18">
+              Hope you can spare some time.
+            </p>
+            <md-button class="my-30 md-vendor-review md-simple md-outlined">
+              Write A Review
+            </md-button>
+            <h5 class="font-size-18">
+              Many thanks
+            </h5>
+            <h5 class="font-size-18">
+              {{ vendor.companyName }}
+            </h5>
           </div>
         </div>
       </div>
@@ -215,6 +233,16 @@ export default {
       opened: false,
     };
   },
+  computed: {
+    recommendations() {
+      return this.$store.state.vendorService.vendor.recommendations;
+    },
+  },
+  watch: {
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+  },
   methods: {
     clear() {
       this.companyName = "";
@@ -245,16 +273,6 @@ export default {
     open() {
       console.log("open");
       this.opened = !this.opened;
-    },
-  },
-  computed: {
-    recommendations() {
-      return this.$store.state.vendorService.vendor.recommendations;
-    },
-  },
-  watch: {
-    vendor() {
-      return this.$store.state.vendorService.vendor;
     },
   },
 };

@@ -7,24 +7,28 @@
       <md-list class="nav-tabs md-card">
         <md-list-item
           v-for="(item, index) in tabName"
-          @click="switchPanel(tabName[index])"
           :key="item"
           :class="[
             { active: isActivePanel(tabName[index]) },
             { [getColorButton(colorButton)]: isActivePanel(tabName[index]) },
             { [theme]: true },
           ]"
+          @click="switchPanel(tabName[index])"
         >
-          <div v-html="tabName[index]"></div>
-          <md-icon v-if="navPillsIcons">{{ tabIcon[index] }}</md-icon>
+          <div v-html="tabName[index]" />
+          <md-icon v-if="navPillsIcons">
+            {{ tabIcon[index] }}
+          </md-icon>
         </md-list-item>
       </md-list>
       <transition name="fade" mode="out-in">
         <div class="tab-content">
           <template v-for="(item, index) in tabName">
             <template v-if="isActivePanel(tabName[index])">
-              <div :class="getTabContent(index + 1)" :key="item">
-                <slot :name="getTabContent(index + 1)"> This is the default text! </slot>
+              <div :key="item" :class="getTabContent(index + 1)">
+                <slot :name="getTabContent(index + 1)">
+                  This is the default text!
+                </slot>
               </div>
             </template>
           </template>

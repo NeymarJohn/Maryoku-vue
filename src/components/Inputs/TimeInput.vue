@@ -2,9 +2,9 @@
   <div class="time-select-fields">
     <!-- <input type="time" v-model="time" class="without_ampm" @change="updateTime" /> -->
     <div class="time-wrapper" :class="size">
-      <input type="number" v-model="timeObject.hh" maxlength="2" />
+      <input v-model="timeObject.hh" type="number" maxlength="2">
       :
-      <input type="number" v-model="timeObject.mm" maxlength="2" />
+      <input v-model="timeObject.mm" type="number" maxlength="2">
     </div>
     <drop-down class="ampm">
       <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">
@@ -18,14 +18,14 @@
           <a class="font-size-22">PM</a>
         </li>
       </ul>
-      <span class="arrow-button" data-toggle="dropdown"></span>
+      <span class="arrow-button" data-toggle="dropdown" />
     </drop-down>
   </div>
 </template>
 <script>
 import moment from "moment";
 export default {
-  name: "time-input",
+  name: "TimeInput",
   props: {
     /**
      * Data binding
@@ -38,6 +38,32 @@ export default {
     size: {
       type: String,
       default: "large",
+    },
+  },
+  data() {
+    return {
+      timeObject: {
+        hh: "00",
+        mm: "00",
+        ampm: new Date(this.value).getHours() >= 12 ? "PM" : "AM",
+      },
+      date: "",
+    };
+  },
+  watch: {
+    timeObject: {
+      handler(newValue) {
+        if (typeof this.value === "string" && !this.isNumeric(this.value)) {
+          this.$emit("input", `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
+        } else if (typeof this.value === "number" || this.isNumeric(this.value)) {
+          const timeStamp = moment(
+            `${this.date} ${newValue.hh}:${newValue.mm} ${newValue.ampm}`,
+            "DD/MM/YY hh:mm A",
+          ).valueOf();
+          this.$emit("input", timeStamp);
+        }
+      },
+      deep: true,
     },
   },
   created() {
@@ -70,32 +96,6 @@ export default {
         !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str))
       ); // ...and ensure strings of whitespace fail
-    },
-  },
-  data() {
-    return {
-      timeObject: {
-        hh: "00",
-        mm: "00",
-        ampm: new Date(this.value).getHours() >= 12 ? "PM" : "AM",
-      },
-      date: "",
-    };
-  },
-  watch: {
-    timeObject: {
-      handler(newValue) {
-        if (typeof this.value === "string" && !this.isNumeric(this.value)) {
-          this.$emit("input", `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
-        } else if (typeof this.value === "number" || this.isNumeric(this.value)) {
-          const timeStamp = moment(
-            `${this.date} ${newValue.hh}:${newValue.mm} ${newValue.ampm}`,
-            "DD/MM/YY hh:mm A",
-          ).valueOf();
-          this.$emit("input", timeStamp);
-        }
-      },
-      deep: true,
     },
   },
 };

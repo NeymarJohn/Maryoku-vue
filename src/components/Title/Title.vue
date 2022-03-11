@@ -1,11 +1,13 @@
 <template>
-   <div  :class='titleBlock' >
-   <p :class="titleText">{{title}}<span :class='spanStyles' @click='triggerFunc'>{{spanText}}<slot></slot></span></p>
-   </div>
+  <div :class="titleBlock">
+    <p :class="titleText">
+      {{ title }}<span :class="spanStyles" @click="triggerFunc">{{ spanText }}<slot /></span>
+    </p>
+  </div>
 </template>
 <script>
 export default {
-  name: 'Title',
+  name: "Title",
   model: {
   },
   props: {
@@ -20,10 +22,10 @@ export default {
   },
   methods: {
     triggerFunc: function (event) {
-      this.onClick()
+      this.onClick();
     }
   }
-}
+};
 </script>
 <style lang="scss">
 </style>

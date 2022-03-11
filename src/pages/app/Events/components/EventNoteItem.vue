@@ -1,24 +1,30 @@
 <template>
-  <div class="note-item d-flex justify-content-between"  :key="note.id">
+  <div :key="note.id" class="note-item d-flex justify-content-between">
     <template v-if="!note.isDeleted">
       <div class="note-item-mark">
-        <md-checkbox v-model="isCompleted" class="md-simple md-checkbox-circle"></md-checkbox>
+        <md-checkbox v-model="isCompleted" class="md-simple md-checkbox-circle" />
       </div>
-      <div class="note-item-description">{{note.description}}</div>
+      <div class="note-item-description">
+        {{ note.description }}
+      </div>
       <div class="note-item-actions">
         <md-button class="edit-btn md-simple" @click="editNote">
-          <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />
+          <img :src="`${$iconURL}Event%20Page/edit-dark.svg`">
         </md-button>
         <md-button class="edit-btn md-simple" @click="deleteNote">
-          <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+          <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`">
         </md-button>
       </div>
     </template>
     <template v-else>
       <div class="d-flex note-item-deleted">
         <div>You have been deleted</div>
-          <md-button class="md-simple edit-btn" @click="cancel">Undo</md-button>
-          <md-button class="md-simple edit-btn md-black" @click="remove"><md-icon>close</md-icon></md-button>
+        <md-button class="md-simple edit-btn" @click="cancel">
+          Undo
+        </md-button>
+        <md-button class="md-simple edit-btn md-black" @click="remove">
+          <md-icon>close</md-icon>
+        </md-button>
       </div>
     </template>
   </div>
@@ -27,7 +33,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  name: "event-note-item",
+  name: "EventNoteItem",
   props: {
     note: {
       type: Object,
@@ -45,11 +51,11 @@ export default {
       this.$emit("edit", this.note);
     },
     deleteNote() {
-      this.note.isDeleted = true
+      this.note.isDeleted = true;
       this.updateEventNote(this.note);
     },
     cancel() {
-      this.note.isDeleted = false
+      this.note.isDeleted = false;
       this.updateEventNote(this.note);
     },
     remove() {
@@ -59,7 +65,7 @@ export default {
   
   watch: {
     isCompleted(newValue, oldValue) {
-      this.note.isCompleted = newValue
+      this.note.isCompleted = newValue;
       this.updateEventNote(this.note);
     }
   },

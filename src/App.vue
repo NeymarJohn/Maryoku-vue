@@ -1,10 +1,10 @@
 <template>
-	<div>
-		<slideout-panel />
-		<router-view />
-		<NotificationModal v-if="isNotificationModal" :name="name" @click="() => {}" />
-		<ActionModal v-if="isActionModal" :name="name" />
-	</div>
+  <div>
+    <slideout-panel />
+    <router-view />
+    <NotificationModal v-if="isNotificationModal" :name="name" @click="() => {}" />
+    <ActionModal v-if="isActionModal" :name="name" />
+  </div>
 </template>
 
 <script>

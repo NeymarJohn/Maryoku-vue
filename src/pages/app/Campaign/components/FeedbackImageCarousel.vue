@@ -1,46 +1,50 @@
 <template>
   <div class="feedback-images">
     <carousel
+      v-if="images.length > 0"
+      :key="Math.random()"
       :items="items"
       :margin="marginItems"
       :dots="false"
       :nav="false"
       class="feedback-carousel"
       :number="2"
-      v-if="images.length > 0"
-      :key="Math.random()"
     >
-      <template slot="prev" >
-        <md-button class="btn-prev edit-btn md-round nav-left nav-btn md-raised md-white" >
-          <md-icon class="icon-arrow-left" >keyboard_arrow_left</md-icon>
+      <template slot="prev">
+        <md-button class="btn-prev edit-btn md-round nav-left nav-btn md-raised md-white">
+          <md-icon class="icon-arrow-left">
+            keyboard_arrow_left
+          </md-icon>
         </md-button>
       </template>
-      <div class="carousel-item" v-for="(item, index) in images" :key="index">
-        <img :src="item.src" class="carousel-image" @error="setAltImg($event, item)" />
+      <div v-for="(item, index) in images" :key="index" class="carousel-item">
+        <img :src="item.src" class="carousel-image" @error="setAltImg($event, item)">
       </div>
-      <template slot="next" >
-        <md-button class="btn-next edit-btn md-round nav-right nav-btn md-raised md-white" >
-          <md-icon class="icon-arrow-right" >keyboard_arrow_right</md-icon>
+      <template slot="next">
+        <md-button class="btn-next edit-btn md-round nav-right nav-btn md-raised md-white">
+          <md-icon class="icon-arrow-right">
+            keyboard_arrow_right
+          </md-icon>
         </md-button>
       </template>
     </carousel>
-    <div v-if="showUploadFile" class="upload-button-wrapper" >
+    <div v-if="showUploadFile" class="upload-button-wrapper">
       <md-button class="md-red maryoku-btn" @click="uploadImage">
-        <img :src="`${$iconURL}Campaign/arrow-circle-white.svg`" class="mr-10" />
+        <img :src="`${$iconURL}Campaign/arrow-circle-white.svg`" class="mr-10">
         Upload photos from the event
       </md-button>
       <input
-        style="display: none"
         id="carousel-file"
+        style="display: none"
         name="attachment"
         type="file"
         multiple="multiple"
         @change="onFileChange"
-      />
+      >
     </div>
-    <div class="feedback-images-footer" >
-      <img class="icon-photography-white" src="static/icons/Group%209348.svg" />
-      <span class="description" >All Photos / video (5)</span>
+    <div class="feedback-images-footer">
+      <img class="icon-photography-white" src="static/icons/Group%209348.svg">
+      <span class="description">All Photos / video (5)</span>
     </div>
   </div>
 </template>

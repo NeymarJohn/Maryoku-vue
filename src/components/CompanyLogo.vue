@@ -1,22 +1,22 @@
 <template>
   <div class="company-logo">
     <div class="content-wrapper">
-      <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading>
+      <vue-element-loading :active="isLoading" color="#FF547C" />
       <div class="uploading-wrapper">
         <md-button class="maryoku-btn md-simple md-white" @click="onClickAvtar">
           <md-icon>edit</md-icon>Edit
         </md-button>
       </div>
-      <img v-if="companyLogo" :src="`${companyLogo}?q=${Math.random()}`" style="margin: auto" />
+      <img v-if="companyLogo" :src="`${companyLogo}?q=${Math.random()}`" style="margin: auto">
       <span v-else style="vertical-align: middle">Company Logo</span>
       <input
-        style="display: none"
         id="company-logo-file"
+        style="display: none"
         name="company-logo"
         type="file"
         multiple="multiple"
         @change="onUserAvatarChange"
-      />
+      >
     </div>
   </div>
 </template>
@@ -46,6 +46,16 @@ export default {
       companyLogo: "",
     };
   },
+  computed: {
+    defaultAvatar() {
+      return this.defaultImage || this.user.companyLogo;
+    },
+  },
+  watch: {
+    defaultAvatar(newValue, oldValue) {
+      this.companyLogo = newValue;
+    },
+  },
   created() {
     this.companyLogo = this.defaultImage || this.user.companyLogo;
   },
@@ -59,23 +69,13 @@ export default {
 
       const extension = files[0].type.split("/")[1];
       let imageName = this.user.id;
-      console.log("process.env.S3_URL",process.env.S3_URL )
+      console.log("process.env.S3_URL",process.env.S3_URL );
       this.isLoading = true;
-      S3Service.fileUpload(files[0], `${imageName}`, `company/logos`).then((res) => {
+      S3Service.fileUpload(files[0], `${imageName}`, "company/logos").then((res) => {
         this.isLoading = false;
         this.companyLogo = res;
         this.$emit("set", res);
       });
-    },
-  },
-  computed: {
-    defaultAvatar() {
-      return this.defaultImage || this.user.companyLogo;
-    },
-  },
-  watch: {
-    defaultAvatar(newValue, oldValue) {
-      this.companyLogo = newValue;
     },
   },
 };

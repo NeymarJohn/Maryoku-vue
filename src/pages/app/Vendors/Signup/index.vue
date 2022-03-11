@@ -2,20 +2,22 @@
   <div class="vendor-signup-wrapper">
     <VendorBasicInfoForm v-if="step == 0" :vendor="vendor" />
     <VendorSignupStep1
+      v-if="step == 1"
       :categories="businessCategories"
-      :generalInfos="generalInfos"
-      :companyServices="companyServices"
+      :general-infos="generalInfos"
+      :company-services="companyServices"
       :icon="`${iconUrl}`"
       :vendor="vendor"
-      v-if="step == 1"
     />
-    <VendorSignupStep2 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 2" />
-    <VendorSignupStep3 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 3" />
-    <VendorSignupStep4 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 4" />
+    <VendorSignupStep2 v-if="step == 2" :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" />
+    <VendorSignupStep3 v-if="step == 3" :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" />
+    <VendorSignupStep4 v-if="step == 4" :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" />
 
-    <VendorSignupStep5 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 5" />
-    <VendorSignupFinalForm :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 6" />
-    <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
+    <VendorSignupStep5 v-if="step == 5" :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" />
+    <VendorSignupFinalForm v-if="step == 6" :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" />
+    <div v-if="isCompletedWizard" class="final-section">
+      Thank you for your signup!
+    </div>
   </div>
 </template>
 
@@ -34,7 +36,7 @@ const components = {
     VendorSignupStep4: () => import("./VendorSignupStep4.vue"),
     VendorSignupStep5: () => import("./VendorSignupStep5.vue"),
     VendorSignupFinalForm: () => import("./VendorSignupFinalForm.vue"),
-}
+};
 
 export default {
   components,

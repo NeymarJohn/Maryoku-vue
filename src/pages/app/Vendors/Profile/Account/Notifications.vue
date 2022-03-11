@@ -2,15 +2,15 @@
   <div class="vendor-account-notification">
     <div>
       <notification-setting-item
-        class="notification-settiong-item"
         v-for="setting in settings"
         :key="setting.name"
+        class="notification-settiong-item"
         :setting="setting"
         @change="changeNotification"
-      ></notification-setting-item>
+      />
     </div>
     <div class="p-60">
-      <phone-box :phoneNumer="vendorData.contactPhoneNumber"></phone-box>
+      <phone-box :phone-numer="vendorData.contactPhoneNumber" />
     </div>
   </div>
 </template>

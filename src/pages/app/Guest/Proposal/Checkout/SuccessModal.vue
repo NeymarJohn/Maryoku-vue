@@ -1,7 +1,9 @@
 <template>
   <modal class="timeline-gap-modal">
     <template slot="header">
-      <div class="font-size-30 font-bold line-height-1">Thank you for your payment</div>
+      <div class="font-size-30 font-bold line-height-1">
+        Thank you for your payment
+      </div>
     </template>
     <template slot="body">
       <div class="timeline-gap-modal-body">
@@ -9,7 +11,7 @@
         there are no disputes, we will pay the vendor 7 days after the event.
       </div>
     </template>
-    <template slot="footer"> </template>
+    <template slot="footer" />
   </modal>
 </template>
 <script>
@@ -20,9 +22,9 @@ export default {
   components: {
     Modal,
   },
+  computed: {},
 
   methods: {},
-  computed: {},
 };
 </script>
 <style lang="scss" scoped>

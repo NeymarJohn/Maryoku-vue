@@ -1,79 +1,79 @@
 <template>
-    <div class="vendor-basic-info-form-wrapper">
-        <div class="inside-container">
-            <div class="left-side">
-                <img :src="`${iconPurple}Purple Icons/Icon_UserSignUp (Vendor).svg`" />
-                <h4>Hi,</h4>
-                <p>
-                    We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with
-                    approving your basic info
-                </p>
-                <h2>0/5</h2>
-                <h3>Only 5 simple steps & you're signed!</h3>
-            </div>
-            <div class="right-side">
-                <h2>
-                    Before we begin,
-                    <br />approve your basic info
-                </h2>
-                <div class="card">
-                    <loader :active="loading" height="100%" page="vendor"/>
-                    <v-signup-editable-field
-                        :title="'Company Name'"
-                        :field="'companyName'"
-                        :img="`${secondUrl}Path 1584.svg`"
-                        :defaultVal="vendor.companyName"
-                        :borderBottom="true"
-                        :required="true"
-                        @save="saveValue"
-                    />
-                    <v-signup-category-selector
-                        :title="'Business Category'"
-                        :field="'vendorCategories'"
-                        :img="''"
-                        :value="vendor.vendorCategories || ['']"
-                        :borderBottom="true"
-                        :required="true"
-                        @save="saveValue"
-                    />
-                    <v-signup-category-selector
-                        :title="'Address'"
-                        :field="'vendorAddresses'"
-                        :img="`${iconUrl}Asset 550.svg`"
-                        :value="vendor.vendorAddresses || ['']"
-                        :borderBottom="true"
-                        :required="true"
-                        @save="saveValue"
-                    />
-                    <v-signup-editable-field
-                        :title="'Phone'"
-                        :field="'vendorMainPhoneNumber'"
-                        :img="`${iconUrl}Asset 548.svg`"
-                        :defaultVal="vendor.vendorMainPhoneNumber"
-                        :borderBottom="true"
-                        @save="saveValue"
-                    />
-                    <v-signup-editable-field
-                        :title="'Email'"
-                        :img="`${iconUrl}Asset 547.svg`"
-                        :field="'vendorMainEmail'"
-                        :defaultVal="vendor.vendorMainEmail"
-                        :borderBottom="true"
-                        :required="true"
-                        @save="saveValue"
-                    />
-                    <v-signup-editable-field
-                        :title="'Contact Person\'s Name'"
-                        :img="`${$iconURL}Signup/user-gray.svg`"
-                        :field="'contactPerson'"
-                        :defaultVal="vendor.contactPerson"
-                        :borderBottom="false"
-                        @save="saveValue"
-                    />
-                </div>
-            </div>
+  <div class="vendor-basic-info-form-wrapper">
+    <div class="inside-container">
+      <div class="left-side">
+        <img :src="`${iconPurple}Purple Icons/Icon_UserSignUp (Vendor).svg`">
+        <h4>Hi,</h4>
+        <p>
+          We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with
+          approving your basic info
+        </p>
+        <h2>0/5</h2>
+        <h3>Only 5 simple steps & you're signed!</h3>
+      </div>
+      <div class="right-side">
+        <h2>
+          Before we begin,
+          <br>approve your basic info
+        </h2>
+        <div class="card">
+          <loader :active="loading" height="100%" page="vendor" />
+          <v-signup-editable-field
+            :title="'Company Name'"
+            :field="'companyName'"
+            :img="`${secondUrl}Path 1584.svg`"
+            :default-val="vendor.companyName"
+            :border-bottom="true"
+            :required="true"
+            @save="saveValue"
+          />
+          <v-signup-category-selector
+            :title="'Business Category'"
+            :field="'vendorCategories'"
+            :img="''"
+            :value="vendor.vendorCategories || ['']"
+            :border-bottom="true"
+            :required="true"
+            @save="saveValue"
+          />
+          <v-signup-category-selector
+            :title="'Address'"
+            :field="'vendorAddresses'"
+            :img="`${iconUrl}Asset 550.svg`"
+            :value="vendor.vendorAddresses || ['']"
+            :border-bottom="true"
+            :required="true"
+            @save="saveValue"
+          />
+          <v-signup-editable-field
+            :title="'Phone'"
+            :field="'vendorMainPhoneNumber'"
+            :img="`${iconUrl}Asset 548.svg`"
+            :default-val="vendor.vendorMainPhoneNumber"
+            :border-bottom="true"
+            @save="saveValue"
+          />
+          <v-signup-editable-field
+            :title="'Email'"
+            :img="`${iconUrl}Asset 547.svg`"
+            :field="'vendorMainEmail'"
+            :default-val="vendor.vendorMainEmail"
+            :border-bottom="true"
+            :required="true"
+            @save="saveValue"
+          />
+          <v-signup-editable-field
+            :title="'Contact Person\'s Name'"
+            :img="`${$iconURL}Signup/user-gray.svg`"
+            :field="'contactPerson'"
+            :default-val="vendor.contactPerson"
+            :border-bottom="false"
+            @save="saveValue"
+          />
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -82,7 +82,7 @@ import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector
 import { Loader } from "@/components";
 
 export default {
-    name: "vendor-basic-info-form",
+    name: "VendorBasicInfoForm",
     components: {
         Loader,
         VSignupEditableField,
@@ -100,29 +100,29 @@ export default {
     },
     computed:{
         loading(){
-            return this.$store.state.vendorSignup.isLoading
+            return this.$store.state.vendorSignup.isLoading;
+        }
+    },
+    watch: {
+        vendor(newVal) {},
+        loading(){
+            console.log("loading", this.loading);
         }
     },
     methods: {
         onUpdateFocus(newValue) {},
         async saveValue({ field, value }) {
             // search and edit existing vendor
-            if (field === 'companyName') {
-                const vendors = await this.$store.dispatch('vendorSignup/searchVendor', {companyName: value});
+            if (field === "companyName") {
+                const vendors = await this.$store.dispatch("vendorSignup/searchVendor", {companyName: value});
                 if (vendors.length) {
-                    this.$store.commit('vendorSignup/setEditing', true);
+                    this.$store.commit("vendorSignup/setEditing", true);
                     this.$store.commit("vendorSignup/setVendor", vendors[0]);
                     return;
                 }
             }
             this.$store.commit("vendorSignup/setField", { field, value });
         },
-    },
-    watch: {
-        vendor(newVal) {},
-        loading(){
-            console.log('loading', this.loading)
-        }
     },
 };
 </script>

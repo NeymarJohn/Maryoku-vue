@@ -4,14 +4,18 @@
       <img
         src="https://static-maryoku.s3.amazonaws.com/storage/img/262Logo2.png"
         class="text-center"
-      />
-      <h2 class="title text-center" slot="title" style="text-align: center;">Not found</h2>
+      >
+      <h2 slot="title" class="title text-center" style="text-align: center;">
+        Not found
+      </h2>
     </div>
     <div class="md-layout-item md-size-50 mx-auto">
       <md-card>
-        <md-card-header></md-card-header>
+        <md-card-header />
         <md-card-content>
-          <h2 class="title text-center" style="text-align: center;">You've reached a non-</h2>
+          <h2 class="title text-center" style="text-align: center;">
+            You've reached a non-
+          </h2>
         </md-card-content>
       </md-card>
     </div>
@@ -21,16 +25,16 @@
 // import auth from '@/auth';
 export default {
   components: {},
-  methods: {},
-  created() {
-    const that = this;
-  },
   data() {
     return {
       serverURL: process.env.SERVER_URL,
       auth: auth,
     };
   },
+  created() {
+    const that = this;
+  },
+  methods: {},
 };
 </script>
 <style>

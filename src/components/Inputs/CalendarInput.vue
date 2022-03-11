@@ -1,5 +1,5 @@
 <template>
-  <div class="maryoku_input" ref="root">
+  <div ref="root" class="maryoku_input">
     <input
       v-model="content"
       :name="name"
@@ -10,21 +10,22 @@
       :disabled="disabled"
       @click="onClickEvent"
       @input="handleInput"
-
-    />
-    <div ref="datePicker" v-if="showDatePicker">
-      <div class="date-picker picker-panel text-center p-10" ref="timePickerPanel" style="z-index: 200 !important" v-click-outside="closeDatePicker">
-        <md-checkbox class="ml-auto md-vendor" v-model="multipleDates">More than one day event</md-checkbox>
+    >
+    <div v-if="showDatePicker" ref="datePicker">
+      <div ref="timePickerPanel" v-click-outside="closeDatePicker" class="date-picker picker-panel text-center p-10" style="z-index: 200 !important">
+        <md-checkbox v-model="multipleDates" class="ml-auto md-vendor">
+          More than one day event
+        </md-checkbox>
         <div class="d-flex justify-content-center align-center p-10">
-          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
+          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
           <span class="ml-5">{{ getFormattedDate }}</span>
         </div>
         <div class="vendor-calendar mt-20">
           <calendar
-                  :multiple="multipleDates"
-                  :initDate="dateData"
-                  @select="setDate"
-          ></calendar>
+            :multiple="multipleDates"
+            :init-date="dateData"
+            @select="setDate"
+          />
         </div>
       </div>
     </div>
@@ -38,7 +39,7 @@ import moment from "moment";
 import ClickOutside from "vue-click-outside";
 
 export default {
-  name: "maryoku-input",
+  name: "MaryokuInput",
   components: {
     Popup,
     FunctionalCalendar,
@@ -54,7 +55,7 @@ export default {
     readonly: Boolean,
     size: {
       type: String,
-      default: '',
+      default: "",
     },
     disabled: {
       type: Boolean,
@@ -80,58 +81,13 @@ export default {
           start: { date: false, dateTime: false, hour: "00", mintue: "00" },
           end: { date: false, dateTime: false, hour: "00", mintue: "00" },
         },
-        selectedDate: moment().format('YYYY-MM-DD'),
+        selectedDate: moment().format("YYYY-MM-DD"),
         selectedDatesItem: "",
         selectedHour: "00",
         selectedMinute: "00",
         selectedDates: [],
       },
     };
-  },
-  created(){
-    this.init()
-  },
-  methods: {
-    init(){
-      if (!this.value[0] || !this.value[1]) return;
-
-      let startDate = moment(this.value[0]).format('YYYY-MM-DD');
-      let endDate = moment(this.value[1]).format('YYYY-MM-DD');
-
-      if (startDate === endDate) {
-        this.dateData.currentDate = new Date(startDate);
-        this.dateData.selectedDate = startDate
-
-      } else {
-        this.dateData.dateRange = {
-            start: {
-              date: startDate
-            },
-            end: {
-              date: endDate
-            }
-        }
-
-        this.multipleDates = true;
-      }
-
-    },
-    closeDatePicker(){this.showDatePicker = false},
-    handleInput(e) {
-      this.dateData = e;
-      this.$emit("change", this.content);
-    },
-    onClickEvent() {
-      this.showDatePicker = true;
-    },
-    setDate(e) {
-      this.dateData = e;
-      // this.showDatePicker = false;
-      setTimeout(_ => {
-        this.$emit("input", {multiple: this.multipleDates, date: e});
-      }, 10)
-
-    },
   },
   computed: {
     getFormattedDate() {
@@ -146,8 +102,53 @@ export default {
     }
   },
   watch: {
-    inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`},
+    inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`;},
     content(){},
+  },
+  created(){
+    this.init();
+  },
+  methods: {
+    init(){
+      if (!this.value[0] || !this.value[1]) return;
+
+      let startDate = moment(this.value[0]).format("YYYY-MM-DD");
+      let endDate = moment(this.value[1]).format("YYYY-MM-DD");
+
+      if (startDate === endDate) {
+        this.dateData.currentDate = new Date(startDate);
+        this.dateData.selectedDate = startDate;
+
+      } else {
+        this.dateData.dateRange = {
+            start: {
+              date: startDate
+            },
+            end: {
+              date: endDate
+            }
+        };
+
+        this.multipleDates = true;
+      }
+
+    },
+    closeDatePicker(){this.showDatePicker = false;},
+    handleInput(e) {
+      this.dateData = e;
+      this.$emit("change", this.content);
+    },
+    onClickEvent() {
+      this.showDatePicker = true;
+    },
+    setDate(e) {
+      this.dateData = e;
+      // this.showDatePicker = false;
+      setTimeout(_ => {
+        this.$emit("input", {multiple: this.multipleDates, date: e});
+      }, 10);
+
+    },
   },
 
 };

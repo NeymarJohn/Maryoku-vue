@@ -3,45 +3,45 @@
     <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
       <div class="left-side">
         <h3 class="title">
-          <img :src="img" />
+          <img :src="img">
           <span>{{ category }}</span>
         </h3>
       </div>
       <div class="right-side">
         <img
-          @click="toggle($event)"
           :src="`${iconUrl}Component 36 (2).svg`"
           :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
-        />
+          @click="toggle($event)"
+        >
       </div>
     </div>
     <template v-if="isExpanded">
       <proposal-requirements
+        key="cost"
         class="additional-service"
         label="Cost Items"
-        key="cost"
-        tableCategory="cost"
+        table-category="cost"
         icon="Group+10662.svg"
         description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-        :vendorCategory="serviceCategory"
+        :vendor-category="serviceCategory"
       />
       <proposal-requirements
+        key="included"
         class="additional-service"
-        tableCategory="included"
+        table-category="included"
         label="Included in Price"
         icon="includedPrice.png"
         description="(from your “included in price” items)"
-        key="included"
-        :vendorCategory="serviceCategory"
+        :vendor-category="serviceCategory"
       />
       <proposal-requirements
+        key="extra"
         class="additional-service"
-        tableCategory="extra"
+        table-category="extra"
         label="Offered Extras"
         icon="cost-requirements.png"
         description="What elements would you like to suggest to the client with extra pay? "
-        key="extra"
-        :vendorCategory="serviceCategory"
+        :vendor-category="serviceCategory"
       />
     </template>
   </div>
@@ -59,7 +59,7 @@ import S3Service from "@/services/s3.service";
 import ProposalServiceTable from "./ProposalServiceTable";
 import ProposalRequirements from "./ProposalRequirements.vue";
 export default {
-  name: "proposal-item",
+  name: "ProposalItem",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
@@ -67,6 +67,11 @@ export default {
     vueDropzone: vue2Dropzone,
     ProposalServiceTable,
     ProposalRequirements,
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
   },
   props: {
     category: String,
@@ -139,6 +144,83 @@ export default {
         maxFilesize: 10,
       },
     };
+  },
+  computed: {
+    isDisabledAdd() {
+      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
+    },
+    optionalRequirements() {
+      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    mandatoryRequirements() {
+      if (!this.proposalRequest) return [];
+      if (!this.proposalRequest.requirements[this.category]) return [];
+      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
+    },
+    additionalServices: {
+      get: function () {
+        return this.$store.state.vendorProposal.additionalServices;
+      },
+      set: function (newValue) {
+        return this.$store.commit("vendorProposal/setAdditionalServices", newValue);
+      },
+    },
+  },
+  watch: {},
+  created() {
+    this.isVCollapsed = this.isCollapsed;
+    this.newProposalRequest = this.proposalRequest;
+    this.mandatoryRequirements.forEach((item) => {
+      this.newProposalRequest.requirements.push({
+        comments: [],
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: 0,
+        priceUnit: "qty",
+        proposalRequest: { id: this.proposalRequest.id },
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: item.item,
+        requirementsCategory: item.category,
+        requirementValue: 1,
+      });
+    });
+
+    this.$forceUpdate();
+    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+    this.$root.$on("remove-proposal-requirement", (item) => {
+      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
+        (req) => req.requirementTitle != item.requirementTitle,
+      );
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
+      this.cancel();
+    });
+
+    this.$root.$on("add-service-item", (item) => {
+      this.clickedItem = !this.clickedItem;
+      this.serviceItem = item;
+      this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+      this.proposalRequest.requirements[index] = item;
+      this.newProposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
+    });
+
+    this.$root.$on("clear-slide-pos", (item) => {
+      this.serviceSlidePos = 0;
+    });
+
+    if (this.$refs.servicesCont) {
+      this.servicesWidth = this.$refs.servicesCont.clientWidth;
+    }
   },
   methods: {
     getObject(item) {
@@ -376,88 +458,6 @@ export default {
       // });
     },
   },
-  created() {
-    this.isVCollapsed = this.isCollapsed;
-    this.newProposalRequest = this.proposalRequest;
-    this.mandatoryRequirements.forEach((item) => {
-      this.newProposalRequest.requirements.push({
-        comments: [],
-        dateCreated: "",
-        includedInPrice: true,
-        itemNotAvailable: false,
-        price: 0,
-        priceUnit: "qty",
-        proposalRequest: { id: this.proposalRequest.id },
-        requirementComment: null,
-        requirementId: "",
-        requirementMandatory: false,
-        requirementPriority: null,
-        requirementTitle: item.item,
-        requirementsCategory: item.category,
-        requirementValue: 1,
-      });
-    });
-
-    this.$forceUpdate();
-    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-    this.$root.$on("remove-proposal-requirement", (item) => {
-      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
-        (req) => req.requirementTitle != item.requirementTitle,
-      );
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.$forceUpdate();
-      this.cancel();
-    });
-
-    this.$root.$on("add-service-item", (item) => {
-      this.clickedItem = !this.clickedItem;
-      this.serviceItem = item;
-      this.qty = this.unit = this.subTotal = 0;
-      this.selectedQuickButton = item;
-    });
-
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.newProposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.$forceUpdate();
-    });
-
-    this.$root.$on("clear-slide-pos", (item) => {
-      this.serviceSlidePos = 0;
-    });
-
-    if (this.$refs.servicesCont) {
-      this.servicesWidth = this.$refs.servicesCont.clientWidth;
-    }
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  computed: {
-    isDisabledAdd() {
-      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
-    },
-    optionalRequirements() {
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    mandatoryRequirements() {
-      if (!this.proposalRequest) return [];
-      if (!this.proposalRequest.requirements[this.category]) return [];
-      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
-    },
-    additionalServices: {
-      get: function () {
-        return this.$store.state.vendorProposal.additionalServices;
-      },
-      set: function (newValue) {
-        return this.$store.commit("vendorProposal/setAdditionalServices", newValue);
-      },
-    },
-  },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

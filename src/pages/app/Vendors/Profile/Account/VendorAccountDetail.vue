@@ -2,33 +2,35 @@
   <div class="vendor-profile-detail">
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.name"
+      :default-value="userData.name"
       :icon="`${$iconURL}common/user-dark.svg`"
-      fieldName="name"
-      fieldLabel="Full Name"
-      @save="saveProfileField"
+      field-name="name"
+      field-label="Full Name"
       theme="md-vendor"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.email || userData.username"
+      :default-value="userData.email || userData.username"
       :icon="`${$iconURL}common/email-dark.svg`"
-      fieldName="email"
-      fieldLabel="Email Address"
-      @save="saveProfileField"
+      field-name="email"
+      field-label="Email Address"
       theme="md-vendor"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.password"
+      :default-value="userData.password"
       :icon="`${$iconURL}common/password-dark.svg`"
-      fieldName="password"
-      fieldLabel="Password"
-      @save="saveProfileField"
+      field-name="password"
+      field-label="Password"
       theme="md-vendor"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <div class="mt-30 pb-50">
-      <md-button class="md-simple edit-btn md-vendor" @click="deleteProfile">Delete My Profile</md-button>
+      <md-button class="md-simple edit-btn md-vendor" @click="deleteProfile">
+        Delete My Profile
+      </md-button>
       <div>You will receive an email to confirm your decision.</div>
       <div>
         Please note, that all events you have created will be permanently erased. You may want to save backups of these
@@ -56,6 +58,17 @@ export default {
       companyDescription: "",
     };
   },
+  computed: {
+    userData() {
+      return this.$store.state.auth.user;
+    },
+  },
+  created() {
+    this.fullName = this.userData.name;
+    this.email = this.userData.email || this.userData.username;
+    this.phoneNumber = this.userData.phoneNumber;
+    this.companyName = this.userData.company;
+  },
   methods: {
     saveProfileField(profileData) {
       this.$store.dispatch("auth/updateProfile", { [profileData.name]: profileData.value, id: this.userData.id });
@@ -63,7 +76,7 @@ export default {
     deleteProfile() {
       Swal.fire({
         title: "<div style='text-align:center'>Are you sure?</div>",
-        text: `You won't be able to login with current credetials!`,
+        text: "You won't be able to login with current credetials!",
         showCancelButton: true,
         icon: "warning",
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -79,17 +92,6 @@ export default {
             });
         }
       });
-    },
-  },
-  created() {
-    this.fullName = this.userData.name;
-    this.email = this.userData.email || this.userData.username;
-    this.phoneNumber = this.userData.phoneNumber;
-    this.companyName = this.userData.company;
-  },
-  computed: {
-    userData() {
-      return this.$store.state.auth.user;
     },
   },
 };

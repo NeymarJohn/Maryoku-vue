@@ -3,12 +3,12 @@
     <h6>If you can't, Maybe someone else you know can?</h6>
     <div class="refer-cont">
       <div class="img-cont">
-          <img :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
+        <img :src="`${$iconURL}Submit Proposal/group-17528.svg`">
       </div>
       <div class="left-side">
         <h4>
           Refer a new vendor
-          <br />and get a commission
+          <br>and get a commission
         </h4>
         <p>You have a chance to help us, the client & another vendor.</p>
       </div>
@@ -24,10 +24,10 @@
       <template slot="header">
         <div class="refer-vendor-modal__header">
           <div class="title-cont">
-            <img :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
+            <img :src="`${$iconURL}Submit Proposal/group-17528.svg`">
             <h3>
               Refer a new vendor
-              <br />and get a commission!!
+              <br>and get a commission!!
             </h3>
           </div>
           <div class="header-description">
@@ -35,16 +35,16 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconUrl}Group 3671 (2).svg`" />
+          <img :src="`${iconUrl}Group 3671 (2).svg`">
         </button>
       </template>
       <template slot="body">
         <div class="refer-vendor-modal__body">
           <refer-modal-item
             v-for="(service, index) in referringServices"
-            :category="service"
             :key="index"
-            :iconUrl="iconUrl"
+            :category="service"
+            :icon-url="iconUrl"
             :img="`${$iconURL}Budget Elements/${service.icon}`"
             @set="setVendorInfo"
             @cancel="removeVendorInfo"
@@ -64,7 +64,7 @@
       <template slot="header">
         <div class="thank-you-modal__header">
           <div class="title-cont">
-            <img :src="`${iconUrl}Group 5676 (2).svg`" />
+            <img :src="`${iconUrl}Group 5676 (2).svg`">
           </div>
           <div class="header-description">
             <h3>Thank You!</h3>
@@ -72,12 +72,14 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconUrl}Group 3671 (2).svg`" />
+          <img :src="`${iconUrl}Group 3671 (2).svg`">
         </button>
       </template>
       <template slot="footer">
         <div class="thank-you-modal__footer">
-          <button class="cool" @click="hideModal()">OK, Cool</button>
+          <button class="cool" @click="hideModal()">
+            OK, Cool
+          </button>
         </div>
       </template>
     </modal>
@@ -88,7 +90,7 @@ import { Modal } from "@/components";
 import ReferModalItem from "./ReferModalItem.vue";
 import Vendors from "@/models/Vendors";
 export default {
-  name: "refer-new-vendor",
+  name: "ReferNewVendor",
   components: {
     Modal,
     ReferModalItem,
@@ -111,6 +113,18 @@ export default {
       referredVendors: {},
     };
   },
+  computed: {
+    referringServices() {
+      return this.event.components.filter(
+        (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
+      );
+    },
+  },
+  watch: {},
+  created() {
+    console.log("Refer Modal", this.event);
+  },
+  mounted() {},
   methods: {
     showThanksModal() {
       this.referModal = false;
@@ -146,18 +160,6 @@ export default {
       delete this.referredVendors[category];
     },
   },
-  created() {
-    console.log("Refer Modal", this.event);
-  },
-  mounted() {},
-  computed: {
-    referringServices() {
-      return this.event.components.filter(
-        (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
-      );
-    },
-  },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

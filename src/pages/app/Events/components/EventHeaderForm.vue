@@ -3,54 +3,54 @@
     <md-card>
       <md-card-header class="md-card-header-text md-card-header-rose">
         <div class="card-text">
-          <h6 class="title2">Event Details</h6>
+          <h6 class="title2">
+            Event Details
+          </h6>
         </div>
       </md-card-header>
       <md-card-content>
         <md-field :class="[{ 'md-error': errors.has('occasion') }]" class="select-with-icon">
           <label>Occasion</label>
-          <md-select v-model="form.occasion" data-vv-name="occasion" v-validate="modelValidations.occasion">
+          <md-select v-model="form.occasion" v-validate="modelValidations.occasion" data-vv-name="occasion">
             <md-option v-for="option in occasionOptions" :key="option.id" :value="option.value">
               {{ option.value }}
             </md-option>
           </md-select>
-          <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
+          <span v-if="errors.has('occasion')" class="md-error">The event occasion is required</span>
         </md-field>
 
         <md-field :class="[{ 'md-error': errors.has('eventName') }]">
           <label>Event Title</label>
-          <md-input v-model="form.eventName" data-vv-name="eventName" v-validate="modelValidations.eventName" />
-          <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+          <md-input v-model="form.eventName" v-validate="modelValidations.eventName" data-vv-name="eventName" />
+          <span v-if="errors.has('eventName')" class="md-error">The event title is required</span>
         </md-field>
 
-        <md-datepicker v-model="form.date" data-vv-name="date" ref="datePicker" v-validate="modelValidations.date">
-          <label :class="[{ 'md-error': $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') }]"
-            >Date</label
-          >
+        <md-datepicker ref="datePicker" v-model="form.date" v-validate="modelValidations.date" data-vv-name="date">
+          <label :class="[{ 'md-error': $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') }]">Date</label>
         </md-datepicker>
 
         <div class="md-layout">
           <div class="md-layout-item md-size-60 md-small-size-100" style="padding-left: 0">
             <md-field :class="[{ 'md-error': errors.has('time') }]" class="">
               <label>Start Time</label>
-              <md-select v-model="form.time" data-vv-name="time" v-validate="modelValidations.time">
+              <md-select v-model="form.time" v-validate="modelValidations.time" data-vv-name="time">
                 <md-option v-for="hour in hoursArray" :key="hour" :value="hour">
                   {{ hour }}
                 </md-option>
               </md-select>
-              <span class="md-error" v-if="errors.has('time')">The event time is required</span>
+              <span v-if="errors.has('time')" class="md-error">The event time is required</span>
             </md-field>
           </div>
 
           <div class="md-layout-item md-size-40 md-small-size-100" style="padding: 0">
             <md-field :class="[{ 'md-error': errors.has('duration') }]" class="">
               <label>Duration</label>
-              <md-select v-model="form.duration" data-vv-name="duration" v-validate="modelValidations.duration">
+              <md-select v-model="form.duration" v-validate="modelValidations.duration" data-vv-name="duration">
                 <md-option v-for="hour in durationArray" :key="hour" :value="hour">
                   {{ hour + " hours" }}
                 </md-option>
               </md-select>
-              <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
+              <span v-if="errors.has('duration')" class="md-error">The event duration time is required</span>
             </md-field>
           </div>
         </div>
@@ -60,26 +60,24 @@
             <md-field :class="[{ 'md-error': errors.has('participants') }]">
               <label>Number of Participants</label>
               <md-input
-                type="text"
                 v-model="form.participants"
-                data-vv-name="participants"
                 v-validate="modelValidations.participants"
+                type="text"
+                data-vv-name="participants"
               />
-              <span class="md-error" v-if="errors.has('participants')"
-                >The event participants is required and should be in range of 1 - 10 000</span
-              >
+              <span v-if="errors.has('participants')" class="md-error">The event participants is required and should be in range of 1 - 10 000</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-60 md-small-size-100" style="padding: 0">
             <md-field :class="[{ 'md-error': errors.has('location') }]">
               <label>Geography</label>
               <md-input
-                type="text"
                 v-model="form.location"
-                data-vv-name="location"
                 v-validate="modelValidations.location"
+                type="text"
+                data-vv-name="location"
               />
-              <span class="md-error" v-if="errors.has('location')">The location is required</span>
+              <span v-if="errors.has('location')" class="md-error">The location is required</span>
             </md-field>
           </div>
         </div>
@@ -89,7 +87,9 @@
     <md-card>
       <md-card-header class="md-card-header-text md-card-header-rose">
         <div class="card-text">
-          <h6 class="title2">Budget Control</h6>
+          <h6 class="title2">
+            Budget Control
+          </h6>
         </div>
       </md-card-header>
       <md-card-content>
@@ -97,17 +97,15 @@
           <div class="md-layout-item md-size-60 md-small-size-100" style="padding-left: 0">
             <md-field :class="[{ 'md-error': errors.has('budget') }]">
               <label>Budget</label>
-              <md-input v-model="form.budget" data-vv-name="budget" v-validate="modelValidations.budget" />
-              <span class="md-error" v-if="errors.has('budget')"
-                >The event budget is required and should be in range of 1 - 1 000 000</span
-              >
+              <md-input v-model="form.budget" v-validate="modelValidations.budget" data-vv-name="budget" />
+              <span v-if="errors.has('budget')" class="md-error">The event budget is required and should be in range of 1 - 1 000 000</span>
             </md-field>
           </div>
 
           <div class="md-layout-item md-size-40 md-small-size-100" style="padding: 0">
-            <md-checkbox class="md-info" v-model="form.budgetPerPersonFlag" @change="updateBudgetType($event)"
-              >Per Guest</md-checkbox
-            >
+            <md-checkbox v-model="form.budgetPerPersonFlag" class="md-info" @change="updateBudgetType($event)">
+              Per Guest
+            </md-checkbox>
           </div>
         </div>
 
@@ -125,12 +123,12 @@
           <div class="md-layout-item md-size-60 md-small-size-100 pl-0" style="padding-left: 0">
             <div style="position: relative; top: 20%">
               <p>
-                <i class="fa fa-circle text-success"></i> Remaining Budget (${{
+                <i class="fa fa-circle text-success" /> Remaining Budget (${{
                   (form.budgetPerPersonFlag ? form.budget * form.participants - spentBudget : form.budget - spentBudget)
                     | formatNum
                 }})
               </p>
-              <p><i class="fa fa-circle text-rose"></i> Spent Budget (${{ spentBudget | formatNum }})</p>
+              <p><i class="fa fa-circle text-rose" /> Spent Budget (${{ spentBudget | formatNum }})</p>
             </div>
           </div>
         </div>
@@ -183,10 +181,15 @@ import moment from "moment";
 import ChartComponent from "@/components/Cards/ChartComponent";
 
 export default {
-  name: "event-header-form",
+  name: "EventHeaderForm",
   components: {
     ChartComponent,
     ChartCard,
+  },
+  filters: {
+    formatNum(value) {
+      return `${value.toLocaleString()}`;
+    },
   },
   props: {
     occasionOptions: Array,
@@ -248,6 +251,38 @@ export default {
       },
     },
   }),
+
+  computed: {
+    isDateValid() {
+      this.form.date && this.validateDate();
+    },
+    spentBudget() {
+      let totalSpent = 0;
+      if (this.$store.state.eventData.components) {
+        this.$store.state.eventData.components.forEach(function (component) {
+          if (component && component.vendors) {
+            component.vendors.forEach(function (val) {
+              totalSpent += val.cost;
+            });
+          }
+        });
+      }
+
+      return totalSpent;
+    },
+    pieChart() {
+      return {
+        data: {
+          labels: [" ", " "], // should be empty to remove text from chart
+          series: [this.calculateRemain(), this.calculateSpent()],
+        },
+        options: {
+          donut: true,
+          donutWidth: 15,
+        },
+      };
+    },
+  },
   watch: {
     formData() {
       this.validateDate();
@@ -413,43 +448,6 @@ export default {
       return this.form.budget - this.spentBudget;
     },
     updateBudgetType(e) {},
-  },
-
-  computed: {
-    isDateValid() {
-      this.form.date && this.validateDate();
-    },
-    spentBudget() {
-      let totalSpent = 0;
-      if (this.$store.state.eventData.components) {
-        this.$store.state.eventData.components.forEach(function (component) {
-          if (component && component.vendors) {
-            component.vendors.forEach(function (val) {
-              totalSpent += val.cost;
-            });
-          }
-        });
-      }
-
-      return totalSpent;
-    },
-    pieChart() {
-      return {
-        data: {
-          labels: [" ", " "], // should be empty to remove text from chart
-          series: [this.calculateRemain(), this.calculateSpent()],
-        },
-        options: {
-          donut: true,
-          donutWidth: 15,
-        },
-      };
-    },
-  },
-  filters: {
-    formatNum(value) {
-      return `${value.toLocaleString()}`;
-    },
   },
 };
 </script>

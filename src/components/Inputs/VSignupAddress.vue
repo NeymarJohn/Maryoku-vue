@@ -4,7 +4,7 @@
       :id="`map-${index}`"
       ref="address"
       :placeholder="defaultValue ? defaultValue : 'Enter an an address, zipcode, or location'"
-      v-on:placechanged="getAddressData"
+      @placechanged="getAddressData"
     />
   </div>
 </template>
@@ -12,7 +12,7 @@
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
-  name: "v-signup-address-editor",
+  name: "VSignupAddressEditor",
   components: {
     VueGoogleAutocomplete,
   },
