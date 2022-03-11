@@ -185,6 +185,12 @@ export default {
       maxlength: this.maxlength
     };
   },
+
+  computed: {
+    ...mapGetters({
+      industryList: "user/getIndustryList"
+    })
+  },
   mounted: function () {
     this.$auth.currentUser(this, true, () => {
       let user = this.$auth.user;
@@ -197,12 +203,6 @@ export default {
                 this.firstDayAtWork = user.me.companyStartDate; */
     });
   },
-  computed: {
-    ...mapGetters({
-      industryList: "user/getIndustryList"
-    })
-  },
-
   methods: {
     updatePhoneNumber (data) {
       this.formattedNumber = data.formattedNumber;

@@ -4,9 +4,9 @@
     <label v-if="editebleMode" key="label-noeditable" style="cursor: pointer !important;" @click="toggleEditableComponent">{{ label }}</label>
     <md-input
       :id="id"
+      :ref="'focusable-' + name"
       class="input-default"
       :type="type"
-      :ref="'focusable-' + name"
       :placeholder="placeholder"
       :value="value"
       :name="name"

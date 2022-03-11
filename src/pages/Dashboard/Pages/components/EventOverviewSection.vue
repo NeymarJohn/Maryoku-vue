@@ -111,30 +111,18 @@
 <style lang="scss" scoped>
 </style>
 <script>
-import Multiselect from "vue-multiselect";
-import HeaderActions from "@/components/HeaderActions";
 import { MaryokuInput, LocationInput, HolidayInput } from "@/components";
-import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
-import { mapState } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import EventOverviewDate from "./EventOverviewDate";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import TimePicker from "@/components/Inputs/TimePicker.vue";
 
 export default {
   name: "EventOverviewSection",
   components: {
-    Multiselect,
-    HeaderActions,
-    FunctionalCalendar,
     MaryokuInput,
     LocationInput,
-    HolidayInput,
     CategorySelector,
-    EventOverviewDate,
     VueTimepicker,
-    TimePicker,
   },
   filters: {
     formatDate: function (date) {
