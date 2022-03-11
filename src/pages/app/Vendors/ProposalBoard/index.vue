@@ -128,7 +128,7 @@
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header">
-        <div class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
+        <div class="border-right font-bold-extra text-center pr-10 mr-10">
           <div
             v-if="
               selectedProposalRequest && selectedProposalRequest.eventData && selectedProposalRequest.eventData.concept
@@ -146,13 +146,13 @@
           <div v-else>New Event</div>
         </div>
 
-        <div v-if="selectedProposal.nonMaryoku" class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
+        <div v-if="selectedProposal.nonMaryoku" class="border-right font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime, "MM/DD/YY") }}
         </div>
-        <div v-else class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
+        <div v-else class="border-right font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
         </div>
-        <div class="text-center font-size-20 font-bold-extra">
+        <div class="text-center font-bold-extra">
           $
           {{ selectedProposal.cost | withComma(Number) }}
         </div>
@@ -304,9 +304,11 @@ const components = {
   Modal: () => import("@/components/Modal.vue"),
   CentredModal: () => import("@/components/CentredModal.vue"),
   carousel: () => import("vue-owl-carousel"),
+  // ProposalRequestCard: () => import("@/pages/app/Vendors/components/ProposalRequestCard.vue"),
   NegotiationRequest: () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
   ProposalContent: () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
   ProposalListItem: () => import("@/pages/app/Vendors/components/ProposalListItem.vue"),
+  // EmptyRequestCard : () => import("@/pages/app/Vendors/components/EmptyRequestCard.vue"),
   InsightDetail: () => import("@/pages/app/Vendors/components/InsightDetail.vue"),
   TablePagination: () => import("@/components/TablePagination.vue"),
   Insight: () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
@@ -534,27 +536,21 @@ export default {
           console.log('negotiation', negotiation)
         if (this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
             this.showRequestNegotiationModal = false;
-
-            if (status === this.negotiationRequestStatus.approve) {
-
-                const version = await this.saveVersion(this.selectedProposal);
-                this.selectedProposal.versions.push(version)
-
-                let routeData = this.$router.resolve({
-                    name: "outsideProposalEdit",
-                    params: {
-                        vendorId: this.selectedProposal.vendor.id,
-                        id: this.selectedProposal.id,
-                        type: 'edit',
-                    },
-                    query: {
-                        version: version.id,
-                        step: 3,
-                        negotiation: true,
-                    },
-                });
-                this.openNewTab(routeData.href);
-            }
+            const version = await this.saveVersion(this.selectedProposal);
+            this.selectedProposal.versions.push(version)
+            console.log('version', version)
+            let routeData = this.$router.resolve({
+                name: "outsideProposalEdit",
+                params: {
+                    vendorId: this.selectedProposal.vendor.id,
+                    id: this.selectedProposal.id,
+                    type: 'edit',
+                },
+                query: {
+                    version: version.id,
+                },
+            });
+            this.openNewTab(routeData.href);
         }
 
         this.selectedProposal.negotiations[0] = negotiation;
@@ -569,7 +565,7 @@ export default {
 
         let proposalRequest = this.selectedProposalRequest
           ? this.selectedProposalRequest
-          : this.proposalRequests.find(p => p.proposal && p.proposal.id === this.selectedProposal.id);
+          : this.proposalRequests.find(p => p.proposal.id === this.selectedProposal.id);
         this.$set(proposalRequest, "proposal", this.selectedProposal);
         await this.$store.commit("vendorDashboard/setProposalRequest", proposalRequest);
 
@@ -647,8 +643,8 @@ export default {
         name: `Ver${proposal.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
         data,
       };
-      console.log('versionData', versionData)
       const version = await this.$store.dispatch("vendorDashboard/saveVersion", { version: versionData, proposal });
+      // console.log('version1', version)
       return version;
     },
     editProposal(params = null, query = null) {

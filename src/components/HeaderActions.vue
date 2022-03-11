@@ -11,9 +11,7 @@
                     class="md-simple md-just-icon adaptive-button"
                     :class="{active: singleAction.key === 'comment' && isCommentMode}"
                     @click="click(singleAction.key)">
-                    <img v-if="singleAction.key === 'like' && anyLiked" class="svg-icon-header" :src="`${$iconURL}Booking-New/Path+6363.svg`" />
-                    <img v-if="singleAction.key === 'like' && !anyLiked" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
-                    <img v-if="singleAction.key === 'cart'" class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
+                    <img class="svg-icon-header" :src="`${$iconURL}${singleAction.icon}`" />
                     <span v-if="singleAction.key === 'like'" :class="{'like-dot': proposalUnviewed == true}"></span>
                     <span v-if="singleAction.key === 'cart'" :class="'cart-dot'">{{ cartCount+1 }}</span>
                 </div>
@@ -36,9 +34,8 @@
           class="md-small-hide"
         >
           <md-button
-
-            v-if="showCommentPanel"
-            class="md-simple md-just-icon hide-long-button"
+            v-if="!isCommentMode"
+            class="md-simple md-just-icon show-long-button"
             @click="click('comment')">
             <div class="show-circle-for-img">
               <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
@@ -101,10 +98,6 @@ export default {
       type: Number,
       default: 0,
     },
-    anyLiked: {
-      type: Boolean,
-      default: false,
-    },
     page: {
       type: String,
       default: 'event',
@@ -118,6 +111,7 @@ export default {
     return {
       actions: HeaderActions,
       requirementActions: HeaderActionsRequirements,
+      dropdownActions: HeaderActionsDropdown,
       isCommentMode: false,
       isSharing: false,
     };
@@ -158,9 +152,6 @@ export default {
     },
     canEdit() {
       return !this.permission || this.permission === "edit";
-    },
-    showCommentPanel(){
-      return this.$store.state.eventPlan.showCommentPanel;
     },
   },
 };
@@ -293,8 +284,8 @@ export default {
         position: absolute;
     }
     .cart-dot {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         margin: 0px 0px 0px -22px;
         padding: 0px 0px 0px 7px;
         background-color: #ffc001;

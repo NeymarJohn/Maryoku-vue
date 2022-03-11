@@ -8,18 +8,6 @@
       >
         <md-icon>close</md-icon>
       </md-button>
-       <comment-editor-panel
-        v-if="showCommentPanel"
-        :commentComponents="commentComponents"
-        :proposal="proposal"
-        :url="`/proposals/${proposal.id}`"
-        :ignoreXOffset="400"
-        :isVendor="false"
-        @saveComment="saveCommentComponent"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent">
-        </comment-editor-panel>
       <div class="proposal-info">
         <div
           class="proposal-header"
@@ -57,100 +45,6 @@
                 <label>Guest Arrival Time</label>
                 <div class="info-text">
                   {{ eventData.eventStartMillis | formatTime }}
-                </div>
-              </li>
-              <li>
-                <div class="time-box" v-if="showTimerBox">
-                    <div class="time-layer">
-                        <div class="this-offer">
-                            This offer will expire in
-                        </div>
-                        <hr>
-                        <div v-if="showTimerInputs" class="time-display ">
-                            <div class="d-flex justify-content-center">
-                                <div class="mins-num">
-                                    <input
-                                    id="days-input"
-                                    name="days-input"
-                                    type="number"
-                                    v-model="expiredDate"
-                                    />
-                                :
-                                </div>
-                                <div class="mins-num">
-                                    <input
-                                    id="hours-input"
-                                    name="hours-input"
-                                    type="number"
-                                    v-model="expiredHours"
-                                    />
-                                :
-                                </div>
-                                <div class="mins-num">
-                                    <input
-                                    id="mins-input"
-                                    name="mins-input"
-                                    type="number"
-                                    v-model="expiredMinutes"
-                                    />
-                                </div>
-                                :
-                                <div class="mins-num">
-                                    <input
-                                    id="secs-input"
-                                    name="secs-input"
-                                    type="number"
-                                    v-model="expiredSeconds"
-                                    />
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <div class="mins">
-                                    Days
-                                </div>
-                                <div class="mins">
-                                    Hours
-                                </div>
-                                <div class="mins">
-                                    Mins
-                                </div>
-                                <div class="mins">
-                                    Secs
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else class="time-display">
-                            <div class="d-flex justify-content-center">
-                                <div class="mins-num">
-                                    {{expiredDate}} :
-                                </div>
-                                <div class="mins-num">
-                                    {{expiredHours}} :
-                                </div>
-                                <div class="mins-num">
-                                    {{expiredMinutes}} :
-                                </div>
-                                <div class="mins-num">
-                                    {{expiredSeconds}}
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <div class="mins">
-                                    Days
-                                </div>
-                                <div class="mins">
-                                    Hours
-                                </div>
-                                <div class="mins">
-                                    Mins
-                                </div>
-                                <div class="mins">
-                                    Secs
-                                </div>
-                            </div>
-                        </div>
-                        <button class="timer-btn" @click="changeTimer">Ask for more time</button>
-                    </div>
                 </div>
               </li>
             </ul>
@@ -662,7 +556,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-    <div v-if="!landingPage && !hideFooter" class="proposal-footer white-card d-flex justify-content-between">
+    <div v-if="!landingPage" class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -724,7 +618,6 @@ const components = {
   EventProposalPolicy: () => import("./EventProposalPolicy.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
   MessageModal: () => import("../components/Modal/PlannerMessage.vue"),
-  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
 };
 
 export default {
@@ -756,14 +649,6 @@ export default {
     theme: {
       type: String,
       default: "red",
-    },
-    showTimerBox: {
-      type: Boolean,
-      default: false,
-    },
-    hideFooter: {
-      type: Boolean,
-      default: false,
     },
   },
   mixins: [CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins],
@@ -803,42 +688,13 @@ export default {
       socialMediaBlocks,
       guaranteedOptions: GuaranteedOptions,
       contentTabs: ProposalContentTabOptions,
-
-      showTimerInputs: false,
-      expiredDate:null,
-      expiredHours:null,
-      expiredMinutes:null,
-      expiredSeconds:null,
-      url:`/proposals/${this.proposal.id}`
     };
   },
   created() {
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
-  mounted() {
-    let end = moment(this.proposal.expiredDate)
-    let diff = moment.duration(end.diff(new Date()));
-
-    function pad(n) {
-        return (n < 10 && n >= 0) ? ("0" + n) : n;
-    }
-
-    let minutes = diff.asMinutes();
-    let seconds = diff.asSeconds();
-    this.expiredDate = Math.floor(minutes/24/60);
-    this.expiredDate = pad(this.expiredDate);
-    this.expiredHours = Math.floor(minutes/60%24);
-    this.expiredHours = pad(this.expiredHours);
-    this.expiredMinutes = Math.floor(minutes%60);
-    this.expiredMinutes = pad(this.expiredMinutes);
-    this.expiredSeconds = Math.floor(seconds%60);
-    this.expiredSeconds = pad(this.expiredSeconds);
-    console.log("eventProposaldetail",this.proposal.commentComponent);
-    this.commentComponents = this.proposal.commentComponent;
-  },
 
   methods: {
-    ...mapMutations("eventPlan", ["updateCommentComponents"]),
     ...mapMutations("EventPlannerVuex", [
       "setEventModal",
       "setEditMode",
@@ -994,18 +850,6 @@ export default {
     selectTab(val) {
       this.$emit("change", val);
     },
-    changeTimer() {
-        if(this.showTimerInputs == false){
-            this.showTimerInputs = true;
-        } else {
-            this.showTimerInputs = false;
-        }
-    },
-    async saveCommentComponent(data){
-      await this.saveComment(data)
-      console.log("this.commentComponents",this.commentComponents)
-      this.updateCommentComponents(this.commentComponents);
-    }
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -1044,10 +888,6 @@ export default {
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-    showCommentPanel(){
-      console.log("showCommentPanel",this.$store.state.eventPlan)
-      return this.$store.state.eventPlan.showCommentPanel;
-    },
   },
   filters: {
     formatDate: function(date) {
@@ -1061,8 +901,8 @@ export default {
     },
   },
   watch: {
-    proposal() {
-      console.log("proposal.watch",this.proposal);
+    proposal(newVal) {
+      console.log("proposal.watch", newVal);
     },
     step(newVal) {},
   },
@@ -1144,7 +984,7 @@ export default {
         .event-info {
           background: rgba(255, 255, 255, 0.76);
           align-items: center;
-          padding: 4.5em;
+          padding: 2.5em;
 
           h3 {
             margin: 0;
@@ -1154,115 +994,29 @@ export default {
           }
         }
         .event-details {
-            list-style: none;
-            display: flex;
-            flex-direction: row;
-            margin: 0;
-            padding: 0;
+          list-style: none;
+          display: flex;
+          flex-direction: row;
+          margin: 0;
+          padding: 0;
 
-            &__item {
-                font-size: 14px;
-                padding-bottom: 10px;
-                &:not(:last-child) {
-                border-right: 1px solid #818080;
-                padding-right: 80px;
-                margin-right: 80px;
-                }
-
-                label {
-                font-weight: 800;
-                margin-bottom: 1em;
-                }
-                .info-text {
-                color: #050505;
-                }
+          &__item {
+            font-size: 14px;
+            padding-bottom: 10px;
+            &:not(:last-child) {
+              border-right: 1px solid #818080;
+              padding-right: 80px;
+              margin-right: 80px;
             }
 
-            .time-box {
-                width: 290.6px;
-                height: 201.5px;
-                margin: -96px 0 0 73px;
-                padding: 13.4px 27px 18.1px 27.5px;
-                border-radius: 3px;
-                background-color: #f51355;
-                position: absolute;
-                right: 20px;
-
-                .time-layer {
-                    width: 239.1px;
-                    height: 170.1px;
-                }
-                .this-offer {
-                    width: 150px;
-                    height: 19px;
-                    margin: 0 42.6px 13.7px 43.5px;
-                    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-size: 14px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: center;
-                    color: #fff;
-                }
-
-                .time-display {
-                    width: 239px;
-                    height: 60.3px;
-                    margin: 8px 7px 25.1px 7px;
-                }
-
-                .mins-num {
-                    width: 58px;
-                    height: 41px;
-                    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-size: 30px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: left;
-                    color: #fff;
-                }
-
-                #mins-input {
-                    width: 60%; height: 40%; padding: 4px 4px;
-                }
-
-                .mins {
-                    width: 32px;
-                    height: 19px;
-                    margin: 14px 28px 0 0;
-                    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: center;
-                    color: #fff;
-                }
-                .timer-btn {
-                    width: 224.9px;
-                    height: 44px;
-                    margin: 7.1px 5.6px 0 5.5px;
-                    padding: 11px 30px 11px 30px;
-                    border-radius: 3px;
-                    background-color: #fff;
-                    color: #f51355;
-                    font-size: 16px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: 0.34px;
-                    text-align: center;
-                    border: none;
-                }
+            label {
+              font-weight: 800;
+              margin-bottom: 1em;
             }
+            .info-text {
+              color: #050505;
+            }
+          }
         }
       }
 
@@ -1823,9 +1577,5 @@ export default {
 }
 .bg-light-gray {
   background-color: #f8fafb;
-}
-
-.click-capture{
-  top: 0px !important;
 }
 </style>

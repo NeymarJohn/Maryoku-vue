@@ -9,14 +9,6 @@
       background-color: #383838 !important;
     }
   }
-  &.white {
-    background-color: #fff !important;
-    color: black !important;
-    margin-right: 2rem!important;
-    .v-step__header {
-        background-color: #fff !important;
-    }
-  }
   &__header {
     background-color :#F51355 !important;
     border:none;
@@ -57,15 +49,6 @@
     height: 3rem;
   }
 }
-.v-step.white .v-step__arrow {
-    border-color: #fff !important;
-    &:before {
-        content: "";
-        position: absolute;
-        border-left:solid 0.5px #fff;
-        height: 0rem;
-    }
-}
 .v-step.dark .v-step__arrow {
   border-color: #383838 !important;       /* set to desired popper arrow color */
   &--dark {
@@ -80,21 +63,30 @@
   }
 }
 .v-step[x-placement^='top'] .v-step__arrow {
+  // border-left-color: transparent !important;
+  // border-right-color: transparent !important;
+  // border-bottom-color: transparent !important;
   bottom:-3rem !important;
   border-radius: 50% !important;
-  border-width: 4px !important;
+  border-width: 4px !important;  
   &:before {
     transform: translateY(-100%);
   }
 }
 
 .v-step[x-placement^='bottom'] .v-step__arrow {
+  // border-left-color: transparent !important;
+  // border-right-color: transparent !important;
+  // border-top-color: transparent !important;
   top:-3rem !important;
   border-radius: 50% !important;
   border-width: 4px !important;
 }
 
 .v-step[x-placement^='right'] .v-step__arrow {
+  // border-left-color: transparent !important;
+  // border-top-color: transparent !important;
+  // border-bottom-color: transparent !important;
   border-radius: 50% !important;
   border-width: 4px !important;
   left: -3rem !important;

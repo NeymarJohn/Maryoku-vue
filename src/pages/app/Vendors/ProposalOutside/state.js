@@ -49,8 +49,7 @@ const state = {
   original: null,
   seatingData: null,
   currentVersion: -1,
-  expiredDate:moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
-  isNegotiation: false,
+  expiredDate:moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -201,9 +200,6 @@ const mutations = {
   setVendor: (state, vendor) => {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
-  },
-  setNegotiation: (state, value) => {
-      state.isNegotiation = value;
   },
   setProposal: (state, proposal) => {
     state.id = proposal.id;

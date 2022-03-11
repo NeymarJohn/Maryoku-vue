@@ -11,8 +11,12 @@ export const HeaderActions = [
 ]
 
 export const HeaderActionsRequirements = [
-    {key: 'like', icon: 'Booking-New/Group+28553.svg'},
+    {key: 'like', icon: 'Booking-New/Path+6363.svg'},
     {key: 'cart', icon: 'Booking-New/Path+13791.svg'},
 ]
 
+export const HeaderActionsDropdown = [
+    {key: 'download', icon: 'common/download-dark.svg'},
+    {key: 'share', icon: 'common/share-dark.svg'},
+]
 

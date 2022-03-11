@@ -101,21 +101,17 @@
     </div>
     <div class="action-cont">
       <button class="no" @click="showNotBiddingModal">Thank You, But No.</button>
-      <a class="no no-border pr-10" @click="showReferModal">
+      <button class="no no-border" @click="showReferModal">
         Refer Another Vendor
-      </a>
-        <img :src="`${iconsUrl}Group 5522.svg`"
-             class="mr-20"
-             width="20px"
-             v-tooltip="{
-                html: true,
-                content: '<h5>Refer someone else<br />and still get your commission!\n</h5>\n'+
-'          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>',
-                delay: { show: 200, hide: 100 },
-                trigger: 'hover',
-                placement: 'top',
-                classes: 'vendor-tooltip-theme',}"
-        />
+        <div class="refer-tooltip" v-if="referTooltip">
+          <h5>
+            Refer a new vendor
+            <br />and get a commission!
+          </h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </div>
+        <img :src="`${iconsUrl}Group 5522.svg`" @mouseover="referTooltip = true" @mouseleave="referTooltip = false" />
+      </button>
       <div class="with-description">
         <p>
           You're the
@@ -262,20 +258,8 @@
           <button class="cancel" @click="hideModal()">Cancel</button>
           <div class="refer-another-vendor-cont">
             <img class="hand" :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
-            <a @click="showReferModal()">Refer Another Vendor
-              <img :src="`${iconsUrl}Group 5522.svg`"
-                 width="20px"
-                 class="ml-10"
-                 v-tooltip="{
-                    html: true,
-                    content: '<h5>Refer someone else<br />and still get your commission!\n</h5>\n'+
-    '          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>',
-                    delay: { show: 200, hide: 100 },
-                    trigger: 'hover',
-                    placement: 'top',
-                    classes: 'vendor-tooltip-theme',}"
-              />
-            </a>
+            <a @click="showReferModal()">Refer Another Vendor</a>
+            <img class="question" :src="`${iconsUrl}Group 5522.svg`" />
           </div>
           <button class="cool" @click="declineRequest()">Send</button>
         </div>
@@ -929,10 +913,10 @@ export default {
     .refer-tooltip {
       position: absolute;
       background-color: #ffedb7;
-      width: 310px;
-      padding: 26px;
+      max-width: 301px;
+      padding: 26px 36px 36px 36px;
       color: #050505;
-      margin-top: -280px;
+      margin-top: -260px;
 
       h5 {
         margin: 0;
@@ -951,8 +935,9 @@ export default {
         position: absolute;
         width: 0;
         height: 0;
+        margin-left: -0.5em;
         bottom: -20px;
-        left: 70%;
+        left: 80%;
         box-sizing: border-box;
 
         border: 12px solid black;

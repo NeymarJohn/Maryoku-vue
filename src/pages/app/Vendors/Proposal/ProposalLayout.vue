@@ -170,8 +170,6 @@ export default {
     };
   },
   async created() {
-
-    console.log('proposal.layout.created', this.$store.state.auth.user);
     // if(this.$store.state.auth.user){
     //   this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
     //
