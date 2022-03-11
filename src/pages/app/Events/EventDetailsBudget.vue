@@ -201,18 +201,17 @@
         <template slot="body">
           <div class="add-category-model__header">
             <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra }}</span></h2>
-              <h2 v-if="extra<0">Oops, The changes you made have got you in the minus</h2>
-              <h2 v-else>Your edits changed the total budget.</h2>
+              <h2 v-if="extra<0">Oops, these changes have put you in the red!</h2>
               <span class="black">What would you like to do? </span>
             <br/>
-            <md-checkbox v-show="extra>0" class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="betweenCategories">  Add new category</md-checkbox>
+            <md-checkbox v-show="extra>0" class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="betweenCategories"> Add new category</md-checkbox>
             <br/>
             <md-checkbox class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="onUnexpected">
-              {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Take that money from ‘Unexpected’ category' }}
+              {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Allocate funds from the “Unexpected” category' }}
             </md-checkbox>
             <br/>
             <md-checkbox  v-show="extra<0"  class="md-checkbox-circle md-red" v-model="extraBudgetMethod" value="goBack">
-              Add more money
+              Add more money to my budget
             </md-checkbox>
           </div>
         </template>
@@ -378,12 +377,13 @@ export default {
       return new Calendar();
     },
     getEvent: async function (_calendar) {
+      console.log('getEvent', this.$route.params.id);
       let event = await _calendar.calendarEvents().find(this.$route.params.id);
       this.event = event;
     },
     getEventComponents: async function (_calendar) {
       let event = new CalendarEvent({ id: this.event.id });
-      let eventComponent = new EventComponent().for(_calendar, event);
+      let eventComponent = new EventComponent().for(event);
       let components = await eventComponent.get();
       components.sort((a, b) => a.order - b.order);
       this.event.components = components;

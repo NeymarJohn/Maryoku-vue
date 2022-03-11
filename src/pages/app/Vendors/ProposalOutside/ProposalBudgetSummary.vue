@@ -127,7 +127,7 @@
                         :defaultNegotiation="negotiationDiscount"
                         :defaultTax="defaultTax"
                         field="negotiation"
-                        custom-class="negotiation"
+                        :custom-class="isNegotiation ? 'negotiation' : ''"
                         :non-maryoku="true"
                         @saveDiscount="saveDiscount('negotiation', $event)"
                     >
@@ -220,7 +220,7 @@
             </template>
         </CollapsePanel>
     </template>
-    <v-tour name="discount" :steps="steps">
+    <v-tour name="discount" :steps="steps" :callbacks="callbacks">
         <template slot-scope="tour">
             <fade-transition>
                 <v-step
@@ -312,10 +312,17 @@ export default {
                   enableScrolling: false,
               }
           }
-      ]
+      ],
+      callbacks: {
+        onFinish: this.closeTour,
+      },
     };
   },
   methods: {
+    closeTour(){
+      console.log('closeTour');
+        this.$store.commit("proposalForNonMaryoku/setNegotiation", false);
+    },
     flatDeep(arr, d = 1) {
       return d > 0
         ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
@@ -429,9 +436,13 @@ export default {
   destoryed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
-    mounted() {
+  updated () {
+      console.log('budget.summary.updated', this.step)
+
+  },
+  mounted() {
     setTimeout(_ => {
-        if (this.step === 3 && this.$route.query.negotiation)
+        if (this.isNegotiation)
         this.$tours['discount'].start()
     }, 600)
 
@@ -469,6 +480,9 @@ export default {
     },
     proposal() {
       return this.$store.state.proposalForNonMaryoku;
+    },
+    isNegotiation() {
+      return this.$store.state.proposalForNonMaryoku.isNegotiation;
     },
     event() {
       if (!this.proposalRequest) return {};

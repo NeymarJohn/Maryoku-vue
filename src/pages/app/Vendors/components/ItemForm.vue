@@ -211,4 +211,7 @@ export default {
     }
   }
 }
+.negotiation{
+    z-index: 9999;
+}
 </style>

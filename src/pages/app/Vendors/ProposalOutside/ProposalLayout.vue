@@ -1,7 +1,7 @@
 <template>
   <div class="for-proposals-layout-wrapper">
     <loader :active="isLoading" is_full_screen page="vendor" height="100vh"></loader>
-
+    <div class="lightbox-mask" v-if="isNegotiation"></div>
     <ProposalHeader v-if="vendor" :vendor="vendor"></ProposalHeader>
     <ProposalVersionsBar
       v-if="$route.params.id"
@@ -194,6 +194,9 @@ export default {
        this.$store.commit("proposalForNonMaryoku/setWizardStep", parseInt(this.$route.query.step));
     }
 
+    if (this.step === 3 && this.$route.query.negotiation) {
+        this.$store.commit("proposalForNonMaryoku/setNegotiation", true);
+    }
     setTimeout(_ => {}, 10000);
     this.isLoading = false;
   },
@@ -461,7 +464,9 @@ export default {
     versions() {
       return this.$store.state.proposalForNonMaryoku.versions;
     },
-
+    isNegotiation() {
+        return this.$store.state.proposalForNonMaryoku.isNegotiation;
+    },
     step: {
       get: function() {
         return this.$store.state.proposalForNonMaryoku.wizardStep;
@@ -667,6 +672,16 @@ export default {
       height: 20px;
       transform: rotate(-90deg);
     }
+  }
+  .lightbox-mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 100;
   }
 }
 </style>

@@ -709,8 +709,9 @@ export default {
         id: this.event.id,
         allocatedTips: this.newAllocatedTips,
       });
+      console.log('updateTips', event, this.calendar);
       event
-        .for(this.calendar)
+        // .for(this.calendar)
         .save()
         .then((res) => {
           this.editTips = false;
