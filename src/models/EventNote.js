@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class EventNote extends Model {
-  resource () {
-    return 'notes'
+  resource() {
+    return "notes";
   }
 }

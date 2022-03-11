@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class CalendarHoliday extends Model {
-  resource () {
-    return 'holidays'
+  resource() {
+    return "holidays";
   }
 }

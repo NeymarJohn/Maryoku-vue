@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class EventConcept extends Model {
-  resource () {
-    return 'concepts'
+  resource() {
+    return "concepts";
   }
 }

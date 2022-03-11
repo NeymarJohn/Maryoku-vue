@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class EventComponentVendor extends Model {
-  resource () {
-    return 'vendors'
+  resource() {
+    return "vendors";
   }
 }

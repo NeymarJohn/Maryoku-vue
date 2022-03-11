@@ -14,17 +14,14 @@ module.exports = {
   ],
   // required to lint *.vue files
   plugins: [
-    "prettier"
   ],
   rules: {
-    "prettier/prettier": "error",
+    quotes: ["error", "double"],
     semi: ["error", "always"],
     "eol-last": ["error", "always"],
-    "vue/max-attributes-per-line": "off",
     "vue/multi-word-component-names": "off",
-    "vue/html-indent": ["error", "tab"],
+    "vue/html-indent": ["error", "space"],
     "vue/html-quotes": ["error", "double"],
-    "vue/attributes-order": ["error", "always"]
-
+    "vue/max-attributes-per-line": "off"
   }
 }

@@ -1,53 +1,40 @@
 <template>
   <div class="main-layout">
     <div class="paper-layout">
-      <div class="position-relative" >
-        <div v-if="showFeedbackMessageSuccessful" class="feedback-message-successful" >
-          <div class="feedback-message-successful-logo" >
-            <img
-              width="75"
-              height="78"
-              :src="`${$iconURL}FeedbackForm/Group 28058.svg`"
-            />
-            <h3>
-              The feedback was
-              sent successfully!
-            </h3>
+      <div class="position-relative">
+        <div v-if="showFeedbackMessageSuccessful" class="feedback-message-successful">
+          <div class="feedback-message-successful-logo">
+            <img width="75" height="78" :src="`${$iconURL}FeedbackForm/Group 28058.svg`" />
+            <h3>The feedback was sent successfully!</h3>
           </div>
-          <div class="feedback-message-successful-text" >
-            <h2>
-              Thank you for your cooperation!
-            </h2>
+          <div class="feedback-message-successful-text">
+            <h2>Thank you for your cooperation!</h2>
             <div>
-              <span class="font-size-18" >
-                You make us better, for you and for future customers.
-              </span>
-              <span class="font-size-18 font-bold" >
-                See you at the next event :)
-              </span>
+              <span class="font-size-18"> You make us better, for you and for future customers. </span>
+              <span class="font-size-18 font-bold"> See you at the next event :) </span>
             </div>
           </div>
-          <button class="feedback-message-successful-btn-close bg-white" @click="closeFeedbackMessageSuccessful" >
+          <button class="feedback-message-successful-btn-close bg-white" @click="closeFeedbackMessageSuccessful">
             <img width="34" height="34" src="static/icons/vendor/proposalBoard/filter-inactive.svg" />
           </button>
         </div>
       </div>
-      <div class="header-cover-image" >
+      <div class="header-cover-image">
         <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" />
       </div>
-      <div class="content" >
-        <div class="decoration-line" >
+      <div class="content">
+        <div class="decoration-line">
           <div class="decoration-item-line item-line-1" />
           <div class="decoration-item-line item-line-2" />
           <div class="decoration-item-line item-line-3" />
           <div class="decoration-item-line item-line-4" />
         </div>
-        <div class="content-article" >
-          <div class="content-article-header" >
-            <div class="d-flex mb-70" >
+        <div class="content-article">
+          <div class="content-article-header">
+            <div class="d-flex mb-70">
               <feedback-logo v-if="campaign && campaign.visibleSettings.showLogo" class="mt-30" />
-              <div v-if="campaign && campaign.visibleSettings.showImages" class="wrapper-view-presentation" >
-                <div class="view-presentation" >
+              <div v-if="campaign && campaign.visibleSettings.showImages" class="wrapper-view-presentation">
+                <div class="view-presentation">
                   <view-presentation
                     cover-image="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/fde9a712-f55d-4a96-b0ce-7df0ac9c1661.png"
                   />
@@ -60,30 +47,24 @@
                 <div class="font-size-40 font-bold line-height-1">THANKS FOR PARTICIPATING!</div>
                 <div class="subtitle">80’s Disco Party</div>
               </div>
-              <div class="message" >
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua.
-                At vero eos et accusam et justo duo dolores et ea rebum.
-                Stet clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam. Clita kasd gubergren,
-                no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                sed diam
+              <div class="message">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
+                ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                dolor sit amet, consetetur sadipscing elitr, sed diam. Clita kasd gubergren, no sea takimata sanctus est
+                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
               </div>
-              <img
-                width="27"
-                height="37"
-                src="static/icons/double-arrow-down-gray.svg"
-              />
+              <img width="27" height="37" src="static/icons/double-arrow-down-gray.svg" />
             </div>
           </div>
-          <div v-if="!showFeedbackMessageSuccessful && campaign.visibleSettings.showFeedback" class="content-article-main-content" >
+          <div
+            v-if="!showFeedbackMessageSuccessful && campaign.visibleSettings.showFeedback"
+            class="content-article-main-content"
+          >
             <div class="feedback-question-list">
               <div>
-                <div class="d-flex justify-content-between" >
-                  <div class="d-flex align-center justify-content-between" >
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex align-center justify-content-between">
                     <img :src="`${$iconURL}Campaign/group-7321.svg`" class="icon-feedback mr-20" />
                     <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
                   </div>
@@ -98,20 +79,20 @@
                     :show-switch="false"
                   ></feedback-question>
                 </div>
-                <md-button class="yellow-button-send-feedback" @click="sendFeedback" >Send feedback</md-button>
+                <md-button class="yellow-button-send-feedback" @click="sendFeedback">Send feedback</md-button>
               </div>
             </div>
           </div>
-          <div class="content-article-footer" >
-            <div class="d-flex align-center pt-50 pb-50" >
+          <div class="content-article-footer">
+            <div class="d-flex align-center pt-50 pb-50">
               <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`" />
-              <div class="ml-20 d-flex flex-wrap flex-column" >
-                <div class="d-flex" >
+              <div class="ml-20 d-flex flex-wrap flex-column">
+                <div class="d-flex">
                   <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
                 </div>
               </div>
             </div>
-            <div class="wrapper-carousel" >
+            <div class="wrapper-carousel">
               <feedback-image-carousel
                 class="p-10"
                 :items="2.5"
@@ -126,12 +107,12 @@
       <div v-if="campaign && campaign.visibleSettings.allowUploadPhoto" class="green-block-wrapper">
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
-            <div  class="icon-and-text">
-              <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
+            <div class="icon-and-text">
+              <img class="left-icon" src="/static/icons/green-block-icon-1.svg" />
               <div class="right-text-style">share with us photos you took from the event</div>
             </div>
             <drop @drop="handleDrop">
-              <div class="white-cube drop" >
+              <div class="white-cube drop">
                 <div class="border-cube">
                   <div class="title-text-drag-and-drop">Drag & Drop</div>
                   <div class="or-section">\\ Or \\</div>
@@ -145,27 +126,28 @@
           </div>
         </div>
       </div>
-      <div v-if="campaign && campaign.visibleSettings.showSharingOption" class="lets_share_block" >
+      <div v-if="campaign && campaign.visibleSettings.showSharingOption" class="lets_share_block">
         <div class="lets_share_text">Let's share all this fun :)</div>
-        <sharing-button-group
-          class="sharing-button-group-wrapper"
-          :copyLink="true"
-        ></sharing-button-group>
+        <sharing-button-group class="sharing-button-group-wrapper" :copyLink="true"></sharing-button-group>
       </div>
-      <div style="color:#fff" class="ml-50" >last block</div>
+      <div style="color: #fff" class="ml-50">last block</div>
     </div>
     <div class="text-center logo maryoku_provided_by" @click="gotoWeb">
-      <span class="mr-10">Provided by   </span>
-      <img  :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-      <span class="mb-10">&#169</span>
+      <span class="mr-10">Provided by </span>
+      <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
+      <!-- <span class="mb-10">&#169</span> -->
     </div>
     <div class="landing-footer">
       <div class="landing-footer-item">
         <md-button
           @click="scrollToTop()"
-          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default mt-40">
+          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default mt-40"
+        >
           <span>
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Requirements/Asset+49.svg" class="upward-button" />
+            <img
+              src="https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Requirements/Asset+49.svg"
+              class="upward-button"
+            />
           </span>
         </md-button>
       </div>
@@ -176,7 +158,7 @@
 import CalendarEvent from "@/models/CalendarEvent";
 import Feedback from "@/models/Feedback";
 import Campaign from "@/models/Campaign";
-import ViewPresentation from '@/pages/app/Campaign/components/ViewPresentation';
+import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
@@ -187,7 +169,7 @@ import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import S3Service from "@/services/s3.service";
-import { Drag, Drop } from 'vue-drag-drop';
+import { Drag, Drop } from "vue-drag-drop";
 
 export default {
   components: {
@@ -201,7 +183,7 @@ export default {
     ViewPresentation,
     Drag,
     Drop,
-},
+  },
 
   data() {
     return {
@@ -212,7 +194,7 @@ export default {
       originalContent: {},
       info: {},
       images: [],
-      showFeedbackMessageSuccessful : false,
+      showFeedbackMessageSuccessful: false,
     };
   },
   created() {
@@ -280,8 +262,8 @@ export default {
     },
     sendFeedback() {
       let email = this.$route.query.email;
-      if(email === undefined){
-        email = "test@gmail.com"
+      if (email === undefined) {
+        email = "test@gmail.com";
       }
       const feedbackQuestions = [];
       this.campaign.feedbackQuestions.forEach((item) => {
@@ -351,7 +333,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.paper-layout{
+.paper-layout {
   width: 1520px;
   height: auto;
   margin: 80px auto;
@@ -401,17 +383,15 @@ export default {
       box-shadow: none;
     }
   }
-
 }
 
-
-.landing-footer{
+.landing-footer {
   width: 100%;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background-color: #fff;
   height: 126.3px;
 }
-.landing-footer-item{
+.landing-footer-item {
   width: 1520px;
   margin: 40px auto;
 }
@@ -420,15 +400,15 @@ export default {
   height: 15px;
   margin-bottom: 5px;
 }
-.maryoku_provided_by{
+.maryoku_provided_by {
   margin: 102px 0 92px 0;
 }
-.lets_share_block{
+.lets_share_block {
   width: 520px;
   height: 120px;
   margin: 100px auto;
 }
-.lets_share_text{
+.lets_share_text {
   font-size: 30px;
   font-weight: 800;
   font-stretch: normal;
@@ -438,20 +418,20 @@ export default {
   text-align: center;
   color: #050505;
 }
-.green-block-wrapper{
+.green-block-wrapper {
   background-color: rgba(87, 242, 195, 0.23);
   height: 312px;
   margin-bottom: 273px;
 }
-.icon-and-text{
+.icon-and-text {
   display: flex;
   align-items: start;
 }
-.left-icon{
+.left-icon {
   margin-right: 20px;
   width: 36px;
 }
-.right-text-style{
+.right-text-style {
   text-transform: uppercase;
   font-size: 22px;
   font-weight: 800;
@@ -462,7 +442,7 @@ export default {
   letter-spacing: normal;
   text-align: left;
 }
-.white-cube{
+.white-cube {
   width: 1200px;
   height: 303px;
   background-color: #fff;
@@ -471,10 +451,10 @@ export default {
   border-radius: 3px;
   box-shadow: 0 0 41px 0 rgba(0, 0, 0, 0.08);
 }
-.margin-left-style-first-block{
+.margin-left-style-first-block {
   margin-left: 113px;
 }
-.title-text-drag-and-drop{
+.title-text-drag-and-drop {
   font-size: 22px;
   font-weight: 800;
   font-stretch: normal;
@@ -485,7 +465,7 @@ export default {
   margin-top: 50px;
   color: #707070;
 }
-.or-section{
+.or-section {
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -495,7 +475,7 @@ export default {
   text-align: center;
   color: #707070;
 }
-.upload-text-area{
+.upload-text-area {
   width: 136px;
   font-size: 16px;
   font-weight: 800;
@@ -504,19 +484,19 @@ export default {
   text-decoration: underline;
   margin: 20px auto;
 }
-.right-white-cube-item{
+.right-white-cube-item {
   margin: 23px 0 0 67px;
   font-size: 16px;
   font-weight: 600;
   color: #050505;
 }
-.underline-red-text{
+.underline-red-text {
   font-size: 16px;
   font-weight: 600;
   color: #f51355;
   text-decoration: underline;
 }
-.red-text-margin{
+.red-text-margin {
   margin: 34px 0 0 67px;
 }
 .header-cover-image {
@@ -686,8 +666,9 @@ export default {
         position: static;
       }
     }
-  }}
-.yellow-button-send-feedback{
+  }
+}
+.yellow-button-send-feedback {
   margin-top: 63px;
   width: 281px;
   height: 61px;

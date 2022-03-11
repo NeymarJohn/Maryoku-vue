@@ -1,4 +1,4 @@
-import  Vue from "vue";
+import Vue from "vue";
 import VueRouter from "vue-router";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -47,15 +47,15 @@ import authService from "@/services/auth.service";
 
 import "./assets/scss/main.scss";
 import dateUtil from "./utils/date.util";
-import stringUtil from "./utils/string.util"
+import stringUtil from "./utils/string.util";
 import VueYoutube from "vue-youtube";
 
 import helper from "@/utils/helperFunction";
 import moment from "moment";
-import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
-Vue.component('v-select', vSelect)
+Vue.component("v-select", vSelect);
 require("vue-tour/dist/vue-tour.css");
 
 const VueScrollTo = require("vue-scrollto");
@@ -69,7 +69,7 @@ Vue.use(VueSwal);
 Vue.use(VueLazyLoad);
 Vue.use(VueGmaps, {
   key: process.env.GOOGLE_API_KEY || "AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA",
-  libraries: ["places"],
+  libraries: ["places"]
 });
 Vue.use(VueScrollTo);
 Vue.use(VueYoutube);
@@ -81,8 +81,8 @@ Vue.use(VueTimeago, {
   locale: "en", // Default locale
   locales: {
     "zh-CN": require("date-fns/locale/zh_cn"),
-    ja: require("date-fns/locale/ja"),
-  },
+    ja: require("date-fns/locale/ja")
+  }
 });
 Vue.use(VueTimepicker);
 Vue.use(vueSignature);
@@ -94,7 +94,7 @@ const router = new VueRouter({
   linkExactActiveClass: "nav-item active",
   scrollBehavior(to, from, savedPosition) {
     return { x: 0, y: 0 };
-  },
+  }
 });
 
 router.beforeEach((to, from, next) => {
@@ -115,7 +115,7 @@ router.beforeEach((to, from, next) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user.currentUserType === "vendor") {
       next("/vendor/profile/settings");
-    } else if (user.currentUserType === 'guest') {
+    } else if (user.currentUserType === "guest") {
       next("/signedIn");
     } else {
       if (user.currentTenant && user.tenants.indexOf(user.currentTenant) >= 0) {
@@ -152,14 +152,14 @@ router.afterEach((to, from) => {
 Object.defineProperty(Vue.prototype, "$Chartist", {
   get() {
     return this.$root.Chartist;
-  },
+  }
 });
 
 // global library setup
 Object.defineProperty(Vue.prototype, "$authService", {
   get() {
     return authService;
-  },
+  }
 });
 
 /* axios.interceptors.response.use(function (response) {
@@ -188,7 +188,7 @@ Vue.use(VueGtm, {
   enabled: process.env.NODE_ENV === "production", // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
   debug: process.env.NODE_ENV !== "production", // Whether or not display console logs debugs (optional)
   vueRouter: router, // Pass the router instance to automatically sync with router (optional)
-  ignoredViews: [], // If router, you can exclude some routes name (case insensitive) (optional)
+  ignoredViews: [] // If router, you can exclude some routes name (case insensitive) (optional)
 });
 
 Vue.use(VueSlideoutPanel);
@@ -196,7 +196,7 @@ Vue.use(VueSlideoutPanel);
 if (process.env.NODE_ENV === "production") {
   Vue.use(Tawk, {
     tawkSrc: "https://embed.tawk.to/5cd93e082846b90c57ae3644/default",
-    enabled: true,
+    enabled: true
   });
 }
 
@@ -205,13 +205,13 @@ Vue.use(VueCookies);
 Vue.directive("focus", {
   inserted: function (el) {
     el.focus();
-  },
+  }
 });
 
 Vue.directive("select-all", {
   inserted: function (el) {
     el.setSelectionRange(el.value.length, el.value.length);
-  },
+  }
 });
 
 // Vue.directive('click-outside', {
@@ -229,26 +229,27 @@ Vue.directive("select-all", {
 // })
 
 Vue.filter("withComma", function (value, type = null) {
-  if (typeof value == 'string') {
-    value = Number(value)
+  if (typeof value == "string") {
+    value = Number(value);
   }
-  return value ? type != Number ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) :
-    value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
-
+  return value
+    ? type != Number
+      ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    : 0;
 });
 Vue.filter("formatQty", function (value) {
-  if (!value) return ""
-  if (typeof value == 'string') {
-    value = Number(value)
+  if (!value) return "";
+  if (typeof value == "string") {
+    value = Number(value);
   }
   return value ? value.toLocaleString() : 0;
-
 });
-Vue.filter('date', function (value, format) {
-  if (!value) return ""
+Vue.filter("date", function (value, format) {
+  if (!value) return "";
 
   return moment(value).format(format);
-})
+});
 
 Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;
@@ -261,15 +262,17 @@ axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
-axios.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
-  // console.log(response)
-  return response;
-}, function (error) {
-  return Promise.reject(error);
-});
-
+axios.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    // console.log(response)
+    return response;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 Number.prototype.padStart = function (size, theChar) {
   var s = String(this);
@@ -290,12 +293,12 @@ String.prototype.padStart = function (size, theChar) {
 Object.defineProperty(Vue.prototype, "$auth", {
   get() {
     return auth;
-  },
+  }
 });
 Object.defineProperty(Vue.prototype, "$dateUtil", {
   get() {
     return dateUtil;
-  },
+  }
 });
 Object.defineProperty(Vue.prototype, "$stringUtil", {
   get() {
@@ -305,19 +308,19 @@ Object.defineProperty(Vue.prototype, "$stringUtil", {
 Object.defineProperty(Vue.prototype, "$helper", {
   get() {
     return helper;
-  },
+  }
 });
 Object.defineProperty(Vue.prototype, "$authHeader", {
   get() {
     return authHeader().Authorization;
-  },
+  }
 });
 
 store.dispatch("common/fetchAllCategories");
 Vue.mixin({
   data: () => ({
     windowWidth: 0,
-    windowHeight: 0,
+    windowHeight: 0
   }),
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -330,16 +333,16 @@ Vue.mixin({
     handleResize() {
       this.windowWidth = window.innerWidth;
       this.windowHeight = window.innerHeight;
-    },
-  },
+    }
+  }
 });
 
 new Vue({
   el: "#app",
-  render: h => h(App),
-  router,
-  store,
   data: () => ({
-    Chartist: Chartist,
+    Chartist: Chartist
   }),
+  render: (h) => h(App),
+  router,
+  store
 });

@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class EventCommentComponent extends Model {
-  resource () {
-    return 'commentComponents'
+  resource() {
+    return "commentComponents";
   }
 }

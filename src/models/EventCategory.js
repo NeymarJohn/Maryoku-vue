@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class EventCategory extends Model {
-  resource () {
-    return 'event/categories'
+  resource() {
+    return "event/categories";
   }
 }

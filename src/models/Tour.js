@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class Tour extends Model {
-  resource () {
-    return 'tours'
+  resource() {
+    return "tours";
   }
 }

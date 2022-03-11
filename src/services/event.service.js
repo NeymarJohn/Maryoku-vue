@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "../store";
 const { SERVER_URL, HOST_URL } = {
   SERVER_URL: process.env.SERVER_URL,
-  HOST_URL: process.env.HOST_URL,
+  HOST_URL: process.env.HOST_URL
 };
 
 const API_URL = `${SERVER_URL}`;
@@ -27,13 +27,10 @@ class EventService {
   getFirstTaskLink(event) {
     if (event.conceptProgress !== 100 && event.eventType && event.eventType.hasConcept) {
       return `/events/${event.id}/booking/concept`;
-
     } else if (event.timelineProgress !== 100) {
       return `/events/${event.id}/booking/timeline`;
-
     } else if (event.campaignProgress !== 100) {
       return `/events/${event.id}/booking/campaign`;
-
     } else {
       const workingComponent = `/events/${event.id}/booking/timeline`;
       if (event.components) {
@@ -61,14 +58,14 @@ class EventService {
         currency: "USD",
         eventType: editingEvent.eventType,
         editable: true,
-        guestType: editingEvent.guestType ? editingEvent.guestType.name : "",
+        guestType: editingEvent.guestType ? editingEvent.guestType.name : ""
       })
         .save()
-        .then(response => {
+        .then((response) => {
           localStorage.removeItem("event");
           resolve(response);
         })
-        .catch(error => {
+        .catch((error) => {
           reject(error);
         });
     });

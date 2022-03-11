@@ -1,9 +1,7 @@
-import AuthService from '../../services/auth.service';
+import AuthService from "../../services/auth.service";
 
-const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user
-  ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null };
+const user = JSON.parse(localStorage.getItem("user"));
+const initialState = user ? { status: { loggedIn: true }, user } : { status: { loggedIn: false }, user: null };
 
 export default {
   namespaced: true,
@@ -11,50 +9,49 @@ export default {
   actions: {
     login({ commit }, user) {
       return AuthService.login(user).then(
-        user => {
-          commit('loginSuccess', user);
+        (user) => {
+          commit("loginSuccess", user);
           return Promise.resolve(user);
         },
-        error => {
-          commit('loginFailure');
+        (error) => {
+          commit("loginFailure");
           return Promise.reject(error);
         }
       );
     },
     logout({ commit }) {
       return new Promise(async (resolve) => {
-          const res = await AuthService.logout()
-          console.log('logout.res', res)
-          commit('logout');
-          resolve()
-      })
-
+        const res = await AuthService.logout();
+        console.log("logout.res", res);
+        commit("logout");
+        resolve();
+      });
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
-        response => {
-          commit('registerSuccess');
+        (response) => {
+          commit("registerSuccess");
           return Promise.resolve(response.data);
         },
-        error => {
-          commit('registerFailure');
+        (error) => {
+          commit("registerFailure");
           return Promise.reject(error);
         }
       );
     },
     updateProfile({ commit }, userData) {
-      AuthService.updateProfile(userData).then(userProfile => {
-        commit('updateUserData', userProfile)
-      })
+      AuthService.updateProfile(userData).then((userProfile) => {
+        commit("updateUserData", userProfile);
+      });
     },
     checkToken({ commit }, token) {
       return AuthService.checkToken(token).then(
-        user => {
-          commit('loginSuccess', user);
+        (user) => {
+          commit("loginSuccess", user);
           return Promise.resolve(user);
         },
-        error => {
-          commit('loginFailure');
+        (error) => {
+          commit("loginFailure");
           return Promise.reject(error);
         }
       );
@@ -70,7 +67,7 @@ export default {
       state.user = null;
     },
     logout(state) {
-      console.log('commit.logout')
+      console.log("commit.logout");
       state.status.loggedIn = false;
       state.user = null;
     },
@@ -81,7 +78,7 @@ export default {
       state.status.loggedIn = false;
     },
     updateUserData(state, userData) {
-      state.user = { ...state.user, ...userData }
+      state.user = { ...state.user, ...userData };
     }
   },
   getters: {
@@ -89,7 +86,7 @@ export default {
       return state.status.loggedIn;
     },
     currentUser: (state, gettters) => {
-      return state.user
+      return state.user;
     }
   }
 };

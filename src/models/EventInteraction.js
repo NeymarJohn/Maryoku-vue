@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class EventInteraction extends Model {
-  resource () {
-    return 'interactions'
+  resource() {
+    return "interactions";
   }
 }

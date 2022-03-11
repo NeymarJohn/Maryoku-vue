@@ -1,7 +1,7 @@
-import Model from './Model'
+import Model from "./Model";
 
 export default class CalendarEventQuery extends Model {
-  resource () {
-    return 'events?q='
+  resource() {
+    return "events?q=";
   }
 }

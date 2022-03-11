@@ -102,14 +102,14 @@ export default {
   name: "event-modal-vendor",
   components: {
     Modal,
-    VueElementLoading,
+    VueElementLoading
   },
   props: {
     vendorItem: Object,
     componentIndex: Number,
     vendorIndex: Number,
     shouldUpdate: Boolean,
-    updateVendor: Function,
+    updateVendor: Function
   },
   data() {
     return {
@@ -121,11 +121,11 @@ export default {
         email: null,
         contactPerson: null,
         phone: null,
-        cost: null,
+        cost: null
       },
       modelValidations: {
         name: {
-          required: true,
+          required: true
         },
         email: {},
         contactPerson: {},
@@ -133,11 +133,11 @@ export default {
         cost: {
           required: true,
           min_value: 0,
-          max_value: 100000,
-        },
+          max_value: 100000
+        }
       },
       selectedFromVendors: true, // for disabled/enabled inputs' state
-      changedVendorItem: null,
+      changedVendorItem: null
     };
   },
   watch: {
@@ -150,7 +150,7 @@ export default {
       this.form.email = "vendorMainEmail" in val ? val.vendorMainEmail : "";
       this.form.phone = "vendorMainPhoneNumber" in val ? val.vendorMainPhoneNumber : "";
       this.form.cost = "cost" in val ? val.cost : "";
-    },
+    }
   },
   methods: {
     noticeModalHide() {
@@ -175,13 +175,13 @@ export default {
               Vue.set(store.vendors, this.vendorIndex, {
                 id: this.form.id,
                 vendorId: vendorId,
-                cost: +this.form.cost,
+                cost: +this.form.cost
               });
               if (this.shouldUpdate) {
                 this.$props.updateVendor(
                   store,
                   { id: this.form.id, vendorId: vendorId, cost: +this.form.cost },
-                  this.vendorIndex,
+                  this.vendorIndex
                 );
               }
 
@@ -201,7 +201,7 @@ export default {
                 vendorCategory: "HARDCODED DATA FROM EVENT",
                 vendorCancellationPolicy: "HARDCODED DATA FROM EVENT",
                 vendorCity: "HARDCODED DATA FROM EVENT",
-                vendorRefundPolicy: "HARDCODED DATA FROM EVENT",
+                vendorRefundPolicy: "HARDCODED DATA FROM EVENT"
               });
               newVendor
                 .save()
@@ -214,13 +214,13 @@ export default {
                     Vue.set(store.vendors, this.vendorIndex, {
                       id: this.form.id,
                       vendorId: vendorId,
-                      cost: +this.form.cost,
+                      cost: +this.form.cost
                     });
                     if (this.shouldUpdate) {
                       this.$props.updateVendor(
                         store,
                         { id: this.form.id, vendorId: vendorId, cost: +this.form.cost },
-                        this.vendorIndex,
+                        this.vendorIndex
                       );
                     }
 
@@ -242,7 +242,7 @@ export default {
 
               store.vendors.push({
                 vendorId: vendorId,
-                cost: +this.form.cost,
+                cost: +this.form.cost
               });
               if (this.shouldUpdate) {
                 this.$props.updateVendor(store, { vendorId: vendorId, cost: +this.form.cost }, this.vendorIndex);
@@ -264,7 +264,7 @@ export default {
                 vendorCategory: "HARDCODED DATA FROM EVENT",
                 vendorCancellationPolicy: "HARDCODED DATA FROM EVENT",
                 vendorCity: "HARDCODED DATA FROM EVENT",
-                vendorRefundPolicy: "HARDCODED DATA FROM EVENT",
+                vendorRefundPolicy: "HARDCODED DATA FROM EVENT"
               });
               newVendor
                 .save()
@@ -276,7 +276,7 @@ export default {
 
                     store.vendors.push({
                       vendorId: vendorId,
-                      cost: +this.form.cost,
+                      cost: +this.form.cost
                     });
                     if (this.shouldUpdate) {
                       this.$props.updateVendor(store, { vendorId: vendorId, cost: +this.form.cost }, this.vendorIndex);
@@ -306,7 +306,7 @@ export default {
         email: null,
         contactPerson: null,
         phone: null,
-        cost: null,
+        cost: null
       };
     },
     setVendor(selectedName) {
@@ -333,19 +333,19 @@ export default {
         icon: "warning",
         horizontalAlign: "center",
         verticalAlign: "top",
-        type: "danger",
+        type: "danger"
       });
     },
     mdOpened: function () {
       this.form.name += " ";
       this.form.name = this.form.name.substring(0, this.form.name.length - 1);
-    },
+    }
   },
   computed: {
     vendorsList() {
       return this.$store.state.vendorsList.map((val) => val.vendorDisplayName);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss">
