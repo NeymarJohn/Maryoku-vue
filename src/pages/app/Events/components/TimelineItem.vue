@@ -335,12 +335,19 @@ export default {
     },
     removeItem(editItem) {
       Swal.fire({
-        title: "Are you sure want to delete this item?",
+        title: "Are you sure you want to say goodbye to your changes?",
+        text: "The changes you made will not be saved,\n" +
+            "so you’ll go back to the previous version",
         showCancelButton: true,
         cancelButtonClass: "md-button md-danger",
         confirmButtonClass: "md-button md-success",
         confirmButtonText: "Yes I'm sure",
         buttonsStyling: false,
+        customClass: {
+            popup:'swal-alert-container',
+            header: 'swal-alert-header',
+            htmlContainer: 'swal-alert-html',
+        }
       })
         .then(result => {
           if (result.value === true) {

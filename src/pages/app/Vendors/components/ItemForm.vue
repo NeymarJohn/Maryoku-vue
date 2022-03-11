@@ -1,5 +1,5 @@
 <template>
-  <div class="discount-form">
+  <div class="discount-form" :class="customClass">
     <div class="service-item" v-if="!isEditing">
       <div class="flex-1">
         <img :src="`${$iconURL}${icons[field]}`" style="width: 20px" class="mr-10" />
@@ -75,6 +75,10 @@ export default {
     nonMaryoku:{
       type: Boolean,
       default: false,
+    },
+    customClass: {
+      type: String,
+      default: '',
     }
   },
     data() {
@@ -206,5 +210,8 @@ export default {
       font-size: 16px;
     }
   }
+}
+.negotiation{
+    z-index: 9999;
 }
 </style>

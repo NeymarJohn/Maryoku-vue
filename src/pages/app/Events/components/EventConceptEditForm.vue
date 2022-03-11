@@ -93,15 +93,15 @@
       </div>
 
       <div class="form-group">
-          <label>You can easily Design with canva</label>
-          <span>
-            <img class="ml-10" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip class="w-max-350">
-              <div class="font-size-14 tab-tooltip">
-                  <p>{{ canvaTooltip }}</p>
-              </div>
-            </md-tooltip>
-          </span>
+        <label>You can easily Design with canva</label>
+        <span>
+          <img class="ml-10" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+          <md-tooltip class="w-max-350">
+            <div class="font-size-14 tab-tooltip">
+              <p>{{ canvaTooltip }}</p>
+            </div>
+          </md-tooltip>
+        </span>
       </div>
 
       <div class="images-list new-concept">
@@ -119,17 +119,38 @@
           <div :class="`images-list__item`" v-for="indx in 5" :key="indx">
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
-
-              <span v-if="!uploadImageData[indx - 1]" data-design-type="A4Document" data-button-size="default" data-button-theme="default" data-api-key="no5x5PRx6hMNshFZlrRpevKJ"
-                    class="canva-design-button"
-                    style="display:none;position: absolute;left:0;right:0;width: 180px;margin:0 auto;top: 15%;color:#050505;background: white;border: 1px solid #050505;z-index: 10">Design on Canva</span>
-              <img class="concept-image" v-if="uploadImageData[indx - 1]" :src="`${uploadImageData[indx - 1]}`" @click="uploadPhoto(indx)"/>
+              <span
+                v-show="!uploadImageData[indx - 1]"
+                data-design-type="A4Document"
+                data-button-size="default"
+                data-button-theme="default"
+                data-api-key="no5x5PRx6hMNshFZIrRpevKJ"
+                class="canva-design-button"
+                style="
+                  display: none;
+                  position: absolute;
+                  left: 0;
+                  right: 0;
+                  width: 180px;
+                  margin: 0 auto;
+                  top: 15%;
+                  color: #050505;
+                  background: white;
+                  border: 1px solid #050505;
+                  z-index: 10;
+                "
+                >Design on Canva</span
+              >
+              <img
+                class="concept-image"
+                v-if="uploadImageData[indx - 1]"
+                :src="`${uploadImageData[indx - 1]}`"
+                @click="uploadPhoto(indx)"
+              />
               <div v-else class="image-selector" @click="uploadPhoto(indx)">
                 <div :class="indx === 2 || indx === 5 ? 'mt-2' : 'mt-1'">
                   <div class="font-size-14">Or</div>
-                  <div class="color-black-middle font-size-14">
-                   Upload Photo
-                  </div>
+                  <div class="color-black-middle font-size-14">Upload Photo</div>
                 </div>
               </div>
               <input
@@ -239,7 +260,7 @@ export default {
       3: false,
       4: false,
     },
-    canvaTooltip: 'Access high quality images to convey your inspiration using our integration to Canva',
+    canvaTooltip: "Access high quality images to convey your inspiration using our integration to Canva",
   }),
   methods: {
     addTag(newTag, tagIndex) {
@@ -251,51 +272,51 @@ export default {
       this.taggingOptions[index].selected = false;
       this.editConcept.tags.splice(selectedIndex, 1);
     },
-    uploadPhoto(idx){
-      let file_el = document.getElementById('file-' + idx);
-      console.log('uploadPhoto', file_el, idx);
-      file_el.onchange = async _ => {
-          let files = event.target.files || event.dataTransfer.files;
-          if (!files.length) return;
-          if (files[0].size > 1024 * 1024 * 5) {
-              Swal.fire({
-                  title: "File is too big",
-                  text: `Sorry, this miximum file size is 5M`,
-                  showCancelButton: false,
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonClass: "md-button md-success confirm-btn-bg ",
-                  cancelButtonClass: "md-button md-danger cancel-btn-bg",
-                  confirmButtonText: "Yes, delete it!",
-                  buttonsStyling: false,
-              }).then((result) => {});
-              return;
-          }
-          let reader = new FileReader();
-          if (event.target.name) {
-              const itemIndex = event.target.getAttribute("data-fileIndex");
-              let isLargeFile = false;
-              this.uploadImages[itemIndex] = files[0];
+    uploadPhoto(idx) {
+      let file_el = document.getElementById("file-" + idx);
+      file_el.onchange = async (_) => {
+        let files = event.target.files || event.dataTransfer.files;
+        if (!files.length) return;
+        if (files[0].size > 1024 * 1024 * 5) {
+          Swal.fire({
+            title: "File is too big",
+            text: `Sorry, this miximum file size is 5M`,
+            showCancelButton: false,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "md-button md-success confirm-btn-bg ",
+            cancelButtonClass: "md-button md-danger cancel-btn-bg",
+            confirmButtonText: "Yes, delete it!",
+            buttonsStyling: false,
+          }).then((result) => {});
+          return;
+        }
+        let reader = new FileReader();
+        if (event.target.name) {
+          const itemIndex = event.target.getAttribute("data-fileIndex");
+          let isLargeFile = false;
+          this.uploadImages[itemIndex] = files[0];
 
-              // getting File information
-              const extension = files[0].type.split("/")[1];
-              const fileName = new Date().getTime() + "";
-              const dirName = "concepts";
-              const fileInfo = {
-                  originName: files[0].name,
-                  name: `${fileName}`,
-                  url: `${process.env.S3_URL}${dirName}/${fileName}.${extension}`,
-              };
-              this.editConcept.images[itemIndex] = fileInfo;
+          // getting File information
+          const extension = files[0].type.split("/")[1];
+          const fileName = new Date().getTime() + "";
+          const dirName = "concepts";
+          const fileInfo = {
+            originName: files[0].name,
+            name: `${fileName}`,
+            url: `${process.env.S3_URL}${dirName}/${fileName}.${extension}`,
+          };
+          this.editConcept.images[itemIndex] = fileInfo;
 
-              console.log("file information", fileInfo);
-              this.uploadImageData[itemIndex] = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
-              this.uploadingStatus[itemIndex] = true;
-              S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
-                  this.uploadingStatus[itemIndex] = false;
-              });
-          }
-      }
+          const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
+          this.$set(this.uploadImageData, itemIndex, imageData);
+          this.$set(this.uploadingStatus, itemIndex, true);
+          S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
+            this.uploadingStatus[itemIndex] = false;
+            this.$set(this.uploadingStatus, itemIndex, false);
+          });
+        }
+      };
       file_el.click();
     },
     async onFileChange(event) {
@@ -332,7 +353,6 @@ export default {
         };
         this.editConcept.images[itemIndex] = fileInfo;
 
-        console.log("file information", fileInfo);
         this.uploadImageData[itemIndex] = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
         this.uploadingStatus[itemIndex] = true;
         S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
@@ -352,7 +372,6 @@ export default {
 
       eventConcept.imageData = this.uploadImageData;
       // for (let i in Object.keys(this.uploadImageData)) {
-      //   console.log(evenConcept.images[i])
       //   if (evenConcept.images[i])
       //     evenConcept.images[i].url = this.uploadImageData[i]
       // }
@@ -368,8 +387,12 @@ export default {
         this.uploadImageData[i] = `${image.url ? image.url : ""}`;
       });
     }
-      (function(c,a,n){var w=c.createElement(a),s=c.getElementsByTagName(a)[0];
-          w.src=n;s.parentNode.insertBefore(w,s);})(document,'script','https://sdk.canva.com/designbutton/v2/api.js');
+    (function (c, a, n) {
+      var w = c.createElement(a),
+        s = c.getElementsByTagName(a)[0];
+      w.src = n;
+      s.parentNode.insertBefore(w, s);
+    })(document, "script", "https://sdk.canva.com/designbutton/v2/api.js");
   },
   mounted() {
     this.taggingOptions.forEach((item, index) => {
@@ -377,7 +400,6 @@ export default {
         this.taggingOptions[index].selected = true;
       }
     });
-
   },
   computed: {
     canSave() {

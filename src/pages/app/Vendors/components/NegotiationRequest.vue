@@ -1,5 +1,5 @@
 <template>
-    <div class="negotiation-modal px-30 py-20">
+    <div class="w-min-700 px-30 py-20">
         <img v-if="icon" :src="`${$iconURL}${icon}`">
         <h3 class="color-vendor font-bold-extra">{{title}}</h3>
         <p>{{subTitle}}</p>
@@ -82,8 +82,7 @@
             :hours="hours"
             :minutes="mins"
             :seconds="seconds"
-            :bottom-content="processed === 0 ? 'Until offer expires' : null"
-            :top-content="processed !== 0 ? 'This offer will expire in' : null"
+            :top-content="'This offer will expire in'"
         />
     </div>
 </template>

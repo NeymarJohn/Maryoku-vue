@@ -87,7 +87,6 @@
 
 <script>
 import { Modal } from "@/components";
-import { v4 as uuidv4 } from 'uuid';
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import S3Service from "@/services/s3.service";
@@ -116,9 +115,7 @@ export default {
   },
   computed: {
     images() {
-      return this.files
-        .filter((file) => file.type.includes("image"))
-        .map((file) => ({ src: file.url }));
+      return this.files.map((file) => ({ src: file.url }));
     }
   },
   methods: {
@@ -130,11 +127,11 @@ export default {
     },
     async fileAdded(file) {
       if (this.files.length === this.dropzoneOptions.maxFiles) return;
-      const fileName = uuidv4();
+      let fileName = new Date().getTime();
       S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then((fileURL) => {
         this.isLoading = false;
         if (this.files.length === this.dropzoneOptions.maxFiles) return;
-        this.files.push({ name: file.name, type: file.type, url: fileURL });
+        this.files.push({ name: file.name, url: fileURL });
       });
     },
     deleteFile(fileURL) {

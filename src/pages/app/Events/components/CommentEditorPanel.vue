@@ -21,7 +21,7 @@
         class="comments-list"
         v-if="isOpenCommentListsPane"
         @click="paneClick($event)"
-        :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
+        :style="panelPosition"
       >
         <div style="height:40px; margin-right:25px" class="text-right">
           <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="closeCommentListPane">
@@ -169,7 +169,7 @@ export default {
       return []
     },
     unresolvedComponents() {
-      return this.updatedCommentComponents.filter(item => !item.isResolved);
+      return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
     }
   },
   created() {
@@ -208,27 +208,26 @@ export default {
     },
 
     setEditPanePosition(x, y) {
-      x -= $('.click-capture').offset().left;
-      y -= $('.click-capture').offset().top;
       const deviceWidth = $('.click-capture').width();
-      if (x + 700 > deviceWidth) {
-        this.panelPosition = {
-          x: x - this.ignoreXOffset - 580,
-          y: y
-        };
-      } else {
-        if(x < 0){
-          this.panelPosition = {
-            x: 10,
-            y: y
-          };
-        }else{
-          this.panelPosition = {
-            x: x - this.ignoreXOffset + 40,
-            y: y
-          };
-        }
+
+      if(x > deviceWidth){
+        x = deviceWidth - 20;
       }
+
+      let circleWidth = 25;
+      let circleHeight = 20;
+
+      let editorWidth = 550;
+
+      if (x + editorWidth + circleWidth > deviceWidth) {
+        x = x - editorWidth - circleWidth;
+      }else{
+        x += circleWidth;
+      }
+
+      y -= circleHeight;
+
+      this.panelPosition = {left: `${x}px`, top: `${y}px`};
     },
     toggleEditPane(commentComponent, isEditing) {
       if (isEditing) {
@@ -264,11 +263,13 @@ export default {
             return index;
           }, 0)
         : 0;
-
+        console.log("event",event,event.clientX,event.clientY)
+        let letfOffset = $(".click-capture").offset().left;
+        let topOffset = $(".click-capture").offset().top;
       const newComentComponent = {
         dateTime: Date.now(),
-        positionX: event.clientX - 80,
-        positionY: event.clientY - 100 + window.scrollY,
+        positionX: event.clientX - letfOffset,
+        positionY: event.clientY - topOffset + window.scrollY,
         index: maxIndex + 1,
         isEditing: false,
         url: this.url ? this.url : this.$route.path,
@@ -278,14 +279,14 @@ export default {
       // this.addCommentComponent({
       //   dateTime: Date.now(),
       //   positionX: event.clientX - 80,
-      //   positionY: event.clientY - 100 + window.scrollY,
+      //   positionY: event.clientY - topOffset + window.scrollY,
       //   index: maxIndex + 1,
       //   isEditing: false,
       //   url: this.$route.path
       // }).then(commentComponent => {
       //   this.selectedCommentComponent = commentComponent
       // });
-      this.setEditPanePosition(event.clientX - 80, event.clientY - 100 + window.scrollY )
+      this.setEditPanePosition(event.clientX - letfOffset, event.clientY - topOffset + window.scrollY )
       this.openEditor()
       this.mostRecentClickCoordinates = {
         x: event.clientX,

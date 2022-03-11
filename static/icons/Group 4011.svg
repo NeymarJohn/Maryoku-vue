@@ -1,0 +1,23 @@
+<svg data-name="Group 4011" xmlns="http://www.w3.org/2000/svg" width="45.289" height="36.579" viewBox="0 0 45.289 36.579">
+    <g data-name="Rectangle 310">
+        <rect data-name="Rectangle 314" width="45.289" height="36.579" rx="2.632" style="fill:none"/>
+        <rect data-name="Rectangle 315" width="40.934" height="32.225" rx=".987" transform="translate(2.177 2.177)" style="stroke:#050505;stroke-linejoin:round;stroke-width:3px;fill:none"/>
+    </g>
+    <g data-name="Ellipse 48" transform="translate(6.967 5.226)">
+        <circle data-name="Ellipse 52" cx="12.193" cy="12.193" r="12.193" style="fill:none"/>
+        <circle data-name="Ellipse 53" cx="10.016" cy="10.016" r="10.016" transform="translate(2.177 2.177)" style="stroke:#050505;stroke-linejoin:round;stroke-width:3px;fill:none"/>
+    </g>
+    <g data-name="Ellipse 49" transform="translate(13.935 12.193)">
+        <circle data-name="Ellipse 54" cx="5.226" cy="5.226" r="5.226" style="fill:none"/>
+        <circle data-name="Ellipse 55" cx="3.048" cy="3.048" r="3.048" transform="translate(2.177 2.177)" style="stroke:#050505;stroke-linejoin:round;stroke-width:3px;fill:none"/>
+    </g>
+    <g data-name="Ellipse 50" transform="translate(34.837 26.128)">
+        <circle data-name="Ellipse 56" cx="1.742" cy="1.742" r="1.742" style="fill:#050505"/>
+        <circle data-name="Ellipse 57" cx=".435" cy=".435" r=".435" transform="translate(1.306 1.306)" style="fill:#050505"/>
+    </g>
+    <g data-name="Ellipse 51" transform="translate(29.612 26.128)">
+        <circle data-name="Ellipse 58" cx="1.742" cy="1.742" r="1.742" style="fill:#050505"/>
+        <circle data-name="Ellipse 59" cx=".435" cy=".435" r=".435" transform="translate(1.306 1.306)" style="fill:#050505"/>
+    </g>
+    <path data-name="Path 974" d="M692.748 407.614V423.1l-7.578 4.419" transform="translate(-657.91 -404.131)" style="stroke-linecap:round;stroke:#050505;stroke-linejoin:round;stroke-width:3px;fill:none"/>
+</svg>

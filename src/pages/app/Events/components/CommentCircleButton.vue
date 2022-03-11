@@ -39,7 +39,7 @@ export default {
       type: [Object, String]
     },
     commentComponent: {
-      type: [Object]
+      type: [Object, Array]
     },
     selectedComponet: {
       type: [Object]

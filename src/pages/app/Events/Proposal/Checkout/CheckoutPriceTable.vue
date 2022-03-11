@@ -1,5 +1,6 @@
 <template>
-  <collapse-panel :defaultStatus="false" class="checkout-price-table">
+  <collapse-panel :defaultStatus="false" class="checkout-price-table"
+                  :spacing="windowWidth>960?50:20">
     <template slot="header">
       <div class="price-header">
         <div class="d-flex align-center">
@@ -104,6 +105,7 @@ export default {
     }
     .element-price {
       text-align: left;
+      margin-left: 10px;
       width: 120px;
     }
   }
@@ -116,6 +118,13 @@ export default {
   }
   .element-price {
     text-align: right;
+  }
+}
+@media (max-width: 500px) {
+  .checkout-price-table {
+    .price-header {
+      padding-right:50px;
+    }
   }
 }
 </style>

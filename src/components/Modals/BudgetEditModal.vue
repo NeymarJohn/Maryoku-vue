@@ -47,7 +47,7 @@
     </template>
     <template slot="footer">
       <md-button class="md-default md-simple cancel-btn" @click="close">Cancel</md-button>
-      <md-button class="md-rose add-category-btn" :class="{ disabled: !updateAvailable }" @click="updateBudget"
+      <md-button class=" add-category-btn" :class="{ disabled: !updateAvailable }" @click="updateBudget"
         >Save</md-button
       >
     </template>
@@ -71,7 +71,6 @@ export default {
     },
   },
   created() {
-    // this.newBudget = this.event.totalBudget;
     this.newBudget = `${this.event.totalBudget}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
   methods: {
@@ -102,3 +101,8 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.add-category-btn {
+  background-color: #f51355 !important;
+}
+</style>

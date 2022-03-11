@@ -571,7 +571,7 @@ export default {
     display: flex;
     margin-top: 38px;
 }
-.view-presentation-footer {
+.view-presentation-description {
     display: flex;
     position: absolute;
     bottom: -50px;

@@ -7,7 +7,7 @@
     padding: 20px 15px;
     line-height: 20px;
     margin-bottom: 20px;
-    z-index: 99999 !important;
+    z-index: 999 !important;
 
     .notifications &{
       margin-bottom: 0;
@@ -30,7 +30,6 @@
     @include alert-color(lighten($white,5%));
     @include alert-icon-color($brand-info);
     color: $brand-info;
-    border-radius: 8px;
   }
 
     &.alert-danger{

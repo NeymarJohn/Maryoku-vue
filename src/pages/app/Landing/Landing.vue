@@ -311,7 +311,8 @@ export default {
 }
 .landing-footer-item{
   width: 1520px;
-  margin: 40px auto 0;
+  margin: 0 auto;
+  margin-top: 40px;
 }
 .upward-button {
   width: 20px;

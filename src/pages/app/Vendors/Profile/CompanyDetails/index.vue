@@ -1,11 +1,9 @@
 <template>
   <div class="company-details-container">
-    <tabs :tab-name="['Company Details', 'Payment Setting', 'Invoices']" color-button="info" theme="purple">
+    <tabs :tab-name="['Company Details']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
         <vendor-company-detail></vendor-company-detail>
       </template>
-      <template slot="tab-pane-2"> <div class="p-40"></div> </template>
-      <template slot="tab-pane-3"> <invoices></invoices> </template>
     </tabs>
   </div>
 </template>
@@ -14,8 +12,6 @@ import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
 import VendorCompanyDetail from "./VendorCompanyDetail";
 import Invoices from "./Invoices";
-// import auth from '@/auth';
-import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -24,12 +20,9 @@ export default {
     Tabs,
     VendorCompanyDetail,
     Invoices,
-    // ProfileDetails,
-    // Permissions,
   },
   data() {
     return {
-      // auth: auth,
       userInfo: { role: "guest" },
       isLoading: false,
     };
@@ -63,8 +56,6 @@ export default {
           height: 100%;
           padding-left: 0px;
           padding-right: 0px;
-          // margin-left: 50px;
-          // margin-right: 50px;
           font-weight: normal;
         }
         &.active {

@@ -90,6 +90,11 @@ const actions = {
             commit('setProfile', res.item);
         })
     },
+    setBankAccount: ({ commit, state }, profileData) => {
+        new Vendors(profileData).save().then(res => {
+            commit('setProfile', res.item);
+        })
+    },
     addServiceImage: async ({ commit, state, dispatch }, { vendorId, file, images, serviceId }) => {
         return new Promise((resolve, reject) => {
             const fileId = `${new Date().getTime()}_${makeid()}`;

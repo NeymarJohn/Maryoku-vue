@@ -36,10 +36,10 @@
                 <img
                     v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
                     class="non-selected"
-                    :src="`${$iconURL}Requirements/Group+16153.svg`"
+                    :src="`${$iconURL}Req/group-22450-2.svg`"
 
                 />
-                <img v-else style="" :src="`${$iconURL}common/heart-red.svg`" />
+                <img v-else style="" :src="`${$iconURL}Req/group-22450-2.svg`" />
                 <md-tooltip md-direction="top">Click here to show vendors your vision for the event</md-tooltip>
             </md-button>
         </template>
@@ -56,9 +56,9 @@
                 v-if="!selectedServices.includes(serviceCategory.clipTitles[index])"
                 class="non-selected"
                 :src="`${$iconURL}Requirements/Group+16153.svg`"
-
+                width="30px"
                 />
-                <img v-else :src="`${$iconURL}common/heart-red.svg`" />
+                <img v-else :src="`${$iconURL}common/heart-red.svg`" width="30px"/>
                 <md-tooltip md-direction="top">Click here to show vendors your vision for the event</md-tooltip>
             </md-button>
         </template>
@@ -285,17 +285,6 @@ export default {
     height: 50px;
     z-index: 2;
     border: 1px solid #f51355;
-    &.isSelected {
-      padding: 0;
-      // /deep/ .md-ripple {
-      //   padding: 0 !important;
-      // }
-      // border: solid 1px #f51355;
-      img {
-        background-color: white;
-        border-radius: 50%;
-      }
-    }
     &.notSelected {
       background-color: white !important;
       color: #f51355 !important;
@@ -303,14 +292,6 @@ export default {
     }
     /deep/ .md-ripple {
       padding: 0;
-    }
-    img.non-selected {
-      padding: 3px;
-    }
-    img {
-      width: 42px;
-      height: 42px;
-      padding: 3px;
     }
   }
   .header-carousel {

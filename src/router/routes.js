@@ -81,6 +81,8 @@ const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vu
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout")
 
+const InvoicePage = () => import('@/pages/app/Invoices/InvoicePage.vue')
+
 let testUI = {
     path: '/testui',
     component: TestUI,
@@ -698,6 +700,12 @@ let landingPages = {
     ],
 };
 
+const invoicesPage = {
+    path: "/invoices/:invoiceId",
+    name: "Invoice",
+    component: InvoicePage,
+}
+
 let feedbackPages = {
     path: "/app2",
     component: LandingPageLayout,
@@ -845,6 +853,7 @@ const routes = [
     EventPages,
     UserEventPages,
     landingPages,
+    invoicesPage,
     rsvpFeedback,
     plannerListPage,
     vendorListPage,

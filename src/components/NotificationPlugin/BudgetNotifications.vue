@@ -9,6 +9,9 @@
                     :timestamp="notification.timestamp"
                     :vertical-align="notification.verticalAlign"
                     :horizontal-align="notification.horizontalAlign"
+                    :cancel-btn="notification.cancelBtn"
+                    :close-btn="notification.closeBtn"
+                    :confirm-btn="notification.confirmBtn"
                     @on-send="action"
                     @on-close="removeNotification">
       </budget-notification>
