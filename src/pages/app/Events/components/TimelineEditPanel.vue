@@ -36,13 +36,13 @@
           <timeline-empty
             :index="templateIndex"
             :date="scheduleDate"
-            v-if="templateIndex == 0"
+            v-if="templateIndex === 0"
             @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
           ></timeline-empty>
           <timeline-template-container
             :template="template"
             :groupIndex="templateIndex"
-            :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
+            :timelineDate="{ ...scheduleDate, dateIndex  }"
             @remove="removeTemplate(dateIndex, templateIndex, template)"
           ></timeline-template-container>
           <timeline-empty
@@ -113,9 +113,6 @@ export default {
     TimelineTemplateContainer,
     Modal,
   },
-  created() {
-    this.$store.dispatch("event/getTimelineDates", this.event.id);
-  },
   computed: {
     event() {
       return this.$store.state.event.eventData;
@@ -144,9 +141,6 @@ export default {
     },
   },
   mounted() {
-    console.log("timeline.edit.panel", this.timelineDates);
-  },
-  created() {
     console.log("timeline.edit.panel", this.timelineDates);
   },
   methods: {

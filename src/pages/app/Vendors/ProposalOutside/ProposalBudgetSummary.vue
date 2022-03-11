@@ -436,10 +436,6 @@ export default {
   destoryed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
-  updated () {
-      console.log('budget.summary.updated', this.step)
-
-  },
   mounted() {
     setTimeout(_ => {
         if (this.isNegotiation)

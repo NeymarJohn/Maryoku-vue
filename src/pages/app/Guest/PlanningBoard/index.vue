@@ -1,5 +1,5 @@
 <template>
-    <div class="booking-section planning-board-layout bg-white" style="padding-left: 450px">
+    <div class="booking-section planning-board-layout bg-white" style="padding-left: 400px">
         <div class="p-50" v-if="!showCounterPage">
             <loader :active="isLoading || isLoadingStoredData || isLoadingProposal" />
             <template v-if="!isLoading && !isLoadingStoredData">
@@ -244,6 +244,7 @@
                             :category="selectedCategory"
                             :key="selectedProposal.id"
                             :showTimerBox="true"
+                            :hideFooter="true"
                             @favorite="favoriteProposal"
                             @close="closeProposal"
                             @ask="handleAsk"
@@ -728,8 +729,9 @@
                 return false;
             },
             expireTime() {
-                console.log("expiredTime()", this.currentRequirement);
-                if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
+                if(this.currentRequirement){
+                    return  (this.currentRequirement.expiredBusinessTime > 0) ? this.currentRequirement.expiredBusinessTime : this.expiredTime;
+                }
                 return this.expiredTime;
             },
             selectedVersion() {
@@ -764,6 +766,10 @@
                 let requirementId = null;
                 if (this.requirements[this.selectedCategory.componentId]) {
                     requirementId = this.requirements[this.selectedCategory.componentId].id;
+                }
+                else if (this.eventRequirements[this.selectedCategory.componentId]) {
+                    this.requirements = this.eventRequirements;
+                    requirementId = this.eventRequirements[this.selectedCategory.componentId].id;
                 }
                 this.isOpenedFinalModal = false;
 

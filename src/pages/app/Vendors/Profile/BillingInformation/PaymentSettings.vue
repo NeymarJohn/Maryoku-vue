@@ -22,6 +22,21 @@
               <md-card-content>
                 <div class="payment-details">
                   <div class="form-section">
+                    <div class="md-layout-item">
+                        <label>ID Number</label>
+                      <br/>
+                      <input  style="width: 50px; margin-right: 5px"
+                              v-model="bankDetails.id[index]"  v-for="(option, index) in bankDetails.id"
+                              maxlength="1" pattern="([12345])\w{0}"
+                              :key="index"
+                              :name="index"
+                      />
+                      <label>-</label>
+                      <input  style="width: 50px"
+                              v-model="bankDetails.adId"
+                              maxlength="1" pattern="([12345])\w{0}"
+                      />
+                    </div>
                     <div class="md-layout">
                       <div class="md-layout-item md-size-50">
                         <md-field>
@@ -56,7 +71,7 @@
                     </div>
                   </div>
                 </div>
-                <md-button @click="test" class="md-vendor md-vendor-review">Save details</md-button>
+                <md-button @click="sendBankInfo" class="md-vendor md-vendor-review">Save details</md-button>
               </md-card-content>
             </md-card>
           </div>
@@ -84,7 +99,10 @@ export default {
   },
   data: () => ({
     isLoaded: false,
-    bankDetails:{}
+    bankDetails:{
+      id:[0,0,0,0,0,0,0],
+      adId:0
+    }
   }),
 
   created() {},
@@ -116,14 +134,21 @@ export default {
     }, 100);
   },
   methods: {
-    test(){
+     test (e){
+      console.log('##-133, PaymentSettings.vue',e)
+    },
+    sendBankInfo(){
 
-      axios.post( process.env.SERVER_URL +'/v1/customer/destinations/account', {
+      axios.post( process.env.SERVER_URL +'/stripe/v1/customer/destinations/account', {
         ...this.bankDetails,
-        accept:'application/json'
+        accept:'application/json',
+        headers:{
+          token: 'lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3'
+        }
         }).then(res=>{
         console.log('##-125, PaymentSettings.vue',res)
-      })
+      }).catch(error => {
+        console.log('##-126, PaymentSettings.vue',error)})
       console.log('##-119, PaymentSettings.vue',this.bankDetails,  process.env.SERVER_URL )
 
     },
