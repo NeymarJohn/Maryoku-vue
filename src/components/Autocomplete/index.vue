@@ -4,7 +4,7 @@
       v-if="filteredSuggestItems[selectedSuggestItemIndex]"
       class="suggested-place-holder"
       :value="getOptionLabel(filteredSuggestItems[selectedSuggestItemIndex])"
-    >
+    />
     <input
       v-model="searchWord"
       class="input-value label-input"
@@ -14,12 +14,12 @@
       @keypress="startSearch"
       @blur="stopSearch"
       @input="input"
-    >
-    <div v-if="showAutoCompletePanel && filteredSuggestItems.length > 0" class="auto-complete-panel">
+    />
+    <div class="auto-complete-panel" v-if="showAutoCompletePanel && filteredSuggestItems.length > 0">
       <div
+        class="suggest-item font-bold"
         v-for="(item, index) in filteredSuggestItems"
         :key="getOptionLabel(item)"
-        class="suggest-item font-bold"
         @mouseenter="hoverSuggestItem(index)"
         @click="selectSuggestItem(index)"
       >
@@ -32,6 +32,13 @@
 <script>
 export default {
   name: "Autocomplete",
+  data() {
+    return {
+      selectedSuggestItemIndex: -1,
+      showAutoCompletePanel: false,
+      searchWord: "",
+    };
+  },
   props: {
     options: {
       type: Array,
@@ -49,34 +56,6 @@ export default {
       type: Object,
       default: () => {},
     },
-  },
-  data() {
-    return {
-      selectedSuggestItemIndex: -1,
-      showAutoCompletePanel: false,
-      searchWord: "",
-    };
-  },
-  computed: {
-    filteredSuggestItems() {
-      return this.options.filter((item) =>
-        this.getOptionLabel(item).toLowerCase().includes(this.searchWord.toLowerCase()),
-      );
-    },
-  },
-  watch: {
-    selectedValue(newValue, oldValue) {
-      console.log("selectedValue", newValue);
-      this.searchWord = `${newValue.companyName} / ${newValue.name}`;
-    },
-  },
-  mounted() {
-      console.log("Autocomplete.mounted", this.selectedValue, this.options);
-      if (this.selectedValue) {
-          this.selectedSuggestItemIndex = this.filteredSuggestItems.findIndex(it =>
-              it.companyName === this.selectedValue.companyName && it.name === this.selectedValue.name);
-      }
-
   },
   methods: {
     hoverSuggestItem(index) {
@@ -97,7 +76,7 @@ export default {
       this.showAutoCompletePanel = true;
     },
     input(e){
-      this.$emit("input", e);
+      this.$emit('input', e);
     },
     stopSearch() {
       setTimeout(() => {
@@ -112,6 +91,27 @@ export default {
         const labels = this.label.map((label) => option[label]);
         return labels.join(" / ");
       }
+    },
+  },
+  mounted() {
+      console.log('Autocomplete.mounted', this.selectedValue, this.options);
+      if (this.selectedValue) {
+          this.selectedSuggestItemIndex = this.filteredSuggestItems.findIndex(it =>
+              it.companyName === this.selectedValue.companyName && it.name === this.selectedValue.name)
+      }
+
+  },
+  computed: {
+    filteredSuggestItems() {
+      return this.options.filter((item) =>
+        this.getOptionLabel(item).toLowerCase().includes(this.searchWord.toLowerCase()),
+      );
+    },
+  },
+  watch: {
+    selectedValue(newValue, oldValue) {
+      console.log('selectedValue', newValue);
+      this.searchWord = `${newValue.companyName} / ${newValue.name}`;
     },
   },
 };

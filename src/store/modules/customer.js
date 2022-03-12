@@ -3,58 +3,69 @@ import Customer from "@/models/Customer";
 import Vendor from "@/models/Vendors";
 
 const state = {
-  customers: []
+    customers: [],
 };
 const mutations = {
-  setCustomers: (state, customers) => {
-    state.customers = customers;
-  },
-  setCampanies: (state, companies) => {},
-  setEventTypes: (state, types) => {},
-  setTaxes: (state, taxes) => {}
+    setCustomers: (state, customers) => {
+        state.customers = customers;
+    },
+    setCampanies: (state, companies) => {
+    },
+    setEventTypes: (state, types) => {
+    },
+    setTaxes: (state, taxes) => {
+    }
 };
 const actions = {
-  getCustomers: ({ commit, state }, payload) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let query = new Customer();
+    getCustomers: ({ commit, state }, payload) => {
+        return new Promise(async (resolve, reject) => {
+           try {
 
-        if (payload.vendorId) {
-          const vendor = new Vendor({ id: payload.vendorId });
-          query.for(vendor);
-        }
+               let query = new Customer();
 
-        if (payload.pagination) {
-          query.page(payload.pagination.page).limit(payload.pagination.limit);
-        }
+               if (payload.vendorId) {
+                   const vendor = new Vendor({id: payload.vendorId});
+                   query.for(vendor)
+               }
 
-        if (payload.params) {
-          query.params(payload.params);
-        }
+               if (payload.pagination) {
+                   query.page(payload.pagination.page)
+                       .limit(payload.pagination.limit)
+               }
 
-        const res = await query.get();
-        console.log("res", res);
+               if (payload.params) {
+                   query.params(payload.params)
+               }
 
-        commit("setCustomers", res[0].customers);
-        resolve(res[0].customers);
-      } catch (e) {
-        reject(e.message);
-      }
-    });
-  },
-  getAllCompanies: ({ commit, state }) => {
-    return new Promise((resolve, reject) => {});
-  },
-  getEventTypes({ commit, state }) {
-    return new Promise((resolve, reject) => {});
-  },
-  getTaxes({ commit, state }) {
-    return new Promise((resolve, reject) => {});
-  }
+               const res = await query.get();
+               console.log('res', res);
+
+               commit('setCustomers', res[0].customers)
+               resolve(res[0].customers);
+           } catch (e) {
+               reject(e.message);
+           }
+
+        });
+    },
+    getAllCompanies: ({ commit, state }) => {
+        return new Promise((resolve, reject) => {
+        })
+    },
+    getEventTypes({ commit, state }) {
+        return new Promise((resolve, reject) => {
+
+        });
+    },
+    getTaxes({commit, state}) {
+        return new Promise((resolve, reject) => {
+
+        });
+    }
 };
 export default {
-  namespaced: true,
-  state,
-  actions,
-  mutations
+    namespaced: true,
+    state,
+    actions,
+    mutations,
 };

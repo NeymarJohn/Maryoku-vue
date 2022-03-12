@@ -3,7 +3,7 @@
     <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
     <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
       <h4 class="md-title">
-        <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
+        <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
           <md-icon>arrow_back</md-icon>
         </md-button>
       </h4>
@@ -15,7 +15,7 @@
       <div class="md-layout" style="overflow: auto; height: 90vh; max-height: 90vh; margin-top: 14px">
         <div class="md-layout-item mx-auto">
           <div class="md-layout">
-            <div v-if="editMode" class="md-layout-item md-size-100" style="margin-bottom: 16px">
+            <div class="md-layout-item md-size-100" style="margin-bottom: 16px" v-if="editMode">
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-50">
                   <md-field
@@ -31,21 +31,17 @@
                     <md-input
                       ref="focusable"
                       v-model="firstName"
-                      v-validate="modelValidations.firstName"
                       data-vv-name="firstName"
                       type="text"
                       autofocus
                       name="firstName"
-                    />
+                      v-validate="modelValidations.firstName"
+                    ></md-input>
                     <slide-y-down-transition>
-                      <md-icon v-show="errors.has('firstName')" class="error">
-                        close
-                      </md-icon>
+                      <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
                     </slide-y-down-transition>
                     <slide-y-down-transition>
-                      <md-icon v-show="!errors.has('firstName') && touched.firstName" class="success">
-                        done
-                      </md-icon>
+                      <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
                     </slide-y-down-transition>
                   </md-field>
                 </div>
@@ -61,20 +57,16 @@
                     <label>Last Name</label>
                     <md-input
                       v-model="lastName"
-                      v-validate="modelValidations.lastName"
                       data-vv-name="lastName"
                       type="text"
                       name="lastName"
-                    />
+                      v-validate="modelValidations.lastName"
+                    ></md-input>
                     <slide-y-down-transition>
-                      <md-icon v-show="errors.has('lastName')" class="error">
-                        close
-                      </md-icon>
+                      <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
                     </slide-y-down-transition>
                     <slide-y-down-transition>
-                      <md-icon v-show="!errors.has('lastName') && touched.lastName" class="success">
-                        done
-                      </md-icon>
+                      <md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>
                     </slide-y-down-transition>
                   </md-field>
                 </div>
@@ -90,27 +82,23 @@
                 <label>One or more email addresses</label>
                 <md-textarea
                   v-model="emailAddress"
-                  v-validate="modelValidations.email"
-                  v-focus
                   data-vv-name="email"
                   type="email"
                   name="email"
                   required
                   rows="5"
+                  v-validate="modelValidations.email"
+                  v-focus
                   placeholder="john@example.com,brad@example.com"
-                />
+                ></md-textarea>
                 <slide-y-down-transition>
-                  <md-icon v-show="errors.has('email')" class="error">
-                    close
-                  </md-icon>
+                  <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon v-show="!errors.has('email') && touched.email" class="success">
-                    done
-                  </md-icon>
+                  <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
                 </slide-y-down-transition>
 
-                <span v-if="errors.has('email')" class="md-error">{{ errors.first("email") }}</span>
+                <span class="md-error" v-if="errors.has('email')">{{ errors.first("email") }}</span>
               </md-field>
               <md-field
                 v-if="this.editMode"
@@ -120,24 +108,20 @@
                 <label>Email address</label>
                 <md-input
                   v-model="emailAddress"
-                  v-validate="modelValidations.email"
                   data-vv-name="email"
                   type="email"
                   name="email"
                   required
-                />
+                  v-validate="modelValidations.email"
+                ></md-input>
                 <slide-y-down-transition>
-                  <md-icon v-show="errors.has('email')" class="error">
-                    close
-                  </md-icon>
+                  <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon v-show="!errors.has('email') && touched.email" class="success">
-                    done
-                  </md-icon>
+                  <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
                 </slide-y-down-transition>
 
-                <span v-if="errors.has('email')" class="md-error">{{ errors.first("email") }}</span>
+                <span class="md-error" v-if="errors.has('email')">{{ errors.first("email") }}</span>
               </md-field>
             </div>
 
@@ -147,39 +131,25 @@
               >
                 <label for="select">Role</label>
                 <md-select
-                  v-model="member_role"
-                  v-validate="modelValidations.role"
                   required
+                  v-model="member_role"
                   name="select"
                   data-vv-name="role"
+                  v-validate="modelValidations.role"
                 >
-                  <md-option value="co_producer">
-                    Co-Producer
-                  </md-option>
-                  <md-option value="manager">
-                    Manager
-                  </md-option>
-                  <md-option value="team_leader">
-                    Team Leader
-                  </md-option>
-                  <md-option value="employee">
-                    Employee
-                  </md-option>
-                  <md-option value="Guest">
-                    Guest
-                  </md-option>
+                  <md-option value="co_producer">Co-Producer</md-option>
+                  <md-option value="manager">Manager</md-option>
+                  <md-option value="team_leader">Team Leader</md-option>
+                  <md-option value="employee">Employee</md-option>
+                  <md-option value="Guest">Guest</md-option>
                 </md-select>
                 <slide-y-down-transition>
-                  <md-icon v-show="errors.has('role')" class="error">
-                    close
-                  </md-icon>
+                  <md-icon class="error" v-show="errors.has('role')">close</md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon v-show="!errors.has('role') && touched.role" class="success">
-                    done
-                  </md-icon>
+                  <md-icon class="success" v-show="!errors.has('role') && touched.role">done</md-icon>
                 </slide-y-down-transition>
-                <span v-if="errors.has('role')" class="md-error">{{ errors.first("role") }}</span>
+                <span class="md-error" v-if="errors.has('role')">{{ errors.first("role") }}</span>
               </md-field>
             </div>
 
@@ -188,9 +158,9 @@
                 <label>Permissions</label>
                 <md-field>
                   <multiselect
-                    v-model="permission"
                     :hide-selected="true"
                     :close-on-select="false"
+                    v-model="permission"
                     tag-placeholder="Add permission"
                     placeholder="Add permissions"
                     label="title"
@@ -211,9 +181,8 @@
                         "
                         :md-deletable="true"
                         @md-delete="removePermission(option)"
+                        >{{ option.title }}</md-chip
                       >
-                        {{ option.title }}
-                      </md-chip>
                     </template>
                   </multiselect>
                 </md-field>
@@ -221,12 +190,10 @@
             </div>
             <div class="md-layout-item md-size-100" style="margin-top: 24px">
               <div class="pull-right">
-                <md-button v-if="editMode" native-type="validated" class="md-success" @click="saveMemberDetails">
-                  Save
-                </md-button>
-                <md-button v-else native-type="validated" class="md-success" @click="sendInvitatio">
-                  Invite
-                </md-button>
+                <md-button v-if="editMode" native-type="validated" class="md-success" @click="saveMemberDetails"
+                  >Save</md-button
+                >
+                <md-button v-else native-type="validated" class="md-success" @click="sendInvitatio">Invite</md-button>
               </div>
             </div>
           </div>

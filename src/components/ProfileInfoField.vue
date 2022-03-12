@@ -2,19 +2,15 @@
   <div class="profile-info-field">
     <div class="d-flex justify-content-between">
       <div class="label">
-        <img v-if="icon" :src="icon" class="label-icon"><span>{{ fieldLabel }}</span>
+        <img v-if="icon" :src="icon" class="label-icon" /><span>{{ fieldLabel }}</span>
       </div>
-      <md-button class="md-simple edit-btn" :class="`${theme}`" @click="edit">
-        Edit
-      </md-button>
+      <md-button class="md-simple edit-btn" :class="`${theme}`" @click="edit"> Edit</md-button>
     </div>
-    <div v-if="description" class="mt-10 color-gray">
-      {{ description }}
-    </div>
-    <div v-if="isEditing" class="profile-field-value">
+    <div v-if="description" class="mt-10 color-gray">{{ description }}</div>
+    <div class="profile-field-value" v-if="isEditing">
       <template v-if="fieldName === 'password' || editor === 'password'">
-        <input v-model="content" type="password" style="width: 100%" placeholder="New password">
-        <input v-model="passwordConfirm" type="password" style="width: 100%; margin-top: 20px" placeholder="Confirm ">
+        <input type="password" style="width: 100%" v-model="content" placeholder="New password" />
+        <input type="password" style="width: 100%; margin-top: 20px" v-model="passwordConfirm" placeholder="Confirm " />
       </template>
       <vue-google-autocomplete
         v-else-if="editor === 'location'"
@@ -22,69 +18,61 @@
         ref="address"
         class="my-10 width-100 address"
         :placeholder="content ? content : 'Enter an an address, zipcode, or location'"
-        @placechanged="getAddressData"
+        v-on:placechanged="getAddressData"
       />
-      <div v-else-if="editor === 'social'" class="social-editor">
-        <div v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" class="field d-flex align-center">
+      <div class="social-editor" v-else-if="editor === 'social'">
+        <div class="field d-flex align-center" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex">
           <div class="label">
-            <img :src="`${$iconURL}Vendor Signup/${s.icon}`">
+            <img :src="`${$iconURL}Vendor Signup/${s.icon}`" />
             <span>{{ s.name }}</span>
           </div>
-          <input v-model="content[s.name]" class="flex-1" type="text" placeholder="Paste link here">
+          <input class="flex-1" type="text" placeholder="Paste link here" v-model="content[s.name]" />
         </div>
       </div>
-      <div v-else-if="editor == 'signature'" class="signature-editor">
+      <div class="signature-editor" v-else-if="editor == 'signature'">
         <md-button class="md-outlined maryoku-btn md-simple md-vendor" @click="uploadSignatureFile">
           Choose File
         </md-button>
-        <div class="or">
-          Or
-        </div>
+        <div class="or">Or</div>
         <div class="sign-here">
-          <img v-if="signatureData" :src="`${signatureData}`">
-          <vueSignature v-else ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
-          <md-button class="md-simple md-vendor edit-btn" @click="clear">
-            Clear
-          </md-button>
+          <img v-if="signatureData" :src="`${signatureData}`" />
+          <vueSignature v-else ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
+          <md-button class="md-simple md-vendor edit-btn" @click="clear">Clear</md-button>
         </div>
         <input
-          ref="signatureFile"
           type="file"
           class="d-none"
+          ref="signatureFile"
           name="vendorSignature"
           accept="image/gif, image/jpg, image/png"
           @change="onSignatureFilePicked"
-        >
+        />
       </div>
-      <input v-else-if="editor === 'input'" v-model="content" type="text" style="width: 100%">
-      <textarea v-else v-model="content" style="width: 100%" rows="6" />
+      <input v-else-if="editor === 'input'" type="text" style="width: 100%" v-model="content" />
+      <textarea v-else style="width: 100%" v-model="content" rows="6"></textarea>
       <div class="text-right mt-10">
-        <md-button class="md-simple maryoku-btn" :class="`${theme}`" @click="cancelEdit">
-          Cancel
-        </md-button>
-        <md-button class="maryoku-btn" :class="`${theme}`" :disabled="!canSave" @click="saveField">
-          Save
-        </md-button>
+        <md-button class="md-simple maryoku-btn" :class="`${theme}`" @click="cancelEdit">Cancel</md-button>
+        <md-button class="maryoku-btn" :class="`${theme}`" :disabled="!canSave" @click="saveField">Save</md-button>
       </div>
     </div>
     <div v-else class="profile-field-value">
       <template v-if="editor === 'social'">
         <div class="social-value d-flex align-center">
           <div
+            class="item mr-20"
             v-for="(s, sIndex) in socialMediaBlocks.filter((item) => defaultValue[item.name])"
             :key="sIndex"
-            class="item mr-20"
           >
             <a :href="defaultValue[s.name]" target="_blank">
-              <img :src="`${$iconURL}Vendor Signup/${s.icon}`">
+              <img :src="`${$iconURL}Vendor Signup/${s.icon}`" />
             </a>
           </div>
         </div>
       </template>
       <template v-else-if="editor === 'signature'">
         <div
-          v-if="defaultValue"
           class="sign"
+          v-if="defaultValue"
           style="max-width: 300px"
           :style="`
                   background-image: url(${defaultValue});
@@ -195,17 +183,6 @@ export default {
       },
     };
   },
-  computed: {
-    canSave() {
-      if (this.fieldName === "password") {
-        return this.content && this.content === this.passwordConfirm;
-      } else if (this.editor === "signature") {
-        return true;
-      } else {
-        return this.content;
-      }
-    },
-  },
   created() {
     this.content = this.defaultValue;
   },
@@ -251,6 +228,17 @@ export default {
       });
 
       // this.$refs.signature.fromDataURL(imageData);
+    },
+  },
+  computed: {
+    canSave() {
+      if (this.fieldName === "password") {
+        return this.content && this.content === this.passwordConfirm;
+      } else if (this.editor === "signature") {
+        return true;
+      } else {
+        return this.content;
+      }
     },
   },
 };

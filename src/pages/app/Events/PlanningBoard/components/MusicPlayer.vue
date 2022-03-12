@@ -3,30 +3,22 @@
     <label>{{ title }}</label>
     <div class="player-controller d-flex align-center justify-content-center">
       <button class="skip-button player-controls__item -xl js-play md-white" @click="prev">
-        <md-icon class="">
-          skip_previous
-        </md-icon>
+        <md-icon class="">skip_previous</md-icon>
       </button>
       <button class="color-blackplayer-controls__item -xl js-play md-white" @click="play">
-        <md-icon v-if="isTimerPlaying" class="color-black">
-          pause
-        </md-icon>
-        <md-icon v-else class="color-black">
-          play_arrow
-        </md-icon>
+        <md-icon class="color-black" v-if="isTimerPlaying">pause</md-icon>
+        <md-icon class="color-black" v-else>play_arrow</md-icon>
       </button>
       <button class="skip-button player-controls__item -xl js-play md-white" @click="next">
-        <md-icon class="color-black">
-          skip_next
-        </md-icon>
+        <md-icon class="color-black">skip_next</md-icon>
       </button>
     </div>
-    <div ref="progress" class="progress">
+    <div class="progress" ref="progress">
       <!-- <div class="progress__top">
         <div class="progress__duration">{{ duration }}</div>
       </div> -->
       <div class="progress__bar" @click="clickProgress">
-        <div class="progress__current" :style="{ width: barWidth }" />
+        <div class="progress__current" :style="{ width: barWidth }"></div>
       </div>
       <!-- <div class="progress__time">{{ currentTime }}</div> -->
     </div>
@@ -52,21 +44,6 @@ export default {
       duration: null,
       currentTime: null,
       isTimerPlaying: false,
-    };
-  },
-  created() {
-    let vm = this;
-    this.audio = new Audio();
-    this.audio.src = this.src;
-    this.audio.ontimeupdate = function () {
-      vm.generateTime();
-    };
-    this.audio.onloadedmetadata = function () {
-      vm.generateTime();
-    };
-    this.audio.onended = function () {
-      vm.nextTrack();
-      this.isTimerPlaying = true;
     };
   },
   methods: {
@@ -163,6 +140,21 @@ export default {
         this.audio.pause();
       }, 300);
     },
+  },
+  created() {
+    let vm = this;
+    this.audio = new Audio();
+    this.audio.src = this.src;
+    this.audio.ontimeupdate = function () {
+      vm.generateTime();
+    };
+    this.audio.onloadedmetadata = function () {
+      vm.generateTime();
+    };
+    this.audio.onended = function () {
+      vm.nextTrack();
+      this.isTimerPlaying = true;
+    };
   },
 };
 </script>

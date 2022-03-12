@@ -1,10 +1,10 @@
 <template>
-  <div class="option-card" :class="{selected: selected}" @click="clickCard">
+  <div class="option-card" @click="clickCard" :class="{selected: selected}" >
     <img :src="`${$iconURL}RSVP/${icon}`" class="mb-10">
     <div class="text-center">
-      {{ label }}
+      {{label}}
     </div>
-    <div v-if="selected" class="check-mark" />
+    <div class="check-mark" v-if="selected"></div>
   </div>
 </template>
 <script>
@@ -12,11 +12,11 @@ export default {
   props: {
     icon: {
       type: String,
-      default: ""
+      default: ''
     },
     label: {
       type: String,
-      default: ""
+      default: ''
     },
     selected: {
       type: Boolean,
@@ -25,10 +25,10 @@ export default {
   },
   methods: {
     clickCard() {
-      this.$emit("select");
+      this.$emit("select")
     }
   },
-};
+}
 </script>
 <style lang="scss" scoped>
 .option-card{

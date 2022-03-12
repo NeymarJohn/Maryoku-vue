@@ -1,31 +1,24 @@
 <template>
   <div class="text-center md-layout-item md-size-90 mt-50" style="margin: 0 auto">
-    <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10668.svg">
+    <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10668.svg" />
     <div
       class="mt-10 mb-30"
       style="padding: 5px 20px; max-width: 1100px; margin-left: auto; margin-right: auto; line-height: 1.5em"
     >
-      <div class="font-size-22 font-bold-extra mb-10 text-uppercase">
-        Our vendors are working on quotes for you
-      </div>
+      <div class="font-size-22 font-bold-extra mb-10 text-uppercase">Our vendors are working on quotes for you</div>
     </div>
     <div class="md-layout">
       <div v-for="(tmp, index) in templates" :key="index"
-           class="md-layout-item d-flex text-right"
-      >
+           class="md-layout-item d-flex text-right">
         <div class="p-40 proposal-card">
-          <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/photo%20(1).svg">
-          <h4 class="font-bold card-title">
-            PROPOSAL {{ index + 1 }}
-          </h4>
-          <div class="mb-10 bar" style="width: 180px" />
-          <div class="mb-10 bar" style="width: 100px" />
-          <div class="mb-10 bar" style="width: 150px" />
-          <div class="mb-10 bar" style="width: 150px" />
-          <div class="mb-10 bar" style="width: 100px" />
-          <div class="action mt-40">
-            Defaults & Booking
-          </div>
+          <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/photo%20(1).svg" />
+          <h4 class="font-bold card-title">PROPOSAL {{ index + 1 }}</h4>
+          <div class="mb-10 bar" style="width: 180px"></div>
+          <div class="mb-10 bar" style="width: 100px"></div>
+          <div class="mb-10 bar" style="width: 150px"></div>
+          <div class="mb-10 bar" style="width: 150px"></div>
+          <div class="mb-10 bar" style="width: 100px"></div>
+          <div class="action mt-40">Defaults & Booking</div>
         </div>
       </div>
 
@@ -36,7 +29,7 @@
           :hours="hours"
           :minutes="mins"
           :seconds="seconds"
-          custom-class="event"
+          customClass="event"
           :bottom-content="'Until you receive your proposals'"
         />
       </div>
@@ -139,14 +132,8 @@ export default {
       hours: 23,
       mins: 59,
       seconds: 59,
-      templates: ["", "", ""]
+      templates: ['', '', '']
     };
-  },
-  watch: {
-    expiredTime(newValue, oldValue) {
-      console.log("expiredTime", newValue);
-      this.setCounter(newValue);
-    },
   },
   created() {
     this.setCounter(this.expiredTime);
@@ -162,6 +149,12 @@ export default {
       this.mins = Math.floor(durationSeconds / 60);
       durationSeconds -= this.mins * 60;
       this.seconds = durationSeconds;
+    },
+  },
+  watch: {
+    expiredTime(newValue, oldValue) {
+      console.log('expiredTime', newValue);
+      this.setCounter(newValue);
     },
   },
 };

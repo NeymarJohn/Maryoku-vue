@@ -1,48 +1,32 @@
 <template>
   <div class="countdown-time d-flex">
     <div class="countdown-time-item">
-      <div class="countdown-time-value">
-        {{ getCountDuration.days }}
-      </div>
+      <div class="countdown-time-value">{{getCountDuration.days}}</div>
       <div
         class="countdown-time-label"
         :style="`background-color: ${getBackColor}; color:${fontColor}`"
-      >
-        DAYS
-      </div>
+      >DAYS</div>
     </div>
     <div class="countdown-time-item">
-      <div class="countdown-time-value">
-        {{ getCountDuration.hours }}
-      </div>
+      <div class="countdown-time-value">{{getCountDuration.hours}}</div>
       <div
         class="countdown-time-label"
         :style="`background-color: ${getBackColor}; color:${fontColor}`"
-      >
-        HOURS
-      </div>
+      >HOURS</div>
     </div>
     <div class="countdown-time-item">
-      <div class="countdown-time-value">
-        {{ getCountDuration.mins }}
-      </div>
+      <div class="countdown-time-value">{{getCountDuration.mins}}</div>
       <div
         class="countdown-time-label"
         :style="`background-color: ${getBackColor}; color:${fontColor}`"
-      >
-        MINUTES
-      </div>
+      >MINUTES</div>
     </div>
     <div class="countdown-time-item">
-      <div class="countdown-time-value">
-        {{ getCountDuration.seconds }}
-      </div>
+      <div class="countdown-time-value">{{getCountDuration.seconds}}</div>
       <div
         class="countdown-time-label"
         :style="`background-color: ${getBackColor}; color:${fontColor}`"
-      >
-        SECONDS
-      </div>
+      >SECONDS</div>
     </div>
   </div>
 </template>
@@ -65,6 +49,20 @@ export default {
       color: "#050505",
     };
   },
+  created() {
+    this.period = this.event.eventStartMillis - new Date().getTime();
+    if (this.event.concept && this.event.concept[0]) {
+      this.color = oppositeColor(this.event.concept.colors[0].color);
+      this.backColor = this.event.concept.colors[0].color;
+    }
+    this.intervalId = setInterval(() => {
+      if (this.event)
+        this.period = this.event.eventStartMillis - new Date().getTime();
+    }, 1000);
+  },
+  destroyed() {
+    clearInterval(this.intervalId);
+  },
   computed: {
     getCountDuration() {
       const timeDuration = duration(this.period, "milliseconds");
@@ -86,20 +84,6 @@ export default {
       console.log(this.getBackColor);
       return oppositeColor(this.getBackColor);
     },
-  },
-  created() {
-    this.period = this.event.eventStartMillis - new Date().getTime();
-    if (this.event.concept && this.event.concept[0]) {
-      this.color = oppositeColor(this.event.concept.colors[0].color);
-      this.backColor = this.event.concept.colors[0].color;
-    }
-    this.intervalId = setInterval(() => {
-      if (this.event)
-        this.period = this.event.eventStartMillis - new Date().getTime();
-    }, 1000);
-  },
-  destroyed() {
-    clearInterval(this.intervalId);
   },
 };
 </script>

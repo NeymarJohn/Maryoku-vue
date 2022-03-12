@@ -4,37 +4,35 @@
     <div v-if="!photo" class="empty-item">
       <label class="photo-add-label color-purple font-bold" @click="handleAddPhoto(index)">
         <md-icon class="color-purple">add</md-icon>
-        <br>
+        <br />
         Add photo
       </label>
     </div>
     <template v-else>
       <div class="active-item">
-        <img class="photo-image" :src="photo.url" @click="handleAddPhoto(index)">
+        <img class="photo-image" :src="photo.url" @click="handleAddPhoto(index)" />
         <md-button class="remove-btn md-icon-button md-raised" @click="removePhoto">
-          <img :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+          <img :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px" />
         </md-button>
       </div>
-      <div v-if="photo.caption" class="photo-caption">
+      <div class="photo-caption" v-if="photo.caption">
         {{ photo.caption }}&nbsp;&nbsp;
         <md-button class="edit-btn md-black md-simple" @click="addCaption">
           <u>Edit</u>
         </md-button>
       </div>
-      <div v-else class="photo-caption">
-        <md-button class="md-simple edit-btn md-black" @click="addCaption">
-          <u>Add caption</u>
-        </md-button>
+      <div class="photo-caption" v-else>
+        <md-button class="md-simple edit-btn md-black" @click="addCaption"><u>Add caption</u></md-button>
       </div>
     </template>
     <input
-      :id="`proposal-inspiration-file-${index}`"
       style="display: none"
+      :id="`proposal-inspiration-file-${index}`"
       name="attachment"
       type="file"
       multiple="multiple"
       @change="onFileChange"
-    >
+    />
   </div>
 </template>
 <script>
@@ -61,6 +59,15 @@ export default {
       isLoading: false,
     };
   },
+  created() {
+    this.photo = this.defaultPhoto;
+    this.$root.$on("saveCaption", (captionData) => {
+      if (this.index == captionData.currentIndex) {
+        if (!this.photo) this.photo = {};
+        this.$set(this.photo, "caption", captionData.caption);
+      }
+    });
+  },
   computed: {
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;
@@ -73,15 +80,6 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setValue", { key: "inspirationalPhotos", value });
       },
     },
-  },
-  created() {
-    this.photo = this.defaultPhoto;
-    this.$root.$on("saveCaption", (captionData) => {
-      if (this.index == captionData.currentIndex) {
-        if (!this.photo) this.photo = {};
-        this.$set(this.photo, "caption", captionData.caption);
-      }
-    });
   },
   methods: {
     async onFileChange(event) {

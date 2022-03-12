@@ -1,6 +1,6 @@
 <template>
   <div class="concept-detail white-card">
-    <concept-box :concept="conceptData" />
+    <concept-box :concept="conceptData"></concept-box>
   </div>
 </template>
 <script>

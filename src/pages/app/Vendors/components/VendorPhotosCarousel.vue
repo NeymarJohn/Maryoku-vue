@@ -1,19 +1,20 @@
 <template>
-  <div v-if="images.length > 0" class="proposal-inpirational-photos">
-    <span v-show="startIndex > 0" class="prev" @click="prev()">
+  <div class="proposal-inpirational-photos" v-if="images.length > 0">
+    <span class="prev" @click="prev()" v-show="startIndex > 0">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
-    <div ref="imagesCont" class="cont" :style="{ left: `${imageSlidePos}px` }">
+    <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
       <vendor-photos-carousel-item
+        class="photo-item"
         v-for="(photo, index) in images"
         :key="photo"
-        class="photo-item"
         :index="index"
-        :default-photo="photo"
+        :defaultPhoto="photo"
         @change="setPhoto(index, ...arguments)"
         @addCaption="addCaption(index, ...arguments)"
         @remove="removePhoto"
-      />
+      >
+      </vendor-photos-carousel-item>
       <div
         class="add-image-item photo-inpirational-item d-flex align-center justify-content-center text-center"
         :class="theme"
@@ -24,25 +25,25 @@
           :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
         >
           <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">add</md-icon>
-          <br>
+          <br />
           Add image
         </label>
         <input
-          :id="`input-add-photo`"
           style="display: none"
+          :id="`input-add-photo`"
           name="attachment"
           type="file"
           multiple="multiple"
           @change="onFileChange"
-        >
+        />
       </div>
     </div>
 
-    <span v-show="startIndex < images.length - 2" class="next" @click="next()">
+    <span class="next" @click="next()" v-show="startIndex < images.length - 2">
       <md-icon>keyboard_arrow_right</md-icon>
     </span>
 
-    <modal v-if="captionModal.isOpen" class="add-caption-modal">
+    <modal class="add-caption-modal" v-if="captionModal.isOpen">
       <template slot="header">
         <div class="maryoku-modal-header">
           <h2>Add caption</h2>
@@ -54,46 +55,40 @@
       <template slot="body">
         <div class="md-layout">
           <div class="md-layout-item md-size-60">
-            <img :src="captionModal.photoUrl">
+            <img :src="captionModal.photoUrl" />
           </div>
           <div class="md-layout-item md-size-40" style="text-align: left; padding-right: 0px; padding-left: 20px">
-            <div class="font-bold">
-              Add caption
-            </div>
+            <div class="font-bold">Add caption</div>
             <textarea
               v-model="captionModal.caption"
               placeholder="Write a brief description of the photo."
               rows="6"
-            />
+            ></textarea>
           </div>
         </div>
       </template>
       <template slot="footer">
         <div>
-          <md-button class="md-simple md-black maryoku-btn" @click="captionModal.isOpen = false">
-            Cancel
-          </md-button>
-          <md-button class="md-red maryoku-btn" @click="saveCaption">
-            Save
-          </md-button>
+          <md-button class="md-simple md-black maryoku-btn" @click="captionModal.isOpen = false">Cancel</md-button>
+          <md-button class="md-red maryoku-btn" @click="saveCaption">Save</md-button>
         </div>
       </template>
     </modal>
   </div>
   <vue-dropzone
     v-else
-    id="dropzone"
     ref="myVueDropzone"
+    id="dropzone"
     :options="dropzoneOptions"
-    :use-custom-slot="true"
-    class="file-drop-zone"
+    :useCustomSlot="true"
     @vdropzone-file-added="fileAdded"
+    class="file-drop-zone"
   >
     <span class="color-purple font-bold choose file-upload-btn">
-      <img :src="`${$iconURL}common/pin-dark.svg`" class="mr-10">Choose File
+      <img :src="`${$iconURL}common/pin-dark.svg`" class="mr-10" />Choose File
     </span>
-    <br>Or
-    <br>
+    <br />Or
+    <br />
     <span class="color-dark-gray">Drag your file here</span>
   </vue-dropzone>
 </template>
@@ -171,7 +166,7 @@ export default {
       this.captionModal.isOpen = false;
     },
     handleAddImage() {
-      document.getElementById("input-add-photo").click();
+      document.getElementById(`input-add-photo`).click();
     },
     async onFileChange(event) {
       if (!event.target.files[0]) return;

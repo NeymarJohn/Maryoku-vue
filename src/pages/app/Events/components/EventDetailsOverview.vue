@@ -1,13 +1,14 @@
 <template>
-  <div v-if="!isLoading" class="md-layout event-details-overview edit-event-details">
-    <comment-editor-panel
-      v-if="showCommentEditorPanel"
-      :comment-components="commentComponents"
-      @saveComment="saveComment"
-      @updateComment="updateComment"
-      @deleteComment="deleteComment"
-      @updateCommentComponent="updateCommentComponent"
-    />
+  <div class="md-layout event-details-overview edit-event-details" v-if="!isLoading">
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-title">
         <div class="d-flex align-center">
@@ -18,7 +19,7 @@
               class="ml-5"
               src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%2010036.svg"
               width="10"
-            >
+            />
           </md-button>
         </div>
         <h3>
@@ -26,33 +27,29 @@
             class="mr-10"
             src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%20793.svg"
             width="25"
-          >
+          />
           YOUR EVENT
         </h3>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @share="share" />
+      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
     </div>
     <div class="md-layout">
-      <div id="control-panel" style="width: 1px; height: 100%; float: left; margin-left: -1px" />
+      <div id="control-panel" style="width: 1px; height: 100%; float: left; margin-left: -1px"></div>
       <div class="md-layout-item md-size-100">
-        <event-overview-date :section="eventDateSection" @change="changeEvent" />
+        <event-overview-date :section="eventDateSection" @change="changeEvent"></event-overview-date>
         <event-overview-section
           v-for="(section, index) in sections"
           :key="index"
           :section="section"
           @change="changeEvent"
-        />
+        ></event-overview-section>
       </div>
     </div>
-    <div id="footer-panel" class="event-footer-container">
+    <div class="event-footer-container" id="footer-panel">
       <div class="ml-20">
-        <md-button class="md-bold add-category-btn md-black md-simple">
-          <md-icon>arrow_back</md-icon>Back
-        </md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple"> <md-icon>arrow_back</md-icon>Back </md-button>
         <md-button class="md-simple md-just-icon md-black">
-          <md-icon style="font-size: 40px">
-            expand_less
-          </md-icon>
+          <md-icon style="font-size: 40px">expand_less</md-icon>
         </md-button>
       </div>
 
@@ -62,11 +59,9 @@
             class="mr-10"
             src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
             @click="cancelEvent"
-          >Cancel Event
-        </md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="updateEvent">
-          Save changes
-        </md-button>
+          />Cancel Event</md-button
+        >
+        <md-button class="md-red md-bold add-category-btn" @click="updateEvent">Save changes</md-button>
       </div>
     </div>
   </div>
@@ -89,7 +84,7 @@ import EventOverviewSection from "./EventOverviewSection";
 import EventOverviewDate from "./EventOverviewDate";
 import Calendar from "@/models/Calendar";
 export default {
-  name: "EventOverview",
+  name: "event-overview",
   components: {
     VueElementLoading,
     FunctionalCalendar,
@@ -101,25 +96,11 @@ export default {
     EventOverviewSection,
     EventOverviewDate,
   },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMM Do YYYY");
-    },
-    formatTime: function (date) {
-      return moment(date).format("h:00 A");
-    },
-    formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, "hours");
-    },
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  mixins: [CommentMixins, ShareMixins],
   props: {
     // event: Object,
     // eventComponents: [Array, Function]
   },
+  mixins: [CommentMixins, ShareMixins],
   data() {
     return {
       // auth: auth,
@@ -140,27 +121,6 @@ export default {
       eventDateSection: null,
       sections: [],
     };
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    eventTypeList(newVal) {
-      this.init();
-    },
-  },
-  mounted() {
-    if (!this.eventTypeList.length) {
-      this.$store.dispatch("event/getEventTypes", {
-        data: this.$store.state.auth.user.profile.defaultCalendarId,
-        ctx: this,
-      });
-    }
-
-    let event = this.$store.state.event.eventData; // Fetch event from store
-    this.event = JSON.parse(JSON.stringify(event));
-    console.log("event", event);
-    this.init();
   },
   methods: {
     updateEvent() {
@@ -186,16 +146,16 @@ export default {
         reCalculate: this.reCalculate,
       });
 
-      const arrow = "<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
-      const description = "<div class=\"description\">Your edits changed the event, do you want to change it?</div>";
+      const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
+      const description = `<div class="description">Your edits changed the event, do you want to change it?</div>`;
 
       Swal.fire({
-        title: "Are Your Sure?",
-        text: "You’re changing significant details about the event.\n" +
-            "\n" +
-            "This will nullify any agreements you already have with vendors, who will be notified and may need to alter/withdraw their proposals and pricing.\n" +
-            "\n" +
-            "Haven’t booked vendors yet? No problem. The event details will simply be updated.",
+        title: `Are Your Sure?`,
+        text: 'You’re changing significant details about the event.\n' +
+            '\n' +
+            'This will nullify any agreements you already have with vendors, who will be notified and may need to alter/withdraw their proposals and pricing.\n' +
+            '\n' +
+            'Haven’t booked vendors yet? No problem. The event details will simply be updated.',
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -203,9 +163,9 @@ export default {
         cancelButtonText: "No, take me back",
         buttonsStyling: false,
           customClass: {
-              popup:"swal-alert-container",
-              header: "swal-alert-header",
-              htmlContainer: "swal-alert-html",
+              popup:'swal-alert-container',
+              header: 'swal-alert-header',
+              htmlContainer: 'swal-alert-html',
           }
       }).then((result) => {
         if (result.dismiss != "cancel") {
@@ -308,6 +268,41 @@ export default {
         this.isLoading = false;
         this.setSection();
       }
+    },
+  },
+  mounted() {
+    if (!this.eventTypeList.length) {
+      this.$store.dispatch("event/getEventTypes", {
+        data: this.$store.state.auth.user.profile.defaultCalendarId,
+        ctx: this,
+      });
+    }
+
+    let event = this.$store.state.event.eventData; // Fetch event from store
+    this.event = JSON.parse(JSON.stringify(event));
+    console.log("event", event);
+    this.init();
+  },
+  watch: {
+    event(newVal, oldVal) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    eventTypeList(newVal) {
+      this.init();
+    },
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("MMM Do YYYY");
+    },
+    formatTime: function (date) {
+      return moment(date).format("h:00 A");
+    },
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, "hours");
+    },
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
     },
   },
   computed: {

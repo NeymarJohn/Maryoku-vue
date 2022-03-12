@@ -2,11 +2,11 @@
   <div class="vendor-signup-step2-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconPurple}Purple Icons/Icon_Services (Vendor).svg`">
+        <img :src="`${iconPurple}Purple Icons/Icon_Services (Vendor).svg`" />
 
         <h2>
           SERVICES &
-          <br>AMENTITIES
+          <br />AMENTITIES
         </h2>
         <p>Don't leave anything out! All information will appear on your future proposals</p>
         <h2>2/5</h2>
@@ -14,7 +14,7 @@
       <div class="right-side">
         <div class="description">
           <h5>
-            <img :src="getCategoryIconByValue(vendor.vendorCategories[0])" width="40">
+            <img :src="getCategoryIconByValue(vendor.vendorCategories[0])" width="40" />
             {{ getCategoryNameByValue(vendor.vendorCategories[0]) }} Amenities
           </h5>
           <p>
@@ -25,7 +25,7 @@
         <vendor-service-item
           v-for="(c, cIndex) in categories.find(category => category.name == vendor.vendorCategory).categories"
           :key="cIndex"
-          :service-item="c"
+          :serviceItem="c"
           :vendor="vendor"
         />
       </div>
@@ -42,16 +42,15 @@ import VendorServiceItem from "../components/VendorServiceItem.vue";
 import { VendorCategories } from "@/constants/vendor";
 
 export default {
-  name: "VendorSignupStep2",
-  components: {
-    VueElementLoading,
-    VendorServiceItem,
-  },
-  filters: {},
+  name: "vendor-signup-step2",
   props: {
     categories: Array,
     icon: String,
     vendor: Object,
+  },
+  components: {
+    VueElementLoading,
+    VendorServiceItem,
   },
   data() {
     return {
@@ -61,8 +60,6 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
-  computed: {},
-  watch: {},
   created() {},
   mounted() {
     console.log("vendor.signup.step2.mounted", this.vendor);
@@ -75,6 +72,9 @@ export default {
       return this.vendorCategories.filter(c => c.value == value)[0].icon;
     },
   },
+  computed: {},
+  filters: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

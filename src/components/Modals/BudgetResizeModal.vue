@@ -10,38 +10,32 @@
           You have {{ newValue > value ? "increased" : "reduced" }} the budget of
           <span class="category-name">"{{ categoryName }}"</span>
         </h2>
-        <div class="header-description">
-          What would you like to do?
-        </div>
+        <div class="header-description">What would you like to do?</div>
       </div>
     </template>
     <template slot="body">
       <div class="md-layout">
-        <div v-if="newValue > value" class="md-layout-item md-size-100">
-          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="unexpected">
-            <span calss="option-label" /> Take that money from ‘Unexpected’ category
-          </md-radio>
-          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="total">
-            <span calss="option-label" /> Increase total budget
-          </md-radio>
+        <div class="md-layout-item md-size-100" v-if="newValue > value">
+          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="unexpected"
+            ><span calss="option-label"></span> Take that money from ‘Unexpected’ category</md-radio
+          >
+          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="total"
+            ><span calss="option-label"></span> Increase total budget</md-radio
+          >
         </div>
-        <div v-else class="md-layout-item md-size-100">
-          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="unexpected">
-            <span calss="option-label" /> Add that money to ‘Unexpected’ category
-          </md-radio>
-          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="total">
-            <span calss="option-label" /> Reduce total budget
-          </md-radio>
+        <div class="md-layout-item md-size-100" v-else>
+          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="unexpected"
+            ><span calss="option-label"></span> Add that money to ‘Unexpected’ category</md-radio
+          >
+          <md-radio v-model="selectedOption" class="md-layout-item md-size-100" value="total"
+            ><span calss="option-label"></span> Reduce total budget</md-radio
+          >
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-simple md-black add-category-btn" @click="cancel">
-        Cancel
-      </md-button>
-      <md-button class="md-red add-category-btn" @click="selectOption">
-        Select
-      </md-button>
+      <md-button class="md-simple md-black add-category-btn" @click="cancel">Cancel</md-button>
+      <md-button class="md-red add-category-btn" @click="selectOption">Select</md-button>
     </template>
   </modal>
 </template>
@@ -49,7 +43,7 @@
 <script>
 import { Modal } from "@/components";
 export default {
-  name: "BudgetHandleMinusModal",
+  name: "budget-handle-minus-modal",
   components: {
     Modal,
   },

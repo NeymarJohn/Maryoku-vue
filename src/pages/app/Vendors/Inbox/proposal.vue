@@ -1,90 +1,88 @@
 <template>
-  <div class="proposal-main-container" style="">
-    <loader :active="loading" :is-full-screen="true" page="vendor" />
-    <template v-if="showProposal">
-      <comment-editor-panel
-        v-if="showCommentEditorPanel"
-        :comment-components="commentComponents"
-        :proposal="proposal"
-        :url="`/unregistered/proposals/${proposal.id}`"
-        :ignore-x-offset="400"
-        :is-vendor="true"
-        @saveComment="saveComment"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent"
-      />
-      <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-10rem">
-        <div class="md-layout-item md-large-size-50 ">
-          <div class="d-flex align-center header-title">
-            <b class="fullTitle">{{ proposal.vendor ? proposal.vendor.eventCategory.fullTitle : '' }}</b>
-            <div class="companyName">
-              | {{ proposal.vendor? proposal.vendor.companyName : '' }}
+    <div class="proposal-main-container" style="">
+        <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
+        <template v-if="showProposal">
+            <comment-editor-panel
+            v-if="showCommentEditorPanel"
+            :commentComponents="commentComponents"
+            :proposal="proposal"
+            :url="`/unregistered/proposals/${proposal.id}`"
+            :ignoreXOffset="400"
+            :isVendor="true"
+            @saveComment="saveCommentComponent"
+            @updateComment="updateComment"
+            @deleteComment="deleteComment"
+            @updateCommentComponent="updateCommentComponent">
+            </comment-editor-panel>
+            <div class="proposal-header md-layout md-alignment-top-left p-30 bg-white h-10rem">
+                <div class="md-layout-item md-large-size-50 ">
+                    <div class="d-flex align-center header-title">
+                        <b class="fullTitle">{{ proposal.vendor ? proposal.vendor.eventCategory.fullTitle : '' }}</b>
+                        <div class="companyName"> | {{ proposal.vendor? proposal.vendor.companyName : '' }}</div>
+                    </div>
+                    <ul class="event-details mt-20">
+                        <li class="event-details__item">
+                            Venue + Catering
+                        </li>
+                        <li class="event-details__item">
+                            For Whole Event
+                        </li>
+                        <li class="event-details__item">
+                            ${{ proposal.cost | withComma }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
+                    <HeaderActions
+                        className="ml-auto"
+                        page="proposal"
+                        hideDownload
+                        hideShare
+                        @toggleCommentMode="toggleCommentMode"
+                    ></HeaderActions>
+                </div>
             </div>
-          </div>
-          <ul class="event-details mt-20">
-            <li class="event-details__item">
-              Venue + Catering
-            </li>
-            <li class="event-details__item">
-              For Whole Event
-            </li>
-            <li class="event-details__item">
-              ${{ proposal.cost | withComma }}
-            </li>
-          </ul>
-        </div>
-        <div class="md-layout-item md-large-size-50 md-small-size-20 d-flex">
-          <HeaderActions
-            class-name="ml-auto"
-            page="proposal"
-            hide-download
-            hide-share
-            @toggleCommentMode="toggleCommentMode"
-          />
-        </div>
-      </div>
-      <ProposalVersionsBar
-        :versions="proposal.versions"
-        :selected="currentVersion"
-        @select="selectVersion"
-        @save="saveVersion"
-        @change="changeVersion"
-        @remove="removeVersion"
-      />
-      <div class="proposal-container event-proposal">
-        <EventProposalDetails v-if="proposal" :proposal="proposal" :landing-page="true" :non-maryoku="true" :step="step" :sh="true" @change="handleStep" />
-      </div>
-    </template>
-    <template v-else>
-      <div v-if="proposal" class="proposal-container no-proposal">
-        <NoProposal :proposal="proposal" @show="showProposal = true" />
-      </div>
-    </template>
-  </div>
+            <ProposalVersionsBar
+            :versions="proposal.versions"
+            :selected="currentVersion"
+            @select="selectVersion"
+            @save="saveVersion"
+            @change="changeVersion"
+            @remove="removeVersion"></ProposalVersionsBar>
+            <div class="proposal-container event-proposal" >
+                <EventProposalDetails :proposal="proposal" :landingPage="true" :nonMaryoku="true" :step="step" v-if="proposal" @change="handleStep" :sh="true">
+                </EventProposalDetails>
+            </div>
+        </template>
+        <template v-else>
+            <div class="proposal-container no-proposal" v-if="proposal">
+                <NoProposal :proposal="proposal" @show="showProposal = true">
+                </NoProposal>
+            </div>
+        </template>
+    </div>
 </template>
 <script>
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import { mapActions, mapMutations } from "vuex";
-import EventCommentComponent from "@/models/EventCommentComponent";
+import EventCommentComponent from '@/models/EventCommentComponent'
 import {CommentMixins, ShareMixins} from "@/mixins";
 
 const components = {
-    EventProposalDetails: () => import("@/pages/app/Events/Proposal/EventProposalDetails.vue"),
-    NoProposal: () => import("@/pages/app/Vendors/Inbox/NoProposal.vue"),
+    EventProposalDetails: () => import('@/pages/app/Events/Proposal/EventProposalDetails.vue'),
+    NoProposal: () => import('@/pages/app/Vendors/Inbox/NoProposal.vue'),
     TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
-    CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel"),
-    GuestSignUpModal: () => import("@/components/Modals/VendorProposal/GuestSignUpModal.vue"),
-    HeaderActions: () => import("@/components/HeaderActions.vue"),
+    CommentEditorPanel: () => import('@/pages/app/Events/components/CommentEditorPanel'),
+    GuestSignUpModal: () => import('@/components/Modals/VendorProposal/GuestSignUpModal.vue'),
+    HeaderActions: () => import('@/components/HeaderActions.vue'),
 
-    Loader: () => import("@/components/loader/Loader.vue"),
-    Modal: () => import("@/components/Modal.vue"),
-    ProposalVersionsBar: () => import("../components/ProposalVersionsBar.vue"),
-};
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Modal: () => import('@/components/Modal.vue'),
+    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
+}
 export default {
     components,
-    mixins: [CommentMixins, ShareMixins],
     data() {
         return {
             loading: true,
@@ -94,8 +92,9 @@ export default {
             showUpdateSuccessModal: false,
             showCommentEditorPanel: false,
             showGuestSignupModal: false,
-        };
+        }
     },
+    mixins: [CommentMixins, ShareMixins],
     async created() {
         this.loading = true;
         let tenantUser = null;
@@ -112,10 +111,11 @@ export default {
     },
     methods: {
         ...mapActions("commentProposal", ["saveVersion"]),
+        ...mapMutations("commentProposal", ["updateCommentComponents"]),
         ...mapMutations("comment", ["setGuestName","setSelectedProposal"]),
         ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
         handleStep(step) {
-            this.step = step;
+            this.step = step
         },
         downProposal() {
             this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
@@ -124,23 +124,32 @@ export default {
             this.showCommentEditorPanel = mode;
         },
         showModal(name) {
-            this.setProposal(this.proposal);
-            this.setProposalRequest(this.proposal.proposalRequest);
-            this.setOpen(name);
+            this.setProposal(this.proposal)
+            this.setProposalRequest(this.proposal.proposalRequest)
+            this.setOpen(name)
         },
         openNewTab(link) {
             window.open(link, "_blank");
         },
-        saveGuestComment(name) {
+        async saveGuestComment(name) {
             this.showGuestSignupModal = false;
             this.setGuestName(name);
             let data = JSON.parse(localStorage.getItem("nonMaryokuAction"));
 
-            if (data.action === "saveComment")
-                this.saveComment({ index: data.index, comment: data.comment, component: data.component });
-            if (data.action === "updateComment") this.updateComment({ comment: data.comment, component: data.component });
-            if (data.action === "deleteComment") this.deleteComment({ index: data.index, comment: data.comment });
-            if (data.action === "updateCommentComponent") this.saveComment({ component: data.component });
+            if (data.action === "saveComment"){
+                await this.saveComment({ index: data.index, comment: data.comment, component: data.component });
+            }
+            if (data.action === "updateComment"){
+                await this.updateComment({ comment: data.comment, component: data.component });
+            } 
+            if (data.action === "deleteComment"){
+                await this.deleteComment({ index: data.index, comment: data.comment });
+            }
+            if (data.action === "updateCommentComponent"){
+                await this.saveComment({ component: data.component });
+            }
+
+            this.updateCommentComponents(this.commentComponents);
             this.showCommentEditorPanel = true;
         },
         async getProposal(proposalId) {
@@ -150,14 +159,14 @@ export default {
         },
         async getComments(proposalId) {
 
-            let url = `/unregistered/proposals/${proposalId}`;
+            let url = `/unregistered/proposals/${proposalId}`
             // this.proposalComments = await this.getCommentComponents(url);
         },
         selectProposal(){
             let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
             if(proposal){
                 this.commentComponents = proposal.commentComponent;
-                this.showProposal = !!this.commentComponents.length;
+                this.showProposal = !!this.commentComponents.length
                 proposal.versions = !proposal.versions ? [] : proposal.versions;
                 this.setSelectedProposal(proposal);
                 this.$store.dispatch("vendorProposal/setProposal",{...proposal});
@@ -165,16 +174,21 @@ export default {
             }
         },
         selectVersion(index){
-            this.$store.commit("commentProposal/selectVersion", index);
+            this.$store.commit('commentProposal/selectVersion', index);
         },
         saveVersion(version){
-            this.$store.dispatch("commentProposal/saveVersion", version);
+            this.$store.dispatch('commentProposal/saveVersion', version);
         },
         changeVersion(versions){
-            this.$store.commit("commentProposal/setVersions", versions);
+            this.$store.commit('commentProposal/setVersions', versions);
         },
         removeVersion(id){
-            this.$store.dispatch("commentProposal/removeVersion", id);
+            this.$store.dispatch('commentProposal/removeVersion', id);
+        },
+        async saveCommentComponent(data){
+            await this.saveComment(data)
+            console.log("this.commentComponents",this.commentComponents)
+            this.updateCommentComponents(this.commentComponents);
         }
     },
     computed: {
@@ -188,7 +202,7 @@ export default {
             return this.$store.state.comment.guestName;
         },
         vendor() {
-            return this.proposal.vendor;
+            return this.proposal.vendor
         },
         proposal(){
             return this.$store.state.commentProposal.proposal;
@@ -197,7 +211,7 @@ export default {
             return this.$store.state.comment.commentsProposals;
         },
         currentVersion(){
-            return this.$store.state.commentProposal.currentVersion;
+            return this.$store.state.commentProposal.currentVersion
         },
     },
     watch: {
@@ -215,7 +229,7 @@ export default {
             this.selectProposal();
         }
     }
-};
+}
 
 </script>
 <style lang="scss" scoped>

@@ -1,23 +1,21 @@
 <template>
   <div class="card-section align-center">
-    <input type="hidden" :value="month">
-    <input type="hidden" :value="year">
+    <input type="hidden" :value="month" />
+    <input type="hidden" :value="year" />
     <div class="left">
-      <img class="mr-30" :src="section.img_src">
+      <img class="mr-30" :src="section.img_src" />
       <div class="mr-30" style="width: 30%">
-        <h3 class="title">
-          {{ section.title }}
-        </h3>
+        <h3 class="title">{{ section.title }}</h3>
 
-        <p v-if="section.started_at && section.started_at !== section.ended_at" class="content">
+        <p class="content" v-if="section.started_at && section.started_at !== section.ended_at">
           {{ section.started_at | formatDate }} ~ {{ section.ended_at | formatDate }}
         </p>
-        <p v-if="section.started_at && section.started_at === section.ended_at" class="content">
+        <p class="content" v-if="section.started_at && section.started_at === section.ended_at">
           {{ section.started_at | formatDate }}
         </p>
 
         <div v-if="isEdit && section.warning" class="warning">
-          <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20">
+          <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20" />
           {{ section.warning }}
         </div>
       </div>
@@ -26,18 +24,17 @@
         <div class="picker-panel">
           <functional-calendar
             ref="Calendar"
-            v-model="dateData"
             :is-date-range="true"
             :change-month-function="true"
             :change-year-function="true"
-            :marked-date-range="markedDates"
+            :markedDateRange="markedDates"
             @dayClicked="changeDate($event)"
             @changedMonth="changeMonth($event)"
             @changedYear="changeYear($event)"
-          />
-          <md-checkbox v-model="section.more_one_day" value="more_one_day">
-            More than one day event
-          </md-checkbox>
+            v-model="dateData"
+          >
+          </functional-calendar>
+          <md-checkbox v-model="section.more_one_day" value="more_one_day"> More than one day event </md-checkbox>
         </div>
       </div>
     </div>
@@ -58,14 +55,9 @@ import moment from "moment";
 import { extendMoment } from "moment-range";
 
 export default {
-  name: "EventOverviewDate",
+  name: "event-overview-date",
   components: {
     FunctionalCalendar,
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMMM DD, YYYY");
-    },
   },
   props: {
     section: {
@@ -115,24 +107,11 @@ export default {
       year: moment(Date.now()).year(),
     };
   },
-  watch: {
-    section: {
-      handler(newVal) {
-        if (newVal) this.init();
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.init();
-  },
-  updated() {
-  },
   methods: {
     changeMonth(e) {
       this.month = moment(e).month();
       this.year = moment(e).year();
-      this.markedDates = {start: null, end: null};
+      this.markedDates = {start: null, end: null}
     },
     changeYear(e) {
       this.month = moment(e).month();
@@ -182,6 +161,24 @@ export default {
       }
     },
     init: function () {
+    },
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("MMMM DD, YYYY");
+    },
+  },
+  mounted() {
+    this.init();
+  },
+  updated() {
+  },
+  watch: {
+    section: {
+      handler(newVal) {
+        if (newVal) this.init();
+      },
+      deep: true,
     },
   },
 };

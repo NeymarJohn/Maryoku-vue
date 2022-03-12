@@ -2,34 +2,35 @@
   <div class="refer-modal-item-wrapper">
     <div class="title-cont" @click="handleSelection">
       <div class="left-side">
-        <img v-if="isSelected" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`">
-        <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`">
-        <h3 class="title">
-          <img :src="img">{{ category.title }}
-        </h3>
+        <img v-if="isSelected" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
+        <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
+        <h3 class="title"><img :src="img" />{{ category.title }}</h3>
       </div>
       <div class="right-side">
-        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isSelected ? 'rotate(90deg)' : ''}`">
+        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isSelected ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
-    <div v-if="isSelected" class="vendor-info-cont">
+    <div class="vendor-info-cont" v-if="isSelected">
       <input-proposal-sub-item
         :title="`Vendor's Name`"
         :placeholder="`Type vendor's name here`"
         @change="setReferredVendorProperty('companyName', ...arguments)"
-      />
+      >
+      </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Email`"
         :placeholder="`Type email address here`"
         :img="`${iconUrl}Asset 620.svg`"
         @change="setReferredVendorProperty('vendorMainEmail', ...arguments)"
-      />
+      >
+      </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Link to Website`"
         :placeholder="`Paste link here`"
         :img="`${iconUrl}Asset 619.svg`"
         @change="setReferredVendorProperty('social.website', ...arguments)"
-      />
+      >
+      </input-proposal-sub-item>
     </div>
   </div>
 </template>
@@ -37,7 +38,7 @@
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 
 export default {
-  name: "ReferModalItem",
+  name: "refer-modal-item",
   components: {
     InputProposalSubItem,
   },
@@ -60,9 +61,6 @@ export default {
       },
     };
   },
-  computed: {},
-  created() {},
-  mounted() {},
   methods: {
     handleSelection() {
       this.isSelected = !this.isSelected;
@@ -82,6 +80,9 @@ export default {
       this.$emit("set", this.vendorInfo);
     },
   },
+  created() {},
+  mounted() {},
+  computed: {},
 };
 </script>
 <style lang="scss" scoped>

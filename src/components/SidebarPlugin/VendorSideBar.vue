@@ -2,22 +2,22 @@
   <div class="new-event-side-bar" :data-color="activeColor" :data-background-color="backgroundColor">
     <div class="sidebar-menu">
       <md-button class="md-round md-simple md-just-icon md-transparent menu-button" @click="toggleMenu = !toggleMenu">
-        <img v-if="toggleMenu === false" :src="`${menuIconsURL}Group 2763.svg`">
-        <img v-else :src="`${menuIconsURL}Group 2763 (2).svg`">
+        <img v-if="toggleMenu === false" :src="`${menuIconsURL}Group 2763.svg`" />
+        <img v-else :src="`${menuIconsURL}Group 2763 (2).svg`" />
       </md-button>
-      <div v-show="toggleMenu" class="sidebar-menu__list">
+      <div class="sidebar-menu__list" v-show="toggleMenu">
         <div class="sidebar-menu__item">
           <div class="item-route" @click="goTo('/vendor/profile/settings')">
-            <img :src="`${menuIconsURL}Asset 117.svg`"> Profile
+            <img :src="`${menuIconsURL}Asset 117.svg`" /> Profile
           </div>
           <div class="item-action" @click="goTo('/vendor/signout')">
             Sign Out
-            <img :src="`${menuIconsURL}Asset 118.svg`">
+            <img :src="`${menuIconsURL}Asset 118.svg`" />
           </div>
         </div>
       </div>
     </div>
-    <div ref="sidebarScrollArea" class="sidebar-wrapper">
+    <div class="sidebar-wrapper" ref="sidebarScrollArea">
       <md-list class="nav">
         <sidebar-item
           name="left-menu-events-list"
@@ -29,7 +29,7 @@
             path: `/vendor/dashboard`,
             startLink: `/vendor/dashboard`,
           }"
-        />
+        ></sidebar-item>
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
@@ -41,7 +41,7 @@
             path: `/vendor/proposals`,
             startLink: `/vendor/proposals`,
           }"
-        />
+        ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
@@ -52,7 +52,7 @@
             path: `/vendor/profile/settings`,
             startLink: `/vendor/profile/`,
           }"
-        />
+        ></sidebar-item>
         <sidebar-item
           class="left-menu-events-list"
           :disabled="true"
@@ -63,7 +63,7 @@
             path: `/vendor/dashboard`,
             startLink: `/vendor/dashboard`,
           }"
-        />
+        ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
@@ -75,24 +75,24 @@
             path: `/vendor/inbox`,
             startLink: `/vendor/inbox`,
           }"
-        />
-        <sidebar-item
-          name="left-menu-yearly-plan"
-          class="left-menu-events-list"
-          :link="{
-            name: 'Customers',
-            iconUrl: '/static/icons/vendor/customer.svg',
-            iconActiveUrl: '/static/icons/vendor/customer-active.svg',
-            path: `/vendor/customers`,
-            startLink: `/vendor/customers`,
+        ></sidebar-item>
+          <sidebar-item
+            name="left-menu-yearly-plan"
+            class="left-menu-events-list"
+            :link="{
+              name: 'Customers',
+              iconUrl: '/static/icons/vendor/customer.svg',
+              iconActiveUrl: '/static/icons/vendor/customer-active.svg',
+              path: `/vendor/customers`,
+              startLink: `/vendor/customers`,
           }"
-        />
+          ></sidebar-item>
       </md-list>
     </div>
     <div class="logo">
       <a href="https://maryoku.com/" target="_blank" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
-          <img :src="`${$iconURL}VendorDashboard/maryoku-logo-dark.png`">
+          <img :src="`${$iconURL}VendorDashboard/maryoku-logo-dark.png`" />
           <!--<md-icon>calendar_today</md-icon>-->
         </div>
       </a>
@@ -106,9 +106,14 @@ import Vendor from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 
 export default {
-  name: "Sidebar",
-  components: {
-    SidebarItem,
+  name: "sidebar",
+  data: () => {
+    return {
+      newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
+      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
+      toggleMenu: false,
+      currentUrl: "",
+    };
   },
   props: {
     title: {
@@ -152,76 +157,10 @@ export default {
       default: {},
     },
   },
-  data: () => {
-    return {
-      newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
-      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
-      toggleMenu: false,
-      currentUrl: "",
-    };
-  },
   provide() {
     return {
       autoClose: this.autoClose,
     };
-  },
-  computed: {
-    sidebarStyle() {
-      return {
-        backgroundImage: `url(${this.backgroundImage})`,
-      };
-    },
-    isEventPage() {
-      return this.currentUrl.indexOf("event") >= 0;
-    },
-    isEventPage() {
-      return this.$router.history.current.path.indexOf("event") >= 0;
-    },
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-    proposalRequests(){
-      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          p.remainingTime > 0 && !p.viewed;
-      });
-    },
-    proposalComments(){
-      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          p.remainingTime > 0 && !p.viewed;
-      });
-    },
-    comments(){
-      const commentsComponents = this.$store.state.comment.commentsProposals.map(p => p.commentComponent).flat();
-      const comments = commentsComponents.map(c => c.comments).flat();
-      console.log("comments", comments);
-      return comments.filter(c => !c.viewed);
-    }
-  },
-  watch: {
-    $route: "fetchUrl",
-    event: {
-      handler(newEvent) {
-        this.taskUrl = eventService.getFirstTaskLink(newEvent);
-      },
-      deep: true,
-    },
-  },
-  beforeDestroy() {
-    if (this.$sidebar.showSidebar) {
-      this.$sidebar.showSidebar = false;
-    }
-  },
-  mounted() {
-    this.fetchUrl();
-    this.taskUrl = eventService.getFirstTaskLink(this.event);
-
-    this.$root.$on("proposalTab", _ => {
-      this.proposalRequests.map(it => {
-          this.$store.dispatch("vendorDashboard/updateProposalRequest", {
-              ...it, viewd: true,
-          });
-      });
-    });
   },
   methods: {
     minimizeSidebar() {
@@ -244,6 +183,67 @@ export default {
       location.href = `/#/events/${this.event.id}/booking/overview?walkWithMe=true`;
       location.reload();
       this.toggleMenu = false;
+    },
+  },
+  computed: {
+    sidebarStyle() {
+      return {
+        backgroundImage: `url(${this.backgroundImage})`,
+      };
+    },
+    isEventPage() {
+      return this.currentUrl.indexOf("event") >= 0;
+    },
+    isEventPage() {
+      return this.$router.history.current.path.indexOf("event") >= 0;
+    },
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    proposalRequests(){
+      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
+          p.remainingTime > 0 && !p.viewed
+      })
+    },
+    proposalComments(){
+      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
+          p.remainingTime > 0 && !p.viewed
+      })
+    },
+    comments(){
+      const commentsComponents = this.$store.state.comment.commentsProposals.map(p => p.commentComponent).flat();
+      const comments = commentsComponents.map(c => c.comments).flat();
+      console.log('comments', comments);
+      return comments.filter(c => !c.viewed)
+    }
+  },
+  beforeDestroy() {
+    if (this.$sidebar.showSidebar) {
+      this.$sidebar.showSidebar = false;
+    }
+  },
+  components: {
+    SidebarItem,
+  },
+  mounted() {
+    this.fetchUrl();
+    this.taskUrl = eventService.getFirstTaskLink(this.event);
+
+    this.$root.$on('proposalTab', _ => {
+      this.proposalRequests.map(it => {
+          this.$store.dispatch('vendorDashboard/updateProposalRequest', {
+              ...it, viewd: true,
+          })
+      })
+    })
+  },
+  watch: {
+    $route: "fetchUrl",
+    event: {
+      handler(newEvent) {
+        this.taskUrl = eventService.getFirstTaskLink(newEvent);
+      },
+      deep: true,
     },
   },
 };

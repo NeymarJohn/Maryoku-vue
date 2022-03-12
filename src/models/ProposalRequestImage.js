@@ -1,12 +1,12 @@
-import Model from "./Model";
-import ProposalRequest from "./ProposalRequest";
+import Model from './Model'
+import ProposalRequest from './ProposalRequest'
 
 export default class ProposalRequestImage extends Model {
-  resource() {
-    return "images";
+  resource () {
+    return 'images'
   }
 
-  event() {
-    return this.belongsTo(ProposalRequest);
+  event () {
+    return this.belongsTo(ProposalRequest)
   }
 }

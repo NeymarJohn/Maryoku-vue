@@ -1,11 +1,11 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <div class="main-panel" style="height: 50%">
-      <notifications />
-      <div :class="{ content: !$route.meta.hideContent }" style="padding-right: 0" @click="toggleSidebar">
-        <side-bar :event="eventData" />
+      <notifications></notifications>
+      <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar" style="padding-right: 0">
+        <side-bar :event="eventData"></side-bar>
         <zoom-center-transition :duration="200" mode="out-in">
-          <router-view />
+          <router-view></router-view>
         </zoom-center-transition>
       </div>
     </div>

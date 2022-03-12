@@ -4,23 +4,23 @@
     :item="item"
     :index="index"
     @applyTemplate="applyToTemplate"
-  />
-  <div v-else class="timeline-item d-flex" :class="size === 'large' ? '' : 'align-center'">
+  ></TimelineTemplateItem>
+  <div class="timeline-item d-flex" :class="size === 'large' ? '' : 'align-center'" v-else>
     <div
       :class="size === 'large' ? 'time-line-icon-large mt-20' : 'time-line-icon-medium'"
       :style="`background-color:${editingContent.color}`"
     >
       <img
-        v-if="editingContent.icon"
         :src="`${this.$resourceURL}storage/icons/Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
-      >
+        v-if="editingContent.icon"
+      />
     </div>
     <md-card
-      v-if="editingContent.mode === 'edit'"
-      id="timeline-edit-card"
-      ref="timeline-edit-card"
       class="block-form"
+      v-if="editingContent.mode === 'edit'"
       :style="`border-left : 5px solid ` + editingContent.color"
+      ref="timeline-edit-card"
+      id="timeline-edit-card"
     >
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content class="md-layout">
@@ -28,124 +28,122 @@
           <span
             class="font-size-20 font-bold text-trans text-transform-capitalize"
             :style="`color:${editingContent.color};`"
-          >{{ editingContent.buildingBlockType }}</span>
-          <img :src="`${$iconURL}Timeline-New/tip.svg`" class="label-icon" style="margin-left: 50px">
+            >{{ editingContent.buildingBlockType }}</span
+          >
+          <img :src="`${$iconURL}Timeline-New/tip.svg`" class="label-icon" style="margin-left: 50px" />
           <span>70% of events like yours timed 30 minuets to this slot</span>
         </div>
 
         <div class="md-layout-item md-size-100 mb-10">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">Name</label>
-            <MaryokuInput v-model="editingContent.title" type="text" class="mt-10" />
+            <MaryokuInput type="text" class="mt-10" v-model="editingContent.title" />
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-20">
           <md-button class="md-simple edit-btn" @click="showDescription = !showDescription">
-            <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10">
+            <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
             <span class="color-red">Add Description</span>
             <span class="color-black font-size-14 pl-5">(Optional)</span>
           </md-button>
-          <div v-if="showDescription" class="form-group mt-30">
+          <div class="form-group mt-30" v-if="showDescription">
             <label class="font-size-16 font-bold">Description</label>
-            <MaryokuTextarea v-model="editingContent.description" size="small" class="mt-10" />
+            <MaryokuTextarea size="small" class="mt-10" v-model="editingContent.description"></MaryokuTextarea>
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-50 d-flex">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">
-              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10">Start At
+              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Start At
             </label>
             <TimeInput
               v-model="editingContent.startTime"
               :h24="false"
               class="mt-10"
-              display-format="hh:mm"
+              displayFormat="hh:mm"
               size="normal"
-            />
+            ></TimeInput>
           </div>
-          <div class="divider" />
+          <div class="divider"></div>
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">
-              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10">Finishes At
+              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Finishes At
             </label>
             <time-input
               v-model="editingContent.endTime"
               :h24="false"
-              display-format="hh:mm"
+              displayFormat="hh:mm"
               class="mt-10"
               size="normal"
-            />
+            ></time-input>
           </div>
         </div>
       </md-card-content>
       <md-card-actions md-alignment="right" style="border: none" class="edit-timeline-footer">
         <md-button
-          v-if="!editingContent.dateCreated"
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
           @click="cancelTimelineItem(editingContent)"
+          v-if="!editingContent.dateCreated"
+          >Cancel</md-button
         >
-          Cancel
-        </md-button>
         <md-button
-          v-else
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
+          v-else
           @click="cancelTimeline(editingContent)"
+          >Cancel</md-button
         >
-          Cancel
-        </md-button>
         <md-button
-          v-if="!editingContent.dateCreated"
           :disabled="!saveAvailable"
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-red"
+          v-if="!editingContent.dateCreated"
           @click="saveTimelineItem"
+          >Save</md-button
         >
-          Save
-        </md-button>
         <md-button
-          v-else
           :disabled="editingContent.isItemLoading"
           name="event-planner-tab-timeline-item-edit"
           class="event-planner-tab-timeline-item-edit maryoku-btn md-red"
+          v-else
           @click="updateTimelineItem"
+          >Save</md-button
         >
-          Save
-        </md-button>
       </md-card-actions>
     </md-card>
     <md-card
-      v-else
       class="block-form"
       :class="size === 'large' ? 'p-20 m-20' : 'my-10 ml-30 p-10 w-min-500'"
       :style="getBorderStyle(editingContent.color)"
+      v-else
     >
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content>
-        <div v-if="editMode" class="timeline-actions">
+        <div class="timeline-actions" v-if="editMode">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
-            <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px">
+            <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
           <md-button class="md-icon-button md-simple" @click="removeItem(editingContent)">
-            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px">
+            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
         </div>
         <div class="item-title-and-time" :class="size === 'large' ? '' : 'd-flex align-center'">
           <span
             class="item-time color-dark-gray"
             :class="size === 'large' ? 'font-size-20' : 'font-size-16 pr-20 border-right'"
-          >{{ formatHour(editingContent.startTime) }} - {{ formatHour(editingContent.endTime) }}</span>
+            >{{ formatHour(editingContent.startTime) }} - {{ formatHour(editingContent.endTime) }}</span
+          >
 
           <p :class="size === 'large' ? 'my-15' : 'ml-20 my-0'">
-            <span v-if="editingContent.title" class="font-bold-extra font-size-20 mr-20 color-black-heavy">{{
+            <span class="font-bold-extra font-size-20 mr-20 color-black-heavy" v-if="editingContent.title">{{
               editingContent.title
             }}</span>
             <md-button
-              v-if="editingContent.description && size === 'large'"
               class="md-button edit-btn md-red md-simple"
-              style="margin: 3px !important"
               @click="showDescription = !showDescription"
+              style="margin: 3px !important"
+              v-if="editingContent.description && size === 'large'"
             >
               <span v-if="!showDescription" class="color-red font-regular">
                 Read More
@@ -158,7 +156,7 @@
             </md-button>
           </p>
 
-          <p v-if="showDescription" class="item-desc">
+          <p class="item-desc" v-if="showDescription">
             {{ editingContent.description }}
           </p>
         </div>
@@ -217,22 +215,6 @@ export default {
       vendor: "",
     };
   },
-  computed: {
-    saveAvailable() {
-      return this.editingContent.startTime && this.editingContent.endTime;
-    },
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-  },
-  watch: {
-    size(newVal) {
-      console.log("timelineItem.watch.size");
-    },
-  },
   mounted() {
     console.log("timeline-item.mounted", this.size);
     this.editingContent = { ...this.item };
@@ -243,6 +225,17 @@ export default {
     //   // this.timelineItems[item.date][index] = {};
     //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
     // });
+  },
+  computed: {
+    saveAvailable() {
+      return this.editingContent.startTime && this.editingContent.endTime;
+    },
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
   },
   methods: {
     getBorderStyle(color) {
@@ -351,9 +344,9 @@ export default {
         confirmButtonText: "Yes I'm sure",
         buttonsStyling: false,
         customClass: {
-            popup:"swal-alert-container",
-            header: "swal-alert-header",
-            htmlContainer: "swal-alert-html",
+            popup:'swal-alert-container',
+            header: 'swal-alert-header',
+            htmlContainer: 'swal-alert-html',
         }
       })
         .then(result => {
@@ -365,6 +358,11 @@ export default {
         .catch(err => {
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
+    },
+  },
+  watch: {
+    size(newVal) {
+      console.log("timelineItem.watch.size");
     },
   },
 };

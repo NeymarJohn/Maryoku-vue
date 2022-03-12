@@ -8,31 +8,26 @@
           :size="42"
           :icon="`${$iconURL}RSVP/Path+251.svg`"
           @closed="updateEvent"
-        />
+        >
+        </color-button>
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content">
         <span>
           {{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
         </span>
-        <div v-if="!editingTimezone" class="timezone-wrapper">
+        <div class="timezone-wrapper" v-if="!editingTimezone">
           <span>({{ timezone }})</span>
-          <md-button v-if="editable" class="edit-btn md-simple md-red" @click="editingTimezone = true">
-            Edit
-          </md-button>
+          <md-button class="edit-btn md-simple md-red" @click="editingTimezone = true" v-if="editable">Edit</md-button>
         </div>
-        <div v-if="editingTimezone" class="timezone-wrapper">
-          <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
-          <md-button class="maryoku-btn md-simple md-red" @click="editingTimezone = false">
-            Cancel
-          </md-button>
-          <md-button class="maryoku-btn md-red" @click="updateEvent">
-            Save
-          </md-button>
+        <div class="timezone-wrapper" v-if="editingTimezone">
+          <v-select class="timezone-selector" v-model="timezone" :options="timezoneList"></v-select>
+          <md-button class="maryoku-btn md-simple md-red" @click="editingTimezone = false">Cancel</md-button>
+          <md-button class="maryoku-btn md-red" @click="updateEvent">Save</md-button>
         </div>
       </div>
     </div>
-    <div v-if="!isVirtualEvent" class="event-info-item">
+    <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
           v-model="iconColors.locationColor"
@@ -40,14 +35,15 @@
           :size="42"
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
           @closed="updateEvent"
-        />
+        >
+        </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
       <div class="event-info-item-content">
         <span>{{ event.location }}</span>
       </div>
     </div>
-    <div v-else class="event-info-item">
+    <div class="event-info-item" v-else>
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
           v-model="iconColors.locationColor"
@@ -55,14 +51,13 @@
           :size="42"
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
           @closed="updateEvent"
-        />
+        >
+        </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
-      <div class="event-info-item-content">
-        <span>Zoom</span>
-      </div>
+      <div class="event-info-item-content"><span>Zoom</span></div>
     </div>
-    <div v-if="!isVirtualEvent" class="event-info-item">
+    <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
           v-model="iconColors.soloColor"
@@ -70,28 +65,21 @@
           :size="42"
           :icon="`${$iconURL}RSVP/Path+1383.svg`"
           @closed="updateEvent"
-        />
+        >
+        </color-button>
         <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
       </div>
-      <div v-if="!editingPlusOne" class="event-info-item-content d-flex align-center">
+      <div class="event-info-item-content d-flex align-center" v-if="!editingPlusOne">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
-        <md-button v-if="editable" class="md-simple edit-btn md-red" @click="editingPlusOne = !editingPlusOne">
+        <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingPlusOne = !editingPlusOne">
           Edit
         </md-button>
       </div>
-      <div v-else class="event-info-item-content d-flex align-center">
-        <md-checkbox v-model="isPluseOne" :value="false">
-          Solo
-        </md-checkbox>
-        <md-checkbox v-model="isPluseOne" :value="true">
-          +1
-        </md-checkbox>
-        <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">
-          Cancel
-        </md-button>
-        <md-button class="md-red maryoku-btn" @click="updateEvent">
-          Save
-        </md-button>
+      <div class="event-info-item-content d-flex align-center" v-else>
+        <md-checkbox v-model="isPluseOne" :value="false">Solo</md-checkbox>
+        <md-checkbox v-model="isPluseOne" :value="true">+1</md-checkbox>
+        <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">Cancel</md-button>
+        <md-button class="md-red maryoku-btn" @click="updateEvent">Save</md-button>
       </div>
     </div>
     <div class="event-info-item">
@@ -102,25 +90,23 @@
           :size="42"
           :icon="`${$iconURL}RSVP/Group+1279.svg`"
           @closed="updateEvent"
-        />
+        >
+        </color-button>
         <span :class="{ underline: !editable }">ARRIVAL?</span>
       </div>
 
-      <div v-if="!editingArrival" class="event-info-item-content">
+      <div class="event-info-item-content" v-if="!editingArrival">
         <span>
           {{ event.arrival || "-" }}&emsp;
-          <md-button v-if="editable" class="md-simple edit-btn md-red" @click="editingArrival = !editingArrival">
-            Edit</md-button>
+          <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival">
+            Edit</md-button
+          >
         </span>
       </div>
-      <div v-else class="event-info-item-content d-flex align-center font-size-20">
-        <input v-model="eventArrival" type="text">
-        <md-button class="md-simple md-black maryoku-btn" @click="editingArrival = !editingArrival">
-          Cancel
-        </md-button>
-        <md-button class="md-red maryoku-btn" @click="updateEvent">
-          Save
-        </md-button>
+      <div class="event-info-item-content d-flex align-center font-size-20" v-else>
+        <input type="text" v-model="eventArrival" />
+        <md-button class="md-simple md-black maryoku-btn" @click="editingArrival = !editingArrival">Cancel</md-button>
+        <md-button class="md-red maryoku-btn" @click="updateEvent">Save</md-button>
       </div>
     </div>
   </div>
@@ -167,37 +153,6 @@ export default {
       iconColors: {},
     };
   },
-  computed: {
-    concept() {
-      return this.event.concept ? this.event.concept : {};
-    },
-    backgroundColor() {
-      return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
-    },
-    isPlusOne() {
-      if ("isPlusOne" in this.event) {
-        return this.event.isPlusOne;
-      }
-      return this.event.guestType === "employees-spouses" || this.event.guestType === "families";
-    },
-    isVirtualEvent() {
-      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
-    },
-  },
-  watch: {
-    event(newValue, oldValue) {
-      if (!newValue.timezone) {
-        console.log(newValue);
-        this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
-          const phrases = timezone.timeZoneName.split(" ");
-          const result = phrases.reduce((s, phrase) => {
-            return `${s}${phrase.substr(0, 1).toUpperCase()}`;
-          }, "");
-          this.timezone = result;
-        });
-      }
-    },
-  },
   created() {
     if (this.event.locationId && !this.event.timezone) {
       this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
@@ -241,6 +196,37 @@ export default {
       this.editingPlusOne = false;
       this.editingArrival = false;
       this.editingTimezone = false;
+    },
+  },
+  computed: {
+    concept() {
+      return this.event.concept ? this.event.concept : {};
+    },
+    backgroundColor() {
+      return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
+    },
+    isPlusOne() {
+      if ("isPlusOne" in this.event) {
+        return this.event.isPlusOne;
+      }
+      return this.event.guestType === "employees-spouses" || this.event.guestType === "families";
+    },
+    isVirtualEvent() {
+      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
+    },
+  },
+  watch: {
+    event(newValue, oldValue) {
+      if (!newValue.timezone) {
+        console.log(newValue);
+        this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
+          const phrases = timezone.timeZoneName.split(" ");
+          const result = phrases.reduce((s, phrase) => {
+            return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+          }, "");
+          this.timezone = result;
+        });
+      }
     },
   },
 };

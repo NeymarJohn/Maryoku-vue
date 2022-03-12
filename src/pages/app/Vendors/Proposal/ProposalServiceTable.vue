@@ -1,21 +1,21 @@
 <template>
-  <div v-if="services && services.length > 0" class="proposal-service-table-wrapper">
+  <div class="proposal-service-table-wrapper" v-if="services && services.length > 0">
     <div class="editable-sub-items-cont">
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
+        :serviceType="tableCategory"
         :key="req.requirementTitle"
-        :service-type="tableCategory"
         :index="rIndex"
-        :default-item="req"
+        :defaultItem="req"
         :active="true"
         :step="1"
         @save="updateItem"
         @remove="removeItem"
       />
-      <div v-if="tableCategory === 'cost'" class="editable-sub-items-footer">
+      <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span class="text-right">Total</span>
-        <span />
-        <span />
+        <span> </span>
+        <span> </span>
         <span class="text-right"> ${{ totalPrice | withComma }} </span>
       </div>
     </div>
@@ -35,18 +35,13 @@ import S3Service from "@/services/s3.service";
 import _ from "underscore";
 
 export default {
-  name: "ProposalServiceTable",
+  name: "proposal-service-table",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
     ProposalServiceTableItem,
     Money,
     vueDropzone: vue2Dropzone,
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
   },
   props: {
     category: String,
@@ -113,101 +108,6 @@ export default {
       },
       proposalData: {},
     };
-  },
-  computed: {
-    requirements() {
-      console.log(this.category);
-      return this.proposalRequest.componentRequirements[this.category];
-    },
-    optionalRequirements() {
-      if (!this.requirements) return [];
-      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    mandatoryRequirements() {
-      if (!this.requirements) return [];
-      return this.requirements.filter((item) => item.mustHave);
-    },
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    services: {
-      get: function () {
-        console.log("services", this.category);
-        if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[this.category];
-        else if (this.tableCategory === "included") {
-          return this.$store.state.vendorProposal.includedServices[this.category];
-        } else if (this.tableCategory === "extra")
-          return this.$store.state.vendorProposal.extraServices[this.category];
-      },
-      set: function (newServices) {
-        if (this.tableCategory === "cost")
-          this.$store.commit("vendorProposal/setCostServices", { category: this.category, services: newServices });
-        else if (this.tableCategory === "included")
-          this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: newServices });
-        else if (this.tableCategory === "extra")
-          this.$store.commit("vendorProposal/setExtraServices", { category: this.category, services: newServices });
-      },
-    },
-    calculatedTotal() {
-      return this.totalPrice - this.discount.price + this.taxPrice;
-    },
-    taxPrice() {
-      return Math.round(((this.totalPrice - this.discount.price) * this.tax) / 100);
-    },
-    totalPrice() {
-      if (!this.services) {
-        return 0;
-      }
-      const sumPrice = this.services.reduce((s, item) => {
-        return s + (item.isComplimentary ? 0 : item.requirementValue * item.price);
-      }, 0);
-      return sumPrice;
-    },
-  },
-  watch: {},
-  created() {
-    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-    this.$root.$on("remove-proposal-requirement", (item) => {
-      // todo why update requirement of proposal request if remove item from costServices
-      // this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
-      //   (req) => req.requirementTitle != item.requirementTitle,
-      // );
-      // this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      // this.$forceUpdate();
-      this.cancel();
-    });
-
-    this.$root.$on("add-service-item", (item) => {
-      this.clickedItem = !this.clickedItem;
-      this.serviceItem = item;
-      this.qty = this.unit = this.subTotal = 0;
-      this.selectedQuickButton = item;
-    });
-
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.proposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      this.$forceUpdate();
-    });
-
-    if (this.$refs.servicesCont) {
-      this.servicesWidth = this.$refs.servicesCont.clientWidth;
-    }
-    this.tax = this.$store.state.vendorProposal.taxes[this.category];
-    if (!this.tax) this.tax = 0;
-    this.discount = this.$store.state.vendorProposal.discounts[this.category];
-    if (!this.discount) {
-      this.discount = {
-        percentage: 0,
-        price: 0,
-      };
-    } else if (!this.discount.price) {
-      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
-    }
   },
   methods: {
     getObject(item) {
@@ -369,6 +269,106 @@ export default {
       const extension = file.type.split("/")[1];
     },
   },
+  created() {
+    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+    this.$root.$on("remove-proposal-requirement", (item) => {
+      // todo why update requirement of proposal request if remove item from costServices
+      // this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
+      //   (req) => req.requirementTitle != item.requirementTitle,
+      // );
+      // this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      // this.$forceUpdate();
+      this.cancel();
+    });
+
+    this.$root.$on("add-service-item", (item) => {
+      this.clickedItem = !this.clickedItem;
+      this.serviceItem = item;
+      this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+      this.proposalRequest.requirements[index] = item;
+      this.proposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      this.$forceUpdate();
+    });
+
+    if (this.$refs.servicesCont) {
+      this.servicesWidth = this.$refs.servicesCont.clientWidth;
+    }
+    this.tax = this.$store.state.vendorProposal.taxes[this.category];
+    if (!this.tax) this.tax = 0;
+    this.discount = this.$store.state.vendorProposal.discounts[this.category];
+    if (!this.discount) {
+      this.discount = {
+        percentage: 0,
+        price: 0,
+      };
+    } else if (!this.discount.price) {
+      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
+    }
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  computed: {
+    requirements() {
+      console.log(this.category);
+      return this.proposalRequest.componentRequirements[this.category];
+    },
+    optionalRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    mandatoryRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => item.mustHave);
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    services: {
+      get: function () {
+        console.log('services', this.category);
+        if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[this.category];
+        else if (this.tableCategory === "included") {
+          return this.$store.state.vendorProposal.includedServices[this.category];
+        } else if (this.tableCategory === "extra")
+          return this.$store.state.vendorProposal.extraServices[this.category];
+      },
+      set: function (newServices) {
+        if (this.tableCategory === "cost")
+          this.$store.commit("vendorProposal/setCostServices", { category: this.category, services: newServices });
+        else if (this.tableCategory === "included")
+          this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: newServices });
+        else if (this.tableCategory === "extra")
+          this.$store.commit("vendorProposal/setExtraServices", { category: this.category, services: newServices });
+      },
+    },
+    calculatedTotal() {
+      return this.totalPrice - this.discount.price + this.taxPrice;
+    },
+    taxPrice() {
+      return Math.round(((this.totalPrice - this.discount.price) * this.tax) / 100);
+    },
+    totalPrice() {
+      if (!this.services) {
+        return 0;
+      }
+      const sumPrice = this.services.reduce((s, item) => {
+        return s + (item.isComplimentary ? 0 : item.requirementValue * item.price);
+      }, 0);
+      return sumPrice;
+    },
+  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

@@ -4,23 +4,17 @@
       <div class="md-layout-item md-size-40 left-side-section">
         <div class="card-section card-overview">
           <div class="budget-card">
-            <div class="font-size-22">
-              Budget
-            </div>
-            <div class="font-size-50 font-bold value">
-              ${{ event.totalBudget | withComma(Number) }}
-            </div>
-            <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-btn" @click="showBudgetModal = true">
-              Edit
-            </md-button>
+            <div class="font-size-22">Budget</div>
+            <div class="font-size-50 font-bold value">${{ event.totalBudget | withComma(Number) }}</div>
+            <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-btn" @click="showBudgetModal = true"
+              >Edit</md-button
+            >
           </div>
         </div>
         <div class="card-section card-expense mt-3">
-          <div class="section-header with-border">
-            Expenses
-          </div>
+          <div class="section-header with-border">Expenses</div>
           <div style="margin: 40px 30px">
-            <pie-chart-round :event.sync="event" :items="pieChartData" columns="1" />
+            <pie-chart-round :event.sync="event" :items="pieChartData" columns="1"></pie-chart-round>
           </div>
         </div>
       </div>
@@ -35,12 +29,12 @@
             <template slot="tab-pane-1">
               <event-budget-component
                 v-for="component in categoryList"
-                :key="component.id"
                 :component="component"
+                :key="component.id"
                 :editable="canEdit"
                 @delete="deleteCategory"
                 @updateCategory="updateCategory"
-              />
+              ></event-budget-component>
               <event-budget-component
                 v-if="event.unexpectedBudget"
                 :editable="canEdit"
@@ -53,7 +47,7 @@
                 }"
                 @delete="deleteCategory"
                 @updateCategory="updateCategory"
-              />
+              ></event-budget-component>
               <event-budget-component
                 v-if="event.allocatedFees + event.allocatedTips"
                 :editable="canEdit"
@@ -66,7 +60,7 @@
                 }"
                 @delete="deleteCategory"
                 @updateCategory="updateCategory"
-              />
+              ></event-budget-component>
               <event-budget-component
                 :editable="false"
                 :component="{
@@ -76,30 +70,30 @@
                   icon: 'unused.svg',
                   allocatedBudget: unusedBudget,
                 }"
-              />
+              ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
                 :component="{ title: 'Total', allocatedBudget: event.totalBudget }"
-              />
-              <div v-if="canEdit" class="add-category-row">
+              ></event-budget-component>
+              <div class="add-category-row" v-if="canEdit">
                 <md-button
                   class="md-simple add-category-btn md-red add-category-button"
                   @click="showAddNewCategory = true"
                 >
-                  <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`">
+                  <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" />
                   <span class="font-size-20 font-bold text-transform-capitalize">Add new category</span>
                 </md-button>
               </div>
             </template>
             <template slot="tab-pane-2">
               <event-budget-component
-                v-for="(component, index) in categoryList"
-                :key="index"
                 :editable="canEdit"
                 type="perguest"
                 :participants="event.numberOfParticipants"
+                v-for="(component, index) in categoryList"
                 :component="component"
-              />
+                :key="index"
+              ></event-budget-component>
               <event-budget-component
                 v-if="event.unexpectedBudget"
                 :editable="canEdit"
@@ -114,7 +108,7 @@
                 :participants="event.numberOfParticipants"
                 @delete="deleteCategory"
                 @updateCategory="updateCategory"
-              />
+              ></event-budget-component>
               <event-budget-component
                 v-if="event.allocatedFees + event.allocatedTips"
                 :editable="canEdit"
@@ -129,7 +123,7 @@
                 :participants="event.numberOfParticipants"
                 @delete="deleteCategory"
                 @updateCategory="updateCategory"
-              />
+              ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
                 :component="{
@@ -141,19 +135,19 @@
                 }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
-              />
+              ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
                 :component="{ title: 'Total', allocatedBudget: event.totalBudget }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
-              />
-              <div v-if="canEdit" class="add-category-row">
+              ></event-budget-component>
+              <div class="add-category-row" v-if="canEdit">
                 <md-button
                   class="md-simple add-category-btn md-red add-category-button"
                   @click="showAddNewCategory = true"
                 >
-                  <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`">
+                  <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" />
                   <span class="font-size-20 font-bold text-transform-capitalize">Add new category</span>
                 </md-button>
               </div>
@@ -168,14 +162,14 @@
       :event="event"
       @cancel="showBudgetModal = false"
       @save="updateBudget"
-    />
+    ></budget-edit-modal>
     <add-new-category-modal
       v-if="showAddNewCategory"
       :event="event"
       :components="categoryList"
       @cancel="showAddNewCategory = false"
       @save="addNewCategory"
-    />
+    ></add-new-category-modal>
   </div>
 </template>
 <script>
@@ -207,6 +201,7 @@ export default {
       showAddNewCategory: false,
     };
   },
+  created() {},
   computed: {
     event() {
       return this.$store.state.event.eventData;
@@ -236,7 +231,6 @@ export default {
       return this.$store.state.event.eventData.components.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
     },
   },
-  created() {},
   methods: {
     updateBudget(eventBudget) {
       const event = new CalendarEvent({
@@ -265,9 +259,9 @@ export default {
         });
         if (changedMoney.selectedOption === "total") {
             event.totalBudget = this.event.totalBudget - changedMoney.offset;
-            if (changedMoney.hasOwnProperty("title") && changedMoney.title) {
-                if (changedMoney.title === "Unexpected") event.unexpectedBudget = 0;
-                if (changedMoney.title === "Extra") {
+            if (changedMoney.hasOwnProperty('title') && changedMoney.title) {
+                if (changedMoney.title === 'Unexpected') event.unexpectedBudget = 0
+                if (changedMoney.title === 'Extra') {
                     event.allocatedTips = 0;
                     event.allocatedFees = 0;
                 }
@@ -285,9 +279,9 @@ export default {
 
         if (changedMoney.selectedOption === "total") {
             event.totalBudget = this.event.totalBudget + changedMoney.offset;
-            if (changedMoney.hasOwnProperty("title") && changedMoney.title) {
-                if (changedMoney.title === "Unexpected") event.unexpectedBudget = this.event.unexpectedBudget + changedMoney.offset;
-                if (changedMoney.title === "Extra") {
+            if (changedMoney.hasOwnProperty('title') && changedMoney.title) {
+                if (changedMoney.title === 'Unexpected') event.unexpectedBudget = this.event.unexpectedBudget + changedMoney.offset
+                if (changedMoney.title === 'Extra') {
                     event.allocatedTips = this.event.allocatedTips + changedMoney.offset;
                 }
             }

@@ -3,11 +3,11 @@
     <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
       <div class="left-side">
         <div class="check-cont" @click="clickItem($event, service.componentId)">
-          <img v-if="isChecked" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`">
-          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`">
+          <img v-if="isChecked" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
+          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
         <h3 class="title">
-          <img :src="img">
+          <img :src="img" />
           <span>{{ category }}</span>
         </h3>
       </div>
@@ -20,39 +20,39 @@
           <span>You're the First bidder</span>
         </div>
         <img
+          @click="toggle($event)"
           :src="`${iconUrl}Component 36 (2).svg`"
           :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
-          @click="toggle($event)"
-        >
+        />
       </div>
     </div>
     <template v-if="isExpanded">
       <proposal-requirements
-        key="cost"
         class="additional-service"
         label="Cost Items"
-        table-category="cost"
+        key="cost"
+        tableCategory="cost"
         icon="Group+10662.svg"
         description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-        :vendor-category="service.componentId"
+        :vendorCategory="service.componentId"
       />
       <proposal-requirements
-        key="included"
         class="additional-service"
-        table-category="included"
+        tableCategory="included"
         label="Included in Price"
         icon="includedPrice.png"
         description="(from your “included in price” items)"
-        :vendor-category="service.componentId"
+        key="included"
+        :vendorCategory="service.componentId"
       />
       <proposal-requirements
-        key="extra"
         class="additional-service"
-        table-category="extra"
+        tableCategory="extra"
         label="Offered Extras"
         icon="cost-requirements.png"
         description="What elements would you like to suggest to the client with extra pay? "
-        :vendor-category="service.componentId"
+        key="extra"
+        :vendorCategory="service.componentId"
       />
       <!-- <proposal-upload-legal></proposal-upload-legal> -->
     </template>
@@ -73,7 +73,7 @@ import ProposalServiceTable from "./ProposalServiceTable";
 import ProposalUploadLegal from "./ProposalUploadLegal";
 import ProposalRequirements from "./ProposalRequirements.vue";
 export default {
-  name: "ProposalItem",
+  name: "proposal-item",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
@@ -152,21 +152,48 @@ export default {
       },
     };
   },
-  computed: {
-    mandatoryRequirements() {
-      if (!this.proposalRequest) return [];
-      if (!this.proposalRequest.requirements[this.category]) return [];
-      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
+  methods: {
+    toggle(event) {
+      event.stopPropagation();
+      this.isExpanded = !this.isExpanded;
+      if (this.isExpanded) {
+        this.$store.commit("vendorProposal/setValue", {
+          key: "currentSecondaryService",
+          value: this.service.componentId,
+        });
+      }
     },
-    isChecked(){
-      return this.additionalServices.includes(this.service.componentId);
+    changeItem(event){
+
     },
-    additionalServices(){
-        return this.$store.state.vendorProposal.additionalServices;
+    clickItem(event, category) {
+      event.stopPropagation();
+
+      let services = this.additionalServices;
+      if (!this.isChecked) {
+
+        this.isExpanded = true;
+        this.$store.commit("vendorProposal/setValue", {
+          key: "currentSecondaryService",
+          value: this.service.componentId,
+        });
+        services.push(category);
+      } else {
+        services = services.filter(s => s !== category);
+        this.isExpanded = false;
+      }
+      this.$store.commit('vendorProposal/setAdditionalServices', services);
+
+      this.$root.$emit("update-additional-services", category);
     },
-  },
-  watch: {
-    service(newValue){console.log("proposal.item.secondary.service", newValue);}
+    cancel() {
+      this.selectedQuickButton = "";
+      this.qty = 0;
+      this.unit = 0;
+      this.subTotal = 0;
+      this.serviceItem = null;
+      this.discount_by_amount = null;
+    },
   },
   created() {
     this.newProposalRequest = this.proposalRequest;
@@ -226,48 +253,21 @@ export default {
       this.servicesWidth = this.$refs.servicesCont.clientWidth;
     }
   },
-  methods: {
-    toggle(event) {
-      event.stopPropagation();
-      this.isExpanded = !this.isExpanded;
-      if (this.isExpanded) {
-        this.$store.commit("vendorProposal/setValue", {
-          key: "currentSecondaryService",
-          value: this.service.componentId,
-        });
-      }
+  computed: {
+    mandatoryRequirements() {
+      if (!this.proposalRequest) return [];
+      if (!this.proposalRequest.requirements[this.category]) return [];
+      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
     },
-    changeItem(event){
-
+    isChecked(){
+      return this.additionalServices.includes(this.service.componentId);
     },
-    clickItem(event, category) {
-      event.stopPropagation();
-
-      let services = this.additionalServices;
-      if (!this.isChecked) {
-
-        this.isExpanded = true;
-        this.$store.commit("vendorProposal/setValue", {
-          key: "currentSecondaryService",
-          value: this.service.componentId,
-        });
-        services.push(category);
-      } else {
-        services = services.filter(s => s !== category);
-        this.isExpanded = false;
-      }
-      this.$store.commit("vendorProposal/setAdditionalServices", services);
-
-      this.$root.$emit("update-additional-services", category);
+    additionalServices(){
+        return this.$store.state.vendorProposal.additionalServices;
     },
-    cancel() {
-      this.selectedQuickButton = "";
-      this.qty = 0;
-      this.unit = 0;
-      this.subTotal = 0;
-      this.serviceItem = null;
-      this.discount_by_amount = null;
-    },
+  },
+  watch: {
+    service(newValue){console.log('proposal.item.secondary.service', newValue)}
   },
 };
 </script>

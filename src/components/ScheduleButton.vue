@@ -5,7 +5,7 @@
       @click="showScheduleModal = true"
     >
       <span class="font-size-16 text-transform-capitalize">
-        <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`">
+        <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`" />
         Schedule Campaign
       </span>
     </md-button>
@@ -16,9 +16,7 @@
       class="schedule-menu"
     >
       <md-button md-menu-trigger class="md-icon-button schedule-menu-btn">
-        <md-icon class="schedule-menu-btn-icon">
-          keyboard_arrow_down
-        </md-icon>
+        <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
       </md-button>
       <md-menu-content>
         <md-menu-item class="text-center" @click="saveDraftCampaign">
@@ -27,7 +25,7 @@
               :src="`${$iconURL}Campaign/Group 1908.svg`"
               class="mr-10"
               style="width: 20px; height: 20px"
-            >Save Draft
+            />Save Draft
           </span>
         </md-menu-item>
         <md-menu-item class="text-center" @click="startCampaign">
@@ -36,7 +34,7 @@
               :src="`${$iconURL}Campaign/group-2428.svg`"
               class="mr-10"
               style="width: 20px; height: 20px"
-            >Send Now
+            />Send Now
           </span>
         </md-menu-item>
       </md-menu-content>

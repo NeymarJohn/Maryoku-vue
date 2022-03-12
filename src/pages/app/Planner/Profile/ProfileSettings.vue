@@ -2,17 +2,11 @@
   <div class="profile-container">
     <tabs :tab-name="['Profile Details', 'Payment & Invoices', 'Notifications', 'Permissions']" color-button="info">
       <template slot="tab-pane-1">
-        <profile-details />
+        <profile-details></profile-details>
       </template>
-      <template slot="tab-pane-2">
-        <div class="p-40" />
-      </template>
-      <template slot="tab-pane-3">
-        <div class="p-40" />
-      </template>
-      <template slot="tab-pane-4">
-        <permissions />
-      </template>
+      <template slot="tab-pane-2"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-3"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-4"> <permissions></permissions> </template>
     </tabs>
   </div>
 </template>

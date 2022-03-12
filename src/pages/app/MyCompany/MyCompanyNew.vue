@@ -7,36 +7,32 @@
           <div class="md-layout">
             <div class="md-layout-item md-size-100 company-view-common-logo_block hover-block">
               <div class="company-main-logo-block">
-                <img class="company-logo" :src="getAvatar">
+                <img class="company-logo" :src="getAvatar" />
                 <div class="onhover-block">
                   <div class="company-logo-button-block">
                     <div @click="UploadAvatar">
                       <md-icon class="company-logo-button">
                         edit
                         <input
-                          id="company-avatar-upload"
                           type="file"
-                          style="display: none"
+                          id="company-avatar-upload"
                           @change="onFileChange($event)"
-                        >
+                          style="display: none"
+                        />
                       </md-icon>
                     </div>
                     <div @click="deleteAvatar(customer.files[0])">
-                      <md-icon class="company-logo-button">
-                        clear
-                      </md-icon>
+                      <md-icon class="company-logo-button">clear</md-icon>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="company-name-block">
-                <h4 class="title text-gray" style="font-weight: 500">
-                  {{ customer.name }}
-                </h4>
+                <h4 class="title text-gray" style="font-weight: 500">{{ customer.name }}</h4>
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px" />
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
             <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
               <div style="display: flex; align-items: center; justify-content: space-between">
@@ -54,17 +50,17 @@
 
                   <template slot="popover">
                     <input-text
-                      label-style="company_label_input"
+                      labelStyle="company_label_input"
                       label="Number of guests"
                       name="numberOfEmployees"
                       :value="String(customer.numberOfEmployees)"
-                      :on-change="onChange"
-                      editeble-mode
+                      :onChange="onChange"
+                      editebleMode
                       :focus="inputFocus"
-                      :is-editable="isEnabled"
-                      :action-func="saveInfoFromForm"
+                      :isEditable="isEnabled"
+                      :actionFunc="saveInfoFromForm"
                       :ctx="customer"
-                      field-style="without-border"
+                      fieldStyle="without-border"
                       @update-focus-value="onUpdateFocus"
                     />
                   </template>
@@ -88,17 +84,17 @@
                   <template slot="popover">
                     <select-common
                       label="Industry"
-                      label-style="om_label_input"
+                      labelStyle="om_label_input"
                       :list="industryList"
                       name="industry"
-                      :on-change="onChange"
-                      :value-name="['title', 'title']"
-                      editeble-mode
-                      :is-editable="isEnabled"
-                      :action-func="saveInfoFromForm"
+                      :onChange="onChange"
+                      :valueName="['title', 'title']"
+                      editebleMode
+                      :isEditable="isEnabled"
+                      :actionFunc="saveInfoFromForm"
                       :ctx="customer"
                       :value="customer.industry"
-                      field-style="without-border"
+                      fieldStyle="without-border"
                     />
                   </template>
                 </v-popover>
@@ -106,18 +102,16 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px" />
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
             <div>
-              <div class="header text-bold text-gray">
-                Contact Information
-              </div>
+              <div class="header text-bold text-gray">Contact Information</div>
               <div v-if="customer.mainAddress" class="md-layout">
                 <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
                   <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
-                        <i class="fa fa-map-marker-alt" />
+                        <i class="fa fa-map-marker-alt"></i>
                       </span>
                       <span>{{ customer.mainAddress.onelineAddress }}</span>
                     </p>
@@ -137,18 +131,18 @@
 
                       <template slot="popover">
                         <input-text
-                          id="main_address_customer"
-                          label-style="company_label_input"
+                          labelStyle="company_label_input"
                           label="Company address"
                           name="mainAddress"
+                          id="main_address_customer"
                           :value="customer.mainAddress.onelineAddress"
-                          :on-change="onChange"
-                          editeble-mode
+                          :onChange="onChange"
+                          editebleMode
                           :focus="inputFocus"
-                          :is-editable="isEnabled"
-                          :action-func="saveInfoFromForm"
+                          :isEditable="isEnabled"
+                          :actionFunc="saveInfoFromForm"
                           :ctx="customer"
-                          field-style="without-border"
+                          fieldStyle="without-border"
                           @update-focus-value="onUpdateFocus"
                         />
                       </template>
@@ -159,7 +153,7 @@
                   <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
-                        <i class="fa fa-phone-volume" />
+                        <i class="fa fa-phone-volume"></i>
                       </span>
                       <span>{{ String(user.phoneNumber) || "" }}</span>
                     </p>
@@ -179,17 +173,17 @@
 
                       <template slot="popover">
                         <input-text
-                          label-style="company_label_input"
+                          labelStyle="company_label_input"
                           label="Phone"
                           name="phoneNumber"
                           :value="String(user.phoneNumber) || ''"
-                          :on-change="onChange"
-                          editeble-mode
+                          :onChange="onChange"
+                          editebleMode
                           :focus="inputFocus"
-                          :is-editable="isEnabled"
-                          :action-func="saveInfoFromForm"
+                          :isEditable="isEnabled"
+                          :actionFunc="saveInfoFromForm"
                           :ctx="user"
-                          field-style="without-border"
+                          fieldStyle="without-border"
                           @update-focus-value="onUpdateFocus"
                         />
                       </template>
@@ -200,7 +194,7 @@
                   <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
-                        <i class="fa fa-envelope" />
+                        <i class="fa fa-envelope"></i>
                       </span>
                       <span>{{ customer.workspaceDomain }}</span>
                     </p>
@@ -220,17 +214,17 @@
 
                       <template slot="popover">
                         <input-text
-                          label-style="company_label_input"
+                          labelStyle="company_label_input"
                           label="Company Email"
                           name="workspaceDomain"
                           :value="customer.workspaceDomain"
-                          :on-change="onChange"
-                          editeble-mode
+                          :onChange="onChange"
+                          editebleMode
                           :focus="inputFocus"
-                          :is-editable="isEnabled"
-                          :action-func="saveInfoFromForm"
+                          :isEditable="isEnabled"
+                          :actionFunc="saveInfoFromForm"
                           :ctx="customer"
-                          field-style="without-border"
+                          fieldStyle="without-border"
                           @update-focus-value="onUpdateFocus"
                         />
                       </template>
@@ -241,7 +235,7 @@
                   <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
-                        <i class="fa fa-globe" />
+                        <i class="fa fa-globe"></i>
                       </span>
                       <span>{{ customer.website }}</span>
                     </p>
@@ -261,17 +255,17 @@
 
                       <template slot="popover">
                         <input-text
-                          label-style="company_label_input"
+                          labelStyle="company_label_input"
                           label="Company Domain"
                           name="website"
                           :value="customer.website"
-                          :on-change="onChange"
-                          editeble-mode
+                          :onChange="onChange"
+                          editebleMode
                           :focus="inputFocus"
-                          :is-editable="isEnabled"
-                          :action-func="saveInfoFromForm"
+                          :isEditable="isEnabled"
+                          :actionFunc="saveInfoFromForm"
                           :ctx="customer"
-                          field-style="without-border"
+                          fieldStyle="without-border"
                           @update-focus-value="onUpdateFocus"
                         />
                       </template>
@@ -281,15 +275,13 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px" />
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
             <div class="md-layout-item md-size-100" style="padding: 0">
               <div class="company-branch_block">
                 <div class="md-layout-item md-size-100" style="text-align: left">
                   <div style="display: flex; align-items: center; justify-content: space-between">
-                    <div class="header text-bold text-gray" style="margin: 0">
-                      Branches
-                    </div>
+                    <div class="header text-bold text-gray" style="margin: 0">Branches</div>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
@@ -305,20 +297,20 @@
                       </md-button>
 
                       <template slot="popover">
-                        <form action="#" @submit.prevent="addIndustry">
+                        <form @submit.prevent="addIndustry" action="#">
                           <input-text
-                            id="branch_address_search"
-                            label-style="company_label_input"
+                            labelStyle="company_label_input"
                             label="Branches address"
                             name="branch_address"
-                            :on-change="onChange"
-                            editeble-mode
+                            :onChange="onChange"
+                            editebleMode
                             :focus="inputFocus"
-                            :is-editable="isEnabled"
+                            :isEditable="isEnabled"
                             :value="branch_address"
-                            :action-func="saveInfoFromForm"
+                            id="branch_address_search"
+                            :actionFunc="saveInfoFromForm"
                             :ctx="customer"
-                            field-style="without-border"
+                            fieldStyle="without-border"
                             @update-focus-value="onUpdateFocus"
                           />
                         </form>
@@ -341,7 +333,7 @@
                       "
                     >
                       <p>{{ branch.onelineAddress }}</p>
-                      <v-popover offset="16" :disabled="!isEnabled" hide-on-target-click placement="right">
+                      <v-popover offset="16" :disabled="!isEnabled" hideOnTargetClick placement="right">
                         <md-button
                           class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default"
                           @click="branchFocus(index)"
@@ -351,18 +343,18 @@
 
                         <template slot="popover">
                           <input-text
-                            id="branch_address_update"
-                            label-style="company_label_input"
+                            labelStyle="company_label_input"
                             label="Branches address"
                             name="branch_address_update"
-                            :on-change="onChange"
-                            editeble-mode
+                            :onChange="onChange"
+                            editebleMode
                             :focus="inputFocus"
-                            :is-editable="isEnabled"
+                            :isEditable="isEnabled"
                             :value="branch_address"
-                            :action-func="saveInfoFromForm"
+                            id="branch_address_update"
+                            :actionFunc="saveInfoFromForm"
                             :ctx="customer"
-                            field-style="without-border"
+                            fieldStyle="without-border"
                             @update-focus-value="onUpdateFocus"
                           />
                         </template>
@@ -371,9 +363,7 @@
                         class="md-button md-icon-button md-simple md-theme-default"
                         @click.prevent="deleteBranch(index)"
                       >
-                        <md-icon class="event-add_icon">
-                          delete
-                        </md-icon>
+                        <md-icon class="event-add_icon">delete</md-icon>
                       </md-button>
                     </div>
                   </div>
@@ -382,12 +372,10 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px" />
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
             <div>
-              <div class="header text-bold text-gray">
-                Customer Infromation
-              </div>
+              <div class="header text-bold text-gray">Customer Infromation</div>
             </div>
           </div>
         </md-card-content>
@@ -398,46 +386,46 @@
         <div class="logo-block">
           <LineChart
             v-if="!isMonthly && getChartNumberOfEventsPerYear"
-            id="number_of_events_chart"
             key="username-input"
-            class-style="max-height: 150px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+            classStyle="max-height: 150px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+            id="number_of_events_chart"
             width="350"
             height="150"
-            :data-chart="getChartNumberOfEventsPerYear"
+            :dataChart="getChartNumberOfEventsPerYear"
             type="line"
-            :option-chart="dataChart.options"
+            :optionChart="dataChart.options"
           />
           <LineChart
             v-else
-            id="number_of_events_chart_monthly"
             key="email-input"
-            class-style="max-height: 150px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+            classStyle="max-height: 150px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+            id="number_of_events_chart_monthly"
             width="350"
             height="150"
-            :data-chart="getDataFromDuration"
+            :dataChart="getDataFromDuration"
             type="line"
-            :option-chart="dataChart.options"
+            :optionChart="dataChart.options"
           />
         </div>
         <md-card-content style="max-height: 200px">
-          <div v-if="showFilter" class="filter-block">
+          <div class="filter-block" v-if="showFilter">
             <div class="filter-datepicker">
               <div class="filter-datepicker-block">
                 <select-common
                   label="Start year"
-                  label-style="om_label_input"
+                  labelStyle="om_label_input"
                   :list="getDurationForChart"
                   name="startPeriod"
-                  :on-change="onChange"
+                  :onChange="onChange"
                 />
               </div>
               <div class="filter-datepicker-block">
                 <select-common
                   label="From"
-                  label-style="om_label_input"
+                  labelStyle="om_label_input"
                   :list="listMonth"
                   name="from"
-                  :on-change="onChange"
+                  :onChange="onChange"
                 />
               </div>
             </div>
@@ -445,41 +433,39 @@
               <div class="filter-datepicker-block">
                 <select-common
                   label="Finish year"
-                  label-style="om_label_input"
+                  labelStyle="om_label_input"
                   :list="getDurationForChart"
                   name="finishPeriod"
-                  :on-change="onChange"
+                  :onChange="onChange"
                 />
               </div>
               <div class="filter-datepicker-block">
                 <select-common
                   label="To"
-                  label-style="om_label_input"
+                  labelStyle="om_label_input"
                   :list="listMonth"
                   name="to"
-                  :on-change="onChange"
+                  :onChange="onChange"
                 />
               </div>
             </div>
           </div>
           <div class="chart-title">
-            <div class="title text-bold">
-              Number of events
-            </div>
+            <div class="title text-bold">Number of events</div>
             <div class="company-button-filter-block">
               <ButtonDiv
                 text="Yearly"
                 class="button-filter"
-                second-class="chenge-filter"
-                :class-chenger="!showFilter"
-                :on-click="onChangeFilterToEarly"
+                secondClass="chenge-filter"
+                :classChenger="!showFilter"
+                :onClick="onChangeFilterToEarly"
               />
               <ButtonDiv
                 text="Monthly"
                 class="button-filter"
-                second-class="chenge-filter"
-                :class-chenger="showFilter"
-                :on-click="onChangeFilter"
+                secondClass="chenge-filter"
+                :classChenger="showFilter"
+                :onClick="onChangeFilter"
               />
             </div>
           </div>
@@ -492,28 +478,24 @@
       <md-card class="margin-block-for-card">
         <div class="logo-block">
           <div class="event-planer-logo partisipation-logo">
-            <md-icon class="company-logo">
-              how_to_reg
-            </md-icon>
+            <md-icon class="company-logo">how_to_reg</md-icon>
           </div>
         </div>
         <md-card-content>
-          <div class="title text-bold">
-            Average number of participants per event
-          </div>
+          <div class="title text-bold">Average number of participants per event</div>
           <div>
-            <ControlPanel :on-click="getMonthControlRate" control-block-style="control-panel-block-participants" />
+            <ControlPanel :onClick="getMonthControlRate" controlBlockStyle="control-panel-block-participants" />
           </div>
           <div>
             <LineIndicator
-              v-for="item in participantsList"
               v-if="participantsList"
+              v-for="item in participantsList"
               :key="item.total + item.typeEvent"
-              left-indicator-style="left-side-indicator-participants"
-              right-indicator-style="right-side-indicator"
+              leftIndicatorStyle="left-side-indicator-participants"
+              rightIndicatorStyle="right-side-indicator"
               :total="item.total"
-              :type-event="item.typeEvent"
-              :current-value="item.currentValue"
+              :typeEvent="item.typeEvent"
+              :currentValue="item.currentValue"
             />
           </div>
         </md-card-content>
@@ -522,19 +504,17 @@
         <div class="logo-block">
           <LineChart
             v-if="getChartEventPerEmployee"
+            classStyle="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
             id="number_of_participants_chart"
-            class-style="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
             width="350"
             height="150"
-            :data-chart="getChartEventPerEmployee"
+            :dataChart="getChartEventPerEmployee"
             type="line"
-            :option-chart="dataChart.options"
+            :optionChart="dataChart.options"
           />
         </div>
         <md-card-content style="max-height: 200px">
-          <div class="title text-bold">
-            Average event cost per employee
-          </div>
+          <div class="title text-bold">Average event cost per employee</div>
         </md-card-content>
       </md-card>
     </div>
@@ -542,17 +522,13 @@
       <md-card>
         <div class="logo-block">
           <div class="event-planer-logo rate-logo">
-            <md-icon class="company-logo">
-              thumbs_up_down
-            </md-icon>
+            <md-icon class="company-logo">thumbs_up_down</md-icon>
           </div>
         </div>
         <md-card-content>
-          <div class="title text-bold">
-            Attendants satisfaction rate
-          </div>
+          <div class="title text-bold">Attendants satisfaction rate</div>
           <div>
-            <ControlPanel :on-click="getMonthFromControl" control-block-style="control-panel-block-rate" />
+            <ControlPanel :onClick="getMonthFromControl" controlBlockStyle="control-panel-block-rate" />
             <div class="rate-mean-block">
               <span class="indicator-event-info-mean-value">{{ `${Math.floor(getMeanValue)}%` }}</span>
               <span class="indicator-event-type-title-rate">{{
@@ -562,15 +538,15 @@
           </div>
           <div>
             <LineIndicator
-              v-for="item in ratesList"
               v-if="ratesList"
+              v-for="item in ratesList"
               :key="item.total + item.typeEvent"
-              left-indicator-style="left-side-indicator-rate"
-              right-indicator-style="right-side-indicator"
+              leftIndicatorStyle="left-side-indicator-rate"
+              rightIndicatorStyle="right-side-indicator"
               :total="item.total"
-              :category-event="item.category"
-              :current-value="item.currentValue"
-              is-rate
+              :categoryEvent="item.category"
+              :currentValue="item.currentValue"
+              isRate
             />
           </div>
         </md-card-content>
@@ -579,19 +555,17 @@
         <div class="logo-block">
           <LineChart
             v-if="getChartEventsPerCategory"
+            classStyle="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
             id="event_vs_category"
-            class-style="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
             width="350"
             height="150"
-            :data-chart="getChartEventsPerCategory"
+            :dataChart="getChartEventsPerCategory"
             type="bar"
-            :option-chart="dataChart.options"
+            :optionChart="dataChart.options"
           />
         </div>
         <md-card-content>
-          <div class="title text-bold">
-            Event categories comparison
-          </div>
+          <div class="title text-bold">Event categories comparison</div>
         </md-card-content>
       </md-card>
     </div>
@@ -651,6 +625,28 @@ export default {
     "select-common": Select,
     LineChart,
     VueElementLoading,
+  },
+  mounted() {
+    const options = {
+      types: ["geocode"],
+    };
+    let input = document.getElementById("branch_address_search");
+    // let autocomplete = new google.maps.places.Autocomplete(input, options)
+
+    if (this.industryList === 0) {
+      this.$store.dispatch("user/getIndustry");
+    }
+
+    this.$auth.currentUser(
+      this,
+      true,
+      function () {
+        this.$store.dispatch("user/getUserFromApi");
+        this.customerLogoUrl = this.$auth.user.me.customer.logoFileId
+          ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}`
+          : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
+      }.bind(this),
+    );
   },
   data() {
     return {
@@ -738,28 +734,6 @@ export default {
       participantsList: [],
       isLoading: true,
     };
-  },
-  mounted() {
-    const options = {
-      types: ["geocode"],
-    };
-    let input = document.getElementById("branch_address_search");
-    // let autocomplete = new google.maps.places.Autocomplete(input, options)
-
-    if (this.industryList === 0) {
-      this.$store.dispatch("user/getIndustry");
-    }
-
-    this.$auth.currentUser(
-      this,
-      true,
-      function () {
-        this.$store.dispatch("user/getUserFromApi");
-        this.customerLogoUrl = this.$auth.user.me.customer.logoFileId
-          ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}`
-          : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
-      }.bind(this),
-    );
   },
   computed: {
     ...mapGetters({

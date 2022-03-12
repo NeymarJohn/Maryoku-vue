@@ -7,13 +7,9 @@
         class="guests-progress__item green"
         :style="`width : ${item.percentage}%; z-index:${calculatedData.length - index};`"
       >
-        <div class="value">
-          {{ item.list.length }}
-        </div>
-        <div class="progress" :style="`background-color:${item.color}`" />
-        <div class="percentage" :style="`color:${item.color}`">
-          {{ item.percentage }}%
-        </div>
+        <div class="value">{{ item.list.length }}</div>
+        <div class="progress" :style="`background-color:${item.color}`"></div>
+        <div class="percentage" :style="`color:${item.color}`">{{ item.percentage }}%</div>
       </div>
       <!-- <div class="guests-progress__item red" style="width : 21%;">
         <div class="value">240</div>
@@ -29,10 +25,10 @@
 
     <div class="guests-legends d-flex justify-content-center align-center mt-60">
       <div v-for="(item, index) in data" :key="index" class="mb-40 flex-1">
-        <popper v-if="item.list.length > 0" trigger="hover" :options="{ placement: 'bottom' }">
-          <div v-if="item.category == 'accepted'" class="popper white-card">
+        <popper trigger="hover" :options="{ placement: 'bottom' }" v-if="item.list.length > 0">
+          <div class="popper white-card" v-if="item.category == 'accepted'">
             <div class="font-size-22 popper-header">
-              <span :style="`background-color:${item.color}`" class="dot" />
+              <span :style="`background-color:${item.color}`" class="dot"></span>
               <span class="font-bold">{{ item.label }}</span>
               ({{ item.list.length }})
             </div>
@@ -57,30 +53,25 @@
               </div>
             </div>
           </div>
-          <div v-else class="popper white-card">
+          <div class="popper white-card" v-else>
             <div class="font-size-22 popper-header">
-              <span :style="`background-color:${item.color}`" class="dot" />
-              <span class="font-bold">{{ item.label }}</span>({{ item.list.length }})
+              <span :style="`background-color:${item.color}`" class="dot"></span>
+              <span class="font-bold">{{ item.label }}</span
+              >({{ item.list.length }})
             </div>
-            <div v-for="(item, index) in item.list" :key="index" class="item-row">
-              {{ item.email }}
-            </div>
+            <div v-for="(item, index) in item.list" :key="index" class="item-row">{{ item.email }}</div>
           </div>
 
-          <color-dot-label slot="reference" :color="item.color" class="legend">
+          <color-dot-label :color="item.color" slot="reference" class="legend">
             <span class="font-bold">{{ item.label }}</span>
             ({{ item.list.length }})
-            <md-icon class="color-black">
-              keyboard_arrow_down
-            </md-icon>
+            <md-icon class="color-black">keyboard_arrow_down</md-icon>
           </color-dot-label>
         </popper>
         <color-dot-label v-else :color="item.color" class="legend">
           <span class="font-bold">{{ item.label }}</span>
           ({{ item.list.length }})
-          <md-icon class="color-black">
-            keyboard_arrow_down
-          </md-icon>
+          <md-icon class="color-black">keyboard_arrow_down</md-icon>
         </color-dot-label>
       </div>
     </div>
@@ -106,14 +97,6 @@ export default {
       colors: ["#2cde6b", "#f3423a", "#ffc001", "#43536a", "#cbc8c8"],
     };
   },
-  computed: {
-    percentage() {
-      const total = this.data.reduce((s, item) => {
-        return s + item.list.length;
-      }, 0);
-      return Array.from(this.data, (item) => (item.list.length / total) * 100);
-    },
-  },
   created() {
     const calculatedData = [];
     const total = this.data.reduce((s, item) => {
@@ -126,6 +109,14 @@ export default {
     });
     this.calculatedData = calculatedData;
     console.log(this.data);
+  },
+  computed: {
+    percentage() {
+      const total = this.data.reduce((s, item) => {
+        return s + item.list.length;
+      }, 0);
+      return Array.from(this.data, (item) => (item.list.length / total) * 100);
+    },
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="cancellation-policy">
-    <div v-for="(policy, yIndex) in cancellationData" :key="yIndex" class="policy">
+    <div class="policy" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
       <div class="item">
         <span class="font-bold-extra">If</span> {{ policy.notice }}
         <span class="font-bold-extra">Then</span>
@@ -12,7 +12,7 @@
 <script>
 import { cancellationPolicyData } from "@/constants/vendor";
 export default {
-  name: "CancellationPolicy",
+  name: 'cancellation-policy',
   data() {
     return {
       cancellationData: cancellationPolicyData,

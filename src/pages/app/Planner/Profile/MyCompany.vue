@@ -1,9 +1,9 @@
 <template>
+
   <div class="md-layout">
     <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
       <h4 class="md-title">
-        <md-button class="md-button md-theme-default md-simple md-just-icon md-size-2x" @click="closePanel">
-          <md-icon>arrow_back</md-icon>
+        <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon md-size-2x"><md-icon>arrow_back</md-icon>
         </md-button>
       </h4>
     </div>
@@ -13,8 +13,9 @@
       </h4>
 
       <div class="md-layout">
+
         <div class="md-layout-item md-size-45" style="padding-left: 0;">
-          <company-dashboard-info />
+          <company-dashboard-info></company-dashboard-info>
         </div>
         <div class="md-layout-item md-size-55">
           <md-card>
@@ -28,37 +29,29 @@
             </md-card-header>
             <md-card-content style="min-height: 320px;">
               <div class="md-layout" style="text-align: left;">
-                <div class="md-layout-item md-size-10">
-                  <i class="fa fa-map-marker-alt text-gray" />
-                </div>
+                <div class="md-layout-item md-size-10"><i class="fa fa-map-marker-alt text-gray"></i></div>
                 <div class="md-layout-item md-size-90">
-                  <span class="text-gray" style="font-weight: 500;">
-                    <label-edit placeholder="Your Main Office Address" />
-                  </span>
+          <span class="text-gray" style="font-weight: 500;">
+          <label-edit placeholder="Your Main Office Address"></label-edit>
+        </span>
                 </div>
-                <div class="md-layout-item md-size-10">
-                  <i class="fa fa-phone-volume text-gray" />
-                </div>
+                <div class="md-layout-item md-size-10"><i class="fa fa-phone-volume text-gray"></i></div>
                 <div class="md-layout-item md-size-90">
-                  <span class="text-gray" style="font-weight: 500;">
-                    <label-edit placeholder="Phone Number" />
-                  </span>
+          <span class="text-gray" style="font-weight: 500;">
+            <label-edit placeholder="Phone Number"></label-edit>
+          </span>
                 </div>
-                <div class="md-layout-item md-size-10">
-                  <i class="fa fa-envelope text-gray" />
-                </div>
+                <div class="md-layout-item md-size-10"><i class="fa fa-envelope text-gray"></i></div>
                 <div class="md-layout-item md-size-90">
-                  <span class="text-gray" style="font-weight: 500;">
-                    <label-edit placeholder="Email Address" />
-                  </span>
+          <span class="text-gray" style="font-weight: 500;">
+            <label-edit placeholder="Email Address"></label-edit>
+          </span>
                 </div>
-                <div class="md-layout-item md-size-10">
-                  <i class="fa fa-globe text-gray" />
-                </div>
+                <div class="md-layout-item md-size-10"><i class="fa fa-globe text-gray"></i></div>
                 <div class="md-layout-item md-size-90">
-                  <span class="text-gray" style="font-weight: 500;">
-                    <label-edit placeholder="Website address" />
-                  </span>
+          <span class="text-gray" style="font-weight: 500;">
+            <label-edit  placeholder="Website address"></label-edit>
+          </span>
                 </div>
               </div>
             </md-card-content>
@@ -86,14 +79,15 @@
             </md-card-content>
           </md-card>
         </div>-->
+
       </div>
     </div>
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
-import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
-import {LabelEdit} from "@/components";
+import VueElementLoading from 'vue-element-loading'
+import CompanyDashboardInfo from '../CompanyDashboard/CompanyDashboardInfo.vue'
+import {LabelEdit} from '@/components'
 
 export default {
   components: {
@@ -103,14 +97,14 @@ export default {
   },
   data () {
     return {
-    };
+    }
   },
   methods: {
     closePanel () {
-      this.$emit("closePanel");
+      this.$emit('closePanel')
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 

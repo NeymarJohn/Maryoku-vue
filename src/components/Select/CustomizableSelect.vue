@@ -1,16 +1,16 @@
 <template>
-  <div v-click-outside="close" class="select-wrapper" :class="{ open: isOpen }" @click="handleOpen">
+  <div class="select-wrapper" :class="{ open: isOpen }" v-click-outside="close" @click="handleOpen">
     <div class="select" :class="{ open: isOpen }">
       <div class="select__trigger">
         <span class="selected-option" :class="{ selected: selected !== initialValue }">{{ selected }}</span>
-        <div class="arrow" />
+        <div class="arrow"></div>
       </div>
       <div class="custom-options">
         <span
           v-for="(item, index) of data"
-          :key="index"
           class="custom-option"
           :class="{ selected: item === selected }"
+          :key="index"
           :data-value="item"
           @click="(e)=>handleClick(e, index.toString())"
         >{{ item }}
@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "CustomizableSelect",
+  name: 'CustomizableSelect',
   props: {
     width: String,
     data: {type: Array, required: true},
@@ -31,34 +31,34 @@ export default {
   },
   data () {
     return {
-      selected: "",
+      selected: '',
       isOpen: false,
       customClasses:{
-          "select_wrapper": {
-              "color": "#22222;"
+          'select_wrapper': {
+              'color': '#22222;'
           },
           select__trigger:{}
       },
-    };
+    }
   },
   mounted () {
-    this.selected = this.initialValue;
+    this.selected = this.initialValue
   },
   methods: {
     close () {
-      this.isOpen = false;
+      this.isOpen = false
     },
     handleOpen () {
-      this.isOpen = !this.isOpen;
+      this.isOpen = !this.isOpen
     },
     handleClick (e, index) {
-      e.stopPropagation();
-      this.selected = e.target.dataset.value;
-      this.$emit("valueChanged", index);
-      this.close();
+      e.stopPropagation()
+      this.selected = e.target.dataset.value
+      this.$emit('valueChanged', index)
+      this.close()
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

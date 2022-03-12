@@ -2,35 +2,29 @@
   <div class="special-request-section mt-30">
     <div>
       <div class="font-size-22 font-bold">
-        <md-checkbox v-model="data.isSelected" class="md-red md-checkbox-circle" @change="changeItem">
-          {{
-            data.subCategory
-          }}
-        </md-checkbox>
+        <md-checkbox class="md-red md-checkbox-circle" v-model="data.isSelected" @change="changeItem">{{
+          data.subCategory
+        }}</md-checkbox>
       </div>
-      <div />
+      <div></div>
       <div class="special-request-section-description">
-        <div v-if="data.desc" class="font-size-20 font-bold mt-20">
-          {{ data.desc }}
-        </div>
-        <div v-if="data.subCategory === 'Sitting arrangement'" class="mt-10">
+        <div class="font-size-20 font-bold mt-20" v-if="data.desc">{{ data.desc }}</div>
+        <div class="mt-10" v-if="data.subCategory === 'Sitting arrangement'">
           You may select up to 2 options and we will endeavor to incorporate them into your event
         </div>
-        <div v-if="data.subCategory === 'Sitting arrangement'" class="mt-10">
-          Please select up to 2 options
-        </div>
+        <div class="mt-10" v-if="data.subCategory === 'Sitting arrangement'">Please select up to 2 options</div>
       </div>
     </div>
-    <div v-if="data.subCategory !== 'Sitting arrangement'" class="mt-30 mb-20">
+    <div class="mt-30 mb-20" v-if="data.subCategory !== 'Sitting arrangement'">
       <md-checkbox
         v-for="(item, index) in data.options"
-        :key="index"
-        v-model="item.selected"
         class="md-simple md-red"
+        v-model="item.selected"
+        :key="index"
         @change="changeItem()"
       >
         <div class="checkbox-label-wrapper">
-          <img :src="getIcon(item.name)">
+          <img :src="getIcon(item.name)" />
           {{ item.name }}
         </div>
       </md-checkbox>
@@ -39,64 +33,54 @@
       <div class="special-request-section-options">
         <div class="md-layout">
           <div
+            class="md-layout-item md-size-50 md-small-size-100 p-50"
             v-for="(option, index) in data.options"
             :key="index"
-            class="md-layout-item md-size-50 md-small-size-100 p-50"
           >
             <div>
-              <md-checkbox v-model="option.selected" class="md-simple md-red" @change="changeItem">
+              <md-checkbox class="md-simple md-red" v-model="option.selected" @change="changeItem">
                 <span>{{ option.item }}</span>
               </md-checkbox>
               <div class="ml-30">
                 <span class="font-bold">Popular for:</span>
                 {{ option.popular }}
                 <div>
-                  <img :src="`${$iconURL}Requirements/${option.icon}`">
+                  <img :src="`${$iconURL}Requirements/${option.icon}`" />
                 </div>
               </div>
             </div>
           </div>
           <div class="md-layout-item md-size-50 md-small-size-100 p-50">
             <div class="d-flex">
-              <md-checkbox v-model="data.hasOtherOption" class="md-simple md-red" @change="changeItem">
+              <md-checkbox class="md-simple md-red" @change="changeItem" v-model="data.hasOtherOption">
                 <span class="font-bold">Other:</span>
               </md-checkbox>
-              <maryoku-input v-model="data.otherOptionContent" class="flex-1" />
+              <maryoku-input class="flex-1" v-model="data.otherOptionContent"></maryoku-input>
             </div>
           </div>
         </div>
       </div>
       <div class="special-request-section-description">
-        <div class="font-size-20 font-bold">
-          Is there going to be group work at the event?
-        </div>
-        <div class="mt-10">
-          Which will require dedicated tables?
-        </div>
+        <div class="font-size-20 font-bold">Is there going to be group work at the event?</div>
+        <div class="mt-10">Which will require dedicated tables?</div>
         <div>
-          <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="true">
-            Yes
-          </md-checkbox>
-          <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="false">
-            No
-          </md-checkbox>
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isGroup" :value="true">Yes</md-checkbox>
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isGroup" :value="false">No</md-checkbox>
         </div>
         <div v-if="isGroup" class="d-flex align-start mt-20">
-          <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top: -10px">
+          <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top: -10px" />
           <div>
-            <div class="font-size-20 font-bold">
-              Around what size of groups?
-            </div>
+            <div class="font-size-20 font-bold">Around what size of groups?</div>
             <div class="d-flex justify-content-between mt-10">
               <md-radio
                 v-for="(size, idx) in data.groupSizes"
-                :key="idx"
                 v-model="groupSize"
+                :key="idx"
                 :value="size.item"
                 @change="sizeChange"
               >
-                {{ `${size.item} people` }}
-              </md-radio>
+                {{ `${size.item} people` }}</md-radio
+              >
             </div>
           </div>
         </div>
@@ -108,7 +92,7 @@
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 
 export default {
-  name: "SpecialRequirementItem",
+  name: "special-requirement-item",
   components: {
     MaryokuInput,
   },
@@ -127,9 +111,6 @@ export default {
       isGroup: false,
       groupSize: null,
     };
-  },
-  mounted() {
-    this.getSpecialItem();
   },
   methods: {
     getSpecialItem() {
@@ -197,6 +178,9 @@ export default {
       });
       this.$emit("change");
     },
+  },
+  mounted() {
+    this.getSpecialItem();
   },
 };
 </script>

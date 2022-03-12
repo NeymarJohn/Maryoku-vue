@@ -1,6 +1,6 @@
 <template>
   <div class="for-vendors-layout-wrapper">
-    <Loader :active="isLoading" :is-full-screen="true" page="vendor" />
+    <Loader :active="isLoading" :isFullScreen="true" page="vendor" />
 
     <div v-if="!isLoading">
       <section class="header-wrapper">
@@ -8,7 +8,7 @@
           <ul>
             <li class="logo">
               <a href="https://www.maryoku.com">
-                <img src="https://www.maryoku.com/img/maryoku-logo.png">
+                <img src="https://www.maryoku.com/img/maryoku-logo.png" />
               </a>
             </li>
             <li>
@@ -21,13 +21,13 @@
         </p>
         <div class="pull-top-right">
           <vendor-bid-time-counter
-            :key="getRemainingTime.seconds"
-            :days="getRemainingTime.days"
-            :hours="getRemainingTime.hours"
-            :minutes="getRemainingTime.mins"
-            :seconds="getRemainingTime.seconds"
-            class="bg-yellow"
-            :bottom-content="'To send your bid'"
+                  :key="getRemainingTime.seconds"
+                  :days="getRemainingTime.days"
+                  :hours="getRemainingTime.hours"
+                  :minutes="getRemainingTime.mins"
+                  :seconds="getRemainingTime.seconds"
+                  class="bg-yellow"
+                  :bottom-content="'To send your bid'"
           />
         </div>
       </section>
@@ -39,18 +39,16 @@
             We found you could fit perfectly for our event with your
             <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.
           </p>
-          <button type="submit" class="submit" @click="goToForm()">
-            Submit Now
-          </button>
+          <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
         </div>
       </div>
-      <router-view />
+      <router-view></router-view>
       <section class="footer-wrapper">
         <div class="vendors-footer">
           <ul>
             <li class="logo">
               <a href="https://www.maryoku.com">
-                <img src="https://www.maryoku.com/img/maryoku-logo.png">
+                <img src="https://www.maryoku.com/img/maryoku-logo.png" />
               </a>
             </li>
             <li>
@@ -58,7 +56,7 @@
             </li>
             <li>
               <a href="https://www.maryoku.com" target="_blank">
-                <img :src="`${iconsUrl}Asset 273.svg`">
+                <img :src="`${iconsUrl}Asset 273.svg`" />
               </a>
             </li>
           </ul>
@@ -66,46 +64,42 @@
       </section>
     </div>
 
-    <signup-request-modal v-if="showSignup" :vendor="vendor" />
+    <signup-request-modal :vendor="vendor" v-if="showSignup"></signup-request-modal>
     <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header d-flex">
-          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`">
+          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
           <div class="ml-20">
             <h3 class="text-left color-black">
-              We are sorry, but someone else got there <br>before you and already won this bid.
+              We are sorry, but someone else got there <br />before you and already won this bid.
             </h3>
-            <div class="text-left">
-              But no worries! We will be with you soon with the next one
-            </div>
+            <div class="text-left">But no worries! We will be with you soon with the next one</div>
           </div>
         </div>
         <button class="close" @click="showCloseProposalModal = false">
-          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
         </button>
       </template>
       <template slot="body">
-        <div class="saved-it-modal__body" />
+        <div class="saved-it-modal__body"></div>
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <md-button class="md-vendor maryoku-btn" @click="showCloseProposalModal = false">
-            Ok, Thanks
-          </md-button>
+          <md-button class="md-vendor maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`"> Time Is Up!</h3>
+            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
           <div class="header-description">
             The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
         </button>
       </template>
       <template slot="body">
@@ -117,9 +111,7 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <md-button class="md-vendor maryoku-btn" @click="hideModal()">
-            Ok, Thanks
-          </md-button>
+          <md-button class="md-vendor maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
@@ -164,20 +156,20 @@ export default {
     };
   },
   async mounted() {
-      console.log("proposal.layout.created", this.$store.state.auth.user);
+      console.log('proposal.layout.created', this.$store.state.auth.user);
       if(this.$store.state.auth.user){
-          this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token).then(user => {
+          this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
 
-          }).catch(err => this.$router.push({ path: "/vendor/signin"}));
+          }).catch(err => this.$router.push({ path: `/vendor/signin`}));
       } else {
-          this.$router.push({ path: "/vendor/signin"});
+          this.$router.push({ path: `/vendor/signin`});
       }
-    this.vendor = await this.getVendor(this.$route.params.vendorId);
+    this.vendor = await this.getVendor(this.$route.params.vendorId)
 
     if (this.vendor.isEditing) {
       this.showSignup = true;
     }
-    this.proposalRequest = await this.getProposalRequest(this.$route.params.rfpId);
+    this.proposalRequest = await this.getProposalRequest(this.$route.params.rfpId)
 
     this.event = this.proposalRequest.eventData;
     if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {

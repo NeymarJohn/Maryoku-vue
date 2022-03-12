@@ -2,7 +2,7 @@
   <div class="company-details-container">
     <tabs :tab-name="['Company Details']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
-        <vendor-company-detail />
+        <vendor-company-detail></vendor-company-detail>
       </template>
     </tabs>
   </div>

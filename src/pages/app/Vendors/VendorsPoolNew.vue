@@ -6,26 +6,24 @@
         <p>
           Millions of companies turn to Maryoku as their trusted event resource, with the largest directory of local
           event
-          <br>vendors. Easily find the best event services in your area with detailed vendor reviews for your event.
+          <br />vendors. Easily find the best event services in your area with detailed vendor reviews for your event.
         </p>
       </div>
       <div class="header-actions">
         <div class="form-group search-field d-flex justify-content-start align-center">
           <md-icon>search</md-icon>
-          <input class="form-control" placeholder="Search" @change="searchByQuery">
+          <input class="form-control" placeholder="Search" @change="searchByQuery" />
         </div>
       </div>
     </div>
 
     <div class="filters-section d-flex justify-content-start font-size-16">
-      <div class="filters-section__label">
-        Filter By
-      </div>
+      <div class="filters-section__label">Filter By</div>
       <div
-        v-for="(filter, index) in filtersItems"
-        :key="index"
         class="filters-section__item"
         :class="{ selected: filter.expand }"
+        v-for="(filter, index) in filtersItems"
+        :key="index"
       >
         <div class="item-title" @click="expandFilter(index)">
           <span v-if="!searchModel[filter.searchKey] || !searchModel[filter.searchKey].length">{{ filter.title }}</span>
@@ -33,29 +31,25 @@
 
           <md-icon>keyboard_arrow_down</md-icon>
         </div>
-        <div v-if="filter.expand" class="expanded-section">
-          <div v-if="filter.title.toLowerCase() == 'category'" class="categories-filters-section d-flex">
+        <div class="expanded-section" v-if="filter.expand">
+          <div class="categories-filters-section d-flex" v-if="filter.title.toLowerCase() == 'category'">
             <div class="main-categories-filters">
               <div
-                v-for="(item, mainFilterIndex) in filter.mainCategories"
-                :key="mainFilterIndex"
                 class="main-filters-item text-center"
                 :class="[
                   `item-${mainFilterIndex}`,
                   { 'first-row': mainFilterIndex < 4 },
                   { 'second-row': mainFilterIndex >= 4 },
                 ]"
+                v-for="(item, mainFilterIndex) in filter.mainCategories"
+                :key="mainFilterIndex"
               >
-                <img :src="`${$iconURL}Budget Elements/${item.icon}`" width="20">
-                <div class="filter-title" @click="searchByCategory(item)">
-                  {{ item.title }}
-                </div>
+                <img :src="`${$iconURL}Budget Elements/${item.icon}`" width="20" />
+                <div class="filter-title" @click="searchByCategory(item)">{{ item.title }}</div>
               </div>
             </div>
             <div class="more-categories-filters">
-              <div class="section-title">
-                More
-              </div>
+              <div class="section-title">More</div>
               <ul class="columns-2">
                 <li v-for="(moreItem, moreItemIndex) in filter.moreCategories" :key="moreItemIndex">
                   <a @click="searchByCategory(moreItem)">{{ moreItem.title }}</a>
@@ -64,7 +58,7 @@
             </div>
           </div>
 
-          <div v-if="filter.title.toLowerCase() == 'location'" class="location-filters-section d-flex">
+          <div class="location-filters-section d-flex" v-if="filter.title.toLowerCase() == 'location'">
             <div class="search-field-section">
               <div class="form-group">
                 <!-- <input placeholder="Search by City, State, Country…" /> -->
@@ -72,18 +66,16 @@
                   id="input_location"
                   ref="address"
                   :placeholder="'Search by City, State, Country…'"
+                  v-on:placechanged="getAddressData"
                   types="geocode"
-                  @placechanged="getAddressData"
                 />
                 <md-button class="md-just-icon md-simple md-small" @click="searchByLocation">
-                  <img :src="`${menuIconsURL}Asset 115.svg`">
+                  <img :src="`${menuIconsURL}Asset 115.svg`" />
                 </md-button>
               </div>
             </div>
             <div class="more-categories-filters">
-              <div class="section-title">
-                Nearby Locations
-              </div>
+              <div class="section-title">Nearby Locations</div>
               <ul>
                 <li v-for="(locationItem, locationItemIndex) in filter.locations" :key="locationItemIndex">
                   <a href>{{ locationItem }}</a>
@@ -92,61 +84,55 @@
             </div>
           </div>
 
-          <div v-if="filter.title.toLowerCase() == 'capacity'" class="capacity-filters-section d-flex">
+          <div class="capacity-filters-section d-flex" v-if="filter.title.toLowerCase() == 'capacity'">
             <md-radio
+              v-model="searchModel.capacity"
+              @change="searchByCapacity"
+              :value="capacityItem"
               v-for="(capacityItem, capacityItemIndex) in filter.options"
               :key="capacityItemIndex"
-              v-model="searchModel.capacity"
-              :value="capacityItem"
-              @change="searchByCapacity"
+              >{{ capacityItem.fullLabel }}</md-radio
             >
-              {{ capacityItem.fullLabel }}
-            </md-radio>
           </div>
 
-          <div v-if="filter.title.toLowerCase() == 'rank'" class="rank-filters-section d-flex justify-content-end">
-            <div v-for="(rank, index) in [5, 4, 3, 2, 1, 0]" :key="`rank-${index}`" class="rank-item">
+          <div class="rank-filters-section d-flex justify-content-end" v-if="filter.title.toLowerCase() == 'rank'">
+            <div class="rank-item" v-for="(rank, index) in [5, 4, 3, 2, 1, 0]" :key="`rank-${index}`">
               <md-checkbox v-model="searchModel.rank" :value="rank">
-                <div v-if="rank" class="label-title">
-                  {{ rank }} Stars<span class="rank-counter">(59)</span>
-                </div>
-                <div v-else class="label-title">
-                  Unrated<span class="rank-counter">(59)</span>
-                </div>
+                <div class="label-title" v-if="rank">{{ rank }} Stars<span class="rank-counter">(59)</span></div>
+                <div class="label-title" v-else>Unrated<span class="rank-counter">(59)</span></div>
                 <tempate v-if="rank">
                   <label
+                    class="star-rating__star"
                     v-for="(rating, ratingIndex) in [1, 2, 3, 4, 5]"
                     :key="ratingIndex"
-                    class="star-rating__star"
                     :class="{ 'is-selected': ratingIndex < rank }"
-                  >★</label>
+                    >★</label
+                  >
                 </tempate>
               </md-checkbox>
             </div>
-            <md-button class="md-simple md-black edit-btn md-icon" @click="searchByRank">
-              <md-icon>search</md-icon>
-            </md-button>
+            <md-button class="md-simple md-black edit-btn md-icon" @click="searchByRank"
+              ><md-icon>search</md-icon></md-button
+            >
           </div>
         </div>
       </div>
-      <div class="filters-section__reset" @click="resetFilters">
-        <md-icon>refresh</md-icon>Reset Filters
-      </div>
+      <div class="filters-section__reset" @click="resetFilters"><md-icon>refresh</md-icon>Reset Filters</div>
     </div>
     <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important">
-      <loader :active="working" :is-full-screen="true" page="vendor" />
+      <loader :active="working" :isFullScreen="true" page="vendor"/>
       <vendors-grid
         v-if="view === 'grid'"
-        :building-blocks-list="buildingBlocksList"
-        :vendors-list="vendorsList"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
         :ratings="ratings"
-        :paging-data="pagingData"
+        :pagingData="pagingData"
         @editVendorDetails="editVendorDetails"
       />
       <vendors-list
         v-if="view === 'list'"
-        :building-blocks-list="buildingBlocksList"
-        :vendors-list="vendorsList"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
         @editVendorDetails="editVendorDetails"
         @delete="showDeleteAlert"
         @add-new-vendor="addNewVendor"
@@ -154,16 +140,16 @@
       />
     </div>
     <div class="text-center width-100 mb-60 mt-50">
-      <div v-if="pagingData.total > 0" style="width: 400px; margin: auto">
+      <div style="width: 400px; margin: auto" v-if="pagingData.total > 0">
         <div>You've viewed {{ viewedCount }} of {{ pagingData.total }}</div>
-        <md-progress-bar class="md-accent" md-mode="determinate" :md-value="pagingProgress" />
+        <md-progress-bar class="md-accent" md-mode="determinate" :md-value="pagingProgress"></md-progress-bar>
       </div>
-      <br>
-      <md-button v-if="canLoadMore" class="md-simple md-black maryoku-btn md-outlined" @click="loadMoreVendor">
-        <span style="padding: 5px 40px" class="font-size-20">Load More</span>
-      </md-button>
+      <br />
+      <md-button class="md-simple md-black maryoku-btn md-outlined" @click="loadMoreVendor" v-if="canLoadMore"
+        ><span style="padding: 5px 40px" class="font-size-20">Load More</span></md-button
+      >
     </div>
-    <upload-modal ref="uploadModal" />
+    <upload-modal ref="uploadModal"></upload-modal>
   </div>
 </template>
 <script>
@@ -181,7 +167,7 @@ import _ from "underscore";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
-  name: "VendorsPool",
+  name: "vendors-pool",
   components: {
     VueElementLoading,
     companyForm,
@@ -281,21 +267,6 @@ export default {
       },
     };
   },
-  computed: {
-    pagingProgress() {
-      return ((this.pagingData.limit * this.pagingData.page) / this.pagingData.total) * 100;
-    },
-    canLoadMore() {
-      return this.pagingData.limit * this.pagingData.page < this.pagingData.total;
-    },
-    viewedCount() {
-      if (this.pagingData.limit * this.pagingData.page > this.pagingData.total) {
-        return this.pagingData.total;
-      }
-      return this.pagingData.limit * this.pagingData.page;
-    },
-  },
-  watch: {},
   mounted() {
     this.working = true;
     // this.$auth.currentUser(this, true, () => {
@@ -331,7 +302,6 @@ export default {
     });
     // })
   },
-  created() {},
   methods: {
     loadVendors() {
       const params = {};
@@ -369,7 +339,7 @@ export default {
     showDeleteAlert(vendor) {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -474,6 +444,22 @@ export default {
       this.searchVendors();
     },
   },
+  computed: {
+    pagingProgress() {
+      return ((this.pagingData.limit * this.pagingData.page) / this.pagingData.total) * 100;
+    },
+    canLoadMore() {
+      return this.pagingData.limit * this.pagingData.page < this.pagingData.total;
+    },
+    viewedCount() {
+      if (this.pagingData.limit * this.pagingData.page > this.pagingData.total) {
+        return this.pagingData.total;
+      }
+      return this.pagingData.limit * this.pagingData.page;
+    },
+  },
+  watch: {},
+  created() {},
 };
 </script>
 <style lang="scss" scoped>

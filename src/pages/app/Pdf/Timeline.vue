@@ -1,5 +1,5 @@
 <template>
-  <timeline-edit-panel :is-edit-mode="false" :editing-mode="editingMode" />
+  <timeline-edit-panel :isEditMode="false" :editingMode="editingMode"></timeline-edit-panel>
 </template>
 <script>
 import TimelineTemplateItem from "@/pages/app/Events/components/TimelineEditPanel";

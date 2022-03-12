@@ -8,14 +8,12 @@
       </div>
       <div class="two-columns">
         <div>
-          <div class="title-header-modal">
-            Overview Hot Activity
-          </div>
+          <div class="title-header-modal">Overview Hot Activity</div>
           <div class="info_proposal">
             <span>{{ proposal.eventData.customer.companyName }}</span>
-            <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
+            <span class="info-proposal-divider"><span class="info-proposal-divider-item"></span></span>
             <span>{{ proposal.dateCreated | date("DD/MM/YYYY") }}</span>
-            <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
+            <span class="info-proposal-divider"><span class="info-proposal-divider-item"></span></span>
             <span>{{ proposal.cost | withComma }}</span>
           </div>
         </div>
@@ -23,30 +21,26 @@
           <div class="proposal-pointer-wrapper">
             <img src="/static/icons/vendor/proposalBoard/proposal-pointer.svg" class="proposal-pointer">
           </div>
-          <proposal-pie-chart
-            :completed="86.2"
-            class="proposal-pie-chart"
-          />
+            <proposal-pie-chart
+              :completed="86.2"
+              class="proposal-pie-chart"
+            ></proposal-pie-chart>
           <div>
             <div>Closing Ratio</div>
-            <div class="right_text_percents">
-              86.2%
-            </div>
+            <div class="right_text_percents">86.2%</div>
           </div>
         </div>
       </div>
     </template>
     <template slot="body">
       <div class="graph-block">
-        <div />
-        <proposal-chart :chart-data="incomeChartData" class="" />
+        <div></div>
+        <proposal-chart :chartData="incomeChartData" class=""></proposal-chart>
       </div>
       <div class="send-message-block">
-        <img :src="`${$iconURL}common/hint.svg`" class="mr-10 send-message-img">
+        <img :src="`${$iconURL}common/hint.svg`" class="mr-10 send-message-img" />
         <span>Increased interest of the planner in your proposal, a higher trend in the last week </span>
-        <md-button class="md-button md-vendor md-maryoku  md-theme-default graph-button">
-          Send Message
-        </md-button>
+        <md-button class="md-button md-vendor md-maryoku  md-theme-default graph-button">Send Message</md-button>
       </div>
     </template>
   </modal>
@@ -63,6 +57,11 @@ export default {
     Modal,
     ProposalChart,
     ProposalPieChart,
+  },
+  methods: {
+    close() {
+      this.$emit("close");
+    },
   },
   props: {
     proposal: Object,
@@ -85,11 +84,6 @@ export default {
         { label: "8 Feb", value: 0, future: true },
       ],
     };
-  },
-  methods: {
-    close() {
-      this.$emit("close");
-    },
   },
 
 };

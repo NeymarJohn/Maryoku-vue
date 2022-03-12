@@ -2,7 +2,7 @@
   <div class="select-proposal-sub-item-wrapper" @click="clickItem(item)">
     <div v-if="!selected" class="active">
       <span>{{ item.name }}</span>
-      <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg">
+      <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg" />
     </div>
     <div v-else class="inactive">
       <span>{{ item.name }}</span>
@@ -12,7 +12,7 @@
 </template>
 <script>
 export default {
-  name: "SelectProposalSubItem",
+  name: "select-proposal-sub-item",
   components: {},
   props: {
     item: Object,
@@ -26,16 +26,16 @@ export default {
       active: true,
     };
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
   methods: {
     clickItem(item) {
       this.active = !this.active;
       this.$emit("click", item);
     },
   },
+  created() {},
+  mounted() {},
+  computed: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

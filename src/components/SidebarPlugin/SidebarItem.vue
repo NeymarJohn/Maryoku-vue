@@ -11,33 +11,31 @@
       <md-icon>{{ link.icon }}</md-icon>
       <p>
         {{ link.name }}
-        <b class="caret" />
+        <b class="caret"></b>
       </p>
     </a>
 
     <collapse-transition>
       <div v-if="$slots.default || this.isMenu" v-show="!collapsed">
         <ul class="nav">
-          <slot />
+          <slot></slot>
         </ul>
       </div>
     </collapse-transition>
 
-    <slot v-if="children.length === 0 && !$slots.default && link.path" name="title">
+    <slot name="title" v-if="children.length === 0 && !$slots.default && link.path">
       <component
-        :is="elementType(link, false)"
         :to="link.path"
+        @click.native="linkClick"
+        :is="elementType(link, false)"
         :class="{ active: link.active }"
         class="nav-link"
         :target="link.target"
         :href="link.path"
-        @click.native="linkClick"
       >
         <template v-if="addLink">
-          <md-icon v-if="link.icon">
-            {{ link.icon }}
-          </md-icon>
-          <span v-else class="sidebar-mini">{{ linkPrefix }}</span>
+          <md-icon v-if="link.icon">{{ link.icon }}</md-icon>
+          <span class="sidebar-mini" v-else>{{ linkPrefix }}</span>
           <span class="sidebar-normal">{{ link.name }}</span>
         </template>
         <template v-else>
@@ -52,7 +50,7 @@
 import { CollapseTransition } from "vue2-transitions";
 
 export default {
-  name: "SidebarItem",
+  name: "sidebar-item",
   components: {
     CollapseTransition,
   },
@@ -119,25 +117,6 @@ export default {
       return false;
     },
   },
-  mounted() {
-    if (this.addLink) {
-      this.addLink(this);
-    }
-    if (this.link.collapsed !== undefined) {
-      this.collapsed = this.link.collapsed;
-    }
-    if (this.isActive && this.isMenu) {
-      this.collapsed = false;
-    }
-  },
-  destroyed() {
-    if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el);
-    }
-    if (this.removeLink) {
-      this.removeLink(this);
-    }
-  },
   methods: {
     addChild(item) {
       const index = this.$slots.default.indexOf(item.$vnode);
@@ -170,6 +149,25 @@ export default {
     collapseSubMenu(link) {
       link.collapsed = !link.collapsed;
     },
+  },
+  mounted() {
+    if (this.addLink) {
+      this.addLink(this);
+    }
+    if (this.link.collapsed !== undefined) {
+      this.collapsed = this.link.collapsed;
+    }
+    if (this.isActive && this.isMenu) {
+      this.collapsed = false;
+    }
+  },
+  destroyed() {
+    if (this.$el && this.$el.parentNode) {
+      this.$el.parentNode.removeChild(this.$el);
+    }
+    if (this.removeLink) {
+      this.removeLink(this);
+    }
   },
 };
 </script>

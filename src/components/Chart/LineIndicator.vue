@@ -1,43 +1,38 @@
 <template>
-  <div>
-    <div v-if="isRate&&isNoDataRate" class="indecator-event-block">
-      <div class="indicator-event-info-block-rate">
-        <span class="indicator-event-type-title-rate">{{ categoryEvent }}</span>
-      </div>
-      <div><span class="indicator-event-info-number-currentV">{{ `${Math.floor(leftWidth)}%` }}</span></div>
-    </div>
-    <div v-if="!isRate&&isNoData" class="indecator-event-block">
-      <div class="indicator-event-info-block">
-        <div class="indicator-event-type-title">
-          {{ typeEvent }}
-        </div>
-        <div class="indicator-event-date-title">
-          {{ eventDate }}
-        </div>
-      </div>
-      <div v-if="isNoData">
-        <span class="indicator-event-info-number-currentV">{{ currentValue }}</span>/<span class="indicator-event-info-number-total">{{ total }}</span>
-      </div>
-    </div>
-    <div v-if="!isRate&&isNoData" class="indicator-block">
-      <div class="indicator-line" :class="leftIndicatorStyle" :style="{ width: leftWidth + '%' }" />
-      <div class="indicator-line" :class="rightIndicatorStyle" :style="{ width: rightWidth + '%' }" />
-    </div>
-    <div v-if="isRate&&isNoDataRate" class="indicator-block">
-      <div class="indicator-line" :class="leftIndicatorStyle" :style="{ width: leftWidth + '%' }" />
-      <div class="indicator-line" :class="rightIndicatorStyle" :style="{ width: rightWidth + '%' }" />
-    </div>
-    <div v-if="!isRate&&!isNoData">
-      {{ 'No data yet, add your events' }}<span><router-link to="/events"> now</router-link></span>
-    </div>
-    <div v-if="isRate&&!isNoDataRate">
-      {{ 'No data yet, add your events' }}<span><router-link to="/events"> now</router-link></span>
-    </div>
-  </div>
+<div >
+<div class='indecator-event-block' v-if='isRate&&isNoDataRate'>
+<div class='indicator-event-info-block-rate'>
+<span class='indicator-event-type-title-rate'>{{categoryEvent}}</span>
+</div>
+<div><span class='indicator-event-info-number-currentV'>{{`${Math.floor(leftWidth)}%`}}</span></div>
+</div>
+<div class='indecator-event-block' v-if='!isRate&&isNoData'>
+<div class='indicator-event-info-block'>
+<div class='indicator-event-type-title'>{{typeEvent}}</div>
+<div class='indicator-event-date-title'>{{eventDate}}</div>
+</div>
+<div v-if='isNoData'><span class='indicator-event-info-number-currentV'>{{currentValue}}</span>/<span class='indicator-event-info-number-total'>{{total}}</span></div>
+</div>
+<div class='indicator-block' v-if='!isRate&&isNoData'>
+<div class='indicator-line' :class='leftIndicatorStyle' :style="{  width: leftWidth + '%' }"/>
+<div class='indicator-line' :class='rightIndicatorStyle' :style="{  width: rightWidth + '%' }"/>
+</div>
+<div class='indicator-block' v-if='isRate&&isNoDataRate'>
+<div class='indicator-line' :class='leftIndicatorStyle' :style="{  width: leftWidth + '%' }"/>
+<div class='indicator-line' :class='rightIndicatorStyle' :style="{  width: rightWidth + '%' }"/>
+</div>
+<div v-if='!isRate&&!isNoData'>{{'No data yet, add your events'}}<span><router-link to="/events"> now</router-link></span></div>
+<div v-if='isRate&&!isNoDataRate'>{{'No data yet, add your events'}}<span><router-link to="/events"> now</router-link></span></div>
+</div>
 </template>
 <script>
 export default {
-  name: "LineIndicator",
+  name: 'LineIndicator',
+  data () {
+    return {
+
+    }
+  },
   props: {
     text: String,
     buttonStyle: String,
@@ -48,41 +43,36 @@ export default {
     leftIndicatorStyle: String,
     rightIndicatorStyle: String,
     isRate: Boolean,
-    eventDate: {type: String, default: ""},
+    eventDate: {type: String, default: ''},
     typeEvent: String,
     categoryEvent: String
-  },
-  data () {
-    return {
-
-    };
   },
   computed: {
     leftWidth () {
       if (this.currentValue * 100 / this.total) {
-        return this.currentValue * 100 / this.total;
+        return this.currentValue * 100 / this.total
       } else {
-        return 0;
+        return 0
       }
     },
     rightWidth () {
       if (this.currentValue && this.total) {
-        return 100 - this.currentValue * 100 / this.total;
+        return 100 - this.currentValue * 100 / this.total
       } else {
-        return 100;
+        return 100
       }
     },
     isNoData () {
-      return Boolean(this.typeEvent && this.currentValue && this.total);
+      return Boolean(this.typeEvent && this.currentValue && this.total)
     },
     isNoDataRate () {
-      return Boolean(this.categoryEvent && this.currentValue && this.total);
+      return Boolean(this.categoryEvent && this.currentValue && this.total)
     }
   },
   methods: {
 
   }
-};
+}
 </script>
 <style lang="scss">
     .indicator-block{

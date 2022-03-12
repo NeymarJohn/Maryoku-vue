@@ -9,10 +9,10 @@
       @dragleave="modalMaskClick"
     >
       <div class="modal-wrapper">
-        <div v-click-outside="closeModal" :class="containerClass">
+        <div :class="containerClass" v-click-outside="closeModal">
           <div class="modal-header">
             <a class="color-black text-decoration-none mobile-show" @click="closeModal"> Cancel </a>
-            <slot name="header" />
+            <slot name="header"></slot>
             <a class="color-red text-decoration-none mobile-show" @click="done">
               Done
             </a>
@@ -23,11 +23,11 @@
           </div>
 
           <div class="modal-body text-center">
-            <slot name="body" />
+            <slot name="body"></slot>
           </div>
 
           <div class="modal-footer">
-            <slot name="footer" />
+            <slot name="footer"></slot>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default {
       return;
     },
     done(){
-      this.$emit("done");
+      this.$emit('done');
     }
   },
 };

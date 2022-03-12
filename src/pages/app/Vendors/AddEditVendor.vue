@@ -6,7 +6,7 @@
       color="#FF547C"
       is-full-screen
     >
-      <img src="static/img/maryoku-loader.gif">
+      <img src="static/img/maryoku-loader.gif" />
     </vue-element-loading>
     <div class="md-layout">
       <div class="md-layout-item md-size-15 md-medium-size-20">
@@ -14,24 +14,21 @@
           <md-field class="mt-42">
             <label>Vendor Category</label>
             <md-select
-              id="vendorCategory"
               v-model="vendor.vendorCategory"
               name="vendorCategory"
+              id="vendorCategory"
               @md-selected="vendorCategoryChanged"
             >
               <md-option
                 v-for="opt in categories"
-                :id="opt.id"
                 :key="opt.id"
+                :id="opt.id"
                 :value="opt.id"
+                >{{ opt.value }}</md-option
               >
-                {{ opt.value }}
-              </md-option>
             </md-select>
           </md-field>
-          <h6 class="title text-primary">
-            Quick Access
-          </h6>
+          <h6 class="title text-primary">Quick Access</h6>
           <div
             v-for="(section, sIndex) in vendorPropertiesSections"
             :key="sIndex"
@@ -40,7 +37,8 @@
               class="md-button md-simple md-default"
               href="javascript:void(null);"
               @click="scrollToHash(section.title)"
-            >{{ section.title }}</a>
+              >{{ section.title }}</a
+            >
           </div>
         </div>
       </div>
@@ -51,9 +49,9 @@
           color="#FF547C"
         />
         <div
+          class="md-layout"
           v-for="(section, sIndex) in vendorPropertiesSections"
           :key="sIndex"
-          class="md-layout"
         >
           <div class="md-layout-item md-size-100">
             <md-card>
@@ -61,7 +59,7 @@
                 class="md-card-header-text md-card-header-warning"
               >
                 <div class="card-text">
-                  <h4 :id="section.title" class="title text-white">
+                  <h4 class="title text-white" :id="section.title">
                     {{ section.title }}
                   </h4>
                 </div>
@@ -69,9 +67,7 @@
               <md-card-content>
                 <div v-for="(item, index) in section.items" :key="index">
                   <template v-if="item.title">
-                    <h6 class="alert alert-info pd-8">
-                      {{ item.title }}
-                    </h6>
+                    <h6 class="alert alert-info pd-8">{{ item.title }}</h6>
                     <div
                       v-for="(subItem, index) in item.items"
                       :key="index"
@@ -97,9 +93,9 @@
       </div>
       <div class="md-layout-item md-size-10">
         <div class="pos-fixed w-92p mt-21">
-          <md-button class="md-success text-right" @click="saveVendor">
-            Save
-          </md-button>
+          <md-button class="md-success text-right" @click="saveVendor"
+            >Save</md-button
+          >
         </div>
       </div>
     </div>
@@ -122,7 +118,6 @@ export default {
     VueElementLoading,
     VendorPropertyField,
   },
-  filters: {},
   props: {
     vendor: {
       type: Object,
@@ -133,7 +128,7 @@ export default {
         };
       },
     },
-    creationMode: false,
+    creation_mode: false,
   },
   data() {
     return {
@@ -144,8 +139,6 @@ export default {
       selectedField: null,
     };
   },
-  computed: {},
-  watch: {},
   created() {
     Vendors.find("categories").then(
       (categories) => {
@@ -277,6 +270,9 @@ export default {
       });
     },
   },
+  computed: {},
+  filters: {},
+  watch: {},
 };
 </script>
 

@@ -1,78 +1,75 @@
 <template>
   <div class="md-layout vendor-signin">
-    <Loader :active="loading" is-full-screen page="vendor" />
+    
+    <Loader :active="loading" is-full-screen page="vendor"></Loader>
     <div class="md-layout-item">
       <signup-card>
         <div
-          slot="content-left"
           class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 left-section p-60"
+          slot="content-left"
         >
           <div>Before we move on...</div>
           <div class="description-content text-center flex-1 pt-50 pb-50">
-            <img style="width: 100px" :src="`${$iconURL}common/signin-logo-purple.svg`">
+            <img style="width: 100px" :src="`${$iconURL}common/signin-logo-purple.svg`" />
             <div class="social-line mt-40">
               <span class="font-size-40 font-bold line-height-15 text-transform-uppercase">
                 Stop looking at your watch
               </span>
             </div>
             <div>You already know it's time for business.</div>
-            <img class="mt-60" :src="`${$iconURL}common/maryoku-logo-purple-1.png`" style="width: 180px">
+            <img class="mt-60" :src="`${$iconURL}common/maryoku-logo-purple-1.png`" style="width: 180px" />
           </div>
         </div>
         <div
-          slot="content-right"
           class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 p-60 right-section"
+          slot="content-right"
         >
           <div class="social-line text-center">
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-              <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20">
+              <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20" />
               <span>Sign in with Google</span>
             </md-button>
           </div>
           <maryoku-input
-            v-model="user.email"
+            class="form-input"
             v-validate="modelValidations.email"
-            class="form-input"
-            input-style="email"
+            inputStyle="email"
+            v-model="user.email"
             placeholder="Type email address here..."
-          />
+          ></maryoku-input>
           <maryoku-input
-            v-model="user.password"
-            v-validate="modelValidations.password"
             class="form-input"
+            v-validate="modelValidations.password"
             type="password"
-            input-style="password"
+            inputStyle="password"
+            v-model="user.password"
             placeholder="Type password here..."
-          />
+          ></maryoku-input>
           <div class="md-error mt-10">
             <div v-if="notFoundUser" class="font-size-16">
               Sorry, we couldn’t find you.
-              <br>
+              <br />
               If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
             </div>
             <div>{{ error }}</div>
           </div>
-          <!--          <div class="d-flex align-center">-->
-          <!--              <md-checkbox class="md-vendor mr-10" v-model="accepted">I accept</md-checkbox>-->
-          <!--              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>-->
-          <!--          </div>-->
+<!--          <div class="d-flex align-center">-->
+<!--              <md-checkbox class="md-vendor mr-10" v-model="accepted">I accept</md-checkbox>-->
+<!--              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>-->
+<!--          </div>-->
           <div class="d-flex justify-content-end">
-            <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
+              <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
           </div>
           <div class="form-buttons">
             <md-button
+              @click="signIn"
               class="md-default md-red md-maryoku mt-30 md-vendor"
               :disabled="!user.password || !user.email"
-              @click="signIn"
             >
               Login
             </md-button>
-            <div class="text-center mt-10 mb-10">
-              Or
-            </div>
-            <md-button class="md-black md-maryoku md-red md-vendor" @click="toSingUp">
-              Sign Up
-            </md-button>
+            <div class="text-center mt-10 mb-10">Or</div>
+            <md-button @click="toSingUp" class="md-black md-maryoku md-red md-vendor"> Sign Up </md-button>
           </div>
         </div>
       </signup-card>
@@ -124,18 +121,10 @@ export default {
             notFoundUser: false,
         };
     },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-    currentUser() {
-      return this.$store.state.auth.user;
-    },
-  },
   async created(){
     if ( this.loggedIn  ) {
-      let res = await this.$store.dispatch("auth/checkToken", this.currentUser.access_token);
-      if (res.currentUserType === "vendor") this.$router.push("/vendor/proposals");
+      let res = await this.$store.dispatch('auth/checkToken', this.currentUser.access_token);
+      if (res.currentUserType === 'vendor') this.$router.push('/vendor/proposals');
     }
   },
   methods: {
@@ -184,13 +173,21 @@ export default {
       });
     },
     toSingUp() {
-      this.$router.push({ path: "/vendor/signup" });
+      this.$router.push({ path: `/vendor/signup` });
     },
     toForgotPassword() {
       this.$router.push({ path: "/vendor/forgot-password" });
     },
     redirectPage() {
       this.$router.push({ path: "/vendor/dashboard" });
+    },
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    currentUser() {
+      return this.$store.state.auth.user;
     },
   },
 };

@@ -1,12 +1,10 @@
 <template>
   <div class="white-card insight-adaptive">
-    <div class="font-size-20 p-30 ">
-      Add more details to generate unique insights
-    </div>
+    <div class="font-size-20 p-30 ">Add more details to generate unique insights</div>
     <div style="margin-left: -52px">
       <div style="margin: 0 80px">
         <pie-chart
-          :chart-data="chartData"
+          :chartData="chartData"
           :columns="1"
           :options="{
             width: 135,
@@ -14,7 +12,7 @@
             strokWidth: 30,
             direction: 'row',
           }"
-        />
+        ></pie-chart>
       </div>
     </div>
     <div class="p-30 ">
@@ -28,40 +26,26 @@
         </div>
       </div>
       <div v-else class="d-flex align-center">
-        <img :src="`${$iconURL}VendorsProposalPage/group-18762.svg`" width="50">
+        <img :src="`${$iconURL}VendorsProposalPage/group-18762.svg`" width="50" />
         <div class="ml-10">
-          <div class="color-vendor font-size-14 m-0">
-            There is not yet enough information
-          </div>
-          <div class="color-vendor font-size-14 mt-10">
-            to present insights
-          </div>
+          <div class="color-vendor font-size-14 m-0">There is not yet enough information</div>
+          <div class="color-vendor font-size-14 mt-10">to present insights</div>
         </div>
       </div>
-      <hr class="mt-50 mb-50">
+      <hr class="mt-50 mb-50" />
       <div class="tips">
         <div class="d-flex mb-30 align-center">
-          <div class="flex-1">
-            <img :src="`${$iconURL}common/light.svg`" class="label-icon">
-          </div>
-          <div class="ml-10">
-            Boost your chances of winning by improving your profile
-          </div>
+          <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+          <div class="ml-10">Boost your chances of winning by improving your profile</div>
         </div>
         <div class="d-flex align-center">
-          <div class="flex-1">
-            <img :src="`${$iconURL}common/light.svg`" class="label-icon">
-          </div>
-          <div class="ml-10">
-            Stay sharp and respond to proposals promptly - you've got to be in it to win it!
-          </div>
+          <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+          <div class="ml-10">Stay sharp and respond to proposals promptly - you've got to be in it to win it!</div>
         </div>
       </div>
       <md-button class="mt-10 md-simple md-vendor-text md-vendor px-0" @click="$emit('insight')">
         More Insights
-        <md-icon class="color-vendor">
-          keyboard_arrow_down
-        </md-icon>
+        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
       </md-button>
     </div>
   </div>
@@ -91,10 +75,6 @@ export default {
       ],
     };
   },
-  watch: {
-    total(newVal) {},
-    won(newVal) {},
-  },
   mounted() {
     this.init();
   },
@@ -105,6 +85,10 @@ export default {
       if (this.won > 0) this.chartData[1].color = "#2cde6b";
       this.chartData = [...this.chartData];
     },
+  },
+  watch: {
+    total(newVal) {},
+    won(newVal) {},
   },
 };
 </script>

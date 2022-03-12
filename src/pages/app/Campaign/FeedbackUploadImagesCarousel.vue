@@ -1,34 +1,30 @@
 <template>
   <div class="feedback-upload-images-carousel">
     <carousel
-      v-if="images.length"
-      :key="Math.random()"
       :items="1"
       :nav="false"
       :dots="false"
       class="carousel"
       :number="2"
+      v-if="images.length"
+      :key="Math.random()"
       @changed="change"
     >
-      <template slot="prev">
-        <button class="carousel-btn-prev nav-btn nav-left">
-          <md-icon class="btn-prev-icon-arrow-left">
-            keyboard_arrow_left
-          </md-icon>
+      <template slot="prev" >
+        <button class="carousel-btn-prev nav-btn nav-left" >
+          <md-icon class="btn-prev-icon-arrow-left" >keyboard_arrow_left</md-icon>
         </button>
       </template>
-      <div v-for="(item, index) in images" :key="index" class="carousel-item">
+      <div class="carousel-item" v-for="(item, index) in images" :key="index">
         <img
           :src="item.src"
           :class="['carousel-item-image', classImage]"
           @error="setAltImg($event, item)"
-        >
+        />
       </div>
-      <template slot="next">
-        <button class="carousel-btn-next nav-btn nav-right">
-          <md-icon class="btn-next-icon-arrow-right">
-            keyboard_arrow_right
-          </md-icon>
+      <template slot="next" >
+        <button class="carousel-btn-next nav-btn nav-right" >
+          <md-icon class="btn-next-icon-arrow-right" >keyboard_arrow_right</md-icon>
         </button>
       </template>
     </carousel>
@@ -40,7 +36,7 @@ import carousel from "vue-owl-carousel";
 import { getBase64 } from "@/utils/file.util";
 
 export default {
-  name: "FeedbackUploadImagesCarousel",
+  name: "feedback-upload-images-carousel",
   components: {
     carousel,
   },
@@ -58,7 +54,7 @@ export default {
     change(event) {
       const itemIndex = event.item.index;
       console.log({ itemIndex });
-      this.$emit("change-item-index", itemIndex);
+      this.$emit('change-item-index', itemIndex);
     },
     uploadImage(index) {
       document.getElementById("carousel-file").click();

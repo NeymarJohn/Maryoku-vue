@@ -2,17 +2,15 @@
   <div class="vendor-customer-board p-40">
     <loader :active="loading" is-full-screen page="vendor" />
     <div class="font-size-22 font-bold d-flex align-center">
-      <img :src="`${$iconURL}CustomerList/group-19735.svg`" class="mr-10"> CUSTOMERS
+      <img :src="`${$iconURL}CustomerList/group-19735.svg`" class="mr-10" /> CUSTOMERS
       <!--<md-button class="ml-auto md-simple md-black md-maryoku mr-15">Import Customers List</md-button>-->
       <div class="mr-15 ml-auto">
         <md-button class="   font-size-14 font-bold md-simple " @click="importCustomersModal = true">
-          <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20">
+          <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20" />
           <span style="color: black;  text-transform: capitalize">Import Customers List</span>
         </md-button>
 
-        <md-button class="md-vendor md-maryoku " @click="createNewCustomer">
-          Add New Customers
-        </md-button>
+        <md-button class="md-vendor md-maryoku " @click="createNewCustomer">Add New Customers</md-button>
       </div>
     </div>
     <div class="customer-table pl-50">
@@ -26,7 +24,7 @@
               @click="selectTab(tab.value)"
             >
               <div class="d-flex align-center px-20 pt-10 pb-10 font-size-16" :class="tab.class">
-                <img class="mr-10" :src="`${$iconURL}${tab.icon}`" width="24px">
+                <img class="mr-10" :src="`${$iconURL}${tab.icon}`" width="24px" />
                 {{ tab.title }}
                 <span v-if="tab.key == 'all'" class="ml-5" :class="tab.class">({{ pagination.total }})</span>
                 <span v-else class="ml-5" :class="tab.class">({{ pagination[tab.key] }})</span>
@@ -41,32 +39,26 @@
 
           <div v-if="!loading">
             <div class="md-20 customer-list">
-              <template v-for="(object, key) in customerObject">
-                <div class="customer-mark font-size-24 font-bold-extra mb-1">
-                  {{ object.group.toUpperCase() }}
-                </div>
+              <template v-for="(object, key) in customerObject" >
+                <div class="customer-mark font-size-24 font-bold-extra mb-1">{{ object.group.toUpperCase() }}</div>
 
                 <CustomerListItem
                   v-for="customer in object.children"
-                  :key="customer.id"
                   :customer="customer"
                   :sort-fields="sortFields"
+                  :key="customer.id"
                   class="row"
                   @customerAction="handleCustomer(customer, $event)"
                   @proposalAction="handleProposal"
                   @click="selectCustomer(customer)"
-                />
+                ></CustomerListItem>
               </template>
             </div>
           </div>
           <div v-if="customers.length < 2" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px">
-            <p class="text-transform-uppercase font-size-14">
-              No More CUSTOMERS To Show
-            </p>
-            <md-button class="md-vendor" @click="createNewCustomer">
-              Add New CUSTOMERS
-            </md-button>
+            <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px" />
+            <p class="text-transform-uppercase font-size-14">No More CUSTOMERS To Show</p>
+            <md-button class="md-vendor" @click="createNewCustomer">Add New CUSTOMERS</md-button>
           </div>
         </div>
         <div class="md-layout-item md-size-35 mt-30">
@@ -75,14 +67,14 @@
             :customer="selectedCustomer"
             :aggregate="aggregate"
             :vendor="vendorData"
-            :customer-status="this.tab"
-          />
+            :customerStatus="this.tab"
+          ></Insight>
         </div>
       </div>
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
       <template slot="body">
-        <ProposalContent :vendor-proposal="selectedProposal" @close="showProposalDetail = false" />
+        <ProposalContent :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
     <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
@@ -167,58 +159,8 @@ export default {
       renderInsight: false,
     };
   },
-  computed: {
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-    customers() {
-      return this.$store.state.vendorDashboard.customers;
-    },
-    proposalRequests() {
-      return this.$store.state.vendorDashboard.proposalRequests;
-    },
-    customerObject() {
-      if (!this.customers) return {};
-      let object = this.customers.reduce((r, e) => {
-        if (!e.companyName) return r;
-        let group = e.companyName[0].toLowerCase();
-        if (!r[group]) r[group] = { group, children: [e] };
-        else r[group].children.push(e);
-        return r;
-      }, {});
-      // sort customer object with alphabetical order
-      return Object.keys(object)
-        .sort()
-        .reduce((res, key) => ((res[key] = object[key]), res), {});
-    },
-    aggregate() {
-      let totalPrice = 0;
-      let totalProposals = 0;
-      let wonProposals = 0;
-      let averagePrice = 0;
-      if (!this.customers.length) return { totalPrice, totalProposals, wonProposals, averagePrice };
-      this.customers.map(c => {
-        let wonProposalsOfCustomer = c.proposals.filter(p => p.accepted);
-        wonProposals += wonProposalsOfCustomer.length;
-        totalProposals += c.proposals.length;
-        if (wonProposalsOfCustomer.length) {
-          let costOfCustomer = wonProposalsOfCustomer.reduce((cost, p) => {
-            return cost + p.cost;
-          }, 0);
-          totalPrice += costOfCustomer;
-          averagePrice += costOfCustomer / wonProposals;
-        }
-      });
-      averagePrice /= this.customers.length;
-      return { totalPrice, totalProposals, wonProposals, averagePrice };
-    },
-  },
-  watch: {},
   async mounted() {
     await this.init();
-  },
-  updated() {
-    // remove empty item in proposal-request carousel
   },
   methods: {
     async getCustomer() {
@@ -325,7 +267,7 @@ export default {
             ein: el.ServiceType,
             type: 1,
             };
-            customerArray["customers"].push(data);
+            customerArray['customers'].push(data);
         });
 
         this.importCustomersModal = false;
@@ -356,6 +298,56 @@ export default {
       this.loading = true;
       this.init();
     }
+  },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    customers() {
+      return this.$store.state.vendorDashboard.customers;
+    },
+    proposalRequests() {
+      return this.$store.state.vendorDashboard.proposalRequests;
+    },
+    customerObject() {
+      if (!this.customers) return {};
+      let object = this.customers.reduce((r, e) => {
+        if (!e.companyName) return r;
+        let group = e.companyName[0].toLowerCase();
+        if (!r[group]) r[group] = { group, children: [e] };
+        else r[group].children.push(e);
+        return r;
+      }, {});
+      // sort customer object with alphabetical order
+      return Object.keys(object)
+        .sort()
+        .reduce((res, key) => ((res[key] = object[key]), res), {});
+    },
+    aggregate() {
+      let totalPrice = 0;
+      let totalProposals = 0;
+      let wonProposals = 0;
+      let averagePrice = 0;
+      if (!this.customers.length) return { totalPrice, totalProposals, wonProposals, averagePrice };
+      this.customers.map(c => {
+        let wonProposalsOfCustomer = c.proposals.filter(p => p.accepted);
+        wonProposals += wonProposalsOfCustomer.length;
+        totalProposals += c.proposals.length;
+        if (wonProposalsOfCustomer.length) {
+          let costOfCustomer = wonProposalsOfCustomer.reduce((cost, p) => {
+            return cost + p.cost;
+          }, 0);
+          totalPrice += costOfCustomer;
+          averagePrice += costOfCustomer / wonProposals;
+        }
+      });
+      averagePrice /= this.customers.length;
+      return { totalPrice, totalProposals, wonProposals, averagePrice };
+    },
+  },
+  watch: {},
+  updated() {
+    // remove empty item in proposal-request carousel
   },
 };
 </script>

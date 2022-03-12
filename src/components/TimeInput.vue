@@ -1,20 +1,16 @@
 <template>
   <div class="time-select-fields">
-    <input v-model="time" type="time" class="without_ampm" @change="updateTime">
+    <input type="time" v-model="time" class="without_ampm" @change="updateTime" />
     <select v-model="ampm">
-      <option value="am">
-        AM
-      </option>
-      <option value="pm">
-        PM
-      </option>
+      <option value="am">AM</option>
+      <option value="pm">PM</option>
     </select>
   </div>
 </template>
 <script>
 import moment from "moment";
 export default {
-  name: "TimeInput",
+  name: "time-input",
   props: {
     /**
      * Data binding
@@ -22,18 +18,6 @@ export default {
      */
     value: {
       type: [String, Date, Number],
-    },
-  },
-  data() {
-    return {
-      ampm: new Date(this.value).getHours() >= 12 ? "pm" : "am",
-      time: moment(new Date(this.value)).format("HH:mm"),
-    };
-  },
-  watch: {
-    value: function () {
-      this.ampm = new Date(this.value).getHours() >= 12 ? "pm" : "am";
-      this.time = moment(new Date(this.value)).format("HH:mm");
     },
   },
   created() {
@@ -59,6 +43,18 @@ export default {
         !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str))
       ); // ...and ensure strings of whitespace fail
+    },
+  },
+  data() {
+    return {
+      ampm: new Date(this.value).getHours() >= 12 ? "pm" : "am",
+      time: moment(new Date(this.value)).format("HH:mm"),
+    };
+  },
+  watch: {
+    value: function () {
+      this.ampm = new Date(this.value).getHours() >= 12 ? "pm" : "am";
+      this.time = moment(new Date(this.value)).format("HH:mm");
     },
   },
 };

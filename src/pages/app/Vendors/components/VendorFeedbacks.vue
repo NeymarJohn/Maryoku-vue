@@ -1,31 +1,30 @@
 <template>
   <div class="full-width">
     <div class="feedbacks-wrapper">
-      <md-card v-for="(item, index) in feedbacks" :key="index" :value="item">
+      <md-card v-for="(item, index) in feedbacks" :value="item" :key="index">
         <md-card-header>
           <md-avatar>
-            <img :src="item.image">
+            <img :src="item.image" />
           </md-avatar>
 
           <div class="md-title">
             {{ item.username }}
             <label
+              class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
-              class="star-rating__star"
               :class="{ 'is-selected': true }"
-            >★</label>
+              >★</label
+            >
           </div>
-          <div class="md-subhead">
-            {{ item.date }}
-          </div>
+          <div class="md-subhead">{{ item.date }}</div>
         </md-card-header>
         <md-card-content>
           <p>
             {{ item.message }}
           </p>
         </md-card-content>
-        <md-divider v-if="index != feedbacks.length - 1" />
+        <md-divider v-if="index != feedbacks.length - 1"></md-divider>
       </md-card>
     </div>
     <a class="more">Show more</a>
@@ -35,7 +34,7 @@
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "VendorFeedbacks",
+  name: "vendor-feedbacks",
   components: {
     VueElementLoading,
   },

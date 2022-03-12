@@ -2,61 +2,51 @@
   <div class="progress-sidebar">
     <div class="summer-party">
       <md-button class="md-default md-sm md-simple expand-sidebar">
-        <img :src="`${$iconURL}Timeline-New/expand.svg`">
+        <img :src="`${$iconURL}Timeline-New/expand.svg`" />
       </md-button>
-      <div v-if="page === 'plan'" class="title-label">
+      <div class="title-label" v-if="page === 'plan'">
         summer party
         <small>checklist</small>
       </div>
-      <div v-if="page === 'event'" class="subTitle-label">
-        Let's Begin
-      </div>
+      <div class="subTitle-label" v-if="page === 'event'">Let's Begin</div>
       <div class="completion-progress">
-        <div class="progress-done" />
+        <div class="progress-done"></div>
       </div>
       <div class="percentage">
         <ul>
-          <li class="green-label">
-            {{ (((warming / elements.length).toFixed(2) * 10000) / 100) | withComma }}%
-          </li>
-          <li class>
-            {{ warming }} of {{ elements.length }}
-          </li>
+          <li class="green-label">{{ (((warming / elements.length).toFixed(2) * 10000) / 100) | withComma }}%</li>
+          <li class>{{ warming }} of {{ elements.length }}</li>
         </ul>
       </div>
-      <div v-if="page === 'plan'" class="small-label">
-        Things are warming up!
-      </div>
-      <div v-if="page === 'event'" class="small-label">
-        Only 4 more vendors to close!
-      </div>
+      <div class="small-label" v-if="page === 'plan'">Things are warming up!</div>
+      <div class="small-label" v-if="page === 'event'">Only 4 more vendors to close!</div>
     </div>
     <div class="progress-sidebar-content">
       <!-- Sidebar Elements -->
       <div class="event-elements">
         <draggable :list="localElements" @change="changeItem">
           <div
-            v-for="(item, index) in localElements"
-            :id="item.id"
-            :key="index"
             class="event-elements__item"
+            @click="goToRoute(item, index)"
             :class="{
               current: isActiveRoute(item),
             }"
-            @click="goToRoute(item, index)"
+            v-for="(item, index) in localElements"
+            :key="index"
+            :id="item.id"
           >
             <div class="item-title">
               <img
                 v-if="item.status === 'completed' || item.progress === 100"
                 :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
                 width="25"
-              >
+              />
               <img
-                v-if="isActiveRoute(item) && item.icon"
                 :src="item.icon"
+                v-if="isActiveRoute(item) && item.icon"
                 width="25"
                 style="max-width: 25px; max-height: 25px"
-              >
+              />
               {{ item.title }}
             </div>
           </div>
@@ -68,8 +58,8 @@
           }"
           @click="changeItem('refresh')"
         >
-          <img :src="`${$iconURL}Budget Requirements/group-9602@3x.png`" width="80">
-        </md-button>
+          <img :src="`${$iconURL}Budget Requirements/group-9602@3x.png`" width="80"
+        /></md-button>
       </div>
     </div>
   </div>
@@ -87,7 +77,7 @@ import EventBlocks from "../components/NewEventBlocks";
 import EventNotePanel from "../components/EventNotePanel";
 
 export default {
-  name: "ProgressSidebar",
+  name: "progress-sidebar",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -117,6 +107,14 @@ export default {
     event: {},
     localElements: [],
   }),
+  created() {
+    this.fetchUrl();
+    this.event = this.$store.state.event.eventData;
+    this.localElements = this.elements
+    setTimeout(_ => {
+      this.renderProgress();
+    }, 50)
+  },
   computed: {
     // ...mapState("event", {
     //   eventData: (state) => state.eventData,
@@ -125,14 +123,6 @@ export default {
       let value = this.elements.filter((it) => it.progress == 100);
       return value ? value.length : 0;
     },
-  },
-  created() {
-    this.fetchUrl();
-    this.event = this.$store.state.event.eventData;
-    this.localElements = this.elements;
-    setTimeout(_ => {
-      this.renderProgress();
-    }, 50);
   },
   methods: {
     ...mapActions("event", ["getEventAction"]),
@@ -156,22 +146,22 @@ export default {
     },
     renderProgress(){
       let self = this;
-      $(".event-elements__item").each(function (idx, el) {
-        let progress = self.elements.find(it => it.id === $(el).attr("id")).progress;
-        $(el).css("--width", `${progress}%`);
-      });
+      $('.event-elements__item').each(function (idx, el) {
+        let progress = self.elements.find(it => it.id === $(el).attr('id')).progress
+        $(el).css("--width", `${progress}%`)
+      })
     }
+  },
+  updated(){
+    this.localElements = this.elements
+    this.renderProgress();
+  },
+  mounted() {
   },
   watch: {
     $route: "fetchUrl",
     currentUrl(newVal){},
     elements(newValue) {},
-  },
-  updated(){
-    this.localElements = this.elements;
-    this.renderProgress();
-  },
-  mounted() {
   },
 };
 </script>

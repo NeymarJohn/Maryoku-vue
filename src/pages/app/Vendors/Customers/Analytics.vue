@@ -1,26 +1,24 @@
 <template>
   <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
     <template slot="prev">
-      <span ref="prevButton" class="prev handle-btn" />
+      <span class="prev handle-btn" ref="prevButton"></span>
     </template>
     <div v-for="(p) in incomeList" :key="p.id" class="carousel-item">
-      <h5 class="color-white font-size-20 font-bold-extra text-center">
-        Income From Past And Future Events
-      </h5>
-      <income-bar-chart :chart-data="incomeChartData" />
+      <h5 class="color-white font-size-20 font-bold-extra text-center">Income From Past And Future Events</h5>
+      <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
       <div class="md-layout my-40">
         <div class="md-layout-item font-size-16 color-white md-size-50 text-left pl-50">
-          <year-select :data="yearsList" width="60%" :initial-value="initialYear" @valueChanged="handleYearChange" />
+        <year-select :data="yearsList" width="60%" :initialValue="initialYear" @valueChanged="handleYearChange"/>
         </div>
         <div class="md-layout-item md-size-50 d-flex align-center font-size-16 color-gray text-right pr-50">
-          <span :style="'background-color: rgb(159, 107, 144)'" class="icon mr-10" />
+          <span :style="'background-color: rgb(159, 107, 144)'" class="icon mr-10"></span>
           No event incomes
         </div>
       </div>
-      <hr :class="incomeList.length < 2 ? 'mb-40' : ''">
+      <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
     </div>
     <template slot="next">
-      <span ref="nextButton" class="next handle-btn d-none" />
+      <span class="next handle-btn d-none" ref="nextButton"> </span>
     </template>
   </carousel>
 </template>
@@ -43,7 +41,7 @@ export default {
     },
   },
   data() {
-    const date = new Date().getFullYear();
+    const date = new Date().getFullYear()
     return {
       incomeList: [""],
       yearsList: [
@@ -57,7 +55,7 @@ export default {
   },
   methods: {
       handleYearChange(value) {
-        this.$emit("onYearChanged", value);
+        this.$emit('onYearChanged', value);
       }
     }
   };

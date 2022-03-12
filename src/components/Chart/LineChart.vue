@@ -6,10 +6,10 @@
 
 
 <script>
-import Chart from "chart.js";
+import Chart from 'chart.js';
 
 export default {
-  props: ["chartData", "options"],
+  props: ['chartData', 'options'],
   mounted() {
     new Chart(
       this.$refs.line_chart,
@@ -20,7 +20,7 @@ export default {
       }
     );
   },
-};
+}
 </script>
 <style lang="scss">
 

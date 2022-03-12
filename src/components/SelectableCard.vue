@@ -1,19 +1,19 @@
 <template>
   <div class="selectable-card" :class="{ selected: selected === value, purple: theme === 'purple' }" @click="change">
     <div>
-      <img :src="icon">
+      <img :src="icon" />
     </div>
     <div>
       {{ label }}
     </div>
     <div>
       <md-checkbox
-        v-model="selected"
         class="md-checkbox-circle"
         :class="{ 'md-red': theme === 'red', 'md-vendor': theme == 'purple' }"
-        :value="value"
         @change="change"
-      />
+        v-model="selected"
+        :value="value"
+      ></md-checkbox>
     </div>
   </div>
 </template>

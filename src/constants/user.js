@@ -1,5 +1,5 @@
 export const USER_TYPE = {
-  PLANNER: "planner",
-  VENDOR: "vendor",
-  GUEST: "guest"
-};
+    PLANNER : 'planner',
+    VENDOR  : 'vendor',
+    GUEST   : 'guest',
+}

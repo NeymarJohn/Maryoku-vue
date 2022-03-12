@@ -1,10 +1,8 @@
 <template>
   <div class="md-layout">
-    <modal v-if="modalOpen" class="gallery-modal" @close="noticeModalHide">
+    <modal v-if="modalOpen" @close="noticeModalHide" class="gallery-modal">
       <template slot="header">
-        <h4 class="modal-title">
-          Image Gallery
-        </h4>
+        <h4 class="modal-title">Image Gallery</h4>
         <md-button
           class="md-simple md-just-icon md-round modal-default-button"
           @click="noticeModalHide"
@@ -17,34 +15,34 @@
 
         <div class="header-image-wrapper">
           <div
+            class="file-input order-2"
             v-for="(imageItem, index) in uploadedImages"
             :key="'image-'+index"
-            class="file-input order-2"
           >
             <div class="image-container" @click="openGallery(index)">
-              <img :src="imageItem.src">
+              <img :src="imageItem.src" />
             </div>
-            <div v-if="removeImage" class="button-container">
+            <div class="button-container" v-if="removeImage">
               <md-button class="md-danger md-round" @click="removeImage(index, imageItem.id)">
-                <i class="fa fa-times" />Remove
+                <i class="fa fa-times"></i>Remove
               </md-button>
             </div>
           </div>
 
-          <div v-if="removeImage" class="file-input order-1">
+          <div class="file-input order-1" v-if="removeImage">
             <div class="image-container">
-              <img :src="regularImg" title>
+              <img :src="regularImg" title />
             </div>
 
             <div class="button-container">
               <md-button class="md-success md-round md-fileinput">
                 <template>Add image</template>
-                <input type="file" @change="onFileChange($event)">
+                <input type="file" @change="onFileChange($event)" />
               </md-button>
             </div>
           </div>
         </div>
-        <LightBox ref="lightbox" :images="uploadedImages" :show-light-box="false" />
+        <LightBox :images="uploadedImages" ref="lightbox" :show-light-box="false"></LightBox>
       </template>
     </modal>
   </div>
@@ -58,7 +56,7 @@ import VueElementLoading from "vue-element-loading";
 import LightBox from "vue-image-lightbox";
 
 export default {
-  name: "EventGalleryModal",
+  name: "event-gallery-modal",
   components: {
     Modal,
     ProductCard,

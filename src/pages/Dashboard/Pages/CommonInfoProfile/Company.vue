@@ -1,15 +1,13 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" is-full-screen />
+    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen />
     <div class="md-layout-item">
-      <h2 slot="title" class="title text-center" style="text-align: center;">
-        Hey, tell us about you
-      </h2>
+      <h2 class="title text-center" slot="title" style="text-align: center;">Hey, tell us about you</h2>
       <signup-card
         style="padding-top: 32px; padding-bottom: 2px; padding-left: 0; min-width: 680px;"
       >
-        <div slot="content-left" class="md-layout-item md-size-5" />
-        <div slot="content-middle" class="md-layout-item md-size-80">
+        <div class="md-layout-item md-size-5" slot="content-left"></div>
+        <div class="md-layout-item md-size-80" slot="content-middle">
           <!-- Company Name -->
           <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">Company Name</label>
@@ -19,12 +17,12 @@
               >
                 <md-input
                   v-model="companyName"
-                  v-validate="modelValidations.companyName"
                   type="text"
                   autofocus
                   required
                   data-vv-name="companyName"
-                />
+                  v-validate="modelValidations.companyName"
+                ></md-input>
               </md-field>
             </div>
           </div>
@@ -38,12 +36,12 @@
               >
                 <md-input
                   v-model="fullName"
-                  v-validate="modelValidations.fullName"
                   type="text"
                   autofocus
                   required
                   data-vv-name="fullName"
-                />
+                  v-validate="modelValidations.fullName"
+                ></md-input>
               </md-field>
             </div>
           </div>
@@ -57,30 +55,26 @@
               >
                 <md-input
                   v-model="numberOfEmployees"
-                  v-validate="modelValidations.numberOfEmployees"
                   type="text"
                   required
                   data-vv-name="numberOfEmployees"
-                />
+                  v-validate="modelValidations.numberOfEmployees"
+                ></md-input>
               </md-field>
             </div>
           </div>
         </div>
-        <div slot="content-right" class="md-layout-item md-size-5" />
+        <div class="md-layout-item md-size-5" slot="content-right"></div>
 
         <div
-          slot="footer"
           class="md-layout-item md-size-100"
           style="text-align: right; padding-top: 48px;"
+          slot="footer"
         >
           <div class="md-layout">
             <div class="md-layout-item md-size-100">
-              <md-button class="md-simple pull-left" @click="skip">
-                Skip
-              </md-button>
-              <md-button class="md-success pull-right" @click="next">
-                Next
-              </md-button>
+              <md-button class="md-simple pull-left" @click="skip">Skip</md-button>
+              <md-button class="md-success pull-right" @click="next">Next</md-button>
             </div>
           </div>
         </div>
@@ -90,30 +84,30 @@
 </template>
 <script>
 // MAIN MODULES
-import LightBox from "vue-image-lightbox";
-import { mapGetters } from "vuex";
+import LightBox from 'vue-image-lightbox'
+import { mapGetters } from 'vuex'
 
 // HELPER FUNC
-import { isWrong } from "@/utils/helperFunction";
+import { isWrong } from '@/utils/helperFunction'
 
 // MODELS
-import VueElementLoading from "vue-element-loading";
-import CustomerFile from "@/models/CustomerFile";
-import Customer from "@/models/Customer";
-import Me from "@/models/Me";
+import VueElementLoading from 'vue-element-loading'
+import CustomerFile from '@/models/CustomerFile'
+import Customer from '@/models/Customer'
+import Me from '@/models/Me'
 // import auth from '@/auth';
 
 // COMPONENTS
-import InputText from "@/components/Inputs/InputText.vue";
-import Select from "@/components/Select/Select.vue";
-import Title from "@/components/Title/Title.vue";
-import Button from "@/components/Button/Button.vue";
-import Autocomplete from "@/components/Autocomplete/Autocomplete.vue";
-import { SignupCard } from "@/components";
-import Places from "vue-places";
+import InputText from '@/components/Inputs/InputText.vue'
+import Select from '@/components/Select/Select.vue'
+import Title from '@/components/Title/Title.vue'
+import Button from '@/components/Button/Button.vue'
+import Autocomplete from '@/components/Autocomplete/Autocomplete.vue'
+import { SignupCard } from '@/components'
+import Places from 'vue-places'
 
 export default {
-  name: "Employee",
+  name: 'Employee',
   components: {
     InputText,
     Select,
@@ -130,20 +124,20 @@ export default {
       // auth: auth,
       loading: false,
 
-      companyName: "",
-      fullName: "",
-      email: "",
-      workspace_domain: "",
+      companyName: '',
+      fullName: '',
+      email: '',
+      workspace_domain: '',
       upload_logo: null,
       main_office_adddress: {
-        label: "",
+        label: '',
         data: {}
       },
       numberOfEmployees: 1,
-      industry: "",
-      website: "",
+      industry: '',
+      website: '',
       isError: false,
-      logo_name: "",
+      logo_name: '',
       images: [],
       isImageShow: false,
       touched: {
@@ -168,17 +162,17 @@ export default {
           required: true
         }
       }
-    };
+    }
   },
   watch: {
     email () {
-      this.touched.email = true;
+      this.touched.email = true
     },
     fullName () {
-      this.touched.fullName = true;
+      this.touched.fullName = true
     },
     companyName () {
-      this.touched.companyName = true;
+      this.touched.companyName = true
     }
   },
   attributes () {
@@ -192,18 +186,18 @@ export default {
       placeholder: this.placeholder,
       readonly: this.readonly,
       maxlength: this.maxlength
-    };
+    }
   },
   mounted: function () {
     this.$auth.currentUser(this, true, () => {
       /* this.$store.dispatch("user/getIndustry"); */
 
-      let user = this.$auth.user;
-      this.fullName = user.displayName;
-      this.email = user.email;
+      let user = this.$auth.user
+      this.fullName = user.displayName
+      this.email = user.email
 
-      let customer = this.$auth.user.customer;
-      this.companyName = customer.name;
+      let customer = this.$auth.user.customer
+      this.companyName = customer.name
       /* this.main_office_adddress = {
                   label: `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`,
                   data: {}
@@ -212,18 +206,18 @@ export default {
                 this.number_of_employees = customer.numberOfEmployees;
                 this.website = customer.website;
                 this.workspace_domain = customer.workspaceDomain; */
-    });
+    })
   },
   computed: {
     ...mapGetters({
-      industryList: "user/getIndustryList"
+      industryList: 'user/getIndustryList'
     })
   },
 
   methods: {
     next () {
-      this.loading = true;
-      const that = this;
+      this.loading = true
+      const that = this
 
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
@@ -235,8 +229,8 @@ export default {
           })
             .save()
             .then(res => {
-              that.$auth.user.customer = res.item;
-              that.$ls.set("user", that.$auth.user, 1000 * 60 * 10);
+              that.$auth.user.customer = res.item
+              that.$ls.set('user', that.$auth.user, 1000 * 60 * 10)
               new Me({
                 id: that.$auth.user.id,
                 onboarded: true,
@@ -246,88 +240,88 @@ export default {
                 .save()
                 .then(response => {
                   Me.get().then(me => {
-                    that.$auth.user.me = me;
-                    that.moveon();
-                  });
-                });
-            });
+                    that.$auth.user.me = me
+                    that.moveon()
+                  })
+                })
+            })
         }
-      });
+      })
     },
     skip () {
-      this.loading = true;
+      this.loading = true
       new Customer({ id: this.$auth.user.me.customer.id, onboarded: true })
         .save()
         .then(res => {
           new Me({ id: this.$auth.user.id, onboarded: true })
             .save()
-            .then(response => {});
-        });
-      this.moveon();
+            .then(response => {})
+        })
+      this.moveon()
     },
     moveon () {
       // this.$router.push({name: 'MeForm'});
-      this.$router.push({ name: "GetStarted" });
+      this.$router.push({ name: 'GetStarted' })
     },
     openPicker () {
-      this.$refs.inputFile.click();
+      this.$refs.inputFile.click()
     },
     submitForm: function () {
-      this.validFunc(this);
+      this.validFunc(this)
       if (this.isError === false) {
         const info = isWrong(this, [
-          "company_name",
-          "main_office_adddress",
-          "number_of_employees",
-          "industry",
-          "website"
-        ]);
-        this.$store.dispatch("user/sendCompanyInfo", info);
-        this.$router.push("/invite");
+          'company_name',
+          'main_office_adddress',
+          'number_of_employees',
+          'industry',
+          'website'
+        ])
+        this.$store.dispatch('user/sendCompanyInfo', info)
+        this.$router.push('/invite')
       }
     },
     onChange: function (selectedIndustry) {
-      this.industry = selectedIndustry;
+      this.industry = selectedIndustry
     },
     validFunc: function (ctx, required) {
-      const errorsObj = [];
-      if (ctx["company_name"] === "") {
-        errorsObj.push("company_name");
+      const errorsObj = []
+      if (ctx['company_name'] === '') {
+        errorsObj.push('company_name')
       }
-      if (ctx["main_office_adddress"] === "") {
-        errorsObj.push("main_office_adddress");
+      if (ctx['main_office_adddress'] === '') {
+        errorsObj.push('main_office_adddress')
       }
       if (errorsObj.length !== 0) {
-        ctx.isError = true;
+        ctx.isError = true
       } else {
-        ctx.isError = false;
+        ctx.isError = false
       }
     },
     onFileChange (e) {
-      let files = e.target.files || e.dataTransfer.files;
+      let files = e.target.files || e.dataTransfer.files
 
-      if (!files.length) return;
-      this.createImage(files[0]);
+      if (!files.length) return
+      this.createImage(files[0])
     },
     createImage (file) {
-      let reader = new FileReader();
-      let _this = this;
-      console.log(file);
+      let reader = new FileReader()
+      let _this = this
+      console.log(file)
       reader.onload = e => {
         if (true) {
-          this.isImageShow = true;
-          this.logo_name = file.name;
+          this.isImageShow = true
+          this.logo_name = file.name
           const newImage = {
             src: e.target.result,
             thumb: e.target.result
-          };
-          this.images.push(newImage);
+          }
+          this.images.push(newImage)
 
           //     this.isModalLoading = true;
           //     let _calendar = new Calendar({id: this.$store.state.calendarId});
           //     let editedEvent = new CalendarEvent({id: this.event.id});
-          this.logo_name = file.name;
-          console.log(e.target);
+          this.logo_name = file.name
+          console.log(e.target)
           return new CustomerFile({ customerFile: e.target.result })
             .save()
             .then(result => {
@@ -335,29 +329,29 @@ export default {
                 src: e.target.result,
                 thumb: e.target.result,
                 id: result.id
-              });
-              this.isImageShow = true;
-              this.logo_name = file.name;
+              })
+              this.isImageShow = true
+              this.logo_name = file.name
               const newImage = {
                 src: e.target.result,
                 thumb: e.target.result
-              };
-              this.images.push(newImage);
+              }
+              this.images.push(newImage)
             })
             .catch(error => {
-              console.log(error);
-            });
+              console.log(error)
+            })
         } else {
           _this.uploadedImages.push({
             src: e.target.result,
             thumb: e.target.result
-          });
+          })
         }
-      };
-      reader.readAsDataURL(file);
+      }
+      reader.readAsDataURL(file)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 input[type="file"] {

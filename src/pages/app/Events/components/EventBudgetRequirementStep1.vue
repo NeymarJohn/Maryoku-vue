@@ -2,61 +2,45 @@
   <div class="event-budget-requirement step1">
     <div class="container text-center">
       <div class="event-budget-flexibility event-basic-info">
-        <div class="font-size-40 font-bold">
-          1/2
-        </div>
-        <div class="mt-1">
-          The million-dollar question…
-        </div>
-        <div class="font-size-40 font-bold text-transform-uppercase mt-1">
-          What’s your budget?
-        </div>
+        <div class="font-size-40 font-bold">1/2</div>
+        <div class="mt-1">The million-dollar question…</div>
+        <div class="font-size-40 font-bold text-transform-uppercase mt-1">What’s your budget?</div>
         <div style="max-width: 600px; margin: 3rem auto 2rem">
           <maryoku-input
-            v-model="eventInfo.budget"
-            input-style="budget"
+            inputStyle="budget"
             placeholder="Type your total budget here"
+            v-model="eventInfo.budget"
             :disabled="eventInfo.noBudget"
             :readonly="eventInfo.noBudget"
             style="text-align: center"
             class="budget-input"
-          />
+          ></maryoku-input>
         </div>
         <div class="font-size-16 font-bold">
-          <md-checkbox v-model="eventInfo.noBudget">
-            I don't know yet
-          </md-checkbox>
+          <md-checkbox v-model="eventInfo.noBudget"> I don't know yet</md-checkbox>
         </div>
         <template v-if="!eventInfo.noBudget">
           <div class="font-size-20 font-bold text-transform-capitalize mt-3">
-            <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
+            <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
             Between a Teflon pan and a super glue How obligated are you to stick to the budget?
           </div>
           <div class="mt-4rem slider-wrapper">
             <div>
-              <img :src="`${$iconURL}Budget Requirements/group-8347.svg`">
-              <div class="font-bold">
-                Must stick
-              </div>
-              <div class="font-bold">
-                to the budget
-              </div>
+              <img :src="`${$iconURL}Budget Requirements/group-8347.svg`" />
+              <div class="font-bold">Must stick</div>
+              <div class="font-bold">to the budget</div>
             </div>
-            <range-slider v-model="eventInfo.flexibility" class="slider" min="0" max="10" step="1" />
+            <range-slider class="slider" min="0" max="10" step="1" v-model="eventInfo.flexibility"> </range-slider>
             <div>
-              <img :src="`${$iconURL}Budget Requirements/group-8348.svg`">
-              <div class="font-bold">
-                Can be flexible
-              </div>
-              <div class="font-bold">
-                for value added
-              </div>
+              <img :src="`${$iconURL}Budget Requirements/group-8348.svg`" />
+              <div class="font-bold">Can be flexible</div>
+              <div class="font-bold">for value added</div>
             </div>
           </div>
         </template>
         <template v-else>
           <div class="font-size-30 font-bold text-transform-uppercase mt-3">
-            <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
+            <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
             If your budget were a Fashion brand, it’d be a…
           </div>
           <div class="mt-1 types">
@@ -68,7 +52,7 @@
               @click="eventInfo.selectedLevel = level.value"
             >
               <div class="brand">
-                <img :src="`${$iconURL}${level.icon}`">
+                <img :src="`${$iconURL}${level.icon}`" />
               </div>
               <div>
                 <div class="mb-1">
@@ -77,10 +61,10 @@
                   <span v-if="index === 2">$$$</span>
                 </div>
                 <md-checkbox
-                  v-model="eventInfo.selectedLevel"
                   class="md-checkbox-circle md-red"
+                  v-model="eventInfo.selectedLevel"
                   :value="level.value"
-                />
+                ></md-checkbox>
               </div>
             </div>
           </div>
@@ -135,6 +119,12 @@ export default {
       ],
     };
   },
+  created() {
+    if (Object.keys(this.defaultData).length > 0) {
+      console.log(this.defaultData);
+      this.eventInfo = this.defaultData;
+    }
+  },
   watch: {
     eventInfo: {
       handler(val) {
@@ -142,12 +132,6 @@ export default {
       },
       deep: true,
     },
-  },
-  created() {
-    if (Object.keys(this.defaultData).length > 0) {
-      console.log(this.defaultData);
-      this.eventInfo = this.defaultData;
-    }
   },
 };
 </script>

@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class ProposalRequestComment extends Model {
-  resource() {
-    return "comments";
+  resource () {
+    return 'comments'
   }
 }

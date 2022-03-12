@@ -5,15 +5,15 @@
         Mandatory elements to involve in proposals are in the table, we recommend adding these elements as well:
       </div>
       <div class="sub-items-cont">
-        <span v-if="serviceSlidePos < 0" class="prev" @click="prev()">
+        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
-        <div ref="servicesCont" class="sub-items" :style="{ left: `${serviceSlidePos}px` }">
+        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
           <select-proposal-sub-item
-            v-for="(requirement, sIndex) in optionalRequirements"
-            :key="sIndex"
             :selected="isSelectedQuickButton('')"
             :item="requirement.item ? requirement.item : requirement.subCategory"
+            v-for="(requirement, sIndex) in optionalRequirements"
+            :key="sIndex"
           />
         </div>
         <span class="next" @click="next()">
@@ -24,7 +24,7 @@
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
-            <input v-model="serviceItem" class="description">
+            <input v-model="serviceItem" class="description" />
           </div>
           <div class="field">
             <span>QTY</span>
@@ -36,13 +36,15 @@
           </div>
           <div class="field">
             <span>Total</span>
-            <money v-if="isNumberVisible" v-model="subTotal" v-bind="currencyFormat" class="total" />
-            <money v-else v-model="unit" v-bind="currencyFormat" class="total" />
+            <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
+            <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
           </div>
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Clear</a>
-          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, unit, category)">Add This</a>
+          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, unit, category)"
+            >Add This</a
+          >
         </div>
       </div>
     </div>
@@ -67,12 +69,12 @@
         <div class="row grid-tax-row">
           <div class="item-cont">
             <div class="plabel">
-              <img :src="`${iconUrl}Asset 612.svg`">
+              <img :src="`${iconUrl}Asset 612.svg`" />
               <span>Add Discount</span>
             </div>
-            <div v-if="isEditDiscount" class="ptitle text-center">
+            <div class="ptitle text-center" v-if="isEditDiscount">
               % Percentage
-              <br>
+              <br />
               <money
                 v-model="discount"
                 v-bind="percentageFormat"
@@ -92,7 +94,7 @@
           <div class="price-cont text-center">
             <template v-if="isEditDiscount">
               <span class="pl-2">Amount</span>
-              <br>
+              <br />
               <money
                 v-model="discount_by_amount"
                 v-bind="currencyFormat"
@@ -110,20 +112,20 @@
             </template>
           </div>
           <div class="edit-cont">
-            <img v-if="!isEditDiscount" class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true">
-            <a v-if="isEditDiscount" class="cancel" @click="cancelDiscount()">Cancel</a>
-            <a v-if="isEditDiscount" class="save" @click="saveDiscount()">Save</a>
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
+            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
+            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
           </div>
         </div>
         <div class="row grid-tax-row">
           <div class="item-cont">
             <div class="plabel">
-              <img :src="`${iconUrl}Asset 613.svg`">
+              <img :src="`${iconUrl}Asset 613.svg`" />
               <span>Add Taxes</span>
             </div>
-            <div v-if="isEditTax" class="ptitle">
+            <div class="ptitle" v-if="isEditTax">
               % Percentage
-              <br>
+              <br />
               <money
                 v-model="tax"
                 v-bind="percentageFormat"
@@ -139,16 +141,17 @@
             <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
           </div>
           <div class="edit-cont">
-            <img v-if="!isEditTax" class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true">
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
             <a
-              v-if="isEditTax"
               class="cancel"
+              v-if="isEditTax"
               @click="
                 isEditTax = false;
                 tax = 0;
               "
-            >Cancel</a>
-            <a v-if="isEditTax" class="save" @click="isEditTax = false">Save</a>
+              >Cancel</a
+            >
+            <a class="save" v-if="isEditTax" @click="isEditTax = false">Save</a>
           </div>
         </div>
       </div>
@@ -229,18 +232,13 @@ import { Money } from "v-money";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 export default {
-  name: "ProposalServiceTable",
+  name: "proposal-service-table",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
     EditableProposalSubItem,
     Money,
     vueDropzone: vue2Dropzone,
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
   },
   props: {
     category: String,
@@ -307,114 +305,6 @@ export default {
       },
       proposalData: {},
     };
-  },
-  computed: {
-    isDisabledAdd() {
-      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
-    },
-    optionalRequirements() {
-      console.log(this.proposalRequest);
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    mandatoryRequirements() {
-      if (!this.proposalRequest) return [];
-      return this.proposalRequest.requirements.filter((item) => item.mustHave);
-    },
-    proposalRequest() {
-      console.log(this.$store.state.vendorProposal.proposalRequest);
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    services: {
-      get: function () {
-        return this.$store.state.vendorProposal.proposalServices[this.category];
-      },
-      set: function (newServices) {
-        this.$store.commit("vendorProposal/setServices", { category: this.category, services: newServices });
-      },
-    },
-
-    calculatedTotal() {
-      let taxRate = this.$store.state.vendorProposal.taxes[this.categroy];
-      if (!taxRate) taxRate = 0;
-      let total = this.totalPrice - (this.totalPrice * this.discount) / 100;
-      const tax = (total * taxRate) / 100;
-      return total - tax;
-    },
-    totalPrice() {
-      const sumPrice = this.services.reduce((s, item) => {
-        return s + item.requirementValue * item.price;
-      }, 0);
-      return sumPrice;
-    },
-    legalDocs: {
-      get: function () {
-        return this.$store.state.vendorProposal.legalDocs[this.category];
-      },
-      set: function (files) {
-        this.$store.commit("vendorProposal/setLegalDocs", files);
-      },
-    },
-  },
-  watch: {},
-  created() {
-    if (!this.services || this.services.length == 0) {
-      const defaultServices = [];
-      this.mandatoryRequirements.forEach((item) => {
-        defaultServices.push({
-          comments: [],
-          dateCreated: "",
-          includedInPrice: true,
-          itemNotAvailable: false,
-          price: 0,
-          priceUnit: "qty",
-          proposalRequest: { id: this.proposalRequest.id },
-          requirementComment: null,
-          requirementId: "",
-          requirementMandatory: false,
-          requirementPriority: null,
-          requirementTitle: item.item,
-          requirementsCategory: item.category,
-          requirementValue: 1,
-        });
-      });
-      this.services = defaultServices;
-    }
-
-    this.$forceUpdate();
-    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-    this.$root.$on("remove-proposal-requirement", (item) => {
-      this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
-        (req) => req.requirementTitle != item.requirementTitle,
-      );
-      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      this.$forceUpdate();
-      this.cancel();
-    });
-
-    this.$root.$on("add-service-item", (item) => {
-      this.clickedItem = !this.clickedItem;
-      this.serviceItem = item;
-      this.qty = this.unit = this.subTotal = 0;
-      this.selectedQuickButton = item;
-    });
-
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.proposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
-      this.$forceUpdate();
-    });
-
-    this.$root.$on("clear-slide-pos", (item) => {
-      this.serviceSlidePos = 0;
-    });
-
-    if (this.$refs.servicesCont) {
-      this.servicesWidth = this.$refs.servicesCont.clientWidth;
-    }
   },
   methods: {
     getObject(item) {
@@ -629,6 +519,119 @@ export default {
       // });
     },
   },
+  created() {
+    if (!this.services || this.services.length == 0) {
+      const defaultServices = [];
+      this.mandatoryRequirements.forEach((item) => {
+        defaultServices.push({
+          comments: [],
+          dateCreated: "",
+          includedInPrice: true,
+          itemNotAvailable: false,
+          price: 0,
+          priceUnit: "qty",
+          proposalRequest: { id: this.proposalRequest.id },
+          requirementComment: null,
+          requirementId: "",
+          requirementMandatory: false,
+          requirementPriority: null,
+          requirementTitle: item.item,
+          requirementsCategory: item.category,
+          requirementValue: 1,
+        });
+      });
+      this.services = defaultServices;
+    }
+
+    this.$forceUpdate();
+    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+    this.$root.$on("remove-proposal-requirement", (item) => {
+      this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
+        (req) => req.requirementTitle != item.requirementTitle,
+      );
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      this.$forceUpdate();
+      this.cancel();
+    });
+
+    this.$root.$on("add-service-item", (item) => {
+      this.clickedItem = !this.clickedItem;
+      this.serviceItem = item;
+      this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+      this.proposalRequest.requirements[index] = item;
+      this.proposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
+      this.$forceUpdate();
+    });
+
+    this.$root.$on("clear-slide-pos", (item) => {
+      this.serviceSlidePos = 0;
+    });
+
+    if (this.$refs.servicesCont) {
+      this.servicesWidth = this.$refs.servicesCont.clientWidth;
+    }
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  computed: {
+    isDisabledAdd() {
+      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
+    },
+    optionalRequirements() {
+      console.log(this.proposalRequest);
+      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    mandatoryRequirements() {
+      if (!this.proposalRequest) return [];
+      return this.proposalRequest.requirements.filter((item) => item.mustHave);
+    },
+    proposalRequest() {
+      console.log(this.$store.state.vendorProposal.proposalRequest);
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    services: {
+      get: function () {
+        return this.$store.state.vendorProposal.proposalServices[this.category];
+      },
+      set: function (newServices) {
+        this.$store.commit("vendorProposal/setServices", { category: this.category, services: newServices });
+      },
+    },
+
+    calculatedTotal() {
+      let taxRate = this.$store.state.vendorProposal.taxes[this.categroy];
+      if (!taxRate) taxRate = 0;
+      let total = this.totalPrice - (this.totalPrice * this.discount) / 100;
+      const tax = (total * taxRate) / 100;
+      return total - tax;
+    },
+    totalPrice() {
+      const sumPrice = this.services.reduce((s, item) => {
+        return s + item.requirementValue * item.price;
+      }, 0);
+      return sumPrice;
+    },
+    legalDocs: {
+      get: function () {
+        return this.$store.state.vendorProposal.legalDocs[this.category];
+      },
+      set: function (files) {
+        this.$store.commit("vendorProposal/setLegalDocs", files);
+      },
+    },
+  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

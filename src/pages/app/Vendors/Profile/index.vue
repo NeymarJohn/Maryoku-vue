@@ -1,20 +1,18 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <loader :active="loading" page="vendor" />
+    <loader :active="loading" page="vendor"/>
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
-      <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20">
+      <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20"/>
       PROFILE & SETTINGS
     </div>
     <div class="md-layout-item md-size-25">
       <div class="left-sidebar white-card">
-        <div v-if="vendorData" class="profile">
+        <div class="profile" v-if="vendorData">
           <div class="avatar" style="">
             <!-- <user-avatar :user="userData" @set="setAvatar"></user-avatar> -->
-            <CompanyLogo :default-image="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo" />
+            <CompanyLogo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></CompanyLogo>
           </div>
-          <h3 class="name font-bold text-center">
-            {{ vendorData.companyName }}
-          </h3>
+          <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
           <div class="text-center">
             <!-- <span class="font-size-20"><md-icon style="color: #ffc001">start</md-icon>4.6</span> -->
             <span class="color-gray">(No Review)</span>
@@ -24,14 +22,14 @@
               :star-size="25"
               :show-rating="false"
               :disabled="true"
-            />
+            ></star-rating>
           </div>
         </div>
         <md-list>
           <md-list-item
             :md-ripple="false"
-            :class="{ 'font-bold-extra': pageName === 'services' }"
             @click="goTo('services')"
+            :class="{ 'font-bold-extra': pageName === 'services' }"
           >
             <label class="menu-label">
               <img
@@ -39,54 +37,53 @@
                   pageName === 'services' ? `${$iconURL}common/company-dark.svg` : `${$iconURL}common/company-gray.svg`
                 "
                 class="page-icon"
-              >
+              />
               <span class="pl-20 font-size-20">My Services</span>
             </label>
           </md-list-item>
           <md-list-item
             :md-ripple="false"
             class="mb-30"
-            :class="{ 'font-bold-extra': pageName === 'details' }"
             @click="goTo('details')"
+            :class="{ 'font-bold-extra': pageName === 'details' }"
           >
-            <label class="menu-label"><img
-                                        :src="
-                                          pageName === 'details' ? `${$iconURL}common/setting-dark.svg` : `${$iconURL}common/setting-gray.svg`
-                                        "
-                                        class="page-icon"
-                                      >
+            <label class="menu-label"
+            ><img
+              :src="
+                  pageName === 'details' ? `${$iconURL}common/setting-dark.svg` : `${$iconURL}common/setting-gray.svg`
+                "
+              class="page-icon"
+            />
               <span class="pl-20 font-size-20">Company Details</span>
             </label>
           </md-list-item>
           <md-list-item
             :md-ripple="false"
-            :class="{ 'font-bold-extra': pageName === 'billing' }"
             @click="goTo('billing')"
-          >
+            :class="{ 'font-bold-extra': pageName === 'billing' }">
             <label class="menu-label">
               <img class="page-icon" :src="`/static/icons/vendor/${
-                pageName === 'billing' ? 'revenue-active.svg':'revenue.svg'}`"
-              >
+              pageName === 'billing' ? 'revenue-active.svg':'revenue.svg'}`"/>
               <span class="pl-20 font-size-20">Billing Information</span>
             </label>
           </md-list-item>
           <md-list-item
             :md-ripple="false"
-            :class="{ 'font-bold-extra': pageName === 'settings' }"
             @click="goTo('settings')"
+            :class="{ 'font-bold-extra': pageName === 'settings' }"
           >
             <label class="menu-label">
               <img
                 :src="pageName === 'settings' ? `${$iconURL}common/user-dark.svg` : `${$iconURL}common/user-gray.svg`"
                 class="page-icon"
-              >
+              />
               <span class="pl-20 font-size-20">Account</span>
             </label>
           </md-list-item>
-          <md-divider />
+          <md-divider></md-divider>
           <md-list-item :md-ripple="false" @click="logout">
             <label class="menu-label">
-              <img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon">
+              <img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon"/>
               <span class="pl-20 font-size-20"> Log Out </span>
             </label>
           </md-list-item>
@@ -94,10 +91,10 @@
       </div>
     </div>
     <div class="md-layout-item md-size-70">
-      <VendorAccountSettings v-if="pageName === 'settings'" />
-      <CompanyDetails v-if="pageName === 'details'" />
-      <MyServices v-if="pageName === 'services'" />
-      <BillingInformation v-if="pageName==='billing'" />
+      <VendorAccountSettings v-if="pageName === 'settings'"></VendorAccountSettings>
+      <CompanyDetails v-if="pageName === 'details'"></CompanyDetails>
+      <MyServices v-if="pageName === 'services'"></MyServices>
+      <BillingInformation v-if="pageName==='billing'"></BillingInformation>
     </div>
   </div>
 </template>
@@ -114,13 +111,13 @@ import CompanyLogo from "@/components/CompanyLogo.vue";
 import VendorAccountSettings from "./Account";
 import CompanyDetails from "./CompanyDetails";
 import MyServices from "./MyServices";
-import BillingInformation from "./BillingInformation";
+import BillingInformation from "./BillingInformation"
 
 const components = {
-  Loader: () => import("@/components/loader/Loader.vue"),
-  Tabs: () => import("@/components/Tabs.vue"),
-  LabelEdit: () => import("@/components/LabelEdit.vue"),
-};
+  Loader: () => import('@/components/loader/Loader.vue'),
+  Tabs: () => import('@/components/Tabs.vue'),
+  LabelEdit: () => import('@/components/LabelEdit.vue'),
+}
 
 export default {
   components: {
@@ -156,9 +153,6 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
-  },
-  watch: {
-    $route: "getPageName",
   },
   mounted() {
     // TODO : user state should be reviewed
@@ -231,6 +225,9 @@ export default {
     logout() {
       this.$router.push("/signout");
     },
+  },
+  watch: {
+    $route: "getPageName",
   },
 };
 </script>

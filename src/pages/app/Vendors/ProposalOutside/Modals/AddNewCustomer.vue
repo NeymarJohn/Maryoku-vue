@@ -1,45 +1,42 @@
 <template>
-  <modal class="add-new-customer" container-class="modal-container sm">
+  <modal class="add-new-customer" containerClass="modal-container sm">
     <template slot="header">
       <div class="position-relative width-100">
         <div class="maryoku-modal-header pl-0">
-          <h2>Customer information</h2>
+            <h2>Customer information</h2>
         </div>
         <md-button
-          class="position-absolute md-simple"
-          style="right: 0;top: 0"
-          @click="onCancel"
+            class="position-absolute md-simple"
+            style="right: 0;top: 0"
+            @click="onCancel"
         >
-          <md-icon>close</md-icon>
-        </md-button>
+            <md-icon>close</md-icon></md-button>
       </div>
+
     </template>
     <template slot="body">
       <div class="text-left">
         <div class="mt-30 text-left">
           <label class="font-bold">Company Name</label>
-          <maryoku-input v-model="company" input-style="company" class="width-80 mt-5 form-input" />
+          <maryoku-input inputStyle="company" class="width-80 mt-5 form-input" v-model="company"></maryoku-input>
         </div>
         <div class="mt-30 text-left">
           <label class="font-bold">Who to contact</label>
-          <maryoku-input v-model="customer" input-style="username" class="width-80 mt-5 form-input" />
+          <maryoku-input inputStyle="username" class="width-80 mt-5 form-input" v-model="customer"></maryoku-input>
         </div>
         <div class="mt-30 text-left">
           <label class="font-bold">Email</label>
           <maryoku-input
-            v-model="email"
-            v-validate="'required|email|unique'"
-            input-style="email"
-            data-vv-name="email"
-            class="width-80 mt-5 form-input"
-          />
+              inputStyle="email"
+              data-vv-name="email"
+              v-validate="'required|email|unique'"
+              class="width-80 mt-5 form-input"
+              v-model="email"></maryoku-input>
         </div>
-        <div v-if="errors.has('email')" class="md-error color-red font-size-14">
-          {{ errors.first('email') }}
-        </div>
+        <div class="md-error color-red font-size-14" v-if="errors.has('email')">{{ errors.first('email') }}</div>
         <div class="mt-30 text-left">
           <label class="font-bold">Phone</label>
-          <maryoku-input v-model="phone" input-style="phone" class="width-80 mt-5 form-input" />
+          <maryoku-input inputStyle="phone" class="width-80 mt-5 form-input" v-model="phone"></maryoku-input>
         </div>
         <md-checkbox v-model="addToCustomerList" class="md-vendor">
           Add to customer list
@@ -47,12 +44,8 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
-        Cancel
-      </md-button>
-      <md-button class="md-vendor md-bold add-category-btn" @click="saveCustomer">
-        Send
-      </md-button>
+      <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
+      <md-button class="md-vendor md-bold add-category-btn" @click="saveCustomer">Send</md-button>
     </template>
   </modal>
 </template>
@@ -64,7 +57,7 @@ import Customer from "@/models/Customer";
 import { Validator } from "vee-validate";
 
 export default {
-  name: "SharingModal",
+  name: "sharing-modal",
   components: {
     Modal,
     MaryokuInput,
@@ -82,25 +75,20 @@ export default {
       phone: null,
     };
   },
-  computed: {
-    vendor() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
-    },
-  },
   created() {
-    console.log("AddNewCustomer");
+    console.log('AddNewCustomer');
     const isUnique = async value => {
       let customer = await getReq(`/1/customers?email=${value}`);
 
       if (!customer.data || Array.isArray(customer.data) && !customer.data.length) {
-          return {valid: true};
+          return {valid: true}
       } else {
           return {
               valid: false,
-              data: {message: "Email already exists."}
-          };
+              data: {message: `Email already exists.`}
+          }
       }
-    };
+    }
     Validator.extend("unique", {
       validate: isUnique,
       getMessage: (field, params, data) => data.message
@@ -108,7 +96,7 @@ export default {
   },
   methods: {
     saveCustomer() {
-      console.log("saveCustomer", this.$validator);
+      console.log('saveCustomer', this.$validator)
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
             const customer = {
@@ -120,16 +108,21 @@ export default {
                 type: 1,
             };
             new Customer(customer).save().then((res) => {
-                console.log("saveCustomer", res);
+                console.log('saveCustomer', res);
                 this.$emit("save", res);
             });
         }
-      });
+      })
 
     },
 
     onCancel: function (e) {
       this.$emit("cancel");
+    },
+  },
+  computed: {
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
     },
   },
 };

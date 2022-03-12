@@ -3,60 +3,46 @@
     <table class="event-blocks__table event-block-header">
       <thead>
         <tr>
-          <th width="40%">
-            Vendor
-          </th>
-          <th width="20%">
-            Original
-          </th>
-          <th width="15%">
-            New
-          </th>
-          <th width="15%">
-            Booked
-          </th>
+          <th width="40%">Vendor</th>
+          <th width="20%">Original</th>
+          <th width="15%">New</th>
+          <th width="15%">Booked</th>
         </tr>
       </thead>
     </table>
 
     <!-- Event Blocks -->
     <draggable :list="eventBuildingBlocks">
-      <table v-for="(block, index) in eventBuildingBlocks" :key="index" class="event-blocks__table event-block-table">
+      <table class="event-blocks__table event-block-table" v-for="(block, index) in eventBuildingBlocks" :key="index">
         <tbody>
           <template>
             <tr>
               <td width="40%" class="event-block-element" :class="block.title.toLowerCase().replace(/ /g, '-')">
                 <img
                   :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.title}.svg`"
-                >
+                />
                 {{ block.title }}
               </td>
               <td class="planned" width="20%">
-                <template v-if="type === 'total'">
-                  {{ block.allocatedBudget }}
-                </template>
-                <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                  {{
-                    block.allocatedBudget
-                      ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString()
-                      : ""
-                  }}
-                </template>
-                <template v-else>
-                  {{
-                    block.allocatedBudget
-                      ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString()
-                      : ""
-                  }}
-                </template>
+                <template v-if="type === 'total'">{{ block.allocatedBudget }}</template>
+                <template v-else-if="block.allocatedBudget && block.numberOfParticipants">{{
+                  block.allocatedBudget
+                    ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString()
+                    : ""
+                }}</template>
+                <template v-else>{{
+                  block.allocatedBudget
+                    ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString()
+                    : ""
+                }}</template>
               </td>
 
               <td class="new-element-budget" width="15%">
-                <input v-model="block.newTotalBudget">
+                <input v-model="block.newTotalBudget" />
               </td>
               <td class="actual red-label" width="15%">
                 <template v-if="block.allocatedBudget">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png">
+                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png" />
                   <template v-if="block.winningProposalId">
                     <md-button
                       class="md-simple actual-cost md-xs"
@@ -82,17 +68,15 @@
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="40%">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png">
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png" />
             Unexpected
           </td>
-          <td class="planned" width="20%">
-            $0
-          </td>
+          <td class="planned" width="20%">$0</td>
           <td class="new-element-budget" width="15%">
-            <input>
+            <input />
           </td>
           <td class="actual red-label" width="15%">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png">
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png" />
           </td>
         </tr>
       </tbody>
@@ -105,30 +89,26 @@
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
               width="20"
-            >
+            />
             Tips
             <span class="percent">12%</span>
           </td>
           <td>${{ totalBudgetTaxes.toFixed(2) }}</td>
           <td class="actual green-label">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+30.png">
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+30.png" />
             $0
           </td>
-          <td />
+          <td></td>
           <td class="expand" style="text-align: right; padding-right: 1em">
             <a href>
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+24.png">
+              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
           </td>
         </tr>
         <tr class="total">
-          <td class="total-title">
-            Total
-          </td>
+          <td class="total-title">Total</td>
           <td>${{ totalBudget | withComma }}</td>
-          <td colspan="3" class="total-value">
-            ${{ totalActual | withComma }}
-          </td>
+          <td colspan="3" class="total-value">${{ totalActual | withComma }}</td>
         </tr>
       </tbody>
     </table>
@@ -159,7 +139,7 @@ import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 
 export default {
-  name: "EventBuildingBlocks",
+  name: "event-building-blocks",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -236,7 +216,7 @@ export default {
     deleteBlock(blockId) {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -420,7 +400,7 @@ export default {
     addRequirements(item) {
       if (item.proposalsCount) {
         Swal.fire({
-          text: "You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?",
+          text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
           showCancelButton: true,
           icon: "warning",
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -560,6 +540,17 @@ export default {
         });
     },
   },
+  created() {
+    console.log(this.event);
+  },
+  mounted() {
+    this.getEventBuildingBlocks();
+    this.getCategoryBlocks();
+
+    this.$on("refreshBuildingBlock", () => {
+      this.getEventBuildingBlocks();
+    });
+  },
   watch: {
     event(newVal, oldVal) {
       // Get default event building blocks
@@ -572,17 +563,6 @@ export default {
     elementsBudget(val) {
       this.switchingBudgetAndCost();
     },
-  },
-  created() {
-    console.log(this.event);
-  },
-  mounted() {
-    this.getEventBuildingBlocks();
-    this.getCategoryBlocks();
-
-    this.$on("refreshBuildingBlock", () => {
-      this.getEventBuildingBlocks();
-    });
   },
   filters: {
     withComma(amount) {

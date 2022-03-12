@@ -1,12 +1,10 @@
 <template>
   <div class="user-avatar">
-    <vue-element-loading :active="isLoading" color="#FF547C" />
+    <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading>
     <div class="uploading-wrapper">
-      <md-button id="pick-avatar" class="maryoku-btn md-simple md-white">
-        <md-icon>edit</md-icon>Edit
-      </md-button>
+      <md-button class="maryoku-btn md-simple md-white" id="pick-avatar"> <md-icon>edit</md-icon>Edit </md-button>
     </div>
-    <img :src="`${userAvatarUrl}?q=${Math.random()}`" style="margin: auto">
+    <img :src="`${userAvatarUrl}?q=${Math.random()}`" style="margin: auto" />
     <!-- <input
       style="display: none"
       id="user-avatar-file"
@@ -16,11 +14,11 @@
       @change="onUserAvatarChange"
     /> -->
     <avatar-cropper
-      :upload-handler="uploadHandler"
-      trigger="#pick-avatar"
-      :labels="{ submit: 'OK', cancel: 'Cancel' }"
       @uploaded="handleUploaded"
       @uploading="handleUploading"
+      :uploadHandler="uploadHandler"
+      trigger="#pick-avatar"
+      :labels="{ submit: 'OK', cancel: 'Cancel' }"
     />
   </div>
 </template>
@@ -68,7 +66,7 @@ export default {
       let imageName = this.user.id;
       let imageUrl = `https://maryoku.s3.amazonaws.com/user/avatars/${this.user.id}.png`;
       this.isLoading = true;
-      S3Service.fileUpload(fileObject, `${imageName}`, "user/avatars").then((res) => {
+      S3Service.fileUpload(fileObject, `${imageName}`, `user/avatars`).then((res) => {
         console.log(res);
         this.isLoading = false;
         this.userAvatarUrl = imageUrl;

@@ -1,12 +1,13 @@
 <template>
   <div class="maryoku-resizable-wrapper">
-    <div contenteditable
-         class="maryoku-resizable-textarea" 
-         :data-placeholder="placeholder"
-         @keydown="editing"
-         @blur="onEdit"
-         v-text="content"
-    />
+  <div contenteditable
+      class="maryoku-resizable-textarea" 
+      :data-placeholder="placeholder"
+      v-text="content"
+      @keydown="editing"
+      @blur="onEdit" >
+      
+  </div>
   </div>
 </template>
 <script>
@@ -40,7 +41,38 @@ export default {
       content: "",
       inputClass: `${this.inputStyle}`,
       hiddenPlaceholder: false,
-    };
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    handleInput(e) {
+      this.$emit("input", this.content);
+      this.$emit("change", { value: this.content, type: this.inputStyle});
+    },
+    clearContent() {
+      this.content = ""
+      this.$emit("input", this.content);
+      this.$emit("change", { value: this.content, type: this.inputStyle});
+    },
+    editing(evt) {
+      console.log("editing")
+      var src = evt.target.innerHTML
+      // this.content = src
+      this.$emit("input", src);
+      this.$emit("change", { value: src, type: this.inputStyle});
+    },
+    onEdit() {
+      this.$el.querySelector('.maryoku-resizable-textarea').blur()
+      this.hiddenPlaceholder = false
+    },
+    clickPlaceholder() {
+      this.hiddenPlaceholder = true
+      this.$el.querySelector('.maryoku-resizable-textarea').click()
+    }
+  },
+  created () {
+    this.content = this.value
   },
   computed: {
     getClass: function() {
@@ -52,45 +84,14 @@ export default {
       this.inputClass = `${this.inputStyle} ${newValue ? "active" : "" }`;
       this.$emit("input", newValue);
       this.$emit("change", { value: newValue, type: this.inputStyle});
-      console.log("emit");
+      console.log("emit")
     },
     value: function(newValue) {
-      this.content = newValue;
+      this.content = newValue
       
     }
-  },
-  mounted () {
-  },
-  created () {
-    this.content = this.value;
-  },
-  methods: {
-    handleInput(e) {
-      this.$emit("input", this.content);
-      this.$emit("change", { value: this.content, type: this.inputStyle});
-    },
-    clearContent() {
-      this.content = "";
-      this.$emit("input", this.content);
-      this.$emit("change", { value: this.content, type: this.inputStyle});
-    },
-    editing(evt) {
-      console.log("editing");
-      var src = evt.target.innerHTML;
-      // this.content = src
-      this.$emit("input", src);
-      this.$emit("change", { value: src, type: this.inputStyle});
-    },
-    onEdit() {
-      this.$el.querySelector(".maryoku-resizable-textarea").blur();
-      this.hiddenPlaceholder = false;
-    },
-    clickPlaceholder() {
-      this.hiddenPlaceholder = true;
-      this.$el.querySelector(".maryoku-resizable-textarea").click();
-    }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @mixin background-icon($url) {

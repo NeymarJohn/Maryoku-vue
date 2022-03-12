@@ -4,45 +4,38 @@
       <label>Status: </label>
       <md-field class="status-select">
         <md-select v-model="event.status" name="event-status" class="event-status">
-          <md-option value="draft">
-            Draft
-          </md-option>
-          <md-option value="approved">
-            Approved
-          </md-option>
-          <md-option value="execution">
-            Execution
-          </md-option>
-          <md-option value="done">
-            Done
-          </md-option>
+          <md-option value="draft">Draft</md-option>
+          <md-option value="approved">Approved</md-option>
+          <md-option value="execution">Execution</md-option>
+          <md-option value="done">Done</md-option>
         </md-select>
       </md-field>
 
-      <md-button native-type="submit" class="md-success" @click="openImageGallery">
+      <md-button native-type="submit" @click="openImageGallery" class="md-success">
         Image Gallery
-        <span v-if="uploadedImages.length" class="badge md-round md-info">{{ uploadedImages.length }}</span>
+        <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
       </md-button>
-      <md-button class="md-success" @click="editEvent()">
+      <md-button @click="editEvent()" class="md-success">
         Edit
       </md-button>
     </div>
 
     <event-gallery-modal ref="galleryModal"
-                         :is-modal-loading="isModalLoading"
-                         :uploaded-images="uploadedImages"
-    />
+                         :isModalLoading="isModalLoading"
+                         :uploadedImages="uploadedImages">
+    </event-gallery-modal>
   </div>
+
 </template>
 
 <script>
-import CalendarEvent from "@/models/CalendarEvent";
-import CalendarEventImage from "@/models/CalendarEventImage";
-import Calendar from "@/models/Calendar";
-import EventGalleryModal from "./EventGalleryModal";
+import CalendarEvent from '@/models/CalendarEvent'
+import CalendarEventImage from '@/models/CalendarEventImage'
+import Calendar from '@/models/Calendar'
+import EventGalleryModal from './EventGalleryModal'
 
 export default {
-  name: "EventActionsShow",
+  name: 'event-actions-show',
   components: {
     EventGalleryModal
   },
@@ -53,29 +46,20 @@ export default {
     uploadedImages: [],
     isModalLoading: false
   }),
-  watch: {
-    "event.eventStatus": {
-      handler: function (newVal) {
-        if (newVal != "" && newVal != undefined) {
-          return this.updateEvent(newVal);
-        }
-      }
-    }
-  },
   created () {
-    this.isModalLoading = true;
+    this.isModalLoading = true
 
     if (this.$store.state.calendarId === null) {
       Calendar.get().then((calendars) => {
-        this.$store.state.calendarId = calendars[0].id;
-        this.getEventImages();
+        this.$store.state.calendarId = calendars[0].id
+        this.getEventImages()
       })
         .catch((error) => {
-          console.log(error);
-          this.isModalLoading = false;
-        });
+          console.log(error)
+          this.isModalLoading = false
+        })
     } else {
-      this.getEventImages();
+      this.getEventImages()
     }
   },
   methods: {
@@ -83,37 +67,46 @@ export default {
       CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/images/`).get().then(images => {
         this.uploadedImages = images.map((image) => {
           return {
-            "src": `${process.env.SERVER_URL}${image.href}`,
-            "thumb": `${process.env.SERVER_URL}${image.href}`,
-            "id": image.id
-          };
-        });
-        this.isModalLoading = false;
+            'src': `${process.env.SERVER_URL}${image.href}`,
+            'thumb': `${process.env.SERVER_URL}${image.href}`,
+            'id': image.id
+          }
+        })
+        this.isModalLoading = false
       })
         .catch((error) => {
-          console.log(error);
-          this.isModalLoading = false;
-        });
+          console.log(error)
+          this.isModalLoading = false
+        })
     },
     editEvent () {
-      this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
+      this.$router.push({ path: `/events/${this.$route.params.id}/edit` })
     },
     updateEvent (status) {
-      let _calendar = new Calendar({id: this.$store.state.calendarId});
-      let editedEvent = new CalendarEvent({id: this.event.id});
+      let _calendar = new Calendar({id: this.$store.state.calendarId})
+      let editedEvent = new CalendarEvent({id: this.event.id})
 
-      editedEvent.eventStatus = status;
+      editedEvent.eventStatus = status
       editedEvent.for(_calendar).save().then(response => {
       })
         .catch((error) => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
     openImageGallery () {
-      this.$refs.galleryModal.toggleModal(true);
+      this.$refs.galleryModal.toggleModal(true)
+    }
+  },
+  watch: {
+    'event.eventStatus': {
+      handler: function (newVal) {
+        if (newVal != '' && newVal != undefined) {
+          return this.updateEvent(newVal)
+        }
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

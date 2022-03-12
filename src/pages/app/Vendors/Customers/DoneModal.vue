@@ -8,24 +8,18 @@
         <div class="md-layout-item pl-0 md-size-100 mt-30" style="">
           <div class="d-flex justify-content-end" style="">
             <md-button class=" md-simple " @click="$emit('cancel')">
-              <md-icon class="">
-                close
-              </md-icon>
+              <md-icon class="">close</md-icon>
             </md-button>
           </div>
         </div>
 
         <div class="md-layout-item pl-0 md-size-100 mt-20 text-center ">
           <div>
-            <img src="/static/img/Group 20954.svg">
+            <img src="/static/img/Group 20954.svg" />
           </div>
           <div class="mt-20">
-            <h2 class="t_text">
-              Upload completed successfully
-            </h2>
-            <p class="s_text">
-              You can now see all your customers in the customer list
-            </p>
+            <h2 class="t_text">Upload completed successfully</h2>
+            <p class="s_text">You can now see all your customers in the customer list</p>
           </div>
         </div>
       </div>

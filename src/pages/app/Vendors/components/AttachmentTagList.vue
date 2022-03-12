@@ -1,29 +1,28 @@
 <template>
   <div class="attachment-tag-list">
-    <div v-for="(attachment, index) in attachments" :key="index" class="attachment-tag" :class="theme">
-      <img :src="theme === 'red' ? `${$iconURL}common/pin-red.svg` : `${$iconURL}common/pin-purple.svg`">
+    <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index" :class="theme">
+      <img :src="theme === 'red' ? `${$iconURL}common/pin-red.svg` : `${$iconURL}common/pin-purple.svg`" />
       <a
         :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
         :href="attachment.url"
         target="_blank"
-      >{{ attachment.name }}</a>
+        >{{ attachment.name }}</a
+      >
       <md-button class="md-simple md-white edit-btn" @click="remove(attachment, index)">
-        <img :src="`${$iconURL}common/trash-dark.svg`">
+        <img :src="`${$iconURL}common/trash-dark.svg`" />
       </md-button>
     </div>
-    <div class="attachment-tag add" :class="theme" @click="addNew">
-      <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">
-        add
-      </md-icon>
+    <div class="attachment-tag add" @click="addNew" :class="theme">
+      <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">add</md-icon>
       Add document
     </div>
     <input
-      ref="legalDocument"
       type="file"
       class="d-none"
+      ref="legalDocument"
       accept="application/text, application/pdf"
       @change="onFilePicked"
-    >
+    />
   </div>
 </template>
 <script>
@@ -42,11 +41,6 @@ export default {
     return {
       attachments: [],
     };
-  },
-  watch: {
-    defaultValue(newValue, oldValue) {
-      this.attachments = Object.assign([], newValue);
-    },
   },
   created() {
     this.attachments = Object.assign([], this.defaultValue);
@@ -69,6 +63,11 @@ export default {
     remove(item, index) {
       this.attachments.splice(index, 1);
       this.$emit("remove");
+    },
+  },
+  watch: {
+    defaultValue(newValue, oldValue) {
+      this.attachments = Object.assign([], newValue);
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="error-message">
-    <img :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`">
+    <img :src="`${$iconURL}NewLandingPage/Group 1175 (10).svg`" />
     {{ label }}
   </div>
 </template>

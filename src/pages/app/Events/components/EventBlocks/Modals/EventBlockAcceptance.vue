@@ -2,15 +2,13 @@
   <div class="adding-building-blocks-panel" style="min-height: 240px; background: white; border-radius: 5px">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee" />
     <template v-if="!isLoading && acceptedBlockVendors.length">
-      <div v-for="(list, index) in acceptedBlockVendors" :key="index" class="manage-proposals_proposals-list">
+      <div class="manage-proposals_proposals-list" v-for="(list, index) in acceptedBlockVendors" :key="index">
         <template v-if="list.list.length">
           <div class="md-toolbar-section-start acceptance-list">
-            <div class="proposals-name">
-              {{ list.title }} ({{ list.list.length }})
-            </div>
+            <div class="proposals-name">{{ list.title }} ({{ list.list.length }})</div>
           </div>
           <div class="proposals-list_items">
-            <div v-for="(item, indx) in list.list" :key="indx" class="proposals-list_item">
+            <div class="proposals-list_item" v-for="(item, indx) in list.list" :key="indx">
               <div class="vendor-avatar">
                 <md-avatar class="md-avatar-icon">
                   <md-icon>people</md-icon>
@@ -21,14 +19,15 @@
                   {{ item.vendor ? item.vendor.vendorDisplayName : "No Vendor Title" }}
                   <div class="star-rating">
                     <label
+                      class="star-rating__star"
                       v-for="(rating, rIndex) in ratings"
                       :key="rIndex"
-                      class="star-rating__star"
                       :class="{
                         'is-selected': item.vendor.rank >= rating && item.vendor.rank != null,
                       }"
                     >
-                      <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                      <input class="star-rating star-rating__checkbox" type="radio" />★</label
+                    >
                   </div>
                 </div>
                 <div class="proposal-property-list">
@@ -39,7 +38,7 @@
                     </li>
                   </ul>
                 </div>
-                <div v-if="item.proposals && item.proposals[0]" class="proposal-benefits-list">
+                <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
                   <ul class="list-items">
                     <li v-for="(pro, pIndex) in item.proposals[0].pros" :key="pIndex">
                       {{ pro }}
@@ -49,19 +48,16 @@
               </div>
               <div class="proposal-actions text-right">
                 <template v-if="item.proposals && item.proposals[0]">
-                  <div class="cost">
-                    ${{ item.proposals[0].cost }}
-                  </div>
-                  <md-button class="md-rose md-sm md-simple" @click="viewProposal(item.proposals[0])">
-                    view contract
-                  </md-button>
+                  <div class="cost">${{ item.proposals[0].cost }}</div>
+                  <md-button class="md-rose md-sm md-simple" @click="viewProposal(item.proposals[0])"
+                    >view contract</md-button
+                  >
                   <md-button
-                    v-if="item.proposals[0].downPaymentStatus !== 'paid'"
                     class="md-rose md-sm"
                     @click="manageProposalsAccept(item.proposals[0])"
+                    v-if="item.proposals[0].downPaymentStatus !== 'paid'"
+                    >Pay</md-button
                   >
-                    Pay
-                  </md-button>
                 </template>
               </div>
             </div>
@@ -69,14 +65,14 @@
         </template>
       </div>
     </template>
-    <md-card v-if="!filteredBlockVendors.length && !isLoading" class="md-card-plain">
+    <md-card class="md-card-plain" v-if="!filteredBlockVendors.length && !isLoading">
       <md-card-content>
         <div class="text-center">
           <h4>Accept proposals to see them here</h4>
         </div>
       </md-card-content>
     </md-card>
-    <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event" />
+    <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
   </div>
 </template>
 
@@ -109,7 +105,7 @@ import ManageProposalsVendors from "./ManageProposalsVendors";
 import ViewProposal from "./ViewProposal.vue";
 
 export default {
-  name: "EventBlockAcceptance",
+  name: "event-block-acceptance",
   components: {
     MdCardHeader,
     MdCardContent,
@@ -141,20 +137,6 @@ export default {
     proposals: [],
     acceptedBlockVendors: [],
   }),
-  computed: {},
-  watch: {
-    searchQuery(newVal, oldVal) {
-      this.filterVendors();
-    },
-    blockVendors(newVal, oldVal) {
-      // this.getBlockVendors();
-      this.isLoading = false;
-    },
-  },
-  created() {},
-  mounted() {
-    this.getBlockVendors();
-  },
   methods: {
     getBlockVendors() {
       if (true) {
@@ -448,6 +430,20 @@ export default {
         .catch((error) => {
           console.log("EventComponentVendor error =>", error);
         });
+    },
+  },
+  created() {},
+  mounted() {
+    this.getBlockVendors();
+  },
+  computed: {},
+  watch: {
+    searchQuery(newVal, oldVal) {
+      this.filterVendors();
+    },
+    blockVendors(newVal, oldVal) {
+      // this.getBlockVendors();
+      this.isLoading = false;
     },
   },
 };

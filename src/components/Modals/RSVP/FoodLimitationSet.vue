@@ -2,69 +2,63 @@
   <div class="food-limitaion-set">
     <div class="d-flex align-center">
       <div>
-        <img :src="`${$iconURL}RSVP/Group+1471.svg`" class="mr-10">
-        <span v-if="type === 1" class="font-bold font-size-20 mr-60">Do you have any food limitations?</span>
-        <span v-if="type === 2" class="font-bold font-size-20 mr-60">Any food limitations? </span>
+        <img :src="`${$iconURL}RSVP/Group+1471.svg`" class="mr-10" />
+        <span class="font-bold font-size-20 mr-60" v-if="type === 1">Do you have any food limitations?</span>
+        <span class="font-bold font-size-20 mr-60" v-if="type === 2">Any food limitations? </span>
       </div>
       <div>
-        <md-checkbox v-model="foodLimitaion" class="md-checkbox-circle md-red mr-30" :value="false">
-          No
-        </md-checkbox>
-        <md-checkbox v-model="foodLimitaion" class="md-checkbox-circle md-red" :value="true">
-          Yes
-        </md-checkbox>
+        <md-checkbox class="md-checkbox-circle md-red mr-30" v-model="foodLimitaion" :value="false">No</md-checkbox>
+        <md-checkbox class="md-checkbox-circle md-red" v-model="foodLimitaion" :value="true">Yes</md-checkbox>
       </div>
     </div>
     <template v-if="foodLimitaion">
       <div class="limitation-type">
-        <img :src="`${$iconURL}RSVP/Group 9278.svg`">
+        <img :src="`${$iconURL}RSVP/Group 9278.svg`" />
         <option-card
           icon="milk.svg"
           :label="type == 1 ? 'I’m Vegetarian' : 'Vegetarian'"
           :selected="limitationType == 'vegetarian'"
           @select="limitationType = 'vegetarian'"
-        />
+        ></option-card>
         <option-card
           icon="food+(4).svg"
           :label="type == 1 ? 'I’m Vegan' : 'Vegan'"
           :selected="limitationType == 'vegan'"
           @select="limitationType = 'vegan'"
-        />
+        ></option-card>
       </div>
-      <md-checkbox v-model="otherLimitation">
-        <span>Other food limitations:</span>
-      </md-checkbox>
+      <md-checkbox v-model="otherLimitation"> <span>Other food limitations:</span></md-checkbox>
       <div v-if="otherLimitation" class="limition-select">
         <div style="min-width: 65px">
-          <div v-if="!expandedPane" class="selectedLimitationList">
+          <div class="selectedLimitationList" v-if="!expandedPane">
             <span v-if="selectedLimitations.length === 0">Choose limitation...</span>
             <div v-else class="items">
               <span v-for="item in selectedLimitations" :key="item"> {{ item }}, </span>
             </div>
-            <md-button class="md-icon-button md-simple" @click="expandedPane = true">
+            <md-button @click="expandedPane = true" class="md-icon-button md-simple">
               <md-icon>keyboard_arrow_down</md-icon>
             </md-button>
           </div>
         </div>
-        <div v-if="expandedPane" class="limition-select-pane md-layout">
+        <div class="limition-select-pane md-layout" v-if="expandedPane">
           <div class="collapse-button">
-            <md-button class="md-icon-button md-simple" @click="expandedPane = false">
-              <md-icon style="color: #050505 !important; font-size: 25px !important">
-                keyboard_arrow_up
-              </md-icon>
+            <md-button @click="expandedPane = false" class="md-icon-button md-simple">
+              <md-icon style="color: #050505 !important; font-size: 25px !important">keyboard_arrow_up</md-icon>
             </md-button>
           </div>
-          <div v-for="(limitation, index) in limitations" :key="index" class="md-layout-item md-size-30 mb-50">
+          <div class="md-layout-item md-size-30 mb-50" v-for="(limitation, index) in limitations" :key="index">
             <md-checkbox v-model="selectedLimitations" :value="limitation.value">
-              <span><img style="margin: -10px 15px" :src="`${$iconURL}RSVP/${limitation.icon}`">
-                {{ limitation.name }}</span>
+              <span
+                ><img style="margin: -10px 15px" :src="`${$iconURL}RSVP/${limitation.icon}`" />
+                {{ limitation.name }}</span
+              >
             </md-checkbox>
           </div>
           <div class="md-layout-item md-size-100 d-flex">
             <md-checkbox v-model="selectedOther">
               <span>Other</span>
             </md-checkbox>
-            <maryoku-input v-if="selectedOther" style="width: 50%" placeholder="Type limitation here…" />
+            <maryoku-input style="width: 50%" v-if="selectedOther" placeholder="Type limitation here…"></maryoku-input>
           </div>
         </div>
       </div>

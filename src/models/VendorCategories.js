@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class VendorCategories extends Model {
-  resource() {
-    return "categories";
+  resource () {
+    return 'categories'
   }
 }

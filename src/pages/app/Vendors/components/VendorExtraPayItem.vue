@@ -8,21 +8,19 @@
           class="ml-20"
           :class="{ 'rotate-90': expanded }"
           :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`"
-        >
+        />
       </div>
-      <div v-if="!isEditable" class="col">
+      <div class="col" v-if="!isEditable">
         <span v-if="getQty()">{{ getQty() | formatQty }}</span>
         <span v-else>-</span>
       </div>
-      <div v-else class="col">
+      <div class="col" v-else>
         <div>
-          <input v-model="editingData.qty">
+          <input v-model="editingData.qty" />
         </div>
       </div>
-      <div v-if="!isEditable" class="col">
-        +${{ getPrice() | withComma }}
-      </div>
-      <div v-else class="col">
+      <div class="col" v-if="!isEditable">+${{ getPrice() | withComma }}</div>
+      <div class="col" v-else>
         <money
           v-model="editingData.value"
           v-bind="{
@@ -36,26 +34,23 @@
           class="input-value"
         />
       </div>
-      <div v-if="!isEditable" class="col action">
-        <img class="mr-20 ml-auto" :src="`${$iconURL}Requirements/edit-dark.svg`" @click="edit">
-        <img :src="`${$iconURL}Requirements/delete-dark.svg`" @click="remove">
+      <div class="col action" v-if="!isEditable">
+        <img class="mr-20 ml-auto" :src="`${$iconURL}Requirements/edit-dark.svg`" @click="edit" />
+        <img :src="`${$iconURL}Requirements/delete-dark.svg`" @click="remove" />
       </div>
-      <div v-else class="col">
-        <md-button class="md-simple md-black maryoku-btn" @click="cancel">
-          Cancel
-        </md-button>
+      <div class="col" v-else>
+        <md-button class="md-simple md-black maryoku-btn" @click="cancel">Cancel</md-button>
         <md-button
           class="md-red maryoku-btn"
           :class="{ 'md-red': theme === 'red', 'md-vendor': theme === 'purple' }"
           @click="save"
-        >
-          Save
+          >Save
         </md-button>
       </div>
     </div>
-    <div v-if="expanded" class="expanded">
+    <div class="expanded" v-if="expanded">
       <span v-if="!isEditable">{{ editingData.desc }}</span>
-      <textarea v-else v-model="editingData.desc" />
+      <textarea v-else v-model="editingData.desc"></textarea>
     </div>
   </div>
 </template>
@@ -63,17 +58,16 @@
 <script>
 import { Money } from "v-money";
 export default {
-  name: "VendorExtraPayItem",
-  components: {
-    Money,
-  },
-  filters: {},
+  name: "vendor-extra-pay-item",
   props: {
     item: Object,
     theme: {
       type: String,
       default: "purple",
     },
+  },
+  components: {
+    Money,
   },
   data() {
     return {
@@ -82,8 +76,6 @@ export default {
       editingData: {},
     };
   },
-  computed: {},
-  watch: {},
   created() {},
   mounted() {
     this.editingData = Object.assign({}, this.item);
@@ -132,6 +124,9 @@ export default {
       this.changeItem();
     },
   },
+  computed: {},
+  filters: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

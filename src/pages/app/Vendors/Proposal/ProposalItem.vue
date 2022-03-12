@@ -1,50 +1,48 @@
 <template>
   <div class="proposal-item-wrapper">
-    <div v-if="step <= 1" class="title-cont default" :class="[{ 'pb-40': isVCollapsed }]">
+    <div class="title-cont default" :class="[{ 'pb-40': isVCollapsed }]" v-if="step <= 1">
       <div class="with-subtitle" @click="isVCollapsed = !isVCollapsed">
         <div class="text-cont">
           <h3 class="title">
-            <img :src="img">
+            <img :src="img" />
             {{ category }}
           </h3>
-          <h5 v-if="!isVCollapsed">
-            {{ subTitle }}
-          </h5>
+          <h5 v-if="!isVCollapsed">{{ subTitle }}</h5>
         </div>
         <div class="action">
-          <img v-if="!isVCollapsed" :src="`${iconUrl}Group 3671 (2).svg`">
-          <img v-else :src="`${iconUrl}Asset 567.svg`">
+          <img v-if="!isVCollapsed" :src="`${iconUrl}Group 3671 (2).svg`" />
+          <img v-else :src="`${iconUrl}Asset 567.svg`" />
         </div>
       </div>
       <p v-if="!isVCollapsed">
         Which element would you like to involve in your
         <strong>{{ category }}</strong> proposal?
       </p>
-      <div v-if="!isVCollapsed" class="sub-items-cont">
-        <span v-if="serviceSlidePos < 0" class="prev" @click="prev()">
+      <div class="sub-items-cont" v-if="!isVCollapsed">
+        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
-        <div ref="servicesCont" class="sub-items" :style="{ left: `${serviceSlidePos}px` }">
+        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
           <select-proposal-sub-item
-            v-for="(requirement, sIndex) in optionalRequirements"
-            :key="sIndex"
             :selected="isSelectedQuickButton(s)"
             :item="requirement.item ? requirement.item : requirement.subCategory"
+            v-for="(requirement, sIndex) in optionalRequirements"
+            :key="sIndex"
           />
         </div>
         <span
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
           class="next"
           @click="next()"
+          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
         >
           <md-icon>keyboard_arrow_right</md-icon>
         </span>
       </div>
-      <div v-if="step == 0 && !isVCollapsed" class="add-item-cont">
+      <div class="add-item-cont" v-if="step == 0 && !isVCollapsed">
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
-            <input v-model="serviceItem" class="description">
+            <input v-model="serviceItem" class="description" />
           </div>
           <div class="field">
             <span>QTY</span>
@@ -56,24 +54,26 @@
           </div>
           <div class="field">
             <span>Total</span>
-            <money v-if="isNumberVisible" v-model="subTotal" v-bind="currencyFormat" class="total" />
-            <money v-else v-model="unit" v-bind="currencyFormat" class="total" />
+            <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
+            <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
           </div>
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Clear</a>
-          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)">Add This</a>
+          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
+            >Add This</a
+          >
         </div>
       </div>
     </div>
-    <div v-if="step == 2" class="title-cont dropdown" @click="clickItem(category)">
+    <div class="title-cont dropdown" v-if="step == 2" @click="clickItem(category)">
       <div class="left-side">
         <div class="check-cont">
-          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`">
-          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`">
+          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
+          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
         <h3 class="title">
-          <img :src="img">
+          <img :src="img" />
           <span>{{ category }}</span>
         </h3>
       </div>
@@ -84,37 +84,37 @@
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
-          <span v-if="proposalRange" class="grey">Proposals range</span>
+          <span class="grey" v-if="proposalRange">Proposals range</span>
           <span v-if="proposalRange">{{
             `$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`
           }}</span>
         </div>
-        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`">
+        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
-    <div v-if="step == 2 && isChecked" class="sub-items-cont">
+    <div class="sub-items-cont" v-if="step == 2 && isChecked">
       <h3>Which elements would you like to involve in your proposal?</h3>
-      <div v-if="step == 2 && isChecked" class="sub-items-cont">
-        <span v-if="serviceSlidePos < 0" class="prev" @click="prev()">
+      <div class="sub-items-cont" v-if="step == 2 && isChecked">
+        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
-        <div ref="servicesCont" class="sub-items" :style="{ left: `${serviceSlidePos}px` }">
-          <select-proposal-sub-item v-for="(s, sIndex) in services" :key="sIndex" :active="true" :item="s" />
+        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
+          <select-proposal-sub-item :active="true" :item="s" v-for="(s, sIndex) in services" :key="sIndex" />
         </div>
         <span
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
           class="next"
           @click="next()"
+          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
         >
           <md-icon>keyboard_arrow_right</md-icon>
         </span>
       </div>
     </div>
-    <div v-if="step == 2 && isChecked" class="add-item-cont">
+    <div class="add-item-cont" v-if="step == 2 && isChecked">
       <div class="fields-cont">
         <div class="field">
           <span>Description</span>
-          <input v-model="serviceItem" readonly class="description">
+          <input v-model="serviceItem" readonly class="description" />
         </div>
         <div class="field">
           <span>QTY</span>
@@ -126,8 +126,8 @@
         </div>
         <div class="field">
           <span>Total</span>
-          <money v-if="isNumberVisible" v-model="subTotal" v-bind="currencyFormat" class="total" />
-          <money v-else v-model="unit" v-bind="currencyFormat" class="total" />
+          <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
+          <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
         </div>
       </div>
       <div class="action-cont">
@@ -137,7 +137,7 @@
         </a>
       </div>
     </div>
-    <div v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)" class="editable-sub-items-cont">
+    <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
       <div class="editable-sub-items-header">
         <span>Description</span>
         <span class="text-center">QTY</span>
@@ -156,12 +156,12 @@
         <div class="row grid-tax-row">
           <div class="item-cont">
             <div class="plabel">
-              <img :src="`${iconUrl}Asset 612.svg`">
+              <img :src="`${iconUrl}Asset 612.svg`" />
               <span>Add Discount</span>
             </div>
-            <div v-if="isEditDiscount" class="ptitle text-center">
+            <div class="ptitle text-center" v-if="isEditDiscount">
               % Percentage
-              <br>
+              <br />
               <money
                 v-model="discount"
                 v-bind="percentageFormat"
@@ -181,7 +181,7 @@
           <div class="price-cont text-center">
             <template v-if="isEditDiscount">
               <span class="pl-2">Amount</span>
-              <br>
+              <br />
               <money
                 v-model="discount_by_amount"
                 v-bind="currencyFormat"
@@ -199,20 +199,20 @@
             </template>
           </div>
           <div class="edit-cont">
-            <img v-if="!isEditDiscount" class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true">
-            <a v-if="isEditDiscount" class="cancel" @click="cancelDiscount()">Cancel</a>
-            <a v-if="isEditDiscount" class="save" @click="saveDiscount()">Save</a>
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
+            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
+            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
           </div>
         </div>
         <div class="row grid-tax-row">
           <div class="item-cont">
             <div class="plabel">
-              <img :src="`${iconUrl}Asset 613.svg`">
+              <img :src="`${iconUrl}Asset 613.svg`" />
               <span>Add Taxes</span>
             </div>
-            <div v-if="isEditTax" class="ptitle">
+            <div class="ptitle" v-if="isEditTax">
               % Percentage
-              <br>
+              <br />
               <money
                 v-model="tax"
                 v-bind="percentageFormat"
@@ -228,16 +228,17 @@
             <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
           </div>
           <div class="edit-cont">
-            <img v-if="!isEditTax" class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true">
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
             <a
-              v-if="isEditTax"
               class="cancel"
+              v-if="isEditTax"
               @click="
                 isEditTax = false;
                 tax = 0;
               "
-            >Cancel</a>
-            <a v-if="isEditTax" class="save" @click="isEditTax = false">Save</a>
+              >Cancel</a
+            >
+            <a class="save" v-if="isEditTax" @click="isEditTax = false">Save</a>
           </div>
         </div>
       </div>
@@ -305,23 +306,23 @@
         </div>
       </div>
     </div> -->
-    <div v-if="step == 2 && isChecked" class="additional-photos-wrapper">
+    <div class="additional-photos-wrapper" v-if="step == 2 && isChecked">
       <div class="title-cont">
-        <h3><img :src="`${iconUrl}Asset 605.svg`">Upload Additional Photos</h3>
+        <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
         <h5>(15 photos top, under 20KB)</h5>
       </div>
       <vue-dropzone
         id="dropzone"
         :options="dropzoneOptions"
-        :use-custom-slot="true"
+        :useCustomSlot="true"
         class="dropdown-zone"
         @vdropzone-file-added="imageSelected"
       >
         <span class="color-red font-bold cho">
-          <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">Choose File
+          <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Choose File
         </span>
-        <br>Or
-        <br>
+        <br />Or
+        <br />
         <span class="color-dark-gray">Drag your file here</span>
       </vue-dropzone>
     </div>
@@ -339,18 +340,13 @@ import { Money } from "v-money";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 export default {
-  name: "ProposalItem",
+  name: "proposal-item",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
     EditableProposalSubItem,
     Money,
     vueDropzone: vue2Dropzone,
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
   },
   props: {
     category: String,
@@ -421,78 +417,6 @@ export default {
         maxFilesize: 10,
       },
     };
-  },
-  computed: {
-    isDisabledAdd() {
-      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
-    },
-    optionalRequirements() {
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    mandatoryRequirements() {
-      if (!this.proposalRequest) return [];
-      return this.proposalRequest.requirements.filter((item) => item.mustHave);
-    },
-  },
-  watch: {},
-  created() {
-    this.isVCollapsed = this.isCollapsed;
-    this.newProposalRequest = this.proposalRequest;
-    this.mandatoryRequirements.forEach((item) => {
-      // if (
-      //   this.newProposalRequest.requirements.length == 0 ||
-      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
-      // )
-      this.newProposalRequest.requirements.push({
-        comments: [],
-        dateCreated: "",
-        includedInPrice: true,
-        itemNotAvailable: false,
-        price: 0,
-        priceUnit: "qty",
-        proposalRequest: { id: this.proposalRequest.id },
-        requirementComment: null,
-        requirementId: "",
-        requirementMandatory: false,
-        requirementPriority: null,
-        requirementTitle: item.item,
-        requirementsCategory: item.category,
-        requirementValue: 1,
-      });
-    });
-
-    this.$forceUpdate();
-    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-    this.$root.$on("remove-proposal-requirement", (item) => {
-      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
-        (req) => req.requirementTitle != item.requirementTitle,
-      );
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.$forceUpdate();
-      this.cancel();
-    });
-
-    this.$root.$on("add-service-item", (item) => {
-      this.clickedItem = !this.clickedItem;
-      this.serviceItem = item;
-      this.qty = this.unit = this.subTotal = 0;
-      this.selectedQuickButton = item;
-    });
-
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.newProposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.$forceUpdate();
-    });
-
-    this.$root.$on("clear-slide-pos", (item) => {
-      this.serviceSlidePos = 0;
-    });
-
-    if (this.$refs.servicesCont) {
-      this.servicesWidth = this.$refs.servicesCont.clientWidth;
-    }
   },
   methods: {
     getObject(item) {
@@ -702,6 +626,83 @@ export default {
       // });
     },
   },
+  created() {
+    this.isVCollapsed = this.isCollapsed;
+    this.newProposalRequest = this.proposalRequest;
+    this.mandatoryRequirements.forEach((item) => {
+      // if (
+      //   this.newProposalRequest.requirements.length == 0 ||
+      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
+      // )
+      this.newProposalRequest.requirements.push({
+        comments: [],
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: 0,
+        priceUnit: "qty",
+        proposalRequest: { id: this.proposalRequest.id },
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: item.item,
+        requirementsCategory: item.category,
+        requirementValue: 1,
+      });
+    });
+
+    this.$forceUpdate();
+    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+    this.$root.$on("remove-proposal-requirement", (item) => {
+      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
+        (req) => req.requirementTitle != item.requirementTitle,
+      );
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
+      this.cancel();
+    });
+
+    this.$root.$on("add-service-item", (item) => {
+      this.clickedItem = !this.clickedItem;
+      this.serviceItem = item;
+      this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+      this.proposalRequest.requirements[index] = item;
+      this.newProposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
+    });
+
+    this.$root.$on("clear-slide-pos", (item) => {
+      this.serviceSlidePos = 0;
+    });
+
+    if (this.$refs.servicesCont) {
+      this.servicesWidth = this.$refs.servicesCont.clientWidth;
+    }
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  computed: {
+    isDisabledAdd() {
+      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
+    },
+    optionalRequirements() {
+      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    mandatoryRequirements() {
+      if (!this.proposalRequest) return [];
+      return this.proposalRequest.requirements.filter((item) => item.mustHave);
+    },
+  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

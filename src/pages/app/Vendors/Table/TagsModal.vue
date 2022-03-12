@@ -1,19 +1,15 @@
 <template>
   <div class="md-layout">
-    <modal v-if="tagsModalOpen" container-class="modal-container" @close="noticeModalHide">
+    <modal v-if="tagsModalOpen" @close="noticeModalHide" container-class="modal-container">
       <template slot="body">
-        <h3 class="title">
-          Tagging
-        </h3>
+        <h3 class="title">Tagging</h3>
         <div class="md-layout">
           <div class="md-layout-item md-size-95 mt-4 md-small-size-100">
             <div class="md-layout-item">
               <md-field>
                 <label for="tag">Tags</label>
                 <md-select v-model="tag" name="select">
-                  <md-option v-for="(option, index) in tags" :key="index" :value="option">
-                    {{ option }}
-                  </md-option>
+                  <md-option v-for="(option, index) in tags" :key="index" :value="option">{{ option }}</md-option>
                 </md-select>
               </md-field>
             </div>

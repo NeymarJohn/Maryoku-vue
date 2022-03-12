@@ -2,9 +2,7 @@
   <div class="md-layout">
     <modal v-if="modalOpen" @close="noticeModalHide">
       <template slot="header">
-        <h4 class="modal-title">
-          {{ vendorIndex !== null && vendorIndex > -1 ? "Edit" : "Add new" }} vendor
-        </h4>
+        <h4 class="modal-title">{{ vendorIndex !== null && vendorIndex > -1 ? "Edit" : "Add new" }} vendor</h4>
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="noticeModalHide">
           <md-icon>clear</md-icon>
         </md-button>
@@ -12,22 +10,22 @@
 
       <template slot="body">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-        <form class="md-layout" @submit.prevent="validateModalForm">
+        <form @submit.prevent="validateModalForm" class="md-layout">
           <div class="md-layout">
             <div class="md-layout-item md-small-size-100">
               <md-autocomplete
                 v-model="form.name"
-                v-validate="modelValidations.name"
                 data-vv-name="name"
+                v-validate="modelValidations.name"
                 required
                 :md-options="vendorsList"
-                class="change-icon-order select-with-icon mb16"
-                :class="[{ 'md-error': errors.has('name') }]"
                 @md-changed="setVendor"
                 @md-opened="mdOpened"
+                class="change-icon-order select-with-icon mb16"
+                :class="[{ 'md-error': errors.has('name') }]"
               >
                 <label>Vendor Name</label>
-                <span v-if="errors.has('name')" class="md-error">This field is required</span>
+                <span class="md-error" v-if="errors.has('name')">This field is required</span>
               </md-autocomplete>
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -35,11 +33,11 @@
                 <label>Email</label>
                 <md-input
                   v-model="form.email"
-                  v-validate="modelValidations.email"
                   data-vv-name="email"
+                  v-validate="modelValidations.email"
                   :disabled="selectedFromVendors"
                 />
-                <span v-if="errors.has('email')" class="md-error">This field is required</span>
+                <span class="md-error" v-if="errors.has('email')">This field is required</span>
               </md-field>
             </div>
           </div>
@@ -50,11 +48,11 @@
                 <label>Contact Person</label>
                 <md-input
                   v-model="form.contactPerson"
-                  v-validate="modelValidations.contactPerson"
                   data-vv-name="contactPerson"
+                  v-validate="modelValidations.contactPerson"
                   :disabled="selectedFromVendors"
                 />
-                <span v-if="errors.has('contactPerson')" class="md-error">This field is required</span>
+                <span class="md-error" v-if="errors.has('contactPerson')">This field is required</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -62,11 +60,11 @@
                 <label>Phone</label>
                 <md-input
                   v-model="form.phone"
-                  v-validate="modelValidations.phone"
                   data-vv-name="phone"
+                  v-validate="modelValidations.phone"
                   :disabled="selectedFromVendors"
                 />
-                <span v-if="errors.has('phone')" class="md-error">This field is required</span>
+                <span class="md-error" v-if="errors.has('phone')">This field is required</span>
               </md-field>
             </div>
           </div>
@@ -75,8 +73,10 @@
             <div class="md-layout-item md-size-50">
               <md-field :class="[{ 'md-error': errors.has('cost') }]" class="mb16">
                 <label>Cost/Budget</label>
-                <md-input v-model="form.cost" v-validate="modelValidations.cost" data-vv-name="cost" required />
-                <span v-if="errors.has('cost')" class="md-error">This field is required and should be in range of 1 - 100 000</span>
+                <md-input v-model="form.cost" data-vv-name="cost" v-validate="modelValidations.cost" required />
+                <span class="md-error" v-if="errors.has('cost')"
+                  >This field is required and should be in range of 1 - 100 000</span
+                >
               </md-field>
             </div>
           </div>
@@ -84,9 +84,7 @@
       </template>
 
       <template slot="footer">
-        <md-button class="md-simple" @click="noticeModalHide">
-          Cancel
-        </md-button>
+        <md-button class="md-simple" @click="noticeModalHide">Cancel</md-button>
         <md-button class="md-primary" @click="validateModalForm">
           <span>{{ vendorIndex !== null && vendorIndex > -1 ? "Save" : "Create" }}</span>
         </md-button>
@@ -101,17 +99,17 @@ import Vendors from "@/models/Vendors";
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "EventModalVendor",
+  name: "event-modal-vendor",
   components: {
     Modal,
-    VueElementLoading
+    VueElementLoading,
   },
   props: {
     vendorItem: Object,
     componentIndex: Number,
     vendorIndex: Number,
     shouldUpdate: Boolean,
-    updateVendor: Function
+    updateVendor: Function,
   },
   data() {
     return {
@@ -123,11 +121,11 @@ export default {
         email: null,
         contactPerson: null,
         phone: null,
-        cost: null
+        cost: null,
       },
       modelValidations: {
         name: {
-          required: true
+          required: true,
         },
         email: {},
         contactPerson: {},
@@ -135,17 +133,12 @@ export default {
         cost: {
           required: true,
           min_value: 0,
-          max_value: 100000
-        }
+          max_value: 100000,
+        },
       },
       selectedFromVendors: true, // for disabled/enabled inputs' state
-      changedVendorItem: null
+      changedVendorItem: null,
     };
-  },
-  computed: {
-    vendorsList() {
-      return this.$store.state.vendorsList.map((val) => val.vendorDisplayName);
-    }
   },
   watch: {
     vendorItem: function (val) {
@@ -157,7 +150,7 @@ export default {
       this.form.email = "vendorMainEmail" in val ? val.vendorMainEmail : "";
       this.form.phone = "vendorMainPhoneNumber" in val ? val.vendorMainPhoneNumber : "";
       this.form.cost = "cost" in val ? val.cost : "";
-    }
+    },
   },
   methods: {
     noticeModalHide() {
@@ -182,13 +175,13 @@ export default {
               Vue.set(store.vendors, this.vendorIndex, {
                 id: this.form.id,
                 vendorId: vendorId,
-                cost: +this.form.cost
+                cost: +this.form.cost,
               });
               if (this.shouldUpdate) {
                 this.$props.updateVendor(
                   store,
                   { id: this.form.id, vendorId: vendorId, cost: +this.form.cost },
-                  this.vendorIndex
+                  this.vendorIndex,
                 );
               }
 
@@ -208,7 +201,7 @@ export default {
                 vendorCategory: "HARDCODED DATA FROM EVENT",
                 vendorCancellationPolicy: "HARDCODED DATA FROM EVENT",
                 vendorCity: "HARDCODED DATA FROM EVENT",
-                vendorRefundPolicy: "HARDCODED DATA FROM EVENT"
+                vendorRefundPolicy: "HARDCODED DATA FROM EVENT",
               });
               newVendor
                 .save()
@@ -221,13 +214,13 @@ export default {
                     Vue.set(store.vendors, this.vendorIndex, {
                       id: this.form.id,
                       vendorId: vendorId,
-                      cost: +this.form.cost
+                      cost: +this.form.cost,
                     });
                     if (this.shouldUpdate) {
                       this.$props.updateVendor(
                         store,
                         { id: this.form.id, vendorId: vendorId, cost: +this.form.cost },
-                        this.vendorIndex
+                        this.vendorIndex,
                       );
                     }
 
@@ -249,7 +242,7 @@ export default {
 
               store.vendors.push({
                 vendorId: vendorId,
-                cost: +this.form.cost
+                cost: +this.form.cost,
               });
               if (this.shouldUpdate) {
                 this.$props.updateVendor(store, { vendorId: vendorId, cost: +this.form.cost }, this.vendorIndex);
@@ -271,7 +264,7 @@ export default {
                 vendorCategory: "HARDCODED DATA FROM EVENT",
                 vendorCancellationPolicy: "HARDCODED DATA FROM EVENT",
                 vendorCity: "HARDCODED DATA FROM EVENT",
-                vendorRefundPolicy: "HARDCODED DATA FROM EVENT"
+                vendorRefundPolicy: "HARDCODED DATA FROM EVENT",
               });
               newVendor
                 .save()
@@ -283,7 +276,7 @@ export default {
 
                     store.vendors.push({
                       vendorId: vendorId,
-                      cost: +this.form.cost
+                      cost: +this.form.cost,
                     });
                     if (this.shouldUpdate) {
                       this.$props.updateVendor(store, { vendorId: vendorId, cost: +this.form.cost }, this.vendorIndex);
@@ -313,7 +306,7 @@ export default {
         email: null,
         contactPerson: null,
         phone: null,
-        cost: null
+        cost: null,
       };
     },
     setVendor(selectedName) {
@@ -340,14 +333,19 @@ export default {
         icon: "warning",
         horizontalAlign: "center",
         verticalAlign: "top",
-        type: "danger"
+        type: "danger",
       });
     },
     mdOpened: function () {
       this.form.name += " ";
       this.form.name = this.form.name.substring(0, this.form.name.length - 1);
-    }
-  }
+    },
+  },
+  computed: {
+    vendorsList() {
+      return this.$store.state.vendorsList.map((val) => val.vendorDisplayName);
+    },
+  },
 };
 </script>
 <style lang="scss">

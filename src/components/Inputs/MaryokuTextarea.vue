@@ -7,32 +7,32 @@
   >
     <textarea
       v-model="content"
+      @input="handleInput"
       :placeholder="placeholder"
       :rows="rows"
       class="textarea js-autoresize"
       :disabled="disabled"
       :style="`font-size:${fontSize}px`"
-      @input="handleInput"
-    />
-    <span v-if="!disabled" class="close-button" @click="clearContent">
-      <img :src="`${$iconURL}Campaign/Group+3602.svg`">
+    ></textarea>
+    <span class="close-button" @click="clearContent" v-if="!disabled">
+      <img :src="`${$iconURL}Campaign/Group+3602.svg`" />
     </span>
   </div>
   <div v-else class="maryoku-textarea input" :class="inputClass">
     <textarea
       v-model="content"
+      @input="handleInput"
       :rows="1"
       class="textarea js-autoresize"
       :disabled="disabled"
-      @input="handleInput"
-    />
+    ></textarea>
     <div class="place-holder color-dark-gray font-size-16">
-      <img v-if="type == 'emails'" :src="`${$iconURL}Campaign/emails-gray.svg`" style="width: 20px; margin: 0 7px">
+      <img v-if="type == 'emails'" :src="`${$iconURL}Campaign/emails-gray.svg`" style="width: 20px; margin: 0 7px" />
       <img
         v-if="type == 'phones'"
         :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`"
         style="width: 20px; margin: 0 7px"
-      >
+      />
       {{ placeholder }}
     </div>
   </div>
@@ -81,6 +81,23 @@ export default {
       inputClass: `${this.inputStyle}`,
     };
   },
+  mounted() {
+    setResizeListeners(this.$el, ".js-autoresize");
+  },
+  methods: {
+    handleInput(e) {
+      this.$emit("input", this.content);
+      this.$emit("change", { value: this.content, type: this.inputStyle });
+    },
+    clearContent() {
+      this.content = "";
+      this.$emit("input", this.content);
+      this.$emit("change", { value: this.content, type: this.inputStyle });
+    },
+  },
+  created() {
+    this.content = this.value;
+  },
   computed: {
     getClass: function () {
       return `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
@@ -95,23 +112,6 @@ export default {
     },
     value: function (newValue) {
       this.content = newValue;
-    },
-  },
-  mounted() {
-    setResizeListeners(this.$el, ".js-autoresize");
-  },
-  created() {
-    this.content = this.value;
-  },
-  methods: {
-    handleInput(e) {
-      this.$emit("input", this.content);
-      this.$emit("change", { value: this.content, type: this.inputStyle });
-    },
-    clearContent() {
-      this.content = "";
-      this.$emit("input", this.content);
-      this.$emit("change", { value: this.content, type: this.inputStyle });
     },
   },
 };

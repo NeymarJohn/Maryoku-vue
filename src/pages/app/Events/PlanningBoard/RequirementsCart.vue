@@ -4,10 +4,10 @@
       <div>
         <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
         <div>
-          Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
+            Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
         </div>
       </div>
-      <progress-radial-bar :value="percentOfBudgetCategories" :total="total" />
+      <progress-radial-bar :value="percentOfBudgetCategories" :total="total"></progress-radial-bar>
 
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
@@ -17,36 +17,32 @@
       <vsa-list>
         <vsa-item v-for="item in selectedCategories" :key="item.key">
           <vsa-heading>
-            <img :src="`${$iconURL}Budget+Elements/${item.icon}`" class="category-icon">
+            <img :src="`${$iconURL}Budget+Elements/${item.icon}`" class="category-icon" />
             {{ item.fullTitle }}
           </vsa-heading>
           <vsa-content>
-            <div class="color-gray">
-              {{ item.fullTitle }} Type
-            </div>
+            <div class="color-gray">{{ item.fullTitle }} Type</div>
             <div>
               <template v-for="typeList in requirements[item.key].types">
                 <requirement-tag-item
-                  v-for="type in typeList"
-                  :key="type"
                   class="mt-10 mb-30"
                   :label="type"
+                  :key="type"
+                  v-for="type in typeList"
                   @remove="removeSelectedType(type)"
-                />
+                ></requirement-tag-item>
               </template>
             </div>
             <div v-for="(requirement, subCategory) in requirements[item.key].mainRequirements" :key="subCategory">
               <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0">
-                <div class="color-gray">
-                  {{ subCategory }}
-                </div>
+                <div class="color-gray">{{ subCategory }}</div>
                 <div class="requirement-grid">
                   <div
+                    class="requirement-item"
                     v-for="requirementItem in requirement.filter((it) => it.selected)"
                     :key="requirementItem.item"
-                    class="requirement-item"
                   >
-                    <div class="checkmark" />
+                    <div class="checkmark"></div>
                     <div class="d-inline-block">
                       {{ requirementItem.item || requirementItem.subCategory }}
                     </div>
@@ -54,9 +50,7 @@
                 </div>
               </template>
             </div>
-            <div class="mt-20 color-gray">
-              Additional Requests
-            </div>
+            <div class="mt-20 color-gray">Additional Requests</div>
             <p>
               {{ requirements[item.key].additionalDescription }}
             </p>
@@ -109,6 +103,16 @@ export default {
       serviceCards: ServiceCards,
     };
   },
+  created() {
+  },
+  methods: {
+    close() {
+      this.$emit("close");
+    },
+    removeSelectedType(type) {
+      console.log(type);
+    },
+  },
 
   computed: {
     selectedCategories() {
@@ -125,16 +129,6 @@ export default {
     },
     percentOfBudgetCategories() {
       return Object.keys(this.requirements).length;
-    },
-  },
-  created() {
-  },
-  methods: {
-    close() {
-      this.$emit("close");
-    },
-    removeSelectedType(type) {
-      console.log(type);
     },
   },
 };

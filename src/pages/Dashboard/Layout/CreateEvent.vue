@@ -4,7 +4,7 @@
       <div class="header-content md-layout">
         <div class="logo md-layout-item md-size-50 md-small-size-40">
           <a href="https://www.maryoku.com">
-            <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" width="200">
+            <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" width="200" />
           </a>
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
@@ -17,13 +17,11 @@
                 {{ tenantUser.name ? tenantUser.name : tenantUser.username }}
               </md-button>
               <md-menu-content class="user-menu-content">
-                <md-menu-item @click="logout">
-                  Logout
-                </md-menu-item>
+                <md-menu-item @click="logout">Logout</md-menu-item>
               </md-menu-content>
             </md-menu>
             <md-button class="md-simple md-just-icon question" @click="showSingupDialog">
-              <img :src="`${$iconURL}Onboarding/question-dark.svg`">
+              <img :src="`${$iconURL}Onboarding/question-dark.svg`" />
             </md-button>
           </ul>
         </div>
@@ -32,12 +30,12 @@
 
     <FadeTransition :duration="200" mode="out-in">
       <!-- your content here -->
-      <router-view />
+      <router-view></router-view>
     </FadeTransition>
 
     <md-dialog :md-active.sync="shoWSignupModal" class="singin-form">
       <vue-element-loading :active="signUpLoading">
-        <img src="/static/img/maryoku-loader.gif">
+        <img src="/static/img/maryoku-loader.gif" />
       </vue-element-loading>
       <md-dialog-title class="text-center">
         Sign in
@@ -46,47 +44,39 @@
         </button>
       </md-dialog-title>
       <md-dialog-content>
-        <div class="social-line text-center">
-          <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-            <img :src="`${$iconURL}Signup/google-icon.jpg`">
-            <span>Sign in with Google</span>
-          </md-button>
-          <div>Or</div>
-        </div>
-        <maryoku-input
-          v-model="email"
-          v-validate="modelValidations.email"
-          class="form-input"
-          data-vv-name="email"
-          input-style="email"
-          placeholder="Type email address here..."
-        />
-        <maryoku-input
-          v-model="password"
-          v-validate="modelValidations.password"
-          class="form-input"
-          data-vv-name="password"
-          type="password"
-          input-style="password"
-          placeholder="Type password here..."
-        />
-        <div class="terms-and-conditions">
-          <md-checkbox v-model="keepMe">
-            Keep me signed in
-          </md-checkbox>
-        </div>
-        <div class="md-error">
-          {{ error }}
-        </div>
-        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">
-          Sign In
-        </md-button>
-        <div class="text-center">
-          <!-- <a href class="forget-password">Forgot your password ?</a> -->
-          <md-button class="md-black md-maryoku mt-4 md-simple mt-4">
-            Forgot my password?
-          </md-button>
-        </div>
+          <div class="social-line text-center">
+              <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+                  <img :src="`${$iconURL}Signup/google-icon.jpg`" />
+                  <span>Sign in with Google</span>
+              </md-button>
+              <div>Or</div>
+          </div>
+          <maryoku-input
+              class="form-input"
+              data-vv-name="email"
+              v-validate="modelValidations.email"
+              inputStyle="email"
+              v-model="email"
+              placeholder="Type email address here..."
+          ></maryoku-input>
+          <maryoku-input
+              class="form-input"
+              data-vv-name="password"
+              v-validate="modelValidations.password"
+              type="password"
+              inputStyle="password"
+              v-model="password"
+              placeholder="Type password here..."
+          ></maryoku-input>
+          <div class="terms-and-conditions">
+              <md-checkbox v-model="keepMe">Keep me signed in</md-checkbox>
+          </div>
+          <div class="md-error">{{ error }}</div>
+          <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
+          <div class="text-center">
+              <!-- <a href class="forget-password">Forgot your password ?</a> -->
+              <md-button class="md-black md-maryoku mt-4 md-simple mt-4">Forgot my password?</md-button>
+          </div>
       </md-dialog-content>
     </md-dialog>
   </div>
@@ -145,7 +135,7 @@ export default {
       this.$router.push("/signin");
     },
     singup() {
-      console.log("signup", this.email, this.password);
+      console.log('signup', this.email, this.password);
       this.loading = true;
 
       if (this.email && this.password) {

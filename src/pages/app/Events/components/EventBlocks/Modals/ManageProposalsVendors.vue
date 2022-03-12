@@ -1,11 +1,11 @@
 <template>
-  <div class="md-layout" />
+  <div class="md-layout"></div>
 </template>
 <script>
 import EventComponentVendor from "@/models/EventComponentVendor";
 
 export default {
-  name: "ManageProposalsVendors",
+  name: "manage-proposals-vendors",
   components: {},
   data() {
     return {
@@ -14,8 +14,6 @@ export default {
       filteredBlockVendors: [],
     };
   },
-  computed: {},
-  watch: {},
   mounted() {},
   methods: {
     getBuildingBlocksVendors() {
@@ -33,6 +31,8 @@ export default {
         });
     },
   },
+  computed: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

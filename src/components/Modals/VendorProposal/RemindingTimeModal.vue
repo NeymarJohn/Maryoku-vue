@@ -1,54 +1,38 @@
 <template>
-  <ActionModal class="reminder-time-modal" container-class="modal-container sm" @close="close" @done="setRemind">
+  <ActionModal class="reminder-time-modal" containerClass="modal-container sm" @close="close" @done="setRemind">
     <template slot="header">
-      <div class="title font-bold text-center">
-        Set a reminder
-      </div>
+        <div class="title font-bold text-center">Set a reminder</div>
     </template>
     <template slot="body">
       <div class="text-left mb-10">
-        Want to come back to this later? We’ll send you a reminder so you never miss a deadline.
+         Want to come back to this later? We’ll send you a reminder so you never miss a deadline.
       </div>
       <div class="text-left">
         <label>Just select the best time for you: </label>
         <div class="text-left">
-          <div>
-            <md-radio v-model="remindTimeOption" value="today">
-              Later today
-            </md-radio>
-          </div>
-          <div>
-            <md-radio v-model="remindTimeOption" value="tomorrow">
-              Tomorrow
-            </md-radio>
-          </div>
-          <div>
-            <md-radio v-model="remindTimeOption" value="specific">
-              Specific Time
-            </md-radio>
-          </div>
+          <div><md-radio v-model="remindTimeOption" value="today">Later today</md-radio></div>
+          <div><md-radio v-model="remindTimeOption" value="tomorrow">Tomorrow</md-radio></div>
+          <div><md-radio v-model="remindTimeOption" value="specific">Specific Time</md-radio></div>
         </div>
-        <div v-if="remindTimeOption === 'specific'" class="pl-40 time-selector">
+        <div class="pl-40 time-selector" v-if="remindTimeOption === 'specific'">
           <div class="text-left mb-20 d-flex">
             <div class="width-50">
               <MaryokuInput
-                v-model="selectedDate"
                 class="form-input mr-10"
                 placeholder="Choose date…"
-                input-style="date"
-              />
+                inputStyle="date"
+                v-model="selectedDate"
+              ></MaryokuInput>
             </div>
-            <TimePicker v-model="selectedTime" />
+            <TimePicker v-model="selectedTime"></TimePicker>
           </div>
-          <WarningMessage class="mb-50" label="This offer is valid for 4 days" />
+          <WarningMessage class="mb-50" label="This offer is valid for 4 days"></WarningMessage>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-black md-simple" @click="close">
-        Cancel
-      </md-button>
-      <md-button class="md-red md-bold reminder-button" :disabled="!canSetReminder" @click="setRemind">
+      <md-button class="md-black md-simple" @click="close"> Cancel </md-button>
+      <md-button class="md-red md-bold reminder-button" @click="setRemind" :disabled="!canSetReminder">
         Done
       </md-button>
     </template>
@@ -56,14 +40,14 @@
 </template>
 <script>
 import moment from "moment";
-import { MaryokuInput } from "@/components";
+import { MaryokuInput } from '@/components';
 
 const components = {
-    ActionModal: () => import("@/components/ActionModal.vue"),
+    ActionModal: () => import('@/components/ActionModal.vue'),
     // MaryokuInput: () => import('@/components/inputs/MaryokuInput.vue'),
-    TimePicker: () => import("@/components/Inputs/TimePicker.vue"),
+    TimePicker: () => import('@/components/Inputs/TimePicker.vue'),
     WarningMessage: () => import("@/components/WarningMessage.vue"),
-};
+}
 export default {
   components: {...components, MaryokuInput},
   props: {},
@@ -80,18 +64,13 @@ export default {
       ],
     };
   },
-  computed: {
-    canSetReminder() {
-      return this.remindTimeOption;
-    },
-  },
   created() {},
   methods: {
     cancel() {
       this.$emit("close");
     },
     close() {
-      console.log("close");
+      console.log('close');
       this.$emit("close");
     },
     setRemind() {
@@ -100,8 +79,8 @@ export default {
       if (this.remindTimeOption === "tomorrow") {
         remindingTime = moment(new Date()).add(1, "day").valueOf();
       } else if (this.remindTimeOption === "today") {
-        remindingTime = moment(new Date()).add(5, "hours").valueOf();
-        let endOfDay = moment().endOf("day").valueOf();
+        remindingTime = moment(new Date()).add(5, 'hours').valueOf();
+        let endOfDay = moment().endOf('day').valueOf();
         if (remindingTime > endOfDay) {
           remindingTime = endOfDay;
         }
@@ -109,6 +88,11 @@ export default {
         remindingTime = moment(`${this.selectedDate} ${this.selectedTime}`, "DD.MM.YYYY hh:mm a").valueOf();
       }
       this.$emit("save", {remindingTime, option: this.remindTimeOption});
+    },
+  },
+  computed: {
+    canSetReminder() {
+      return this.remindTimeOption;
     },
   },
 };

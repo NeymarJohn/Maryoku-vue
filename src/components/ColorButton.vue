@@ -1,29 +1,29 @@
 <template>
   <div class="maryoku-component color-select-button">
-    <div v-if="showColorPane" class="color-select-button-mask" @click="toggleColorPane()" />
+    <div class="color-select-button-mask" @click="toggleColorPane()" v-if="showColorPane"></div>
     <md-button
-      v-if="bgc"
       class="md-just-icon"
       :style="`background-color: ${bgc} !important; opacity:${alpha}; width:${size}px; height:${size}px`"
       @click="toggleColorPane()"
-    />
+      v-if="bgc"
+    ></md-button>
     <md-button
-      v-else
       class="add-button md-just-icon md-white"
-      :style="`width:${size}px; height:${size}px`"
       @click="toggleColorPane()"
+      v-else
+      :style="`width:${size}px; height:${size}px`"
     >
-      <img :src="`${$iconURL}Concept/Asset 488.svg`" width="20">
+      <img :src="`${$iconURL}Concept/Asset 488.svg`" width="20" />
     </md-button>
 
     <chrome-picker
-      v-if="showColorPane"
       :value="selectedColour"
+      @input="updateValue"
       label="Pick Colour"
       picker="chrome"
-      @input="updateValue"
+      v-if="showColorPane"
     />
-    <img v-if="icon" :src="icon" class="icon-img" @click="toggleColorPane()">
+    <img :src="icon" @click="toggleColorPane()" v-if="icon" class="icon-img" />
   </div>
 </template>
 <script>
@@ -53,7 +53,7 @@ let defaultValue = {
 };
 
 export default {
-  name: "ColorButton",
+  name: "color-button",
   components: {
     "chrome-picker": Chrome,
   },
@@ -96,16 +96,6 @@ export default {
       return 1;
     },
   },
-  watch: {
-    value: function () {
-      this.selectedColour.hex = this.value.color;
-      this.selectedColour.a = this.value.opacity;
-    },
-  },
-  created() {
-    this.selectedColour.hex = this.value.color;
-    this.selectedColour.a = this.value.alpha;
-  },
   methods: {
     hidePane: function (event) {
       this.showColorPane = false;
@@ -123,6 +113,16 @@ export default {
       if (!this.showColorPane) {
         this.$emit("closed");
       }
+    },
+  },
+  created() {
+    this.selectedColour.hex = this.value.color;
+    this.selectedColour.a = this.value.alpha;
+  },
+  watch: {
+    value: function () {
+      this.selectedColour.hex = this.value.color;
+      this.selectedColour.a = this.value.opacity;
     },
   },
 };

@@ -1,12 +1,12 @@
 <template>
   <div class="resizable-toggle-wrapper">
     <button class="resizable-toggle-button" :class="{ clicked: clicked, disabled }" @click="handleClick">
-      <img v-if="clicked && selectedIcon" :src="selectedIcon">
-      <img v-else :src="icon" :style="iconStyle">
+      <img :src="selectedIcon" v-if="clicked && selectedIcon" />
+      <img :src="icon" :style="iconStyle" v-else />
       <span class="label-text">{{ label }}</span>
-      <span v-if="proposalCategory" class="badge-mark" />
+      <span v-if="proposalCategory" class="badge-mark"></span>
     </button>
-    <span v-if="hasBadge && !clicked" class="badge-mark" />
+    <span class="badge-mark" v-if="hasBadge && !clicked"></span>
   </div>
 </template>
 <script>
@@ -50,11 +50,6 @@ export default {
       clicked: false,
     };
   },
-  watch: {
-    defaultStatus(newValue, oldValue) {
-      this.clicked = newValue;
-    },
-  },
   created() {
     this.clicked = this.defaultStatus;
   },
@@ -63,6 +58,11 @@ export default {
       if (this.disabled) return;
       this.clicked = true;
       this.$emit("click", this.clicked);
+    },
+  },
+  watch: {
+    defaultStatus(newValue, oldValue) {
+      this.clicked = newValue;
     },
   },
 };

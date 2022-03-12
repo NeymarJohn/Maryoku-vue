@@ -1,63 +1,58 @@
 <template>
-  <!--  <div class="md-layout">-->
-  <!--    <loader :active="loading" :isFullScreen="true"/>-->
-  <!--    <div class="md-layout-item">-->
-  <!--      <signup-card>-->
-  <!--        <div-->
-  <!--          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain"-->
-  <!--          slot="content-right"-->
-  <!--        >-->
+<!--  <div class="md-layout">-->
+<!--    <loader :active="loading" :isFullScreen="true"/>-->
+<!--    <div class="md-layout-item">-->
+<!--      <signup-card>-->
+<!--        <div-->
+<!--          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain"-->
+<!--          slot="content-right"-->
+<!--        >-->
   <div>
     <div class="social-line text-center">
       <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-        <img :src="`${$iconURL}Signup/google-icon.jpg`">
+        <img :src="`${$iconURL}Signup/google-icon.jpg`"/>
         <span>Sign in with Google</span>
       </md-button>
-      <h4 class="mt-1">
-        Or
-      </h4>
+      <h4 class="mt-1">Or</h4>
     </div>
     <maryoku-input
-      v-model="user.email"
+      class="form-input"
       v-validate="modelValidations.email"
-      class="form-input"
-      input-style="email"
+      inputStyle="email"
+      v-model="user.email"
       placeholder="Type email address here..."
-    />
+    ></maryoku-input>
     <maryoku-input
-      v-model="user.password"
-      v-validate="modelValidations.password"
       class="form-input"
+      v-validate="modelValidations.password"
       type="password"
-      input-style="password"
+      inputStyle="password"
+      v-model="user.password"
       placeholder="Type password here..."
-    />
+    ></maryoku-input>
     <div class="md-error">
       <div v-if="notFoundUser" class="font-size-16">
         Sorry, we couldn’t find you.
-        <br>
+        <br/>
         If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
       </div>
       <div>{{ error }}</div>
     </div>
     <div class="terms-and-conditions mt-2">
-      <md-checkbox v-model="keepMe">
-        Keep me signed in
-      </md-checkbox>
+      <md-checkbox v-model="keepMe"> Keep me signed in</md-checkbox>
     </div>
     <div class="form-buttons">
       <div>
-        <md-button slot="footer" class="md-black md-maryoku mt-4 md-simple mt-4" @click="toForgotPassword">
-          Forgot my password?
-        </md-button>
-        <br>
-        <md-button slot="footer" class="md-default md-red md-maryoku mt-4" @click="signIn">
-          Sign In
-        </md-button>
-        <md-button slot="footer" class="md-black md-maryoku mt-4 md-simple mt-4" @click="toSingUp">
+        <md-button @click="toForgotPassword" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
+        Forgot my password?
+      </md-button>
+        <br/>
+        <md-button @click="signIn" class="md-default md-red md-maryoku mt-4" slot="footer">Sign In</md-button>
+        <md-button @click="toSingUp" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
           Sign Up
         </md-button>
       </div>
+
     </div>
   </div>
 <!--      </signup-card>-->
@@ -80,6 +75,127 @@ export default {
     InputText,
     Loader,
     MaryokuInput,
+  },
+  mounted() {
+    // console.log('mounted', this.$router.currentRoute);
+  },
+    methods: {
+    authenticate(provider) {
+      let action = this.$route.query.action;
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
+
+      this.loading = true;
+      let tenantId = this.$authService.resolveTenantId();
+
+      let callback = btoa(
+              `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?'userType=guest&token=':'userType=planner&token='}`,
+      );
+
+      if (action) {
+        callback = btoa(
+                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}${isGuest?'&userType=guest&token=':'&userType=guest&token='}`,
+        );
+      }
+
+      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+    },
+    signIn() {
+      this.loading = true;
+      let isGuest = this.$router.currentRoute.path.indexOf('guest') !== -1;
+      let that = this;
+      this.$validator.validateAll().then((isValid) => {
+        console.log(this.$validator);
+        if (isValid) {
+          if (this.user.email && this.user.password) {
+            const userData = {
+              email: `${this.user.email}/${isGuest ? 'guest' : 'planner'}`,
+              password: this.user.password,
+            };
+            this.$store.dispatch("auth/login", userData).then(
+              () => {
+                if (this.keepMe) {
+                  document.cookie = `rememberMe=true; path=/;`;
+                }
+                this.redirectPage();
+              },
+              (error) => {
+                this.loading = false;
+                this.notFoundUser = true;
+                this.error = "";
+              },
+            );
+          }
+        } else {
+          that.notFoundUser = false;
+          that.error = "Sorry, invalid email or password, please check and try again";
+          that.loading = false;
+        }
+      });
+    },
+    toSingUp() {
+      let action = this.$route.query.action;
+      if (action) {
+        this.$router.push({ path: `/signup?action=${action}` });
+      } else {
+        this.$router.push({ path: `/signup` });
+      }
+    },
+    toForgotPassword() {
+      this.$router.push({ path: "/forgot-password" });
+    },
+    async redirectPage() {
+      console.log("redirect.page", this.$route.query.action, this.currentUser);
+
+      let action = this.$route.query.action;
+      const tenantId = this.$authService.resolveTenantId();
+
+      if (this.currentUser) {
+        if (action === this.$queryEventActions.planner) {
+          if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants || !this.tenantUser.tenants.includes(tenantId)) {
+            const callback = btoa("/events");
+            this.$router.push({ path: `/create-workspace?action=${action}&callback=${callback}` });
+          } else {
+            this.$router.push({ path: "/event-wizard-create" });
+          }
+        } else {
+          if (this.currentUser.currentTenant === 'DEFAULT' && this.currentUser.tenants.length > 1) {
+              this.$router.push({ path: "/choose-workspace" });
+          }
+          if (this.currentUser.currentTenant) {
+            if(this.currentUser.currentUserType === USER_TYPE.PLANNER) { // get last event
+                CalendarEvent.get().then((events) => {
+                    if (events.length > 0) {
+                        const gotoLink = eventService.getFirstTaskLink(events[0]);
+                        console.log("redirect.events", gotoLink);
+                        this.$router.push({path: gotoLink});
+                    } else this.$router.push({path: `/create-event-wizard`});
+                });
+            } else if (this.currentUser.currentUserType === USER_TYPE.GUEST) { // get last customer event
+                let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
+                        params: {filters:{myEvents: true}},
+                    })
+                let events = res.data;
+                console.log('events', events);
+                if (events.length > 0) {
+                    this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
+                }
+
+            }
+          } else if (this.currentUser.tenants.length === 0) {
+            console.log("redirect.create-event-wizard");
+            const callback = btoa("/create-event-wizard");
+            this.$router.push({ path: `/create-workspace?callback=${callback}` });
+          } else if (this.currentUser.tenants.length > 1) {
+            this.$router.push({ path: "/choose-workspace" });
+          } else if (this.currentUser.tenants.length == 1) {
+            const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#/events`;
+            location.href = firstWorksapce;
+          } else {
+            this.$router.push({ path: "/error" });
+          }
+        }
+      }
+    },
   },
   data() {
     return {
@@ -116,127 +232,6 @@ export default {
     },
     currentUser() {
       return this.$store.state.auth.user;
-    },
-  },
-  mounted() {
-    // console.log('mounted', this.$router.currentRoute);
-  },
-    methods: {
-    authenticate(provider) {
-      let action = this.$route.query.action;
-      let isGuest = this.$router.currentRoute.path.indexOf("guest") !== -1;
-
-      this.loading = true;
-      let tenantId = this.$authService.resolveTenantId();
-
-      let callback = btoa(
-              `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?${isGuest?"userType=guest&token=":"userType=planner&token="}`,
-      );
-
-      if (action) {
-        callback = btoa(
-                `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}${isGuest?"&userType=guest&token=":"&userType=guest&token="}`,
-        );
-      }
-
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
-    },
-    signIn() {
-      this.loading = true;
-      let isGuest = this.$router.currentRoute.path.indexOf("guest") !== -1;
-      let that = this;
-      this.$validator.validateAll().then((isValid) => {
-        console.log(this.$validator);
-        if (isValid) {
-          if (this.user.email && this.user.password) {
-            const userData = {
-              email: `${this.user.email}/${isGuest ? "guest" : "planner"}`,
-              password: this.user.password,
-            };
-            this.$store.dispatch("auth/login", userData).then(
-              () => {
-                if (this.keepMe) {
-                  document.cookie = "rememberMe=true; path=/;";
-                }
-                this.redirectPage();
-              },
-              (error) => {
-                this.loading = false;
-                this.notFoundUser = true;
-                this.error = "";
-              },
-            );
-          }
-        } else {
-          that.notFoundUser = false;
-          that.error = "Sorry, invalid email or password, please check and try again";
-          that.loading = false;
-        }
-      });
-    },
-    toSingUp() {
-      let action = this.$route.query.action;
-      if (action) {
-        this.$router.push({ path: `/signup?action=${action}` });
-      } else {
-        this.$router.push({ path: "/signup" });
-      }
-    },
-    toForgotPassword() {
-      this.$router.push({ path: "/forgot-password" });
-    },
-    async redirectPage() {
-      console.log("redirect.page", this.$route.query.action, this.currentUser);
-
-      let action = this.$route.query.action;
-      const tenantId = this.$authService.resolveTenantId();
-
-      if (this.currentUser) {
-        if (action === this.$queryEventActions.planner) {
-          if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants || !this.tenantUser.tenants.includes(tenantId)) {
-            const callback = btoa("/events");
-            this.$router.push({ path: `/create-workspace?action=${action}&callback=${callback}` });
-          } else {
-            this.$router.push({ path: "/event-wizard-create" });
-          }
-        } else {
-          if (this.currentUser.currentTenant === "DEFAULT" && this.currentUser.tenants.length > 1) {
-              this.$router.push({ path: "/choose-workspace" });
-          }
-          if (this.currentUser.currentTenant) {
-            if(this.currentUser.currentUserType === USER_TYPE.PLANNER) { // get last event
-                CalendarEvent.get().then((events) => {
-                    if (events.length > 0) {
-                        const gotoLink = eventService.getFirstTaskLink(events[0]);
-                        console.log("redirect.events", gotoLink);
-                        this.$router.push({path: gotoLink});
-                    } else this.$router.push({path: "/create-event-wizard"});
-                });
-            } else if (this.currentUser.currentUserType === USER_TYPE.GUEST) { // get last customer event
-                let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
-                        params: {filters:{myEvents: true}},
-                    });
-                let events = res.data;
-                console.log("events", events);
-                if (events.length > 0) {
-                    this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
-                }
-
-            }
-          } else if (this.currentUser.tenants.length === 0) {
-            console.log("redirect.create-event-wizard");
-            const callback = btoa("/create-event-wizard");
-            this.$router.push({ path: `/create-workspace?callback=${callback}` });
-          } else if (this.currentUser.tenants.length > 1) {
-            this.$router.push({ path: "/choose-workspace" });
-          } else if (this.currentUser.tenants.length == 1) {
-            const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#/events`;
-            location.href = firstWorksapce;
-          } else {
-            this.$router.push({ path: "/error" });
-          }
-        }
-      }
     },
   },
 };

@@ -1,38 +1,34 @@
 <template>
   <div class>
     <div class="section-header">
-      <h2 class="section-title">
-        Great Job! we have everything we need to start working!
-      </h2>
+      <h2 class="section-title">Great Job! we have everything we need to start working!</h2>
       <div class="steps-wizard">
         <ul class="steps-wizard-items">
-          <li v-for="index in step" :key="index" />
+          <li v-for="index in step" :key="index"></li>
         </ul>
       </div>
     </div>
     <div class="container no-padding-mobile">
       <div class="form-section start-working">
-        <div v-for="(item,index) in startWorkingList" :key="index" class="start-working-item">
+        <div class="start-working-item" v-for="(item,index) in startWorkingList" :key="index">
           <md-checkbox v-model="item.selected">
             <div class="image-cont">
               <img
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/wizard-icons/${item.img}`"
-              >
+              />
             </div>
-            <span>{{ item.title }}</span>
-            <small>{{ item.desc }}</small>
+            <span>{{item.title}}</span>
+            <small>{{item.desc}}</small>
           </md-checkbox>
         </div>
 
         <div class="form-actions">
-          <md-button class="md-rose next-btn custom-btn" @click="goToNext">
-            Let's go
-          </md-button>
+          <md-button class="md-rose next-btn custom-btn" @click="goToNext">Let's go</md-button>
         </div>
       </div>
     </div>
 
-    <go-back navigation="event-scales" />
+    <go-back navigation="event-scales"></go-back>
   </div>
 </template>
 
@@ -153,7 +149,7 @@ export default {
           });
 
           if (this.$auth.user.authenticated) {
-            this.$router.push({ path: "/event-summery" });
+            this.$router.push({ path: `/event-summery` });
           } else {
             this.setSingupModal({ showModal: true });
           }

@@ -1,7 +1,6 @@
 <template>
-  <div ref="root" class="maryoku_input">
+  <div class="maryoku_input" ref="root">
     <input
-      :ref="refName"
       v-model="content"
       :name="name"
       :type="type"
@@ -9,75 +8,68 @@
       :class="inputClass"
       :readonly="readonly"
       :disabled="disabled"
-      :data-vv-name="validation"
       @click="onClickEvent"
       @input="handleInput"
-    >
-    <span v-if="errors.has(validation)" class="md-error color-red">{{ errors.first(validation) }}</span>
+      :ref="refName"
+      :data-vv-name="validation"
+    />
+    <span class="md-error color-red" v-if="errors.has(validation)">{{ errors.first(validation) }}</span>
 
-    <div v-if="inputStyle === 'sharing'" class="copy_clip" :class="theme">
+    <div class="copy_clip" v-if="inputStyle === 'sharing'" :class="theme">
       <button
+        type="button"
         v-clipboard:copy="value"
         v-clipboard:success="onCopy"
         v-clipboard:error="onCopyError"
-        type="button"
         @mouseover="mouseOver($event)"
       >
         Copy
       </button>
       <transition name="fade" mode="out-in">
-        <div v-if="tooltipActive" class="copied-tooltip">
-          Link Copied!
-        </div>
+        <div class="copied-tooltip" v-if="tooltipActive">Link Copied!</div>
       </transition>
     </div>
-    <div v-if="showTimePicker" ref="timePickerElements">
-      <div ref="timePickerPanel" class="time-picker picker-panel">
+    <div ref="timePickerElements" v-if="showTimePicker">
+      <div class="time-picker picker-panel" ref="timePickerPanel">
         <div class="d-flex picker-content">
-          <img :src="`${$iconURL}Notes/clock-dark.svg`" width="23px">
-          <TimeInput v-model="timeInfo" />
+          <img :src="`${$iconURL}Notes/clock-dark.svg`" width="23px" />
+          <TimeInput v-model="timeInfo"></TimeInput>
         </div>
         <div class="btn-group">
-          <md-button class="md-simple md-black normal-btn" @click="showTimePicker = false">
-            Cancel
-          </md-button>
-          <md-button class="md-default md-rose normal-btn" @click="setTime">
-            Set
-          </md-button>
+          <md-button class="md-simple md-black normal-btn" @click="showTimePicker = false">Cancel</md-button>
+          <md-button class="md-default md-rose normal-btn" @click="setTime">Set</md-button>
         </div>
       </div>
-      <div v-if="showTimePicker" ref="timePickerMask" class="time-picker-mask" @click="showTimePicker = false" />
+      <div class="time-picker-mask" @click="showTimePicker = false" ref="timePickerMask" v-if="showTimePicker"></div>
     </div>
 
-    <div v-if="showDatePicker" ref="datePicker">
-      <div ref="timePickerPanel" class="date-picker maryoku picker-panel" style="z-index: 200 !important">
+    <div ref="datePicker" v-if="showDatePicker">
+      <div class="date-picker maryoku picker-panel" ref="timePickerPanel" style="z-index: 200 !important">
         <div class="d-flex pl-10">
-          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
+          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
           <!-- {{dateData && dateData.selectedDate}} -->
           <span class="p-5">{{ getFormattedDate }}</span>
         </div>
         <!-- <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div> -->
         <div>
           <FunctionalCalendar
-            v-model="dateData"
             :is-date-picker="true"
             :change-month-function="true"
             :change-year-function="true"
-            date-format="yyyy-mm-dd"
+            dateFormat="yyyy-mm-dd"
+            v-model="dateData"
             :class="theme"
-          />
+          ></FunctionalCalendar>
         </div>
         <div class="btn-group">
-          <md-button class="md-simple md-black normal-btn" @click="showDatePicker = false">
-            Cancel
-          </md-button>
-          <md-button class="md-default md-rose normal-btn" :class="{ 'md-vendor': theme === 'purple' }" @click="setDate">
-            Set
-          </md-button>
+          <md-button class="md-simple md-black normal-btn" @click="showDatePicker = false">Cancel</md-button>
+          <md-button class="md-default md-rose normal-btn" :class="{ 'md-vendor': theme === 'purple' }" @click="setDate"
+            >Set</md-button
+          >
         </div>
       </div>
-      <div v-if="showDatePicker" ref="timePickerMask" class="time-picker-mask" @click="showDatePicker = false" />
-      <div v-if="showDatePicker" ref="timePickerMask" class="time-picker-mask" @click="clickMask" />
+      <div class="time-picker-mask" @click="showDatePicker = false" ref="timePickerMask" v-if="showDatePicker"></div>
+      <div class="time-picker-mask" @click="clickMask" ref="timePickerMask" v-if="showDatePicker"></div>
     </div>
   </div>
 </template>
@@ -93,7 +85,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 // }
 
 export default {
-  name: "MaryokuInput",
+  name: "maryoku-input",
   components: {
         Popup,
         TimeInput,
@@ -117,7 +109,7 @@ export default {
     readonly: Boolean,
     size: {
       type: String,
-      default: "",
+      default: '',
     },
     disabled: {
       type: Boolean,
@@ -138,6 +130,9 @@ export default {
       default: "input",
     },
   },
+  beforeDestroy() {
+    if (this.$refs.timePickerPanel) this.$refs.timePickerPanel.style.display = "none";
+  },
   data() {
     return {
       content: this.value,
@@ -148,55 +143,6 @@ export default {
       timeInfo: 0,
       tooltipActive: false,
     };
-  },
-  computed: {
-    getClass: function () {
-      return `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
-    },
-    getFormattedDate() {
-      if (!this.dateData.selectedDate) return "";
-      return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY");
-    },
-    getValidateObject() {
-      if (this.validation === "url") {
-        return { url: { require_porotocal: false } };
-      } else {
-        return "";
-      }
-    },
-    getErrorMessage() {
-      return this.errors.first();
-    },
-  },
-  watch: {
-    content: function (newValue) {
-      this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
-      if (this.inputStyle === "budget" || this.inputStyle === "users") {
-        const result = Number(newValue.replace(/,/g, ""));
-        this.$emit("input", result);
-      } else {
-        this.$emit("input", this.content);
-      }
-    },
-    value: function (newValue) {
-      if (this.inputStyle === "budget" || this.inputStyle === "users") {
-        this.content = `${newValue}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      } else {
-        this.content = newValue;
-      }
-    },
-    inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`;}
-  },
-  beforeDestroy() {
-    if (this.$refs.timePickerPanel) this.$refs.timePickerPanel.style.display = "none";
-  },
-  created() {
-    if (this.value && this.inputStyle === "budget") {
-      this.content = `${this.value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
     handleInput(e) {
@@ -266,6 +212,52 @@ export default {
       e.stopPropagation();
       e.preventDefault();
     },
+  },
+  computed: {
+    getClass: function () {
+      return `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
+    },
+    getFormattedDate() {
+      if (!this.dateData.selectedDate) return "";
+      return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY");
+    },
+    getValidateObject() {
+      if (this.validation === "url") {
+        return { url: { require_porotocal: false } };
+      } else {
+        return "";
+      }
+    },
+    getErrorMessage() {
+      return this.errors.first();
+    },
+  },
+  created() {
+    if (this.value && this.inputStyle === "budget") {
+      this.content = `${this.value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  watch: {
+    content: function (newValue) {
+      this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
+      if (this.inputStyle === "budget" || this.inputStyle === "users") {
+        const result = Number(newValue.replace(/,/g, ""));
+        this.$emit("input", result);
+      } else {
+        this.$emit("input", this.content);
+      }
+    },
+    value: function (newValue) {
+      if (this.inputStyle === "budget" || this.inputStyle === "users") {
+        this.content = `${newValue}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      } else {
+        this.content = newValue;
+      }
+    },
+    inputStyle(newVal) {this.inputClass = `${newVal} ${this.size}`}
   },
 };
 </script>

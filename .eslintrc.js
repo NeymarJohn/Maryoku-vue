@@ -9,19 +9,21 @@ module.exports = {
     browser: true,
   },
   extends: [
-    "plugin:vue/recommended",
-    "prettier"
+    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
+    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
+    'plugin:vue/essential', 
+    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
+    'standard'
   ],
   // required to lint *.vue files
   plugins: [
+    'vue'
   ],
+  // add your custom rules here
   rules: {
-    quotes: ["error", "double"],
-    semi: ["error", "always"],
-    "eol-last": ["error", "always"],
-    "vue/multi-word-component-names": "off",
-    "vue/html-indent": ["error", "space"],
-    "vue/html-quotes": ["error", "double"],
-    "vue/max-attributes-per-line": "off"
+    // allow async-await
+    'generator-star-spacing': 'off',
+    // allow debugger during development
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

@@ -7,14 +7,14 @@
         <span v-if="serviceType !== 'included'" class="text-right">Price per unit</span>
         <span v-if="serviceType !== 'included'" class="text-right">Subtotal</span>
       </div>
-      <hr style="background-color: #b2b2b2; height: 2px">
-      <div v-if="serviceType !== 'included'" class="fields-cont mt-20">
+      <hr style="background-color: #b2b2b2; height: 2px" />
+      <div class="fields-cont mt-20" v-if="serviceType !== 'included'">
         <div class="field description-field">
           <input
             v-if="filteredSuggestItems[selectedSuggestItemIndex] && serviceItem"
             class="suggested-place-holder"
             :value="filteredSuggestItems[selectedSuggestItemIndex].description"
-          >
+          />
           <input
             v-model="serviceItem"
             class="input-value description-input"
@@ -23,25 +23,19 @@
             placeholder="Type name of element here"
             @keypress="startSearch"
             @blur="stopSearch"
-          >
-          <div v-if="showAutoCompletePanel && filteredSuggestItems.length > 0" class="auto-complete-panel">
+          />
+          <div class="auto-complete-panel" v-if="showAutoCompletePanel && filteredSuggestItems.length > 0">
             <div
+              class="suggest-item font-bold"
               v-for="(item, index) in filteredSuggestItems"
               :key="item.description"
-              class="suggest-item font-bold"
               @mouseenter="hoverSuggestItem(index)"
               @click="selectSuggestItem(index)"
             >
               <div>{{ item.description }}</div>
-              <div class="color-red font-regular">
-                {{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}
-              </div>
-              <div v-if="item.included" class="text-right">
-                {{ "Included" }}
-              </div>
-              <div v-else class="text-right">
-                ${{ item.price | withComma }}
-              </div>
+              <div class="color-red font-regular">{{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}</div>
+              <div v-if="item.included" class="text-right">{{ "Included" }}</div>
+              <div v-else class="text-right">${{ item.price | withComma }}</div>
             </div>
           </div>
         </div>
@@ -50,18 +44,18 @@
         </div>
         <div class="field">
           <money
-            v-if="serviceType !== 'included'"
             v-model="unit"
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
           />
         </div>
         <div class="field">
           <money
-            v-if="serviceType !== 'included'"
             :value="qty * unit"
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
             readonly
           />
         </div>
@@ -75,13 +69,13 @@
           </md-button>
         </div>
       </div>
-      <div v-if="serviceType === 'included'" class="fields-cont mt-20">
+      <div class="fields-cont mt-20" v-if="serviceType === 'included'">
         <div class="field description-field">
           <input
             v-if="filteredSuggestItems[selectedSuggestItemIndex] && serviceItem"
             class="suggested-place-holder"
             :value="filteredSuggestItems[selectedSuggestItemIndex].description"
-          >
+          />
           <input
             v-model="serviceItem"
             class="input-value description-input"
@@ -90,25 +84,19 @@
             placeholder="Type name of element here"
             @keypress="startSearch"
             @blur="stopSearch"
-          >
-          <div v-if="showAutoCompletePanel && filteredSuggestItems.length > 0" class="auto-complete-panel">
+          />
+          <div class="auto-complete-panel" v-if="showAutoCompletePanel && filteredSuggestItems.length > 0">
             <div
+              class="suggest-item font-bold"
               v-for="(item, index) in filteredSuggestItems"
               :key="item.description"
-              class="suggest-item font-bold"
               @mouseenter="hoverSuggestItem(index)"
               @click="selectSuggestItem(index)"
             >
               <div>{{ item.description }}</div>
-              <div class="color-red font-regular">
-                {{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}
-              </div>
-              <div v-if="item.included" class="text-right">
-                {{ "Included" }}
-              </div>
-              <div v-else class="text-right">
-                ${{ item.price | withComma }}
-              </div>
+              <div class="color-red font-regular">{{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}</div>
+              <div v-if="item.included" class="text-right">{{ "Included" }}</div>
+              <div v-else class="text-right">${{ item.price | withComma }}</div>
             </div>
           </div>
         </div>
@@ -117,18 +105,18 @@
         </div>
         <div class="field">
           <money
-            v-if="serviceType !== 'included'"
             v-model="unit"
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
           />
         </div>
         <div class="field">
           <money
-            v-if="serviceType !== 'included'"
             :value="qty * unit"
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
             readonly
           />
         </div>
@@ -144,9 +132,9 @@
       </div>
 
       <div v-if="isRequiredPlannerChoice" class="d-flex align-start mt-20">
-        <img :src="`${$iconURL}Onboarding/enter-gray.svg`" style="margin-right: 10px">
+        <img :src="`${$iconURL}Onboarding/enter-gray.svg`" style="margin-right: 10px" />
         <div>
-          <div v-for="(option, index) in plannerChoices" :key="`planer-option-${index}`" class="d-flex mb-20">
+          <div class="d-flex mb-20" v-for="(option, index) in plannerChoices" :key="`planer-option-${index}`">
             <div class="mr-10">
               <span class="font-bold">Option {{ ("0" + (index + 1)).slice(-2) }}</span>
               <div>
@@ -157,7 +145,7 @@
                   type="text"
                   :placeholder="`Type option here`"
                   :class="{ isFilled: !!option.description }"
-                >
+                />
               </div>
             </div>
             <div style="width: 150px">
@@ -177,16 +165,14 @@
           <div>
             <md-button class="md-simple md-red edit-btn" @click="addNewChoice">
               <md-icon>add_circle_outline</md-icon>
-              Add option {{ ("0" + (plannerChoices.length + 1)).slice(-2) }}
-            </md-button>
+              Add option {{ ("0" + (plannerChoices.length + 1)).slice(-2) }}</md-button
+            >
           </div>
         </div>
       </div>
       <div v-if="isEditingComment" class="mt-30">
-        <div class="pb-10">
-          <img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10"> <u>Add comment</u>
-        </div>
-        <textarea v-model="comment" class="textbox-comment" placeholder="Type your comment here" />
+        <div class="pb-10"><img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10" /> <u>Add comment</u></div>
+        <textarea v-model="comment" class="textbox-comment" placeholder="Type your comment here"></textarea>
         <md-button
           class="maryoku-btn md-simple md-black"
           style="vertical-align: bottom"
@@ -200,7 +186,7 @@
       v-if="showAskSaveChangeModal"
       @cancel="showAskSaveChangeModal = false"
       @save="handleSave"
-    />
+    ></ask-save-change>
   </div>
 </template>
 
@@ -275,102 +261,6 @@ export default {
       showAutoCompletePanel: false,
       showAskSaveChangeModal: false,
     };
-  },
-  computed: {
-    isDisabledAdd() {
-      if (this.serviceType === "cost") {
-        return !this.qty || !this.unit || !this.serviceItem;
-      }
-      return !this.qty || !this.serviceItem;
-    },
-    subTotal() {
-      return this.qty * this.unit;
-    },
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    filteredSuggestItems() {
-      if (!this.serviceItem) return [];
-      return this.suggestedItems.filter(item =>
-        item.description.toLowerCase().startsWith(this.serviceItem.toLowerCase()),
-      );
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    isAutoCompletedValue() {
-      return this.selectedSuggestItemIndex >= 0;
-    },
-    suggestedItems() {
-      const items = [];
-      this.vendorServices.forEach(category => {
-        if (category.name !== "accessibility") {
-          category.subCategories.forEach(subCat => {
-            if (
-              subCat.name.toLowerCase() === "inclusion" ||
-              subCat.name.toLowerCase() === "sustainability" ||
-              subCat.name.toLowerCase() === "diversity"
-            )
-              return;
-            subCat.items.forEach(item => {
-              if (item.hideOnAutoComplete) return;
-              const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
-              const camelized = this.camelize(capitalized);
-              const profileService = this.profileServices[camelized];
-
-              if (camelized === "customService" && profileService) {
-                const customServiceItems = profileService.data;
-                customServiceItems.forEach(service_item => {
-                  if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
-                    items.push({
-                      description: service_item.name.charAt(0).toUpperCase() + service_item.name.slice(1),
-                      qty: 1,
-                      included: false,
-                      price: `${service_item.price}`,
-                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-                    });
-                  }
-                });
-              }
-
-              const requestItemByPlanner = null;
-              if (item.available) {
-                item.available.forEach(availableItem => {
-                  const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
-                  if (items.findIndex(it => it.description.toLowerCase() === description.toLowerCase()) < 0) {
-                    items.push({
-                      description,
-                      qty: item.value ? item.value : 1,
-                      included:
-                        profileService &&
-                        profileService.checked &&
-                        !profileService.xIncluded &&
-                        profileService.included,
-                      price: profileService ? Number(profileService.value) : "",
-                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-                    });
-                  }
-                });
-              }
-              if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
-                items.push({
-                  description: capitalized,
-                  qty: item.value ? item.value : 1,
-                  included:
-                    profileService && profileService.checked && !profileService.xIncluded && profileService.included,
-                  price: profileService ? Number(profileService.value) : "",
-                  requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-                });
-              }
-            });
-          });
-        }
-      });
-      return items;
-    },
-  },
-  watch: {
-    profileServices() {},
   },
   created() {
     this.$root.$on("clear-slide-pos", item => {
@@ -488,10 +378,10 @@ export default {
             included: true,
             value: null,
             xIncluded: true,
-        };
+        }
         this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
 
-        console.log("vendor", vendor);
+        console.log('vendor', vendor);
         await this.$store.dispatch("vendorProposal/saveVendor", vendor);
         this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },
@@ -537,6 +427,102 @@ export default {
       this.cancel();
       this.showAskSaveChangeModal = false;
     },
+  },
+  computed: {
+    isDisabledAdd() {
+      if (this.serviceType === "cost") {
+        return !this.qty || !this.unit || !this.serviceItem;
+      }
+      return !this.qty || !this.serviceItem;
+    },
+    subTotal() {
+      return this.qty * this.unit;
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    filteredSuggestItems() {
+      if (!this.serviceItem) return [];
+      return this.suggestedItems.filter(item =>
+        item.description.toLowerCase().startsWith(this.serviceItem.toLowerCase()),
+      );
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    isAutoCompletedValue() {
+      return this.selectedSuggestItemIndex >= 0;
+    },
+    suggestedItems() {
+      const items = [];
+      this.vendorServices.forEach(category => {
+        if (category.name !== "accessibility") {
+          category.subCategories.forEach(subCat => {
+            if (
+              subCat.name.toLowerCase() === "inclusion" ||
+              subCat.name.toLowerCase() === "sustainability" ||
+              subCat.name.toLowerCase() === "diversity"
+            )
+              return;
+            subCat.items.forEach(item => {
+              if (item.hideOnAutoComplete) return;
+              const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+              const camelized = this.camelize(capitalized);
+              const profileService = this.profileServices[camelized];
+
+              if (camelized === 'customService' && profileService) {
+                const customServiceItems = profileService.data;
+                customServiceItems.forEach(service_item => {
+                  if (items.findIndex(it => it.description.toLowerCase() === service_item.name.toLowerCase()) < 0) {
+                    items.push({
+                      description: service_item.name.charAt(0).toUpperCase() + service_item.name.slice(1),
+                      qty: 1,
+                      included: false,
+                      price: `${service_item.price}`,
+                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+                    });
+                  }
+                })
+              }
+
+              const requestItemByPlanner = null;
+              if (item.available) {
+                item.available.forEach(availableItem => {
+                  const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
+                  if (items.findIndex(it => it.description.toLowerCase() === description.toLowerCase()) < 0) {
+                    items.push({
+                      description,
+                      qty: item.value ? item.value : 1,
+                      included:
+                        profileService &&
+                        profileService.checked &&
+                        !profileService.xIncluded &&
+                        profileService.included,
+                      price: profileService ? Number(profileService.value) : "",
+                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+                    });
+                  }
+                });
+              }
+              if (items.findIndex(it => it.description.toLowerCase() === capitalized.toLowerCase()) < 0) {
+                items.push({
+                  description: capitalized,
+                  qty: item.value ? item.value : 1,
+                  included:
+                    profileService && profileService.checked && !profileService.xIncluded && profileService.included,
+                  price: profileService ? Number(profileService.value) : "",
+                  requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+                });
+              }
+            });
+          });
+        }
+      });
+      return items;
+    },
+  },
+  watch: {
+    profileServices() {},
   },
 };
 </script>

@@ -7,30 +7,26 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`">
-        <div class="font-size-30 font-bold mt-20 color-purple">
-          How do you want to send this proposal?
-        </div>
+        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`" />
+        <div class="font-size-30 font-bold mt-20 color-purple">How do you want to send this proposal?</div>
         <div class="mt-20 font-size-20">
           <span class="font-bold color-purple">To:</span> {{ event.customer ? event.customer.email : "" }}
         </div>
         <div class="mt-30 d-flex justify-content-center mb-30">
-          <div class="mr-40 type-button" :class="{ active: emailAccount === 'email' }" @click="emailAccount = 'email'">
-            <img :src="`${$iconURL}NewSubmitPorposal/Group 16982.svg`" style="margin-top: -10px; width: 40px">
+          <div @click="emailAccount = 'email'" class="mr-40 type-button" :class="{ active: emailAccount === 'email' }">
+            <img :src="`${$iconURL}NewSubmitPorposal/Group 16982.svg`" style="margin-top: -10px; width: 40px" />
           </div>
-          <div class="type-button" :class="{ active: emailAccount === 'whatsapp' }" @click="sendSMS">
-            <img :src="`${$iconURL}NewSubmitPorposal/Group 16974.svg`" style="margin-top: -10px; width: 40px">
+          <div @click="sendSMS" class="type-button" :class="{ active: emailAccount === 'whatsapp' }">
+            <img :src="`${$iconURL}NewSubmitPorposal/Group 16974.svg`" style="margin-top: -10px; width: 40px" />
           </div>
         </div>
         <div class="d-flex justify-content-center">
-          <maryoku-input v-model="link" class="width-50" input-style="sharing" theme="purple" />
+          <maryoku-input class="width-50" inputStyle="sharing" v-model="link" theme="purple"></maryoku-input>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-vendor maryoku-btn" @click="submitProposal">
-        Send
-      </md-button>
+      <md-button class="md-vendor maryoku-btn" @click="submitProposal">Send</md-button>
     </template>
   </modal>
 </template>
@@ -64,6 +60,10 @@ export default {
       default: "",
     },
   },
+  created() {
+    this.api = gapi;
+    this.api.load("client:auth2", this.initClient);
+  },
   data() {
     return {
       showZoomLink: false,
@@ -72,10 +72,6 @@ export default {
       authorized: false,
       sharelink: "",
     };
-  },
-  created() {
-    this.api = gapi;
-    this.api.load("client:auth2", this.initClient);
   },
   methods: {
     close() {
@@ -166,8 +162,8 @@ export default {
       this.$emit("submit");
     },
     sendSMS(){
-      console.log("sendSMS");
-      this.$emit("sms");
+      console.log('sendSMS');
+      this.$emit('sms');
     }
   },
 };

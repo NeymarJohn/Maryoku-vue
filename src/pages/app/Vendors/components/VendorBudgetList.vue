@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-budget-list-wrapper">
     <h4>
-      <img :src="`${iconsUrl}Asset 500.svg`">
+      <img :src="`${iconsUrl}Asset 500.svg`" />
       {{ title }}
     </h4>
     <div class="total">
@@ -10,14 +10,14 @@
       <span v-else>Unknown</span>
     </div>
     <p>
-      <img :src="`${iconsUrl}Group 5180.svg`">
+      <img :src="`${iconsUrl}Group 5180.svg`" />
       {{ description }}
     </p>
     <div class="budget-list">
       <div class="items">
-        <div v-for="(r, ri) in validRequirements" :key="ri" class="item">
+        <div class="item" v-for="(r, ri) in validRequirements" :key="ri">
           <span>
-            <img :src="`${$iconURL}Budget Elements/${r.icon}`">
+            <img :src="`${$iconURL}Budget Elements/${r.icon}`" />
             {{ r.title }}
           </span>
           <span v-if="r.allocatedBudget">${{ r.allocatedBudget | withComma }}</span>
@@ -36,14 +36,9 @@
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "VendorBudgetList",
+  name: "vendor-budget-list",
   components: {
     VueElementLoading,
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
   },
   props: {
     title: String,
@@ -57,6 +52,17 @@ export default {
     rawRequirements: [],
     iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
   }),
+  created() {},
+  mounted() {
+    console.log('validRequirements', this.validRequirements);
+    console.log('proposalReq', this.proposalRequest);
+  },
+  methods: {
+      getServiceCategory(category) {
+          console.log('getServiceCategory', this.serviceCategories, category);
+          return this.serviceCategories.find((item) => item.key === category);
+      },
+  },
   computed: {
     totalBudget() {
       const sum = this.validRequirements.reduce((s, item) => {
@@ -73,7 +79,7 @@ export default {
     averageBudget(){
           let service = this.getServiceCategory(this.vendor.eventCategory.key);
 
-          console.log("service", service);
+          console.log('service', service)
           let budget = this.proposalRequest.eventData.numberOfParticipants * service.basicCostPerGuest;
           if (service.minCost && budget < service.minCost) {
               return service.minCost;
@@ -94,18 +100,12 @@ export default {
       return this.$store.state.vendorProposal.vendor;
     },
   },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   watch: {},
-  created() {},
-  mounted() {
-    console.log("validRequirements", this.validRequirements);
-    console.log("proposalReq", this.proposalRequest);
-  },
-  methods: {
-      getServiceCategory(category) {
-          console.log("getServiceCategory", this.serviceCategories, category);
-          return this.serviceCategories.find((item) => item.key === category);
-      },
-  },
 };
 </script>
 <style lang="scss" scoped>

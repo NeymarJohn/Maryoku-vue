@@ -3,7 +3,7 @@
     <template slot="header">
       <div class="maryoku-modal-header">
         <h2>
-          <img :src="`${$iconURL}common/email-dark.svg`" class="page-icon mr-10">
+          <img :src="`${$iconURL}common/email-dark.svg`" class="page-icon mr-10" />
           Ask the planner any questions you have!
         </h2>
         <div>We will make sure she will get back to you as soon as possible</div>
@@ -12,17 +12,13 @@
     <template slot="body">
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
-          <textarea v-mode="message" placeholder="Type your message here..." rows="10" />
+          <textarea v-mode="message" placeholder="Type your message here..." rows="10"></textarea>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
-        Cancel
-      </md-button>
-      <md-button class="md-vendor md-bold add-category-btn" @click="sendQuestion">
-        Send
-      </md-button>
+      <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
+      <md-button class="md-vendor md-bold add-category-btn" @click="sendQuestion">Send</md-button>
     </template>
   </modal>
 </template>
@@ -31,7 +27,7 @@
 import { Modal, MaryokuInput } from "@/components";
 
 export default {
-  name: "SharingModal",
+  name: "sharing-modal",
   components: {
     Modal,
   },

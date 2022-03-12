@@ -9,16 +9,16 @@
       @dragleave="modalMaskClick"
     >
       <div class="modal-wrapper ">
-        <div v-click-outside="closeModal" :class="containerClass">
+        <div :class="containerClass" v-click-outside="closeModal">
           <div class=" d-flex flex-column align-center content-wrapper">
             <div class="modal-header">
-              <slot name="header" />
+              <slot name="header"></slot>
             </div>
             <div class="modal-body">
-              <slot name="body" />
+              <slot name="body"></slot>
             </div>
             <div class="modal-footer">
-              <slot name="footer" />
+              <slot name="footer"></slot>
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
-    <div v-if="user" class="md-layout-item md-size-100">
+    <div class="md-layout-item md-size-100" v-if="user">
       <div class="pull-right">
         <drop-down direction="down" :hover="true">
-          <md-button slot="title" name="user-top-menu" class="md-purple md-sm" data-toggle="dropdown">
+          <md-button name="user-top-menu" slot="title" class="md-purple md-sm" data-toggle="dropdown">
             <md-icon>person</md-icon>
             {{ user ? user.displayName : "" }}
           </md-button>
@@ -15,7 +15,8 @@
                 name="user-top-menu-my-profile"
                 class="user-top-menu-my-profile"
                 @click="openMyProfile"
-              >My Profile</a>
+                >My Profile</a
+              >
             </li>
             <li>
               <a
@@ -23,31 +24,30 @@
                 name="user-top-menu-my-profile"
                 class="user-top-menu-my-profile"
                 @click="openMyEvents"
-              >My Events</a>
+                >My Events</a
+              >
             </li>
-            <li class="divider" />
+            <li class="divider"></li>
             <li>
-              <router-link name="user-top-menu-sign-out" class="user-top-menu-sign-out" :to="{ path: '/signout' }">
-                Sign Out
-              </router-link>
+              <router-link name="user-top-menu-sign-out" class="user-top-menu-sign-out" :to="{ path: '/signout' }"
+                >Sign Out</router-link
+              >
             </li>
           </ul>
         </drop-down>
       </div>
     </div>
-    <div v-if="!user">
-&nbsp;
-    </div>
+    <div v-if="!user">&nbsp;</div>
     <div class="md-layout-item md-size-100">
       <md-card class="event-details">
-        <md-card-content v-if="calendarEvent.id" class="md-layout event-details_content">
+        <md-card-content class="md-layout event-details_content" v-if="calendarEvent.id">
           <!-- Event Banner -->
           <event-banner
             :user-response.sync="userResponse"
             :user-info.sync="user"
             :event.sync="calendarEvent"
             :readonly.sync="readonly"
-          />
+          ></event-banner>
           <!-- ./Event Banner -->
 
           <!-- Event Info -->
@@ -55,47 +55,43 @@
             <div class="event-title-date">
               <h4>{{ calendarEvent.title }}</h4>
 
-              <div class="event-date">
-                {{ getEventDate(calendarEvent.eventStartMillis) }}
-              </div>
+              <div class="event-date">{{ getEventDate(calendarEvent.eventStartMillis) }}</div>
 
-              <div class="number-of-users">
-                12 people accepted
-              </div>
+              <div class="number-of-users">12 people accepted</div>
             </div>
 
-            <event-tabs v-if="!isMobile" :event="calendarEvent" :readonly="readonly" />
+            <event-tabs :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-tabs>
 
-            <event-images v-if="!isMobile" :event="calendarEvent" :readonly="readonly" />
+            <event-images :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-images>
 
             <event-questions-answers
-              v-if="!isMobile"
               :event="calendarEvent"
               :readonly="readonly"
-            />
+              v-if="!isMobile"
+            ></event-questions-answers>
           </div>
           <!-- ./Event Info -->
 
           <!-- Event TimeLine -->
-          <div v-if="!isMobile" class="md-layout-item md-size-50 md-small-size-100">
-            <event-time-line-items :event="calendarEvent" :readonly="readonly" />
+          <div class="md-layout-item md-size-50 md-small-size-100" v-if="!isMobile">
+            <event-time-line-items :event="calendarEvent" :readonly="readonly"></event-time-line-items>
           </div>
           <!-- ./Event Timeline -->
 
           <!-- Mobile Tabs -->
-          <div v-if="isMobile" class="md-layout-item md-size-100 event-details-tabs">
+          <div class="md-layout-item md-size-100 event-details-tabs" v-if="isMobile">
             <tabs :tab-name="['DETAILS', 'IMAGES', 'TIMELINE']" color-button="warning">
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
-                <event-tabs :event="calendarEvent" :readonly="readonly" />
+                <event-tabs :event="calendarEvent" :readonly="readonly"></event-tabs>
 
-                <event-questions-answers :event="calendarEvent" :readonly="readonly" />
+                <event-questions-answers :event="calendarEvent" :readonly="readonly"></event-questions-answers>
               </template>
               <template slot="tab-pane-2">
-                <event-images :event="calendarEvent" :readonly="readonly" />
+                <event-images :event="calendarEvent" :readonly="readonly"></event-images>
               </template>
               <template slot="tab-pane-3">
-                <event-time-line-items :event="calendarEvent" :readonly="readonly" />
+                <event-time-line-items :event="calendarEvent" :readonly="readonly"></event-time-line-items>
               </template>
             </tabs>
           </div>
@@ -162,17 +158,6 @@ export default {
     DietaryConstraintsModal,
     MyEventsPanel,
   },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("Do, MMM");
-    },
-    formatTime: function (date) {
-      return moment(date).format("h:00 A");
-    },
-    formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, "hours");
-    },
-  },
 
   data() {
     return {
@@ -188,32 +173,6 @@ export default {
       pendingResponse: null,
     };
   },
-  computed: {
-    pieChart() {
-      return {
-        data: {
-          labels: [" ", " "], // should be empty to remove text from chart
-          series: this.seriesData,
-        },
-        options: {
-          padding: 0,
-          height: 120,
-          donut: true,
-          donutWidth: 12,
-        },
-      };
-    },
-    date: {
-      get() {
-        return this.calendarEvent.eventStartMillis ? new Date(this.calendarEvent.eventStartMillis) : null;
-      },
-      set(value) {
-        let eventStartTime = new Date(value).getTime();
-        this.$set(this, "newEventStartTime", eventStartTime);
-      },
-    },
-  },
-  watch: {},
   created() {
     const givenToken = this.$route.query.token;
     if (givenToken) {
@@ -367,6 +326,43 @@ export default {
         });
     },
   },
+  computed: {
+    pieChart() {
+      return {
+        data: {
+          labels: [" ", " "], // should be empty to remove text from chart
+          series: this.seriesData,
+        },
+        options: {
+          padding: 0,
+          height: 120,
+          donut: true,
+          donutWidth: 12,
+        },
+      };
+    },
+    date: {
+      get() {
+        return this.calendarEvent.eventStartMillis ? new Date(this.calendarEvent.eventStartMillis) : null;
+      },
+      set(value) {
+        let eventStartTime = new Date(value).getTime();
+        this.$set(this, "newEventStartTime", eventStartTime);
+      },
+    },
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("Do, MMM");
+    },
+    formatTime: function (date) {
+      return moment(date).format("h:00 A");
+    },
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, "hours");
+    },
+  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

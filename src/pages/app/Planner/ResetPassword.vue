@@ -1,82 +1,75 @@
 <template>
   <div class="md-layout">
-    <Loader :active="loading" is-full-screen />
+    <Loader :active="loading" isFullScreen/>
     <div class="md-layout-item">
-      <div class="d-flex flex-column">
-        <img class="mx-auto" :src="`${$iconURL}PinkIcons/icon-reset-password-planner.svg`">
-        <div class="text-center font-size-30 font-bold color-black my-20">
-          Reset Password
+        <div class="d-flex flex-column">
+            <img class="mx-auto" :src="`${$iconURL}PinkIcons/icon-reset-password-planner.svg`"/>
+            <div class="text-center font-size-30 font-bold color-black my-20">Reset Password</div>
         </div>
-      </div>
       <signup-card>
-        <div v-if="!inValidToken" slot="content-right" class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain">
-          <template v-if="succeded">
-            <div class="font-size-16 text-center font-bold">
-              Your password updated successfully.
-              <br>
-              You can sign in with new password
-            </div>
-            <div class="d-flex justify-content-center">
-              <md-button class="md-simple normal-btn md-vendor mt-20" @click="toSignin">
-                Go to Signin
-              </md-button>
-            </div>
-          </template>
-          <template v-else>
-            <div class="maryoku_input">
-              <input
-                ref="password"
-                v-model="password"
-                v-validate="'required|min:8'"
-                class="form-input my-15"
-                type="password"
-                name="password"
-                placeholder="New password"
-                @input="change"
-              >
-              <span v-if="errors.has('password')" class="md-error color-red">{{ errors.first('password') }}</span>
-            </div>
-            <div class="maryoku_input">
-              <input
-                v-model="confirm_password"
-                v-validate="'required|min:8|confirmed:password'"
-                class="form-input my-15"
-                type="password"
-                name="pw_confirm"
-                data-vv-as="password"
-                placeholder="Confirm password"
-                @input="change"
-              >
-              <span v-if="errors.has('pw_confirm')" class="md-error color-red">{{ errors.first('pw_confirm') }}</span>
-            </div>
-            <div class="form-buttons">
-              <md-button slot="footer" class="md-default md-red md-maryoku mt-4" @click="updatePassword">
-                Update Password
-              </md-button>
-            </div>
-          </template>
-        </div>
-        <div v-if="inValidToken" slot="content-right" class="text-center md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain">
-          <div class="font-size-16 font-bold text-center">
-            The current token is expired.
+          <div v-if="!inValidToken" class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
+              <template v-if="succeded">
+                  <div class="font-size-16 text-center font-bold">
+                      Your password updated successfully.
+                      <br/>
+                      You can sign in with new password
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <md-button class="md-simple normal-btn md-vendor mt-20" @click="toSignin">Go to Signin</md-button>
+                  </div>
+              </template>
+              <template v-else>
+                  <div class="maryoku_input">
+                      <input
+                          class="form-input my-15"
+                          type="password"
+                          v-validate="'required|min:8'"
+                          name="password"
+                          placeholder="New password"
+                          v-model="password"
+                          ref="password"
+                          @input="change"
+                      />
+                      <span class="md-error color-red" v-if="errors.has('password')">{{ errors.first('password') }}</span>
+                  </div>
+                  <div class="maryoku_input">
+                      <input
+                          class="form-input my-15"
+                          type="password"
+                          v-validate="'required|min:8|confirmed:password'"
+                          name="pw_confirm"
+                          v-model="confirm_password"
+                          data-vv-as="password"
+                          placeholder="Confirm password"
+                          @input="change"
+                      />
+                      <span class="md-error color-red" v-if="errors.has('pw_confirm')">{{ errors.first('pw_confirm') }}</span>
+                  </div>
+                  <div class="form-buttons">
+                      <md-button @click="updatePassword" class="md-default md-red md-maryoku mt-4" slot="footer">Update Password</md-button>
+                  </div>
+              </template>
+
           </div>
-          <br>
-          <md-button class="md-vendor md-default normal-btn md-simple" @click="toSignin">
-            Signin
-          </md-button>
-        </div>
+          <div v-if="inValidToken" class="text-center md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
+              <div class="font-size-16 font-bold text-center">
+                  The current token is expired.
+              </div>
+              <br/>
+              <md-button @click="toSignin" class="md-vendor md-default normal-btn md-simple">Signin</md-button>
+          </div>
       </signup-card>
-      <div class="d-flex flex-column">
-        <img class="mx-auto mt-100" :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`">
-      </div>
+        <div class="d-flex flex-column">
+            <img class="mx-auto mt-100" :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`">
+        </div>
     </div>
   </div>
 </template>
 
 <script>
-import { SignupCard, MaryokuInput } from "@/components";
-import InputText from "@/components/Inputs/InputText.vue";
-import Loader from "@/components/loader/Loader.vue";
+import { SignupCard, MaryokuInput } from '@/components'
+import InputText from '@/components/Inputs/InputText.vue'
+import Loader from '@/components/loader/Loader.vue'
 
 export default {
   components: {
@@ -88,7 +81,7 @@ export default {
     data () {
         return {
             inValidToken: false,
-            error: "",
+            error: '',
             loading: false,
             firstname: null,
             terms: false,
@@ -102,80 +95,80 @@ export default {
                 password: false,
             },
             submitted:false
-        };
+        }
+    },
+    methods: {
+        updatePassword () {
+            console.log(this.$validator)
+            const email = this.$route.query.email
+            const token = this.$route.query.resetToken
+            if (this.password !== this.confirm_password) return
+            this.$validator.validateAll().then(isValid => {
+                console.log(this.$validator)
+                if (isValid) {
+                    this.$http.post(`${process.env.SERVER_URL}/1/reset-password`, { username : email, token : token, password: this.password}, { 'ContentType': 'application/json' })
+                        .then((resp) => {
+                            console.log(resp)
+                            this.loading = false
+                            if (resp.status) {
+                                this.succeded = true
+                            } else {
+                                this.error = resp.message
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error)
+                            this.loading = false
+                            if (error.response.status === 401) {
+                                this.error = 'Sorry, No such user name or password address.'
+                            } else {
+                                this.error = 'Temporary failure, try again later'
+                            }
+                        })
+                } else  {
+                    this.error = 'Invalid password. Minimum length is 8 letters.'
+                }
+            })
+
+        },
+        toSingUp() {
+            this.$router.push({ path: '/vendor/signup' })
+        },
+        toSignin() {
+            this.$router.push({ path: '/vendor/signin' })
+        },
+        change(){
+            this.error = '';
+        }
     },
     watch: {
         password () {
-            this.touched.password = true;
+            this.touched.password = true
         }
     },
     created () {
-        const token = this.$route.query.resetToken;
-        this.$http.post(`${process.env.SERVER_URL}/1/check-password-token`, { token: token }, { "ContentType": "application/json" })
+        const token = this.$route.query.resetToken
+        this.$http.post(`${process.env.SERVER_URL}/1/check-password-token`, { token: token }, { 'ContentType': 'application/json' })
             .then((resp) => {
-                console.log(resp);
-                this.loading = false;
+                console.log(resp)
+                this.loading = false
                 if (resp.data.isValid) {
-                    this.inValidToken = false;
+                    this.inValidToken = false
                 } else {
                     this.inValidToken = false;
                 }
             })
             .catch((error) => {
-                console.error(error);
-                this.loading = false;
+                console.error(error)
+                this.loading = false
                 if (error.response.status === 401) {
-                    this.error = "Sorry, No such user name or email address.";
+                    this.error = 'Sorry, No such user name or email address.'
                 } else {
-                    this.error = "Temporary failure, try again later";
+                    this.error = 'Temporary failure, try again later'
                 }
             });
     },
-    methods: {
-        updatePassword () {
-            console.log(this.$validator);
-            const email = this.$route.query.email;
-            const token = this.$route.query.resetToken;
-            if (this.password !== this.confirm_password) return;
-            this.$validator.validateAll().then(isValid => {
-                console.log(this.$validator);
-                if (isValid) {
-                    this.$http.post(`${process.env.SERVER_URL}/1/reset-password`, { username : email, token : token, password: this.password}, { "ContentType": "application/json" })
-                        .then((resp) => {
-                            console.log(resp);
-                            this.loading = false;
-                            if (resp.status) {
-                                this.succeded = true;
-                            } else {
-                                this.error = resp.message;
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                            this.loading = false;
-                            if (error.response.status === 401) {
-                                this.error = "Sorry, No such user name or password address.";
-                            } else {
-                                this.error = "Temporary failure, try again later";
-                            }
-                        });
-                } else  {
-                    this.error = "Invalid password. Minimum length is 8 letters.";
-                }
-            });
-
-        },
-        toSingUp() {
-            this.$router.push({ path: "/vendor/signup" });
-        },
-        toSignin() {
-            this.$router.push({ path: "/vendor/signin" });
-        },
-        change(){
-            this.error = "";
-        }
-    },
-};
+}
 </script>
 <style lang="scss" scoped>
     p.description {

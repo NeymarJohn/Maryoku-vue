@@ -2,12 +2,13 @@
   <div class="proposal-steps-wrapper">
     <div class="title-cont">
       <div class="d-flex justify-content-center font-size-30 mb-10">
-        <img :src="`${$iconURL}Budget Elements/${eventCategory.icon}`" class="page-icon">
+        <img :src="`${$iconURL}Budget Elements/${eventCategory.icon}`" class="page-icon" />
         <span> {{ vendor.eventCategory.fullTitle }} Proposal &nbsp;</span>
         <span class="color-vendor font-size-30 font-bold">{{ vendor.companyName }}</span>
       </div>
       <div class="d-flex justify-content-center">
-        <span>{{ selectedServices }}</span><span v-if="serviceTime" class="seperator" /><span>{{ serviceTime }}</span>
+        <span>{{ selectedServices }}</span
+        ><span v-if="serviceTime" class="seperator"></span><span>{{ serviceTime }}</span>
       </div>
     </div>
     <div class="steps-cont">
@@ -15,25 +16,25 @@
         <li :class="[{ active: step >= 0 }, { current: step == 0 }]" @click="goToStep(0)">
           <span v-if="step == 0"><i>&#8226;</i></span>
           <span v-else><md-icon>check</md-icon></span>
-          <br>
-          Describe Your <br>Vision
+          <br />
+          Describe Your <br />Vision
         </li>
         <li :class="[{ active: step > 1 }, { current: step == 1 }, { inactive: step < 1 }]" @click="goToStep(1)">
           <span v-if="step >= 2"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
-          <br>
-          Propose <br>Your Bid
+          <br />
+          Propose <br />Your Bid
         </li>
         <li v-if="event.components.length" :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
-          <br>
-          Additional <br>Services
+          <br />
+          Additional <br />Services
         </li>
         <li :class="[{ current: step >= 3 }, { inactive: step < 3 }]" @click="goToStep(3)">
           <span v-if="step >= 3"><i>&#8226;</i></span>
           <span v-else><i>&#8226;</i></span>
-          <br>Preview <br>Proposal
+          <br />Preview <br />Proposal
         </li>
       </ul>
     </div>
@@ -41,7 +42,7 @@
 </template>
 <script>
 export default {
-  name: "ProposalSteps",
+  name: "proposal-steps",
   components: {},
   props: {
     hasVisionStep: Boolean,
@@ -54,6 +55,15 @@ export default {
       lookingFor: [],
     };
   },
+  methods: {
+    goToStep(step) {
+      this.$store.commit("vendorProposal/setWizardStep", step);
+    },
+  },
+  created() {},
+  mounted() {
+    this.lookingFor = this.proposalRequest.plannerRequirement.types[this.vendor.eventCategory.key];
+  },
   computed: {
     step() {
       return this.$store.state.vendorProposal.wizardStep;
@@ -61,7 +71,7 @@ export default {
     selectedServices() {
       let str = "";
 
-      if (!this.lookingFor) return "";
+      if (!this.lookingFor) return '';
       return this.lookingFor.join(", ");
     },
     serviceTime() {
@@ -100,15 +110,6 @@ export default {
     }
   },
   watch: {},
-  created() {},
-  mounted() {
-    this.lookingFor = this.proposalRequest.plannerRequirement.types[this.vendor.eventCategory.key];
-  },
-  methods: {
-    goToStep(step) {
-      this.$store.commit("vendorProposal/setWizardStep", step);
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

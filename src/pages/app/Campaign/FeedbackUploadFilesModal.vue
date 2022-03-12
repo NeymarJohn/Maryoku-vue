@@ -5,12 +5,10 @@
       'upload-files-modal-with-carousel': !!files.length
     }"
   >
-    <template slot="header">
+    <template slot="header" >
       <div class="upload-files-modal-header-content">
         <div>
-          <div class="upload-files-title">
-            Upload Files
-          </div>
+          <div class="upload-files-title">Upload Files</div>
           <div class="upload-files-text">
             Drag and drop your files, you can upload several files together,
             click here to upload files from your computer
@@ -21,7 +19,7 @@
             <md-icon>clear</md-icon>
           </md-button>
         </div>
-        <div v-if="files.length" class="upload-files-list">
+        <div v-if="files.length" class="upload-files-list" >
           <div
             v-for="(file, index) in files"
             :class="{
@@ -30,11 +28,11 @@
             }"
           >
             <span class="upload-files-list-item-text">
-              {{ file.name }}
+              {{file.name}}
             </span>
-            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.url)">
+            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.url)" >
               <md-icon class="icon-close">close</md-icon>
-            </span>
+              </span>
           </div>
         </div>
       </div>
@@ -43,25 +41,19 @@
       <div v-if="!files.length" class="upload-files-modal-body-content">
         <div class="upload-files-white-cube">
           <vue-dropzone
-            id="dropzone"
             ref="myVueDropzone"
+            id="dropzone"
             :options="dropzoneOptions"
-            :use-custom-slot="true"
-            class="file-drop-zone upload-section text-center drop feedback-drop-zone"
+            :useCustomSlot="true"
             @vdropzone-file-added="fileAdded"
+            class="file-drop-zone upload-section text-center drop feedback-drop-zone"
           >
             <md-button class="choose-file-button">
               <img src="/static/icons/red-clip.svg">
-              <div class="ml-10">
-                Choose File
-              </div>
+              <div class="ml-10">Choose File</div>
             </md-button>
-            <div class="font-size-14">
-              Or
-            </div>
-            <div class="drag-your-file-text">
-              Drag your file here
-            </div>
+            <div class="font-size-14">Or</div>
+            <div class="drag-your-file-text">Drag your file here</div>
           </vue-dropzone>
         </div>
       </div>
@@ -77,24 +69,16 @@
     <template slot="footer">
       <div class="upload-files-modal-footer-content">
         <div v-if="!files.length" class="d-flex">
-          <img src="/static/icons/red-delete-icon.svg">
-          <div class="bottom-block-delete-text">
-            Delete the images marked with V
-          </div>
+          <img src="/static/icons/red-delete-icon.svg" >
+          <div class="bottom-block-delete-text">Delete the images marked with V</div>
         </div>
         <div v-else class="d-flex">
-          <img src="/static/icons/red-delete-icon.svg">
-          <div class="bottom-block-presentation-text">
-            Mark in V the presentation you want to appear in the main view
-          </div>
+          <img src="/static/icons/red-delete-icon.svg" >
+          <div class="bottom-block-presentation-text">Mark in V the presentation you want to appear in the main view</div>
         </div>
-        <div class="footer-content-actions">
-          <div class="cancel-text-bottom-block" @click="close">
-            Cancel
-          </div>
-          <md-button class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default">
-            Upload files
-          </md-button>
+        <div class="footer-content-actions" >
+          <div class="cancel-text-bottom-block" @click="close">Cancel</div>
+          <md-button class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default" >Upload files</md-button>
         </div>
       </div>
     </template>
@@ -103,14 +87,13 @@
 
 <script>
 import { Modal } from "@/components";
-import { v4 as uuidv4 } from "uuid";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import S3Service from "@/services/s3.service";
 import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
 
 export default {
-  name: "FeedbackUploadImagesModal",
+  name: "feedback-upload-images-modal",
   components: {
     Modal,
     vueDropzone: vue2Dropzone,
@@ -132,9 +115,7 @@ export default {
   },
   computed: {
     images() {
-      return this.files
-        .filter((file) => file.type.includes("image"))
-        .map((file) => ({ src: file.url }));
+      return this.files.map((file) => ({ src: file.url }));
     }
   },
   methods: {
@@ -146,11 +127,11 @@ export default {
     },
     async fileAdded(file) {
       if (this.files.length === this.dropzoneOptions.maxFiles) return;
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}`, "events/proposal").then((fileURL) => {
+      let fileName = new Date().getTime();
+      S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then((fileURL) => {
         this.isLoading = false;
         if (this.files.length === this.dropzoneOptions.maxFiles) return;
-        this.files.push({ name: file.name, type: file.type, url: fileURL });
+        this.files.push({ name: file.name, url: fileURL });
       });
     },
     deleteFile(fileURL) {

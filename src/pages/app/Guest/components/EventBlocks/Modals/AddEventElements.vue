@@ -19,27 +19,24 @@
             @click="addElement(item)"
           >
             <drag
-              v-if="!item.childComponents"
               :class="[`md-button block-item text-center`, { active: isElementSelected(item) }]"
               :transfer-data="{ item }"
+              v-if="!item.childComponents"
+              >{{ item.title }}</drag
             >
-              {{ item.title }}
-            </drag>
           </div>
         </div>
       </div>
     </div>
-    <drop v-if="isLoaded" class="draggable-area" @drop="handleDrop">
+    <drop @drop="handleDrop" class="draggable-area" v-if="isLoaded">
       <p>
         <img
           src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop_white.png"
           alt="drag and drop"
           style="width: 52px"
-        >
+        />
       </p>
-      <p class style>
-        Drag Event Elements Here
-      </p>
+      <p class style>Drag Event Elements Here</p>
     </drop>
   </div>
 </template>

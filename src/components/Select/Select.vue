@@ -1,30 +1,27 @@
 <template>
-  <md-field :class="fieldStyle">
-    <label v-if="!editebleMode" :class="labelStyle">{{ label }}<span v-if="required" class="required-logo">*</span></label>
-    <label v-if="editebleMode" key="label-noeditable" style="cursor: pointer !important;" @click="toggleEditableComponent">{{ label }}</label>
-    <md-select v-if="typeof list[0]===&quot;object&quot;" :value="value" :name="name" @input="triggerFunc($event,name)">
-      <md-option v-for="item of list" :key="item[valueName[0]]" :value="item[valueName[1]]">
-        {{ `${trim?'':item[valueName[0]]} ${withSpan?item[valueName[1]]:''}` }}
-      </md-option>
-    </md-select>
-    <md-select v-else :name="name" @input="triggerFunc($event,name)">
-      <md-option v-for="(item,index) of list" :key="index" :value="item">
-        {{ item }}
-      </md-option>
-    </md-select>
-    <span v-if="!editebleMode" class="md-error">{{ isErrors?'Required':'' }}</span>
-    <span v-if="editebleMode" key="input-editable" class="md-suffix" style="display: inline-block; white-space: nowrap;">
-      <md-button v-show="isEditable" v-close-popover class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.prevent="makeAction"><md-icon>check</md-icon></md-button>
-      <md-button v-show="isEditable" v-close-popover class="md-simple md-just-icon md-round md-sm md-red" style="padding: 0; margin: 0; text-align: right;" @click.prevent="toggleEditableComponent"><md-icon>close</md-icon></md-button>
-      <md-button v-show="!isEditable" v-close-popover class="inline-edit md-simple md-just-icon md-round fa fa-edit button-height" @click="toggleEditableComponent">
-        <md-icon>edit</md-icon>
-      </md-button>
-    </span>
-  </md-field>
+    <md-field :class='fieldStyle'>
+
+        <label v-if='!editebleMode' :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
+        <label v-if='editebleMode' key='label-noeditable'  style="cursor: pointer !important;" @click='toggleEditableComponent'>{{label}}</label>
+        <md-select v-if='typeof list[0]==="object"'   :value='value'  :name="name"  @input="triggerFunc($event,name)">
+            <md-option v-for='item of list' :key='item[valueName[0]]' :value="item[valueName[1]]">{{`${trim?'':item[valueName[0]]} ${withSpan?item[valueName[1]]:''}`}}</md-option>
+        </md-select >
+        <md-select v-else  :name="name"  @input="triggerFunc($event,name)">
+            <md-option v-for='(item,index) of list' :key='index' :value="item">{{item}}</md-option>
+        </md-select >
+         <span v-if='!editebleMode' class='md-error'>{{isErrors?'Required':''}}</span>
+         <span v-if='editebleMode' class="md-suffix" key='input-editable' style="display: inline-block; white-space: nowrap;">
+            <md-button v-close-popover @click.prevent="makeAction" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;"><md-icon>check</md-icon></md-button>
+            <md-button v-close-popover @click.prevent="toggleEditableComponent" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-red" style="padding: 0; margin: 0; text-align: right;"><md-icon>close</md-icon></md-button>
+            <md-button v-close-popover v-show="!isEditable" class="inline-edit md-simple md-just-icon md-round fa fa-edit button-height" @click='toggleEditableComponent'>
+                <md-icon>edit</md-icon>
+            </md-button>
+      </span>
+    </md-field>
 </template>
 <script>
 export default {
-  name: "Select",
+  name: 'Select',
 
   model: {
   },
@@ -54,16 +51,16 @@ export default {
   },
   methods: {
     triggerFunc: function (value, name) {
-      this.onChange(value, name);
+      this.onChange(value, name)
     },
     toggleEditableComponent () {
     },
     makeAction () {
-      this.actionFunc(this.ctx, this.name);
+      this.actionFunc(this.ctx, this.name)
     }
 
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .required-logo{

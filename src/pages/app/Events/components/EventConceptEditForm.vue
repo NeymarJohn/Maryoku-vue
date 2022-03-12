@@ -1,19 +1,17 @@
 <template>
   <div class="create-concept-from">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-    <div class="form-name font-bold-extra font-size-30 mb-50">
-      Create Your Own Concept
-    </div>
+    <div class="form-name font-bold-extra font-size-30 mb-50">Create Your Own Concept</div>
     <div class="form-content">
       <div class="form-group">
         <label>What should we call it?</label>
         <input
-          v-model="editConcept.name"
-          v-validate="'required'"
           type="text"
           class="form-control"
           placeholder="Type your concept here…"
-        >
+          v-model="editConcept.name"
+          v-validate="'required'"
+        />
       </div>
       <div class="form-group add-tags-field">
         <label style="margin-bottom: 1em; display: inline-block">
@@ -27,32 +25,32 @@
           <template v-for="(tag, index) in taggingOptions">
             <div
               v-if="tag.selected"
-              :key="index"
               class="tags-list__item"
               :class="{ selected: tag.selected }"
+              :key="index"
               @click="removeTag(tag, index)"
             >
               {{ tag.name }}
-              <img :src="`${$iconURL}Concept/Asset 489.svg`">
+              <img :src="`${$iconURL}Concept/Asset 489.svg`" />
             </div>
             <div
               v-else
-              :key="index"
               class="tags-list__item"
               :class="{ selected: tag.selected }"
+              :key="index"
               @click="addTag(tag, index)"
             >
               {{ tag.name }}
-              <img :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag, index)">
+              <img :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag, index)" />
             </div>
           </template>
 
-          <div style="flex-grow: 1" />
+          <div style="flex-grow: 1"></div>
         </div>
         <md-button
+          @click="tagExpanded = !tagExpanded"
           class="md-button md-red md-sm md-simple edit-btn md-theme-default"
           style="margin-top: 20px !important"
-          @click="tagExpanded = !tagExpanded"
         >
           <span v-if="!tagExpanded">
             Show More
@@ -68,18 +66,18 @@
         <label>Tell us more</label>
         <p>The more we know, the better services we can find for you</p>
         <textarea
-          v-model="editConcept.description"
           rows
           class="form-control"
           placeholder="Write description here"
-        />
+          v-model="editConcept.description"
+        ></textarea>
       </div>
 
       <div class="form-group">
         <label>Add Colors</label>
         <div class="colors-list d-flex justify-content-start">
           <div v-for="(colorItem, index) in editConcept.colors" :key="index" style="margin-right: 30px">
-            <color-button v-model="editConcept.colors[index]" />
+            <color-button v-model="editConcept.colors[index]"></color-button>
             <!-- <md-button class="colors-list__item md-just-icon" :style="`background: ${color.value} !important`" @click="addColor(index)" v-if="color.value"></md-button> -->
             <!-- <md-button class="colors-list__item colors-list__add md-just-icon" @click="addColor(index)" v-else><img :src="`${conceptIconsURL}Asset 488.svg`"></md-button> -->
           </div>
@@ -97,7 +95,7 @@
       <div class="form-group">
         <label>You can easily Design with canva</label>
         <span>
-          <img class="ml-10" :src="`${$iconURL}Campaign/Group 9087.svg`">
+          <img class="ml-10" :src="`${$iconURL}Campaign/Group 9087.svg`" />
           <md-tooltip class="w-max-350">
             <div class="font-size-14 tab-tooltip">
               <p>{{ canvaTooltip }}</p>
@@ -109,16 +107,16 @@
       <div class="images-list new-concept">
         <div class="image-backgrounds">
           <div
+            class="image-background"
             v-for="idx in 4"
             :key="idx"
-            class="image-background"
-            :style="`background-color: ${editConcept.colors[idx - 1].color}; opacity:${
-              editConcept.colors[idx - 1].opacity
-            }`"
-          />
+            :style="
+              `background-color: ${editConcept.colors[idx - 1].color}; opacity:${editConcept.colors[idx - 1].opacity}`
+            "
+          ></div>
         </div>
         <div>
-          <div v-for="indx in 5" :key="indx" :class="`images-list__item`">
+          <div :class="`images-list__item`" v-for="indx in 5" :key="indx">
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
               <span
@@ -126,55 +124,42 @@
                 data-design-type="A4Document"
                 data-button-size="default"
                 data-button-theme="default"
-                data-api-key="no5x5PRx6hMNshFZIrRpevKJ"
+                data-api-key="no5x5PRx6hMNshFZlrRpevKJ"
                 class="canva-design-button"
-                style="
-                  display: none;
-                  position: absolute;
-                  left: 0;
-                  right: 0;
-                  width: 180px;
-                  margin: 0 auto;
-                  top: 15%;
-                  color: #050505;
-                  background: white;
-                  border: 1px solid #050505;
-                  z-index: 10;
-                "
-              >Design on Canva</span>
+                style="display:none;position: absolute;left:0;right:0;width: 180px;margin:0 auto;top: 15%;color:#050505;background: white;border: 1px solid #050505;z-index: 10"
+                >Design on Canva</span
+              >
               <img
-                v-if="uploadImageData[indx - 1]"
                 class="concept-image"
+                v-if="uploadImageData[indx - 1]"
                 :src="`${uploadImageData[indx - 1]}`"
                 @click="uploadPhoto(indx)"
-              >
+              />
               <div v-else class="image-selector" @click="uploadPhoto(indx)">
                 <div :class="indx === 2 || indx === 5 ? 'mt-2' : 'mt-1'">
-                  <div class="font-size-14">
-                    Or
-                  </div>
+                  <div class="font-size-14">Or</div>
                   <div class="color-black-middle font-size-14">
                     Upload Photo
                   </div>
                 </div>
               </div>
               <input
-                :id="`file-${indx}`"
                 style="display: none"
+                :id="`file-${indx}`"
                 name="attachment"
                 type="file"
                 multiple="multiple"
                 :data-fileIndex="indx - 1"
-              >
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div class="concept-actions d-flex justify-content-end align-center">
-        <md-button class="md-red md-bold" :disabled="!canSave" @click="saveConcept">
-          Save my brilliant concept
-        </md-button>
+        <md-button class="md-red md-bold" @click="saveConcept" :disabled="!canSave"
+          >Save my brilliant concept</md-button
+        >
       </div>
     </div>
   </div>
@@ -233,7 +218,7 @@ const initialConcept = {
   images: [],
 };
 export default {
-  name: "EventConceptEditForm",
+  name: "event-concept-edit-form",
   components: {
     ColorButton,
     Multiselect,
@@ -267,51 +252,25 @@ export default {
     },
     canvaTooltip: "Access high quality images to convey your inspiration using our integration to Canva",
   }),
-  computed: {
-    canSave() {
-      return this.editConcept.name && this.editConcept.description;
-    },
-  },
-  created() {
-    if (this.defaultConcept) {
-      this.editConcept = this.defaultConcept;
-      this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = `${image.url ? image.url : ""}`;
-      });
-    }
-    (function (c, a, n) {
-      var w = c.createElement(a),
-        s = c.getElementsByTagName(a)[0];
-      w.src = n;
-      s.parentNode.insertBefore(w, s);
-    })(document, "script", "https://sdk.canva.com/designbutton/v2/api.js");
-  },
-  mounted() {
-    this.taggingOptions.forEach((item, index) => {
-      if (this.editConcept.tags.findIndex((tag) => tag.name === item.name) >= 0) {
-        this.taggingOptions[index].selected = true;
-      }
-    });
-  },
   methods: {
     addTag(newTag, tagIndex) {
       this.editConcept.tags.push(newTag);
       this.taggingOptions[tagIndex].selected = true;
     },
     removeTag(tag, index) {
-      const selectedIndex = this.editConcept.tags.findIndex((item) => item.name === tag.name);
+      const selectedIndex = this.editConcept.tags.findIndex(item => item.name === tag.name);
       this.taggingOptions[index].selected = false;
       this.editConcept.tags.splice(selectedIndex, 1);
     },
     uploadPhoto(idx) {
       let file_el = document.getElementById("file-" + idx);
-      file_el.onchange = async (_) => {
+      file_el.onchange = async _ => {
         let files = event.target.files || event.dataTransfer.files;
         if (!files.length) return;
         if (files[0].size > 1024 * 1024 * 5) {
           Swal.fire({
             title: "File is too big",
-            text: "Sorry, this miximum file size is 5M",
+            text: `Sorry, this miximum file size is 5M`,
             showCancelButton: false,
             icon: "warning",
             showCancelButton: true,
@@ -319,7 +278,7 @@ export default {
             cancelButtonClass: "md-button md-danger cancel-btn-bg",
             confirmButtonText: "Yes, delete it!",
             buttonsStyling: false,
-          }).then((result) => {});
+          }).then(result => {});
           return;
         }
         let reader = new FileReader();
@@ -342,7 +301,7 @@ export default {
           const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
           this.$set(this.uploadImageData, itemIndex, imageData);
           this.$set(this.uploadingStatus, itemIndex, true);
-          S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
+          S3Service.fileUpload(files[0], fileInfo.name, dirName).then(res => {
             this.uploadingStatus[itemIndex] = false;
             this.$set(this.uploadingStatus, itemIndex, false);
           });
@@ -356,7 +315,7 @@ export default {
       if (files[0].size > 1024 * 1024 * 5) {
         Swal.fire({
           title: "File is too big",
-          text: "Sorry, this miximum file size is 5M",
+          text: `Sorry, this miximum file size is 5M`,
           showCancelButton: false,
           icon: "warning",
           showCancelButton: true,
@@ -364,7 +323,7 @@ export default {
           cancelButtonClass: "md-button md-danger cancel-btn-bg",
           confirmButtonText: "Yes, delete it!",
           buttonsStyling: false,
-        }).then((result) => {});
+        }).then(result => {});
         return;
       }
       let reader = new FileReader();
@@ -386,7 +345,7 @@ export default {
 
         this.uploadImageData[itemIndex] = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
         this.uploadingStatus[itemIndex] = true;
-        S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
+        S3Service.fileUpload(files[0], fileInfo.name, dirName).then(res => {
           this.uploadingStatus[itemIndex] = false;
         });
       }
@@ -409,6 +368,32 @@ export default {
 
       this.isLoading = false;
       this.$emit("saved", eventConcept);
+    },
+  },
+  created() {
+    if (this.defaultConcept) {
+      this.editConcept = this.defaultConcept;
+      this.editConcept.images.forEach((image, i) => {
+        this.uploadImageData[i] = `${image.url ? image.url : ""}`;
+      });
+    }
+    (function(c, a, n) {
+      var w = c.createElement(a),
+        s = c.getElementsByTagName(a)[0];
+      w.src = n;
+      s.parentNode.insertBefore(w, s);
+    })(document, "script", "https://sdk.canva.cn/designbutton/v2/api.js");
+  },
+  mounted() {
+    this.taggingOptions.forEach((item, index) => {
+      if (this.editConcept.tags.findIndex(tag => tag.name === item.name) >= 0) {
+        this.taggingOptions[index].selected = true;
+      }
+    });
+  },
+  computed: {
+    canSave() {
+      return this.editConcept.name && this.editConcept.description;
     },
   },
 };

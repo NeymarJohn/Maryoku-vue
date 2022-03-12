@@ -5,7 +5,7 @@
         {{ item.requirementTitle }}
       </div>
       <div class="item-qty text-center">
-        <input v-if="!item.added" v-model="item.requirementValue">
+        <input v-model="item.requirementValue" v-if="!item.added" />
         <span v-else class="pb-15 pt-15 d-inline-block">{{ item.requirementValue }}</span>
       </div>
       <div class="item-price text-center">
@@ -14,16 +14,14 @@
       </div>
       <div class="item-added text-center">
         <template v-if="item.added">
-          <img :src="`${$iconURL}budget+screen/png/Asset+31.png`" width="20">
+          <img :src="`${$iconURL}budget+screen/png/Asset+31.png`" width="20" />
           Added
         </template>
         <md-button v-else class="md-red md-sm normal-btn" @click="addService">
-          <md-icon class="mr-10">
-            add_circle_outline
-          </md-icon>Add
+          <md-icon class="mr-10">add_circle_outline</md-icon>Add
         </md-button>
       </div>
-      <div v-if="item.description" class="item-actions" :class="{ expanded: expanded }">
+      <div class="item-actions" :class="{ expanded: expanded }" v-if="item.description">
         <md-button
           class="md-sm normal-btn md-simple md-just-icon expand-extra-item color-black"
           @click="expanded = !expanded"
@@ -33,7 +31,7 @@
         </md-button>
       </div>
     </div>
-    <div v-if="expanded" class="item-description">
+    <div class="item-description" v-if="expanded">
       {{ item.description }}
     </div>
   </div>

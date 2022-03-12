@@ -1,12 +1,12 @@
-import Model from "./Model";
-import CommunityAnswers from "./CommunityAnswers";
+import Model from './Model'
+import CommunityAnswers from './CommunityAnswers'
 
 export default class CommunityAsks extends Model {
-  resource() {
-    return "asks";
+  resource () {
+    return 'asks'
   }
 
-  answers() {
-    return this.hasMany(CommunityAnswers);
+  answers () {
+    return this.hasMany(CommunityAnswers)
   }
 }

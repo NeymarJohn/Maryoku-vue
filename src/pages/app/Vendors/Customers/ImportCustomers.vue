@@ -1,15 +1,13 @@
 <template>
   <div>
-    <div v-if="upload" class="position-relative">
+    <div class="position-relative" v-if="upload">
       <div class="md-layout">
         <div class="md-layout-item pl-0 md-size-90">
           <div class="d-flex flex-column align-start">
             <div class="d-flex">
-              <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20" height="22">
+              <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20" height="22" />
 
-              <h3 class="font-size-25 font-bold m-0">
-                Upload your File
-              </h3>
+              <h3 class="font-size-25 font-bold m-0">Upload your File</h3>
             </div>
             <p class="font-size-14 mt-20">
               Don't have a compatible document?
@@ -18,26 +16,24 @@
                   href="static/Vendorlist_template.csv"
                   style="color: #641856; text-decoration: none;
                    border-bottom: 1px solid  #641856; padding: 0px;"
-                >Download our template</a></strong>
+                  >Download our template</a
+                ></strong
+              >
             </p>
           </div>
         </div>
         <div class="md-layout-item pl-0 md-size-10">
-          <md-button class="md-simple " style="margin-top: -10px" @click="$emit('cancel')">
-            <md-icon id="x_mark">
-              close
-            </md-icon>
+          <md-button  class="md-simple " style="margin-top: -10px" @click="$emit('cancel')">
+            <md-icon id="x_mark">close</md-icon>
           </md-button>
         </div>
         <div class="md-layout-item pl-0 md-size-100 mt-30 ">
-          <p class="d-flex font-size-15 font-bold-extra">
-            Attach File
-          </p>
+          <p class="d-flex font-size-15 font-bold-extra">Attach File</p>
         </div>
         <div class="md-layout-item pl-0 md-size-100">
           <div class="d-flex">
             <span class="font-size-14" style="cursor: pointer;">
-              <img class="" :src="`${$iconURL}Campaign/Group 9087.svg`">
+              <img class="" :src="`${$iconURL}Campaign/Group 9087.svg`" />
               <md-tooltip class="custom_right ">
                 <div class=" tab-tooltip px-20 py-20" style="color: black; width: 610px;">
                   <div>
@@ -47,14 +43,14 @@
                   </div>
                   <div class="mb-10 mt-10">
                     <p>
-                      • Your file needs to contain columns that have the following information:<br>
-                      business name, contact person’s full name, phone number, <br>
+                      • Your file needs to contain columns that have the following information:<br />
+                      business name, contact person’s full name, phone number, <br />
                       and email (it’s ok if you have other information too).
                     </p>
                   </div>
                   <div class="mb-10">
                     <p>
-                      • On the next screen, you’ll let us know which columns match Maryoku <br>
+                      • On the next screen, you’ll let us know which columns match Maryoku <br />
                       categories, so we can analyze them properly.
                     </p>
                   </div>
@@ -67,53 +63,47 @@
 
         <div class="form-group  mt-30  md-layout-item pl-0 md-size-100 pb-20" :class="{hasFile: csv, opened: showErrors}">
           <vue-dropzone
-            v-if="!csv"
-            id="drop"
+          id="drop"
             ref="csv"
             :options="dropzoneOptions"
-            :use-custom-slot="true"
-            class="file-drop-zone upload-section text-center"
+            :useCustomSlot="true"
             @vdropzone-file-added="handleAdded"
+            v-if="!csv"
+            class="file-drop-zone upload-section text-center"
           >
             <md-button class="md-outlined md-simple md-vendor md-dense font-size-14">
-              <i class="fas fa-paperclip md-simple pr-5" />
+              <i class="fas fa-paperclip md-simple pr-5"></i>
               <span>Choose File</span>
             </md-button>
 
-            <div class="font-size-13 font-bold" style="">
-              Or
-            </div>
-            <div class="font-size-14">
-              Drag your file here
-            </div>
+            <div class="font-size-13 font-bold" style="">Or</div>
+            <div class="font-size-14">Drag your file here</div>
           </vue-dropzone>
 
-          <div v-else class="added-file-wrapper" :class="{'opened': showErrors}">
+          <div class="added-file-wrapper" :class="{'opened': showErrors}" v-else>
             <div class="file">
               <div>
-                <i class="fas fa-paperclip md-simple md-vendor pr-5" />
+                <i class="fas fa-paperclip md-simple md-vendor pr-5"></i>
                 <a :href="`${fileUrl}`" class="color-black" target="_blank"> {{ fileName }} </a>
               </div>
               <div>
                 <div class="progressbar color-yellow-dark">
-                  <div class="progress-inner-bar" :class="{fileIsLoading}" />
+                  <div class="progress-inner-bar" :class="{fileIsLoading}"></div>
                 </div>
-                <span class=" color-won">{{ fileIsLoading?'90%':'100%' }}</span>
+                <span class=" color-won">{{fileIsLoading?'90%':'100%'}}</span>
               </div>
               <div>
                 <span v-show="!fileIsLoading" class=" color-red" :class=" {'color-won': !errors}"> {{ errors ? 1 : 'NO ' }} </span>
                 <span class="color-black-heavy"> ERROR </span>
                 <span v-if="errors" @click="showErrors=!showErrors"><md-icon>{{
-                  showErrors ? 'expand_less' : 'expand_more'
-                }}</md-icon></span>
+                    showErrors ? 'expand_less' : 'expand_more'
+                  }}</md-icon></span>
               </div>
             </div>
             <span class="attach-trash" @click="deleteFile"><md-icon>delete</md-icon></span>
           </div>
         </div>
-        <div v-if="showError&&!csv" class="md-error error_text">
-          {{ this.errorMessage }}
-        </div>
+        <div v-if="showError&&!csv" class="md-error error_text">{{ this.errorMessage }}</div>
       </div>
       <div class="md-layout-item pl-0 md-size-100 mt-40">
         <div
@@ -126,60 +116,48 @@
             </span>
           </div>
           <div>
-            <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-20 " @click="load()">
-              continue
-            </md-button>
+            <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-20 " @click="load()">continue</md-button>
           </div>
         </div>
       </div>
     </div>
-    <div v-if="header" class="position-relative">
+    <div class="position-relative" v-if="header">
       <div class="md-layout">
         <div class="md-layout-item pl-0 md-size-90">
           <div class="d-flex">
-            <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20" height="22">
+            <img :src="`${$iconURL}CustomerList/group-19001.svg`" class="mr-10" width="20" height="22" />
 
-            <h3 class="font-size-25 font-bold m-0">
-              Match your column headers to Maryoku categories
-            </h3>
+            <h3 class="font-size-25 font-bold m-0">Match your column headers to Maryoku categories</h3>
           </div>
         </div>
 
         <div class="md-layout-item pl-0 md-size-10">
           <md-button class="md-simple " style="margin-top: -7px;" @click="$emit('cancel')">
-            <md-icon id="x_mark">
-              close
-            </md-icon>
+            <md-icon id="x_mark">close</md-icon>
           </md-button>
         </div>
         <div class="md-layout-item pl-0 md-size-100 mt-20 ">
           <div id="headers_to_categories_mapping" class="custom_border">
             <md-table>
               <md-table-row class="font-size-17">
-                <md-table-head md-numeric>
-                  Matched
-                </md-table-head>
+                <md-table-head md-numeric>Matched</md-table-head>
                 <md-table-head>Maryoku Category</md-table-head>
                 <md-table-head>Column Header in File</md-table-head>
               </md-table-row>
 
               <md-table-row v-for="(field, key) in fieldsToMap" :key="key" class="text-left font-normal">
-                <md-table-cell md-numeric class="pr-20">
-                  <img v-if="map[field.key]" :src="img">
-                </md-table-cell>
-                <md-table-cell :id="field.label">
-                  {{ mapFieldsNames[key] }}
-                </md-table-cell>
-                <md-table-cell>
-                  <customizable-select :initial-value="'Choose ' + mapSelectNames[key]" :data="firstRow" @valueChanged="onValueChanged($event, field.key)" />
-                </md-table-cell>
+                <md-table-cell md-numeric class="pr-20"> <img :src="img" v-if="map[field.key]"/></md-table-cell>
+                <md-table-cell :id="field.label">{{mapFieldsNames[key]}} </md-table-cell>
+                  <md-table-cell>
+                      <customizable-select @valueChanged="onValueChanged($event, field.key)" :initial-value="'Choose ' + mapSelectNames[key]" :data="firstRow"></customizable-select>
+                  </md-table-cell>
               </md-table-row>
             </md-table>
           </div>
         </div>
 
         <div class="mt-20">
-          <strong>*You have {{ requiredFieldsNumber }}/2 mandatory matched columns</strong>
+          <strong>*You have {{requiredFieldsNumber}}/2 mandatory matched columns</strong>
         </div>
 
         <div class="md-layout-item pl-0 md-size-100 mt-20">
@@ -195,37 +173,31 @@
             <div>
               <md-button
                 class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="backToUpload()"
+                @click="backToUpload()">Back
+              </md-button
               >
-                Back
-              </md-button>
               <md-button
                 class="md-vendor maryoku-btn ml-auto font-size-14 px-20"
-                @click="showPreview()"
+                @click="showPreview()">continue
+              </md-button
               >
-                continue
-              </md-button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-if="preview" class="position-relative">
+    <div class="position-relative" v-if="preview">
       <div class="md-layout">
         <div class="md-layout-item pl-0 md-size-90">
           <div class="d-flex align-center">
-            <span class="mr-10"> <i class="fas fa-search fa-lg" /></span>
+            <span class="mr-10"> <i class="fas fa-search fa-lg"></i></span>
 
-            <h3 class="font-size-25 font-bold m-0">
-              Preview
-            </h3>
+            <h3 class="font-size-25 font-bold m-0">Preview</h3>
           </div>
         </div>
         <div class="md-layout-item pl-0 md-size-10">
           <md-button class="md-simple " style="" @click="$emit('cancel')">
-            <md-icon id="x_mark">
-              close
-            </md-icon>
+            <md-icon id="x_mark">close</md-icon>
           </md-button>
         </div>
 
@@ -239,15 +211,15 @@
               <md-table-head>Contact Name</md-table-head>
             </md-table-row>
 
-            <md-table-row v-for="(item, index) in form.csv" :key="index" class="text-center">
+            <md-table-row class="text-center" v-for="(item, index) in form.csv" :key="index">
               <md-table-cell> {{ item.EIN }}</md-table-cell>
               <md-table-cell>{{ item.BusinessName }}</md-table-cell>
               <md-table-cell> {{ item.PhoneNumber }}</md-table-cell>
               <md-table-cell>{{ item.email }}</md-table-cell>
               <md-table-cell>{{ item.ContactFullName }} </md-table-cell>
               <md-table-cell>
-                <span style="color: #b7b5b5;"> <i class="fas fa-ellipsis-v fa-lg" /></span>
-              </md-table-cell>
+                <span style="color: #b7b5b5;"> <i class="fas fa-ellipsis-v fa-lg"></i></span
+              ></md-table-cell>
             </md-table-row>
           </md-table>
         </div>
@@ -263,12 +235,12 @@
               </span>
             </div>
             <div>
-              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="backToPreview()">
-                Back
-              </md-button>
-              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="saveCustomers(form.csv)">
-                Done
-              </md-button>
+              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="backToPreview()"
+                >Back</md-button
+              >
+              <md-button class="md-vendor maryoku-btn ml-auto font-size-14 px-40" @click="saveCustomers(form.csv)"
+                >Done</md-button
+              >
             </div>
           </div>
         </div>
@@ -284,15 +256,15 @@ import CustomizableSelect from "../../../../components/Select/CustomizableSelect
 import { getBase64 } from "@/utils/file.util";
 import success from "../../../../../static/img/good.svg";
 export default {
-  components: {
-    CustomizableSelect,
-    vueDropzone: vue2Dropzone,
-  },
   props: {
     events: {
       type: Array,
       default: () => [],
     },
+  },
+  components: {
+    CustomizableSelect,
+    vueDropzone: vue2Dropzone,
   },
   data: () => ({
     form: {
@@ -336,33 +308,6 @@ export default {
     errorMessage: "",
     url: `${process.env.SERVER_URL}/1/customersCSV`,
   }),
-  computed: {
-    firstRow() {
-      return _.get(this, "sample.0");
-    },
-    preRow() {
-      // this.form.csv.shift();
-      // return this.form.csv
-    },
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-  },
-    watch: {
-    map: {
-      handler: function(newVal) {
-        if (this.headers === true) {
-          this.mapFields.every(function(item) {
-            return newVal.hasOwnProperty(item);
-          });
-            this.requiredFieldsNumber = newVal.ContactFullName && newVal.email ? 2 :
-                newVal.ContactFullName || newVal.email ? 1 : 0;
-          // this.submit();
-        }
-      },
-      deep: true,
-    },
-  },
   created() {
     this.hasHeaders = this.headers;
     if (_.isArray(this.mapFields)) {
@@ -391,20 +336,20 @@ export default {
     deleteFile(){
       this.fileName = null;
       this.csv = null;
-      this.csv2 = [];
-      this.sample = [];
+      this.csv2 = []
+      this.sample = []
     },
     close() {
       this.$emit("cancel");
     },
     async handleAdded(file) {
-      this.fileIsLoading = true;
+      this.fileIsLoading = true
       this.csv = file;
       this.fileName = file.name;
       let data = {
         vendorId:this.vendorData.id,
         file: await getBase64(file)
-      };
+      }
       this.submit(data);
     },
     async fileAdded(file) {
@@ -423,7 +368,7 @@ export default {
         axios
           .post(this.url, data)
           .then(response => {
-            this.fileIsLoading = false;
+            this.fileIsLoading = false
             if (response.data) {
               this.errors = response.data.success ? 0 : 1;
               const {data} = response.data;
@@ -441,12 +386,12 @@ export default {
             // _this.callback(response);
             if(response.data.status){
               this.close();
-              this.emit("fileUploaded");
+              this.emit('fileUploaded');
             }
           })
           .catch(error => {
-              console.log("error", error);
-          });
+              console.log('error', error)
+          })
       } else {
         _this.callback(this.form.csv);
       }
@@ -468,9 +413,9 @@ export default {
       if (this.errors) return;
       const _this = this;
       if (!_this.csv) {
-          this.errorMessage = "Choose File";
+          this.errorMessage = 'Choose File';
           this.showError = true;
-            return;
+            return
       }
       this.readFile(output => {
         // _this.sample = _.get(Papa.parse(output, { preview: 2, skipEmptyLines: true }), "data");
@@ -509,6 +454,33 @@ export default {
       this.header = true;
       this.preview = false;
     }
+  },
+    watch: {
+    map: {
+      handler: function(newVal) {
+        if (this.headers === true) {
+          this.mapFields.every(function(item) {
+            return newVal.hasOwnProperty(item);
+          });
+            this.requiredFieldsNumber = newVal.ContactFullName && newVal.email ? 2 :
+                newVal.ContactFullName || newVal.email ? 1 : 0
+          // this.submit();
+        }
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    firstRow() {
+      return _.get(this, "sample.0");
+    },
+    preRow() {
+      // this.form.csv.shift();
+      // return this.form.csv
+    },
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
   },
 };
 </script>

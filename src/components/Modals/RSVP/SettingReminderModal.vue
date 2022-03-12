@@ -7,9 +7,9 @@
           Back
         </md-button>
       </div> -->
-      <div v-if="screen == 3" class="maryoku-modal-header">
+      <div class="maryoku-modal-header" v-if="screen == 3">
         <md-button class="md-simple md-black normal-btn" @click="screen = screen - 1">
-          <img class="mr-10" :src="`${$iconURL}RSVP/Group+3593.svg`">
+          <img class="mr-10" :src="`${$iconURL}RSVP/Group+3593.svg`" />
           Change my mind
         </md-button>
       </div>
@@ -19,45 +19,33 @@
     </template>
     <template slot="body">
       <div v-if="screen == 2" class="text-left">
-        <div class="font-size-30 font-bold mb-50 mt-30 header-text">
-          TAKE YOUR TIME, WE’LL REMIND YOU LATER
-        </div>
+        <div class="font-size-30 font-bold mb-50 mt-30 header-text">TAKE YOUR TIME, WE’LL REMIND YOU LATER</div>
         <div class="text-left">
-          <div>
-            <md-radio v-model="remindTool" value="sms">
-              Remind me by Sms
-            </md-radio>
-          </div>
+          <div><md-radio v-model="remindTool" value="sms">Remind me by Sms</md-radio></div>
           <maryoku-input
-            v-if="remindTool == 'sms'"
-            key="phone-input"
-            v-model="remindingPhone"
             placeholder="Type phone number here..."
             class="mb-20 width-50"
-            input-style="phone"
+            inputStyle="phone"
             type="text"
-          />
-          <div>
-            <md-radio v-model="remindTool" value="email">
-              Remind me by email
-            </md-radio>
-          </div>
+            v-model="remindingPhone"
+            key="phone-input"
+            v-if="remindTool == 'sms'"
+          ></maryoku-input>
+          <div><md-radio v-model="remindTool" value="email">Remind me by email</md-radio></div>
           <maryoku-input
-            v-if="remindTool == 'email'"
-            key="email-input"
-            v-model="remindingEmail"
             placeholder="Type email address here..."
             class="mb-20 width-50"
-            input-style="email"
+            inputStyle="email"
             type="email"
-          />
+            v-model="remindingEmail"
+            v-if="remindTool == 'email'"
+            key="email-input"
+          ></maryoku-input>
         </div>
 
         <div class="text-left d-flex">
-          <img class="mr-30" :src="`${$iconURL}RSVP/ring.svg`">
-          <div class="font-size-20 font-bold time-question">
-            When Do You Want Your Reminder?
-          </div>
+          <img class="mr-30" :src="`${$iconURL}RSVP/ring.svg`" />
+          <div class="font-size-20 font-bold time-question">When Do You Want Your Reminder?</div>
         </div>
         <div class="options-list">
           <option-card
@@ -65,37 +53,35 @@
             label="Remind Me Tonight"
             :selected="remindTime == 'tonight'"
             @select="remindTime = 'tonight'"
-          />
+          ></option-card>
           <option-card
             icon="Group+8441.svg"
             label="Remind Me Tomorrow"
             :selected="remindTime == 'tomorrow'"
             @select="remindTime = 'tomorrow'"
-          />
+          ></option-card>
           <option-card
             icon="Group+4458.svg"
             label="Remind Me In A Week"
             :selected="remindTime == 'week'"
             @select="remindTime = 'week'"
-          />
+          ></option-card>
         </div>
       </div>
       <div v-if="screen == 3">
-        <img :src="`${$iconURL}RSVP/Group 8005.svg`" class="mt-20">
+        <img :src="`${$iconURL}RSVP/Group 8005.svg`" class="mt-20" />
         <div class="font-size-30 mb-30 mt-30 font-bold" style="line-height: 1.5em">
           WE WILL SEND YOU A REMINDER {{ remindTime === "week" ? "WITHIN A WEEK" : remindTime.toUpperCase() }}
         </div>
-        <div class>
-          {{ remindTool === "email" ? `By email` : `By SMS` }}
-        </div>
+        <div class>{{ remindTool === "email" ? `By email` : `By SMS` }}</div>
       </div>
     </template>
     <template slot="footer">
       <md-button
         v-if="screen == 2"
         class="md-red md-bold reminder-button"
-        :disabled="!canSetReminder"
         @click="setRemind"
+        :disabled="!canSetReminder"
       >
         Set A Reminder
       </md-button>
@@ -127,11 +113,6 @@ export default {
       remindTool: "email",
       remindTime: "tomorrow",
     };
-  },
-  computed: {
-    canSetReminder() {
-      return (this.remindTool === "email" && this.remindingEmail) || (this.remindTool === "sms" && this.remindingPhone);
-    },
   },
   created() {
     this.remindingEmail = this.rsvpRequest.email;
@@ -173,6 +154,11 @@ export default {
         this.$emit("setRemind", res);
         this.screen = 3;
       });
+    },
+  },
+  computed: {
+    canSetReminder() {
+      return (this.remindTool === "email" && this.remindingEmail) || (this.remindTool === "sms" && this.remindingPhone);
     },
   },
 };

@@ -1,13 +1,13 @@
 <template>
   <div class="proposal-item-secondary-service">
-    <div class="title-cont dropdown" :class="{ opened: isChecked }" @click="clickItem(service.componentId)">
+    <div class="title-cont dropdown" @click="clickItem(service.componentId)" :class="{ opened: isChecked }">
       <div class="left-side">
         <!-- <div class="check-cont">
           <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div> -->
         <h3 class="title">
-          <img :src="img">
+          <img :src="img" />
           <span>{{ category }}</span>
         </h3>
       </div>
@@ -19,38 +19,38 @@
         <div class="proposal-range-cont">
           <span>You're the First bidder</span>
         </div>
-        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`">
+        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
     <template v-if="isChecked">
       <proposal-requirements
-        key="cost"
         class="additional-service"
         label="Cost Items"
-        table-category="cost"
+        key="cost"
+        tableCategory="cost"
         icon="Group+10662.svg"
         description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-        :vendor-category="service.componentId"
+        :vendorCategory="service.componentId"
       />
       <proposal-requirements
-        key="included"
         class="additional-service"
-        table-category="included"
+        tableCategory="included"
         label="Included in Price"
         icon="includedPrice.png"
         description="(from your “included in price” items)"
-        :vendor-category="service.componentId"
+        key="included"
+        :vendorCategory="service.componentId"
       />
       <proposal-requirements
-        key="extra"
         class="additional-service"
-        table-category="extra"
+        tableCategory="extra"
         label="Offered Extras"
         icon="cost-requirements.png"
         description="What elements would you like to suggest to the client with extra pay? "
-        :vendor-category="service.componentId"
+        key="extra"
+        :vendorCategory="service.componentId"
       />
-      <proposal-upload-legal />
+      <proposal-upload-legal></proposal-upload-legal>
     </template>
   </div>
 </template>
@@ -69,7 +69,7 @@ import ProposalServiceTable from "./ProposalServiceTable";
 import ProposalUploadLegal from "./ProposalUploadLegal";
 import ProposalRequirements from "./ProposalRequirements.vue";
 export default {
-  name: "ProposalItem",
+  name: "proposal-item",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
@@ -79,11 +79,6 @@ export default {
     ProposalServiceTable,
     ProposalRequirements,
     ProposalUploadLegal,
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
   },
   props: {
     category: String,
@@ -154,96 +149,6 @@ export default {
         maxFilesize: 10,
       },
     };
-  },
-  computed: {
-    isDisabledAdd() {
-      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
-    },
-    optionalRequirements() {
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    mandatoryRequirements() {
-      if (!this.proposalRequest) return [];
-      if (!this.proposalRequest.requirements[this.category]) return [];
-      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
-    },
-    additionalServices: {
-      get: function () {
-        return this.$store.state.vendorProposal.additionalServices;
-      },
-      set: function (newValue) {
-        return this.$store.commit("vendorProposal/setAddtionalService", newValue);
-      },
-    },
-    costedServices() {
-      return this.$store.state.vendorProposal.costServices[this.category];
-    },
-    includedServices() {
-      return this.$store.state.vendorProposal.includedServices[this.category];
-    },
-    extraServices() {
-      return this.$store.state.vendorProposal.extraServices[this.category];
-    },
-  },
-  watch: {},
-  created() {
-    this.isVCollapsed = this.isCollapsed;
-    this.newProposalRequest = this.proposalRequest;
-    this.mandatoryRequirements.forEach((item) => {
-      // if (
-      //   this.newProposalRequest.requirements.length == 0 ||
-      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
-      // )
-      this.newProposalRequest.requirements.push({
-        comments: [],
-        dateCreated: "",
-        includedInPrice: true,
-        itemNotAvailable: false,
-        price: 0,
-        priceUnit: "qty",
-        proposalRequest: { id: this.proposalRequest.id },
-        requirementComment: null,
-        requirementId: "",
-        requirementMandatory: false,
-        requirementPriority: null,
-        requirementTitle: item.item,
-        requirementsCategory: item.category,
-        requirementValue: 1,
-      });
-    });
-
-    this.$forceUpdate();
-    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-    this.$root.$on("remove-proposal-requirement", (item) => {
-      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
-        (req) => req.requirementTitle != item.requirementTitle,
-      );
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.$forceUpdate();
-      this.cancel();
-    });
-
-    this.$root.$on("add-service-item", (item) => {
-      this.clickedItem = !this.clickedItem;
-      this.serviceItem = item;
-      this.qty = this.unit = this.subTotal = 0;
-      this.selectedQuickButton = item;
-    });
-
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.newProposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
-      this.$forceUpdate();
-    });
-
-    this.$root.$on("clear-slide-pos", (item) => {
-      this.serviceSlidePos = 0;
-    });
-
-    if (this.$refs.servicesCont) {
-      this.servicesWidth = this.$refs.servicesCont.clientWidth;
-    }
   },
   methods: {
     getObject(item) {
@@ -460,6 +365,101 @@ export default {
       // });
     },
   },
+  created() {
+    this.isVCollapsed = this.isCollapsed;
+    this.newProposalRequest = this.proposalRequest;
+    this.mandatoryRequirements.forEach((item) => {
+      // if (
+      //   this.newProposalRequest.requirements.length == 0 ||
+      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
+      // )
+      this.newProposalRequest.requirements.push({
+        comments: [],
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: 0,
+        priceUnit: "qty",
+        proposalRequest: { id: this.proposalRequest.id },
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: item.item,
+        requirementsCategory: item.category,
+        requirementValue: 1,
+      });
+    });
+
+    this.$forceUpdate();
+    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+    this.$root.$on("remove-proposal-requirement", (item) => {
+      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
+        (req) => req.requirementTitle != item.requirementTitle,
+      );
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
+      this.cancel();
+    });
+
+    this.$root.$on("add-service-item", (item) => {
+      this.clickedItem = !this.clickedItem;
+      this.serviceItem = item;
+      this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+      this.proposalRequest.requirements[index] = item;
+      this.newProposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
+    });
+
+    this.$root.$on("clear-slide-pos", (item) => {
+      this.serviceSlidePos = 0;
+    });
+
+    if (this.$refs.servicesCont) {
+      this.servicesWidth = this.$refs.servicesCont.clientWidth;
+    }
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  computed: {
+    isDisabledAdd() {
+      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
+    },
+    optionalRequirements() {
+      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    mandatoryRequirements() {
+      if (!this.proposalRequest) return [];
+      if (!this.proposalRequest.requirements[this.category]) return [];
+      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
+    },
+    additionalServices: {
+      get: function () {
+        return this.$store.state.vendorProposal.additionalServices;
+      },
+      set: function (newValue) {
+        return this.$store.commit("vendorProposal/setAddtionalService", newValue);
+      },
+    },
+    costedServices() {
+      return this.$store.state.vendorProposal.costServices[this.category];
+    },
+    includedServices() {
+      return this.$store.state.vendorProposal.includedServices[this.category];
+    },
+    extraServices() {
+      return this.$store.state.vendorProposal.extraServices[this.category];
+    },
+  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

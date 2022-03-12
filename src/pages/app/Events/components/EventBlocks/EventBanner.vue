@@ -1,35 +1,33 @@
 <template>
   <div
     class="md-layout-item md-size-100 event-details_banner"
-    :style="`background-image : url(`+ bannerURL +`)`"
+    :style="`background-image : url(`+ bannerURL  +`)`"
   >
     <div
-      v-if="!readonly"
       class="update-banner-form"
+      v-if="!readonly"
       style="position: absolute; bottom: 1em; left : 1em;"
     >
-      <md-button class="md-info" @click="uploadImage">
-        Select Header Image
-      </md-button>
+      <md-button class="md-info" @click="uploadImage">Select Header Image</md-button>
       <input
-        ref="inputFile"
         type="file"
         style="display: none;"
+        ref="inputFile"
         accept="image/gif, image/jpg, image/png"
         @change="onFilePicked"
-      >
+      />
     </div>
 
     <event-confirmation
-      v-if="readonly"
       :user-response.sync="userResponse"
       :user-info.sync="userInfo"
       :event="event"
-      rel="signUpModal"
+      v-if="readonly"
       @isGoing="showSignUp()"
-    />
+      rel="signUpModal"
+    ></event-confirmation>
 
-    <edit-header-image v-if="!readonly" :event="event" rel="editHeaderModal" />
+    <edit-header-image v-if="!readonly" :event="event" rel="editHeaderModal"></edit-header-image>
   </div>
 </template>
 <script>
@@ -43,7 +41,7 @@ import EditHeaderImage from "./Modals/EditHeaderImage.vue";
 import EventConfirmation from "./EventConfirmation.vue";
 
 export default {
-  name: "EventBanner",
+  name: "event-banner",
   components: {
     EditHeaderImage,
     EventConfirmation,
@@ -94,6 +92,8 @@ export default {
       }
     },
   },
+  created() {},
+  mounted() {},
   computed: {
     bannerURL() {
       return this.event.eventPage.headerImage
@@ -102,7 +102,5 @@ export default {
         : "https://bit.ly/2TWGILO";
     },
   },
-  created() {},
-  mounted() {},
 };
 </script>

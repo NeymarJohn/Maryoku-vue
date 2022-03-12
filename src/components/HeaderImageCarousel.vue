@@ -1,23 +1,20 @@
 <template>
   <div class="header-image-carousel">
-    <span v-show="startIndex > 0" class="prev" @click="prev()">
+    <span class="prev" @click="prev()" v-show="startIndex > 0">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
-    <div ref="imagesCont" class="cont" :style="{ left: `${imageSlidePos}px` }">
-      <img v-for="(img, ind) in carouselImages" :key="ind" :src="img" class="image-item" @click="view(ind)">
+    <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
+      <img :src="img" v-for="(img, ind) in carouselImages" :key="ind" @click="view(ind)" class="image-item" />
     </div>
-    <span v-show="startIndex < images.length - 1" class="next" @click="next()">
+    <span class="next" @click="next()" v-show="startIndex < images.length - 1">
       <md-icon>keyboard_arrow_right</md-icon>
     </span>
-    <LightBox v-if="medias.length" ref="lightbox" :media="medias" :show-light-box="false" />
+    <LightBox v-if="medias.length" :media="medias" ref="lightbox" :show-light-box="false" />
   </div>
 </template>
 <script>
 import LightBox from "vue-image-lightbox";
 export default {
-  components: {
-    LightBox,
-  },
   props: {
     images: {
       type: Array,
@@ -30,19 +27,8 @@ export default {
       startIndex: 0,
     };
   },
-  computed: {
-    medias() {
-      return this.images.map((item) => {
-        return {
-          thumb: item,
-          src: item,
-          caption: "test",
-        };
-      });
-    },
-    carouselImages() {
-      return [this.images[this.images.length - 1], ...this.images, this.images[0]];
-    },
+  components: {
+    LightBox,
   },
   created() {
     // init first location
@@ -92,6 +78,20 @@ export default {
       this.imageSlidePos = -document.getElementsByClassName("image-item")[this.startIndex + 1].offsetLeft;
       this.startIndex += 1;
       console.log(document.getElementsByClassName("image-item")[this.startIndex].offsetLeft);
+    },
+  },
+  computed: {
+    medias() {
+      return this.images.map((item) => {
+        return {
+          thumb: item,
+          src: item,
+          caption: "test",
+        };
+      });
+    },
+    carouselImages() {
+      return [this.images[this.images.length - 1], ...this.images, this.images[0]];
     },
   },
 };

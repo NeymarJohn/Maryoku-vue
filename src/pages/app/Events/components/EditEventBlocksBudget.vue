@@ -3,65 +3,52 @@
     <table class="event-blocks__table event-block-header">
       <thead>
         <tr>
-          <th width="40%">
-            Vendor
-          </th>
-          <th width="20%">
-            Original
-          </th>
-          <th width="15%">
-            New
-          </th>
-          <th width="15%">
-            Booked
-          </th>
+          <th width="40%">Vendor</th>
+          <th width="20%">Original</th>
+          <th width="15%">New</th>
+          <th width="15%">Booked</th>
         </tr>
       </thead>
     </table>
 
     <!-- Event Blocks -->
     <draggable :list="eventBuildingBlocks">
-      <table v-for="(block, index) in eventBuildingBlocks" :key="index" class="event-blocks__table event-block-table">
+      <table class="event-blocks__table event-block-table" v-for="(block, index) in eventBuildingBlocks" :key="index">
         <tbody>
           <template>
             <tr>
               <td width="40%" class="event-block-element" :class="block.title.toLowerCase().replace(/ /g, '-')">
                 <img
                   :src="`${$iconURL}Budget Elements/${block.icon}`"
-                >
+                />
                 {{ block.title }}
               </td>
               <td class="planned" width="20%">
-                <template v-if="type === 'total'">
-                  {{ block.allocatedBudget }}
-                </template>
-                <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                  {{
-                    block.allocatedBudget
-                      ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString()
-                      : ""
-                  }}
-                </template>
-                <template v-else>
-                  {{
-                    block.allocatedBudget
-                      ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString()
-                      : ""
-                  }}
-                </template>
+                <template v-if="type === 'total'">{{ block.allocatedBudget }}</template>
+                <template v-else-if="block.allocatedBudget && block.numberOfParticipants">{{
+                  block.allocatedBudget
+                    ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString()
+                    : ""
+                }}</template>
+                <template v-else>{{
+                  block.allocatedBudget
+                    ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString()
+                    : ""
+                }}</template>
               </td>
 
               <td class="new-element-budget" width="15%">
-                <input v-if="type === 'total'" v-model="block.newTotalBudget" @change="(e)=>handleTotalChange(e,block,index)">
+                <input v-if="type === 'total'" v-model="block.newTotalBudget"   @change="(e)=>handleTotalChange(e,block,index)"/>
                 <input v-else :value="`${block.numberOfParticipants?block.newTotalBudget
-                         /block.numberOfParticipants:block.allocatedBudget / event.numberOfParticipants}`"
-                       @change="(e)=>handlePerGuestChange(e,block,index)"
-                >
+                /block.numberOfParticipants:block.allocatedBudget / event.numberOfParticipants}`"
+                @change="(e)=>handlePerGuestChange(e,block,index)"
+                />
+
               </td>
               <td class="actual red-label" width="15%">
                 <template v-if="block.allocatedBudget">
-                  <img v-if="block.vendorsCount" src="https://static-maryoku.s3.amazonaws.com/storage/icons/common/check-circle-green.svg">
-                  <img v-else src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png">
+                  <img v-if="block.vendorsCount" src="https://static-maryoku.s3.amazonaws.com/storage/icons/common/check-circle-green.svg" />
+                  <img v-else src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png" />
 
                   <template v-if="block.winningProposalId">
                     <md-button
@@ -88,65 +75,51 @@
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="35%">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png">
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png" />
             Unexpected
           </td>
-          <td class="planned" width="20%">
-            ${{ event.unexpectedBudget }}
+          <td class="planned" width="20%">${{event.unexpectedBudget}}</td>
+          <td class="new-element-budget" width="15%">
           </td>
-          <td class="new-element-budget" width="15%" />
-          <td class="actual red-label" width="15%" />
+          <td class="actual red-label" width="15%">
+          </td>
         </tr>
       </tbody>
     </table>
     <table class="event-blocks__table event-block-table">
       <tbody>
-        <tr>
-          <td class="event-block-element unexpected" width="35%">
-            <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
-              width="20"
-            >
-            Extras
-          </td>
-          <td class="planned" width="20%">
-            ${{ extras }}
-          </td>
-          <td class="new-element-budget" width="15%" />
-          <td class="actual red-label" width="15%" />
-        </tr>
+      <tr>
+        <td class="event-block-element unexpected" width="35%">
+          <img
+            src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+            width="20"
+          />
+          Extras
+        </td>
+        <td class="planned" width="20%">${{extras}}</td>
+        <td class="new-element-budget" width="15%">
+        </td>
+        <td class="actual red-label" width="15%">
+        </td>
+      </tr>
       </tbody>
     </table>
 
     <table class="event-blocks__table actions-table" style="border-spacing: 0 1px; ">
       <tbody>
         <tr class="total">
-          <td class="total-title" />
+          <td class="total-title"></td>
           <td>Old budget</td>
-          <td colspan="3">
-            Planed budget
-          </td>
-          <td colspan="3">
-            New budget
-          </td>
-          <td colspan="3">
-            Leftover
-          </td>
+          <td colspan="3" >Planed budget</td>
+          <td colspan="3" >New budget</td>
+          <td colspan="3" >Leftover</td>
         </tr>
         <tr class="total">
-          <td class="total-title">
-            Total
-          </td>
+          <td class="total-title">Total</td>
           <td>${{ event.totalBudget | withComma }}</td>
-          <td colspan="3">
-            ${{ eventNewBudget | withComma }}
-          </td>
-          <td colspan="3">
-            ${{ newTotalBudget | withComma }}
-          </td>
-          <td colspan="3" class="total-value">
-            ${{ (eventNewBudget - newTotalBudget) | withComma }}
-          </td>
+          <td colspan="3" >${{ eventNewBudget | withComma }}</td>
+          <td colspan="3" >${{ newTotalBudget | withComma }}</td>
+          <td colspan="3" class="total-value">${{ (eventNewBudget - newTotalBudget) | withComma }}</td>
         </tr>
       </tbody>
     </table>
@@ -177,7 +150,7 @@ import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 
 export default {
-  name: "EventBuildingBlocks",
+  name: "event-building-blocks",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -245,7 +218,7 @@ export default {
       this.isLoading = true;
       this.totalBudget = 0;
       this.totalBudgetTaxes = 0;
-      this.extras = this.event.allocatedTips + this.event.allocatedFees;
+      this.extras = this.event.allocatedTips + this.event.allocatedFees
       let res = this.event.components;
       this.$set(this, "eventBuildingBlocks", res);
 
@@ -268,7 +241,7 @@ export default {
             : (parseInt(item.allocatedBudget) / parseInt(this.event.numberOfParticipants)) * 0.12;
         }
       });
-      this.handleTotalChange();
+      this.handleTotalChange()
       this.$forceUpdate();
     },
     showAddBuildingBlocksModal() {
@@ -303,18 +276,18 @@ export default {
       });
     },
     handlePerGuestChange(e, event, index){
-      const value = e.target.value;
+      const value = e.target.value
       this.eventBuildingBlocks[index].newTotalBudget = event.numberOfParticipants?
-        value*event.numberOfParticipants:value*this.event.numberOfParticipants;
+        value*event.numberOfParticipants:value*this.event.numberOfParticipants
     },
     handleTotalChange(){
       this.newTotalBudget = 0;
       this.event.components.forEach((item)=>{
-        this.newTotalBudget += +item.newTotalBudget;
-      });
+        this.newTotalBudget += +item.newTotalBudget
+      })
       this.newTotalBudget += (this.extras + this.event.unexpectedBudget);
       this.leftover = this.eventNewBudget - this.newTotalBudget;
-      console.log("##-307, EditEventBlocksBudget.vue",this.leftover);
+      console.log('##-307, EditEventBlocksBudget.vue',this.leftover)
     },
     checkLeftovers() {
       if (this.leftover !== 0) {
@@ -328,13 +301,13 @@ export default {
           buttonsStyling: false,
         }).then((result) => {
           if (result.value) {
-            this.blockBudgetChanged();
-           return true;
+            this.blockBudgetChanged()
+           return true
           }
-          return false;
+          return false
         });
       } else {
-        return Promise.resolve(this.blockBudgetChanged());
+        return Promise.resolve(this.blockBudgetChanged())
       }
     },
     blockBudgetChanged  ()  {
@@ -363,17 +336,17 @@ export default {
               console.log(error);
             });
         }
-      });
+      })
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
         this.$emit("change", event);
       });
-      return true;
+      return true
     },
 
     addRequirements(item) {
       if (item.proposalsCount) {
         Swal.fire({
-          text: "You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?",
+          text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
           showCancelButton: true,
           icon: "warning",
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -512,6 +485,16 @@ export default {
         });
     },
   },
+  created() {
+  },
+  mounted() {
+    this.getEventBuildingBlocks();
+    this.getCategoryBlocks();
+
+    this.$on("refreshBuildingBlock", () => {
+      this.getEventBuildingBlocks();
+    });
+  },
   watch: {
     event(newVal, oldVal) {
       // Get default event building blocks
@@ -524,16 +507,6 @@ export default {
     elementsBudget(val) {
       this.switchingBudgetAndCost();
     },
-  },
-  created() {
-  },
-  mounted() {
-    this.getEventBuildingBlocks();
-    this.getCategoryBlocks();
-
-    this.$on("refreshBuildingBlock", () => {
-      this.getEventBuildingBlocks();
-    });
   },
   filters: {
     withComma(amount) {

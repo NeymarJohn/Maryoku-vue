@@ -1,12 +1,12 @@
-import Model from "./Model";
-import CalendarEvent from "./CalendarEvent";
+import Model from './Model'
+import CalendarEvent from './CalendarEvent'
 
 export default class CalendarEventStatistics extends Model {
-  resource() {
-    return "statistics";
+  resource () {
+    return 'statistics'
   }
 
-  event() {
-    return this.belongsTo(CalendarEvent);
+  event () {
+    return this.belongsTo(CalendarEvent)
   }
 }

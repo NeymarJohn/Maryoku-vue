@@ -1,17 +1,18 @@
 <template>
   <div class="maryoku_input">
     <md-autocomplete
-      v-model="selectedLocation"
       class="location md-vendor"
+      v-model="selectedLocation"
       :md-options="locations"
       :class="{ active: !!selectedLocation, 'md-purple': theme === 'purple' }"
       @md-opened="updateSuggestionStyle"
-    />
+    >
+    </md-autocomplete>
   </div>
 </template>
 <script>
 export default {
-  name: "MaryokuInput",
+  name: "maryoku-input",
   model: {},
   props: {
     /**
@@ -44,10 +45,46 @@ export default {
       results: [],
     };
   },
+  methods: {
+    handleInput(e) {
+      this.$emit("input", this.content);
+    },
+    addressSuggestions(predictions, status) {
+      if (status != google.maps.places.PlacesServiceStatus.OK) {
+        return;
+      }
+      this.locations = [];
+      predictions.forEach((item) => {
+        this.locations.push(item.description);
+        this.places.push({ id: item.place_id, name: item.description });
+      });
+      this.updateSuggestionStyle();
+    },
+    updateSuggestionStyle(){
+      console.log('updateSuggestionStyle', this.theme);
+      if ( this.theme === 'purple' ) {
+        setTimeout((_) => {
+          $(".md-list-item-button").hover(
+                  function (el) {
+                    $(this).attr("style", "background-color:#641856!important;color: #fff!important");
+                  },
+                  function () {
+                    $(this).attr("style", "background-color:#fff;color:#000");
+                  },
+          );
+        }, 0);
+      }
+    }
+  },
   computed: {
     getClass: function () {
       return `${this.inputStyle} ${this.value ? "active" : ""}`;
     },
+  },
+  mounted() {
+    this.selectedLocation = this.value;
+    this.locationService = new google.maps.places.AutocompleteService();
+    this.geocoder = new google.maps.Geocoder();
   },
   watch: {
     content: function (newValue) {
@@ -76,42 +113,6 @@ export default {
         this.selectedLocation = newValue;
       }
     },
-  },
-  mounted() {
-    this.selectedLocation = this.value;
-    this.locationService = new google.maps.places.AutocompleteService();
-    this.geocoder = new google.maps.Geocoder();
-  },
-  methods: {
-    handleInput(e) {
-      this.$emit("input", this.content);
-    },
-    addressSuggestions(predictions, status) {
-      if (status != google.maps.places.PlacesServiceStatus.OK) {
-        return;
-      }
-      this.locations = [];
-      predictions.forEach((item) => {
-        this.locations.push(item.description);
-        this.places.push({ id: item.place_id, name: item.description });
-      });
-      this.updateSuggestionStyle();
-    },
-    updateSuggestionStyle(){
-      console.log("updateSuggestionStyle", this.theme);
-      if ( this.theme === "purple" ) {
-        setTimeout((_) => {
-          $(".md-list-item-button").hover(
-                  function (el) {
-                    $(this).attr("style", "background-color:#641856!important;color: #fff!important");
-                  },
-                  function () {
-                    $(this).attr("style", "background-color:#fff;color:#000");
-                  },
-          );
-        }, 0);
-      }
-    }
   },
 };
 </script>

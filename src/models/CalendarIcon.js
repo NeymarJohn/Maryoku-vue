@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class CalendarIcon extends Model {
-  resource() {
-    return "icons";
+  resource () {
+    return 'icons'
   }
 }

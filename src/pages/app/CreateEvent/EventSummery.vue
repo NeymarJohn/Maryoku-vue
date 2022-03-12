@@ -1,96 +1,85 @@
 <template>
-  <div class="event-summery">
-    <div class="container">
-      <div class="summery-section">
-        <h1>Here what happened next</h1>
+    <div class="event-summery">
+        <div class="container">
+            <div class="summery-section">
+                <h1>Here what happened next</h1>
 
-        <div class="event-steps">
-          <div class="event-steps__item">
-            3 Ideas for Event Concepts
-          </div>
-          <div class="event-steps__item">
-            Detailed timeline
-          </div>
-          <div class="event-steps__item">
-            detailed budget table
-          </div>
-          <div class="event-steps__item">
-            vendor proposals
-          </div>
-        </div>
+                <div class="event-steps">
+                    <div class="event-steps__item">
+                        3 Ideas for Event Concepts
+                    </div>
+                    <div class="event-steps__item">
+                        Detailed timeline
+                    </div>
+                    <div class="event-steps__item">
+                        detailed budget table
+                    </div>
+                    <div class="event-steps__item">
+                        vendor proposals
+                    </div>
+                </div>
 
-        <div class="wizard small row ">
-          <a href="">Within 24 hour</a>
-          <a href="">+ 12 hour</a>
-          <a href="">+ 12 hour</a>
-          <a href="">Within a week</a>
-        </div>
+                <div class="wizard small row ">
+                    <a href="">Within 24 hour</a>
+                    <a href="">+ 12 hour</a>
+                    <a href="">+ 12 hour</a>
+                    <a href="">Within a week</a>
+                </div>
 
-        <div class="event-dashboard-desc">
-          <img src="https://www.maryoku.com/img/events-img3.png">
-          <div class="event-dashboard-desc__content">
-            <h4>You will get a designed event site to engage your invitees and for them to RSVP</h4>
-            <p>
-              Some text here Some text here klere klkle text here
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="price-submit-section">
-        <div class="form-section">
-          <div class="price-desc">
-            <div class="desc-item">
-              <div class="item-label">
-                Price
-              </div>
-              <div class="item-value">
-                $60
-              </div>
+                <div class="event-dashboard-desc">
+                    <img src="https://www.maryoku.com/img/events-img3.png">
+                    <div class="event-dashboard-desc__content">
+                        <h4>You will get a designed event site to engage your invitees and for them to RSVP</h4>
+                        <p>
+                            Some text here Some text here klere klkle text here
+                        </p>
+                    </div>
+                </div>
+
             </div>
-            <div class="desc-item">
-              <div class="item-label">
-                <md-checkbox v-model="agree">
-                  I agree to showcase this event in Maryoku library
-                </md-checkbox>
-              </div>
-              <div class="item-value">
-                -$60
-              </div>
-            </div>
-          </div>
+            <div class="price-submit-section">
+                <div class="form-section">
+                    <div class="price-desc">
+                        <div class="desc-item">
+                            <div class="item-label">Price</div>
+                            <div class="item-value">$60</div>
+                        </div>
+                        <div class="desc-item">
+                            <div class="item-label">
+                                <md-checkbox v-model="agree">I agree to showcase this event in Maryoku library</md-checkbox>
 
-          <div class="total-and-submit">
-            <div class="desc-item total-desc">
-              <div class="item-label">
-                Total
-              </div>
-              <div class="item-value">
-                $0
-              </div>
-            </div>
+                            </div>
+                            <div class="item-value">-$60</div>
+                        </div>
+                    </div>
 
-            <md-button
-              class="md-rose next-btn custom-btn"
-              @click="createEvent"
-            >
-              Submit
-            </md-button>
-          </div>
+                    <div class="total-and-submit">
+                        <div class="desc-item total-desc">
+                            <div class="item-label">Total</div>
+                            <div class="item-value">$0</div>
+                        </div>
+
+                        <md-button
+                            @click="createEvent"
+                            class="md-rose next-btn custom-btn">Submit
+                        </md-button>
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
 
-import GoBack from "./componenets/GoBack";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
-import numeral from "numeral";
-import EventComponent from "@/models/EventComponent";
-import CalendarEvent from "@/models/CalendarEvent";
-import Calendar from "@/models/Calendar";
+import numeral from 'numeral'
+import EventComponent from '@/models/EventComponent'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
 
 export default {
   components: {
@@ -99,29 +88,29 @@ export default {
   data () {
     return {
       agree: true
-    };
+    }
   },
   created () {
     // create new event
 
     this.$auth.currentUser(this, false, () => {
 
-    });
+    })
   },
   methods: {
 
     createEvent () {
-      this.$router.push({ path: "/event-created"});
+      this.$router.push({ path: `/event-created`})
     }
 
   },
   computed: {
-    ...mapState("PublicEventPlanner", [
-      "publicEventData"
+    ...mapState('PublicEventPlanner', [
+      'publicEventData'
     ])
   }
 
-};
+}
 </script>
 <style lang="scss">
     $baseColor : #5c2153;

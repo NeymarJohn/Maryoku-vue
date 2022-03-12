@@ -1,16 +1,16 @@
 <template>
   <section class="proposal-header">
     <div class="background-image">
-      <div v-if="vendor" class="d-flex concept-image-wrapper">
+      <div class="d-flex concept-image-wrapper" v-if="vendor">
         <div v-for="(imageIndex, index) in new Array(10)" :key="`header-image-${index}-1`" class="concept-color">
           <img
-            v-if="backgroundImages[index % backgroundImages.length]"
             class="concept-image"
+            v-if="backgroundImages[index % backgroundImages.length]"
             :src="`${backgroundImages[index % backgroundImages.length]}`"
-          >
+          />
         </div>
       </div>
-      <img v-else :src="defaultImage" class="default-image">
+      <img v-else :src="defaultImage" class="default-image" />
     </div>
     <div class="proposal-banner">
       <div class="header-content">
@@ -23,11 +23,11 @@
       <div class="summary-cont">
         <ul>
           <li>
-            <img :src="`${$iconURL}common/clock-white.svg`">
+            <img :src="`${$iconURL}common/clock-white.svg`" />
             {{ eventTime }}
           </li>
           <li>
-            <img :src="`${$iconURL}common/calendar-white.svg`">
+            <img :src="`${$iconURL}common/calendar-white.svg`" />
             {{ eventDate }}
           </li>
         </ul>

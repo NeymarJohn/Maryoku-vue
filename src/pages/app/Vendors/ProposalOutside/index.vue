@@ -2,30 +2,30 @@
   <div class="for-proposal-wrapper">
     <div class="md-layout justify-content-between">
       <div class="md-layout-item md-size-70">
-        <proposal-steps v-if="vendor" :event-category="vendor.eventCategory" :step="step" :vendor="vendor" />
-        <div v-if="step === 0" class="step-wrapper">
-          <ProposalWizardStep0 class="mt-20" />
+        <proposal-steps v-if="vendor" :eventCategory="vendor.eventCategory" :step="step" :vendor="vendor" />
+        <div class="step-wrapper" v-if="step === 0">
+          <ProposalWizardStep0 class="mt-20"></ProposalWizardStep0>
         </div>
-        <div v-if="step === 1" class="step-wrapper">
-          <ProposalEventVision :event="event" />
+        <div class="step-wrapper" v-if="step === 1">
+          <ProposalEventVision :event="event"></ProposalEventVision>
         </div>
-        <div v-if="step === 2" class="step-wrapper">
-          <ProposalWizardStep2 />
+        <div class="step-wrapper" v-if="step === 2">
+          <ProposalWizardStep2></ProposalWizardStep2>
         </div>
-        <div v-if="step === 3" class="step-wrapper">
-          <ProposalWizardStep3 :title="`Event Information & Details`" :is-edit="false" :icon-url="iconUrl" />
+        <div class="step-wrapper" v-if="step === 3">
+          <ProposalWizardStep3 :title="`Event Information & Details`" :isEdit="false" :iconUrl="iconUrl" />
         </div>
       </div>
       <div class="md-layout-item md-size-30 pos-relative">
         <ProposalBudgetSummary
-          v-if="step >= 1"
-          :bundle-discount="true"
+          :bundleDiscount="true"
           :warning="true"
           :additional="true"
-          :is-edit="true"
+          :isEdit="true"
           :step="step"
           :services="services"
           :taxes="taxes"
+          v-if="step >= 1"
         />
       </div>
     </div>
@@ -47,11 +47,10 @@ const components = {
     ProposalWizardStep0: () => import("./ProposalWizardStep0.vue"),
     ProposalWizardStep2: () => import("./ProposalWizardStep2.vue"),
     ProposalWizardStep3: () => import("./ProposalWizardStep3.vue"),
-};
+}
 
 export default {
   components,
-  filters: {},
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -62,6 +61,51 @@ export default {
       markedDates: [],
     };
   },
+  created() {},
+  async mounted() {
+    this.services = Object.assign([], businessCategories);
+
+    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
+    await this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch('common/getTaxes');
+
+    // handling uploading photo backhand process
+      this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName}) => {
+          const currentPhoto = this.inspirationalPhotos[index];
+
+
+          const url = await S3Service.fileUpload(file, fileName, link)
+          this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url }});
+
+      });
+      this.$root.$on("remove-inspirational-photo", async (index) => {
+          if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+          this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: null });
+      })
+  },
+  methods: {
+    selectSecondCategory(serviceCategory) {
+      this.$store.commit("proposalForNonMaryoku/setValue", { key: "currentSecondaryService", value: serviceCategory });
+    },
+    flatDeep(arr, d = 1) {
+      return d > 0
+        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
+        : arr.slice();
+    },
+    servicesByCategory(category) {
+      const services = this.services.filter((s) => s.name == category);
+
+      if (services.length > 0) {
+        return this.flatDeep(
+          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+          Infinity,
+        );
+      } else {
+        return [];
+      }
+    },
+  },
+  filters: {},
   computed: {
     extraServices() {
       return this.event.components.filter(
@@ -97,51 +141,7 @@ export default {
     }
   },
   watch: {
-      taxes(newVal){console.log("taxes", newVal);}
-  },
-  created() {},
-  async mounted() {
-    this.services = Object.assign([], businessCategories);
-
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-    await this.$store.dispatch("common/fetchAllCategories");
-    await this.$store.dispatch("common/getTaxes");
-
-    // handling uploading photo backhand process
-      this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName}) => {
-          const currentPhoto = this.inspirationalPhotos[index];
-
-
-          const url = await S3Service.fileUpload(file, fileName, link);
-          this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url }});
-
-      });
-      this.$root.$on("remove-inspirational-photo", async (index) => {
-          if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
-          this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: null });
-      });
-  },
-  methods: {
-    selectSecondCategory(serviceCategory) {
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "currentSecondaryService", value: serviceCategory });
-    },
-    flatDeep(arr, d = 1) {
-      return d > 0
-        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
-        : arr.slice();
-    },
-    servicesByCategory(category) {
-      const services = this.services.filter((s) => s.name == category);
-
-      if (services.length > 0) {
-        return this.flatDeep(
-          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-          Infinity,
-        );
-      } else {
-        return [];
-      }
-    },
+      taxes(newVal){console.log('taxes', newVal)}
   }
 };
 </script>

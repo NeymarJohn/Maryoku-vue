@@ -1,6 +1,6 @@
 <template>
   <div class="timeline-items-list">
-    <div v-for="(scheduleDate, dateIndex) in timelineDates" :key="scheduleDate.date" class="timeline-items-list__item">
+    <div class="timeline-items-list__item" v-for="(scheduleDate, dateIndex) in timelineDates" :key="scheduleDate.date">
       <div class="item-header mb-20">
         <div class="header-title font-size-14 color-gray text-transform-capitalize">
           <div class="time-line-edit d-flex justify-content-center align-center">
@@ -10,7 +10,7 @@
             </div>
           </div>
         </div>
-        <div v-if="isEditMode" class="header-actions">
+        <div class="header-actions" v-if="isEditMode">
           <md-button
             class="md-default md-icon-button md-simple md-just-icon md-wrapper edit-btn"
             style="font-size: 26px !important"
@@ -34,22 +34,22 @@
           class="timeline-group-wrapper time-line-item"
         >
           <timeline-empty
-            v-if="templateIndex === 0"
             :index="templateIndex"
             :date="scheduleDate"
+            v-if="templateIndex == 0"
             @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
-          />
+          ></timeline-empty>
           <timeline-template-container
             :template="template"
-            :group-index="templateIndex"
-            :timeline-date="{ ...scheduleDate, dateIndex }"
+            :groupIndex="templateIndex"
+            :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
             @remove="removeTemplate(dateIndex, templateIndex, template)"
-          />
+          ></timeline-template-container>
           <timeline-empty
             :index="templateIndex"
             :date="scheduleDate"
             @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
-          />
+          ></timeline-empty>
         </div>
       </template>
       <template v-else>
@@ -58,11 +58,11 @@
           :key="`timelineItem-${index}`"
           :item="timelineItem"
           :index="index"
-          :timeline-date="scheduleDate"
+          :timelineDate="scheduleDate"
           class="mt-10 mb-10 timeline-group-wrapper"
-          :edit-mode="false"
           @remove="removeItem"
-        />
+          :editMode="false"
+        ></timeline-item>
       </template>
     </div>
     <!-- Confirm Modal-->
@@ -71,11 +71,9 @@
         <div class="maryoku-modal-header delete-timeline-model__header">
           <h2>
             Are you sure you want to say
-            <br>goodbye to your changes?
+            <br />goodbye to your changes?
           </h2>
-          <div class="header-description">
-            Your changes will be deleted after that
-          </div>
+          <div class="header-description">Your changes will be deleted after that</div>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button modal-close-button"
             @click="showDeleteConfirmModal = false"
@@ -85,12 +83,8 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal = false">
-          Cancel
-        </md-button>
-        <md-button class="md-red add-category-btn" @click="removeTimelineItem">
-          Yes,I'm sure
-        </md-button>
+        <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal = false">Cancel</md-button>
+        <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
       </template>
     </modal>
   </div>
@@ -109,7 +103,7 @@ import moment from "moment";
 import { Modal } from "@/components";
 import { timelineTempates } from "@/constants/event.js";
 export default {
-  name: "EventDetailsTimeline",
+  name: "event-details-timeline",
   components: {
     Drop,
     TimelineTemplateItem,
@@ -119,21 +113,8 @@ export default {
     TimelineTemplateContainer,
     Modal,
   },
-  props: {
-    isEditMode: {
-      type: Boolean,
-      default: true,
-    },
-    editingMode: {
-      type: String,
-      default: "template",
-    },
-  },
-  data() {
-    return {
-      showDeleteConfirmModal: false,
-      delItem: null,
-    };
+  created() {
+    this.$store.dispatch("event/getTimelineDates", this.event.id);
   },
   computed: {
     event() {
@@ -146,7 +127,26 @@ export default {
       return [];
     },
   },
+  data() {
+    return {
+      showDeleteConfirmModal: false,
+      delItem: null,
+    };
+  },
+  props: {
+    isEditMode: {
+      type: Boolean,
+      default: true,
+    },
+    editingMode: {
+      type: String,
+      default: "template",
+    },
+  },
   mounted() {
+    console.log("timeline.edit.panel", this.timelineDates);
+  },
+  created() {
     console.log("timeline.edit.panel", this.timelineDates);
   },
   methods: {

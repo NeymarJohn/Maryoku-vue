@@ -1,11 +1,9 @@
 <template>
-  <md-button :class="buttonStyle" @click.prevent="triggerFunc">
-    {{ text }}
-  </md-button>
+<md-button @click.prevent='triggerFunc' :class='buttonStyle'>{{text}}</md-button>
 </template>
 <script>
 export default {
-  name: "Button",
+  name: 'Button',
   model: {
   },
   props: {
@@ -15,10 +13,10 @@ export default {
   },
   methods: {
     triggerFunc: function () {
-      this.onClick();
+      this.onClick()
     }
   }
-};
+}
 </script>
 <style lang="scss">
     .input-default{

@@ -12,38 +12,36 @@
         </template>
         <template slot="body">
           <div class="md-layout" style="margin-top: 5%">
-            <div v-for="(item, index) in dietaryIconOnFirstList" class="md-layout-item dietary-item">
+            <div class="md-layout-item dietary-item" v-for="(item, index) in dietaryIconOnFirstList">
               <img
-                v-if="item.flagOn"
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
                 @click="toggleFlagFirstList(index)"
-              >
+                v-if="item.flagOn"
+              />
               <img
-                v-if="!item.flagOn"
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.off}.png`"
                 @click="toggleFlagFirstList(index)"
-              >
+                v-if="!item.flagOn"
+              />
             </div>
           </div>
 
           <div class="md-layout" style="margin-top: 5%">
-            <div v-for="(item, index) in dietaryIconOnSecondList" class="md-layout-item dietary-item">
+            <div class="md-layout-item dietary-item" v-for="(item, index) in dietaryIconOnSecondList">
               <img
-                v-if="item.flagOn"
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
                 @click="toggleFlagSecondList(index)"
-              >
+                v-if="item.flagOn"
+              />
               <img
-                v-if="!item.flagOn"
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.off}.png`"
                 @click="toggleFlagSecondList(index)"
-              >
+                v-if="!item.flagOn"
+              />
             </div>
           </div>
 
-          <md-button class="md-info signup-btn md-round" @click="send()">
-            Send
-          </md-button>
+          <md-button class="md-info signup-btn md-round" @click="send()">Send</md-button>
         </template>
       </modal>
     </div>

@@ -1,19 +1,19 @@
 <template>
-  <div ref="content" class="concept-image-block">
+  <div class="concept-image-block" ref="content">
     <div
+      class="image-background"
       v-for="idx in 4"
       :key="idx"
-      class="image-background"
       :style="`background-color: ${colors[idx - 1].color}; opacity:${colors[idx - 1].opacity}`"
-    />
+    ></div>
     <div>
-      <div v-for="indx in 5" :key="indx" :class="`images-list__item ${border}`">
+      <div :class="`images-list__item ${border}`" v-for="indx in 5" :key="indx">
         <div
-          v-if="images[indx - 1]"
           class="image-section d-flex justify-content-center align-center text-center"
           :style="`background-image:url(${images[indx - 1].thumb_url || images[indx - 1].url})`"
           :for="`file-${indx}`"
-        />
+          v-if="images[indx - 1]"
+        ></div>
       </div>
     </div>
   </div>
@@ -21,6 +21,11 @@
 <script>
 import jsPDF from "jspdf";
 export default {
+  data() {
+    return {
+      imageData: "",
+    };
+  },
   props: {
     images: {
       type: Array,
@@ -34,11 +39,6 @@ export default {
       type: String,
       default: "",
     },
-  },
-  data() {
-    return {
-      imageData: "",
-    };
   },
   created() {},
 };

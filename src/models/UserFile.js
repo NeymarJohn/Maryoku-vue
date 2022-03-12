@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class UserFile extends Model {
-  resource() {
-    return "me/files";
+  resource () {
+    return 'me/files'
   }
 }

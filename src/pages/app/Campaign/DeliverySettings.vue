@@ -3,11 +3,9 @@
     <collapse-panel>
       <template slot="header">
         <div class="d-flex align-center p-50">
-          <img class="mr-30" :src="`${$iconURL}Campaign/Group 9136.svg`">
+          <img class="mr-30" :src="`${$iconURL}Campaign/Group 9136.svg`" />
           <div>
-            <div class="font-size-30 font-bold-extra color-red">
-              Message Settings
-            </div>
+            <div class="font-size-30 font-bold-extra color-red">Message Settings</div>
             <div class="mt-2 d-flex align-center">
               <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
 
@@ -20,51 +18,45 @@
         <div class="delivery-setting-content pb-50">
           <div class="setting-item">
             <div class="check-wrapper">
-              <md-checkbox v-model="settingData.phone.selected" class="md-checkbox-narrow" />
+              <md-checkbox v-model="settingData.phone.selected" class="md-checkbox-narrow"></md-checkbox>
               <div>
-                <img :src="`${$iconURL}Campaign/group-9439.svg`" class="mr-10 ml-10">
+                <img :src="`${$iconURL}Campaign/group-9439.svg`" class="mr-10 ml-10" />
                 <span class="font-size-22 font-bold-extra mr-30">By text message</span>
                 <span>WhatsApp or sms </span>
               </div>
               <md-button class="md-icon-button md-simple collapse-button">
-                <md-icon v-if="settingData.phone.selected" class="icon">
-                  keyboard_arrow_down
-                </md-icon>
-                <md-icon v-if="!settingData.phone.selected" class="icon">
-                  keyboard_arrow_right
-                </md-icon>
+                <md-icon class="icon" v-if="settingData.phone.selected">keyboard_arrow_down</md-icon>
+                <md-icon class="icon" v-if="!settingData.phone.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
             <div
+              class="mt-50"
               v-if="
                 settingData.phone.selected &&
-                  (currentCampaign.campaignStatus == 'EDITING' ||
+                (currentCampaign.campaignStatus == 'EDITING' ||
                   currentCampaign.campaignStatus == 'TESTING' ||
                   currentCampaign.campaignStatus == 'SAVED')
               "
-              class="mt-50"
             >
-              <div class="font-bold">
-                To
-              </div>
+              <div class="font-bold">To</div>
               <div class="d-flex align-start width-100">
                 <div class="flex-1 position-relative">
                   <maryoku-textarea
-                    v-model="settingData.phone.numberString"
                     type="phones"
                     placeholder="Paste all phone numbers here…"
                     hint="###-##-#######"
-                    input-style="phone"
+                    inputStyle="phone"
+                    v-model="settingData.phone.numberString"
                     @change="handleInputEmails"
-                  />
+                  ></maryoku-textarea>
                   <invalid-address-panel
-                    v-if="invalidPastedPhones"
                     type="phone"
                     class="mt-30"
+                    v-if="invalidPastedPhones"
                     :content="invalidPastedPhones"
-                  />
+                  ></invalid-address-panel>
                   <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                     <md-tooltip>
                       <div class="font-size-14 input-tooltip">###-##-#######</div>
                     </md-tooltip>
@@ -72,11 +64,11 @@
                 </div>
                 <span class="font-size-16" style="padding: 20px 40px">Or</span>
                 <md-button
-                  v-if="!settingData.phone.excelFileName"
                   class="md-outlined md-simple maryoku-btn"
                   @click="choosePhoneExcel"
+                  v-if="!settingData.phone.excelFileName"
                 >
-                  <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
+                  <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />
                   <span class="color-red">Upload Excel list file</span>
                 </md-button>
                 <div v-else class="uploadedFile border-gray-1">
@@ -91,7 +83,7 @@
                   </md-button>
                 </div>
                 <span class="ml-20 mt-10">
-                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                   <md-tooltip>
                     <div class="font-size-14 input-tooltip">
                       {{ tooltips.phoneExcel }}
@@ -99,9 +91,7 @@
                   </md-tooltip>
                 </span>
               </div>
-              <div class="mt-50 font-bold">
-                How would you like to send your text?
-              </div>
+              <div class="mt-50 font-bold">How would you like to send your text?</div>
               <div class="mt-10">
                 <md-checkbox
                   v-model="settingData.phone.smsOrWhatsapp"
@@ -113,7 +103,8 @@
                       'font-bold': settingData.phone.smsOrWhatsapp === 'sms',
                     }"
                     class="p-5"
-                  >By SMS</span>
+                    >By SMS</span
+                  >
                 </md-checkbox>
                 <md-checkbox
                   v-model="settingData.phone.smsOrWhatsapp"
@@ -121,21 +112,22 @@
                   value="whatsapp"
                   disabled
                 >
-                  <img :src="`${$iconURL}Campaign/Image+74.png`">
+                  <img :src="`${$iconURL}Campaign/Image+74.png`" />
                   <span
                     :class="{
                       'font-bold': settingData.phone.smsOrWhatsapp === 'whatsapp',
                     }"
-                  >By WhatsApp</span>
+                    >By WhatsApp</span
+                  >
                 </md-checkbox>
               </div>
             </div>
             <div
+              class="mt-50"
               v-if="
                 (settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED') ||
-                  currentCampaign.campaignStatus == 'SCHEDULED'
+                currentCampaign.campaignStatus == 'SCHEDULED'
               "
-              class="mt-50"
             >
               <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
@@ -144,12 +136,12 @@
                 <div class="d-flex align-start width-100">
                   {{ currentCampaign.settings.phone.numberString }}
                 </div>
-                <div v-if="settingData.phone.smsOrWhatsapp" class="font-bold mb-10 line-height-2 mt-50">
+                <div class="font-bold mb-10 line-height-2 mt-50" v-if="settingData.phone.smsOrWhatsapp">
                   By {{ settingData.phone.smsOrWhatsapp }}
                 </div>
                 <div class="mt-20">
                   <md-button class="md-simple md-red edit-btn" @click="downloadUsersPhone">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10">Download Full Guests list
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />Download Full Guests list
                   </md-button>
                 </div>
               </div>
@@ -158,25 +150,21 @@
 
           <div class="setting-item">
             <div class="check-wrapper">
-              <md-checkbox v-model="settingData.email.selected" class="md-checkbox-narrow" />
+              <md-checkbox v-model="settingData.email.selected" class="md-checkbox-narrow"></md-checkbox>
               <div>
-                <img :src="`${$iconURL}Campaign/group-9437.svg`" class="mr-10 ml-10">
+                <img :src="`${$iconURL}Campaign/group-9437.svg`" class="mr-10 ml-10" />
                 <span class="font-size-22 font-bold-extra mr-30">By email</span>
                 <span>Enter recipients emails or upload Microsoft excel or Google sheets with guests list</span>
               </div>
               <md-button class="md-icon-button md-simple collapse-button">
-                <md-icon v-if="settingData.email.selected" class="icon">
-                  keyboard_arrow_down
-                </md-icon>
-                <md-icon v-if="!settingData.email.selected" class="icon">
-                  keyboard_arrow_right
-                </md-icon>
+                <md-icon class="icon" v-if="settingData.email.selected">keyboard_arrow_down</md-icon>
+                <md-icon class="icon" v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
             <div
               v-if="
                 settingData.email.selected &&
-                  (currentCampaign.campaignStatus == 'EDITING' ||
+                (currentCampaign.campaignStatus == 'EDITING' ||
                   currentCampaign.campaignStatus == 'TESTING' ||
                   currentCampaign.campaignStatus == 'SAVED')
               "
@@ -185,17 +173,17 @@
                 <label class="font-bold mb-10 line-height-2">Subject</label>
                 <div class="width-60 position-relative">
                   <maryoku-input
-                    v-model="settingData.email.subject"
                     placeholder="Type your email subject here…"
-                  />
+                    v-model="settingData.email.subject"
+                  ></maryoku-input>
                 </div>
               </div>
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">From</label>
                 <div class="width-60 position-relative">
-                  <maryoku-input v-model="settingData.email.from" placeholder="Your email address…" />
+                  <maryoku-input placeholder="Your email address…" v-model="settingData.email.from"></maryoku-input>
                   <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                     <md-tooltip class="emailTooltip">
                       Pick the email from which you wish the guests to get this mail
                     </md-tooltip>
@@ -210,25 +198,25 @@
                 <div class="d-flex align-start width-100">
                   <div class="width-60 position-relative">
                     <maryoku-textarea
-                      v-model="settingData.email.addressString"
                       placeholder="Paste all emails here…"
                       type="input"
-                      input-style="emails"
+                      inputStyle="emails"
                       hint="example : example@mail.com"
+                      v-model="settingData.email.addressString"
                       @change="handleInputEmails"
-                    />
+                    ></maryoku-textarea>
                     <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                      <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                      <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                       <md-tooltip>
                         <div class="font-size-14 input-tooltip">example : example@mail.com</div>
                       </md-tooltip>
                     </span>
                     <invalid-address-panel
-                      v-if="invalidPastedEmails"
                       type="email"
                       class="mt-30"
+                      v-if="invalidPastedEmails"
                       :content="invalidPastedEmails"
-                    />
+                    ></invalid-address-panel>
                   </div>
                   <span class="font-size-16" style="padding: 20px 40px">Or</span>
 
@@ -238,7 +226,7 @@
                     class="md-outlined md-simple maryoku-btn"
                     @click="chooseEmailExcel"
                   >
-                    <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
+                    <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />
                     <span class="color-red">Upload Excel list file</span>
                   </md-button>
                   <div v-else class="uploadedFile border-gray-1">
@@ -248,13 +236,13 @@
                     <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
                       <span class="color-red">change</span>
                     </md-button>
-                    <span class="ml-10 mr-10" />
+                    <span class="ml-10 mr-10"></span>
                     <md-button class="md-simple edit-btn ml-10" @click="removeExcel('email')">
                       <span class="color-red">remove</span>
                     </md-button>
                   </div>
                   <span class="ml-20 mt-10">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                     <md-tooltip>
                       <div class="font-size-14 input-tooltip">
                         {{ tooltips.emailExcel }}
@@ -267,21 +255,17 @@
             <div
               v-if="
                 settingData.email.selected &&
-                  (currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED')
+                (currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED')
               "
             >
               <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  Subject
-                </div>
+                <div class="font-bold mb-10 line-height-2">Subject</div>
                 <div class="width-60 position-relative">
                   {{ settingData.email.subject }}
                 </div>
               </div>
               <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  From
-                </div>
+                <div class="font-bold mb-10 line-height-2">From</div>
                 <div class="width-60 position-relative">
                   {{ settingData.email.from }}
                 </div>
@@ -295,7 +279,7 @@
                 </div>
                 <div class="mt-20">
                   <md-button class="md-simple md-red edit-btn" @click="downloadUsersEmailList">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10">Download Full Guests list
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />Download Full Guests list
                   </md-button>
                 </div>
               </div>
@@ -303,14 +287,14 @@
           </div>
 
           <input
-            id="execelFileInput"
             style="display: none"
+            id="execelFileInput"
             name="attachment"
             type="file"
             multiple="multiple"
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             @change="onFileChange"
-          >
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          />
         </div>
       </template>
     </collapse-panel>
@@ -379,64 +363,6 @@ export default {
       },
       fileInputType: "",
     };
-  },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    emailSubject() {
-      const campaignData = this.$store.state.campaign;
-      switch (this.campaign.name) {
-        case "SAVING_DATE":
-          return `Save the date - ${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title}`;
-          break;
-        case "RSVP":
-          return `RSVP - ${campaignData.RSVP ? campaignData.RSVP.title : this.event.title}`;
-          break;
-        case "COMING_SOON":
-          return `Coming soon - ${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title}`;
-          break;
-        case "FEEDBACK":
-          return `Feedback - ${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title}`;
-          break;
-        default:
-          return "";
-      }
-    },
-    currentCampaign() {
-      const currentCampaign = this.$store.state.campaign[this.campaign.name];
-      if (!currentCampaign) return {};
-      return currentCampaign;
-    },
-    inviteesCount() {
-      if (this.currentCampaign) {
-        const emailInvitees = this.currentCampaign.guestEmails ? this.currentCampaign.guestEmails.length : 0;
-        const phoneInvitees = this.currentCampaign.guestSMS ? this.currentCampaign.guestSMS.length : 0;
-
-        return emailInvitees + phoneInvitees;
-      }
-      return "";
-    },
-  },
-  watch: {
-    settingData: {
-      handler(newValue) {
-        this.$emit("change", newValue);
-      },
-      deep: true,
-    },
-    defaultSettings: {
-      handler(newValue) {
-        this.settingData = newValue;
-        this.settingData.email.subject = this.emailSubject;
-        if (!this.settingData.email.from)
-          this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
-      },
-      deep: true,
-    },
-    emailSubject(newValue) {
-      this.settingData.email.subject = newValue;
-    },
   },
   created() {
     this.settingData = this.defaultSettings;
@@ -547,6 +473,64 @@ export default {
       const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, this.currentCampaign.campaignType + "_" + fileName + fileExtension);
+    },
+  },
+  computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    emailSubject() {
+      const campaignData = this.$store.state.campaign;
+      switch (this.campaign.name) {
+        case "SAVING_DATE":
+          return `Save the date - ${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title}`;
+          break;
+        case "RSVP":
+          return `RSVP - ${campaignData.RSVP ? campaignData.RSVP.title : this.event.title}`;
+          break;
+        case "COMING_SOON":
+          return `Coming soon - ${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title}`;
+          break;
+        case "FEEDBACK":
+          return `Feedback - ${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title}`;
+          break;
+        default:
+          return "";
+      }
+    },
+    currentCampaign() {
+      const currentCampaign = this.$store.state.campaign[this.campaign.name];
+      if (!currentCampaign) return {};
+      return currentCampaign;
+    },
+    inviteesCount() {
+      if (this.currentCampaign) {
+        const emailInvitees = this.currentCampaign.guestEmails ? this.currentCampaign.guestEmails.length : 0;
+        const phoneInvitees = this.currentCampaign.guestSMS ? this.currentCampaign.guestSMS.length : 0;
+
+        return emailInvitees + phoneInvitees;
+      }
+      return "";
+    },
+  },
+  watch: {
+    settingData: {
+      handler(newValue) {
+        this.$emit("change", newValue);
+      },
+      deep: true,
+    },
+    defaultSettings: {
+      handler(newValue) {
+        this.settingData = newValue;
+        this.settingData.email.subject = this.emailSubject;
+        if (!this.settingData.email.from)
+          this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
+      },
+      deep: true,
+    },
+    emailSubject(newValue) {
+      this.settingData.email.subject = newValue;
     },
   },
 };

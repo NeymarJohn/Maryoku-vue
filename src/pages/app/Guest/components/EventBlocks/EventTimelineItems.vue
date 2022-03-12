@@ -3,24 +3,20 @@
     <h4>
       Timeline
       <md-button
-        v-if="!readonly"
         class="md-info md-sm edit-timeline-btn pull-right"
+        v-if="!readonly"
         @click="editTimeLineItems"
-      >
-        Edit
-      </md-button>
+      >Edit</md-button>
     </h4>
 
     <div>
-      <ul v-if="timelineItems.length" class="time-line-blocks_selected-items">
+      <ul class="time-line-blocks_selected-items" v-if="timelineItems.length">
         <li
           v-for="item in timelineItems"
           :key="item.id"
           class="time-line-blocks_selected-items_item time-line-item"
         >
-          <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">
-            {{ item.icon }}
-          </md-icon>
+          <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}</md-icon>
 
           <md-card class="block-info">
             <div class="card-actions" style="width: 100%;">
@@ -28,18 +24,16 @@
                 class="item-time"
                 style="display: inline-block; margin: 14px; padding: 2px 12px !important; font-size: 1.6vmin;"
                 :style="`background : ` + item.color"
-              >{{ item.startTime }} - {{ item.endTime }}</span>
+              >{{ item.startTime }} - {{item.endTime}}</span>
             </div>
             <div class="item-title-and-time" style="padding-top: 36px;">
               <span
-                v-if="item.title"
                 class="item-title"
                 style="font-weight: 500; margin-top: 6px; display: inline-block;"
-              >{{ item.title }}</span>
+                v-if="item.title"
+              >{{item.title }}</span>
             </div>
-            <p class="item-desc">
-              {{ item.description }}
-            </p>
+            <p class="item-desc">{{ item.description }}</p>
           </md-card>
         </li>
       </ul>
@@ -47,7 +41,7 @@
         <img
           src="https://static-maryoku.s3.amazonaws.com/storage/img/timeline_example.png"
           style="opacity: 0.4;"
-        >
+        />
       </div>
     </div>
   </div>
@@ -69,7 +63,7 @@ import EventTimeLine from "../EventTimeLine";
 import EventTimeLinePanel from "../EventTimeLinePanel";
 
 export default {
-  name: "EventTabs",
+  name: "event-tabs",
   components: {
     Tabs,
   },
@@ -84,19 +78,6 @@ export default {
     // auth: auth,
     timelineItems: [],
   }),
-  computed: {},
-  created() {
-    this.isLoading = true;
-  },
-  mounted() {
-    setTimeout(this.getTimelineItems(), 400);
-
-    this.$root.$on("timeline-updated", (timelineItems) => {
-      this.isLoading = true;
-      this.event.timelineItems = timelineItems;
-      this.getTimelineItems();
-    });
-  },
   methods: {
     getTimelineItems() {
       this.timelineItems = _.sortBy(this.event.timelineItems, function (item) {
@@ -120,5 +101,18 @@ export default {
       });
     },
   },
+  created() {
+    this.isLoading = true;
+  },
+  mounted() {
+    setTimeout(this.getTimelineItems(), 400);
+
+    this.$root.$on("timeline-updated", (timelineItems) => {
+      this.isLoading = true;
+      this.event.timelineItems = timelineItems;
+      this.getTimelineItems();
+    });
+  },
+  computed: {},
 };
 </script>

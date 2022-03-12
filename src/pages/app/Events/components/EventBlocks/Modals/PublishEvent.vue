@@ -4,9 +4,7 @@
       <modal v-if="publishEventModal">
         <template slot="header">
           <div class="md-layout d-flex items-left">
-            <h4 class="clear-margins">
-              Publish Event
-            </h4>
+            <h4 class="clear-margins">Publish Event</h4>
           </div>
           <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
             <md-icon>clear</md-icon>
@@ -15,21 +13,19 @@
         <template slot="body">
           <div class="md-layout clear-margins">
             <div class="md-layout-item md-size-100">
-              <h5 class="text-left clear-margins">
-                Copy this link and send it to your event participants
-              </h5>
+              <h5 class="text-left clear-margins">Copy this link and send it to your event participants</h5>
             </div>
             <div class="md-layout-item md-size-100 clear-margins">
               <div class="md-layout">
                 <div class="md-layout-item md-size-85">
                   <md-field v-if="event">
                     <md-input
-                      id="event-link"
-                      ref="publishUrlInput"
                       v-model="publishUrl"
-                      v-focus
                       :value="publishUrl"
-                    />
+                      id="event-link"
+                      v-focus
+                      ref="publishUrlInput"
+                    ></md-input>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10 text-left" style="white-space: nowrap">
@@ -39,12 +35,8 @@
                     class="md-success md-xs md-just-icon"
                     @click="copyLink"
                   >
-                    <md-icon v-if="!copyDone">
-                      assignment
-                    </md-icon>
-                    <md-icon v-if="copyDone">
-                      check
-                    </md-icon>
+                    <md-icon v-if="!copyDone">assignment</md-icon>
+                    <md-icon v-if="copyDone">check</md-icon>
                     <md-tooltip>Copy to clipboard</md-tooltip>
                   </md-button>
                   <md-button
@@ -61,7 +53,7 @@
             </div>
           </div>
         </template>
-        <template slot="footer" />
+        <template slot="footer"> </template>
       </modal>
     </div>
   </div>

@@ -1,51 +1,49 @@
 <template>
-  <div class="proposal-page_details">
-    <div class="proposal-content">
-      <div class="proposal-info">
-        <div class="proposal-body">
-          <div class="md-simple d-flex justify-content-center align-item-center">
-            <img v-tooltip="{
-              html: true,
-              content: '<p></p>',
-              delay: { show: 200, hide: 100 },
-              trigger: 'hover',
-              placement: 'bottom',
-              classes: 'vendor-tooltip-theme',
-            }" src="/static/icons//hand-shaking.svg" class="hand-img"
-            >
-          </div>
-          <div class=" d-flex justify-content-center align-item-center">
-            <div class="md-small-hide">
-              <p class="start-communicating">
-                LET'S START TALKING!
-              </p>
+    <div class="proposal-page_details">
+        <div class="proposal-content">
+            <div class="proposal-info">
+                <div class="proposal-body">
+                    <div class="md-simple d-flex justify-content-center align-item-center">
+                        <img v-tooltip="{
+                            html: true,
+                            content: '<p></p>',
+                            delay: { show: 200, hide: 100 },
+                            trigger: 'hover',
+                            placement: 'bottom',
+                            classes: 'vendor-tooltip-theme',
+                        }" src="/static/icons//hand-shaking.svg" class="hand-img" />
+                    </div>
+                    <div class=" d-flex justify-content-center align-item-center">
+                        <div class="md-small-hide">
+                            <p class="start-communicating">
+                                LET'S START TALKING!
+                            </p>
+                        </div>
+                    </div>
+                    <div class=" d-flex justify-content-center align-item-center">
+                        <div class="md-small-hide">
+                            <p class="to-start">
+                                Click on one of the planners on the left to respond to an existing message, or start a completely new conversation.
+                            </p>
+                        </div>
+                    </div>
+                    <div class=" d-flex justify-content-center align-item-center">
+                        <div class="md-small-hide">
+                            <div class="md-vendor lets-begin" @click="$emit('show')">
+                                <a class="lets-text" >Let's Go</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-strip d-flex justify-content-center align-item-center">
+                    <p> For more information and an explanation of how to start a new offer, <a href="">click here</a></p>
+                </div>
             </div>
-          </div>
-          <div class=" d-flex justify-content-center align-item-center">
-            <div class="md-small-hide">
-              <p class="to-start">
-                Click on one of the planners on the left to respond to an existing message, or start a completely new conversation.
-              </p>
-            </div>
-          </div>
-          <div class=" d-flex justify-content-center align-item-center">
-            <div class="md-small-hide">
-              <div class="md-vendor lets-begin" @click="$emit('show')">
-                <a class="lets-text">Let's Go</a>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="footer-strip d-flex justify-content-center align-item-center">
-          <p> For more information and an explanation of how to start a new offer, <a href="">click here</a></p>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 <script>
 export default {
-    filters: {},
     props: {
         proposal: {
           type: Object,
@@ -55,15 +53,16 @@ export default {
     data() {
         return {};
     },
-    computed: {
-        link(){
-            return `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`;
-        }
-    },
-    watch: {},
     created() {},
 
     methods: {},
+    computed: {
+        link(){
+            return `${location.protocol}//${location.host}/#/unregistered/proposals/${this.proposal.id}`
+        }
+    },
+    filters: {},
+    watch: {},
 };
 
 </script>

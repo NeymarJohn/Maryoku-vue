@@ -1,21 +1,21 @@
 <template>
-  <functional-calendar
-    v-if="!updated"
-    v-model="dateData"
-    :is-date-range="multiple"
-    :is-date-picker="!multiple"
-    :change-month-function="true"
-    :change-year-function="true"
-    date-format="yyyy-mm-dd"
-    @changedMonth="changeMonth"
-    @dayClicked="selectDay($event)"
-  />
+    <functional-calendar
+        v-if="!updated"
+        :is-date-range="multiple"
+        :is-date-picker="!multiple"
+        :change-month-function="true"
+        :change-year-function="true"
+        dateFormat="yyyy-mm-dd"
+        v-model="dateData"
+        @changedMonth="changeMonth"
+        v-on:dayClicked="selectDay($event)"
+    ></functional-calendar>
 </template>
 <script>
     import moment from "moment";
     import { FunctionalCalendar } from "vue-functional-calendar";
     export default {
-        name: "MaryokuCalendar",
+        name: 'maryoku-calendar',
         components: {
             FunctionalCalendar
         },
@@ -46,36 +46,22 @@
                         start: { date: false, dateTime: false, hour: "00", mintue: "00" },
                         end: { date: false, dateTime: false, hour: "00", mintue: "00" },
                     },
-                    selectedDate: moment().format("YYYY-M-D"),
+                    selectedDate: moment().format('YYYY-M-D'),
                     selectedDatesItem: "",
                     selectedHour: "00",
                     selectedMinute: "00",
                     selectedDates: [],
                 },
-            };
+            }
         },
-        watch:{
-            multiple(newVal, oldVal){
-
-               this.updated = true;
-               setTimeout(_ => {
-                   this.updated = false;
-               }, 10);
-            },
-        },
-        created(){this.init();},
-        mounted() {
-        },
-        updated() {
-            this.renderCalendar();
-        },
+        created(){this.init()},
         methods: {
             init(){
-                console.log("init", this.initDate);
+                console.log('init', this.initDate);
                 if (this.initDate )this.dateData = this.initDate;
             },
             selectDay(e) {
-                this.$emit("select", this.dateData);
+                this.$emit('select', this.dateData)
                 this.$forceUpdate();
             },
             changeMonth(){
@@ -143,8 +129,22 @@
                     }
                 });
             },
+        },
+        watch:{
+            multiple(newVal, oldVal){
+
+               this.updated = true;
+               setTimeout(_ => {
+                   this.updated = false;
+               }, 10)
+            },
+        },
+        mounted() {
+        },
+        updated() {
+            this.renderCalendar();
         }
-    };
+    }
 </script>
 <style lang="scss">
     .input-default{

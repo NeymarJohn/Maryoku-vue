@@ -1,7 +1,7 @@
 <template>
   <div>
-    <canvas id="concept-area" width="1000" height="400" />
-    <img :src="renderedImage">
+    <canvas id="concept-area" width="1000" height="400"> </canvas>
+    <img :src="renderedImage" />
   </div>
 </template>
 <script>

@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper-logo">
-    <div class="wrapper-logo-microsoft">
-      <div class="logo-microsoft">
-        <div class="icon-microsoft">
+  <div class="wrapper-logo" >
+    <div class="wrapper-logo-microsoft" >
+      <div class="logo-microsoft" >
+        <div class="icon-microsoft" >
           <div class="block block1" />
           <div class="block block2" />
           <div class="block block3" />
@@ -25,7 +25,7 @@
 import HideSwitch from "@/components/HideSwitch";
 
 export default {
-  name: "FeedbackLogo",
+  name: "feedback-logo",
   components: {
     HideSwitch
   },
@@ -35,7 +35,7 @@ export default {
       default: false,
     }
   }
-};
+}
 </script>
 
 

@@ -50,8 +50,8 @@
     </div>
     <div v-else-if="item.type === 'date'">
       <md-datepicker
-        v-model="vendor.vendorPropertyValues[item.id]"
         class="purple-field with-icon"
+        v-model="vendor.vendorPropertyValues[item.id]"
         md-immediately
       >
         <label>{{ item.name }}</label>
@@ -63,9 +63,9 @@
     <div v-else-if="item.type === 'image-array'">
       {{ item.name }} <strong>{{ item.type }}</strong>
     </div>
-    <div v-else-if="item.type === 'file'" />
-    <div v-else-if="item.type === 'file-array'" />
-    <div v-else-if="item.type === 'geo-map'" />
+    <div v-else-if="item.type === 'file'"></div>
+    <div v-else-if="item.type === 'file-array'"></div>
+    <div v-else-if="item.type === 'geo-map'"></div>
     <div v-else-if="item.type === 'link'">
       <md-field>
         <label>{{ item.name }}</label>
@@ -80,18 +80,17 @@
       <md-field>
         <label>{{ item.name }}</label>
         <md-select
-          :id="item.id"
           v-model="vendor.vendorPropertyValues[item.id]"
           :name="item.name"
+          :id="item.id"
         >
           <md-option
             v-for="opt in item.selectionOptions"
-            :id="opt.id"
             :key="opt.id"
+            :id="opt.id"
             :value="opt.id"
+            >{{ opt.title }}</md-option
           >
-            {{ opt.title }}
-          </md-option>
         </md-select>
       </md-field>
     </div>
@@ -103,19 +102,18 @@
       <md-field>
         <label>{{ item.name }}</label>
         <md-select
-          :id="item.id"
           v-model="vendor.vendorPropertyValues[item.id]"
           :name="item.id"
+          :id="item.id"
           multiple
         >
           <md-option
             v-for="opt in item.selectionOptions"
-            :id="opt.id"
             :key="opt.id"
+            :id="opt.id"
             :value="opt.id"
+            >{{ opt.title }}</md-option
           >
-            {{ opt.title }}
-          </md-option>
         </md-select>
       </md-field>
     </div>
@@ -149,8 +147,6 @@ export default {
   data() {
     return {};
   },
-  computed: {},
-  watch: {},
   created() {
     if (
       this.item.type === "multiple-selection" ||
@@ -161,6 +157,8 @@ export default {
   },
   mounted() {},
   methods: {},
+  computed: {},
+  watch: {},
 };
 </script>
 

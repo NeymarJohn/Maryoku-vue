@@ -1,19 +1,15 @@
 <template>
   <div class="concept-item-wrapper white-card">
-    <img :src="`${concept.images[0].url}`" class="img_box">
+    <img :src="`${concept.images[0].url}`" class="img_box" />
     <div class="concept-body">
-      <div class="votes">
-        {{ concept.votes || 0 }}
-      </div>
-      <div class="name">
-        {{ concept.name }}
-      </div>
+      <div class="votes">{{ concept.votes || 0 }}</div>
+      <div class="name">{{ concept.name }}</div>
       <div class="concept-description">
         {{ concept.description }}
       </div>
-      <md-button class="edit-btn md-simple md-black" @click="gotoDetail">
-        <span class="font-size-12">Read More <md-icon>keyboard_arrow_right</md-icon></span>
-      </md-button>
+      <md-button class="edit-btn md-simple md-black" @click="gotoDetail"
+        ><span class="font-size-12">Read More <md-icon>keyboard_arrow_right</md-icon></span></md-button
+      >
     </div>
   </div>
 </template>

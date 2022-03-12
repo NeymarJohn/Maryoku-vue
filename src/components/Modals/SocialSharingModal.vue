@@ -2,10 +2,8 @@
   <modal class="sharing-model">
     <template slot="header">
       <div class="maryoku-modal-header text-center" style="width: 100%">
-        <img :src="`${$iconURL}Share/Group+7309.svg`" class="mb-20">
-        <div class="font-size-30 font-bold text-center">
-          Share It!
-        </div>
+        <img :src="`${$iconURL}Share/Group+7309.svg`" class="mb-20" />
+        <div class="font-size-30 font-bold text-center">Share It!</div>
         <div>Invite people to this event!</div>
       </div>
     </template>
@@ -14,17 +12,15 @@
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <sharing-button-group
             class="sharing-button-group-wrapper"
-            :copy-link="false"
-            :sharing-data="sharingData"
-          />
-          <maryoku-input v-model="shareLink" input-style="sharing" readonly class="sharelink" />
+            :copyLink="false"
+            :sharingData="sharingData"
+          ></sharing-button-group>
+          <maryoku-input inputStyle="sharing" v-model="shareLink" readonly class="sharelink"></maryoku-input>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-red md-bold add-category-btn" @click="onCancel()">
-        Done
-      </md-button>
+      <md-button class="md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
     </template>
   </modal>
 </template>
@@ -36,7 +32,7 @@ import InputTag from "vue-input-tag";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup.vue";
 
 export default {
-  name: "SharingModal",
+  name: "sharing-modal",
   components: {
     Modal,
     MaryokuInput,

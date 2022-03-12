@@ -18,34 +18,32 @@
         </md-button>
       </div>
       <div class="pull-right" style="margin: 0 1px">
-        <md-button style="display: inline-block" class="md-info md-sm" @click="addNewVendor">
-          Add Vendor
-        </md-button>
-        <md-button style="display: inline-block" class="md-purple md-sm" @click="openUploadModal">
-          Import Vendors From Spreadsheet
-        </md-button>
+        <md-button style="display: inline-block" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
+        <md-button style="display: inline-block" class="md-purple md-sm" @click="openUploadModal"
+          >Import Vendors From Spreadsheet</md-button
+        >
       </div>
     </div>
     <div class="md-layout-item md-size-100 clear-margins">
       <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent" />
       <vendors-grid
         v-if="view === 'grid'"
-        :building-blocks-list="buildingBlocksList"
-        :vendors-list="vendorsList"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
         :ratings="ratings"
         @editVendorDetails="editVendorDetails"
       />
       <vendors-list
         v-if="view === 'list'"
-        :building-blocks-list="buildingBlocksList"
-        :vendors-list="vendorsList"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
         @editVendorDetails="editVendorDetails"
         @delete="showDeleteAlert"
         @add-new-vendor="addNewVendor"
         @open-upload-modal="openUploadModal"
       />
     </div>
-    <upload-modal ref="uploadModal" />
+    <upload-modal ref="uploadModal"></upload-modal>
   </div>
 </template>
 <script>
@@ -61,7 +59,7 @@ import EventComponent from "@/models/EventComponent";
 import _ from "underscore";
 
 export default {
-  name: "VendorsPool",
+  name: "vendors-pool",
   components: {
     VueElementLoading,
     companyForm,
@@ -82,8 +80,6 @@ export default {
       searchTerm: "",
     };
   },
-  computed: {},
-  watch: {},
   mounted() {
     this.working = true;
     this.$auth.currentUser(this, true, () => {
@@ -118,7 +114,7 @@ export default {
     showDeleteAlert(vendor) {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         icon: "warning",
         showCancelButton: true,
@@ -160,6 +156,8 @@ export default {
       this.$refs.uploadModal.toggleModal(true);
     },
   },
+  computed: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

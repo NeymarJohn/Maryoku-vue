@@ -1,51 +1,51 @@
 <template>
-  <drop-down class="d-flex">
-    <button class="versions-button" data-toggle="dropdown">
-      <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
-            &nbsp;&nbsp;
-      <span v-if="selected === -1">
-        {{ 'Original' }}
-      </span>
-      <span v-else-if="versions">
-        {{ versions[selected].name }}
-      </span>
-            &nbsp;&nbsp;
-      <md-icon>keyboard_arrow_down</md-icon>
-    </button>
-    <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-      <li class="other-list" :class="{'selected': selected === -1}" @click="select(-1)">
-        <a class="other-item font-size-16">
-          <div class="other-name">
+    <drop-down class="d-flex" >
+        <button class="versions-button" data-toggle="dropdown">
             <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
-                        &nbsp;&nbsp;
-            <span>
-              {{ 'Original' }}
+            &nbsp;&nbsp;
+            <span v-if="selected === -1">
+                {{'Original'}}
             </span>
-          </div>
-        </a>
-      </li>
-      <li v-for="(version, idx) in versions" :key="idx" class="other-list" :class="{'selected': selected === idx}" @click="select(idx)">
-        <a class="other-item font-size-16">
-          <div class="other-name">
-            <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
-                        &nbsp;&nbsp;
-            <span>
-              {{ version.name }}
+            <span v-else-if="versions">
+                {{ versions[selected].name}}
             </span>
-          </div>
-        </a>
-      </li>
-    </ul>
-  </drop-down>
+            &nbsp;&nbsp;
+            <md-icon>keyboard_arrow_down</md-icon>
+        </button>
+        <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right " >
+            <li class="other-list" @click="select(-1)" :class="{'selected': selected === -1}">
+                <a class="other-item font-size-16" >
+                    <div class="other-name">
+                        <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
+                        &nbsp;&nbsp;
+                        <span>
+                        {{'Original'}}
+                        </span>
+                    </div>
+                </a>
+            </li>
+            <li class="other-list" v-for="(version, idx) in versions" :key="idx" @click="select(idx)" :class="{'selected': selected === idx}">
+                <a class="other-item font-size-16" >
+                    <div class="other-name">
+                        <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
+                        &nbsp;&nbsp;
+                        <span>
+                        {{version.name}}
+                        </span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </drop-down>
 </template>
 <script>
 import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 
 const components = {
     ClickOutside: () => import("vue-click-outside")
-};
+}
 export default {
-  name: "ProposalVersionsDropdown",
+  name: "proposal-versions-dropdown",
   components,
   props: {
       versions:{
@@ -62,15 +62,15 @@ export default {
         versionName: null,
     };
   },
-  watch: {
-    versions(newVal){console.log("versions", newVal);}
-  },
   methods: {
     select(index){
-      console.log("select", index, this.selected);
-      this.$emit("select", index);
+      console.log('select', index, this.selected);
+      this.$emit('select', index);
     },
 
+  },
+  watch: {
+    versions(newVal){console.log('versions', newVal)}
   },
 };
 </script>

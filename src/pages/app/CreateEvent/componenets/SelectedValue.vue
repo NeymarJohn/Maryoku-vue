@@ -1,13 +1,11 @@
 <template>
   <div class="selected-value">
-    <img :src="`${$iconURL}Onboarding/${icon}`">
+    <img :src="`${$iconURL}Onboarding/${icon}`"/>
     <div>
-      {{ this.value }}
+      {{this.value}}
     </div>
     <div>
-      <md-icon style="color:#f51355">
-        keyboard_arrow_right
-      </md-icon>
+      <md-icon style="color:#f51355">keyboard_arrow_right</md-icon>
     </div>
   </div>
 </template>
@@ -25,11 +23,11 @@ export default {
   },
   computed: {
     icon() {
-      if (!this.property) return "";
-      return `${this.property}-red.svg`;
+      if (!this.property) return ""
+      return `${this.property}-red.svg`
     }
   },
-};
+}
 </script>
 <style lang="scss" scoped>
   .selected-value {

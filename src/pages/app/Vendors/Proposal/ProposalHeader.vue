@@ -1,7 +1,7 @@
 <template>
   <section class="proposal-header">
     <div class="background-image">
-      <div v-if="event.concept" class="d-flex concept-image-wrapper">
+      <div class="d-flex concept-image-wrapper" v-if="event.concept">
         <div
           v-for="(color, index) in event.concept.colors"
           :key="`header-image-${index}-1`"
@@ -9,10 +9,10 @@
           :style="`background: ${color.color || '#EDEDED'}`"
         >
           <img
-            v-if="event.concept.images[index]"
             class="concept-image"
+            v-if="event.concept.images[index]"
             :src="`${event.concept.images[index].thumb_url || event.concept.images[index].url}`"
-          >
+          />
         </div>
         <div
           v-for="(color, index) in event.concept.colors"
@@ -21,13 +21,13 @@
           :style="`background: ${color.color || '#EDEDED'}`"
         >
           <img
-            v-if="event.concept.images[index]"
             class="concept-image"
+            v-if="event.concept.images[index]"
             :src="`${event.concept.images[index].thumb_url || event.concept.images[index].url}`"
-          >
+          />
         </div>
       </div>
-      <img v-else :src="defaultImage" class="default-image">
+      <img v-else :src="defaultImage" class="default-image" />
     </div>
     <div class="proposal-banner">
       <div class="header-content">
@@ -37,11 +37,11 @@
           </li>
           <li>
             <img
-              v-if="event.owner && event.owner.companyLogo"
               class="company-logo"
               alt=""
+              v-if="event.owner && event.owner.companyLogo"
               :src="`${event.owner.companyLogo}`"
-            >
+            />
             {{ event.owner ? event.owner.company : "" }}
           </li>
         </ul>
@@ -49,35 +49,35 @@
       <div class="summary-cont">
         <ul>
           <li>
-            <img :src="`${$iconURL}common/users-white.svg`">
+            <img :src="`${$iconURL}common/users-white.svg`" />
             {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
           </li>
           <li>
-            <img :src="`${$iconURL}common/clock-white.svg`">
+            <img :src="`${$iconURL}common/clock-white.svg`" />
             {{ eventTime }}
           </li>
           <li>
-            <img :src="`${$iconURL}common/calendar-white.svg`">
+            <img :src="`${$iconURL}common/calendar-white.svg`" />
             {{ eventDate }}
             <div
-              v-if="suggestionDate"
               class="suggest-date-help"
+              v-if="suggestionDate"
               @mouseover="dateTooltip = true"
               @mouseleave="dateTooltip = false"
             >
               ?
-              <div v-show="dateTooltip" class="date-tooltip">
+              <div class="date-tooltip" v-show="dateTooltip">
                 <h3>Your Time Suggestion</h3>
                 <p>
                   Client will get this proposal with
-                  <br>your new suggested date
+                  <br />your new suggested date
                 </p>
               </div>
             </div>
           </li>
 
           <li>
-            <img :src="`${$iconURL}common/location-white.svg`">
+            <img :src="`${$iconURL}common/location-white.svg`" />
             {{ getLocation }}
           </li>
 
@@ -105,54 +105,54 @@
     <modal v-if="showModal" class="full-details-modal" container-class="modal-container lg">
       <template slot="header">
         <div class="full-details-modal__header">
-          <div v-if="event.concept" class="header-description">
+          <div class="header-description" v-if="event.concept">
             {{ event.concept.description }}
           </div>
         </div>
         <button class="close" @click="showModal = false">
-          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
         </button>
       </template>
       <template slot="body">
         <div class="full-details-modal__body">
           <ul>
             <li>
-              <img :src="`${$iconURL}NewLandingPage/Path 251.svg`">
+              <img :src="`${$iconURL}NewLandingPage/Path 251.svg`" />
               <span>
                 <strong>Date:</strong>
                 {{ eventDate }}
               </span>
             </li>
             <li>
-              <img :src="`${$iconURL}NewLandingPage/Group 6085.svg`">
+              <img :src="`${$iconURL}NewLandingPage/Group 6085.svg`" />
               <span>
                 <strong>Time:</strong>
                 {{ eventTime }}
               </span>
             </li>
             <li>
-              <img :src="`${$iconURL}NewLandingPage/Asset 506.svg`">
+              <img :src="`${$iconURL}NewLandingPage/Asset 506.svg`" />
               <span>
                 <strong>Address:</strong>
                 {{ getLocation }}
               </span>
             </li>
             <li>
-              <img :src="`${$iconURL}NewLandingPage/Asset 505.svg`">
+              <img :src="`${$iconURL}NewLandingPage/Asset 505.svg`" />
               <span>
                 <strong>Guests:</strong>
                 {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
               </span>
             </li>
             <li>
-              <img :src="`${$iconURL}NewLandingPage/Path 1942.svg`">
+              <img :src="`${$iconURL}NewLandingPage/Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
                 {{ proposalRequest ? event.eventType.name : "-" }}
               </span>
             </li>
             <li>
-              <img :src="`${$iconURL}NewLandingPage/Path 1383.svg`">
+              <img :src="`${$iconURL}NewLandingPage/Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
                 {{ proposalRequest && event.guestType ? event.guestType : "-" }}

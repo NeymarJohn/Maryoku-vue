@@ -7,12 +7,12 @@
       class="location"
       :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
       @md-opened="updateSuggestionStyle"
-    />
+    ></md-autocomplete>
   </div>
 </template>
 <script>
 export default {
-  name: "MaryokuInput",
+  name: "maryoku-input",
   model: {},
   props: {
     /**
@@ -45,10 +45,61 @@ export default {
       results: [],
     };
   },
+  methods: {
+    init(){
+       this.locationService = new google.maps.places.AutocompleteService();
+       this.geocoder = new google.maps.Geocoder();
+    },
+    handleInput(e) {
+      this.$emit("input", this.content);
+    },
+    addressSuggestions(predictions, status) {
+      console.log('addressSuggestions', predictions, status);
+      if (status != google.maps.places.PlacesServiceStatus.OK) {
+        return;
+      }
+      this.locations = [];
+      predictions.forEach((item) => {
+        this.locations.push(item.description);
+        this.places.push({ id: item.place_id, name: item.description });
+      });
+      this.updateSuggestionStyle()
+    },
+    updateSuggestionStyle(){
+        console.log('updateSuggestionStyle', this.theme, this.locations);
+        if ( this.theme === 'purple' ) {
+            console.log('purple')
+            setTimeout((_) => {
+                $(".md-list-item-button").hover(
+                    function (el) {
+                        $(this).attr("style", "background-color:#f51355 !important;color: #fff!important");
+                    },
+                    function () {
+                        $(this).attr("style", "background-color:#fff;color:#000");
+                    },
+                );
+            }, 0);
+        } else {
+          setTimeout((_) => {
+            $(".md-list-item-button").hover(
+                    function (el) {
+                      $(this).attr("style", "background-color:#f51355!important;color: #fff!important");
+                    },
+                    function () {
+                      $(this).attr("style", "background-color:#fff;color:#000");
+                    },
+            );
+          }, 0);
+        }
+    }
+  },
   computed: {
     getClass: function () {
       return `${this.inputStyle} ${this.value ? "active" : ""}`;
     },
+  },
+  mounted() {
+    this.init();
   },
   watch: {
     content: function (newValue) {
@@ -74,57 +125,6 @@ export default {
         this.addressSuggestions,
       );
     },
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init(){
-       this.locationService = new google.maps.places.AutocompleteService();
-       this.geocoder = new google.maps.Geocoder();
-    },
-    handleInput(e) {
-      this.$emit("input", this.content);
-    },
-    addressSuggestions(predictions, status) {
-      console.log("addressSuggestions", predictions, status);
-      if (status != google.maps.places.PlacesServiceStatus.OK) {
-        return;
-      }
-      this.locations = [];
-      predictions.forEach((item) => {
-        this.locations.push(item.description);
-        this.places.push({ id: item.place_id, name: item.description });
-      });
-      this.updateSuggestionStyle();
-    },
-    updateSuggestionStyle(){
-        console.log("updateSuggestionStyle", this.theme, this.locations);
-        if ( this.theme === "purple" ) {
-            console.log("purple");
-            setTimeout((_) => {
-                $(".md-list-item-button").hover(
-                    function (el) {
-                        $(this).attr("style", "background-color:#f51355 !important;color: #fff!important");
-                    },
-                    function () {
-                        $(this).attr("style", "background-color:#fff;color:#000");
-                    },
-                );
-            }, 0);
-        } else {
-          setTimeout((_) => {
-            $(".md-list-item-button").hover(
-                    function (el) {
-                      $(this).attr("style", "background-color:#f51355!important;color: #fff!important");
-                    },
-                    function () {
-                      $(this).attr("style", "background-color:#fff;color:#000");
-                    },
-            );
-          }, 0);
-        }
-    }
   },
 };
 </script>

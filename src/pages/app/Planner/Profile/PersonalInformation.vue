@@ -4,9 +4,7 @@
       <div class="card-icon">
         <md-icon>person</md-icon>
       </div>
-      <h5 class="title profile-title">
-        Personal Information
-      </h5>
+      <h5 class="title profile-title">Personal Information</h5>
     </md-card-header>
     <md-card-content class="company-profile-section">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
@@ -21,7 +19,7 @@
               field-name="displayName"
               @text-updated-blur="userValueChanged"
               @text-updated-enter="userValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33" style="text-align: left">
@@ -34,7 +32,7 @@
               field-name="emailAddress"
               @text-updated-blur="userValueChanged"
               @text-updated-enter="userValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33" style="text-align: left">
@@ -47,7 +45,7 @@
               field-name="role"
               @text-updated-blur="userValueChanged"
               @text-updated-enter="userValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33" style="text-align: left">
@@ -60,7 +58,7 @@
               field-name="department"
               @text-updated-blur="userValueChanged"
               @text-updated-enter="userValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33" style="text-align: left">
@@ -73,7 +71,7 @@
               field-name="location"
               @text-updated-blur="userValueChanged"
               @text-updated-enter="userValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
       </div>
@@ -95,6 +93,7 @@ export default {
     VueElementLoading,
     Me,
   },
+  mounted() {},
   props: {
     userInfo: Object,
     isLoading: {
@@ -113,10 +112,6 @@ export default {
       alretExceedPictureSize: false,
     };
   },
-  watch: {
-    userInfo(newVal, oldVal) {},
-  },
-  mounted() {},
   methods: {
     userValueChanged(val, fieldName) {
       this.userInfo[fieldName] = val;
@@ -173,6 +168,9 @@ export default {
     onCancel() {
       this.dialogConfirmFlag = false;
     },
+  },
+  watch: {
+    userInfo(newVal, oldVal) {},
   },
 };
 </script>

@@ -1,21 +1,21 @@
 <template>
   <div class="pie-chart-wrapper">
     <svg
-      v-if="sortedData"
       id="pie_chart"
       ref="pie_chart"
       width="300"
       height="300"
+      v-if="sortedData"
       :class="{ 'd-none': showImage, 'd-block': !showImage }"
     >
       <g
         v-for="(item, index) in reorderingData"
-        :id="`g_${index}`"
         :key="index"
         :ref="`tooltip_${index}`"
-        :style="{ transform: `rotate(${item.rotate}deg)`, transformOrigin: 'center' }"
         @mousemove="setTooltipPos($event, item)"
         @mouseleave="hideToolTip"
+        :id="`g_${index}`"
+        :style="{ transform: `rotate(${item.rotate}deg)`, transformOrigin: 'center' }"
       >
         <circle
           class="pie-chart-value"
@@ -34,18 +34,18 @@
         />
       </g>
 
-      <g ref="tooltip" :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`">
+      <g :transform="`translate(${x},${y})`" class="tooltip" :visibility="`${toolTipStatus}`" ref="tooltip">
         <path
-          v-if="toolTipPosition == 'left'"
           id="svgMask"
           d="M3,92 L182,92 182,43 190,38 182,33 182,3 3,3 z"
           fill="#e6e5e5"
+          v-if="toolTipPosition == 'left'"
         />
         <path
-          v-if="toolTipPosition == 'right'"
           id="svgMask"
           d="M12,92 L190,92 190,3 12,3 12,43 3,38 12,33 z"
           fill="#e6e5e5"
+          v-if="toolTipPosition == 'right'"
         />
         <circle
           class="pie-chart-value"
@@ -57,11 +57,11 @@
               `"
         />
         <text
-          v-if="toolTip.category"
           id="tooltip"
           x="40"
           y="30"
           style="fill: #050505; font-family: 'Manrope-Regular'; font-size: 16px; font-weight: 800"
+          v-if="toolTip.category"
         >
           {{ toolTip.category.substr(0, 15) }}{{ toolTip.category.length > 15 ? "..." : "" }}
           <tspan x="25" dy="1.6em" style="font-size: 16px; font-weight: 300">Planned budget</tspan>
@@ -70,18 +70,18 @@
       </g>
     </svg>
     <img
-      v-if="showImage"
-      id="pie_chart_image"
       :src="blobURL"
+      v-if="showImage"
       style="min-height: 300px"
+      id="pie_chart_image"
       :class="{ 'd-none': showImage }"
-    >
-    <canvas v-if="showImage" id="pie-chart-canvas" width="300" height="300" />
+    />
+    <canvas id="pie-chart-canvas" v-if="showImage" width="300" height="300"></canvas>
     <div class="items-cont">
       <ul class="items-list">
         <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns}`">
           <div class="d-flex">
-            <span :style="`background-color: ${item.color};`" class="icon" />
+            <span :style="`background-color: ${item.color};`" class="icon"></span>
             <span class="text">{{ item.category }}</span>
           </div>
         </li>
@@ -315,14 +315,6 @@ export default {
       return this.sortedData;
     },
   },
-  watch: {
-    event(newVal, oldVal) {
-      this.drawChart();
-    },
-    items(newVal, oldVal) {
-      this.drawChart();
-    },
-  },
   mounted() {
     this.drawChart();
     this.$root.$on("event-building-block-budget-changed", (eventComponents) => {
@@ -337,6 +329,14 @@ export default {
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  watch: {
+    event(newVal, oldVal) {
+      this.drawChart();
+    },
+    items(newVal, oldVal) {
+      this.drawChart();
     },
   },
 };

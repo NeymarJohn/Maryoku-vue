@@ -9,7 +9,7 @@
         <img
           :src="companyProfile.companyLogo"
           style="object-fit: scale-down; padding: 4px; width: 100%; height: 100%;"
-        >
+        />
         <vue-element-loading :active="!loaded" :is-full-screen="false" />
         <div v-show="logoButtonsVisible" style="margin-top: -15%; text-align: center;">
           <md-button
@@ -17,7 +17,7 @@
             @click="openLogoImageInput"
           >
             <md-icon>edit</md-icon>
-            <input ref="logoImageInput" type="file" @change="onFileChange">
+            <input ref="logoImageInput" type="file" @change="onFileChange" />
           </md-button>
           <md-button
             v-if="companyProfile.logoFileId"
@@ -36,13 +36,11 @@
           :title="companyProfile.name"
           @text-updated-blur="companyValueChanged"
           @text-updated-enter="companyValueChanged"
-        />
+        ></label-edit>
       </h4>
     </md-card-header>
     <md-card-content class="company-profile-section">
-      <div class="separator">
-&nbsp;
-      </div>
+      <div class="separator">&nbsp;</div>
       <div class="md-layout" style="text-align: left;">
         <div class="md-layout-item md-size-33">
           <span class="text-gray" style="font-weight: 500;">Main Office</span>
@@ -55,7 +53,7 @@
               :title="companyProfile.mainAddress.onelineAddress"
               @text-updated-blur="companyValueChanged"
               @text-updated-enter="companyValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-60">
@@ -69,7 +67,7 @@
               :title="companyProfile.numberOfEmployees"
               @text-updated-blur="companyValueChanged"
               @text-updated-enter="companyValueChanged"
-            />
+            ></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33">
@@ -77,15 +75,13 @@
         </div>
         <div class="md-layout-item md-size-66 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
-            <label-edit :text="companyProfile.industry" placeholder="Your Industry" />
+            <label-edit v-bind:text="companyProfile.industry" placeholder="Your Industry"></label-edit>
           </h6>
         </div>
       </div>
-      <hr class="divider">
-      <h6 style="margin: 4px 0;">
-        Custom Information
-      </h6>
-      <div style="min-height: 140px" />
+      <hr class="divider" />
+      <h6 style="margin: 4px 0;">Custom Information</h6>
+      <div style="min-height: 140px"></div>
     </md-card-content>
   </md-card>
 </template>
@@ -97,7 +93,7 @@ import Customer from "@/models/Customer";
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "CompanyDashboardInfo",
+  name: "company-dashboard-info",
   components: {
     LabelEdit,
     VueElementLoading,

@@ -1,37 +1,27 @@
 <template>
   <div class="proposal-time-counter" :class="theme">
-    <div v-if="isExpired" class="font-bold">
-      This offer has expired
-    </div>
-    <div v-else class="font-bold">
-      This offer will expire in
-    </div>
-    <hr>
-    <timer v-if="status !== 2" size="big" :target="target" />
-    <timer v-if="status === 2" size="big" :target="new Date()" />
+    <div class="font-bold" v-if="isExpired">This offer has expired</div>
+    <div class="font-bold" v-else>This offer will expire in</div>
+    <hr />
+    <timer size="big" :target="target" v-if="status !== 2"></timer>
+    <timer size="big" :target="new Date()" v-if="status === 2"></timer>
     <template v-if="approved">
-      <hr>
-      <div class="font-bold font-size-14">
-        More Time Granted
-      </div>
+      <hr />
+      <div class="font-bold font-size-14">More Time Granted</div>
     </template>
     <template v-else-if="declined">
-      <hr>
-      <div class="font-bold font-size-14">
-        Request Denied
-      </div>
+      <hr />
+      <div class="font-bold font-size-14">Request Denied</div>
     </template>
     <template v-else-if="pending">
-      <hr>
-      <div class="font-bold font-size-14">
-        Waiting reply
-      </div>
+      <hr />
+      <div class="font-bold font-size-14">Waiting reply</div>
     </template>
     <template v-else-if="status === 2">
       <div class="button-wrap">
-        <md-button class="maryoku-btn " :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled>
-          <span style="color: gray">Ask for more time</span>
-        </md-button>
+        <md-button class="maryoku-btn " :class="`md-${theme === 'red' ? 'red' : 'vendor'}`" disabled
+          ><span style="color: gray">Ask for more time</span></md-button
+        >
       </div>
     </template>
 
@@ -40,9 +30,8 @@
         class="maryoku-btn md-simple "
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
         @click="updateExpireTime"
+        ><span>Ask for more time</span></md-button
       >
-        <span>Ask for more time</span>
-      </md-button>
     </div>
   </div>
 </template>
@@ -85,14 +74,14 @@ export default {
       default: "detail",
     },
   },
-  computed: {
-    isExpired() {
-      return new Date(this.target).getTime() - new Date().getTime() < 0;
-    },
-  },
   methods: {
     updateExpireTime() {
       this.$emit("updateExpireDate");
+    },
+  },
+  computed: {
+    isExpired() {
+      return new Date(this.target).getTime() - new Date().getTime() < 0;
     },
   },
 };

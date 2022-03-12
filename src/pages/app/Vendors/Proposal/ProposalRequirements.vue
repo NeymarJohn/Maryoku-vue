@@ -4,7 +4,7 @@
       <div class="d-flex align-center justify-content-between">
         <div class="text-cont d-flex">
           <h3 class="title font-bold">
-            <img :src="`${$iconURL}NewSubmitPorposal/${icon}`" class="page-icon mr-10">
+            <img :src="`${$iconURL}NewSubmitPorposal/${icon}`" class="page-icon mr-10" />
             {{ label }}
           </h3>
         </div>
@@ -13,23 +13,23 @@
             :src="`${$iconURL}NewSubmitPorposal/Component 36 (2).svg`"
             :class="{ isExpanded: isExpanded }"
             class="arrow-img"
-          >
+          />
         </div>
       </div>
       <div>
         {{ description }}
       </div>
     </div>
-    <div v-if="isExpanded" class="collapse-panel-content">
+    <div class="collapse-panel-content" v-if="isExpanded">
       <proposal-add-item-form
         v-if="canAdd"
-        :optional-requirements="optionalRequirements"
-        :service-type="tableCategory"
-        :profile-services="vendorProfileServices"
-        :vendor-services="vendorServices"
+        :optionalRequirements="optionalRequirements"
+        :serviceType="tableCategory"
+        :profileServices="vendorProfileServices"
+        :vendorServices="vendorServices"
         @addItem="addItem"
-      />
-      <proposal-service-table :category="vendorCategory" :table-category="tableCategory" />
+      ></proposal-add-item-form>
+      <proposal-service-table :category="vendorCategory" :tableCategory="tableCategory"></proposal-service-table>
     </div>
   </div>
 </template>
@@ -39,10 +39,6 @@ import ProposalServiceTable from "./ProposalServiceTable";
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
 export default {
-  components: {
-    ProposalServiceTable,
-    ProposalAddItemForm,
-  },
   props: {
     label: {
       type: String,
@@ -76,6 +72,28 @@ export default {
       isExpanded: false,
       files: [],
     };
+  },
+  methods: {
+    toggle() {
+      this.isExpanded = !this.isExpanded;
+    },
+    getFileByTag(tag) {
+      const file = this.files.filter((f) => f.tag == tag);
+      if (file.length > 0) {
+        return file[0].filename;
+      } else {
+        return null;
+      }
+    },
+    addItem({serviceItem}) {
+        if (!this.services) this.services = [];
+        this.services.push(serviceItem);
+        this.services = Object.assign([], this.services);
+    },
+  },
+  components: {
+    ProposalServiceTable,
+    ProposalAddItemForm,
   },
   computed: {
     categoryName() {
@@ -142,24 +160,6 @@ export default {
   },
   watch:{
     vendorProfileServices(){}
-  },
-  methods: {
-    toggle() {
-      this.isExpanded = !this.isExpanded;
-    },
-    getFileByTag(tag) {
-      const file = this.files.filter((f) => f.tag == tag);
-      if (file.length > 0) {
-        return file[0].filename;
-      } else {
-        return null;
-      }
-    },
-    addItem({serviceItem}) {
-        if (!this.services) this.services = [];
-        this.services.push(serviceItem);
-        this.services = Object.assign([], this.services);
-    },
   }
 };
 </script>

@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class Industry extends Model {
-  resource() {
-    return "industries";
+  resource () {
+    return 'industries'
   }
 }

@@ -9,14 +9,14 @@
     <div class="logo">
       <a href="/" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
-          <img :src="logo">
+          <img :src="logo" />
           <!--<md-icon>calendar_today</md-icon>-->
         </div>
       </a>
       <a href="/" class="simple-text logo-normal">
-        <template v-if="$route.meta.rtlActive">{{ rtlTitle }}</template>
+        <template v-if="$route.meta.rtlActive">{{rtlTitle}}</template>
         <template v-else>
-          <img style="width: 100px;" width="100px" :src="fullLogo">
+          <img style="width: 100px;" width="100px" :src="fullLogo" />
         </template>
       </a>
       <div class="navbar-minimize">
@@ -30,8 +30,8 @@
         </md-button>
       </div>
     </div>
-    <div ref="sidebarScrollArea" class="sidebar-wrapper">
-      <slot />
+    <div class="sidebar-wrapper" ref="sidebarScrollArea">
+      <slot></slot>
       <md-list class="nav">
         <slot name="links">
           <sidebar-item v-for="(link, index) in sidebarLinks" :key="link.name + index" :link="link">
@@ -39,7 +39,7 @@
               v-for="(subLink, index) in link.children"
               :key="subLink.name + index"
               :link="subLink"
-            />
+            ></sidebar-item>
           </sidebar-item>
         </slot>
       </md-list>
@@ -48,7 +48,7 @@
 </template>
 <script>
 export default {
-  name: "Sidebar",
+  name: "sidebar",
   props: {
     title: {
       type: String,
@@ -111,6 +111,13 @@ export default {
       autoClose: this.autoClose,
     };
   },
+  methods: {
+    minimizeSidebar() {
+      if (this.$sidebar) {
+        this.$sidebar.toggleMinimize();
+      }
+    },
+  },
   computed: {
     sidebarStyle() {
       return {
@@ -122,13 +129,6 @@ export default {
     if (this.$sidebar.showSidebar) {
       this.$sidebar.showSidebar = false;
     }
-  },
-  methods: {
-    minimizeSidebar() {
-      if (this.$sidebar) {
-        this.$sidebar.toggleMinimize();
-      }
-    },
   },
 };
 </script>

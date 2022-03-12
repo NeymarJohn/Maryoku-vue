@@ -6,39 +6,31 @@
       <div class="md-card-content">
         <div class="md-layout">
           <div class="md-layout-item">
-            <h3 class="margin-bottom-md">
-              Now, select elements:
-            </h3>
+            <h3 class="margin-bottom-md">Now, select elements:</h3>
             <div
-              v-if="cerrors.selectedCategories"
               class="md-error"
-            >
-              {{ cerrors.selectedCategories[0] }}
-            </div>
+              v-if="cerrors.selectedCategories"
+            >{{ cerrors.selectedCategories[0] }}</div>
             <div class="list-container">
               <div class="list-container">
                 <div
                   v-for="category in categories"
                   :key="category.id"
+                  @click="toggleSelectCategory(category)"
                   class="list-item"
                   :class="{'active': isCategorySelected(category) || isSelected(category)}"
-                  @click="toggleSelectCategory(category)"
                 >
                   <div class="list-item--icon">
                     <md-icon
-                      v-if="isCategorySelected(category) || isSelected(category)"
                       class="check-icon"
-                    >
-                      check
-                    </md-icon>
+                      v-if="isCategorySelected(category) || isSelected(category)"
+                    >check</md-icon>
 
                     <img
                       :src="`https://static-maryoku.s3.amazonaws.com/storage/img/event-elements/${category.id}.png`"
-                    >
+                    />
                   </div>
-                  <div class="list-item--title">
-                    {{ category.title }}
-                  </div>
+                  <div class="list-item--title">{{ category.title }}</div>
                 </div>
               </div>
             </div>
@@ -50,25 +42,21 @@
               <div class="list-container">
                 <div
                   v-for="subCategory in subCategories"
+                  @click="toggleSelectSubCategory(subCategory)"
                   :key="subCategory.id"
                   class="list-item"
                   :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }"
-                  @click="toggleSelectSubCategory(subCategory)"
                 >
                   <div class="list-item--icon">
                     <md-icon
-                      v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)"
                       class="check-icon"
-                    >
-                      check
-                    </md-icon>
+                      v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)"
+                    >check</md-icon>
                     <img
                       :src="`https://static-maryoku.s3.amazonaws.com/storage/img/event-elements/${subCategory.id}.png`"
-                    >
+                    />
                   </div>
-                  <div class="list-item--title">
-                    {{ subCategory.title }}
-                  </div>
+                  <div class="list-item--title">{{ subCategory.title }}</div>
                 </div>
 
                 <div class="list-item">
@@ -81,27 +69,23 @@
             <div>
               <md-field class="margin-bottom-xxl">
                 <label>Add a short paragraph about the event.</label>
-                <br>
+                <br />
                 <md-textarea
                   v-model="brief"
                   placeholder="Is there a dress code? Who is participating? What's the occasion?"
-                />
+                ></md-textarea>
               </md-field>
             </div>
             <div class="text-right margin-bottom-xxl">
-              <md-button class="md-button md-default" @click="goBack">
-                Back
-              </md-button>
-              <md-button class="md-button md-primary" @click.prevent="validateAndSubmit">
-                Continue
-              </md-button>
+              <md-button @click="goBack" class="md-button md-default">Back</md-button>
+              <md-button @click.prevent="validateAndSubmit" class="md-button md-primary">Continue</md-button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <create-custom-element :event="newEvent" @getEventComponents="getEventComponents" />
+    <create-custom-element :event="newEvent" @getEventComponents="getEventComponents"></create-custom-element>
   </div>
 </template>
 <script>
@@ -115,13 +99,13 @@ import VueElementLoading from "vue-element-loading";
 import CreateCustomElement from "./Modals/CreateCustomElement";
 
 export default {
-  name: "GetStartedStep",
+  name: "get-started-step",
+  props: ["newEvent"],
   components: {
     VueElementLoading,
     CreateCustomElement,
     Modal,
   },
-  props: ["newEvent"],
   methods: {
     ...mapMutations("EventPlannerVuex", ["setCustomElementModal"]),
     createCustomElement() {
@@ -245,7 +229,7 @@ export default {
           // this.$emit('goToNextPage');
 
           this.$router.push({
-            path: "/events/" + this.event.id + "/edit/details",
+            path: `/events/` + this.event.id + "/edit/details",
           });
         })
         .catch((e) => {

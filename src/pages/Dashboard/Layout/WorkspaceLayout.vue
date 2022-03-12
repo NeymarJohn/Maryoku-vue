@@ -19,10 +19,10 @@
       <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
         <div class="container md-offset">
           <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
-            <router-view />
+            <router-view></router-view>
           </zoom-center-transition>
         </div>
-        <footer v-if="false" class="footer">
+        <footer class="footer" v-if="false">
           <div class="container md-offset">
             <nav>
               <ul>
@@ -100,7 +100,7 @@ export default {
       };
       if (!images[this.$route.name]) {
         return {
-          backgroundColor: "#f3f7fd",
+          backgroundColor: `#f3f7fd`,
         };
       }
       return {
@@ -110,24 +110,6 @@ export default {
     setPageClass() {
       return `${this.$route.name}-page`.toLowerCase();
     },
-  },
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  },
-  beforeMount() {
-    this.$store
-      .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
-      .then((res) => {})
-      .catch((error) => {
-        this.$store.dispatch("auth/logout").then((res) => {
-          this.$router.push({ path: "/signin" });
-        });
-      });
-  },
-  beforeDestroy() {
-    this.closeMenu();
-    window.removeEventListener("resize", this.onResponsiveInverted);
   },
   methods: {
     toggleSidebarPage() {
@@ -158,6 +140,24 @@ export default {
         this.responsive = false;
       }
     },
+  },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeMount() {
+    this.$store
+      .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
+      .then((res) => {})
+      .catch((error) => {
+        this.$store.dispatch("auth/logout").then((res) => {
+          this.$router.push({ path: "/signin" });
+        });
+      });
+  },
+  beforeDestroy() {
+    this.closeMenu();
+    window.removeEventListener("resize", this.onResponsiveInverted);
   },
   beforeRouteUpdate(to, from, next) {
     // Close the mobile menu first then transition to next page

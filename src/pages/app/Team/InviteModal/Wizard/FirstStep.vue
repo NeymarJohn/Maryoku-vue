@@ -18,28 +18,24 @@
         <div class="md-layout-item md-size-95 md-small-size-100">
           <md-field
             :class="[
-              {'md-valid': !errors.has('firstName') && touched.firstName},
-              {'md-form-group': true},
-              {'md-error': errors.has('firstName')}]"
+          {'md-valid': !errors.has('firstName') && touched.firstName},
+          {'md-form-group': true},
+          {'md-error': errors.has('firstName')}]"
           >
             <label>First Name</label>
             <md-input
               v-model="firstName"
-              v-validate="modelValidations.firstName"
               data-vv-name="firstName"
               type="text"
               name="firstName"
               required
-            />
+              v-validate="modelValidations.firstName"
+            ></md-input>
             <slide-y-down-transition>
-              <md-icon v-show="errors.has('firstName')" class="error">
-                close
-              </md-icon>
+              <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon v-show="!errors.has('firstName') && touched.firstName" class="success">
-                done
-              </md-icon>
+              <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
             </slide-y-down-transition>
           </md-field>
 
@@ -89,28 +85,24 @@
 
           <md-field
             :class="[
-              {'md-valid': !errors.has('lastName') && touched.lastName},
-              {'md-form-group': true},
-              {'md-error': errors.has('lastName')}]"
+          {'md-valid': !errors.has('lastName') && touched.lastName},
+          {'md-form-group': true},
+          {'md-error': errors.has('lastName')}]"
           >
             <label>Last Name</label>
             <md-input
               v-model="lastName"
-              v-validate="modelValidations.lastName"
               data-vv-name="lastName"
               type="text"
               name="lastName"
               required
-            />
+              v-validate="modelValidations.lastName"
+            ></md-input>
             <slide-y-down-transition>
-              <md-icon v-show="errors.has('lastName')" class="error">
-                close
-              </md-icon>
+              <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon v-show="!errors.has('lastName') && touched.lastName" class="success">
-                done
-              </md-icon>
+              <md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -118,28 +110,24 @@
         <div class="md-layout-item md-size-95 md-small-size-100">
           <md-field
             :class="[
-              {'md-valid': !errors.has('email') && touched.email},
-              {'md-form-group': true},
-              {'md-error': errors.has('email')}]"
+          {'md-valid': !errors.has('email') && touched.email},
+          {'md-form-group': true},
+          {'md-error': errors.has('email')}]"
           >
             <label>Email</label>
             <md-input
               v-model="emailAddress"
-              v-validate="modelValidations.emailAddress"
               data-vv-name="emailAddress"
               type="text"
               name="email"
               required
-            />
+              v-validate="modelValidations.emailAddress"
+            ></md-input>
             <slide-y-down-transition>
-              <md-icon v-show="errors.has('email')" class="error">
-                close
-              </md-icon>
+              <md-icon class="error" v-show="errors.has('email')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon v-show="!errors.has('email') && touched.email" class="success">
-                done
-              </md-icon>
+              <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -147,28 +135,18 @@
           <md-field>
             <label for="select">Single Select</label>
             <md-select v-model="role" name="select">
-              <md-option value="guest">
-                Guest
-              </md-option>
-              <md-option value="collaborator">
-                Collaborator
-              </md-option>
+              <md-option value="guest">Guest</md-option>
+              <md-option value="collaborator">Collaborator</md-option>
             </md-select>
           </md-field>
         </div>
         <div class="md-layout-item md-size-95 md-small-size-100">
           <md-field>
             <label for="movies">Permission</label>
-            <md-select id="permissions" v-model="permissions" name="permissions" multiple>
-              <md-option value="View">
-                View
-              </md-option>
-              <md-option value="Manage">
-                Manage
-              </md-option>
-              <md-option value="Vote">
-                Vote
-              </md-option>
+            <md-select v-model="permissions" name="permissions" id="permissions" multiple>
+              <md-option value="View">View</md-option>
+              <md-option value="Manage">Manage</md-option>
+              <md-option value="Vote">Vote</md-option>
             </md-select>
           </md-field>
         </div>

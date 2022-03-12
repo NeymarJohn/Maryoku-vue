@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class EventInviteeGroup extends Model {
-  resource() {
-    return "eventGroups";
+  resource () {
+    return 'eventGroups'
   }
 }

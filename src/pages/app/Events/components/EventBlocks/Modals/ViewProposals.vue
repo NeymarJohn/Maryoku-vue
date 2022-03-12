@@ -14,7 +14,6 @@
         </h4>
         <div class="tabs-section">
           <tabs
-            ref="proposalsTabs"
             :tab-name="[
               '<span>1</span> Brief (' + requirementsLength + ')',
               '<span>2</span> Manage Proposals (' + proposalsNumber + ')',
@@ -22,47 +21,47 @@
               '<span>4</span> Accepted (' + acceptedNumber + ')',
             ]"
             color-button="danger"
-            :active-tab="1"
+            ref="proposalsTabs"
+            :activeTab="1"
           >
             <template slot="tab-pane-1" class="w-100p">
               <event-block-requirements
                 :event.sync="event"
-                :selected-block.sync="selectedBlock"
-                :predefined-requirements="selectedBlock.predefinedRequirements"
-              />
+                :selectedBlock.sync="selectedBlock"
+                :predefinedRequirements="selectedBlock.predefinedRequirements"
+              >
+              </event-block-requirements>
             </template>
             <template slot="tab-pane-2" class="w-100p">
               <event-block-proposal-vendors
                 :event="event"
-                :selected-block.sync="selectedBlock"
+                :selectedBlock.sync="selectedBlock"
                 @update-comparison="updateComparison"
-              />
+              ></event-block-proposal-vendors>
             </template>
             <template slot="tab-pane-3" class="w-100p">
               <div class="pl-6">
                 <event-block-comparison
                   :event.sync="event"
-                  :selected-block.sync="selectedBlock"
-                  :block-vendors.sync="blockVendors"
-                />
+                  :selectedBlock.sync="selectedBlock"
+                  :blockVendors.sync="blockVendors"
+                ></event-block-comparison>
               </div>
             </template>
             <template slot="tab-pane-4" class="w-100p">
               <div>
                 <event-block-acceptance
                   :event="event"
-                  :selected-block.sync="selectedBlock"
+                  :selectedBlock.sync="selectedBlock"
                   @update-comparison="updateComparison"
-                />
+                ></event-block-acceptance>
               </div>
             </template>
           </tabs>
           <md-card class="allocated-budget">
             <md-card-content>
               <span class="small">Allocated Budget</span>
-              <div class="budget">
-                ${{ selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget : "0.0" }}
-              </div>
+              <div class="budget">${{ selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget : "0.0" }}</div>
             </md-card-content>
           </md-card>
         </div>
@@ -116,11 +115,6 @@ export default {
     acceptedNumber: 0,
     blockVendors: null,
   }),
-  computed: {
-    proposalsNumber() {
-      return this.selectedBlock.proposalsCount;
-    },
-  },
 
   created() {
     console.log("selectedBlock => ", this.selectedBlock);
@@ -250,6 +244,11 @@ export default {
           this.isLoading = false;
           console.log("EventComponentVendor error =>", error);
         });
+    },
+  },
+  computed: {
+    proposalsNumber() {
+      return this.selectedBlock.proposalsCount;
     },
   },
 };

@@ -2,47 +2,42 @@
   <div class="d-flex align-center" style="background-color: #ffedb7">
     <div class="d-flex align-center py-30 font-size-16 text-center cursor-pointer w-min-250 color-black-middle border-right"
          :class="{'selected': selected === -1}"
-         @click="select(-1)"
-    >
-      <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
-      Original
+         @click="select(-1)">
+        <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
+        Original
     </div>
     <div v-for="(version, idx) in versions"
          class="version d-flex align-center cursor-pointer text-center py-30 font-size-16 text-center w-min-250 color-black-middle border-right"
          :class="{'selected': selected === idx}"
-         @click="select(idx)"
-    >
-      <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
-      <template v-if="idx !== editIdx">
-        {{ version.name }}
-        <md-button class="md-simple md-icon-button" @click="editName(idx)">
-          <img :src="`${$iconURL}common/edit-dark.svg`" width="20px">
+         @click="select(idx)">
+        <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
+        <template v-if="idx !== editIdx">
+            {{version.name}}
+            <md-button class="md-simple md-icon-button" @click="editName(idx)">
+                <img :src="`${$iconURL}common/edit-dark.svg`" width="20px">
+            </md-button>
+        </template>
+        <template v-else>
+            <input class="name" v-model="versionName" @input="changeName" v-click-outside="closeEditing"/>
+        </template>
+        <md-button class="md-simple md-icon-button remove" @click="remove(idx)">
+            <img :src="`${$iconURL}common/trash-dark.svg`" width="20px">
         </md-button>
-      </template>
-      <template v-else>
-        <input v-model="versionName" v-click-outside="closeEditing" class="name" @input="changeName">
-      </template>
-      <md-button class="md-simple md-icon-button remove" @click="remove(idx)">
-        <img :src="`${$iconURL}common/trash-dark.svg`" width="20px">
-      </md-button>
     </div>
-    <div class="d-flex font-size-16 py-20 pl-30 w-min-180 cursor-pointer" style="color: #641856;" @click="saveVersion">
-      <md-icon class="mr-10" style="color: #641856">
-        add
-      </md-icon>
-      Add New Version
-    </div>
+    <div class="d-flex font-size-16 py-20 pl-30 w-min-180 cursor-pointer" @click="saveVersion" style="color: #641856;">
+        <md-icon class="mr-10" style="color: #641856">add</md-icon>
+        Add New Version</div>
   </div>
 </template>
 <script>
-import moment from "moment";
+import moment from 'moment';
 import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 
 const components = {
     ClickOutside: () => import("vue-click-outside")
-};
+}
 export default {
-  name: "ProposalVersionsBar",
+  name: "proposal-versions-bar",
   components,
   props: {
       versions:{
@@ -60,19 +55,16 @@ export default {
         versionName: null,
     };
   },
-  watch: {
-    versions(newVal){console.log("versions", newVal);}
-  },
   methods: {
     select(index){
-      console.log("select", index, this.selected);
+      console.log('select', index, this.selected);
       if (this.selected === index) return;
-      this.$emit("select", index);
+      this.$emit('select', index);
     },
     saveVersion(){
       let data = {};
       this.versionFields.map(key => {
-          if (key === "bookedServices") {
+          if (key === 'bookedServices') {
               data[key] = [];
           } else {
               data[key] = this.$store.state.vendorProposal[key];
@@ -82,8 +74,8 @@ export default {
       let version = {
           name: `Ver${this.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
           data,
-      };
-      this.$emit("save", version);
+      }
+      this.$emit('save', version)
     },
     editName(idx) {
       this.editIdx = idx;
@@ -91,15 +83,18 @@ export default {
     },
     changeName(e){
       let versions = this.versions;
-      this.$set(versions[this.editIdx], "name", this.versionName);
-      this.$emit("change", versions);
+      this.$set(versions[this.editIdx], 'name', this.versionName);
+      this.$emit('change', versions);
     },
     closeEditing(){
       this.editIdx = null;
     },
     remove(idx) {
-      this.$emit("remove", idx);
+      this.$emit('remove', idx);
     }
+  },
+  watch: {
+    versions(newVal){console.log('versions', newVal)}
   },
 };
 </script>

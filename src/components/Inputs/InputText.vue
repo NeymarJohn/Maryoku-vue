@@ -1,36 +1,42 @@
 <template>
-  <md-field :class="fieldStyle" :editeble-mode="editebleMode">
-    <label v-if="!editebleMode" key="label-editable" :class="labelStyle">{{ label }}<span v-if="required" class="required-logo">*</span></label>
-    <label v-if="editebleMode" key="label-noeditable" style="cursor: pointer !important;" @click="toggleEditableComponent">{{ label }}</label>
-    <md-input
-      :id="id"
-      :ref="'focusable-' + name"
-      class="input-default"
-      :type="type"
-      :placeholder="placeholder"
-      :value="value"
-      :name="name"
-      :disabled="disabled"
-      @input="triggerFunc($event,name,count)"
-      @change="changeFunc($event,name)"
-      @:keyup.enter="autoSubmit($event,name)"
-      @blur.prevent="updatefocusValue"
-    />
+<md-field :class='fieldStyle' :editebleMode='editebleMode'>
+      <label v-if='!editebleMode' key='label-editable' :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
+      <label v-if='editebleMode' key='label-noeditable'  style="cursor: pointer !important;" @click='toggleEditableComponent'>{{label}}</label>
+      <md-input
+        class='input-default'
+        :id='id'
+        :type='type'
+        :placeholder='placeholder'
+        :value='value'
+        @input='triggerFunc($event,name,count)'
+        @change='changeFunc($event,name)'
+        @:keyup.enter='autoSubmit($event,name)'
+        :name='name'
+        :disabled='disabled'
+        :ref="'focusable-' + name"
+        @blur.prevent="updatefocusValue"></md-input>
 
-    <span v-if="!editebleMode" key="input-noeditable" class="md-error">{{ isErrors?'Required':'' }}</span>
-    <span v-if="editebleMode" key="input-editable" class="md-suffix" style="display: inline-block; white-space: nowrap;">
-      <md-button v-show="isEditable" v-close-popover class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.prevent="makeAction"><md-icon>check</md-icon></md-button>
-      <md-button v-show="isEditable" v-close-popover class="md-simple md-just-icon md-round md-sm md-red" style="padding: 0; margin: 0; text-align: right;" @click.prevent="toggleEditableComponent"><md-icon>close</md-icon></md-button>
-      <md-button v-show="!isEditable" v-close-popover class="inline-edit md-simple md-just-icon md-round fa fa-edit button-height" @click="toggleEditableComponent">
-        <md-icon>edit</md-icon>
-      </md-button>
-    </span>
-  </md-field>
+    <span v-if='!editebleMode' key='input-noeditable' class='md-error'>{{isErrors?'Required':''}}</span>
+    <span v-if='editebleMode' class="md-suffix" key='input-editable' style="display: inline-block; white-space: nowrap;">
+       <md-button v-close-popover @click.prevent="makeAction" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;"><md-icon>check</md-icon></md-button>
+       <md-button v-close-popover @click.prevent="toggleEditableComponent" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-red" style="padding: 0; margin: 0; text-align: right;"><md-icon>close</md-icon></md-button>
+       <md-button v-close-popover v-show="!isEditable" class="inline-edit md-simple md-just-icon md-round fa fa-edit button-height" @click='toggleEditableComponent'>
+       <md-icon>edit</md-icon>
+       </md-button>
+      </span>
+    </md-field>
 </template>
 <script>
 export default {
-  name: "InputText",
+  name: 'InputText',
   model: {
+  },
+  data () {
+    return {
+      vm: {
+        searchPlace: ''
+      }
+    }
   },
   props: {
     required: Boolean,
@@ -40,7 +46,7 @@ export default {
     title: String,
     placeholder: {
       type: String,
-      default: ""
+      default: ''
     },
     icon: String,
     focus: Boolean,
@@ -60,50 +66,43 @@ export default {
     ctx: Object,
     googleSearch: Boolean
   },
-  data () {
-    return {
-      vm: {
-        searchPlace: ""
-      }
-    };
-  },
-  watch: {
-    focus (val) {
-      if (val) {
-        setTimeout(() => {
-          this.$refs[`focusable-${this.name}`].$el.focus();
-        }, 500);
-      }
-    }
-  },
   mounted () {
   },
   methods: {
     updatefocusValue (event) {
-      this.$emit("update-focus-value", false);
+      this.$emit('update-focus-value', false)
     },
     triggerFunc: function (value, name, count) {
-      console.log(this.id);
+      console.log(this.id)
       if (this.onChange) {
-        this.onChange(value, name, count);
+        this.onChange(value, name, count)
       }
     },
     changeFunc: function (e, name) {
-      this.onChange(e.target.value, name);
+      this.onChange(e.target.value, name)
     },
     autoSubmit: function ($event, name) {
       if (this.onBlur) {
-        this.onBlur(value, name);
+        this.onBlur(value, name)
       }
     },
     toggleEditableComponent () {
 
     },
     makeAction () {
-      this.actionFunc(this.ctx, this.name);
+      this.actionFunc(this.ctx, this.name)
+    }
+  },
+  watch: {
+    focus (val) {
+      if (val) {
+        setTimeout(() => {
+          this.$refs[`focusable-${this.name}`].$el.focus()
+        }, 500)
+      }
     }
   }
-};
+}
 
 </script>
 <style lang="scss" scoped>

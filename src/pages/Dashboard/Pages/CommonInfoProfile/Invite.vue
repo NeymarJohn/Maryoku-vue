@@ -2,38 +2,38 @@
   <div class="invite_body">
     <div class="invite_form-main">
       <div class="invite_button-block">
-        <Button text="next" :on-click="onNext" class="md-success md-fileinput button-md-common" />
+        <Button text="next" :onClick="onNext" class="md-success md-fileinput button-md-common" />
       </div>
       <div class="invite_form-block">
         <div>
-          <Title class="invite_emp-title" title="Time to say hello" title-text="invite_titleStyle" />
+          <Title class="invite_emp-title" title="Time to say hello" titleText="invite_titleStyle" />
         </div>
         <div class="invite_massage-block">
           <InputText
-            label-style="company_label_input"
+            labelStyle="company_label_input"
             label="Website"
             :value="employee_email"
             name="employee_email"
-            :on-change="onChange"
+            :onChange="onChange"
           />
           <div class="send-button">
-            <Button text="Send" :on-click="onSend" class="md-success md-fileinput button-md-common" />
+            <Button text="Send" :onClick="onSend" class="md-success md-fileinput button-md-common" />
           </div>
         </div>
         <Title
           title="Or upload guests' emails from csv file."
-          title-block="invite_titleBlock"
-          title-text="invite_title-span"
-          with-span
-          span-text=" Browse file"
-          span-styles="invite_event-title"
-          :on-click="UploadCSV"
+          titleBlock="invite_titleBlock"
+          titleText="invite_title-span"
+          withSpan
+          spanText=" Browse file"
+          spanStyles="invite_event-title"
+          :onClick="UploadCSV"
         >
           <input type="file" id="csv-upload" @change="onFileChange($event)" style="display:none" />
         </Title>
       </div>
       <div class="invite_button-block">
-        <ButtonDiv button-style="invite_buttonStyle" text="skip" :on-click="onSkip" />
+        <ButtonDiv buttonStyle="invite_buttonStyle" text="skip" :onClick="onSkip" />
       </div>
     </div>
     <div class="invite_logo-main">
@@ -41,15 +41,15 @@
         <img
           class="invite_emp-logo"
           src="https://static-maryoku.s3.amazonaws.com/storage/img/propasal_manager.png"
-        >
-        <Title
-          title="Come on, introduce us"
-          title-block="invite_titleBlock"
-          title-text="invite_titleStyle"
         />
         <Title
-          title-text="invite_titleTextLogo"
-          title-block="invite_titleBlock"
+          title="Come on, introduce us"
+          titleBlock="invite_titleBlock"
+          titleText="invite_titleStyle"
+        />
+        <Title
+          titleText="invite_titleTextLogo"
+          titleBlock="invite_titleBlock"
           title="Enchance the experience for your guests using variouns Participants Tools such as RSVP, Feedback, Group Segregation, After party options and so much more"
         />
       </div>
@@ -69,15 +69,15 @@ import Button from "@/components/Button/Button.vue";
 
 export default {
   name: "Employee",
+  props: {
+    officeManager: String,
+  },
   components: {
     InputText,
     Select,
     Title,
     ButtonDiv,
     Button,
-  },
-  props: {
-    officeManager: String,
   },
   data() {
     return {

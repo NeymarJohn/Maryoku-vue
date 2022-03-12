@@ -1,36 +1,32 @@
 <template>
   <div
+    @click="close"
     data-notify="container"
     class="alert open event-state-message alert-plain"
     role="alert"
     :class="[verticalAlign, horizontalAlign]"
     :style="customPosition"
-    data-notify-position="top-center"
-    @click="close"
-  >
-    <div class="event-state-message-image">
-      <img :src="icon">
-    </div>
-    <div class="event-state-message-content position-relative">
-      <div class="message-title">
-        {{ message.title }}
+    data-notify-position="top-center">
+      <div class="event-state-message-image">
+          <img :src="icon" />
       </div>
-      <div class="message-content">
-        {{ message.content }}
+      <div class="event-state-message-content position-relative">
+          <div class="message-title">{{message.title}}</div>
+          <div class="message-content">{{message.content}}</div>
+
+          <md-button class="position-absolute font-bold-extra md-black md-simple"
+                     style="right: 0;top: 0"
+                     @click="message.close">
+              <md-icon>close</md-icon>
+          </md-button>
+
       </div>
 
-      <md-button class="position-absolute font-bold-extra md-black md-simple"
-                 style="right: 0;top: 0"
-                 @click="message.close"
-      >
-        <md-icon>close</md-icon>
-      </md-button>
-    </div>
   </div>
 </template>
 <script>
 export default {
-  name: "Notification",
+  name: 'notification',
   props: {
     title: {
         type: String,
@@ -44,11 +40,11 @@ export default {
     icon: String,
     verticalAlign: {
       type: String,
-      default: "top"
+      default: 'top'
     },
     horizontalAlign: {
       type: String,
-      default: "center"
+      default: 'center'
     },
     type: {
       type: String,
@@ -65,47 +61,47 @@ export default {
   data () {
     return {
       elmHeight: 0
-    };
+    }
   },
   computed: {
     hasIcon () {
-      return this.icon && this.icon.length > 0;
+      return this.icon && this.icon.length > 0
     },
     alertType () {
-      return `alert-${this.type}`;
+      return `alert-${this.type}`
     },
     customPosition () {
-      let initialMargin = 0;
-      let alertHeight = this.elmHeight + 10;
+      let initialMargin = 0
+      let alertHeight = this.elmHeight + 10
       let sameAlertsCount = this.$notifications.state.filter(alert => {
         return (
           alert.horizontalAlign === this.horizontalAlign &&
           alert.verticalAlign === this.verticalAlign &&
           alert.timestamp <= this.timestamp
-        );
-      }).length;
-      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin;
-      let styles = {};
-      if (this.verticalAlign === "top") {
-        styles.top = `${pixels}px`;
+        )
+      }).length
+      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin
+      let styles = {}
+      if (this.verticalAlign === 'top') {
+        styles.top = `${pixels}px`
       } else {
-        styles.bottom = `${pixels}px`;
+        styles.bottom = `${pixels}px`
       }
-      return styles;
+      return styles
     }
-  },
-  mounted () {
-    this.elmHeight = this.$el.clientHeight;
   },
   methods: {
     close () {
-      this.$emit("on-close", this.timestamp);
+      this.$emit('on-close', this.timestamp)
     },
     send(){
-      this.$emit("on-send", this.message.title);
+      this.$emit('on-send', this.message.title);
     }
+  },
+  mounted () {
+    this.elmHeight = this.$el.clientHeight
   }
-};
+}
 </script>
 <style lang="scss" scoped>
     .event-state-message {

@@ -1,13 +1,14 @@
 <template>
   <div class="vendor-detail-page">
-    <comment-editor-panel
-      v-if="showCommentEditorPanel"
-      :comment-components="commentComponents"
-      @saveComment="saveComment"
-      @updateComment="updateComment"
-      @deleteComment="deleteComment"
-      @updateCommentComponent="updateCommentComponent"
-    />
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="vendor-detail-header">
       <div class="vendor-detail-title">
         <span style="vertical-align: middle" class="font-size-40 font-bold">{{ vendor.companyName }}</span>
@@ -20,43 +21,45 @@
       <div class="vendor-detail-basic">
         <ul class="d-flex">
           <li>
-            <img :src="`${$iconURL}NewSubmitPorposal/Asset 593.svg`">
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 593.svg`" />
             <span>{{ vendor.vendorMainEmail }}</span>
           </li>
           <li>
-            <img :src="`${$iconURL}NewSubmitPorposal/Asset 573.svg`">
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 573.svg`" />
             <span>{{ vendor.vendorAddressLine1 }}</span>
           </li>
           <li v-if="vendor.vendorMainPhoneNumber">
-            <img :src="`${$iconURL}NewSubmitPorposal/Asset 591.svg`">
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 591.svg`" />
             <span>{{ vendor.vendorMainPhoneNumber }}</span>
           </li>
           <template v-for="social in socialList">
             <li v-if="vendor.social && vendor.social[social.name]" :key="social.name">
-              <a :href="vendor.social[social.name]" target="_blank"><img :src="`${$iconURL}Vendor Signup/${social.icon}`"></a>
+              <a :href="vendor.social[social.name]" target="_blank"
+                ><img :src="`${$iconURL}Vendor Signup/${social.icon}`"
+              /></a>
             </li>
           </template>
         </ul>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @share="share" />
+      <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
     </div>
     <div class="vendor-detail-tab-wrapper">
       <div class="tabs">
         <div class="tab text-center font-bold active">
-          <img class="page-icon" :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`">
+          <img class="page-icon" :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`" />
           {{ vendor.eventCategory.fullTitle }}
         </div>
       </div>
     </div>
-    <vendor-detail-content :vendor="vendor" />
+    <vendor-detail-content :vendor="vendor"></vendor-detail-content>
     <div class="vendor-detail-footer">
-      <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-        <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+      <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+        <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
       </md-button>
       <md-button class="md-simple maryoku-btn md-black" @click="$router.push(('/vendors-pool'))">
         <md-icon>keyboard_backspace</md-icon>
-        Back
-      </md-button>
+        Back</md-button
+      >
     </div>
   </div>
 </template>
@@ -83,11 +86,6 @@ export default {
       socialList: socialIcons,
     };
   },
-  computed: {
-    availableSocials() {
-      return Object.keys(this.vendor.social).filter((item) => item);
-    },
-  },
   created() {
     this.getVendorData();
   },
@@ -104,6 +102,11 @@ export default {
     },
     scrollToTop() {
       window.scrollTo(0, 0);
+    },
+  },
+  computed: {
+    availableSocials() {
+      return Object.keys(this.vendor.social).filter((item) => item);
     },
   },
 };

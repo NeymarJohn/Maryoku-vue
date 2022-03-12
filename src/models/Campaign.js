@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class Campaign extends Model {
-  resource() {
-    return "campaigns";
+  resource () {
+    return 'campaigns'
   }
 }

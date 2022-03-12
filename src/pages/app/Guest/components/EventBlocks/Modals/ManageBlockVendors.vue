@@ -1,12 +1,12 @@
 <template>
   <div class="adding-building-blocks-panel">
-    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" is-full-screen />
+    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen />
     <div class="md-layout" style="max-height: 50vh">
       <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
         <h4 class="md-title">
-          <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
-            <md-icon>arrow_back</md-icon>
-          </md-button>
+          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"
+            ><md-icon>arrow_back</md-icon></md-button
+          >
         </h4>
       </div>
       <div class="md-layout-item md-size-95" style="max-height: 50vh">
@@ -25,17 +25,18 @@
             <md-card-content>
               <vendors-table
                 v-if="vendorsList"
-                ref="VendorsTable"
-                :tooltip-models="tooltipModels"
-                :vendors-list="vendorsList"
-                :selected-block="selectedBlock"
-                :event="event"
-                mode="manageBlock"
+                :tooltipModels="tooltipModels"
                 @add-vendor="onSelectVendor"
                 @remove-vendor="onRemoveVendor"
-              />
+                :vendorsList="vendorsList"
+                :selectedBlock="selectedBlock"
+                :event="event"
+                mode="manageBlock"
+                ref="VendorsTable"
+              >
+              </vendors-table>
 
-              <md-card-actions v-if="pagination.limit < pagination.total" md-alignment="space-between">
+              <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">
                 <div class="">
                   <p class="card-category">
                     Showing {{ pagination.from }} to
@@ -44,12 +45,13 @@
                   </p>
                 </div>
                 <pagination
-                  v-model="pagination.page"
                   class="pagination-no-border pagination-info"
+                  @input="pageChanged($event)"
+                  v-model="pagination.page"
                   :per-page="pagination.limit"
                   :total="pagination.total"
-                  @input="pageChanged($event)"
-                />
+                >
+                </pagination>
               </md-card-actions>
             </md-card-content>
           </md-card>
@@ -57,7 +59,7 @@
       </div>
     </div>
 
-    <upload-vendors-modal ref="uploadModal" />
+    <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
   </div>
 </template>
 <script>
@@ -88,7 +90,6 @@ export default {
     VendorsTable,
     UploadVendorsModal,
   },
-  mixins: [paginationMixins],
   props: {
     event: Object,
     selectedBlock: Object,
@@ -104,7 +105,7 @@ export default {
     },
     tooltipModels: [],
   }),
-  computed: {},
+  mixins: [paginationMixins],
 
   created() {
     this.$auth.currentUser(
@@ -255,5 +256,6 @@ export default {
         });
     },
   },
+  computed: {},
 };
 </script>

@@ -2,53 +2,53 @@
   <div class="md-layout amounts-wrapper">
     <div class="amounts">
       <span class="text-left">
-        Paid: ${{ paid | numeral('0,0') }}
+        Paid: ${{paid | numeral('0,0')}}
       </span>
       <span class="text-right">
-        Total: ${{ total | numeral('0,0') }}
+        Total: ${{total | numeral('0,0')}}
       </span>
     </div>
     <div class="percentage">
-      <div class="inner" :style="percentageStyle" />
+      <div class="inner" :style="percentageStyle"></div>
     </div>
-    <h3>${{ toBePaid | numeral('0,0') }} to be paid</h3>
+    <h3>${{toBePaid | numeral('0,0')}} to be paid</h3>
   </div>
 </template>
 <script>
 // MAIN MODULES
-import moment from "moment";
+import moment from 'moment'
 
 export default {
-  name: "EventPaidTotalAmounts",
-  components: {
-  },
-  filters: {
-  },
+  name: 'event-paid-total-amounts',
   props: {
     paid: Number,
     total: Number,
     toBePaid: Number
   },
+  components: {
+  },
   data () {
     return {
 
-    };
-  },
-  computed: {
-    percentageStyle () {
-      const percentage = 100 / this.total * this.paid;
-      return {
-        width: percentage > 100 ? "100%" : percentage + "%"
-      };
     }
-  },
-  watch: {
   },
   mounted () {
   },
   methods: {
+  },
+  computed: {
+    percentageStyle () {
+      const percentage = 100 / this.total * this.paid
+      return {
+        width: percentage > 100 ? '100%' : percentage + '%'
+      }
+    }
+  },
+  filters: {
+  },
+  watch: {
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

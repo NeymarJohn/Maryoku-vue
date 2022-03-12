@@ -1,47 +1,55 @@
 <template>
-  <div class="event-plan d-flex">
-    <loader :active="loading" :is-full-screen="true" page="vendor" />
-    <div class="inboxSidebar" style="position: fixed;">
-      <InboxSidebar />
-    </div>
-    <router-view />
-    <div v-if="!selectedProposal" class="proposal-container no-proposal">
-      <img :src="`${$iconURL}CommentsMode/ZeroState/Group 22588.svg`">
-    </div>
+    <div class="event-plan d-flex">
+        <loader :active="loading" :isFullScreen="true" page="vendor"></loader>
+        <div class="inboxSidebar" style="position: fixed;">
+            <InboxSidebar />
+        </div>
+        <router-view></router-view>
+      <div class="proposal-container no-proposal" v-if="!selectedProposal" >
+       <img :src="`${$iconURL}CommentsMode/ZeroState/Group 22588.svg`">
+      </div>
 
-    <section v-if="selectedProposal" class="footer-wrapper">
-      <div>
-        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`"> Back
-        </md-button>
-        <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-          <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17">
-        </md-button>
-      </div>
-      <div class="next-cont">
-        <a class="save" @click="">
-          <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
-        </a>
-      </div>
-    </section>
-  </div>
+      <section class="footer-wrapper" v-if="selectedProposal">
+            <div>
+                <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+                    <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button>
+                <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+                    <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
+                </md-button>
+            </div>
+            <div class="next-cont" >
+                <a class="save" @click="">
+                    <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
+                </a>
+            </div>
+        </section>
+    </div>
 </template>
 <script>
 const components = {
-    InboxSidebar: () => import("../components/InboxSidebar.vue"),
+    InboxSidebar: () => import('../components/InboxSidebar.vue'),
     Loader: () => import("@/components/loader/Loader.vue"),
-};
+}
 import state from "./state";
 import { CommentMixins } from "@/mixins";
 
 export default {
     components,
-    mixins: [CommentMixins],
     data() {
         return {
             loading: false,
             proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-        };
+        }
+    },
+    mixins: [CommentMixins],
+    beforeCreate() {
+        this.$store.registerModule("commentProposal", state);
+    },
+    async created() {
+        this.loading = true;
+        await this.$store.dispatch('vendorDashboard/getComments', { vendorId: this.vendorData.id });
+        await this.getCommentsProposalsByVendor(this.vendorData.id);
+        this.loading = false;
     },
     computed: {
         vendorData() {
@@ -51,15 +59,6 @@ export default {
             return this.$store.state.comment.selectedProposal;
         },
     },
-    beforeCreate() {
-        this.$store.registerModule("commentProposal", state);
-    },
-    async created() {
-        this.loading = true;
-        await this.$store.dispatch("vendorDashboard/getComments", { vendorId: this.vendorData.id });
-        await this.getCommentsProposalsByVendor(this.vendorData.id);
-        this.loading = false;
-    },
     methods: {
         scrollToTop() {
             setTimeout(() => {
@@ -67,7 +66,7 @@ export default {
             }, 100);
         },
     }
-};
+}
 
 </script>
 <style lang="scss" scoped>

@@ -1,8 +1,6 @@
 <template>
   <div class="serivice-item">
-    <div class="font-size-20 mr-20">
-      {{ service.name }}
-    </div>
+    <div class="font-size-20 mr-20">{{ service.name }}</div>
     <div class="color-gray font-size-14">
       <div class="d-flex align-center font-bold">
         {{ service.size }}

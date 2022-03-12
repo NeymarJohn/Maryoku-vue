@@ -1,12 +1,12 @@
 <template>
   <div class="proposal-title-with-icon-wrapper">
-    <h3><img :src="img">{{ title }}</h3>
+    <h3><img :src="img" />{{ title }}</h3>
     <p>{{ desc }}</p>
   </div>
 </template>
 <script>
 export default {
-  name: "ProposalTitleWithIcon",
+  name: "proposal-title-with-icon",
   components: {},
   props: {
     icon: String,
@@ -17,11 +17,11 @@ export default {
   data() {
     return {};
   },
-  computed: {},
-  watch: {},
+  methods: {},
   created() {},
   mounted() {},
-  methods: {},
+  computed: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

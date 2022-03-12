@@ -3,30 +3,27 @@
     <carousel :items="3" :margin="20" :dots="false" :nav="false" class="photos-carousel" :number="3">
       <template slot="prev">
         <md-button class="md-simple md-black handle-btn prev-btn md-icon-button edit-btn">
-          <md-icon class="font-bold">
-            keyboard_arrow_left
-          </md-icon>
+          <md-icon class="font-bold">keyboard_arrow_left</md-icon>
         </md-button>
       </template>
       <proposal-inspirational-photos-item
+        class="photo-item"
         v-for="(photo, index) in inspirationalPhotos"
         :key="`photo-${index}`"
-        class="photo-item"
         :index="index"
-        :default-photo="photo"
+        :defaultPhoto="photo"
         @change="setPhoto(index, ...arguments)"
         @addCaption="addCaption(index, ...arguments)"
         @remove="removePhoto"
-      />
+      >
+      </proposal-inspirational-photos-item>
       <template slot="next">
         <md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
-          <md-icon class="font-bold">
-            keyboard_arrow_right
-          </md-icon>
+          <md-icon class="font-bold">keyboard_arrow_right</md-icon>
         </md-button>
       </template>
     </carousel>
-    <modal v-if="captionModal.isOpen" class="add-caption-modal">
+    <modal class="add-caption-modal" v-if="captionModal.isOpen">
       <template slot="header">
         <div class="maryoku-modal-header">
           <h2>Add caption</h2>
@@ -38,28 +35,22 @@
       <template slot="body">
         <div class="md-layout">
           <div class="md-layout-item md-size-60">
-            <img :src="captionModal.photoUrl">
+            <img :src="captionModal.photoUrl" />
           </div>
           <div class="md-layout-item md-size-40" style="text-align: left; padding-right: 0px; padding-left: 20px">
-            <div class="font-bold">
-              Add caption
-            </div>
+            <div class="font-bold">Add caption</div>
             <textarea
               v-model="captionModal.caption"
               placeholder="Write a brief description of the photo."
               rows="6"
-            />
+            ></textarea>
           </div>
         </div>
       </template>
       <template slot="footer">
         <div>
-          <md-button class="md-simple md-black maryoku-btn" @click="captionModal.isOpen = false">
-            Cancel
-          </md-button>
-          <md-button class="md-purple maryoku-btn" @click="saveCaption">
-            Save
-          </md-button>
+          <md-button class="md-simple md-black maryoku-btn" @click="captionModal.isOpen = false">Cancel</md-button>
+          <md-button class="md-purple maryoku-btn" @click="saveCaption">Save</md-button>
         </div>
       </template>
     </modal>

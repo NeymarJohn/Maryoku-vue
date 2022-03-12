@@ -1,17 +1,17 @@
 <template>
-  <div class="icon" @click.prevent="checkImage">
-    <div :class="iconStyle">
-      <img v-if="isChecked===true" :src="iconSourceOne" :class="imageStyle">
-      <img v-else :src="iconSourceTwo" :class="imageStyle">
-    </div>
-    <div class="label-logo">
-      <span :class="titleStyle">{{ toUpperCase }}</span>
-    </div>
-  </div>
+<div @click.prevent='checkImage' class='icon'>
+<div :class='iconStyle'>
+<img v-if='isChecked===true' :src="iconSourceOne" :class="imageStyle"/>
+<img v-else :src="iconSourceTwo" :class="imageStyle"/>
+</div>
+<div class="label-logo">
+    <span :class="titleStyle">{{toUpperCase}}</span>
+</div>
+</div>
 </template>
 <script>
 export default {
-  name: "Icon",
+  name: 'Icon',
   model: {
   },
   props: {
@@ -24,7 +24,7 @@ export default {
     logoName: String,
     title: {
       type: String,
-      default: ""
+      default: ''
     },
     onClick: Function,
     name: String
@@ -32,20 +32,20 @@ export default {
   data () {
     return {
       isChecked: true
-    };
+    }
   },
   computed: {
     toUpperCase: function () {
-      return this.title.toUpperCase();
+      return this.title.toUpperCase()
     }
   },
   methods: {
     checkImage: function () {
-      this.isChecked = !this.isChecked;
-      this.onClick(this.name);
+      this.isChecked = !this.isChecked
+      this.onClick(this.name)
     }
   }
-};
+}
 </script>
 <style lang="scss">
 .icon{

@@ -3,55 +3,55 @@
     <div class="om_form-main">
       <div class="om_form-block">
         <div>
-          <Title class="emp-title" title="Oh, wow so thats you" title-text="om_titleStyle" />
+          <Title class="emp-title" title="Oh, wow so thats you" titleText="om_titleStyle" />
         </div>
         <InputText
-          label-style="om_label_input"
+          labelStyle="om_label_input"
           label="Full Name"
-          field-style="field_input"
+          fieldStyle="field_input"
           :value="full_name"
           name="full_name"
-          :on-change="onChange"
-          :is-errors="isErrors"
+          :onChange="onChange"
+          :isErrors="isErrors"
           required
         />
         <InputText
-          label-style="om_label_input"
+          labelStyle="om_label_input"
           label="Email Address"
           :value="email"
           name="email"
-          :on-change="onChange"
-          :is-errors="isErrors"
+          :onChange="onChange"
+          :isErrors="isErrors"
           required
         />
         <div class="om_phone-block">
           <div class="phone_country-code">
             <Select
               label="Country code"
-              label-style="om_label_input"
+              labelStyle="om_label_input"
               :list="list_code"
               name="country_code"
               required
-              :on-change="onChange"
-              :value-name="['name','dial_code']"
-              with-span
+              :onChange="onChange"
+              :valueName="['name','dial_code']"
+              withSpan
               :trim="isTrim"
-              :is-errors="isErrors"
+              :isErrors="isErrors"
             />
           </div>
           <InputText
-            label-style="om_label_input"
+            labelStyle="om_label_input"
             label="Phone Number"
             :value="phone"
             name="phone"
-            :on-change="onChange"
-            :is-errors="isErrors"
+            :onChange="onChange"
+            :isErrors="isErrors"
             required
           />
         </div>
       </div>
       <div class="om_button-block">
-        <Button text="next" :on-click="submitForm" class="md-success md-fileinput button-md-common" />
+        <Button text="next" :onClick="submitForm" class="md-success md-fileinput button-md-common" />
       </div>
     </div>
     <div class="om_logo-main">
@@ -59,11 +59,11 @@
         <img
           class="om_emp-logo"
           src="https://static-maryoku.s3.amazonaws.com/storage/img/secure_booker.png"
-        >
-        <Title title="Smart Leadership" title-block="om_titleStyle" title-text="om_titleStyle" />
+        />
+        <Title title="Smart Leadership" titleBlock="om_titleStyle" titleText="om_titleStyle" />
         <Title
-          title-text="om_titleTextLogo"
-          title-block="om_titleStyle"
+          titleText="om_titleTextLogo"
+          titleBlock="om_titleStyle"
           title="We help you collect all events data, from participation rate to feedback and budget frends. Evething you need to lead"
         />
       </div>

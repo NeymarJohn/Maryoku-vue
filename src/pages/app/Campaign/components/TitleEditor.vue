@@ -1,26 +1,20 @@
 <template>
-  <div v-if="!isEditing" class="d-flex campaign-title-editor">
+  <div class="d-flex campaign-title-editor" v-if="!isEditing">
     {{ content }}
     <md-button class="md-simple md-icon-button edit-btn ml-10" @click="isEditing = true">
       <!-- <img :src="`${$iconURL}Campaign/edit-dark.svg`" style="width: 20px; margin-left: 20px" /> -->
-      <md-button class="edit-btn md-simple md-red">
-        Edit
-      </md-button>
+      <md-button class="edit-btn md-simple md-red">Edit</md-button>
     </md-button>
   </div>
-  <div v-else class="d-flex campaign-title-editor">
+  <div class="d-flex campaign-title-editor" v-else>
     <input
       v-model="content"
-      v-autowidth="{ maxWidth: '960px', minWidth: '20px', comfortZone: 0 }"
       class=""
       :class="{ isEditing: isEditing }"
-    >
-    <md-button class="md-simple maryoku-btn md-black" @click="cancel">
-      Cancel
-    </md-button>
-    <md-button class="maryoku-btn md-red" @click="changeText">
-      Save
-    </md-button>
+      v-autowidth="{ maxWidth: '960px', minWidth: '20px', comfortZone: 0 }"
+    />
+    <md-button class="md-simple maryoku-btn md-black" @click="cancel"> Cancel </md-button>
+    <md-button class="maryoku-btn md-red" @click="changeText"> Save </md-button>
   </div>
 </template>
 <script>
@@ -37,11 +31,6 @@ export default {
       isEditing: false,
     };
   },
-  watch: {
-    defaultValue(newValue, oldValue) {
-      console.log(newValue);
-    },
-  },
   methods: {
     changeText(e) {
       console.log(this.content);
@@ -51,6 +40,11 @@ export default {
     cancel() {
       this.content = this.defaultValue;
       this.isEditing = false;
+    },
+  },
+  watch: {
+    defaultValue(newValue, oldValue) {
+      console.log(newValue);
     },
   },
 };

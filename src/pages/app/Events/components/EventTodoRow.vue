@@ -4,32 +4,32 @@
     <md-table-cell>{{ todoItem.dueDateMillis | moment }}</md-table-cell>
     <!--<md-table-cell>{{ todoItem.assignee }}</md-table-cell>
     <md-table-cell>{{ todoItem.status }}</md-table-cell>-->
-    <md-table-cell v-if="!readonly" class="visible-on-hover">
+    <md-table-cell class="visible-on-hover" v-if="!readonly">
       <md-button class="md-raised md-primary md-icon-button" @click="showSwal($event, todoIndex, 'todos')">
         <md-icon>delete</md-icon>
       </md-button>
     </md-table-cell>
-    <md-tooltip>{{ todoItem.assignee }}</md-tooltip>
+    <md-tooltip>{{todoItem.assignee}}</md-tooltip>
   </md-table-row>
 </template>
 
 <script>
-import moment from "moment";
+import moment from 'moment'
 export default {
 
-  name: "EventTodoRow",
-  filters: {
-    moment: function (date) {
-      return moment(date).format("YYYY-MM-DD");
-    }
-  },
+  name: 'event-todo-row',
   props: {
     todoItem: Object,
     todoIndex: Number,
     showModalTodo: Function,
     showSwal: Function,
     readonly: Boolean
+  },
+  filters: {
+    moment: function (date) {
+      return moment(date).format('YYYY-MM-DD')
+    }
   }
 
-};
+}
 </script>

@@ -1,7 +1,7 @@
-import Model from "./Model";
+import Model from './Model'
 
 export default class CalendarColor extends Model {
-  resource() {
-    return "colors";
+  resource () {
+    return 'colors'
   }
 }

@@ -4,33 +4,37 @@
       :active="loading"
       spinner="ring"
       color="#FF547C"
-      is-full-screen
+      isFullScreen
     />
     <div class="md-layout-item">
-      <h2 slot="title" class="title text-center" style="text-align: center">
+      <h2 class="title text-center" slot="title" style="text-align: center">
         Oh, wow so that's you
       </h2>
       <signup-card
         style="padding-top: 32px; padding-bottom: 2px; padding-left: 0"
       >
-        <div slot="content-left" class="md-layout-item md-size-5" />
-        <div slot="content-middle" class="md-layout-item md-size-80">
+        <div class="md-layout-item md-size-5" slot="content-left"></div>
+        <div class="md-layout-item md-size-80" slot="content-middle">
           <!-- Full Name -->
           <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">Full Name</label>
+            <label class="md-layout-item md-size-35 md-form-label"
+              >Full Name</label
+            >
             <div class="md-layout-item">
               <md-field>
-                <md-input v-model="full_name" type="text" autofocus />
+                <md-input v-model="full_name" type="text" autofocus></md-input>
               </md-field>
             </div>
           </div>
 
           <!-- Email Address -->
           <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">Email Address</label>
+            <label class="md-layout-item md-size-35 md-form-label"
+              >Email Address</label
+            >
             <div class="md-layout-item">
               <md-field>
-                <md-input v-model="email_address" type="text" />
+                <md-input v-model="email_address" type="text"></md-input>
               </md-field>
             </div>
           </div>
@@ -38,48 +42,54 @@
           <!-- Birthday -->
 
           <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">Birthday</label>
+            <label class="md-layout-item md-size-35 md-form-label"
+              >Birthday</label
+            >
             <div class="md-layout-item">
-              <md-datepicker :name="birthday" autofocus />
+              <md-datepicker :name="birthday" autofocus></md-datepicker>
             </div>
           </div>
 
           <!-- First Day at work -->
 
           <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">First day at work</label>
+            <label class="md-layout-item md-size-35 md-form-label"
+              >First day at work</label
+            >
             <div class="md-layout-item">
-              <md-datepicker :name="firstDayAtWork" />
+              <md-datepicker :name="firstDayAtWork"></md-datepicker>
             </div>
           </div>
 
           <!-- Phone number -->
           <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">Phone Number</label>
+            <label class="md-layout-item md-size-35 md-form-label"
+              >Phone Number</label
+            >
             <div class="md-layout-item">
               <!-- <vue-phone-number-input v-model="phone_number" /> -->
             </div>
           </div>
         </div>
 
-        <div slot="content-right" class="md-layout-item md-size-5" />
+        <div class="md-layout-item md-size-5" slot="content-right"></div>
 
         <div
-          slot="footer"
           class="md-layout-item md-size-100"
           style="text-align: right; padding-top: 48px"
+          slot="footer"
         >
           <div class="md-layout">
             <div class="md-layout-item md-size-100">
-              <md-button class="md-simple pull-left" @click="skip">
-                Skip
-              </md-button>
-              <md-button class="md-success pull-right" @click="next">
-                Next
-              </md-button>
-              <md-button class="md-simple md-danger pull-right" @click="back">
-                Back
-              </md-button>
+              <md-button class="md-simple pull-left" @click="skip"
+                >Skip</md-button
+              >
+              <md-button class="md-success pull-right" @click="next"
+                >Next</md-button
+              >
+              <md-button class="md-simple md-danger pull-right" @click="back"
+                >Back</md-button
+              >
             </div>
           </div>
         </div>

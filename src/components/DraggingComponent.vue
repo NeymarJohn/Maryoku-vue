@@ -7,13 +7,13 @@
     @mouseup.stop="drop"
     @touchmove.stop="iosMove"
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>
 
 <script>
   export default {
-    name: "DragItDude",
+    name: 'drag-it-dude',
     props: {
       width: {
         type: Number,
@@ -32,18 +32,6 @@
         default: 0,
       },
     },
-    data: () => ({
-      shiftY: null,
-      shiftX: null,
-      left: 0,
-      top: 0,
-      elem: null,
-      isIos: false,
-      parent: {
-        width: 0,
-        height: 0,
-      },
-    }),
     watch: {
       width(newWidth, oldWidth) {
         if (newWidth < oldWidth) return;
@@ -69,19 +57,27 @@
         }
       },
     },
-    mounted() {
-      this.isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      this.elem = this.$el;
-    },
+    data: () => ({
+      shiftY: null,
+      shiftX: null,
+      left: 0,
+      top: 0,
+      elem: null,
+      isIos: false,
+      parent: {
+        width: 0,
+        height: 0,
+      },
+    }),
     methods: {
       iosMove(e) {
         if (this.isIos) this.elementMove(e);
       },
       elementMove(e) {
-        this.$emit("dragging");
+        this.$emit('dragging');
         e.preventDefault();
         if (!e.pageX) {
-          document.body.style.overflow = "hidden";
+          document.body.style.overflow = 'hidden';
         }
         const x = e.pageX || e.changedTouches[0].pageX;
         const y = e.pageY || e.changedTouches[0].pageY;
@@ -111,7 +107,7 @@
         this.top = newTop;
       },
       hang(e) {
-        this.$emit("activated");
+        this.$emit('activated');
         this.parent.width = this.parentWidth || this.elem.parentNode.offsetWidth;
         this.parent.height = this.parentHeight || this.elem.parentNode.offsetHeight;
         this.shiftX = e.pageX
@@ -122,23 +118,27 @@
           : e.changedTouches[0].pageY - this.elem.offsetTop;
         if (e.pageX) {
           if (this.isIos) {
-            this.elem.addEventListener("touchmove", this.elementMove);
+            this.elem.addEventListener('touchmove', this.elementMove);
           } else {
-            this.elem.addEventListener("mousemove", this.elementMove);
-            this.elem.addEventListener("mouseleave", this.drop);
+            this.elem.addEventListener('mousemove', this.elementMove);
+            this.elem.addEventListener('mouseleave', this.drop);
           }
         } else {
-          this.elem.addEventListener("touchmove", this.elementMove);
+          this.elem.addEventListener('touchmove', this.elementMove);
         }
       },
       drop() {
-        this.$emit("dropped");
+        this.$emit('dropped');
         document.body.style.overflow = null;
-        this.elem.removeEventListener("mousemove", this.elementMove, false);
-        this.elem.removeEventListener("touchmove", this.elementMove, false);
+        this.elem.removeEventListener('mousemove', this.elementMove, false);
+        this.elem.removeEventListener('touchmove', this.elementMove, false);
         this.elem.onmouseup = null;
         this.elem.ontouchend = null;
       },
+    },
+    mounted() {
+      this.isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      this.elem = this.$el;
     },
   };
 </script>

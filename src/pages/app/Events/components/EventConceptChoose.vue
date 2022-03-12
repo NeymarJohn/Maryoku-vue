@@ -1,122 +1,120 @@
 <template>
   <div class="md-layout event-concept-section booking-section">
-    <loader :active="isLoading" />
-    <comment-editor-panel
-      v-if="showCommentEditorPanel"
-      :comment-components="commentComponents"
-      @saveComment="saveComment"
-      @updateComment="updateComment"
-      @deleteComment="deleteComment"
-      @updateCommentComponent="updateCommentComponent"
-    />
-    <div v-if="showConceptList && !isLoading" class="concept-content">
+    <loader :active="isLoading"/>
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
+    <div class="concept-content" v-if="showConceptList && !isLoading">
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-name">
           <h3>Hi {{ userName }}</h3>
           <p>
             Here are 3 awesome event concepts based on everything you told us about your event.
-            <br>Got some cool ideas of your own? &nbsp;&nbsp;Scroll down to create a brilliant new concept.
+            <br />Got some cool ideas of your own? &nbsp;&nbsp;Scroll down to create a brilliant new concept.
           </p>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" />
+        <header-actions @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
         <div class="header-name">
-          <h4><img :src="`${conceptIconsURL}Asset 491.svg`" width="30"> Choose concept</h4>
+          <h4><img :src="`${conceptIconsURL}Asset 491.svg`" width="30" /> Choose concept</h4>
         </div>
       </div>
 
       <div class="concepts-list md-layout-item md-size-100">
         <vue-element-loading :active="loadingConceptOptions" spinner="ring" color="#FF547C" />
         <div
-          v-for="(item, index) in conceptOptions"
-          :key="index"
           class="concepts-list__item d-flex justify-content-start"
           :class="{ expanded: item.expand }"
+          v-for="(item, index) in conceptOptions"
+          :key="index"
         >
-          <div v-if="item.expand" class="d-flex justify-content-between align-center">
+          <div class="d-flex justify-content-between align-center" v-if="item.expand">
             <label>24 have tried this!</label>
             <md-button
               v-if="item.name != selectedConcept.name && canEdit"
               class="md-red md-bold"
               @click="selectConcept(index)"
+              >Select</md-button
             >
-              Select
-            </md-button>
             <span v-if="item.name == selectedConcept.name" class="font-size-16">You already selected this concept</span>
           </div>
 
           <div :class="`images-list option-${index + 1}`">
             <div class="image-backgrounds">
               <div
+                class="image-background"
                 v-for="(bg, bgIndex) in item.colors"
                 :key="bgIndex"
-                class="image-background"
                 :style="`background:${bg.color}; opacity:${bg.opacity}`"
-              />
+              ></div>
             </div>
             <div>
-              <div v-for="(image, imageIndex) in item.images" :key="imageIndex" :class="`images-list__item`">
+              <div :class="`images-list__item`" v-for="(image, imageIndex) in item.images" :key="imageIndex">
                 <div
                   class="image-section"
                   :style="`background-image: url(${
                     image.thumb_url || image.url
                   });background-size: cover;background-position: center;`"
-                />
+                ></div>
               </div>
             </div>
           </div>
           <div class="concept-details">
             <small>Option 0{{ index + 1 }}</small>
             <div class="concept-name">
-              <h3 class="mb-5" :style="`font-family:${item.fontFamily}`" v-html="item.name" />
-              <ul v-if="item.tags" class="features-list">
-                <li v-for="(tag, featureIndex) in item.tags" :key="featureIndex" class="features-list__item">
+              <h3 class="mb-5" :style="`font-family:${item.fontFamily}`" v-html="item.name"></h3>
+              <ul class="features-list" v-if="item.tags">
+                <li class="features-list__item" v-for="(tag, featureIndex) in item.tags" :key="featureIndex">
                   {{ tag.name }}
                 </li>
               </ul>
             </div>
-            <div v-if="item.expand" class="concept-description">
+            <div class="concept-description" v-if="item.expand">
               {{ item.description }}
             </div>
           </div>
           <md-button class="md-rose md-simple md-just-icon view-concept" @click="expandConcept(item, index)">
-            <img :src="`${conceptIconsURL}Asset 490.svg`">
+            <img :src="`${conceptIconsURL}Asset 490.svg`" />
           </md-button>
         </div>
 
         <!-- Create Concept Section -->
         <div
-          v-if="canEdit"
           class="concepts-list__item d-flex justify-content-start"
           :class="{ expanded: expandCreateConcept }"
+          v-if="canEdit"
         >
-          <div v-if="!expandCreateConcept" class="images-list create-concept">
+          <div class="images-list create-concept" v-if="!expandCreateConcept">
             <div class="image-backgrounds">
-              <div v-for="idx in 4" :key="idx" class="image-background" />
+              <div class="image-background" v-for="idx in 4" :key="idx"></div>
             </div>
             <div>
-              <div v-for="indx in 5" :key="indx" :class="`images-list__item`">
+              <div :class="`images-list__item`" v-for="indx in 5" :key="indx">
                 <div class="image-section d-flex justify-content-center align-center">
-                  <img :src="`${conceptIconsURL}Asset 492.svg`">
+                  <img :src="`${conceptIconsURL}Asset 492.svg`" />
                 </div>
               </div>
             </div>
           </div>
-          <div v-if="!expandCreateConcept" class="concept-details">
-            <h3 class="font-bold-extra font-size-30 color-red">
-              Create Your Own Concept
-            </h3>
+          <div class="concept-details" v-if="!expandCreateConcept">
+            <h3 class="font-bold-extra font-size-30 color-red">Create Your Own Concept</h3>
             <p>Feeling creative? Tell us all about your ideas and we’ll get right on it!</p>
           </div>
           <md-button
             class="md-rose md-simple md-just-icon view-concept"
             @click="expandCreateConcept = !expandCreateConcept"
           >
-            <img :src="`${conceptIconsURL}Asset 490.svg`">
+            <img :src="`${conceptIconsURL}Asset 490.svg`" />
           </md-button>
-          <event-concept-edit-form v-if="expandCreateConcept" @saved="onSaveConcept" />
+          <event-concept-edit-form v-if="expandCreateConcept" @saved="onSaveConcept"></event-concept-edit-form>
         </div>
         <!-- ./Create Concept Section -->
       </div>
@@ -127,36 +125,36 @@
           <md-icon>expand_less</md-icon>Back to top
         </md-button>-->
       </div>
-      <div v-if="!expandCreateConcept" class="concept-actions">
+      <div class="concept-actions" v-if="!expandCreateConcept">
         <div>
-          <md-button v-if="!showConceptList" class="md-simple md-black normal-btn" @click="showConceptList = true">
+          <md-button class="md-simple md-black normal-btn" v-if="!showConceptList" @click="showConceptList = true">
             <md-icon>arrow_back</md-icon>Back
           </md-button>
-          <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
         </div>
-        <md-button class="md-simple md-black normal-btn" @click="openConceptContest">
-          I'd like to see more options
-        </md-button>
+        <md-button class="md-simple md-black normal-btn" @click="openConceptContest"
+          >I'd like to see more options</md-button
+        >
       </div>
     </div>
-    <div v-if="!showConceptList && !isLoading" class="concept-content">
+    <div class="concept-content" v-if="!showConceptList && !isLoading">
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-name">
           <h3>Great Choice!</h3>
           <p>This theme will inspire us when planning our next steps.</p>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf" />
+        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
         <div class="header-name">
-          <h4><img :src="`${conceptIconsURL}Asset 491.svg`" width="30"> Your Selected Theme</h4>
+          <h4><img :src="`${conceptIconsURL}Asset 491.svg`" width="30" /> Your Selected Theme</h4>
         </div>
       </div>
 
-      <div v-if="!showEditForm" class="concepts-list md-layout-item md-size-100">
+      <div class="concepts-list md-layout-item md-size-100" v-if="!showEditForm">
         <div class="concepts-list__item d-flex justify-content-start expanded">
           <div>
             <a
@@ -164,26 +162,26 @@
               style="padding-top: 4px"
               href="https://www.maryoku.com/contest-compete"
               target="_blank"
-            >Compete with my brilliant concept?</a>
+              >Compete with my brilliant concept?</a
+            >
             <span>
               <img
                 src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/light.svg"
                 alt="Avatar"
                 width="20px"
-              >
+              />
               <md-tooltip md-direction="bottom">
                 <strong class="font-size-16">A chance to win $1,000!</strong>
                 <div class="font-size-16">
                   Don't miss this chance
-                  <br>to submit your concept <br>and compete for a grand <br>prize and recogintion.
+                  <br />to submit your concept <br />and compete for a grand <br />prize and recogintion.
                 </div>
               </md-tooltip>
             </span>
           </div>
-          <concept-box :concept="selectedConcept" />
+          <concept-box :concept="selectedConcept"></concept-box>
         </div>
         <vue-html2pdf
-          ref="html2Pdf"
           :show-layout="false"
           :float-layout="true"
           :enable-download="true"
@@ -195,6 +193,7 @@
           pdf-format="a4"
           pdf-orientation="portrait"
           pdf-content-width="800px"
+          ref="html2Pdf"
         >
           <section slot="pdf-content">
             <!-- PDF Content Here -->
@@ -205,49 +204,48 @@
                   style="padding-top: 4px"
                   href="https://www.maryoku.com/contest-compete"
                   target="_blank"
-                >Compete with my brilliant concept?</a>
+                  >Compete with my brilliant concept?</a
+                >
                 <span>
                   <img
                     src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/light.svg"
                     alt="Avatar"
                     width="20px"
-                  >
+                  />
                   <md-tooltip md-direction="bottom">
                     <strong class="font-size-16">A chance to win $1,000!</strong>
                     <div class="font-size-16">
                       Don't miss this chance
-                      <br>to submit your concept <br>and compete for a grand <br>prize and recogintion.
+                      <br />to submit your concept <br />and compete for a grand <br />prize and recogintion.
                     </div>
                   </md-tooltip>
                 </span>
               </div>
-              <concept-box :concept="selectedConcept" :scale="0.77" />
+              <concept-box :concept="selectedConcept" :scale="0.77"></concept-box>
             </div>
           </section>
         </vue-html2pdf>
       </div>
-      <div v-else class="concepts-list md-layout-item md-size-100">
+      <div class="concepts-list md-layout-item md-size-100" v-else>
         <div class="concepts-list__item d-flex justify-content-start expanded">
-          <event-concept-edit-form :default-concept="selectedConcept" @saved="onSaveConcept" />
+          <event-concept-edit-form :defaultConcept="selectedConcept" @saved="onSaveConcept"></event-concept-edit-form>
         </div>
       </div>
       <div class="selected-concept-footer d-flex justify-content-end">
         <!-- <md-button class="md-black md-simple md-maryoku " @click="showConceptList=true">
           <md-icon>keyboard_arrow_left</md-icon>Back
         </md-button>-->
-        <div />
+        <div></div>
         <div>
           <span class="concept-saved">
-            <img :src="`${$iconURL}common/check-circle-green.svg`" width="32">
+            <img :src="`${$iconURL}common/check-circle-green.svg`" width="32" />
             Concept is Saved
           </span>
-          <span class="separate" />
-          <md-button v-if="!showEditForm" class="md-black md-simple md-maryoku" @click="showEditForm = true">
-            Edit Concept
-          </md-button>
-          <md-button v-else class="md-black md-simple md-maryoku" @click="showEditForm = false">
-            Cancel
-          </md-button>
+          <span class="separate"></span>
+          <md-button class="md-black md-simple md-maryoku" v-if="!showEditForm" @click="showEditForm = true"
+            >Edit Concept</md-button
+          >
+          <md-button class="md-black md-simple md-maryoku" v-else @click="showEditForm = false">Cancel</md-button>
         </div>
       </div>
     </div>
@@ -279,7 +277,7 @@ import ConceptBox from "../../../../components/ConceptBox.vue";
 const VueHtml2pdf = () => import("vue-html2pdf");
 
 export default {
-  name: "EventConceptChoose",
+  name: "event-concept-choose",
   components: {
     Loader,
     EventBlocks,
@@ -297,8 +295,8 @@ export default {
     ConceptBox,
     VueHtml2pdf,
   },
-  mixins: [CommentMixins, ShareMixins],
   props: {},
+  mixins: [CommentMixins, ShareMixins],
   computed: {
     ...mapState("event", ["eventData"]),
     currentUser() {
@@ -528,29 +526,13 @@ export default {
       event.target.src = image;
     },
     openConceptContest() {
-      window.open("https://www.maryoku.com/concept-contest", "_blank");
+      window.open(`https://www.maryoku.com/concept-contest`, "_blank");
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
     exportToPdf() {
       this.$refs.html2Pdf.generatePdf();
-    },
-  },
-  watch: {
-    eventData(newValue, oldValue) {
-      console.log(newValue);
-      if (newValue.concept) {
-        this.selectedConcept = newValue.concept;
-        this.selectedConcept.images.forEach((item, i) => {
-          item.url = item.url;
-        });
-        this.showConceptList = false;
-      } else {
-        this.showConceptList = true;
-      }
-      this.isLoading = false;
-      console.log(newValue.id);
     },
   },
   async created() {
@@ -650,6 +632,22 @@ export default {
       }
       this.isLoading = false;
     }
+  },
+  watch: {
+    eventData(newValue, oldValue) {
+      console.log(newValue);
+      if (newValue.concept) {
+        this.selectedConcept = newValue.concept;
+        this.selectedConcept.images.forEach((item, i) => {
+          item.url = item.url;
+        });
+        this.showConceptList = false;
+      } else {
+        this.showConceptList = true;
+      }
+      this.isLoading = false;
+      console.log(newValue.id);
+    },
   },
   filters: {
     formatDate: function (date) {

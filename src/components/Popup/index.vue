@@ -1,30 +1,24 @@
 <template>
   <div class="maryoku-popup">
     <div class="popup-target" @mouseenter="show">
-      <slot name="content" />
+      <slot name="content"></slot>
     </div>
     <div class="popup" :class="{open : showPopup}">
       <slot name="popup">
-        <div v-if="showButtons" class="popup-footer">
-          <md-button class="md-red md-simple normal-btn" @click="showPopup=false">
-            Yes I'm sure
-          </md-button>
-          <md-button class="md-red normal-btn" @click="deleteTips">
-            Yes I'm sure
-          </md-button>
+        <div class="popup-footer" v-if="showButtons">
+          <md-button class="md-red md-simple normal-btn" @click="showPopup=false">Yes I'm sure</md-button>
+          <md-button class="md-red normal-btn" @click="deleteTips">Yes I'm sure</md-button>
         </div>
       </slot>
       <md-button class="popup-close md-button md-simple edit-btn md-theme-default" @click="showPopup=false">
-        <md-icon class="popup-close-icon">
-          close
-        </md-icon>
+        <md-icon class="popup-close-icon">close</md-icon>
       </md-button>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "MaryokuPopup",
+  name: "maryoku-popup",
   props:{
     showButtons:[Boolean]
   },
@@ -33,13 +27,13 @@ export default {
   }),
   methods:{
     show() {
-      this.showPopup = true;
+      this.showPopup = true
     },
     hide() {
-      this.showPopup = false;
+      this.showPopup = false
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
   .maryoku-popup {

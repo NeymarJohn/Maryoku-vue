@@ -2,10 +2,10 @@
   <div class="vendor-signup-step2-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconUrl}step-2.svg`">
+        <img :src="`${iconUrl}step-2.svg`" />
         <h2>
           SERVICES &
-          <br>AMENTITIES
+          <br />AMENTITIES
         </h2>
         <p>Don't leave anything out! All information will appear on your future proposals</p>
         <h2>1/4</h2>
@@ -13,7 +13,7 @@
       <div class="right-side">
         <div class="description">
           <h5>
-            <img :src="getCategoryIconByValue(currentService.vendorCategory)" width="40">
+            <img :src="getCategoryIconByValue(currentService.vendorCategory)" width="40" />
             {{ getCategoryNameByValue(currentService.vendorCategory) }} Amenities
           </h5>
           <p>
@@ -25,7 +25,7 @@
           v-for="(c, cIndex) in categories.find((category) => category.name == currentService.vendorCategory)
             .categories"
           :key="cIndex"
-          :service-item="c"
+          :serviceItem="c"
           :vendor="vendor"
           :service="currentService"
           theme="purple"
@@ -41,14 +41,13 @@ import VendorServiceItem from "../components/VendorServiceItem.vue";
 import { VendorCategories } from "@/constants/vendor";
 
 export default {
-  name: "VendorSignupStep2",
-  components: {
-    VendorServiceItem,
-  },
-  filters: {},
+  name: "vendor-signup-step2",
   props: {
     categories: Array,
     icon: String,
+  },
+  components: {
+    VendorServiceItem,
   },
   data() {
     return {
@@ -57,15 +56,6 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
-  computed: {
-    vendor() {
-      return this.$store.state.vendorService.vendor;
-    },
-    currentService() {
-      return this.$store.state.vendorService.service;
-    },
-  },
-  watch: {},
   created() {},
   mounted() {
     console.log("vendor.signup.step2.mounted", this.vendor);
@@ -78,6 +68,16 @@ export default {
       return this.vendorCategories.filter((c) => c.value == value)[0].icon;
     },
   },
+  computed: {
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    currentService() {
+      return this.$store.state.vendorService.service;
+    },
+  },
+  filters: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

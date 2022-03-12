@@ -1,19 +1,21 @@
 <template>
-  <div class="popover-wrapper">
-    <div v-click-outside="closeModal" :class="containerClass">
-      <div class="modal-header">
-        <slot name="header" />
+      <div class="popover-wrapper">
+        <div :class="containerClass" v-click-outside="closeModal">
+
+          <div class="modal-header">
+            <slot name="header"></slot>
+          </div>
+
+          <div class="modal-body text-center">
+            <slot name="body"></slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer"></slot>
+          </div>
+        </div>
       </div>
 
-      <div class="modal-body text-center">
-        <slot name="body" />
-      </div>
-
-      <div class="modal-footer">
-        <slot name="footer" />
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -21,15 +23,15 @@ export default {
   props: {
     containerClass: {
       type: String,
-      default: "modal-container"
+      default: 'modal-container'
     }
   },
   methods: {
     closeModal: function () {
-      this.$emit("close");
+      this.$emit('close')
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

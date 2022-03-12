@@ -7,16 +7,14 @@
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
-          <h4 class="title">
-            Upcoming Events
-          </h4>
+          <h4 class="title">Upcoming Events</h4>
         </md-card-header>
         <md-card-content>
           <md-table
             v-model="upcomingEvents"
             table-header-color="rose"
-            class="table-striped table-hover right-align-actions"
             @click="forceRerender()"
+            class="table-striped table-hover right-align-actions"
           >
             <md-table-row
               slot="md-table-row"
@@ -24,50 +22,34 @@
               class="hover-row"
               @click="routeToEvent(item, $event)"
             >
-              <md-table-cell md-label="Id">
-                {{ item.id }}
-              </md-table-cell>
-              <md-table-cell md-label="Event Name">
-                {{ item.title }}
-              </md-table-cell>
-              <md-table-cell md-label="Event Type">
-                {{
-                  item.eventType ? item.eventType.name : item.eventType
-                }}
-              </md-table-cell>
-              <md-table-cell md-label="Date">
-                {{ item.eventStartMillis | moment }}
-              </md-table-cell>
-              <md-table-cell md-label="Customer Name">
-                {{ item.owner ? item.owner.department : null }}
-              </md-table-cell>
+              <md-table-cell md-label="Id">{{ item.id }}</md-table-cell>
+              <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
+              <md-table-cell md-label="Event Type">{{
+                item.eventType ? item.eventType.name : item.eventType
+              }}</md-table-cell>
+              <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
+              <md-table-cell md-label="Customer Name">{{ item.owner ? item.owner.department : null }}</md-table-cell>
               <md-table-cell
-                v-if="item.owner && item.owner.id !== $auth.user.id"
                 md-label="Created By"
                 style="text-transform: capitalize"
+                v-if="item.owner && item.owner.id !== $auth.user.id"
               >
                 {{ item.owner.displayName }}
                 <span class="small text-primary" style="display: block">{{ item.owner.emailAddress }}</span>
               </md-table-cell>
-              <md-table-cell v-else md-label="Created By">
+              <md-table-cell md-label="Created By" v-else>
                 You
                 <span class="small text-primary" style="display: block">{{
                   item.owner ? item.owner.emailAddress : null
                 }}</span>
               </md-table-cell>
-              <md-table-cell md-label="# Participants">
-                {{ item.numberOfParticipants }}
-              </md-table-cell>
-              <md-table-cell md-label="Budget Per Participant">
-                $ {{ item.budgetPerPerson }}
-              </md-table-cell>
-              <md-table-cell md-label="Location">
-                {{ item.location }}
-              </md-table-cell>
+              <md-table-cell md-label="# Participants">{{ item.numberOfParticipants }}</md-table-cell>
+              <md-table-cell md-label="Budget Per Participant">$ {{ item.budgetPerPerson }}</md-table-cell>
+              <md-table-cell md-label="Location">{{ item.location }}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap">
-                <md-button class="md-danger md-just-icon md-round" @click="showDeleteAlert($event, item)">
-                  <md-icon>delete</md-icon>
-                </md-button>
+              <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
+                <md-icon>delete</md-icon>
+              </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
@@ -79,40 +61,34 @@
           </div>-->
         </md-card-content>
       </md-card>
-      <md-card v-if="!upcomingEvents.length && !isLoading" class="md-card-plain">
+      <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
           <div class="text-center mt-5">
             <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar.png" style="width: 120px;" /> -->
             <h3>You do not have any events planned yet</h3>
             <div class="mt-4rem">
-              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">
-                Create New Event
-              </md-button>
-              <md-button class="md-red md-simple normal-btn" @click="chooseWorkspace">
-                Choose Workspace
-              </md-button>
+              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">Create New Event</md-button>
+              <md-button class="md-red md-simple normal-btn" @click="chooseWorkspace">Choose Workspace</md-button>
             </div>
           </div>
         </md-card-content>
       </md-card>
     </div>
 
-    <div v-if="recentEvents.length" class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
+    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100" v-if="recentEvents.length">
       <div class="header text-center">
-        <h4 class="title">
-          Recent Events
-        </h4>
+        <h4 class="title">Recent Events</h4>
       </div>
     </div>
 
     <div
+      class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
       v-for="event in recentEvents"
       :key="event.id"
-      class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
       @click="routeToEvent(event)"
     >
       <product-card header-animation="true">
-        <img slot="imageHeader" class="img" :src="imageHref(event.coverImage)">
+        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)" />
 
         <h4 slot="title" class="title">
           <a @click="routeToEvent(event)">{{ event.title }}</a>
@@ -170,18 +146,6 @@ export default {
     VueElementLoading,
     EventModal,
   },
-  data() {
-    return {
-      // auth: auth,
-      product3: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-      recentEvents: [],
-      upcomingEvents: [],
-      isLoading: true,
-      imageIndex,
-      quoteIndex,
-      quote,
-    };
-  },
   created() {
     const query = this.$route.query;
 
@@ -194,7 +158,7 @@ export default {
     const params = query && query.type == 1 ?
       {
         filters: {myEvents: true}
-      } : null;
+      } : null
 
     this.$http
         .get(`${process.env.SERVER_URL}/1/events`, {
@@ -208,6 +172,18 @@ export default {
             console.log(error);
         });
     }
+  },
+  data() {
+    return {
+      // auth: auth,
+      product3: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+      recentEvents: [],
+      upcomingEvents: [],
+      isLoading: true,
+      imageIndex,
+      quoteIndex,
+      quote,
+    };
   },
 
   methods: {
@@ -235,7 +211,7 @@ export default {
       e.stopPropagation();
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -277,7 +253,7 @@ export default {
     routeToEvent(event) {
       const gotoLink = eventService.getFirstTaskLink(event);
       this.$router.push({
-          path: this.$store.state.auth.user.currentUserType === "planner" ? gotoLink : `/user-events/${event.id}/booking/overview`
+          path: this.$store.state.auth.user.currentUserType === 'planner' ? gotoLink : `/user-events/${event.id}/booking/overview`
       });
     },
     chooseWorkspace() {
@@ -318,7 +294,7 @@ export default {
       });
     },
     routeToNewEvent() {
-      this.$router.push("/create-event-wizard");
+      this.$router.push(`/create-event-wizard`);
     },
     getExtraFields(allEvents) {
       allEvents.forEach((item) => {

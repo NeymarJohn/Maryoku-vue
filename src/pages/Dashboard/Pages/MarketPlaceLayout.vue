@@ -4,7 +4,7 @@
       <div class="inner">
         <md-nav>
           <md-nav-logo href="#!/navbar">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/img/262Logo2.png">
+            <img src="https://static-maryoku.s3.amazonaws.com/storage/img/262Logo2.png" />
           </md-nav-logo>
           <md-nav-links class="links">
             <a href="/index.php/blog" class="blog">BLOG</a>
@@ -15,7 +15,7 @@
         </md-nav>
       </div>
     </div>
-    <router-view />
+    <router-view></router-view>
   </div>
 </template>
 <script>
@@ -74,14 +74,6 @@ export default {
       return `${this.$route.name}-page`.toLowerCase();
     },
   },
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  },
-  beforeDestroy() {
-    this.closeMenu();
-    window.removeEventListener("resize", this.onResponsiveInverted);
-  },
   methods: {
     toggleSidebarPage() {
       if (this.$sidebar.showSidebar) {
@@ -115,6 +107,14 @@ export default {
         this.responsive = false;
       }
     },
+  },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeDestroy() {
+    this.closeMenu();
+    window.removeEventListener("resize", this.onResponsiveInverted);
   },
   beforeRouteUpdate(to, from, next) {
     // Close the mobile menu first then transition to next page

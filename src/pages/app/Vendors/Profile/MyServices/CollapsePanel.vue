@@ -1,42 +1,38 @@
 <template>
   <div class="collapse-panel">
     <div class="collapse-panel-header font-bold-extra text-transform-uppercase" @click="toggle">
-      <slot name="header" />
-      <md-button class="md-icon-button md-simple collapse-button mr-50" @click="toggle">
-        <md-icon v-if="isExpanded" class="icon">
-          keyboard_arrow_down
-        </md-icon>
-        <md-icon v-if="!isExpanded" class="icon">
-          keyboard_arrow_right
-        </md-icon>
+      <slot name="header"></slot>
+      <md-button @click="toggle" class="md-icon-button md-simple collapse-button mr-50">
+        <md-icon class="icon" v-if="isExpanded">keyboard_arrow_down</md-icon>
+        <md-icon class="icon" v-if="!isExpanded">keyboard_arrow_right</md-icon>
       </md-button>
     </div>
-    <div v-if="isExpanded" class="collapse-panel-content">
-      <slot name="content" />
+    <div class="collapse-panel-content" v-if="isExpanded">
+      <slot name="content"></slot>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: {
-    defaultStatus: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       isExpanded: false,
     };
-  },
-  created() {
-    this.isExpanded = this.defaultStatus;
   },
   methods: {
     toggle(event) {
       event.stopPropagation();
       this.isExpanded = !this.isExpanded;
       this.$emit("toggle", this.isExpanded);
+    },
+  },
+  created() {
+    this.isExpanded = this.defaultStatus;
+  },
+  props: {
+    defaultStatus: {
+      type: Boolean,
+      default: false,
     },
   },
 };

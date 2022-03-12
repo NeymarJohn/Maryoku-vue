@@ -1,56 +1,52 @@
 <template>
   <div>
-    <Loader :active="isLoading" :is-full-screen="true" page="vendor" />
+    <Loader :active="isLoading" :isFullScreen="true" page="vendor"></Loader>
     <div class="for-proposals-layout-wrapper">
-      <ProposalHeader v-if="event" :event="event" :proposal-request="proposalRequest" />
+      <ProposalHeader v-if="event" :event="event" :proposalRequest="proposalRequest"></ProposalHeader>
       <ProposalVersionsBar
-        v-if="proposalRequest && proposalRequest.proposal"
-        :versions="versions"
-        :selected="selectedVersion"
-        @select="selectVersion"
-        @save="saveVersion"
-        @change="changeVersion"
-        @remove="removeVersion"
-      />
+          v-if="proposalRequest && proposalRequest.proposal"
+          :versions="versions"
+          :selected="selectedVersion"
+          @select="selectVersion"
+          @save="saveVersion"
+          @change="changeVersion"
+          @remove="removeVersion"
+      ></ProposalVersionsBar>
       <div class="main-cont">
-        <router-view />
+        <router-view></router-view>
       </div>
       <section class="footer-wrapper">
         <div>
           <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-            <img :src="`${proposalIconsUrl}Group 4770 (2).svg`"> Back
-          </md-button>
-          <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-            <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17">
+            <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
+          >
+          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+            <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
           </md-button>
         </div>
 
         <div class="next-cont">
           <span>You can return to it till the deadline!</span>
-          <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"> Discard </a>
+          <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
           <a class="save" @click="calculateStage(proposalStatus.DRAFT)">
-            <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
+            <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
           </a>
-          <a v-if="step < 3" class="next active" :class="[{ active: selectedServices.length > 0 }]" @click="gotoNext">
+          <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
             Next
           </a>
-          <a v-else class="next active" :disabled="isUpdating" @click="calculateStage(option)">Submit Proposal</a>
+          <a class="next active" @click="calculateStage(option)" v-else :disabled="isUpdating">Submit Proposal</a>
         </div>
       </section>
 
       <modal v-if="submittedModal" class="saved-it-modal proposal-submitting-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header">
-            <img :src="`${proposalIconsUrl}thanks-proposal.png`">
-            <div class="font-size-30 font-bold color-vendor mt-30">
-              Thank you for submitting a proposal!
-            </div>
-            <div class="text-center font-size-22 mt-40 mb-40">
-              You will get a reply in 4 days
-            </div>
+            <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
+            <div class="font-size-30 font-bold color-vendor mt-30">Thank you for submitting a proposal!</div>
+            <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
           </div>
           <button class="close" @click="hideModal()">
-            <img :src="`${proposalIconsUrl}Group 3671 (2).svg`">
+            <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
           </button>
         </template>
         <template slot="body">
@@ -59,75 +55,69 @@
               <md-button class="md-simple maryoku-btn md-vendor" @click="goToProcessingGuid">
                 How does our bidding process work?
               </md-button>
-              <md-button class="md-simple maryoku-btn md-vendor md-outlined" @click="goToVendorProfile">
-                Go to my Dashboard
-              </md-button>
+              <md-button class="md-simple maryoku-btn md-vendor md-outlined" @click="goToVendorProfile"
+                >Go to my Dashboard</md-button
+              >
             </div>
           </div>
         </template>
       </modal>
       <modal v-if="showMissingModal" container-class="modal-container w-max-700 no-header no-footer">
         <template slot="body">
-          <MissingDetail
-            :data="missingDetail"
-            @send="uploadProposal(proposalStatus.PENDING)"
-            @close="showMissingModal = false"
-          />
+            <MissingDetail
+                :data="missingDetail"
+                @send="uploadProposal(proposalStatus.PENDING)"
+                @close="showMissingModal = false"
+            ></MissingDetail>
         </template>
       </modal>
       <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header">
-            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`"> Time Is Up!</h3>
+            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
             <div class="header-description">
               The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the
               next one.
             </div>
           </div>
           <button class="close" @click="hideModal()">
-            <img :src="`${proposalIconsUrl}Group 3671 (2).svg`">
+            <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
           </button>
         </template>
         <template slot="body">
           <div class="saved-it-modal__body">
             <div class="time-cont">
-              <VendorBidTimeCounter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple" />
+              <VendorBidTimeCounter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple"/>
             </div>
           </div>
         </template>
         <template slot="footer">
           <div class="saved-it-modal__footer">
-            <md-button class="md-red maryoku-btn" @click="hideModal()">
-              Ok, Thanks
-            </md-button>
+            <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
           </div>
         </template>
       </modal>
       <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header d-flex">
-            <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`">
+            <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
             <div class="ml-20">
               <h3 class="text-left color-black">
-                We are sorry, but someone else got there <br>before you and already won this bid.
+                We are sorry, but someone else got there <br />before you and already won this bid.
               </h3>
-              <div class="text-left">
-                But no worries! We will be with you soon with the next one
-              </div>
+              <div class="text-left">But no worries! We will be with you soon with the next one</div>
             </div>
           </div>
           <button class="close" @click="showCloseProposalModal = false">
-            <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`">
+            <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
           </button>
         </template>
         <template slot="body">
-          <div class="saved-it-modal__body" />
+          <div class="saved-it-modal__body"></div>
         </template>
         <template slot="footer">
           <div class="saved-it-modal__footer">
-            <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">
-              Ok, Thanks
-            </md-button>
+            <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
           </div>
         </template>
       </modal>
@@ -143,14 +133,14 @@ import { PROPOSAL_STATUS } from "@/constants/status";
 import { MISSING_DETAILS } from "@/constants/proposal";
 
 const components = {
-    Loader: () => import("@/components/loader/Loader.vue"),
-    Modal: () => import("@/components/Modal.vue"),
-    MissingDetail: () => import("./Modals/MissingDetail.vue"),
-    ProposalVersionsBar: () => import("../components/ProposalVersionsBar.vue"),
-    ProposalSubmitted: () => import("../Proposal/Modals/ProposalSubmitted.vue"),
-    ProposalHeader: () => import("./ProposalHeader.vue"),
-    VendorBidTimeCounter: () => import("@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue"),
-};
+    Loader: () => import('@/components/loader/Loader.vue'),
+    Modal: () => import('@/components/Modal.vue'),
+    MissingDetail: () => import('./Modals/MissingDetail.vue'),
+    ProposalVersionsBar: () => import('../components/ProposalVersionsBar.vue'),
+    ProposalSubmitted: () => import('../Proposal/Modals/ProposalSubmitted.vue'),
+    ProposalHeader: () => import('./ProposalHeader.vue'),
+    VendorBidTimeCounter: () => import('@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue'),
+}
 
 export default {
   components,
@@ -181,7 +171,7 @@ export default {
   },
   async created() {
 
-    console.log("proposal.layout.created", this.$store.state.auth.user);
+    console.log('proposal.layout.created', this.$store.state.auth.user);
     // if(this.$store.state.auth.user){
     //   this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
     //
@@ -207,7 +197,7 @@ export default {
 
     await this.getVendor(this.$route.params.vendorId);
 
-    this.proposalRequest = await this.getProposalRequest(this.$route.params.id);
+    this.proposalRequest = await this.getProposalRequest(this.$route.params.id)
     if (this.proposalRequest.componentInstance && this.proposalRequest.componentInstance.proposalAccepted) {
       this.showCloseProposalModal = true;
     }
@@ -231,9 +221,9 @@ export default {
 
     if (this.$route.query.version) {
       let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version.id);
-      this.$store.commit("vendorProposal/selectVersion", index);
+      this.$store.commit('vendorProposal/selectVersion', index);
     }
-    this.isLoading = false;
+    this.isLoading = false
   },
 
   methods: {
@@ -278,7 +268,7 @@ export default {
     },
 
       getMissingDetail(field) {
-          return MISSING_DETAILS.find(it => it.key === field);
+          return MISSING_DETAILS.find(it => it.key === field)
       },
 
       async calculateStage(type) {
@@ -286,32 +276,32 @@ export default {
           const vendorProposal = this.$store.state.vendorProposal;
 
           let progress = 0;
-          if (vendorProposal.hasOwnProperty("eventVision") && vendorProposal.eventVision) {
+          if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
               progress += 10;
           } else {
-              this.missingDetail.push(this.getMissingDetail("vision"));
+              this.missingDetail.push(this.getMissingDetail('vision'))
           }
           if (vendorProposal.costServices[this.vendor.vendorCategory] && vendorProposal.costServices[this.vendor.vendorCategory].length) {
               progress += 30;
           } else {
-              this.missingDetail.push(this.getMissingDetail("cost"));
+              this.missingDetail.push(this.getMissingDetail('cost'))
           }
 
           if (vendorProposal.includedServices[this.vendor.vendorCategory] && vendorProposal.includedServices[this.vendor.vendorCategory].length) {
               progress += 20;
           } else {
-              this.missingDetail.push(this.getMissingDetail("include"));
+              this.missingDetail.push(this.getMissingDetail('include'))
           }
           if (vendorProposal.extraServices[this.vendor.vendorCategory] && vendorProposal.extraServices[this.vendor.vendorCategory].length) {
               progress += 20;
           } else {
-              this.missingDetail.push(this.getMissingDetail("extra"));
+              this.missingDetail.push(this.getMissingDetail('extra'))
           }
 
           if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
               progress += 20;
           } else {
-              this.missingDetail.push(this.getMissingDetail("image"));
+              this.missingDetail.push(this.getMissingDetail('image'))
           }
 
           // check missing when submit the proposal
@@ -321,7 +311,7 @@ export default {
           }
 
           this.$store.commit("vendorProposal/setProgress", progress);
-          await this.uploadProposal(type);
+          await this.uploadProposal(type)
     },
 
     async uploadProposal(type) {
@@ -352,7 +342,7 @@ export default {
         if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
         else {
           Swal.fire({
-              title: "You’ve saved this current proposal. Come back and edit it at any time!",
+              title: `You’ve saved this current proposal. Come back and edit it at any time!`,
               buttonsStyling: false,
               showCancelButton: true,
               type: "success",
@@ -378,7 +368,7 @@ export default {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
     },
     goToProcessingGuid() {
-      this.$router.push({ path: "/completed-bidding" });
+      this.$router.push({ path: `/completed-bidding` });
     },
     goToVendorProfile() {
         this.$router.push({path: "/vendor/dashboard"});
@@ -386,7 +376,7 @@ export default {
     discard() {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success btn-fill",
         cancelButtonClass: "md-button md-danger btn-fill",
@@ -400,16 +390,16 @@ export default {
       });
     },
     selectVersion(index){
-      this.$store.commit("vendorProposal/selectVersion", index);
+      this.$store.commit('vendorProposal/selectVersion', index);
     },
     saveVersion(version){
-        this.$store.dispatch("vendorProposal/saveVersion", version);
+        this.$store.dispatch('vendorProposal/saveVersion', version);
     },
     changeVersion(versions){
-        this.$store.commit("vendorProposal/setVersions", versions);
+        this.$store.commit('vendorProposal/setVersions', versions);
     },
     removeVersion(id){
-        this.$store.dispatch("vendorProposal/removeVersion", id);
+        this.$store.dispatch('vendorProposal/removeVersion', id);
     }
   },
 
@@ -451,7 +441,7 @@ export default {
     },
   },
   watch: {
-    vendor(newVal){console.log("vendor.watch", newVal);}
+    vendor(newVal){console.log('vendor.watch', newVal)}
   }
 };
 </script>

@@ -1,22 +1,23 @@
 <template>
   <div class="full-width">
     <div class="proposals-wrapper">
-      <md-card v-for="(item, index) in proposals" :key="index" :value="item">
+      <md-card v-for="(item, index) in proposals" :value="item" :key="index">
         <md-card-header>
           <div class="upper-row">
-            <img :src="item.image">
+            <img :src="item.image" />
             <div class="text-container">
               <p>
                 {{ item.vendorName }}
                 <label
+                  class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  class="star-rating__star"
                   :class="{
                     'is-selected':
                       item.bidderRank >= rating && item.bidderRank != null,
                   }"
-                >★</label>
+                  >★</label
+                >
               </p>
               <h4>{{ getEventTitle(item.eventData) }}</h4>
               <h5>
@@ -54,7 +55,7 @@ import EventComponent from "@/models/EventComponent";
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "VendorSimilarProposals",
+  name: "vendor-similar-proposals",
   components: {
     VueElementLoading,
   },

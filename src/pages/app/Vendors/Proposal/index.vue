@@ -1,39 +1,39 @@
 <template>
   <div class="for-proposal-wrapper">
-    <Loader :active="!event || !vendor || !proposalRequest" is-full-screen page="vendor" />
-    <div v-if="event && vendor && proposalRequest" class="md-layout justify-content-between">
+    <Loader :active="!event || !vendor || !proposalRequest" is-full-screen page="vendor"></Loader>
+    <div class="md-layout justify-content-between" v-if="event && vendor && proposalRequest">
       <div class="md-layout-item md-size-70">
         <ProposalSteps
-          :event-category="vendor.eventCategory"
+          :eventCategory="vendor.eventCategory"
           :step="step"
-          :has-vision-step="!!event && !!event.concept"
+          :hasVisionStep="!!event && !!event.concept"
           :vendor="vendor"
-          :proposal-request="proposalRequest"
+          :proposalRequest="proposalRequest"
         />
-        <div v-if="step == 0" class="step-wrapper">
+        <div class="step-wrapper" v-if="step == 0">
           <div class="proposal-add-personal-message-wrapper">
-            <h3><img :src="`${iconUrl}Asset 611.svg`">Let's begin with a personal message</h3>
+            <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
             <h4>Write something nice, we'll add it to the final proposal</h4>
             <MaryokuTextarea
-              v-if="proposalRequest"
-              v-model="personalMessage"
               class="width-100"
               size="small"
               rows="6"
-            />
+              v-model="personalMessage"
+              v-if="proposalRequest"
+            ></MaryokuTextarea>
             <span>Sincerely,</span>
             <p>{{ vendor.companyName }}</p>
           </div>
-          <ProposalEventVision :event="event" />
-          <ProposalAdditionalRequirement />
+          <ProposalEventVision :event="event"></ProposalEventVision>
+          <ProposalAdditionalRequirement></ProposalAdditionalRequirement>
         </div>
-        <div v-if="step == 1" class="step-wrapper">
-          <ProposalBidContent />
+        <div class="step-wrapper" v-if="step == 1">
+          <ProposalBidContent></ProposalBidContent>
         </div>
-        <div v-if="step == 2" class="step-wrapper">
+        <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
           <p>
-            <img :src="`${iconUrl}Group 5280 (5).svg`">
+            <img :src="`${iconUrl}Group 5280 (5).svg`" />
             Did you know? Referring us to vendors for these services can get you a commission get!
           </p>
           <ProposalItemSecondaryService
@@ -41,39 +41,39 @@
             :key="index"
             :category="service.title"
             :services="servicesByCategory(service.componentId)"
-            :is-collapsed="true"
-            :is-dropdown="true"
-            :proposal-range="true"
+            :isCollapsed="true"
+            :isDropdown="true"
+            :proposalRange="true"
             :img="`${$iconURL}Budget Elements/${service.icon}`"
-            :proposal-request="proposalRequest"
+            :proposalRequest="proposalRequest"
             :service="service"
             @click="selectSecondCategory(service.componentId)"
           />
 
           <ReferNewVendor :event="event" :vendor="vendor" />
         </div>
-        <div v-if="step == 3" class="step-wrapper">
+        <div class="step-wrapper" v-if="step == 3">
           <ProposalEventSummary
             :title="`Event Information & Details`"
-            :event-data="event"
-            :is-edit="false"
-            :icon-url="iconUrl"
-            :personal-message="proposalRequest.personalMessage"
-            :proposal-request="proposalRequest"
+            :eventData="event"
+            :isEdit="false"
+            :iconUrl="iconUrl"
+            :personalMessage="proposalRequest.personalMessage"
+            :proposalRequest="proposalRequest"
             :services="services"
           />
         </div>
       </div>
       <div class="md-layout-item md-size-30 pos-relative">
-        <ProposalRequirementsPanel v-if="step !== 3" class="requirements-panel" />
+        <ProposalRequirementsPanel class="requirements-panel" v-if="step !== 3"></ProposalRequirementsPanel>
         <ProposalBudgetSummary
-          v-if="step >= 1"
-          :bundle-discount="true"
+          :bundleDiscount="true"
           :warning="true"
           :additional="true"
-          :is-edit="true"
+          :isEdit="true"
           :step="step"
           :services="services"
+          v-if="step >= 1"
         />
       </div>
     </div>
@@ -99,11 +99,10 @@ const components = {
     ProposalSteps: () => import("./ProposalSteps.vue"),
     ProposalEventVision: () => import("./ProposalEventVision.vue"),
     ProposalBidContent: () => import("./ProposalBidContent.vue"),
-};
+}
 
 export default {
   components,
-  filters: {},
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -114,6 +113,50 @@ export default {
       markedDates: [],
     };
   },
+  created() {},
+  async mounted() {
+    this.services = Object.assign([], businessCategories);
+    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
+    await this.$store.dispatch("common/fetchAllCategories");
+    await this.$store.dispatch('common/getTaxes');
+
+    // handling uploading photo backhand process
+    this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName }) => {
+      const currentPhoto = this.inspirationalPhotos[index];
+      const url = await  S3Service.fileUpload(file, fileName, link)
+
+      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
+
+    });
+    this.$root.$on("remove-inspirational-photo", async (index) => {
+        if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
+        this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
+    })
+  },
+  methods: {
+    selectSecondCategory(serviceCategory) {
+      // console.log('selectSecondCategory', serviceCategory);
+      this.$store.commit("vendorProposal/setValue", { key: "currentSecondaryService", value: serviceCategory });
+    },
+    flatDeep(arr, d = 1) {
+      return d > 0
+        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
+        : arr.slice();
+    },
+    servicesByCategory(category) {
+      const services = this.services.filter((s) => s.name == category);
+
+      if (services.length > 0) {
+        return this.flatDeep(
+          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+          Infinity,
+        );
+      } else {
+        return [];
+      }
+    },
+  },
+  filters: {},
   computed: {
     extraServices() {
       if ( this.event.components.length ) {
@@ -159,49 +202,6 @@ export default {
   },
   watch:{
     inspirationalPhotos(newVal){}
-  },
-  created() {},
-  async mounted() {
-    this.services = Object.assign([], businessCategories);
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-    await this.$store.dispatch("common/fetchAllCategories");
-    await this.$store.dispatch("common/getTaxes");
-
-    // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName }) => {
-      const currentPhoto = this.inspirationalPhotos[index];
-      const url = await  S3Service.fileUpload(file, fileName, link);
-
-      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
-
-    });
-    this.$root.$on("remove-inspirational-photo", async (index) => {
-        if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
-        this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
-    });
-  },
-  methods: {
-    selectSecondCategory(serviceCategory) {
-      // console.log('selectSecondCategory', serviceCategory);
-      this.$store.commit("vendorProposal/setValue", { key: "currentSecondaryService", value: serviceCategory });
-    },
-    flatDeep(arr, d = 1) {
-      return d > 0
-        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
-        : arr.slice();
-    },
-    servicesByCategory(category) {
-      const services = this.services.filter((s) => s.name == category);
-
-      if (services.length > 0) {
-        return this.flatDeep(
-          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-          Infinity,
-        );
-      } else {
-        return [];
-      }
-    },
   }
 };
 </script>

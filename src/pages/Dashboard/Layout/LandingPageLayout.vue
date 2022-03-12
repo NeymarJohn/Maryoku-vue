@@ -1,6 +1,6 @@
 <template>
   <zoom-center-transition :duration="200" mode="out-in">
-    <router-view />
+    <router-view></router-view>
   </zoom-center-transition>
 </template>
 <script>

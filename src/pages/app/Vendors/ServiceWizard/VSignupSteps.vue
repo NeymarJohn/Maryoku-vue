@@ -8,29 +8,29 @@
           <br />
           <strong class="text">about your <br />company</strong>
         </li> -->
-        <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
+        <li @click="goToStep(2)" :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
-          <br>
-          <strong class="text">services &<br>amentities</strong>
+          <br />
+          <strong class="text">services &<br />amentities</strong>
         </li>
-        <li :class="[{ active: step >= 4 }, { current: step == 3 }, { inactive: step < 3 }]" @click="goToStep(3)">
+        <li @click="goToStep(3)" :class="[{ active: step >= 4 }, { current: step == 3 }, { inactive: step < 3 }]">
           <span v-if="step >= 4"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
-          <br>
-          <strong class="text">disclamer & <br>policy</strong>
+          <br />
+          <strong class="text">disclamer & <br />policy</strong>
         </li>
-        <li :class="[{ active: step >= 5 }, { current: step == 4 }, { inactive: step < 4 }]" @click="goToStep(4)">
+        <li @click="goToStep(4)" :class="[{ active: step >= 5 }, { current: step == 4 }, { inactive: step < 4 }]">
           <span v-if="step >= 5"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
-          <br>
+          <br />
           <strong class="text">summary</strong>
         </li>
-        <li :class="[{ active: step >= 6 }, { current: step >= 5 }, { inactive: step < 5 }]" @click="goToStep(5)">
+        <li @click="goToStep(5)" :class="[{ active: step >= 6 }, { current: step >= 5 }, { inactive: step < 5 }]">
           <span v-if="step >= 6"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
-          <br>
-          <strong class="text">get<br>recommendation</strong>
+          <br />
+          <strong class="text">get<br />recommendation</strong>
         </li>
       </ul>
     </div>
@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: "VSignupSteps",
+  name: "v-signup-steps",
   components: {},
   props: {
     step: Number,
@@ -46,10 +46,6 @@ export default {
   data() {
     return {};
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
   methods: {
     goToStep(step) {
       if (step < this.step) {
@@ -57,6 +53,10 @@ export default {
       }
     },
   },
+  created() {},
+  mounted() {},
+  computed: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

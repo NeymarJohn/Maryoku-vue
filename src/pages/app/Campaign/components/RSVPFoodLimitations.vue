@@ -1,20 +1,20 @@
 <template>
   <div class="d-flex food-limitaions">
     <div v-for="(key, index) in Object.keys(limitations)" :key="index" class="flex-1 food-limit-item text-center">
-      <img :src="`${$iconURL}RSVP/${icons[key]}`">
+      <img :src="`${$iconURL}RSVP/${icons[key]}`" />
       <div>
         <div class="text-transform-capitalize">
           {{ key }}
         </div>
         <div>
           ({{ limitations[key].length }})
-          <span v-if="limitations[key].length" style="color: #050505" @click="showPannel(key)"><md-icon>keyboard_arrow_down</md-icon></span>
+          <span style="color: #050505" @click="showPannel(key)" v-if="limitations[key].length"
+            ><md-icon>keyboard_arrow_down</md-icon></span
+          >
         </div>
       </div>
-      <div v-if="key == openedKey" class="popover-panel">
-        <div v-for="(guest, guestIndex) in limitations[key]" :key="guestIndex" class="popup-item">
-          {{ guest.name }}
-        </div>
+      <div class="popover-panel" v-if="key == openedKey">
+        <div class="popup-item" v-for="(guest, guestIndex) in limitations[key]" :key="guestIndex">{{ guest.name }}</div>
       </div>
     </div>
   </div>

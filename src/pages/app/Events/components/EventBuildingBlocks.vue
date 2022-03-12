@@ -4,19 +4,13 @@
       <md-card>
         <md-card-header class="md-card-header-icon md-card-header-rose">
           <div class="md-layout-item show-cost-switch">
-            <h4 class="title profile-title title-summary">
-              Budget Table
-            </h4>
+            <h4 class="title profile-title title-summary">Budget Table</h4>
             <label>Show Cost:</label>
             <md-field class="no-border">
-              <label />
-              <md-select v-model="elementsBudget" class="select-elements-budget">
-                <md-option value="event">
-                  Per Event
-                </md-option>
-                <md-option value="guest">
-                  Per Guest
-                </md-option>
+              <label></label>
+              <md-select class="select-elements-budget" v-model="elementsBudget">
+                <md-option value="event">Per Event</md-option>
+                <md-option value="guest">Per Guest</md-option>
               </md-select>
             </md-field>
             <md-button class="md-default md-simple add-new-block-btn no-padding" @click="showAddEventElementsModal()">
@@ -34,8 +28,8 @@
                 <!--                <th>Brief</th>-->
                 <th>Budget</th>
                 <th>Actual cost</th>
-                <th />
-                <th />
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody v-if="eventBuildingBlocks.length">
@@ -59,16 +53,16 @@
                   <td></td>
               </tr>-->
               <tr
+                class="text-left"
                 v-for="(block, index) in eventBuildingBlocks"
                 :key="index"
-                class="text-left"
                 @mouseover="setCurrentBlockId(block)"
                 @mouseout="setCurrentBlockId(null)"
               >
                 <td>
                   <span class="span-element">{{ block.title }}</span>
-                  <span v-if="elementsBudget === 'guest'" class="span-users-count pull-right">
-                    <i class="fa fa-user" />
+                  <span class="span-users-count pull-right" v-if="elementsBudget === 'guest'">
+                    <i class="fa fa-user"></i>
                     {{ block.numberOfParticipants ? block.numberOfParticipants : event.numberOfParticipants }}
                   </span>
                 </td>
@@ -102,7 +96,7 @@
                       :numeric="true"
                       @text-updated-blur="blockBudgetChanged"
                       @text-updated-enter="blockBudgetChanged"
-                    />
+                    ></label-edit>
 
                     <label-edit
                       v-else-if="block.allocatedBudget && block.numberOfParticipants"
@@ -117,7 +111,7 @@
                       :numeric="true"
                       @text-updated-blur="blockBudgetChanged"
                       @text-updated-enter="blockBudgetChanged"
-                    />
+                    ></label-edit>
                     <label-edit
                       v-else
                       :text="
@@ -131,7 +125,7 @@
                       :numeric="true"
                       @text-updated-blur="blockBudgetChanged"
                       @text-updated-enter="blockBudgetChanged"
-                    />
+                    ></label-edit>
                   </div>
                 </td>
                 <td class="actual-cost">
@@ -159,9 +153,8 @@
                       <md-button
                         class="md-success md-sm btn-view-order"
                         @click="reviewProposals(block, block.winningProposalId)"
+                        >View Order</md-button
                       >
-                        View Order
-                      </md-button>
                     </template>
                     <template
                       v-else-if="
@@ -183,9 +176,9 @@
                 </td>
                 <td class="w-5 text-right">
                   <a
-                    v-if="currentBlockId === block.id"
                     href="#"
                     class="no-padding pull-right"
+                    v-if="currentBlockId === block.id"
                     @click="deleteBlock(block.id)"
                   >
                     <md-icon @click="deleteBlock(block.id)">close</md-icon>
@@ -221,7 +214,7 @@ import _ from "underscore";
 import { LabelEdit, AnimatedNumber, StatsCard, ChartCard } from "@/components";
 
 export default {
-  name: "EventBuildingBlocks",
+  name: "event-building-blocks",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -255,7 +248,7 @@ export default {
     deleteBlock(blockId) {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -412,7 +405,7 @@ export default {
     addRequirements(item) {
       if (item.proposalsCount) {
         Swal.fire({
-          text: "You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?",
+          text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
           showCancelButton: true,
           icon: "warning",
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -500,6 +493,14 @@ export default {
       }
     },
   },
+  created() {},
+  mounted() {
+    this.getEventBuildingBlocks();
+
+    this.$root.$on("refreshBuildingBlock", () => {
+      this.getEventBuildingBlocks();
+    });
+  },
   watch: {
     event(newVal, oldVal) {
       // Get default event building blocks
@@ -512,14 +513,6 @@ export default {
     elementsBudget(val) {
       this.switchingBudgetAndCost();
     },
-  },
-  created() {},
-  mounted() {
-    this.getEventBuildingBlocks();
-
-    this.$root.$on("refreshBuildingBlock", () => {
-      this.getEventBuildingBlocks();
-    });
   },
 };
 </script>

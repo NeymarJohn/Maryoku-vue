@@ -1,53 +1,43 @@
 <template>
-  <modal class="planning-board-additioal-modal" :container-class="`modal-container lg`">
+  <modal class="planning-board-additioal-modal" :containerClass="`modal-container lg`">
     <template slot="header">
       <div class="maryoku-modal-header text-center">
-        <img :src="`${$iconURL}NewRequirements/group-16281.svg`">
-        <div class="font-size-30 font-bold color-red mt-20">
-          ALMOST DONE!
-        </div>
+        <img :src="`${$iconURL}NewRequirements/group-16281.svg`" />
+        <div class="font-size-30 font-bold color-red mt-20">ALMOST DONE!</div>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button p-absolute" @click="$emit('cancel')">
         <md-icon>clear</md-icon>
       </md-button>
     </template>
     <template slot="body">
-      <div class="md-layout maryoku-modal-body" />
+      <div class="md-layout maryoku-modal-body"></div>
       <div>
-        <div class="font-bold font-size-22">
-          Anyting else?
-        </div>
-        <div class="mt-20">
-          Would you like to add any of those categories?
-        </div>
+        <div class="font-bold font-size-22">Anyting else?</div>
+        <div class="mt-20">Would you like to add any of those categories?</div>
         <div class="tags mt-30">
           <tag-item
-            v-for="tag in tags"
-            :key="tag"
-            :tag-label="tag"
-            :is-selected="selectedTags.includes(tag)"
-            class="m-5"
             @click="addTag(tag)"
-          />
+            :tagLabel="tag"
+            :key="tag"
+            :isSelected="selectedTags.includes(tag)"
+            v-for="tag in tags"
+            class="m-5"
+          ></tag-item>
         </div>
       </div>
       <div>
-        <div v-for="section in selectedTags" :id="section" :key="section" class="text-left sub-category">
-          <div class="font-bold-extra">
-            {{ section }}
-          </div>
+        <div v-for="section in selectedTags" :key="section" class="text-left sub-category" :id="section">
+          <div class="font-bold-extra">{{ section }}</div>
           <div class="requirement-row text-left">
             <div v-for="subCategory in speicalRequirements[section]" :key="subCategory.subCategory" class="mt-30">
-              <div v-if="subCategory.subCategory" class="font-bold color-gray">
-                {{ subCategory.subCategory }}:
-              </div>
+              <div v-if="subCategory.subCategory" class="font-bold color-gray">{{ subCategory.subCategory }}:</div>
               <div v-for="item in subCategory.items" :key="item.name" class="requirement-item">
                 <md-checkbox v-model="item.selected" class="checkbox-label-wrapper">
                   <img
-                    v-if="getIcon(item.subCategory, item.name)"
                     class="special-icon"
                     :src="getIcon(item.subCategory, item.name)"
-                  >
+                    v-if="getIcon(item.subCategory, item.name)"
+                  />
                   {{ item.name }}
                 </md-checkbox>
               </div>
@@ -61,9 +51,7 @@
         No, Skip
         <md-icon>keyboard_arrow_right</md-icon>
       </md-button>
-      <md-button class="md-red md-bold add-category-btn" @click="save">
-        Find Me Vendors
-      </md-button>
+      <md-button class="md-red md-bold add-category-btn" @click="save">Find Me Vendors</md-button>
     </template>
   </modal>
 </template>
@@ -75,16 +63,6 @@ export default {
   components: {
     Modal,
     TagItem,
-  },
-  props: {
-    subCategory: {
-      type: Object,
-      default: () => {},
-    },
-    defaultData: {
-      type: Object,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -200,6 +178,16 @@ export default {
         ],
       },
     };
+  },
+  props: {
+    subCategory: {
+      type: Object,
+      default: () => {},
+    },
+    defaultData: {
+      type: Object,
+      default: () => {},
+    },
   },
   created() {
     this.selectedTags = Object.keys(this.defaultData);

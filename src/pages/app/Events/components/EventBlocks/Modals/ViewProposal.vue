@@ -1,6 +1,6 @@
 <template>
   <div class="manage-proposals-panel">
-    <div v-if="vendorProposal && vendorInfo" class="md-layout maxh-50vh">
+    <div class="md-layout maxh-50vh" v-if="vendorProposal && vendorInfo">
       <!-- <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
         <h4 class="md-title">
           <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
@@ -11,15 +11,13 @@
       <div class="md-layout-item md-size-100 maxh-50vh">
         <div class="title-section">
           <h4 class="md-title">
-            <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
+            <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
               <md-icon>navigate_before</md-icon>
             </md-button>
             {{ vendorInfo.vendorCategory }}
           </h4>
           <div class="actions-list">
-            <md-button class="md-rose md-sm md-simple">
-              <md-icon>compare</md-icon>Add to compare
-            </md-button>
+            <md-button class="md-rose md-sm md-simple"> <md-icon>compare</md-icon>Add to compare </md-button>
             <md-button class="md-rose no-uppercase" @click="manageProposalsAccept(proposal)">
               Accept Proposal
               <md-icon>check</md-icon>
@@ -38,9 +36,7 @@
                   </md-avatar>
                 </div>
                 <div class="vendor-name">
-                  <h4 class="md-title">
-                    {{ vendorInfo.vendorDisplayName }}
-                  </h4>
+                  <h4 class="md-title">{{ vendorInfo.vendorDisplayName }}</h4>
                   <div class="star-rating">
                     <!-- <label class="star-rating__star"
                       v-for="rating in ratings"
@@ -51,17 +47,15 @@
                 </div>
                 <div class="vendor-location">
                   <md-icon>room</md-icon>
-                  <span>{{ vendorInfo.vendorAddressLine1 }}
-                    {{ vendorInfo.vendorAddressLine2 ? " - " + vendorInfo.vendorAddressLine2 : "" }}</span>
+                  <span
+                    >{{ vendorInfo.vendorAddressLine1 }}
+                    {{ vendorInfo.vendorAddressLine2 ? " - " + vendorInfo.vendorAddressLine2 : "" }}</span
+                  >
                   <ul class="vendor-tags">
-                    <li v-for="(tag, index) in vendorInfo.vendorTagging" :key="index">
-                      {{ tag }}
-                    </li>
+                    <li v-for="(tag, index) in vendorInfo.vendorTagging" :key="index">{{ tag }}</li>
                   </ul>
                 </div>
-                <div class="last-update">
-                  Last Update on {{ getDate(vendorInfo.lastUpdated) }} (3 updates)
-                </div>
+                <div class="last-update">Last Update on {{ getDate(vendorInfo.lastUpdated) }} (3 updates)</div>
               </div>
               <h3>Dear {{ vendorInfo.vendorDisplayName }}</h3>
               <p v-html="vendorProposal.personalMessage">
@@ -69,7 +63,7 @@
               </p>
               <div class="signature md-hide">
                 Thanks,
-                <br>
+                <br />
                 {{ vendorInfo.vendorDisplayName }}
               </div>
               <template v-if="attachedFiles.length">
@@ -93,33 +87,21 @@
             <md-card-content>
               <div class="cost-info">
                 <div class="cost-info_desc">
-                  <div class="cost-label">
-                    Subtotal
-                  </div>
-                  <br>
-                  <div class="cost-value">
-                    ${{ vendorProposal.cost | numeral(0, 0) }}
-                  </div>
-                  <br>
-                  <div class="down-payment">
-                    Down Payment : ${{ (vendorProposal.cost * 0.1) | numeral(0, 0) }}
-                  </div>
+                  <div class="cost-label">Subtotal</div>
+                  <br />
+                  <div class="cost-value">${{ vendorProposal.cost | numeral(0, 0) }}</div>
+                  <br />
+                  <div class="down-payment">Down Payment : ${{ (vendorProposal.cost * 0.1) | numeral(0, 0) }}</div>
                 </div>
                 <div class="cost-info_desc">
-                  <div class="cost-label">
-                    Cost Per Guest
-                  </div>
-                  <br>
-                  <div class="cost-value">
-                    ${{ vendorProposal.costPerGuest | numeral(0, 0) }}
-                  </div>
+                  <div class="cost-label">Cost Per Guest</div>
+                  <br />
+                  <div class="cost-value">${{ vendorProposal.costPerGuest | numeral(0, 0) }}</div>
                 </div>
               </div>
               <div class="cost-info_breakdown">
-                <div class="cost-label">
-                  Cost Breakdown
-                </div>
-                <br>
+                <div class="cost-label">Cost Breakdown</div>
+                <br />
                 <ul class="cost-breakdown__items">
                   <li v-for="(item, index) in proposal.costBreakdown" :key="index">
                     <span v-if="item.service">{{ item.service }}: ${{ item.cost | numeral(0, 0) }}</span>
@@ -128,12 +110,10 @@
               </div>
               <div class="proposal-pros-cons">
                 <div class="section-content pros-section">
-                  <md-icon class="thumb-up">
-                    thumb_up_alt
-                  </md-icon>
+                  <md-icon class="thumb-up">thumb_up_alt</md-icon>
                   <ul class="list-items">
                     <li>
-                      <br>
+                      <br />
                     </li>
                     <li v-for="(item, index) in vendorProposal.pros" :key="index">
                       {{ getStringWithRoundedNumber(item) }}
@@ -141,29 +121,27 @@
                   </ul>
                 </div>
                 <div class="section-content cons-section">
-                  <md-icon class="thumb-down">
-                    thumb_down_alt
-                  </md-icon>
+                  <md-icon class="thumb-down">thumb_down_alt</md-icon>
                   <ul class="list-items">
                     <li>
-                      <br>
+                      <br />
                     </li>
-                    <li v-for="(item, index) in vendorProposal.cons" :key="index">
-                      {{ item }}
-                    </li>
+                    <li v-for="(item, index) in vendorProposal.cons" :key="index">{{ item }}</li>
                   </ul>
                 </div>
               </div>
               <div class="need-help-section">
                 <h6>Need help or Modification?</h6>
-                <br>
-                <a @click="tooltipActive = !tooltipActive">Contact {{ vendorInfo.contactPerson ? vendorInfo.contactPerson : vendorInfo.vendorDisplayName }}</a>
-                <br>
-                <div v-if="tooltipActive" class="arrow_box">
+                <br />
+                <a @click="tooltipActive = !tooltipActive"
+                  >Contact {{ vendorInfo.contactPerson ? vendorInfo.contactPerson : vendorInfo.vendorDisplayName }}</a
+                >
+                <br />
+                <div class="arrow_box" v-if="tooltipActive">
                   <strong>Contact Information:</strong>
-                  <br>
+                  <br />
                   <span>Phone: {{ vendorInfo.vendorMainPhoneNumber }}</span>
-                  <br>
+                  <br />
                   <span>Email: {{ vendorInfo.vendorMainEmail }}</span>
                 </div>
               </div>
@@ -174,8 +152,10 @@
           <div class="section-title with-border">
             <h3>Included in {{ vendorInfo.vendorCategory }}:</h3>
             <div class="total-budget text-right pull-right">
-              <span class="total">Total {{ vendorInfo.vendorCategory }}: ${{ vendorProposal.cost | numeral(0, 0) }}</span>
-              <br>
+              <span class="total"
+                >Total {{ vendorInfo.vendorCategory }}: ${{ vendorProposal.cost | numeral(0, 0) }}</span
+              >
+              <br />
               <span class="per-guest">Per Guest: ${{ vendorProposal.costPerGuest | numeral(0, 0) }}</span>
             </div>
           </div>
@@ -200,29 +180,26 @@
                     {{ item.requirementValue }}x {{ item.requirementTitle }}
                     <small class="md-hide">(Suggested by vendor)</small>
                   </div>
-                  <div v-for="(comment, index) in item.comments" :key="index" class="proposal-desc">
+                  <div class="proposal-desc" v-for="(comment, index) in item.comments" :key="index">
                     {{ comment.commentText }}
                     <md-button
                       v-if="comment.commentText.length > 300"
                       class="md-primary md-simple md-sm read-more no-uppercase"
+                      >Read more</md-button
                     >
-                      Read more
-                    </md-button>
                   </div>
                 </div>
                 <div class="proposal-actions">
-                  <md-button v-if="!item.itemNotAvailable" class="md-rose">
-                    Add (${{ item.price | numeral(0, 0) }})
-                  </md-button>
-                  <md-button v-else class="md-success">
-                    Got it
-                  </md-button>
+                  <md-button v-if="!item.itemNotAvailable" class="md-rose"
+                    >Add (${{ item.price | numeral(0, 0) }})</md-button
+                  >
+                  <md-button v-else class="md-success">Got it</md-button>
                 </div>
               </li>
             </template>
           </ul>
         </div>
-        <div class="md-layout-item md-size-5 md-hide" />
+        <div class="md-layout-item md-size-5 md-hide"></div>
         <div class="md-layout-item md-size-95 cost-breakdown-notes md-hide">
           <div class="section-title">
             <h3>Cost Breakdown</h3>
@@ -236,39 +213,27 @@
                     slot-scope="{ item }"
                     :class="{ disabled: item.perGuest === 'N/A' }"
                   >
-                    <md-table-cell md-label="Service tf-capitalize">
-                      {{ item.service }}
-                    </md-table-cell>
+                    <md-table-cell md-label="Service tf-capitalize">{{ item.service }}</md-table-cell>
                     <md-table-cell md-label="Per guest">
-                      <template v-if="item.perGuest === 'N/A'">
-                        {{ item.perGuest.toFixed(2) }}
-                      </template>
-                      <template v-else>
-                        ${{ item.perGuest }}
-                      </template>
+                      <template v-if="item.perGuest === 'N/A'">{{ item.perGuest.toFixed(2) }}</template>
+                      <template v-else>${{ item.perGuest }}</template>
                     </md-table-cell>
-                    <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">
-                      ${{ item.cost.toFixed(2) }}
-                    </md-table-cell>
+                    <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)"
+                      >${{ item.cost.toFixed(2) }}</md-table-cell
+                    >
                   </md-table-row>
                 </md-table>
                 <div class="table table-stats table-striped">
                   <div class="td-price">
-                    <div class="td-total">
-                      Subtotal
-                    </div>
+                    <div class="td-total">Subtotal</div>
                     <span class="td-value">${{ vendorProposal.cost.toFixed(2) | numeral(0, 0) }}</span>
                   </div>
                   <div class="td-price">
-                    <div class="td-total">
-                      Tax (3%)
-                    </div>
+                    <div class="td-total">Tax (3%)</div>
                     <span class="td-value">${{ (vendorProposal.cost * 0.03).toFixed(2) | numeral(0, 0) }}</span>
                   </div>
                   <div class="td-price bold">
-                    <div class="td-total">
-                      Total
-                    </div>
+                    <div class="td-total">Total</div>
                     <span class="td-value">${{ vendorProposal.cost + vendorProposal.cost * 0.03 }}</span>
                   </div>
                 </div>
@@ -277,13 +242,9 @@
             <div class="section-content notes-section">
               <div>
                 <h4>Notes</h4>
-                <p v-for="(note, index) in vendorProposal.notes" :key="index">
-                  {{ note }}
-                </p>
+                <p v-for="(note, index) in vendorProposal.notes" :key="index">{{ note }}</p>
               </div>
-              <p class="danger-label">
-                This offer is valid till {{ getDate(vendorProposal.validUntil) }}.
-              </p>
+              <p class="danger-label">This offer is valid till {{ getDate(vendorProposal.validUntil) }}.</p>
             </div>
           </div>
         </div>
@@ -292,16 +253,16 @@
             <div class="section-title">
               <h3>Vendor's Images</h3>
             </div>
-            <md-button v-if="images.length" class="md-default view-images no-uppercase" @click="view()">
-              View Images
-            </md-button>
+            <md-button v-if="images.length" class="md-default view-images no-uppercase" @click="view()"
+              >View Images</md-button
+            >
             <ul class="images-list">
-              <li v-for="(item, index) in images" :key="index" class="image-item">
+              <li class="image-item" v-for="(item, index) in images" :key="index">
                 <div
                   :style="`
                   background: url(${item.src}) center center no-repeat;
                   background-size: cover;`"
-                />
+                ></div>
               </li>
               <!--              <li class="image-item" v-if="vendorProposal.attachements.length - images.length - attachedFiles.length">-->
               <!--                <div>-->
@@ -323,33 +284,29 @@
               <!--                </iframe>-->
               <!--              </li>-->
             </ul>
-            <LightBox v-if="images.length" ref="lightbox" :images="images" :show-light-box="false" />
+            <LightBox v-if="images.length" :images="images" ref="lightbox" :show-light-box="false"></LightBox>
           </div>
         </template>
-        <div class="md-layout-item md-size-5 md-hide" />
+        <div class="md-layout-item md-size-5 md-hide"></div>
         <div class="md-layout-item md-size-95 feedback-section md-hide">
           <div class="section-title">
             <h5>Feedback</h5>
-            <div class="review-count">
-              (2)
-            </div>
+            <div class="review-count">(2)</div>
           </div>
           <ul class="feedback-list-items">
             <li class="feedback-item">
-              <div class="item-thumbnail">
-                J
-              </div>
+              <div class="item-thumbnail">J</div>
               <div class="item-info">
                 <div class="item-name">
                   <h5>Jane Bloom, Facebook</h5>
                   <div class="star-rating">
                     <label
+                      class="star-rating__star"
                       v-for="(rating, index) in ratings"
                       :key="index"
-                      class="star-rating__star"
                       :class="{ 'is-selected': feedbackRating >= rating && feedbackRating != null }"
                     >
-                      <input v-model="feedbackRating" class="star-rating star-rating__checkbox" type="radio">★
+                      <input class="star-rating star-rating__checkbox" type="radio" v-model="feedbackRating" />★
                     </label>
                   </div>
                 </div>
@@ -363,26 +320,22 @@
                     and final guest counts and any additional charges approved by the Client.
                   </p>
                 </div>
-                <div class="date">
-                  Dec 29, 2017
-                </div>
+                <div class="date">Dec 29, 2017</div>
               </div>
             </li>
             <li class="feedback-item">
-              <div class="item-thumbnail">
-                J
-              </div>
+              <div class="item-thumbnail">J</div>
               <div class="item-info">
                 <div class="item-name">
                   <h5>Jane Bloom, Facebook</h5>
                   <div class="star-rating">
                     <label
+                      class="star-rating__star"
                       v-for="(rating, index) in ratings"
                       :key="index"
-                      class="star-rating__star"
                       :class="{ 'is-selected': feedbackRating >= rating && feedbackRating != null }"
                     >
-                      <input v-model="feedbackRating" class="star-rating star-rating__checkbox" type="radio">★
+                      <input class="star-rating star-rating__checkbox" type="radio" v-model="feedbackRating" />★
                     </label>
                   </div>
                 </div>
@@ -396,9 +349,7 @@
                     and final guest counts and any additional charges approved by the Client.
                   </p>
                 </div>
-                <div class="date">
-                  Dec 29, 2017
-                </div>
+                <div class="date">Dec 29, 2017</div>
               </div>
             </li>
           </ul>
@@ -418,9 +369,7 @@
                 <div class="proposal-desc">
                   A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior
                   to the..
-                  <md-button class="md-primary md-simple md-sm read-more no-uppercase">
-                    Read more
-                  </md-button>
+                  <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button>
                 </div>
               </div>
             </li>
@@ -433,20 +382,14 @@
                 <div class="proposal-desc">
                   A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior
                   to the..
-                  <md-button class="md-primary md-simple md-sm read-more no-uppercase">
-                    Read more
-                  </md-button>
+                  <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button>
                 </div>
               </div>
             </li>
             <li>
               <div class="proposal-info about-us">
-                <div class="proposal-title">
-                  About Us
-                </div>
-                <div class="proposal-desc">
-                  {{ vendorProposal.aboutUsMessage }}
-                </div>
+                <div class="proposal-title">About Us</div>
+                <div class="proposal-desc">{{ vendorProposal.aboutUsMessage }}</div>
               </div>
               <div class="attachments-list md-hide">
                 <ul class="attachments-list_items">
@@ -504,11 +447,6 @@ export default {
     attachedFiles: [],
     attachmentsLoadingCount: 0,
   }),
-  computed: {
-    extraMissingRequirements() {
-      return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
-    },
-  },
   created() {
     console.log(this.proposal);
     this.$set(this, "vendorProposal", this.proposal);
@@ -585,6 +523,11 @@ export default {
           }
         });
       });
+    },
+  },
+  computed: {
+    extraMissingRequirements() {
+      return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },
   },
 };

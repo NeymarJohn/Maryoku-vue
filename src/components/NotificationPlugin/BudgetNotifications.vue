@@ -1,34 +1,34 @@
 <template>
   <div class="notifications">
-    <transition-group v-if="field === 'budget'" name="list" mode="in-out">
+    <transition-group name="list" mode="in-out" v-if="field === 'budget'">
       <budget-notification v-for="(notification) in notifications"
-                           :key="notification.timestamp.getTime()"
-                           :message="notification.message"
-                           :icon="notification.icon"
-                           :type="notification.type"
-                           :timestamp="notification.timestamp"
-                           :vertical-align="notification.verticalAlign"
-                           :horizontal-align="notification.horizontalAlign"
-                           :cancel-btn="notification.cancelBtn"
-                           :close-btn="notification.closeBtn"
-                           :confirm-btn="notification.confirmBtn"
-                           @on-send="action"
-                           @on-close="removeNotification"
-      />
+                    :key="notification.timestamp.getTime()"
+                    :message="notification.message"
+                    :icon="notification.icon"
+                    :type="notification.type"
+                    :timestamp="notification.timestamp"
+                    :vertical-align="notification.verticalAlign"
+                    :horizontal-align="notification.horizontalAlign"
+                    :cancel-btn="notification.cancelBtn"
+                    :close-btn="notification.closeBtn"
+                    :confirm-btn="notification.confirmBtn"
+                    @on-send="action"
+                    @on-close="removeNotification">
+      </budget-notification>
     </transition-group>
-    <transition-group v-if="field === 'negotiation'" name="list" mode="in-out">
-      <negotiation-notification v-for="(notification) in notifications"
-                                :key="notification.timestamp.getTime()"
-                                :message="notification.message"
-                                :icon="notification.icon"
-                                :type="notification.type"
-                                :timestamp="notification.timestamp"
-                                :vertical-align="notification.verticalAlign"
-                                :horizontal-align="notification.horizontalAlign"
-                                @on-send="action"
-                                @on-close="removeNotification"
-      />
-    </transition-group>
+      <transition-group name="list" mode="in-out" v-if="field === 'negotiation'">
+          <negotiation-notification v-for="(notification) in notifications"
+                               :key="notification.timestamp.getTime()"
+                               :message="notification.message"
+                               :icon="notification.icon"
+                               :type="notification.type"
+                               :timestamp="notification.timestamp"
+                               :vertical-align="notification.verticalAlign"
+                               :horizontal-align="notification.horizontalAlign"
+                               @on-send="action"
+                               @on-close="removeNotification">
+          </negotiation-notification>
+      </transition-group>
   </div>
 </template>
 <script>
@@ -42,26 +42,26 @@ export default {
   props:{
     field:{
         type: String,
-        default: "budget"
+        default: 'budget'
     }
   },
   data () {
     return {
       notifications: this.$notifications.state
-    };
+    }
+  },
+  methods: {
+    removeNotification (timestamp) {
+      this.$notifications.removeNotification(timestamp)
+    },
+    action(message) {
+      this.$root.$emit('budget_notification_action', message);
+    }
   },
     beforeDestroy() {
         this.$root.$off("budget_notification_action");
     },
-  methods: {
-    removeNotification (timestamp) {
-      this.$notifications.removeNotification(timestamp);
-    },
-    action(message) {
-      this.$root.$emit("budget_notification_action", message);
-    }
-  },
-};
+}
 </script>
 <style lang="scss">
 .notifications {

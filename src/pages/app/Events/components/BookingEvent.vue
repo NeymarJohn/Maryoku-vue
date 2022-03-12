@@ -1,36 +1,35 @@
 <template>
   <div class="md-layout booking-section position-relative">
     <template v-if="showProposals">
-      <comment-editor-panel
-        v-if="showCommentEditorPanel"
-        :comment-components="commentComponents"
-        @saveComment="saveComment"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent"
-      />
+        <comment-editor-panel
+            v-if="showCommentEditorPanel"
+            :commentComponents="commentComponents"
+            @saveComment="saveComment"
+            @updateComment="updateComment"
+            @deleteComment="deleteComment"
+            @updateCommentComponent="updateCommentComponent"
+        >
+        </comment-editor-panel>
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-title">
           <h3>
             <img
               :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
               style="width: 30px; margin-right: 0.5em"
-            >
+            />
             {{ selectedBlock.bookTitle }}
           </h3>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" />
+        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
       <template v-if="!showCounterPage">
         <div class="booking-header md-layout-item md-size-100">
           <div class="header-title w-100">
-            <div class="font-size-22 mb-20">
-              Hey {{ $store.state.auth.user.name }}
-            </div>
+            <div class="font-size-22 mb-20">Hey {{ $store.state.auth.user.name }}</div>
           </div>
           <div class="d-flex justify-content-between">
             <div>
-              We found the top {{ proposals.length }} proposals for your event, <br>
+              We found the top {{ proposals.length }} proposals for your event, <br />
               Book now before it’s too late
             </div>
             <div class="header-actions">
@@ -38,7 +37,7 @@
                 <md-icon>bar_chart</md-icon>
                 Compare Proposals
               </md-button>
-              <span class="seperator" />
+              <span class="seperator"></span>
               <md-button class="md-simple normal-btn md-red">
                 <md-icon>edit</md-icon>
                 Change {{ selectedBlock.title }} Requirements
@@ -48,15 +47,15 @@
         </div>
 
         <!-- Event Booking Items -->
-        <div v-if="proposals.length" class="md-layout events-booking-items">
+        <div class="md-layout events-booking-items" v-if="proposals.length">
           <proposal-card
             v-for="(proposal, index) in proposals.slice(0, 3)"
             :key="index"
             :proposal="proposal"
             :component="selectedBlock"
-            :probability="getProbability(index)"
             @goDetail="goDetailPage"
-          />
+            :probability="getProbability(index)"
+          ></proposal-card>
         </div>
         <!-- ./Event Booking Items -->
 
@@ -64,7 +63,7 @@
           <md-button class="md-simple md-black normal-btn" @click="showShareVendorModal = true">
             I already have a venue for my event
           </md-button>
-          <span class="seperator" />
+          <span class="seperator"></span>
           <md-button class="md-simple md-black normal-btn" @click="showSomethingModal = true">
             I want something different
           </md-button>
@@ -73,15 +72,13 @@
         <event-change-proposal-modal
           v-if="showSomethingModal"
           @close="showSomethingModal = false"
-        />
+        ></event-change-proposal-modal>
 
         <modal v-if="showShareVendorModal" class="add-category-model something-modal">
           <template slot="header">
             <div class="add-category-model__header">
               <h2>Share your vendor info</h2>
-              <div class="header-description">
-                Share your vendor info
-              </div>
+              <div class="header-description">Share your vendor info</div>
             </div>
             <md-button
               class="md-simple md-just-icon md-round modal-default-button"
@@ -94,23 +91,23 @@
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
                 <label>Name</label>
-                <maryoku-input input-style="name" type="text" />
+                <maryoku-input inputStyle="name" type="text" />
               </div>
               <div class="md-layout-item md-size-100 mt-20">
                 <label>Price of the service</label>
-                <maryoku-input input-style="budget" type="text" />
+                <maryoku-input inputStyle="budget" type="text" />
               </div>
               <div class="md-layout-item md-size-100 mt-20">
                 <label>Location</label>
-                <maryoku-input input-style="location" type="text" />
+                <maryoku-input inputStyle="location" type="text" />
               </div>
               <div class="md-layout-item md-size-100 mt-20">
                 <label>Phone</label>
-                <maryoku-input input-style="phone" type="text" />
+                <maryoku-input inputStyle="phone" type="text" />
               </div>
               <div class="md-layout-item md-size-100 mt-20">
                 <label>Email</label>
-                <maryoku-input input-style="email" type="text" />
+                <maryoku-input inputStyle="email" type="text" />
               </div>
 
               <div class="md-layout-item md-size-100 mt-20">
@@ -121,30 +118,30 @@
                     <div>Or</div>
                     <div class="note">Drag your file here</div>
                   </label>
-                  <input id="file" style="display: none" name="attachment" type="file" @change>
+                  <input style="display: none" id="file" name="attachment" type="file" @change />
                 </div>
               </div>
             </div>
           </template>
           <template slot="footer">
-            <md-button class="md-default md-simple cancel-btn" @click="showShareVendorModal = false">
-              Remind Me Later
+            <md-button class="md-default md-simple cancel-btn" @click="showShareVendorModal = false"
+              >Remind Me Later
             </md-button>
-            <md-button class="md-rose add-category-btn" :class="{ disabled: !somethingMessage }">
-              Update Vendor
+            <md-button class="md-rose add-category-btn" :class="{ disabled: !somethingMessage }"
+              >Update Vendor
             </md-button>
           </template>
         </modal>
       </template>
       <template v-if="showCounterPage">
-        <PendingForVendors :expired-time="expiredTime" />
+        <PendingForVendors :expiredTime="expiredTime"></PendingForVendors>
         <div class="footer-container">
           <md-button class="md-bold add-category-btn md-black md-simple" @click="back">
             <md-icon>arrow_back</md-icon>
             Back
           </md-button>
           <md-button class="md-bold add-category-btn md-black md-simple ml-auto mr-20" @click="updateExpiredTime">
-            <img class="mr-10" src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10912.svg">
+            <img class="mr-10" src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10912.svg" />
             I need those proposals urgent
           </md-button>
         </div>
@@ -153,9 +150,9 @@
     <template v-if="!showProposals">
       <booking-event-requirement
         v-if="selectedBlock"
-        :component="selectedBlock"
         @setRequirements="setRequirements"
-      />
+        :component="selectedBlock"
+      ></booking-event-requirement>
     </template>
   </div>
 </template>
@@ -186,7 +183,7 @@ import {CommentMixins, ShareMixins} from "@/mixins";
 
 import { postReq, getReq } from "@/utils/token";
 export default {
-  name: "EventBooking",
+  name: "event-booking",
   components: {
     Loader,
     EventBlocks,
@@ -200,8 +197,8 @@ export default {
     ProposalCard,
     MaryokuInput,
   },
-  mixins: [CommentMixins, ShareMixins],
   props: {},
+  mixins: [CommentMixins, ShareMixins],
   data: () => ({
     // auth: auth,
     calender: null,
@@ -277,7 +274,7 @@ export default {
         });
     },
     toggleCommentMode(mode) {
-      console.log("toggle.comment", mode);
+      console.log('toggle.comment', mode);
       this.showCommentEditorPanel = mode;
     },
     fetchData: async function () {
@@ -328,12 +325,6 @@ export default {
       this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/compare`);
     },
   },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    $route: "fetchData",
-  },
   created() {
     console.log("bookingEvent");
     this.isLoading = true;
@@ -348,6 +339,12 @@ export default {
       if (requirements[event.id]) requirements[event.id] = null;
       this.setBookingRequirements(requirements);
     });
+  },
+  watch: {
+    event(newVal, oldVal) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    $route: "fetchData",
   },
   filters: {
     formatDate: function (date) {

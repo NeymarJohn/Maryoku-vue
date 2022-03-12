@@ -4,24 +4,21 @@
       <md-card style="min-height: 50%">
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
-            <h4 class="title" style="color: white">
-              Manage Groups
-            </h4>
+            <h4 class="title" style="color: white">Manage Groups</h4>
           </div>
           <md-button
             v-if="groupsList.length"
             class="md-info md-sm pull-right"
             style="margin: 16px 6px"
-            :disabled="working"
             @click="createNewGroup"
+            :disabled="working"
+            >Add Group</md-button
           >
-            Add Group
-          </md-button>
         </md-card-header>
         <md-card-content style="min-height: 100%">
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
 
-          <md-table v-model="groupsList" :md-card="false">
+          <md-table :md-card="false" v-model="groupsList">
             <md-table-row
               slot="md-table-row"
               slot-scope="{ item, index }"
@@ -33,11 +30,11 @@
             >
               <md-table-cell class="text-center" style="width: 5%; vertical-align: middle">
                 <md-switch
-                  v-model="item.enabled"
                   class="md-switch-rose"
                   style="margin: auto"
+                  v-model="item.enabled"
                   @change="changeGroupSelection($event, item)"
-                />
+                ></md-switch>
               </md-table-cell>
 
               <md-table-cell style="vertical-align: middle">
@@ -48,7 +45,7 @@
                   field-name="title"
                   @text-updated-blur="groupNameChanged"
                   @text-updated-enter="groupNameChanged"
-                />
+                ></label-edit>
                 <!--<div class="timing-form" v-if="item.editMode">
                   <md-card class="md-card-plain md-gutter" style="margin: 0; padding: 0;">
                     <md-card-content style="padding: 12px 0;">
@@ -84,53 +81,49 @@
                 </div>-->
               </md-table-cell>
               <md-table-cell style="vertical-align: middle">
-                <div v-if="item.invitees" style="margin-top: 4px">
+                <div style="margin-top: 4px" v-if="item.invitees">
                   {{ item.invitees.length }} <md-icon>group</md-icon>
                 </div>
               </md-table-cell>
               <md-table-cell class="text-right" style="width: 80px; vertical-align: middle">
                 <md-button
-                  v-if="item.id === 'new'"
                   style="margin-top: 8px"
                   class="md-success md-sm"
+                  v-if="item.id === 'new'"
                   @click="saveGroup(item)"
                 >
                   Save
                 </md-button>
                 <md-button
-                  v-if="item.id !== 'new'"
                   style="margin-top: 8px"
                   class="md-round md-danger md-just-icon"
+                  v-if="item.id !== 'new'"
                   @click="deleteGroup(item)"
                 >
                   <md-icon>delete</md-icon>
                 </md-button>
                 <md-button
-                  v-if="item.id !== 'new'"
                   style="margin-top: 8px"
                   class="md-round md-info md-just-icon"
+                  v-if="item.id !== 'new'"
                   @click="groupDetails(item)"
                 >
                   <md-icon>chevron_right</md-icon>
-                  <md-tooltip md-direction="bottom">
-                    Manage group members
-                  </md-tooltip>
+                  <md-tooltip md-direction="bottom">Manage group members</md-tooltip>
                 </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
 
-          <div v-if="!groupsList.length" class="text-center">
+          <div class="text-center" v-if="!groupsList.length">
             <h4>You do not have any groups yet</h4>
-            <md-button class="md-info" @click="createNewGroup">
-              <md-icon>event</md-icon> Create New Group
-            </md-button>
+            <md-button class="md-info" @click="createNewGroup"> <md-icon>event</md-icon> Create New Group </md-button>
           </div>
         </md-card-content>
       </md-card>
     </div>
     <div class="md-layout-item md-medium-size-55 md-size-65">
-      <event-group-details :group-data.sync="visibleGroup" :event-data="eventData" />
+      <event-group-details :group-data.sync="visibleGroup" :event-data="eventData"></event-group-details>
     </div>
   </div>
 </template>
@@ -144,7 +137,7 @@ import _ from "underscore";
 import Swal from "sweetalert2";
 
 export default {
-  name: "EventGroupsList",
+  name: "event-groups-list",
   components: {
     LabelEdit,
     EventGroupDetails,
@@ -164,16 +157,16 @@ export default {
       visibleGroup: null,
     };
   },
-  watch: {
-    eventData(newVal, oldVal) {
-      this.refreshList();
-    },
-  },
   mounted() {
     this.working = true;
     if (this.eventData) {
       this.refreshList();
     }
+  },
+  watch: {
+    eventData(newVal, oldVal) {
+      this.refreshList();
+    },
   },
   methods: {
     refreshList() {

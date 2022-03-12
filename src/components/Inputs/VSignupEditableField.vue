@@ -1,49 +1,43 @@
 <template>
   <div class="vsignup-edtiable-field-wrapper" :class="[{ 'border-bottom': borderBottom }]">
     <div class="left" :class="[{ 'full-width': isEdit }]">
-      <div class="title">
-        {{ title }}<span v-if="required"> *</span>
-      </div>
+      <div class="title">{{ title }}<span v-if="required"> *</span></div>
       <div class="content">
         <div v-if="!isEdit">
           <div class="d-flex align-center">
-            <img v-if="img != '' && value" class="mr-10" :src="img">
+            <img class="mr-10" v-if="img != '' && value" :src="img" />
             {{ field == "vendorCategory" || field == "secondaryVendorCategory" ? selectedCategory.name : value }}
           </div>
         </div>
-        <div v-else class="edit-content">
+        <div class="edit-content" v-else>
           <div v-if="field == 'vendorMainEmail'">
-            <img v-if="img != ''" class="inside-img" :src="img">
-            <input v-model="value" class="default width-100" :class="[{ 'with-img': img != '' }, isEmailValid()]">
+            <img class="inside-img" :src="img" v-if="img != ''" />
+            <input class="default width-100" :class="[{ 'with-img': img != '' }, isEmailValid()]" v-model="value" />
           </div>
           <div v-else-if="field == 'vendorMainPhoneNumber'">
-            <img v-if="img != ''" class="inside-img" :src="img">
+            <img class="inside-img" :src="img" v-if="img != ''" />
             <input
-              v-model="value"
               class="default width-100"
               :type="field == 'vendorMainPhoneNumber' ? 'number' : 'text'"
               :class="[{ 'with-img': img != '' }]"
-            >
+              v-model="value"
+            />
           </div>
           <div v-else>
-            <img v-if="img != ''" class="inside-img" :src="img">
-            <input v-model="value" class="default width-100" :class="[{ 'with-img': img != '' }]">
+            <img class="inside-img" :src="img" v-if="img != ''" />
+            <input class="default width-100" :class="[{ 'with-img': img != '' }]" v-model="value" />
           </div>
         </div>
       </div>
-      <div v-if="isEdit" class="action-cont" :class="{ 'width-66': field === 'vendorCategories' }">
-        <md-button class="maryoku-btn md-simple md-black" @click="cancel">
-          Cancel
-        </md-button>
-        <md-button class="maryoku-btn md-vendor" :disabled="!isValidValue" @click="save()">
-          Save
-        </md-button>
+      <div class="action-cont" v-if="isEdit" :class="{ 'width-66': field === 'vendorCategories' }">
+        <md-button class="maryoku-btn md-simple md-black" @click="cancel">Cancel</md-button>
+        <md-button class="maryoku-btn md-vendor" :disabled="!isValidValue" @click="save()">Save</md-button>
       </div>
     </div>
-    <div v-if="!isEdit" class="right md-vendor">
-      <a style="color: #58154B" @click="isEdit = true">
+    <div class="right md-vendor" v-if="!isEdit">
+      <a @click="isEdit = true" style="color: #58154B">
         Edit
-        <md-icon class="md-vendor">navigate_next</md-icon>
+        <md-icon class="md-vendor" >navigate_next</md-icon>
       </a>
     </div>
   </div>
@@ -52,7 +46,7 @@
 import VueElementLoading from "vue-element-loading";
 import VSignupAddressEditor from "./VSignupAddress";
 export default {
-  name: "VSignupEditableField",
+  name: "v-signup-editable-field",
   components: {
     VueElementLoading,
     VSignupAddressEditor,
@@ -83,24 +77,8 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
     value: null,
-    iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
+    iconUrl: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/`,
   }),
-  computed: {
-    isValidValue() {
-      const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
-      if (this.field.indexOf("mail") >= 0) {
-        return this.value && reg.test(this.value);
-      } else return this.value;
-    },
-  },
-  watch: {
-    defaultVal(newValue, oldValue) {
-      this.value = newValue;
-      if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
-        this.$refs.address.focus();
-      }
-    },
-  },
   mounted() {
     this.value = this.defaultVal;
     if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
@@ -124,6 +102,22 @@ export default {
     isEmailValid: function() {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
       return this.reg.test(this.value) ? "" : "";
+    },
+  },
+  watch: {
+    defaultVal(newValue, oldValue) {
+      this.value = newValue;
+      if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
+        this.$refs.address.focus();
+      }
+    },
+  },
+  computed: {
+    isValidValue() {
+      const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
+      if (this.field.indexOf("mail") >= 0) {
+        return this.value && reg.test(this.value);
+      } else return this.value;
     },
   },
 };

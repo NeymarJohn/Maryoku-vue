@@ -1,19 +1,17 @@
 <template>
   <div class>
     <div class="section-header">
-      <h2 class="section-title">
-        Let’s make sure we understand the vibe you’re looking for
-      </h2>
+      <h2 class="section-title">Let’s make sure we understand the vibe you’re looking for</h2>
       <div class="steps-wizard">
         <ul class="steps-wizard-items">
-          <li v-for="index in step" :key="index" />
+          <li v-for="index in step" :key="index"></li>
         </ul>
       </div>
     </div>
     <div class="container no-padding-mobile">
       <div class="form-section vibe-section">
         <div class="vibes-list">
-          <div v-for="(tone,index) in ringtonesList" :key="index" class="vibe-item">
+          <div class="vibe-item" v-for="(tone,index) in ringtonesList" :key="index">
             <!--                        <md-icon>pause_circle_filled</md-icon>-->
             <span v-if="currentIndex !== index" @click.prevent="playSong(index)">
               <md-icon class="play-icon">play_circle_filled</md-icon>
@@ -22,9 +20,9 @@
               <md-icon class="pause-icon">pause_circle_filled</md-icon>
             </span>
             <md-radio v-model="eventSongId" :value="tone.name" class="with-border">
-              <small>{{ tone.author }}</small>
-              <br>
-              {{ tone.name }}
+              <small>{{tone.author}}</small>
+              <br />
+              {{tone.name}}
             </md-radio>
           </div>
         </div>
@@ -35,21 +33,17 @@
             :class="[{'opacity-btn' : buttonLabel === 'Skip'}]"
             @mouseover="buttonLabel='I don\'t know'"
             @mouseleave="buttonLabel='Skip'"
-          >
-            {{ buttonLabel }}
-          </md-button>
+          >{{buttonLabel}}</md-button>
           <md-button
             class="md-rose next-btn custom-btn"
-            :class="[{'disabled': !eventSongId }]"
             @click="goToNext"
-          >
-            Next
-          </md-button>
+            :class="[{'disabled': !eventSongId }]"
+          >Next</md-button>
         </div>
       </div>
     </div>
 
-    <go-back navigation="event-budget" />
+    <go-back navigation="event-budget"></go-back>
   </div>
 </template>
 
@@ -171,13 +165,13 @@ export default {
             actualValue: this.eventSongId,
           });
           this.setCurrentStep({ currentPage: "/event-movies" });
-          this.$router.push({ path: "/event-movies" });
+          this.$router.push({ path: `/event-movies` });
         } else {
         }
       });
     },
     skip() {
-      this.$router.push({ path: "/event-movies" });
+      this.$router.push({ path: `/event-movies` });
       this.setCurrentStep({ currentPage: "/event-movies" });
     },
     songName(name) {

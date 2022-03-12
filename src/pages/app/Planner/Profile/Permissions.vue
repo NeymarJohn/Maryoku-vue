@@ -1,13 +1,9 @@
 <template>
   <div class="profile-permission">
-    <div class="font-size-20 font-bold-extra">
-      Add colleague to your projects
-    </div>
-    <div class="font-size-16 font-bold mt-40">
-      Email
-    </div>
+    <div class="font-size-20 font-bold-extra">Add colleague to your projects</div>
+    <div class="font-size-16 font-bold mt-40">Email</div>
     <div class="add-form">
-      <maryoku-input v-model="newColleague.email" input-style="email" />
+      <maryoku-input v-model="newColleague.email" inputStyle="email"></maryoku-input>
       <div class="input-wrapper">
         <multiselect
           v-model="newColleague.role"
@@ -18,7 +14,7 @@
           placeholder="User permission"
           label="title"
           track-by="id"
-        />
+        ></multiselect>
       </div>
       <div class="input-wrapper">
         <multiselect
@@ -30,22 +26,18 @@
           placeholder="Type to search event"
           label="title"
           track-by="id"
-        />
+        ></multiselect>
       </div>
-      <md-button class="maryoku-btn md-red" @click="addCollaborator">
-        Add
-      </md-button>
+      <md-button class="maryoku-btn md-red" @click="addCollaborator">Add</md-button>
     </div>
-    <hr class="mt-50 mb-50">
+    <hr class="mt-50 mb-50" />
     <div class="permision-list">
       <div class="permission-row">
-        <div><img :src="userData.avatar" class="user-icon"></div>
+        <div><img :src="userData.avatar" class="user-icon" /></div>
         <div>{{ userData.name }}</div>
-        <div />
-        <div class="color-gray">
-          Owner
-        </div>
-        <div />
+        <div></div>
+        <div class="color-gray">Owner</div>
+        <div></div>
       </div>
       <permitted-user-row
         v-for="(user, index) in permittedUsers"
@@ -54,7 +46,7 @@
         :user="user"
         @remove="removeUser"
         @update="updateCollobrator"
-      />
+      ></permitted-user-row>
     </div>
   </div>
 </template>
@@ -86,11 +78,6 @@ export default {
       myEvents: [],
     };
   },
-  computed: {
-    userData() {
-      return this.$store.state.auth.user;
-    },
-  },
   created() {
     let filters = {
       filters: {
@@ -109,6 +96,11 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+  },
+  computed: {
+    userData() {
+      return this.$store.state.auth.user;
+    },
   },
   methods: {
     addCollaborator() {

@@ -1,45 +1,38 @@
 <template>
   <div class="vendor-proposal-board p-40">
-    <loader :active="loading" :is-full-screen="true" page="vendor" />
+    <loader :active="loading" :isFullScreen="true" page="vendor" />
     <div class="font-size-22 font-bold d-flex align-center">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" alt=""> Proposals Board
-      <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">
-        Create New Proposal
-      </md-button>
+      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" alt="" /> Proposals Board
+      <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
-    <div class="font-bold text-uppercase mt-30 mb-15">
-      Opportunities
-    </div>
-    <carousel v-if="!loading" :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests">
+    <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
+    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="proposal-requests" v-if="!loading">
       <template slot="prev">
         <button class="nav-left nav-btn">
           <span><md-icon class="color-vendor">arrow_back</md-icon></span>
         </button>
       </template>
       <ProposalRequestCard
+        class="carousel-item"
         v-for="(proposalRequest, idx) in proposalRequests"
         :key="proposalRequest.id"
-        class="carousel-item"
-        :proposal-request="proposalRequest"
-        :has-negotiation="!!getNegotiations(proposalRequest.proposal).length"
+        :proposalRequest="proposalRequest"
+        :hasNegotiation="!!getNegotiations(proposalRequest.proposal).length"
         @handle="handleRequestCard(idx)"
         @dismiss="dismiss"
-      />
-      <EmptyRequestCard v-if="proposalRequests.length < 1" />
+      >
+      </ProposalRequestCard>
+      <EmptyRequestCard v-if="proposalRequests.length < 1"></EmptyRequestCard>
 
       <template slot="next">
         <button class="nav-right nav-btn">
-          <md-icon class="color-vendor">
-            arrow_forward
-          </md-icon>
+          <md-icon class="color-vendor">arrow_forward</md-icon>
         </button>
       </template>
     </carousel>
-    <hr class="my-40 color-vendor">
+    <hr class="my-40 color-vendor" />
     <div class="proposals-table">
-      <div class="font-bold">
-        All proposals:
-      </div>
+      <div class="font-bold">All proposals:</div>
       <div class="filter-bar mt-30">
         <md-button
           v-for="tab in proposalTabs"
@@ -53,7 +46,7 @@
               :src="`/static/icons/vendor/proposalBoard/${tab.icon}`"
               alt=""
               style="width: 20px; height: 20px"
-            >
+            />
             {{ tab.title }}
             <span v-if="tab.key === 'all'" class="ml-5" :class="tab.class">({{ pagination.total }})</span>
             <span v-else class="ml-5" :class="tab.class">({{ pagination[tab.key] }})</span>
@@ -62,7 +55,8 @@
       </div>
       <div class="mt-30">
         <span class="font-size-16 font-bold" :class="!proposals.length ? 'color-minus' : 'color-won'">
-          {{ pagination.total }} Proposals:</span>
+          {{ pagination.total }} Proposals:</span
+        >
       </div>
       <div class="md-layout mt-10">
         <div class="md-layout-item md-size-75 p-0 d-flex flex-column" style="background: rgba(255, 255, 255, 0.46)">
@@ -75,7 +69,8 @@
             >
               {{ it.title }}
               <md-icon v-if="it.key && it.key !== 'update' && sortFields['sort'] === it.key" class="color-black">
-                {{ sortFields["order"] === "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon>
+                {{ sortFields["order"] === "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon
+              >
               <md-icon v-if="it.key && it.key !== 'update' && sortFields['sort'] !== it.key" class="color-black-middle">
                 keyboard_arrow_down
               </md-icon>
@@ -85,34 +80,30 @@
             <div class="white-card md-20 proposal-list">
               <ProposalListItem
                 v-for="(proposal, idx) in proposals"
-                :key="proposal.id"
                 :proposal="proposal"
-                :has-negotiation="
+                :hasNegotiation="
                   !!(
                     !proposal.accepted &&
                     proposal.negotiations &&
                     proposal.negotiations.filter(it => it.status === 0).length
                   )
                 "
+                :key="proposal.id"
                 class="row"
                 :color="colors[idx]"
                 @action="handleProposal"
                 @showGraphModal="showGraphModal"
-              />
+              ></ProposalListItem>
             </div>
           </div>
           <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" alt="">
-            <p class="text-transform-uppercase font-size-14">
-              No More Proposal To Show
-            </p>
-            <md-button class="md-vendor" @click="createNewProposal">
-              Create New Proposal
-            </md-button>
+            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" alt="" />
+            <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
+            <md-button class="md-vendor" @click="createNewProposal">Create New Proposal</md-button>
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-          <insight v-if="!loading" :total="pagination.total" :won="pagination.won" @insight="count()" />
+          <insight v-if="!loading" :total="pagination.total" :won="pagination.won" @insight="count()"></insight>
         </div>
       </div>
       <div class="md-layout">
@@ -122,17 +113,17 @@
 
               v-if="pagination.pageCount"
               class="mt-30"
-              :page-count="pagination.pageCount"
-              :click-handler="gotoPage"
-            />
+              :pageCount="pagination.pageCount"
+              :clickHandler="gotoPage"
+            ></TablePagination>
           </div>
         </div>
-        <div class="md-layout-item md-size-25" />
+        <div class="md-layout-item md-size-25"></div>
       </div>
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
       <template slot="body">
-        <ProposalContent :vendor-proposal="selectedProposal" @close="showProposalDetail = false" />
+        <ProposalContent :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
@@ -152,9 +143,7 @@
           >
             {{ selectedProposalRequest.eventData.title }}
           </div>
-          <div v-else>
-            New Event
-          </div>
+          <div v-else>New Event</div>
         </div>
 
         <div v-if="selectedProposal.nonMaryoku" class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
@@ -170,9 +159,8 @@
         <md-button
           class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
           @click="showRequestNegotiationModal = false"
+          ><md-icon>close</md-icon></md-button
         >
-          <md-icon>close</md-icon>
-        </md-button>
       </template>
       <template slot="body">
         <negotiation-request
@@ -188,59 +176,52 @@
             v-if="negotiationProcessed === 0"
             class="md-simple md-vendor-text md-black p-0"
             @click="handleNegotiation(negotiationRequestStatus.decline)"
+            >Decline</md-button
           >
-            Decline
-          </md-button>
           <md-button
             class="md-simple md-outlined md-vendor ml-auto"
             @click="handleNegotiation(negotiationRequestStatus.review)"
+            >Review proposal</md-button
           >
-            Review proposal
-          </md-button>
           <md-button
             v-if="negotiationProcessed === 0"
             class="md-vendor ml-10"
             @click="handleNegotiation(negotiationRequestStatus.approve)"
+            >Approve</md-button
           >
-            Approve
-          </md-button>
-          <md-button v-else class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.done)">
-            Done
-          </md-button>
+          <md-button v-else class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.done)"
+            >Done</md-button
+          >
         </template>
         <template v-else-if="negotiationType === negotiationTypes.EVENT_CHANGE">
           <md-button
             class="md-simple md-vendor-text md-black p-0"
             @click="handleNegotiation(negotiationRequestStatus.cancel_proposal)"
+            >Cancel proposal</md-button
           >
-            Cancel proposal
-          </md-button>
           <md-button
             class="md-simple md-outlined md-vendor ml-auto"
             @click="handleNegotiation(negotiationRequestStatus.update_proposal)"
+            >Update proposal</md-button
           >
-            Update proposal
-          </md-button>
-          <md-button class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.acknowledge)">
-            Acknowledge
-          </md-button>
+          <md-button class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.acknowledge)"
+            >Acknowledge</md-button
+          >
         </template>
         <template v-else-if="negotiationType === negotiationTypes.PRICE_NEGOTIATION">
           <md-button
             class="md-simple md-vendor-text md-black p-0"
             @click="handleNegotiation(negotiationRequestStatus.decline)"
+            >Decline</md-button
           >
-            Decline
-          </md-button>
           <md-button
             class="md-simple md-vendor-text md-black p-0 ml-auto"
             @click="handleNegotiation(negotiationRequestStatus.review)"
+            >Review proposal</md-button
           >
-            Review proposal
-          </md-button>
-          <md-button class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.approve)">
-            Approve
-          </md-button>
+          <md-button class="md-vendor ml-10" @click="handleNegotiation(negotiationRequestStatus.approve)"
+            >Approve</md-button
+          >
         </template>
       </template>
     </modal>
@@ -249,17 +230,17 @@
       <template slot="header">
         <div>
           <span
-            class="winning-rate"
-          >Winning Rate</span>
+           class="winning-rate"
+
+            >Winning Rate</span
+          >
         </div>
       </template>
       <template slot="body">
         <NoInsight />
       </template>
       <template slot="footer">
-        <md-button class="md-vendor px-50" @click="showLessInsightModal = false">
-          Close
-        </md-button>
+        <md-button class="md-vendor px-50" @click="showLessInsightModal = false">Close</md-button>
       </template>
     </centred-modal>
     <modal v-if="showInsightModal" container-class="modal-container bg-white">
@@ -267,27 +248,22 @@
         <md-button
           class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
           @click="showInsightModal = false"
-        >
-          <md-icon>close</md-icon>
-        </md-button>
-      </template>
+          ><md-icon>close</md-icon></md-button
+        ></template
+      >
       <template slot="body">
         <InsightDetail />
       </template>
       <template slot="footer">
-        <md-button class="md-simple ml-auto md-outlined md-vendor p-0">
-          Update Your Prices
-        </md-button>
-        <md-button class="md-vendor ml-20" @click="showInsightModal = false">
-          Close
-        </md-button>
+        <md-button class="md-simple ml-auto md-outlined md-vendor p-0">Update Your Prices</md-button>
+        <md-button class="md-vendor ml-20" @click="showInsightModal = false">Close</md-button>
       </template>
     </modal>
     <ShareProposal
       v-if="showShareProposalModal"
       :link="proposalLink"
       @close="showShareProposalModal = false"
-    />
+    ></ShareProposal>
     <ResendProposalResult
       v-if="showResendProposalModal"
       :to="
@@ -297,19 +273,21 @@
       "
       @close="showResendProposalModal = false"
       @submit="showResendProposalModal = false"
-    />
+    >
+    </ResendProposalResult>
     <ProposalGraphModal
       v-if="showProposalGraph"
-      :proposal="selectedProposalForGraph"
       @close="closeProposalGraph"
-    />
+      :proposal="selectedProposalForGraph"
+    >
+    </ProposalGraphModal>
   </div>
 </template>
 <script>
 import moment from "moment";
 import NoInsight from "./NoInsight.vue";
 import _ from "underscore";
-import carousel from "vue-owl-carousel";
+import carousel from "vue-owl-carousel"
 import {avatarColors} from "@/constants/color";
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
@@ -386,87 +364,10 @@ export default {
       colors: avatarColors
     };
   },
-  computed: {
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-    proposalLink() {
-      if (!this.selectedProposal) return null;
-      return this.selectedProposal.nonMaryoku
-        ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
-        : `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${
-            this.selectedProposal.proposalRequestId
-          }/form/edit`;
-    },
-    proposalRequests() {
-      let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
-      return proposalRequests.filter(p => {
-        return p.proposal
-          ? (p.declineMessage !== "decline" && p.proposal.status === PROPOSAL_STATUS.DRAFT && p.remainingTime > 0) ||
-              (!p.proposal.accepted &&
-                p.proposal.negotiations &&
-                p.proposal.negotiations.filter(
-                  it => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0,
-                ).length)
-          : p.remainingTime > 0 && p.declineMessage !== "decline";
-      });
-    },
-    proposals() {
-      return this.$store.state.vendorDashboard.proposals.filter(p => p.status !== PROPOSAL_STATUS.INACTIVE);
-    },
-    negotiation() {
-       const negotiations = this.getNegotiations(this.selectedProposal);
-      if ( !negotiations.length ) return null;
-
-      if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
-        return new Date(negotiations[0].expiredTime).getTime();
-      } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) {
-        let { startTime, endTime, numberOfParticipants, location, eventType } = this.selectedProposal.eventData;
-        let { event } = negotiations[0];
-        return {
-          originalDate: moment(startTime * 1000).format("DD-MM-YY"),
-          date: moment(event.startTime * 1000).format("DD-MM-YY"),
-          originalStartTime: moment(startTime * 1000).format("hh:mm a"),
-          originalEndTime: moment(endTime * 1000).format("hh:mm a"),
-          startTime: moment(event.startTime * 1000).format("hh:mm a"),
-          endTime: moment(event.endTime * 1000).format("hh:mm a"),
-          originalNumberOfParticipants: numberOfParticipants,
-          numberOfParticipants: event.numberOfParticipants,
-          originalLocation: location,
-          location: event.location,
-          originalEventType: eventType,
-          eventType: event.eventType,
-        };
-      } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
-        console.log("price.negotiation");
-        let { numberOfParticipants } = this.selectedProposal.eventData;
-        let data = negotiations[0].price;
-        let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
-
-        return {
-          originalBudget: this.selectedProposal.cost,
-          budget,
-          originalBudgetPerGuest: (this.selectedProposal.cost / numberOfParticipants).toFixed(2),
-          budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
-        };
-      }
-    },
-  },
-  watch: {
-    proposalRequests(newVal) {
-      console.log("proposalRequests.watch", newVal);
-    },
-  },
   async mounted() {
     this.$root.$emit("proposalTab");
 
     await this.init();
-  },
-  updated() {
-    // remove empty item in proposal-request carousel
-    $(".owl-item").each(function() {
-      if ($(this).text().length === 0) $(this).remove();
-    });
   },
   methods: {
     async getProposal() {
@@ -630,21 +531,21 @@ export default {
           data,
           proposal: this.selectedProposal,
         });
-          console.log("negotiation", negotiation);
+          console.log('negotiation', negotiation)
         if (this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
             this.showRequestNegotiationModal = false;
 
             if (status === this.negotiationRequestStatus.approve) {
 
                 const version = await this.saveVersion(this.selectedProposal);
-                this.selectedProposal.versions.push(version);
+                this.selectedProposal.versions.push(version)
 
                 let routeData = this.$router.resolve({
                     name: "outsideProposalEdit",
                     params: {
                         vendorId: this.selectedProposal.vendor.id,
                         id: this.selectedProposal.id,
-                        type: "edit",
+                        type: 'edit',
                     },
                     query: {
                         version: version.id,
@@ -726,14 +627,14 @@ export default {
       this.versionFields.map(key => {
         if (key === "eventData") {
           data[key] = { ...proposal.eventData, ...proposal.negotiations[0].event };
-        }else if ( key === "negotiationDiscount" && proposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
+        }else if ( key === 'negotiationDiscount' && proposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
             data.negotiationDiscount = {
                 isApplied: true,
-                percentage: proposal.negotiations[0].price.rate === "%" ? proposal.negotiations[0].price.value :
+                percentage: proposal.negotiations[0].price.rate === '%' ? proposal.negotiations[0].price.value :
                     (proposal.negotiations[0].price.value / proposal.cost * 100).toFixed(2),
-                price: proposal.negotiations[0].price.rate === "$" ? proposal.negotiations[0].price.value :
+                price: proposal.negotiations[0].price.rate === '$' ? proposal.negotiations[0].price.value :
                     (proposal.negotiations[0].price.value / 100 * proposal.cost).toFixed(2),
-            };
+            }
         }
         else if (key === "bookedServices") {
           data[key] = [];
@@ -746,7 +647,7 @@ export default {
         name: `Ver${proposal.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
         data,
       };
-      console.log("versionData", versionData);
+      console.log('versionData', versionData)
       const version = await this.$store.dispatch("vendorDashboard/saveVersion", { version: versionData, proposal });
       return version;
     },
@@ -825,7 +726,7 @@ export default {
       this.loading = false;
     },
     showGraphModal(proposal) {
-        console.log("Open GraphModal", proposal);
+        console.log('Open GraphModal', proposal);
         this.showProposalGraph = true;
         this.selectedProposalForGraph = proposal;
     },
@@ -833,9 +734,86 @@ export default {
       this.showProposalGraph = false;
     },
     getNegotiations(proposal) {
-      if (!proposal || !proposal.negotiations) return [];
-      return proposal.negotiations.filter(it => it.status === 0 && it.remainingTime > 0);
+      if (!proposal || !proposal.negotiations) return []
+      return proposal.negotiations.filter(it => it.status === 0 && it.remainingTime > 0)
     }
+  },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    proposalLink() {
+      if (!this.selectedProposal) return null;
+      return this.selectedProposal.nonMaryoku
+        ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
+        : `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${
+            this.selectedProposal.proposalRequestId
+          }/form/edit`;
+    },
+    proposalRequests() {
+      let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
+      return proposalRequests.filter(p => {
+        return p.proposal
+          ? (p.declineMessage !== "decline" && p.proposal.status === PROPOSAL_STATUS.DRAFT && p.remainingTime > 0) ||
+              (!p.proposal.accepted &&
+                p.proposal.negotiations &&
+                p.proposal.negotiations.filter(
+                  it => it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.remainingTime > 0,
+                ).length)
+          : p.remainingTime > 0 && p.declineMessage !== "decline";
+      });
+    },
+    proposals() {
+      return this.$store.state.vendorDashboard.proposals.filter(p => p.status !== PROPOSAL_STATUS.INACTIVE);
+    },
+    negotiation() {
+       const negotiations = this.getNegotiations(this.selectedProposal);
+      if ( !negotiations.length ) return null;
+
+      if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
+        return new Date(negotiations[0].expiredTime).getTime();
+      } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) {
+        let { startTime, endTime, numberOfParticipants, location, eventType } = this.selectedProposal.eventData;
+        let { event } = negotiations[0];
+        return {
+          originalDate: moment(startTime * 1000).format("DD-MM-YY"),
+          date: moment(event.startTime * 1000).format("DD-MM-YY"),
+          originalStartTime: moment(startTime * 1000).format("hh:mm a"),
+          originalEndTime: moment(endTime * 1000).format("hh:mm a"),
+          startTime: moment(event.startTime * 1000).format("hh:mm a"),
+          endTime: moment(event.endTime * 1000).format("hh:mm a"),
+          originalNumberOfParticipants: numberOfParticipants,
+          numberOfParticipants: event.numberOfParticipants,
+          originalLocation: location,
+          location: event.location,
+          originalEventType: eventType,
+          eventType: event.eventType,
+        };
+      } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
+        console.log("price.negotiation");
+        let { numberOfParticipants } = this.selectedProposal.eventData;
+        let data = negotiations[0].price;
+        let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
+
+        return {
+          originalBudget: this.selectedProposal.cost,
+          budget,
+          originalBudgetPerGuest: (this.selectedProposal.cost / numberOfParticipants).toFixed(2),
+          budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
+        };
+      }
+    },
+  },
+  watch: {
+    proposalRequests(newVal) {
+      console.log("proposalRequests.watch", newVal);
+    },
+  },
+  updated() {
+    // remove empty item in proposal-request carousel
+    $(".owl-item").each(function() {
+      if ($(this).text().length === 0) $(this).remove();
+    });
   },
 };
 </script>

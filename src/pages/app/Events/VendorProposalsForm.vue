@@ -1,8 +1,8 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
-    <div v-if="proposalRequest" class="md-layout vendor-proposals">
-      <div v-if="proposalRequest.submitted" class="custom-1" />
+    <div class="md-layout vendor-proposals" v-if="proposalRequest">
+      <div class="custom-1" v-if="proposalRequest.submitted"></div>
       <div class="md-layout-item md-size-100">
         <h5>
           <a href="#" @click.prevent="goToLanding">
@@ -11,10 +11,8 @@
         </h5>
       </div>
       <div class="md-layout-item md-size-100">
-        <h3 class="title fw-bold">
-          Submit your proposal
-        </h3>
-        <div v-if="proposalRequest.submitted" class="alert alert-danger text-center">
+        <h3 class="title fw-bold">Submit your proposal</h3>
+        <div class="alert alert-danger text-center" v-if="proposalRequest.submitted">
           <h5 class="text-center clear-margins z-9999">
             You already submitted this proposal, you cannot change it anymore.
           </h5>
@@ -26,25 +24,17 @@
           <md-card-content>
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
-                <h4 class="title">
-                  Event information
-                </h4>
+                <h4 class="title">Event information</h4>
               </div>
               <div class="md-layout-item md-size-25 md-small-size-100">
                 <div class="info-item">
-                  <div class="info-label">
-                    Start Date:
-                  </div>
-                  <div class="info-value">
-                    {{ getEventDate(proposalRequest.eventData.eventStartMillis) }}
-                  </div>
+                  <div class="info-label">Start Date:</div>
+                  <div class="info-value">{{ getEventDate(proposalRequest.eventData.eventStartMillis) }}</div>
                 </div>
               </div>
               <div class="md-layout-item md-size-25 md-small-size-100">
                 <div class="info-item">
-                  <div class="info-label">
-                    Time & Duration:
-                  </div>
+                  <div class="info-label">Time & Duration:</div>
                   <div class="info-value">
                     {{ getEventTime(proposalRequest.eventData.eventStartMillis) }} -
                     {{
@@ -58,19 +48,13 @@
               </div>
               <div class="md-layout-item md-size-25 md-small-size-100">
                 <div class="info-item">
-                  <div class="info-label">
-                    Location:
-                  </div>
-                  <div class="info-value">
-                    {{ getLocation }}
-                  </div>
+                  <div class="info-label">Location:</div>
+                  <div class="info-value">{{ getLocation }}</div>
                 </div>
               </div>
               <div class="md-layout-item md-size-25 md-small-size-100">
                 <div class="info-item">
-                  <div class="info-label">
-                    Participants:
-                  </div>
+                  <div class="info-label">Participants:</div>
                   <div class="info-value">
                     {{ getParticipants }}
                     <!-- {{proposalRequest.eventData.numberOfParticipants}}
@@ -79,9 +63,7 @@
                 </div>
               </div>
               <div class="md-layout-item md-size-100">
-                <div class="proposal-description">
-                  {{ proposalRequest.description }}
-                </div>
+                <div class="proposal-description">{{ proposalRequest.description }}</div>
               </div>
             </div>
           </md-card-content>
@@ -92,9 +74,7 @@
           <md-card-content>
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
-                <h4 class="title">
-                  {{ proposalRequest.requirements.length }} Elements in this proposal
-                </h4>
+                <h4 class="title">{{ proposalRequest.requirements.length }} Elements in this proposal</h4>
               </div>
               <div class="md-layout-item md-size-100">
                 <div class="vendor-proposals_requirements-list">
@@ -112,18 +92,18 @@
                       <md-field class="with-bg">
                         <span class="md-prefix">$</span>
                         <md-input
-                          v-model="proposalRequest.requirementsCategoryCost"
                           type="number"
+                          v-model="proposalRequest.requirementsCategoryCost"
                           @blur="updateProposalRequest"
-                        />
+                        ></md-input>
                       </md-field>
                     </div>
                   </div>
                   <div
-                    v-for="(item, index) in proposalRequest.requirements"
-                    :key="index"
                     class="list-item md-layout"
                     :class="{ 'not-available': item.itemNotAvailable }"
+                    v-for="(item, index) in proposalRequest.requirements"
+                    :key="index"
                   >
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                       <span v-if="item.requirementValue">{{ item.requirementValue }} x</span>
@@ -133,15 +113,11 @@
                           Client
                           <strong>must-have</strong> requirement
                         </span>
-                        <div class="text-gray">
-                          {{ item.requirementComment }}
-                        </div>
+                        <div class="text-gray">{{ item.requirementComment }}</div>
                       </blockquote>
                       <blockquote v-else class="grey-blockquote">
                         <span>Client requirement</span>
-                        <div class="text-gray">
-                          {{ item.requirementComment }}
-                        </div>
+                        <div class="text-gray">{{ item.requirementComment }}</div>
                       </blockquote>
                     </div>
                     <div
@@ -150,34 +126,30 @@
                       <template v-if="!item.includedInPrice">
                         <md-field>
                           <md-select v-model="item.priceUnit" @change="updateProposalRequest">
-                            <md-option value="per guest">
-                              Per Guest
-                            </md-option>
-                            <md-option value="total">
-                              Total
-                            </md-option>
+                            <md-option value="per guest">Per Guest</md-option>
+                            <md-option value="total">Total</md-option>
                           </md-select>
                         </md-field>
                         <md-field class="with-bg">
                           <span class="md-prefix">$</span>
-                          <md-input v-model="item.price" @blur="updateProposalRequest" />
+                          <md-input v-model="item.price" @blur="updateProposalRequest"></md-input>
                         </md-field>
                       </template>
-                      <md-switch v-model="item.includedInPrice" class="md-switch-rose switch-btn" />
+                      <md-switch class="md-switch-rose switch-btn" v-model="item.includedInPrice"></md-switch>
                       <label :for="`include-${index}`">Included in price</label>
                     </div>
                     <div class="actions-list md-layout-item md-size-100 md-small-size-100 display-flex">
                       <md-field v-if="item.requirementMandatory" class="amount-field">
                         <label>Amount</label>
                         <md-input
-                          v-model="item.requirementValue"
                           type="number"
+                          v-model="item.requirementValue"
                           @blur="updateProposalRequest"
-                        />
+                        ></md-input>
                       </md-field>
                       <md-button
-                        v-if="!item.itemNotAvailable"
                         class="md-success md-simple"
+                        v-if="!item.itemNotAvailable"
                         @click="
                           item.itemNotAvailable = !item.itemNotAvailable;
                           updateProposalRequest();
@@ -186,8 +158,8 @@
                         <md-icon>check</md-icon>Mark as available
                       </md-button>
                       <md-button
-                        v-if="item.itemNotAvailable"
                         class="md-rose md-simple"
+                        v-if="item.itemNotAvailable"
                         @click="
                           item.itemNotAvailable = !item.itemNotAvailable;
                           updateProposalRequest();
@@ -196,8 +168,8 @@
                         <md-icon>block</md-icon>Mark as not available
                       </md-button>
                       <md-button
-                        v-if="!(item.comments && item.comments.length)"
                         class="md-primary md-simple add-comment-btn"
+                        v-if="!(item.comments && item.comments.length)"
                         @click="
                           item.showCommentForm = true;
                           item.addedComment = false;
@@ -206,14 +178,14 @@
                       >
                         <md-icon>comment</md-icon>Add Comment
                       </md-button>
-                      <div v-if="item.comments && item.comments.length" class="requirement-comment">
+                      <div class="requirement-comment" v-if="item.comments && item.comments.length">
                         <md-icon>comment</md-icon>
                         <label-edit
                           :text="item.comments[0].commentText"
                           :field-name="item"
                           @text-updated-blur="setRequirementComment"
                           @text-updated-enter="setRequirementComment"
-                        />
+                        ></label-edit>
                       </div>
                       <template v-if="item.showCommentForm">
                         <md-field class="full-width bordered-field">
@@ -222,7 +194,7 @@
                             placeholder="Add your comment here, event producers can see these comments."
                             @keypress.enter="setRequirementComment(item.tempComment, item)"
                             @blur="setRequirementComment(item.tempComment, item)"
-                          />
+                          ></md-input>
                         </md-field>
                       </template>
                     </div>
@@ -238,16 +210,12 @@
           <!-- Vendor images -->
           <md-card class="event-information-card">
             <md-card-content>
-              <h4 class="title mb-12">
-                Can you also provide these elements?
-              </h4>
+              <h4 class="title mb-12">Can you also provide these elements?</h4>
               <p>The client is also looking for the elements below, can you provide them</p>
 
               <div class="event-elements__list">
                 <div class="event-element__item">
-                  <md-button class="md-primary">
-                    <md-icon>add</md-icon>Bar
-                  </md-button>
+                  <md-button class="md-primary"> <md-icon>add</md-icon>Bar </md-button>
                 </div>
               </div>
             </md-card-content>
@@ -299,16 +267,14 @@
           <!-- Vendor images -->
           <md-card class="event-information-card vendor-images">
             <md-card-content>
-              <h4 class="title mb-12">
-                Images
-              </h4>
+              <h4 class="title mb-12">Images</h4>
               <div class="md-layout">
                 <div
-                  v-for="(image, index) in proposalRequestImages"
-                  v-if="!image.tag"
-                  :key="index"
                   class="md-layout-item md-size-20"
+                  v-for="(image, index) in proposalRequestImages"
+                  :key="index"
                   style="margin: 12px"
+                  v-if="!image.tag"
                 >
                   <iframe
                     seamless
@@ -341,53 +307,39 @@
                     <md-icon>add</md-icon>
                   </md-button>
                   <input
-                    ref="eventFile"
                     type="file"
                     class="hide"
+                    ref="eventFile"
                     accept="image/gif, image/jpg, image/png, application/text, application/pdf"
                     @change="onEventFilePicked"
-                  >
+                  />
                 </div>
               </div>
-              <h5 class="title mb-12">
-                Additional documentation
-              </h5>
+              <h5 class="title mb-12">Additional documentation</h5>
               <div class="attachments-documents-btn">
                 <md-button
                   class="md-sm add-vendor-image"
                   :class="{ 'md-primary': !attachmentUploaded('proof_of_insurance') }"
                   @click="uploadEventImage(null, 'proof_of_insurance')"
                 >
-                  <md-icon v-if="attachmentUploaded('proof_of_insurance')">
-                    check
-                  </md-icon>
-                  <md-icon v-else>
-                    add
-                  </md-icon>Proof of Insurance
+                  <md-icon v-if="attachmentUploaded('proof_of_insurance')">check</md-icon>
+                  <md-icon v-else>add</md-icon>Proof of Insurance
                 </md-button>
                 <md-button
                   class="md-primary md-sm add-vendor-image"
                   :class="{ 'md-primary': !attachmentUploaded('liquor_license') }"
                   @click="uploadEventImage(null, 'liquor_license')"
                 >
-                  <md-icon v-if="attachmentUploaded('liquor_license')">
-                    check
-                  </md-icon>
-                  <md-icon v-else>
-                    add
-                  </md-icon>Liquor License
+                  <md-icon v-if="attachmentUploaded('liquor_license')">check</md-icon>
+                  <md-icon v-else>add</md-icon>Liquor License
                 </md-button>
                 <md-button
                   class="md-primary md-sm add-vendor-image"
                   :class="{ 'md-primary': !attachmentUploaded('caterer_license') }"
                   @click="uploadEventImage(null, 'caterer_license')"
                 >
-                  <md-icon v-if="attachmentUploaded('caterer_license')">
-                    check
-                  </md-icon>
-                  <md-icon v-else>
-                    add
-                  </md-icon>Caterer License
+                  <md-icon v-if="attachmentUploaded('caterer_license')">check</md-icon>
+                  <md-icon v-else>add</md-icon>Caterer License
                 </md-button>
               </div>
               <!--<div class="md-layout">
@@ -474,19 +426,17 @@
           <md-card-content>
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
-                <h4 class="title">
-                  Terms
-                </h4>
+                <h4 class="title">Terms</h4>
               </div>
               <div class="md-layout-item md-size-50 terms-form">
                 <h5>Cancellation policy</h5>
                 <div class="notes-section">
                   <md-field>
                     <md-textarea
-                      v-model="proposalRequest.cancellationPolicy"
                       rows="5"
+                      v-model="proposalRequest.cancellationPolicy"
                       @blur="updateProposalRequest()"
-                    />
+                    ></md-textarea>
                   </md-field>
                 </div>
               </div>
@@ -510,18 +460,16 @@
           <md-card-content>
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
-                <h4 class="title">
-                  Personal Message
-                </h4>
+                <h4 class="title">Personal Message</h4>
                 <span class="text-gray">A personal message from you can increase your chances of winning.</span>
               </div>
               <div class="md-layout-item md-size-100">
                 <md-field>
                   <md-textarea
-                    v-model="proposalRequest.personalMessage"
                     rows="5"
+                    v-model="proposalRequest.personalMessage"
                     @blur="updateProposalRequest()"
-                  />
+                  ></md-textarea>
                 </md-field>
               </div>
             </div>
@@ -531,9 +479,7 @@
           <md-card-content>
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
-                <h4 class="title">
-                  About Us
-                </h4>
+                <h4 class="title">About Us</h4>
                 <span class="text-gray">
                   Let your clients know more about your business, what should they pick you? What makes your proposal
                   unique?
@@ -541,7 +487,7 @@
               </div>
               <div class="md-layout-item md-size-100">
                 <md-field>
-                  <md-textarea v-model="proposalRequest.aboutUsMessage" rows="5" @blur="updateProposalRequest()" />
+                  <md-textarea rows="5" v-model="proposalRequest.aboutUsMessage" @blur="updateProposalRequest()" />
                 </md-field>
               </div>
             </div>
@@ -552,43 +498,29 @@
       <div class="md-layout-item md-size-30 md-small-size-100">
         <md-card class="bid-section pos-fixed">
           <md-card-content>
-            <h3 class="text-center">
-              You're the {{ proposalRequest.bidderRank | numeral("Oo") }} bidder
-            </h3>
+            <h3 class="text-center">You're the {{ proposalRequest.bidderRank | numeral("Oo") }} bidder</h3>
             <div class="text-center">
-              <h5 class="clear-margins">
-                Client's budget is
-              </h5>
+              <h5 class="clear-margins">Client's budget is</h5>
               <span class="text-gray">${{ proposalRequest.bidRange.low }} - ${{ proposalRequest.bidRange.high }}</span>
             </div>
-            <div v-if="proposalRequest.bidderRank > 1" class="cost-average">
-              <div class="text-center small">
-                Current bids range between
-              </div>
+            <div class="cost-average" v-if="proposalRequest.bidderRank > 1">
+              <div class="text-center small">Current bids range between</div>
               <div class="cost-average_item">
-                <h5 class>
-                  Lowest
-                </h5>
-                <div class="cost">
-                  ${{ proposalRequest.bidRange.low | withComma }}
-                </div>
+                <h5 class>Lowest</h5>
+                <div class="cost">${{ proposalRequest.bidRange.low | withComma }}</div>
               </div>
               <div class="cost-average_item arrow-item">
                 <md-icon>arrow_right_alt</md-icon>
               </div>
               <div class="cost-average_item">
-                <h5 class>
-                  Highest
-                </h5>
-                <div class="cost">
-                  ${{ proposalRequest.bidRange.high | withComma }}
-                </div>
+                <h5 class>Highest</h5>
+                <div class="cost">${{ proposalRequest.bidRange.high | withComma }}</div>
               </div>
             </div>
             <div class="update-checkbox">
               <md-checkbox
-                v-model="proposalRequest.updateOnOutbid"
                 class="md-success"
+                v-model="proposalRequest.updateOnOutbid"
                 @change="updateProposalRequest()"
               >
                 Update me if someone outbids my offer
@@ -596,52 +528,40 @@
             </div>
             <div class="offer-value">
               <div class="value-section upgrades-section">
-                <div class="title">
-                  {{ getServiceCategory }}
-                </div>
-                <div class="cost text-right">
-                  ${{ proposalRequest.requirementsCategoryCost | withComma }}
-                </div>
+                <div class="title">{{ getServiceCategory }}</div>
+                <div class="cost text-right">${{ proposalRequest.requirementsCategoryCost | withComma }}</div>
               </div>
               <div class="value-section upgrades-section extra-section">
-                <div class="title">
-                  Extra
-                </div>
-                <div class="cost text-right">
-                  ${{ extraTotal | withComma }}
-                </div>
+                <div class="title">Extra</div>
+                <div class="cost text-right">${{ extraTotal | withComma }}</div>
               </div>
               <div class="extra-items-wrapper">
                 <div
-                  v-for="(req, rIndex) in proposalRequest.requirements"
-                  v-if="req.price || req.price * proposalRequest.eventData.numberOfParticipants"
-                  :key="rIndex"
                   class="extra-items"
+                  v-for="(req, rIndex) in proposalRequest.requirements"
+                  :key="rIndex"
+                  v-if="req.price || req.price * proposalRequest.eventData.numberOfParticipants"
                 >
                   <span>{{ req.requirementTitle }}</span>
-                  <span class="pull-right">${{
-                    req.priceUnit === "total"
-                      ? req.price
-                      : (req.price * proposalRequest.eventData.numberOfParticipants) | withComma
-                  }}</span>
+                  <span class="pull-right"
+                    >${{
+                      req.priceUnit === "total"
+                        ? req.price
+                        : (req.price * proposalRequest.eventData.numberOfParticipants) | withComma
+                    }}</span
+                  >
                 </div>
               </div>
               <div class="value-section user-offer-section">
-                <div class="title">
-                  Your Offer
-                </div>
-                <div class="cost text-right">
-                  ${{ totalOffer | withComma }}
-                </div>
+                <div class="title">Your Offer</div>
+                <div class="cost text-right">${{ totalOffer | withComma }}</div>
               </div>
             </div>
             <div class="bid-button">
-              <md-button v-if="!proposalRequest.submitted" class="md-success" @click="updateProposalRequest(true)">
-                Submit Proposal
-              </md-button>
-              <h6 v-else class="text-primary text-center">
-                Submitted {{ dateSubmitted(proposalRequest) }}
-              </h6>
+              <md-button class="md-success" @click="updateProposalRequest(true)" v-if="!proposalRequest.submitted"
+                >Submit Proposal</md-button
+              >
+              <h6 class="text-primary text-center" v-else>Submitted {{ dateSubmitted(proposalRequest) }}</h6>
             </div>
             <div class="payment-policy text-center">
               By submitting a proposal you agree to our
@@ -675,18 +595,13 @@ import ProposalRequestRequirement from "../../../models/ProposalRequestRequireme
 import _ from "underscore";
 
 export default {
+  props: ["proposalRequestRequirements", "proposalRequest"],
   components: {
     VueElementLoading,
     Icon,
     Collapse,
     LabelEdit,
   },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  props: ["proposalRequestRequirements", "proposalRequest"],
 
   data() {
     return {
@@ -705,60 +620,6 @@ export default {
       attachmentType: null,
       vendorCategory: null,
     };
-  },
-  computed: {
-    totalOffer() {
-      let total = parseFloat(this.proposalRequest.requirementsCategoryCost);
-      let vm = this;
-
-      this.proposalRequest.requirements.map(function (item) {
-        if (item.price) {
-          if (item.priceUnit === "total") {
-            total += parseFloat(item.price);
-          } else {
-            total += parseFloat(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants);
-          }
-        }
-      });
-      return total;
-    },
-    extraTotal() {
-      let total = 0;
-      let vm = this;
-      this.proposalRequest.requirements.map(function (item) {
-        if (item.price) {
-          if (item.priceUnit === "total") {
-            total += parseFloat(item.price);
-          } else {
-            total += parseFloat(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants);
-          }
-        }
-      });
-      this.$forceUpdate();
-      return total;
-    },
-    getLocation() {
-      if (this.proposalRequest) {
-        return this.proposalRequest.eventData.location || "-";
-      } else {
-        return "-";
-      }
-    },
-    getParticipants() {
-      const eventData = this.proposalRequest.eventData;
-      if (eventData.participantsType) {
-        return eventData.numberOfParticipants + eventData.participantsType;
-      } else {
-        return eventData.numberOfParticipants;
-      }
-    },
-    getServiceCategory() {
-      if (this.proposalRequest.requirementsCategory) {
-        return this.proposalRequest.requirementsCategory;
-      } else {
-        return this.vendorCategory;
-      }
-    },
   },
   created() {
     console.log("proposalRequest => ", this.proposalRequest);
@@ -1134,6 +995,65 @@ export default {
     },
     attachmentUploaded(type) {
       return _.findWhere(this.proposalRequestImages, { tag: type });
+    },
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  computed: {
+    totalOffer() {
+      let total = parseFloat(this.proposalRequest.requirementsCategoryCost);
+      let vm = this;
+
+      this.proposalRequest.requirements.map(function (item) {
+        if (item.price) {
+          if (item.priceUnit === "total") {
+            total += parseFloat(item.price);
+          } else {
+            total += parseFloat(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants);
+          }
+        }
+      });
+      return total;
+    },
+    extraTotal() {
+      let total = 0;
+      let vm = this;
+      this.proposalRequest.requirements.map(function (item) {
+        if (item.price) {
+          if (item.priceUnit === "total") {
+            total += parseFloat(item.price);
+          } else {
+            total += parseFloat(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants);
+          }
+        }
+      });
+      this.$forceUpdate();
+      return total;
+    },
+    getLocation() {
+      if (this.proposalRequest) {
+        return this.proposalRequest.eventData.location || "-";
+      } else {
+        return "-";
+      }
+    },
+    getParticipants() {
+      const eventData = this.proposalRequest.eventData;
+      if (eventData.participantsType) {
+        return eventData.numberOfParticipants + eventData.participantsType;
+      } else {
+        return eventData.numberOfParticipants;
+      }
+    },
+    getServiceCategory() {
+      if (this.proposalRequest.requirementsCategory) {
+        return this.proposalRequest.requirementsCategory;
+      } else {
+        return this.vendorCategory;
+      }
     },
   },
 };

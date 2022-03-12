@@ -1,28 +1,29 @@
 <template>
   <div v-if="component" class="booking-event-requirement">
-    <comment-editor-panel
-      v-if="showCommentEditorPanel"
-      :comment-components="commentComponents"
-      @saveComment="saveComment"
-      @updateComment="updateComment"
-      @deleteComment="deleteComment"
-      @updateCommentComponent="updateCommentComponent"
-    />
+      <comment-editor-panel
+          v-if="showCommentEditorPanel"
+          :commentComponents="commentComponents"
+          @saveComment="saveComment"
+          @updateComment="updateComment"
+          @deleteComment="deleteComment"
+          @updateCommentComponent="updateCommentComponent"
+      >
+      </comment-editor-panel>
     <div class="booking-header md-layout-item md-size-100">
       <div class="d-flex justify-content-between">
         <div>
           <h3>
             <img
-              v-if="component.componentId"
               :src="`${$iconURL}Budget+Elements/${component.icon}`"
               style="width: 30px; margin-right: 0.5em"
-            >
+              v-if="component.componentId"
+            />
             Let us know what you are looking for in a {{ component.title }}
           </h3>
           Our job is to bring you the most accurate offers for your event.
-          <br>This is what we know about your event so far, let us know if there is anything we missed.
+          <br />This is what we know about your event so far, let us know if there is anything we missed.
         </div>
-        <header-actions hide-download @toggleCommentMode="toggleCommentMode" @share="share" />
+        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" hideDownload></header-actions>
       </div>
     </div>
 
@@ -37,9 +38,9 @@
               :key="id"
               :index="id"
               :data="data"
-              :current-component="component"
+              :currentComponent="component"
               @change="handleMultiSelectChange"
-            />
+            ></vendor-requirement-multiselect-panel>
           </template>
           <template v-else-if="category == 'radio'">
             <vendor-requirement-singleselect-panel
@@ -47,17 +48,17 @@
               :key="id"
               :index="id"
               :data="data"
-              :current-component="component"
+              :currentComponent="component"
               @change="handleSingleSelectChange"
-            />
+            ></vendor-requirement-singleselect-panel>
           </template>
           <div v-else-if="category == 'special'">
             <special-requirement-section
               :data="requirementProperties[category]"
-              :current-component="component"
+              :currentComponent="component"
               :note="anythingElse"
               @change="handleSpecialChange"
-            />
+            ></special-requirement-section>
           </div>
           <div v-else>
             <event-requirement-section
@@ -66,7 +67,7 @@
               :block-id="blockId"
               :note="anythingElse"
               @change="handlePropertyChange"
-            />
+            ></event-requirement-section>
           </div>
         </div>
       </div>
@@ -75,22 +76,16 @@
 
     <div class="booking-section__actions">
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple">
-          <md-icon>arrow_back</md-icon>Back
-        </md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple"> <md-icon>arrow_back</md-icon>Back </md-button>
         <md-button class="md-simple md-just-icon md-black">
-          <md-icon style="font-size: 40px">
-            expand_less
-          </md-icon>
+          <md-icon style="font-size: 40px">expand_less</md-icon>
         </md-button>
       </div>
       <div>
         <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal">
           Revert To Original
         </md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">
-          Find my perfect vendor
-        </md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>
   </div>
@@ -120,7 +115,7 @@ import SpecialRequirementSection from "./SpecialRequirementSection";
 import EventRequirementSection from "./EventRequirementSection";
 
 export default {
-  name: "BookingEventRequirement",
+  name: "booking-event-requirement",
   components: {
     Loader,
     InputMask,
@@ -136,13 +131,13 @@ export default {
     SpecialRequirementSection,
     EventRequirementSection,
   },
-  mixins: [CommentMixins, ShareMixins],
   props: {
     component: {
       type: Object,
       default: {},
     },
   },
+  mixins: [CommentMixins, ShareMixins],
   data: () => ({
     // auth: auth,
     calendar: null,
@@ -287,6 +282,19 @@ export default {
       });
     },
   },
+  created() {
+    this.calendar = new Calendar({
+      id: this.$store.state.auth.user.profile.defaultCalendarId,
+    });
+  },
+  mounted() {
+    this.isLoading = true;
+
+    if (this.eventData.id) {
+      console.log(this.eventData.id);
+      this.fetchData();
+    }
+  },
   watch: {
     eventData(newVal, oldVal) {
       if (newVal.id) {
@@ -309,19 +317,6 @@ export default {
         this.isLoading = false;
       }
     },
-  },
-  created() {
-    this.calendar = new Calendar({
-      id: this.$store.state.auth.user.profile.defaultCalendarId,
-    });
-  },
-  mounted() {
-    this.isLoading = true;
-
-    if (this.eventData.id) {
-      console.log(this.eventData.id);
-      this.fetchData();
-    }
   },
   filters: {
     formatDate: function (date) {

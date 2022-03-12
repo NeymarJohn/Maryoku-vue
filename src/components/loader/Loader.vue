@@ -1,16 +1,16 @@
 <template>
   <vue-element-loading
     :active="active"
-    :is-full-screen="isFullScreen"
+    :isFullScreen="isFullScreen"
     :style="{ height: height, backGroundColor: backGroundColor }"
   >
-    <img :src="`${imgUrl}`" :width="width">
+    <img :src="`${imgUrl}`" :width="width" />
   </vue-element-loading>
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
 export default {
-  name: "Loader",
+  name: 'loader',
   components:{
       VueElementLoading,
   },

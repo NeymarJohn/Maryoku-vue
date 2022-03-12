@@ -7,7 +7,7 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30">
+        <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30" />
         <div class="font-size-30 font-bold mb-30">
           SEE YOU THERE
           <span class="text-transform-uppercase"> {{ rsvp.name }} </span>!
@@ -19,31 +19,25 @@
             @click="showCalendar = !showCalendar"
           >
             Sync Your Calendar
-            <md-icon v-if="!showCalendar">
-              keyboard_arrow_right
-            </md-icon>
-            <md-icon v-if="showCalendar">
-              keyboard_arrow_down
-            </md-icon>
+            <md-icon v-if="!showCalendar">keyboard_arrow_right</md-icon>
+            <md-icon v-if="showCalendar">keyboard_arrow_down</md-icon>
           </md-button>
           <div v-if="showCalendar">
             <div>Choose your email account:</div>
             <div class="mt-30">
               <md-radio v-model="emailAccount" class="mr-60" value="google">
-                <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px">
+                <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
               </md-radio>
               <md-radio v-model="emailAccount" value="outlook">
-                <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px">
+                <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
               </md-radio>
             </div>
-            <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">
-              Sync
-            </md-button>
+            <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">Sync</md-button>
           </div>
         </div>
       </div>
     </template>
-    <template slot="footer" />
+    <template slot="footer"> </template>
   </modal>
 </template>
 <script>
@@ -73,6 +67,11 @@ export default {
     },
     rsvp: [Object],
   },
+  created() {
+    console.log(this.campaign);
+    this.api = gapi;
+    this.initClient();
+  },
   data() {
     return {
       showZoomLink: false,
@@ -80,11 +79,6 @@ export default {
       emailAccount: "outlook",
       authorized: false,
     };
-  },
-  created() {
-    console.log(this.campaign);
-    this.api = gapi;
-    this.initClient();
   },
   methods: {
     close() {

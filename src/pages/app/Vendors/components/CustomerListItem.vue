@@ -6,51 +6,42 @@
       </div>
 
       <div>
-        <div class="font-bold font-size-16 text-capitalize">
-          {{ customer.companyName }}
-        </div>
+        <div class="font-bold font-size-16 text-capitalize">{{ customer.companyName }}</div>
       </div>
-      <div class="font-size-14 color-black-middle">
-        {{ customer.ein }}
-      </div>
-      <div class="font-size-14 color-black-middle">
-        ${{ getIncome(customer) | withComma }}
-      </div>
-      <div class="font-size-14 color-black-middle text-capitalize">
-        {{ customer.name }}
-      </div>
-      <div class="font-size-14 color-black-middle">
-        {{ customer.proposals.length }}
-      </div>
+      <div class="font-size-14 color-black-middle">{{ customer.ein }}</div>
+      <div class="font-size-14 color-black-middle">${{ getIncome(customer) | withComma }}</div>
+      <div class="font-size-14 color-black-middle text-capitalize">{{ customer.name }}</div>
+      <div class="font-size-14 color-black-middle">{{ customer.proposals.length }}</div>
       <div>
-        <img :src="`${$iconURL}Group 19780.svg`">
+        <img :src="`${$iconURL}Group 19780.svg`" />
       </div>
 
       <div class="d-flex align-center">
-        <img :src="`${$iconURL}Group 19190.svg`" class="mr-20">
+        <img :src="`${$iconURL}Group 19190.svg`" class="mr-20" />
         <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px; width: 40px; z-index: 200">
-            <img :src="`${$iconURL}Group 19186.svg`">
+            <img :src="`${$iconURL}Group 19186.svg`" />
           </md-button>
           <md-menu-content>
-            <md-menu-item class="md-purple" :disabled="customer.name == 'Maryoku'" @click="edit(customerStatus.edit)">
+            <md-menu-item @click="edit(customerStatus.edit)" class="md-purple" :disabled="customer.name == 'Maryoku'">
               <span>
-                <img :src="`${$iconURL}Group 19254.svg`" class="mr-10" width="25px">
-                Customer Details</span>
+                <img :src="`${$iconURL}Group 19254.svg`" class="mr-10" width="25px" />
+                Customer Details</span
+              >
             </md-menu-item>
             <md-menu-item
+              @click="edit(customerStatus.proposal)"
               class="md-purple"
               :disabled="customer.name == 'Maryoku'"
-              @click="edit(customerStatus.proposal)"
             >
               <span>
-                <img :src="`${$iconURL}CustomerList/group-18971.svg`" class="mr-10">
+                <img :src="`${$iconURL}CustomerList/group-18971.svg`" class="mr-10" />
                 Make New Proposal
               </span>
             </md-menu-item>
-            <md-menu-item class="md-purple" :disabled="customer.name == 'Maryoku'" @click="edit(customerStatus.delete)">
+            <md-menu-item @click="edit(customerStatus.delete)" class="md-purple" :disabled="customer.name == 'Maryoku'">
               <span>
-                <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10"> Delete Customer
+                <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Customer
               </span>
             </md-menu-item>
           </md-menu-content>
@@ -60,7 +51,7 @@
 
     <fade-transition v-if="isToggle">
       <div>
-        <div v-if="customer.proposals.length" class="sort-bar px-20 mt-30 ml-40">
+        <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
           <span
             v-for="it in proposalHeaders"
             class="sort-item"
@@ -69,7 +60,8 @@
           >
             {{ it.title }}
             <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">
-              {{ sortFields["order"] == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon>
+              {{ sortFields["order"] == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon
+            >
             <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] != it.key" class="color-black-middle">
               keyboard_arrow_down
             </md-icon>
@@ -79,9 +71,9 @@
           v-for="proposal in customer.proposals"
           :key="proposal.id"
           :proposal="proposal"
-          page="custom"
           @action="handleProposal"
-        />
+          page="custom"
+        ></proposal-list-item>
       </div>
     </fade-transition>
   </div>

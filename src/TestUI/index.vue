@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <md-button
-      class="md-xs md-just-icon md-round md-info md-icon-button md-fileinput"
-    >
-      <md-icon>edit</md-icon>
-      <input ref="logoImageInput" type="file" @change="onFileChange">
-    </md-button>
-  </div>
+    <div>
+        <md-button
+            class="md-xs md-just-icon md-round md-info md-icon-button md-fileinput"
+        >
+            <md-icon>edit</md-icon>
+            <input ref="logoImageInput" type="file" @change="onFileChange" />
+        </md-button>
+    </div>
 </template>
 
 <script>
 
 import CustomersCSV from "@/models/CustomersCSV";
 export default {
-    name: "TablePaginationRemote",
+    name: 'TablePaginationRemote',
     data: () => ({
         users: {
             mdCount: null,
@@ -24,9 +24,9 @@ export default {
     }),
     created() {
         if(this.$store.state.auth.user){
-            this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token).then(user => {
-                console.log("user", user);
-            });
+            this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
+                console.log('user', user)
+            })
         }
     },
     methods: {
@@ -40,18 +40,18 @@ export default {
 
             let reader = new FileReader();
             reader.onload = (e) => {
-                console.log("file", e);
-                return new CustomersCSV({ file: e.target.result, vendorId: "60c21d02cfefec3756b70f17" })
+                console.log('file', e)
+                return new CustomersCSV({ file: e.target.result, vendorId: '60c21d02cfefec3756b70f17' })
                     .save()
                     .then((result) => {
-                        console.log("upload.res", result);
-                    });
-            };
+                        console.log('upload.res', result)
+                    })
+            }
 
             reader.readAsDataURL(file);
         }
     },
-};
+}
 </script>
 
 <style lang="scss" scoped>

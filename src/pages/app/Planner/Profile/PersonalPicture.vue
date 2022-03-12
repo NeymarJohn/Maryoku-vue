@@ -3,24 +3,20 @@
     <div class="picture-container">
       <div class="picture">
         <div v-if="!imageUrl">
-          <img class="avatar" title src="https://static-maryoku.s3.amazonaws.com/storage/img/profile-picture.png">
+          <img class="avatar" title src="https://static-maryoku.s3.amazonaws.com/storage/img/profile-picture.png" />
         </div>
         <div v-else>
-          <img v-model="imageUrl" class="avatar" :src="imageUrl">
+          <img v-model="imageUrl" class="avatar" :src="imageUrl" />
         </div>
-        <input type="file" accept="image/x-png, image/gif, image/jpeg" @change="onFileChange">
+        <input type="file" accept="image/x-png, image/gif, image/jpeg" @change="onFileChange" />
       </div>
       <div v-if="!imageUrl">
-        <button class="description choose-button">
-          Choose Picture
-        </button>
+        <button class="description choose-button">Choose Picture</button>
       </div>
     </div>
     <div v-if="imageUrl" class="remove">
-      <button class="description choose-button" @click="clearImg">
-        <h6 class="description">
-          Remove
-        </h6>
+      <button v-on:click="clearImg" class="description choose-button">
+        <h6 class="description">Remove</h6>
       </button>
     </div>
   </div>
@@ -68,6 +64,7 @@ export default {
   components: {
     Me,
   },
+  mounted() {},
   props: {
     userInfo: Object,
     isLoading: {
@@ -82,10 +79,6 @@ export default {
       alretExceedPictureSize: false,
     };
   },
-  watch: {
-    userInfo(newVal, oldVal) {},
-  },
-  mounted() {},
   methods: {
     onFileChange(event) {
       let file = event.target.files || event.dataTransfer.files;
@@ -103,7 +96,7 @@ export default {
     clearImg() {
       Swal.fire({
         title: "Are you sure you want remove it?",
-        text: "",
+        text: ``,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -165,7 +158,7 @@ export default {
       // sremoveImagehowRemoveConfirmDialog()
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -187,6 +180,9 @@ export default {
       //     this.loaded = true;
       // });
     },
+  },
+  watch: {
+    userInfo(newVal, oldVal) {},
   },
 };
 </script>

@@ -2,14 +2,12 @@
   <div class="requirement-section">
     <div class="d-flex align-start mb-30">
       <div class="d-flex align-center" style="min-width: 300px">
-        <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
+        <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20" />
         <div class="title">
-          <div class="font-size-22 font-bold">
-            Special Requests
-          </div>
+          <div class="font-size-22 font-bold">Special Requests</div>
           <div class="mt-10">
             Would you like to add
-            <br>one of those items?
+            <br />one of those items?
           </div>
         </div>
       </div>
@@ -17,15 +15,13 @@
       <div>
         <template v-for="(property, index) in specialRequirements">
           <div
-            :key="index"
             class="additional-request-tag"
             :class="{ selected: property.isSelected }"
             @click="setRequirement(index)"
+            :key="index"
           >
             {{ property.subCategory }}
-            <md-icon class="icon color-red">
-              add_circle
-            </md-icon>
+            <md-icon class="icon color-red">add_circle</md-icon>
           </div>
         </template>
       </div>
@@ -36,20 +32,18 @@
         :index="idx"
         :data="property"
         @change="handleChangeItem"
-      />
+      ></special-requirement-item>
     </div>
     <div class="anything-else-section">
       <h4>Get me a pink unicorn please</h4>
 
-      <div class="mt-10">
-        We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.
-      </div>
+      <div class="mt-10">We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.</div>
       <div class="anything-else-section-options mt-10">
         <textarea
-          v-model="anythingElse"
           placeholder="Type name of element here..."
+          v-model="anythingElse"
           @input="handleNoteChange"
-        />
+        ></textarea>
       </div>
     </div>
   </div>
@@ -83,19 +77,6 @@ export default {
       anythingElse: this.note,
     };
   },
-  watch: {
-    data: {
-      handler(newVal, oldVal) {
-        if (newVal) {
-          this.getSpecialRequirements();
-        }
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.getSpecialRequirements();
-  },
   methods: {
     getSpecialRequirements() {
       console.log("specialRequirements", this.anythingElse);
@@ -112,6 +93,19 @@ export default {
       this.data[index].isSelected = !this.data[index].isSelected;
       this.$emit("change", this.data);
     },
+  },
+  watch: {
+    data: {
+      handler(newVal, oldVal) {
+        if (newVal) {
+          this.getSpecialRequirements();
+        }
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.getSpecialRequirements();
   },
 };
 </script>

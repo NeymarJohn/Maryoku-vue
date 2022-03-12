@@ -3,12 +3,12 @@
     <div class="white-card">
       <div class="proposal-review-header">
         <carousel
-          :key="`carousel-${coverImage.length}`"
           :items="1"
           :margin="0"
           :dots="false"
           :nav="false"
           class="header-carousel"
+          :key="`carousel-${coverImage.length}`"
         >
           <template slot="prev">
             <span class="prev handle-btn">
@@ -16,12 +16,12 @@
             </span>
           </template>
           <img
+            :src="item"
             v-for="(item, index) in coverImage"
             :key="`carousel-item-${index}`"
-            :src="item"
             class="carousel-image"
-          >
-          <template v-if="coverImage.length > 1" slot="next">
+          />
+          <template slot="next" v-if="coverImage.length > 1">
             <span class="next handle-btn">
               <md-icon>keyboard_arrow_right</md-icon>
             </span>
@@ -31,8 +31,8 @@
           <div class="summary-cont">
             <div class="upper">
               <h3>{{ title }}</h3>
-              <div v-if="warning" class="warning-days">
-                <img :src="`${iconUrl}Asset 575.svg`"> This proposal is 2 days before the original date
+              <div class="warning-days" v-if="warning">
+                <img :src="`${iconUrl}Asset 575.svg`" /> This proposal is 2 days before the original date
               </div>
             </div>
             <ul>
@@ -50,122 +50,120 @@
               </li>
               <li>
                 <div class="time-box">
-                  <div class="time-layer">
-                    <div class="this-offer">
-                      This offer will expire in
-                    </div>
-                    <hr>
-                    <div v-if="showTimerInputs" class="time-display ">
-                      <div class="d-flex justify-content-center">
-                        <div class="days-num">
-                          <input
-                            id="days-input"
-                            v-model="expiredDate"
-                            name="days-input"
-                            type="number"
-                          >
-                          :
+                    <div class="time-layer">
+                        <div class="this-offer">
+                            This offer will expire in
                         </div>
-                        <div class="hours-num">
-                          <input
-                            id="hours-input"
-                            v-model="expiredHours"
-                            name="hours-input"
-                            type="number"
-                          >
-                          :
+                        <hr>
+                        <div v-if="showTimerInputs" class="time-display ">
+                            <div class="d-flex justify-content-center">
+                                <div class="days-num">
+                                    <input
+                                    id="days-input"
+                                    name="days-input"
+                                    type="number"
+                                    v-model="expiredDate"
+                                    />
+                                :
+                                </div>
+                                <div class="hours-num">
+                                    <input
+                                    id="hours-input"
+                                    name="hours-input"
+                                    type="number"
+                                    v-model="expiredHours"
+                                    />
+                                    :
+                                </div>
+                                <div class="mins-num">
+                                    <input
+                                    id="mins-input"
+                                    name="mins-input"
+                                    type="number"
+                                    v-model="expiredMinutes"
+                                    />
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div class="days">
+                                    Days
+                                </div>
+                                <div class="hours">
+                                    Hours
+                                </div>
+                                <div class="mins">
+                                    Mins
+                                </div>
+                            </div>
                         </div>
-                        <div class="mins-num">
-                          <input
-                            id="mins-input"
-                            v-model="expiredMinutes"
-                            name="mins-input"
-                            type="number"
-                          >
+                        <div v-else class="time-display">
+                            <div class="d-flex justify-content-center">
+                                <div class="days-num">
+                                    {{expiredDate}} :
+                                </div>
+                                <div class="hours-num">
+                                    {{expiredHours}} :
+                                </div>
+                                <div class="mins-num">
+                                    {{expiredMinutes}}
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div class="days">
+                                    Days
+                                </div>
+                                <div class="hours">
+                                    Hours
+                                </div>
+                                <div class="mins">
+                                    Mins
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <div class="days">
-                          Days
-                        </div>
-                        <div class="hours">
-                          Hours
-                        </div>
-                        <div class="mins">
-                          Mins
-                        </div>
-                      </div>
-                    </div>
-                    <div v-else class="time-display">
-                      <div class="d-flex justify-content-center">
-                        <div class="days-num">
-                          {{ expiredDate }} :
-                        </div>
-                        <div class="hours-num">
-                          {{ expiredHours }} :
-                        </div>
-                        <div class="mins-num">
-                          {{ expiredMinutes }}
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <div class="days">
-                          Days
-                        </div>
-                        <div class="hours">
-                          Hours
-                        </div>
-                        <div class="mins">
-                          Mins
-                        </div>
-                      </div>
-                    </div>
-                    <button class="timer-btn" @click="changeTimer">
-                      Set timer
-                    </button>
-                    <!-- <div class="timer-btn">
+                        <button class="timer-btn" @click="changeTimer">
+                            Set timer
+                        </button>
+                        <!-- <div class="timer-btn">
                             Set timer
                         </div> -->
-                  </div>
+                    </div>
                 </div>
               </li>
             </ul>
           </div>
         </div>
         <md-button class="maryoku-btn md-vendor change-cover-btn" @click="chooseFiles">
-          <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
+          <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
           <span>Change Cover</span>
         </md-button>
         <input
-          id="coverImage"
           style="display: none"
+          id="coverImage"
           name="attachment"
           type="file"
           multiple="multiple"
           @change="onFileChange"
-        >
+        />
       </div>
       <div class="event-summary-body">
         <div class="cover-letter font-bold-extra mb-50">
           <h4 class="font-bold-extra text-transform-uppercase">
             Dear {{ event.owner ? event.owner.name : "Planner" }},
           </h4>
-          <textarea v-model="personalMessage" />
+          <textarea v-model="personalMessage"> </textarea>
         </div>
 
         <div class="vision-section">
           <div class="font-size-22 font-bold-extra mt-30 mb-20">
-            <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="page-icon">
+            <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="page-icon" />
             Our vision for your event
           </div>
           <div>
             {{ eventVision }}
           </div>
         </div>
-        <div class="font-bold mb-10">
-          Some references to the experience you will get from us
-        </div>
-        <proposal-inspirational-photos class="mb-60" />
+        <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+        <proposal-inspirational-photos class="mb-60"></proposal-inspirational-photos>
         <md-button class="md-simple edit-btn md-purple mb-30" @click="savedItModal = true">
           About us
           <md-icon>navigate_next</md-icon>
@@ -177,32 +175,32 @@
           <h4>Contact Us</h4>
           <ul>
             <li>
-              <img :src="`${iconUrl}Asset 593.svg`">
+              <img :src="`${iconUrl}Asset 593.svg`" />
               <span>{{ vendor.vendorMainEmail }}</span>
             </li>
             <li>
-              <img :src="`${iconUrl}Asset 573.svg`">
+              <img :src="`${iconUrl}Asset 573.svg`" />
               <span>{{ vendor.vendorAddressLine1 }}</span>
             </li>
             <li v-if="vendor.vendorMainPhoneNumber">
-              <img :src="`${iconUrl}Asset 591.svg`">
+              <img :src="`${iconUrl}Asset 591.svg`" />
               <span>{{ vendor.vendorMainPhoneNumber }}</span>
             </li>
           </ul>
         </div>
         <attachment-tag-list
           class="mt-40"
-          :default-value="attachments"
+          :defaultValue="attachments"
           theme="purple"
           @add="addNewAttachment"
           @remove="removeAttachment"
-        />
+        ></attachment-tag-list>
       </div>
     </div>
 
     <div class="pricing-cont">
       <div class="title">
-        <h4><img :src="`${iconUrl}Asset 576.svg`">Pricing & Details</h4>
+        <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
         <p v-if="vendor.vendorCategory === 'venuerental'">
           <template v-if="vendor.notAllowedThirdParty === 1">
             *Work only with our {{ vendor.eventCategory.fullTitle }}
@@ -214,36 +212,26 @@
       </div>
       <p>What would you like to take from our suggested services?</p>
       <proposal-pricing-item
-        v-for="(c, cIndex) in categories"
-        :key="cIndex"
-        :icon-url="iconUrl"
-        :category-icon="`${iconUrl}Asset 614.svg`"
-        :item-type="`price`"
+        :iconUrl="iconUrl"
+        :categoryIcon="`${iconUrl}Asset 614.svg`"
+        :itemType="`price`"
         :requirements="proposalRequest.requirements"
         :category="c"
+        v-for="(c, cIndex) in categories"
+        :key="cIndex"
       />
-      <proposal-pricing-item v-if="bundleDiscount.isApplied" :icon-url="iconUrl" :item-type="`bundle`" />
+      <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
       <div class="total-proposal-price">
         <div class="d-flex justify-content-between">
-          <div class="font-size-22 font-bold">
-            Total
-          </div>
-          <div class="font-size-20 font-bold">
-            ${{ Number(totalPriceOfProposal) | withComma }}
-          </div>
+          <div class="font-size-22 font-bold">Total</div>
+          <div class="font-size-20 font-bold">${{ Number(totalPriceOfProposal) | withComma }}</div>
         </div>
-        <div v-if="bundleDiscount && bundleDiscount.isApplied" class="d-flex justify-content-between">
-          <div class="font-size-16">
-            Before Bundle Offer
-          </div>
-          <div class="font-size-16 crosslinedText">
-            ${{ Number(totalBeforeBundle) | withComma }}
-          </div>
+        <div class="d-flex justify-content-between" v-if="bundleDiscount && bundleDiscount.isApplied">
+          <div class="font-size-16">Before Bundle Offer</div>
+          <div class="font-size-16 crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</div>
         </div>
-        <div v-if="defaultDiscount.percentage" class="d-flex justify-content-between">
-          <div class="font-size-16">
-            Before Discount
-          </div>
+        <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
+          <div class="font-size-16">Before Discount</div>
           <div class="font-size-16">
             ({{ defaultDiscount.percentage }}% off)
             <span class="crosslinedText"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
@@ -252,61 +240,54 @@
       </div>
     </div>
     <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-         class="policy-cont"
-    >
+           class="policy-cont" >
       <div class="title">
-        <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-        Health policy
-      </div>
+          <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
+          Health policy</div>
       <div class="policy-wrapper">
         <template v-if="vendor.healthPolicy">
           <div class="rule font-bold-extra my-20">
-            <span class="color-vendor">COVID 19</span>
-            - Exceptional Policy
+              <span class="color-vendor">COVID 19</span>
+              - Exceptional Policy
           </div>
           <p class="width-66">
-            {{ vendor.healthPolicy }}
+              {{vendor.healthPolicy}}
           </p>
         </template>
         <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-          <div class="mt-30 font-bold-extra">
-            Guaranteed with every staff member:
-          </div>
+          <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
           <div class="md-layout mt-20">
-            <div v-for="option in guaranteedOptions" :key="option.value" class="md-layout-item md-size-30 py-10"
-                 :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}"
-            >
-              <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px">
-                {{ option.label }}
+              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
+                   :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
+                  <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                      <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px">
+                      {{option.label}}
+                  </div>
               </div>
-            </div>
           </div>
         </template>
       </div>
     </div>
     <div class="policy-cont">
       <div class="title">
-        <h4><img :src="`${iconUrl}Asset 594.svg`"> Our Policy</h4>
+        <h4><img :src="`${iconUrl}Asset 594.svg`" /> Our Policy</h4>
       </div>
       <div class="policy-wrapper">
         <div class="policy mb-50">
-          <div v-for="(policy, index) in vendor.yesRules" :key="index" class="mb-10">
+          <div class="mb-10" v-for="(policy, index) in vendor.yesRules" :key="index">
             <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
-            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon">
+            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
           </div>
-          <div v-for="(policy, index) in vendor.noRules" :key="index" class="mb-10">
+          <div class="mb-10" v-for="(policy, index) in vendor.noRules" :key="index">
             <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
-            <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon">
+            <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
           </div>
         </div>
         <div class="cancellation">
-          <h5 class="subtitle">
-            Our cancellation approach
-          </h5>
+          <h5 class="subtitle">Our cancellation approach</h5>
           <div id="Policy">
             <div class="rules">
-              <div v-for="(policy, yIndex) in cancellationData" :key="yIndex" class="rule">
+              <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
                 <div class="item">
                   <span class="font-bold-extra">If</span> {{ policy.notice }}
                   <span class="font-bold-extra">Then</span>
@@ -317,9 +298,7 @@
           </div>
         </div>
         <div class="cancellation">
-          <h5 class="subtitle">
-            Act of God
-          </h5>
+          <h5 class="subtitle">Act of God</h5>
           <div id="Policy">
             <div class="rules">
               <span class="font-bold"> {{ vendor.companyName }}</span>
@@ -330,40 +309,37 @@
           </div>
         </div>
         <div class="cancellation">
-          <h5 class="subtitle">
-            Our Policy
-          </h5>
+          <h5 class="subtitle">Our Policy</h5>
           <div id="Policy">
             <div class="rules">
               <div class="rules">
-                <div v-for="(policy, yIndex) in validPolicy" :key="yIndex" class="rule">
-                  <div class="item">
-                    {{ policy.name }}
-                  </div>
-                  <div v-if="policy.type === 'MultiSelection'" class="item">
-                    <span v-for="(v, vIndex) in policy.value" :key="`policy-${vIndex}`" class="mr-10">{{
+
+                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                  <div class="item">{{ policy.name }}</div>
+                  <div class="item" v-if="policy.type === 'MultiSelection'">
+                    <span class="mr-10" v-for="(v, vIndex) in policy.value" :key="`policy-${vIndex}`">{{
                       `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                     }}</span>
                   </div>
-                  <div v-else-if="policy.type === 'Including'" class="item">
-                    <span v-if="policy.value" class="mr-10"> Yes </span>
-                    <span v-if="!policy.value && policy.cost" class="mr-10"> {{ `$ ${policy.cost}` }} </span>
+                  <div class="item" v-else-if="policy.type === 'Including'">
+                    <span class="mr-10" v-if="policy.value"> Yes </span>
+                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                   </div>
-                  <div v-else class="item">
+                  <div class="item" v-else>
                     <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                     <span v-if="policy.type === 'Boolean'">
-                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`">
-                      <img v-else :src="`${$iconURL}VendorsProposalPage/group-17076.svg`">
+                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
+                      <img v-else :src="`${$iconURL}VendorsProposalPage/group-17076.svg`" />
                       <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                     </span>
                     <span v-else>
-                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`">
-                      <img v-else-if="policy.value === false" :src="`${$iconURL}VendorsProposalPage/group-17076.svg`">
+                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
+                      <img v-else-if="policy.value === false" :src="`${$iconURL}VendorsProposalPage/group-17076.svg`" />
                       <span v-else>{{ policy.value | withComma }}</span>
                     </span>
                     <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
                     <span v-if="policy.isPercentage">%</span>
-                    <span v-if="policy.hasOwnProperty('attendees')" class="ml-50">
+                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                       {{ policy.attendees }} attendees
                     </span>
                   </div>
@@ -371,12 +347,12 @@
               </div>
             </div>
           </div>
-          <div v-if="vendor.vendorCategories[0] == 'venuerental'" class="not-allowed mb-30">
+          <div class="not-allowed mb-30" v-if="vendor.vendorCategories[0] == 'venuerental'">
             <h5>We don't allow these 3rd party vendor:</h5>
             <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
           </div>
         </div>
-        <div id="Rules" class="cancellation pricing-policy-cont">
+        <div class="cancellation pricing-policy-cont" id="Rules">
           <div class="signature-wrapper">
             <div class="half-side">
               <h6>{{ vendor.companyName }}</h6>
@@ -387,29 +363,23 @@
                       <a class @click="uploadVendorSignature">
                         <img
                           :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 559.svg`"
-                        >
+                        />
                         Choose File
                       </a>
-                      <div class="or">
-                        Or
-                      </div>
+                      <div class="or">Or</div>
                       <div class="sign-here">
-                        <vueSignature ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
-                        <button class="save" @click="save">
-                          Save
-                        </button>
-                        <button class="clear" @click="clear">
-                          Clear
-                        </button>
+                        <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
+                        <button class="save" @click="save">Save</button>
+                        <button class="clear" @click="clear">Clear</button>
                       </div>
                       <input
-                        ref="signatureFile"
                         type="file"
                         class="hide"
+                        ref="signatureFile"
                         name="vendorSignature"
                         accept="image/gif, image/jpg, image/png"
                         @change="onUploadVendorSignature"
-                      >
+                      />
                     </div>
                   </div>
                 </template>
@@ -429,7 +399,7 @@
             </div>
             <div class="half-side">
               <h6>Client</h6>
-              <div class="signature-client signature-bidder" />
+              <div class="signature-client signature-bidder"></div>
             </div>
           </div>
         </div>
@@ -456,7 +426,7 @@ import carousel from "vue-owl-carousel";
 import moment from "moment";
 
 export default {
-  name: "ProposalEventSummary",
+  name: "proposal-event-summary",
   components: {
     ProposalPricingItem,
     ProposalInspirationalPhotos,
@@ -494,35 +464,6 @@ export default {
       expiredHours:null,
       expiredMinutes:null,
     };
-  },
-  created() {
-    console.log(this.vendor);
-    //Get attachments from vendor profile,
-    this.$store.commit("vendorProposal/setValue", { key: "attachments", value: this.vendor.attachments });
-  },
-  mounted() {
-    this.savedItModal = false;
-    this.isTimeUp = true;
-    this.categories.push(this.vendor.vendorCategory);
-    this.additionalServices.forEach((service) => {
-      this.categories.push(service);
-    });
-
-    let end = moment(this.$store.state.vendorProposal.expiredDate);
-    let diff = moment.duration(end.diff(new Date()));
-
-    function pad(n) {
-        return (n < 10 && n >= 0) ? ("0" + n) : n;
-    }
-
-    let minutes = diff.asMinutes();
-    this.expiredDate = Math.floor(minutes/24/60);
-    this.expiredDate = pad(this.expiredDate);
-    this.expiredHours = Math.floor(minutes/60%24);
-    this.expiredHours = pad(this.expiredHours);
-    this.expiredMinutes = Math.floor(minutes%60);
-    this.expiredMinutes = pad(this.expiredMinutes);
-
   },
   methods: {
     changeTimer() {
@@ -633,6 +574,35 @@ export default {
       attachments.splice(index, 1);
       this.$store.commit("vendorProposal/setValue", { key: "attachments", value: attachments });
     },
+  },
+  created() {
+    console.log(this.vendor);
+    //Get attachments from vendor profile,
+    this.$store.commit("vendorProposal/setValue", { key: "attachments", value: this.vendor.attachments });
+  },
+  mounted() {
+    this.savedItModal = false;
+    this.isTimeUp = true;
+    this.categories.push(this.vendor.vendorCategory);
+    this.additionalServices.forEach((service) => {
+      this.categories.push(service);
+    });
+
+    let end = moment(this.$store.state.vendorProposal.expiredDate)
+    let diff = moment.duration(end.diff(new Date()));
+
+    function pad(n) {
+        return (n < 10 && n >= 0) ? ("0" + n) : n;
+    }
+
+    let minutes = diff.asMinutes();
+    this.expiredDate = Math.floor(minutes/24/60);
+    this.expiredDate = pad(this.expiredDate);
+    this.expiredHours = Math.floor(minutes/60%24);
+    this.expiredHours = pad(this.expiredHours);
+    this.expiredMinutes = Math.floor(minutes%60);
+    this.expiredMinutes = pad(this.expiredMinutes);
+
   },
   computed: {
     ...mapGetters("vendorProposal", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),

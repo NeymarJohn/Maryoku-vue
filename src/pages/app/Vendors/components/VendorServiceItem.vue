@@ -1,10 +1,8 @@
 <template>
   <div class="vendor-service-item-wrapper">
     <div class="title-cont" @click="collapsed = !collapsed">
-      <div class="title">
-        {{ serviceItem.name }}
-      </div>
-      <div v-if="!collapsed && serviceItem.name !== 'Custom service'" class="help d-flex justify-content-end align-center mr-20">
+      <div class="title">{{ serviceItem.name }}</div>
+      <div class="help d-flex justify-content-end align-center mr-20" v-if="!collapsed && serviceItem.name !== 'Custom service'">
         <div v-if="serviceItem.name !== 'Sustainability, Inclusion and Diversity'">
           Check all of the services that are included in your initial offer.
         </div>
@@ -18,29 +16,27 @@
             classes: 'vendor-tooltip-theme',
           }"
           :src="`${iconUrl}Group 5522 (2).svg`"
-        >
+        />
       </div>
       <div class="arrow" :class="{ expanded: !collapsed }" @click="collapsed = !collapsed">
         <img
           class="mt-5"
           :src="theme === 'pink' ? `${iconUrl}Asset 519.svg` : `${$iconURL}common/arrow-right-purple.svg`"
-        >
+        />
       </div>
     </div>
-    <div v-if="!collapsed" class="items-cont">
-      <div v-for="(sub, sIndex) in serviceItem.subCategories" :key="sIndex" class="items">
-        <div class="sub-category-title">
-          {{ sub.name }}
-        </div>
-        <div v-for="(item, index) in sub.items" :key="index" class="checklist">
+    <div class="items-cont" v-if="!collapsed">
+      <div class="items" v-for="(sub, sIndex) in serviceItem.subCategories" :key="sIndex">
+        <div class="sub-category-title">{{ sub.name }}</div>
+        <div class="checklist" v-for="(item, index) in sub.items" :key="index">
           <vendor-checkbox
-            v-model="item.value"
             :category="serviceItem.name"
             :item="item"
             :label="item.name"
             :vendor="vendor"
             :service="service"
             :theme="theme"
+            v-model="item.value"
           />
         </div>
       </div>
@@ -52,11 +48,7 @@
 import VendorCheckbox from "./VendorCheckbox.vue";
 
 export default {
-  name: "VendorServiceItem",
-  components: {
-    VendorCheckbox,
-  },
-  filters: {},
+  name: "vendor-service-item",
   props: {
     serviceItem: Object,
     vendorCategory: String,
@@ -67,6 +59,9 @@ export default {
       default: "red",
     },
   },
+  components: {
+    VendorCheckbox,
+  },
   data() {
     return {
       collapsed: true,
@@ -74,8 +69,6 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
-  computed: {},
-  watch: {},
   created() {},
   mounted() {},
   methods: {
@@ -87,6 +80,9 @@ export default {
       }
     },
   },
+  computed: {},
+  filters: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

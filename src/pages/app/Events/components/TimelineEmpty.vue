@@ -1,15 +1,13 @@
 <template>
   <drop
-    style="height: 100%"
-    class="timeline-empty-drop"
-    :class="{ dropping: isHover }"
     @drop="handleDrop(...arguments)"
     @dragenter="hadleDragEnter"
     @dragleave="handleDragLeave"
+    style="height: 100%"
+    class="timeline-empty-drop"
+    :class="{ dropping: isHover }"
   >
-    <div v-if="placeHolder" class="timeline-empty-start">
-      Pleas drop here one of timeline slots
-    </div>
+    <div v-if="placeHolder" class="timeline-empty-start">Pleas drop here one of timeline slots</div>
     <div v-else class="timeline-empty-item">
       <div class="timeline-image" :style="hoverStyle">
         <md-icon>add</md-icon>
@@ -48,17 +46,6 @@ export default {
       droppingBlock: {},
     };
   },
-  computed: {
-    hoverStyle() {
-      if (!this.isHover) {
-        return "";
-      }
-      return `border-color: ${this.droppingBlock.color}; background-color: ${hexToRgbA(
-        this.droppingBlock.color,
-        0.25,
-      )}`;
-    },
-  },
   created() {},
   methods: {
     handleDrop() {
@@ -75,6 +62,17 @@ export default {
     },
     handleDragLeave(data) {
       this.isHover = false;
+    },
+  },
+  computed: {
+    hoverStyle() {
+      if (!this.isHover) {
+        return "";
+      }
+      return `border-color: ${this.droppingBlock.color}; background-color: ${hexToRgbA(
+        this.droppingBlock.color,
+        0.25,
+      )}`;
     },
   },
 };

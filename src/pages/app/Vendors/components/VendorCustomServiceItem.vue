@@ -1,13 +1,13 @@
 <template>
   <div>
-    <form style="display: flex; justify-content: space-between;" @submit.prevent>
+    <form @submit.prevent style="display: flex; justify-content: space-between;">
       <div>
-        <label class="titles" v-text="'Add Services'" />
-        <input v-model="addService" type="text" style="min-width:555px" @input="addService = $event.target.value">
+        <label class="titles" v-text="'Add Services'"></label>
+        <input @input="addService = $event.target.value" v-model="addService" type="text" style="min-width:555px" />
       </div>
 
       <div>
-        <label class="titles" v-text="'Price'" />
+        <label class="titles" v-text="'Price'"></label>
         <money
           v-model="price"
           v-bind="{
@@ -25,25 +25,23 @@
 
       <div style="margin-top: 25px; width: 166px">
         <input
-          id="check"
           v-model="virtualService"
           type="checkbox"
+          id="check"
           class="custom-checkbox"
-          style="cursor: pointer"
           @input="virtualService = $event.target.checked"
-        >
-        <label class="virtual-services service" for="check" v-text="'Virtual services'" />
+          style="cursor: pointer"
+        />
+        <label class="virtual-services service" v-text="'Virtual services'" for="check"></label>
       </div>
 
-      <button class="button-add-custom-service" @click="addedService">
-        Add
-      </button>
+      <button @click="addedService" class="button-add-custom-service">Add</button>
     </form>
 
     <div>
       <div v-for="(service, index) in services" :key="service.id" style="background-color: #f7f7f7;">
-        <div v-if="editingItem == service.id" class="wrapper-service">
-          <input v-model="services[index].name" type="text" style="min-width: 555px; height: 20px; margin-top: 18px;">
+        <div class="wrapper-service" v-if="editingItem == service.id">
+          <input type="text" style="min-width: 555px; height: 20px; margin-top: 18px;" v-model="services[index].name" />
           <money
             v-model="services[index].price"
             v-bind="{
@@ -58,63 +56,63 @@
           />
           <span class="service">
             <input
-              id="newCheck"
               v-model="services[index].checked"
               type="checkbox"
               class="custom-checkbox"
+              id="newCheck"
               style="cursor: pointer"
-            >
+            />
             <label
               class="virtual-services service"
+              v-text="'Virtual services'"
               for="newCheck"
               style="margin: 0; width: 166px"
-              v-text="'Virtual services'"
-            />
+            ></label>
           </span>
           <span style="height: 25px; margin-top: 30px; min-width: 104.22px; text-align: end">
             <img
-              :id="service.id"
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 562.svg"
               width="22"
               height="22"
               style="cursor: pointer"
+              :id="service.id"
               :name="service.name"
               :price="service.price"
               :checked="service.checked"
               @click="saveEditItem"
-            >
+            />
             <img
-              :id="service.id"
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22420.svg"
               style="cursor: pointer; margin-left: 25px"
               @click="removeService"
-            >
+              :id="service.id"
+            />
           </span>
         </div>
 
-        <div v-else class="wrapper-service">
+        <div class="wrapper-service" v-else>
           <span class="service" style="min-width: 555px">{{ service.name }}</span>
           <span class="service" style="font-weight: normal; text-align: center;">{{ `$ ${service.price}` }}</span>
           <span class="service">
-            <input v-model="service.checked" type="checkbox" class="custom-checkbox">
-            <label v-text="'Virtual services'" />
+            <input v-model="service.checked" type="checkbox" class="custom-checkbox" />
+            <label v-text="'Virtual services'"></label>
           </span>
           <span style="height: 25px; margin-top: 30px; min-width: 104.22px; text-align: end">
             <img
-              :id="service.id"
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22425.svg"
               style="cursor: pointer"
+              :id="service.id"
               :name="service.name"
               :price="service.price"
               :checked="service.checked"
               @click="editItem"
-            >
+            />
             <img
-              :id="service.id"
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/VirtualServices/Group 22420.svg"
               style="cursor: pointer; margin-left: 25px"
               @click="removeService"
-            >
+              :id="service.id"
+            />
           </span>
         </div>
       </div>
@@ -123,10 +121,10 @@
 </template>
 
 <script>
-import { Money } from "v-money";
+import { Money } from 'v-money'
 
 export default {
-  name: "VendorCustomServiceItem",
+  name: 'vendor-custom-service-item',
   components: {
     Money,
   },
@@ -140,13 +138,13 @@ export default {
       editingItemChecked: null,
       editingChecked: false,
       editingItemPrice: null,
-      editingPrice: "0.00",
+      editingPrice: '0.00',
       editingItem: null,
-      editingInput: "",
+      editingInput: '',
       collapsed: true,
-      addService: "",
-      price: "0.00",
-    };
+      addService: '',
+      price: '0.00',
+    }
   },
   mounted () {
     this.services = this.vendor.services.customService ?
@@ -156,45 +154,45 @@ export default {
 
   methods: {
     addedService ({ target }) {
-      if (!target.form[0].value || target.form[1].value === "$ 0.00") {
-        return;
+      if (!target.form[0].value || target.form[1].value === '$ 0.00') {
+        return
       }
       const newService = {
         id: Date.now(),
         name: this.addService,
         price: this.price.toFixed(2),
         checked: this.virtualService,
-      };
-      this.services.push(newService);
-      this.addService = "";
-      this.price = "";
-      this.virtualService = false;
+      }
+      this.services.push(newService)
+      this.addService = ''
+      this.price = ''
+      this.virtualService = false
       this.updateRootState();
     },
     removeService ({ target }) {
       this.services = this.services.filter(
         service => service.id != Number(target.id),
-      );
-      this.updateRootState();
+      )
+      this.updateRootState()
     },
     editItem ({ target }) {
-      this.editingItem = target.attributes.id.value;
+      this.editingItem = target.attributes.id.value
     },
     saveEditItem ({ target }) {
       this.services = this.services.map(service => {
         if (service.id == Number(target.id)) {
-          return {...service, price: service.price.toFixed(2)};
+          return {...service, price: service.price.toFixed(2)}
         }
-        return service;
+        return service
       });
-      this.editingItem = "";
-      this.updateRootState();
+      this.editingItem = ''
+      this.updateRootState()
     },
     updateRootState() {
-      this.$root.$emit("update-vendor-value", "services.customService", {data: this.services});
+      this.$root.$emit('update-vendor-value', `services.customService`, {data: this.services})
     }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

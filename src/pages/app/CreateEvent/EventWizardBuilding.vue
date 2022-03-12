@@ -1,40 +1,36 @@
 <template>
   <div class="event-wizard-building">
     <div class="container">
-      <div class="title">
-        3/5
-      </div>
-      <selected-value :value="publicEventData.location || 'Not Sure'" property="location" />
+      <div class="title">3/5</div>
+      <selected-value :value="publicEventData.location || 'Not Sure'" property="location"></selected-value>
       <div class="event-building event-basic-info">
         <div class="setting-title mt-70">
-          <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
+          <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
           Staying in or in need of some fresh air?
         </div>
-        <div class="text-center mt-2">
-          Is it an indoor or outdoor event?
-        </div>
+        <div class="text-center mt-2">Is it an indoor or outdoor event?</div>
         <div class="mt-3 types">
           <div
+            class="type-card"
+            @click="addType(type.value)"
+            :class="{ selected: isSelected(type.value) }"
             v-for="type in types"
             :key="type.value"
-            class="type-card"
-            :class="{ selected: isSelected(type.value) }"
-            @click="addType(type.value)"
           >
             <div>
-              <img :src="getIconUrl(type.value)">
+              <img :src="getIconUrl(type.value)" />
             </div>
             <div>
               {{ type.name }}
             </div>
             <div>
-              <md-checkbox v-model="selectedTypes" class="md-checkbox-circle md-red" :value="type.value" />
+              <md-checkbox class="md-checkbox-circle md-red" v-model="selectedTypes" :value="type.value"></md-checkbox>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <wizard-status-bar :current-step="3" @next="goToNext" @skip="skip" @back="back" />
+    <wizard-status-bar :currentStep="3" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
   </div>
 </template>
 
@@ -107,13 +103,13 @@ export default {
     },
     goToNext() {
       this.setEventProperty({ key: "places", actualValue: this.selectedTypes });
-      this.$router.push({ path: "/event-wizard-type" });
+      this.$router.push({ path: `/event-wizard-type` });
     },
     skip() {
-      this.$router.push({ path: "/event-wizard-type" });
+      this.$router.push({ path: `/event-wizard-type` });
     },
     back() {
-      this.$router.push({ path: "/event-wizard-location" });
+      this.$router.push({ path: `/event-wizard-location` });
     },
     getIconUrl(value) {
       if (value === "INDOORS" || value === "OUTDOORS") {

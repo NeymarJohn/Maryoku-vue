@@ -9,23 +9,23 @@
           <template v-if="item.type == 'Boolean'">
             <div class="item" @click="setPolicy(null, 'option', item.name, true)">
               <img
-                v-if="item.value"
                 :src="theme === 'pink' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
-              >
-              <span v-else class="unchecked" />
+                v-if="item.value"
+              />
+              <span class="unchecked" v-else></span>
               Yes
             </div>
             <div class="item" @click="setPolicy(null, 'option', item.name, false)">
               <img
-                v-if="!item.value"
                 :src="theme === 'pink' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
-              >
-              <span v-else class="unchecked" />
+                v-if="!item.value"
+              />
+              <span class="unchecked" v-else></span>
               No
             </div>
           </template>
           <template v-if="item.type == String">
-            <input v-model="item.value" class="text-center string-field" @input="setPolicy">
+            <input class="text-center string-field" v-model="item.value" @input="setPolicy" />
             <!--<div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">-->
             <!--<a class="note">+ Add Note</a>-->
             <!--</div>-->
@@ -36,7 +36,7 @@
             <!--</div>-->
           </template>
           <template v-if="item.type == 'Selection'">
-            <select v-model="item.value" class="unit-select">
+            <select class="unit-select" v-model="item.value">
               <option v-for="(option, index) in item.options" :key="index" :value="option">
                 {{ option }}
               </option>
@@ -45,18 +45,18 @@
           <template v-if="item.type == 'Including'">
             <div class="item" @click="setPolicy(null, 'Including', item.name, true)">
               <img
-                v-if="item.value"
                 :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
-              >
-              <span v-else class="unchecked" />
+                v-if="item.value"
+              />
+              <span class="unchecked" v-else></span>
               Included
             </div>
             <div class="item" @click="setPolicy(null, 'Including', item.name, false)">
               <img
-                v-if="!item.value"
                 :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
-              >
-              <span v-else class="unchecked" />
+                v-if="!item.value"
+              />
+              <span class="unchecked" v-else></span>
               Not Included
             </div>
           </template>
@@ -67,96 +67,92 @@
               :categories="item.options"
               :multiple="true"
               @change="changeCategorySelector(...arguments)"
-            />
+            ></category-selector>
           </template>
         </div>
-        <div v-if="item.type == 'Number'" class="bottom no-margin">
+        <div class="bottom no-margin" v-if="item.type == 'Number'">
           <template v-if="item.noSuffix">
             <div>
               <input
-                v-model="item.value"
                 type="number"
                 class="text-center number-field"
                 placeholder="00.00"
+                v-model="item.value"
                 @input="setPolicy"
-              >
+              />
             </div>
           </template>
           <template v-else>
             <span v-if="item.isPercentage">Rate (%)</span>
             <span v-else>Extra Payment</span>
-            <br>
-            <div v-if="item.isPercentage" class="suffix percentage">
-              <input v-model="item.value" type="number" placeholder="00.00" @input="setPolicy">
+            <br />
+            <div class="suffix percentage" v-if="item.isPercentage">
+              <input type="number" placeholder="00.00" v-model="item.value" @input="setPolicy" />
             </div>
-            <div v-else class="suffix">
-              <input v-model="item.value" type="number" placeholder="00.00" @input="setPolicy">
+            <div class="suffix" v-else>
+              <input type="number" placeholder="00.00" v-model="item.value" @input="setPolicy" />
             </div>
           </template>
         </div>
-        <div v-if="item.type == 'Including' && !item.value" class="bottom mt-0 ml-40">
+        <div class="bottom mt-0 ml-40" v-if="item.type == 'Including' && !item.value">
           <span>Extra Payment</span>
-          <br>
+          <br />
           <div class="suffix">
             <input
-              v-model="item.cost"
               type="number"
               class="text-center number-field"
               placeholder="00.00"
+              v-model="item.cost"
               @input="setPolicy"
-            >
+            />
           </div>
         </div>
-        <div v-if="item.type == 'Boolean' && item.value && item.hasOwnProperty('cost')" class="bottom mt-0 ml-40">
+        <div class="bottom mt-0 ml-40" v-if="item.type == 'Boolean' && item.value && item.hasOwnProperty('cost')">
           <template v-if="item.noSuffix">
             <div>
               <input
-                v-model="item.cost"
                 type="number"
                 class="text-center number-field"
                 placeholder="00.00"
+                v-model="item.cost"
                 @input="setPolicy"
-              >
+              />
             </div>
           </template>
           <template v-else>
             <span v-if="item.isPercentage">Rate (%)</span>
             <span v-else>Extra Payment</span>
-            <br>
-            <div v-if="item.isPercentage" class="suffix percentage">
-              <input v-model="item.cost" type="number" placeholder="00.00" @input="setPolicy">
+            <br />
+            <div class="suffix percentage" v-if="item.isPercentage">
+              <input type="number" placeholder="00.00" v-model="item.cost" @input="setPolicy" />
             </div>
-            <div v-else class="suffix">
-              <input v-model="item.cost" type="number" placeholder="00.00" @input="setPolicy">
+            <div class="suffix" v-else>
+              <input type="number" placeholder="00.00" v-model="item.cost" @input="setPolicy" />
             </div>
           </template>
         </div>
       </div>
-      <div v-if="item.hasComment" class="mt-0 ml-40 add-note">
+      <div class="mt-0 ml-40 add-note" v-if="item.hasComment">
         <div class="item">
           <div
             class="cursor-pointer"
-            :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"
             @click="notable = !notable"
+            :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"
           >
             <template v-if="!notable">
-              <md-icon :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }">
-                add
-              </md-icon>
+              <md-icon :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"> add </md-icon>
               Add Note
             </template>
             <template v-else>
-              <md-icon :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }">
-                remove
-              </md-icon>
+              <md-icon :class="{ 'color-purple': theme === 'red', 'color-purple': theme === 'purple' }"> remove </md-icon>
               Add Note
             </template>
           </div>
           <textarea
             v-if="item.hasComment && notable"
-            v-model="item.desc"
             class="desc"
             rows="3"
+            v-model="item.desc"
             :placeholder="item.placeholder ? item.placeholder : `Except from the parking area`"
           />
         </div>
@@ -167,7 +163,7 @@
 <script>
 import CategorySelector from "@/components/Inputs/CategorySelector";
 export default {
-  name: "VendorPolicyItem",
+  name: "vendor-policy-item",
   components: [CategorySelector],
   props: {
     item: {
@@ -185,12 +181,6 @@ export default {
       notable: false,
     };
   },
-  watch: {
-    item: {
-      handler() {},
-      deep: true,
-    },
-  },
   methods: {
     setPolicy(e, type, name, value) {
       console.log("type", type);
@@ -207,6 +197,12 @@ export default {
       // console.log(type, item, value);
       this.item.value = value;
       this.$emit("update", this.item);
+    },
+  },
+  watch: {
+    item: {
+      handler() {},
+      deep: true,
     },
   },
 };

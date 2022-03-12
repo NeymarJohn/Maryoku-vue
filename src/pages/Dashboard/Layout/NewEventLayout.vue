@@ -2,18 +2,18 @@
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <div class="main-panel" style="height: 50%">
       <div
-        v-if="renderChild"
         :class="{ content: !$route.meta.hideContent }"
-        style="padding-right: 0"
         @click="toggleSidebar"
+        style="padding-right: 0"
+        v-if="renderChild"
       >
         <!-- your content here -->
-        <side-bar :event="eventData" />
+        <side-bar :event="eventData"></side-bar>
         <zoom-center-transition :duration="200" mode="out-in">
-          <router-view />
+          <router-view></router-view>
         </zoom-center-transition>
       </div>
-      <div v-else class="error-page">
+      <div class="error-page" v-else>
         <span v-if="showError">We cannot get your event. Please check your link or try again later.</span>
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
@@ -38,31 +38,27 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour">
-                <md-icon style="color: white !important">
-                  close
-                </md-icon>
-              </md-button>
+              <md-button class="md-simple md-icon-button" @click="stopTour"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
               <md-button
                 v-if="tour.isLast"
+                @click="tour.finish"
                 class="md-simple md-red maryoku-btn"
                 style="background-color: white !important"
-                @click="tour.finish"
+                >Got it</md-button
               >
-                Got it
-              </md-button>
               <md-button
                 v-else
+                @click="tour.nextStep"
                 class="md-simple md-red maryoku-btn"
                 style="background-color: white !important"
-                @click="tour.nextStep"
+                >Keep going</md-button
               >
-                Keep going
-              </md-button>
             </div>
           </v-step>
         </fade-transition>
@@ -88,31 +84,27 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour">
-                <md-icon style="color: white !important">
-                  close
-                </md-icon>
-              </md-button>
+              <md-button class="md-simple md-icon-button" @click="stopTour"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
               <md-button
                 v-if="tour.isLast"
+                @click="tour.finish"
                 class="md-simple md-red maryoku-btn"
                 style="background-color: white !important"
-                @click="tour.finish"
+                >Got it</md-button
               >
-                Got it
-              </md-button>
               <md-button
                 v-else
+                @click="tour.nextStep"
                 class="md-simple md-red maryoku-btn"
                 style="background-color: white !important"
-                @click="tour.nextStep"
+                >Keep going</md-button
               >
-                Keep going
-              </md-button>
             </div>
           </v-step>
         </fade-transition>
@@ -138,11 +130,9 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour">
-                <md-icon style="color: white !important">
-                  close
-                </md-icon>
-              </md-button>
+              <md-button class="md-simple md-icon-button" @click="stopTour"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
@@ -150,20 +140,18 @@
 
               <md-button
                 v-if="tour.isLast"
+                @click="tour.finish"
                 class="md-simple md-red maryoku-btn"
                 style="background-color: white !important"
-                @click="tour.finish"
+                >Got it</md-button
               >
-                Got it
-              </md-button>
               <md-button
                 v-else
+                @click="tour.nextStep"
                 class="md-simple md-red maryoku-btn"
                 style="background-color: white !important"
-                @click="tour.nextStep"
+                >Keep going</md-button
               >
-                Keep going
-              </md-button>
             </div>
           </v-step>
         </fade-transition>
@@ -190,21 +178,15 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour">
-                <md-icon style="color: white !important">
-                  close
-                </md-icon>
-              </md-button>
+              <md-button class="md-simple md-icon-button" @click="stopTour"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label dark">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
-              <md-button v-if="tour.isLast" class="md-red maryoku-btn" @click="tour.finish">
-                Got it
-              </md-button>
-              <md-button v-else class="md-red maryoku-btn" @click="tour.nextStep">
-                Keep going
-              </md-button>
+              <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
+              <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
           </v-step>
         </fade-transition>
@@ -231,21 +213,15 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour">
-                <md-icon style="color: white !important">
-                  close
-                </md-icon>
-              </md-button>
+              <md-button class="md-simple md-icon-button" @click="stopTour"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label dark">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
-              <md-button v-if="tour.isLast" class="md-red maryoku-btn" @click="tour.finish">
-                Got it
-              </md-button>
-              <md-button v-else class="md-red maryoku-btn" @click="tour.nextStep">
-                Keep going
-              </md-button>
+              <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
+              <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
           </v-step>
         </fade-transition>
@@ -515,7 +491,7 @@ export default {
         this.initData();
       })
       .catch(() => {
-        this.$router.push({ path: "/signin" });
+        this.$router.push({ path: `/signin` });
         return;
       });
   },

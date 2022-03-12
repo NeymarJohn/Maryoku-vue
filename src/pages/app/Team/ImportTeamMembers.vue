@@ -1,12 +1,12 @@
 <template>
   <div class="import-team-members">
-    <div container-class=" lg" @close="noticeModalHide">
+    <div @close="noticeModalHide" container-class=" lg">
       <div slot="body">
         <div class="md-layout-item">
           <md-card>
             <md-card-header class="md-card-header-icon md-card-header-blue">
               <div class="card-icon" style="padding: 12px">
-                <i class="fa fa-upload" />
+                <i class="fa fa-upload"></i>
               </div>
               <h4 class="title profile-title">
                 <span>Upload Members</span>
@@ -20,38 +20,36 @@
                 <div
                   class="md-lg md-theme-default"
                   style="border-radius: 6px"
-                  :class="{ active: currentStep === 1 }"
+                  v-bind:class="{ active: currentStep === 1 }"
                 >
-                  <span class="fa fa-upload" />
-                  <br>Upload File
+                  <span class="fa fa-upload"></span>
+                  <br />Upload File
                 </div>
                 <div
                   class="md-lg md-theme-default"
                   style="border-radius: 6px"
-                  :class="{ active: currentStep === 2 }"
+                  v-bind:class="{ active: currentStep === 2 }"
                 >
-                  <span class="fa fa-edit" />
-                  <br>Assign Columns
+                  <span class="fa fa-edit"></span>
+                  <br />Assign Columns
                 </div>
                 <div
                   class="md-lg md-theme-default"
                   style="border-radius: 6px"
-                  :class="{ active: currentStep === 3 }"
+                  v-bind:class="{ active: currentStep === 3 }"
                 >
-                  <span class="fa fa-list-alt" />
-                  <br>View Results
+                  <span class="fa fa-list-alt"></span>
+                  <br />View Results
                 </div>
               </div>
               <div class="md-layout">
                 <div class="md-layout-item">
-                  <div v-if="currentStep === 1" class="step1" style="text-align: center">
+                  <div class="step1" v-if="currentStep === 1" style="text-align: center">
                     <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C" />
-                    <h3 class="title">
-                      Start by uploading a CSV file containing your list of Members
-                    </h3>
+                    <h3 class="title">Start by uploading a CSV file containing your list of Members</h3>
                     <h5>
                       Don't worry about format and columns
-                      <br>in the next step you will have the chance to easily assign column names.
+                      <br />in the next step you will have the chance to easily assign column names.
                     </h5>
                     <div class="main-upload-box">
                       <drop @drop="handleDrop">
@@ -65,12 +63,12 @@
                               <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
                               <div class="col-sm-9">
                                 <input
-                                  id="csv_file"
                                   type="file"
+                                  id="csv_file"
+                                  @change="(e) => sendCSVFile(e.target.files[0])"
                                   name="csv_file"
                                   class="csv_file form-control"
-                                  @change="(e) => sendCSVFile(e.target.files[0])"
-                                >
+                                />
                               </div>
                             </div>
                           </div>
@@ -78,49 +76,44 @@
                       </drop>
                     </div>
                   </div>
-                  <div v-if="currentStep === 2" class="step2" style="text-align: center">
+                  <div class="step2" v-if="currentStep === 2" style="text-align: center">
                     <div class="table-section">
-                      <h3 class="title">
-                        Great, now you can assign columns names to the columns from your file
-                      </h3>
+                      <h3 class="title">Great, now you can assign columns names to the columns from your file</h3>
                       <h5>
                         Each column header has a dropdown list of possible columns to assign, choose the one that
                         reflects your data as much as possible.
                       </h5>
-                      <md-table v-if="parseCSV" class="border-table">
+                      <md-table class="border-table" v-if="parseCSV">
                         <md-table-row style="border-top: none">
                           <md-table-head
-                            v-for="(column, index) in parseCSV.columns"
                             v-if="column !== ''"
+                            v-for="(column, index) in parseCSV.columns"
                             :key="index"
-                            :class="{ active: sortKey === index }"
                             @click="sortBy(index)"
+                            :class="{ active: sortKey === index }"
                           >
                             <md-field>
                               <md-select id="remove-border" v-model="databaseMemberColumns[index].value" name="select">
                                 <md-option
-                                  v-for="(item, index) in databaseMemberColumns"
                                   v-if="item !== ''"
-                                  :key="index"
+                                  v-for="(item, index) in databaseMemberColumns"
                                   :value="item.name"
+                                  :key="index"
+                                  >{{ item.displayName }}</md-option
                                 >
-                                  {{ item.displayName }}
-                                </md-option>
                               </md-select>
                             </md-field>
                           </md-table-head>
                         </md-table-row>
                         <md-table-row v-for="(row, rowIndex) in parseCSV.rows" :key="rowIndex">
-                          <md-table-cell v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">
-                            {{
-                              row[column]
-                            }}
-                          </md-table-cell>
+                          <md-table-cell v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">{{
+                            row[column]
+                          }}</md-table-cell>
                         </md-table-row>
                       </md-table>
                     </div>
                   </div>
-                  <div v-if="currentStep === 3" class="step3">
+                  <div class="step3" v-if="currentStep === 3">
                     <h3>Awesome, your Members list is uploaded</h3>
                     <h5>You can review the results of the process here.</h5>
                     <p>Rows processed: {{ finalResult.processed }}</p>
@@ -133,12 +126,10 @@
             <md-card-actions v-if="currentStep > 1">
               <div class="md-layout">
                 <div class="md-layout-item md-medium-size-100 md-xsmall-size-100">
-                  <button v-if="currentStep === 2" class="md-button next-btn" @click="goToStep(currentStep + 1)">
+                  <button class="md-button next-btn" v-if="currentStep === 2" v-on:click="goToStep(currentStep + 1)">
                     NEXT
                   </button>
-                  <button v-if="currentStep === 3" class="md-button next-btn" @click="closeModal">
-                    FINISH
-                  </button>
+                  <button class="md-button next-btn" v-if="currentStep === 3" v-on:click="closeModal">FINISH</button>
                 </div>
               </div>
             </md-card-actions>
@@ -169,11 +160,6 @@ export default {
     draggable,
     Drag,
     Drop,
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    },
   },
   data() {
     return {
@@ -306,6 +292,11 @@ export default {
   },
   created() {
     this.$store.registerModule("MembersVuex", vendorsModule);
+  },
+  filters: {
+    capitalize: function (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    },
   },
   methods: {
     ...mapMutations("MembersVuex", ["setFileToState"]),

@@ -2,9 +2,7 @@
   <modal class="vendor-create-event">
     <template slot="header">
       <div class="add-category-model__header">
-        <h2 class="font-size-20 font-bold-extra">
-          Give us a few details of the event
-        </h2>
+        <h2 class="font-size-20 font-bold-extra">Give us a few details of the event</h2>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
@@ -12,151 +10,139 @@
     </template>
     <template slot="body">
       <div class="position-relative">
-        <Loader :active="isLoading" page="vendor" />
+        <Loader :active="isLoading" page="vendor"></Loader>
         <div class="row">
-          <p class="mb-5 text-left text-bold">
-            Date Of The Event
-          </p>
+          <p class="mb-5 text-left text-bold">Date Of The Event</p>
           <maryoku-input
-            v-model="date"
             :value="date"
             class="form-input width-50"
             placeholder="Choose date…"
-            input-style="date"
+            inputStyle="date"
+            v-model="date"
             theme="purple"
-          />
+          ></maryoku-input>
         </div>
         <div class="md-layout mt-30">
           <div class="md-layout-item md-size-50 p-0">
             <p class="mb-5 text-left text-bold">
-              <img :src="`${iconUrl}Asset 522.svg`" class="mr-10" width="16">From
+              <img :src="`${iconUrl}Asset 522.svg`" class="mr-10" width="16" />From
             </p>
             <div class="event-time d-flex align-center">
               <vue-timepicker
-                v-model="startTime"
                 manual-input
                 input-class="time-class"
                 hide-dropdown
                 format="hh:mm"
+                v-model="startTime"
                 hide-clear-button
               />
               <div class="am-field" @click="updateStartA()">
-                <input v-model="amPack.start" type="text" readonly>
+                <input type="text" v-model="amPack.start" readonly />
               </div>
             </div>
           </div>
           <div class="md-layout-item md-size-50 p-0">
-            <p class="mb-5 text-left text-bold">
-              <img class="mr-10" :src="`${iconUrl}Asset 522.svg`" width="16">To
-            </p>
+            <p class="mb-5 text-left text-bold"><img class="mr-10" :src="`${iconUrl}Asset 522.svg`" width="16" />To</p>
             <div class="event-time d-flex align-center">
               <vue-timepicker
-                v-model="endTime"
                 manual-input
                 input-class="time-class"
                 hide-dropdown
                 format="hh:mm"
+                v-model="endTime"
                 hide-clear-button
               />
               <div class="am-field" @click="updateEndA()">
-                <input v-model="amPack.end" type="text" readonly>
+                <input type="text" v-model="amPack.end" readonly />
               </div>
             </div>
           </div>
         </div>
         <div class="md-layout mt-30">
           <div class="md-layout-item md-size-50 p-0 text-left">
-            <md-checkbox v-model="isRegisteredCustomer" class="md-simple md-checkbox-circle md-vendor" :value="true">
+            <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
               Selection from the customer list
             </md-checkbox>
           </div>
           <div class="md-layout-item md-size-50 p-0 text-left">
-            <md-checkbox v-model="isRegisteredCustomer" class="md-simple md-checkbox-circle md-vendor" :value="false">
+            <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="false">
               Unregistered customer
             </md-checkbox>
           </div>
         </div>
-        <div v-if="isRegisteredCustomer" class="mt-30 text-left">
+        <div class="mt-30 text-left" v-if="isRegisteredCustomer">
           <label class="font-bold">Company / Customer Name *</label>
           <autocomplete
             class="width-50 mt-5 md-purple medium-selector"
             placeholder="Type name of customer here..."
             :options="customers"
-            :selected-value="selectedCustomer"
+            :selectedValue="selectedCustomer"
             :label="['companyName', 'name']"
             @change="selectCustomer"
-          />
+          ></autocomplete>
         </div>
         <div v-else class="text-left">
           <div class="mt-30 text-left">
             <label class="font-bold">Company Name</label>
-            <maryoku-input v-model="company" input-style="company" class="width-50 mt-5 form-input" />
+            <maryoku-input inputStyle="company" class="width-50 mt-5 form-input" v-model="company"></maryoku-input>
           </div>
           <div class="mt-30 text-left">
             <label class="font-bold">Customer Name</label>
-            <maryoku-input v-model="customer" input-style="username" class="width-50 mt-5 form-input" />
+            <maryoku-input inputStyle="username" class="width-50 mt-5 form-input" v-model="customer"></maryoku-input>
           </div>
           <div class="mt-30 text-left">
             <label class="font-bold">Email *</label>
-            <maryoku-input v-model="email" input-style="email" class="width-50 mt-5 form-input" />
+            <maryoku-input inputStyle="email" class="width-50 mt-5 form-input" v-model="email"></maryoku-input>
           </div>
-          <md-checkbox v-model="addToCustomerList" class="md-vendor">
-            Add this customer to your regular customer list
-          </md-checkbox>
+          <md-checkbox v-model="addToCustomerList" class="md-vendor"
+            >Add this customer to your regular customer list</md-checkbox
+          >
         </div>
         <div class="text-left mt-30">
           <label class="font-bold">Number of Guests</label>
           <maryoku-input
-            v-model="guests"
             class="width-50 mt-5 form-input"
-            input-style="users"
+            v-model="guests"
+            inputStyle="users"
             placeholer="Type the amount of guests here..."
-          />
+          ></maryoku-input>
         </div>
         <div class="text-left mt-30">
           <label class="font-bold">Event Location</label>
           <div class="width-50 location-input">
-            <location-input v-model="location" />
+            <location-input v-model="location"></location-input>
           </div>
         </div>
         <div class="form-group text-left mt-30 proposal">
           <label>Upload proposal *</label>
           <vue-dropzone
-            v-if="!fileName"
-            id="dropzone"
             ref="myVueDropzone"
+            id="dropzone"
             :options="dropzoneOptions"
-            :use-custom-slot="true"
-            class="file-drop-zone upload-section text-center"
+            :useCustomSlot="true"
             @vdropzone-file-added="fileAdded"
+            class="file-drop-zone upload-section text-center"
+            v-if="!fileName"
           >
             <md-button class="md-outlined md-simple md-vendor md-sm">
-              <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15">
+              <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />
               Attach file
             </md-button>
             <div>Or</div>
-            <div class="note">
-              Drag your file here
-            </div>
+            <div class="note">Drag your file here</div>
           </vue-dropzone>
-          <div v-else class="form-group attach-file text-left mt-30">
-            <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15">
+          <div class="form-group attach-file text-left mt-30" v-else>
+            <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />
             <a :href="`${fileUrl}`" class="color-black" target="_blank">{{ fileName }}</a>
             <span class="attach-trash" @click="fileName = null"><md-icon>close</md-icon></span>
           </div>
         </div>
-        <div v-if="showError" class="md-error">
-          {{ this.errorMessage }}
-        </div>
+        <div v-if="showError" class="md-error">{{ this.errorMessage }}</div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">
-        Cancel
-      </md-button>
-      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent">
-        Done
-      </md-button>
+      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
+      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent">Done</md-button>
     </template>
   </modal>
 </template>
@@ -229,11 +215,6 @@ export default {
       errorMessage: "",
     };
   },
-  computed: {
-    vendor() {
-      return this.$store.state.vendor.profile;
-    },
-  },
   async created() {
     console.log("vendorCreateEvent.created", this.defaultData);
     this.isLoading = true;
@@ -256,7 +237,7 @@ export default {
 
     this.selectedCustomer = this.defaultData.customer;
     this.isLoading = false;
-    console.log("selectedCustomer", this.selectedCustomer);
+    console.log('selectedCustomer', this.selectedCustomer);
   },
   methods: {
     async getVendorCustomers() {
@@ -339,10 +320,15 @@ export default {
       const extension = file.type.split("/")[1];
       let fileName = new Date().getTime();
       this.fileName = file.name;
-      S3Service.fileUpload(file, `${fileName}`, "events/proposal").then((res) => {
+      S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then((res) => {
         this.isLoading = false;
         this.fileUrl = res;
       });
+    },
+  },
+  computed: {
+    vendor() {
+      return this.$store.state.vendor.profile;
     },
   },
 };

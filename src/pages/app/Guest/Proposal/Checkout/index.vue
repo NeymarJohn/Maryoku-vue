@@ -1,28 +1,26 @@
 <template>
   <div class="event-vendor-checkout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
-    <div v-if="!loading" class="checkout-content md-layout">
+    <div class="checkout-content md-layout" v-if="!loading">
       <vue-element-loading :active="loadingPayment" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-45 left-panel">
         <div
           class="background-section"
           :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg) `"
-        />
+        ></div>
         <div class="content p-50">
           <div class="font-size-30">
-            <span v-if="pageType === 0" class="font-bold">
+            <span class="font-bold" v-if="pageType === 0">
               <img
                 :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`"
                 style="width: 30px; margin-right: 0.5em"
-              >
+              />
               Book {{ vendor.eventCategory.fullTitle }}
             </span>
             <span v-else class="font-bold">Book VENDORS</span>
             CHECKOUT
           </div>
-          <div v-if="pageType === 0" class="mt-20">
-            {{ vendor.companyName }}
-          </div>
+          <div class="mt-20" v-if="pageType === 0">{{ vendor.companyName }}</div>
           <div class="white-card p-40 font-size-22 font-bold mt-50 d-flex justify-content-between">
             <span v-if="pageType === 0">What does this proposal include?</span>
             <span v-else>What Do We Include In This Proposals?</span>
@@ -35,24 +33,24 @@
           <template v-if="pageType === 0">
             <div v-if="proposal.additionalServices.length">
               <checkout-price-table
-                v-for="service in proposal.bookedServices"
-                :key="`secondary-${service}-section`"
                 class="price-table"
+                v-for="service in proposal.bookedServices"
                 :proposal="proposal"
-                :service-category="service"
-              />
+                :serviceCategory="service"
+                :key="`secondary-${service}-section`"
+              ></checkout-price-table>
             </div>
             <checkout-price-table
               v-else
-              :key="`${proposal.vendor.vendorCategory}-section`"
               class="price-table"
               :proposal="proposal"
-              :service-category="proposal.vendor.vendorCategory"
-            />
+              :serviceCategory="proposal.vendor.vendorCategory"
+              :key="`${proposal.vendor.vendorCategory}-section`"
+            ></checkout-price-table>
 
-            <div v-if="this.proposal.extraServices[this.vendor.eventCategory.key]" class="p-30">
+            <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
               <div>Would you like to upgrade & add one of those?</div>
-              <div v-if="proposal.serviceCategory" class="mb-30">
+              <div class="mb-30" v-if="proposal.serviceCategory">
                 You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
                 your original defined budget.
               </div>
@@ -61,21 +59,19 @@
                 will be added to the overall vendor cost.
               </div>
               <div
+                class="pt-10 pb-10"
                 v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
                   (item) => !item.added && item.price,
                 )"
                 :key="service.subCategory"
-                class="pt-10 pb-10"
               >
                 <div class="d-flex align-center">
                   <div class="d-flex align-center">
-                    <md-checkbox v-model="service.addedOnProposal" class="m-0 mr-10" />
+                    <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
                     <span>{{ service.requirementTitle }}</span>
                   </div>
                   <div class="ml-auto pr-100">
-                    <div class="element-price">
-                      ${{ service.price | withComma }}
-                    </div>
+                    <div class="element-price">${{ service.price | withComma }}</div>
                   </div>
                 </div>
               </div>
@@ -84,17 +80,18 @@
           <template v-else>
             <checkout-proposal-table
               v-for="(item, key) in cart"
-              :key="key"
               :proposal="item.proposal"
               :category="item.category"
-            />
+              :key="key"
+            >
+            </checkout-proposal-table>
           </template>
         </div>
-        <collapse-panel :default-status="false" class="checkout-additional white-card mt-20">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center">
-              <md-checkbox v-model="onDayCordinator" class="m-0 mr-10" />
-              <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10">
+              <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
+              <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
               On Day Coordinator($1,000 Per Day)
             </div>
           </template>
@@ -105,22 +102,22 @@
             </div>
           </template>
         </collapse-panel>
-        <collapse-panel :default-status="false" class="checkout-additional white-card mt-20">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center disabled">
-              <md-checkbox class="m-0 mr-10" :disabeld="true" />
+              <md-checkbox class="m-0 mr-10" :disabeld="true"></md-checkbox>
               Event Insurance (Coming Soon)
             </div>
           </template>
           <template slot="content">
-            <div class="price-table-content" />
+            <div class="price-table-content"></div>
           </template>
         </collapse-panel>
-        <collapse-panel :default-status="false" class="checkout-additional white-card mt-20">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center">
-              <md-checkbox v-model="checkedGiveBack" class="m-0 mr-10" />
-              <img :src="`${$iconURL}PaymentPage/Group 9791.svg`" class="mr-10 ml-10">
+              <md-checkbox class="m-0 mr-10" v-model="checkedGiveBack"></md-checkbox>
+              <img :src="`${$iconURL}PaymentPage/Group 9791.svg`" class="mr-10 ml-10" />
               Give Back
             </div>
           </template>
@@ -133,22 +130,22 @@
               <md-button class="md-simple edit-btn md-red color-red mt-20">
                 Read More <md-icon>keyboard_arrow_right</md-icon>
               </md-button>
-              <hr class="mt-20 mb-20">
+              <hr class="mt-20 mb-20" />
               <div>
-                <md-checkbox v-model="isCheckedFoodDonate" class="md-red md-simple">
+                <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
                   Donate your food leftovers
                 </md-checkbox>
               </div>
               <div class="mb-20 d-flex">
-                <img :src="`${$iconURL}PaymentPage/Image 211.png`">
+                <img :src="`${$iconURL}PaymentPage/Image 211.png`" />
                 <div class="ml-10">
                   Don’t let your leftover food go to waste! Maryoku collaborates with food rescue organizations that
                   would really appreciate your contribution, helping the community and the environment.
                 </div>
               </div>
-              <hr class="mt-20 mb-20">
+              <hr class="mt-20 mb-20" />
               <div>
-                <md-checkbox v-model="cachMaryokuPoints" class="md-red md-simple">
+                <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
                   Cash in Your Maryoku Points
                 </md-checkbox>
               </div>
@@ -165,35 +162,33 @@
             </div>
           </template>
         </collapse-panel>
-        <collapse-panel :default-status="false" class="checkout-additional white-card mt-20">
+        <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="d-flex align-center disabled">
-              <md-checkbox class="m-0 mr-10" />
-              <img :src="`${$iconURL}common/reward.svg`" class="mr-10 ml-10">
+              <md-checkbox class="m-0 mr-10"></md-checkbox>
+              <img :src="`${$iconURL}common/reward.svg`" class="mr-10 ml-10" />
               Use your rewards with this event (Coming Soon)
             </div>
           </template>
           <template slot="content">
-            <div class="price-table-content">
-              123123
-            </div>
+            <div class="price-table-content">123123</div>
           </template>
         </collapse-panel>
-        <div v-if="pageType === 0" class="total-price-panel mt-20 white-card">
+        <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
           <template v-if="discount(this.proposal).percentage">
             <div class="discount-row">
               <span class="font-bold">Discount </span>
               <span class="font-bold">-{{ discount(this.proposal).percentage }}%</span>
               <span class="text-right">-${{ discount(this.proposal).price | withComma }}</span>
             </div>
-            <hr>
+            <hr />
           </template>
           <div class="discount-row">
             <span class="font-bold">Tax </span>
             <span class="font-bold">{{ tax(this.proposal).percentage }}%</span>
             <span class="text-right">${{ tax(this.proposal).price | withComma }}</span>
           </div>
-          <hr>
+          <hr />
           <div class="discount-row">
             <span class="font-bold">Fee </span>
             <span class="font-bold">{{ feePercentail }}%</span>
@@ -206,7 +201,7 @@
             </div>
           </div>
         </div>
-        <div v-else class="total-price-panel mt-20 white-card">
+        <div class="total-price-panel mt-20 white-card" v-else>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
@@ -215,7 +210,7 @@
           </div>
         </div>
         <div class="mt-40">
-          <md-checkbox v-model="agreedCancellationPolicy" class="m-0">
+          <md-checkbox class="m-0" v-model="agreedCancellationPolicy">
             <span class="font-regular">I agree to the</span>
             <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
           </md-checkbox>
@@ -246,21 +241,19 @@
             v-if="showStripeCheckout"
             :items="stripePriceData"
             :proposal="proposal"
-            :success-u-r-l="successURL"
-          />
+            :successURL="successURL"
+          ></stripe-checkout>
           <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
-      <md-button class="maryoku-btn md-simple md-black" @click="back">
-        Back
-      </md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay">
-        Submit Payment
+      <md-button class="maryoku-btn md-simple md-black" @click="back">Back</md-button>
+      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay"
+        >Submit Payment
       </md-button>
     </div>
-    <success-modal v-if="showSuccessModal" />
+    <success-modal v-if="showSuccessModal"></success-modal>
   </div>
 </template>
 <script>
@@ -301,27 +294,6 @@ export default {
       successURL: null,
     };
   },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    categories() {
-      return this.$store.state.common.serviceCategories;
-    },
-    finalPrice() {
-      console.log("finalPrice");
-      if (this.pageType === VENDOR) {
-        console.log("finalPrice", this.discounedAndTaxedPrice(this.proposal));
-        return this.discounedAndTaxedPrice(this.proposal) + this.feePrice(this.proposal);
-      } else if (this.pageType === CART) {
-        let sum = 0;
-        Object.keys(this.cart).map((key) => {
-          sum += this.discounedAndTaxedPrice(this.cart[key].proposal) + this.feePrice(this.cart[key].proposal);
-        });
-        return sum;
-      }
-    },
-  },
   async created() {
     if (this.$route.params.hasOwnProperty("proposalId")) {
       const proposalId = this.$route.params.proposalId;
@@ -343,6 +315,27 @@ export default {
     if (this.$route.query.checkout === "success") {
 
     }
+  },
+  computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    categories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    finalPrice() {
+      console.log("finalPrice");
+      if (this.pageType === VENDOR) {
+        console.log("finalPrice", this.discounedAndTaxedPrice(this.proposal));
+        return this.discounedAndTaxedPrice(this.proposal) + this.feePrice(this.proposal);
+      } else if (this.pageType === CART) {
+        let sum = 0;
+        Object.keys(this.cart).map((key) => {
+          sum += this.discounedAndTaxedPrice(this.cart[key].proposal) + this.feePrice(this.cart[key].proposal);
+        });
+        return sum;
+      }
+    },
   },
   methods: {
     ...mapActions("planningBoard", ["getCartItems"]),

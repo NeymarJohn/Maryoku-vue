@@ -5,27 +5,23 @@
         class="md-layout-item md-size-100 d-flex items-left"
         style="justify-content: space-between; margin-bottom: 2em"
       >
-        <h4 style="margin: 0">
-          Add Questions to Event
-        </h4>
+        <h4 style="margin: 0">Add Questions to Event</h4>
         <div class="pull-right">
           <md-button class="md-info md-sm add-question-btn" @click="addQuestion">
             <md-icon>add</md-icon> Add Question
           </md-button>
 
-          <md-button class="md-success md-sm move-right" @click="saveQuestoinsList">
-            Save
-          </md-button>
+          <md-button class="md-success md-sm move-right" @click="saveQuestoinsList"> Save </md-button>
         </div>
       </div>
       <div class="md-layout-item md-size-100">
-        <div v-for="(item, index) in questionsList" :key="index" class="question-item">
+        <div class="question-item" v-for="(item, index) in questionsList" :key="index">
           <md-field>
             <label>Question</label>
-            <md-input v-model="item.question" />
+            <md-input v-model="item.question"></md-input>
             <md-button
-              v-if="questionsList.length > 1"
               class="md-danger md-sm md-just-icon md-simple"
+              v-if="questionsList.length > 1"
               @click="removeQuestion(index)"
             >
               <md-icon>delete_outline</md-icon>
@@ -33,7 +29,7 @@
           </md-field>
           <md-field>
             <label>Answer</label>
-            <md-textarea v-model="item.answer" />
+            <md-textarea v-model="item.answer"></md-textarea>
           </md-field>
         </div>
       </div>

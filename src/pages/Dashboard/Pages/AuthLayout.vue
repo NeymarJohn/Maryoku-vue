@@ -4,14 +4,14 @@
       <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
         <div class="container md-offset">
           <video autoplay muted loop class="background-video">
-            <source :src="`/static/videos/signinBg.mp4`" type="video/mp4">
+            <source :src="`/static/videos/signinBg.mp4`" type="video/mp4" />
             Your browser does not support HTML5 video.
           </video>
           <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
-            <router-view />
+            <router-view></router-view>
           </zoom-center-transition>
         </div>
-        <footer v-if="false" class="footer">
+        <footer class="footer" v-if="false">
           <div class="container md-offset">
             <nav>
               <ul>
@@ -89,7 +89,7 @@ export default {
       };
       if (!images[this.$route.name]) {
         return {
-          backgroundColor: "#f3f7fd",
+          backgroundColor: `#f3f7fd`,
         };
       }
       return {
@@ -99,27 +99,6 @@ export default {
     setPageClass() {
       return `${this.$route.name}-page`.toLowerCase();
     },
-  },
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  },
-  beforeMount() {
-    console.log(this.$store.state.auth.status.loggedIn);
-    if (this.$store.state.auth.status.loggedIn) {
-      this.$store
-        .dispatch("auth/checkToken")
-        .then(res => {})
-        .catch(error => {
-          this.$store.dispatch("auth/logout").then(res => {
-            this.$router.push({ path: "/signin" });
-          });
-        });
-    }
-  },
-  beforeDestroy() {
-    this.closeMenu();
-    window.removeEventListener("resize", this.onResponsiveInverted);
   },
   methods: {
     toggleSidebarPage() {
@@ -150,6 +129,27 @@ export default {
         this.responsive = false;
       }
     },
+  },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeMount() {
+    console.log(this.$store.state.auth.status.loggedIn);
+    if (this.$store.state.auth.status.loggedIn) {
+      this.$store
+        .dispatch("auth/checkToken")
+        .then(res => {})
+        .catch(error => {
+          this.$store.dispatch("auth/logout").then(res => {
+            this.$router.push({ path: "/signin" });
+          });
+        });
+    }
+  },
+  beforeDestroy() {
+    this.closeMenu();
+    window.removeEventListener("resize", this.onResponsiveInverted);
   },
   beforeRouteUpdate(to, from, next) {
     // Close the mobile menu first then transition to next page

@@ -1,12 +1,10 @@
 <template>
   <div class="my-auto d-flex flex-column align-center">
-    <img class="mb-0" src="/static/icons/vendor/light.svg" alt="">
+    <img class="mb-0" src="/static/icons/vendor/light.svg" alt="" />
 
-    <h2 class="No-insights-yet">
-      No Insights Yet
-    </h2>
+    <h2 class="No-insights-yet">No Insights Yet</h2>
     <p class="sub">
-      We've just started our journey together. <br>
+      We've just started our journey together. <br />
       You'll start bidding and soon we'll have insights for you.
     </p>
   </div>

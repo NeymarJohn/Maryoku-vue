@@ -5,16 +5,14 @@
     <div class="selected-proposals-list">
       <table ref="content" class="w-100 h-100" cellspacing="0" colpadding="0">
         <tr>
-          <td class="comparison-cell category-outer-cell no-padding va-top" />
+          <td class="comparison-cell category-outer-cell no-padding va-top"></td>
           <td class="comparison-cell outer-cell">
             <md-field>
-              <label />
+              <label></label>
               <md-select id="0" v-model="selectedBlock.proposalComparison1" placeholder="Select Proposal">
-                <md-option v-for="(item, index) in selectableProposals" :key="index" :value="item">
-                  {{
-                    getProposalName(item)
-                  }}
-                </md-option>
+                <md-option v-for="(item, index) in selectableProposals" :key="index" v-bind:value="item">{{
+                  getProposalName(item)
+                }}</md-option>
               </md-select>
             </md-field>
             <!-- <multiselect id="0"
@@ -36,88 +34,74 @@
               </template>
             </multiselect>-->
             <md-button
+              class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
-              class="md-success w-100 text-capitalize fs-14"
               @click="viewProposal(selectedBlock.proposalComparison1)"
+              >View - ${{ getProposalPrice(selectedBlock.proposalComparison1) | withComma }}</md-button
             >
-              View - ${{ getProposalPrice(selectedBlock.proposalComparison1) | withComma }}
-            </md-button>
             <md-button
+              class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
-              class="md-danger w-100 text-capitalize fs-14"
               @click="manageProposalsAccept(selectedBlock.proposalComparison1)"
+              >Accept - ${{ getProposalPrice(selectedBlock.proposalComparison1) | withComma }}</md-button
             >
-              Accept - ${{ getProposalPrice(selectedBlock.proposalComparison1) | withComma }}
-            </md-button>
           </td>
           <td class="comparison-cell outer-cell">
             <md-field>
-              <label />
+              <label></label>
               <md-select id="1" v-model="selectedBlock.proposalComparison2" placeholder="Select Proposal">
-                <md-option v-for="(item, index) in selectableProposals" :key="index" :value="item">
-                  {{
-                    getProposalName(item)
-                  }}
-                </md-option>
+                <md-option v-for="(item, index) in selectableProposals" :key="index" v-bind:value="item">{{
+                  getProposalName(item)
+                }}</md-option>
               </md-select>
             </md-field>
             <md-button
-              v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               class="md-success w-100 text-capitalize fs-14"
+              v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)"
+              >View - ${{ getProposalPrice(selectedBlock.proposalComparison2) | withComma }}</md-button
             >
-              View - ${{ getProposalPrice(selectedBlock.proposalComparison2) | withComma }}
-            </md-button>
             <md-button
-              v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               class="md-danger w-100 text-capitalize fs-14"
+              v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison2)"
+              >Accept - ${{ getProposalPrice(selectedBlock.proposalComparison2) | withComma }}</md-button
             >
-              Accept - ${{ getProposalPrice(selectedBlock.proposalComparison2) | withComma }}
-            </md-button>
           </td>
           <td class="comparison-cell outer-cell">
             <md-field>
-              <label />
+              <label></label>
               <md-select id="2" v-model="selectedBlock.proposalComparison3" placeholder="Select Proposal">
-                <md-option v-for="(item, index) in selectableProposals" :key="index" :value="item">
-                  {{
-                    getProposalName(item)
-                  }}
-                </md-option>
+                <md-option v-for="(item, index) in selectableProposals" :key="index" v-bind:value="item">{{
+                  getProposalName(item)
+                }}</md-option>
               </md-select>
             </md-field>
             <md-button
-              v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               class="md-success w-100 text-capitalize fs-14"
+              v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               @click="viewProposal(selectedBlock.proposalComparison3)"
+              >View - ${{ getProposalPrice(selectedBlock.proposalComparison3) | withComma }}</md-button
             >
-              View - ${{ getProposalPrice(selectedBlock.proposalComparison3) | withComma }}
-            </md-button>
             <md-button
-              v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
               class="md-danger w-100 text-capitalize fs-14"
+              v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison3)"
+              >Accept - ${{ getProposalPrice(selectedBlock.proposalComparison3) | withComma }}</md-button
             >
-              Accept - ${{ getProposalPrice(selectedBlock.proposalComparison3) | withComma }}
-            </md-button>
           </td>
         </tr>
         <tr>
           <td colspan="4" class="padding-2-ex-bottom">
             <md-card class="clear-margins no-shadow catering-wrapper">
               <md-card-header class="md-card-header-text text-left">
-                <h5 class="title">
-                  {{ this.selectedBlock.category }}
-                </h5>
+                <h5 class="title">{{ this.selectedBlock.category }}</h5>
               </md-card-header>
               <md-card-content class="table-padding">
                 <table class="w-100 h-100">
                   <tr>
                     <td class="text-left" colspan="4">
-                      <h5 class="title">
-                        Catering
-                      </h5>
+                      <h5 class="title">Catering</h5>
                     </td>
                   </tr>
                   <tr>
@@ -134,101 +118,94 @@
                       <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison3)}} -->
                     </td>
                   </tr>
-                  <tr v-for="(requirement, index) in selectedBlock.values" :key="index" :value="requirement">
+                  <tr v-for="(requirement, index) in selectedBlock.values" :value="requirement" :key="index">
                     <td class="comparison-cell category border-bottom">
-                      <h6 v-tooltip="requirement.comment" class="title small">
-                        {{ requirement.title }}
-                      </h6>
+                      <h6 class="title small" v-tooltip="requirement.comment">{{ requirement.title }}</h6>
                     </td>
                     <td class="comparison-cell proposal border-bottom">
                       <!-- <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon> -->
                       <span
+                        class="fc-green fs-14"
                         v-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison1, requirement.id).included
                         "
-                        class="fc-green fs-14"
-                      >Included</span>
+                        >Included</span
+                      >
                       <md-icon
                         v-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison1, requirement.id).missing
                         "
+                        >close</md-icon
                       >
-                        close
-                      </md-icon>
                       <md-button
+                        class="md-danger w-90 h-30 text-capitalize fs-14"
                         v-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison1, requirement.id).extra
                         "
-                        class="md-danger w-90 h-30 text-capitalize fs-14"
-                      >
-                        Add (${{
+                        >Add (${{
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison1, requirement.id).price
                             | numeral(0, 0)
-                        }})
-                      </md-button>
+                        }})</md-button
+                      >
                     </td>
                     <td class="comparison-cell proposal border-bottom">
                       <!-- <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon> -->
                       <span
+                        class="fc-green fs-14"
                         v-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison2, requirement.id).included
                         "
-                        class="fc-green fs-14"
-                      >Included</span>
+                        >Included</span
+                      >
                       <md-icon
                         v-else-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison2, requirement.id).missing
                         "
+                        >close</md-icon
                       >
-                        close
-                      </md-icon>
                       <md-button
+                        class="md-danger w-90 h-30 text-capitalize fs-14"
                         v-else-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison2, requirement.id).extra
                         "
-                        class="md-danger w-90 h-30 text-capitalize fs-14"
-                      >
-                        Add (${{
+                        >Add (${{
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison2, requirement.id).price
                             | numeral(0, 0)
-                        }})
-                      </md-button>
+                        }})</md-button
+                      >
                       <!-- <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span> -->
                     </td>
                     <td class="comparison-cell proposal border-bottom">
                       <!-- <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon> -->
                       <span
+                        class="fc-green fs-14"
                         v-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison3, requirement.id).included
                         "
-                        class="fc-green fs-14"
-                      >Included</span>
+                        >Included</span
+                      >
                       <md-icon
                         v-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison3, requirement.id).missing
                         "
+                        >close</md-icon
                       >
-                        close
-                      </md-icon>
                       <md-button
+                        class="md-danger w-90 h-30 text-capitalize fs-14"
                         v-else-if="
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison3, requirement.id).extra
                         "
-                        class="md-danger w-90 h-30 text-capitalize fs-14"
-                      >
-                        Add (${{
+                        >Add (${{
                           getProposalRequirementFulfillment(selectedBlock.proposalComparison3, requirement.id).price
                             | numeral(0, 0)
-                        }})
-                      </md-button>
+                        }})</md-button
+                      >
                       <!-- <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span> -->
                     </td>
                   </tr>
                   <tr>
                     <td class="comparison-cell category">
-                      <h6 class="title">
-                        Subtotal
-                      </h6>
+                      <h6 class="title">Subtotal</h6>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
@@ -248,9 +225,7 @@
                   </tr>
                   <tr>
                     <td class="comparison-cell category">
-                      <h6 class="title">
-                        Per guest
-                      </h6>
+                      <h6 class="title">Per guest</h6>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
@@ -274,7 +249,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="spacer" />
+          <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
           <td colspan="4" class="padding-x-2">
@@ -283,55 +258,56 @@
                 <table class="w-100 h-100">
                   <tr>
                     <td class="comparison-cell category">
-                      <h5 class="title">
-                        Rating
-                      </h5>
+                      <h5 class="title">Rating</h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <div v-if="selectedBlock.proposalComparison1" class="star-rating">
+                      <div class="star-rating" v-if="selectedBlock.proposalComparison1">
                         <label
-                          v-for="(rating, index) in ratings"
-                          :key="index"
                           class="star-rating__star fs-14"
+                          v-for="(rating, index) in ratings"
                           :value="rating"
+                          :key="index"
                           :class="{
                             'is-selected':
                               getProposalRating(selectedBlock.proposalComparison1) >= rating &&
                               getProposalRating(selectedBlock.proposalComparison1) != null,
                           }"
-                        >★</label>
+                          >★</label
+                        >
                         <span class="small">{{ getProposalRating(selectedBlock.proposalComparison1) }}</span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
-                      <div v-if="selectedBlock.proposalComparison2" class="star-rating">
+                      <div class="star-rating" v-if="selectedBlock.proposalComparison2">
                         <label
-                          v-for="(rating, index) in ratings"
-                          :key="index"
                           class="star-rating__star fs-14"
+                          v-for="(rating, index) in ratings"
                           :value="rating"
+                          :key="index"
                           :class="{
                             'is-selected':
                               getProposalRating(selectedBlock.proposalComparison2) >= rating &&
                               getProposalRating(selectedBlock.proposalComparison2) != null,
                           }"
-                        >★</label>
+                          >★</label
+                        >
                         <span class="small">{{ getProposalRating(selectedBlock.proposalComparison2) }}</span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
-                      <div v-if="selectedBlock.proposalComparison3" class="star-rating">
+                      <div class="star-rating" v-if="selectedBlock.proposalComparison3">
                         <label
-                          v-for="(rating, index) in ratings"
-                          :key="index"
                           class="star-rating__star fs-14"
+                          v-for="(rating, index) in ratings"
                           :value="rating"
+                          :key="index"
                           :class="{
                             'is-selected':
                               getProposalRating(selectedBlock.proposalComparison3) >= rating &&
                               getProposalRating(selectedBlock.proposalComparison3) != null,
                           }"
-                        >★</label>
+                          >★</label
+                        >
                         <span class="small">{{ getProposalRating(selectedBlock.proposalComparison3) }}</span>
                       </div>
                     </td>
@@ -342,7 +318,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="spacer" />
+          <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
           <td colspan="4" class="padding-x-2">
@@ -351,9 +327,7 @@
                 <table class="w-100 h-100">
                   <tr>
                     <td class="comparison-cell category">
-                      <h5 class="title">
-                        Cancellation
-                      </h5>
+                      <h5 class="title">Cancellation</h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <p class="fs-14 fc-grey">
@@ -377,7 +351,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="spacer" />
+          <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
           <td colspan="4" class="padding-x-2">
@@ -386,72 +360,67 @@
                 <table class="w-100 h-100">
                   <tr>
                     <td class="comparison-cell category">
-                      <h5 class="title">
-                        Legal Docs
-                      </h5>
+                      <h5 class="title">Legal Docs</h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <ul v-if="getLegalDocsOfComparison1.length > 0" class="list-files">
+                      <ul class="list-files" v-if="getLegalDocsOfComparison1.length > 0">
                         <li v-for="(legalDoc, index) in getLegalDocsOfComparison1" :key="index">
-                          <a class="fc-danger" target="_blank" :href="legalDoc.path">
+                          <a class="fc-danger" target="_blank" v-bind:href="legalDoc.path">
                             <md-icon class="fs-14 fc-danger">picture_as_pdf</md-icon>
                             {{ legalDoc.fileName }}
                           </a>
                         </li>
                       </ul>
-                      <p v-else class="fc-danger fs-14">
-                        No Files
-                      </p>
+                      <p class="fc-danger fs-14" v-else>No Files</p>
                     </td>
                     <td class="comparison-cell proposal">
-                      <ul v-if="getLegalDocsOfComparison2.length > 0" class="list-files">
+                      <ul class="list-files" v-if="getLegalDocsOfComparison2.length > 0">
                         <li v-for="(legalDoc, index) in getLegalDocsOfComparison2" :key="index">
-                          <a class="fc-danger" target="_blank" :href="legalDoc.path">
+                          <a class="fc-danger" target="_blank" v-bind:href="legalDoc.path">
                             <md-icon class="fs-14 fc-danger">picture_as_pdf</md-icon>
                             {{ legalDoc.fileName }}
                           </a>
                         </li>
                       </ul>
-                      <p v-else class="fc-danger fs-14">
-                        No Files
-                      </p>
+                      <p class="fc-danger fs-14" v-else>No Files</p>
                     </td>
                     <td class="comparison-cell proposal">
-                      <ul v-if="getLegalDocsOfComparison3.length > 0" class="list-files">
+                      <ul class="list-files" v-if="getLegalDocsOfComparison3.length > 0">
                         <li v-for="(legalDoc, index) in getLegalDocsOfComparison3" :key="index">
-                          <a class="fc-danger" target="_blank" :href="legalDoc.path">
+                          <a class="fc-danger" target="_blank" v-bind:href="legalDoc.path">
                             <md-icon class="fs-14 fc-danger">picture_as_pdf</md-icon>
                             {{ legalDoc.fileName }}
                           </a>
                         </li>
                       </ul>
-                      <p v-else class="fc-danger fs-14">
-                        No Files
-                      </p>
+                      <p class="fc-danger fs-14" v-else>No Files</p>
                     </td>
                   </tr>
                   <tr>
-                    <td class="comparison-cell category" />
+                    <td class="comparison-cell category"></td>
                     <td class="comparison-cell proposal">
                       <a
+                        class="text-transform-uppercase fs-12 fc-danger fw-500"
                         v-if="selectedBlock.proposalComparison1"
-                        class="text-transform-uppercase fs-12 fc-danger fw-500"
                         @click="viewProposal(selectedBlock.proposalComparison1)"
-                      >View Proposal</a>
+                        >View Proposal</a
+                      >
                     </td>
                     <td class="comparison-cell proposal">
                       <a
+                        class="text-transform-uppercase fs-12 fc-danger fw-500"
                         v-if="selectedBlock.proposalComparison2"
-                        class="text-transform-uppercase fs-12 fc-danger fw-500"
                         @click="viewProposal(selectedBlock.proposalComparison2)"
-                      >View Proposal</a>
+                        >View Proposal</a
+                      >
                     </td>
                     <td class="comparison-cell proposal">
                       <a
-                        v-if="selectedBlock.proposalComparison3"
                         class="text-transform-uppercase fs-12 fc-danger fw-500"
+                        v-if="selectedBlock.proposalComparison3"
                         @click="viewProposal(selectedBlock.proposalComparison3)"
-                      >View Proposal</a>
+                        >View Proposal</a
+                      >
                     </td>
                   </tr>
                 </table>
@@ -477,16 +446,11 @@ import numeral from "numeral";
 const jsPDF = () => import("jspdf");
 const html2canvas = () => import("html2canvas");
 export default {
-  name: "EventBlockComparison",
+  name: "event-block-comparison",
   components: {
     VueElementLoading,
     ManageProposalsAccept,
     ViewProposal,
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
   },
   props: {
     selectedBlock: Object,
@@ -502,28 +466,6 @@ export default {
     serverUrl: process.env.SERVER_URL,
     legalDocs: [],
   }),
-  computed: {
-    getLegalDocsOfComparison1() {
-      return this.legalDocs.filter((ld) => ld.path.includes(this.selectedBlock.proposalComparison1));
-    },
-    getLegalDocsOfComparison2() {
-      return this.legalDocs.filter((ld) => ld.path.includes(this.selectedBlock.proposalComparison2));
-    },
-    getLegalDocsOfComparison3() {
-      return this.legalDocs.filter((ld) => ld.path.includes(this.selectedBlock.proposalComparison3));
-    },
-  },
-  watch: {
-    selectedBlock(newVal, oldVal) {
-      this.populateProposals();
-    },
-  },
-  created(title, proposal) {},
-  mounted() {
-    this.populateProposals();
-    this.getLegalDocs();
-    // this.getBlockVendors()
-  },
   methods: {
     manageProposalsAccept(proposal) {
       window.currentPanel = this.$showPanel({
@@ -805,6 +747,33 @@ export default {
         doc.addImage(img, "PNG", 20, -10);
         doc.save("sample.pdf");
       });
+    },
+  },
+  created(title, proposal) {},
+  mounted() {
+    this.populateProposals();
+    this.getLegalDocs();
+    // this.getBlockVendors()
+  },
+  computed: {
+    getLegalDocsOfComparison1() {
+      return this.legalDocs.filter((ld) => ld.path.includes(this.selectedBlock.proposalComparison1));
+    },
+    getLegalDocsOfComparison2() {
+      return this.legalDocs.filter((ld) => ld.path.includes(this.selectedBlock.proposalComparison2));
+    },
+    getLegalDocsOfComparison3() {
+      return this.legalDocs.filter((ld) => ld.path.includes(this.selectedBlock.proposalComparison3));
+    },
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  watch: {
+    selectedBlock(newVal, oldVal) {
+      this.populateProposals();
     },
   },
 };

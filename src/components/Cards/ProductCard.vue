@@ -1,19 +1,18 @@
 <template>
   <md-card class="md-card-product"
-           :data-count="hoverCount"
-           @mouseleave.native="onMouseLeave"
-  >
+    @mouseleave.native="onMouseLeave"
+    :data-count="hoverCount">
+
     <md-card-header
+      @mouseenter.native="onMouseOver"
       :data-header-animation="headerAnimation"
       :class="[{hovered: imgHovered}, {hinge: headerDown}, {fadeInDown: fixedHeader}]"
-      class="md-card-header-image animated"
-      @mouseenter.native="onMouseOver"
-    >
-      <slot name="imageHeader" />
+      class="md-card-header-image animated">
+      <slot name="imageHeader"></slot>
     </md-card-header>
 
     <md-card-content>
-      <div v-if="headerAnimation === 'true'" class="md-card-action-buttons text-center">
+      <div class="md-card-action-buttons text-center" v-if="headerAnimation === 'true'">
         <!--<md-button class="md-danger md-simple fix-broken-card" @click="fixHeader" v-if="headerDown">
           <slot name="fixed-button"></slot> Fix Header!
         </md-button>
@@ -29,25 +28,25 @@
           <md-button class="md-danger md-xs md-round md-just-icon">
               <slot name="fourth-button"></slot>
           </md-button>-->
-        <slot name="card-buttons" />
+          <slot name="card-buttons"></slot>
       </div>
-      <slot name="title" />
-      <slot name="description" />
+      <slot name="title"></slot>
+      <slot name="description"></slot>
     </md-card-content>
 
     <md-card-actions md-alignment="space-between">
-      <slot name="footer" />
+      <slot name="footer"></slot>
     </md-card-actions>
   </md-card>
 </template>
 
 <script>
 export default {
-  name: "ProductCard",
+  name: 'product-card',
   props: {
     headerAnimation: {
       type: String,
-      default: "true"
+      default: 'true'
     }
   },
   data () {
@@ -55,36 +54,36 @@ export default {
       hoverCount: 0,
       imgHovered: false,
       fixedHeader: false
-    };
+    }
   },
   computed: {
     headerDown () {
-      return false; // this.hoverCount > 15;
+      return false // this.hoverCount > 15;
     }
   },
   methods: {
     headerBack: function () {
-      this.fixedHeader = false;
+      this.fixedHeader = false
     },
     fixHeader: function () {
-      this.hoverCount = 0;
-      this.fixedHeader = true;
+      this.hoverCount = 0
+      this.fixedHeader = true
 
-      setTimeout(this.headerBack, 480);
+      setTimeout(this.headerBack, 480)
     },
     onMouseOver: function () {
-      if (this.headerAnimation === "true") {
-        this.imgHovered = true;
-        this.hoverCount++;
+      if (this.headerAnimation === 'true') {
+        this.imgHovered = true
+        this.hoverCount++
       }
     },
     onMouseLeave: function () {
-      if (this.headerAnimation === "true") {
-        this.imgHovered = false;
+      if (this.headerAnimation === 'true') {
+        this.imgHovered = false
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

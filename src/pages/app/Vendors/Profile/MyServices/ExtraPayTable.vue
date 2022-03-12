@@ -10,28 +10,24 @@
     <template slot="header">
       <div class="header-content">
         <div>
-          <img :src="`${$iconURL}Vendor Signup/Asset 526.svg`" style="width: 20px" class="mr-10">
+          <img :src="`${$iconURL}Vendor Signup/Asset 526.svg`" style="width: 20px" class="mr-10" />
           With Extra Pay
         </div>
         <template v-if="isExpanded">
-          <div class="font-size-16 font-regular text-transform-capitalize text-center">
-            QTY
-          </div>
-          <div class="font-size-16 font-regular text-transform-capitalize text-center">
-            Price
-          </div>
+          <div class="font-size-16 font-regular text-transform-capitalize text-center">QTY</div>
+          <div class="font-size-16 font-regular text-transform-capitalize text-center">Price</div>
         </template>
       </div>
     </template>
     <template slot="content">
       <div class="pr-50 pl-50 pb-50 cost-service-content">
-        <hr>
+        <hr />
         <vendor-extra-pay-item
           v-for="(cs, csIndex) in items"
           :key="csIndex"
           :item="cs"
-          theme="purple"
           @change="changeServiceItem"
+          theme="purple"
         />
       </div>
     </template>
@@ -60,6 +56,20 @@ export default {
       isExpanded: false,
     };
   },
+  methods: {
+    changeServiceItem(item) {
+      console.log("item", item);
+      if (this.isMainService) {
+        const vendor = { id: this.vendorData.id, services: this.vendorData.services };
+        vendor.services[camelize(item.label)] = item;
+        this.$store.dispatch("vendor/updateProfile", vendor);
+      } else {
+        const service = { id: this.serviceData.id, services: this.serviceData.services };
+        service.services[camelize(item.label)] = item;
+        this.$store.dispatch("vendor/updateService", { vendorId: this.vendorData.id, serviceData: service });
+      }
+    },
+  },
 
   computed: {
     serviceData() {
@@ -74,20 +84,6 @@ export default {
     },
     isMainService() {
       return this.serviceCategory === this.vendorData.vendorCategory;
-    },
-  },
-  methods: {
-    changeServiceItem(item) {
-      console.log("item", item);
-      if (this.isMainService) {
-        const vendor = { id: this.vendorData.id, services: this.vendorData.services };
-        vendor.services[camelize(item.label)] = item;
-        this.$store.dispatch("vendor/updateProfile", vendor);
-      } else {
-        const service = { id: this.serviceData.id, services: this.serviceData.services };
-        service.services[camelize(item.label)] = item;
-        this.$store.dispatch("vendor/updateService", { vendorId: this.vendorData.id, serviceData: service });
-      }
     },
   },
 };

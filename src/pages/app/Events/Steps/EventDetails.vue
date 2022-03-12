@@ -9,11 +9,11 @@
               <label>Event Title</label>
               <md-input
                 v-model="eventData.title"
-                v-validate="modelValidations.title"
                 data-vv-name="title"
+                v-validate="modelValidations.title"
                 required
-              />
-              <span v-if="errors.has('title')" class="md-error">The event title is required</span>
+              ></md-input>
+              <span class="md-error" v-if="errors.has('title')">The event title is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
@@ -21,13 +21,15 @@
               <label>Guest Count</label>
               <md-input
                 v-model="eventData.numberOfParticipants"
-                v-validate="modelValidations.numberOfParticipants"
                 data-vv-name="numberOfParticipants"
+                v-validate="modelValidations.numberOfParticipants"
                 required
                 type="number"
                 @change="calculateBudgetPerGuest()"
-              />
-              <span v-if="errors.has('numberOfParticipants')" class="md-error">The Guest Count is required and should be a number</span>
+              ></md-input>
+              <span class="md-error" v-if="errors.has('numberOfParticipants')"
+                >The Guest Count is required and should be a number</span
+              >
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
@@ -35,19 +37,19 @@
               <label>Budget</label>
               <md-input
                 v-model="eventData.totalBudget"
-                v-validate="modelValidations.totalBudget"
                 data-vv-name="budget"
+                v-validate="modelValidations.totalBudget"
                 required
                 type="number"
                 @change="calculateBudgetPerGuest()"
-              />
-              <span v-if="errors.has('budget')" class="md-error">The Budget is required and should be a number</span>
+              ></md-input>
+              <span class="md-error" v-if="errors.has('budget')">The Budget is required and should be a number</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
             <md-field class="disabled">
               <label>Per Guest</label>
-              <md-input v-model="eventData.budgetPerPerson" type="text" disabled="disabled" />
+              <md-input v-model="eventData.budgetPerPerson" type="text" disabled="disabled"></md-input>
             </md-field>
           </div>
         </div>
@@ -55,16 +57,14 @@
         <div class="md-layout event-types-list mt-1">
           <div class="md-layout-item md-size-40 required" :class="{ 'has-error': !eventType && validating }">
             <label class="bold">Select Event Type</label>
-            <br>
-            <span v-if="!eventType && validating" class="md-error">The Event Type Is Required</span>
+            <br />
+            <span class="md-error" v-if="!eventType && validating">The Event Type Is Required</span>
             <div class="list-container">
               <md-field class="mt-0 mb-2">
                 <md-select v-model="eventType">
-                  <md-option v-for="(type, index) in eventTypes" :key="index" :value="type.id">
-                    {{
-                      type.name
-                    }}
-                  </md-option>
+                  <md-option v-for="(type, index) in eventTypes" :key="index" :value="type.id">{{
+                    type.name
+                  }}</md-option>
                 </md-select>
               </md-field>
             </div>
@@ -79,42 +79,42 @@
               v-model="eventData.occasion"
               data-vv-name="occasion"
               :md-options="occasionsList"
+              @md-opened="mdOpened"
               class="change-icon-order select-with-icon mb16"
               :class="[{ 'md-error': errors.has('occasion') }]"
               value
-              @md-opened="mdOpened"
             >
               <label>Occasion</label>
-              <span v-if="errors.has('occasion')" class="md-error">This field is required</span>
+              <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
             </md-autocomplete>
           </div>
           <div class="md-layout-item md-size-25">
             <md-field>
               <label>City</label>
-              <md-input v-model="eventData.location" />
+              <md-input v-model="eventData.location"></md-input>
             </md-field>
           </div>
         </div>
         <div class="md-layout">
           <div class="md-layout-item md-size-50 required">
             <md-datepicker
-              ref="datePicker"
-              v-model="eventData.date"
-              v-validate="modelValidations.date"
               :class="[
                 {
                   'md-error':
                     eventData.date && $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value'),
                 },
               ]"
+              v-model="eventData.date"
               data-vv-name="date"
+              ref="datePicker"
+              v-validate="modelValidations.date"
               required
             >
               <label>Date</label>
             </md-datepicker>
-            <md-checkbox v-model="flexibleDate" @change="switchDateRequired">
-              I'm flexible around the selected date
-            </md-checkbox>
+            <md-checkbox v-model="flexibleDate" @change="switchDateRequired"
+              >I'm flexible around the selected date</md-checkbox
+            >
           </div>
         </div>
         <div class="md-layout hide">
@@ -122,11 +122,9 @@
             <md-field class="required" :class="[{ 'md-error': errors.has('time') }]">
               <label>Start Time</label>
               <md-select v-model="eventData.time" v-validate="modelValidations.time" data-vv-name="time" required>
-                <md-option v-for="hour in hoursArray" :key="hour" :value="hour">
-                  {{ hour }}
-                </md-option>
+                <md-option v-for="hour in hoursArray" :key="hour" :value="hour">{{ hour }}</md-option>
               </md-select>
-              <span v-if="errors.has('time')" class="md-error">The start time is required</span>
+              <span class="md-error" v-if="errors.has('time')">The start time is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-25">
@@ -138,24 +136,18 @@
                 data-vv-name="duration"
                 required
               >
-                <md-option v-for="hour in durationArray" :key="hour" :value="hour">
-                  {{ hour + " hours" }}
-                </md-option>
+                <md-option v-for="hour in durationArray" :key="hour" :value="hour">{{ hour + " hours" }}</md-option>
               </md-select>
-              <span v-if="errors.has('duration')" class="md-error">The duration is required</span>
+              <span class="md-error" v-if="errors.has('duration')">The duration is required</span>
             </md-field>
           </div>
         </div>
         <!-- ./Event fields section -->
         <div class="md-layout">
           <div class="md-layout-item md-size-100 text-right">
-            <br>
-            <md-button class="md-default" @click="cancel">
-              Cancel
-            </md-button>
-            <md-button class="md-primary" @click="validateAndSubmit">
-              {{ submitButtonLabel }}
-            </md-button>
+            <br />
+            <md-button class="md-default" @click="cancel">Cancel</md-button>
+            <md-button class="md-primary" @click="validateAndSubmit">{{ submitButtonLabel }}</md-button>
           </div>
         </div>
       </div>
@@ -177,11 +169,11 @@ import _ from "underscore";
 import Swal from "sweetalert2";
 
 export default {
-  name: "GetStartedStep",
+  name: "get-started-step",
+  props: ["newEventData"],
   components: {
     VueElementLoading,
   },
-  props: ["newEventData"],
   methods: {
     ...mapMutations("AnnualPlannerVuex", ["resetForm", "setEventModal", "setEventProperty"]),
     calculateBudgetPerGuest() {
@@ -376,7 +368,7 @@ export default {
             // vm.$emit('goToNextPage', response)
             // vm.newEvent = vm.eventData
             vm.$router.push({
-              path: "/events/" + vm.event.id + "/edit/details",
+              path: `/events/` + vm.event.id + "/edit/details",
             });
           })
           .catch((error) => {
@@ -537,8 +529,8 @@ export default {
     });
 
     [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 PM") : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 AM") : this.hoursArray.push(`${x}:00 AM`)));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
 
     this.hoursArray.push();
 

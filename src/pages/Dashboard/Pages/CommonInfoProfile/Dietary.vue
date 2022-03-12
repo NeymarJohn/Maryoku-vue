@@ -4,96 +4,96 @@
       <div class="dietary_form-main">
         <div class="dietary_form-block">
           <div>
-            <Title class="emp-title" title="It's time to come clean" title-text="titleStyle" />
+            <Title class="emp-title" title="It's time to come clean" titleText="titleStyle" />
             <Title
               title="Mark you dietary constrints, so that we'll know to order for you"
-              title-block="dietary_titleBlock"
-              title-text="dietary_title-span"
+              titleBlock="dietary_titleBlock"
+              titleText="dietary_title-span"
             />
           </div>
           <div class="dietary-check-block">
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="cluten"
             />
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="lactuz"
             />
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="gmo"
             />
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="egg"
             />
           </div>
           <div class="dietary-check-block">
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="sugar"
             />
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="peanut"
             />
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="kosher"
             />
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="organic"
             />
           </div>
           <div class="dietary-check-block">
             <Icon
-              icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_off.png"
-              icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_on.png"
-              image-style="dietary-icon_logo"
-              :on-click="onSelect"
+              iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_off.png"
+              iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_on.png"
+              imageStyle="dietary-icon_logo"
+              :onClick="onSelect"
               name="ecofood"
             />
             <div class="dietary_other-options">
               <InputText
-                label-style="label_input"
+                labelStyle="label_input"
                 label="Other"
-                field-style="field_input"
+                fieldStyle="field_input"
                 :value="another_food"
                 name="another_food"
-                :on-change="onChange"
+                :onChange="onChange"
               />
             </div>
           </div>
         </div>
         <div class="button-block">
-          <ButtonDiv button-style="dietary_buttonStyle" text="skip" :on-click="onSkip" />
-          <Button text="next" :on-click="onNext" class="md-success md-fileinput button-md-common" />
+          <ButtonDiv buttonStyle="dietary_buttonStyle" text="skip" :onClick="onSkip" />
+          <Button text="next" :onClick="onNext" class="md-success md-fileinput button-md-common" />
         </div>
       </div>
       <div class="dietary_logo-main">
@@ -101,15 +101,15 @@
           <img
             class="emp-logo"
             src="https://static-maryoku.s3.amazonaws.com/storage/img/syncer.png"
-          >
-          <Title
-            title="All Guests Preferences in one place"
-            title-block="titleBlock"
-            title-text="titleStyle"
           />
           <Title
-            title-text="dietary_addition-text"
-            title-block="titleBlock"
+            title="All Guests Preferences in one place"
+            titleBlock="titleBlock"
+            titleText="titleStyle"
+          />
+          <Title
+            titleText="dietary_addition-text"
+            titleBlock="titleBlock"
             title="Keeping track on everyone's dietory preferences can be a hassle, when each employee manages their personal preferences, all you have to do is lay back and enjoy"
           />
         </div>
@@ -121,98 +121,98 @@
       <div class="dietary_form-main">
         <div class="dietary_form-block">
           <div>
-            <Title class="emp-title" title="It's time to come clean" title-text="titleStyle" />
+            <Title class="emp-title" title="It's time to come clean" titleText="titleStyle" />
             <Title
               title="Mark you dietary constrints, so that we'll know to order for you"
-              title-block="event_titleBlock"
-              title-text="dietary_title-span"
+              titleBlock="event_titleBlock"
+              titleText="dietary_title-span"
             />
           </div>
           <div>
             <div class="dietary-check-block">
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gluten_free_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="cluten"
               />
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/lactose_free_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="lactuz"
               />
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/gmo_free_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="gmo"
               />
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/egg_free_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="egg"
               />
             </div>
             <div class="dietary-check-block">
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/sugar_free_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="sugar"
               />
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/peanut_free_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="peanut"
               />
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/kosher_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="kosher"
               />
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/organic_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="organic"
               />
             </div>
             <div class="dietary-check-block">
               <Icon
-                icon-source-one="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_off.png"
-                icon-source-two="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_on.png"
-                image-style="dietary-icon_logo"
-                :on-click="onSelect"
+                iconSourceOne="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_off.png"
+                iconSourceTwo="https://static-maryoku.s3.amazonaws.com/storage/img/dietary/eco_on.png"
+                imageStyle="dietary-icon_logo"
+                :onClick="onSelect"
                 name="ecofood"
               />
               <div class="dietary_other-options">
                 <InputText
-                  label-style="label_input"
+                  labelStyle="label_input"
                   label="Other"
-                  field-style="field_input"
+                  fieldStyle="field_input"
                   :value="another_food"
                   name="another_food"
-                  :on-change="onChange"
+                  :onChange="onChange"
                 />
               </div>
             </div>
           </div>
         </div>
         <div class="button-block">
-          <ButtonDiv button-style="dietary_buttonStyle" text="skip" :on-click="onSkip" />
-          <Button text="next" :on-click="onNext" class="md-success md-fileinput button-md-common" />
+          <ButtonDiv buttonStyle="dietary_buttonStyle" text="skip" :onClick="onSkip" />
+          <Button text="next" :onClick="onNext" class="md-success md-fileinput button-md-common" />
         </div>
       </div>
       <div class="dietary_logo-main">
@@ -220,8 +220,8 @@
           <img
             class="emp-logo"
             src="https://static-maryoku.s3.amazonaws.com/storage/img/syncer.png"
-          >
-          <Title title="You gutta eat, right?" title-block="titleBlock" title-text="titleStyle" />
+          />
+          <Title title="You gutta eat, right?" titleBlock="titleBlock" titleText="titleStyle" />
         </div>
       </div>
     </div>
@@ -237,6 +237,9 @@ import Icon from "@/components/Icon/Icon.vue";
 
 export default {
   name: "Employee",
+  props: {
+    officeManager: String,
+  },
   components: {
     InputText,
     Select,
@@ -244,9 +247,6 @@ export default {
     ButtonDiv,
     Icon,
     Button,
-  },
-  props: {
-    officeManager: String,
   },
   data() {
     return {

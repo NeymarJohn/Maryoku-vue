@@ -1,17 +1,17 @@
 <template>
   <div class="campaign-save-date">
-    <loader :active="!campaignData" />
-    <div v-if="campaignData" class>
+    <loader :active="!campaignData"/>
+    <div class v-if="campaignData">
       <div
-        v-if="campaignData.campaignStatus != 'STARTED'"
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
+        v-if="campaignData.campaignStatus != 'STARTED'"
       >
         let's start with a "save the date"
       </div>
       <div class="concept-image-block-wrapper">
         <div v-show="showChangeCover" class="change-cover-feedback" @click="test">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" >
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
             Change Campaign Cover
           </md-button>
         </div>
@@ -21,24 +21,24 @@
           :images="concept.images"
           :colors="concept.colors"
           border="no-border"
-        />
+        ></concept-image-block>
       </div>
-      <concept-canvas v-if="concept" class="ml-50" :event-concept="concept" style="display: none" />
-      <div v-else class="cover-preview">
-        <img :src="coverImage">
+      <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept" style="display: none"> </concept-canvas>
+      <div class="cover-preview" v-else>
+        <img :src="coverImage" />
         <label for="cover">
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">Change Cover
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
           </md-button>
         </label>
         <input
-          id="coverImage"
           style="display: none"
+          id="coverImage"
           name="attachment"
           type="file"
           multiple="multiple"
           @change="onFileChange"
-        >
+        />
       </div>
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
@@ -46,67 +46,63 @@
           $dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")
         }}</span>
         <title-editor
-          :key="campaignTitle"
           class="mt-40 font-size-60"
-          :default-value="campaignTitle"
+          :defaultValue="campaignTitle"
+          :key="campaignTitle"
           @change="changeTitle"
-        />
+        ></title-editor>
       </div>
       <div class="p-50 comment">
-        <maryoku-textarea v-model="campaignDescription" class="width-100" :placeholder="placeHolder" />
+        <maryoku-textarea class="width-100" :placeholder="placeHolder" v-model="campaignDescription"></maryoku-textarea>
       </div>
       <div class="p-50 text-center">
-        <div class="font-size-22 mb-50">
-          MORE DETAILS COMING SOON
-        </div>
+        <div class="font-size-22 mb-50">MORE DETAILS COMING SOON</div>
         <vue-dropzone
           v-if="!campaignData.logoUrl"
-          id="dropzone"
           ref="myVueDropzone"
+          id="dropzone"
           :options="dropzoneOptions"
-          :use-custom-slot="true"
+          :useCustomSlot="true"
           @vdropzone-file-added="logoSelected"
         >
           <span class="color-red font-bold">
-            <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">Upload company logo
+            <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload company logo
           </span>
-          <br>Or
-          <br>
+          <br />Or
+          <br />
           <span class="color-dark-gray">Drag your file here</span>
         </vue-dropzone>
         <div v-else class="d-flex align-center justify-content-center">
           <div class="image-logo">
             <div class="logo-action">
               <div class="color-white mb-20 font-bold font-size-16 button" @click="removeLogo">
-                <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10"> Delete
+                <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
               </div>
               <div class="color-white font-bold font-size-16 button" @click="changeLogo">
-                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"> Replace
+                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10" /> Replace
               </div>
             </div>
-            <img :src="campaignData.logoUrl">
+            <img :src="campaignData.logoUrl" />
             <input
-              id="logoImage"
               style="display: none"
+              id="logoImage"
               name="attachment"
               type="file"
               multiple="multiple"
               @change="onLogoChange"
-            >
+            />
           </div>
           <div class="display-logo ml-50">
-            <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch" />
-            <div v-if="campaignData.visibleSettings.showLogo">
-              Show Logo
-            </div>
-            <div v-if="!campaignData.visibleSettings.showLogo">
-              Hide Logo
-            </div>
+            <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch"></md-switch>
+            <div v-if="campaignData.visibleSettings.showLogo">Show Logo</div>
+            <div v-if="!campaignData.visibleSettings.showLogo">Hide Logo</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+
 </template>
 <script>
 import vue2Dropzone from "vue2-dropzone";
@@ -205,12 +201,12 @@ export default {
   methods: {
     test(){
       this.showChangeCoverModal = true;
-      this.$emit("showModal", this.showChangeCoverModal);
+      this.$emit('showModal', this.showChangeCoverModal)
     },
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success btn-fill",
         cancelButtonClass: "md-button md-danger btn-fill",

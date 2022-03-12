@@ -7,9 +7,10 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30">
+        <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30" />
         <div class="font-size-30 font-bold mb-30 header-text">
-          SEE YOU THERE <span class="text-transform-uppercase">{{ rsvp.name }}</span>!
+          SEE YOU THERE <span class="text-transform-uppercase">{{ rsvp.name }}</span
+          >!
         </div>
         <div>
           <md-button
@@ -18,20 +19,16 @@
             @click="showZoomLink = !showZoomLink"
           >
             Get Link To Zoom Event
-            <md-icon v-if="!showZoomLink">
-              keyboard_arrow_right
-            </md-icon>
-            <md-icon v-if="showZoomLink">
-              keyboard_arrow_down
-            </md-icon>
+            <md-icon v-if="!showZoomLink">keyboard_arrow_right</md-icon>
+            <md-icon v-if="showZoomLink">keyboard_arrow_down</md-icon>
           </md-button>
           <div v-if="showZoomLink">
             <maryoku-input
-              v-model="campaign.additionalData.zoomlink"
-              input-style="sharing"
+              inputStyle="sharing"
               readonly
               class="sharelink"
-            />
+              v-model="campaign.additionalData.zoomlink"
+            ></maryoku-input>
           </div>
         </div>
         <div>
@@ -41,31 +38,25 @@
             @click="showCalendar = !showCalendar"
           >
             Sync Your Calendar
-            <md-icon v-if="!showCalendar">
-              keyboard_arrow_right
-            </md-icon>
-            <md-icon v-if="showCalendar">
-              keyboard_arrow_down
-            </md-icon>
+            <md-icon v-if="!showCalendar">keyboard_arrow_right</md-icon>
+            <md-icon v-if="showCalendar">keyboard_arrow_down</md-icon>
           </md-button>
           <div v-if="showCalendar">
             <div>Choose your email account:</div>
             <div class="mt-30">
               <md-radio v-model="emailAccount" class="mr-60" value="google">
-                <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px">
+                <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
               </md-radio>
               <md-radio v-model="emailAccount" value="outlook">
-                <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px">
+                <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
               </md-radio>
             </div>
-            <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">
-              Sync
-            </md-button>
+            <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">Sync</md-button>
           </div>
         </div>
       </div>
     </template>
-    <template slot="footer" />
+    <template slot="footer"> </template>
   </modal>
 </template>
 <script>
@@ -99,6 +90,11 @@ export default {
     },
     rsvp: [Object],
   },
+  created() {
+    console.log(this.campaign);
+    this.api = gapi;
+    this.initClient();
+  },
   data() {
     return {
       showZoomLink: false,
@@ -106,11 +102,6 @@ export default {
       emailAccount: "outlook",
       authorized: false,
     };
-  },
-  created() {
-    console.log(this.campaign);
-    this.api = gapi;
-    this.initClient();
   },
   methods: {
     close() {
@@ -173,7 +164,7 @@ export default {
           console.log(event.htmlLink);
           Swal.fire({
             title: "Thank you for your attending!",
-            text: "See you there!",
+            text: `See you there!`,
             showCancelButton: false,
             confirmButtonClass: "md-button md-success btn-fill",
             cancelButtonClass: "md-button md-danger btn-fill",
@@ -223,7 +214,7 @@ export default {
         .then(() => {
           swal({
             title: "Thank you for your attending!",
-            text: "See you there!",
+            text: `See you there!`,
             showCancelButton: false,
             confirmButtonClass: "md-button md-success btn-fill",
             cancelButtonClass: "md-button md-danger btn-fill",
@@ -236,7 +227,7 @@ export default {
         .catch((error) => {
           swal({
             title: "Sorry something is wrong!",
-            text: "Please try again.",
+            text: `Please try again.`,
             showCancelButton: false,
             confirmButtonClass: "md-button md-success btn-fill",
             cancelButtonClass: "md-button md-danger btn-fill",

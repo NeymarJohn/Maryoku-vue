@@ -1,7 +1,7 @@
 <template>
   <div class style="height: 100vh;">
     <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
-      <router-view />
+      <router-view></router-view>
     </zoom-center-transition>
   </div>
 </template>
@@ -59,10 +59,6 @@ export default {
       return `${this.$route.name}-page`.toLowerCase();
     },
   },
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  },
   methods: {
     toggleSidebarPage() {
       if (this.$sidebar.showSidebar) {
@@ -96,6 +92,10 @@ export default {
         this.responsive = false;
       }
     },
+  },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
   },
 };
 </script>

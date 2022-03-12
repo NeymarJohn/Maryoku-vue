@@ -1,30 +1,28 @@
 <template>
-  <div id="pricingPolicySection" class="pricing-policy-section">
+  <div class="pricing-policy-section" id="pricingPolicySection">
     <div class="rules">
-      <div v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex" class="rule">
-        <div class="item">
-          {{ policy.name }}
-        </div>
-        <div v-if="policy.type === 'MultiSelection'" class="item">
-          <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
+      <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
+        <div class="item">{{ policy.name }}</div>
+        <div class="item" v-if="policy.type === 'MultiSelection'">
+          <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
             `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
           }}</span>
         </div>
-        <div v-else-if="policy.type === 'Including'" class="item">
-          <span v-if="policy.value" class="mr-10"> Yes </span>
-          <span v-if="!policy.value && policy.cost" class="mr-10"> {{ `$ ${policy.cost | withComma}` }} </span>
+        <div class="item" v-else-if="policy.type === 'Including'">
+          <span class="mr-10" v-if="policy.value"> Yes </span>
+          <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
         </div>
-        <div v-else-if="policy.type === 'Boolean' && policy.value && policy.discount" class="item">
-          <span v-if="policy.hasOwnProperty('unit') && policy.unit === '$'" class="mr-10"> $ </span>
-          <span v-if="policy.discount" class="mr-10"> {{ policy.discount }} </span>
-          <span v-if="policy.hasOwnProperty('unit') && policy.unit === '%'" class="mr-10"> % </span>
+        <div class="item" v-else-if="policy.type === 'Boolean' && policy.value && policy.discount">
+          <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
+          <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
+          <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
         </div>
-        <div v-else class="item">
+        <div class="item" v-else>
           <span v-if="!policy.isPercentage">$</span>
           <span v-if="policy.value === true">Yes</span>
           <span v-else>{{ Number(policy.value) | withComma }}</span>
           <span v-if="policy.isPercentage">%</span>
-          <span v-if="policy.hasOwnProperty('attendees')" class="ml-50"> {{ policy.attendees }} attendees </span>
+          <span class="ml-50" v-if="policy.hasOwnProperty('attendees')"> {{ policy.attendees }} attendees </span>
         </div>
       </div>
     </div>
@@ -32,14 +30,14 @@
 </template>
 <script>
 export default {
+  data() {
+    return {};
+  },
   props: {
     serviceData: {
       type: Object,
       default: () => {},
     },
-  },
-  data() {
-    return {};
   },
   computed: {
     vendor() {

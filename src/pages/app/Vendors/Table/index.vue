@@ -2,27 +2,13 @@
   <div style="position: relative">
     <md-table table-header-color="rose" class="table-striped table-hover">
       <md-table-row>
-        <md-table-cell md-label="Vendor">
-          Vendor
-        </md-table-cell>
-        <md-table-cell md-label="Category">
-          Category
-        </md-table-cell>
-        <md-table-cell md-label="Web site">
-          Web site
-        </md-table-cell>
-        <md-table-cell md-label="Address">
-          Address
-        </md-table-cell>
-        <md-table-cell md-label="Email">
-          Email
-        </md-table-cell>
-        <md-table-cell md-label="Phone">
-          Phone
-        </md-table-cell>
-        <md-table-cell md-label="Actions">
-          Actions
-        </md-table-cell>
+        <md-table-cell md-label="Vendor">Vendor</md-table-cell>
+        <md-table-cell md-label="Category">Category</md-table-cell>
+        <md-table-cell md-label="Web site">Web site</md-table-cell>
+        <md-table-cell md-label="Address">Address</md-table-cell>
+        <md-table-cell md-label="Email">Email</md-table-cell>
+        <md-table-cell md-label="Phone">Phone</md-table-cell>
+        <md-table-cell md-label="Actions">Actions</md-table-cell>
       </md-table-row>
       <md-table-row v-for="(item, index) in vendorsList" :key="index" slot="md-table-row">
         <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
@@ -32,7 +18,7 @@
         <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
         <md-table-cell>{{ item.vendorMainPhoneNumber }} </md-table-cell>
         <md-table-cell>
-          <md-button class="md-raised md-info md-icon-button" @click="openPopover(index)">
+          <md-button @click="openPopover(index)" class="md-raised md-info md-icon-button">
             <md-icon>thumb_up</md-icon>
           </md-button>
 
@@ -51,92 +37,73 @@
         </md-table-cell>
 
         <div
-          v-if="tooltipModels[index].value && openPopup"
-          v-click-outside="closeModal"
           class="popup-box"
+          v-click-outside="closeModal"
+          v-if="tooltipModels[index].value && openPopup"
           :md-active.sync="tooltipModels[index].value"
           md-direction="left"
         >
           <div class="header-position">
-            <h3 class="title">
-              Ranking
-            </h3>
-            <button class="btn-position" @click="closeModal">
-              X
-            </button>
+            <h3 class="title">Ranking</h3>
+            <button class="btn-position" @click="closeModal">X</button>
           </div>
           <div class="md-layout-item md-size-100 md-small-size-100">
             <div v-for="(item, index) in tooltipModels[index].rankingParameters" class="space-between box-rate">
-              <h3 class="">
-                {{ item.name }}
-              </h3>
+              <h3 class="">{{ item.name }}</h3>
               <div class="pull-right">
                 <div class="star-rating">
                   <label
-                    v-for="rating in ratings"
                     class="star-rating__star"
+                    v-for="rating in ratings"
                     :class="{ 'is-selected': item.value >= rating && item.value != null }"
-                    @click="setRanking(rating, index)"
+                    v-on:click="setRanking(rating, index)"
                   >
                     <input
-                      v-model="item.value"
                       class="star-rating star-rating__checkbox"
                       type="radio"
                       :value="rating"
                       :name="name"
-                    >★</label>
+                      v-model="item.value"
+                    />★</label
+                  >
                 </div>
               </div>
             </div>
 
             <md-field class="border-field">
               <label class="label-right">Your review</label>
-              <md-textarea v-model="tooltipModels[index].textarea" md-counter="80" />
+              <md-textarea v-model="tooltipModels[index].textarea" md-counter="80"></md-textarea>
             </md-field>
           </div>
           <div class="popup-footer">
-            <md-button class="move-left md-red md-simple" @click="closeModal">
-              Close
-            </md-button>
-            <md-button class="btn-success md-success">
-              Submit
-            </md-button>
+            <md-button class="move-left md-red md-simple" @click="closeModal">Close</md-button>
+            <md-button class="btn-success md-success">Submit</md-button>
           </div>
         </div>
         <div
-          v-if="tooltipModels[index].value && openPopupTags"
-          v-click-outside="closeTagsModal"
           class="popup-box"
+          v-click-outside="closeTagsModal"
+          v-if="tooltipModels[index].value && openPopupTags"
           :md-active.sync="tooltipModels[index].value"
           md-direction="left"
         >
           <div class="header-position">
-            <h3 class="title">
-              Tagging
-            </h3>
-            <button class="btn-position" @click="closeTagsModal">
-              X
-            </button>
+            <h3 class="title">Tagging</h3>
+            <button class="btn-position" @click="closeTagsModal">X</button>
           </div>
           <div class="md-layout-item md-size-100 md-small-size-100">
             <div class="md-layout-item">
               <md-field>
                 <label for="tag">Tags</label>
                 <md-select v-model="tag" name="select">
-                  <md-option v-for="(option, index) in tags" :key="index" :value="option">
-                    {{ option }}
-                  </md-option>
+                  <md-option v-for="(option, index) in tags" :key="index" :value="option">{{ option }}</md-option>
                 </md-select>
               </md-field>
             </div>
           </div>
           <div class="popup-footer">
-            <md-button class="move-left md-red md-simple" @click="closeTagsModal">
-              Close
-            </md-button>
-            <md-button class="btn-success md-success">
-              Submit
-            </md-button>
+            <md-button class="move-left md-red md-simple" @click="closeTagsModal">Close</md-button>
+            <md-button class="btn-success md-success">Submit</md-button>
           </div>
         </div>
       </md-table-row>
@@ -181,6 +148,7 @@ export default {
       },
     },
   },
+  created() {},
   data() {
     return {
       tagsModalOpen: false,
@@ -192,7 +160,6 @@ export default {
       ratings: [1, 2, 3, 4, 5],
     };
   },
-  created() {},
   methods: {
     openInviteModal() {
       this.$refs.inviteModal.toggleModal(true);

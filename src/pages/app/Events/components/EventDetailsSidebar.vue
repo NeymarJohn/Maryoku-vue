@@ -7,9 +7,7 @@
       <h4 class="title profile-title title-summary">
         Event Summary
         <md-button class="md-sm md-simple md-just-icon pull-right clear-margins" @click="openEventModal()">
-          <md-icon class="company-logo">
-            create
-          </md-icon>
+          <md-icon class="company-logo">create</md-icon>
         </md-button>
       </h4>
     </md-card-header>
@@ -18,7 +16,7 @@
         <div class="md-layout event-info-section card-expansion">
           <div class="md-layout-item summary-item">
             <div class="md-layout-item title-text">
-              <i class="fa fa-calendar" />
+              <i class="fa fa-calendar"></i>
             </div>
             <div class="md-layout-item">
               {{ calendarEvent.eventStartMillis | formatDate }},
@@ -29,19 +27,15 @@
 
           <div class="md-layout-item summary-item">
             <div class="md-layout-item title-text">
-              <i class="fa fa-map-marker-alt" />
+              <i class="fa fa-map-marker-alt"></i>
             </div>
-            <div class="md-layout-item">
-              {{ calendarEvent.location }}
-            </div>
+            <div class="md-layout-item">{{ calendarEvent.location }}</div>
           </div>
           <div class="md-layout-item summary-item">
             <div class="md-layout-item title-text">
-              <i class="fa fa-user" />
+              <i class="fa fa-user"></i>
             </div>
-            <div class="md-layout-item">
-              {{ calendarEvent.numberOfParticipants }} {{ inviteeType(calendarEvent) }}
-            </div>
+            <div class="md-layout-item">{{ calendarEvent.numberOfParticipants }} {{ inviteeType(calendarEvent) }}</div>
           </div>
           <md-card class="event-extra-info-card">
             <md-card-expand>
@@ -51,80 +45,54 @@
                     <div class="md-layout-item title-text">
                       <md-icon>wb_sunny</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      {{ calendarEvent.eventDayPart }}
-                    </div>
+                    <div class="md-layout-item text-capitalize">{{ calendarEvent.eventDayPart }}</div>
                   </div>
                   <div class="md-layout-item summary-item">
                     <div class="md-layout-item title-text">
-                      <md-icon v-if="calendarEvent.eventPlaceNeeded">
-                        check
-                      </md-icon>
-                      <md-icon v-else>
-                        close
-                      </md-icon>
+                      <md-icon v-if="calendarEvent.eventPlaceNeeded">check</md-icon>
+                      <md-icon v-else>close</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      Have event place
-                    </div>
+                    <div class="md-layout-item text-capitalize">Have event place</div>
                   </div>
                   <div class="md-layout-item summary-item">
                     <div class="md-layout-item title-text">
-                      <md-icon v-if="calendarEvent.flexibleWithDates">
-                        check
-                      </md-icon>
-                      <md-icon v-else>
-                        close
-                      </md-icon>
+                      <md-icon v-if="calendarEvent.flexibleWithDates">check</md-icon>
+                      <md-icon v-else>close</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      flexible with dates
-                    </div>
+                    <div class="md-layout-item text-capitalize">flexible with dates</div>
                   </div>
                   <div class="md-layout-item summary-item">
                     <div class="md-layout-item title-text">
-                      <md-icon v-if="calendarEvent.internalEvent">
-                        check
-                      </md-icon>
-                      <md-icon v-else>
-                        close
-                      </md-icon>
+                      <md-icon v-if="calendarEvent.internalEvent">check</md-icon>
+                      <md-icon v-else>close</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      Internal company event
-                    </div>
+                    <div class="md-layout-item text-capitalize">Internal company event</div>
                   </div>
-                  <div v-if="calendarEvent.expectedAttendacePercent" class="md-layout-item summary-item">
+                  <div class="md-layout-item summary-item" v-if="calendarEvent.expectedAttendacePercent">
                     <div class="md-layout-item title-text">
-                      <i class="fa fa-percent" />
+                      <i class="fa fa-percent"></i>
                     </div>
                     <div class="md-layout-item text-capitalize">
                       ({{ calendarEvent.expectedAttendacePercent }}) people you're expecting to show up
                     </div>
                   </div>
-                  <div v-if="calendarEvent.eventSongId" class="md-layout-item summary-item">
+                  <div class="md-layout-item summary-item" v-if="calendarEvent.eventSongId">
                     <div class="md-layout-item title-text">
                       <md-icon>audiotrack</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      {{ calendarEvent.eventSongId }}
-                    </div>
+                    <div class="md-layout-item text-capitalize">{{ calendarEvent.eventSongId }}</div>
                   </div>
-                  <div v-if="calendarEvent.eventMovieId" class="md-layout-item summary-item">
+                  <div class="md-layout-item summary-item" v-if="calendarEvent.eventMovieId">
                     <div class="md-layout-item title-text">
                       <md-icon>videocam</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      {{ calendarEvent.eventMovieId }}
-                    </div>
+                    <div class="md-layout-item text-capitalize">{{ calendarEvent.eventMovieId }}</div>
                   </div>
                   <div class="md-layout-item summary-item">
                     <div class="md-layout-item title-text">
                       <md-icon>linear_scale</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      Decision Factors
-                    </div>
+                    <div class="md-layout-item text-capitalize">Decision Factors</div>
                   </div>
                   <div class="md-layout-item">
                     <ul class="m-0 p-0" style="padding-left: 39px; margin: 0">
@@ -214,15 +182,11 @@
                     <div class="md-layout-item title-text">
                       <md-icon>event_note</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">
-                      Event Needed Services
-                    </div>
+                    <div class="md-layout-item text-capitalize">Event Needed Services</div>
                   </div>
                   <div class="md-layout-item">
                     <ul class="m-0 p-0" style="padding-left: 39px; margin: 0">
-                      <li v-for="(item, i, index) in calendarEvent.eventNeededServices" :key="index">
-                        {{ i }}
-                      </li>
+                      <li v-for="(item, i, index) in calendarEvent.eventNeededServices" :key="index">{{ i }}</li>
                     </ul>
                   </div>
                   <!-- NOTE: just hiding it -->
@@ -247,43 +211,39 @@
 
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <div class="fc-divider" />
+            <div class="fc-divider"></div>
           </div>
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <h5 class="title-budget-main">
-              Remaining budget
-            </h5>
+            <h5 class="title-budget-main">Remaining budget</h5>
             <h4 class="title budget">
               <div
-                v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
                 class="title"
                 :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
+                v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
               >
                 <animated-number
                   ref="totalRemainingBudgetNumber"
                   :value="getTotalRemainingBudget"
                   prefix="$"
-                />
+                ></animated-number>
                 <small class="total-event-budget"> / ${{ getTotalAmountByGuestType | withComma }} </small>
               </div>
             </h4>
 
-            <h5 class="title-budget-main">
-              Per guest
-            </h5>
+            <h5 class="title-budget-main">Per guest</h5>
             <h4 class="title budget">
               <div
-                v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
                 class="title"
                 :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
+                v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
               >
                 <animated-number
                   ref="totalRemainingBudgetNumber"
                   :value="getRemainingBudgetPerEmployee"
                   prefix="$"
-                />
+                ></animated-number>
                 <small class="total-event-budget">/ ${{ calendarEvent.budgetPerPerson }}</small>
               </div>
             </h4>
@@ -296,8 +256,8 @@
                 style="grid-column: 1; grid-row: 1; color: red"
               />
               <animated-number
-                ref="percentageNumber"
                 class="percentage"
+                ref="percentageNumber"
                 :custom-style="true"
                 :custom-style-contents="'font-weight:500;font-size:24px;'"
                 :value="getPercentage"
@@ -308,7 +268,7 @@
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <div class="fc-divider" />
+            <div class="fc-divider"></div>
           </div>
         </div>
         <div class="md-layout md-gutter">
@@ -316,17 +276,15 @@
             <event-paid-total-amounts
               :paid="getPaidAmount"
               :total="getToBePaidAmount"
-              :to-be-paid="getToBePaidAmount - getPaidAmount"
-            />
+              :toBePaid="getToBePaidAmount - getPaidAmount"
+            ></event-paid-total-amounts>
           </div>
         </div>
       </div>
       <div class="md-layout md-gutter hide">
         <div class="md-layout-item">
           <div>
-            <div class="md-caption title-text">
-              Remaining budget per participant
-            </div>
+            <div class="md-caption title-text">Remaining budget per participant</div>
             <!-- TODO Need calculate with components -->
             <div
               class="md-caption title-text"
@@ -336,13 +294,11 @@
                 ref="budgetPerPersonNumber"
                 :value="remainingBudgetPerEmployee"
                 prefix="$"
-              />
+              ></animated-number>
             </div>
           </div>
           <div>
-            <div class="md-caption title-text">
-              Budget per participant
-            </div>
+            <div class="md-caption title-text">Budget per participant</div>
             <div
               class="md-caption title-text"
               :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
@@ -351,19 +307,17 @@
                 ref="budgetPerPersonNumber"
                 :value="calendarEvent.budgetPerPerson"
                 prefix="$"
-              />
+              ></animated-number>
             </div>
           </div>
           <div>
-            <div class="md-caption title-text">
-              Total budget for the event
-            </div>
+            <div class="md-caption title-text">Total budget for the event</div>
             <div class="md-caption title-text title-budget-prise">
               <animated-number
                 ref="totalBudgetNumber"
                 :value="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
                 prefix="$"
-              />
+              ></animated-number>
             </div>
           </div>
         </div>
@@ -392,7 +346,7 @@ import EventSidePanel from "../EventSidePanel.vue";
 import EventPaidTotalAmounts from "../components/EventPaidTotalAmounts.vue";
 
 export default {
-  name: "EventDetailsSidebar",
+  name: "event-details-sidebar",
   components: {
     LabelEdit,
     AnimatedNumber,
@@ -539,7 +493,7 @@ export default {
         });
     },
     openEventModal() {
-      this.$router.push({ path: "/event/" + this.event.id + "/edit" });
+      this.$router.push({ path: `/event/` + this.event.id + "/edit" });
 
       //   window.currentPanel = this.$showPanel({
       //   component: EventSidePanel,

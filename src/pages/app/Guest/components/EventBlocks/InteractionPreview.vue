@@ -5,42 +5,36 @@
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
             <h4 class="title" style="color: white;">
-              {{ interactionData.title }}
+              {{interactionData.title}}
               <small style="display: block;">Preview</small>
             </h4>
           </div>
           <md-button
             class="md-success md-sm pull-right"
             style="margin: 16px 6px;"
-            :disabled="working"
             @click="saveInteraction"
-          >
-            Save
-          </md-button>
+            :disabled="working"
+          >Save</md-button>
           <md-button
             class="md-info md-sm pull-right"
             style="margin: 16px 6px;"
-            :disabled="working"
             @click="saveInteraction"
-          >
-            Send Test Mail
-          </md-button>
+            :disabled="working"
+          >Send Test Mail</md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
           <div class="md-layout" style="margin: 0;">
             <div class="md-layout-item md-size-100" style="margin-bottom: 24px;">
-              <div class="title">
-                Select Image for your interaction
-              </div>
+              <div class="title">Select Image for your interaction</div>
               <div class="interaction-options-list">
                 <img
-                  v-for="(image,index) in interactionData.options"
                   :src="`https://static-maryoku.s3.amazonaws.com/storage/img/interactions/${image}.png`"
                   class="interaction-option-image"
                   :class="{'selected':selectedTemplateId===image}"
+                  v-for="(image,index) in interactionData.options"
                   @click="selectTemplateImage(image)"
-                >
+                />
               </div>
             </div>
 
@@ -48,15 +42,15 @@
               <iframe
                 id="kfrm"
                 style="border: 1px solid lightgrey; border-radius: 5px; width: 20vmax; height: 20vmax; margin-left: auto; margin-right: auto;"
-              />
+              ></iframe>
             </div>
             <div class="md-layout-item md-size-50">
               <md-field>
                 <label>Title</label>
                 <md-input
                   v-model="interactionData.line1"
-                  v-focus
                   data-vv-name="line1"
+                  v-focus
                   @keyup.native="updatePreview(interactionData)"
                 />
               </md-field>
@@ -88,7 +82,7 @@ import EventInteraction from "@/models/EventInteraction";
 import Calendar from "@/models/Calendar";
 
 export default {
-  name: "InteractionPreview",
+  name: "interaction-preview",
   props: {
     eventData: {
       type: Object,
@@ -108,17 +102,6 @@ export default {
       selectedTemplateId: "interaction-1",
       working: true,
     };
-  },
-  watch: {
-    interactionData(newVal, oldVal) {
-      this.working = true;
-      setTimeout(() => {
-        if (newVal) {
-          this.selectedTemplateId = newVal.templateImage || "interaction-1";
-          this.updatePreview(newVal);
-        }
-      }, 500);
-    },
   },
   mounted() {},
   methods: {
@@ -174,6 +157,17 @@ export default {
           console.error(e);
           this.working = false;
         });
+    },
+  },
+  watch: {
+    interactionData(newVal, oldVal) {
+      this.working = true;
+      setTimeout(() => {
+        if (newVal) {
+          this.selectedTemplateId = newVal.templateImage || "interaction-1";
+          this.updatePreview(newVal);
+        }
+      }, 500);
     },
   },
 };

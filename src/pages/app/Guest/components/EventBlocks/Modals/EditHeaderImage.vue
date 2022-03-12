@@ -10,15 +10,15 @@
             <md-icon>clear</md-icon>
           </md-button>
         </template>
-        <template v-if="headerImages" slot="body">
+        <template slot="body" v-if="headerImages">
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" is-full-screen />
           <div class="header-images-list md-layout">
-            <div v-for="(image, index) in headerImages" class="header-images-list_item md-layout-item md-size-33">
+            <div class="header-images-list_item md-layout-item md-size-33" v-for="(image, index) in headerImages">
               <img
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${image.fullFileName}`"
                 :class="{ selected: selectedImage === image.cutFileName }"
                 @click="selectImage(image.cutFileName)"
-              >
+              />
               <md-button class="md-simple md-just-icon md-round" @click="previewImage(image.cutFileName)">
                 <md-icon>visibility</md-icon>
                 <md-tooltip>Preview</md-tooltip>
@@ -27,18 +27,16 @@
           </div>
         </template>
         <template slot="footer">
-          <md-button class="md-success move-right" :disabled="working" @click="saveHeaderImage">
-            Save
-          </md-button>
+          <md-button class="md-success move-right" @click="saveHeaderImage" :disabled="working">Save</md-button>
         </template>
       </modal>
     </div>
 
-    <div v-if="imagePreview" class="preview-image">
+    <div class="preview-image" v-if="imagePreview">
       <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
         <md-icon>clear</md-icon>
       </md-button>
-      <img :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${imagePreview}`">
+      <img :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${imagePreview}`" />
     </div>
   </div>
 </template>

@@ -8,22 +8,20 @@
           </h4>
           <md-card>
             <md-card-header class="md-card-header-text">
-              <h4 class="title2">
-                Groups
-              </h4>
+              <h4 class="title2">Groups</h4>
               <div class="card-actions pull-right">
                 <!--<md-button class="md-info" @click="removeMember">Remove</md-button>-->
-                <md-button class="md-info md-sm event-planner-tab-invitees-management-create-group" @click="addMember">
-                  Create Group
-                </md-button>
+                <md-button class="md-info md-sm event-planner-tab-invitees-management-create-group" @click="addMember"
+                  >Create Group</md-button
+                >
               </div>
             </md-card-header>
             <md-card-content class="groups-list">
               <!-- Groups -->
               <div
+                class="group"
                 v-for="(group, index) in selectedEventGroups"
                 :key="index"
-                class="group"
                 :class="{ selected: selectedGroup && selectedGroup.id === group.id }"
               >
                 <h4>
@@ -32,7 +30,7 @@
                     :field-name="index"
                     @text-updated-blur="groupTitleChanged"
                     @text-updated-enter="groupTitleChanged"
-                  />
+                  ></label-edit>
                 </h4>
 
                 <div class="card-actions pull-right">
@@ -48,59 +46,44 @@
             </md-card-content>
           </md-card>
         </div>
-        <div v-if="groupInvitees.length" class="md-layout-item md-size-50">
+        <div class="md-layout-item md-size-50" v-if="groupInvitees.length">
           <h5>
             Add members to '
-            <span>{{ selectedGroup.title }}</span>' group manually <br>or
-            <md-button class="md-simple md-info upload-members-btn">
-              Upload members from file
-            </md-button>
+            <span>{{ selectedGroup.title }}</span
+            >' group manually <br />or
+            <md-button class="md-simple md-info upload-members-btn">Upload members from file</md-button>
           </h5>
           <md-card>
             <md-card-header class="md-card-header-text">
-              <h4 class="title2">
-                Member List
-              </h4>
-              <div v-if="!adding" class="card-actions pull-right">
-                <md-button class="md-danger md-sm" @click="removeMember">
-                  Remove
-                </md-button>
-                <md-button class="md-info md-sm" @click="addInvitee">
-                  Add Invitee
-                </md-button>
+              <h4 class="title2">Member List</h4>
+              <div class="card-actions pull-right" v-if="!adding">
+                <md-button class="md-danger md-sm" @click="removeMember">Remove</md-button>
+                <md-button class="md-info md-sm" @click="addInvitee">Add Invitee</md-button>
               </div>
             </md-card-header>
             <md-card-content>
               <!-- Groups -->
-              <ul v-if="!adding" class="members-list">
-                <li v-for="(item, index) in groupInvitees" :key="index" class="member-item">
-                  <md-checkbox v-model="item.selected" class="member-checkbox" />
-                  <div class="member-name">
-                    {{ item.fullName }}
-                  </div>
-                  <div class="member-email">
-                    {{ item.emailAddress }}
-                  </div>
+              <ul class="members-list" v-if="!adding">
+                <li class="member-item" v-for="(item, index) in groupInvitees" :key="index">
+                  <md-checkbox v-model="item.selected" class="member-checkbox"></md-checkbox>
+                  <div class="member-name">{{ item.fullName }}</div>
+                  <div class="member-email">{{ item.emailAddress }}</div>
                 </li>
               </ul>
 
-              <div v-else-if="adding" class="adding-members">
+              <div class="adding-members" v-else-if="adding">
                 <h5>Add invitee to {{ selectedGroup.title }}</h5>
                 <md-field class="md-layout-item">
                   <label>User Name</label>
-                  <md-input v-model="newUser" type="email" />
+                  <md-input type="email" v-model="newUser"></md-input>
                 </md-field>
                 <md-field class="md-layout-item">
                   <label>Email Address</label>
-                  <md-input v-model="newValue" type="email" />
+                  <md-input type="email" v-model="newValue"></md-input>
                 </md-field>
                 <div>
-                  <md-button class="md-info md-sm" @click="saveInvitee">
-                    Save
-                  </md-button>
-                  <md-button class="md-default md-sm" @click="cancel">
-                    Cancel
-                  </md-button>
+                  <md-button class="md-info md-sm" @click="saveInvitee">Save</md-button>
+                  <md-button class="md-default md-sm" @click="cancel">Cancel</md-button>
                 </div>
               </div>
             </md-card-content>
@@ -145,7 +128,6 @@ export default {
     selectedGroup: null,
     groupInvitees: [],
   }),
-  computed: {},
 
   created() {},
   mounted() {},
@@ -177,7 +159,7 @@ export default {
     removeMember() {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -285,7 +267,7 @@ export default {
     removeGroup(id) {
       Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: `You won't be able to revert this!`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -342,6 +324,7 @@ export default {
         });
     },
   },
+  computed: {},
 };
 </script>
 <style lang="scss" scope>

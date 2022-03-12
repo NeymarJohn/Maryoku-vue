@@ -1,32 +1,26 @@
 <template>
-  <collapse-panel v-if="!isLoading" class="white-card proposal-requirements-panel" :spacing="20">
+  <collapse-panel class="white-card proposal-requirements-panel" :spacing="20" v-if="!isLoading">
     <template slot="header">
       <div class="d-flex align-center p-30">
-        <img :src="`${$storageURL}Additional%20Requests.svg`">
-        <div class="font-size-22 font-bold-extra color-black ml-10">
-          Requirements <br>from the planner
-        </div>
+        <img :src="`${$storageURL}Additional%20Requests.svg`" />
+        <div class="font-size-22 font-bold-extra color-black ml-10">Requirements <br />from the planner</div>
       </div>
     </template>
     <template slot="content">
-      <div v-if="step < 2" class="requirements-content pt-0-i" style="padding: 30px 30px 0">
-        <!--        <div>-->
-        <!--          <template v-for="types in requirementsData.types">-->
-        <!--            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>-->
-        <!--          </template>-->
-        <!--        </div>-->
-        <div v-for="(types, key) in requirementsData.types" class="category-section">
-          <div class="color-dark-gray text-transform-capitalize">
-            {{ key }}
-          </div>
-          <div class="requirement-grid">
-            <div v-for="type in types" class="requirement-item">
-              <div class="checkmark" />
-              <div class="d-inline-block">
-                {{ type }}
-              </div>
+      <div class="requirements-content pt-0-i" v-if="step < 2" style="padding: 30px 30px 0">
+<!--        <div>-->
+<!--          <template v-for="types in requirementsData.types">-->
+<!--            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>-->
+<!--          </template>-->
+<!--        </div>-->
+        <div class="category-section" v-for="(types, key) in requirementsData.types">
+            <div class="color-dark-gray text-transform-capitalize">{{ key }}</div>
+            <div class="requirement-grid">
+                <div v-for="type in types" class="requirement-item">
+                  <div class="checkmark"></div>
+                  <div class="d-inline-block">{{type}}</div>
+                </div>
             </div>
-          </div>
         </div>
 
         <template v-if="requirementsData.mainRequirements">
@@ -36,23 +30,19 @@
           >
             <template v-if="requirementCategory.toLowerCase() === 'special'">
               <div
+                class="category-section"
                 v-for="subCategory in selectedOptions(requirementsData.mainRequirements[requirementCategory])"
                 :key="subCategory.subCategory"
-                class="category-section"
               >
-                <div class="color-dark-gray text-transform-capitalize">
-                  {{ subCategory.subCategory }}
-                </div>
+                <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
                 <div class="requirement-grid">
                   <div
+                    class="requirement-item"
                     v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
                     :key="requirementItem.name"
-                    class="requirement-item"
                   >
-                    <div class="checkmark" />
-                    <div class="d-inline-block">
-                      {{ requirementItem.name }}
-                    </div>
+                    <div class="checkmark"></div>
+                    <div class="d-inline-block">{{ requirementItem.name }}</div>
                   </div>
                 </div>
               </div>
@@ -63,18 +53,16 @@
               "
               class="category-section"
             >
-              <div class="color-dark-gray text-transform-capitalize">
-                {{ requirementCategory }}
-              </div>
+              <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
+                  class="requirement-item"
                   v-for="requirementItem in requirementsData.mainRequirements[requirementCategory].filter(
                     (item) => item.selected,
                   )"
                   :key="requirementItem.item"
-                  class="requirement-item"
                 >
-                  <div class="checkmark" />
+                  <div class="checkmark"></div>
                   <!-- {{ requirementItem }} -->
                   <div class="d-inline-block">
                     {{ requirementItem.item || requirementItem.subCategory }}
@@ -88,9 +76,7 @@
         </template>
 
         <div class="addtional-requests">
-          <div class="font-bold">
-            Additional Requests
-          </div>
+          <div class="font-bold">Additional Requests</div>
           <div>
             {{ additionalNote }}
           </div>
@@ -101,121 +87,108 @@
           <div class="font-size-20 font-bold mb-20">
             {{ getCategoryFromId(secondaryRequirement.category).fullTitle }}
           </div>
-          <div v-for="(types, key) in secondaryRequirement.types" class="category-section">
-            <div class="color-dark-gray text-transform-capitalize">
-              {{ key }}
-            </div>
+          <div class="category-section" v-for="(types, key) in secondaryRequirement.types">
+            <div class="color-dark-gray text-transform-capitalize">{{ key }}</div>
             <div class="requirement-grid">
-              <div v-for="type in types" class="requirement-item">
-                <div class="checkmark" />
-                <div class="d-inline-block">
-                  {{ type }}
+                <div v-for="type in types" class="requirement-item">
+                    <div class="checkmark"></div>
+                    <div class="d-inline-block">{{type}}</div>
                 </div>
-              </div>
             </div>
           </div>
           <template v-if="secondaryRequirement.mainRequirements">
-            <div
-              v-for="(requirementCategory, index) in Object.keys(secondaryRequirement.mainRequirements)"
-              :key="`requirement-category-${index}`"
-            >
-              <template v-if="requirementCategory === 'multi-selection'" />
-              <template v-else-if="requirementCategory.toLowerCase() === 'special'">
-                <div
-                  v-for="subCategory in selectedOptions(secondaryRequirement.mainRequirements[requirementCategory])"
-                  :key="subCategory.subCategory"
-                  class="category-section"
-                >
-                  <div class="color-dark-gray text-transform-capitalize">
-                    {{ subCategory.subCategory }}
-                  </div>
-                  <div class="requirement-grid">
-                    <div
-                      v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
-                      :key="requirementItem.name"
-                      class="requirement-item"
-                    >
-                      <div class="checkmark" />
-                      <div class="d-inline-block">
-                        {{ requirementItem.name }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
               <div
-                v-else-if="
-                  secondaryRequirement.mainRequirements[requirementCategory].filter((item) => item.selected).length > 0
-                "
-                class="category-section"
+                  v-for="(requirementCategory, index) in Object.keys(secondaryRequirement.mainRequirements)"
+                  :key="`requirement-category-${index}`"
               >
-                <div class="color-dark-gray text-transform-capitalize">
-                  {{ requirementCategory }}
-                </div>
-                <div class="requirement-grid">
+                  <template v-if="requirementCategory === 'multi-selection'"> </template>
+                  <template v-else-if="requirementCategory.toLowerCase() === 'special'">
+                      <div
+                          class="category-section"
+                          v-for="subCategory in selectedOptions(secondaryRequirement.mainRequirements[requirementCategory])"
+                          :key="subCategory.subCategory"
+                      >
+                          <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
+                          <div class="requirement-grid">
+                              <div
+                                  class="requirement-item"
+                                  v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
+                                  :key="requirementItem.name"
+                              >
+                                  <div class="checkmark"></div>
+                                  <div class="d-inline-block">{{ requirementItem.name }}</div>
+                              </div>
+                          </div>
+                      </div>
+                  </template>
                   <div
-                    v-for="requirementItem in secondaryRequirement.mainRequirements[requirementCategory].filter(
-                      (item) => item.selected,
-                    )"
-                    :key="requirementItem.item"
-                    class="requirement-item"
+                      v-else-if="
+                secondaryRequirement.mainRequirements[requirementCategory].filter((item) => item.selected).length > 0
+              "
+                      class="category-section"
                   >
-                    <div class="checkmark" />
-                    <!-- {{ requirementItem }} -->
-                    <div class="d-inline-block">
-                      {{ requirementItem.item || requirementItem.subCategory }}
-                      <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
-                    </div>
+                      <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+                      <div class="requirement-grid">
+                          <div
+                              class="requirement-item"
+                              v-for="requirementItem in secondaryRequirement.mainRequirements[requirementCategory].filter(
+                    (item) => item.selected,
+                  )"
+                              :key="requirementItem.item"
+                          >
+                              <div class="checkmark"></div>
+                              <!-- {{ requirementItem }} -->
+                              <div class="d-inline-block">
+                                  {{ requirementItem.item || requirementItem.subCategory }}
+                                  <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
               </div>
-            </div>
           </template>
           <div v-if="step < 2" class="addtional-requests">
-            <div class="font-bold">
-              Addtional Requests
-            </div>
+            <div class="font-bold">Addtional Requests</div>
             <div>
-              {{ additionalNote }}
+                {{ additionalNote }}
             </div>
           </div>
         </div>
       </div>
       <div class="position-relative" style="padding: 15px 30px 30px">
-        <fade-transition v-if="statusMessage">
-          <md-card class="position-absolute notification-card">
-            <md-card-content class="d-flex align-center position-relative p-30">
-              <div class="message-arrow" style="right: 200px" />
-              <div class="">
-                <img :src="`${$iconURL}VendorsProposalPage/group-16292.svg`" style="width: 45px">
-              </div>
-              <div class="ml-10">
-                <span class="color-won font-size-16 font-bold-extra">Message was sent!</span>
-                <p class="my-0">
-                  We will make sure the planner will get back to you as soon as possible
-                </p>
-              </div>
-              <div class="position-absolute" style="right: 20px; top: 20px">
-                <md-button class="md-icon-button md-simple" @click="statusMessage = ''">
-                  <img :src="`${$iconURL}Campaign/Group+3602.svg`">
-                </md-button>
-              </div>
-            </md-card-content>
-          </md-card>
+          <fade-transition v-if="statusMessage">
+              <md-card class="position-absolute notification-card">
+                  <md-card-content class="d-flex align-center position-relative p-30">
+                      <div class="message-arrow" style="right: 200px"></div>
+                      <div class="">
+                          <img :src="`${$iconURL}VendorsProposalPage/group-16292.svg`" style="width: 45px"/>
+                      </div>
+                      <div class="ml-10">
+                          <span class="color-won font-size-16 font-bold-extra">Message was sent!</span>
+                          <p class="my-0">We will make sure the planner will get back to you as soon as possible</p>
+                      </div>
+                      <div class="position-absolute" style="right: 20px; top: 20px">
+                          <md-button class="md-icon-button md-simple" @click="statusMessage = ''">
+                              <img :src="`${$iconURL}Campaign/Group+3602.svg`">
+                          </md-button>
+                      </div>
+                  </md-card-content>
+
+              </md-card>
         </fade-transition>
         <md-button class="md-outlined md-vendor md-simple maryoku-btn width-100" @click="showQuestionModal = true">
-          <img :src="`${$iconURL}Submit Proposal/group-19162.svg`" class="page-icon mr-10">
+          <img :src="`${$iconURL}Submit Proposal/group-19162.svg`" class="page-icon mr-10" />
           Questions? Send a question to planner
         </md-button>
         <question-modal
-          v-if="showQuestionModal"
-          @cancel="showQuestionModal = false"
-          @send="sendMail"
-        />
+            v-if="showQuestionModal"
+            @cancel="showQuestionModal = false"
+            @send="sendMail"
+        ></question-modal>
       </div>
     </template>
   </collapse-panel>
-  <div v-else />
+  <div v-else></div>
 </template>
 <script>
 import CollapsePanel from "../../Campaign/CollapsePanel.vue";
@@ -234,8 +207,56 @@ export default {
       additionalServiceRequirements: [],
       showQuestionModal: false,
       isLoading: true,
-      statusMessage: "",
+      statusMessage: '',
     };
+  },
+  methods: {
+    sendMail(message){
+        if(!message) return
+        this.showQuestionModal = false
+
+        if(this.vendor.vendorMainEmail && this.proposalRequest.eventData && this.proposalRequest.eventData.owner
+            && this.proposalRequest.eventData.owner.emailAddress)
+          this.$http
+          .post(
+            `${process.env.SERVER_URL}/1/sendMail`,
+            {
+              from: this.vendor.vendorMainEmail,
+              to: this.proposalRequest.eventData.owner.emailAddress,
+              subject: 'Questions',
+              message,
+            },
+            { headers: this.$auth.getAuthHeader() },
+          )
+          .then((res) => {
+            if (res.data.status) {
+              this.statusMessage = "We have sent an email to the invited users.";
+            } else {
+              this.statusMessage = "Something is wrong. Please try again later.";
+            }
+          });
+    },
+    selectedOptions(specialRequirements) {
+      if (!specialRequirements) return [];
+      return specialRequirements.filter(
+        (item) =>
+          item.subCategory.toLowerCase() !== "sitting arrangement" && item.options.some((option) => option.selected),
+      );
+    },
+    getCategoryFromId(category) {
+      if (!category) return {};
+      return this.$store.state.common.serviceCategories.find((item) => item.key === category);
+    },
+  },
+  created() {
+    new ProposalRequestRequirement()
+      .for(new CalendarEvent({ id: this.proposalRequest.eventData.id }))
+      .get()
+      .then((res) => {
+        console.log(res);
+        this.isLoading = false;
+        this.additionalServiceRequirements = res;
+      });
   },
   computed: {
     vendor() {
@@ -247,7 +268,7 @@ export default {
       // return this.allRequirements;
     },
     secondaryRequirement() {
-      console.log(this.allRequirements[this.$store.state.vendorProposal.currentSecondaryService]);
+      console.log(this.allRequirements[this.$store.state.vendorProposal.currentSecondaryService])
       return this.allRequirements[this.$store.state.vendorProposal.currentSecondaryService] || {};
     },
     allRequirements() {
@@ -280,56 +301,8 @@ export default {
   },
   watch:{
     step(newVal){
-        console.log("step", this.step);
+        console.log('step', this.step);
     }
-  },
-  created() {
-    new ProposalRequestRequirement()
-      .for(new CalendarEvent({ id: this.proposalRequest.eventData.id }))
-      .get()
-      .then((res) => {
-        console.log(res);
-        this.isLoading = false;
-        this.additionalServiceRequirements = res;
-      });
-  },
-  methods: {
-    sendMail(message){
-        if(!message) return;
-        this.showQuestionModal = false;
-
-        if(this.vendor.vendorMainEmail && this.proposalRequest.eventData && this.proposalRequest.eventData.owner
-            && this.proposalRequest.eventData.owner.emailAddress)
-          this.$http
-          .post(
-            `${process.env.SERVER_URL}/1/sendMail`,
-            {
-              from: this.vendor.vendorMainEmail,
-              to: this.proposalRequest.eventData.owner.emailAddress,
-              subject: "Questions",
-              message,
-            },
-            { headers: this.$auth.getAuthHeader() },
-          )
-          .then((res) => {
-            if (res.data.status) {
-              this.statusMessage = "We have sent an email to the invited users.";
-            } else {
-              this.statusMessage = "Something is wrong. Please try again later.";
-            }
-          });
-    },
-    selectedOptions(specialRequirements) {
-      if (!specialRequirements) return [];
-      return specialRequirements.filter(
-        (item) =>
-          item.subCategory.toLowerCase() !== "sitting arrangement" && item.options.some((option) => option.selected),
-      );
-    },
-    getCategoryFromId(category) {
-      if (!category) return {};
-      return this.$store.state.common.serviceCategories.find((item) => item.key === category);
-    },
   }
 };
 </script>
