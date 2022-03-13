@@ -172,13 +172,6 @@
             </ul>
           </div>
         </div>
-        <!--        <discount-form-->
-        <!--          :totalPrice="totalPriceBeforeDiscount"-->
-        <!--          :defaultTax="defaultTax"-->
-        <!--          :defaultDiscount="defaultDiscount"-->
-        <!--          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"-->
-        <!--          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"-->
-        <!--        ></discount-form>-->
         <ItemForm
           :default-discount="defaultDiscount"
           :default-negotiation="negotiationDiscount"
@@ -285,30 +278,25 @@
 </template>
 <script>
 import { categoryNameWithIcons } from "@/constants/vendor";
-import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import { Money } from "v-money";
 import { mapGetters } from "vuex";
 import ItemForm from "../components/ItemForm.vue";
-import DiscountForm from "../components/DiscountForm.vue";
-
-// const components = {
-//     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
-//     Money: () => import('v-money'),
-//     DiscountForm: () => import('../components/DiscountForm.vue'),
-//     ItemForm: () => import('../components/ItemForm.vue'),
-// }
 
 export default {
   name: "ProposalBudgetSummary",
   components: {
-    InputProposalSubItem,
     Money,
-    DiscountForm,
     ItemForm,
   },
   props: {
-    step: Number,
-    services: Array,
+    step: {
+      type: Number,
+      default: 0
+    },
+    services: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
@@ -330,6 +318,111 @@ export default {
       discoutOption: "",
       expanded: false,
     };
+  },
+  computed: {
+    ...mapGetters("vendorProposal", [
+      "finalPriceOfMainCategory",
+      "pricesByCategory",
+      "originalPriceOfMainCategory",
+      "totalPriceByCategory",
+      "totalPriceOfProposal",
+      "totalBeforeDiscount",
+      "totalBeforeBundle",
+    ]),
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    proposal() {
+      return this.$store.state.vendorProposal;
+    },
+    event() {
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    additionalServices() {
+      return this.$store.state.vendorProposal.additionalServices;
+    },
+    mainService() {
+      const category = this.$store.state.vendorProposal.vendor.eventCategory.key;
+      const proposalServices = this.$store.state.vendorProposal.proposalServices;
+      if (!proposalServices[category]) {
+        return {};
+      }
+      return proposalServices[category];
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
+
+    totalPrice() {
+      return (
+        this.totalPriceBeforeDiscount -
+        (this.defaultDiscount ? ((this.defaultDiscount.percentage * this.totalPriceBeforeDiscount)/100): 0) +
+        Number(this.defaultTax ? this.defaultTax.price : 0) -
+        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
+      );
+    },
+    totalPriceBeforeBundle() {
+      return (
+        this.totalPriceBeforeDiscount -
+        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
+        (this.defaultTax ? this.defaultTax.price : 0)
+      );
+    },
+    totalPriceBeforeDiscount() {
+      let s = 0;
+      Object.keys(this.totalPriceByCategory).forEach((category) => {
+        s += this.totalPriceByCategory[category];
+      });
+      return s;
+    },
+    totalPriceForBundle() {
+      let s = 0;
+      Object.keys(this.pricesByCategory).forEach((category) => {
+        if (this.bundleDiscountServices.includes(category)) {
+          s += this.pricesByCategory[category];
+        }
+      });
+      return s;
+    },
+    bundleDiscount() {
+      return this.$store.state.vendorProposal.bundleDiscount;
+    },
+    bundledServicesString() {
+      let result = "";
+      this.bundleDiscount.services.forEach((service, index) => {
+        if (index !== 0) result += " + ";
+        result += this.getServiceCategory(service).title;
+      });
+      return result;
+    },
+    defaultTax() {
+      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
+    },
+    negotiationDiscount(){
+      console.log("negotiationDiscount", this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false});
+      return this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
+    },
+  },
+  watch: {
+    defaultTax(newValue) {
+      this.tax = newValue;
+    },
+    defaultDiscount(newValue) {
+      this.discount = newValue;
+    },
+    step(newValue, oldValue) {
+      if (newValue === 3) {
+        this.expanded = true;
+      }
+    },
+    totalPriceByCategory(newVal, oldVal){console.log("totalPriceByCategory", newVal);}
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
@@ -476,111 +569,6 @@ export default {
   },
   destoryed() {
     window.removeEventListener("scroll", this.handleScroll);
-  },
-  computed: {
-    ...mapGetters("vendorProposal", [
-      "finalPriceOfMainCategory",
-      "pricesByCategory",
-      "originalPriceOfMainCategory",
-      "totalPriceByCategory",
-      "totalPriceOfProposal",
-      "totalBeforeDiscount",
-      "totalBeforeBundle",
-    ]),
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    proposal() {
-      return this.$store.state.vendorProposal;
-    },
-    event() {
-      if (!this.proposalRequest) return {};
-      return this.proposalRequest.eventData;
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    additionalServices() {
-      return this.$store.state.vendorProposal.additionalServices;
-    },
-    mainService() {
-      const category = this.$store.state.vendorProposal.vendor.eventCategory.key;
-      const proposalServices = this.$store.state.vendorProposal.proposalServices;
-      if (!proposalServices[category]) {
-        return {};
-      }
-      return proposalServices[category];
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-
-    totalPrice() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? ((this.defaultDiscount.percentage * this.totalPriceBeforeDiscount)/100): 0) +
-        Number(this.defaultTax ? this.defaultTax.price : 0) -
-        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
-      );
-    },
-    totalPriceBeforeBundle() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0)
-      );
-    },
-    totalPriceBeforeDiscount() {
-      let s = 0;
-      Object.keys(this.totalPriceByCategory).forEach((category) => {
-        s += this.totalPriceByCategory[category];
-      });
-      return s;
-    },
-    totalPriceForBundle() {
-      let s = 0;
-      Object.keys(this.pricesByCategory).forEach((category) => {
-        if (this.bundleDiscountServices.includes(category)) {
-          s += this.pricesByCategory[category];
-        }
-      });
-      return s;
-    },
-    bundleDiscount() {
-      return this.$store.state.vendorProposal.bundleDiscount;
-    },
-    bundledServicesString() {
-      let result = "";
-      this.bundleDiscount.services.forEach((service, index) => {
-        if (index !== 0) result += " + ";
-        result += this.getServiceCategory(service).title;
-      });
-      return result;
-    },
-    defaultTax() {
-      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
-    },
-    defaultDiscount() {
-      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
-    },
-    negotiationDiscount(){
-      console.log("negotiationDiscount", this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false});
-      return this.$store.state.vendorProposal.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
-    },
-  },
-  watch: {
-    defaultTax(newValue) {
-      this.tax = newValue;
-    },
-    defaultDiscount(newValue) {
-      this.discount = newValue;
-    },
-    step(newValue, oldValue) {
-      if (newValue === 3) {
-        this.expanded = true;
-      }
-    },
-    totalPriceByCategory(newVal, oldVal){console.log("totalPriceByCategory", newVal);}
   },
 };
 </script>

@@ -39,13 +39,10 @@
   </div>
 </template>
 <script>
-import vue2Dropzone from "vue2-dropzone";
-import S3Service from "@/services/s3.service";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 
 export default {
   components: {
-    vueDropzone: vue2Dropzone,
     ProposalInspirationalPhotos,
   },
   props: {
@@ -82,13 +79,6 @@ export default {
     }
   },
   methods: {
-    async imageSelected(file) {
-      const imageData = await getBase64(file);
-      const extension = file.type.split("/")[1];
-      // S3Service.fileUpload(file, logoName, "logos").then((res) => {
-      //   this.$store.dispatch("campaign/setLogo", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
-      // });
-    },
   }
 };
 </script>

@@ -59,43 +59,48 @@
   </div>
 </template>
 <script>
-import ProposalRequest from "@/models/ProposalRequest";
-import ProposalRequestFile from "@/models/ProposalRequestFile";
-
-import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
-import EditableProposalSubItem from "./EditableProposalSubItem.vue";
-import { Money } from "v-money";
-
-import vue2Dropzone from "vue2-dropzone";
-import S3Service from "@/services/s3.service";
-import ProposalServiceTable from "./ProposalServiceTable";
-import ProposalUploadLegal from "./ProposalUploadLegal";
 import ProposalRequirements from "./ProposalRequirements.vue";
 export default {
   name: "ProposalItem",
   components: {
-    InputProposalSubItem,
-    SelectProposalSubItem,
-    EditableProposalSubItem,
-    Money,
-    vueDropzone: vue2Dropzone,
-    ProposalServiceTable,
     ProposalRequirements,
-    ProposalUploadLegal,
   },
   props: {
-    category: String,
+    category: {
+      type: String,
+      default: ""
+    },
     isCollapsed: Boolean,
     isDropdown: Boolean,
     proposalRange: Boolean,
-    subTitle: String,
-    img: String,
-    step: Number,
-    services: Array,
-    proposalRequest: Object,
-    vendor: Object,
-    service: Object,
+    subTitle: {
+      type: String,
+      default: ""
+    },
+    img: {
+      type: String,
+      default: ""
+    },
+    step: {
+      type: Number,
+      default: 0
+    },
+    services: {
+      type: Array,
+      default: () => []
+    },
+    proposalRequest: {
+      type: Object,
+      default: () => {}
+    },
+    vendor: {
+      type: Object,
+      default: () => {}
+    },
+    service: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {

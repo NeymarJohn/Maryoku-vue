@@ -461,17 +461,31 @@ export default {
     ProposalPricingItem,
     ProposalInspirationalPhotos,
     vueSignature,
-    ProposalPricingSummary,
     AttachmentTagList,
     carousel,
   },
   props: {
-    title: String,
-    eventData: Object,
+    title: {
+      type: String,
+      default: ""
+    },
+    eventData: {
+      type: Object,
+      default: () => {}
+    },
     isEdit: Boolean,
-    iconUrl: String,
-    itemType: String,
-    services: Array,
+    iconUrl: {
+      type: String,
+      default: ""
+    },
+    itemType: {
+      type: String,
+      default: ""
+    },
+    services: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
@@ -495,6 +509,85 @@ export default {
       expiredMinutes:null,
     };
   },
+  computed: {
+    ...mapGetters("vendorProposal", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),
+    personalMessage: {
+      get() {
+        return this.$store.state.vendorProposal.personalMessage;
+      },
+      set(value) {
+        this.$store.commit("vendorProposal/setValue", { key: "personalMessage", value });
+      },
+    },
+    attachments: {
+      get() {
+        return this.$store.state.vendorProposal.attachments;
+      },
+      set(value) {
+        this.$store.commit("vendorProposal/setValue", { key: "attachments", value });
+      },
+    },
+    eventVision() {
+      return this.$store.state.vendorProposal.eventVision;
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    event() {
+      if (this.proposalRequest) return this.proposalRequest.eventData;
+      return null;
+    },
+    additionalServices() {
+      return this.$store.state.vendorProposal.additionalServices;
+    },
+    extraServices() {
+      return this.event.components.filter((item) => item.componentId !== "unexpected");
+    },
+    step() {
+      return this.$store.state.vendorProposal.wizardStep;
+    },
+    validPolicy() {
+      if (this.vendor.policies)
+        return this.vendor.policies.filter(
+          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    validPricingPolicy() {
+      if (this.vendor.pricingPolicies)
+        return this.vendor.pricingPolicies.filter(
+          (item) => item.value || item.desc || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    headerBackgroundImage() {
+      if (this.coverImage) return this.coverImage;
+      if (this.vendor.images && this.vendor.images[0]) return this.vendor.images[0];
+      if (this.vendor.vendorImages && this.vendor.vendorImages[0]) return this.vendor.vendorImages[0];
+      return "";
+    },
+    coverImage: {
+      get() {
+        return this.$store.state.vendorProposal.coverImage;
+      },
+      set(value) {
+        this.$store.commit("vendorProposal/setValue", { key: "coverImage", value });
+      },
+    },
+    bundleDiscount() {
+      return this.$store.state.vendorProposal.bundleDiscount;
+    },
+    defaultTax() {
+      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
+    },
+  },
+  watch: {},
   created() {
     console.log(this.vendor);
     //Get attachments from vendor profile,
@@ -634,85 +727,6 @@ export default {
       this.$store.commit("vendorProposal/setValue", { key: "attachments", value: attachments });
     },
   },
-  computed: {
-    ...mapGetters("vendorProposal", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),
-    personalMessage: {
-      get() {
-        return this.$store.state.vendorProposal.personalMessage;
-      },
-      set(value) {
-        this.$store.commit("vendorProposal/setValue", { key: "personalMessage", value });
-      },
-    },
-    attachments: {
-      get() {
-        return this.$store.state.vendorProposal.attachments;
-      },
-      set(value) {
-        this.$store.commit("vendorProposal/setValue", { key: "attachments", value });
-      },
-    },
-    eventVision() {
-      return this.$store.state.vendorProposal.eventVision;
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    event() {
-      if (this.proposalRequest) return this.proposalRequest.eventData;
-      return null;
-    },
-    additionalServices() {
-      return this.$store.state.vendorProposal.additionalServices;
-    },
-    extraServices() {
-      return this.event.components.filter((item) => item.componentId !== "unexpected");
-    },
-    step() {
-      return this.$store.state.vendorProposal.wizardStep;
-    },
-    validPolicy() {
-      if (this.vendor.policies)
-        return this.vendor.policies.filter(
-          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
-        );
-      return null;
-    },
-    validPricingPolicy() {
-      if (this.vendor.pricingPolicies)
-        return this.vendor.pricingPolicies.filter(
-          (item) => item.value || item.desc || (item.type === "Including" && item.cost),
-        );
-      return null;
-    },
-    headerBackgroundImage() {
-      if (this.coverImage) return this.coverImage;
-      if (this.vendor.images && this.vendor.images[0]) return this.vendor.images[0];
-      if (this.vendor.vendorImages && this.vendor.vendorImages[0]) return this.vendor.vendorImages[0];
-      return "";
-    },
-    coverImage: {
-      get() {
-        return this.$store.state.vendorProposal.coverImage;
-      },
-      set(value) {
-        this.$store.commit("vendorProposal/setValue", { key: "coverImage", value });
-      },
-    },
-    bundleDiscount() {
-      return this.$store.state.vendorProposal.bundleDiscount;
-    },
-    defaultTax() {
-      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
-    },
-    defaultDiscount() {
-      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
-    },
-  },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

@@ -80,8 +80,8 @@
         <span class="font-size-14">Please choose:</span>
       </div>
       <div
-        v-for="(option, index) in item.plannerOptions"
-        :key="index"
+        v-for="(option, optionIndex) in item.plannerOptions"
+        :key="optionIndex"
         class="editable-proposal-sub-item-wrapper alternative-option"
         :class="[{ 'step-3': step == 3 }]"
       >
@@ -174,10 +174,19 @@ export default {
     },
   },
   props: {
-    item: Object,
+    item: {
+      type: Object,
+      default: () => {}  
+    },
     active: Boolean,
-    step: Number,
-    index: Number,
+    step: {
+      type: Number,
+      default: 0  
+    },
+    index: {
+      type: Number,
+      default: 0  
+    },
     theme: {
       type: String,
       default: "red",

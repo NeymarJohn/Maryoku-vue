@@ -38,13 +38,10 @@
   </div>
 </template>
 <script>
-import carousel from "vue-owl-carousel";
 import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
-import moment from "moment";
 export default {
   components: {
-    carousel,
   },
   props: {
     defaultPhoto: {

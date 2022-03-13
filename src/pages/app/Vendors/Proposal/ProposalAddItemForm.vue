@@ -205,11 +205,10 @@
 </template>
 
 <script>
-import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
 import AskSaveChange from "./Modals/AskSaveChangeModal";
 
 export default {
-  components: { SelectProposalSubItem, AskSaveChange },
+  components: { AskSaveChange },
 
   props: {
     optionalRequirements: {

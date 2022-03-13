@@ -31,13 +31,11 @@
   </div>
 </template>
 <script>
-import ProposalUploadLegal from "./ProposalUploadLegal";
 import ProposalRequirements from "./ProposalRequirements.vue";
 import _ from "underscore";
 
 export default {
   components: {
-    ProposalUploadLegal,
     ProposalRequirements,
   },
   computed: {

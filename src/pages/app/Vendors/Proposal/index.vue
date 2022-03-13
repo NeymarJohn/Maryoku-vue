@@ -125,6 +125,7 @@ export default {
               (item) => item.category !== this.vendor.vendorCategory
           );
       }
+      return [];
     },
     inspirationalPhotos(){
       return this.$store.state.vendorProposal.inspirationalPhotos;
