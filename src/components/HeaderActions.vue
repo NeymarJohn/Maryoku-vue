@@ -1,20 +1,21 @@
 <template>
   <div class="header-actions" :class="className">
     <ul class="d-flex list-style-none">
-      <template >
-          <template>
-            <li v-for="(action, j) in actions" v-if="action.key === 'share' && !hideShare || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment"
-                :class="{'md-small-hide':action.key !== 'share'}"
-                :key="j"
+      <template>
+        <template>
+          <li v-for="(action, j) in actions" v-if="action.key === 'share' && !hideShare || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment"
+              :key="j"
+              :class="{'md-small-hide':action.key !== 'share'}"
+          >
+            <md-button
+              class="md-simple md-just-icon adaptive-button"
+              :class="{active: action.key === 'comment' && isCommentMode}"
+              @click="click(action.key)"
             >
-                <md-button
-                    class="md-simple md-just-icon adaptive-button"
-                    :class="{active: action.key === 'comment' && isCommentMode}"
-                    @click="click(action.key)">
-                    <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`" />
-                </md-button>
-            </li>
-          </template >
+              <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`">
+            </md-button>
+          </li>
+        </template>
         <li
           class="md-small-hide"
         >
@@ -22,21 +23,26 @@
 
             v-if="showCommentPanel"
             class="md-simple md-just-icon hide-long-button"
-            @click="click('comment')">
+            @click="click('comment')"
+          >
             <div class="show-circle-for-img">
-              <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
+              <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
             </div>
-            <div class="show-comments-text">Show comments</div>
+            <div class="show-comments-text">
+              Show comments
+            </div>
           </md-button>
           <md-button
             v-else
             class="md-simple md-just-icon hide-long-button"
             @click="click('comment')"
           >
-            <div class="d-flex" >
-              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">Hide comments</div>
+            <div class="d-flex">
+              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
+                Hide comments
+              </div>
               <div class="hide-circle-for-img">
-                <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg" />
+                <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
               </div>
             </div>
           </md-button>
@@ -47,7 +53,8 @@
       v-if="isSharing"
       :page="page"
       @share="shareLink"
-      @cancel="isSharing = false"/>
+      @cancel="isSharing = false"
+    />
   </div>
 </template>
 <script>
@@ -55,14 +62,14 @@ import SharingModal from "@/components/Modals/SharingModal";
 import { HeaderActions, HeaderActionsRequirements, } from "@/constants/tabs";
 
 export default {
-  name: "header-actions",
+  name: "HeaderActions",
   components: {
     SharingModal,
   },
   props: {
     className: {
       type: String,
-      default: '',
+      default: "",
     },
     hideDownload: {
       type: Boolean,
@@ -90,7 +97,7 @@ export default {
     },
     page: {
       type: String,
-      default: 'event',
+      default: "event",
     },
     customStyles: {
       type: Object,
@@ -103,29 +110,6 @@ export default {
       isCommentMode: false,
       isSharing: false,
     };
-  },
-  created() {
-    const tenantId = this.$authService.resolveTenantId();
-  },
-  methods: {
-    click(key) {
-      console.log('action', key);
-      if (key === 'download') {
-        this.$emit("export", { type: "pdf" });
-      } else if (key === 'share') {
-        this.isSharing = !this.isSharing;
-      } else if (key === 'comment') {
-        this.isCommentMode = !this.isCommentMode;
-        this.$emit("toggleCommentMode", this.isCommentMode);
-      }
-    },
-
-    shareLink(args){
-      this.$emit("share", {...args, cb: params => {
-          console.log('shareLink', params);
-          this.isSharing = false;
-        }})
-    }
   },
   computed: {
     permission() {
@@ -144,6 +128,29 @@ export default {
     showCommentPanel(){
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
+  },
+  created() {
+    const tenantId = this.$authService.resolveTenantId();
+  },
+  methods: {
+    click(key) {
+      console.log("action", key);
+      if (key === "download") {
+        this.$emit("export", { type: "pdf" });
+      } else if (key === "share") {
+        this.isSharing = !this.isSharing;
+      } else if (key === "comment") {
+        this.isCommentMode = !this.isCommentMode;
+        this.$emit("toggleCommentMode", this.isCommentMode);
+      }
+    },
+
+    shareLink(args){
+      this.$emit("share", {...args, cb: params => {
+          console.log("shareLink", params);
+          this.isSharing = false;
+        }});
+    }
   },
 };
 </script>

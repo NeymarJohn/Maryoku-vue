@@ -10,49 +10,59 @@
                 id="remove-border"
                 class="no-underline"
                 placeholder="Select Category"
-                @md-selected="fetchVendors(1, $event)"
                 name="select"
+                @md-selected="fetchVendors(1, $event)"
               >
-                <md-option value>all</md-option>
-                <md-option v-for="(cat, index) in buildingBlocksList" :key="index" :value="cat.id" v-model="cat.id">{{
-                  cat.value
-                }}</md-option>
+                <md-option value>
+                  all
+                </md-option>
+                <md-option v-for="(cat, index) in buildingBlocksList" :key="index" v-model="cat.id" :value="cat.id">
+                  {{
+                    cat.value
+                  }}
+                </md-option>
               </md-select>
             </md-field>
           </md-table-cell>
-          <md-table-head class="md-table-header-color">Rank</md-table-head>
+          <md-table-head class="md-table-header-color">
+            Rank
+          </md-table-head>
         </md-table-row>
 
         <md-table-row
           v-for="(vendor, index) in vendorsList"
           :key="index"
-          @click="selectVendor(vendor)"
           style="cursor: pointer"
+          @click="selectVendor(vendor)"
         >
-          <md-table-cell md-label="Vendor Name">{{ vendor.vendorDisplayName }}</md-table-cell>
-          <md-table-cell md-label="Category" md-sort-by="vendorCategory">{{
-            categoryTitle(vendor.vendorCategory)
-          }}</md-table-cell>
+          <md-table-cell md-label="Vendor Name">
+            {{ vendor.vendorDisplayName }}
+          </md-table-cell>
+          <md-table-cell md-label="Category" md-sort-by="vendorCategory">
+            {{
+              categoryTitle(vendor.vendorCategory)
+            }}
+          </md-table-cell>
           <md-table-cell md-label="Rank">
             <div class="md-layout-item md-size-100 md-small-size-100">
               <label
-                class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
+                class="star-rating__star"
                 :class="{ 'is-selected': vendor.rank >= rating && vendor.rank != null }"
               >
                 <input
+                  v-model="vendor.rank"
                   class="star-rating star-rating__checkbox"
-                  @click="setRanking(vendor.id, rating)"
                   type="radio"
                   :value="rating"
                   :name="`market_ranking_` + vendor.id"
-                  v-model="vendor.rank"
-                />★
+                  @click="setRanking(vendor.id, rating)"
+                >★
               </label>
             </div>
           </md-table-cell>
-          <md-table-cell class="vendors-table_item-actions" v-if="mode === 'listing'">
+          <md-table-cell v-if="mode === 'listing'" class="vendors-table_item-actions">
             <md-button
               :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
               class="md-danger md-just-icon md-round"
@@ -61,7 +71,7 @@
               <md-icon>delete</md-icon>
             </md-button>
           </md-table-cell>
-          <md-table-cell class="vendors-table_item-actions" v-if="mode === 'manageBlock'">
+          <md-table-cell v-if="mode === 'manageBlock'" class="vendors-table_item-actions">
             <md-button
               v-if="!isSelected(vendor.id)"
               :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
@@ -148,11 +158,6 @@ export default {
       default: null,
     },
   },
-  created() {
-    if (this.event && this.selectedBlock) {
-      this.getBlockVendors();
-    }
-  },
   data() {
     return {
       /* auth : auth, */
@@ -167,6 +172,11 @@ export default {
       selectedVendor: undefined,
       blockVendors: [],
     };
+  },
+  created() {
+    if (this.event && this.selectedBlock) {
+      this.getBlockVendors();
+    }
   },
   mounted() {
     this.getBlockVendors();

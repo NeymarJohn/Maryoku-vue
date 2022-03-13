@@ -2,44 +2,44 @@
   <div class="time-slot d-flex">
     <div class="">
       <p class="mb-5 text-left font-bold">
-        <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="23" />Start At
+        <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="23">Start At
       </p>
       <div class="event-time d-flex align-center mt-10">
         <vue-timepicker
+          v-model="startTime"
           manual-input
           input-class="time-class red"
           class="time-class red"
           hide-dropdown
           format="hh:mm"
-          v-model="startTime"
           hide-clear-button
           @open="openDropDown"
           @change="updateTime"
         />
         <div class="am-field" @click="updateStartA()">
-          <input type="text" v-model="amPack.start" readonly />
+          <input v-model="amPack.start" type="text" readonly>
         </div>
       </div>
     </div>
-    <div class="line"></div>
+    <div class="line" />
     <div class="">
       <p class="mb-5 text-left font-bold">
-        <img class="mr-10" :src="`${$iconURL}Vendor Signup/Asset 522.svg`" width="23" />Finish At
+        <img class="mr-10" :src="`${$iconURL}Vendor Signup/Asset 522.svg`" width="23">Finish At
       </p>
       <div class="event-time d-flex align-center mt-10">
         <vue-timepicker
+          v-model="endTime"
           manual-input
           input-class="time-class red"
           class="time-class red"
           hide-dropdown
           format="hh:mm"
-          v-model="endTime"
           hide-clear-button
           @open="openDropDown"
           @change="updateTime"
         />
         <div class="am-field" @click="updateEndA()">
-          <input type="text" v-model="amPack.end" readonly />
+          <input v-model="amPack.end" type="text" readonly>
         </div>
       </div>
     </div>

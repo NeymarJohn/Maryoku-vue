@@ -4,7 +4,7 @@
       ${{ proposalRequest.cost | withComma }}
     </div>
     <div class="title">
-        {{ proposalRequest.vendor ? proposalRequest.vendor.companyName : '' }}
+      {{ proposalRequest.vendor ? proposalRequest.vendor.companyName : '' }}
     </div>
   </div>
 </template>

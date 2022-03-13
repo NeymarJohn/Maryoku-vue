@@ -1,7 +1,9 @@
 <template>
   <div class="requirement-tag-item">
     {{ label }}
-    <md-button class="md-simple md-icon-button md-red" @click="remove"><md-icon>close</md-icon></md-button>
+    <md-button class="md-simple md-icon-button md-red" @click="remove">
+      <md-icon>close</md-icon>
+    </md-button>
   </div>
 </template>
 <script>

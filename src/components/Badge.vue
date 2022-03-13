@@ -1,33 +1,33 @@
 <template>
   <component :is="tag" class="badge" :class="`badge-${type}`">
-    <slot></slot>
+    <slot />
   </component>
 </template>
 <script>
 export default {
-  name: 'badge',
+  name: "Badge",
   props: {
     tag: {
       type: String,
-      default: 'span'
+      default: "span"
     },
     type: {
       type: String,
-      default: 'default',
+      default: "default",
       validator: value => {
         let acceptedValues = [
-          'primary',
-          'info',
-          'success',
-          'warning',
-          'danger',
-          'rose'
-        ]
-        return acceptedValues.indexOf(value) !== -1
+          "primary",
+          "info",
+          "success",
+          "warning",
+          "danger",
+          "rose"
+        ];
+        return acceptedValues.indexOf(value) !== -1;
       }
     }
   }
-}
+};
 </script>
 <style>
 </style>

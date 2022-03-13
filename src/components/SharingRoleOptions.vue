@@ -2,24 +2,30 @@
   <div class="sharing-role-options" :class="{alignRight: align==='right'}">
     <div>
       <md-radio v-model="role" value="edit">
-        <div class="note-item-label">Can Edit</div>
+        <div class="note-item-label">
+          Can Edit
+        </div>
       </md-radio>
     </div>
     <div>
       <md-radio v-model="role" value="comment">
-        <div class="note-item-label">Can comment</div>
+        <div class="note-item-label">
+          Can comment
+        </div>
       </md-radio>
     </div>
     <div>
       <md-radio v-model="role" value="view">
-        <div class="note-item-label">Can view</div>
+        <div class="note-item-label">
+          Can view
+        </div>
       </md-radio>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "sharing-role-options",
+  name: "SharingRoleOptions",
   props: {
     align: {
       type: String,
@@ -33,14 +39,14 @@ export default {
   data() {
     return {
       role: this.value
-    }
+    };
   },
   watch: {
     role(newValue, oldValue) {
-      this.$emit("change", newValue)
+      this.$emit("change", newValue);
     }
   },
-}
+};
 </script>
 <style lang="scss" scoped>
   .sharing-role-options{

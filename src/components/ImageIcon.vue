@@ -1,5 +1,5 @@
 <template>
-  <img :src="`${$iconURL}${src}`" :style="`width:${width}px; margin-right:10px`"/>
+  <img :src="`${$iconURL}${src}`" :style="`width:${width}px; margin-right:10px`">
 </template>
 <script>
 export default {
@@ -13,5 +13,5 @@ export default {
       default: 20
     }
   },
-}
+};
 </script>

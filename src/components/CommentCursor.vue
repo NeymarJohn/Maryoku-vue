@@ -1,11 +1,9 @@
-<template>
-
-</template>
+<template />
 
 <script>
 export default {
   name: "CommentCursor",
-  props: ['top', 'left']
+  props: ["top", "left"]
 };
 </script>
 

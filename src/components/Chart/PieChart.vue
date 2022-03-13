@@ -1,22 +1,22 @@
 <template>
   <div class="pie-chart-wrapper" :class="{ row: options.direction === 'row' }">
     <svg
+      v-if="sortedData"
       id="pie_chart"
       ref="pie_chart"
       :width="options.width"
       :height="options.height"
-      v-if="sortedData"
       :class="{ 'd-none': showImage, 'd-block': !showImage }"
       :style="`min-width: ${options.minWidth || options.width}px; height:${options.height}`"
     >
       <g
         v-for="(item, index) in reorderingData"
+        :id="`g_${index}`"
         :key="index"
         :ref="`tooltip_${index}`"
+        :style="{ transform: `rotate(${item.rotate}deg)`, transformOrigin: 'center' }"
         @mousemove="setTooltipPos($event, item)"
         @mouseleave="hideToolTip"
-        :id="`g_${index}`"
-        :style="{ transform: `rotate(${item.rotate}deg)`, transformOrigin: 'center' }"
       >
         <circle
           class="pie-chart-value"
@@ -36,23 +36,23 @@
       </g>
 
       <g
+        v-if="showTooltip"
+        ref="tooltip"
         :transform="`translate(${x},${y})`"
         class="tooltip"
         :visibility="`${toolTipStatus}`"
-        ref="tooltip"
-        v-if="showTooltip"
       >
         <path
+          v-if="toolTipPosition == 'left'"
           id="svgMask"
           d="M3,92 L182,92 182,43 190,38 182,33 182,3 3,3 z"
           fill="#e6e5e5"
-          v-if="toolTipPosition == 'left'"
         />
         <path
+          v-if="toolTipPosition == 'right'"
           id="svgMask"
           d="M12,92 L190,92 190,3 12,3 12,43 3,38 12,33 z"
           fill="#e6e5e5"
-          v-if="toolTipPosition == 'right'"
         />
         <circle
           class="pie-chart-value"
@@ -64,11 +64,11 @@
               `"
         />
         <text
+          v-if="toolTip.category"
           id="tooltip"
           x="40"
           y="30"
           style="fill: #050505; font-family: 'Manrope-Regular'; font-size: 16px; font-weight: 800"
-          v-if="toolTip.category"
         >
           {{ toolTip.category.substr(0, 15) }}{{ toolTip.category.length > 15 ? "..." : "" }}
           <tspan x="25" dy="1.6em" style="font-size: 16px; font-weight: 300">Planned budget</tspan>
@@ -77,19 +77,19 @@
       </g>
     </svg>
     <img
-      :src="blobURL"
       v-if="showImage"
-      style="min-height: 300px"
       id="pie_chart_image"
+      :src="blobURL"
+      style="min-height: 300px"
       :class="{ 'd-none': showImage }"
-    />
-    <canvas id="pie-chart-canvas" v-if="showImage" width="300" height="300"></canvas>
+    >
+    <canvas v-if="showImage" id="pie-chart-canvas" width="300" height="300" />
     <div class="items-cont">
       <ul class="items-list">
         <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns} pr-0`">
           <div class="d-flex align-center">
-            <span :style="`background-color: ${item.color};`" class="icon"></span>
-            <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="24" />
+            <span :style="`background-color: ${item.color};`" class="icon" />
+            <img v-if="item.image" class="pie_svg_img ml-5" :src="item.image" width="24">
             <span class="ml-10 text-gray">{{ item.category }}</span>
           </div>
         </li>
@@ -102,6 +102,11 @@ import _ from "underscore";
 import { mapGetters } from "vuex";
 
 export default {
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   props: {
     chartData: [Array, Function],
     type: {
@@ -170,6 +175,41 @@ export default {
       ],
       defaultColor: "#641956",
     };
+  },
+  computed: {
+    reorderingData() {
+      let maxIndex = this.sortedData.findIndex((item) => item.value == this.maxValue);
+      const endData = { ...this.sortedData[maxIndex] };
+      endData.strikeDash = 2 + " " + (this.circleLength - 2) + " " + this.circleLength;
+      if (maxIndex == 0) maxIndex = this.sortedData.length - 1;
+      else maxIndex -= 1;
+      const newData = [...this.sortedData.slice(maxIndex), ...this.sortedData.slice(0, maxIndex)];
+      newData.push(this.sortedData[maxIndex]);
+      newData.push(endData);
+      if (maxIndex >= 0) {
+        return newData;
+      }
+      return this.sortedData;
+    },
+  },
+  watch: {
+    event(newVal, oldVal) {
+      this.drawChart();
+    },
+    items(newVal, oldVal) {
+      this.drawChart();
+    },
+    chartData() {
+      this.drawChart();
+    },
+  },
+  mounted() {
+    this.drawChart();
+    window.addEventListener("resize", this.onResize);
+  },
+  beforeDestroy() {
+    // Unregister the event listener before destroying this Vue instance
+    window.removeEventListener("resize", this.onResize);
   },
   methods: {
     setTooltipPos: function (event, item) {
@@ -281,46 +321,6 @@ export default {
     },
     onResize() {
       this.$refs.pie_chart.style.display = this.$refs.pie_chart.style.display === "inline" ? "inline-block" : "inline";
-      this.drawChart();
-    },
-  },
-  computed: {
-    reorderingData() {
-      let maxIndex = this.sortedData.findIndex((item) => item.value == this.maxValue);
-      const endData = { ...this.sortedData[maxIndex] };
-      endData.strikeDash = 2 + " " + (this.circleLength - 2) + " " + this.circleLength;
-      if (maxIndex == 0) maxIndex = this.sortedData.length - 1;
-      else maxIndex -= 1;
-      const newData = [...this.sortedData.slice(maxIndex), ...this.sortedData.slice(0, maxIndex)];
-      newData.push(this.sortedData[maxIndex]);
-      newData.push(endData);
-      if (maxIndex >= 0) {
-        return newData;
-      }
-      return this.sortedData;
-    },
-  },
-  mounted() {
-    this.drawChart();
-    window.addEventListener("resize", this.onResize);
-  },
-  beforeDestroy() {
-    // Unregister the event listener before destroying this Vue instance
-    window.removeEventListener("resize", this.onResize);
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.drawChart();
-    },
-    items(newVal, oldVal) {
-      this.drawChart();
-    },
-    chartData() {
       this.drawChart();
     },
   },

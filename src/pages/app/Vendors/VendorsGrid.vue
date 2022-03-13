@@ -2,20 +2,22 @@
   <div class="md-layout md-gutter">
     <div class="md-layout-item md-size-100 mt-42 mt-0">
       <md-field>
-        <md-input type="search" class="mb-3" clearable placeholder="Search vendors" v-model="searchQuery"></md-input>
+        <md-input v-model="searchQuery" type="search" class="mb-3" clearable placeholder="Search vendors" />
       </md-field>
     </div>
     <div
-      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
       v-for="vendor in filteredVendorsList"
       :key="vendor.id"
+      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
     >
       <product-card header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
-        <img class="img imgHeader" slot="imageHeader" :src="vendorMainImage(vendor)" />
+        <img slot="imageHeader" class="img imgHeader" :src="vendorMainImage(vendor)">
         <div slot="card-buttons">
           <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">
             <md-icon>more_horiz</md-icon>
-            <md-tooltip md-direction="bottom">View</md-tooltip>
+            <md-tooltip md-direction="bottom">
+              View
+            </md-tooltip>
           </md-button>
           <md-button
             v-if="vendor.vendorWebsite && isValidVendorWebsite(vendor)"
@@ -24,29 +26,34 @@
             target="_blank"
           >
             <md-icon>open_in_browser</md-icon>
-            <md-tooltip md-direction="bottom">Open website</md-tooltip>
+            <md-tooltip md-direction="bottom">
+              Open website
+            </md-tooltip>
           </md-button>
           <md-button class="md-warning md-xs md-round md-just-icon" @click="editVendorDetails(vendor)">
             <md-icon>edit</md-icon>
-            <md-tooltip md-direction="bottom">Edit</md-tooltip>
+            <md-tooltip md-direction="bottom">
+              Edit
+            </md-tooltip>
           </md-button>
           <md-button class="md-danger md-xs md-round md-just-icon">
             <md-icon>delete</md-icon>
-            <md-tooltip md-direction="bottom">Remove</md-tooltip>
+            <md-tooltip md-direction="bottom">
+              Remove
+            </md-tooltip>
           </md-button>
         </div>
         <h4 slot="title" class="title">
           <a class="fw-bold" href="#pablo">{{ vendor.vendorDisplayName }}</a>
           <div class="small">
             <label
-              class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
+              class="star-rating__star"
               :class="{
                 'is-selected': vendor.rank >= rating && vendor.rank != null,
               }"
-              >★</label
-            >
+            >★</label>
             <span class="small text-gray">({{ vendor.voters }})</span>
           </div>
         </h4>
@@ -54,7 +61,7 @@
           <div class>
             <p>{{ vendor.vendorTagLine }}</p>
           </div>
-          <div class="tags" v-if="vendor.vendorTagging && vendor.vendorTagging.length">
+          <div v-if="vendor.vendorTagging && vendor.vendorTagging.length" class="tags">
             <div v-for="(tag, index) in vendor.vendorTagging" :key="index">
               <span class="tt-capitalize">{{ tag }}</span>
               <span v-if="index <= vendor.vendorTagging.length">&middot;</span>
@@ -71,7 +78,9 @@
             </div>
           </div>
           <div class="stats">
-            <p class="category"><md-icon>place</md-icon>Geography</p>
+            <p class="category">
+              <md-icon>place</md-icon>Geography
+            </p>
           </div>
         </template>
       </product-card>
@@ -122,6 +131,18 @@ export default {
       ],
     };
   },
+  watch: {
+    searchQuery(newVal, oldVal) {
+      if (newVal === "") {
+        this.filteredVendorsList = this.vendorsList;
+      } else {
+        this.filterVendors();
+      }
+    },
+    vendorsList(newVal, oldVal) {
+      this.filterVendors();
+    },
+  },
   mounted() {
     this.filteredVendorsList = this.vendorsList;
   },
@@ -153,18 +174,6 @@ export default {
         return vendor.vendorWebsite.indexOf("http://") > -1 || vendor.vendorWebsite.indexOf("https://") > -1;
       }
       return false;
-    },
-  },
-  watch: {
-    searchQuery(newVal, oldVal) {
-      if (newVal === "") {
-        this.filteredVendorsList = this.vendorsList;
-      } else {
-        this.filterVendors();
-      }
-    },
-    vendorsList(newVal, oldVal) {
-      this.filterVendors();
     },
   },
 };

@@ -1,12 +1,12 @@
 <template>
   <div class="maryoku-radial-progress">
     <radial-progress-bar
-      :startColor="color"
-      :stopColor="color"
-      innerStrokeColor="#C4C1C1"
-      :strokeWidth="30"
+      :start-color="color"
+      :stop-color="color"
+      inner-stroke-color="#C4C1C1"
+      :stroke-width="30"
       :diameter="212"
-      isClockwise="true"
+      is-clockwise="true"
       :completed-steps="percentage"
       :total-steps="100"
     >
@@ -15,9 +15,9 @@
         :value="Number(percentage)"
         class="percentage font-size-22 font-bold-extra"
         suffix="%"
-        :customStyle="true"
-        :customStyleContents="`color: ${color}`"
-      ></animated-number>
+        :custom-style="true"
+        :custom-style-contents="`color: ${color}`"
+      />
     </radial-progress-bar>
   </div>
 </template>

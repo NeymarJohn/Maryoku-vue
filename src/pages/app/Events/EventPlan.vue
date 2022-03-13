@@ -1,8 +1,8 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
+    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
     <!-- <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar> -->
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 <script>
@@ -111,7 +111,7 @@ export default {
       // };
       const elements = [];
 
-      if (this.user.currentUserType === 'planner' || this.user.currentUserType === 'vendor') {
+      if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
           elements.push(overview);
           elements.push(concept);
           elements.push(budget);
@@ -120,7 +120,7 @@ export default {
           if (this.event.budgetProgress > 0) {
               elements.push(planningBoard);
           }
-      } else if(this.user.currentUserType === 'guest') {
+      } else if(this.user.currentUserType === "guest") {
           elements.push(overview);
           elements.push(planningBoard);
       }
@@ -149,6 +149,16 @@ export default {
       }
     },
   },
+  watch: {
+    $route: "fetchData",
+    event(newValue) {
+      this.setConstantStates(newValue);
+    },
+    eventData(newValue) {
+      this.setConstantStates(newValue);
+    },
+  },
+  created() {},
   methods: {
     setConstantStates(event) {
       const overviewIndex = this.eventElements.findIndex((item) => item.componentId === "overview");
@@ -194,16 +204,6 @@ export default {
       });
       this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
       });
-    },
-  },
-  created() {},
-  watch: {
-    $route: "fetchData",
-    event(newValue) {
-      this.setConstantStates(newValue);
-    },
-    eventData(newValue) {
-      this.setConstantStates(newValue);
     },
   },
 };

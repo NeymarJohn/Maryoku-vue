@@ -1,24 +1,33 @@
 <template>
   <div class="proposal-time-counter" :class="theme">
-    <div class="font-bold" v-if="isExpired">This offer has expired</div>
-    <div class="font-bold" v-else>This offer will expire in</div>
-    <hr />
-    <timer size="big" :target="target"></timer>
+    <div v-if="isExpired" class="font-bold">
+      This offer has expired
+    </div>
+    <div v-else class="font-bold">
+      This offer will expire in
+    </div>
+    <hr>
+    <timer size="big" :target="target" />
     <template v-if="approved">
-      <hr />
-      <div class="font-bold font-size-14">Your Request has been Approved</div>
+      <hr>
+      <div class="font-bold font-size-14">
+        Your Request has been Approved
+      </div>
     </template>
     <template v-else-if="pending">
-      <hr />
-      <div class="font-bold font-size-14">Waiting reply</div>
+      <hr>
+      <div class="font-bold font-size-14">
+        Waiting reply
+      </div>
     </template>
     <div v-else-if="section !== 'card'" class="button-wrapper">
       <md-button
         class="maryoku-btn md-simple"
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
         @click="updateExpireTime"
-        >Ask for more time</md-button
       >
+        Ask for more time
+      </md-button>
     </div>
   </div>
 </template>
@@ -53,14 +62,14 @@ export default {
       default: "detail",
     }
   },
-  methods: {
-    updateExpireTime() {
-      this.$emit("updateExpireDate");
-    },
-  },
   computed: {
     isExpired() {
       return new Date(this.target).getTime() - new Date().getTime() < 0;
+    },
+  },
+  methods: {
+    updateExpireTime() {
+      this.$emit("updateExpireDate");
     },
   },
 };

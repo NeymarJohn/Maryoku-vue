@@ -4,13 +4,13 @@
       <img
         src="https://static-maryoku.s3.amazonaws.com/storage/wizard-icons/Group 577@2x.png"
         width="110"
-      />
+      >
       <h3>One event coming right up!</h3>
     </div>
 
     <div class="page-content">
       Great Job!
-      <br />We have everything we need to start planning your event.
+      <br>We have everything we need to start planning your event.
     </div>
   </div>
 </template>

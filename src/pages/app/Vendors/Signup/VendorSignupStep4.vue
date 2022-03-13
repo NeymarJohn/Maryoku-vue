@@ -2,7 +2,7 @@
   <div class="vendor-signup-step4-wrapper">
     <div class="md-layout inside-container">
       <div class="left-side md-layout-item md-size-25">
-        <img :src="`${iconPurple}Purple Icons/Icon_Summary(Vendor).svg`"/>
+        <img :src="`${iconPurple}Purple Icons/Icon_Summary(Vendor).svg`">
         <h2>SUMMARY</h2>
         <p>This is a summary of your company's info which we'll use in future proposal creating</p>
         <h2>4/5</h2>
@@ -11,10 +11,10 @@
         <div class="card">
           <div class="tabs">
             <div
-              class="tab"
-              :class="{ active: t == activeTab }"
               v-for="(t, tIndex) in tabs"
               :key="tIndex"
+              class="tab"
+              :class="{ active: t == activeTab }"
               @click="goToSection(t)"
             >
               {{ t }}
@@ -22,12 +22,12 @@
           </div>
           <div class="banner">
             <carousel
+              :key="`carousel-${vendor.images.length}`"
               :items="1"
               :margin="0"
               :dots="false"
               :nav="false"
               class="header-carousel"
-              :key="`carousel-${vendor.images.length}`"
             >
               <template slot="prev">
                 <span class="prev handle-btn">
@@ -35,88 +35,98 @@
                 </span>
               </template>
               <img
-                :src="item"
                 v-for="(item, index) in vendor.images.filter(it => it != null)"
                 :key="`carousel-item-${index}`"
+                :src="item"
                 class="carousel-image"
-              />
-              <template slot="next" v-if="vendor.images.length > 1">
+              >
+              <template v-if="vendor.images.length > 1" slot="next">
                 <span class="next handle-btn">
                   <md-icon>keyboard_arrow_right</md-icon>
                 </span>
               </template>
             </carousel>
           </div>
-          <div class="about-cont" id="About">
+          <div id="About" class="about-cont">
             <div class="block">
-              <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
+              <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`">Capacity </span>
               <span class="number">
                 {{ vendor.capacity.low }}
-                <img :src="`${iconUrl}Group 4585 (2).svg`" />
+                <img :src="`${iconUrl}Group 4585 (2).svg`">
                 {{ vendor.capacity.high }}
               </span>
             </div>
             <div class="block">
-              <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
-              <div class="desc">{{ vendor.about.company }}</div>
+              <div class="title lg">
+                <img :src="`${iconUrl}Asset 563.svg`"> ABOUT
+              </div>
+              <div class="desc">
+                {{ vendor.about.company }}
+              </div>
             </div>
             <div class="block">
               <div class="title">
                 <img
                   :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`"
                   width="30px"
-                />
+                >
                 About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
               </div>
-              <div class="desc">{{ vendor.about.category }}</div>
+              <div class="desc">
+                {{ vendor.about.category }}
+              </div>
             </div>
             <vendor-images-list
               :images="[...vendor.images.filter(it => it != null), ...vendor.images.filter(it => it != null)]"
               class="images"
-            ></vendor-images-list>
-            <div class="contact-us" id="Contact">
+            />
+            <div id="Contact" class="contact-us">
               <h4>CONTACT US</h4>
               <div class="items">
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 547.svg`" />
+                  <img :src="`${iconUrl}Asset 547.svg`">
                   {{ vendor.vendorMainEmail }}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 550.svg`" />
+                  <img :src="`${iconUrl}Asset 550.svg`">
                   {{ vendor.vendorAddressLine1 }}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 548.svg`" />
+                  <img :src="`${iconUrl}Asset 548.svg`">
                   {{ vendor.vendorMainPhoneNumber }}
                 </div>
               </div>
             </div>
-            <div class="social" v-if="isSocial()">
+            <div v-if="isSocial()" class="social">
               Website & social
               <div class="items">
                 <div
-                  class="item"
                   v-for="(s, sIndex) in socialMediaBlocks"
                   :key="sIndex"
+                  class="item"
                   :class="{ 'mr-20': vendor.social[s.name] }"
                 >
                   <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
-                    <img :src="`${iconUrl}${s.icon}`" />
+                    <img :src="`${iconUrl}${s.icon}`">
                     {{ vendor.social[s.name] }}
                   </a>
                 </div>
               </div>
             </div>
 
-            <div class="personal-message mt-40" v-if="vendor.personalMessage">
+            <div v-if="vendor.personalMessage" class="personal-message mt-40">
               <div class="font-bold mb-20">
-                <img class="mr-10" :src="`${$iconURL}common/message-dark.svg`" />
+                <img class="mr-10" :src="`${$iconURL}common/message-dark.svg`">
                 Personal message to your clients
               </div>
-              <div class="content">{{ vendor.personalMessage }}</div>
+              <div class="content">
+                {{ vendor.personalMessage }}
+              </div>
             </div>
             <div class="attachments mt-50">
-              <div class="mb-30">Attachments</div>
+              <div class="mb-30">
+                Attachments
+              </div>
               <!-- <attachment-tag-list
                 :defaultValue="vendor.attachments"
                 @add="addNewAttachment"
@@ -130,18 +140,18 @@
                 class="attachment"
                 @uploaded="setAttachment"
                 @remove="removeAttachment"
-              ></attachment-item>
+              />
             </div>
           </div>
-          <div class="fee-cont" id="Pricing">
+          <div id="Pricing" class="fee-cont">
             <div class="title">
-              <h3><img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE</h3>
+              <h3><img :src="`${iconUrl}Asset 562.svg`"> ELEMENTS IN STARTING FEE</h3>
             </div>
             <div class="cblock">
               <div class="cheader">
                 <div class="first-column">
                   <div>
-                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`">
                     {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </div>
                   <!-- <span>QTY</span> -->
@@ -155,19 +165,19 @@
               </div>
             </div>
           </div>
-          <div class="extra-cont" id="Pricing">
+          <div id="Pricing" class="extra-cont">
             <div class="title">
-              <h3><img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY</h3>
+              <h3><img :src="`${iconUrl}Asset 526.svg`">WITH EXTRA PAY</h3>
             </div>
             <div class="cblock">
               <div class="cheader">
                 <div class="d-flex align-center">
-                  <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                  <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`">
                   {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
                 <span class="text-center">QTY</span>
                 <span class="text-center">Price</span>
-                <span></span>
+                <span />
               </div>
               <div class="citems">
                 <div class="citem">
@@ -181,21 +191,25 @@
               </div>
             </div>
           </div>
-          <div class="policy-cont" id="Policy">
-            <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
+          <div id="Policy" class="policy-cont">
+            <div class="title">
+              <img :src="`${iconUrl}Group 1471 (2).svg`"> OUR POLICY
+            </div>
             <div class="rules">
-              <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                <div class="item">{{ policy.name }}</div>
-                <div class="item" v-if="policy.type === 'MultiSelection'">
-                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+              <div v-for="(policy, yIndex) in validPolicy" :key="yIndex" class="rule">
+                <div class="item">
+                  {{ policy.name }}
+                </div>
+                <div v-if="policy.type === 'MultiSelection'" class="item">
+                  <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
                     `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                   }}</span>
                 </div>
-                <div class="item" v-else-if="policy.type === 'Including'">
-                  <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
+                <div v-else-if="policy.type === 'Including'" class="item">
+                  <span v-if="policy.value" class="mr-10"> Yes </span>
+                  <span v-if="!policy.value && policy.cost" class="mr-10"> {{ `$ ${policy.cost | withComma}` }} </span>
                 </div>
-                <div class="item text-right" v-else>
+                <div v-else class="item text-right">
                   <span
                     v-if="
                       policy.type === 'Number' &&
@@ -203,34 +217,37 @@
                         policy.unit !== 'hour' &&
                         policy.unit !== 'none'
                     "
-                    >$</span
-                  >
+                  >$</span>
                   <span v-if="policy.type === 'Boolean'">
-                    <img v-if="policy.value === true" :src="`${$iconURL}common/checked-circle-purple.svg`" />
-                    <img v-else :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`"/>
+                    <img v-if="policy.value === true" :src="`${$iconURL}common/checked-circle-purple.svg`">
+                    <img v-else :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`">
                     <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                   </span>
                   <span v-else>
-                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                    <img v-else-if="policy.value === false" :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`"/>
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
+                    <img v-else-if="policy.value === false" :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`">
                     <span v-else-if="policy.unit === 'none'">{{ policy.desc }}</span>
                     <span v-else>{{ policy.value | withComma }}</span>
                   </span>
                   <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
                   <span v-if="policy.isPercentage">%</span>
-                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                  <span v-if="policy.hasOwnProperty('attendees')" class="ml-50">
                     {{ policy.attendees }} attendees
                   </span>
                 </div>
               </div>
             </div>
-            <div class="rules" v-if="additionalRules && additionalRules.length">
-              <h5 class="font-bold font-size-20">Additional Rules</h5>
-              <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                <div class="item font-regular">Event must be {{ policy }}</div>
+            <div v-if="additionalRules && additionalRules.length" class="rules">
+              <h5 class="font-bold font-size-20">
+                Additional Rules
+              </h5>
+              <div v-for="(policy, yIndex) in additionalRules" :key="yIndex" class="rule">
+                <div class="item font-regular">
+                  Event must be {{ policy }}
+                </div>
               </div>
             </div>
-            <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
+            <div v-if="vendor.vendorCategories[0] == 'venuerental'" class="not-allowed">
               <template v-if="vendor.notAllowedThirdParty === 2">
                 <h5>We don't allow these 3rd party vendor:</h5>
                 <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
@@ -244,26 +261,26 @@
             </div>
             <div class="dont-work">
               <h5>We don't work on:</h5>
-              <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+              <div v-if="mergeStringItems(vendor.selectedWeekdays)" class="item">
+                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`">
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
-              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+              <div v-for="(d, dIndex) in vendor.exDonts" :key="dIndex" class="item">
+                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`">
                 {{ d.holiday }}
               </div>
-              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+              <div v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0" class="item">
+                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`">
                 {{ dontWorkDays() }}
               </div>
-              <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`" />
+              <div v-if="vendor.dontWorkTime" class="item">
+                <img :src="`${iconPurple}Purple Icons/Icon_X(Small).svg`">
                 {{ dontWorkTime() }}
               </div>
             </div>
             <div v-if="vendor.healthPolicy || (vendor.guaranteed && vendor.guaranteed.length)" class="healthy-policy">
               <h5 class="d-flex align-center">
-                <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px" />
+                <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
                 Health policy
               </h5>
               <template v-if="vendor.healthPolicy">
@@ -276,16 +293,18 @@
                 </p>
               </template>
               <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-                <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+                <div class="mt-30 font-bold-extra">
+                  Guaranteed with every staff member:
+                </div>
                 <div class="md-layout mt-20">
                   <div
                     v-for="option in guaranteedOptions"
-                    class="md-layout-item md-size-30 py-10"
                     :key="option.value"
+                    class="md-layout-item md-size-30 py-10"
                     :style="{ display: vendor.guaranteed.includes(option.value) ? '' : 'none' }"
                   >
                     <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                      <img class="mr-10" :src="`/static/icons/vendor/Icon_V.svg`" width="30px" />
+                      <img class="mr-10" :src="`/static/icons/vendor/Icon_V.svg`" width="30px">
                       {{ option.label }}
                     </div>
                   </div>
@@ -293,44 +312,48 @@
               </template>
             </div>
           </div>
-          <div class="pricing-policy-cont" id="Rules">
-            <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
+          <div id="Rules" class="pricing-policy-cont">
+            <div class="title">
+              <img :src="`${iconUrl}Asset 560.svg`"> OUR PRICING POLICY
+            </div>
             <div class="rules">
-              <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
+              <div v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex" class="rule">
                 <div class="item">
                   <div>{{ policy.name }}</div>
-                  <div class="mt-10 color-gray">{{ policy.desc }}</div>
+                  <div class="mt-10 color-gray">
+                    {{ policy.desc }}
+                  </div>
                 </div>
-                <div class="item" v-if="policy.type === 'MultiSelection'">
-                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                <div v-if="policy.type === 'MultiSelection'" class="item">
+                  <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
                     `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                   }}</span>
                 </div>
-                <div class="item" v-else-if="policy.type === 'Including'">
-                  <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
+                <div v-else-if="policy.type === 'Including'" class="item">
+                  <span v-if="policy.value" class="mr-10"> Yes </span>
+                  <span v-if="!policy.value && policy.cost && policy.unit === '$'" class="mr-10"> $ </span>
                   <span>{{ Number(policy.cost) | withComma }}</span>
                 </div>
-                <div class="item" v-else-if="policy.type === 'Boolean' && policy.value && policy.discount">
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
-                  <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
+                <div v-else-if="policy.type === 'Boolean' && policy.value && policy.discount" class="item">
+                  <span v-if="policy.hasOwnProperty('unit') && policy.unit === '$'" class="mr-10"> $ </span>
+                  <span v-if="policy.discount" class="mr-10"> {{ policy.discount }} </span>
+                  <span v-if="policy.hasOwnProperty('unit') && policy.unit === '%'" class="mr-10"> % </span>
                 </div>
-                <div class="item" v-else-if="policy.type === 'CostAndQty'">
+                <div v-else-if="policy.type === 'CostAndQty'" class="item">
                   ${{ policy.value | withComma }} per {{ policy.qtyUnit }}({{ policy.defaultQty }}{{ policy.qtyUnit }}s)
                 </div>
-                <div class="item" v-else-if="policy.type === 'Cost'">
+                <div v-else-if="policy.type === 'Cost'" class="item">
                   ${{ policy.value | withComma }} per {{ policy.qtyUnit }}
                 </div>
-                <div class="item" v-else>
+                <div v-else class="item">
                   <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>
                   <span v-else>{{ policy.value | withComma }}</span>
                   <span v-if="policy.isPercentage">%</span>
-                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                  <span v-if="policy.hasOwnProperty('attendees')" class="ml-50">
                     {{ policy.attendees }} attendees
                   </span>
-                  <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
+                  <span v-if="policy.unit" class="ml-50 text-transform-capitalize">
                     <!-- {{ policy.unit }}{{ policy.value > 1 ? "s" : "" }} -->
                     {{ getUnit(policy) }}
                   </span>
@@ -342,8 +365,8 @@
             </div>
             <div class="signatures">
               <div
-                class="sign"
                 v-if="vendor.signature"
+                class="sign"
                 :style="
                   `
                   background-image: url(${vendor.signature});
@@ -382,12 +405,7 @@ import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
 import AttachmentItem from "../components/AttachmentItem.vue";
 export default {
-  name: "vendor-signup-step4",
-  props: {
-    categories: Array,
-    icon: String,
-    vendor: Object,
-  },
+  name: "VendorSignupStep4",
   components: {
     VendorServiceItem,
     LightBox,
@@ -398,6 +416,12 @@ export default {
     AttachmentTagList,
     AttachmentItem,
     HeaderImageCarousel,
+  },
+  filters: {},
+  props: {
+    categories: Array,
+    icon: String,
+    vendor: Object,
   },
   data() {
     return {
@@ -557,6 +581,48 @@ export default {
       guaranteedOptions: GuaranteedOptions,
       medias: [],
     };
+  },
+  computed: {
+    additionalRules() {
+      return this.$store.state.vendorSignup.vendor.additionalRules;
+    },
+    validPricingPolicy() {
+      if (this.vendor.pricingPolicies)
+        return this.vendor.pricingPolicies.filter(
+          item => item.value || item.desc || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    validPolicy() {
+      if (this.vendor.policies)
+        return this.vendor.policies.filter(
+          item => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    attachments() {
+      if (this.vendor.attachments && this.vendor.attachments.length > 0) return this.vendor.attachments;
+      if (this.vendor.eventCategory.legalDocuments) {
+        return this.vendor.eventCategory.legalDocuments.map(legal => {
+          return {
+            name: legal,
+            isRequired:
+              this.vendor.eventCategory.mandatoryLegalDocs &&
+              this.vendor.eventCategory.mandatoryLegalDocs.findIndex(item => item === legal) >= 0,
+            fileName: "",
+          };
+        });
+      }
+      return [];
+    },
+  },
+  watch: {
+    vendor: {
+      handler: function(newVal) {
+        console.log("handler", newVal);
+      },
+      deep: true,
+    },
   },
   created() {},
   mounted() {
@@ -722,49 +788,6 @@ export default {
         return `For ${policy.groupSize}`;
       }
       return "";
-    },
-  },
-  computed: {
-    additionalRules() {
-      return this.$store.state.vendorSignup.vendor.additionalRules;
-    },
-    validPricingPolicy() {
-      if (this.vendor.pricingPolicies)
-        return this.vendor.pricingPolicies.filter(
-          item => item.value || item.desc || (item.type === "Including" && item.cost),
-        );
-      return null;
-    },
-    validPolicy() {
-      if (this.vendor.policies)
-        return this.vendor.policies.filter(
-          item => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
-        );
-      return null;
-    },
-    attachments() {
-      if (this.vendor.attachments && this.vendor.attachments.length > 0) return this.vendor.attachments;
-      if (this.vendor.eventCategory.legalDocuments) {
-        return this.vendor.eventCategory.legalDocuments.map(legal => {
-          return {
-            name: legal,
-            isRequired:
-              this.vendor.eventCategory.mandatoryLegalDocs &&
-              this.vendor.eventCategory.mandatoryLegalDocs.findIndex(item => item === legal) >= 0,
-            fileName: "",
-          };
-        });
-      }
-      return [];
-    },
-  },
-  filters: {},
-  watch: {
-    vendor: {
-      handler: function(newVal) {
-        console.log("handler", newVal);
-      },
-      deep: true,
     },
   },
 };

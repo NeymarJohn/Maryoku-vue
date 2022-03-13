@@ -1,30 +1,52 @@
 <template>
   <div class="down-timer" :class="`${size}`">
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(days) }}</div>
-      <div class="count-label">Days</div>
+      <div class="number">
+        {{ $stringUtil.getTwoDigits(days) }}
+      </div>
+      <div class="count-label">
+        Days
+      </div>
     </div>
-    <div class="count-item divider">:</div>
-    <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(hours) }}</div>
-      <div class="count-label">Hours</div>
+    <div class="count-item divider">
+      :
     </div>
-    <div class="count-item divider">:</div>
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(mins) }}</div>
-      <div class="count-label">Min</div>
+      <div class="number">
+        {{ $stringUtil.getTwoDigits(hours) }}
+      </div>
+      <div class="count-label">
+        Hours
+      </div>
     </div>
-    <div class="count-item divider">:</div>
+    <div class="count-item divider">
+      :
+    </div>
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(secs) }}</div>
-      <div class="count-label">Sec</div>
+      <div class="number">
+        {{ $stringUtil.getTwoDigits(mins) }}
+      </div>
+      <div class="count-label">
+        Min
+      </div>
+    </div>
+    <div class="count-item divider">
+      :
+    </div>
+    <div class="count-item">
+      <div class="number">
+        {{ $stringUtil.getTwoDigits(secs) }}
+      </div>
+      <div class="count-label">
+        Sec
+      </div>
     </div>
   </div>
 </template>
 <script>
 import moment from "moment";
 export default {
-  name: "time-counter",
+  name: "TimeCounter",
   props: {
     target: {
       type: [Number, Date],
@@ -42,6 +64,20 @@ export default {
       secs: "00",
       intervalId: null,
     };
+  },
+  watch: {
+    target: function () {
+      this.updateTime();
+    },
+  },
+  created() {
+    this.updateTime();
+    this.intervalId = setInterval(() => {
+      this.updateTime();
+    }, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   },
   methods: {
     updateTime() {
@@ -70,20 +106,6 @@ export default {
         // diff -= this.horus * 3600;
         // this.mins = diff / 60;
       }
-    },
-  },
-  created() {
-    this.updateTime();
-    this.intervalId = setInterval(() => {
-      this.updateTime();
-    }, 1000);
-  },
-  beforeDestroy() {
-    clearInterval(this.intervalId);
-  },
-  watch: {
-    target: function () {
-      this.updateTime();
     },
   },
 };

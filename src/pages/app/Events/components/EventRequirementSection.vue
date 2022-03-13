@@ -5,26 +5,30 @@
         <tr>
           <th class="width-30">
             <span class="section-title">
-              <img :src="`${$iconURL}Requirements/Services.svg`" class="mr-20" style="width: 60px" />
+              <img :src="`${$iconURL}Requirements/Services.svg`" class="mr-20" style="width: 60px">
               {{ category }}
             </span>
           </th>
           <th v-if="category !== 'Amenities'" class="width-10">
-            <div class="text-center">Size</div>
+            <div class="text-center">
+              Size
+            </div>
           </th>
           <th :class="category === 'Amenities' ? 'width-20' : 'width-10'">
-            <div :class="category !== 'Amenities' ? 'text-center mr-20' : 'text-left ml-40'">How Many?</div>
+            <div :class="category !== 'Amenities' ? 'text-center mr-20' : 'text-left ml-40'">
+              How Many?
+            </div>
           </th>
-          <th class="width-10"></th>
-          <th class="width-30"></th>
+          <th class="width-10" />
+          <th class="width-30" />
         </tr>
       </thead>
       <tbody>
-        <tr class="requirement-item" v-for="(service, index) in properties.filter((sv) => sv.isSelected)" :key="index">
+        <tr v-for="(service, index) in properties.filter((sv) => sv.isSelected)" :key="index" class="requirement-item">
           <td class="width-30">
             <div class="py-10 label-capitalize">
               {{ service.item }}
-              <div class="mt-10" v-if="service.type === 'single-selection'">
+              <div v-if="service.type === 'single-selection'" class="mt-10">
                 <category-selector
                   :value="service.value"
                   :categories="service.options"
@@ -33,7 +37,7 @@
                   column="2"
                   :additional="true"
                   @change="handleChangeCategorySelector(service, ...arguments)"
-                ></category-selector>
+                />
               </div>
               <!--              <requirement-item-comment-->
               <!--                v-if="service.notable"-->
@@ -41,7 +45,7 @@
               <!--                @save="saveComment"-->
               <!--              ></requirement-item-comment>-->
               <span v-if="service.item === 'Table setup and preparations' && service.hint" class="ml-10">
-                <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
+                <img :src="`${$iconURL}Event%20Page/light.svg`" width="20">
                 <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
               </span>
             </div>
@@ -49,26 +53,28 @@
           <td v-if="category !== 'Amenities'">
             <template v-if="service.sizeEnabled">
               <input
+                v-model="service.defaultSize"
                 class="quantity-input"
                 placeholder="Cm"
                 type="number"
-                v-model="service.defaultSize"
                 @input="updateRequirement"
-              />
+              >
             </template>
-            <div v-else class="empty text-center">n/a</div>
+            <div v-else class="empty text-center">
+              n/a
+            </div>
           </td>
           <td :class="category !== 'Amenities' ? 'text-center' : 'text-left ml-30'">
             <template v-if="service.qtyEnabled">
               <input
+                v-model="service.defaultQty"
                 class="quantity-input"
                 placeholder="QTY"
                 type="number"
-                v-model="service.defaultQty"
                 @input="updateRequirement"
-              />
+              >
               <span v-if="service.hint" style="position: absolute; margin-top: 10px">
-                <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
+                <img :src="`${$iconURL}Event%20Page/light.svg`" width="20">
                 <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
               </span>
             </template>
@@ -78,20 +84,20 @@
           </td>
           <td class="width-10">
             <div class="empty">
-              <md-button class="md-icon-button md-simple requirement-action" v-if="service.qtyEnabled">
-                <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
+              <md-button v-if="service.qtyEnabled" class="md-icon-button md-simple requirement-action">
+                <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20">
               </md-button>
               <md-button class="md-icon-button md-simple requirement-action" @click="removeRequirement(service)">
-                <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />
+                <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20">
               </md-button>
             </div>
           </td>
           <td class="width-30">
             <div class="condition">
-              <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="true">
+              <md-checkbox v-model="service.mustHave" class="md-simple md-checkbox-circle md-red" :value="true">
                 Must Have
               </md-checkbox>
-              <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="false">
+              <md-checkbox v-model="service.mustHave" class="md-simple md-checkbox-circle md-red" :value="false">
                 Nice To Have
               </md-checkbox>
             </div>
@@ -102,18 +108,24 @@
     <div class="additional-request mb-30">
       <div class="additional-request-description">
         <h4>Additional Requests</h4>
-        <div v-if="category === 'Amenities'">Select all of the items you'd like to add.</div>
-        <div v-else>Would you like to add one of those items?</div>
+        <div v-if="category === 'Amenities'">
+          Select all of the items you'd like to add.
+        </div>
+        <div v-else>
+          Would you like to add one of those items?
+        </div>
       </div>
       <div class="additional-tag-container">
         <div
-          class="additional-request-tag"
           v-for="(service, index) in properties.filter((item) => !item.isSelected && item.visible)"
           :key="index"
+          class="additional-request-tag"
           @click="addRequirement(service)"
         >
           {{ service.item }}
-          <md-icon class="icon color-red">add_circle</md-icon>
+          <md-icon class="icon color-red">
+            add_circle
+          </md-icon>
         </div>
       </div>
     </div>
@@ -127,7 +139,7 @@ import Multiselect from "vue-multiselect";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {
-  name: "event-requirement-section",
+  name: "EventRequirementSection",
   components: {
     RequirementItemComment,
     Multiselect,
@@ -156,6 +168,23 @@ export default {
       properties: [],
       value: [],
     };
+  },
+  watch: {
+    requirements: {
+      handler(newVal, oldVal) {
+        this.getProperties();
+      },
+      deep: true,
+    },
+    multiSelection: {
+      handler(newVal, oldVal) {
+        this.getProperties();
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.getProperties();
   },
   methods: {
     getProperties() {
@@ -240,23 +269,6 @@ export default {
 
       this.$emit("change", this.requirements);
     },
-  },
-  watch: {
-    requirements: {
-      handler(newVal, oldVal) {
-        this.getProperties();
-      },
-      deep: true,
-    },
-    multiSelection: {
-      handler(newVal, oldVal) {
-        this.getProperties();
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.getProperties();
   },
 };
 </script>

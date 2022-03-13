@@ -1,36 +1,38 @@
 <template>
   <div class="md-layout booking-section position-relative booking-proposals bg-white" style="padding-left: 450px">
-    <budget-notifications field="negotiation"></budget-notifications>
+    <budget-notifications field="negotiation" />
     <div class="choose-vendor-board">
       <loader :active="isLoadingProposal" />
       <div class="d-flex justify-content-between align-center">
         <div>
           <resizable-toggle-button
-            class="mr-20 mb-10"
+            v-for="tab in tabs"
             :key="tab"
+            class="mr-20 mb-10"
             :label="getServiceCategoryByKey(tab).title"
             :icon="`${$iconURL}Budget+Elements/${tab}.svg`"
-            :selectedIcon="`${$iconURL}Budget+Elements/${tab}-white.svg`"
-            :defaultStatus="tab === selectedCategory"
+            :selected-icon="`${$iconURL}Budget+Elements/${tab}-white.svg`"
+            :default-status="tab === selectedCategory"
             :disabled="!eventRequirements[tab]"
-            :hasBadge="hasBadge(tab)"
-            iconStyle="opacity:0.8"
-            v-for="tab in tabs"
+            :has-badge="hasBadge(tab)"
+            icon-style="opacity:0.8"
             @click="selectCategory(tab)"
-          ></resizable-toggle-button>
-          <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
+          />
+          <button class="add-category-button mb-10" @click="addRequirements">
+            <md-icon>add</md-icon>
+          </button>
         </div>
         <progress-radial-bar
           :value="proposals.length"
           :total="3"
           icon="common/checked-calendar-red.svg"
           @click="openCart"
-        ></progress-radial-bar>
+        />
       </div>
       <div class="booking-proposals">
         <template v-if="proposals.length > 0">
           <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
-            <img :src="`${$iconURL}Budget+Elements/${getServiceCategoryByKey(selectedCategory).icon}`" />
+            <img :src="`${$iconURL}Budget+Elements/${getServiceCategoryByKey(selectedCategory).icon}`">
             {{ getServiceCategoryByKey(selectedCategory).title }}
           </div>
           <div class="d-flex justify-content-between">
@@ -38,35 +40,34 @@
           </div>
           <div>
             <!-- Event Booking Items -->
-            <div class="events-booking-items" v-if="proposals.length">
+            <div v-if="proposals.length" class="events-booking-items">
               <proposal-card
-                @goDetail="goDetailPage"
                 v-for="(proposal, index) in proposals.slice(0, 3)"
                 :key="index"
                 :proposal="proposal"
                 :component="selectedCategory"
                 :probability="getProbability(index)"
-                :isCollapsed="showDetails"
-                :isSelected="selectedProposal && selectedProposal.id === proposal.id"
-              >
-              </proposal-card>
+                :is-collapsed="showDetails"
+                :is-selected="selectedProposal && selectedProposal.id === proposal.id"
+                @goDetail="goDetailPage"
+              />
             </div>
             <template v-if="showDetails">
               <transition name="component-fade" mode="out-in">
                 <event-proposal-details
+                  :key="selectedProposal.id"
                   class="mt-20"
                   :proposal="selectedProposal"
                   :category="selectedCategory"
-                  :key="selectedProposal.id"
                   @favorite="favoriteProposal"
                   @close="closeProposal"
                   @ask="handleAsk"
-                ></event-proposal-details>
+                />
               </transition>
             </template>
           </div>
         </template>
-        <pending-for-vendors v-else :expiredTime="currentRequirement.expiredBusinessTime"></pending-for-vendors>
+        <pending-for-vendors v-else :expired-time="currentRequirement.expiredBusinessTime" />
       </div>
     </div>
     <div class="proposals-footer white-card">
@@ -82,41 +83,44 @@
         </md-button>
       </div>
       <md-button v-else class="md-simple maryoku-btn md-black ml-auto" @click="updateExpiredTime">
-          <span class="text-transform-capitalize">I need those proposals urgent</span>
+        <span class="text-transform-capitalize">I need those proposals urgent</span>
       </md-button>
 
       <div v-if="proposals.length">
         <md-button
-            class="md-simple md-outlined md-red maryoku-btn"
-            :disabled="proposals.length === 0 || !selectedProposal"
-            @click="bookVendor"
+          class="md-simple md-outlined md-red maryoku-btn"
+          :disabled="proposals.length === 0 || !selectedProposal"
+          @click="bookVendor"
         >
           Book Now
         </md-button>
         <md-button class="md-red maryoku-btn"
                    :disabled="proposals.length === 0 || !selectedProposal"
-                   @click="addToCart">Add To Cart</md-button>
+                   @click="addToCart"
+        >
+          Add To Cart
+        </md-button>
       </div>
     </div>
     <services-cart
-        v-if="showCart"
-        @close="showCart = false"
-    ></services-cart>
+      v-if="showCart"
+      @close="showCart = false"
+    />
     <additional-request-modal
-      class="lg"
       v-if="isOpenedAdditionalModal"
-      :subCategory="currentRequirement.mainRequirements"
-      :selectedCategory="getServiceCategoryByKey(selectedCategory)"
-      :defaultData="getRequirementsFormStore(selectedCategory) || {}"
+      class="lg"
+      :sub-category="currentRequirement.mainRequirements"
+      :selected-category="getServiceCategoryByKey(selectedCategory)"
+      :default-data="getRequirementsFormStore(selectedCategory) || {}"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
-    ></additional-request-modal>
+    />
     <event-change-proposal-modal
       v-if="showDifferentProposals"
-      @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
-    ></event-change-proposal-modal>
+      @close="showDifferentProposals = false"
+    />
   </div>
 </template>
 <script>
@@ -148,7 +152,7 @@ import NegotiationNotification from "./components/NegotiationNotification";
 import Swal from "sweetalert2";
 
 export default {
-  name: "event-booking",
+  name: "EventBooking",
   components: {
     Loader,
     InputMask,
@@ -213,8 +217,8 @@ export default {
       }
     },
     getServiceCategoryByKey(key){
-        console.log('service.category', key);
-        if(!key) return null
+        console.log("service.category", key);
+        if(!key) return null;
         let category = this.serviceCategories.find(cat => cat.key === key);
         return category ? category : null;
     },
@@ -269,7 +273,7 @@ export default {
           },
           eventId: this.event.id
       });
-      console.log('updateExpiredTime', requirement);
+      console.log("updateExpiredTime", requirement);
       this.currentRequirement = requirement;
     },
     goDetailPage(proposal) {
@@ -324,7 +328,7 @@ export default {
       });
     },
     async favoriteProposal(isFavorite){
-      this.selectedProposal = await this.$store.dispatch('event/updateProposal', {
+      this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
           proposal: {...this.selectedProposal, isFavorite},
           category: this.selectedCategory
       });
@@ -334,8 +338,8 @@ export default {
       });
     },
     async handleAsk(ask){
-        if (ask === 'expiredDate') {
-            let expiredTime = moment().add(2, 'days').unix() * 1000;
+        if (ask === "expiredDate") {
+            let expiredTime = moment().add(2, "days").unix() * 1000;
             let query = new ProposalNegotiationRequest({
                 eventId: this.event.id,
                 proposalId: this.selectedProposal.id,
@@ -344,8 +348,8 @@ export default {
                 url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
             });
 
-            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save()
-            console.log('ask.result', res);
+            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save();
+            console.log("ask.result", res);
             this.selectedProposal.negotiations.push(res);
         }
     },
@@ -355,8 +359,8 @@ export default {
           category: this.selectedCategory,
           event: {id: this.event.id},
           proposalId: this.selectedProposal.id,
-      })
-      this.$store.dispatch('event/updateProposal', {
+      });
+      this.$store.dispatch("event/updateProposal", {
          proposal: {...this.selectedProposal, isFavorite: false},
          category: this.selectedProposal.vendor.vendorCategory,
       });
@@ -365,23 +369,47 @@ export default {
       this.showCart = true;
     },
     async processNotification(){
-      console.log('processNotification');
+      console.log("processNotification");
       let proposals = this.negotiationProposals;
       this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
           this.negotiationProposals[key].map(proposal => {
               let { negotiations } = proposal;
               negotiations.map(it => it.status = 3);
-              this.$store.dispatch('event/updateProposal', {
+              this.$store.dispatch("event/updateProposal", {
                   category: key,
                   proposal: {...proposal, negotiations}
-              })
-          })
-      })
+              });
+          });
+      });
     }
   },
+  watch: {
+    event(newVal, oldVal) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    negotiationProposals(newVal){
+      console.log("negotiationProposals", newVal);
+      if(Object.keys(newVal).length) {
+          this.$notify({
+              message: {
+                  title: "Great News!",
+                  content: "The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide",
+                  close: this.processNotification
+              },
+              icon: `${this.$iconURL}messages/group-21013.svg`,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              timeout: 5000,
+          });
+      }
+    },
+    proposals(newVal){},
+    eventRequirements(newVal){},
+    $route: "fetchData",
+  },
   async created() {
-    await this.$store.dispatch('planningBoard/resetCartItems');
+    await this.$store.dispatch("planningBoard/resetCartItems");
     this.isLoadingProposal = true;
     await this.getRequirements(this.event.id);
     await this.getProposals({eventId: this.event.id});
@@ -397,30 +425,6 @@ export default {
       if (requirements[event.id]) requirements[event.id] = null;
       self.setBookingRequirements(requirements);
     });
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    negotiationProposals(newVal){
-      console.log('negotiationProposals', newVal);
-      if(Object.keys(newVal).length) {
-          this.$notify({
-              message: {
-                  title: 'Great News!',
-                  content: 'The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide',
-                  close: this.processNotification
-              },
-              icon: `${this.$iconURL}messages/group-21013.svg`,
-              horizontalAlign: "right",
-              verticalAlign: "top",
-              timeout: 5000,
-          });
-      }
-    },
-    proposals(newVal){},
-    eventRequirements(newVal){},
-    $route: "fetchData",
   },
   filters: {
     formatDate: function (date) {
@@ -450,8 +454,8 @@ export default {
       return this.$store.state.EventGuestVuex.eventData.components;
     },
     tabs(){
-      if(!this.eventRequirements || !Object.keys(this.eventRequirements).length) return []
-        return Object.keys(this.eventRequirements)
+      if(!this.eventRequirements || !Object.keys(this.eventRequirements).length) return [];
+        return Object.keys(this.eventRequirements);
     },
     event() {
         return this.$store.state.EventGuestVuex.eventData;
@@ -466,7 +470,7 @@ export default {
     },
     negotiationProposals(){
       let proposals = this.$store.state.EventGuestVuex.proposals;
-      if(!Object.keys(proposals).length) return {}
+      if(!Object.keys(proposals).length) return {};
       let negotiationProposals = {};
       Object.keys(proposals).map(key => {
           let subProposals = [];
@@ -476,9 +480,9 @@ export default {
               if(negotiations.length) {
                   subProposals.push(p);
               }
-          })
+          });
           if(subProposals.length) negotiationProposals[key] = subProposals;
-      })
+      });
       return negotiationProposals;
     },
   },

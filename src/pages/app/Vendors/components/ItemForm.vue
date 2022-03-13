@@ -1,21 +1,25 @@
 <template>
   <div class="discount-form" :class="customClass">
-    <div class="service-item" v-if="!isEditing">
+    <div v-if="!isEditing" class="service-item">
       <div class="flex-1">
-        <img :src="`${$iconURL}${icons[field]}`" style="width: 20px" class="mr-10" />
+        <img :src="`${$iconURL}${icons[field]}`" style="width: 20px" class="mr-10">
         <span class="text-capitalize">{{ field }}</span>
       </div>
-      <div class="text-right">{{ discount.percentage }}%</div>
-      <div class="text-right">{{field === 'tax' ? '': '-'}} ${{ (discount.price || calDiscount) | withComma }}</div>
+      <div class="text-right">
+        {{ discount.percentage }}%
+      </div>
+      <div class="text-right">
+        {{ field === 'tax' ? '': '-' }} ${{ (discount.price || calDiscount) | withComma }}
+      </div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="toggleEditMode">
-          <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
+          <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px">
         </md-button>
       </div>
     </div>
-    <div class="service-item is-edit" v-else>
+    <div v-else class="service-item is-edit">
       <div class="flex-1">
-        <img :src="`${$iconURL}${icons[field]}`" style="width: 20px" class="mr-10" />
+        <img :src="`${$iconURL}${icons[field]}`" style="width: 20px" class="mr-10">
         <span class="text-capitalize">{{ field }} </span>
       </div>
       <money
@@ -45,9 +49,13 @@
         @keyup.native="setPriceRange(editingDiscount.price, field)"
       />
     </div>
-    <div class="text-right mb-10" v-if="isEditing">
-      <md-button class="md-simple normal-btn md-vendor" @click="cancel">Cancel</md-button>
-      <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>
+    <div v-if="isEditing" class="text-right mb-10">
+      <md-button class="md-simple normal-btn md-vendor" @click="cancel">
+        Cancel
+      </md-button>
+      <md-button class="normal-btn md-vendor" @click="saveDiscount">
+        Save
+      </md-button>
     </div>
   </div>
 </template>
@@ -70,7 +78,7 @@ export default {
     },
     field: {
       type: String,
-      default: 'discount',
+      default: "discount",
     },
     nonMaryoku:{
       type: Boolean,
@@ -78,16 +86,16 @@ export default {
     },
     customClass: {
       type: String,
-      default: '',
+      default: "",
     }
   },
     data() {
       return {
         icons: {
-          discount: 'NewSubmitPorposal/Asset 612.svg',
-          tax: 'NewSubmitPorposal/Asset 613.svg',
-          negotiation: 'NewSubmitPorposal/Asset 612.svg',
-          bundle: '',
+          discount: "NewSubmitPorposal/Asset 612.svg",
+          tax: "NewSubmitPorposal/Asset 613.svg",
+          negotiation: "NewSubmitPorposal/Asset 612.svg",
+          bundle: "",
         },
         // discount: this.defaultDiscount,
         discount: {
@@ -101,21 +109,53 @@ export default {
         isEditing: false,
       };
     },
+    computed: {
+      calDiscount() {
+        if ( this.field === "discount" ) {
+          this.discount.price = ((this.sumOfPrices * this.discount.percentage) / 100);
+        } else if ( this.field === "negotiation" ) {
+          const discountedTotal = this.sumOfPrices * (1 - this.defaultDiscount.percent / 100);
+          this.discount.price =  Math.round(discountedTotal * this.discount.percent / 100);
+        } else if ( this.field === "tax" ) {
+          const discountedTotal = this.sumOfPrices * (this.defaultDiscount.percentage / 100);
+          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ? discountedTotal * (1 - this.defaultNegotiation.percent / 100) : discountedTotal;
+          console.log({
+            discountedTotal,
+            negotiatedTotal
+          });
+          this.discount.price = (this.sumOfPrices - negotiatedTotal) * (this.editingDiscount.percentage / 100);
+        }
+        return this.discount.price;
+      },
+      sumOfPrices() {
+        return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"] :
+          this.$store.getters["vendorProposal/sumOfPrices"];
+      }
+    },
+    watch: {
+      sumOfPrices(newValue, oldValue) {
+        // console.log({ newValue, oldValue });
+        if (newValue !== oldValue) {
+          this.discount.price = (newValue * this.discount.percentage) / 100;
+          // this.tax.price = ((newValue - this.discount.price) * this.tax.percentage) / 100;
+        }
+      },
+    },
     created() {
-      if ( this.field === 'discount' ) {
-        this.discount = JSON.parse(JSON.stringify(this.defaultDiscount))
-        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount))
-      } else if ( this.field === 'negotiation' ) {
-        this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation))
-        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation))
-      } else if ( this.field === 'tax' ) {
-        this.discount = JSON.parse(JSON.stringify(this.defaultTax))
-        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax))
+      if ( this.field === "discount" ) {
+        this.discount = JSON.parse(JSON.stringify(this.defaultDiscount));
+        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount));
+      } else if ( this.field === "negotiation" ) {
+        this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation));
+        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation));
+      } else if ( this.field === "tax" ) {
+        this.discount = JSON.parse(JSON.stringify(this.defaultTax));
+        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax));
       }
     },
     methods: {
       toggleEditMode() {
-        this.isEditing = !this.isEditing
+        this.isEditing = !this.isEditing;
       },
       cancel() {
         this.isEditing = false;
@@ -149,45 +189,13 @@ export default {
       setPriceRange(val) {
         if (this.field === "discount") {
           this.editingDiscount.percentage = ((val / this.sumOfPrices) * 100).toFixed(2);
-        } else if (this.field === 'negotiation') {
+        } else if (this.field === "negotiation") {
           this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price)) * 100).toFixed(2);
         } else if (this.field === "tax") {
           this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price -
             (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0))) * 100).toFixed(2);
         }
       },
-    },
-    watch: {
-      sumOfPrices(newValue, oldValue) {
-        // console.log({ newValue, oldValue });
-        if (newValue !== oldValue) {
-          this.discount.price = (newValue * this.discount.percentage) / 100;
-          // this.tax.price = ((newValue - this.discount.price) * this.tax.percentage) / 100;
-        }
-      },
-    },
-    computed: {
-      calDiscount() {
-        if ( this.field === 'discount' ) {
-          this.discount.price = ((this.sumOfPrices * this.discount.percentage) / 100)
-        } else if ( this.field === 'negotiation' ) {
-          const discountedTotal = this.sumOfPrices * (1 - this.defaultDiscount.percent / 100);
-          this.discount.price =  Math.round(discountedTotal * this.discount.percent / 100);
-        } else if ( this.field === 'tax' ) {
-          const discountedTotal = this.sumOfPrices * (this.defaultDiscount.percentage / 100);
-          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ? discountedTotal * (1 - this.defaultNegotiation.percent / 100) : discountedTotal;
-          console.log({
-            discountedTotal,
-            negotiatedTotal
-          });
-          this.discount.price = (this.sumOfPrices - negotiatedTotal) * (this.editingDiscount.percentage / 100)
-        }
-        return this.discount.price;
-      },
-      sumOfPrices() {
-        return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"] :
-          this.$store.getters["vendorProposal/sumOfPrices"]
-      }
     },
 };
 </script>
@@ -210,5 +218,8 @@ export default {
       font-size: 16px;
     }
   }
+}
+.negotiation{
+    z-index: 9999;
 }
 </style>

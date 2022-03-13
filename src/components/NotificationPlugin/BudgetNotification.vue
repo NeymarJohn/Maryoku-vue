@@ -1,41 +1,50 @@
 <template>
   <div
-    @click="close"
     data-notify="container"
     class="alert open event-state-message alert-plain"
     role="alert"
     :class="[verticalAlign, horizontalAlign]"
     :style="customPosition"
-    data-notify-position="top-center">
-      <md-button
-          v-if="closeBtn"
-          class="md-simple position-absolute md-small-hide"
-          style="top: 20px;right:20px"
-          @click="close"
-      >
-          <md-icon>close</md-icon>
-      </md-button>
-      <div v-if="icon" class="event-state-message-image">
-          <img :src="icon" />
+    data-notify-position="top-center"
+    @click="close"
+  >
+    <md-button
+      v-if="closeBtn"
+      class="md-simple position-absolute md-small-hide"
+      style="top: 20px;right:20px"
+      @click="close"
+    >
+      <md-icon>close</md-icon>
+    </md-button>
+    <div v-if="icon" class="event-state-message-image">
+      <img :src="icon">
+    </div>
+    <div class="event-state-message-content">
+      <div class="message-title" :style="{color: type === 'info' ? '#000' : ''}">
+        {{ message.title }}
       </div>
-      <div class="event-state-message-content">
-          <div class="message-title" :style="{color: type === 'info' ? '#000' : ''}">{{message.title}}</div>
-          <div class="message-content">{{message.content}}</div>
-          <div class="message-action">
-              <div class="message-action-content">{{message.action}}</div>
-              <div class="message-action-button">
-                  <md-button v-if="cancelBtn" class="md-bold add-category-btn md-black md-simple" @click="close">Cancel</md-button>
-                  <md-button v-if="confirmBtn && type !== 'positive'" class="md-red md-bold add-category-btn" @click="send">
-                      {{ confirmBtn }}</md-button>
-              </div>
-          </div>
+      <div class="message-content">
+        {{ message.content }}
       </div>
-
+      <div class="message-action">
+        <div class="message-action-content">
+          {{ message.action }}
+        </div>
+        <div class="message-action-button">
+          <md-button v-if="cancelBtn" class="md-bold add-category-btn md-black md-simple" @click="close">
+            Cancel
+          </md-button>
+          <md-button v-if="confirmBtn && type !== 'positive'" class="md-red md-bold add-category-btn" @click="send">
+            {{ confirmBtn }}
+          </md-button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'notification',
+  name: "Notification",
   props: {
     title: {
         type: String,
@@ -49,11 +58,11 @@ export default {
     icon: String,
     verticalAlign: {
       type: String,
-      default: 'top'
+      default: "top"
     },
     horizontalAlign: {
       type: String,
-      default: 'center'
+      default: "center"
     },
     type: {
       type: String,
@@ -82,52 +91,52 @@ export default {
   data () {
     return {
       elmHeight: 0
-    }
+    };
   },
   computed: {
     hasIcon () {
-      return this.icon && this.icon.length > 0
+      return this.icon && this.icon.length > 0;
     },
     alertType () {
-      return `alert-${this.type}`
+      return `alert-${this.type}`;
     },
     customPosition () {
-      let initialMargin = 0
-      let alertHeight = this.elmHeight + 10
+      let initialMargin = 0;
+      let alertHeight = this.elmHeight + 10;
       let sameAlertsCount = this.$notifications.state.filter(alert => {
         return (
           alert.horizontalAlign === this.horizontalAlign &&
           alert.verticalAlign === this.verticalAlign &&
           alert.timestamp <= this.timestamp
-        )
-      }).length
-      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin
-      let styles = {}
-      if (this.verticalAlign === 'top') {
-        styles.top = `${pixels}px`
+        );
+      }).length;
+      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin;
+      let styles = {};
+      if (this.verticalAlign === "top") {
+        styles.top = `${pixels}px`;
       } else {
-        styles.bottom = `${pixels}px`
+        styles.bottom = `${pixels}px`;
       }
-      return styles
+      return styles;
+    }
+  },
+  mounted () {
+    this.elmHeight = this.$el.clientHeight;
+    if (this.timeout) {
+        setTimeout(_ => {
+            this.$emit("on-close");
+        }, this.timeout);
     }
   },
   methods: {
     close () {
-      this.$emit('on-close', this.timestamp)
+      this.$emit("on-close", this.timestamp);
     },
     send(){
-      this.$emit('on-send', this.message.title);
-    }
-  },
-  mounted () {
-    this.elmHeight = this.$el.clientHeight
-    if (this.timeout) {
-        setTimeout(_ => {
-            this.$emit('on-close');
-        }, this.timeout)
+      this.$emit("on-send", this.message.title);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
     .event-state-message {

@@ -3,81 +3,85 @@
     <table
       class="event-blocks__table event-block-table"
       :class="{ booked: eventCategoryItem.bookedBudget, borderCard: !editingMode }"
-      :style="        editingMode
-          ? `border-left: 10px solid ${eventCategoryItem.color}`
-          : `border: 2px solid ${eventCategoryItem.color}`">
+      :style=" editingMode
+        ? `border-left: 10px solid ${eventCategoryItem.color}`
+        : `border: 2px solid ${eventCategoryItem.color}`"
+    >
       <tbody>
-      <template>
-        <tr>
-          <td width="40%" class="event-block-element">
-            <div class="d-flex align-center">
-              <img :src="editingMode
-                    ? `${$iconURL}Budget Elements/${eventCategoryItem.icon}`
-                    : `/static/icons/budget/${eventCategoryItem.icon.replace('svg', 'png')}`"/>
-              <span>{{ eventCategoryItem.title }}</span>
-              <span v-if="eventCategoryItem.eventCategory">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon ml-5"/>
-                <md-tooltip>
-                  <div class="font-size-14 tab-tooltip">{{ eventCategoryItem.eventCategory.tooltipText }}</div>
-                </md-tooltip>
-              </span>
-            </div>
-          </td>
-          <td class="planned" width="25%" style="white-space: nowrap">
-            <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma(Number) }}</span>
-            <span v-else>$ {{
+        <template>
+          <tr>
+            <td width="40%" class="event-block-element">
+              <div class="d-flex align-center">
+                <img :src="editingMode
+                  ? `${$iconURL}Budget Elements/${eventCategoryItem.icon}`
+                  : `/static/icons/budget/${eventCategoryItem.icon.replace('svg', 'png')}`"
+                >
+                <span>{{ eventCategoryItem.title }}</span>
+                <span v-if="eventCategoryItem.eventCategory">
+                  <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon ml-5">
+                  <md-tooltip>
+                    <div class="font-size-14 tab-tooltip">{{ eventCategoryItem.eventCategory.tooltipText }}</div>
+                  </md-tooltip>
+                </span>
+              </div>
+            </td>
+            <td class="planned" width="25%" style="white-space: nowrap">
+              <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma(Number) }}</span>
+              <span v-else>$ {{
                 (eventCategoryItem.allocatedBudget / event.numberOfParticipants).toFixed(2) | withComma
               }}</span>
-            <md-button class="md-rose md-sm md-simple edit-btn" v-if="isEditable && editingMode" @click="switchEdit"
-            ><img :src="`${$iconURL}Requirements/edit-dark.svg`" style="width: 20px"/>
-            </md-button
-            >
-            <img
-              :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
-              v-if="isEditing"
-              style="width: 25px; float: right; margin: 3px 0px"/>
-          </td>
-          <template v-if="!isEditing">
-            <td class="actual red-label" width="15%">
-              <template v-if="eventCategoryItem.allocatedBudget">
-                <template v-if="eventCategoryItem.winningProposalId">
-                  <template v-if="eventCategoryItem.allocatedBudget < eventCategoryItem.winingProposal.cost">
-                    <img :src="`${$iconURL}budget+screen/png/Asset+29.png`"/>
-                  </template>
-                  <template v-else><img :src="`${$iconURL}budget+screen/png/Asset+29.png`"/></template>
-                  <md-button
-                    class="md-simple actual-cost md-xs"
-                    :class="
+              <md-button v-if="isEditable && editingMode" class="md-rose md-sm md-simple edit-btn" @click="switchEdit">
+                <img :src="`${$iconURL}Requirements/edit-dark.svg`" style="width: 20px">
+              </md-button>
+              <img
+                v-if="isEditing"
+                :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
+                style="width: 25px; float: right; margin: 3px 0px"
+              >
+            </td>
+            <template v-if="!isEditing">
+              <td class="actual red-label" width="15%">
+                <template v-if="eventCategoryItem.allocatedBudget">
+                  <template v-if="eventCategoryItem.winningProposalId">
+                    <template v-if="eventCategoryItem.allocatedBudget < eventCategoryItem.winingProposal.cost">
+                      <img :src="`${$iconURL}budget+screen/png/Asset+29.png`">
+                    </template>
+                    <template v-else>
+                      <img :src="`${$iconURL}budget+screen/png/Asset+29.png`">
+                    </template>
+                    <md-button
+                      class="md-simple actual-cost md-xs"
+                      :class="
                         eventCategoryItem.allocatedBudget < eventCategoryItem.winingProposal.cost
                           ? `md-danger`
-                          : `md-success` ">
-                    {{
-                      event.elementsBudgetPerGuest
-                        ? `$${(eventCategoryItem.winingProposal.cost / event.numberOfParticipants).toFixed(2)}`
-                        : `$${eventCategoryItem.winingProposal.cost.toFixed(2)}`
-                    }}
-                    <md-icon>open_in_new</md-icon>
-                  </md-button>
+                          : `md-success` "
+                    >
+                      {{
+                        event.elementsBudgetPerGuest
+                          ? `$${(eventCategoryItem.winingProposal.cost / event.numberOfParticipants).toFixed(2)}`
+                          : `$${eventCategoryItem.winingProposal.cost.toFixed(2)}`
+                      }}
+                      <md-icon>open_in_new</md-icon>
+                    </md-button>
+                  </template>
                 </template>
-              </template>
-              <!-- v-if="eventCategoryItem.downPaymentStatus==='accepted'" -->
-              <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="eventCategoryItem" :event="event"/>
-              <span class="font-size-20 whitspace-nowrap" v-if="eventCategoryItem.vendorsCount > 0">
+                <!-- v-if="eventCategoryItem.downPaymentStatus==='accepted'" -->
+                <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="eventCategoryItem" :event="event" />
+                <span v-if="eventCategoryItem.vendorsCount > 0" class="font-size-20 whitspace-nowrap">
                   <md-icon
-                    class="color-plus font-size-20"
                     v-if="eventCategoryItem.bookedBudget <= eventCategoryItem.allocatedBudget"
+                    class="color-plus font-size-20"
                     style="margin-top: -0.2em"
                   >add_circle_outline</md-icon>
-                  <md-icon class="color-minus font-size-20" v-else>remove_circle_outline</md-icon>
+                  <md-icon v-else class="color-minus font-size-20">remove_circle_outline</md-icon>
                   <span
                     :class="
                       eventCategoryItem.bookedBudget <= eventCategoryItem.allocatedBudget ? 'color-plus' : 'color-minus'
-                    ">
-                    <template v-if="type === 'total'"
-                    >$ {{
-                        eventCategoryItem.bookedBudget ? eventCategoryItem.bookedBudget : 0 | withComma(Number)
-                      }}</template
-                    >
+                    "
+                  >
+                    <template v-if="type === 'total'">$ {{
+                      eventCategoryItem.bookedBudget ? eventCategoryItem.bookedBudget : 0 | withComma(Number)
+                    }}</template>
                     <template v-else>
                       $ {{
                         eventCategoryItem.bookedBudget
@@ -87,63 +91,65 @@
                     </template>
                   </span>
                 </span>
-            </td>
-            <td class="status" width="10%">
-              <div class="text-left">
-                <img
-                  :src="`${$iconURL}common/check-circle-green.svg`"
-                  width="32"
-                  v-if="eventCategoryItem.bookedBudget"
+              </td>
+              <td class="status" width="10%">
+                <div class="text-left">
+                  <img
+                    v-if="eventCategoryItem.bookedBudget"
+                    :src="`${$iconURL}common/check-circle-green.svg`"
+                    width="32"
+                  >
+                </div>
+              </td>
+              <td class="expand">
+                <div class="text-right" @click="showDeleteModal">
+                  <img :src="`${$iconURL}menu _ checklist/SVG/Group 2763 (2).svg`" style="width: 20px">
+                </div>
+              </td>
+            </template>
+            <template v-else>
+              <td colspan="3" align="right" style="white-space: nowrap" class="d-flex">
+                <maryoku-input
+                  v-model="newBudget"
+                  input-style="budget"
+                  size="small"
+                  style="width: 150px"
+                  @focus="$event.target.select()"
                 />
-              </div>
-            </td>
-            <td class="expand">
-              <div @click="showDeleteModal" class="text-right">
-                <img :src="`${$iconURL}menu _ checklist/SVG/Group 2763 (2).svg`" style="width: 20px"/>
-              </div>
-            </td>
-          </template>
-          <template v-else>
-            <td colspan="3" align="right" style="white-space: nowrap" class="d-flex">
-              <maryoku-input
-                v-model="newBudget"
-                inputStyle="budget"
-                size="small"
-                style="width: 150px"
-                @focus="$event.target.select()"
-              ></maryoku-input>
-              <md-button class="md-simple md-black normal-btn" @click="switchEdit">Cancel</md-button>
-              <md-button class="md-red normal-btn" :disabled="!isUpdated" @click="showResizeBudgetModal"
-              >Save
-              </md-button>
-            </td>
-          </template>
-        </tr>
-      </template>
+                <md-button class="md-simple md-black normal-btn" @click="switchEdit">
+                  Cancel
+                </md-button>
+                <md-button class="md-red normal-btn" :disabled="!isUpdated" @click="showResizeBudgetModal">
+                  Save
+                </md-button>
+              </td>
+            </template>
+          </tr>
+        </template>
       </tbody>
     </table>
     <budget-resize-modal
       v-if="resizeModalOpened"
-      :newValue="newBudget"
+      :new-value="newBudget"
       :value="eventCategoryItem.allocatedBudget"
-      :categoryName="eventCategoryItem.fullTitle"
+      :category-name="eventCategoryItem.fullTitle"
       @select="resizeBudget"
       @cancel="resizeModalOpened = false"
-    ></budget-resize-modal>
+    />
     <category-delete-modal
       v-if="deleteModalOpened"
       :category="eventCategoryItem"
       @select="deleteItem"
       @cancel="deleteModalOpened = false"
-    ></category-delete-modal>
+    />
     <add-my-vendor-modal
       v-if="addVendorModalOpened"
       :event="event"
-      :selectedComponent="eventCategoryItem"
+      :selected-component="eventCategoryItem"
       @closeModal="closeAddVendorModalOpened"
       @remindLater="addVendorModalOpened = false"
       @updateVendor="updateVendor"
-    ></add-my-vendor-modal>
+    />
   </div>
 </template>
 <script>
@@ -196,6 +202,17 @@ export default {
       deleteModalOpened: false,
       addVendorModalOpened: false,
     };
+  },
+  computed: {
+    isEditable() {
+      return !this.isEditing && !this.eventCategoryItem.bookedBudget;
+    },
+    canExpand() {
+      return !this.eventCategoryItem.fixed && this.eventCategoryItem.componentId != "unexpected";
+    },
+    isUpdated() {
+      return this.eventCategoryItem.allocatedBudget !== this.newBudget;
+    },
   },
   created() {
     this.$root.$on("expandBudgetCategoryItem", (category) => {
@@ -278,17 +295,6 @@ export default {
     bookVendors(item) {
       // go to booking page
       this.$router.push(`/events/${this.event.id}/booking/${item.id}`);
-    },
-  },
-  computed: {
-    isEditable() {
-      return !this.isEditing && !this.eventCategoryItem.bookedBudget;
-    },
-    canExpand() {
-      return !this.eventCategoryItem.fixed && this.eventCategoryItem.componentId != "unexpected";
-    },
-    isUpdated() {
-      return this.eventCategoryItem.allocatedBudget !== this.newBudget;
     },
   },
 };

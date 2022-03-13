@@ -1,32 +1,36 @@
 <template>
   <div class="event-component-vedor-item">
     <div class="vendor-actions">
-      <div class="vendor-title">{{ vendor.vendor.vendorDisplayName }}</div>
-<!--      <md-button class="md-button md-red md-simple md-theme-default edit-btn-1" @click="viewContract(vendor)"-->
-<!--        ></md-button-->
-<!--      >-->
+      <div class="vendor-title">
+        {{ vendor.vendor.vendorDisplayName }}
+      </div>
+      <!--      <md-button class="md-button md-red md-simple md-theme-default edit-btn-1" @click="viewContract(vendor)"-->
+      <!--        ></md-button-->
+      <!--      >-->
       <div style="position: relative">
-        <md-button class="md-button md-black md-simple md-theme-default edit-btn-1">Request Changes</md-button>
-        <span class="divider"></span>
-        <md-button class="md-button md-black md-simple md-theme-default edit-btn-1" @click="cancelModalOpened = true"
-          >Cancel Vendor</md-button
-        >
+        <md-button class="md-button md-black md-simple md-theme-default edit-btn-1">
+          Request Changes
+        </md-button>
+        <span class="divider" />
+        <md-button class="md-button md-black md-simple md-theme-default edit-btn-1" @click="cancelModalOpened = true">
+          Cancel Vendor
+        </md-button>
       </div>
     </div>
     <vendor-cancel-modal
       v-if="cancelModalOpened"
-      :categoryItem="categoryItem"
+      :category-item="categoryItem"
       :vendor="vendor"
       @cancel="cancelModalOpened = false"
       @deleteVendor="deleteVendor"
-    ></vendor-cancel-modal>
+    />
   </div>
 </template>
 <script>
 import VendorCancelModal from "@/components/Modals/VendorCancelModal";
 
 export default {
-  name: "event-component-vendor-item",
+  name: "EventComponentVendorItem",
   components: {
     VendorCancelModal,
   },

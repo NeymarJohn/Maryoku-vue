@@ -1,8 +1,8 @@
-import Model from './Model'
-import VendorCategories from './VendorCategories'
+import Model from "./Model";
+import VendorCategories from "./VendorCategories";
 
 export default class EventsFile extends Model {
-  resource () {
-    return 'eventsFile'
+  resource() {
+    return "eventsFile";
   }
 }

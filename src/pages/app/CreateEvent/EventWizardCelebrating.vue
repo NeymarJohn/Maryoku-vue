@@ -1,38 +1,40 @@
 <template>
   <div class="event-wizard-celebrating">
     <div class="container">
-      <div class="title">4/5</div>
+      <div class="title">
+        4/5
+      </div>
       <selected-value
         :value="publicEventData.eventType.name"
         :property="publicEventData.eventType.key"
-      ></selected-value>
+      />
       <div class="event-basic-info">
         <div class="setting-title mt-70">
-          <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
+          <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
           What are we celebrating?
         </div>
         <div class="mt-3 types">
           <div
-            class="type-card"
-            @click="selected = type"
-            :class="{ selected: type.value == selected.value }"
             v-for="type in occasions"
             :key="type.value"
+            class="type-card"
+            :class="{ selected: type.value == selected.value }"
+            @click="selected = type"
           >
             <div>
-              <img :src="`${$iconURL}Onboarding/${type.icon}`" />
+              <img :src="`${$iconURL}Onboarding/${type.icon}`">
             </div>
             <div>
               {{ type.name }}
             </div>
             <div>
-              <md-checkbox class="md-checkbox-circle md-red" v-model="selected" :value="type"></md-checkbox>
+              <md-checkbox v-model="selected" class="md-checkbox-circle md-red" :value="type" />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <wizard-status-bar :currentStep="4" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+    <wizard-status-bar :current-step="4" @next="goToNext" @skip="skip" @back="back" />
   </div>
 </template>
 
@@ -98,14 +100,14 @@ export default {
     },
     goToNext() {
       this.setEventProperty({ key: "occasion", actualValue: this.selected });
-      if (this.selected.value === "holiday") this.$router.push({ path: `/event-wizard-religion` });
-      else this.$router.push({ path: `/event-wizard-vibes` });
+      if (this.selected.value === "holiday") this.$router.push({ path: "/event-wizard-religion" });
+      else this.$router.push({ path: "/event-wizard-vibes" });
     },
     skip() {
-      this.$router.push({ path: `/event-wizard-vibes` });
+      this.$router.push({ path: "/event-wizard-vibes" });
     },
     back() {
-      this.$router.push({ path: `/event-wizard-type` });
+      this.$router.push({ path: "/event-wizard-type" });
     },
   },
   data() {

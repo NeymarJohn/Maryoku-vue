@@ -1,7 +1,9 @@
 <template>
   <div class="planningboard-tag-item" :class="{ selected: isSelected, red: theme === 'red' }" @click="handleClick">
     <span>{{ tagLabel }}</span>
-    <md-icon class="icon">add_circle</md-icon>
+    <md-icon class="icon">
+      add_circle
+    </md-icon>
   </div>
 </template>
 <script>

@@ -8,19 +8,19 @@
           style="margin: auto"
           :style="`background-image : url(` + `${serverUrl}/1/eventPageImages/${image.id}` + `)`"
           @click="previewImage(image.id)"
-        ></div>
+        />
         <md-button
+          v-if="!readonly"
           class="md-info md-xs md-just-icon md-round replace-event-image"
           @click="uploadEventImage(index)"
-          v-if="!readonly"
         >
           <md-icon>cached</md-icon>
           <md-tooltip>Replace</md-tooltip>
         </md-button>
         <md-button
+          v-if="!readonly"
           class="md-danger md-xs md-just-icon md-round delete-event-image"
           @click="removeEventImage(index)"
-          v-if="!readonly"
         >
           <md-icon>delete</md-icon>
           <md-tooltip>Remove</md-tooltip>
@@ -38,28 +38,28 @@
       <div
         v-if="!readonly"
         class
-        @click="uploadEventImage"
         style="color: black; text-shadow: 0 0 3px #fff; font-size: 18px; font-weight: 500"
+        @click="uploadEventImage"
       >
-        <md-icon style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500"
-          >add_to_photos</md-icon
-        >Add image
+        <md-icon style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500">
+          add_to_photos
+        </md-icon>Add image
       </div>
     </md-card>
-    <div class="update-banner-form" v-if="!readonly">
+    <div v-if="!readonly" class="update-banner-form">
       <input
+        ref="eventFile"
         type="file"
         style="display: none"
-        ref="eventFile"
         accept="image/gif, image/jpg, image/png"
         @change="onEventFilePicked"
-      />
+      >
     </div>
-    <div class="preview-image" v-if="imagePreview">
+    <div v-if="imagePreview" class="preview-image">
       <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
         <md-icon>clear</md-icon>
       </md-button>
-      <img :src="`${serverUrl}/1/eventPageImages/${imagePreview}`" class="event-image-item" />
+      <img :src="`${serverUrl}/1/eventPageImages/${imagePreview}`" class="event-image-item">
     </div>
   </div>
 </template>
@@ -74,7 +74,7 @@ import VueElementLoading from "vue-element-loading";
 import Swal from "sweetalert2";
 
 export default {
-  name: "event-images",
+  name: "EventImages",
   components: {
     VueElementLoading,
   },
@@ -93,6 +93,9 @@ export default {
     isLoading: false,
     selectedImage: null,
   }),
+  computed: {},
+  created() {},
+  mounted() {},
   methods: {
     uploadEventImage(imageId = null) {
       this.selectedImage = typeof imageId !== "object" ? imageId : null;
@@ -186,8 +189,5 @@ export default {
       this.imagePreview = null;
     },
   },
-  created() {},
-  mounted() {},
-  computed: {},
 };
 </script>

@@ -1,92 +1,92 @@
 <template>
-  <div class="vendor-profile-detail" v-if="companyData">
+  <div v-if="companyData" class="vendor-profile-detail">
     <profile-info-field
       class="profile-detail-info"
-      fieldName="aboutCompany"
-      fieldLabel="About your company"
+      field-name="aboutCompany"
+      field-label="About your company"
       theme="md-vendor"
       editor="textarea"
-      :defaultValue="companyData.about ? companyData.about.company : ''"
+      :default-value="companyData.about ? companyData.about.company : ''"
       :icon="`${$iconURL}common/info-gray.svg`"
       @save="saveProfileField"
-    ></profile-info-field>
+    />
     <profile-info-field
       class="profile-detail-info"
-      fieldName="personalMessage"
-      fieldLabel="Personal messsage to your clients"
-      @save="saveProfileField"
+      field-name="personalMessage"
+      field-label="Personal messsage to your clients"
       theme="md-vendor"
       editor="textarea"
       description="(Will be added automatically to future proposals)"
-      :defaultValue="companyData.personalMessage"
+      :default-value="companyData.personalMessage"
       :icon="`${$iconURL}common/message-gray.svg`"
-    ></profile-info-field>
-    <profile-info-field
-      class="profile-detail-info"
-      :defaultValue="companyData.companyName"
-      fieldName="companyName"
-      fieldLabel="Company Name"
       @save="saveProfileField"
-      theme="md-vendor"
-    ></profile-info-field>
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="companyData.vendorMainEmail"
+      :default-value="companyData.companyName"
+      field-name="companyName"
+      field-label="Company Name"
+      theme="md-vendor"
+      @save="saveProfileField"
+    />
+    <profile-info-field
+      class="profile-detail-info"
+      :default-value="companyData.vendorMainEmail"
       :icon="`${$iconURL}common/email-gray.svg`"
-      fieldName="vendorMainEmail"
-      fieldLabel="Business Email Address"
-      @save="saveProfileField"
+      field-name="vendorMainEmail"
+      field-label="Business Email Address"
       theme="md-vendor"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="companyData.vendorMainPhoneNumber"
+      :default-value="companyData.vendorMainPhoneNumber"
       :icon="`${$iconURL}common/phone-gray.svg`"
-      fieldName="vendorMainPhoneNumber"
-      fieldLabel="Business Phone Number"
-      @save="saveProfileField"
+      field-name="vendorMainPhoneNumber"
+      field-label="Business Phone Number"
       theme="md-vendor"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="companyData.vendorAddressLine1"
+      :default-value="companyData.vendorAddressLine1"
       :icon="`${$iconURL}common/location-gray.svg`"
-      fieldName="vendorAddressLine1"
-      fieldLabel="Business Location"
-      @save="saveProfileField"
+      field-name="vendorAddressLine1"
+      field-label="Business Location"
       theme="md-vendor"
       editor="location"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="companyData.vendorAddressLine1"
+      :default-value="companyData.vendorAddressLine1"
       :icon="`${$iconURL}common/sender-gray.svg`"
-      fieldName="vendorAddressLine1"
-      fieldLabel="Shipping Address"
-      @save="saveProfileField"
+      field-name="vendorAddressLine1"
+      field-label="Shipping Address"
       theme="md-vendor"
       editor="location"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="companyData.social"
-      fieldName="social"
-      fieldLabel="Website & Social Media"
-      @save="saveProfileField"
+      :default-value="companyData.social"
+      field-name="social"
+      field-label="Website & Social Media"
       theme="md-vendor"
       editor="social"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="companyData.signature"
-      fieldName="signature"
-      fieldLabel="Business Signature"
-      @save="saveProfileField"
+      :default-value="companyData.signature"
+      field-name="signature"
+      field-label="Business Signature"
       theme="md-vendor"
       editor="signature"
-    ></profile-info-field>
+      @save="saveProfileField"
+    />
   </div>
-  <div v-else></div>
+  <div v-else />
 </template>
 <script>
 import ProfileInfoField from "@/components/ProfileInfoField.vue";
@@ -108,6 +108,12 @@ export default {
       companyDescription: "",
     };
   },
+  computed: {
+    companyData() {
+      return this.$store.state.vendor.profile;
+    },
+  },
+  created() {},
   methods: {
     saveProfileField(profileData) {
       let updateData;
@@ -121,7 +127,7 @@ export default {
     deleteProfile() {
       Swal.fire({
         title: "<div style='text-align:center'>Are you sure?</div>",
-        text: `You won't be able to login with current credetials!`,
+        text: "You won't be able to login with current credetials!",
         showCancelButton: true,
         icon: "warning",
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -137,12 +143,6 @@ export default {
             });
         }
       });
-    },
-  },
-  created() {},
-  computed: {
-    companyData() {
-      return this.$store.state.vendor.profile;
     },
   },
 };

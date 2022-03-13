@@ -1,13 +1,15 @@
 <template>
-  <div class="rsvp-timeline" v-if="timeline">
-    <img class="item-icon" :src="`/static/icons/timeline/${timeline.icon.toLowerCase()}-circle.png`" />
+  <div v-if="timeline" class="rsvp-timeline">
+    <img class="item-icon" :src="`/static/icons/timeline/${timeline.icon.toLowerCase()}-circle.png`">
     <div class="rsvp-timeline-content" :style="`border:dashed 2px ${timeline.color}`">
       <div>
         <div class="item-time">
           {{ $dateUtil.formatScheduleTime(Number(timeline.startTime)) }} -
           {{ $dateUtil.formatScheduleTime(Number(timeline.endTime)) }}
         </div>
-        <div class="item-title">{{ timeline.title }}</div>
+        <div class="item-title">
+          {{ timeline.title }}
+        </div>
       </div>
       <div class="item-description">
         {{ timeline.description }}

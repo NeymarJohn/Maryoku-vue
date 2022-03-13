@@ -1,32 +1,23 @@
 <template>
   <div class="collapse-panel">
     <div class="collapse-panel-header">
-      <slot name="header"></slot>
-      <md-button @click="toggle" class="md-icon-button md-simple collapse-button" :class="`mr-${spacing}`">
-        <md-icon class="icon" v-if="isExpanded">keyboard_arrow_down</md-icon>
-        <md-icon class="icon" v-if="!isExpanded">keyboard_arrow_right</md-icon>
+      <slot name="header" />
+      <md-button class="md-icon-button md-simple collapse-button" :class="`mr-${spacing}`" @click="toggle">
+        <md-icon v-if="isExpanded" class="icon">
+          keyboard_arrow_down
+        </md-icon>
+        <md-icon v-if="!isExpanded" class="icon">
+          keyboard_arrow_right
+        </md-icon>
       </md-button>
     </div>
-    <div class="collapse-panel-content" v-if="isExpanded">
-      <slot name="content"></slot>
+    <div v-if="isExpanded" class="collapse-panel-content">
+      <slot name="content" />
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      isExpanded: true,
-    };
-  },
-  methods: {
-    toggle() {
-      this.isExpanded = !this.isExpanded;
-    },
-  },
-  created() {
-    this.isExpanded = this.defaultStatus;
-  },
   props: {
     defaultStatus: {
       type: Boolean,
@@ -35,6 +26,19 @@ export default {
     spacing: {
       type: Number,
       default: 50,
+    },
+  },
+  data() {
+    return {
+      isExpanded: true,
+    };
+  },
+  created() {
+    this.isExpanded = this.defaultStatus;
+  },
+  methods: {
+    toggle() {
+      this.isExpanded = !this.isExpanded;
     },
   },
 };

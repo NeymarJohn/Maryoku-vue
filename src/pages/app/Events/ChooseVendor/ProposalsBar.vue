@@ -1,16 +1,18 @@
 <template>
   <div class="proposals-bar">
     <div
-      class="flex-1 proposal-item"
       v-for="proposal in proposals"
-      :class="{ isActive: proposal.id === selectedId }"
       :key="proposal.id"
-      @click="handleClick(proposal)"
+      class="flex-1 proposal-item"
+      :class="{ isActive: proposal.id === selectedId }"
       :style="`background: url('${headerBackgroundImage(proposal)}') center center no-repeat 100%`"
+      @click="handleClick(proposal)"
     >
-      <img :src="`${headerBackgroundImage(proposal)}`" />
+      <img :src="`${headerBackgroundImage(proposal)}`">
       <div class="proposal-content">
-        <div class="font-size-30">${{ proposal.cost | withComma }}</div>
+        <div class="font-size-30">
+          ${{ proposal.cost | withComma }}
+        </div>
         <div class="font-size-22 mt-30" :class="{ 'font-bold-extra': proposal.id === selectedId }">
           {{ proposal.vendor.companyName }}
         </div>

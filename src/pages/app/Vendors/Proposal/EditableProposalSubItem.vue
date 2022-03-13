@@ -1,15 +1,17 @@
 <template>
   <div>
-    <div class="editable-proposal-sub-item-wrapper" :class="[{ 'step-3': step == 3 }]" v-if="!item.plannerOptions.length">
+    <div v-if="!item.plannerOptions.length" class="editable-proposal-sub-item-wrapper" :class="[{ 'step-3': step == 3 }]">
       <div class="item-cont">
         {{ item.requirementTitle }}
-        <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
-        <span class="complementary-badge" v-if="item.isComplimentary">Complementary</span>
+        <span v-if="item.isMandatory" class="madatory-badge">Mandatory</span>
+        <span v-if="item.isComplimentary" class="complementary-badge">Complementary</span>
       </div>
       <div class="qty-cont editor-wrapper">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
+        <template v-if="!isEdit">
+          {{ item.priceUnit === "total" ? 1 : item.requirementValue }}
+        </template>
         <template v-else>
-          <input class="input-value" type="number" v-model="item.requirementValue" />
+          <input v-model="item.requirementValue" class="input-value" type="number">
         </template>
       </div>
       <div class="price-cont editor-wrapper">
@@ -37,9 +39,9 @@
         </template>
       </div>
       <div class="total-cont editor-wrapper">
-        <template v-if="!isEdit"
-          >$ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}</template
-        >
+        <template v-if="!isEdit">
+          $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
+        </template>
         <template v-else>
           <!-- <input class="input-value" v-model="item.price" type="number" /> -->
           <money
@@ -60,11 +62,11 @@
       </div>
       <div class="action-cont editor-wrapper">
         <div v-if="!isEdit" class="editing-buttons">
-          <md-button @click="isEdit = true" class="md-simple edit-btn">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
+          <md-button class="md-simple edit-btn" @click="isEdit = true">
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`">
           </md-button>
-          <md-button @click="removeRequirement(item)" class="md-simple edit-btn">
-            <img class="trash" :src="`${iconUrl}Asset 586.svg`" />
+          <md-button class="md-simple edit-btn" @click="removeRequirement(item)">
+            <img class="trash" :src="`${iconUrl}Asset 586.svg`">
           </md-button>
         </div>
         <template v-else>
@@ -73,32 +75,36 @@
         </template>
       </div>
     </div>
-    <div class="p-40 alternative-items" v-if="item.plannerOptions.length > 0">
+    <div v-if="item.plannerOptions.length > 0" class="p-40 alternative-items">
       <div>
         <span class="font-size-14">Please choose:</span>
       </div>
       <div
-        class="editable-proposal-sub-item-wrapper alternative-option"
-        :class="[{ 'step-3': step == 3 }]"
         v-for="(option, index) in item.plannerOptions"
         :key="index"
+        class="editable-proposal-sub-item-wrapper alternative-option"
+        :class="[{ 'step-3': step == 3 }]"
       >
         <div class="item-cont">
           <md-radio
             v-model="item.selectedOption"
             :class="theme === 'red' ? 'md-red' : 'md-purple'"
             :value="index"
-          ></md-radio>
+          />
           {{ option.description }}
         </div>
         <div class="qty-cont editor-wrapper">
-          <template v-if="!isEdit">{{ option.qty }}</template>
+          <template v-if="!isEdit">
+            {{ option.qty }}
+          </template>
           <template v-else>
-            <input class="input-value" type="number" v-model="option.qty" />
+            <input v-model="option.qty" class="input-value" type="number">
           </template>
         </div>
         <div class="price-cont editor-wrapper">
-          <template v-if="!isEdit"> $ {{ option.price | withComma }} </template>
+          <template v-if="!isEdit">
+            $ {{ option.price | withComma }}
+          </template>
           <template v-else>
             <money
               v-model="option.price"
@@ -115,7 +121,9 @@
           </template>
         </div>
         <div class="total-cont editor-wrapper">
-          <template v-if="!isEdit">$ {{ (option.price * option.qty) | withComma }}</template>
+          <template v-if="!isEdit">
+            $ {{ (option.price * option.qty) | withComma }}
+          </template>
           <template v-else>
             <!-- <input class="input-value" v-model="item.price" type="number" /> -->
             <money
@@ -136,11 +144,11 @@
         </div>
         <div class="action-cont editor-wrapper">
           <div v-if="!isEdit" class="editing-buttons">
-            <md-button @click="isEdit = true" class="md-simple edit-btn">
-              <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
+            <md-button class="md-simple edit-btn" @click="isEdit = true">
+              <img class="edit" :src="`${iconUrl}Asset 585.svg`">
             </md-button>
-            <md-button @click="removeRequirement(item)" class="md-simple edit-btn">
-              <img class="trash" :src="`${iconUrl}Asset 586.svg`" />
+            <md-button class="md-simple edit-btn" @click="removeRequirement(item)">
+              <img class="trash" :src="`${iconUrl}Asset 586.svg`">
             </md-button>
           </div>
           <template v-else>
@@ -156,9 +164,14 @@
 import { Money } from "v-money";
 
 export default {
-  name: "editable-proposal-sub-item",
+  name: "EditableProposalSubItem",
   components: {
     Money,
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
   },
   props: {
     item: Object,
@@ -183,6 +196,11 @@ export default {
       return this.item.price * this.item.requirementValue;
     },
   },
+  watch: {},
+  created() {},
+  mounted() {
+    console.log(this.item);
+  },
   methods: {
     removeRequirement(item) {
       this.$root.$emit("remove-proposal-requirement", item);
@@ -197,16 +215,6 @@ export default {
       this.isEdit = false;
     },
   },
-  created() {},
-  mounted() {
-    console.log(this.item);
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

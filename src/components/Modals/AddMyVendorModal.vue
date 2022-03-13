@@ -3,11 +3,13 @@
     <template slot="header">
       <div class="maryoku-modal-header">
         <h2>Add my vendor</h2>
-        <div class="header-description">So we could add it to your plan</div>
+        <div class="header-description">
+          So we could add it to your plan
+        </div>
       </div>
-        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
-            <md-icon>clear</md-icon>
-        </md-button>
+      <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
+        <md-icon>clear</md-icon>
+      </md-button>
     </template>
     <template slot="body">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
@@ -15,53 +17,52 @@
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black mt-40">Name</label>
           <maryoku-input
-            inputStyle="normal"
-            name="vendorDisplayName"
             v-model="editingVendor.vendorDisplayName"
             v-validate.initial="modelValidations.vendorDisplayName"
-          ></maryoku-input>
+            input-style="normal"
+            name="vendorDisplayName"
+          />
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Price of the serivce</label>
           <maryoku-input
-            inputStyle="budget"
-            name="cost"
             v-model="editingVendor.cost"
             v-validate.initial="modelValidations.cost"
-          ></maryoku-input>
+            input-style="budget"
+            name="cost"
+          />
         </div>
         <div class="md-layout-item md-size-100 mb-30">
           <label class="font-size-16 font-bold-extra color-black">Location</label>
           <location-input
-            name="vendorAddressLine1"
             v-model="editingVendor.vendorAddressLine1"
             v-validate.initial="modelValidations.vendorAddressLine1"
-          >
-          </location-input>
+            name="vendorAddressLine1"
+          />
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Phone</label>
           <maryoku-input
-            inputStyle="phone"
-            type="phonenumber"
-            name="vendorMainPhoneNumber"
             v-model="editingVendor.vendorMainPhoneNumber"
             v-validate.initial="modelValidations.vendorMainPhoneNumber"
-          ></maryoku-input>
+            input-style="phone"
+            type="phonenumber"
+            name="vendorMainPhoneNumber"
+          />
         </div>
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Email</label>
           <maryoku-input
-            inputStyle="email"
-            type="email"
-            name="vendorMainEmail"
             v-model="editingVendor.vendorMainEmail"
             v-validate.initial="modelValidations.vendorMainEmail"
-          ></maryoku-input>
+            input-style="email"
+            type="email"
+            name="vendorMainEmail"
+          />
         </div>
         <div class="md-layout-item md-size-100 form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">Attach Proposal</label>
-          <label class="upload-section" v-if="!editingVendor.attachment">
+          <label v-if="!editingVendor.attachment" class="upload-section">
             <label
               class="md-rose md-outline md-simple md-sm attachment upload-button"
               for="file"
@@ -81,31 +82,35 @@
               </span>
             </div>
             <input
-              style="display: none"
               id="file"
+              style="display: none"
               name="attachment"
               type="file"
               multiple="multiple"
               @change="onFileChange"
-            />
+            >
           </label>
           <div v-else class="attchment-item">
             {{ editingVendor.attachment.name }}
             <button @click="editingVendor.attachment = null">
-              <md-icon class="color-white">close</md-icon>
+              <md-icon class="color-white">
+                close
+              </md-icon>
             </button>
           </div>
         </div>
-        <div class="md-layout-item md-size-100 form-group maryoku-field mt-30" v-if="this.errorMessage">
+        <div v-if="this.errorMessage" class="md-layout-item md-size-100 form-group maryoku-field mt-30">
           <div class="error-message">
-            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" />
+            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`">
             {{ this.errorMessage }}
           </div>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-button md-black md-simple md-theme-default" @click="remindLater">Remind Me Later</md-button>
+      <md-button class="md-button md-black md-simple md-theme-default" @click="remindLater">
+        Remind Me Later
+      </md-button>
       <md-button class="md-red md-bold add-category-btn" :disabled="errors.all().length > 0" @click="updateMyVendor">
         Update Vendor
       </md-button>
@@ -120,7 +125,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventComponentVendor from "@/models/EventComponentVendor";
 export default {
-  name: "add-vendor-modal",
+  name: "AddVendorModal",
   components: {
     Modal,
     MaryokuInput,

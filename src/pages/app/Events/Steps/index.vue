@@ -12,54 +12,54 @@
       <!--                Send to vendors-->
       <!--            </div>-->
     </div>
-    <event-details v-if="step===1" @goToNextPage="goToNextPage" :new-event-data="newEvent" />
+    <event-details v-if="step===1" :new-event-data="newEvent" @goToNextPage="goToNextPage" />
     <get-started
       v-else-if="step===2"
+      :new-event="newEvent"
       @goToNextPage="goToNextPage"
       @goToPrevPage="goToPrevPage"
-      :new-event="newEvent"
     />
     <!--        <brief-details v-show="step===2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
 
     <div class="first-child">
       <div class="second-child">
-        <div class></div>
+        <div class />
       </div>
     </div>
   </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading'
-import GetStarted from './GetStartedStep'
-import BriefDetails from './BriefDetails'
-import EventDetails from './EventDetails'
+import VueElementLoading from "vue-element-loading";
+import GetStarted from "./GetStartedStep";
+import BriefDetails from "./BriefDetails";
+import EventDetails from "./EventDetails";
 
 export default {
-  name: 'event-steps',
+  name: "EventSteps",
   components: {
     VueElementLoading,
     GetStarted,
     BriefDetails,
     EventDetails
   },
-  methods: {
-    goToNextPage (eventData) {
-      console.log('eventData => ', eventData)
-      this.newEvent = eventData
-      this.step++
-    },
-    goToPrevPage () {
-      this.step--
-    }
-  },
   data () {
     return {
       isLoading: false,
       step: 1,
       newEvent: null
+    };
+  },
+  methods: {
+    goToNextPage (eventData) {
+      console.log("eventData => ", eventData);
+      this.newEvent = eventData;
+      this.step++;
+    },
+    goToPrevPage () {
+      this.step--;
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_variables.scss";

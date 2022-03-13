@@ -19,28 +19,32 @@
               :key="'gallery-images-'+index"
               :class="{'active': index === currentIndex }"
               class="gallery-item"
-              style="display: inline-block">
+              style="display: inline-block"
+          >
             <img style="height: 100px"
-                 @click="changeCurrentImage(index)">
+                 @click="changeCurrentImage(index)"
+            >
           </li>
         </ul>
-        <LightBox :images="images"
-                  ref="lightbox"
+        <LightBox ref="lightbox"
+                  :images="images"
                   :show-caption="true"
-                  :show-light-box="false">
-        </LightBox>
+                  :show-light-box="false"
+        />
       </div>
 
       <div class="md-layout-item md-size-25 ml-auto">
         <div class="proposal-sidebar-wrapper">
           <div class="md-layout md-layout-item md-size-100 text-center">
-            <h2 class="mb0">${{ proposalData.budget }}</h2>
+            <h2 class="mb0">
+              ${{ proposalData.budget }}
+            </h2>
           </div>
           <div class="md-layout md-layout-item md-size-100 text-center total-text">
             Total Cost for Event
           </div>
           <div class="md-layout-item md-size-100">
-            <slider v-model="sliderCheaper" disabled></slider>
+            <slider v-model="sliderCheaper" disabled />
             <div class="text text-center offer-text">
               This offer is {{ sliderCheaper }}% cheaper than the lowest offer you have
             </div>
@@ -49,47 +53,42 @@
             Terms and conditions text, including for how long the offer is relevant, terms for cancellation and terms for payment and installments
           </div>
 
-          <hr/>
+          <hr>
           <div class="md-layout-item md-size-100">
             <h3>Included in Price</h3>
-            <div class="md-layout-item md-size-100" v-for="(item, index) in proposalData.included" :key="'proposalData-'+index">
-              <md-checkbox v-model="checked" class="readonly" :key="item">{{ item }}</md-checkbox>
+            <div v-for="(item, index) in proposalData.included" :key="'proposalData-'+index" class="md-layout-item md-size-100">
+              <md-checkbox :key="item" v-model="checked" class="readonly">
+                {{ item }}
+              </md-checkbox>
             </div>
           </div>
-
         </div>
         <div class="md-layout">
-          <md-button class="md-success sidebar-button">Save to Event Option</md-button>
+          <md-button class="md-success sidebar-button">
+            Save to Event Option
+          </md-button>
         </div>
         <div class="md-layout">
-          <md-button class="md-info sidebar-button">Chat With Vendor</md-button>
+          <md-button class="md-info sidebar-button">
+            Chat With Vendor
+          </md-button>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import VueLazyLoad from 'vue-lazyload'
-import LightBox from 'vue-image-lightbox'
-import { Slider } from '@/components'
+import Vue from "vue";
+import VueLazyLoad from "vue-lazyload";
+import LightBox from "vue-image-lightbox";
+import { Slider } from "@/components";
 
-Vue.use(VueLazyLoad)
+Vue.use(VueLazyLoad);
 export default {
   components: {
     LightBox,
     Slider
-  },
-  methods: {
-    openGallery (index) {
-      this.$refs.lightbox.showImage(index)
-    },
-    changeCurrentImage (index) {
-      this.currentImage = this.images[index]
-      this.currentIndex = index
-    }
   },
   data () {
     return {
@@ -102,34 +101,34 @@ export default {
       },
       images: [
         {
-          thumb: 'https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg',
-          src: 'https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg',
-          caption: '<h4>Elephant</h4>'
+          thumb: "https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg",
+          src: "https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg",
+          caption: "<h4>Elephant</h4>"
         },
         {
-          thumb: 'https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg',
-          src: 'https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg',
-          caption: '<h4>Messi</h4>'
+          thumb: "https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg",
+          src: "https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg",
+          caption: "<h4>Messi</h4>"
         },
         {
-          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg',
-          src: 'https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg',
-          caption: '<h4>Bale and Marcelo</h4>'
+          thumb: "https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg",
+          src: "https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg",
+          caption: "<h4>Bale and Marcelo</h4>"
         },
         {
-          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png',
-          src: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png',
-          caption: '<h4>Madrid crowd</h4>'
+          thumb: "https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png",
+          src: "https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png",
+          caption: "<h4>Madrid crowd</h4>"
         },
         {
-          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg',
-          src: 'https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg',
-          caption: '<h4>Zidane</h4>'
+          thumb: "https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg",
+          src: "https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg",
+          caption: "<h4>Zidane</h4>"
         },
         {
-          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png',
-          src: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png',
-          caption: '<h4>Bale kissed the cup</h4>'
+          thumb: "https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png",
+          src: "https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png",
+          caption: "<h4>Bale kissed the cup</h4>"
         }
 
       ],
@@ -137,28 +136,37 @@ export default {
       currentIndex: null,
       sliderCheaper: null,
       checked: true
-    }
+    };
   },
   mounted () {
-    this.currentImage = this.images[0]
-    this.currentIndex = 0
+    this.currentImage = this.images[0];
+    this.currentIndex = 0;
     this.proposalData = {
-      name: 'Event name',
+      name: "Event name",
       rate: 7.2,
       budget: 3100,
       cheaper: 50,
       included: [
-        'Premium Bar',
-        '500 Guests',
-        'Event Manager',
-        'Cleaning Services',
-        'Internet',
-        'Sound and Light'
+        "Premium Bar",
+        "500 Guests",
+        "Event Manager",
+        "Cleaning Services",
+        "Internet",
+        "Sound and Light"
       ]
+    };
+    this.sliderCheaper = this.proposalData.cheaper;
+  },
+  methods: {
+    openGallery (index) {
+      this.$refs.lightbox.showImage(index);
+    },
+    changeCurrentImage (index) {
+      this.currentImage = this.images[index];
+      this.currentIndex = index;
     }
-    this.sliderCheaper = this.proposalData.cheaper
   }
-}
+};
 </script>
 
 <style lang="scss">

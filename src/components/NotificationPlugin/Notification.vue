@@ -1,40 +1,43 @@
 <template>
   <div
-    @click="close()"
     data-notify="container"
     class="alert open alert-with-icon"
     role="alert"
     :class="[verticalAlign, horizontalAlign, alertType]"
     :style="customPosition"
-    data-notify-position="top-center">
+    data-notify-position="top-center"
+    @click="close()"
+  >
     <button
       type="button"
       aria-hidden="true"
       class="close"
       data-notify="dismiss"
-      @click="close">×
+      @click="close"
+    >
+      ×
     </button>
-    <i data-notify="icon" class="material-icons" v-if="icon">{{icon}}</i>
-    <span data-notify="message" v-html="message"></span>
+    <i v-if="icon" data-notify="icon" class="material-icons">{{ icon }}</i>
+    <span data-notify="message" v-html="message" />
   </div>
 </template>
 <script>
 export default {
-  name: 'notification',
+  name: "Notification",
   props: {
     message: String,
     icon: String,
     verticalAlign: {
       type: String,
-      default: 'top'
+      default: "top"
     },
     horizontalAlign: {
       type: String,
-      default: 'center'
+      default: "center"
     },
     type: {
       type: String,
-      default: 'info'
+      default: "info"
     },
     timeout: {
       type: Number,
@@ -48,47 +51,47 @@ export default {
   data () {
     return {
       elmHeight: 0
-    }
+    };
   },
   computed: {
     hasIcon () {
-      return this.icon && this.icon.length > 0
+      return this.icon && this.icon.length > 0;
     },
     alertType () {
-      return `alert-${this.type}`
+      return `alert-${this.type}`;
     },
     customPosition () {
-      let initialMargin = 20
-      let alertHeight = this.elmHeight + 10
+      let initialMargin = 20;
+      let alertHeight = this.elmHeight + 10;
       let sameAlertsCount = this.$notifications.state.filter(alert => {
         return (
           alert.horizontalAlign === this.horizontalAlign &&
           alert.verticalAlign === this.verticalAlign &&
           alert.timestamp <= this.timestamp
-        )
-      }).length
-      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin
-      let styles = {}
-      if (this.verticalAlign === 'top') {
-        styles.top = `${pixels}px`
+        );
+      }).length;
+      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin;
+      let styles = {};
+      if (this.verticalAlign === "top") {
+        styles.top = `${pixels}px`;
       } else {
-        styles.bottom = `${pixels}px`
+        styles.bottom = `${pixels}px`;
       }
-      return styles
+      return styles;
+    }
+  },
+  mounted () {
+    this.elmHeight = this.$el.clientHeight;
+    if (this.timeout) {
+      setTimeout(this.close, this.timeout);
     }
   },
   methods: {
     close () {
-      this.$emit('on-close', this.timestamp)
-    }
-  },
-  mounted () {
-    this.elmHeight = this.$el.clientHeight
-    if (this.timeout) {
-      setTimeout(this.close, this.timeout)
+      this.$emit("on-close", this.timestamp);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @media screen and (max-width: 991px) {

@@ -1,31 +1,31 @@
 <template>
   <div class="propsal-bid-content">
     <proposal-requirements
+      key="cost"
       class="white-card card"
       label="Cost Items"
-      key="cost"
-      tableCategory="cost"
+      table-category="cost"
       icon="Group+10662.svg"
       description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-      :vendorCategory="vendor.eventCategory.key"
+      :vendor-category="vendor.eventCategory.key"
     />
     <proposal-requirements
-      tableCategory="included"
+      key="included"
+      table-category="included"
       label="Included in Price"
       icon="includedPrice.png"
       description="(from your “included in price” items)"
-      key="included"
       class="white-card card"
-      :vendorCategory="vendor.eventCategory.key"
+      :vendor-category="vendor.eventCategory.key"
     />
     <proposal-requirements
-      tableCategory="extra"
+      key="extra"
+      table-category="extra"
       label="Offered Extras"
       icon="cost-requirements.png"
       description="What elements would you like to suggest to the client with extra pay? "
-      key="extra"
       class="white-card card"
-      :vendorCategory="vendor.eventCategory.key"
+      :vendor-category="vendor.eventCategory.key"
     />
     <!-- <proposal-upload-legal class="white-card legal-upload"></proposal-upload-legal> -->
   </div>
@@ -39,6 +39,56 @@ export default {
   components: {
     ProposalUploadLegal,
     ProposalRequirements,
+  },
+  computed: {
+    event() {
+      return this.proposalRequest.eventData;
+    },
+    category() {
+      return this.vendor.eventCategory.key;
+    },
+    requirements() {
+      return this.proposalRequest.componentRequirements[this.vendor.eventCategory.key];
+    },
+    taxes() {
+      return this.$store.state.common.taxes;
+    },
+    optionalRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    requirementsFromPlanner() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => item.isSelected);
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    costServiceItems() {
+      return this.$store.state.vendorProposal.costServices[this.category];
+    },
+    includedServiceItems(){
+      return this.$store.state.vendorProposal.includedServices[this.category];
+    }
+  },
+  watch: {
+    // remove costServiceItem already in included section
+    costServiceItems: {
+        handler(newVal) {
+          let includeItems = this.includedServiceItems;
+          if(newVal.length) {
+            newVal.map(costItem => {
+                includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
+            });
+          }
+          // console.log('costServiceItems', includeItems);
+          this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: includeItems });
+        },
+        deep: true,
+    }
   },
   async created() {
     let taxRate = 0;
@@ -226,65 +276,15 @@ export default {
       getTaxFromState() {
           if (!this.event.location) return 0;
 
-          let tax = 0
+          let tax = 0;
           this.taxes.map(it => {
-              const arr = this.event.location.split(', ');
-              if (arr[arr.length - 1] === 'USA' && arr[arr.length - 2] === it.code) {
+              const arr = this.event.location.split(", ");
+              if (arr[arr.length - 1] === "USA" && arr[arr.length - 2] === it.code) {
                 tax = it.tax;
               }
-          })
+          });
           return tax;
       }
-  },
-  computed: {
-    event() {
-      return this.proposalRequest.eventData;
-    },
-    category() {
-      return this.vendor.eventCategory.key;
-    },
-    requirements() {
-      return this.proposalRequest.componentRequirements[this.vendor.eventCategory.key];
-    },
-    taxes() {
-      return this.$store.state.common.taxes;
-    },
-    optionalRequirements() {
-      if (!this.requirements) return [];
-      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
-    },
-    requirementsFromPlanner() {
-      if (!this.requirements) return [];
-      return this.requirements.filter((item) => item.isSelected);
-    },
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    costServiceItems() {
-      return this.$store.state.vendorProposal.costServices[this.category];
-    },
-    includedServiceItems(){
-      return this.$store.state.vendorProposal.includedServices[this.category];
-    }
-  },
-  watch: {
-    // remove costServiceItem already in included section
-    costServiceItems: {
-        handler(newVal) {
-          let includeItems = this.includedServiceItems;
-          if(newVal.length) {
-            newVal.map(costItem => {
-                includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
-            })
-          }
-          // console.log('costServiceItems', includeItems);
-          this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: includeItems });
-        },
-        deep: true,
-    }
   }
 };
 </script>

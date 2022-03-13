@@ -5,7 +5,7 @@
         A glimpse at the agenda
       </span>
       <md-switch v-if="canHide" v-model="isDisplayed" class="ml-10 md-switch-rose below-label large-switch">
-        <span class="color-black font-regular">{{`${isDisplayed ? 'Show' : 'Hide'} Agenda`}}</span>
+        <span class="color-black font-regular">{{ `${isDisplayed ? 'Show' : 'Hide'} Agenda` }}</span>
       </md-switch>
     </div>
     <template v-if="isDisplayed">
@@ -23,7 +23,7 @@
             v-for="(timeline, index) in schedule.timelineItems"
             :key="index"
             :timeline="timeline"
-          ></rsvp-timeline-item>
+          />
         </div>
       </div>
     </template>
@@ -60,7 +60,6 @@ export default {
       isDisplayed: true,
     };
   },
-  created() {},
   computed: {
     event() {
       return this.$store.state.event.eventData;
@@ -75,6 +74,7 @@ export default {
       this.$emit("changeVisibility", newValue);
     },
   },
+  created() {},
 };
 </script>
 <style lang="scss" scoped>

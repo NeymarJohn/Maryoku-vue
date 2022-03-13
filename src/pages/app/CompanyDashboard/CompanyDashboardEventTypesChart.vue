@@ -8,7 +8,8 @@
     chart-inside-content
     no-footer
     background-color="blue"
-  :show-loader="loading">
+    :show-loader="loading"
+  >
     <template slot="chartInsideHeader">
       <div class="card-icon">
         <md-icon>timeline</md-icon>
@@ -21,38 +22,19 @@
 </template>
 <script>
 // import auth from '@/auth';
-import Chartist from 'chartist'
+import Chartist from "chartist";
 import {
   ChartCard
-} from '@/components'
+} from "@/components";
 export default {
-  name: 'company-dashboard-satisfaction-chart',
+  name: "CompanyDashboardSatisfactionChart",
   components: {
     ChartCard
   },
   props: {
     eventsPerCategory: {
       type: Object,
-      default: () => { return {} }
-    }
-  },
-  watch: {
-    eventsPerCategory (newVal, oldVal) {
-      this.loading = false
-      let labels = []
-      let series = []
-      let keys = Object.keys(newVal)
-      if (keys.length > 0) {
-        for (const key of keys) {
-          labels.push(key)
-          series.push(newVal[key])
-        }
-      }
-
-      this.colouredLineChart.data = {
-        labels: labels,
-        series: [series]
-      }
+      default: () => { return {}; }
     }
   },
   data () {
@@ -79,15 +61,34 @@ export default {
           low: 0,
           /* high: 50, */
           showPoint: true,
-          height: '100%',
+          height: "100%",
           plugins: [
             // this.$Chartist.plugins.tooltip()
           ]
         }
       }
+    };
+  },
+  watch: {
+    eventsPerCategory (newVal, oldVal) {
+      this.loading = false;
+      let labels = [];
+      let series = [];
+      let keys = Object.keys(newVal);
+      if (keys.length > 0) {
+        for (const key of keys) {
+          labels.push(key);
+          series.push(newVal[key]);
+        }
+      }
+
+      this.colouredLineChart.data = {
+        labels: labels,
+        series: [series]
+      };
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 

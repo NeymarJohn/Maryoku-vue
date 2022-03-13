@@ -1,16 +1,16 @@
 <template>
   <div class="time-picker-component">
     <vue-timepicker
+      v-model="startTime"
       manual-input
       input-class="time-class"
       hide-dropdown
       format="hh:mm"
-      v-model="startTime"
       hide-clear-button
       @change="changeTime"
     />
     <div class="am-field" @click="updateStartA()">
-      <input type="text" v-model="ampm" readonly />
+      <input v-model="ampm" type="text" readonly>
     </div>
   </div>
 </template>

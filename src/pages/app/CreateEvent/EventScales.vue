@@ -1,46 +1,66 @@
 <template>
   <div class>
     <div class="section-header">
-      <h2 class="section-title">Tell us what you care for more in this event</h2>
+      <h2 class="section-title">
+        Tell us what you care for more in this event
+      </h2>
       <div class="steps-wizard">
         <ul class="steps-wizard-items">
-          <li v-for="index in step" :key="index"></li>
+          <li v-for="index in step" :key="index" />
         </ul>
       </div>
     </div>
     <div class="container">
       <div class="form-section scales-section">
         <div class="range-item">
-          <div class="option left">Convenience & Accessibility</div>
-          <div class="option right">Authenticity & experience</div>
-          <input type="range" v-model="eventScale1" @change="checkScale1" />
+          <div class="option left">
+            Convenience & Accessibility
+          </div>
+          <div class="option right">
+            Authenticity & experience
+          </div>
+          <input v-model="eventScale1" type="range" @change="checkScale1">
         </div>
 
         <div class="range-item">
-          <div class="option left">Familiar & trusted</div>
-          <div class="option right">New and edgy</div>
-          <input type="range" v-model="eventScale2" @change="checkScale2" />
+          <div class="option left">
+            Familiar & trusted
+          </div>
+          <div class="option right">
+            New and edgy
+          </div>
+          <input v-model="eventScale2" type="range" @change="checkScale2">
         </div>
 
         <div class="range-item">
-          <div class="option left">Within budget</div>
-          <div class="option right">Hight Value for Money</div>
-          <input type="range" v-model="eventScale3" @change="checkScale3" />
+          <div class="option left">
+            Within budget
+          </div>
+          <div class="option right">
+            Hight Value for Money
+          </div>
+          <input v-model="eventScale3" type="range" @change="checkScale3">
         </div>
 
         <div class="range-item">
-          <div class="option left">Meets Requirements</div>
-          <div class="option right">Social & Green</div>
-          <input type="range" v-model="eventScale4" @change="checkScale4" />
+          <div class="option left">
+            Meets Requirements
+          </div>
+          <div class="option right">
+            Social & Green
+          </div>
+          <input v-model="eventScale4" type="range" @change="checkScale4">
         </div>
 
         <div class="form-actions">
-          <md-button class="md-rose next-btn custom-btn" @click="goToNext">Next</md-button>
+          <md-button class="md-rose next-btn custom-btn" @click="goToNext">
+            Next
+          </md-button>
         </div>
       </div>
     </div>
 
-    <go-back navigation="event-movies"></go-back>
+    <go-back navigation="event-movies" />
   </div>
 </template>
 
@@ -108,7 +128,7 @@ export default {
         if (isValid) {
           // this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
           this.setCurrentStep({ currentPage: "/event-start-working" });
-          this.$router.push({ path: `/event-start-working` });
+          this.$router.push({ path: "/event-start-working" });
         } else {
         }
       });

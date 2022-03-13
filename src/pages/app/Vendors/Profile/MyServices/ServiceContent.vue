@@ -1,19 +1,25 @@
 <template>
   <div class="service-content">
     <div class="service-header">
-      <img class="service-image" :src="coverImage" />
-      <md-button class="md-vendor md-maryoku btn-change-cover" @click="openFileBrowser">Change Image</md-button>
-      <input type="file" @change="changeCoverImage" class="d-none" id="coverImageFile" />
+      <img class="service-image" :src="coverImage">
+      <md-button class="md-vendor md-maryoku btn-change-cover" @click="openFileBrowser">
+        Change Image
+      </md-button>
+      <input id="coverImageFile" type="file" class="d-none" @change="changeCoverImage">
     </div>
     <div class="p-50">
       <div class="font-size-16 font-bold d-flex justify-content-between align-center">
         <div>
-          <img :src="`${$iconURL}Budget Elements/${serviceCategory.icon}`" class="page-icon mr-10" />
+          <img :src="`${$iconURL}Budget Elements/${serviceCategory.icon}`" class="page-icon mr-10">
           About Our {{ serviceCategory.title }}
         </div>
-        <md-button class="md-vendor maryoku-btn" @click="gotoEditingService">Edit Service</md-button>
+        <md-button class="md-vendor maryoku-btn" @click="gotoEditingService">
+          Edit Service
+        </md-button>
       </div>
-      <div class="mt-20 about-service">{{ vendorData.about.category }}</div>
+      <div class="mt-20 about-service">
+        {{ vendorData.about.category }}
+      </div>
     </div>
     <div class="pr-50 pl-50">
       <label>Attachments</label>
@@ -26,8 +32,7 @@
         class="attachment"
         @uploaded="setAttachment"
         @remove="removeAttachment"
-      >
-      </attachment-item>
+      />
     </div>
     <!-- <vendor-images-list :images="serviceData.images"></vendor-images-list> -->
     <vendor-photos-carousel
@@ -37,11 +42,11 @@
       @addImage="addServiceImage"
       @setPhoto="updateServiceImage"
       @removeImage="removeServiceImage"
-    ></vendor-photos-carousel>
-    <starting-fee-table class="mt-30" :items="startingFeeItems"></starting-fee-table>
-    <extra-pay-table :serviceCategory="serviceData.vendorCategory" :items="extraPayItems"></extra-pay-table>
-    <policy :serviceCategory="serviceData.vendorCategory" :serviceData="serviceData"></policy>
-    <price-policy :serviceCategory="serviceData.vendorCategory" :serviceData="serviceData"></price-policy>
+    />
+    <starting-fee-table class="mt-30" :items="startingFeeItems" />
+    <extra-pay-table :service-category="serviceData.vendorCategory" :items="extraPayItems" />
+    <policy :service-category="serviceData.vendorCategory" :service-data="serviceData" />
+    <price-policy :service-category="serviceData.vendorCategory" :service-data="serviceData" />
   </div>
 </template>
 <script>
@@ -72,6 +77,12 @@ export default {
       type: Object,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      images: [],
+      coverImage: null,
+    };
   },
   computed: {
 
@@ -124,17 +135,11 @@ export default {
       return [];
     },
   },
-  data() {
-    return {
-      images: [],
-      coverImage: null,
-    };
-  },
   created() {
     this.images = [...this.serviceData.images];
 
     if ( this.serviceData.coverImage ) {
-        this.coverImage = this.serviceData.coverImage
+        this.coverImage = this.serviceData.coverImage;
     } else if ( this.serviceData.images && this.serviceData.images.length ) {
         this.coverImage = this.serviceData.images[0];
     }

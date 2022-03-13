@@ -1,12 +1,12 @@
-import Model from './Model'
-import TeamMember from './TeamMember'
+import Model from "./Model";
+import TeamMember from "./TeamMember";
 
 export default class Me extends Model {
-  resource () {
-    return 'me'
+  resource() {
+    return "me";
   }
 
-  customer () {
-    return this['customer']
+  customer() {
+    return this["customer"];
   }
 }

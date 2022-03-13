@@ -9,12 +9,12 @@
             background-image: url(${bgImages[0]});
             background-size: cover;
             background-size: 100% 100%;`"
-        ></div>
+        />
         <div class="img-cont thumb-img-cont">
-          <img :src="bgImages[1]" />
-          <img :src="bgImages[2]" />
-          <img :src="bgImages[3]" />
-          <img :src="bgImages[4]" />
+          <img :src="bgImages[1]">
+          <img :src="bgImages[2]">
+          <img :src="bgImages[3]">
+          <img :src="bgImages[4]">
         </div>
         <md-button class="md-default btn-photos" @click="view()">
           <md-icon>photo</md-icon>
@@ -23,18 +23,20 @@
         </md-button>
         <LightBox
           v-if="getGalleryImages.length > 0"
-          :images="getGalleryImages"
           ref="lightbox"
+          :images="getGalleryImages"
           :show-light-box="false"
-        ></LightBox>
+        />
       </div>
     </div>
     <div class="md-layout bg-white">
       <div class="md-layout-item">
         <div class="title-cont">
           <div class="title-child">
-            <img v-if="isVendorLogo" :src="isVendorLogo" />
-            <div v-else class="default-text-logo">{{ logoText }}</div>
+            <img v-if="isVendorLogo" :src="isVendorLogo">
+            <div v-else class="default-text-logo">
+              {{ logoText }}
+            </div>
           </div>
           <div class="title-child mt-4">
             <div class="md-layout-item">
@@ -47,18 +49,20 @@
                 <label>Display Name</label>
                 <md-input
                   v-model="vendor.vendorDisplayName"
+                  v-validate="modelValidations.vendorDisplayName"
                   required
                   data-vv-name="vendorDisplayName"
                   name="vendorDisplayName"
-                  v-validate="modelValidations.vendorDisplayName"
                 />
                 <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>
+                  <md-icon v-show="errors.has('vendorDisplayName')" class="error">
+                    close
+                  </md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('vendorDisplayName') && vendor.vendorDisplayName"
-                    >done</md-icon
-                  >
+                  <md-icon v-show="!errors.has('vendorDisplayName') && vendor.vendorDisplayName" class="success">
+                    done
+                  </md-icon>
                 </slide-y-down-transition>
               </md-field>
             </div>
@@ -71,15 +75,17 @@
                   { 'md-error': errors.has('vendorDisplayName') },
                 ]"
               >
-                <label> <i class="fa fa-map-marker-alt"></i> Address </label>
-                <md-input v-model="vendor.vendorAddressLine1"></md-input>
+                <label> <i class="fa fa-map-marker-alt" /> Address </label>
+                <md-input v-model="vendor.vendorAddressLine1" />
                 <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('vendorAddressLine1')">close</md-icon>
+                  <md-icon v-show="errors.has('vendorAddressLine1')" class="error">
+                    close
+                  </md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('vendorAddressLine1') && vendor.vendorAddressLine1"
-                    >done</md-icon
-                  >
+                  <md-icon v-show="!errors.has('vendorAddressLine1') && vendor.vendorAddressLine1" class="success">
+                    done
+                  </md-icon>
                 </slide-y-down-transition>
               </md-field>
             </div>
@@ -88,7 +94,7 @@
             <div class="md-layout-item">
               <md-field class="auto-width">
                 <label>Avg Score</label>
-                <md-input v-model="vendor.avgScore" type="number" min="0" @keyup="validateScore()"></md-input>
+                <md-input v-model="vendor.avgScore" type="number" min="0" @keyup="validateScore()" />
               </md-field>
             </div>
           </div>
@@ -99,15 +105,18 @@
           <div class="md-layout-item">
             <label>Rating</label>
             <label
-              class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
-              @click="setRating(ratingIndex)"
+              class="star-rating__star"
               :class="{ 'is-selected': vendor.rank >= rating && vendor.rank != null }"
-              >★</label
-            >
-            <md-button v-if="creation_mode" class="md-purple md-lg md-save" @click="addVendor">Create</md-button>
-            <md-button v-else class="md-purple md-lg md-save" @click="updateVendor">Save</md-button>
+              @click="setRating(ratingIndex)"
+            >★</label>
+            <md-button v-if="creation_mode" class="md-purple md-lg md-save" @click="addVendor">
+              Create
+            </md-button>
+            <md-button v-else class="md-purple md-lg md-save" @click="updateVendor">
+              Save
+            </md-button>
           </div>
         </div>
       </div>
@@ -124,17 +133,21 @@
             <label>Email</label>
             <md-input
               v-model="vendor.vendorMainEmail"
+              v-validate="modelValidations.vendorMainEmail"
               type="email"
               required
               data-vv-name="vendorMainEmail"
               name="vendorMainEmail"
-              v-validate="modelValidations.vendorMainEmail"
             />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorMainEmail')">close</md-icon>
+              <md-icon v-show="errors.has('vendorMainEmail')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorMainEmail') && vendor.vendorMainEmail">done</md-icon>
+              <md-icon v-show="!errors.has('vendorMainEmail') && vendor.vendorMainEmail" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -148,20 +161,22 @@
             <label>Phone Number</label>
             <md-input
               v-model="vendor.vendorMainPhoneNumber"
+              v-validate="modelValidations.vendorMainPhoneNumber"
               type="text"
-              @keydown="onlyNumber"
               required
               data-vv-name="vendorMainPhoneNumber"
               name="vendorMainPhoneNumber"
-              v-validate="modelValidations.vendorMainPhoneNumber"
-            ></md-input>
+              @keydown="onlyNumber"
+            />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorMainPhoneNumber')">close</md-icon>
+              <md-icon v-show="errors.has('vendorMainPhoneNumber')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber"
-                >done</md-icon
-              >
+              <md-icon v-show="!errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -177,16 +192,20 @@
             <label>Website</label>
             <md-input
               v-model="vendor.vendorWebsite"
+              v-validate="modelValidations.vendorWebsite"
               type="url"
               data-vv-name="vendorWebsite"
               name="vendorWebsite"
-              v-validate="modelValidations.vendorWebsite"
             />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
+              <md-icon v-show="errors.has('vendorWebsite')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorWebsite') && vendor.vendorWebsite">done</md-icon>
+              <md-icon v-show="!errors.has('vendorWebsite') && vendor.vendorWebsite" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -207,7 +226,7 @@
             </p>
           </div>
         </div>
-        <div class="description"></div>
+        <div class="description" />
         <div class="text-group">
           <div class>
             <span>Past Events With the Vendor: {{ vendor.voters }}</span>
@@ -224,7 +243,7 @@
       <div
         class="tab-item"
         :class="[{ visited: currentTab > 1 }, { active: currentTab === 1 }]"
-        v-on:click="currentTab = 1"
+        @click="currentTab = 1"
       >
         <template>
           <md-field :class="[{ 'md-error': errors.has('vendorCategory') }]" class="select-with-icon">
@@ -233,14 +252,16 @@
               v-model="vendor.vendorCategory"
               name="vendorCategory"
               data-vv-name="vendorCategory"
-              @md-selected="onChangeCategory()"
               required
+              @md-selected="onChangeCategory()"
             >
-              <md-option v-for="(option, index) in categories" :key="index" :value="option.id">{{
-                option.value
-              }}</md-option>
+              <md-option v-for="(option, index) in categories" :key="index" :value="option.id">
+                {{
+                  option.value
+                }}
+              </md-option>
             </md-select>
-            <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
+            <span v-if="errors.has('vendorCategory')" class="md-error">The Vendor Category is required</span>
           </md-field>
         </template>
       </div>
@@ -261,16 +282,18 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorCapacities.length > 0">
-                  <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
+                  <div v-for="(item, index) in vendorCapacities" :key="index" class="icon-text-vertical" :value="item">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>{{ item.defaultValue }}</h5>
                     <span>{{ item.name }}</span>
                   </div>
                 </template>
-                <template v-else>No Capacity Info</template>
+                <template v-else>
+                  No Capacity Info
+                </template>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>check_circle</md-icon>
@@ -284,25 +307,27 @@
                       <strong class="capitalize">{{ vendor.vendorCategory }}</strong>
                     </li>
                     <li>
-                      <br />
+                      <br>
                     </li>
-                    <li class="normal" v-for="(item, i) of vendorServicesList" :key="'S' + i" :value="item">
+                    <li v-for="(item, i) of vendorServicesList" :key="'S' + i" class="normal" :value="item">
                       <md-icon>check</md-icon>
                       {{ item.name }}
                     </li>
-                    <li class="disabled" v-for="(item, i) of vendorRestrictions" :key="'R' + i" :value="item">
-                      <md-icon></md-icon>
+                    <li v-for="(item, i) of vendorRestrictions" :key="'R' + i" class="disabled" :value="item">
+                      <md-icon />
                       <span>{{ item.name }}</span>
                     </li>
                   </ul>
                 </template>
-                <template v-else>No Service Data</template>
-                <div class="notes" v-if="attachments.length > 0">
+                <template v-else>
+                  No Service Data
+                </template>
+                <div v-if="attachments.length > 0" class="notes">
                   <div class="notes-title">
                     <h4>Attachment</h4>
                   </div>
                   <div class="notes-body">
-                    <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
+                    <div v-for="(item, index) in attachments" :key="index" class="note-item" :value="item">
                       <a
                         v-if="item.vendorsFileContentType === 'application/pdf'"
                         target="_blank"
@@ -324,7 +349,7 @@
                 </div>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>menu_book</md-icon>
@@ -332,12 +357,14 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorPricesAndRules.length > 0">
-                  <div class="text-vertical" v-for="(item, index) of vendorPricesAndRules" :key="index" :value="item">
+                  <div v-for="(item, index) of vendorPricesAndRules" :key="index" class="text-vertical" :value="item">
                     <h5>${{ item.defaultValue === null ? 0 : item.defaultValue }}</h5>
                     <span>{{ item.name }}</span>
                   </div>
                 </template>
-                <template v-else>No Price Data</template>
+                <template v-else>
+                  No Price Data
+                </template>
                 <div class="notes">
                   <div class="notes-title">
                     <h4>Notes</h4>
@@ -352,36 +379,35 @@
                 </div>
               </div>
             </div>
-            <md-divider></md-divider>
-            <div class="tab-item-content" v-if="proposals.length > 0">
+            <md-divider />
+            <div v-if="proposals.length > 0" class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>dehaze</md-icon>
                 <h4>Similar Proposals Made by Vendor</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-proposals :proposals="proposals" :ratings="ratings"></vendor-similar-proposals>
+                <vendor-similar-proposals :proposals="proposals" :ratings="ratings" />
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>edit</md-icon>
                 <h4>
                   Feedbacks
                   <label
-                    class="star-rating__star"
                     v-for="(rating, ratingIndex) in ratings"
                     :key="ratingIndex"
+                    class="star-rating__star"
                     :class="{ 'is-selected': true }"
-                    >★</label
-                  >
+                  >★</label>
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings"></vendor-feedbacks>
+                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings" />
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>credit_card</md-icon>
@@ -394,7 +420,7 @@
                 </p>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>warning</md-icon>
@@ -408,18 +434,20 @@
                 </p>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>flip_to_back</md-icon>
                 <h4>Similar Vendors</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-item :similarItems="similarItems" :ratings="ratings"></vendor-similar-item>
+                <vendor-similar-item :similar-items="similarItems" :ratings="ratings" />
               </div>
             </div>
           </div>
-          <div v-if="currentTab === 2">Venue</div>
+          <div v-if="currentTab === 2">
+            Venue
+          </div>
         </div>
       </div>
     </div>
@@ -449,6 +477,7 @@ export default {
     SlideYDownTransition,
     LightBox,
   },
+  filters: {},
   data() {
     return {
       isLoading: true,
@@ -530,6 +559,83 @@ export default {
       routeName: null,
     };
   },
+  computed: {
+    logoText: function () {
+      if (!this.vendor.vendorDisplayName) {
+        return null;
+      } else {
+        const titleWords = this.vendor.vendorDisplayName.split(" ");
+        if (titleWords.length > 1 && titleWords[titleWords.length - 1].length > 0) {
+          return titleWords[0].charAt(0) + titleWords[titleWords.length - 1].charAt(0);
+        } else {
+          return titleWords[0].charAt(0);
+        }
+      }
+    },
+    vendorCapacities: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Capacity");
+      } else {
+        return [];
+      }
+    },
+    vendorLogoImage: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.name === "Logo" && item.type === "image");
+      } else {
+        return [];
+      }
+    },
+    vendorExtraImage: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.name != "Logo" && item.type === "image");
+      } else {
+        return [];
+      }
+    },
+    vendorPricesAndRules: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Cost Elements");
+      } else {
+        return [];
+      }
+    },
+    vendorServicesList: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter(
+          (item) => item.categoryTitle === "Services" || item.categoryTitle === "Included services and amenities",
+        );
+      } else {
+        return [];
+      }
+    },
+    vendorRestrictions: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Restrictions");
+      } else {
+        return [];
+      }
+    },
+    getGalleryImages: function () {
+      let temp = [];
+      if (this.bgImages.length > 0) {
+        this.bgImages.forEach((item) => {
+          if (item != this.defaultImg) {
+            temp.push({
+              thumb: item,
+              src: item,
+              caption: "",
+              srcset: "",
+            });
+          }
+        });
+        return temp;
+      } else {
+        return [];
+      }
+    },
+  },
+  watch: {},
   created() {
     this.routeName = this.$route.name;
     Vendors.find("categories").then(
@@ -687,84 +793,6 @@ export default {
       this.selectedField = null;
     },
   },
-  computed: {
-    logoText: function () {
-      if (!this.vendor.vendorDisplayName) {
-        return null;
-      } else {
-        const titleWords = this.vendor.vendorDisplayName.split(" ");
-        if (titleWords.length > 1 && titleWords[titleWords.length - 1].length > 0) {
-          return titleWords[0].charAt(0) + titleWords[titleWords.length - 1].charAt(0);
-        } else {
-          return titleWords[0].charAt(0);
-        }
-      }
-    },
-    vendorCapacities: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Capacity");
-      } else {
-        return [];
-      }
-    },
-    vendorLogoImage: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.name === "Logo" && item.type === "image");
-      } else {
-        return [];
-      }
-    },
-    vendorExtraImage: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.name != "Logo" && item.type === "image");
-      } else {
-        return [];
-      }
-    },
-    vendorPricesAndRules: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Cost Elements");
-      } else {
-        return [];
-      }
-    },
-    vendorServicesList: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Services" || item.categoryTitle === "Included services and amenities",
-        );
-      } else {
-        return [];
-      }
-    },
-    vendorRestrictions: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Restrictions");
-      } else {
-        return [];
-      }
-    },
-    getGalleryImages: function () {
-      let temp = [];
-      if (this.bgImages.length > 0) {
-        this.bgImages.forEach((item) => {
-          if (item != this.defaultImg) {
-            temp.push({
-              thumb: item,
-              src: item,
-              caption: "",
-              srcset: "",
-            });
-          }
-        });
-        return temp;
-      } else {
-        return [];
-      }
-    },
-  },
-  filters: {},
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

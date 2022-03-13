@@ -3,7 +3,7 @@
     <template slot="header">
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra">
-          <img :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" style="width: 30px; margin-right: 0.5em" />
+          <img :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" style="width: 30px; margin-right: 0.5em">
           Add Budet To {{ serviceCategory.fullTitle }}
         </h2>
       </div>
@@ -18,10 +18,10 @@
           <div class="mb-10">
             <small class="font-size-14">You have ${{ availableBudget | withComma }} to use</small>
           </div>
-          <maryoku-input inputStyle="budget" v-model="budget" />
+          <maryoku-input v-model="budget" input-style="budget" />
         </div>
-        <div class="md-error d-flex align-center" v-if="availableBudget < budget">
-          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" />
+        <div v-if="availableBudget < budget" class="md-error d-flex align-center">
+          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px">
           <span style="padding: 0 15px">Oops! Seems like you don’t have enough cash in your “Unexpected” category</span>
           <md-button
             class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra"
@@ -33,7 +33,9 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
+      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">
+        Cancel
+      </md-button>
       <md-button :disabled="!isAvailable" class="md-red add-category-btn md-bold" @click="addNewBudget">
         Add Budget
       </md-button>
@@ -57,7 +59,6 @@ export default {
       default: {},
     },
   },
-  created: async function () {},
   data() {
     return {
       filteredEventBlocks: null,
@@ -69,6 +70,23 @@ export default {
       },
     };
   },
+  computed: {
+    availableBudget() {
+      return this.event.unexpectedBudget;
+    },
+    isAvailable() {
+      return Number(this.budget) > 0;
+    },
+    event() {
+      return this.$store.state.EventGuestVuex.eventData;
+    },
+    selectedCategory() {
+      return this.$store.state.common.serviceCategories.find(
+        (item) => item.key === this.serviceCategory.serviceCategory,
+      );
+    },
+  },
+  created: async function () {},
   methods: {
     close() {
       this.$emit("cancel");
@@ -106,22 +124,6 @@ export default {
         });
     },
     addMoreMoney() {},
-  },
-  computed: {
-    availableBudget() {
-      return this.event.unexpectedBudget;
-    },
-    isAvailable() {
-      return Number(this.budget) > 0;
-    },
-    event() {
-      return this.$store.state.EventGuestVuex.eventData;
-    },
-    selectedCategory() {
-      return this.$store.state.common.serviceCategories.find(
-        (item) => item.key === this.serviceCategory.serviceCategory,
-      );
-    },
   },
 };
 </script>

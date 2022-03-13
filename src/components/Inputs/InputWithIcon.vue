@@ -1,18 +1,19 @@
 <template>
-<div :class='inputBlock'>
-<img :class="imgStyle" :src='srcLogo'>
-<input
-    :value='value'
-    :name='name'
-    :type='type'
-    @input='triggerFunc($event)'
-    :placeholder='placeholder'
-    :class='inputStyle'/>
-</div>
+  <div :class="inputBlock">
+    <img :class="imgStyle" :src="srcLogo">
+    <input
+      :value="value"
+      :name="name"
+      :type="type"
+      :placeholder="placeholder"
+      :class="inputStyle"
+      @input="triggerFunc($event)"
+    >
+  </div>
 </template>
 <script>
 export default {
-  name: 'InputWithIcon',
+  name: "InputWithIcon",
   model: {
   },
   props: {
@@ -31,10 +32,10 @@ export default {
   },
   methods: {
     triggerFunc: function (event) {
-      this.onChange(event.target.value, event.target.name)
+      this.onChange(event.target.value, event.target.name);
     }
   }
-}
+};
 </script>
 <style lang="scss">
     .input-default{

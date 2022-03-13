@@ -1,5 +1,5 @@
-import moment from 'moment'
-import Proposal from '@/models/Proposal'
+import moment from "moment";
+import Proposal from "@/models/Proposal";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import { postReq, getReq } from "@/utils/token";
@@ -7,106 +7,106 @@ import Vue from "vue";
 
 export default {
   namespaced: true,
-  state () {
+  state() {
     return {
       eventData: {},
       vendorRequirements: null,
       requirements: {},
-      proposals:{},
-      favorite:{},
-      bookingRequirements:{},
+      proposals: {},
+      favorite: {},
+      bookingRequirements: {},
       showCommentPanel: false,
-      proposal: null,
-    }
+      proposal: null
+    };
   },
 
   mutations: {
-    setEventProperty (state, {key, actualValue}) {
-      state.eventData[key] = actualValue
+    setEventProperty(state, { key, actualValue }) {
+      state.eventData[key] = actualValue;
     },
-    setEventData (state, data) {
+    setEventData(state, data) {
       state.eventData = data;
     },
-      setBookingRequirements(state, requirements) {
-          state.bookingRequirements = requirements;
-      },
-      resetRequirements(state){
-          Vue.set(state, 'requirements', {})
-      },
-      setStep(state, step) {
-          state.step = step;
-      },
-      setData(state, { key, value }) {
-          Vue.set(state, key, value)
-      },
-      setProposalsByCategory(state, {category, proposals}){
-          Vue.set(state.proposals, category, proposals);
-      },
-      setVendorRequirements(state, data) {
-          state.vendorRequirements = data
-      },
-      setCategoryRequirements(state, { category, requirements }) {
-          Vue.set(state.requirements, category, requirements)
-      },
+    setBookingRequirements(state, requirements) {
+      state.bookingRequirements = requirements;
+    },
+    resetRequirements(state) {
+      Vue.set(state, "requirements", {});
+    },
+    setStep(state, step) {
+      state.step = step;
+    },
+    setData(state, { key, value }) {
+      Vue.set(state, key, value);
+    },
+    setProposalsByCategory(state, { category, proposals }) {
+      Vue.set(state.proposals, category, proposals);
+    },
+    setVendorRequirements(state, data) {
+      state.vendorRequirements = data;
+    },
+    setCategoryRequirements(state, { category, requirements }) {
+      Vue.set(state.requirements, category, requirements);
+    },
 
     toggleCommentMode: (state, showCommentPanel) => {
-        console.log("toggleCommentMode", showCommentPanel)
-        state.showCommentPanel = showCommentPanel;
+      console.log("toggleCommentMode", showCommentPanel);
+      state.showCommentPanel = showCommentPanel;
     },
     setProposal: (state, proposal) => {
-        console.log("setProposal");
-        state.proposal = proposal;
-    },
+      console.log("setProposal");
+      state.proposal = proposal;
+    }
   },
   actions: {
-    resetRequirements({commit}){
-      commit('resetRequirements')
+    resetRequirements({ commit }) {
+      commit("resetRequirements");
     },
-    resetCartItems({commit}){
-      commit('resetCartItems')
+    resetCartItems({ commit }) {
+      commit("resetCartItems");
     },
-    getUserEvent ({dispatch, commit}, payload) {
+    getUserEvent({ dispatch, commit }, payload) {
       return new Promise(async (resolve) => {
-        CalendarEvent.find(payload.id)
-            .then(res => {
-                console.log('res', res);
-                commit("setEventData", res);
-                resolve(res)
+        CalendarEvent.find(payload.id).then((res) => {
+          console.log("res", res);
+          commit("setEventData", res);
+          resolve(res);
         });
-      })
-
+      });
     },
     getVendorRequirements({ commit, state }) {
-          const eventId = state.eventData.id
-          return new Promise((resolve, reject) => {
-              if (state.vendorRequirements) {
-                  resolve(state.vendorRequirements)
-              } else {
-                  getReq(`/1/vendor/property?eventId=${eventId}`).then((res) => {
-                      commit("setVendorRequirements", res.data)
-                      resolve(res.data)
-                  }).catch(e => {
-                      reject(e)
-                  });
-              }
-          })
+      const eventId = state.eventData.id;
+      return new Promise((resolve, reject) => {
+        if (state.vendorRequirements) {
+          resolve(state.vendorRequirements);
+        } else {
+          getReq(`/1/vendor/property?eventId=${eventId}`)
+            .then((res) => {
+              commit("setVendorRequirements", res.data);
+              resolve(res.data);
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        }
+      });
     },
     getRequirements({ commit, state }, eventId) {
       return new Promise((resolve, reject) => {
-          new ProposalRequestRequirement()
-              .for(new CalendarEvent({ id: eventId }))
-              .get()
-              .then((res) => {
-                  if(res && res.length) {
-                      res.forEach(requirements => {
-                          commit("setCategoryRequirements", { category: requirements.category, requirements })
-                      })
-                  }
-                  resolve(res)
-              })
-              .catch(err => {
-                  reject(err)
+        new ProposalRequestRequirement()
+          .for(new CalendarEvent({ id: eventId }))
+          .get()
+          .then((res) => {
+            if (res && res.length) {
+              res.forEach((requirements) => {
+                commit("setCategoryRequirements", { category: requirements.category, requirements });
               });
+            }
+            resolve(res);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     },
     // getProposals({commit, state}, payload) {
@@ -127,37 +127,36 @@ export default {
     //   })
     // },
     getProposals({ commit, state }, payload) {
-        return new Promise((resolve, reject) => {
-            new Proposal()
-                .params(payload)
-                .get()
-                .then((result) => {
-                    state.eventData.components.map(c => {
-                        let proposals = result.filter(it => it.eventComponentId == c.id) || [];
-                        commit("setProposalsByCategory", { category: c.componentId, proposals });
-                    })
-                    resolve(result)
-                })
-        })
+      return new Promise((resolve, reject) => {
+        new Proposal()
+          .params(payload)
+          .get()
+          .then((result) => {
+            state.eventData.components.map((c) => {
+              let proposals = result.filter((it) => it.eventComponentId == c.id) || [];
+              commit("setProposalsByCategory", { category: c.componentId, proposals });
+            });
+            resolve(result);
+          });
+      });
     },
     saveRequirement({ commit, state }, payload) {
       return new Promise((resolve, reject) => {
-          new ProposalRequestRequirement(payload.requirement)
-              .for(new CalendarEvent({ id: payload.eventId }))
-              .save()
-              .then((res) => {
-                  console.log('res', res);
-                  // commit('setCategoryRequirements', res.category, res)
-                  resolve(res)
-              })
-              .catch(err => {
-                  reject(err)
-              });
+        new ProposalRequestRequirement(payload.requirement)
+          .for(new CalendarEvent({ id: payload.eventId }))
+          .save()
+          .then((res) => {
+            console.log("res", res);
+            // commit('setCategoryRequirements', res.category, res)
+            resolve(res);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     },
     setProposal: ({ commit, state }, proposal) => {
-        commit("setProposal", proposal);
+      commit("setProposal", proposal);
     }
-  },
-}
-
+  }
+};

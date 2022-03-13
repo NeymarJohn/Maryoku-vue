@@ -2,12 +2,14 @@
   <div class="vendor-signup-wrapper">
     <template v-if="!isLoading">
       <vendor-service-step1 v-if="step == 1" />
-      <vendor-service-step2 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 2" />
-      <vendor-service-step3 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 3" />
-      <vendor-service-step4 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 4" />
+      <vendor-service-step2 v-if="step == 2" :categories="businessCategories" :icon="`${iconUrl}`" />
+      <vendor-service-step3 v-if="step == 3" :categories="businessCategories" :icon="`${iconUrl}`" />
+      <vendor-service-step4 v-if="step == 4" :categories="businessCategories" :icon="`${iconUrl}`" />
 
-      <vendor-service-step5 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 5" />
-      <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
+      <vendor-service-step5 v-if="step == 5" :categories="businessCategories" :icon="`${iconUrl}`" />
+      <div v-if="isCompletedWizard" class="final-section">
+        Thank you for your signup!
+      </div>
     </template>
   </div>
 </template>

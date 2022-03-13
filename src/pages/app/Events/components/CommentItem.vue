@@ -1,76 +1,90 @@
 <template>
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
-      <div class="comment-item-avatar" >
-        <Avartar :name="comment.planner.name"
-                 v-if="comment.planner && comment.planner.name"></Avartar>
-        <Avartar :name="comment.customer.name"
-                 v-else-if="comment.customer && comment.customer.name"></Avartar>
+      <div class="comment-item-avatar">
+        <Avartar v-if="comment.planner && comment.planner.name"
+                 :name="comment.planner.name"
+        />
+        <Avartar v-else-if="comment.customer && comment.customer.name"
+                 :name="comment.customer.name"
+        />
         <img v-else-if="!comment.customer && !comment.planner " class="user-avatar"
-             :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px"/>
+             :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px"
+        >
       </div>
       <div class="comment-item-description">
-        <div v-if="comment.planner">{{comment.planner.name}}</div>
-        <div v-if="comment.customer">{{comment.customer.name}}</div>
-        <div class="post-date">
-          <timeago :datetime="comment.dateCreated"></timeago>
+        <div v-if="comment.planner">
+          {{ comment.planner.name }}
         </div>
-        <div class="comment-item-content" v-if="!isEditing">{{comment.description}}</div>
-        <div class="comment-item-content" v-else>
+        <div v-if="comment.customer">
+          {{ comment.customer.name }}
+        </div>
+        <div class="post-date">
+          <timeago :datetime="comment.dateCreated" />
+        </div>
+        <div v-if="!isEditing" class="comment-item-content">
+          {{ comment.description }}
+        </div>
+        <div v-else class="comment-item-content">
           <div class="form-group">
             <textarea
+              v-model="editingDescription"
               rows="4"
               class="form-control"
               placeholder="Write your comment here"
-              v-model="editingDescription"
-            ></textarea>
+            />
           </div>
           <div class="text-right">
-            <md-button class="md-simple normal-btn" @click="cancelEditing()">Cancel</md-button>
-            <md-button class="md-simple md-black normal-btn" @click="updateComment()">Submit</md-button>
+            <md-button class="md-simple normal-btn" @click="cancelEditing()">
+              Cancel
+            </md-button>
+            <md-button class="md-simple md-black normal-btn" @click="updateComment()">
+              Submit
+            </md-button>
           </div>
         </div>
         <div class="reply-dropdown d-flex justify-content-between">
-          <span v-if="isMain">{{replies}} Replies</span>
+          <span v-if="isMain">{{ replies }} Replies</span>
           <span v-if="comment.favoriteUsers && comment.favoriteUsers.length>0">
             <img
               :src="`${$iconURL}comments/SVG/heart-gray.svg`"
               class="comment-actions-icon"
               width="25px"
-            />
-              {{ comment.favoriteUsers.length }}
-            </span>
-          <span v-else></span>
+            >
+            {{ comment.favoriteUsers.length }}
+          </span>
+          <span v-else />
           <div class="comment-actions">
             <md-button
               class="edit-btn md-simple md-black comment-action-btn"
               @click="resolveCommentComonent(comment)"
-            >Resolve
+            >
+              Resolve
             </md-button>
             <md-button
-              class="edit-btn md-simple comment-action-btn"
               v-if="comment.planner.name === user.name"
+              class="edit-btn md-simple comment-action-btn"
               @click="editComment(comment)"
             >
               <img
                 :src="`${$iconURL}comments/SVG/edit-dark.svg`"
                 width="25px"
                 class="comment-actions-icon"
-              />
+              >
             </md-button>
             <md-button class="edit-btn md-simple comment-action-btn">
               <img
                 :src="`${$iconURL}comments/SVG/${!myFavorite?'heart-dark.svg':'heart-yellow.svg'}`"
-                @click="markAsFavorite(comment, !myFavorite)"
                 class="comment-actions-icon"
-              />
+                @click="markAsFavorite(comment, !myFavorite)"
+              >
             </md-button>
             <md-button class="edit-btn md-simple comment-action-btn">
               <img
                 class="comment-actions-icon trash"
                 :src="`${$iconURL}comments/SVG/trash-dark.svg`"
                 @click="deleteComment(comment)"
-              />
+              >
             </md-button>
           </div>
         </div>
@@ -83,7 +97,7 @@
 import Avartar from "@/components/Avartar.vue";
 
 export default {
-  name: "comment-item",
+  name: "CommentItem",
   components: {
     Avartar,
   },
@@ -108,39 +122,39 @@ export default {
       user: this.$store.state.auth.user
     };
   },
-  methods: {
-    cancelEditing() {
-      this.editingDescription = this.comment.description;
-      this.isEditing = false
-    },
-    updateComment() {
-      this.comment.description = this.editingDescription;
-      this.isEditing = false
-      this.$emit("updateComment", this.comment);
-    },
-    resolveCommentComonent(comment) {
-      this.$emit("resolve", comment)
-    },
-    editComment(comment) {
-      this.isEditing = true
-    },
-    markAsFavorite(comment, isFavorite) {
-      this.$emit("favorite", comment, isFavorite)
-    },
-    deleteComment(comment) {
-      this.$emit("delete", comment)
-    },
-  },
   computed: {
     getTimeDiffString() {
     },
     myFavorite() {
-      if (!this.comment.favoriteUsers) return false
+      if (!this.comment.favoriteUsers) return false;
       if (this.comment.favoriteUsers.findIndex(userId => userId === this.user.id) < 0) {
-        return false
+        return false;
       }
-      return true
+      return true;
     }
+  },
+  methods: {
+    cancelEditing() {
+      this.editingDescription = this.comment.description;
+      this.isEditing = false;
+    },
+    updateComment() {
+      this.comment.description = this.editingDescription;
+      this.isEditing = false;
+      this.$emit("updateComment", this.comment);
+    },
+    resolveCommentComonent(comment) {
+      this.$emit("resolve", comment);
+    },
+    editComment(comment) {
+      this.isEditing = true;
+    },
+    markAsFavorite(comment, isFavorite) {
+      this.$emit("favorite", comment, isFavorite);
+    },
+    deleteComment(comment) {
+      this.$emit("delete", comment);
+    },
   }
 };
 </script>

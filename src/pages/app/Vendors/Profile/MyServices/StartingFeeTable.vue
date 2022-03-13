@@ -2,7 +2,7 @@
   <collapse-panel class="starting-fee-table">
     <template slot="header">
       <div class="d-flex align-center">
-        <img :src="`${$iconURL}Vendor Signup/Asset 562.svg`" style="width: 25px" class="mr-10" />
+        <img :src="`${$iconURL}Vendor Signup/Asset 562.svg`" style="width: 25px" class="mr-10">
         Elements in starting fee
       </div>
     </template>

@@ -1,61 +1,57 @@
 <template>
   <div>
-    <slideout-panel></slideout-panel>
-    <router-view></router-view>
-
-    <NotificationModal v-if="isNotificationModal" :name="name"></NotificationModal>
-    <ActionModal v-if="isActionModal" :name="name"></ActionModal>
+    <slideout-panel />
+    <router-view />
+    <NotificationModal v-if="isNotificationModal" :name="name" @click="() => {}" />
+    <ActionModal v-if="isActionModal" :name="name" />
   </div>
 </template>
 
 <script>
-// import auth from '@/auth';
-// import Model from '@/models/Model'
 import { NOTIFICATION, ACTION } from "./constants/modal";
 
 const components = {
-    NotificationModal: () => import('@/components/Modals/NotificationModal.vue'),
-    ActionModal: () => import('@/components/Modals/ActionModal.vue'),
-}
+  NotificationModal: () => import("@/components/Modals/NotificationModal.vue"),
+  ActionModal: () => import("@/components/Modals/ActionModal.vue"),
+};
 
 export default {
   components,
-  data () {
+  data() {
     return {
       // auth: auth
-    }
-  },
-  mounted () {
-    const that = this
-    if (window.focusEventListener != null) {
-      window.removeEventListener('focus', window.focusEventListener)
-      window.focusEventListener = null
-    }
-
-    let initialMessage = document.getElementById('initial-message')
-    if (initialMessage) {
-      initialMessage.remove()
-    }
-    const loadingBackground = document.getElementById('loading-background');
-    if (loadingBackground) {
-      loadingBackground.remove()
-    }
+    };
   },
   computed: {
     name() {
-        return this.$store.state.modal.name;
+      return this.$store.state.modal.name;
     },
-    isNotificationModal(){
-        return Object.keys(NOTIFICATION).includes(this.name)
+    isNotificationModal() {
+      return Object.keys(NOTIFICATION).includes(this.name);
     },
-    isActionModal(){
-        return Object.keys(ACTION).includes(this.name)
-    }
+    isActionModal() {
+      return Object.keys(ACTION).includes(this.name);
+    },
   },
   watch: {
-    name(newVal){}
-  }
-}
+    name(newVal) {},
+  },
+  mounted() {
+    if (window.focusEventListener != null) {
+      window.removeEventListener("focus", window.focusEventListener);
+      window.focusEventListener = null;
+    }
+
+    const initialMessage = document.getElementById("initial-message");
+    if (initialMessage) {
+      initialMessage.remove();
+    }
+    const loadingBackground = document.getElementById("loading-background");
+    if (loadingBackground) {
+      loadingBackground.remove();
+    }
+  },
+};
 </script>
 <style lang="scss">
 .slideout.transition36 {

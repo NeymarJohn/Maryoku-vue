@@ -1,12 +1,12 @@
 <template>
   <div class="event-overview-item card-section" :class="{ 'align-center': !isEdit }">
     <div class="left" :class="{ 'align-center': !isEdit }">
-      <img class="mr-30" :src="section.img_src" />
+      <img class="mr-30" :src="section.img_src">
       <div class="mr-30 flex-1">
         <div class="text-left">
           <span class="title font-size-26 mr-30">{{ section.title }}</span>
-          <span class="content" v-if="!isEdit && section.startTime">{{ section.startTime * 1000 | formatDate }}</span>
-          <span class="content" v-if="!isEdit && section.location">{{ section.location }}</span>
+          <span v-if="!isEdit && section.startTime" class="content">{{ section.startTime * 1000 | formatDate }}</span>
+          <span v-if="!isEdit && section.location" class="content">{{ section.location }}</span>
           <span v-if="!isEdit && section.numberOfParticipants" class="content">
             {{ section.numberOfParticipants | formatQty }} Guests
           </span>
@@ -16,13 +16,13 @@
         <div class="row">
           <maryoku-input
             v-if="isEdit && section.key === 'date'"
+            v-model="eventDate"
             :value="eventDate"
             class="form-input w-max-400"
             placeholder="Choose date…"
-            inputStyle="date"
-            v-model="eventDate"
+            input-style="date"
             @input="changeDate"
-          ></maryoku-input>
+          />
         </div>
         <location-input
           v-if="isEdit && section.key === 'location'"
@@ -30,70 +30,73 @@
           placeholder="Type city / region or specific address here…"
           class="my-10 w-max-450"
           @change="changeLocation"
-        >
-        </location-input>
+        />
 
         <maryoku-input
           v-if="isEdit && section.key === 'number_of_guest'"
           class="form-input w-max-250 my-10"
           placeholder="Type number…..."
-          inputStyle="users"
-          @change="guestNumberChange"
+          input-style="users"
           :value="section.numberOfParticipants.toString()"
-        ></maryoku-input>
+          @change="guestNumberChange"
+        />
 
         <category-selector
           v-if="isEdit && section.key === 'event_type'"
           :value="section.eventType"
           :categories="eventTypes"
-          trackBy="name"
+          track-by="name"
           class="my-10 w-max-450"
           @change="eventTypeChange"
-        ></category-selector>
+        />
 
         <div v-if="isEdit && section.warning" class="warning d-flex">
-          <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20" />
+          <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20">
           <div>{{ section.warning }}</div>
         </div>
       </div>
 
       <div v-if="isEdit && section.key === 'date'" class="value">
-          <div class="md-layout">
-              <div class="md-layout-item md-size-50 p-0">
-                  <p class="title font-size-20 my-5">From</p>
-                  <div class="event-time d-flex align-center">
-                      <vue-timepicker
-                          manual-input
-                          input-class="time-class"
-                          hide-dropdown
-                          format="hh:mm"
-                          v-model="startTime"
-                          hide-clear-button
-                          @change="changeDate"
-                      />
-                      <div class="am-field" @click="changeDate('start')">
-                          <input type="text" v-model="amPack.start" readonly />
-                      </div>
-                  </div>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-50 p-0">
+            <p class="title font-size-20 my-5">
+              From
+            </p>
+            <div class="event-time d-flex align-center">
+              <vue-timepicker
+                v-model="startTime"
+                manual-input
+                input-class="time-class"
+                hide-dropdown
+                format="hh:mm"
+                hide-clear-button
+                @change="changeDate"
+              />
+              <div class="am-field" @click="changeDate('start')">
+                <input v-model="amPack.start" type="text" readonly>
               </div>
-              <div class="md-layout-item md-size-50 p-0">
-                  <p class="title font-size-20 my-5">To</p>
-                  <div class="event-time d-flex align-center">
-                      <vue-timepicker
-                          manual-input
-                          input-class="time-class"
-                          hide-dropdown
-                          format="hh:mm"
-                          v-model="endTime"
-                          hide-clear-button
-                          @change="changeDate"
-                      />
-                      <div class="am-field" @click="changeDate('end')">
-                          <input type="text" v-model="amPack.end" readonly />
-                      </div>
-                  </div>
-              </div>
+            </div>
           </div>
+          <div class="md-layout-item md-size-50 p-0">
+            <p class="title font-size-20 my-5">
+              To
+            </p>
+            <div class="event-time d-flex align-center">
+              <vue-timepicker
+                v-model="endTime"
+                manual-input
+                input-class="time-class"
+                hide-dropdown
+                format="hh:mm"
+                hide-clear-button
+                @change="changeDate"
+              />
+              <div class="am-field" @click="changeDate('end')">
+                <input v-model="amPack.end" type="text" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="right">
@@ -108,30 +111,23 @@
 <style lang="scss" scoped>
 </style>
 <script>
-import Multiselect from "vue-multiselect";
-import HeaderActions from "@/components/HeaderActions";
 import { MaryokuInput, LocationInput, HolidayInput } from "@/components";
-import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
-import { mapState } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import EventOverviewDate from "./EventOverviewDate";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import TimePicker from "@/components/Inputs/TimePicker.vue";
 
 export default {
-  name: "event-overview-section",
+  name: "EventOverviewSection",
   components: {
-    Multiselect,
-    HeaderActions,
-    FunctionalCalendar,
     MaryokuInput,
     LocationInput,
-    HolidayInput,
     CategorySelector,
-    EventOverviewDate,
     VueTimepicker,
-    TimePicker,
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("MMMM DD, YYYY");
+    },
   },
   props: {
     section: {
@@ -153,6 +149,22 @@ export default {
       eventTypes: [],
     };
   },
+  computed: {
+    eventTypesList() {
+      return this.$store.state.common.eventTypes;
+    },
+  },
+  watch: {
+    section: {
+      handler(newVal) {
+        if (newVal) this.init();
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.init();
+  },
   methods: {
     getIconUrl(name) {
       if (name === "outdoors") {
@@ -173,21 +185,21 @@ export default {
       this.$emit("change", { location: loc });
     },
     guestNumberChange(e) {
-      console.log('guestNumberChange', e);
+      console.log("guestNumberChange", e);
       this.$emit("change", { numberOfParticipants: parseInt(e) });
     },
     eventTypeChange(e) {
-      console.log('eventTypeChange', e);
+      console.log("eventTypeChange", e);
       this.$emit("change", { eventType: e });
     },
     changeDate(field = null){
-        console.log('changeDate', this.eventDate, this.startTime, this.endTime, this.amPack);
-        if(field == 'start') this.amPack.start = this.amPack.start === 'am' ? 'pm' : 'am'
-        if(field == 'end') this.amPack.end = this.amPack.end === 'am' ? 'pm' : 'am'
-        this.$emit('change', {dateData: {
+        console.log("changeDate", this.eventDate, this.startTime, this.endTime, this.amPack);
+        if(field == "start") this.amPack.start = this.amPack.start === "am" ? "pm" : "am";
+        if(field == "end") this.amPack.end = this.amPack.end === "am" ? "pm" : "am";
+        this.$emit("change", {dateData: {
             startTime: this.getTimeFromFormat(this.eventDate, this.startTime, this.amPack.start, "DD.MM.YYYY hh:mm a"),
             endTime: this.getTimeFromFormat(this.eventDate, this.endTime, this.amPack.start, "DD.MM.YYYY hh:mm a"),
-        }})
+        }});
     },
     getTimeFromFormat(date, time, a, format) {
       return moment(`${date} ${time.hh}:${time.mm} ${a}`, format).unix();
@@ -198,37 +210,16 @@ export default {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
       });
 
-      this.eventDate = moment(this.section.startTime * 1000).format("DD.MM.YYYY")
+      this.eventDate = moment(this.section.startTime * 1000).format("DD.MM.YYYY");
       this.startTime = {
           hh: moment(this.section.startTime * 1000).format("hh"),
           mm: moment(this.section.startTime * 1000).format("mm"),
-      }
+      };
       this.endTime = {
           hh: moment(this.section.endTime * 1000).format("hh"),
           mm: moment(this.section.endTime * 1000).format("mm"),
-      }
+      };
 
-    },
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMMM DD, YYYY");
-    },
-  },
-  computed: {
-    eventTypesList() {
-      return this.$store.state.common.eventTypes;
-    },
-  },
-  mounted() {
-    this.init();
-  },
-  watch: {
-    section: {
-      handler(newVal) {
-        if (newVal) this.init();
-      },
-      deep: true,
     },
   },
 };

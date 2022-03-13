@@ -1,19 +1,21 @@
 <template>
-    <div class="choice"
-         :class="">
-        <input type="text"
-               :name="name"
-               class="input-default"
-               :disabled="disabled"
-               :placeholder="placeholder" >
-        <slot name="title">
-            <h6>{{title}}</h6>
-        </slot>
-    </div>
+  <div class="choice"
+       :class=""
+  >
+    <input type="text"
+           :name="name"
+           class="input-default"
+           :disabled="disabled"
+           :placeholder="placeholder"
+    >
+    <slot name="title">
+      <h6>{{ title }}</h6>
+    </slot>
+  </div>
 </template>
 <script>
 export default {
-  name: 'input-text',
+  name: "InputText",
   model: {
   },
   props: {
@@ -26,7 +28,7 @@ export default {
   methods: {
 
   }
-}
+};
 </script>
 <style>
     .input-default{

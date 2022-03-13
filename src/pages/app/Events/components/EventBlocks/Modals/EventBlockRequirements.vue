@@ -9,19 +9,17 @@
                 <div class="md-layout-item md-size-100">
                   <div class="event-date">
                     <md-icon>local_mall</md-icon>
-                    <label
-                      >{{ event.eventStartMillis | formatDate }},
+                    <label>{{ event.eventStartMillis | formatDate }},
                       {{ event.eventStartMillis | formatTime }}
-                      ({{ event.eventStartMillis | formatDuration(event.eventEndMillis) }}h)</label
-                    >
+                      ({{ event.eventStartMillis | formatDuration(event.eventEndMillis) }}h)</label>
                   </div>
                 </div>
                 <div class="md-layout-item md-size-100 required" style="margin-top: 2em">
                   <md-datepicker
-                    v-model="eventData.date"
-                    data-vv-name="date"
                     ref="datePicker"
+                    v-model="eventData.date"
                     v-validate="modelValidations.date"
+                    data-vv-name="date"
                     required
                   >
                     <label>Date</label>
@@ -36,7 +34,7 @@
                       </md-option>
                     </md-select>
 
-                    <span class="md-error" v-if="errors.has('time')">The start time is required</span>
+                    <span v-if="errors.has('time')" class="md-error">The start time is required</span>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
@@ -52,7 +50,7 @@
                         {{ hour + " hours" }}
                       </md-option>
                     </md-select>
-                    <span class="md-error" v-if="errors.has('duration')">The duration is required</span>
+                    <span v-if="errors.has('duration')" class="md-error">The duration is required</span>
                   </md-field>
                 </div>
               </div>
@@ -65,13 +63,13 @@
                     <label>Guest Count</label>
                     <md-input
                       v-model="selectedBlock.numberOfParticipants"
-                      data-vv-name="numberOfParticipants"
                       v-validate="modelValidations.numberOfParticipants"
+                      data-vv-name="numberOfParticipants"
                       required
                       type="number"
                       @change="updateEventComponent"
-                    ></md-input>
-                    <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
+                    />
+                    <span v-if="errors.has('numberOfParticipants')" class="md-error">The Guest Count is required</span>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-33">
@@ -80,19 +78,19 @@
                     <label>Budget</label>
                     <md-input
                       v-model="selectedBlock.allocatedBudget"
-                      data-vv-name="budget"
                       v-validate="modelValidations.totalBudget"
+                      data-vv-name="budget"
                       required
                       type="number"
                       @change="updateEventComponent"
-                    ></md-input>
-                    <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
+                    />
+                    <span v-if="errors.has('budget')" class="md-error">The Budget is required</span>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-33">
                   <md-field class="disabled" style="pointer-events: none">
                     <label>Per Guest</label>
-                    <md-input v-model="selectedBlock.budgetPerPerson" style="color: gray"></md-input>
+                    <md-input v-model="selectedBlock.budgetPerPerson" style="color: gray" />
                   </md-field>
                 </div>
               </div>
@@ -126,7 +124,7 @@
                             </li>
                         </ul>
                         <div style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" >&nbsp;</div>-->
-            <md-table class="clear-margins" v-if="eventBlockRequirements" v-model="filteredEventBlockRequirements">
+            <md-table v-if="eventBlockRequirements" v-model="filteredEventBlockRequirements" class="clear-margins">
               <!--                            <md-table-toolbar >-->
               <!--                                <div class="md-toolbar-section-start">-->
               <!--                                    <md-field>-->
@@ -149,10 +147,12 @@
               <md-table-empty-state
                 :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`"
               >
-                <md-button class="md-primary md-raised" @click="addNewValue">Add Requirement</md-button>
+                <md-button class="md-primary md-raised" @click="addNewValue">
+                  Add Requirement
+                </md-button>
               </md-table-empty-state>
 
-              <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement
@@ -161,12 +161,12 @@
                     :event-id="event.id"
                     :selected-block-id="selectedBlock.id"
                     :requirement-properties="getRequirementProperties(item)"
-                  ></event-block-requirement>
+                  />
                 </md-table-cell>
               </md-table-row>
             </md-table>
-            <md-table class="clear-margins" v-else v-model="dummyList">
-              <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id">
+            <md-table v-else v-model="dummyList" class="clear-margins">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement
@@ -174,9 +174,9 @@
                     :requirement.sync="item"
                     :event-id="event.id"
                     :selected-block-id="selectedBlock.id"
-                    @requirement-saved="requirementSaved"
                     :requirement-properties="getRequirementProperties(item)"
-                  ></event-block-requirement>
+                    @requirement-saved="requirementSaved"
+                  />
                 </md-table-cell>
               </md-table-row>
             </md-table>
@@ -213,6 +213,17 @@ export default {
     Drop,
     ClickOutside,
     EventBlockRequirement,
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("MMM Do YYYY ");
+    },
+    formatTime: function (date) {
+      return moment(date).format("h:00 A");
+    },
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, "hours");
+    },
   },
   props: {
     event: Object,
@@ -278,11 +289,17 @@ export default {
     durationArray: [...Array(12).keys()].map((x) => ++x),
     hoursArray: [],
   }),
+  computed: {},
+  watch: {
+    searchQuery(newVal, oldVal) {
+      this.filterRequirements();
+    },
+  },
 
   created() {
     [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 PM") : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 AM") : this.hoursArray.push(`${x}:00 AM`)));
 
     this.hoursArray.push();
 
@@ -425,7 +442,7 @@ export default {
     deleteValue(valueId) {
       Swal.fire({
         title: "Are you sure?",
-        text: `You won't be able to revert this!`,
+        text: "You won't be able to revert this!",
         showCancelButton: true,
 
         confirmButtonClass: "md-button md-success",
@@ -605,23 +622,6 @@ export default {
             type: "danger",
           });
         });
-    },
-  },
-  computed: {},
-  watch: {
-    searchQuery(newVal, oldVal) {
-      this.filterRequirements();
-    },
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMM Do YYYY ");
-    },
-    formatTime: function (date) {
-      return moment(date).format("h:00 A");
-    },
-    formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, "hours");
     },
   },
 };

@@ -1,38 +1,50 @@
 <template>
   <div class="md-layout md-alignment-top-center pt-24">
-    <div class="md-layout-item md-size-70" v-if="firstTime">
+    <div v-if="firstTime" class="md-layout-item md-size-70">
       <div class="margin-bottom-lg">
         <h3 class="title">
-          <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>You've been added to our marketplace as
+          <md-icon class="md-success md-size-2x margin-right-sm">
+            check_circle
+          </md-icon>You've been added to our marketplace as
           <a href="#">vetted vendor</a>.
         </h3>
       </div>
       <div class="margin-bottom-md">
-        <h4 class="title">What's maryoku?</h4>
+        <h4 class="title">
+          What's maryoku?
+        </h4>
         <p>Our community based marketplace brings together event producers and vetted vendors to streamline event production.</p>
       </div>
       <div class="margin-bottom-lg">
-        <h4 class="title">Win more quotes, get better leads</h4>
+        <h4 class="title">
+          Win more quotes, get better leads
+        </h4>
         <p>* Get insights about the competition and budget range to create winning quotes.</p>
         <p>* Get notified when quote outbided, and update your quote.</p>
         <p>* We study your proposals and build your auto proposal builder to save you time and energy.</p>
       </div>
     </div>
-    <div class="md-layout-item md-size-70" v-else>
+    <div v-else class="md-layout-item md-size-70">
       <div class="margin-bottom-lg">
         <h3 class="title">
-          <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Thank you
+          <md-icon class="md-success md-size-2x margin-right-sm">
+            check_circle
+          </md-icon>Thank you
         </h3>
       </div>
     </div>
     <div class="md-layout-item md-size-70 margin-bottom-lg">
-      <h4 class="title">Waiting for your quote:</h4>
+      <h4 class="title">
+        Waiting for your quote:
+      </h4>
       <md-card class="proposals--card">
         <md-card-content>
           <div class="md-layout">
             <div class="md-layout-item separated">
               <div class="proposal--title margin-bottom-lg">
-                <md-icon class="proposal--icon">date_range</md-icon>
+                <md-icon class="proposal--icon">
+                  date_range
+                </md-icon>
                 <span>{{ eventDate }}</span>
               </div>
               <div class="md-layout align-with-title">
@@ -40,7 +52,9 @@
                   <div>Guests</div>
                   <p
                     class="proposal--title"
-                  >{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' }}</p>
+                  >
+                    {{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' }}
+                  </p>
                 </div>
                 <div
                   v-if="proposalRequest.bidderRank > 1"
@@ -55,22 +69,28 @@
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Location</div>
-                  <p class="proposal--title">{{getLocation}}</p>
+                  <p class="proposal--title">
+                    {{ getLocation }}
+                  </p>
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Requirements</div>
                   <p
                     class="proposal--title"
-                  >{{ proposalRequest ? proposalRequest.requirements.length : '-' }}</p>
+                  >
+                    {{ proposalRequest ? proposalRequest.requirements.length : '-' }}
+                  </p>
                 </div>
 
                 <div
-                  class="md-layout-item md-size-100 margin-bottom-md alternative-date"
                   v-if="proposalRequest.eventData.flexibleWithDates"
+                  class="md-layout-item md-size-100 margin-bottom-md alternative-date"
                 >
-                  <md-button class="md-primary" @click="suggestAnotherDay">Suggest another day</md-button>
-                  <br />
-                  <br />
+                  <md-button class="md-primary" @click="suggestAnotherDay">
+                    Suggest another day
+                  </md-button>
+                  <br>
+                  <br>
                   <md-datepicker
                     v-if="suggest"
                     v-model="proposalRequest.suggestedDates"
@@ -85,7 +105,7 @@
               <div class="proposal--title margin-bottom-lg centered">
                 <span
                   v-if="proposalRequest.bidderRank > 1"
-                >You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</span>
+                >You're the {{ proposalRequest.bidderRank | numeral('Oo') }} bidder</span>
                 <span v-else>Budget</span>
               </div>
               <div class="md-layout md-alignment-top-center margin-bottom-lg">
@@ -103,10 +123,12 @@
                   <div>Min</div>
                   <p
                     class="proposal--title"
-                  >${{ proposalRequest ? proposalRequest.bidRange.low : '-' }}</p>
+                  >
+                    ${{ proposalRequest ? proposalRequest.bidRange.low : '-' }}
+                  </p>
                 </div>
                 <div class="md-layout-item margin-bottom-md md-size-30">
-                  <div class="arrow"></div>
+                  <div class="arrow" />
                 </div>
                 <div
                   v-if="proposalRequest.bidderRank > 1"
@@ -122,7 +144,9 @@
                   <div>Max</div>
                   <p
                     class="proposal--title"
-                  >${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}</p>
+                  >
+                    ${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}
+                  </p>
                 </div>
               </div>
 
@@ -136,18 +160,22 @@
                   v-if="!proposalRequest"
                   class="md-button md-primary"
                   @click.prevent="onSkipToAnotherEventRequest"
-                >See more event requests</md-button>
+                >
+                  See more event requests
+                </md-button>
                 <md-button
                   v-else
-                  @click.prevent="goToDetails"
                   class="md-button md-primary"
-                >See full details</md-button>
+                  @click.prevent="goToDetails"
+                >
+                  See full details
+                </md-button>
               </div>
             </div>
           </div>
         </md-card-content>
       </md-card>
-      <a href="#" @click.prevent="onSkipToAnotherEventRequest" v-if="showSkipLink">
+      <a v-if="showSkipLink" href="#" @click.prevent="onSkipToAnotherEventRequest">
         Skip to another event request
         <md-icon class="md-primary">keyboard_arrow_right</md-icon>
       </a>
@@ -156,14 +184,14 @@
 </template>
 
 <script>
-import moment from 'moment'
-import Vendors from '@/models/Vendors'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
+import moment from "moment";
+import Vendors from "@/models/Vendors";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
 
 export default {
-  props: ['proposalRequest', 'proposals', 'firstTime'],
   components: {},
+  props: ["proposalRequest", "proposals", "firstTime"],
 
   data () {
     return {
@@ -171,72 +199,20 @@ export default {
       upcomingEvents: [],
       vendor: null,
       suggest: false
-    }
-  },
-  created () {},
-  mounted () {
-    this.getVendor()
-
-    let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-
-    let m = new CalendarEvent().for(_calendar).fetch(this, true)
-    m.then(allEvents => {
-      console.log(allEvents)
-      this.upcomingEvents = allEvents
-      this.isLoading = false
-    })
-  },
-  methods: {
-    goToDetails () {
-      this.$emit('goToDetails')
-    },
-    onSkipToAnotherEventRequest () {
-      let index = _.findIndex(
-        this.proposals,
-        pr => pr.id === this.proposalRequest.id
-      )
-      let nextIndex = (index + 1) % this.proposals.length
-      this.$emit('requestAnotherProposal', this.proposals[nextIndex].id)
-    },
-    getVendor () {
-      this.$auth.currentUser(
-        this,
-        true,
-        function () {
-          Vendors.find(this.proposalRequest.vendorId).then(vendor => {
-            this.vendor = vendor
-          })
-        }.bind(this)
-      )
-    },
-    isDateDisabled (date) {
-      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis)
-      let endDate = new Date(this.proposalRequest.eventData.eventStartMillis)
-      let numberOfDaysToAdd = 3
-      startDate.setDate(startDate.getDate() - 4)
-      endDate.setDate(endDate.getDate() + numberOfDaysToAdd)
-
-      return !(date >= startDate && date <= endDate)
-    },
-    suggestAnotherDay () {
-      this.suggest = true
-      this.proposalRequest.suggestedDates = new Date(
-        this.proposalRequest.eventData.eventStartMillis
-      )
-    }
+    };
   },
   computed: {
     eventDate () {
-      if (!this.proposalRequest) return '-'
+      if (!this.proposalRequest) return "-";
 
-      let date = new Date(this.proposalRequest.eventData.eventStartMillis)
-      return moment(date).format('MMM D, YYYY [at] hh:mma')
+      let date = new Date(this.proposalRequest.eventData.eventStartMillis);
+      return moment(date).format("MMM D, YYYY [at] hh:mma");
     },
     getLocation () {
-      console.log(this.proposalRequest)
-      console.log(this.upcomingEvents)
+      console.log(this.proposalRequest);
+      console.log(this.upcomingEvents);
       console.log(
-        'test',
+        "test",
         this.upcomingEvents.filter(
           item =>
             item.participantsType ===
@@ -247,16 +223,68 @@ export default {
           // item.eventStartMillis===this.proposalRequest.eventStartMillis &&
           // item.eventEndMillis===this.proposalRequest.eventEndMillis
         )
-      )
+      );
 
       if (this.proposalRequest) {
-        return this.proposalRequest.eventData.location || '-'
+        return this.proposalRequest.eventData.location || "-";
       } else {
-        return '-'
+        return "-";
       }
     }
+  },
+  created () {},
+  mounted () {
+    this.getVendor();
+
+    let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+
+    let m = new CalendarEvent().for(_calendar).fetch(this, true);
+    m.then(allEvents => {
+      console.log(allEvents);
+      this.upcomingEvents = allEvents;
+      this.isLoading = false;
+    });
+  },
+  methods: {
+    goToDetails () {
+      this.$emit("goToDetails");
+    },
+    onSkipToAnotherEventRequest () {
+      let index = _.findIndex(
+        this.proposals,
+        pr => pr.id === this.proposalRequest.id
+      );
+      let nextIndex = (index + 1) % this.proposals.length;
+      this.$emit("requestAnotherProposal", this.proposals[nextIndex].id);
+    },
+    getVendor () {
+      this.$auth.currentUser(
+        this,
+        true,
+        function () {
+          Vendors.find(this.proposalRequest.vendorId).then(vendor => {
+            this.vendor = vendor;
+          });
+        }.bind(this)
+      );
+    },
+    isDateDisabled (date) {
+      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
+      let endDate = new Date(this.proposalRequest.eventData.eventStartMillis);
+      let numberOfDaysToAdd = 3;
+      startDate.setDate(startDate.getDate() - 4);
+      endDate.setDate(endDate.getDate() + numberOfDaysToAdd);
+
+      return !(date >= startDate && date <= endDate);
+    },
+    suggestAnotherDay () {
+      this.suggest = true;
+      this.proposalRequest.suggestedDates = new Date(
+        this.proposalRequest.eventData.eventStartMillis
+      );
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_colors.scss";

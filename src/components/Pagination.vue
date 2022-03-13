@@ -2,22 +2,22 @@
   <ul class="pagination" :class="paginationClass">
     <li class="page-item prev-page" :class="{ disabled: value === 1, 'no-arrows': noArrows }">
       <a name="pagination-page-prev" class="page-link" aria-label="Previous" @click="prevPage">
-        <i class="fas fa-angle-double-left color-purple"></i>
+        <i class="fas fa-angle-double-left color-purple" />
       </a>
     </li>
-    <li class="page-item" v-for="item in range(minPage, maxPage)" :key="item" :class="{ active: value === item }">
+    <li v-for="item in range(minPage, maxPage)" :key="item" class="page-item" :class="{ active: value === item }">
       <a :name="`pagination-page-${item}`" class="page-link" @click="changePage(item)">{{ item }}</a>
     </li>
     <li class="page-item page-pre next-page" :class="{ disabled: value === totalPages, 'no-arrows': noArrows }">
       <a name="pagination-page-next" class="page-link" aria-label="Next" @click="nextPage">
-        <i class="fas fa-angle-double-right"></i>
+        <i class="fas fa-angle-double-right" />
       </a>
     </li>
   </ul>
 </template>
 <script>
 export default {
-  name: "pagination",
+  name: "Pagination",
   props: {
     type: {
       type: String,
@@ -43,6 +43,11 @@ export default {
       type: Number,
       default: 1,
     },
+  },
+  data() {
+    return {
+      defaultPagesToDisplay: 5,
+    };
   },
   computed: {
     paginationClass() {
@@ -87,10 +92,13 @@ export default {
       }
     },
   },
-  data() {
-    return {
-      defaultPagesToDisplay: 5,
-    };
+  watch: {
+    perPage() {
+      this.$emit("input", 1);
+    },
+    total() {
+      this.$emit("input", 1);
+    },
   },
   methods: {
     range(min, max) {
@@ -112,14 +120,6 @@ export default {
       if (this.value > 1) {
         this.$emit("input", this.value - 1);
       }
-    },
-  },
-  watch: {
-    perPage() {
-      this.$emit("input", 1);
-    },
-    total() {
-      this.$emit("input", 1);
     },
   },
 };

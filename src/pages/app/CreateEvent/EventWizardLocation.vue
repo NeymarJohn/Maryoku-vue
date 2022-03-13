@@ -1,33 +1,33 @@
 <template>
-    <div class="">
-        <div class="container">
-            <div class="title">
-              3/5
-              <div class="mt-1">
-                Location Location Location
-              </div>
-            </div>
-            <div class="text-center">
-              Where is the event scheduled to take place? (City or region would be enough)
-            </div>
-            <div class="location event-basic-info">
-              <div class="mt-4rem">
-                <location-input v-model="location" placeholder="Type city / region or specific address here…" @change="changeLocation"></location-input>
-              </div>
-            </div>
+  <div class="">
+    <div class="container">
+      <div class="title">
+        3/5
+        <div class="mt-1">
+          Location Location Location
         </div>
-        <wizard-status-bar :currentStep="3" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+      </div>
+      <div class="text-center">
+        Where is the event scheduled to take place? (City or region would be enough)
+      </div>
+      <div class="location event-basic-info">
+        <div class="mt-4rem">
+          <location-input v-model="location" placeholder="Type city / region or specific address here…" @change="changeLocation" />
+        </div>
+      </div>
     </div>
+    <wizard-status-bar :current-step="3" @next="goToNext" @skip="skip" @back="back" />
+  </div>
 </template>
 
 <script>
 
-import GoBack from './componenets/GoBack'
-import SelectedValue from './componenets/SelectedValue'
-import WizardStatusBar from './componenets/WizardStatusBar'
-import { MaryokuInput, LocationInput} from '@/components'
+import GoBack from "./componenets/GoBack";
+import SelectedValue from "./componenets/SelectedValue";
+import WizardStatusBar from "./componenets/WizardStatusBar";
+import { MaryokuInput, LocationInput} from "@/components";
 
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   components: {
     GoBack,
@@ -37,35 +37,35 @@ export default {
   },
   created () {
     if (this.publicEventData.location) {
-      this.location = this.publicEventData.location
+      this.location = this.publicEventData.location;
     }
   },
   methods: {
-    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
     validateDate () {
-      return this.$refs.datePicker.$el.classList.contains('md-has-value')
+      return this.$refs.datePicker.$el.classList.contains("md-has-value");
     },
     validateAndSubmit () {
       // this.$emit('goToNextPage');
       //  return;
-      let vm = this
+      let vm = this;
 
-      this.cerrors = {}
-      this.validating = true
+      this.cerrors = {};
+      this.validating = true;
 
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           // this.$parent.isLoading = true;
 
           if (this.eventId) {
-            vm.updateEvent()
+            vm.updateEvent();
           } else {
-            vm.createEvent()
+            vm.createEvent();
           }
         } else {
-          this.showNotify()
+          this.showNotify();
         }
-      })
+      });
 
       if (!this.eventType) {
 
@@ -78,38 +78,38 @@ export default {
     },
     showNotify () {
       this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
+        message: "Please, check all required fields",
+        icon: "warning",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
     },
     goToNext() {
-      this.setEventProperty({ key: 'location', actualValue: this.location})
-      this.setEventProperty({ key: 'locationId', actualValue: this.locationData.id})
-      this.$router.push({path: `/event-wizard-building`})
+      this.setEventProperty({ key: "location", actualValue: this.location});
+      this.setEventProperty({ key: "locationId", actualValue: this.locationData.id});
+      this.$router.push({path: "/event-wizard-building"});
     },
     skip() {
-      this.$router.push({path: `/event-wizard-building`})
+      this.$router.push({path: "/event-wizard-building"});
     },
     back() {
-      this.$router.push({path: `/event-wizard-guests-type`})
+      this.$router.push({path: "/event-wizard-guests-type"});
     }
   },
   data () {
     return {
       location: "",
       locationData: {}
-    }
+    };
   },
   computed: {
-    ...mapState('PublicEventPlanner', [
-      'publicEventData'
+    ...mapState("PublicEventPlanner", [
+      "publicEventData"
     ])
   }
 
-}
+};
 </script>
 <style lang="scss">
 

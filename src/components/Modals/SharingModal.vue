@@ -2,16 +2,20 @@
   <modal class="sharing-model adaptive">
     <template slot="header">
       <div class="title">
-        <div v-if="page === 'event'">Share 'Venue Proposals' With Your Colleague</div>
-        <div v-if="page === 'proposal'">Share 'Proposal' With Your Colleague</div>
+        <div v-if="page === 'event'">
+          Share 'Venue Proposals' With Your Colleague
+        </div>
+        <div v-if="page === 'proposal'">
+          Share 'Proposal' With Your Colleague
+        </div>
       </div>
-        <md-button
-            class="md-simple md-icon-button position-absolute md-small-hide"
-            style="top: 20px;right:20px"
-            @click="$emit('cancel')"
-        >
-            <md-icon>close</md-icon>
-        </md-button>
+      <md-button
+        class="md-simple md-icon-button position-absolute md-small-hide"
+        style="top: 20px;right:20px"
+        @click="$emit('cancel')"
+      >
+        <md-icon>close</md-icon>
+      </md-button>
     </template>
     <template slot="body">
       <div class="md-layout maryoku-modal-body">
@@ -22,43 +26,57 @@
             <div v-if="page === 'event'" class="sharing-role">
               <md-button class="md-simple md-red edit-btn" @click="showLinkRoleEditor = !showLinkRoleEditor">
                 Can {{ role }}
-                <md-icon v-if="showLinkRoleEditor">keyboard_arrow_down</md-icon>
-                <md-icon v-else>keyboard_arrow_right</md-icon>
+                <md-icon v-if="showLinkRoleEditor">
+                  keyboard_arrow_down
+                </md-icon>
+                <md-icon v-else>
+                  keyboard_arrow_right
+                </md-icon>
               </md-button>
-              <sharing-role-options v-if="showLinkRoleEditor" @change="setRole" :value="role"></sharing-role-options>
+              <sharing-role-options v-if="showLinkRoleEditor" :value="role" @change="setRole" />
             </div>
           </div>
-          <maryoku-input inputStyle="sharing" v-model="shareLink" readonly class="sharelink"></maryoku-input>
+          <maryoku-input v-model="shareLink" input-style="sharing" readonly class="sharelink" />
         </div>
-        <div class="spacer"></div>
+        <div class="spacer" />
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Invite People</label>
-          <div class="mt-10 mb-10">Email Address</div>
+          <div class="mt-10 mb-10">
+            Email Address
+          </div>
           <div class="d-flex">
             <!-- <maryoku-input class="flex-1" inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input> -->
-            <input-tag placeholder="Type email address here…" v-model="emails" class="flex-1"></input-tag>
+            <input-tag v-model="emails" placeholder="Type email address here…" class="flex-1" />
             <div v-if="page === 'event'" class="email-role-button">
               <md-button
                 class="md-simple md-red role-editor"
-                @click="showEmailRoleEditor = !showEmailRoleEditor"
                 :disabled="emails.length == 0"
+                @click="showEmailRoleEditor = !showEmailRoleEditor"
               >
-                <img data-v-a76b6a56="" :src="`${this.$iconURL}Share/edit-red.svg`" width="20" />
-                <md-icon v-if="showEmailRoleEditor">keyboard_arrow_down</md-icon>
-                <md-icon v-else>keyboard_arrow_right</md-icon>
+                <img data-v-a76b6a56="" :src="`${this.$iconURL}Share/edit-red.svg`" width="20">
+                <md-icon v-if="showEmailRoleEditor">
+                  keyboard_arrow_down
+                </md-icon>
+                <md-icon v-else>
+                  keyboard_arrow_right
+                </md-icon>
               </md-button>
-              <sharing-role-options v-if="showEmailRoleEditor" @change="setEmailRole" :value="emailRole" align="right"></sharing-role-options>
+              <sharing-role-options v-if="showEmailRoleEditor" :value="emailRole" align="right" @change="setEmailRole" />
             </div>
           </div>
           <div v-if="emails.length > 0">
             <div class="form-group mt-4">
-              <textarea rows="8" class="form-control" placeholder="Add message" v-model="message"></textarea>
+              <textarea v-model="message" rows="8" class="form-control" placeholder="Add message" />
             </div>
             <div class="d-flex align-center justify-content-between">
               <div>
-                <strong>Shared with: </strong> <span v-for="(email, idx) in emails" :key="email">{{ email }} {{idx < emails.length - 1 ? ',' : ''}} </span>
+                <strong>Shared with: </strong> <span v-for="(email, idx) in emails" :key="email">{{ email }} {{ idx < emails.length - 1 ? ',' : '' }} </span>
               </div>
-              <div class="checkbox-wrapper"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
+              <div class="checkbox-wrapper">
+                <md-checkbox v-model="isSendingMessage">
+                  Send message
+                </md-checkbox>
+              </div>
             </div>
           </div>
           <div>
@@ -69,11 +87,17 @@
     </template>
     <template slot="footer">
       <template v-if="emails.length > 0">
-        <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
-        <md-button class="md-red md-bold add-category-btn ml-10" @click="sendEmail">Send</md-button>
+        <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
+          Cancel
+        </md-button>
+        <md-button class="md-red md-bold add-category-btn ml-10" @click="sendEmail">
+          Send
+        </md-button>
       </template>
       <template v-else>
-        <md-button class="md-button md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
+        <md-button class="md-button md-red md-bold add-category-btn" @click="onCancel()">
+          Done
+        </md-button>
       </template>
     </template>
   </modal>
@@ -85,7 +109,7 @@ import SharingRoleOptions from "@/components/SharingRoleOptions";
 import InputTag from "vue-input-tag";
 
 export default {
-  name: "sharing-modal",
+  name: "SharingModal",
   components: {
     Modal,
     MaryokuInput,
@@ -95,7 +119,7 @@ export default {
   props: {
     page: {
       type: String,
-      default: 'event',
+      default: "event",
     },
     show: [Boolean],
     value: [Number],
@@ -119,29 +143,29 @@ export default {
     };
   },
   created() {
-    console.log('sharing.modal.created', this.page);
+    console.log("sharing.modal.created", this.page);
     this.generateShareLink();
   },
   methods: {
     generateShareLink() {
       const tenantId = this.$authService.resolveTenantId();
-      if (this.page === 'event') {
+      if (this.page === "event") {
           this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&event=${
               this.$route.params.id
           }`;
-      } else if(this.page === 'proposal') {
-          this.shareLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${this.$route.params.proposalId}`
+      } else if(this.page === "proposal") {
+          this.shareLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${this.$route.params.proposalId}`;
       }
       return this.shareLink;
     },
       generateShareLinkEmail() {
           const tenantId = this.$authService.resolveTenantId();
-          if (this.page === 'event') {
+          if (this.page === "event") {
               this.shareLinkWithEmail = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.emailRole}&event=${
                   this.$route.params.id
               }`;
-          } else if(this.page === 'proposal') {
-              this.shareLinkWithEmail = `${location.protocol}//${location.host}/#/unregistered/proposals/${this.$route.params.proposalId}`
+          } else if(this.page === "proposal") {
+              this.shareLinkWithEmail = `${location.protocol}//${location.host}/#/unregistered/proposals/${this.$route.params.proposalId}`;
           }
           return this.shareLinkWithEmail;
       },
@@ -154,10 +178,10 @@ export default {
     removeSelectedAttachment(index) {},
     sendEmail() {
 
-      if (!this.isSendingMessage) return
+      if (!this.isSendingMessage) return;
 
       let params = {page: this.page};
-      if (this.page === 'event') {
+      if (this.page === "event") {
 
           params.emails = this.emails;
           params.message = this.message;
@@ -168,12 +192,12 @@ export default {
           }
           params.eventId = this.$route.params.id;
 
-      } else if(this.page === 'proposal') {
+      } else if(this.page === "proposal") {
           params.emails = this.emails;
           params.proposalId = this.$route.params.proposalId;
       }
 
-      this.$emit('share', params);
+      this.$emit("share", params);
     },
 
     onCancel: function (e) {

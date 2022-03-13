@@ -3,18 +3,20 @@
     <div class="md-layout" style="max-height: 50vh">
       <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
         <h4 class="md-title">
-          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
+          <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
             <md-icon>arrow_back</md-icon>
           </md-button>
         </h4>
       </div>
       <div class="md-layout-item md-size-95" style="max-height: 50vh">
-        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px"><b>Back to table</b> / Add Building Block</h4>
+        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
+          <b>Back to table</b> / Add Building Block
+        </h4>
         <p>Drag & Drop building blocks to your working panel to add new services or products to your event</p>
         <div class="md-layout" style="overflow: auto; max-height: 80vh">
           <md-field>
             <md-icon>search</md-icon>
-            <md-input placeholder="Search for event element" v-model="searchQuery"></md-input>
+            <md-input v-model="searchQuery" placeholder="Search for event element" />
           </md-field>
           <div
             v-for="(item, index) in filteredEventBlocks"
@@ -23,9 +25,9 @@
             @click="addBlock(item)"
           >
             <drag
+              v-if="!item.childComponents"
               :class="`md-button md-warning block-item text-center`"
               :transfer-data="{ item }"
-              v-if="!item.childComponents"
             >
               <!--<md-icon>{{item.icon}}</md-icon>-->
               {{ item.title }}
@@ -35,15 +37,17 @@
       </div>
     </div>
 
-    <drop @drop="handleDrop" class="draggable-area" v-if="isLoaded">
+    <drop v-if="isLoaded" class="draggable-area" @drop="handleDrop">
       <p>
         <img
           src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop_white.png"
           alt="drag and drop"
           style="width: 52px"
-        />
+        >
       </p>
-      <p style="font-size: 20px; margin: 0">Drag building blocks here</p>
+      <p style="font-size: 20px; margin: 0">
+        Drag building blocks here
+      </p>
     </drop>
   </div>
 </template>

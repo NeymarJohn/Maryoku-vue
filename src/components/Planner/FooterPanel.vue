@@ -1,10 +1,10 @@
 <template>
   <div class="planner-footer-panel">
-    <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-      <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+    <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
+      <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
     </md-button>
     <div class="planner-footer-panel-content d-flex">
-      <slot name="buttons"> </slot>
+      <slot name="buttons" />
     </div>
   </div>
 </template>

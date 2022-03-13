@@ -1,16 +1,20 @@
 <template>
   <div class="empty-request-card white-card d-flex">
-      <div style="min-width: 56.3px;">
-          <img class="mb-0" :src="`${$iconURL}vendordashboard/group-17116.png`" style="width: 56.3px; height: 56.5px" />
+    <div style="min-width: 56.3px;">
+      <img class="mb-0" :src="`${$iconURL}vendordashboard/group-17116.png`" style="width: 56.3px; height: 56.5px">
+    </div>
+    <div class="ml-15">
+      <div class="card-title color-vendor">
+        No Open opportunities
       </div>
-      <div class="ml-15">
-          <div class="card-title color-vendor">No Open opportunities</div>
-          <p class="card-description">
-              We couldn't find any more opportunities for you at this point. Increase your exposure by improving your
-              profile
-          </p>
-             <md-button class="card-button md-simple ml-auto md-vendor md-outlined">Optimize Profile</md-button>
-      </div>
+      <p class="card-description">
+        We couldn't find any more opportunities for you at this point. Increase your exposure by improving your
+        profile
+      </p>
+      <md-button class="card-button md-simple ml-auto md-vendor md-outlined">
+        Optimize Profile
+      </md-button>
+    </div>
   </div>
 </template>
 <script>
@@ -23,8 +27,8 @@ export default {
 
     };
   },
-  methods: { },
   mounted() {},
+  methods: { },
 };
 </script>
 

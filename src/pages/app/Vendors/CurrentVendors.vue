@@ -9,12 +9,12 @@
             background-image: url(${bgImages[0]});
             background-size: cover;
             background-size: 100% 100%;`"
-        ></div>
+        />
         <div class="img-cont thumb-img-cont">
-          <img :src="bgImages[1]" />
-          <img :src="bgImages[2]" />
-          <img :src="bgImages[3]" />
-          <img :src="bgImages[4]" />
+          <img :src="bgImages[1]">
+          <img :src="bgImages[2]">
+          <img :src="bgImages[3]">
+          <img :src="bgImages[4]">
         </div>
         <md-button class="md-default btn-photos" @click="view()">
           <md-icon>photo</md-icon>
@@ -23,46 +23,51 @@
         </md-button>
         <LightBox
           v-if="getGalleryImages.length > 0"
-          :images="getGalleryImages"
           ref="lightbox"
+          :images="getGalleryImages"
           :show-light-box="false"
-        ></LightBox>
+        />
       </div>
     </div>
     <div class="md-layout bg-white">
       <div class="md-layout-item">
         <div class="title-cont">
           <div class="title-child">
-            <img v-if="isVendorLogo" :src="isVendorLogo" />
-            <div v-else class="default-text-logo">{{ logoText }}</div>
+            <img v-if="isVendorLogo" :src="isVendorLogo">
+            <div v-else class="default-text-logo">
+              {{ logoText }}
+            </div>
           </div>
           <div class="title-child">
             <h3>{{ vendor.vendorDisplayName }}</h3>
             <span class="address">
-              <i class="fa fa-map-marker-alt"></i>
+              <i class="fa fa-map-marker-alt" />
               {{ vendor.vendorAddressLine1 }}
             </span>
-            <br class="hidden-lg hidden-md" />
+            <br class="hidden-lg hidden-md">
             <div class="hor-divider">
               <label
-                class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
+                class="star-rating__star"
                 :class="{
                   'is-selected': vendor.rank >= rating && vendor.rank != null,
                 }"
-                >★</label
-              >
+              >★</label>
               {{ vendor.avgScore }}
             </div>
-            <br class="hidden-lg hidden-md" />
+            <br class="hidden-lg hidden-md">
             <a class="favorite"> <md-icon>favorite_border</md-icon>add to favorites </a>
           </div>
         </div>
       </div>
       <div class="md-layout-item button-group text-right">
-        <md-button class="md-success md-lg">Contact Vendor</md-button>
-        <md-button class="md-danger md-lg" @click="goToProposal()">Create Brief Ask for Proposal</md-button>
+        <md-button class="md-success md-lg">
+          Contact Vendor
+        </md-button>
+        <md-button class="md-danger md-lg" @click="goToProposal()">
+          Create Brief Ask for Proposal
+        </md-button>
         <h4>Avg. Response Time: {{ vendor.rank }}</h4>
       </div>
     </div>
@@ -75,13 +80,15 @@
           </div>
           <div class="banner-description-body">
             <p>
-              <template v-if="vendor.vendorPropertyValues && vendorDescription">{{
-                vendor.vendorPropertyValues[vendorDescription.id]
-              }}</template>
+              <template v-if="vendor.vendorPropertyValues && vendorDescription">
+                {{
+                  vendor.vendorPropertyValues[vendorDescription.id]
+                }}
+              </template>
             </p>
           </div>
         </div>
-        <div class="description"></div>
+        <div class="description" />
         <div class="text-group">
           <div class>
             <span>Past Events With the Vendor: {{ vendor.voters }}</span>
@@ -98,7 +105,7 @@
       <div
         class="tab-item"
         :class="[{ visited: currentTab > 1 }, { active: currentTab === 1 }]"
-        v-on:click="currentTab = 1"
+        @click="currentTab = 1"
       >
         <span class="capitalize">{{ vendor.vendorCategory }}</span>
       </div>
@@ -119,16 +126,18 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorCapacities.length > 0">
-                  <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
+                  <div v-for="(item, index) in vendorCapacities" :key="index" class="icon-text-vertical" :value="item">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>{{ vendor.vendorPropertyValues[item.id] }}</h5>
                     <span>{{ item.name }}</span>
                   </div>
                 </template>
-                <template v-else>No Capacity Info</template>
+                <template v-else>
+                  No Capacity Info
+                </template>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>check_circle</md-icon>
@@ -142,25 +151,27 @@
                       <strong class="capitalize">{{ vendor.vendorCategory }}</strong>
                     </li>
                     <li>
-                      <br />
+                      <br>
                     </li>
-                    <li class="normal" v-for="(item, i) of vendorServicesList" :key="'S' + i" :value="item">
+                    <li v-for="(item, i) of vendorServicesList" :key="'S' + i" class="normal" :value="item">
                       <md-icon>check</md-icon>
                       {{ item.name }}
                     </li>
-                    <li class="disabled" v-for="(item, i) of vendorRestrictions" :key="'R' + i" :value="item">
-                      <md-icon></md-icon>
+                    <li v-for="(item, i) of vendorRestrictions" :key="'R' + i" class="disabled" :value="item">
+                      <md-icon />
                       <span>{{ item.name }}</span>
                     </li>
                   </ul>
                 </template>
-                <template v-else>No Service Data</template>
-                <div class="notes" v-if="attachments.length > 0">
+                <template v-else>
+                  No Service Data
+                </template>
+                <div v-if="attachments.length > 0" class="notes">
                   <div class="notes-title">
                     <h4>Attachment</h4>
                   </div>
                   <div class="notes-body">
-                    <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
+                    <div v-for="(item, index) in attachments" :key="index" class="note-item" :value="item">
                       <a
                         v-if="item.vendorsFileContentType === 'application/pdf'"
                         target="_blank"
@@ -182,7 +193,7 @@
                 </div>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>menu_book</md-icon>
@@ -190,12 +201,14 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorPricesAndRules.length > 0">
-                  <div class="text-vertical" v-for="(item, index) of vendorPricesAndRules" :key="index" :value="item">
+                  <div v-for="(item, index) of vendorPricesAndRules" :key="index" class="text-vertical" :value="item">
                     <h5>${{ item.defaultValue === null ? 0 : item.defaultValue }}</h5>
                     <span>{{ item.name }}</span>
                   </div>
                 </template>
-                <template v-else>No Price Data</template>
+                <template v-else>
+                  No Price Data
+                </template>
                 <div class="notes">
                   <div class="notes-title">
                     <h4>Notes</h4>
@@ -210,36 +223,35 @@
                 </div>
               </div>
             </div>
-            <md-divider></md-divider>
-            <div class="tab-item-content" v-if="proposals.length > 0">
+            <md-divider />
+            <div v-if="proposals.length > 0" class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>dehaze</md-icon>
                 <h4>Similar Proposals Made by Vendor</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-proposals :proposals="proposals" :ratings="ratings"></vendor-similar-proposals>
+                <vendor-similar-proposals :proposals="proposals" :ratings="ratings" />
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>edit</md-icon>
                 <h4>
                   Feedbacks
                   <label
-                    class="star-rating__star"
                     v-for="(rating, ratingIndex) in ratings"
                     :key="ratingIndex"
+                    class="star-rating__star"
                     :class="{ 'is-selected': true }"
-                    >★</label
-                  >
+                  >★</label>
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings"></vendor-feedbacks>
+                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings" />
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>credit_card</md-icon>
@@ -247,13 +259,15 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  <template v-if="vendor.vendorPropertyValues && vendorPaymentPolicy">{{
-                    vendor.vendorPropertyValues[vendorPaymentPolicy.id]
-                  }}</template>
+                  <template v-if="vendor.vendorPropertyValues && vendorPaymentPolicy">
+                    {{
+                      vendor.vendorPropertyValues[vendorPaymentPolicy.id]
+                    }}
+                  </template>
                 </p>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>warning</md-icon>
@@ -261,24 +275,28 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  <template v-if="vendor.vendorPropertyValues && vendorCancellationPolicy">{{
-                    vendor.vendorPropertyValues[vendorCancellationPolicy.id]
-                  }}</template>
+                  <template v-if="vendor.vendorPropertyValues && vendorCancellationPolicy">
+                    {{
+                      vendor.vendorPropertyValues[vendorCancellationPolicy.id]
+                    }}
+                  </template>
                 </p>
               </div>
             </div>
-            <md-divider></md-divider>
+            <md-divider />
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>flip_to_back</md-icon>
                 <h4>Similar Vendors</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-item :similarItems="similarItems" :ratings="ratings"></vendor-similar-item>
+                <vendor-similar-item :similar-items="similarItems" :ratings="ratings" />
               </div>
             </div>
           </div>
-          <div v-if="currentTab === 2">Venue</div>
+          <div v-if="currentTab === 2">
+            Venue
+          </div>
         </div>
       </div>
     </div>
@@ -309,6 +327,7 @@ export default {
     Icon,
     LightBox,
   },
+  filters: {},
   props: {
     item: {
       type: Object,
@@ -372,6 +391,107 @@ export default {
       routeName: null,
     };
   },
+  computed: {
+    logoText: function () {
+      if (!this.vendor.vendorDisplayName) {
+        return null;
+      } else {
+        const titleWords = this.vendor.vendorDisplayName.split(" ");
+        if (titleWords.length > 1 && titleWords[titleWords.length - 1].length > 0) {
+          return titleWords[0].charAt(0) + titleWords[titleWords.length - 1].charAt(0);
+        } else {
+          return titleWords[0].charAt(0);
+        }
+      }
+    },
+    vendorCapacities: function () {
+      if (this.vendorPropertiesItems) {
+        console.log(this.vendorPropertiesItems.filter((item) => item.categoryTitle === "Capacity"));
+        return this.vendorPropertiesItems.filter((item) => item.categoryTitle === "Capacity");
+      } else {
+        return {};
+      }
+    },
+    vendorDescription: function () {
+      if (this.vendorPropertiesItems) {
+        return this.vendorPropertiesItems.filter((item) => item.name === "Description")[0];
+      } else {
+        return {};
+      }
+    },
+    vendorPaymentPolicy: function () {
+      if (this.vendorPropertiesItems) {
+        return this.vendorPropertiesItems.filter((item) => item.name === "Payment Policy")[0];
+      } else {
+        return {};
+      }
+    },
+    vendorCancellationPolicy: function () {
+      if (this.vendorPropertiesItems) {
+        return this.vendorPropertiesItems.filter((item) => item.name === "Cancellation policy")[0];
+      } else {
+        return {};
+      }
+    },
+    // "Courtesy save policy"
+    // "Number events per year"
+    vendorLogoImage: function () {
+      if (this.vendor.vendorPropertiesItems) {
+        return this.vendor.vendorPropertiesItems.filter((item) => item.name === "Logo" && item.type === "image");
+      } else {
+        return {};
+      }
+    },
+    vendorExtraImage: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.name != "Logo" && item.type === "image");
+      } else {
+        return [];
+      }
+    },
+    vendorPricesAndRules: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Cost Elements");
+      } else {
+        return [];
+      }
+    },
+    vendorServicesList: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter(
+          (item) => item.categoryTitle === "Services" || item.categoryTitle === "Included services and amenities",
+        );
+      } else {
+        return [];
+      }
+    },
+    vendorRestrictions: function () {
+      if (this.vendor.vendorProperties) {
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Restrictions");
+      } else {
+        return [];
+      }
+    },
+    getGalleryImages: function () {
+      let temp = [];
+      if (this.bgImages.length > 0) {
+        this.bgImages.forEach((item) => {
+          if (item != this.defaultImg) {
+            temp.push({
+              thumb: item,
+              src: item,
+              caption: "",
+              srcset: "",
+            });
+          }
+        });
+        return temp;
+      } else {
+        return [];
+      }
+    },
+  },
+  watch: {},
   created() {
     this.routeName = this.$route.name;
   },
@@ -482,108 +602,6 @@ export default {
       }
     },
   },
-  computed: {
-    logoText: function () {
-      if (!this.vendor.vendorDisplayName) {
-        return null;
-      } else {
-        const titleWords = this.vendor.vendorDisplayName.split(" ");
-        if (titleWords.length > 1 && titleWords[titleWords.length - 1].length > 0) {
-          return titleWords[0].charAt(0) + titleWords[titleWords.length - 1].charAt(0);
-        } else {
-          return titleWords[0].charAt(0);
-        }
-      }
-    },
-    vendorCapacities: function () {
-      if (this.vendorPropertiesItems) {
-        console.log(this.vendorPropertiesItems.filter((item) => item.categoryTitle === "Capacity"));
-        return this.vendorPropertiesItems.filter((item) => item.categoryTitle === "Capacity");
-      } else {
-        return {};
-      }
-    },
-    vendorDescription: function () {
-      if (this.vendorPropertiesItems) {
-        return this.vendorPropertiesItems.filter((item) => item.name === "Description")[0];
-      } else {
-        return {};
-      }
-    },
-    vendorPaymentPolicy: function () {
-      if (this.vendorPropertiesItems) {
-        return this.vendorPropertiesItems.filter((item) => item.name === "Payment Policy")[0];
-      } else {
-        return {};
-      }
-    },
-    vendorCancellationPolicy: function () {
-      if (this.vendorPropertiesItems) {
-        return this.vendorPropertiesItems.filter((item) => item.name === "Cancellation policy")[0];
-      } else {
-        return {};
-      }
-    },
-    // "Courtesy save policy"
-    // "Number events per year"
-    vendorLogoImage: function () {
-      if (this.vendor.vendorPropertiesItems) {
-        return this.vendor.vendorPropertiesItems.filter((item) => item.name === "Logo" && item.type === "image");
-      } else {
-        return {};
-      }
-    },
-    vendorExtraImage: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.name != "Logo" && item.type === "image");
-      } else {
-        return [];
-      }
-    },
-    vendorPricesAndRules: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Cost Elements");
-      } else {
-        return [];
-      }
-    },
-    vendorServicesList: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Services" || item.categoryTitle === "Included services and amenities",
-        );
-      } else {
-        return [];
-      }
-    },
-    vendorRestrictions: function () {
-      if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Restrictions");
-      } else {
-        return [];
-      }
-    },
-    getGalleryImages: function () {
-      let temp = [];
-      if (this.bgImages.length > 0) {
-        this.bgImages.forEach((item) => {
-          if (item != this.defaultImg) {
-            temp.push({
-              thumb: item,
-              src: item,
-              caption: "",
-              srcset: "",
-            });
-          }
-        });
-        return temp;
-      } else {
-        return [];
-      }
-    },
-  },
-  filters: {},
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

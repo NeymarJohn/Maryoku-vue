@@ -9,14 +9,13 @@
                     :timestamp="notification.timestamp"
                     :vertical-align="notification.verticalAlign"
                     :horizontal-align="notification.horizontalAlign"
-                    @on-close="removeNotification">
-      </notification>
+                    @on-close="removeNotification"
+      />
     </transition-group>
-
   </div>
 </template>
 <script>
-import Notification from './Notification.vue'
+import Notification from "./Notification.vue";
 export default {
   components: {
     Notification
@@ -24,14 +23,14 @@ export default {
   data () {
     return {
       notifications: this.$notifications.state
-    }
+    };
   },
   methods: {
     removeNotification (timestamp) {
-      this.$notifications.removeNotification(timestamp)
+      this.$notifications.removeNotification(timestamp);
     }
   }
-}
+};
 </script>
 <style lang="scss">
 .notifications {

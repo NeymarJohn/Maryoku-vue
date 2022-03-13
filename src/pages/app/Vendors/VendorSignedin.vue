@@ -1,8 +1,10 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item" style="text-align: center">
-      <img src="/static/img/maryoku-loader.gif" />
-      <h2 class="title text-center" slot="title" style="text-align: center">Hi there, one moment please ...</h2>
+      <img src="/static/img/maryoku-loader.gif">
+      <h2 slot="title" class="title text-center" style="text-align: center">
+        Hi there, one moment please ...
+      </h2>
     </div>
     <!-- <div v-else class="md-layout-item font-size-30" style="text-align: center; color: #050505">
       {{ messages[messageIndex] }}
@@ -18,13 +20,12 @@ import eventService from "@/services/event.service";
 import Vendors from "@/models/Vendors";
 export default {
   components: {},
-  methods: {
-    toCreateWorkspace() {
-      this.$router.push({ path: "/create-event-wizard" });
-    },
-    toChooseWorkspace() {
-      this.$router.push({ path: "/choose-workspace" });
-    },
+  data() {
+    return {
+      serverURL: process.env.SERVER_URL,
+      messageIndex: -1,
+      messages: ["Workspace does not exist, create your workspace."],
+    };
   },
   async created() {
     console.log("signedIn", this.$route.query.token);
@@ -33,7 +34,7 @@ export default {
     this.$store.dispatch("auth/checkToken", givenToken).then(
       (tenantUser) => {
         const tenantId = this.$authService.resolveTenantId();
-          console.log('vendorSignedIn.vendor', vendorId, tenantUser);
+          console.log("vendorSignedIn.vendor", vendorId, tenantUser);
         this.$authService.setTenant(tenantId);
 
         // SET LIVE CHAT INFORMANTION
@@ -55,7 +56,7 @@ export default {
         // SET VENDOR Tenant
         if (vendorId) {
             new Vendors({ id: vendorId, tenantUser: { id: tenantUser.id }, isEditing: false }).save().then(res => {
-                console.log('updateVendor', res);
+                console.log("updateVendor", res);
                 this.$router.push("/vendor/profile/settings");
             });
             return;
@@ -77,12 +78,13 @@ export default {
       },
     );
   },
-  data() {
-    return {
-      serverURL: process.env.SERVER_URL,
-      messageIndex: -1,
-      messages: [`Workspace does not exist, create your workspace.`],
-    };
+  methods: {
+    toCreateWorkspace() {
+      this.$router.push({ path: "/create-event-wizard" });
+    },
+    toChooseWorkspace() {
+      this.$router.push({ path: "/choose-workspace" });
+    },
   },
 };
 </script>

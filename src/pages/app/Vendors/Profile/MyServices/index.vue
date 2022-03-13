@@ -1,37 +1,39 @@
 <template>
-  <div class="my-service white-card" v-if="vendorData">
+  <div v-if="vendorData" class="my-service white-card">
     <div class="services-header">
       <div class="service-tab-item" :class="{ active: selectedIndex === 0 }" @click="selectService(0)">
         <img
           v-if="vendorData.vendorCategories"
           :src="`${$iconURL}Budget Elements/${getServiceCategory(vendorData.vendorCategories[0]).icon}`"
           class="page-icon mr-10"
-        />
+        >
         {{ getServiceCategory(vendorData.vendorCategories[0]).title }}
       </div>
       <div
-        class="service-tab-item"
         v-for="(service, index) in vendorData.secondaryServices"
+        class="service-tab-item"
         :class="{ active: selectedIndex === index + 1 }"
         @click="selectService(index + 1)"
       >
         <img
           :src="`${$iconURL}Budget Elements/${getServiceCategory(service.vendorCategory).icon}`"
           class="page-icon mr-10"
-        />
+        >
         {{ getServiceCategory(service.vendorCategory).title }}
       </div>
       <div class="service-tab-item font-size-16">
         <md-button class="maryoku-btn md-simple md-vendor" @click="startAddNewService">
-          <md-icon class="color-purple font-size-30 mr-5">add</md-icon>
-          Sign new service</md-button
-        >
+          <md-icon class="color-purple font-size-30 mr-5">
+            add
+          </md-icon>
+          Sign new service
+        </md-button>
       </div>
     </div>
     <service-content
-      :serviceCategory="getSelectedServiceCategory()"
       :key="getSelectedServiceCategory().key"
-    ></service-content>
+      :service-category="getSelectedServiceCategory()"
+    />
   </div>
 </template>
 <script>
@@ -54,6 +56,14 @@ export default {
       isLoading: false,
       selectedIndex: 0,
     };
+  },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
   },
   mounted() {
     this.isLoading = true;
@@ -78,14 +88,6 @@ export default {
       } else {
         return this.getServiceCategory(this.vendorData.secondaryServices[this.selectedIndex - 1].vendorCategory);
       }
-    },
-  },
-  computed: {
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
     },
   },
 };

@@ -1,40 +1,41 @@
 <template>
-  <div class="tab-pane fade"
-       role="tabpanel"
+  <div v-show="active"
        :id="tabId"
+       class="tab-pane fade"
+       role="tabpanel"
        :aria-hidden="!active"
-       :aria-labelledby="`step-${tabId}`"
-       :class="{'active show': active}" v-show="active">
-    <slot></slot>
+       :aria-labelledby="`step-${tabId}`" :class="{'active show': active}"
+  >
+    <slot />
   </div>
 </template>
 <script>
 export default {
-  name: 'wizard-tab',
+  name: "WizardTab",
   props: {
     label: String,
     id: String,
     beforeChange: Function
   },
-  inject: ['addTab', 'removeTab'],
+  inject: ["addTab", "removeTab"],
   data () {
     return {
       active: false,
       checked: false,
       hasError: false,
-      tabId: ''
-    }
+      tabId: ""
+    };
   },
   mounted () {
-    this.addTab(this)
+    this.addTab(this);
   },
   destroyed () {
     if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el)
+      this.$el.parentNode.removeChild(this.$el);
     }
-    this.removeTab(this)
+    this.removeTab(this);
   }
-}
+};
 </script>
 <style>
 </style>

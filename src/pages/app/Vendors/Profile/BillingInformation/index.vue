@@ -2,11 +2,11 @@
   <div class="company-details-container">
     <tabs :tab-name="['Payment Setting', 'Invoices']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
-        <PaymentSettings></PaymentSettings>
+        <PaymentSettings />
       </template>
       <template slot="tab-pane-2">
         <div class="p-40">
-          <invoices></invoices>
+          <invoices />
         </div>
       </template>
     </tabs>

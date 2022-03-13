@@ -1,6 +1,6 @@
 <template>
   <div class="upcoming-event-list">
-    <div class="upcoming-event" v-for="event in events" :key="event.id">
+    <div v-for="event in events" :key="event.id" class="upcoming-event">
       <div class="event-logo" @click="show(event.id)">
         <img
           :src="`${$iconURL}CalendarIcons/${event.icon}`"
@@ -8,12 +8,16 @@
              height: 31.1px;
              object-fit: contain;
              "
-        />
+        >
       </div>
 
       <div class="event-detail flex-1">
-        <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
-        <div class="font-bold mb-10" v-if="event.customer">{{ event.customer.name }} | {{ event.customer.email }}</div>
+        <div class="color-gray font-size-14">
+          {{ getUpcomingPeriod(event.startTime) }}
+        </div>
+        <div v-if="event.customer" class="font-bold mb-10">
+          {{ event.customer.name }} | {{ event.customer.email }}
+        </div>
         <div>
           {{ event.companyName }} |
 
@@ -21,7 +25,9 @@
         </div>
       </div>
       <md-button class="md-simple md-icon-button" @click="selectEvent(event)">
-        <md-icon class="color-black">east</md-icon>
+        <md-icon class="color-black">
+          east
+        </md-icon>
       </md-button>
     </div>
   </div>
@@ -29,18 +35,23 @@
 <script>
 
 export default {
+  components: {},
   props: {
     events: {
       type: Array,
       default: [],
     },
   },
-  components: {},
-  mounted(){
-    console.log(this.events);
-  },
   data() {
     return {};
+  },
+  computed: {
+    proposals() {
+      return this.$store.state.vendorDashboard.proposals;
+    },
+  },
+  mounted(){
+    console.log(this.events);
   },
   methods: {
     getUpcomingPeriod(dateString) {
@@ -65,11 +76,6 @@ export default {
       console.log("proposalUrl", eventId, this.proposals.map(p => p));
       let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id.toString() === eventId.toString());
       return proposal ? `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}` : null;
-    },
-  },
-  computed: {
-    proposals() {
-      return this.$store.state.vendorDashboard.proposals;
     },
   },
 };

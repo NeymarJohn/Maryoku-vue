@@ -1,8 +1,8 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
-    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar>
-    <router-view></router-view>
+    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
+    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
+    <router-view />
   </div>
 </template>
 <script>
@@ -86,7 +86,7 @@ export default {
       };
       const elements = [];
 
-      console.log('user', this.user);
+      console.log("user", this.user);
 
       elements.push(overview);
       elements.push(planningBoard);
@@ -97,6 +97,18 @@ export default {
       return elements;
     },
   },
+  watch: {
+    $route: "fetchData",
+    event(newValue) {
+      console.log("event");
+      this.setConstantStates(newValue);
+    },
+    eventData(newValue) {
+      console.log("eventData");
+      this.setConstantStates(newValue);
+    },
+  },
+  created() {},
   methods: {
     setConstantStates(event) {
       console.log("setConstantStates");
@@ -130,22 +142,10 @@ export default {
     },
     fetchData() {
       this.pageId = this.$route.params.blockId ? this.$route.params.blockId : "timeline";
-      console.log('eventPlan', this.event);
+      console.log("eventPlan", this.event);
     },
     changeCheckList(e) {
       console.log("changeCheckList", e);
-    },
-  },
-  created() {},
-  watch: {
-    $route: "fetchData",
-    event(newValue) {
-      console.log("event");
-      this.setConstantStates(newValue);
-    },
-    eventData(newValue) {
-      console.log("eventData");
-      this.setConstantStates(newValue);
     },
   },
 };

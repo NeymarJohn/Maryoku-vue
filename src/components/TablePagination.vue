@@ -1,30 +1,29 @@
 <template>
   <ul class="pagination pagination-vendor" :class="paginationClass">
-    <li class="page-item" v-if="firstLastButton" :class="[pageClass, firstPageSelected() ? disabledClass : '']">
+    <li v-if="firstLastButton" class="page-item" :class="[pageClass, firstPageSelected() ? disabledClass : '']">
       <a
-        @click="selectFirstPage()"
-        @keyup.enter="selectFirstPage()"
         :class="pageLinkClass"
         :tabindex="firstPageSelected() ? -1 : 0"
-        v-html="firstButtonText"
         class="page-link"
-      ></a>
+        @click="selectFirstPage()"
+        @keyup.enter="selectFirstPage()"
+        v-html="firstButtonText"
+      />
     </li>
 
     <li
-      class="page-handler prev-page"
       v-if="!(firstPageSelected() && hidePrevNext)"
+      class="page-handler prev-page"
       :class="[prevClass, firstPageSelected() ? disabledClass : '']"
     >
       <a
-        @click="prevPage()"
-        @keyup.enter="prevPage()"
         class="page-link"
         :class="prevLinkClass"
         :tabindex="firstPageSelected() ? -1 : 0"
+        @click="prevPage()"
+        @keyup.enter="prevPage()"
       >
-        <i class="fas fa-angle-left font-size-24 color-purple"></i
-      ></a>
+        <i class="fas fa-angle-left font-size-24 color-purple" /></a>
     </li>
 
     <li
@@ -37,19 +36,16 @@
         page.breakView ? breakViewClass : '',
       ]"
     >
-      <a v-if="page.breakView" :class="[pageLinkClass, breakViewLinkClass]" tabindex="0" class="page-link"
-        ><slot name="breakViewContent">{{ breakViewText }}</slot></a
-      >
-      <a class="page-link" v-else-if="page.disabled" :class="pageLinkClass" tabindex="0">{{ page.content }}</a>
+      <a v-if="page.breakView" :class="[pageLinkClass, breakViewLinkClass]" tabindex="0" class="page-link"><slot name="breakViewContent">{{ breakViewText }}</slot></a>
+      <a v-else-if="page.disabled" class="page-link" :class="pageLinkClass" tabindex="0">{{ page.content }}</a>
       <a
         v-else
-        @click="handlePageSelected(page.index + 1)"
-        @keyup.enter="handlePageSelected(page.index + 1)"
         :class="pageLinkClass"
         tabindex="0"
         class="page-link"
-        >{{ page.content }}</a
-      >
+        @click="handlePageSelected(page.index + 1)"
+        @keyup.enter="handlePageSelected(page.index + 1)"
+      >{{ page.content }}</a>
     </li>
 
     <li
@@ -58,25 +54,25 @@
       class="page-handler prev-page"
     >
       <a
-        @click="nextPage()"
-        @keyup.enter="nextPage()"
         class="page-link"
         :class="nextLinkClass"
         :tabindex="lastPageSelected() ? -1 : 0"
+        @click="nextPage()"
+        @keyup.enter="nextPage()"
       >
-        <i class="fas fa-angle-right font-size-24 color-purple"></i>
+        <i class="fas fa-angle-right font-size-24 color-purple" />
       </a>
     </li>
 
     <li v-if="firstLastButton" :class="[pageClass, lastPageSelected() ? disabledClass : '']" class="page-item">
       <a
-        @click="selectLastPage()"
-        @keyup.enter="selectLastPage()"
         class="page-link"
         :class="pageLinkClass"
         :tabindex="lastPageSelected() ? -1 : 0"
+        @click="selectLastPage()"
+        @keyup.enter="selectLastPage()"
         v-html="lastButtonText"
-      ></a>
+      />
     </li>
   </ul>
 </template>
@@ -181,11 +177,10 @@ export default {
       default: false,
     },
   },
-  beforeUpdate() {
-    if (this.forcePage === undefined) return;
-    if (this.forcePage !== this.selected) {
-      this.selected = this.forcePage;
-    }
+  data() {
+    return {
+      innerValue: 1,
+    };
   },
   computed: {
     paginationClass() {
@@ -260,10 +255,11 @@ export default {
       return items;
     },
   },
-  data() {
-    return {
-      innerValue: 1,
-    };
+  beforeUpdate() {
+    if (this.forcePage === undefined) return;
+    if (this.forcePage !== this.selected) {
+      this.selected = this.forcePage;
+    }
   },
   methods: {
     handlePageSelected(selected) {

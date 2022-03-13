@@ -8,18 +8,26 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`" />
+        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`">
         <!-- <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div> -->
-        <div class="font-size-30 font-bold mt-30 color-purple p-success">Proposal sent successfully!</div>
-        <div class="mt-10 "><span class="text-to">To:</span><span class="to-email"> mayaetti@gmail.com</span></div>
+        <div class="font-size-30 font-bold mt-30 color-purple p-success">
+          Proposal sent successfully!
+        </div>
+        <div class="mt-10 ">
+          <span class="text-to">To:</span><span class="to-email"> mayaetti@gmail.com</span>
+        </div>
         <!-- <div class="mt-40">A copy will be sent to your email</div> -->
-        <div class="mt-50 copy-email">you will receive a copy to your email</div>
+        <div class="mt-50 copy-email">
+          you will receive a copy to your email
+        </div>
         <div class="mt-30">
-          <md-button class="md-vendor maryoku-btn cool-dash" @click="goToDashboard">Cool, Go To Dashboard</md-button>
+          <md-button class="md-vendor maryoku-btn cool-dash" @click="goToDashboard">
+            Cool, Go To Dashboard
+          </md-button>
         </div>
       </div>
     </template>
-    <template slot="footer"> </template>
+    <template slot="footer" />
   </modal>
 </template>
 <script>
@@ -53,10 +61,6 @@ export default {
     },
     events: [Array],
   },
-  created() {
-    this.api = gapi;
-    this.api.load("client:auth2", this.initClient);
-  },
   data() {
     return {
       showZoomLink: false,
@@ -64,6 +68,10 @@ export default {
       sender: "outlook",
       authorized: false,
     };
+  },
+  created() {
+    this.api = gapi;
+    this.api.load("client:auth2", this.initClient);
   },
   methods: {
     close() {
@@ -159,7 +167,7 @@ export default {
     },
     goToDashboard() {
       this.close();
-      this.$router.push(`/vendor/dashboard`);
+      this.$router.push("/vendor/dashboard");
     },
   },
 };

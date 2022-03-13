@@ -1,31 +1,33 @@
 <template>
-  <div @click="addFromEvent( $event )" class="click-capture" >
+  <div class="click-capture" @click="addFromEvent( $event )">
     <comment-circle-button
-      class="item"
       v-for="(item, index) in unresolvedComponents"
       :key="index"
+      class="item"
       :style="getCirclePosition(item)"
-      :commentComponent="item"
+      :comment-component="item"
+      :selected-componet="selectedCommentComponent"
       @save="saveComment"
       @show="showComments"
       @toggleEditPane="toggleEditPane"
       @onDropped="movedCommentComponent"
       @onDragginStart="isDragging=true"
       @dragging="draggingButton"
-      :selectedComponet="selectedCommentComponent"
-    ></comment-circle-button>
+    />
 
     <!-- Comments List -->
     <transition name="fade">
       <div
-        class="comments-list"
         v-if="isOpenCommentListsPane"
-        @click="paneClick($event)"
+        class="comments-list"
         :style="panelPosition"
+        @click="paneClick($event)"
       >
         <div style="height:40px; margin-right:25px" class="text-right">
           <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="closeCommentListPane">
-            <md-icon class="font-size-30">clear</md-icon>
+            <md-icon class="font-size-30">
+              clear
+            </md-icon>
           </md-button>
         </div>
         <div>
@@ -33,25 +35,26 @@
             <comment-item
               :comment="mainComment"
               :proposal="proposal"
-              :isEditing="editingCommentId == mainComment.id"
-              :isMain="true"
+              :is-editing="editingCommentId == mainComment.id"
+              :is-main="true"
               :replies="replies.length"
               @updateComment="updateComment"
               @resolve="resolveCommentComponent"
               @favorite="markAsFavorite"
               @delete="deleteComment"
-            ></comment-item>
+            />
             <comment-item
               v-for="(comment) in replies"
               :key="comment.id"
               :comment="comment"
-              :isMain="false"
+              :is-main="false"
               @updateComment="updateComment"
               @resolve="resolveCommentComponent"
               @favorite="markAsFavorite"
               @delete="deleteComment"
-            ></comment-item>
+            />
           </div>
+
           <div class="form-group position-relative reply-form" :class="{'main-form':!(this.selectedCommentComponent && this.selectedCommentComponent.length) }">
               <fade-transition v-if="showAddress">
                   <md-card class="position-absolute notification-card">
@@ -65,27 +68,30 @@
                   </md-card>
               </fade-transition>
             <textarea
+              ref="commentEditor"
+              v-model="editingComment"
               rows="4"
               class="form-control"
               placeholder="Write reply here"
-              v-model="editingComment"
-              ref="commentEditor"
               @input="getMessage"
-            ></textarea>
-            <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+            />
+            <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
             <div class="footer">
-              <md-button class="md-simple normal-btn" @click="closeCommentListPane">Cancel</md-button>
+              <md-button class="md-simple normal-btn" @click="closeCommentListPane">
+                Cancel
+              </md-button>
               <md-button
                 class="md-simple md-black normal-btn"
                 @click="saveComment($event, 'reply')"
-              >Submit</md-button>
+              >
+                Submit
+              </md-button>
             </div>
           </div>
         </div>
-
       </div>
     </transition>
-    <div :class="{mask:isOpenCommentListsPane}" v-if="isOpenCommentListsPane"></div>
+    <div v-if="isOpenCommentListsPane" :class="{mask:isOpenCommentListsPane}" />
   </div>
   <!-- End Comments List -->
 </template>
@@ -154,19 +160,19 @@ export default {
   },
   computed: {
     selectedCommentComponent() {
-      return this.updatedCommentComponents[this.selectedComponentIndex]
+      return this.updatedCommentComponents[this.selectedComponentIndex];
     },
     mainComment() {
       if (this.updatedCommentComponents[this.selectedComponentIndex].comments) {
-        return this.updatedCommentComponents[this.selectedComponentIndex].comments[0]
+        return this.updatedCommentComponents[this.selectedComponentIndex].comments[0];
       }
-      return {}
+      return {};
     },
     replies() {
       if (this.updatedCommentComponents[this.selectedComponentIndex].comments) {
-        return this.updatedCommentComponents[this.selectedComponentIndex].comments.filter((item, index)=>index>0)
+        return this.updatedCommentComponents[this.selectedComponentIndex].comments.filter((item, index)=>index>0);
       }
-      return []
+      return [];
     },
     unresolvedComponents() {
       return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
@@ -192,9 +198,9 @@ export default {
     },
     showComments(commentComponent) {
       if (this.isOpenCommentListsPane) return;
-      this.comments = commentComponent.comments
+      this.comments = commentComponent.comments;
       this.selectedComponentIndex = this.updatedCommentComponents.findIndex(item=>item.index === commentComponent.index);
-      this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY )
+      this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY );
       this.isOpenCommentListsPane = true;
 
       // this.getCommentsAction(commentComponent.id).then(comments => {
@@ -208,7 +214,7 @@ export default {
     },
 
     setEditPanePosition(x, y) {
-      const deviceWidth = $('.click-capture').width();
+      const deviceWidth = $(".click-capture").width();
 
       if(x > deviceWidth){
         x = deviceWidth - 20;
@@ -231,7 +237,7 @@ export default {
     },
     toggleEditPane(commentComponent, isEditing) {
       if (isEditing) {
-        this.showComments(commentComponent)
+        this.showComments(commentComponent);
       } else {
         // this.selectedCommentComponent = null;
       }
@@ -240,6 +246,7 @@ export default {
     },
     clearStatus() {
       if (this.selectedComponentIndex >=0 ) {
+
         if (!(this.updatedCommentComponents[this.selectedComponentIndex] && this.updatedCommentComponents[this.selectedComponentIndex].comments) || this.updatedCommentComponents[this.selectedComponentIndex].comments.length === 0 ) {
           this.updatedCommentComponents.splice(this.selectedComponentIndex, 1)
         }
@@ -263,7 +270,7 @@ export default {
             return index;
           }, 0)
         : 0;
-        console.log("event",event,event.clientX,event.clientY)
+        console.log("event",event,event.clientX,event.clientY);
         let letfOffset = $(".click-capture").offset().left;
         let topOffset = $(".click-capture").offset().top;
       const newComentComponent = {
@@ -273,8 +280,8 @@ export default {
         index: maxIndex + 1,
         isEditing: false,
         url: this.url ? this.url : this.$route.path,
-      }
-      this.updatedCommentComponents = this.updatedCommentComponents.concat([newComentComponent])
+      };
+      this.updatedCommentComponents = this.updatedCommentComponents.concat([newComentComponent]);
       this.selectedComponentIndex = this.updatedCommentComponents.length - 1;
       // this.addCommentComponent({
       //   dateTime: Date.now(),
@@ -286,8 +293,8 @@ export default {
       // }).then(commentComponent => {
       //   this.selectedCommentComponent = commentComponent
       // });
-      this.setEditPanePosition(event.clientX - letfOffset, event.clientY - topOffset + window.scrollY )
-      this.openEditor()
+      this.setEditPanePosition(event.clientX - letfOffset, event.clientY - topOffset + window.scrollY );
+      this.openEditor();
       this.mostRecentClickCoordinates = {
         x: event.clientX,
         y: event.clientY
@@ -301,7 +308,7 @@ export default {
       this.isOpenCommentListsPane = true;
       setTimeout(()=>{
         this.$refs.commentEditor.focus();
-      }, 100)
+      }, 100);
     },
     enter(element) {
       var clickX = this.mostRecentClickCoordinates.x;
@@ -326,9 +333,9 @@ export default {
             email: this.selectedCustomer ? this.selectedCustomer.email : null,
             viewed:this.isVendor
       };
-      this.$emit('saveComment', {component: selectedComponent, comment, index: this.selectedComponentIndex})
+      this.$emit("saveComment", {component: selectedComponent, comment, index: this.selectedComponentIndex});
 
-      this.editingComment = ""
+      this.editingComment = "";
       event.stopPropagation();
     },
     resolveCommentComponent() {
@@ -337,7 +344,7 @@ export default {
             id: this.hoveredComponent.id,
             isResolved: true
         });
-      this.$emit('updateCommentComponent', commentComponent)
+      this.$emit("updateCommentComponent", commentComponent);
 
       this.isOpenCommentListsPane = false;
     },
@@ -346,7 +353,7 @@ export default {
       this.editingCommentId = comment.id;
     },
     markAsFavorite(comment, isFavorite) {
-      const hoveredComponent = this.updatedCommentComponents[this.selectedComponentIndex]
+      const hoveredComponent = this.updatedCommentComponents[this.selectedComponentIndex];
       comment.eventCommentComponent.id = hoveredComponent.id;
 
       if (isFavorite) {
@@ -361,9 +368,9 @@ export default {
         comment.myFavorite = false;
       }
       const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
-      const commentIndex = hoveredComponent.comments.findIndex(item=>item.id===comment.id)
-      this.updatedCommentComponents[this.selectedComponentIndex].comments[commentIndex] = comment
-      this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
+      const commentIndex = hoveredComponent.comments.findIndex(item=>item.id===comment.id);
+      this.updatedCommentComponents[this.selectedComponentIndex].comments[commentIndex] = comment;
+      this.$emit("updateComment", {comment, component: new EventCommentComponent({id: selectedComponent.id})});
     },
 
     /*markAsRead(commentComponent){
@@ -381,13 +388,13 @@ export default {
     },*/
 
     deleteComment(comment) {
-      this.$emit('deleteComment', {comment, index:this.selectedComponentIndex} )
+      this.$emit("deleteComment", {comment, index:this.selectedComponentIndex} );
     },
     updateComment(comment) {
       this.editingCommentId = "";
 
       const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
-      this.$emit('updateComment', {comment, component: new EventCommentComponent({id: selectedComponent.id})})
+      this.$emit("updateComment", {comment, component: new EventCommentComponent({id: selectedComponent.id})});
     },
     movedCommentComponent(movedCommentComponent) {
       const commentComponent = new EventCommentComponent({
@@ -395,7 +402,7 @@ export default {
         positionX: movedCommentComponent.positionX,
         positionY: movedCommentComponent.positionY
       });
-      this.$emit('updateCommentComponent', commentComponent)
+      this.$emit("updateCommentComponent", commentComponent);
       // this.updateCommentComponent(commentComponent).then(() => {
         this.isOpenCommentListsPane = false;
       // });
@@ -418,8 +425,8 @@ export default {
       }
     },
     async getMessage(e){
-      if(e.target.value.includes('@')){
-        let queryArray = e.target.value.split('@')
+      if(e.target.value.includes("@")){
+        let queryArray = e.target.value.split("@");
 
         let res = await getReq(`/1/customers?name=${queryArray[1]}`);
         this.customers = res.data;
@@ -430,23 +437,23 @@ export default {
     toAddress(customer){
 
       this.selectedCustomer = customer;
-      let queryArray = this.editingComment.split('@');
+      let queryArray = this.editingComment.split("@");
       queryArray[1] = customer.name;
 
-      this.editingComment = queryArray.join('@') + ' ';
-      this.showAddress = false
+      this.editingComment = queryArray.join("@") + " ";
+      this.showAddress = false;
     },
     getCirclePosition(item){
 
       if(item.positionX > $(".click-capture").width()){
         item.positionX = $(".click-capture").width() - 20;
       }
-      return {left: `${item.positionX}px`, top: `${item.positionY}px`}
+      return {left: `${item.positionX}px`, top: `${item.positionY}px`};
     }
   },
   watch:{
     commentComponents(newVal){
-      this.updatedCommentComponents = JSON.parse(JSON.stringify(newVal))
+      this.updatedCommentComponents = JSON.parse(JSON.stringify(newVal));
     }
   }
 };

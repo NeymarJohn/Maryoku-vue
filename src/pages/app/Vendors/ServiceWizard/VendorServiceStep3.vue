@@ -2,23 +2,25 @@
   <div class="vendor-signup-step3-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconUrl}step-3.svg`" />
+        <img :src="`${iconUrl}step-3.svg`">
         <h2>
           DISCLAMER &
-          <br />POLICY
+          <br>POLICY
         </h2>
         <p>
           Don’t worry, you’ll only have to do this once. After that all elements will appear on your future proposals
           automatically
         </p>
         <h2>2/4</h2>
-        <p class="color-red font-bold">Good job, you're almost done!</p>
+        <p class="color-red font-bold">
+          Good job, you're almost done!
+        </p>
       </div>
       <div class="right-side">
         <div class="policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Asset 560.svg`" /> Policy</h5>
+              <h5><img :src="`${iconUrl}Asset 560.svg`"> Policy</h5>
             </div>
             <div class="bottom">
               <p>Set {{ getCategoryNameByValue(currentService.vendorCategory) }} rules for your guests</p>
@@ -36,53 +38,60 @@
                 v-for="(r, rIndex) in vendorPolicies.items"
                 :key="rIndex + 'component'"
                 :item="r"
-                @update="setPolicy($event, rIndex)"
                 theme="purple"
-              >
-              </vendor-policy-item>
+                @update="setPolicy($event, rIndex)"
+              />
             </div>
             <v-signup-add-rules
-              :comType="`rule`"
+              :com-type="`rule`"
               :title="rulesDesc"
-              :defaultRules="additionalRules"
+              :default-rules="additionalRules"
               theme="purple"
-              :isMainService="false"
+              :is-main-service="false"
             />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Asset 536.svg`" /> pricing policy</h5>
+              <h5><img :src="`${iconUrl}Asset 536.svg`"> pricing policy</h5>
             </div>
           </div>
           <div class="card">
             <div class="side-label">
-              <div class="label-value">Our cancellation approach</div>
+              <div class="label-value">
+                Our cancellation approach
+              </div>
             </div>
 
             <div class="proposal-section__subtitle">
-              <div class="subtitle">We allow free cancellation until:</div>
-              <div class="desc">30 days before the event</div>
+              <div class="subtitle">
+                We allow free cancellation until:
+              </div>
+              <div class="desc">
+                30 days before the event
+              </div>
             </div>
-            <cancellation-policy></cancellation-policy>
+            <cancellation-policy />
 
             <div class="side-label">
-              <div class="label-value">Extra Fees</div>
+              <div class="label-value">
+                Extra Fees
+              </div>
             </div>
             <div class="rules">
               <vendor-pricing-policy-item
                 v-for="(p, pIndex) in vendorPricingPolicies.items"
                 :key="pIndex + 'component'"
                 :item="p"
-                @update="setPricePolicy($event, pIndex)"
                 theme="purple"
-              ></vendor-pricing-policy-item>
+                @update="setPricePolicy($event, pIndex)"
+              />
             </div>
             <div class="additional-disclaimer">
               <div><span class="font-bold"> Additional Disclaimer</span> <span>* Suggested</span></div>
               <div class="mt-10">
-                <textarea></textarea>
+                <textarea />
               </div>
             </div>
           </div>
@@ -90,12 +99,14 @@
         <div class="health-policy-wrapper">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Union 12.svg`" />Health Policy</h5>
+              <h5><img :src="`${iconUrl}Union 12.svg`">Health Policy</h5>
             </div>
           </div>
           <div class="card">
             <div class="title-cont">
-              <div class="top">COVID 19 - Exceptional Policy</div>
+              <div class="top">
+                COVID 19 - Exceptional Policy
+              </div>
               <div class="bottom mb-10">
                 <p>
                   Please indicate any policy related to Corona - observing and complying with rules within your own
@@ -104,7 +115,7 @@
               </div>
             </div>
             <div class="main-cont">
-              <textarea v-model="currentService.healthPolicy"></textarea>
+              <textarea v-model="currentService.healthPolicy" />
             </div>
           </div>
         </div>
@@ -137,11 +148,7 @@ import CancellationPolicy from "@/components/CancellationPolicy.vue";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 
 export default {
-  name: "vendor-signup-step3",
-  props: {
-    categories: Array,
-    icon: String,
-  },
+  name: "VendorSignupStep3",
   components: {
     VendorPricingPolicyItem,
     VendorPolicyItem,
@@ -153,6 +160,11 @@ export default {
     Multiselect,
     CancellationPolicy,
     MaryokuInput,
+  },
+  filters: {},
+  props: {
+    categories: Array,
+    icon: String,
   },
   data() {
     return {
@@ -259,6 +271,34 @@ export default {
       vendorPricingPolicies: {},
       setAsMainPolicy: false,
     };
+  },
+  computed: {
+    additionalRules() {
+      return this.$store.state.vendorService.service.additionalRules;
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    currentService() {
+      return this.$store.state.vendorService.service;
+    },
+  },
+  watch: {
+    vendor: {
+      handler(newVal) {
+        console.log("signup.step3", newVal);
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.init();
+  },
+  updated() {
+    this.renderCalendar();
+  },
+  beforeDestroy() {
+    // this.$root.$off("update-vendor-value");
   },
   methods: {
     getCategoryNameByValue(value) {
@@ -448,7 +488,7 @@ export default {
               this.$set(it, "isExtraService", vendorPricingPolicies.items[idx].isExtraService);
               this.$set(it, "extraService", vendorPricingPolicies.items[idx].extraService);
             }
-            if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
+            if (it.type == "Boolean" && !it.hasOwnProperty("value")) {
               this.$set(it, "value", false);
             }
           }
@@ -457,7 +497,7 @@ export default {
         this.vendorPricingPolicies = vendorPricingPolicies;
         console.log(vendorPricingPolicies);
         this.vendorPricingPolicies.items.map((it) => {
-          if (it.type == 'Boolean') {
+          if (it.type == "Boolean") {
             this.$set(it, "value", false);
           }
         });
@@ -467,14 +507,14 @@ export default {
         this.$set(this.vendorPolicies, "items", this.currentService.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
-          if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
+          if (it.type == "Boolean" && !it.hasOwnProperty("value")) {
             this.$set(it, "value", false);
           }
         });
       } else {
         this.vendorPolicies = vendorPolicies;
         this.vendorPolicies.items.map((it) => {
-          if (it.type == 'Boolean') {
+          if (it.type == "Boolean") {
             this.$set(it, "value", false);
           }
         });
@@ -595,35 +635,6 @@ export default {
           $(day).find("div.vfc-base-end").remove();
         }
       });
-    },
-  },
-  computed: {
-    additionalRules() {
-      return this.$store.state.vendorService.service.additionalRules;
-    },
-    vendor() {
-      return this.$store.state.vendorService.vendor;
-    },
-    currentService() {
-      return this.$store.state.vendorService.service;
-    },
-  },
-  filters: {},
-  mounted() {
-    this.init();
-  },
-  updated() {
-    this.renderCalendar();
-  },
-  beforeDestroy() {
-    // this.$root.$off("update-vendor-value");
-  },
-  watch: {
-    vendor: {
-      handler(newVal) {
-        console.log("signup.step3", newVal);
-      },
-      deep: true,
     },
   },
 };

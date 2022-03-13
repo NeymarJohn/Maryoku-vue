@@ -1,32 +1,32 @@
 <template>
   <md-card class="md-card-pricing" :class="cardClass">
-    <slot name="category"></slot>
+    <slot name="category" />
     <md-card-content>
       <div class="md-card-icon" :class="iconColor">
-        <slot name="icon"></slot>
+        <slot name="icon" />
       </div>
-      <slot name="title"></slot>
-      <slot name="description"></slot>
+      <slot name="title" />
+      <slot name="description" />
     </md-card-content>
     <md-card-actions class="text-center">
-      <slot name="footer"></slot>
+      <slot name="footer" />
     </md-card-actions>
   </md-card>
 </template>
 <script>
 export default {
-  name: 'pricing-card',
+  name: "PricingCard",
   props: {
     cardClass: {
       type: String,
-      default: ''
+      default: ""
     },
     iconColor: {
       type: String,
-      default: ''
+      default: ""
     }
   }
-}
+};
 </script>
 <style>
 </style>

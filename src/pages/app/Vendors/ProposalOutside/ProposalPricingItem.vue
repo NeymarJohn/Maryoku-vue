@@ -6,16 +6,20 @@
     >
       <div class="summary" @click="expand()">
         <div class="left">
-          <img v-if="itemType == 'price'" :src="getCategoryIcon()" />
-          <img v-if="itemType == 'bundle'" :src="`${iconUrl}Asset 577.svg`" />
-          <h3 v-if="itemType == 'price'">{{ getServiceCategory(category).title }}</h3>
-          <h3 v-if="itemType == 'bundle'">Bundle offer</h3>
+          <img v-if="itemType == 'price'" :src="getCategoryIcon()">
+          <img v-if="itemType == 'bundle'" :src="`${iconUrl}Asset 577.svg`">
+          <h3 v-if="itemType == 'price'">
+            {{ getServiceCategory(category).title }}
+          </h3>
+          <h3 v-if="itemType == 'bundle'">
+            Bundle offer
+          </h3>
           <div v-if="itemType == 'total'" class="total-cont">
             <h4>Total</h4>
             <span v-if="bundleDiscount.isApplied">before discount</span>
           </div>
           <!-- <span v-if="itemType == 'price'">{{ serviceTime.time }}</span> -->
-          <div class="bundle-desc" v-if="itemType == 'bundle'">
+          <div v-if="itemType == 'bundle'" class="bundle-desc">
             <h4>{{ bundleDiscount.percentage }}%</h4>
             <span v-for="(service, index) in bundleDiscount.services" :key="index" style="padding: 0 2px">
               {{ getServiceCategory(service).title }},
@@ -23,14 +27,14 @@
           </div>
         </div>
         <div class="right">
-          <div class="price-cont" v-if="!isExpanded">
+          <div v-if="!isExpanded" class="price-cont">
             <template v-if="itemType == 'price'">
               <span class="org-price">${{ getTotalPrice(category) | withComma }}</span>
               <!-- <div class="off-cont" v-if="bundleDiscount && bundleDiscount.services.includes(category)">
                 ({{ bundleDiscount.percentage }}% off)
                 <span>${{ getDiscountedPrice(category) | withComma }}</span>
               </div> -->
-              <div class="off-cont" v-if="defaultDiscount.percentage > 0">
+              <div v-if="defaultDiscount.percentage > 0" class="off-cont">
                 ({{ defaultDiscount.percentage }}% off)
                 <span>${{ pricesByCategory[category] | withComma }}</span>
               </div>
@@ -38,9 +42,7 @@
             <template v-if="itemType == 'total'">
               <!-- <span class="org-price">${{ totalPrice | withComma }}</span> -->
               <template v-if="bundleDiscount && bundleDiscount.isApplied">
-                <span class="org-price"
-                  >${{ ((getTotalPrice(category) * (100 - bundleDiscount.percentage)) / 100) | withComma }}</span
-                >
+                <span class="org-price">${{ ((getTotalPrice(category) * (100 - bundleDiscount.percentage)) / 100) | withComma }}</span>
                 <div class="off-cont">
                   ({{ bundleDiscount.percentage }}% off)
                   <span>${{ getTotalPrice(category) | withComma }}</span>
@@ -59,7 +61,7 @@
             v-if="itemType == 'price'"
             :src="`${iconUrl}Component 36 (2).svg`"
             :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
-          />
+          >
         </div>
       </div>
       <div v-if="isExpanded" class="subitems">
@@ -74,7 +76,7 @@
           :key="sIndex"
           :item="s"
           :active="true"
-          :isEdit="true"
+          :is-edit="true"
           :step="3"
           theme="purple"
         />
@@ -86,7 +88,7 @@
             <div class="text-center">
               <span>{{ defaultDiscount.percentage }}%</span>
             </div>
-            <div></div>
+            <div />
             <div class="right text-center">
               <span> -${{ getDiscount(category) | withComma }} </span>
             </div>
@@ -98,7 +100,7 @@
             <div class="text-center">
               <span>{{ defaultTax.percentage }}%</span>
             </div>
-            <div></div>
+            <div />
             <div class="right text-center">
               <span> ${{ getTaxPrice(category) | withComma }} </span>
             </div>
@@ -110,30 +112,30 @@
         </div>
 
         <proposal-requirements
+          key="included"
           class="additional-service white-card"
-          tableCategory="included"
+          table-category="included"
           label="What Do We Include In This Proposal?"
           icon="includedPrice.png"
           description=""
-          key="included"
-          :canAdd="false"
-          :vendorCategory="category"
+          :can-add="false"
+          :vendor-category="category"
         />
         <proposal-requirements
+          key="extra"
           class="additional-service white-card"
-          tableCategory="extra"
+          table-category="extra"
           label="Extras"
           icon="cost-requirements.png"
           description="(Asking the client) Wold you like to upgrade & add one of those?"
-          key="extra"
-          :canAdd="false"
-          :vendorCategory="category"
+          :can-add="false"
+          :vendor-category="category"
         />
-        <div class="attachments-cont" v-if="proposalAttachments[category]">
+        <div v-if="proposalAttachments[category]" class="attachments-cont">
           <h4>Attachments</h4>
           <div class="files-cont">
-            <div class="item" v-for="(file, index) in proposalAttachments[category]" :key="index">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
+            <div v-for="(file, index) in proposalAttachments[category]" :key="index" class="item">
+              <img :src="`${iconUrl}Asset 578.svg`"> Kosher_certificate.pdf
             </div>
           </div>
         </div>
@@ -143,32 +145,46 @@
 </template>
 <script>
 import EditableProposalSubItem from "../Proposal/EditableProposalSubItem.vue";
-import CheckListItem from "../components/CheckListItem.vue";
 import { categoryNameWithIcons } from "@/constants/vendor";
 import { mapGetters } from "vuex";
 import ProposalRequirements from "./ProposalRequirements.vue";
 
 export default {
-  name: "proposal-pricing-item",
+  name: "ProposalPricingItem",
   components: {
     EditableProposalSubItem,
-    CheckListItem,
     ProposalRequirements,
   },
   props: {
-    category: String,
+    category: {
+      type: String,
+      default: ""
+    },
     isCollapsed: Boolean,
     isDropdown: Boolean,
     proposalRange: Boolean,
-    iconUrl: String,
-    itemType: String,
-    requirements: Array,
+    iconUrl: {
+      type: String,
+      default: ""
+    },
+    itemType: {
+      type: String,
+      default: ""
+    },
+    requirements: {
+      type: Array,
+      default: () => {}
+    },
   },
   data() {
     return {
       isExpanded: false,
       iconsWithCategory: null,
     };
+  },
+  created() {},
+  mounted() {
+    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
   },
   methods: {
     expand() {
@@ -218,10 +234,6 @@ export default {
     getTotalPrice(category) {
       return Number(this.getDiscountedPrice(category)) + Number(this.getTaxPrice(category));
     },
-  },
-  created() {},
-  mounted() {
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
   },
   computed: {
     ...mapGetters("proposalForNonMaryoku", [

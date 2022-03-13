@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="photo">
-      <img :src="avatar" alt="avatar" />
+      <img :src="avatar" alt="avatar">
     </div>
     <div class="user-info">
       <a
@@ -11,12 +11,12 @@
         @click.capture="clicked"
       >
         <span v-if="$route.meta.rtlActive">
-          {{rtlTitle}}
-          <b class="caret"></b>
+          {{ rtlTitle }}
+          <b class="caret" />
         </span>
         <span v-else>
-          {{title}}
-          <b class="caret"></b>
+          {{ title }}
+          <b class="caret" />
         </span>
       </a>
 

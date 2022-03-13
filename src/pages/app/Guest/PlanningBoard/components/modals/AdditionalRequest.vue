@@ -1,9 +1,11 @@
 <template>
-  <modal class="planning-board-additioal-modal" :containerClass="`modal-container xl`">
+  <modal class="planning-board-additioal-modal" :container-class="`modal-container xl`">
     <template slot="header">
       <div class="maryoku-modal-header text-left">
-        <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" style="width: 30px; margin-right: 0.5em" />
-        <div class="font-size-30 font-bold color-black">{{ selectedCategory.fullTitle }}</div>
+        <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`" style="width: 30px; margin-right: 0.5em">
+        <div class="font-size-30 font-bold color-black">
+          {{ selectedCategory.fullTitle }}
+        </div>
       </div>
       <md-button class="md-just-icon md-simple" @click="close">
         <md-icon>close</md-icon>
@@ -11,57 +13,60 @@
     </template>
     <template slot="body">
       <div v-if="selectedCategory.key === 'venuerental'" class="text-left mt-20 mb-20">
-        <div class="font-bold font-size-22">Any Additional Requests?</div>
-        <div class="mt-20">Would you like to add one of those items?</div>
+        <div class="font-bold font-size-22">
+          Any Additional Requests?
+        </div>
+        <div class="mt-20">
+          Would you like to add one of those items?
+        </div>
         <div class="tags mt-30">
           <tag-item
-            @click="selectTag(tag)"
-            :tagLabel="tag.subCategory"
-            :key="tag.subCategory"
-            :isSelected="tag.isSelected"
             v-for="tag in specialTags"
+            :key="tag.subCategory"
+            :tag-label="tag.subCategory"
+            :is-selected="tag.isSelected"
             theme="red"
             class="mr-10"
-          ></tag-item>
+            @click="selectTag(tag)"
+          />
         </div>
       </div>
       <div class="text-left p-20" style="background-color: #f3f7fd;">
         <div class="d-flex align-center">
           <div class="font-size-20 font-bold">
-            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28" />
-            Time Slot</div>
-          <md-switch v-if="page === 'planner'" class="md-switch-rose large-switch ml-100" v-model="isEntire">
+            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28">
+            Time Slot
+          </div>
+          <md-switch v-if="page === 'planner'" v-model="isEntire" class="md-switch-rose large-switch ml-100">
             <span class="color-black font-bold font-size-16">Entire Event</span>
           </md-switch>
         </div>
         <template v-if="!isEntire">
-            <div v-if="page === 'planner'" class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
-                <div class="check-item" @click="checkTimeline(true)">
-                    <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
-                    <span class="unchecked" v-else></span>
-                    <span>Assign to one of those timeline events</span>
-                </div>
-                <div class="check-item" @click="checkTimeline(false)">
-                    <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="!assignTimeline" />
-                    <span class="unchecked" v-else></span>
-                    <span>Specific Time Slot</span>
-                </div>
+          <div v-if="page === 'planner'" class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
+            <div class="check-item" @click="checkTimeline(true)">
+              <img v-if="assignTimeline" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
+              <span v-else class="unchecked" />
+              <span>Assign to one of those timeline events</span>
             </div>
-            <template v-if="assignTimeline">
-
-                <div class="d-flex align-center ml-50" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
-                    <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index"></md-checkbox>
-                    <timeline-item
-                        :item="timelineItem"
-                        :index="index"
-                        class="my-10 timeline-group-wrapper"
-                        :editMode="false"
-                        size="medium"
-                    ></timeline-item>
-                </div>
-
-            </template>
-            <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime"></time-slot>
+            <div class="check-item" @click="checkTimeline(false)">
+              <img v-if="!assignTimeline" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
+              <span v-else class="unchecked" />
+              <span>Specific Time Slot</span>
+            </div>
+          </div>
+          <template v-if="assignTimeline">
+            <div v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`" class="d-flex align-center ml-50">
+              <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index" />
+              <timeline-item
+                :item="timelineItem"
+                :index="index"
+                class="my-10 timeline-group-wrapper"
+                :edit-mode="false"
+                size="medium"
+              />
+            </div>
+          </template>
+          <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime" />
         </template>
       </div>
       <div>
@@ -70,50 +75,57 @@
           :key="section"
           class="text-left sub-category"
         >
-            <div class="font-bold-extra">{{ section }}</div>
-            <div class="md-layout text-left">
-                <!-- {{ subCategory.requirements[section] }} -->
+          <div class="font-bold-extra">
+            {{ section }}
+          </div>
+          <div class="md-layout text-left">
+            <!-- {{ subCategory.requirements[section] }} -->
             <div
-                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-                :key="item.item"
-                class="md-layout-item md-size-33">
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
+              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+              :key="item.item"
+              class="md-layout-item md-size-33"
+            >
+              <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                <span class="text-transform-capitalize">{{ item.item }}</span>
+              </md-checkbox>
             </div>
             <div v-if="subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)">
-                <div
-                    v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
-                    class="requirement-item-tags  mt-10"
-                    :key="item.item"
-                >
-                    <div class="mb-10">{{ item.item }}:</div>
-                    <tag-item
-                        @click="tag.selected = !tag.selected"
-                        :tagLabel="tag.name"
-                        :key="tag.name"
-                        :isSelected="tag.selected"
-                        :theme="`red`"
-                        v-for="tag in item.options"
-                        class="mr-10"
-                    ></tag-item>
+              <div
+                v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
+                :key="item.item"
+                class="requirement-item-tags  mt-10"
+              >
+                <div class="mb-10">
+                  {{ item.item }}:
                 </div>
+                <tag-item
+                  v-for="tag in item.options"
+                  :key="tag.name"
+                  :tag-label="tag.name"
+                  :is-selected="tag.selected"
+                  :theme="`red`"
+                  class="mr-10"
+                  @click="tag.selected = !tag.selected"
+                />
+              </div>
             </div>
           </div>
         </div>
         <div
           v-for="specialSection in specialTags"
+          :id="specialSection.subCategory"
           :key="specialSection.subCategory"
           class="text-left sub-category"
-          :id="specialSection.subCategory"
         >
-          <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
-          <div class="md-layout text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
+          <div class="font-bold-extra">
+            {{ specialSection.subCategory }}
+          </div>
+          <div v-if="specialSection.subCategory !== 'Sitting arrangement'" class="md-layout text-left">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options" class="md-layout-item md-size-33" :key="item.name">
+            <div v-for="item in specialSection.options" :key="item.name" class="md-layout-item md-size-33">
               <md-checkbox v-model="item.selected">
                 <div class="checkbox-label-wrapper">
-                  <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)" />
+                  <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)">
                   {{ item.name }}
                 </div>
               </md-checkbox>
@@ -123,54 +135,64 @@
             <div class="special-request-section-options">
               <div class="md-layout">
                 <div
-                  class="md-layout-item md-size-50 md-small-size-100 pt-20 pl-0"
                   v-for="(option, index) in specialSection.options"
                   :key="index"
+                  class="md-layout-item md-size-50 md-small-size-100 pt-20 pl-0"
                 >
                   <div>
-                    <md-checkbox class="md-simple md-red" v-model="option.selected">
+                    <md-checkbox v-model="option.selected" class="md-simple md-red">
                       <span class="text-transform-capitalize">{{ option.item }}</span>
                     </md-checkbox>
                     <div class="ml-30">
                       <span class="font-bold">Popular for:</span>
                       {{ option.popular }}
                       <div>
-                        <img :src="`${$iconURL}Requirements/${option.icon}`" />
+                        <img :src="`${$iconURL}Requirements/${option.icon}`">
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="md-layout-item md-size-50 md-small-size-100 pt-50 pl-0">
                   <div class="d-flex">
-                    <md-checkbox class="md-simple md-red" v-model="specialSection.hasOtherOption">
+                    <md-checkbox v-model="specialSection.hasOtherOption" class="md-simple md-red">
                       <span class="font-bold">Other:</span>
                     </md-checkbox>
-                    <maryoku-input class="flex-1" v-model="specialSection.otherOptionContent"></maryoku-input>
+                    <maryoku-input v-model="specialSection.otherOptionContent" class="flex-1" />
                   </div>
                 </div>
               </div>
             </div>
             <div class="special-request-section-description mt-20">
-              <div class="font-size-20 font-bold">Is there going to be group work at the event?</div>
-              <div class="mt-10">Which will require dedicated tables?</div>
+              <div class="font-size-20 font-bold">
+                Is there going to be group work at the event?
+              </div>
+              <div class="mt-10">
+                Which will require dedicated tables?
+              </div>
               <div>
-                <md-checkbox class="md-checkbox-circle md-red" v-model="isGroup" :value="true">Yes</md-checkbox>
-                <md-checkbox class="md-checkbox-circle md-red" v-model="isGroup" :value="false">No</md-checkbox>
+                <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="true">
+                  Yes
+                </md-checkbox>
+                <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="false">
+                  No
+                </md-checkbox>
               </div>
               <div v-if="isGroup" class="d-flex align-start mt-20">
-                <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top: -10px" />
+                <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top: -10px">
                 <div>
-                  <div class="font-size-20 font-bold">Around what size of groups?</div>
+                  <div class="font-size-20 font-bold">
+                    Around what size of groups?
+                  </div>
                   <div class="d-flex justify-content-between mt-10">
                     <md-radio
                       v-for="(size, idx) in specialSection.groupSizes"
-                      v-model="groupSize"
                       :key="idx"
+                      v-model="groupSize"
                       :value="size.item"
                       @change="sizeChange"
                     >
-                      {{ `${size.item} people` }}</md-radio
-                    >
+                      {{ `${size.item} people` }}
+                    </md-radio>
                   </div>
                 </div>
               </div>
@@ -181,21 +203,27 @@
 
       <div class="anything-else-section text-left mt-50 mb-20">
         <div class="d-flex align-center mb-20" style="min-width: 300px">
-          <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20" />
+          <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
           <div class="title">
-            <div class="font-size-22 font-bold">Special Requests</div>
-            <div class="mt-10">Would you like to add one of those items?</div>
+            <div class="font-size-22 font-bold">
+              Special Requests
+            </div>
+            <div class="mt-10">
+              Would you like to add one of those items?
+            </div>
           </div>
         </div>
         <label class="font-bold">Get me a pink unicorn please</label>
-        <div class="mt-10">We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.</div>
+        <div class="mt-10">
+          We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.
+        </div>
         <div class="anything-else-section-options mt-10">
           <textarea
+            v-model="anythingElse"
             placeholder="Type name of element here..."
             rows="5"
-            v-model="anythingElse"
             @input="handleNoteChange"
-          ></textarea>
+          />
         </div>
       </div>
     </template>
@@ -204,12 +232,14 @@
         No, Skip
         <md-icon>keyboard_arrow_right</md-icon>
       </md-button>
-      <md-button class="md-red md-bold add-category-btn" @click="save">Save & Finish</md-button>
+      <md-button class="md-red md-bold add-category-btn" @click="save">
+        Save & Finish
+      </md-button>
     </template>
   </modal>
 </template>
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
 import TimeSlot from "../TimeSlot.vue";
@@ -248,7 +278,7 @@ export default {
     },
     page: {
         type: String,
-        default: 'planner',
+        default: "planner",
     }
   },
   data() {
@@ -263,14 +293,41 @@ export default {
       period: [],
       assignTimeline: false,
       timeSlotsByServiceType: {
-        'venuerental' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'Discussion', 'Break', 'Relaxation', 'meal'],
-        'transportation' : ['transportation'],
-        'entertainment' : ['activity', 'Show', 'Speaker / Keynote', 'Discussion'],
-        'administration' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'meal'],
-        'foodandbeverage' : ['break', 'Relaxation', 'meal'],
+        "venuerental" : ["setup", "activity", "Show", "Speaker / Keynote", "Discussion", "Break", "Relaxation", "meal"],
+        "transportation" : ["transportation"],
+        "entertainment" : ["activity", "Show", "Speaker / Keynote", "Discussion"],
+        "administration" : ["setup", "activity", "Show", "Speaker / Keynote", "meal"],
+        "foodandbeverage" : ["break", "Relaxation", "meal"],
       },
       timeSlotIdx: [],
     };
+  },
+  computed: {
+    event() {
+      return this.$store.state.EventGuestVuex.eventData;
+    },
+    timeslots(){
+      let slots = [];
+      // classify and get timeslots by service type
+      this.$store.state.EventGuestVuex.eventData.timelineDates.map(date => {
+        date.timelineItems.map(item => {
+          if ((this.selectedCategory.key === "venuerental" || this.selectedCategory.key === "decor" ||
+            this.selectedCategory.key === "equipmentrentals") && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === "transportation" && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if ((this.selectedCategory.key === "entertainment" || this.selectedCategory.key === "videographyandphotography" ||
+            this.selectedCategory.key === "audiovisualstagingservices") && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === "administration" && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === "foodandbeverage"&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
+            slots.push(item);
+          }
+        });
+      });
+      return slots;
+    }
   },
   created() {
     this.subCategorySections = Object.keys(this.subCategory);
@@ -284,7 +341,7 @@ export default {
     } else {
       this.specialTags = [];
     }
-    console.log('additionalRequests.created', this.specialTags);
+    console.log("additionalRequests.created", this.specialTags);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
@@ -299,7 +356,7 @@ export default {
             this.timeSlotIdx.push(idx);
           }
 
-        })
+        });
       }
     },
     close: function () {
@@ -309,13 +366,13 @@ export default {
       this.$emit("cancel");
     },
     checkTimeline(value) {
-      console.log('checkTimeline', this.timeslots);
+      console.log("checkTimeline", this.timeslots);
       if (!this.timeslots.length) return;
       this.assignTimeline = value;
       this.setTimeSlot();
     },
     getPeriod(timeslots, idxs) {
-      console.log('getPeriod', timeslots);
+      console.log("getPeriod", timeslots);
       let duration = [];
 
       // timeslots.map(timeslot => {
@@ -350,15 +407,15 @@ export default {
               return {
                   startTime: this.timeslots[idx].startTime,
                   endTime: this.timeslots[idx].endTime
-              }
-          })
+              };
+          });
       }
       requirements.special = [];
       for (let item of this.specialTags) {
         requirements.special.push(item);
       }
-      console.log('save', this.period);
-        console.log('save', this.period);
+      console.log("save", this.period);
+        console.log("save", this.period);
         
       this.$emit("save", {
         category: this.selectedCategory.key,
@@ -372,7 +429,7 @@ export default {
       });
     },
     selectItem(item){
-      console.log('selectItem', item.selected);
+      console.log("selectItem", item.selected);
       item.selected = !item.selected;
       this.$forceUpdate();
     },
@@ -467,42 +524,15 @@ export default {
     },
     setTime(time) {
       this.period = [];
-      let eventDate = moment(this.page === 'customer' ? this.proposal.eventData.startTime * 1000 : this.event.eventStartMillis).format('YYYY-MM-DD');
-      if(this.page === 'planner') console.log('setTime.eventData', this.event.eventStartMillis,  eventDate);
-      if(this.page === 'customer') console.log('setTime.eventData', this.proposal.eventData.startTime,  eventDate);
+      let eventDate = moment(this.page === "customer" ? this.proposal.eventData.startTime * 1000 : this.event.eventStartMillis).format("YYYY-MM-DD");
+      if(this.page === "planner") console.log("setTime.eventData", this.event.eventStartMillis,  eventDate);
+      if(this.page === "customer") console.log("setTime.eventData", this.proposal.eventData.startTime,  eventDate);
       Vue.set(this.period, 0, {
-          startTime: this.getTimeStampFromFormat (`${eventDate} ${time.startTime.time.hh}:${time.startTime.time.mm} ${time.startTime.ampm}`, 'YYYY-MM-DD hh:mm A').toString(),
-          endTime: this.getTimeStampFromFormat(`${eventDate} ${time.endTime.time.hh}:${time.endTime.time.mm} ${time.endTime.ampm}`, 'YYYY-MM-DD hh:mm A').toString(),
-      })
-      console.log('setTime', this.period);
+          startTime: this.getTimeStampFromFormat (`${eventDate} ${time.startTime.time.hh}:${time.startTime.time.mm} ${time.startTime.ampm}`, "YYYY-MM-DD hh:mm A").toString(),
+          endTime: this.getTimeStampFromFormat(`${eventDate} ${time.endTime.time.hh}:${time.endTime.time.mm} ${time.endTime.ampm}`, "YYYY-MM-DD hh:mm A").toString(),
+      });
+      console.log("setTime", this.period);
     },
-  },
-  computed: {
-    event() {
-      return this.$store.state.EventGuestVuex.eventData;
-    },
-    timeslots(){
-      let slots = [];
-      // classify and get timeslots by service type
-      this.$store.state.EventGuestVuex.eventData.timelineDates.map(date => {
-        date.timelineItems.map(item => {
-          if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
-            this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
-            slots.push(item);
-          } else if (this.selectedCategory.key === 'transportation' && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
-            slots.push(item);
-          } else if ((this.selectedCategory.key === 'entertainment' || this.selectedCategory.key === 'videographyandphotography' ||
-            this.selectedCategory.key === 'audiovisualstagingservices') && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-            slots.push(item)
-          } else if (this.selectedCategory.key === 'administration' && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-            slots.push(item);
-          } else if (this.selectedCategory.key === 'foodandbeverage'&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
-            slots.push(item);
-          }
-        })
-      })
-      return slots;
-    }
   }
 };
 </script>

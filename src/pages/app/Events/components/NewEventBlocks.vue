@@ -1,9 +1,11 @@
 <template>
   <div class="manage-proposals md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen />
+    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" is-full-screen />
 
     <div class="md-layout-item md-size-100">
-      <h3 @click="goBack"><md-icon>arrow_back</md-icon> Send inquiry and manage proposals</h3>
+      <h3 @click="goBack">
+        <md-icon>arrow_back</md-icon> Send inquiry and manage proposals
+      </h3>
 
       <p>Send out one inquiry to all vendors and we'll organize all the proposals for you to choose the best one.</p>
     </div>
@@ -14,11 +16,13 @@
           <div class="card-icon">
             <md-icon>{{ selectedBlock.icon }}</md-icon>
           </div>
-          <h4 class="title2" style="text-transform: capitalize">{{ selectedBlock.componentId }}</h4>
+          <h4 class="title2" style="text-transform: capitalize">
+            {{ selectedBlock.componentId }}
+          </h4>
         </md-card-header>
 
         <md-card-content class="md-layout blocks-list">
-          <div class="blocks-list_item md-layout" v-for="(block, index) in eventBlocks">
+          <div v-for="(block, index) in eventBlocks" class="blocks-list_item md-layout">
             <div class="md-layout-item md-size-100">
               <md-field>
                 <label>Requirement Description</label>
@@ -26,7 +30,7 @@
                   v-model="block.title"
                   type="text"
                   :rows="block.title ? parseInt(block.title.length / 33) + 1 : 2"
-                ></md-textarea>
+                />
               </md-field>
             </div>
 
@@ -34,9 +38,11 @@
               <md-field>
                 <label>Priority</label>
                 <md-select v-model="block.priority" name="select">
-                  <md-option v-for="(option, index) in prioritiesList" :key="index" :value="option.value">{{
-                    option.value
-                  }}</md-option>
+                  <md-option v-for="(option, index) in prioritiesList" :key="index" :value="option.value">
+                    {{
+                      option.value
+                    }}
+                  </md-option>
                 </md-select>
               </md-field>
             </div>
@@ -53,14 +59,18 @@
         </md-card-content>
 
         <md-card-actions md-alignment="right">
-          <md-button class="md-info" @click="addNewValue">Add Requirement</md-button>
-          <md-button class="md-info" @click="saveAllValues">Save</md-button>
+          <md-button class="md-info" @click="addNewValue">
+            Add Requirement
+          </md-button>
+          <md-button class="md-info" @click="saveAllValues">
+            Save
+          </md-button>
         </md-card-actions>
       </md-card>
     </div>
 
     <div class="md-layout-item md-size-60">
-      <manage-proposals :selectedBlock="selectedBlock" :event="event"></manage-proposals>
+      <manage-proposals :selected-block="selectedBlock" :event="event" />
     </div>
   </div>
 </template>
@@ -78,7 +88,7 @@ import Swal from "sweetalert2";
 import { LabelEdit } from "@/components";
 
 export default {
-  name: "event-blocks",
+  name: "EventBlocks",
   components: {
     VueElementLoading,
     ManageProposals,
@@ -108,6 +118,12 @@ export default {
     ],
     blockVendors: [],
   }),
+  computed: {},
+  created() {},
+  mounted() {
+    this.isLoading = false;
+    this.getBuildingBlockValues();
+  },
   methods: {
     goBack() {
       this.$emit("go-to-building-blocks", {});
@@ -148,7 +164,7 @@ export default {
     deleteValue(valueId) {
       Swal.fire({
         title: "Are you sure?",
-        text: `You won't be able to revert this!`,
+        text: "You won't be able to revert this!",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -206,12 +222,6 @@ export default {
       });
     },
   },
-  created() {},
-  mounted() {
-    this.isLoading = false;
-    this.getBuildingBlockValues();
-  },
-  computed: {},
 };
 </script>
 <style lang="scss">

@@ -3,17 +3,19 @@
     <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
     <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
       <h4 class="md-title">
-        <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
+        <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
           <md-icon>arrow_back</md-icon>
         </md-button>
       </h4>
     </div>
     <div class="md-layout-item md-size-95" style="height: 90vh; max-height: 90vh">
-      <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">{{ modalTitle }}</h4>
+      <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
+        {{ modalTitle }}
+      </h4>
       <div class="md-layout" style="overflow: auto; height: 90vh; max-height: 90vh; margin-top: 14px">
         <div class="md-layout-item mx-auto">
           <div class="md-layout">
-            <div class="md-layout-item md-size-100" style="margin-bottom: 16px" v-if="editMode">
+            <div v-if="editMode" class="md-layout-item md-size-100" style="margin-bottom: 16px">
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-50">
                   <md-field
@@ -27,17 +29,21 @@
                     <md-input
                       ref="focusable"
                       v-model="teamMember.firstName"
+                      v-focus
+                      v-validate="modelValidations.firstName"
                       data-vv-name="firstName"
                       type="text"
-                      v-focus
                       name="firstName"
-                      v-validate="modelValidations.firstName"
-                    ></md-input>
+                    />
                     <slide-y-down-transition>
-                      <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
+                      <md-icon v-show="errors.has('firstName')" class="error">
+                        close
+                      </md-icon>
                     </slide-y-down-transition>
                     <slide-y-down-transition>
-                      <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
+                      <md-icon v-show="!errors.has('firstName') && touched.firstName" class="success">
+                        done
+                      </md-icon>
                     </slide-y-down-transition>
                   </md-field>
                 </div>
@@ -51,16 +57,20 @@
                     <label>Last Name</label>
                     <md-input
                       v-model="teamMember.lastName"
+                      v-validate="modelValidations.lastName"
                       data-vv-name="lastName"
                       type="text"
                       name="lastName"
-                      v-validate="modelValidations.lastName"
-                    ></md-input>
+                    />
                     <slide-y-down-transition>
-                      <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
+                      <md-icon v-show="errors.has('lastName')" class="error">
+                        close
+                      </md-icon>
                     </slide-y-down-transition>
                     <slide-y-down-transition>
-                      <md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>
+                      <md-icon v-show="!errors.has('lastName') && touched.lastName" class="success">
+                        done
+                      </md-icon>
                     </slide-y-down-transition>
                   </md-field>
                 </div>
@@ -75,23 +85,27 @@
               >
                 <md-input
                   v-model="teamMember.emailAddress"
+                  v-validate="modelValidations.email"
+                  v-focus
                   data-vv-name="email"
                   type="email"
                   name="email"
                   required
                   rows="1"
-                  v-validate="modelValidations.email"
-                  v-focus
                   placeholder="john@example.com,brad@example.com"
-                ></md-input>
+                />
                 <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('email')">close</md-icon>
+                  <md-icon v-show="errors.has('email')" class="error">
+                    close
+                  </md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
+                  <md-icon v-show="!errors.has('email') && touched.email" class="success">
+                    done
+                  </md-icon>
                 </slide-y-down-transition>
 
-                <span class="md-error" v-if="errors.has('email')">{{ errors.first("email") }}</span>
+                <span v-if="errors.has('email')" class="md-error">{{ errors.first("email") }}</span>
               </md-field>
             </div>
             <div v-if="this.editMode" class="md-layout-item md-size-100" style="margin-bottom: 16px">
@@ -103,56 +117,65 @@
                 <label>Email address</label>
                 <md-input
                   v-model="teamMember.emailAddress"
+                  v-validate="modelValidations.email"
                   data-vv-name="email"
                   type="email"
                   name="email"
                   required
-                  v-validate="modelValidations.email"
-                ></md-input>
+                />
                 <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('email')">close</md-icon>
+                  <md-icon v-show="errors.has('email')" class="error">
+                    close
+                  </md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
+                  <md-icon v-show="!errors.has('email') && touched.email" class="success">
+                    done
+                  </md-icon>
                 </slide-y-down-transition>
 
-                <span class="md-error" v-if="errors.has('email')">{{ errors.first("email") }}</span>
+                <span v-if="errors.has('email')" class="md-error">{{ errors.first("email") }}</span>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-100" style="margin-bottom: 16px" v-if="canEditPermissions">
+            <div v-if="canEditPermissions" class="md-layout-item md-size-100" style="margin-bottom: 16px">
               <md-field
                 :class="[{ 'md-valid': !errors.has('role') && touched.role }, { 'md-error': errors.has('role') }]"
               >
                 <label for="select">Role</label>
                 <md-select
-                  required
                   v-model="teamMember.role"
+                  v-validate="modelValidations.role"
+                  required
                   name="select"
                   data-vv-name="role"
-                  v-validate="modelValidations.role"
                 >
-                  <md-option v-for="role in rolesList" :key="role.id" :value="role.id">{{ role.title }}</md-option>
+                  <md-option v-for="role in rolesList" :key="role.id" :value="role.id">
+                    {{ role.title }}
+                  </md-option>
                 </md-select>
                 <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('role')">close</md-icon>
+                  <md-icon v-show="errors.has('role')" class="error">
+                    close
+                  </md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('role') && touched.role">done</md-icon>
+                  <md-icon v-show="!errors.has('role') && touched.role" class="success">
+                    done
+                  </md-icon>
                 </slide-y-down-transition>
-                <span class="md-error" v-if="errors.has('role')">{{ errors.first("role") }}</span>
+                <span v-if="errors.has('role')" class="md-error">{{ errors.first("role") }}</span>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-100" style="margin-bottom: 16px" v-if="!editMode">
+            <div v-if="!editMode" class="md-layout-item md-size-100" style="margin-bottom: 16px">
               <label>Groups</label>
               <md-field>
                 <multiselect
-                  @tag="createNewGroup"
+                  v-model="teamMember.groups"
                   tag-placeholder="Add this as new group"
                   :hide-selected="true"
                   :close-on-select="false"
-                  v-model="teamMember.groups"
                   placeholder
                   label="name"
                   track-by="id"
@@ -160,6 +183,7 @@
                   :options="groupsList"
                   :multiple="true"
                   :taggable="true"
+                  @tag="createNewGroup"
                 >
                   <template slot="tag" slot-scope="{ option }" style="padding: 12px">
                     <md-chip
@@ -172,14 +196,15 @@
                       "
                       :md-deletable="true"
                       @md-delete="removeGroup(option)"
-                      >{{ option.name }}</md-chip
                     >
+                      {{ option.name }}
+                    </md-chip>
                   </template>
                 </multiselect>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-100" style="margin-bottom: 16px" v-if="canEditPermissions && false">
+            <div v-if="canEditPermissions && false" class="md-layout-item md-size-100" style="margin-bottom: 16px">
               <div style="margin-top: 8px">
                 <label>Permissions</label>
                 <!--<md-field>
@@ -193,22 +218,25 @@
                 </md-field>-->
                 <div>
                   <md-checkbox
-                    :disabled="availablePermission.id === 'view'"
                     v-for="availablePermission in allPermissions"
                     :key="availablePermission.id"
                     v-model="permission"
+                    :disabled="availablePermission.id === 'view'"
                     :value="availablePermission.id"
-                    >{{ availablePermission.title }}</md-checkbox
                   >
+                    {{ availablePermission.title }}
+                  </md-checkbox>
                 </div>
               </div>
             </div>
             <div class="md-layout-item md-size-100" style="margin-top: 24px">
               <div class="pull-right">
-                <md-button v-if="editMode" native-type="validated" class="md-success" @click="saveMemberDetails"
-                  >Save</md-button
-                >
-                <md-button v-else native-type="validated" class="md-success" @click="sendInvitation">Invite</md-button>
+                <md-button v-if="editMode" native-type="validated" class="md-success" @click="saveMemberDetails">
+                  Save
+                </md-button>
+                <md-button v-else native-type="validated" class="md-success" @click="sendInvitation">
+                  Invite
+                </md-button>
               </div>
             </div>
           </div>
@@ -302,6 +330,24 @@ export default {
       },
     };
   },
+  computed: {},
+  watch: {
+    firstName() {
+      this.touched.firstName = true;
+    },
+    lastName() {
+      this.touched.lastName = true;
+    },
+    email() {
+      this.touched.email = true;
+    },
+    role() {
+      this.touched.role = true;
+    },
+    permissions() {
+      this.touched.permissions = true;
+    },
+  },
   mounted() {
     let permissions = this.teamMember.permissions ? this.teamMember.permissions.split(",") : [];
     this.allPermissions = JSON.parse(JSON.stringify(this.permissionsList));
@@ -320,7 +366,6 @@ export default {
     this.editMode = this.teamMember.id !== "new";
     this.modalTitle = this.editMode ? "Edit member details" : "Invite team members";
   },
-  computed: {},
   methods: {
     createNewGroup(groupName) {
       Team.save(this, { name: groupName }).then((team) => {
@@ -477,23 +522,6 @@ export default {
         return g.id === option.id;
       });
       this.teamMember.groups.splice(index, 1);
-    },
-  },
-  watch: {
-    firstName() {
-      this.touched.firstName = true;
-    },
-    lastName() {
-      this.touched.lastName = true;
-    },
-    email() {
-      this.touched.email = true;
-    },
-    role() {
-      this.touched.role = true;
-    },
-    permissions() {
-      this.touched.permissions = true;
     },
   },
 };

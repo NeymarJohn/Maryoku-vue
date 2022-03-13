@@ -13,9 +13,11 @@
         <template slot="body">
           <md-field>
             <label>Name</label>
-            <md-input v-model="name"></md-input>
+            <md-input v-model="name" />
           </md-field>
-          <md-button class="md-rose" @click="CreateCustomElement"> Submit </md-button>
+          <md-button class="md-rose" @click="CreateCustomElement">
+            Submit
+          </md-button>
         </template>
       </modal>
     </div>

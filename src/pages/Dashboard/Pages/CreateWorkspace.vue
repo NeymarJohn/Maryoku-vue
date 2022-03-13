@@ -1,11 +1,13 @@
 <template>
   <div class="md-layout" style="text-align: center">
-    <h2 class="title text-center" style="text-align: center; width: 100%">Welcome, lets create your workspace</h2>
+    <h2 class="title text-center" style="text-align: center; width: 100%">
+      Welcome, lets create your workspace
+    </h2>
     <div class="md-layout-item md-size-50 mx-auto">
       <signup-card>
         <div
-          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto"
           slot="content-right"
+          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto"
           style="padding: 24px"
         >
           <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
@@ -20,17 +22,17 @@
             <label>Workspace Name</label>
             <span class="md-prefix">https://</span>
             <md-input
-              v-focus
               v-model="workspace"
+              v-focus
               type="text"
               data-vv-name="workspace"
               required
               @keyup="checkWorkspace"
-            ></md-input>
+            />
             <span class="md-suffix">.maryoku.com</span>
             <div
-              class="md-error"
               v-if="!workspaceValid"
+              class="md-error"
               style="text-align: center; width: 100%; font-size: 0.9rem; padding-top: 18px"
             >
               {{ error }}
@@ -39,12 +41,13 @@
 
           <div class="button-container">
             <md-button
-              @click="createWorkSpace"
-              class="md-default md-red md-maryoku mt-4"
               slot="footer"
+              class="md-default md-red md-maryoku mt-4"
               :disabled="!workspaceValid"
-              >Continue</md-button
+              @click="createWorkSpace"
             >
+              Continue
+            </md-button>
           </div>
         </div>
       </signup-card>
@@ -94,6 +97,17 @@ export default {
   computed: {
     ...mapState("PublicEventPlanner", ["publicEventData"]),
   },
+  watch: {
+    email() {
+      this.touched.email = true;
+    },
+    password() {
+      this.touched.password = true;
+    },
+  },
+  created() {
+    this.workspace = this.generateWorkspaceName(this.$store.state.auth.user.companyName);
+  },
   methods: {
     createWorkSpace() {
       this.loading = true;
@@ -110,7 +124,7 @@ export default {
                 AuthService.setTenant(this.workspace);
                 let callback = this.$route.query.callback;
                 const action = this.$route.query.action;
-                let eventData = JSON.parse(localStorage.getItem('event'));
+                let eventData = JSON.parse(localStorage.getItem("event"));
                 if (action === this.$queryEventActions.planner) {
                   eventService
                     .saveEvent(eventData)
@@ -252,17 +266,6 @@ export default {
         return "";
       }
       return company.replace(/ /g, "-").toLowerCase();
-    },
-  },
-  created() {
-    this.workspace = this.generateWorkspaceName(this.$store.state.auth.user.companyName);
-  },
-  watch: {
-    email() {
-      this.touched.email = true;
-    },
-    password() {
-      this.touched.password = true;
     },
   },
 };

@@ -1,17 +1,19 @@
 <template>
   <div class="youtube-player">
     <div class="video-content">
-      <youtube :video-id="videoId" ref="youtube" class="video-content" width="800" height="450"></youtube>
-      <md-button class="md-icon-button md-simple color-white" @click="closePlayer"
-        ><md-icon class="color-white">close</md-icon></md-button
-      >
+      <youtube ref="youtube" :video-id="videoId" class="video-content" width="800" height="450" />
+      <md-button class="md-icon-button md-simple color-white" @click="closePlayer">
+        <md-icon class="color-white">
+          close
+        </md-icon>
+      </md-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "videoPlayer",
+  name: "VideoPlayer",
   props: {
     videoId: {
       type: String,

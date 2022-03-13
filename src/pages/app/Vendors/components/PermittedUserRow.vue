@@ -1,12 +1,14 @@
 <template>
   <div class="permission-row">
-    <div><avartar :name="user.email" :color="palette[index]"></avartar></div>
+    <div><avartar :name="user.email" :color="palette[index]" /></div>
     <div>{{ user.email }}</div>
     <div>
       <md-menu md-size="big" md-align-trigger class="schedule-menu">
         <md-button md-menu-trigger class="md-simple md-black schedule-menu-btn maryoku-btn">
           <span class="font-size-16 font-regular"> Can {{ permittedRole }} </span>
-          <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
+          <md-icon class="schedule-menu-btn-icon">
+            keyboard_arrow_down
+          </md-icon>
         </md-button>
         <md-menu-content class="permit-user-role">
           <md-menu-item class="text-center md-purple" @click="selectRole('view')">
@@ -15,7 +17,7 @@
           <md-menu-item class="text-center md-purple" @click="selectRole('edit')">
             <span class="font-size-16" :class="{ 'font-bold-extra': permittedRole === 'edit' }"> Can edit </span>
           </md-menu-item>
-          <md-divider></md-divider>
+          <md-divider />
           <md-menu-item class="text-center md-purple" @click="removeUser">
             <span class="font-size-16" :class="{ 'font-bold-extra': false }"> Remove </span>
           </md-menu-item>
@@ -45,9 +47,6 @@ export default {
       default: () => {},
     },
   },
-  created() {
-    console.log(this.user.role);
-  },
   data() {
     return {
       permittedPages: [],
@@ -75,6 +74,19 @@ export default {
       ],
     };
   },
+  computed: {
+    availablePages() {
+      return this.allPages.filter((page) => {
+        return this.selectedPages.findIndex((item) => item.id === page.id) < 0;
+      });
+    },
+    permittedRole() {
+      return this.user.role;
+    },
+  },
+  created() {
+    console.log(this.user.role);
+  },
   methods: {
     selectRole(role) {
       new Collaborator({ id: this.user.id, role }).save().then((res) => {
@@ -91,16 +103,6 @@ export default {
       new Collaborator({ id: this.user.id }).delete().then((res) => {
         this.$emit("remove", this.user);
       });
-    },
-  },
-  computed: {
-    availablePages() {
-      return this.allPages.filter((page) => {
-        return this.selectedPages.findIndex((item) => item.id === page.id) < 0;
-      });
-    },
-    permittedRole() {
-      return this.user.role;
     },
   },
 };

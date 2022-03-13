@@ -1,34 +1,34 @@
 <template>
   <div class="timeline-items-list">
     <div class="timeline-items-header">
-      <img src="/static/icons/timeline/timeline-title.png" /><span class="font-size-24">Timeline</span>
+      <img src="/static/icons/timeline/timeline-title.png"><span class="font-size-24">Timeline</span>
     </div>
     <section
-      class="timeline-items-list__item"
       v-for="(scheduleDate, dateIndex) in timelineDates"
       :key="scheduleDate.date"
+      class="timeline-items-list__item"
     >
       <div
         v-if="dateIndex > 0 && timelineDates[dateIndex - 1].timelineItems.length > 3"
         class="html2pdf__page-break"
-      ></div>
+      />
 
       <div class="item-header mb-20 mt-20">
-        <div class="header-line"></div>
+        <div class="header-line" />
         <div class="time-line-edit d-flex justify-content-center align-center">
           <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
           <div>
             {{ $dateUtil.formatScheduleDay(scheduleDate.date, "MM/DD/YY") }}
           </div>
         </div>
-        <div class="header-line"></div>
+        <div class="header-line" />
       </div>
 
       <rsvp-timeline-item
         v-for="(timeline, index) in scheduleDate.timelineItems"
         :key="index"
         :timeline="timeline"
-      ></rsvp-timeline-item>
+      />
       <!-- <timeline-item
         v-for="(timelineItem, index) in scheduleDate.timelineItems"
         :key="`timelineItem-${index}`"
@@ -53,7 +53,7 @@ import TimelineTemplateContainer from "./TimelineTemplateContainer";
 import TimelineGapModal from "../Modals/TimelineGapModal";
 import RsvpTimelineItem from "../../RSVP/RSVPTimelineItem.vue";
 export default {
-  name: "event-details-timeline",
+  name: "EventDetailsTimeline",
   components: {
     Drop,
     TimelineTemplateItem,
@@ -63,8 +63,10 @@ export default {
     TimelineTemplateContainer,
     RsvpTimelineItem,
   },
-  created() {
-    this.$store.dispatch("event/getTimelineDates", this.event.id);
+  data() {
+    return {
+      showDeleteConfirmModal: false,
+    };
   },
   computed: {
     event() {
@@ -77,10 +79,8 @@ export default {
       return [];
     },
   },
-  data() {
-    return {
-      showDeleteConfirmModal: false,
-    };
+  created() {
+    this.$store.dispatch("event/getTimelineDates", this.event.id);
   },
   methods: {
     formatDate() {},

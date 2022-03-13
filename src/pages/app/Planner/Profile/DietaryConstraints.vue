@@ -5,27 +5,29 @@
         <div class="card-icon" style="padding: 12px;">
           <md-icon>fastfood</md-icon>
         </div>
-        <h4 class="title profile-title">Dietary Preferences</h4>
+        <h4 class="title profile-title">
+          Dietary Preferences
+        </h4>
       </md-card-header>
 
       <md-card-content style="padding: 0; margin: 0; padding-bottom: 12px;">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
         <div class="md-layout" style="margin-top:5%">
           <div
-            class="md-layout-item md-size-33"
             v-for="(item,index) in dietaryIconsList"
             :key="item.id"
+            class="md-layout-item md-size-33"
           >
             <img
+              v-if="item.flagOn"
               :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
               @click="toggleFlagFirstList(index)"
-              v-if="item.flagOn"
-            />
+            >
             <img
+              v-if="!item.flagOn"
               :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.off}.png`"
               @click="toggleFlagFirstList(index)"
-              v-if="!item.flagOn"
-            />
+            >
           </div>
         </div>
 
@@ -105,6 +107,19 @@ export default {
       ],
     };
   },
+  watch: {
+    userInfo(newVal, oldVal) {
+      let dietaryConstraints = newVal.dietaryConstraints;
+      if (dietaryConstraints) {
+        for (let i = 0; i < dietaryConstraints.length; i++) {
+          let item = _.findWhere(this.dietaryIconsList, {
+            id: dietaryConstraints[i],
+          });
+          item.flagOn = true;
+        }
+      }
+    },
+  },
 
   methods: {
     toggleFlagFirstList(index) {
@@ -134,19 +149,6 @@ export default {
             type: "success",
           });
         });
-    },
-  },
-  watch: {
-    userInfo(newVal, oldVal) {
-      let dietaryConstraints = newVal.dietaryConstraints;
-      if (dietaryConstraints) {
-        for (let i = 0; i < dietaryConstraints.length; i++) {
-          let item = _.findWhere(this.dietaryIconsList, {
-            id: dietaryConstraints[i],
-          });
-          item.flagOn = true;
-        }
-      }
     },
   },
 };

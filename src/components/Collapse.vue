@@ -1,19 +1,19 @@
 <template>
   <div>
     <div
-      :class="[
-          'md-collapse',
-          activeCollapse(index + 1),
-          {[getColorCollapse(colorCollapse)]: true}]"
       v-for="(item, index) in collapse"
       :key="index"
+      :class="[
+        'md-collapse',
+        activeCollapse(index + 1),
+        {[getColorCollapse(colorCollapse)]: true}]"
     >
       <div class="md-collapse-label" @click="toggle(index + 1)">
-        <div class="md-layout" v-if="icon && item.eventStartMillis">
+        <div v-if="icon && item.eventStartMillis" class="md-layout">
           <h5 class="md-collapse-title md-layout-item" :title="item.title">
             <!--md-size-40"-->
 
-            {{getTitle(item.title)}}
+            {{ getTitle(item.title) }}
           </h5>
           <!--
           <div class="md-layout-item">
@@ -25,20 +25,22 @@
                 class="md-layout-item md-size-100"
                 style="text-align:left;padding-right: 0px;padding-left: 0px; text-align: right"
               >
-                <md-icon style="margin-right: 0px; font-size: 15px !important;">{{icon}}</md-icon>
+                <md-icon style="margin-right: 0px; font-size: 15px !important;">
+                  {{ icon }}
+                </md-icon>
                 <span
                   class="date-content"
-                >{{new Date(item.eventStartMillis).toLocaleDateString("en-US", { day: 'numeric',year: 'numeric', month: 'long'})}}</span>
+                >{{ new Date(item.eventStartMillis).toLocaleDateString("en-US", { day: 'numeric',year: 'numeric', month: 'long'}) }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="md-layout" v-else-if="item.eventStartMillis">
+        <div v-else-if="item.eventStartMillis" class="md-layout">
           <h5 class="md-collapse-title md-layout-item">
             <!--md-size-40"-->
 
-            {{item.title}}
+            {{ item.title }}
           </h5>
           <!-- <div class="md-layout-item">
 
@@ -51,22 +53,22 @@
               >
                 <span
                   class="date-content"
-                >{{new Date(item.eventStartMillis).toLocaleDateString("en-US", { day: 'numeric',year: 'numeric', month: 'long'})}}</span>
+                >{{ new Date(item.eventStartMillis).toLocaleDateString("en-US", { day: 'numeric',year: 'numeric', month: 'long'}) }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="md-layout" v-else>
+        <div v-else class="md-layout">
           <h5 class="md-collapse-title md-layout-item">
             <!--md-size-40"-->
 
-            {{item.title}}
+            {{ item.title }}
           </h5>
           <div class="md-layout-item">
             <div class="md-layout">
               <div class="md-layout-item">
-                <md-icon>{{icon}}</md-icon>
+                <md-icon>{{ icon }}</md-icon>
               </div>
             </div>
           </div>
@@ -75,11 +77,11 @@
 
       <collapse-transition>
         <div
+          v-show="getActiveCollapse(index + 1)"
           class="md-collapse-content"
           style="padding-left: 0px;"
-          v-show="getActiveCollapse(index + 1)"
         >
-          <slot :name="getCollapseContent(index + 1)"></slot>
+          <slot :name="getCollapseContent(index + 1)" />
         </div>
       </collapse-transition>
     </div>
@@ -87,10 +89,10 @@
 </template>
 
 <script>
-import { CollapseTransition } from 'vue2-transitions'
+import { CollapseTransition } from "vue2-transitions";
 
 export default {
-  name: 'collapse',
+  name: "Collapse",
   components: {
     CollapseTransition
   },
@@ -104,53 +106,53 @@ export default {
       isActive: 0,
       activeList: [],
       showedList: []
+    };
+  },
+  watch: {
+    activeList (newVal, oldVal) {
+      this.showedList = newVal;
     }
   },
   mounted () {},
   methods: {
     getActiveCollapse (index) {
       // return this.isActive===index;
-      return this.activeList.includes(index)
+      return this.activeList.includes(index);
     },
     activeCollapse (index) {
       return {
-        'is-active': this.isActive === index
-      }
+        "is-active": this.isActive === index
+      };
     },
     toggle (index) {
       if (this.activeList.includes(index)) {
-        this.activeList = this.activeList.filter(x => x != index)
+        this.activeList = this.activeList.filter(x => x != index);
         // debugger
       } else {
-        this.activeList.push(index)
+        this.activeList.push(index);
       }
       if (index === this.isActive) {
-        this.isActive = 0
+        this.isActive = 0;
       } else {
-        this.isActive = index
+        this.isActive = index;
       }
     },
     getCollapseContent: function (index) {
-      return 'md-collapse-pane-' + index + ''
+      return "md-collapse-pane-" + index + "";
     },
     getColorCollapse: function (colorCollapse) {
-      return 'md-' + colorCollapse + ''
+      return "md-" + colorCollapse + "";
     },
 
     getTitle (title) {
       if (title.length < 10) {
-        return title
+        return title;
       } else {
-        return title.substring(0, 8) + ' ...'
+        return title.substring(0, 8) + " ...";
       }
     }
-  },
-  watch: {
-    activeList (newVal, oldVal) {
-      this.showedList = newVal
-    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

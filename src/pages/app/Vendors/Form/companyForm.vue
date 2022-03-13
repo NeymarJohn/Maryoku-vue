@@ -11,9 +11,15 @@
           }}
         </h4>
         <md-card-actions md-alignment="right">
-          <md-button class="md-default md-sm" @click="closePanel">Close</md-button>
-          <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor">Create</md-button>
-          <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">Save</md-button>
+          <md-button class="md-default md-sm" @click="closePanel">
+            Close
+          </md-button>
+          <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor">
+            Create
+          </md-button>
+          <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">
+            Save
+          </md-button>
         </md-card-actions>
       </md-card-header>
       <md-card-content class="md-layout">
@@ -27,20 +33,22 @@
             <label>Vendor Name</label>
             <md-input
               v-model="selected_vendor.vendorDisplayName"
+              v-validate="modelValidations.vendorDisplayName"
+              v-focus
               type="text"
               required
               data-vv-name="vendorDisplayName"
               name="vendorDisplayName"
-              v-validate="modelValidations.vendorDisplayName"
-              v-focus
-            ></md-input>
+            />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>
+              <md-icon v-show="errors.has('vendorDisplayName')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName"
-                >done</md-icon
-              >
+              <md-icon v-show="!errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -57,14 +65,16 @@
               type="text"
               data-vv-name="vendorWebsite"
               name="vendorWebsite"
-            ></md-input>
+            />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
+              <md-icon v-show="errors.has('vendorWebsite')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorWebsite') && selected_vendor.vendorWebsite"
-                >done</md-icon
-              >
+              <md-icon v-show="!errors.has('vendorWebsite') && selected_vendor.vendorWebsite" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -78,19 +88,21 @@
             <label>Email</label>
             <md-input
               v-model="selected_vendor.vendorMainEmail"
+              v-validate="modelValidations.vendorMainEmail"
               type="email"
               required
               data-vv-name="vendorMainEmail"
               name="vendorMainEmail"
-              v-validate="modelValidations.vendorMainEmail"
-            ></md-input>
+            />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorMainEmail')">close</md-icon>
+              <md-icon v-show="errors.has('vendorMainEmail')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail"
-                >done</md-icon
-              >
+              <md-icon v-show="!errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -99,20 +111,22 @@
             <label>Address</label>
             <md-input
               v-model="selected_vendor.vendorAddressLine1"
-              type="email"
               v-gmaps-searchbox="vm"
+              v-validate="modelValidations.vendorAddressLine1"
+              type="email"
               placeholder
               data-vv-name="vendorAddressLine1"
               name="vendorAddressLine1"
-              v-validate="modelValidations.vendorAddressLine1"
-            ></md-input>
+            />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorAddressLine1')">close</md-icon>
+              <md-icon v-show="errors.has('vendorAddressLine1')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1"
-                >done</md-icon
-              >
+              <md-icon v-show="!errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1" class="success">
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -126,22 +140,25 @@
             <label>Phone Number</label>
             <md-input
               v-model="selected_vendor.vendorMainPhoneNumber"
+              v-validate="modelValidations.vendorMainPhoneNumber"
               type="text"
-              @keydown="onlyNumber"
               required
               data-vv-name="vendorMainPhoneNumber"
               name="vendorMainPhoneNumber"
-              v-validate="modelValidations.vendorMainPhoneNumber"
-            ></md-input>
+              @keydown="onlyNumber"
+            />
             <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorMainPhoneNumber')">close</md-icon>
+              <md-icon v-show="errors.has('vendorMainPhoneNumber')" class="error">
+                close
+              </md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
               <md-icon
-                class="success"
                 v-show="!errors.has('vendorMainPhoneNumber') && selected_vendor.vendorMainPhoneNumber"
-                >done</md-icon
+                class="success"
               >
+                done
+              </md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -150,31 +167,35 @@
             <label for="category">Category</label>
             <md-select
               v-model="selected_vendor.vendorCategory"
+              v-validate="modelValidations.vendorCategory"
               name="vendorCategory"
               data-vv-name="vendorCategory"
-              v-validate="modelValidations.vendorCategory"
               required
             >
-              <md-option v-for="(option, index) in categories" :key="index" :value="option.id">{{
-                option.value
-              }}</md-option>
+              <md-option v-for="(option, index) in categories" :key="index" :value="option.id">
+                {{
+                  option.value
+                }}
+              </md-option>
             </md-select>
-            <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
+            <span v-if="errors.has('vendorCategory')" class="md-error">The Vendor Category is required</span>
           </md-field>
         </div>
-        <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
+        <div v-if="selected_vendor.vendorTagging" class="md-layout-item md-size-50">
           <md-field>
             <md-chips
+              id="tagging"
               v-model="selected_vendor.vendorTagging"
               class="md-info"
               name="tagging"
-              id="tagging"
               md-placeholder="Tags"
               md-check-duplicated
-            ></md-chips>
+            />
           </md-field>
         </div>
-        <div class="md-layout-item md-size-100 margin-bottom_30">&nbsp;</div>
+        <div class="md-layout-item md-size-100 margin-bottom_30">
+&nbsp;
+        </div>
         <div class="md-layout-item md-size-33">
           <label>Contact Person</label>
         </div>
@@ -191,25 +212,29 @@
         >
           <div class="md-layout-item md-size-33">
             <md-field>
-              <md-input v-model="contactPerson.name" :name="'name_' + index" type="text"></md-input>
+              <md-input v-model="contactPerson.name" :name="'name_' + index" type="text" />
             </md-field>
           </div>
           <div class="md-layout-item md-size-33">
             <md-field>
-              <md-input v-model="contactPerson.email" :name="'email_' + index" type="text"></md-input>
+              <md-input v-model="contactPerson.email" :name="'email_' + index" type="text" />
             </md-field>
           </div>
           <div class="md-layout-item md-size-30">
             <md-field>
-              <md-input v-model="contactPerson.phone_number" :name="'phone_number_' + index" type="text"></md-input>
+              <md-input v-model="contactPerson.phone_number" :name="'phone_number_' + index" type="text" />
             </md-field>
           </div>
           <div class="delete-item" @click="deleteContactPersonItem(index)">
-            <md-icon class="md-theme-rose">delete_outline</md-icon>
+            <md-icon class="md-theme-rose">
+              delete_outline
+            </md-icon>
           </div>
         </div>
         <div class="md-layout-item md-size-100">
-          <md-button class="md-purple md-xs" @click="addContactPerson">+ Add contact person</md-button>
+          <md-button class="md-purple md-xs" @click="addContactPerson">
+            + Add contact person
+          </md-button>
         </div>
         <div class="md-layout-item md-size-100 vendor_attachments-file">
           <label>Attachments</label>
@@ -220,16 +245,20 @@
               class="md-layout-item md-size-100 contact-person-list"
             >
               <md-field>
-                <md-file class="attachments-file" :ref="'file-' + index" v-model="attachment.path" />
+                <md-file :ref="'file-' + index" v-model="attachment.path" class="attachments-file" />
                 <div class="delete-item" @click="deleteAttachmentItem(index)">
-                  <md-icon class="md-theme-rose">delete_outline</md-icon>
+                  <md-icon class="md-theme-rose">
+                    delete_outline
+                  </md-icon>
                 </div>
               </md-field>
             </div>
           </template>
         </div>
         <div class="md-layout-item md-size-100">
-          <md-button class="md-purple md-xs" @click="addAttachment">+ Add Attachment</md-button>
+          <md-button class="md-purple md-xs" @click="addAttachment">
+            + Add Attachment
+          </md-button>
         </div>
       </md-card-content>
     </md-card>
@@ -282,15 +311,46 @@ export default {
     SlideYDownTransition,
   },
   props: {
-    selected_vendor: {
+    selectedVendor: {
       type: Object,
       default: {},
     },
-    creation_mode: {
+    creationMode: {
       type: Boolean,
       default: false,
     },
     categories: Array,
+  },
+  data() {
+    return {
+      company: {},
+      vendorCategory: [],
+      contactPersonList: [],
+      vendorAttachments: [],
+      vm: {
+        searchPlace: "",
+        location: {},
+      },
+      selectedVendor: this.selected_vendor,
+      modelValidations: {
+        vendorDisplayName: {
+          required: true,
+          min: 5,
+        },
+        vendorMainEmail: {
+          required: true,
+          email: true,
+        },
+        vendorMainPhoneNumber: {
+          required: true,
+          min: 5,
+        },
+        vendorCategory: {
+          required: true,
+          min: 5,
+        },
+      },
+    };
   },
   created() {
     /**
@@ -325,37 +385,6 @@ export default {
     }
   },
   mounted() {},
-  data() {
-    return {
-      company: {},
-      vendorCategory: [],
-      contactPersonList: [],
-      vendorAttachments: [],
-      vm: {
-        searchPlace: "",
-        location: {},
-      },
-      selectedVendor: this.selected_vendor,
-      modelValidations: {
-        vendorDisplayName: {
-          required: true,
-          min: 5,
-        },
-        vendorMainEmail: {
-          required: true,
-          email: true,
-        },
-        vendorMainPhoneNumber: {
-          required: true,
-          min: 5,
-        },
-        vendorCategory: {
-          required: true,
-          min: 5,
-        },
-      },
-    };
-  },
   methods: {
     /**
      * Modify selected vendor from vendors list

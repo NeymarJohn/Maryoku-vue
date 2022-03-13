@@ -2,7 +2,7 @@
   <modal class="rsvp-information-model">
     <template slot="header">
       <div class="maryoku-modal-header">
-        <img :src="`${$iconURL}RSVP/Group+8217.svg`" />
+        <img :src="`${$iconURL}RSVP/Group+8217.svg`">
         <span class="font-size-30 font-bold-extra">JUST A QUICK FILL OUT & WE’RE DONE!</span>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -13,52 +13,54 @@
       <div class="d-flex user-info">
         <div class="text-left flex-1 input-wrapper">
           <label class="font-bold">Name</label>
-          <maryoku-input v-model="name" inputStyle="username" placeholder="Type your name here..."></maryoku-input>
+          <maryoku-input v-model="name" input-style="username" placeholder="Type your name here..." />
         </div>
         <div class="text-left flex-1 input-wrapper">
           <label class="font-bold">Email</label>
-          <maryoku-input v-model="email" inputStyle="email" placeholder="Type email address here..."></maryoku-input>
+          <maryoku-input v-model="email" input-style="email" placeholder="Type email address here..." />
         </div>
       </div>
-      <div class="d-flex user-info" v-if="isCustomerEvent">
+      <div v-if="isCustomerEvent" class="d-flex user-info">
         <div class="text-left flex-1 input-wrapper">
           <label class="font-bold">Role</label>
-          <maryoku-input v-model="role" placeholder="Type your role here..."></maryoku-input>
+          <maryoku-input v-model="role" placeholder="Type your role here..." />
         </div>
         <div class="text-left flex-1 input-wrapper">
           <label class="font-bold">Company Name</label>
-          <maryoku-input v-model="companyName" placeholder="Type company name here..."></maryoku-input>
+          <maryoku-input v-model="companyName" placeholder="Type company name here..." />
         </div>
       </div>
       <div class="information-section">
-        <food-limitation-set @change="setMyFoodLimitation"></food-limitation-set>
+        <food-limitation-set @change="setMyFoodLimitation" />
       </div>
       <div class="information-section">
         <div class="mb-20">
-          <img :src="`${$iconURL}RSVP/Path+1383.svg`" class="mr-10" />
+          <img :src="`${$iconURL}RSVP/Path+1383.svg`" class="mr-10">
           <span class="font-bold font-size-20">Will anyone join you for the event?</span>
         </div>
         <div class="guestNumber">
           <md-button class="handle-btn md-icon-button md-simple" @click="decreaseGuest">
-            <img :src="`${$iconURL}RSVP/Path+3734.svg`" />
+            <img :src="`${$iconURL}RSVP/Path+3734.svg`">
           </md-button>
-          <input type="text" class="guestNumber-input" v-model="guestNumber" readonly />
+          <input v-model="guestNumber" type="text" class="guestNumber-input" readonly>
           <md-button class="handle-btn md-icon-button md-simple" @click="increaseGeust">
-            <img :src="`${$iconURL}RSVP/Group+7913.svg`" />
+            <img :src="`${$iconURL}RSVP/Group+7913.svg`">
           </md-button>
         </div>
       </div>
-      <div class="information-section" v-for="(guest, index) in joinedGuests" :key="index">
+      <div v-for="(guest, index) in joinedGuests" :key="index" class="information-section">
         <div class="width-50">
           <label class="font-bold mb-10" style="display: inline-block">Name of Guest 0{{ index + 1 }}</label>
-          <maryoku-input v-model="guest.name" class="mb-20" placeholder="Just Me"></maryoku-input>
+          <maryoku-input v-model="guest.name" class="mb-20" placeholder="Just Me" />
         </div>
-        <food-limitation-set :type="2" @change="setGuestFoodLimitation(index, ...arguments)"></food-limitation-set>
+        <food-limitation-set :type="2" @change="setGuestFoodLimitation(index, ...arguments)" />
       </div>
     </template>
-    <template slot="footer" v-if="step == 1">
+    <template v-if="step == 1" slot="footer">
       <div class="text-center w-100">
-        <md-button class="md-red md-bold" @click="setRsvp">RSVP Now</md-button>
+        <md-button class="md-red md-bold" @click="setRsvp">
+          RSVP Now
+        </md-button>
       </div>
     </template>
   </modal>
@@ -97,6 +99,11 @@ export default {
       guestNumber: "Just Me",
       joinedGuests: [],
     };
+  },
+  computed: {
+    isCustomerEvent() {
+      return this.event.guestType === "Customers" || this.event.guestType === "Business Associates";
+    },
   },
   methods: {
     cancel() {
@@ -151,11 +158,6 @@ export default {
       this.joinedGuests[index] = { ...this.joinedGuests[index], ...foodLimitation };
       console.log(index);
       console.log(foodLimitation);
-    },
-  },
-  computed: {
-    isCustomerEvent() {
-      return this.event.guestType === "Customers" || this.event.guestType === "Business Associates";
     },
   },
 };

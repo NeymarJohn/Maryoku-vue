@@ -3,48 +3,51 @@
     <div class="md-layout-item md-size-100 vendors-list-header d-flex justify-content-start align-center">
       <div class="form-group d-flex align-center">
         <label>Sort by</label>
-        <v-select class="sort-by-list" v-model="sortField" :options="sortOptions" :clearable="false"> </v-select>
+        <v-select v-model="sortField" class="sort-by-list" :options="sortOptions" :clearable="false" />
       </div>
-      <div class="vendors-number">Vendors:{{ pagingData.total }}</div>
+      <div class="vendors-number">
+        Vendors:{{ pagingData.total }}
+      </div>
     </div>
     <div
-      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
       v-for="vendor in filteredVendorsList"
       :key="vendor.id"
+      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
     >
       <div class="vendor-item">
         <div
           class="vendor-image"
           :style="`background : url(${vendorMainImage(vendor)}) center center no-repeat;`"
-        ></div>
+        />
         <div class="vendor-info">
-          <div class="category font-size-16" v-if="vendor.eventCategory">
-            <img :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`" class="label-icon" />
+          <div v-if="vendor.eventCategory" class="category font-size-16">
+            <img :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`" class="label-icon">
             {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
           </div>
-          <h4 class="vendor-name font-size-20">{{ vendor.companyName }}</h4>
+          <h4 class="vendor-name font-size-20">
+            {{ vendor.companyName }}
+          </h4>
           <div class="vendor-location">
             {{ vendor.vendorAddressLine1 ? vendor.vendorAddressLine1.substring(0, 35) : "" }}
           </div>
           <div class="vendor-review small">
             <label
-              class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
+              class="star-rating__star"
               :class="{
                 'is-selected': vendor.rank >= rating && vendor.rank != null,
               }"
-              >★</label
-            >
+            >★</label>
             <span class="small text-gray">{{ vendor.voters }} Reviews</span>
           </div>
           <div class="about-vendor">
             {{ vendor.about && vendor.about.company ? vendor.about.company.substring(0, 180) + " ..." : "" }}
           </div>
           <div class="actions">
-            <md-button class="md-rose md-outline" @click="routeToVendor(vendor.id, $event)"
-              ><span class="font-size-14">More Details</span></md-button
-            >
+            <md-button class="md-rose md-outline" @click="routeToVendor(vendor.id, $event)">
+              <span class="font-size-14">More Details</span>
+            </md-button>
           </div>
         </div>
       </div>
@@ -164,6 +167,18 @@ export default {
       ],
     };
   },
+  watch: {
+    searchQuery(newVal, oldVal) {
+      if (newVal === "") {
+        this.filteredVendorsList = this.vendorsList;
+      } else {
+        this.filterVendors();
+      }
+    },
+    vendorsList(newVal, oldVal) {
+      this.filterVendors();
+    },
+  },
   mounted() {
     this.filteredVendorsList = this.vendorsList;
     console.log("vendorsList => ", this.vendorsList);
@@ -201,18 +216,6 @@ export default {
         return vendor.vendorWebsite.indexOf("http://") > -1 || vendor.vendorWebsite.indexOf("https://") > -1;
       }
       return false;
-    },
-  },
-  watch: {
-    searchQuery(newVal, oldVal) {
-      if (newVal === "") {
-        this.filteredVendorsList = this.vendorsList;
-      } else {
-        this.filterVendors();
-      }
-    },
-    vendorsList(newVal, oldVal) {
-      this.filterVendors();
     },
   },
 };

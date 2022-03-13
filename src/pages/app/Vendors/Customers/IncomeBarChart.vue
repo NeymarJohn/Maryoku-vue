@@ -10,7 +10,7 @@
         :height="getHeight(chartDataItem.value)"
         rx="10"
         :style="`fill: ${chartDataItem.future ? '#9F6B90' : 'white'}`"
-      ></rect>
+      />
     </g>
     <g v-for="(chartDataItem, index) in chartData" :key="`chartItem-${index}`">
       <text
@@ -34,6 +34,14 @@ export default {
       default: () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     },
   },
+  computed: {
+    maxValue() {
+      return this.chartData.reduce((max, prev) => {
+        console.log(max);
+        return max < prev.value ? prev.value : max;
+      }, 0);
+    },
+  },
   methods: {
     getHeight(value) {
       // console.log(value);
@@ -42,14 +50,6 @@ export default {
         return Math.round((value / this.maxValue) * 250);
       }
       return value;
-    },
-  },
-  computed: {
-    maxValue() {
-      return this.chartData.reduce((max, prev) => {
-        console.log(max);
-        return max < prev.value ? prev.value : max;
-      }, 0);
     },
   },
 };

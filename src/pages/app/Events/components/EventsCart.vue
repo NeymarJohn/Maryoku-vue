@@ -1,89 +1,97 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item md-size-25">
-    <md-card class="md-card-profile">
-        <div class='event-cart-header title-block'>
-        <div class='title-div'>
-        <div class='title'>{{title}}</div>
-        </div>
-        <div class='button-block'>
+      <md-card class="md-card-profile">
+        <div class="event-cart-header title-block">
+          <div class="title-div">
+            <div class="title">
+              {{ title }}
+            </div>
+          </div>
+          <div class="button-block">
             <div>
-            <md-icon class='icon'>attach_file</md-icon>
+              <md-icon class="icon">
+                attach_file
+              </md-icon>
             </div>
-            <div class='message-block'>
-            <md-icon class='icon'>speaker_notes</md-icon>
-            <div class='message-count-block'>            3
-            </div>
+            <div class="message-block">
+              <md-icon class="icon">
+                speaker_notes
+              </md-icon>
+              <div class="message-count-block">
+                3
+              </div>
             </div>
             <div>
-            <md-icon class='icon'>restore_from_trash</md-icon>
+              <md-icon class="icon">
+                restore_from_trash
+              </md-icon>
             </div>
+          </div>
         </div>
-        </div>
-         <md-card-content>
-        <div >
-        <div >
-        <span class='proposal-title'>{{0}}</span>
-        <span class='proposal-title'>Proposal</span>
-        </div>
-        <div class='main-proposal-container'>
-        <div class='proposal-block'>
-        <span class='proposal-title proposal-number'>Allocated Budget</span>
-        <span class='proposal-title proposal-number'>$10</span>
-        </div>
-        <div class='proposal-block'>
-        <span class='proposal-title proposal-number'>Best Proposal</span>
-        <span class='proposal-title proposal-number'>$10</span>
-        </div>
-        </div>
-        </div>
-         <div class="md-layout-item md-size-100">
-          <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
-         </div>
-         <div>
-          <span class='proposal-title proposal-footer'>Manage Proposals</span>
-         </div>
-         <div>
-         </div>
+        <md-card-content>
+          <div>
+            <div>
+              <span class="proposal-title">{{ 0 }}</span>
+              <span class="proposal-title">Proposal</span>
+            </div>
+            <div class="main-proposal-container">
+              <div class="proposal-block">
+                <span class="proposal-title proposal-number">Allocated Budget</span>
+                <span class="proposal-title proposal-number">$10</span>
+              </div>
+              <div class="proposal-block">
+                <span class="proposal-title proposal-number">Best Proposal</span>
+                <span class="proposal-title proposal-number">$10</span>
+              </div>
+            </div>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;" />
+          </div>
+          <div>
+            <span class="proposal-title proposal-footer">Manage Proposals</span>
+          </div>
+          <div />
         </md-card-content>
-       </md-card>
+      </md-card>
     </div>
   </div>
 </template>
 <script>
 // MAIN MODULES
-import moment from 'moment'
+import moment from "moment";
 
 // COMPONENTS
 
 export default {
-  name: 'event-cart',
-  props: {
-    title: {type: String, default: 'test'}
-  },
+  name: "EventCart",
   components: {
 
+  },
+  filters: {
+
+  },
+  props: {
+    title: {type: String, default: "test"}
   },
 
   data () {
     return {
 
-    }
+    };
+  },
+  computed: {
+  },
+  watch: {
   },
   mounted () {
 
   },
   methods: {
 
-  },
-  computed: {
-  },
-  filters: {
-
-  },
-  watch: {
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

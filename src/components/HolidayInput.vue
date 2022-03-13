@@ -1,22 +1,22 @@
 <template>
   <div>
     <multiselect
-            v-model="holiday"
-            :options="options"
-            :close-on-select="true"
-            :clear-on-select="true"
-            group-values="holidays"
-            group-label="name"
-            placeholder="Please select holiday"
-            class="multiple-selection small-selector mt-20"
-            @select="change($event)"
-    ></multiselect>
+      v-model="holiday"
+      :options="options"
+      :close-on-select="true"
+      :clear-on-select="true"
+      group-values="holidays"
+      group-label="name"
+      placeholder="Please select holiday"
+      class="multiple-selection small-selector mt-20"
+      @select="change($event)"
+    />
   </div>
 </template>
 <script>
 
 export default {
-  name: "holiday-input",
+  name: "HolidayInput",
   model: {},
   props: {
     value: String,
@@ -66,20 +66,20 @@ export default {
             "Purim",
             "Pesach",
             "Shavout",
-            `Tish'a B'Av`,
+            "Tish'a B'Av",
           ],
         },
       ],
       holiday: this.value
     };
   },
+  mounted() {
+  },
   methods: {
     change(e) {
-      console.log("holiday.change", e)
+      console.log("holiday.change", e);
       this.$emit("change", e);
     },
-  },
-  mounted() {
   }
 };
 </script>

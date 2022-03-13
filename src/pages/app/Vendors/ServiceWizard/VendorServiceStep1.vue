@@ -2,7 +2,7 @@
   <div class="vendor-basic-info-form-wrapper">
     <div class="md-layout inside-container">
       <div class="md-layout-item md-size-25 left-side">
-        <img :src="`${iconUrl}step-1.svg`" />
+        <img :src="`${iconUrl}step-1.svg`">
         <h4>Hi,{{ vendor.companyName }}</h4>
         <p>Choose the category & upload photos to appear in your fussiness card & future proposals</p>
         <h2>0/4</h2>
@@ -11,7 +11,7 @@
       <div class="md-layout-item md-size-75 right-side">
         <h2>
           Before we begin,
-          <br />What type of service would you like to sign?
+          <br>What type of service would you like to sign?
         </h2>
         <div class="card">
           <label>Business Category</label>
@@ -19,13 +19,13 @@
             :value="selectedCategoryName || ''"
             :categories="serviceCategories"
             column="2"
-            trackBy="name"
+            track-by="name"
             class="my-10"
             @change="updateCategory"
-          ></category-selector>
+          />
           <div class="upload-wrapper mt-30">
             <div class="title-cont">
-              <span><img :src="`${iconUrl}art (2).svg`" class="page-icon" /> Upload your best images</span>
+              <span><img :src="`${iconUrl}art (2).svg`" class="page-icon"> Upload your best images</span>
               <span>(15 photos top, under 5MB)</span>
             </div>
             <div class="carousel">
@@ -36,7 +36,7 @@
                 @addImage="addVendorImage"
                 @setPhoto="updateVendorImage"
                 @removeImage="removeVendorImage"
-              ></vendor-photos-carousel>
+              />
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ import { VendorCategories } from "@/constants/vendor";
 import vue2Dropzone from "vue2-dropzone";
 
 export default {
-  name: "vendor-basic-info-form",
+  name: "VendorBasicInfoForm",
   components: {
     vueDropzone: vue2Dropzone,
     VueElementLoading,
@@ -69,6 +69,24 @@ export default {
       iconUrl: `${this.$iconURL}Vendor Signup/`,
       secondUrl: `${this.$iconURL}VendorSignup/`,
     };
+  },
+  computed: {
+    serviceCategories() {
+      return VendorCategories;
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    service() {
+      return this.$store.state.vendorService.service;
+    },
+    selectedCategoryName() {
+      if (!this.service.vendorCategory) return "";
+      return VendorCategories.find((item) => item.value === this.service.vendorCategory).name;
+    },
+  },
+  watch: {
+    vendor(newVal) {},
   },
   methods: {
     onUpdateFocus(newValue) {},
@@ -96,24 +114,6 @@ export default {
           data: `${uploadedName}`,
         });
       });
-    },
-  },
-  watch: {
-    vendor(newVal) {},
-  },
-  computed: {
-    serviceCategories() {
-      return VendorCategories;
-    },
-    vendor() {
-      return this.$store.state.vendorService.vendor;
-    },
-    service() {
-      return this.$store.state.vendorService.service;
-    },
-    selectedCategoryName() {
-      if (!this.service.vendorCategory) return "";
-      return VendorCategories.find((item) => item.value === this.service.vendorCategory).name;
     },
   },
 };

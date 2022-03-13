@@ -1,16 +1,16 @@
 <template>
   <section class="proposal-header">
     <div class="background-image">
-      <div class="d-flex concept-image-wrapper" v-if="vendor">
+      <div v-if="vendor" class="d-flex concept-image-wrapper">
         <div v-for="(imageIndex, index) in new Array(10)" :key="`header-image-${index}-1`" class="concept-color">
           <img
-            class="concept-image"
             v-if="backgroundImages[index % backgroundImages.length]"
+            class="concept-image"
             :src="`${backgroundImages[index % backgroundImages.length]}`"
-          />
+          >
         </div>
       </div>
-      <img v-else :src="defaultImage" class="default-image" />
+      <img v-else :src="defaultImage" class="default-image">
     </div>
     <div class="proposal-banner">
       <div class="header-content">
@@ -23,11 +23,11 @@
       <div class="summary-cont">
         <ul>
           <li>
-            <img :src="`${$iconURL}common/clock-white.svg`" />
+            <img :src="`${$iconURL}common/clock-white.svg`">
             {{ eventTime }}
           </li>
           <li>
-            <img :src="`${$iconURL}common/calendar-white.svg`" />
+            <img :src="`${$iconURL}common/calendar-white.svg`">
             {{ eventDate }}
           </li>
         </ul>
@@ -36,13 +36,9 @@
   </section>
 </template>
 <script>
-import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
-import { Modal } from "@/components";
 import moment from "moment";
 export default {
   components: {
-    VendorBidTimeCounter,
-    Modal,
   },
   props: {
     vendor: {
@@ -55,6 +51,7 @@ export default {
       showModal: false,
       dateTooltip: false,
       defaultImage: "https://maryoku.s3.amazonaws.com/proposal/background-default.jpg",
+      isTimeUp: false,
     };
   },
   computed: {
@@ -71,30 +68,6 @@ export default {
     eventTime() {
       if (!this.eventData) return;
       return `${moment(this.eventData.startTime * 1000).format("hh:mmA")} - ${moment(this.eventData.endTime * 1000).format("hh:mmA")}`;
-    },
-    getRemainingTime() {
-      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
-      if (remainingMs <= 0) {
-        this.isTimeUp = true;
-        this.openedModal = "timeIsUp";
-        return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      }
-      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
-      remainingMs = remainingMs - days * 24 * 3600 * 1000;
-      const hours = Math.floor(remainingMs / 3600 / 1000);
-      remainingMs = remainingMs - hours * 3600 * 1000;
-      const mins = Math.floor(remainingMs / 60 / 1000);
-      remainingMs = remainingMs - mins * 60 * 1000;
-      const seconds = Math.floor(remainingMs / 1000);
-      return { days, hours, mins, seconds };
-    },
-    getLocation() {
-      if (this.proposalRequest) {
-        return this.event.location || "-";
-      } else {
-        return "-";
-      }
     },
     backgroundImages() {
       return this.vendor.images.filter((image) => image);

@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper" :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
-    <notifications></notifications>
+    <notifications />
     <side-bar>
       <!--<user-menu></user-menu>-->
-      <mobile-menu></mobile-menu>
+      <mobile-menu />
       <template slot="links">
         <!--<sidebar-item :link="{name: 'Me', icon: 'person_pin', path: '/me'}">
         </sidebar-item>-->
@@ -18,17 +18,17 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-        <sidebar-item :link="{ name: 'Annual Planner', icon: 'key', path: '/planner' }"> </sidebar-item>
+        <sidebar-item :link="{ name: 'Annual Planner', icon: 'key', path: '/planner' }" />
 
-        <sidebar-item :link="{ name: 'Yearly Planner', icon: 'event', path: '/yearly-plan' }"> </sidebar-item>
+        <sidebar-item :link="{ name: 'Yearly Planner', icon: 'event', path: '/yearly-plan' }" />
 
-        <sidebar-item :link="{ name: 'Our Events', icon: 'local_play', path: '/events' }"> </sidebar-item>
+        <sidebar-item :link="{ name: 'Our Events', icon: 'local_play', path: '/events' }" />
 
-        <sidebar-item :link="{ name: 'My Vendors', icon: 'contacts', path: '/vendors' }"> </sidebar-item>
+        <sidebar-item :link="{ name: 'My Vendors', icon: 'contacts', path: '/vendors' }" />
 
-        <li class="menu-divider"></li>
+        <li class="menu-divider" />
 
-        <sidebar-item :link="{ name: 'Team', icon: 'group_add', path: '/team' }"> </sidebar-item>
+        <sidebar-item :link="{ name: 'Team', icon: 'group_add', path: '/team' }" />
 
         <!--<li class="menu-divider"></li>
 
@@ -131,12 +131,12 @@
       </template>
     </side-bar>
     <div class="main-panel">
-      <top-navbar></top-navbar>
+      <top-navbar />
 
       <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
-          <router-view></router-view>
+          <router-view />
         </zoom-center-transition>
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
@@ -183,13 +183,6 @@ export default {
       auth: auth,
     };
   },
-  methods: {
-    toggleSidebar() {
-      if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
-      }
-    },
-  },
   mounted() {
     this.$auth.currentUser(this, true, function () {
       let docClasses = document.body.classList;
@@ -205,6 +198,13 @@ export default {
         docClasses.add("perfect-scrollbar-off");
       }
     });
+  },
+  methods: {
+    toggleSidebar() {
+      if (this.$sidebar.showSidebar) {
+        this.$sidebar.displaySidebar(false);
+      }
+    },
   },
 };
 </script>

@@ -1,36 +1,38 @@
 <template>
   <div class="md-layout booking-section position-relative booking-proposals">
-    <budget-notifications field="negotiation"></budget-notifications>
+    <budget-notifications field="negotiation" />
     <div class="choose-vendor-board">
       <loader :active="isLoadingProposal" />
       <div class="d-flex justify-content-between align-center">
         <div>
           <ResizableToggleButton
-            class="mr-20 mb-10"
+            v-for="component in categories"
             :key="component.componentId"
+            class="mr-20 mb-10"
             :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
             :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-            :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
-            :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
+            :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+            :default-status="selectedCategory && component.componentId === selectedCategory.componentId"
             :disabled="!eventRequirements[component.componentId]"
-            :hasBadge="hasBadge(component)"
-            iconStyle="opacity:0.8"
-            v-for="component in categories"
+            :has-badge="hasBadge(component)"
+            icon-style="opacity:0.8"
             @click="selectCategory(component)"
-          ></ResizableToggleButton>
-          <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
+          />
+          <button class="add-category-button mb-10" @click="addRequirements">
+            <md-icon>add</md-icon>
+          </button>
         </div>
         <ProgressRadialBar
           :value="proposals.length"
           :total="3"
           icon="common/checked-calendar-red.svg"
           @click="openCart"
-        ></ProgressRadialBar>
+        />
       </div>
       <div class="booking-proposals">
         <template v-if="proposals.length > 0">
           <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
-            <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
+            <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`">
             {{ selectedCategory.fullTitle }}
           </div>
           <div class="d-flex justify-content-between">
@@ -40,7 +42,7 @@
                 <md-icon>bar_chart</md-icon>
                 Compare Proposals
               </md-button>
-              <span class="seperator"></span>
+              <span class="seperator" />
               <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
                 <md-icon>edit</md-icon>
                 I Want Something Different
@@ -49,35 +51,34 @@
           </div>
           <div>
             <!-- Event Booking Items -->
-            <div class="events-booking-items" v-if="proposals.length">
+            <div v-if="proposals.length" class="events-booking-items">
               <ProposalCard
-                @goDetail="goDetailPage"
                 v-for="(proposal, index) in proposals.slice(0, 3)"
                 :key="index"
                 :proposal="proposal"
                 :component="selectedCategory"
                 :probability="getProbability(index)"
-                :isCollapsed="showDetails"
-                :isSelected="selectedProposal && selectedProposal.id === proposal.id"
-              >
-              </ProposalCard>
+                :is-collapsed="showDetails"
+                :is-selected="selectedProposal && selectedProposal.id === proposal.id"
+                @goDetail="goDetailPage"
+              />
             </div>
             <template v-if="showDetails">
               <transition name="component-fade" mode="out-in">
                 <EventProposalDetails
+                  :key="selectedProposal.id"
                   class="mt-20"
                   :proposal="selectedProposal"
                   :category="selectedCategory"
-                  :key="selectedProposal.id"
                   @favorite="favoriteProposal"
                   @close="closeProposal"
                   @ask="handleAsk"
-                ></EventProposalDetails>
+                />
               </transition>
             </template>
           </div>
         </template>
-        <PendingForVendors v-else :expiredTime="expiredTime"></PendingForVendors>
+        <PendingForVendors v-else :expired-time="expiredTime" />
       </div>
     </div>
     <div class="proposals-footer white-card">
@@ -94,36 +95,39 @@
       </div>
       <div>
         <md-button
-            class="md-simple md-outlined md-red maryoku-btn"
-            :disabled="proposals.length === 0 || !selectedProposal"
-            @click="bookVendor"
+          class="md-simple md-outlined md-red maryoku-btn"
+          :disabled="proposals.length === 0 || !selectedProposal"
+          @click="bookVendor"
         >
           Book Now
         </md-button>
         <md-button class="md-red maryoku-btn"
                    :disabled="proposals.length === 0 || !selectedProposal"
-                   @click="addToCart">Add To Cart</md-button>
+                   @click="addToCart"
+        >
+          Add To Cart
+        </md-button>
       </div>
     </div>
     <ServicesCart
-        v-if="showCart"
-        @close="showCart = false"
-    ></ServicesCart>
+      v-if="showCart"
+      @close="showCart = false"
+    />
     <AdditionalRequestModal
-      class="lg"
       v-if="isOpenedAdditionalModal"
-      :subCategory="currentRequirement.mainRequirements"
-      :selectedCategory="selectedCategory"
-      :defaultData="getRequirementsFormStore(selectedCategory.key) || {}"
+      class="lg"
+      :sub-category="currentRequirement.mainRequirements"
+      :selected-category="selectedCategory"
+      :default-data="getRequirementsFormStore(selectedCategory.key) || {}"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
-    ></AdditionalRequestModal>
+    />
     <EventChangeProposalModal
       v-if="showDifferentProposals"
-      @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
-    ></EventChangeProposalModal>
+      @close="showDifferentProposals = false"
+    />
   </div>
 </template>
 <script>
@@ -154,10 +158,10 @@ const components = {
     ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
     NegotiationNotification: () => import("./components/NegotiationNotification"),
     EventChangeProposalModal: () => import("@/components/Modals/EventChangeProposalModal"),
-}
+};
 
 export default {
-  name: "event-booking",
+  name: "EventBooking",
   components: {...components, MaryokuInput},
   props: {},
   data: () => ({
@@ -260,7 +264,7 @@ export default {
       this.showProposals = false;
     },
     async updateExpiredTime() {
-      console.log('updateExpiredTime');
+      console.log("updateExpiredTime");
       // let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
       //   id: this.currentRequirement.id,
       //   expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
@@ -274,7 +278,7 @@ export default {
       if(proposal.selectedVersion > -1)
         this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
       else this.selectedProposal = proposal;
-      console.log('selectedProposal', proposal, this.selectedProposal);
+      console.log("selectedProposal", proposal, this.selectedProposal);
 
     },
     closeProposal() {
@@ -321,12 +325,12 @@ export default {
         name: "CheckoutWithVendor",
         params: {
             proposalId: this.selectedProposal.id,
-            proposalType: 'planner',
+            proposalType: "planner",
         },
       });
     },
     async favoriteProposal(isFavorite){
-      this.selectedProposal = await this.$store.dispatch('event/updateProposal', {
+      this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
           proposal: {...this.selectedProposal, isFavorite},
           category: this.selectedCategory.componentId
       });
@@ -336,8 +340,8 @@ export default {
       });
     },
     async handleAsk(ask){
-        if (ask === 'expiredDate') {
-            let expiredTime = moment().add(2, 'days').unix() * 1000;
+        if (ask === "expiredDate") {
+            let expiredTime = moment().add(2, "days").unix() * 1000;
             let query = new ProposalNegotiationRequest({
                 eventId: this.event.id,
                 proposalId: this.selectedProposal.id,
@@ -347,8 +351,8 @@ export default {
                 url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
             });
 
-            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save()
-            console.log('ask.result', res);
+            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save();
+            console.log("ask.result", res);
             this.selectedProposal.negotiations.push(res);
         }
     },
@@ -358,8 +362,8 @@ export default {
           category: this.selectedCategory.componentId,
           event: {id: this.event.id},
           proposalId: this.selectedProposal.id,
-      })
-      this.$store.dispatch('event/updateProposal', {
+      });
+      this.$store.dispatch("event/updateProposal", {
          proposal: {...this.selectedProposal, isFavorite: false},
          category: this.selectedProposal.vendor.vendorCategory,
       });
@@ -368,32 +372,55 @@ export default {
       this.showCart = true;
     },
     async processNotification(){
-      console.log('processNotification');
+      console.log("processNotification");
       let proposals = this.negotiationProposals;
       this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
           this.negotiationProposals[key].map(proposal => {
               let { negotiations } = proposal;
               negotiations.map(it => it.status = 3);
-              this.$store.dispatch('event/updateProposal', {
+              this.$store.dispatch("event/updateProposal", {
                   category: key,
                   proposal: {...proposal, negotiations}
-              })
-          })
-      })
+              });
+          });
+      });
     },
     getUpdatedProposal(proposal, data) {
       Object.keys(data).map(key => {
         this.$set(proposal, key, data[key]);
       });
-      return proposal
+      return proposal;
     }
   },
+  watch: {
+    event(newVal, oldVal) {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    negotiationProposals(newVal){
+      console.log("negotiationProposals", newVal);
+      if(Object.keys(newVal).length) {
+          this.$notify({
+              message: {
+                  title: "Great News!",
+                  content: "The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide",
+                  close: this.processNotification
+              },
+              icon: `${this.$iconURL}messages/group-21013.svg`,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              timeout: 5000,
+          });
+      }
+    },
+    proposals(newVal){},
+    $route: "fetchData",
+  },
   async created() {
-    console.log('choose-vendors.created');
-    await this.$store.dispatch('planningBoard/resetCartItems');
+    console.log("choose-vendors.created");
+    await this.$store.dispatch("planningBoard/resetCartItems");
     this.isLoadingProposal = true;
-    const tenantId = this.$authService.resolveTenantId()
+    const tenantId = this.$authService.resolveTenantId();
     await this.getRequirements(this.event.id);
     await this.getProposals({eventId: this.event.id, tenantId});
     await this.getCartItems(this.event.id);
@@ -408,29 +435,6 @@ export default {
       if (requirements[event.id]) requirements[event.id] = null;
       self.setBookingRequirements(requirements);
     });
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    negotiationProposals(newVal){
-      console.log('negotiationProposals', newVal);
-      if(Object.keys(newVal).length) {
-          this.$notify({
-              message: {
-                  title: 'Great News!',
-                  content: 'The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide',
-                  close: this.processNotification
-              },
-              icon: `${this.$iconURL}messages/group-21013.svg`,
-              horizontalAlign: "right",
-              verticalAlign: "top",
-              timeout: 5000,
-          });
-      }
-    },
-    proposals(newVal){},
-    $route: "fetchData",
   },
   filters: {
     formatDate: function (date) {
@@ -482,7 +486,7 @@ export default {
     },
     negotiationProposals(){
       let proposals = this.$store.state.event.proposals;
-      if(!Object.keys(proposals).length) return {}
+      if(!Object.keys(proposals).length) return {};
       let negotiationProposals = {};
       Object.keys(proposals).map(key => {
           let subProposals = [];
@@ -492,9 +496,9 @@ export default {
               if(negotiations.length) {
                   subProposals.push(p);
               }
-          })
+          });
           if(subProposals.length) negotiationProposals[key] = subProposals;
-      })
+      });
       return negotiationProposals;
     },
   },

@@ -7,12 +7,15 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}VendorsProposalPage/group-17103.svg`" />
-          <div class="font-size-30 font-bold mt-30 color-purple">Share</div>
-        <div class="font-size-14 my-30">{{`Share proposal by copying the link`}}</div>
+        <img :src="`${$iconURL}VendorsProposalPage/group-17103.svg`">
+        <div class="font-size-30 font-bold mt-30 color-purple">
+          Share
+        </div>
+        <div class="font-size-14 my-30">
+          {{ `Share proposal by copying the link` }}
+        </div>
 
-        <maryoku-input inputStyle="sharing" v-model="link" theme="purple"></maryoku-input>
-
+        <maryoku-input v-model="link" input-style="sharing" theme="purple" />
       </div>
     </template>
   </modal>
@@ -31,13 +34,13 @@ export default {
       default: "",
     },
   },
-  created() {
-    console.log('created');
-  },
   data() {
     return {
       sharelink: "",
     };
+  },
+  created() {
+    console.log("created");
   },
   methods: {
     close() {

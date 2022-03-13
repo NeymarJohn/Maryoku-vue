@@ -4,7 +4,7 @@
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label>
           <div class="flag">
-            <img :src="item.flag" />
+            <img :src="item.flag">
           </div>
         </md-table-cell>
         <md-table-cell>{{ item.country }}</md-table-cell>
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "global-sales-table",
+  name: "GlobalSalesTable",
   data() {
     return {
       selected: [],

@@ -2,10 +2,12 @@
   <div class="vendor-dashboard p-30">
     <div class="d-flex justify-content-between align-center">
       <div class="font-size-22 font-bold color-purple">
-        <img src="/static/icons/vendor/dashboard-active.svg" class="mr-10" /> WELCOME ON BOARD SAM!
+        <img src="/static/icons/vendor/dashboard-active.svg" class="mr-10"> WELCOME ON BOARD SAM!
       </div>
       <div>
-        <md-button class="md-vendor maryoku-btn" @click="gotoProposalWizard">Create New Proposal</md-button>
+        <md-button class="md-vendor maryoku-btn" @click="gotoProposalWizard">
+          Create New Proposal
+        </md-button>
       </div>
     </div>
     <div class="md-layout pt-30">
@@ -13,19 +15,21 @@
         <div>
           <div style="display: flex; justify-content: space-between;">
             <label>Yearly Revenue By Segment</label>
-            <year-select :data="yearsList" :initialValue="selectedYear" @valueChanged="handleYearChange"/>
+            <year-select :data="yearsList" :initial-value="selectedYear" @valueChanged="handleYearChange" />
           </div>
           <div class="md-layout my-20">
             <div class="md-layout-item md-size-35 px-0">
-              <div class="font-size-50 total-revenue" v-if="yearlyRevenue">
+              <div v-if="yearlyRevenue" class="font-size-50 total-revenue">
                 ${{ Math.round(yearlyRevenue) | formatQty }}
               </div>
-              <div class="font-size-50 total-revenue" v-else>$0</div>
+              <div v-else class="font-size-50 total-revenue">
+                $0
+              </div>
             </div>
             <div class="md-layout-item md-size-65 pr-0">
               <div>
                 <pie-chart
-                  :chartData="serviceChart"
+                  :chart-data="serviceChart"
                   :columns="1"
                   :options="{
                     width: 170,
@@ -35,8 +39,8 @@
                     direction: 'row',
                   }"
                   theme="white"
-                  :showTooltip="false"
-                ></pie-chart>
+                  :show-tooltip="false"
+                />
               </div>
               <div class="d-flex">
                 <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn" @click="addNewService">
@@ -46,18 +50,18 @@
             </div>
           </div>
         </div>
-        <hr />
+        <hr>
         <div class="pt-30">
           <label>Income From Past And Future Events</label>
           <p class="d-flex align-center text-gray font-size-14">
             <span
               class="d-inline-block mr-10"
               style="width: 14px; height: 14px; border-radius: 50%; background: rgb(159 107 144)"
-            ></span>
+            />
             No event incomes
           </p>
           <div>
-            <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+            <income-bar-chart :chart-data="incomeChartData" />
             <!--              <income-chart :chartData="data" :options="options" :width="300" :height="400"></income-chart>-->
           </div>
         </div>
@@ -65,29 +69,33 @@
       <div class="md-layout-item md-size-55 schedule-section">
         <div class="md-layout">
           <div class="md-layout-item md-size-50 pl-0 pr-10">
-            <proposal-request-section></proposal-request-section>
+            <proposal-request-section />
           </div>
           <div class="md-layout-item md-size-50 pr-0 pl-10">
-            <proposal-request-section field="negotiation"></proposal-request-section>
+            <proposal-request-section field="negotiation" />
           </div>
         </div>
         <div class="md-layout mt-20">
           <div class="white-card md-layout p-30">
             <div class="md-layout-item md-size-50">
-              <event-calendar @clickDate="createEventFromCalendar"></event-calendar>
+              <event-calendar @clickDate="createEventFromCalendar" />
             </div>
             <div class="md-layout-item md-size-50">
-              <div class="p-5 font-bold text-center">UPCOMING EVENTS:</div>
+              <div class="p-5 font-bold text-center">
+                UPCOMING EVENTS:
+              </div>
               <div class="d-flex flex-column align-center justify-content-center p-50 upcoming-events">
                 <upcoming-event
                   v-if="upcomingEvents && upcomingEvents.length > 0"
                   :events="upcomingEvents"
                   @showEvent="showEvent"
                   @show="show($event)"
-                ></upcoming-event>
+                />
                 <template v-else>
-                  <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
-                  <div class="mb-20 color-vendor font-bold font-size-14">NO UPCOMING EVENTS</div>
+                  <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`">
+                  <div class="mb-20 color-vendor font-bold font-size-14">
+                    NO UPCOMING EVENTS
+                  </div>
                 </template>
                 <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="createNewEvent">
                   Create New Event
@@ -102,18 +110,16 @@
     <select-icons
       v-if="iconsModal"
       :events="upcomingEvents"
+      :event-id="selectedEvent"
       @iconSelected="applySelectedIcon"
       @cancel="cancelIcon()"
-      :eventId="selectedEvent"
-    >
-    </select-icons>
+    />
     <vendor-create-event-modal
       v-if="showVendorCreateModal"
-      :defaultData="defaultEventData"
+      :default-data="defaultEventData"
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
-    ></vendor-create-event-modal>
-
+    />
   </div>
 </template>
 <script>
@@ -150,7 +156,7 @@ export default {
     YearSelect
   },
   data() {
-    const date = new Date().getFullYear()
+    const date = new Date().getFullYear();
     return {
       yearlyRevenue :0,
       hola: null,
@@ -194,9 +200,54 @@ export default {
       selectedYear: new Date().getFullYear(),
     };
   },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    serviceChart() {
+      const services = this.vendorData.vendorCategories.concat(this.vendorData.secondaryServices.map((s) => s.vendorCategory));
+      return services.map((vc, idx) => {
+        const item = {
+          title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
+          value: 1,
+          color: this.activeCategoryColors[idx],
+          image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
+        };
+        if (this.serviceReportData) {
+          const cat = this.serviceReportData.find(c => c._id == vc);
+
+          if (cat) {
+            item.value = cat.amount;
+            item.color = this.activeCategoryColors[idx];
+          }
+        }
+        return item;
+      });
+    },
+    proposalRequests() {
+      return this.$store.state.vendorDashboard.proposalRequests;
+    },
+    // yearlyRevenue() {
+    //   if (!this.serviceReportData || this.serviceReportData.length === 0) return 0;
+    //   return this.serviceReportData.reduce((s, item) => {
+    //     return s + item.amount / 100;
+    //   }, 0);
+    // },
+    proposals() {
+      return this.$store.state.vendorDashboard.proposals;
+    },
+  },
+  watch: {
+    backOutDays(newVal) {
+      // this.getMarkedDates();
+    },
+  },
   async mounted() {
     //get data
-    this.getIncomingData()
+    this.getIncomingData();
     this.getComingEvents();
     this.getServiceReport();
     this.getMarkedDates();
@@ -254,12 +305,12 @@ export default {
           return updated;
         }
         return event;
-      })
+      });
     },
     updateEventIcon(event) {
       new UserEvent(event).save().then((res) => {
-        console.log('res', res);
-      }).catch((error) => {console.log('error', error);});
+        console.log("res", res);
+      }).catch((error) => {console.log("error", error);});
     },
     show(ev) {
       this.iconsModal = true;
@@ -272,7 +323,7 @@ export default {
       ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`).then(res => {
         if (res.data.services && res.data.services.length) {
           this.serviceReportData = res.data.services;
-          this.yearlyRevenue = res.data.total
+          this.yearlyRevenue = res.data.total;
         }
       });
     },
@@ -348,7 +399,7 @@ export default {
           this.upcomingEvents = events.map((event, index) => {
             const randomId = Math.floor(Math.random() * 28) + 1;
             const randomIconId = Math.ceil(Math.random() * 10 * randomId) % 28;
-            return { ...event, icon: event.icon || eventIcons[randomIconId] }
+            return { ...event, icon: event.icon || eventIcons[randomIconId] };
           });
         });
     },
@@ -374,51 +425,6 @@ export default {
       }
 
       this.showVendorCreateModal = true;
-    },
-  },
-  computed: {
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-    serviceChart() {
-      const services = this.vendorData.vendorCategories.concat(this.vendorData.secondaryServices.map((s) => s.vendorCategory));
-      return services.map((vc, idx) => {
-        const item = {
-          title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
-          value: 1,
-          color: this.activeCategoryColors[idx],
-          image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
-        };
-        if (this.serviceReportData) {
-          const cat = this.serviceReportData.find(c => c._id == vc);
-
-          if (cat) {
-            item.value = cat.amount;
-            item.color = this.activeCategoryColors[idx];
-          }
-        }
-        return item;
-      });
-    },
-    proposalRequests() {
-      return this.$store.state.vendorDashboard.proposalRequests;
-    },
-    // yearlyRevenue() {
-    //   if (!this.serviceReportData || this.serviceReportData.length === 0) return 0;
-    //   return this.serviceReportData.reduce((s, item) => {
-    //     return s + item.amount / 100;
-    //   }, 0);
-    // },
-    proposals() {
-      return this.$store.state.vendorDashboard.proposals;
-    },
-  },
-  watch: {
-    backOutDays(newVal) {
-      // this.getMarkedDates();
     },
   },
 };

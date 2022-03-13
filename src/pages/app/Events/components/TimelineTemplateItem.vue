@@ -1,20 +1,20 @@
 <template>
   <drop
-    @drop="handleDrop(...arguments)"
-    @dragenter="hadleDragEnter"
-    @dragleave="handleDragLeave"
     style="height: 100%; min-height: 50px"
     :data-index="index"
     class="timeline-template-drop"
+    @drop="handleDrop(...arguments)"
+    @dragenter="hadleDragEnter"
+    @dragleave="handleDragLeave"
   >
     <div class="timeline-template-item" :class="{ dropping: isHover }">
       <div class="timeline-image" :style="hoverStyle">
         <img
-          class="time-line-blocks_icon"
           v-if="item.status == 'template'"
+          class="time-line-blocks_icon"
           :src="`${$iconURL}Timeline-New/templates/${item.icon.toLowerCase()}.svg`"
-        />
-        <img class="time-line-blocks_icon" v-else :src="`${$iconURL}Timeline-New/timegap.svg`" />
+        >
+        <img v-else class="time-line-blocks_icon" :src="`${$iconURL}Timeline-New/timegap.svg`">
         <!-- <div class="timeline-image-mask"></div> -->
       </div>
       <div v-if="item.status == 'template'" class="template-form ml-20" :class="`${item.group}`" :style="hoverStyle">
@@ -26,7 +26,9 @@
           *{{ formatHour(item.timeGap.start) }}-
           {{ formatHour(item.timeGap.end) }}
         </div>
-        <div class="font-bold">Window Gap</div>
+        <div class="font-bold">
+          Window Gap
+        </div>
         <div>Drag A Time Slot To Complete Timeline</div>
         <!-- <div class="template-form-mask"></div> -->
       </div>
@@ -58,6 +60,17 @@ export default {
       droppingBlock: {},
     };
   },
+  computed: {
+    hoverStyle() {
+      if (!this.isHover) {
+        return "";
+      }
+      return `border-color: ${this.droppingBlock.color}; background-color: ${hexToRgbA(
+        this.droppingBlock.color,
+        0.25,
+      )}`;
+    },
+  },
   methods: {
     remove() {
       this.$root.$emit("remove-template", {
@@ -83,17 +96,6 @@ export default {
     },
     formatHour(date) {
       return moment(new Date(Number(date))).format("hh:mm A");
-    },
-  },
-  computed: {
-    hoverStyle() {
-      if (!this.isHover) {
-        return "";
-      }
-      return `border-color: ${this.droppingBlock.color}; background-color: ${hexToRgbA(
-        this.droppingBlock.color,
-        0.25,
-      )}`;
     },
   },
 };

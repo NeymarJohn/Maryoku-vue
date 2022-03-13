@@ -1,36 +1,42 @@
 <template>
   <div class="booking-item" style="position: relative">
     <template v-if="remainingTime < 0">
-          <div class="d-flex flex-column justify-content-start align-center"
-               style="position: absolute;left: 0;right:0;top:0;bottom:0;width:100%;height: 100%;background:rgba(0,0,0,.7);z-index: 1">
-              <timer-panel
-                  class="time-counter mt-100"
-                  :target="targetTime"
-                  section="card"
-                  @updateExpireDate="updateExpireDate"
-
-              ></timer-panel>
-              <md-button
-                  class="maryoku-btn md-simple md-outlined md-red mt-30"
-                  style="background: white!important;width: 300px;max-width: 90%"
-                  @click="updateExpireDate"
-              >
-                  Ask vendor for more time</md-button>
-              <p class="color-white mt-20">Show me an alternative offer</p>
-          </div>
+      <div class="d-flex flex-column justify-content-start align-center"
+           style="position: absolute;left: 0;right:0;top:0;bottom:0;width:100%;height: 100%;background:rgba(0,0,0,.7);z-index: 1"
+      >
+        <timer-panel
+          class="time-counter mt-100"
+          :target="targetTime"
+          section="card"
+          @updateExpireDate="updateExpireDate"
+        />
+        <md-button
+          class="maryoku-btn md-simple md-outlined md-red mt-30"
+          style="background: white!important;width: 300px;max-width: 90%"
+          @click="updateExpireDate"
+        >
+          Ask vendor for more time
+        </md-button>
+        <p class="color-white mt-20">
+          Show me an alternative offer
+        </p>
+      </div>
     </template>
     <div
       class="event-image p-relative"
       :style="`background: url(${backgroundImage}) center center no-repeat`"
       :class="{ isCollapsed, isSelected }"
     >
-      <div class="bundle-offer" v-if="proposal.additionalServices.length">
-        <img :src="`${$iconURL}common/bell-white.svg`" />
+      <div v-if="proposal.additionalServices.length" class="bundle-offer">
+        <img :src="`${$iconURL}common/bell-white.svg`">
         Bundle Offer
         <md-tooltip md-direction="top" class="p-30 color-black">
-          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(Object.keys(proposal.pricesByCategory)) }}</div>
-          <div class="font-size-16" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
-              {{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
+          <div class="font-size-20 font-bold mb-10">
+            {{ getBundleToolTipText(Object.keys(proposal.pricesByCategory)) }}
+          </div>
+          <div v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied" class="font-size-16">
+            {{ proposal.bundleDiscount.percentage }}% Off for the whole package
+          </div>
         </md-tooltip>
       </div>
       <div v-if="isCollapsed" class="proposal-summary" @click="proposalDetails">
@@ -45,8 +51,8 @@
     <transition name="slide">
       <div v-if="!isCollapsed">
         <div class="card-content">
-          <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
-            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
+          <div v-show="proposal.suggestionDate" class="mt-20 d-flex">
+            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5">
             <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
               This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
             </span>
@@ -62,21 +68,31 @@
             class="font-size-14 color-dark-gray mb-10"
             :class="{ invisible: component.allocatedBudget >= proposal.cost }"
           >
-            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
+            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon">
             ${{ (proposal.cost - component.allocatedBudget) | withComma }}
             more than budget
           </div>
           <template v-if="proposal.vendor">
-            <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
+            <h4 class="event-title">
+              {{ proposal.vendor.companyName }}
+            </h4>
             <ul class="event-info">
-              <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
-              <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
+              <li class="event-info__item">
+                {{ proposal.vendor.vendorAddresses[0] }}
+              </li>
+              <li class="event-info__item">
+                {{ proposal.vendor.vendorCity }}
+              </li>
             </ul>
-            <div class="probability">Complies with requirements {{ probability }}%</div>
+            <div class="probability">
+              Complies with requirements {{ probability }}%
+            </div>
           </template>
           <!-- <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p> -->
           <div class="item-actions text-right mt-30">
-            <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
+            <md-button class="md-red maryoku-btn" @click="proposalDetails">
+              Details & Booking
+            </md-button>
           </div>
         </div>
       </div>
@@ -86,8 +102,8 @@
 <script>
 import moment from "moment";
 import Timer from "@/components/Timer.vue";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest"
-import Proposal from "@/models/Proposal"
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+import Proposal from "@/models/Proposal";
 import TimerPanel from "./TimerPanel";
 import Swal from "sweetalert2";
 import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
@@ -115,66 +131,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  methods: {
-    getCategory(key) {
-      return this.categories.find((item) => item.key === key);
-    },
-    getBundleToolTipText(bundleServices) {
-      const serviceNames = bundleServices.map((service) => {
-        return this.getCategory(service).title;
-      });
-      return serviceNames.join(" + ");
-    },
-    proposalDetails() {
-      this.$emit("goDetail", this.proposal);
-    },
-    getDiffDaysFromOriginal() {
-      const suggestionDate = this.proposal.suggestionDate;
-      if (!this.eventData) return "-";
-
-      let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
-      if (suggestionDate && suggestionDate.length > 0) {
-        let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
-        return suggestedDate.diff(orignStartDate, "days");
-      }
-      return 0;
-    },
-    updateExpireDate(){
-        let expiredTime = 0;
-        if (this.proposal.expiredDate) {
-            expiredTime = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
-        } else {
-            expiredTime = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
-        }
-
-        new ProposalNegotiationRequest({
-            eventId: this.eventData.id,
-            proposalId: this.proposal.id,
-            proposal: new Proposal({ id: this.proposal.id }),
-            proposalRequestId: this.proposal.proposalRequestId,
-            expiredTime,
-            type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME
-        })
-            .for(new Proposal({ id: this.proposal.id }))
-            .save()
-            .then((res) => {
-                Swal.fire({
-                  title: "Thanks, we sent your request to the vendor!",
-                  html: 'You’ll receive a notification as soon as the vendor makes a decision'+
-                    ' <br/>' +
-                    'Don’t worry – if the vendor isn’t able to give you more time,'+
-                    ' we’ll provide you with alternative options',
-                  showCancelButton: false,
-                  confirmButtonClass: "md-button md-success btn-fill",
-                  cancelButtonClass: "md-button md-danger btn-fill",
-                  confirmButtonText: "OK",
-                  customClass: {container: 'non-vendor-add-more-time-popup-modal'},
-                  buttonsStyling: false,
-                }).then((result) => {});
-            });
-
-    }
   },
   computed: {
     backgroundImage() {
@@ -231,20 +187,80 @@ export default {
       return new Date(this.proposal.dateCreated);
     },
     remainingTime(){
-      let today = new Date()
+      let today = new Date();
       let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
-      return expiredDate - today
+      return expiredDate - today;
     },
     negotiationProcessed(){
       // return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it =>
       //     it.status === NEGOTIATION_REQUEST_STATUS.PROCESSED && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
-      return false
+      return false;
     },
     negotiationPending(){
-      console.log('negotiationPending', this.proposal.id);
+      console.log("negotiationPending", this.proposal.id);
       return !!this.proposal.negotiations.length && this.proposal.negotiations.some(it =>
-          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME)
+          it.status === NEGOTIATION_REQUEST_STATUS.NONE && it.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME);
     },
+  },
+  methods: {
+    getCategory(key) {
+      return this.categories.find((item) => item.key === key);
+    },
+    getBundleToolTipText(bundleServices) {
+      const serviceNames = bundleServices.map((service) => {
+        return this.getCategory(service).title;
+      });
+      return serviceNames.join(" + ");
+    },
+    proposalDetails() {
+      this.$emit("goDetail", this.proposal);
+    },
+    getDiffDaysFromOriginal() {
+      const suggestionDate = this.proposal.suggestionDate;
+      if (!this.eventData) return "-";
+
+      let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
+      if (suggestionDate && suggestionDate.length > 0) {
+        let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
+        return suggestedDate.diff(orignStartDate, "days");
+      }
+      return 0;
+    },
+    updateExpireDate(){
+        let expiredTime = 0;
+        if (this.proposal.expiredDate) {
+            expiredTime = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
+        } else {
+            expiredTime = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
+        }
+
+        new ProposalNegotiationRequest({
+            eventId: this.eventData.id,
+            proposalId: this.proposal.id,
+            proposal: new Proposal({ id: this.proposal.id }),
+            proposalRequestId: this.proposal.proposalRequestId,
+            expiredTime,
+            type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME
+        })
+            .for(new Proposal({ id: this.proposal.id }))
+            .save()
+            .then((res) => {
+                Swal.fire({
+                  title: "Thanks, we sent your request to the vendor!",
+                  html: "You’ll receive a notification as soon as the vendor makes a decision"+
+                    " <br/>" +
+                    "Don’t worry – if the vendor isn’t able to give you more time,"+
+                    " we’ll provide you with alternative options",
+                  showCancelButton: false,
+                  confirmButtonClass: "md-button md-success btn-fill",
+                  cancelButtonClass: "md-button md-danger btn-fill",
+                  confirmButtonText: "OK",
+                  customClass: {container: "non-vendor-add-more-time-popup-modal"},
+                  buttonsStyling: false,
+                }).then((result) => {});
+            });
+
+    }
   },
 };
 </script>

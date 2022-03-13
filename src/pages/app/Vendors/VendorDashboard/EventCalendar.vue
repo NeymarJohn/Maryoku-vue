@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="event-calendar" v-if="!isLoading">
+    <div v-if="!isLoading" class="event-calendar">
       <div class="calendar__header">
         <a href="javascript:;" class="arrow-btn btn-prevmonth" @click.prevent="changeMonth(false)">Prev</a>
         <div class="calendar__title" @click.prevent="backToToday()">
@@ -12,14 +12,16 @@
       <div class="calendar__body">
         <ul class="calendar__heading">
           <li v-for="item in heading" @click="clickDate(item)">
-            <div class="calendar__item">{{ item }}</div>
+            <div class="calendar__item">
+              {{ item }}
+            </div>
           </li>
         </ul>
         <ul class="calendar__content">
           <li v-for="item in buildCalendar" @click="clickDate(item)">
-            <popper trigger="hover" :options="{ placement: 'right' }" v-if="eventsForDate[Number(item.number)]">
+            <popper v-if="eventsForDate[Number(item.number)]" trigger="hover" :options="{ placement: 'right' }">
               <div class="popper-content white-card">
-                <div class="font-size-22 popper-header"></div>
+                <div class="font-size-22 popper-header" />
                 <div>
                   <div v-for="(event, index) in eventsForDate[Number(item.number)]">
                     <div class="color-gray">
@@ -32,11 +34,12 @@
                       </template>
                       {{ event.companyName }}
                     </div>
-                    <hr v-if="index < eventsForDate[Number(item.number)].length - 1" />
+                    <hr v-if="index < eventsForDate[Number(item.number)].length - 1">
                   </div>
                 </div>
               </div>
               <a
+                slot="reference"
                 href="javascript:;"
                 class="calendar__item"
                 :class="{
@@ -46,18 +49,19 @@
                   'is-blackout': isBlackoutDay(item),
                 }"
                 @click.prevent="getDateData(item)"
-                slot="reference"
               >
                 {{ item.number }}
                 <div
-                  class="event-add-badge"
                   v-if="eventsForDate[Number(item.number)] && eventsForDate[Number(item.number)].length > 1"
+                  class="event-add-badge"
                 >
                   <span class=""><md-icon>add</md-icon></span>
                 </div>
               </a>
             </popper>
             <a
+              v-else
+              slot="reference"
               href="javascript:;"
               class="calendar__item"
               :class="{
@@ -67,13 +71,11 @@
                 'is-blackout': isBlackoutDay(item),
               }"
               @click.prevent="getDateData(item)"
-              slot="reference"
-              v-else
             >
               {{ item.number }}
               <div
-                class="event-add-badge"
                 v-if="eventsForDate[Number(item.number)] && eventsForDate[Number(item.number)].length > 1"
+                class="event-add-badge"
               >
                 <span class=""><md-icon>add</md-icon></span>
               </div>
@@ -85,16 +87,18 @@
       </div>
     </div>
     <div class="d-flex align-center">
-      <md-switch class="md-switch-vendor large-switch" v-model="showBlackoutDays">
+      <md-switch v-model="showBlackoutDays" class="md-switch-vendor large-switch">
         <span class="color-black font-size-14px">Blackout Days</span>
       </md-switch>
-      <md-button class="md-simple ml-auto md-vendor" @click="showSyncModal = true"> Sync With Calendar</md-button>
+      <md-button class="md-simple ml-auto md-vendor" @click="showSyncModal = true">
+        Sync With Calendar
+      </md-button>
     </div>
     <sync-calendar-modal
       v-if="showSyncModal"
       :events="eventsForThisMonth"
       @close="showSyncModal = false"
-    ></sync-calendar-modal>
+    />
   </div>
 </template>
 <script>
@@ -125,69 +129,6 @@ export default {
       showBlackoutDays: false,
       showSyncModal: false,
     };
-  },
-  methods: {
-    isBlackoutDay(item) {
-      return (
-        this.showBlackoutDays &&
-        this.blackoutDays[`${item.years}-${this.$stringUtil.getTwoDigits(item.month)}-${item.number}`]
-      );
-    },
-    changeMonth(isNext) {
-      let month = this.current.month;
-      isNext === true ? (month = month + 1) : (month = month - 1);
-      if (month <= 0) {
-        month = 12;
-        this.current.year = this.current.year - 1;
-      }
-      if (month > 12) {
-        month = 1;
-        this.current.year = this.current.year + 1;
-      }
-      this.current.month = month;
-      this.current.date = 1;
-      this.getEventsForThisMonth();
-    },
-    getDateData(data) {
-      if (data.none === true) {
-        return false;
-      } else {
-        if (data.years === this.current.year && data.month === this.current.month && data.date === this.current.date) {
-          return false;
-        } else {
-          this.current.year = data.years;
-          this.current.month = data.month;
-          this.current.date = data.date;
-        }
-      }
-    },
-    backToToday() {
-      this.current.year = this.today.year;
-      this.current.month = this.today.month;
-      this.current.date = this.today.date;
-    },
-    getToday() {
-      this.today.year = moment().year();
-      this.today.month = moment().month() + 1;
-      this.today.date = moment().date();
-    },
-    getEventsForThisMonth() {
-      return this.$store.dispatch("vendorDashboard/getCalendarEvents", this.currentMonth);
-    },
-    getEventsForDate(date) {
-      const events = this.eventsForThisMonth.filter((event) => {
-        return new Date(event.startTime).getDate() === Number(date);
-      });
-      return events;
-    },
-    clickDate(day) {
-      console.log('clickDate', day, this.eventsForDate[Number(day.number)])
-      if (this.eventsForDate[Number(day.number)].length) {
-        this.$emit("clickDate", {event: this.eventsForDate[Number(day.number)][0]});
-      } else {
-        this.$emit("clickDate", {date: day} );
-      }
-    },
   },
   computed: {
     currentMonth() {
@@ -302,6 +243,69 @@ export default {
   },
   beforeMount() {},
   mounted() {},
+  methods: {
+    isBlackoutDay(item) {
+      return (
+        this.showBlackoutDays &&
+        this.blackoutDays[`${item.years}-${this.$stringUtil.getTwoDigits(item.month)}-${item.number}`]
+      );
+    },
+    changeMonth(isNext) {
+      let month = this.current.month;
+      isNext === true ? (month = month + 1) : (month = month - 1);
+      if (month <= 0) {
+        month = 12;
+        this.current.year = this.current.year - 1;
+      }
+      if (month > 12) {
+        month = 1;
+        this.current.year = this.current.year + 1;
+      }
+      this.current.month = month;
+      this.current.date = 1;
+      this.getEventsForThisMonth();
+    },
+    getDateData(data) {
+      if (data.none === true) {
+        return false;
+      } else {
+        if (data.years === this.current.year && data.month === this.current.month && data.date === this.current.date) {
+          return false;
+        } else {
+          this.current.year = data.years;
+          this.current.month = data.month;
+          this.current.date = data.date;
+        }
+      }
+    },
+    backToToday() {
+      this.current.year = this.today.year;
+      this.current.month = this.today.month;
+      this.current.date = this.today.date;
+    },
+    getToday() {
+      this.today.year = moment().year();
+      this.today.month = moment().month() + 1;
+      this.today.date = moment().date();
+    },
+    getEventsForThisMonth() {
+      return this.$store.dispatch("vendorDashboard/getCalendarEvents", this.currentMonth);
+    },
+    getEventsForDate(date) {
+      const events = this.eventsForThisMonth.filter((event) => {
+        return new Date(event.startTime).getDate() === Number(date);
+      });
+      return events;
+    },
+    clickDate(day) {
+      console.log("clickDate", day, this.eventsForDate[Number(day.number)]);
+      if (this.eventsForDate[Number(day.number)].length) {
+        this.$emit("clickDate", {event: this.eventsForDate[Number(day.number)][0]});
+      } else {
+        this.$emit("clickDate", {date: day} );
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

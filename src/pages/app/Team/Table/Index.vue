@@ -1,30 +1,40 @@
 <template>
-  <md-table @md-selected="onSelect" v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
-    <div class="grid-col pad-20" slot="md-table-alternate-header" slot-scope="{ count }">
-      <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
+  <md-table v-model="teamMembers" table-header-color="rose" class="table-striped table-hover" @md-selected="onSelect">
+    <div slot="md-table-alternate-header" slot-scope="{ count }" class="grid-col pad-20">
+      <div class="md-toolbar-section-start">
+        {{ getAlternateLabel(count) }}
+      </div>
 
       <div class="md-toolbar-section-end">
-        <md-button @click.native="openPopup()" class="delete-btn md-info md-just-icon md-round">
+        <md-button class="delete-btn md-info md-just-icon md-round" @click.native="openPopup()">
           <md-icon>edit</md-icon>
         </md-button>
-        <md-button @click.native="deleteAllTeamMember()" class="delete-btn md-primary md-just-icon md-round">
+        <md-button class="delete-btn md-primary md-just-icon md-round" @click.native="deleteAllTeamMember()">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
     </div>
     <md-table-row slot="md-table-row" slot-scope="{ item }">
       <!--md-selectable="multiple" md-auto-select-->
-      <div class="popup-box" v-click-outside="closePopup" v-if="openPopover" md-direction="left">
+      <div v-if="openPopover" v-click-outside="closePopup" class="popup-box" md-direction="left">
         <div class="header-position">
-          <h3 class="title">Tagging</h3>
-          <button class="btn-position" @click="closePopup">X</button>
+          <h3 class="title">
+            Tagging
+          </h3>
+          <button class="btn-position" @click="closePopup">
+            X
+          </button>
         </div>
         <div class="md-layout-item md-size-100 md-small-size-100">
-          <div class="md-layout-item"></div>
+          <div class="md-layout-item" />
         </div>
         <div class="popup-footer">
-          <md-button class="move-left md-red md-simple" @click="closePopup">Close</md-button>
-          <md-button class="btn-success md-success">Submit</md-button>
+          <md-button class="move-left md-red md-simple" @click="closePopup">
+            Close
+          </md-button>
+          <md-button class="btn-success md-success">
+            Submit
+          </md-button>
         </div>
       </div>
       <md-table-cell md-label="First Name" style="width: 10%">
@@ -35,7 +45,7 @@
           field-name="firstName"
           @text-updated-blur="teamMemberDetailsChanged"
           @text-updated-enter="teamMemberDetailsChanged"
-        ></label-edit>
+        />
       </md-table-cell>
       <md-table-cell md-label="Last Name" style="width: 10%">
         <label-edit
@@ -45,7 +55,7 @@
           field-name="lastName"
           @text-updated-blur="teamMemberDetailsChanged"
           @text-updated-enter="teamMemberDetailsChanged"
-        ></label-edit>
+        />
       </md-table-cell>
       <md-table-cell md-label="Email" style="width: 25%">
         <label-edit
@@ -55,7 +65,7 @@
           field-name="emailAddress"
           @text-updated-blur="teamMemberDetailsChanged"
           @text-updated-enter="teamMemberDetailsChanged"
-        ></label-edit>
+        />
       </md-table-cell>
       <md-table-cell md-label="Role" style="width: 10%">
         <label-edit
@@ -65,17 +75,21 @@
           field-name="role"
           @text-updated-blur="teamMemberDetailsChanged"
           @text-updated-enter="teamMemberDetailsChanged"
-        ></label-edit>
+        />
       </md-table-cell>
       <md-table-cell md-label="Permissions" style="width: 25%">
         {{ permissionTitles(item.permissions) }}
       </md-table-cell>
-      <md-table-cell md-label="Last Login" v-if="item.invitationStatus === 'pending'" style="width: 10%">{{
-        item.invitationStatus
-      }}</md-table-cell>
-      <md-table-cell md-label="Last Login" v-else style="width: 10%">{{ item.lastLogin | moment }}</md-table-cell>
+      <md-table-cell v-if="item.invitationStatus === 'pending'" md-label="Last Login" style="width: 10%">
+        {{
+          item.invitationStatus
+        }}
+      </md-table-cell>
+      <md-table-cell v-else md-label="Last Login" style="width: 10%">
+        {{ item.lastLogin | moment }}
+      </md-table-cell>
       <md-table-cell md-label="Actions" style="width: 10%">
-        <md-button @click.native="toggleEditModal(true, item)" class="md-info md-just-icon md-round">
+        <md-button class="md-info md-just-icon md-round" @click.native="toggleEditModal(true, item)">
           <md-icon>edit</md-icon>
         </md-button>
         <md-button
@@ -84,7 +98,9 @@
           @click="deleteTeamMember(item)"
         >
           <md-icon>delete</md-icon>
-          <md-tooltip md-direction="top">Delete</md-tooltip>
+          <md-tooltip md-direction="top">
+            Delete
+          </md-tooltip>
         </md-button>
       </md-table-cell>
     </md-table-row>
@@ -108,6 +124,11 @@ export default {
     SimpleWizard,
     WizardTab,
     LabelEdit,
+  },
+  filters: {
+    moment: function (date) {
+      return moment(date).format("MMMM Do, GGGG");
+    },
   },
   props: {
     currentUserId: String,
@@ -140,11 +161,6 @@ export default {
       hideBtn: false,
       openPopover: false,
     };
-  },
-  filters: {
-    moment: function (date) {
-      return moment(date).format("MMMM Do, GGGG");
-    },
   },
   methods: {
     ...mapActions("teamVuex", ["setInviteModalAndTeamMember"]),

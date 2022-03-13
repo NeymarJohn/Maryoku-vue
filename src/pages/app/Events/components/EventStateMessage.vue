@@ -1,64 +1,99 @@
 <template>
   <div class="event-state-message">
     <div class="event-state-message-image">
-      <img v-if="data.type==='positive'" :src="`${$iconURL}messages/positive.svg`" />
-      <img v-if="data.type==='action'" :src="`${$iconURL}messages/CTA.svg`" />
-      <img v-if="data.type==='benchmark'" :src="`${$iconURL}messages/Benchmark.svg`" />
-      <img v-if="data.type==='alert'" :src="`${$iconURL}messages/Alert.svg`" />
-
+      <img v-if="data.type==='positive'" :src="`${$iconURL}messages/positive.svg`">
+      <img v-if="data.type==='action'" :src="`${$iconURL}messages/CTA.svg`">
+      <img v-if="data.type==='benchmark'" :src="`${$iconURL}messages/Benchmark.svg`">
+      <img v-if="data.type==='alert'" :src="`${$iconURL}messages/Alert.svg`">
     </div>
     <div v-if="data.type==='positive'" class="event-state-message-content">
-      <div class="message-title">{{data.title}}</div>
-      <div class="message-content">{{data.message}}</div>
+      <div class="message-title">
+        {{ data.title }}
+      </div>
+      <div class="message-content">
+        {{ data.message }}
+      </div>
       <div class="message-action">
-        <div class="message-action-content">{{data.action}}</div>
+        <div class="message-action-content">
+          {{ data.action }}
+        </div>
         <div class="message-action-button">
-          <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">Cancel</md-button>
-<!--          <md-button class="md-red md-bold add-category-btn">Send</md-button>-->
+          <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">
+            Cancel
+          </md-button>
+          <!--          <md-button class="md-red md-bold add-category-btn">Send</md-button>-->
         </div>
       </div>
     </div>
-    <div v-if="data.type==='action'"  class="event-state-message-content">
-      <div class="message-title">{{data.title}}</div>
-      <div class="message-content">{{data.message}}</div>
+    <div v-if="data.type==='action'" class="event-state-message-content">
+      <div class="message-title">
+        {{ data.title }}
+      </div>
+      <div class="message-content">
+        {{ data.message }}
+      </div>
       <div class="message-action">
-        <div class="message-action-content">{{data.action}}</div>
+        <div class="message-action-content">
+          {{ data.action }}
+        </div>
         <div class="message-action-button">
-          <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">Cancel</md-button>
-          <md-button class="md-red md-bold add-category-btn">Send</md-button>
+          <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">
+            Cancel
+          </md-button>
+          <md-button class="md-red md-bold add-category-btn">
+            Send
+          </md-button>
         </div>
       </div>
     </div>
-    <div v-if="data.type==='benchmark'"  class="event-state-message-content">
-      <div class="message-title benchmark">{{data.title}}</div>
-      <div class="message-content benchmark">{{data.message}}</div>
+    <div v-if="data.type==='benchmark'" class="event-state-message-content">
+      <div class="message-title benchmark">
+        {{ data.title }}
+      </div>
+      <div class="message-content benchmark">
+        {{ data.message }}
+      </div>
       <div class="message-action">
-        <div class="message-action-content benchmark">{{data.action}}</div>
+        <div class="message-action-content benchmark">
+          {{ data.action }}
+        </div>
         <div class="message-action-button">
           <md-button
             class="md-red md-simple normal-btn"
-          >Ok, Thanks</md-button>
+          >
+            Ok, Thanks
+          </md-button>
         </div>
       </div>
     </div>
-    <div v-if="data.type==='alert'"  class="event-state-message-content">
+    <div v-if="data.type==='alert'" class="event-state-message-content">
       <div class="message-title alert-message">
-        <md-icon class="color-minus">remove_circle_outline</md-icon>
+        <md-icon class="color-minus">
+          remove_circle_outline
+        </md-icon>
         $ 2,200
       </div>
-      <div class="message-title alert-message">{{data.title}}</div>
+      <div class="message-title alert-message">
+        {{ data.title }}
+      </div>
       <div class="message-action">
-        <div class="message-action-content alert-message">{{data.message}}</div>
+        <div class="message-action-content alert-message">
+          {{ data.message }}
+        </div>
         <div class="message-action-button">
           <md-button
             class="md-bold add-category-btn md-black md-simple"
-          >No, Thanks</md-button>
-          <md-button class="md-red md-bold add-category-btn">Add Money</md-button>
+          >
+            No, Thanks
+          </md-button>
+          <md-button class="md-red md-bold add-category-btn">
+            Add Money
+          </md-button>
         </div>
       </div>
     </div>
     <div class="close-button">
-      <md-button @click="closeMessage()" class="md-icon-button md-default md-simple md-black">
+      <md-button class="md-icon-button md-default md-simple md-black" @click="closeMessage()">
         <md-icon>close</md-icon>
       </md-button>
     </div>
@@ -89,10 +124,10 @@ const messages = [
     message: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
     type: "alert"
   }
-]
+];
 import { BUDGET_MESSAGES } from "@/constants/messages";
 export default {
-  name: "event-state-message",
+  name: "EventStateMessage",
   props: {
     state: {
       type: Object,
@@ -102,25 +137,25 @@ export default {
   data() {
     return {
       data: {}
-    }
+    };
+  },
+  mounted() {
+     this.init();
   },
   methods: {
     init(){
       // console.log('event.state.message', this.state);
-      this.data = BUDGET_MESSAGES.find(m => m.key === this.state.key)
-      if (this.state.key === 'higher_than_average') {
+      this.data = BUDGET_MESSAGES.find(m => m.key === this.state.key);
+      if (this.state.key === "higher_than_average") {
         let {message} = this.data;
-        this.$set(this.data, 'message', message.replace('X%', `${this.state.percent}%`));
+        this.$set(this.data, "message", message.replace("X%", `${this.state.percent}%`));
       }
     },
     closeMessage() {
       this.$emit("closeMessage");
     }
-  },
-  mounted() {
-     this.init();
   }
-}
+};
 </script>
 <style lang="scss" scoped>
   .event-state-message {

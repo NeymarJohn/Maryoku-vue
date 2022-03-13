@@ -1,9 +1,11 @@
 <template>
   <div>
     <zoom-center-transition :duration="200" mode="out-in">
-      <router-view></router-view>
+      <router-view />
     </zoom-center-transition>
-    <div class="text-center">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
+    <div class="text-center">
+      Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
+    </div>
   </div>
 </template>
 <script>

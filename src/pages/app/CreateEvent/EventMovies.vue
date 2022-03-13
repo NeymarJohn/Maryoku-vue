@@ -1,41 +1,43 @@
 <template>
   <div class>
     <div class="section-header">
-      <h2 class="section-title">Which movie or TV show character would you say your boss is</h2>
+      <h2 class="section-title">
+        Which movie or TV show character would you say your boss is
+      </h2>
       <div class="steps-wizard">
         <ul class="steps-wizard-items">
-          <li v-for="index in step" :key="index"></li>
+          <li v-for="index in step" :key="index" />
         </ul>
       </div>
     </div>
     <div class="container no-padding-mobile">
       <div class="form-section movies-section">
         <div class="movies-list">
-          <div class="movie-item" v-for="(movie,index) in moviesList" :key="index">
+          <div v-for="(movie,index) in moviesList" :key="index" class="movie-item">
             <!--                        <md-icon>pause_circle_filled</md-icon>-->
             <div
               class="movie-wallpaper"
               :style="`background : url(${moviesPostersURL + movie.image}) center center no-repeat;`"
-            ></div>
+            />
             <md-radio
               v-model="eventMovieId"
               v-tooltip="{
-  content: movie.tooltip,
-  placement: 'top-center',
-  classes: ['info'],
-  targetClasses: ['it-has-a-tooltip'],
-  offset: 100,
-  delay: {
-    show: 500,
-    hide: 300,
-  },
-}"
+                content: movie.tooltip,
+                placement: 'top-center',
+                classes: ['info'],
+                targetClasses: ['it-has-a-tooltip'],
+                offset: 100,
+                delay: {
+                  show: 500,
+                  hide: 300,
+                },
+              }"
               :value="movie.title"
               class="movie-radio"
             >
-              <small>{{movie.author}}</small>
-              <br />
-              {{movie.title}}
+              <small>{{ movie.author }}</small>
+              <br>
+              {{ movie.title }}
             </md-radio>
           </div>
         </div>
@@ -43,14 +45,16 @@
         <div class="form-actions">
           <md-button
             class="md-rose next-btn custom-btn"
-            @click="goToNext"
             :class="[{'disabled': !eventMovieId}]"
-          >Next</md-button>
+            @click="goToNext"
+          >
+            Next
+          </md-button>
         </div>
       </div>
     </div>
 
-    <go-back navigation="event-vibe"></go-back>
+    <go-back navigation="event-vibe" />
   </div>
 </template>
 
@@ -91,21 +95,21 @@ export default {
         {
           image: "amy-santiago.png",
           tooltip:
-            'Amy is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection. A well crafted timeline will go a long way to get you approval',
+            "Amy is a \"by the book\" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection. A well crafted timeline will go a long way to get you approval",
           title: "Amy Brookheimer",
           author: "Veep",
         },
         {
           image: "captain-kirk2.png",
           tooltip:
-            '"Star Trek" is all about going boldly where no one has gone before -- and nobody is bolder than Captain James T. Kirk. To please him you’d have to come up with fresh ideas, edgy concepts and flawless plan to execute',
+            "\"Star Trek\" is all about going boldly where no one has gone before -- and nobody is bolder than Captain James T. Kirk. To please him you’d have to come up with fresh ideas, edgy concepts and flawless plan to execute",
           title: "Captain Kirk",
           author: "Star Trek",
         },
         {
           image: "dirty-harry2.png",
           tooltip:
-            'Harry is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he\'ll track RSVP like a hawk and deal personally with non comers',
+            "Harry is not a \"company man\" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he'll track RSVP like a hawk and deal personally with non comers",
           title: "Inspector Harold Francis",
           author: "Dirty Harry",
         },
@@ -126,7 +130,7 @@ export default {
         {
           image: "mirandapreistly.jpg",
           tooltip:
-            'Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are "do it correctly." You may try to, but we all know how this will end.',
+            "Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are \"do it correctly.\" You may try to, but we all know how this will end.",
           title: "Miranda Priestly",
           author: "The Devil Wears Prada",
         },
@@ -163,7 +167,7 @@ export default {
             actualValue: this.eventMovieId,
           });
           this.setCurrentStep({ currentPage: "/event-scales" });
-          this.$router.push({ path: `/event-scales` });
+          this.$router.push({ path: "/event-scales" });
         } else {
         }
       });

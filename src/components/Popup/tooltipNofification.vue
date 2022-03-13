@@ -2,8 +2,10 @@
   <fade-transition>
     <md-card class="position-absolute notification-card">
       <md-card-content class="py-20 px-50">
-        <div class="message-arrow"></div>
-        <h5 class="font-size-16 font-bold-extra">Example of a text that can work well:</h5>
+        <div class="message-arrow" />
+        <h5 class="font-size-16 font-bold-extra">
+          Example of a text that can work well:
+        </h5>
         <carousel :items="1"
                   :margin="0"
                   :dots="false"
@@ -12,18 +14,22 @@
                   @changed="changed"
         >
           <template slot="prev">
-            <span class="prev handle-btn" ref="prevButton"><md-icon>keyboard_arrow_left</md-icon></span>
+            <span ref="prevButton" class="prev handle-btn"><md-icon>keyboard_arrow_left</md-icon></span>
           </template>
           <p v-for="text in about">
             {{ text }}
           </p>
           <template slot="next">
-            <span class="next handle-btn" ref="nextButton"> <md-icon>keyboard_arrow_right</md-icon></span>
+            <span ref="nextButton" class="next handle-btn"> <md-icon>keyboard_arrow_right</md-icon></span>
           </template>
         </carousel>
         <div class="d-flex align-center">
-          <md-button class="md-simple md-black ml-auto" @click="$emit('cancel')">Cancel</md-button>
-          <md-button class="md-vendor" @click="$emit('copy', about[index])">Copy Text</md-button>
+          <md-button class="md-simple md-black ml-auto" @click="$emit('cancel')">
+            Cancel
+          </md-button>
+          <md-button class="md-vendor" @click="$emit('copy', about[index])">
+            Copy Text
+          </md-button>
         </div>
       </md-card-content>
     </md-card>
@@ -47,15 +53,15 @@ export default {
   data() {
     return {
       index: 0,
-    }
+    };
   },
   methods: {
     changed(e){
-      console.log('changed', e);
+      console.log("changed", e);
       this.index = e.item.index;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

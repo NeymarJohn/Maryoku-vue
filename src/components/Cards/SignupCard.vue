@@ -1,25 +1,25 @@
 <template>
   <md-card class="md-card-signup">
-    <slot name="title"></slot>
+    <slot name="title" />
 
     <md-card-content class="signup-card">
       <div class="md-layout">
-        <slot name="content-left"></slot>
-        <slot name="content-middle"></slot>
-        <slot name="content-right"></slot>
+        <slot name="content-left" />
+        <slot name="content-middle" />
+        <slot name="content-right" />
       </div>
     </md-card-content>
 
     <md-card-actions v-if="$slots.footer" md-alignment="space-between">
-      <slot name="footer" v-if="$slots.footer"></slot>
+      <slot v-if="$slots.footer" name="footer" />
     </md-card-actions>
   </md-card>
 </template>
 
 <script>
 export default {
-  name: 'signup-card'
-}
+  name: "SignupCard"
+};
 </script>
 
 <style lang="css">

@@ -1,15 +1,15 @@
 import IconCheckbox from "./Inputs/IconCheckbox.vue";
 import InputText from "./Inputs/input-text.vue";
 import InputWithIcon from "./Inputs/InputWithIcon.vue";
-import MaryokuInput from "./Inputs/MaryokuInput.vue"
-import CalendarInput from "./Inputs/CalendarInput"
-import MaryokuTextarea from "./Inputs/MaryokuTextarea.vue"
-import MaryokuResizableTextarea from "./Inputs/MaryokuResizableTextarea.vue"
+import MaryokuInput from "./Inputs/MaryokuInput.vue";
+import CalendarInput from "./Inputs/CalendarInput";
+import MaryokuTextarea from "./Inputs/MaryokuTextarea.vue";
+import MaryokuResizableTextarea from "./Inputs/MaryokuResizableTextarea.vue";
 
 import Badge from "./Badge";
 
 import DropDown from "./Dropdown.vue";
-import TooltipNotification from "./Popup/tooltipNofification"
+import TooltipNotification from "./Popup/tooltipNofification";
 
 // Modals
 import Modal from "./Modal.vue";
@@ -42,60 +42,60 @@ import LabelEdit from "./LabelEdit.vue";
 import Pagination from "./Pagination.vue";
 import SidebarPlugin from "./SidebarPlugin";
 import AnimatedNumber from "./AnimatedNumber";
-import LocationInput from './LocationInput';
-import HolidayInput from './HolidayInput';
-import SidebarItem from './SidebarPlugin/NewSidebarItem.vue'
-import SideBar from './SidebarPlugin/NewSideBar.vue'
-import TimeInput from './TimeInput'
-import Loader from './loader/Loader';
-import TablePagination from './TablePagination'
-import PieChart  from "./Chart/PieChart.vue";
-import Calendar from './Calendar';
+import LocationInput from "./LocationInput";
+import HolidayInput from "./HolidayInput";
+import SidebarItem from "./SidebarPlugin/NewSidebarItem.vue";
+import SideBar from "./SidebarPlugin/NewSideBar.vue";
+import TimeInput from "./TimeInput";
+import Loader from "./loader/Loader";
+import TablePagination from "./TablePagination";
+import PieChart from "./Chart/PieChart.vue";
+import Calendar from "./Calendar";
 import CommentInput from "./Inputs/CommentInput";
 export {
-    IconCheckbox,
-    InputText,
-    Badge,
-    Modal,
-    Pagination,
-    GlobalSalesTable,
-    Calendar,
-    LockCard,
-    PricingCard,
-    SignupCard,
-    TestimonialCard,
-    StatsCard,
-    LoginCard,
-    ChartCard,
-    ChartComponent,
-    GlobalSalesCard,
-    NavTabsCard,
-    ProductCard,
-    DropDown,
-    Loader,
-    SidebarPlugin,
-    Tabs,
-    NavTabs,
-    Slider,
-    SimpleWizard,
-    WizardTab,
-    AnimatedNumber,
-    Collapse,
-    LabelEdit,
-    VueSlideoutPanel,
-    InputWithIcon,
-    MaryokuInput,
-    MaryokuTextarea,
-    MaryokuResizableTextarea,
-    LocationInput,
-    HolidayInput,
-    SidebarItem,
-    SideBar,
-    TimeInput,
-    TablePagination,
-    PieChart,
-    SignInContent,
-    CommentInput,
-    CalendarInput,
-    TooltipNotification
+  IconCheckbox,
+  InputText,
+  Badge,
+  Modal,
+  Pagination,
+  GlobalSalesTable,
+  Calendar,
+  LockCard,
+  PricingCard,
+  SignupCard,
+  TestimonialCard,
+  StatsCard,
+  LoginCard,
+  ChartCard,
+  ChartComponent,
+  GlobalSalesCard,
+  NavTabsCard,
+  ProductCard,
+  DropDown,
+  Loader,
+  SidebarPlugin,
+  Tabs,
+  NavTabs,
+  Slider,
+  SimpleWizard,
+  WizardTab,
+  AnimatedNumber,
+  Collapse,
+  LabelEdit,
+  VueSlideoutPanel,
+  InputWithIcon,
+  MaryokuInput,
+  MaryokuTextarea,
+  MaryokuResizableTextarea,
+  LocationInput,
+  HolidayInput,
+  SidebarItem,
+  SideBar,
+  TimeInput,
+  TablePagination,
+  PieChart,
+  SignInContent,
+  CommentInput,
+  CalendarInput,
+  TooltipNotification
 };

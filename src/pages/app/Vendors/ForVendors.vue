@@ -11,45 +11,47 @@
                 : proposalRequest.eventData.eventType.name
             }}
           </h3>
-          <h3 v-else>No Event Data</h3>
+          <h3 v-else>
+            No Event Data
+          </h3>
 
           <p v-if="proposalRequest">
             {{ proposalRequest.eventData.concept ? proposalRequest.eventData.concept.description : "" }}
-            <br />
-            <br />
+            <br>
+            <br>
           </p>
           <p v-else>
             There is no proposal request for this id. So, we can't show any event data now. But, we can just show how
             you would make a proposal here when you would get an email from us.
-            <br />
-            <br />
+            <br>
+            <br>
           </p>
         </div>
         <div class="right-side">
           <div class="summary-cont">
             <ul>
               <li>
-                <img :src="`${iconsUrl}Path 251.svg`" />
+                <img :src="`${iconsUrl}Path 251.svg`">
                 <strong>Date:</strong>
                 {{ serviceTime.date }}
               </li>
               <li>
-                <img :src="`${iconsUrl}Group 6085.svg`" />
+                <img :src="`${iconsUrl}Group 6085.svg`">
                 <strong>Time:</strong>
                 {{ serviceTime.time }}
               </li>
               <li>
-                <img :src="`${iconsUrl}Asset 506.svg`" />
+                <img :src="`${iconsUrl}Asset 506.svg`">
                 <strong>Address:</strong>
                 <span>{{ getLocation }}</span>
               </li>
               <li>
-                <img :src="`${iconsUrl}Asset 505.svg`" />
+                <img :src="`${iconsUrl}Asset 505.svg`">
                 <strong>Guests:</strong>
                 {{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : "-" | withComma }}
               </li>
               <li>
-                <img :src="`${iconsUrl}Path 1942.svg`" />
+                <img :src="`${iconsUrl}Path 1942.svg`">
                 <strong>Type:</strong>
                 {{
                   proposalRequest && proposalRequest.eventData.eventType
@@ -58,64 +60,63 @@
                 }}
               </li>
               <li>
-                <img :src="`${iconsUrl}Path 1383.svg`" />
+                <img :src="`${iconsUrl}Path 1383.svg`">
                 <strong>Invited:</strong>
                 {{ proposalRequest && proposalRequest.eventData.guestType ? proposalRequest.eventData.guestType : "-" }}
               </li>
               <li>
-                <div class="new-time" v-if="vendor.eventCategory.key == 'venuerental'">
+                <div v-if="vendor.eventCategory.key == 'venuerental'" class="new-time">
                   Already Booked?
                   <a @click="showChooseDateModal()">Suggest New time</a>
                   <span v-if="suggestionDate">
-                    ( {{ suggestionDate[0].date }} - {{ suggestionDate[suggestionDate.length - 1].date }})</span
-                  >
+                    ( {{ suggestionDate[0].date }} - {{ suggestionDate[suggestionDate.length - 1].date }})</span>
                 </div>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <hr />
+      <hr>
       <vendor-budget-list
         :title="`Budget`"
         :description="`Usually budget is flexible and could change according to needs`"
-        :proposalRequest="proposalRequest"
+        :proposal-request="proposalRequest"
         :requirements="requiredServices"
       />
     </div>
     <div class="rank-cont">
       <h3>Would you like to submit your bid?</h3>
       <div class="check-cont">
-        <md-checkbox class="check-condition md-vendor" v-model="isAgreed">
-          <span class="regular" @mouseover="conditionTooltip = true" @mouseleave="conditionTooltip = false"
-            >I accept</span
-          >
+        <md-checkbox v-model="isAgreed" class="check-condition md-vendor">
+          <span class="regular" @mouseover="conditionTooltip = true" @mouseleave="conditionTooltip = false">I accept</span>
         </md-checkbox>
         <a class="condition" target="_blank" href="https://www.maryoku.com/terms">Maryoku's Terms & Conditions</a>
       </div>
       <!-- <div class="condition-tooltip" v-if="conditionTooltip"> -->
-      <div class="condition-tooltip" v-if="true">
-        <img :src="`${iconsUrl}Group 1175 (10).svg`" />
+      <div v-if="true" class="condition-tooltip">
+        <img :src="`${iconsUrl}Group 1175 (10).svg`">
         Let us know that you are on board with our teams & conditions
       </div>
     </div>
     <div class="action-cont">
-      <button class="no" @click="showNotBiddingModal">Thank You, But No.</button>
+      <button class="no" @click="showNotBiddingModal">
+        Thank You, But No.
+      </button>
       <a class="no no-border pr-10" @click="showReferModal">
         Refer Another Vendor
       </a>
-        <img :src="`${iconsUrl}Group 5522.svg`"
-             class="mr-20"
-             width="20px"
-             v-tooltip="{
-                html: true,
-                content: '<h5>Refer someone else<br />and still get your commission!\n</h5>\n'+
-'          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>',
-                delay: { show: 200, hide: 100 },
-                trigger: 'hover',
-                placement: 'top',
-                classes: 'vendor-tooltip-theme',}"
-        />
+      <img v-tooltip="{
+             html: true,
+             content: '<h5>Refer someone else<br />and still get your commission!\n</h5>\n'+
+               '          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>',
+             delay: { show: 200, hide: 100 },
+             trigger: 'hover',
+             placement: 'top',
+             classes: 'vendor-tooltip-theme',}"
+           :src="`${iconsUrl}Group 5522.svg`"
+           class="mr-20"
+           width="20px"
+      >
       <div class="with-description">
         <p>
           You're the
@@ -123,7 +124,9 @@
           <span class="text-transform-lowercase">{{ vendor.eventCategory.title }} </span>bidder
         </p>
 
-        <button class="yes" @click="goToForm()">Submit Proposal</button>
+        <button class="yes" @click="goToForm()">
+          Submit Proposal
+        </button>
       </div>
     </div>
     <modal v-if="referModal" class="refer-vendor-modal adaptive" container-class="modal-container sl">
@@ -135,7 +138,7 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`" />
+          <img :src="`${iconsUrl}Group 3602.svg`">
         </button>
       </template>
       <template slot="body">
@@ -159,7 +162,7 @@
             :placeholder="`Type your email address here`"
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 499.svg`"
-            :isLeft="true"
+            :is-left="true"
             @change="setReferredVendorProperty('vendorMainEmail', ...arguments)"
           />
           <input-proposal-sub-item
@@ -167,7 +170,7 @@
             :placeholder="`Paste link here`"
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 498.svg`"
-            :isLeft="true"
+            :is-left="true"
             @change="setReferredVendorProperty('social.website', ...arguments)"
           />
         </div>
@@ -184,12 +187,14 @@
         <div class="not-bidding-modal__header">
           <h3 class="font-bold-extra">
             Sorry to hear you’re not bidding
-            <br/>can you tell us why not?
+            <br>can you tell us why not?
           </h3>
-          <div class="header-description adaptive">You can select more than one reason</div>
+          <div class="header-description adaptive">
+            You can select more than one reason
+          </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`" />
+          <img :src="`${iconsUrl}Group 3602.svg`">
         </button>
       </template>
       <template slot="body">
@@ -200,14 +205,10 @@
                 v-model="reasonIsDate"
                 :style="`border-color: ${reasonIsDate ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{ bold: reasonIsDate }]"
-                  >I’m fully booked around the event date</span
-                >
+                <span class="colored" :class="[{ bold: reasonIsDate }]">I’m fully booked around the event date</span>
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
-                >Suggest Another Date</a
-              >
-              <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
+              <a v-if="vendor.eventCategory.key == 'venuerental'" class="another-date" @click="showChooseDateModal()">Suggest Another Date</a>
+              <a v-else class="another-date" @click="showChooseDateModal()">Suggest Another Time</a>
             </li>
             <li>
               <md-checkbox
@@ -222,9 +223,7 @@
                 v-model="reasonIsService"
                 :style="`border-color: ${reasonIsService ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{ bold: reasonIsService }]"
-                  >My services aren’t in line with your needs</span
-                >
+                <span class="colored" :class="[{ bold: reasonIsService }]">My services aren’t in line with your needs</span>
               </md-checkbox>
             </li>
             <li>
@@ -232,9 +231,7 @@
                 v-model="reasonIsInfo"
                 :style="`border-color: ${reasonIsInfo ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{ bold: reasonIsInfo }]"
-                  >I don’t have enough information</span
-                >
+                <span class="colored" :class="[{ bold: reasonIsInfo }]">I don’t have enough information</span>
               </md-checkbox>
             </li>
             <li>
@@ -254,30 +251,36 @@
             class="form-control"
             placeholder="Tell us more here..."
           />
-          <p class="text-left mt-10 ml-50">We’ll use this information to improve our analysis of your Maryoku statistics</p>
+          <p class="text-left mt-10 ml-50">
+            We’ll use this information to improve our analysis of your Maryoku statistics
+          </p>
         </div>
       </template>
       <template slot="footer">
         <div class="not-bidding-modal__footer">
-          <button class="cancel" @click="hideModal()">Cancel</button>
+          <button class="cancel" @click="hideModal()">
+            Cancel
+          </button>
           <div class="refer-another-vendor-cont">
-            <img class="hand" :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
+            <img class="hand" :src="`${$iconURL}Submit Proposal/group-17528.svg`">
             <a @click="showReferModal()">Refer Another Vendor
-              <img :src="`${iconsUrl}Group 5522.svg`"
-                 width="20px"
-                 class="ml-10"
-                 v-tooltip="{
-                    html: true,
-                    content: '<h5>Refer someone else<br />and still get your commission!\n</h5>\n'+
-    '          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>',
-                    delay: { show: 200, hide: 100 },
-                    trigger: 'hover',
-                    placement: 'top',
-                    classes: 'vendor-tooltip-theme',}"
-              />
+              <img v-tooltip="{
+                     html: true,
+                     content: '<h5>Refer someone else<br />and still get your commission!\n</h5>\n'+
+                       '          <p>Do you know a vendor that’s  perfect for the job? Let us know and get a commission!</p>',
+                     delay: { show: 200, hide: 100 },
+                     trigger: 'hover',
+                     placement: 'top',
+                     classes: 'vendor-tooltip-theme',}"
+                   :src="`${iconsUrl}Group 5522.svg`"
+                   width="20px"
+                   class="ml-10"
+              >
             </a>
           </div>
-          <button class="cool" @click="declineRequest()">Send</button>
+          <button class="cool" @click="declineRequest()">
+            Send
+          </button>
         </div>
       </template>
     </modal>
@@ -285,26 +288,30 @@
       <template slot="header">
         <div class="sorry-modal__header">
           <div class="left-side">
-            <img :src="`${iconsUrl}Group 5811.svg`" />
+            <img :src="`${iconsUrl}Group 5811.svg`">
           </div>
           <div class="right-side">
             <h3>
               We are sorry, but someone else got there
-              <br />before you and already won this bid
+              <br>before you and already won this bid
             </h3>
-            <div class="header-description">But no worries! We will be with you soon with the next one</div>
+            <div class="header-description">
+              But no worries! We will be with you soon with the next one
+            </div>
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`" />
+          <img :src="`${iconsUrl}Group 3602.svg`">
         </button>
       </template>
       <template slot="body">
-        <div class="sorry-modal__body"></div>
+        <div class="sorry-modal__body" />
       </template>
       <template slot="footer">
         <div class="sorry-modal__footer">
-          <button class="cool" @click="hideModal()">OK, Thanks</button>
+          <button class="cool" @click="hideModal()">
+            OK, Thanks
+          </button>
         </div>
       </template>
     </modal>
@@ -313,48 +320,50 @@
         <div class="choose-date-modal__header">
           <h3>What is your new time suggestion?</h3>
           <div class="header-description">
-            <img :src="`${iconsUrl}Group 1175 (9).svg`" />
+            <img :src="`${iconsUrl}Group 1175 (9).svg`">
             A new time suggestion would be possible up to three days before or after the original event
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`" />
+          <img :src="`${iconsUrl}Group 3602.svg`">
         </button>
       </template>
       <template slot="body">
         <div class="choose-date-modal__body">
-          <div class="left-side"></div>
+          <div class="left-side" />
           <div class="right-side">
             <template>
               <div class="calendar-wrapper">
-                <div class="calendar-title">Date Range Picker</div>
+                <div class="calendar-title">
+                  Date Range Picker
+                </div>
                 <functional-calendar
                   :key="componentKey"
+                  ref="calendar"
+                  v-model="suggestedDates"
                   :change-month-function="true"
                   :change-year-function="true"
                   :is-multiple-date-picker="true"
-                  :minSelDays="1"
-                  :sundayStart="true"
+                  :min-sel-days="1"
+                  :sunday-start="true"
                   :arrow-position="`space-between`"
                   :limits="limitDateRange"
                   :marked-dates="markedDataRange"
-                  v-model="suggestedDates"
-                  ref="calendar"
                 />
               </div>
             </template>
             <div class="select-time-cont">
-              <img :src="`${iconsUrl}Group 6085.svg`" />
+              <img :src="`${iconsUrl}Group 6085.svg`">
               <vue-timepicker
+                v-model="startTime"
                 manual-input
                 input-class="time-class"
                 hide-dropdown
                 format="hh:mm"
-                v-model="startTime"
                 hide-clear-button
               />
               <div class="am-field" @click="updateStartA()">
-                <input type="text" v-model="amPack.start" readonly />
+                <input v-model="amPack.start" type="text" readonly>
               </div>
             </div>
           </div>
@@ -362,8 +371,12 @@
       </template>
       <template slot="footer">
         <div class="choose-date-modal__footer">
-          <button class="cancel" @click="hideModal()">Cancel</button>
-          <button class="send" @click="suggestAnotherDay()">Create Proposal With This Time</button>
+          <button class="cancel" @click="hideModal()">
+            Cancel
+          </button>
+          <button class="send" @click="suggestAnotherDay()">
+            Create Proposal With This Time
+          </button>
         </div>
       </template>
     </modal>
@@ -391,6 +404,11 @@ export default {
     VendorBudgetList,
     FunctionalCalendar,
     VueTimepicker,
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
   },
   data() {
     return {
@@ -438,6 +456,118 @@ export default {
       },
     };
   },
+  computed: {
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    proposalRequest() {
+      try {
+        if (this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period) {
+          this.startTime = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.time;
+          this.amPack.start = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.ampm;
+        }
+      } catch (e) {}
+
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    timelineDates() {
+      return this.$store.state.vendorProposal.timelineDates;
+    },
+    eventDate() {
+      if (!this.proposalRequest) return "-";
+
+      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
+      let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
+      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
+    },
+    eventTime() {
+      if (!this.proposalRequest) return "-";
+
+      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
+      let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
+      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
+    },
+    serviceTime() {
+      if (!this.proposalRequest) {
+        return {
+          time: "",
+          date: "",
+        };
+      }
+      // let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "All Day" : "Not planned yet";
+      let serviceTimeString = "";
+      let serviceDate = "";
+      this.timelineDates.forEach((td) => {
+        td.timelineItems.forEach((timelineItem) => {
+          if (
+            timelineItem &&
+            timelineItem.eventCategory &&
+            timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
+          ) {
+            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
+            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
+              Number(timelineItem.startTime),
+              "hh:mm A",
+            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}`;
+            serviceDate = this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MMM DD, YYYY");
+          }
+        });
+      });
+      if ( !serviceDate ) {
+        let startDate = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, "MMM DD, YYYY");
+        let endDate = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, "MMM DD, YYYY");
+        serviceDate = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+      }
+
+      if (this.proposalRequest.plannerRequirement.isEntireEvent) {
+        serviceTimeString = "All Day";
+      } else if (this.proposalRequest.plannerRequirement.period) {
+        const period = this.proposalRequest.plannerRequirement.period;
+
+        let startTime = this.getDateByFormat(period.startTime, "hh:mm:a");
+        let endTime = this.getDateByFormat(period.endTime, "hh:mm:a");
+        serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
+      } else {
+          let startTime = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, "hh:mm:a");
+          let endTime = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, "hh:mm:a");
+          serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
+      }
+      return {
+        time: serviceTimeString,
+        date: serviceDate,
+      };
+    },
+    getEventDuration() {
+      return moment
+        .duration(this.proposalRequest.eventData.eventEndMillis - this.proposalRequest.eventData.eventStartMillis)
+        .humanize();
+    },
+    getLocation() {
+      if (this.proposalRequest) {
+        return this.proposalRequest.eventData.location || "-";
+      } else {
+        return "-";
+      }
+    },
+    getServiceCategory() {
+      if (this.proposalRequest.requirementsCategory) {
+        return this.proposalRequest.requirementsCategory;
+      } else {
+        return this.vendorCategory;
+      }
+    },
+    requiredServices() {
+      if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
+      return [];
+    },
+    suggestionDate() {
+      return this.$store.state.vendorProposal.suggestionDate;
+    },
+    vendorCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
+  },
+  watch: {},
   mounted() {
     this.today = moment(new Date());
     this.limitDateRange = {
@@ -447,7 +577,7 @@ export default {
     this.markedDataRange.push({ date: moment(new Date()).add(-4, "days").format("DD/MM/YYYY"), class: "marked_end" });
     this.markedDataRange.push({ date: moment(new Date()).add(4, "days").format("DD/MM/YYYY"), class: "marked_start" });
 
-    console.log('markedDateRange', this.markedDataRange);
+    console.log("markedDateRange", this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form/submit`);
@@ -466,7 +596,7 @@ export default {
         if (serviceCategory.type == "service") this.categories.push(serviceCategory.fullTitle);
       });
     });
-    console.log('forvendor.mounted', this.categories);
+    console.log("forvendor.mounted", this.categories);
   },
   methods: {
     setReferredVendorProperty(property, value) {
@@ -490,7 +620,7 @@ export default {
           console.log(res);
           Swal.fire({
             title: "Thank you for your referring! ",
-            html: `We will send proposal request to this vendor`,
+            html: "We will send proposal request to this vendor",
             showCancelButton: true,
             confirmButtonClass: "md-button md-success confirm-btn-bg ",
             cancelButtonClass: "md-button md-danger cancel-btn-bg",
@@ -502,7 +632,7 @@ export default {
         .catch((err) => {
           Swal.fire({
             title: "Please check information! ",
-            html: `You may try to refer the existing vendor on our system`,
+            html: "You may try to refer the existing vendor on our system",
             showCancelButton: false,
             confirmButtonClass: "md-button md-success confirm-btn-bg ",
             buttonsStyling: false,
@@ -577,7 +707,7 @@ export default {
         console.log(res);
         Swal.fire({
           title: "Thank you! ",
-          html: `We hope to see you next time.`,
+          html: "We hope to see you next time.",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
           cancelButtonClass: "md-button md-danger cancel-btn-bg",
@@ -588,134 +718,17 @@ export default {
       });
     },
     findVendorCategoryByTitle(title) {
-      console.log('findVendorCategoryByTitle', this.vendorCategories, title);
+      console.log("findVendorCategoryByTitle", this.vendorCategories, title);
       return this.vendorCategories.find((item) => item.fullTitle == title).key;
     },
     findVendorCategoryTitleByKey(key) {
       return this.vendorCategories.find((item) => item.fullkey == key).key;
     },
     getDateByFormat(data, format){
-        if (typeof data == 'string') data = parseInt(data);
+        if (typeof data == "string") data = parseInt(data);
         return moment(data).format(format);
     }
   },
-  computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    proposalRequest() {
-      try {
-        if (this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period) {
-          this.startTime = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.time;
-          this.amPack.start = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.ampm;
-        }
-      } catch (e) {}
-
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    timelineDates() {
-      return this.$store.state.vendorProposal.timelineDates;
-    },
-    eventDate() {
-      if (!this.proposalRequest) return "-";
-
-      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
-      let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
-      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
-    },
-    eventTime() {
-      if (!this.proposalRequest) return "-";
-
-      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
-      let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
-      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
-    },
-    serviceTime() {
-      if (!this.proposalRequest) {
-        return {
-          time: "",
-          date: "",
-        };
-      }
-      // let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "All Day" : "Not planned yet";
-      let serviceTimeString = "";
-      let serviceDate = "";
-      this.timelineDates.forEach((td) => {
-        td.timelineItems.forEach((timelineItem) => {
-          if (
-            timelineItem &&
-            timelineItem.eventCategory &&
-            timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
-          ) {
-            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
-            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
-              Number(timelineItem.startTime),
-              "hh:mm A",
-            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}`;
-            serviceDate = this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MMM DD, YYYY");
-          }
-        });
-      });
-      if ( !serviceDate ) {
-        let startDate = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, "MMM DD, YYYY");
-        let endDate = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, "MMM DD, YYYY");
-        serviceDate = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
-      }
-
-      if (this.proposalRequest.plannerRequirement.isEntireEvent) {
-        serviceTimeString = "All Day";
-      } else if (this.proposalRequest.plannerRequirement.period) {
-        const period = this.proposalRequest.plannerRequirement.period;
-
-        let startTime = this.getDateByFormat(period.startTime, 'hh:mm:a');
-        let endTime = this.getDateByFormat(period.endTime, 'hh:mm:a');
-        serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
-      } else {
-          let startTime = this.getDateByFormat(this.proposalRequest.eventData.eventStartMillis, 'hh:mm:a');
-          let endTime = this.getDateByFormat(this.proposalRequest.eventData.eventEndMillis, 'hh:mm:a');
-          serviceTimeString = startTime === endTime ? startTime : `${startTime} - ${endTime}`;
-      }
-      return {
-        time: serviceTimeString,
-        date: serviceDate,
-      };
-    },
-    getEventDuration() {
-      return moment
-        .duration(this.proposalRequest.eventData.eventEndMillis - this.proposalRequest.eventData.eventStartMillis)
-        .humanize();
-    },
-    getLocation() {
-      if (this.proposalRequest) {
-        return this.proposalRequest.eventData.location || "-";
-      } else {
-        return "-";
-      }
-    },
-    getServiceCategory() {
-      if (this.proposalRequest.requirementsCategory) {
-        return this.proposalRequest.requirementsCategory;
-      } else {
-        return this.vendorCategory;
-      }
-    },
-    requiredServices() {
-      if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
-      return [];
-    },
-    suggestionDate() {
-      return this.$store.state.vendorProposal.suggestionDate;
-    },
-    vendorCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

@@ -1,32 +1,32 @@
 <template>
-  <dragging-component class="maryoku-component color-select-button"
-    :class="{topIcon:showEditPane, dragging:isDragging}" ref="draggingComp"
-    @dropped="onDropped(commentComponent)"
-    @dragging="onDragging(commentComponent)"
-    @activated="onActivated(commentComponent)"
-    >
-        <!-- <md-button
+  <dragging-component ref="draggingComp"
+                      class="maryoku-component color-select-button" :class="{topIcon:showEditPane, dragging:isDragging}"
+                      @dropped="onDropped(commentComponent)"
+                      @dragging="onDragging(commentComponent)"
+                      @activated="onActivated(commentComponent)"
+  >
+    <!-- <md-button
           class="add-button md-just-icon md-white"
           @click="toggleEditPane( $event )"
           v-if="showEditPane"
         >
           <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%" style="width:30px">
         </md-button> -->
-        <md-button
-          class="add-button md-just-icon md-yellow"
-          @click="toggleEditPane( $event )"
-          @mouseenter="showComments($event)"
-          @mouseleave="showCommentList=false"
-        >
-          <span> {{commentComponent.index}}</span>
-        </md-button>
-    </dragging-component>
+    <md-button
+      class="add-button md-just-icon md-yellow"
+      @click="toggleEditPane( $event )"
+      @mouseenter="showComments($event)"
+      @mouseleave="showCommentList=false"
+    >
+      <span> {{ commentComponent.index }}</span>
+    </md-button>
+  </dragging-component>
 </template>
 <script>
-import DragItDude from 'vue-drag-it-dude';
-import DraggingComponent from '@/components/DraggingComponent'
+import DragItDude from "vue-drag-it-dude";
+import DraggingComponent from "@/components/DraggingComponent";
 export default {
-  name: "comment-circle-button",
+  name: "CommentCircleButton",
   components: {
     DraggingComponent,
   },
@@ -50,6 +50,17 @@ export default {
     showCommentList: true,
     isDragging:false
   }),
+  watch: {
+    selectedComponet(newValue, oldValue) {
+      if (!newValue) {
+        this.showEditPane = false;
+      } else {
+        this.showEditPane = this.commentComponent.index == newValue.index;
+      }
+    }
+  },
+  created() {
+  },
   methods: {
     hidePane: function(event) {
       this.showEditPane = false;
@@ -61,7 +72,7 @@ export default {
       event.preventDefault();
       if (this.isDragging) return;
       this.showEditPane = !this.showEditPane;
-      this.$emit("toggleEditPane", this.commentComponent, this.showEditPane)
+      this.$emit("toggleEditPane", this.commentComponent, this.showEditPane);
 
     },
 
@@ -69,42 +80,31 @@ export default {
 
       setTimeout(()=>{
         if (this.isDragging) return;
-        this.$emit("show", this.commentComponent)
-        this.showCommentList = true
-      },500)
+        this.$emit("show", this.commentComponent);
+        this.showCommentList = true;
+      },500);
 
     },
     onDropped(component) {
-      if (!this.$refs.draggingComp.left && !this.$refs.draggingComp.top ) return
+      if (!this.$refs.draggingComp.left && !this.$refs.draggingComp.top ) return;
       if (this.$refs.draggingComp.left != component.positionX || this.$refs.draggingComp.top != component.positionY ) {
-        component.positionX = this.$refs.draggingComp.left
-        component.positionY = this.$refs.draggingComp.top
-        setTimeout(()=>{this.isDragging = false}, 200);
-        this.$emit("onDropped",component)
+        component.positionX = this.$refs.draggingComp.left;
+        component.positionY = this.$refs.draggingComp.top;
+        setTimeout(()=>{this.isDragging = false;}, 200);
+        this.$emit("onDropped",component);
       } else {
 
       }
     },
     onDragging(component) {
-      this.isDragging = true
+      this.isDragging = true;
       if (this.$refs.draggingComp.left > 0 && this.$refs.draggingComp.top > 0){
-        this.$emit("dragging", component, {x: this.$refs.draggingComp.left,y:this.$refs.draggingComp.top })
+        this.$emit("dragging", component, {x: this.$refs.draggingComp.left,y:this.$refs.draggingComp.top });
       }
     },
     onActivated(component) {
       //this.isDragging = true
       // this.$emit("onDragginStart",component)
-    }
-  },
-  created() {
-  },
-  watch: {
-    selectedComponet(newValue, oldValue) {
-      if (!newValue) {
-        this.showEditPane = false
-      } else {
-        this.showEditPane = this.commentComponent.index == newValue.index
-      }
     }
   },
 };

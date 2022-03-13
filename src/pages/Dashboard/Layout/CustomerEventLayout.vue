@@ -1,14 +1,13 @@
 <template>
   <div>
     <div class="main-panel">
-        <Loader :active="loading" :isFullScreen="true"></Loader>
-        <!-- your content here -->
-        <div v-if="!loading">
-            <zoom-center-transition :duration="200" mode="out-in">
-                <router-view></router-view>
-            </zoom-center-transition>
-        </div>
-
+      <Loader :active="loading" :is-full-screen="true" />
+      <!-- your content here -->
+      <div v-if="!loading">
+        <zoom-center-transition :duration="200" mode="out-in">
+          <router-view />
+        </zoom-center-transition>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +38,7 @@ export default {
 
     async initData() {
       const id = this.$route.params.id;
-        console.log('initData', id);
+        console.log("initData", id);
       await this.$store.dispatch("EventGuestVuex/getUserEvent", {id});
       await this.$store.dispatch("common/fetchAllCategories");
       // await this.$store.dispatch("common/getEventTypes");
@@ -50,11 +49,11 @@ export default {
   },
   async mounted() {
     try{
-        await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token)
+        await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
         await this.initData();
         this.loading = false;
     }catch (e) {
-        this.$router.push({ path: `/signin` });
+        this.$router.push({ path: "/signin" });
     }
   },
   computed: {

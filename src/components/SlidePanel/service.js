@@ -1,30 +1,30 @@
-import Promise from 'promise-polyfill'
+import Promise from "promise-polyfill";
 
-import eventBus from './eventBus'
+import eventBus from "./eventBus";
 
 function generateGuid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
-      .substring(1)
+      .substring(1);
   }
 
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
+  return s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4();
 }
 
 class PanelResult {
   constructor(id, promise, panelOptions) {
-    if (!id) throw new Error('id')
-    if (!promise) throw new Error('promise')
-    if (!panelOptions) throw new Error('panelOptions')
+    if (!id) throw new Error("id");
+    if (!promise) throw new Error("promise");
+    if (!panelOptions) throw new Error("panelOptions");
 
-    this._id = id
-    this._promise = promise
-    this._panelOptions = panelOptions
+    this._id = id;
+    this._promise = promise;
+    this._panelOptions = panelOptions;
   }
 
   get promise() {
-    return this._promise
+    return this._promise;
   }
 
   /**
@@ -32,63 +32,66 @@ class PanelResult {
    * @param {Object} [panel.props] - any props you want to update
    */
   show(panel = {}) {
-    const panelOptions = Object.assign(this._panelOptions, panel)
+    const panelOptions = Object.assign(this._panelOptions, panel);
 
-    return showPanel(panelOptions, this._id)
+    return showPanel(panelOptions, this._id);
   }
 
   hide() {
-    const panelOptions = Object.assign({
-      id: this._id
-    }, this._panelOptions)
+    const panelOptions = Object.assign(
+      {
+        id: this._id
+      },
+      this._panelOptions
+    );
 
-    eventBus.$emit('hideSlideOutPanel', panelOptions)
+    eventBus.$emit("hideSlideOutPanel", panelOptions);
   }
 }
 
 function showPanel(panelOptions, existingId) {
-  if (!panelOptions) throw new Error('panelOptions is required')
-  if (!panelOptions.component) throw new Error('panelOptions.component is required')
+  if (!panelOptions) throw new Error("panelOptions is required");
+  if (!panelOptions.component) throw new Error("panelOptions.component is required");
 
-  const id = existingId || generateGuid()
+  const id = existingId || generateGuid();
 
-  panelOptions.id = id
+  panelOptions.id = id;
 
-  const promise = new Promise(resolve => {
-    eventBus.$emit('showSlideOutPanel', panelOptions)
+  const promise = new Promise((resolve) => {
+    eventBus.$emit("showSlideOutPanel", panelOptions);
 
-    eventBus.$once(`hideSlideOutPanel-${panelOptions.id}`, payload => {
-      return resolve(payload.data)
-    })
-  })
+    eventBus.$once(`hideSlideOutPanel-${panelOptions.id}`, (payload) => {
+      return resolve(payload.data);
+    });
+  });
 
-  let panelResult = new PanelResult(id, promise, panelOptions)
+  let panelResult = new PanelResult(id, promise, panelOptions);
 
-  let slideoutPanelBg = document.getElementsByClassName('slideout-panel-bg')
+  let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
   if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-    slideoutPanelBg[0].style = 'z-index: 101'
+    slideoutPanelBg[0].style = "z-index: 101";
   }
 
-  panelResult.promise.then(res => {
+  panelResult.promise.then((res) => {
     if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-      slideoutPanelBg[0].style = 'z-index: 100'
+      slideoutPanelBg[0].style = "z-index: 100";
     }
-  })
+  });
 
-  return panelResult
+  return panelResult;
 }
 
 function showPanelStack(panelOptions) {
-  if (!panelOptions || !panelOptions.length) throw new Error('panelOptions must be an array')
+  if (!panelOptions || !panelOptions.length) throw new Error("panelOptions must be an array");
 
   const panelResults = panelOptions.map((panelOption) => {
-    return showPanel(panelOption, this._id)
-  })
+    return showPanel(panelOption, this._id);
+  });
 
-  return panelResults
+  return panelResults;
 }
 
 export default {
   showPanel,
   showPanelStack
-}
+};

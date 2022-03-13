@@ -1,293 +1,531 @@
 <template>
-  <div class="md-layout event-campaign-section booking-section event-campaign-width">
-    <budget-notifications></budget-notifications>
+  <div
+    class="
+      md-layout
+      event-campaign-section
+      booking-section
+      event-campaign-width
+    "
+  >
+    <budget-notifications />
     <div class="inner-container">
       <comment-editor-panel
         v-if="showCommentEditorPanel"
-        :commentComponents="commentComponents"
+        :comment-components="commentComponents"
         @saveComment="saveComment"
         @updateComment="updateComment"
         @deleteComment="deleteComment"
         @updateCommentComponent="updateCommentComponent"
-      >
-      </comment-editor-panel>
+      />
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-name">
           <div class="font-size-30 font-bold text-transform-capitalize mb-20">
-            <img class="mr-10" :src="`${$iconURL}Campaign/Group 8857.svg`" />
+            <img
+              class="mr-10"
+              :src="`${$iconURL}Campaign/Group 8857.svg`"
+            >
             your event's brilliant campaign
           </div>
-          <p class="font-size-16">Get your guests super exited by giving them a taste of what's waiting for them</p>
+          <p class="font-size-16">
+            Get your guests super exited by giving them a taste of what's
+            waiting for them
+          </p>
         </div>
-        <header-actions :customStyles="{showCommentsText: {paddingLeft: '2px'}}" @toggleCommentMode="toggleCommentMode" @share="share"></header-actions>
+        <header-actions
+          :custom-styles="{ showCommentsText: { paddingLeft: '2px' } }"
+          @toggleCommentMode="toggleCommentMode"
+          @share="share"
+        />
       </div>
       <div class="campaign-content md-layout-item md-size-100 mt-30">
         <loader :active="isLoading" />
         <div class="campaign-content-tab d-flex">
           <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+            class="
+              campaign-content-tab-item
+              flex-1
+              font-size-22 font-bold-extra
+              text-center
+            "
             :class="{ selected: selectedTab === 1 }"
             @click="selectTab(1)"
           >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['SAVING_DATE']" />
-            <span :class="{ completedCampaign: campaignIssued['SAVING_DATE'] }">Save The Date</span>
+            <img
+              v-if="campaignIssued['SAVING_DATE']"
+              :src="`${$iconURL}Campaign/Group 9222.svg`"
+            >
+            <span
+              :class="{ completedCampaign: campaignIssued['SAVING_DATE'] }"
+            >Save The Date</span>
             <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip class="w-max-350">
-              <div class="font-size-14 tab-tooltip">
-                <p>{{ campaignTabs[1].tooltip }}</p>
-              </div>
-            </md-tooltip>
-          </span>
+              <img
+                class="ml-20"
+                :src="`${$iconURL}Campaign/Group 9087.svg`"
+              >
+              <md-tooltip class="w-max-350">
+                <div class="font-size-14 tab-tooltip">
+                  <p>{{ campaignTabs[1].tooltip }}</p>
+                </div>
+              </md-tooltip>
+            </span>
           </div>
           <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+            class="
+              campaign-content-tab-item
+              flex-1
+              font-size-22 font-bold-extra
+              text-center
+            "
             :class="{ selected: selectedTab === 2 }"
             @click="selectTab(2)"
           >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['RSVP']" />
-            <span :class="{ completedCampaign: campaignIssued['RSVP'] }">RSVP</span>
+            <img
+              v-if="campaignIssued['RSVP']"
+              :src="`${$iconURL}Campaign/Group 9222.svg`"
+            >
+            <span
+              :class="{ completedCampaign: campaignIssued['RSVP'] }"
+            >RSVP</span>
             <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip class="w-max-350">
-              <div class="font-size-14 tab-tooltip">
-                <p>{{ campaignTabs[2].tooltip }}</p>
-              </div>
-            </md-tooltip>
-          </span>
+              <img
+                class="ml-20"
+                :src="`${$iconURL}Campaign/Group 9087.svg`"
+              >
+              <md-tooltip class="w-max-350">
+                <div class="font-size-14 tab-tooltip">
+                  <p>{{ campaignTabs[2].tooltip }}</p>
+                </div>
+              </md-tooltip>
+            </span>
           </div>
           <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+            class="
+              campaign-content-tab-item
+              flex-1
+              font-size-22 font-bold-extra
+              text-center
+            "
             :class="{ selected: selectedTab === 3 }"
             @click="selectTab(3)"
           >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['COMING_SOON']" />
-            <span :class="{ completedCampaign: campaignIssued['COMING_SOON'] }">Coming Soon</span>
+            <img
+              v-if="campaignIssued['COMING_SOON']"
+              :src="`${$iconURL}Campaign/Group 9222.svg`"
+            >
+            <span
+              :class="{ completedCampaign: campaignIssued['COMING_SOON'] }"
+            >Coming Soon</span>
             <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip class="w-max-350">
-              <div class="font-size-14 tab-tooltip">
-                <p>{{ campaignTabs[3].tooltip }}</p>
-              </div>
-            </md-tooltip>
-          </span>
+              <img
+                class="ml-20"
+                :src="`${$iconURL}Campaign/Group 9087.svg`"
+              >
+              <md-tooltip class="w-max-350">
+                <div class="font-size-14 tab-tooltip">
+                  <p>{{ campaignTabs[3].tooltip }}</p>
+                </div>
+              </md-tooltip>
+            </span>
           </div>
           <div
-            class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
+            class="
+              campaign-content-tab-item
+              flex-1
+              font-size-22 font-bold-extra
+              text-center
+            "
             :class="{ selected: selectedTab === 4 }"
             @click="selectTab(4)"
           >
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['FEEDBACK']" />
-            <span :class="{ completedCampaign: campaignIssued['FEEDBACK'] }">Feedback</span>
+            <img
+              v-if="campaignIssued['FEEDBACK']"
+              :src="`${$iconURL}Campaign/Group 9222.svg`"
+            >
+            <span
+              :class="{ completedCampaign: campaignIssued['FEEDBACK'] }"
+            >Feedback</span>
             <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip class="w-max-350">
-              <div class="font-size-14 tab-tooltip">
-                <p>{{ campaignTabs[4].tooltip }}</p>
-              </div>
-            </md-tooltip>
-          </span>
+              <img
+                class="ml-20"
+                :src="`${$iconURL}Campaign/Group 9087.svg`"
+              >
+              <md-tooltip class="w-max-350">
+                <div class="font-size-14 tab-tooltip">
+                  <p>{{ campaignTabs[4].tooltip }}</p>
+                </div>
+              </md-tooltip>
+            </span>
           </div>
         </div>
-        <savedate-analytics v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"></savedate-analytics>
-        <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']"></rsvp-analytics>
-        <comingsoon-analytics v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"></comingsoon-analytics>
-        <feedback-analytics v-if="selectedTab == 4 && campaignIssued['FEEDBACK']"></feedback-analytics>
+        <savedate-analytics
+          v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"
+        />
+        <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']" />
+        <comingsoon-analytics
+          v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"
+        />
+        <feedback-analytics
+          v-if="selectedTab == 4 && campaignIssued['FEEDBACK']"
+        />
 
         <!-- Save the date -->
         <template v-if="selectedTab == 1">
-          <collapse-panel class="white-card" v-if="campaignIssued['SAVING_DATE']" :defaultStatus="false">
+          <collapse-panel
+            v-if="campaignIssued['SAVING_DATE']"
+            class="white-card"
+            :default-status="false"
+          >
             <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Save The Date’ Campaign</div>
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘Save The Date’ Campaign
+              </div>
             </template>
             <template slot="content">
-              <save-date :info="{ ...campaignTabs[1], ...campaignInfo }"
-                         @changeInfo="changeInfo"
-                         @showModal="test"
-                         :show-change-cover="true"
-              ></save-date>
+              <save-date
+                :info="{ ...campaignTabs[1], ...campaignInfo }"
+                :show-change-cover="true"
+                @changeInfo="changeInfo"
+                @showModal="test"
+              />
             </template>
           </collapse-panel>
           <save-date
             v-else
-            :info="{ ...campaignTabs[1], ...campaignInfo }"
-            @changeInfo="changeInfo"
-            @showModal="test"
             ref="savedateCampaign"
+            :info="{ ...campaignTabs[1], ...campaignInfo }"
             class="white-card"
             :show-change-cover="true"
-          ></save-date>
+            @changeInfo="changeInfo"
+            @showModal="test"
+          />
         </template>
 
         <template v-if="selectedTab == 2">
-          <collapse-panel v-if="campaignIssued['RSVP']" class="white-card" :defaultStatus="false">
+          <collapse-panel
+            v-if="campaignIssued['RSVP']"
+            class="white-card"
+            :default-status="false"
+          >
             <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘RSVP’ Campaign</div>
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘RSVP’ Campaign
+              </div>
             </template>
             <template slot="content">
-              <rsvp :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
+              <rsvp
+                ref="rsvp"
+                :info="{ ...campaignTabs[2], ...campaignInfo }"
+              />
             </template>
           </collapse-panel>
-          <rsvp v-else :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
+          <rsvp
+            v-else
+            ref="rsvp"
+            :info="{ ...campaignTabs[2], ...campaignInfo }"
+          />
         </template>
 
         <template v-if="selectedTab == 3">
-          <collapse-panel v-if="campaignIssued['COMING_SOON']" class="white-card" :defaultStatus="false">
+          <collapse-panel
+            v-if="campaignIssued['COMING_SOON']"
+            class="white-card"
+            :default-status="false"
+          >
             <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Cooming Soon’ Campaign</div>
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘Cooming Soon’ Campaign
+              </div>
             </template>
             <template slot="content">
-              <countdown :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
+              <countdown
+                ref="countdown"
+                :info="{ ...campaignTabs[3], ...campaignInfo }"
+              />
             </template>
           </collapse-panel>
           <countdown
             v-else
-            :info="{ ...campaignTabs[3], ...campaignInfo }"
             ref="countdown"
+            :info="{ ...campaignTabs[3], ...campaignInfo }"
             class="white-card"
-          ></countdown>
+          />
         </template>
 
         <template v-if="selectedTab == 4">
-          <collapse-panel v-if="campaignIssued['FEEDBACK']" class="white-card" :defaultStatus="false">
+          <collapse-panel
+            v-if="campaignIssued['FEEDBACK']"
+            class="white-card"
+            :default-status="false"
+          >
             <template slot="header">
-              <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Feedback’ Campaign</div>
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘Feedback’ Campaign
+              </div>
             </template>
             <template slot="content">
-              <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+              <feedback
+                ref="feedback"
+                :info="{ ...campaignTabs[4], ...campaignInfo }"
+              />
             </template>
           </collapse-panel>
-          <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback" class="white-card"></feedback>
+          <feedback
+            v-else
+            ref="feedback"
+            :info="{ ...campaignTabs[4], ...campaignInfo }"
+            class="white-card"
+          />
         </template>
 
         <delivery-settings
-          :defaultSettings="deliverySettings"
-          @change="changeSettings"
+          :default-settings="deliverySettings"
           :campaign="campaignTabs[selectedTab]"
-        ></delivery-settings>
+          @change="changeSettings"
+        />
       </div>
       <campaign-schedule-modal
         v-if="showScheduleModal"
         :campaigns="campaignTabs"
-        :currentCampaign="campaignTabs[selectedTab]"
-        :currentCampaignIndex="selectedTab"
+        :current-campaign="campaignTabs[selectedTab]"
+        :current-campaign-index="selectedTab"
         @changeTime="saveScheduleTime"
         @cancel="showScheduleModal = false"
-      ></campaign-schedule-modal>
+      />
     </div>
     <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
         <div>
-          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+          <md-button
+            class="
+              md-button md-simple md-just-icon md-theme-default
+              scroll-top-button
+            "
+            @click="scrollToTop"
+          >
+            <img
+              :src="`${$iconURL}Budget+Requirements/Asset+49.svg`"
+              width="17"
+            >
           </md-button>
         </div>
-        <div class="d-flex align-center" v-if="!campaignIssued[campaignTabs[selectedTab].name]">
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="sendPreviewEmail">
+        <div
+          v-if="!campaignIssued[campaignTabs[selectedTab].name]"
+          class="d-flex align-center"
+        >
+          <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendPreviewEmail"
+          >
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`" />
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 1855.svg`"
+              >
               Send Me A Preview
             </span>
           </md-button>
-          <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="revertSetting" v-if="!isScheduled">
+          <span class="seperator" />
+          <md-button
+            v-if="!isScheduled"
+            class="md-simple md-button md-black maryoku-btn"
+            @click="revertSetting"
+          >
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 8871.svg`"
+              >Revert to original
             </span>
           </md-button>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="startCampaign" v-else>
+          <md-button
+            v-else
+            class="md-simple md-button md-black maryoku-btn"
+            @click="startCampaign"
+          >
             <span class="font-size-16 text-transform-capitalize">
-              <img :src="`${$iconURL}Campaign/group-2428.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              <img
+                :src="`${$iconURL}Campaign/group-2428.svg`"
+                class="mr-10"
+                style="width: 20px; height: 20px"
+              >
               Send Now
             </span>
           </md-button>
-          <div class="schedule-btn d-flex" v-if="!isScheduled">
-            <md-button class="md-button md-red maryoku-btn schedule-campaign-btn" @click="showScheduleModal = true">
+          <div
+            v-if="!isScheduled"
+            class="schedule-btn d-flex"
+          >
+            <md-button
+              class="md-button md-red maryoku-btn schedule-campaign-btn"
+              @click="showScheduleModal = true"
+            >
               <span class="font-size-16 text-transform-capitalize">
-                <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`" />
+                <img
+                  class="mr-20"
+                  :src="`${$iconURL}Campaign/Path 4377.svg`"
+                >
                 Schedule Campaign
               </span>
             </md-button>
-            <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
-              <md-button md-menu-trigger class="md-icon-button schedule-menu-btn">
-                <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
+            <md-menu
+              md-size="medium"
+              md-align-trigger
+              md-direction="top-end"
+              class="schedule-menu"
+            >
+              <md-button
+                md-menu-trigger
+                class="md-icon-button schedule-menu-btn"
+              >
+                <md-icon class="schedule-menu-btn-icon">
+                  keyboard_arrow_down
+                </md-icon>
               </md-button>
               <md-menu-content>
-                <md-menu-item class="text-center" @click="saveDraftCampaign">
+                <md-menu-item
+                  class="text-center"
+                  @click="saveDraftCampaign"
+                >
                   <span class="font-size-16 font-bold-extra">
                     <img
                       :src="`${$iconURL}Campaign/Group 1908.svg`"
                       class="mr-10"
                       style="width: 20px; height: 20px"
-                    />Save Draft
+                    >Save Draft
                   </span>
                 </md-menu-item>
-                <md-menu-item class="text-center" @click="startCampaign">
+                <md-menu-item
+                  class="text-center"
+                  @click="startCampaign"
+                >
                   <span class="font-size-16 font-bold-extra">
                     <img
                       :src="`${$iconURL}Campaign/group-2428.svg`"
                       class="mr-10"
                       style="width: 20px; height: 20px"
-                    />Send Now
+                    >Send Now
                   </span>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
           </div>
           <template v-else>
-            <span class="seperator"></span>
-            <img class="mr-20 label-icon-25 ml-30" :src="`${$iconURL}Campaign/clock-gray.svg`" />
+            <span class="seperator" />
+            <img
+              class="mr-20 label-icon-25 ml-30"
+              :src="`${$iconURL}Campaign/clock-gray.svg`"
+            >
             Scheduled Send:
-            {{ $dateUtil.formatScheduleDay(currentCampaign.scheduleSettings.scheduleTime, "DD.MM.YY  |  hh:mm A") }}
-            <md-button class="maryoku-btn md-simple md-red" @click="cancelSchedule">Cancel</md-button>
+            {{
+              $dateUtil.formatScheduleDay(
+                currentCampaign.scheduleSettings.scheduleTime,
+                "DD.MM.YY  |  hh:mm A"
+              )
+            }}
+            <md-button
+              class="maryoku-btn md-simple md-red"
+              @click="cancelSchedule"
+            >
+              Cancel
+            </md-button>
           </template>
         </div>
-        <div class="d-flex align-center" v-else>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="sendToAddtionalGuests">
+        <div
+          v-else
+          class="d-flex align-center"
+        >
+          <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendToAddtionalGuests"
+          >
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Send To Additional Guests
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 8871.svg`"
+              >Send To Additional Guests
             </span>
           </md-button>
-          <span class="seperator" style="margin-top: 0"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="sendPreviewEmail">
+          <span
+            class="seperator"
+            style="margin-top: 0"
+          />
+          <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendPreviewEmail"
+          >
             <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`" />
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 1855.svg`"
+              >
               Send Me A Preview
             </span>
           </md-button>
-          <span class="seperator" style="margin-top: 0; margin-right: 30px"></span>
-          <div class="ml-40" v-if="!canSchedule">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
+          <span
+            class="seperator"
+            style="margin-top: 0; margin-right: 30px"
+          />
+          <div
+            v-if="!canSchedule"
+            class="ml-40"
+          >
+            <img :src="`${$iconURL}Campaign/Group 9222.svg`">
             Campaign Sent
           </div>
-          <div class="schedule-btn d-flex" v-else>
-            <md-button class="md-button md-red maryoku-btn schedule-campaign-btn" @click="showScheduleModal = true">
+          <div
+            v-else
+            class="schedule-btn d-flex"
+          >
+            <md-button
+              class="md-button md-red maryoku-btn schedule-campaign-btn"
+              @click="showScheduleModal = true"
+            >
               <span class="font-size-16 text-transform-capitalize">
-                <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`" />
+                <img
+                  class="mr-20"
+                  :src="`${$iconURL}Campaign/Path 4377.svg`"
+                >
                 Schedule Campaign
               </span>
             </md-button>
-            <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
-              <md-button md-menu-trigger class="md-icon-button schedule-menu-btn">
-                <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
+            <md-menu
+              md-size="medium"
+              md-align-trigger
+              md-direction="top-end"
+              class="schedule-menu"
+            >
+              <md-button
+                md-menu-trigger
+                class="md-icon-button schedule-menu-btn"
+              >
+                <md-icon class="schedule-menu-btn-icon">
+                  keyboard_arrow_down
+                </md-icon>
               </md-button>
               <md-menu-content>
-                <md-menu-item class="text-center" @click="saveDraftCampaign">
+                <md-menu-item
+                  class="text-center"
+                  @click="saveDraftCampaign"
+                >
                   <span class="font-size-16 font-bold-extra">
                     <img
                       :src="`${$iconURL}Campaign/Group 1908.svg`"
                       class="mr-10"
                       style="width: 20px; height: 20px"
-                    />Save Draft
+                    >Save Draft
                   </span>
                 </md-menu-item>
-                <md-menu-item class="text-center" @click="startCampaign">
+                <md-menu-item
+                  class="text-center"
+                  @click="startCampaign"
+                >
                   <span class="font-size-16 font-bold-extra">
                     <img
                       :src="`${$iconURL}Campaign/group-2428.svg`"
                       class="mr-10"
                       style="width: 20px; height: 20px"
-                    />Send Now
+                    >
+                    Send Now
                   </span>
                 </md-menu-item>
               </md-menu-content>
@@ -296,27 +534,40 @@
         </div>
       </div>
     </div>
-    <modal v-if="showChangeCoverModal" container-class="modal-container-wizard lg">
+    <modal
+      v-if="showChangeCoverModal"
+      container-class="modal-container-wizard lg"
+    >
       <template slot="header">
         <div class="model__header">
-          <div class="font-size-30 arrow"><md-icon  @click="test" >close</md-icon></div>
-          <h2>
-            Change Cover
-          </h2>
+          <div class="font-size-30 arrow">
+            <md-icon @click="test">
+              close
+            </md-icon>
+          </div>
+          <h2>Change Cover</h2>
           <div class="header-description">
-            Select the image that will appear on “Save the Date” cover.
-            If you want to change the collage you can always go back to concept page
+            Select the image that will appear on “Save the Date” cover. If you
+            want to change the collage you can always go back to concept page
           </div>
         </div>
-
       </template>
       <template slot="body">
-        <div class="md-layout">
-        </div>
+        <div class="md-layout" />
       </template>
       <template slot="footer">
-        <md-button class="add-category-btn" @click="test">Cancel</md-button>
-        <md-button class="md-red add-category-btn"  @click="test" >Choose Image</md-button>
+        <md-button
+          class="add-category-btn"
+          @click="test"
+        >
+          Cancel
+        </md-button>
+        <md-button
+          class="md-red add-category-btn"
+          @click="test"
+        >
+          Choose Image
+        </md-button>
       </template>
     </modal>
   </div>
@@ -324,7 +575,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { Tabs, Modal } from "@/components";
+import { Modal } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import { CommentMixins, ShareMixins } from "@/mixins";
@@ -345,7 +596,6 @@ import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import FeedbackList from "./components/FeedbackList";
-import VueElementLoading from "vue-element-loading";
 import { Loader } from "@/components";
 const defaultSettings = {
   phone: {
@@ -371,7 +621,6 @@ const defaultSettings = {
 export default {
   components: {
     Loader,
-    VueElementLoading,
     Tabs,
     Modal,
     HeaderActions,
@@ -400,7 +649,7 @@ export default {
       deliverySettings: this.defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
-      showChangeCoverModal:false,
+      showChangeCoverModal: false,
       showScheduleModal: false,
       campaignTabs: {
         1: {
@@ -412,7 +661,8 @@ export default {
         2: {
           completed: false,
           name: "RSVP",
-          tooltip: "Try sending your RSVP's a month in advance,  so you'll get the most accurate results",
+          tooltip:
+            "Try sending your RSVP's a month in advance,  so you'll get the most accurate results",
         },
         3: {
           completed: false,
@@ -431,8 +681,8 @@ export default {
     };
   },
   methods: {
-    test(){
-      this.showChangeCoverModal = !this.showChangeCoverModal
+    test() {
+      this.showChangeCoverModal = !this.showChangeCoverModal;
     },
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     toggleCommentMode(mode) {
@@ -457,10 +707,15 @@ export default {
       window.scrollTo(0, 0);
     },
     startCampaign() {
-      const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      if (!campaignData || (!this.deliverySettings.email.selected && !this.deliverySettings.phone.selected)) {
+      const campaignData =
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      if (
+        !campaignData ||
+        (!this.deliverySettings.email.selected &&
+          !this.deliverySettings.phone.selected)
+      ) {
         Swal.fire({
-          title: `Please select email or phone or both.`,
+          title: "Please select email or phone or both.",
           buttonsStyling: false,
           icon: "warning",
           confirmButtonClass: "md-button md-success",
@@ -468,7 +723,10 @@ export default {
         return;
       }
 
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "STARTED");
+      this.callSaveCampaign(
+        this.campaignTabs[this.selectedTab].name,
+        "STARTED"
+      );
     },
     saveDraftCampaign() {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
@@ -482,7 +740,10 @@ export default {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
     scheduleCampaign() {
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SCHEDULED");
+      this.callSaveCampaign(
+        this.campaignTabs[this.selectedTab].name,
+        "SCHEDULED"
+      );
     },
     changeInfo(data) {
       this.campaignInfo[data.field] = data.value;
@@ -495,12 +756,15 @@ export default {
       const campaignData = this.$store.state.campaign[campaignType];
       let coverImage = campaignData.coverImage;
       if (coverImage && coverImage.indexOf("base64") >= 0) {
-        const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
+        const fileObject = S3Service.dataURLtoFile(
+          coverImage,
+          `${this.event.id}-${campaignType}`
+        );
         const extenstion = fileObject.type.split("/")[1];
         let fileUpload = await S3Service.fileUpload(
           fileObject,
           `${this.event.id}-${campaignType}`,
-          "campaigns/cover-images",
+          "campaigns/cover-images"
         );
         coverImage = fileUpload;
       }
@@ -531,7 +795,7 @@ export default {
       });
       return new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
-          .then(res => {
+          .then((res) => {
             this.$store.commit("event/setEventData", res.item.event);
             this.isLoading = false;
             resolve();
@@ -543,7 +807,12 @@ export default {
       });
     },
     saveScheduleTime(data) {
-      const { currentCampaignIndex, scheduleTime, scheduleSettings, selectedOption } = data;
+      const {
+        currentCampaignIndex,
+        scheduleTime,
+        scheduleSettings,
+        selectedOption,
+      } = data;
       const scheduleSettingsData = {
         timeZone: "EST",
         scheduleTime: scheduleTime,
@@ -556,7 +825,8 @@ export default {
         value: scheduleSettingsData,
       });
 
-      const campaign = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      const campaign =
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
       this.scheduleCampaign();
     },
     revertSetting() {
@@ -572,27 +842,34 @@ export default {
       }
     },
     sendPreviewEmail() {
-      const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      const campaignData =
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
       console.log(campaignData);
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
-        true,
-      ).then(res => {});
-        this.$notify({
-            message: {
-                title: 'Your preview email is on the way!',
-                content: `The preview email for ${this.campaignTabs[this.selectedTab].name.split('_').join(' ')} has been sent to ${this.event.owner.name}.You should receive it shortly.`,
-            },
-            icon: `${this.$iconURL}messages/info.svg`,
-            horizontalAlign: "right",
-            verticalAlign: "top",
-            type: 'info',
-            cancelBtn: false,
-            sendBtn: false,
-            closeBtn: true,
-            timeout: 5000,
-        });
+        true
+      ).then((res) => {});
+      this.$notify({
+        message: {
+          title: "Your preview email is on the way!",
+          content: `The preview email for ${this.campaignTabs[
+            this.selectedTab
+          ].name
+            .split("_")
+            .join(" ")} has been sent to ${
+            this.event.owner.name
+          }.You should receive it shortly.`,
+        },
+        icon: `${this.$iconURL}messages/info.svg`,
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "info",
+        cancelBtn: false,
+        sendBtn: false,
+        closeBtn: true,
+        timeout: 5000,
+      });
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {
@@ -611,13 +888,21 @@ export default {
       return this.$store.state.auth.user;
     },
     currentCampaign() {
-      return this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      return this.$store.state.campaign[
+        this.campaignTabs[this.selectedTab].name
+      ];
     },
     canSchedule() {
-      if (this.currentCampaign.settings.email.selected && this.currentCampaign.settings.email.status !== "sent") {
+      if (
+        this.currentCampaign.settings.email.selected &&
+        this.currentCampaign.settings.email.status !== "sent"
+      ) {
         return true;
       }
-      if (this.currentCampaign.settings.phone.selected && this.currentCampaign.settings.phone.status !== "sent") {
+      if (
+        this.currentCampaign.settings.phone.selected &&
+        this.currentCampaign.settings.phone.status !== "sent"
+      ) {
         return true;
       }
       return false;
@@ -627,26 +912,30 @@ export default {
       return this.currentCampaign.campaignStatus === "SCHEDULED";
     },
   },
-  created() {
-    this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
-    this.getCampaigns({ event: this.event }).then(campaigns => {
-      this.campaigns = campaigns;
-      this.setDefaultSettings();
-    });
-  },
   watch: {
     currentCampaign(newValue, oldValue) {
       this.setDefaultSettings();
     },
     event(newValue, oldValue) {
-      this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
+      this.campaignInfo.conceptName = this.event.concept
+        ? this.event.concept.name
+        : "Event Name";
     },
+  },
+  created() {
+    this.campaignInfo.conceptName = this.event.concept
+      ? this.event.concept.name
+      : "Event Name";
+    this.getCampaigns({ event: this.event }).then((campaigns) => {
+      this.campaigns = campaigns;
+      this.setDefaultSettings();
+    });
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.header-description{
+.header-description {
   font-size: 16px;
 }
 .campaign-content {
@@ -741,10 +1030,10 @@ export default {
     }
   }
 }
-.event-campaign-width{
+.event-campaign-width {
   width: 100%;
 }
-.inner-container{
+.inner-container {
   width: 1300px;
   margin: 0 auto;
 }

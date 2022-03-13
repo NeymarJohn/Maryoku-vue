@@ -2,14 +2,16 @@
   <div class>
     <div class="header">
       <div class="navbar">
-        <div class="logo-section"></div>
+        <div class="logo-section" />
         <div class="navbar-menu">
           <ul>
             <li>For Vendors</li>
             <li>Blog</li>
             <li>Our Story</li>
             <li>Contact</li>
-            <li class>Sign in</li>
+            <li class>
+              Sign in
+            </li>
           </ul>
         </div>
       </div>

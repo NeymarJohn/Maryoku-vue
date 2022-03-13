@@ -1,14 +1,14 @@
 <template>
   <div>
-    <md-datepicker :name="name"  @input="triggerFunc($event,name,count)">
-      <label>{{label}}</label>
+    <md-datepicker :name="name" @input="triggerFunc($event,name,count)">
+      <label>{{ label }}</label>
     </md-datepicker>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Datepicker',
+  name: "Datepicker",
   model: {
   },
   props: {
@@ -30,8 +30,8 @@ export default {
   },
   methods: {
     triggerFunc: function (value, name, count) {
-      this.onChange(value, name, count)
+      this.onChange(value, name, count);
     }
   }
-}
+};
 </script>

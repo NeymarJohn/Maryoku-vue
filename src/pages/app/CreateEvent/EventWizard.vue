@@ -7,39 +7,41 @@
             <md-icon>
               <img
                 src="https://static-maryoku.s3.amazonaws.com/storage/wizard-icons/icon%20location@2x.png"
-              />
+              >
             </md-icon>
             <v-select
               v-model="eventData.location"
+              v-validate="modelValidations.location"
               :options="locationsList"
               :class="{'has-value' : eventData.location}"
               data-vv-name="location"
-              v-validate="modelValidations.location"
-            ></v-select>
+            />
             <label>Event Location (City)</label>
-            <span class="md-error" v-if="errors.has('location')">This field is required</span>
+            <span v-if="errors.has('location')" class="md-error">This field is required</span>
           </div>
-          <md-checkbox v-model="eventData.eventPlaceNeeded">I have event place</md-checkbox>
+          <md-checkbox v-model="eventData.eventPlaceNeeded">
+            I have event place
+          </md-checkbox>
         </div>
 
         <div class="maryoku-field with-icon" :class="{'has-value' : eventData.eventType}">
           <md-icon>grade</md-icon>
           <v-select
             v-model="eventData.eventType"
+            v-validate="modelValidations.eventType"
             :options="eventTypes"
             :class="{'has-value' : eventData.eventType}"
             data-vv-name="location"
-            v-validate="modelValidations.eventType"
-          ></v-select>
+          />
           <label>Event Type</label>
-          <span class="md-error" v-if="errors.has('eventType')">This field is required</span>
+          <span v-if="errors.has('eventType')" class="md-error">This field is required</span>
         </div>
 
         <div class="form-group">
           <md-datepicker
-            class="purple-field with-icon datepicker-field"
             v-model="eventData.date"
             v-validate="modelValidations.date"
+            class="purple-field with-icon datepicker-field"
             md-immediately
             :class="[{'md-error': errors.has('date')}]"
           >
@@ -47,31 +49,41 @@
             <md-icon class="custom-icon">
               <img
                 src="https://static-maryoku.s3.amazonaws.com/storage/wizard-icons/icon date@2x.png"
-              />
+              >
             </md-icon>
-            <span class="md-error" v-if="errors.has('date')">This field is required</span>
+            <span v-if="errors.has('date')" class="md-error">This field is required</span>
           </md-datepicker>
 
-          <md-checkbox v-model="eventData.flexibleWithDates">I'm flexible with dates</md-checkbox>
+          <md-checkbox v-model="eventData.flexibleWithDates">
+            I'm flexible with dates
+          </md-checkbox>
         </div>
 
         <div class="event-time">
-          <md-radio v-model="eventData.eventDayPart" value="day" class="with-border">Day event</md-radio>
-          <md-radio v-model="eventData.eventDayPart" value="night" class="with-border">Night event</md-radio>
-          <md-radio v-model="eventData.eventDayPart" value="all" class="with-border">All day</md-radio>
+          <md-radio v-model="eventData.eventDayPart" value="day" class="with-border">
+            Day event
+          </md-radio>
+          <md-radio v-model="eventData.eventDayPart" value="night" class="with-border">
+            Night event
+          </md-radio>
+          <md-radio v-model="eventData.eventDayPart" value="all" class="with-border">
+            All day
+          </md-radio>
         </div>
 
         <div class="form-actions">
           <md-button
             class="md-rose next-btn custom-btn"
-            @click="goToNext"
             :class="[{'disabled': !eventData.location || !eventData.eventType || !eventData.date}]"
-          >Next</md-button>
+            @click="goToNext"
+          >
+            Next
+          </md-button>
         </div>
       </div>
     </div>
 
-    <go-back navigation="https://www.maryoku.com/home.html" :home="true"></go-back>
+    <go-back navigation="https://www.maryoku.com/home.html" :home="true" />
   </div>
 </template>
 
@@ -146,7 +158,7 @@ export default {
             actualValue: this.eventData.flexibleWithDates,
           });
           this.setCurrentStep({ currentPage: "/about-invited" });
-          this.$router.push({ path: `/about-invited` });
+          this.$router.push({ path: "/about-invited" });
         } else {
           this.showNotify();
         }

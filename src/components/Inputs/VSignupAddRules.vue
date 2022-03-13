@@ -4,15 +4,15 @@
       <div class="add-rule-cont">
         <h4>{{ title.title }}</h4>
         <div class="field" :class="{ suffix: focusedRule != '' }">
-          <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule" />
-          <a :disabled="true" @click="addRule()" :class="`${theme}`">Add</a>
+          <input ref="additionalRule" v-model="focusedRule" :placeholder="title.placeholder">
+          <a :disabled="true" :class="`${theme}`" @click="addRule()">Add</a>
         </div>
-        <div class="rules-cont" v-if="rules.length > 0">
-          <div class="rule" v-for="(r, rIndex) in rules" :key="rIndex">
+        <div v-if="rules.length > 0" class="rules-cont">
+          <div v-for="(r, rIndex) in rules" :key="rIndex" class="rule">
             <span>Event must be {{ r }}</span>
             <div class="actions">
-              <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)" />
-              <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)" />
+              <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)">
+              <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)">
             </div>
           </div>
         </div>
@@ -32,10 +32,10 @@
                 {{ title.labels.if }}
               </span>
             </div>
-            <input :placeholder="title.placeholder.if" ref="ifPolicy" v-model="focusedCancelPolicy.if" />
+            <input ref="ifPolicy" v-model="focusedCancelPolicy.if" :placeholder="title.placeholder.if">
           </div>
           <div class="arrow">
-            <img :src="`${iconUrl}Group 4585 (2).svg`" />
+            <img :src="`${iconUrl}Group 4585 (2).svg`">
           </div>
           <div class="ifthan">
             <div>
@@ -44,14 +44,14 @@
                 {{ title.labels.than }}
               </span>
             </div>
-            <input :placeholder="title.placeholder.than" ref="thanPolicy" v-model="focusedCancelPolicy.than" />
+            <input ref="thanPolicy" v-model="focusedCancelPolicy.than" :placeholder="title.placeholder.than">
           </div>
           <div class="action">
             <a :disabled="true" @click="addCancelPolicy()">Add</a>
           </div>
         </div>
-        <div class="policies-cont" v-if="policies.length > 0">
-          <div class="policy" v-for="(p, pIndex) in policies" :key="pIndex">
+        <div v-if="policies.length > 0" class="policies-cont">
+          <div v-for="(p, pIndex) in policies" :key="pIndex" class="policy">
             <div class="pitem">
               <b>If</b>
               {{ p.if }}
@@ -61,8 +61,8 @@
               {{ p.than }}
             </div>
             <div class="actions">
-              <img :src="`${iconUrl}Asset 527.svg`" @click="editCancelPolicy(p)" />
-              <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)" />
+              <img :src="`${iconUrl}Asset 527.svg`" @click="editCancelPolicy(p)">
+              <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)">
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@
 import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: "v-signup-add-rules",
+  name: "VSignupAddRules",
   components: {
     VueElementLoading,
   },

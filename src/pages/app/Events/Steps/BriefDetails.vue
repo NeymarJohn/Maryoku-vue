@@ -3,9 +3,11 @@
     <div class="md-layout-item md-size-15 event-components-list">
       <template v-for="(component, index) in eventComponents">
         <md-button
-          class="md-primary"
           :key="index"
-        >{{component.title}} ({{component.proposalsCount}})</md-button>
+          class="md-primary"
+        >
+          {{ component.title }} ({{ component.proposalsCount }})
+        </md-button>
       </template>
     </div>
     <div class="md-layout-item md-size-85">
@@ -15,7 +17,7 @@
             <md-card-content>
               <md-field class="horizontal-field">
                 <label>Guest Count</label>
-                <md-input type="number" placeholder="eg: 200"></md-input>
+                <md-input type="number" placeholder="eg: 200" />
               </md-field>
             </md-card-content>
           </md-card>
@@ -25,18 +27,20 @@
             <md-card-content style="display: flex;">
               <md-field class="horizontal-field">
                 <label>Venue Budget</label>
-                <md-input type="number" placeholder="$0.0"></md-input>
+                <md-input type="number" placeholder="$0.0" />
               </md-field>
               <md-field class="horizontal-field">
                 <label>PerGuest</label>
-                <md-input type="number" placeholder="$0.0"></md-input>
+                <md-input type="number" placeholder="$0.0" />
               </md-field>
             </md-card-content>
           </md-card>
         </div>
         <div class="md-layout-item md-size-100">
           <div class="section-header">
-            <h3 class="section-title">Add Requirements</h3>
+            <h3 class="section-title">
+              Add Requirements
+            </h3>
             <md-button class="md-primary md-sm md-simple">
               <md-icon>refresh</md-icon>load requirements from history
             </md-button>
@@ -54,10 +58,16 @@
               >
                 <div class="list-item--header">
                   <div class="list-item--icon" @click="toggleSelectCategory(category)">
-                    <md-icon v-if="isCategorySelected(category)">check</md-icon>
-                    <md-icon v-else>arrow_forward</md-icon>
+                    <md-icon v-if="isCategorySelected(category)">
+                      check
+                    </md-icon>
+                    <md-icon v-else>
+                      arrow_forward
+                    </md-icon>
                   </div>
-                  <div class="list-item--title">{{ category.value }}</div>
+                  <div class="list-item--title">
+                    {{ category.value }}
+                  </div>
                 </div>
                 <div class="list-item--actions">
                   <md-button class="md-just-icon md-primary md-sm md-simple action-btn">
@@ -72,18 +82,22 @@
     </div>
     <div class="md-layout-item md-size-100">
       <div class="text-right margin-bottom-xxl">
-        <md-button @click.prevent="back" class="md-button md-white">Back</md-button>
-        <md-button class="md-button md-primary">Send to vendors</md-button>
+        <md-button class="md-button md-white" @click.prevent="back">
+          Back
+        </md-button>
+        <md-button class="md-button md-primary">
+          Send to vendors
+        </md-button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { Tabs, NavTabsCard } from '@/components'
-import EventComponent from '@/models/EventComponent'
-import CalendarEvent from '@/models/CalendarEvent'
-import Calendar from '@/models/Calendar'
-import VueElementLoading from 'vue-element-loading'
+import { Tabs, NavTabsCard } from "@/components";
+import EventComponent from "@/models/EventComponent";
+import CalendarEvent from "@/models/CalendarEvent";
+import Calendar from "@/models/Calendar";
+import VueElementLoading from "vue-element-loading";
 
 export default {
   components: {
@@ -102,61 +116,61 @@ export default {
       selectedCategories: [],
       selectedSubCategories: [],
       eventComponents: []
-    }
-  },
-  methods: {
-    back () {
-      this.$emit('goToPrevPage')
-    },
-    isCategorySelected (category) {
-      return (
-        _.findIndex(this.selectedCategories, o => o.id === category.id) > -1
-      )
-    },
-    toggleSelectCategory (category) {
-      if (this.isCategorySelected(category)) {
-        this.selectedCategories = this.selectedCategories.filter(
-          o => o.id != category.id
-        )
-        this.subCategories = this.subCategories.filter(
-          o => o.categoryId != category.id
-        )
-        this.selectedSubCategories = this.selectedSubCategories.filter(
-          o => o.categoryId != category.id
-        )
-      } else {
-        this.selectedCategories = this.selectedCategories.concat([category])
-        this.subCategories = this.subCategories.concat(
-          category.childComponents
-        )
-      }
-    }
+    };
   },
   mounted () {
-    this.isLoading = true
-    let vm = this
+    this.isLoading = true;
+    let vm = this;
 
     this.$auth.currentUser(this, true, () => {
       Promise.all([
         CalendarEvent.find(vm.$route.params.id),
         EventComponent.get()
       ]).then(([event, components]) => {
-        vm.calendar = new Calendar({ id: vm.$auth.user.defaultCalendarId })
-        vm.event = event.for(vm.calendar)
+        vm.calendar = new Calendar({ id: vm.$auth.user.defaultCalendarId });
+        vm.event = event.for(vm.calendar);
 
         new EventComponent()
           .for(vm.calendar, vm.event)
           .get()
           .then(resp => {
-            console.log('components ', resp)
+            console.log("components ", resp);
             // vm.selectedCategories = resp;
-            vm.$set(vm, 'eventComponents', resp)
-          })
-        vm.isLoading = false
-      })
-    })
+            vm.$set(vm, "eventComponents", resp);
+          });
+        vm.isLoading = false;
+      });
+    });
+  },
+  methods: {
+    back () {
+      this.$emit("goToPrevPage");
+    },
+    isCategorySelected (category) {
+      return (
+        _.findIndex(this.selectedCategories, o => o.id === category.id) > -1
+      );
+    },
+    toggleSelectCategory (category) {
+      if (this.isCategorySelected(category)) {
+        this.selectedCategories = this.selectedCategories.filter(
+          o => o.id != category.id
+        );
+        this.subCategories = this.subCategories.filter(
+          o => o.categoryId != category.id
+        );
+        this.selectedSubCategories = this.selectedSubCategories.filter(
+          o => o.categoryId != category.id
+        );
+      } else {
+        this.selectedCategories = this.selectedCategories.concat([category]);
+        this.subCategories = this.subCategories.concat(
+          category.childComponents
+        );
+      }
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_variables.scss";

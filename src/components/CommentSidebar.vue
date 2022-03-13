@@ -3,85 +3,85 @@
     <div class="summer-party2">
       <div class="d-flex">
         <span class="titleText">
-                    All Comments
-                </span>
+          All Comments
+        </span>
       </div>
       <div class="dropdown d-flex">
-                <span class="subText">
-                    March Madness
-                </span>
+        <span class="subText">
+          March Madness
+        </span>
       </div>
       <div class="dropdown2 d-flex">
         <md-menu md-size="medium" class="action-menu myr-1" :md-offset-x="-300" :md-offset-y="-36">
           <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('name')">
             Sort
-            <i class="fas fa-chevron-up my-chevron" v-if="commentSortType == 'asc'" @click.stop="changeCommentSortType('name')" @click="sortBy='name'"></i>
-            <i class="fas fa-chevron-down my-chevron" v-else @click.stop="changeCommentSortType('name')" @click="sortBy='name'"></i>
+            <i v-if="commentSortType == 'asc'" class="fas fa-chevron-up my-chevron" @click.stop="changeCommentSortType('name')" @click="sortBy='name'" />
+            <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('name')" @click="sortBy='name'" />
           </md-button>
         </md-menu>
         <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('status')">
           Status
-          <i class="fas fa-chevron-up my-chevron" v-if="commentStatusSortType == 'asc'" @click.stop="changeCommentSortType('status')"></i>
-          <i class="fas fa-chevron-down my-chevron" v-else @click.stop="changeCommentSortType('status')"></i>
+          <i v-if="commentStatusSortType == 'asc'" class="fas fa-chevron-up my-chevron" @click.stop="changeCommentSortType('status')" />
+          <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('status')" />
         </md-button>
       </div>
     </div>
     <div class="sidebar__items d-flex flex-column fullDiscussion">
-      <div class="comment_item align-items-center justify-content-between cursor-pointer"
-           v-for="(commentComponent, commentIndex) in commentComponents"
-           :key="commentIndex"
+      <div v-for="(commentComponent, commentIndex) in commentComponents"
            v-if="commentComponent.comments && commentComponent.comments.length"
+           :key="commentIndex"
+           class="comment_item align-items-center justify-content-between cursor-pointer"
       >
         <div class="d-flex justify-content-between">
           <div class="sidebar__item__details2 d-flex">
             <img class="" src="/static/icons/Group 21554.png">
             <div class="productLaunchParty">
               <div v-if="commentComponent.planner">
-                {{commentComponent.planner.name}}
+                {{ commentComponent.planner.name }}
               </div>
               <div v-if="commentComponent.customer">
-                {{commentComponent.customer.name}}
+                {{ commentComponent.customer.name }}
               </div>
             </div>
           </div>
-          <div v-if="daysDiff(commentComponent.dateCreated) > 1" class="time-color" >
+          <div v-if="daysDiff(commentComponent.dateCreated) > 1" class="time-color">
             {{ commentComponent.dateCreated | date("DD/MM/YYYY") }}
           </div>
-          <timeago v-else class="time-color" :datetime="commentComponent.dateCreated"></timeago>
+          <timeago v-else class="time-color" :datetime="commentComponent.dateCreated" />
         </div>
         <div class="d-flex sidebar__item__content">
-          <div class="dot"></div>
-          <span class="comment">{{(commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ''}} </span>
+          <div class="dot" />
+          <span class="comment">{{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : '' }} </span>
         </div>
         <div class="d-flex sidebar__item__content justify-content-between mt-1 mb-1">
-            <span class="replay" @click="toggleshowReply(commentIndex)">{{commentComponent.comments.length-1}} Reply
-                <i class="fas fa-chevron-down"></i>
-            </span>
-            <span class="unread-count2">02</span>
+          <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length-1 }} Reply
+            <i class="fas fa-chevron-down" />
+          </span>
+          <span class="unread-count2">02</span>
         </div>
         <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4">
-          <div class="commentItem" v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
+          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
             <div class="d-flex sidebar__item__content2 justify-content-between">
               <!-- <div class="d-flex sidebar__item__content"> -->
               <div class="sidebar__item__details d-flex">
                 <img class="" src="/static/icons/Group 21554.png">
                 <div class="productLaunchParty">
                   <div v-if="comment.planner">
-                    {{comment.planner.name}}
+                    {{ comment.planner.name }}
                   </div>
                   <div v-if="comment.customer">
-                    {{comment.customer.name}}
+                    {{ comment.customer.name }}
                   </div>
                 </div>
               </div>
               <!-- </div> -->
-              <div v-if="daysDiff(comment.dateCreated) > 1" class="time-color" >
+              <div v-if="daysDiff(comment.dateCreated) > 1" class="time-color">
                 {{ comment.dateCreated | date("DD/MM/YYYY") }}
               </div>
-              <timeago v-else class="time-color" :datetime="comment.dateCreated"></timeago>
+              <timeago v-else class="time-color" :datetime="comment.dateCreated" />
             </div>
             <div class="commentDesc">
-              <span>{{comment.description}}</span>
+              <span>{{ comment.description }}</span>
             </div>
           </div>
         </div>
@@ -92,23 +92,27 @@
                 <md-card-content class="d-flex align-center position-relative p-10">
                   <md-menu md-size="medium" class="action-menu">
                     <md-menu-item v-for="c in customers" :key="c.id" @click="toAddress(c)">
-                      {{c.name}}
+                      {{ c.name }}
                     </md-menu-item>
                   </md-menu>
                 </md-card-content>
               </md-card>
             </fade-transition>
-            <textarea rows="4" class="form-control reply-text-area" placeholder="Write reply here" v-model="editingComment" ref="commentEditor" @input="getMessage"></textarea>
-            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+            <textarea ref="commentEditor" v-model="editingComment" rows="4" class="form-control reply-text-area" placeholder="Write reply here" @input="getMessage" />
+            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
             <div class="footer text-right my-top my-bottom">
-              <md-button class="md-simple normal-btn md-black" @click="">Cancel</md-button>
-              <md-button class="normal-btn background-red" @click="saveCommentReply($event, 'reply')">Submit</md-button>
+              <md-button class="md-simple normal-btn md-black" @click="">
+                Cancel
+              </md-button>
+              <md-button class="normal-btn background-red" @click="saveCommentReply($event, 'reply')">
+                Submit
+              </md-button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Loader :active="loading" :isFullScreen="true" page="vendor"></Loader>
+    <Loader :active="loading" :is-full-screen="true" page="vendor" />
   </div>
 </template>
 
@@ -117,7 +121,7 @@
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 import { FadeTransition } from "vue2-transitions";
 import {CommentMixins} from "@/mixins";
-import moment from 'moment'
+import moment from "moment";
 import { getReq } from "@/utils/token";
 
 
@@ -125,49 +129,49 @@ const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
   Avartar: () => import("@/components/Avartar.vue"),
   FadeTransition
-}
+};
 
 export default {
-  name: "comment-sidebar",
+  name: "CommentSidebar",
   components,
-  props: {},
   mixins: [CommentMixins],
+  props: {},
   data: () => ({
     loading: false,
     pagination: PROPOSAL_PAGE_PAGINATION,
     sortFields: { sort: "cost", order: "desc" },
     tab: "all",
-    sortBy: '',
-    sortType: 'asc',
-    statusSortType: 'asc',
-    commentSortBy: '',
-    commentSortType: 'asc',
-    commentStatusSortType: 'asc',
+    sortBy: "",
+    sortType: "asc",
+    statusSortType: "asc",
+    commentSortBy: "",
+    commentSortType: "asc",
+    commentStatusSortType: "asc",
     fullDiscussion: true,
     showReply: false,
     showReplyComment: null,
-    colors: ['#428dfc', '#21cfe0', '#a3809d', '#ff5888', '#77ad8c', '#fdbe00'],
+    colors: ["#428dfc", "#21cfe0", "#a3809d", "#ff5888", "#77ad8c", "#fdbe00"],
     editingComment: "",
     showAddress: false,
     selectedComponent:null,
     customers: [],
   }),
+  computed: {},
 
   created() {},
   mounted() {
-    console.log("Commentside bar mounted")
+    console.log("Commentside bar mounted");
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
   },
-  computed: {},
 
   methods: {
     changeCommentSortType(sortByType) {
-      if(sortByType == 'name'){
-        this.commentSortType = this.commentSortType == 'asc' ? 'desc' : 'asc'
+      if(sortByType == "name"){
+        this.commentSortType = this.commentSortType == "asc" ? "desc" : "asc";
       }
 
-      if(sortByType == 'status'){
-        this.commentStatusSortType = this.commentStatusSortType == 'asc' ? 'desc' : 'asc'
+      if(sortByType == "status"){
+        this.commentStatusSortType = this.commentStatusSortType == "asc" ? "desc" : "asc";
       }
 
       this.commentSortBy = sortByType;
@@ -180,12 +184,12 @@ export default {
           components2.push(component);
         }
       }
-      if(sortByType == 'name'){
-        if (this.commentSortBy == 'name') {
+      if(sortByType == "name"){
+        if (this.commentSortBy == "name") {
           components2.sort((a, b) => {
             let name1 = a.customer ? a.customer.name : a.planner.name;
             let name2 = b.customer ? b.customer.name : b.planner.name;
-            if (this.commentSortType == 'asc') {
+            if (this.commentSortType == "asc") {
               return name1 > name2 ? 1 : -1;
             }else{
               return name1 < name2 ? 1 : -1;
@@ -195,10 +199,10 @@ export default {
       }
 
 
-      if(sortByType == 'status'){
-        if (this.commentSortBy == 'status') {
+      if(sortByType == "status"){
+        if (this.commentSortBy == "status") {
           components2.sort((a, b) => {
-            if (this.commentStatusSortType == 'asc') {
+            if (this.commentStatusSortType == "asc") {
               return b.unread_count - a.unread_count;
             }
 
@@ -210,11 +214,11 @@ export default {
       this.commentComponents = components2;
     },
     async getMessage(e) {
-      if (e.target.value.includes('@')) {
-        let queryArray = e.target.value.split('@')
+      if (e.target.value.includes("@")) {
+        let queryArray = e.target.value.split("@");
 
         let res = await getReq(`/1/customers?name=${queryArray[1]}`);
-        console.log('customers', res);
+        console.log("customers", res);
         this.customers = res.data;
 
         this.showAddress = true;
@@ -227,7 +231,7 @@ export default {
     },
     async saveCommentReply(event, type) {
       let selectedComponent = this.selectedComponent;
-      console.log('saveComment', selectedComponent);
+      console.log("saveComment", selectedComponent);
       const comment = {
         commentComponent: { id: selectedComponent.id },
         description: this.editingComment,
@@ -235,11 +239,11 @@ export default {
         email: this.selectedCustomer ? this.selectedCustomer.email : null,
       };
       this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
-      this.editingComment = ""
+      this.editingComment = "";
       event.stopPropagation();
     },
     daysDiff(date){
-      return moment(moment()).diff(moment(date), 'days');
+      return moment(moment()).diff(moment(date), "days");
     }
   }
 };

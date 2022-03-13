@@ -1,12 +1,12 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <div class="main-panel" style="height: 50%">
-      <notifications></notifications>
-      <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar" style="padding-right: 0">
-        <side-bar :event="eventData"></side-bar>
-        <loader :active="loading" page="vendor"></loader>
+      <notifications />
+      <div :class="{ content: !$route.meta.hideContent }" style="padding-right: 0" @click="toggleSidebar">
+        <side-bar :event="eventData" />
+        <loader :active="loading" page="vendor" />
         <zoom-center-transition v-if="!loading" :duration="200" mode="out-in">
-          <router-view></router-view>
+          <router-view />
         </zoom-center-transition>
       </div>
     </div>
@@ -43,11 +43,11 @@ export default {
   },
   beforeCreate() {
     if(this.$store.state.auth.user){
-      this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
+      this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token).then(user => {
 
-      }).catch(err => this.$router.push({ path: `/vendor/signin`}));
+      }).catch(err => this.$router.push({ path: "/vendor/signin"}));
     } else {
-      this.$router.push({ path: `/vendor/signin`});
+      this.$router.push({ path: "/vendor/signin"});
     }
 
     if (!this.$store.state.vendorDashboard) {

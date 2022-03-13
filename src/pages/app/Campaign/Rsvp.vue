@@ -2,54 +2,56 @@
   <div>
     <div class="rsvp-campaign white-card">
       <div class="p-50">
-        <div class="font-size-30 font-bold-extra mb-50" v-if="campaignData.campaignStatus != 'STARTED'">
+        <div v-if="campaignData.campaignStatus != 'STARTED'" class="font-size-30 font-bold-extra mb-50">
           Get everyone to RSVP
         </div>
         <div class="cover-preview">
-          <img :src="campaignData.coverImage || campaignData.defaultCoverImage" class="mr-10" />
+          <img :src="campaignData.coverImage || campaignData.defaultCoverImage" class="mr-10">
           <label for="cover">
             <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
               Change Cover(Size 1200 * 400)
             </md-button>
           </label>
           <input
-            style="display: none"
             id="coverImage"
+            style="display: none"
             name="attachment"
             type="file"
             multiple="multiple"
             @change="onFileChange"
-          />
+          >
         </div>
-        <div class="preview-logo p-40 d-flex align-center" v-if="campaignData.logoUrl">
-          <img :src="campaignData.logoUrl" style="max-width: 200px" />
-          <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
+        <div v-if="campaignData.logoUrl" class="preview-logo p-40 d-flex align-center">
+          <img :src="campaignData.logoUrl" style="max-width: 200px">
+          <md-switch v-model="showLogo" class="large-switch below-label">
+            Hide logo
+          </md-switch>
         </div>
         <div class="font-size-30 font-bold mt-20 d-flex align-center">
           <title-editor
-            :defaultValue="campaignData.additionalData.greetingWords"
             :key="campaignData.additionalData.greetingWords"
-            @change="handleChangeAddtionalData('greetingWords', ...arguments)"
+            :default-value="campaignData.additionalData.greetingWords"
             class="mt-40 mb-30 font-bold-extra"
-          ></title-editor>
+            @change="handleChangeAddtionalData('greetingWords', ...arguments)"
+          />
         </div>
         <div class="font-size-20 mt-50">
           <title-editor
-            :defaultValue="campaignData.additionalData.prefixEvent"
+            :default-value="campaignData.additionalData.prefixEvent"
             @change="handleChangeAddtionalData('prefixEvent', ...arguments)"
-          ></title-editor>
+          />
         </div>
         <title-editor
-          :defaultValue="campaignTitle"
           :key="campaignTitle"
-          @change="changeTitle"
+          :default-value="campaignTitle"
           class="mt-40 mb-30 font-size-60 font-bold-extra"
-        ></title-editor>
+          @change="changeTitle"
+        />
 
         <maryoku-textarea
           v-model="campaignData.description"
-          :fontSize="18"
+          :font-size="18"
           :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(
             event.eventStartMillis,
             'dddd, MMMM D, YYYY',
@@ -57,29 +59,29 @@
             event.eventStartMillis,
             'dddd, MMMM D, YYYY',
           )}, so I'll know you feel the same way :)`"
-        ></maryoku-textarea>
-        <rsvp-event-info-panel class="mt-60" :event="event" :startTime="eventStartTime"></rsvp-event-info-panel>
+        />
+        <rsvp-event-info-panel class="mt-60" :event="event" :start-time="eventStartTime" />
         <div>
           <title-editor
-            :defaultValue="campaignData.additionalData.carouselTitle"
-            @change="handleChangeAddtionalData('carouselTitle', ...arguments)"
+            :default-value="campaignData.additionalData.carouselTitle"
             class="font-size-20 mb-20"
-          ></title-editor>
+            @change="handleChangeAddtionalData('carouselTitle', ...arguments)"
+          />
           <div>
-            <rsvp-venue-carousel :defaultImages="images" :event="event" @change="changeImage"></rsvp-venue-carousel>
+            <rsvp-venue-carousel :default-images="images" :event="event" @change="changeImage" />
           </div>
         </div>
       </div>
       <div class="p-40 position-relative">
         <div
-          class="rsvp-event-guid-background"
           v-if="event.concept && event.concept.colors[0]"
+          class="rsvp-event-guid-background"
           :style="`background-color:${event.concept.colors[0].color}`"
-        ></div>
-        <div v-else class="rsvp-event-guid-background" :style="`background-color:#D5FCF3;opacity:1;`"></div>
+        />
+        <div v-else class="rsvp-event-guid-background" :style="`background-color:#D5FCF3;opacity:1;`" />
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">
-            <div class="font-size-30 font-bold-extra mb-30 d-flex" v-if="!isEditingWearing" style="height: 52px">
+            <div v-if="!isEditingWearing" class="font-size-30 font-bold-extra mb-30 d-flex" style="height: 52px">
               <img
                 :src="
                   campaignData.visibleSettings && campaignData.visibleSettings.showWearingGuide
@@ -87,7 +89,7 @@
                     : `${$iconURL}RSVP/wear-gray.svg`
                 "
                 style="height: 43px; z-index: 1"
-              />
+              >
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
@@ -100,30 +102,35 @@
               <div>
                 <md-button
                   class="edit-btn md-red md-simple"
-                  @click="isEditingWearing = true"
                   :disabled="!campaignData.visibleSettings.showWearingGuide"
-                  >Edit</md-button
+                  @click="isEditingWearing = true"
                 >
+                  Edit
+                </md-button>
               </div>
               <hide-switch
-                class="ml-10"
                 v-model="campaignData.visibleSettings.showWearingGuide"
+                class="ml-10"
                 label=" "
-              ></hide-switch>
+              />
             </div>
-            <div class="mb-30 d-flex" style="height: 52px" v-else>
-              <maryoku-input class="flex-1" v-model="wearingTitleContent"></maryoku-input>
-              <md-button class="md-simple md-red maryoku-btn" @click="isEditingWearing = false">Cancel</md-button>
-              <md-button class="md-red maryoku-btn" @click="saveTitle('wearing')">Save</md-button>
+            <div v-else class="mb-30 d-flex" style="height: 52px">
+              <maryoku-input v-model="wearingTitleContent" class="flex-1" />
+              <md-button class="md-simple md-red maryoku-btn" @click="isEditingWearing = false">
+                Cancel
+              </md-button>
+              <md-button class="md-red maryoku-btn" @click="saveTitle('wearing')">
+                Save
+              </md-button>
             </div>
             <maryoku-textarea
-              placeholder="Give your guests details about the expected dress code"
               v-model="campaignData.additionalData.wearingGuide"
+              placeholder="Give your guests details about the expected dress code"
               :disabled="!campaignData.visibleSettings.showWearingGuide"
-            ></maryoku-textarea>
+            />
           </div>
           <div class="md-layout-item md-size-50 md-small-size-50">
-            <div class="font-size-30 font-bold-extra mb-30 d-flex" v-if="!isEditingKnowledge" style="height: 52px">
+            <div v-if="!isEditingKnowledge" class="font-size-30 font-bold-extra mb-30 d-flex" style="height: 52px">
               <img
                 :src="
                   campaignData.visibleSettings.showKnowledge
@@ -131,7 +138,7 @@
                     : `${$iconURL}RSVP/lamp-gray.svg`
                 "
                 style="height: 43px; z-index: 1"
-              />
+              >
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
@@ -144,51 +151,58 @@
               <div>
                 <md-button
                   class="edit-btn md-red md-simple"
-                  @click="isEditingKnowledge = true"
                   :disabled="!campaignData.visibleSettings.showKnowledge"
-                  >Edit</md-button
+                  @click="isEditingKnowledge = true"
                 >
+                  Edit
+                </md-button>
               </div>
-              <hide-switch class="ml-10" v-model="campaignData.visibleSettings.showKnowledge" label=" "></hide-switch>
+              <hide-switch v-model="campaignData.visibleSettings.showKnowledge" class="ml-10" label=" " />
             </div>
-            <div class="mb-30 d-flex" style="height: 52px" v-else>
-              <maryoku-input class="flex-1" v-model="knowledgeTitleContent"></maryoku-input>
-              <md-button class="md-simple md-red maryoku-btn" @click="isEditingKnowledge = false">Cancel</md-button>
-              <md-button class="md-red maryoku-btn" @click="saveTitle('knowledge')">Save</md-button>
+            <div v-else class="mb-30 d-flex" style="height: 52px">
+              <maryoku-input v-model="knowledgeTitleContent" class="flex-1" />
+              <md-button class="md-simple md-red maryoku-btn" @click="isEditingKnowledge = false">
+                Cancel
+              </md-button>
+              <md-button class="md-red maryoku-btn" @click="saveTitle('knowledge')">
+                Save
+              </md-button>
             </div>
             <maryoku-textarea
-              placeholder="Give your guests any information you find relevant"
               v-model="campaignData.additionalData.knowledge"
+              placeholder="Give your guests any information you find relevant"
               :disabled="!campaignData.visibleSettings.showKnowledge"
-            ></maryoku-textarea>
+            />
           </div>
         </div>
       </div>
       <rsvp-timeline-panel
         class="p-50"
-        :canHide="true"
+        :can-hide="true"
         :visible="campaignData.visibleSettings.showTimeline"
         @changeVisibility="setVisibleTimeline"
-      ></rsvp-timeline-panel>
+      />
     </div>
     <div class="p-50 pt-0 mt-40 white-card">
       <div class="font-size-30 font-bold-extra mb-30">
-        <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10" />
+        <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10">
         Digital Participation
       </div>
       <md-checkbox v-model="campaignData.allowOnline">
         <span class="font-bold">Allow digital participation</span>
       </md-checkbox>
-      <br />
-      <div class="d-flex align-start" v-if="campaignData.allowOnline">
-        <img class="ml-10 mr-20" style="margin-top: -10px" :src="`${$iconURL}Campaign/enter-gray.svg`" />
+      <br>
+      <div v-if="campaignData.allowOnline" class="d-flex align-start">
+        <img class="ml-10 mr-20" style="margin-top: -10px" :src="`${$iconURL}Campaign/enter-gray.svg`">
         <div class="width-50">
-          <div class="font-bold">Paste link to video communication</div>
+          <div class="font-bold">
+            Paste link to video communication
+          </div>
           <maryoku-input
             v-model="campaignData.additionalData.zoomlink"
             placeholder="Paste Zoom link here..."
-            fieldName="link"
-          ></maryoku-input>
+            field-name="link"
+          />
         </div>
       </div>
     </div>
@@ -258,64 +272,6 @@ export default {
       },
     };
   },
-  created() {
-    if (this.$store.state.campaign.RSVP) {
-      this.editingContent = this.$store.state.campaign.RSVP;
-      if (!this.editingContent.additionalData.greetingWords) {
-        const greetingWords = `Hello ${this.user.companyName ? this.user.companyName : this.user.currentTenant} ${
-          this.event.guestType || "Employee"
-        }`;
-        this.$store.commit("campaign/setAttribute", {
-          name: "RSVP",
-          key: "additionalData",
-          value: { ...this.editingContent.additionalData, greetingWords },
-        });
-      }
-      if (!this.editingContent.additionalData.prefixEvent) {
-        const prefixEvent = `YOU ARE INVITED TO`;
-        this.$store.commit("campaign/setAttribute", {
-          name: "RSVP",
-          key: "additionalData",
-          value: { ...this.editingContent.additionalData, prefixEvent },
-        });
-      }
-      if (!this.editingContent.additionalData.carouselTitle) {
-        const carouselTitle = `ADD YOUR TITLE HERE`;
-        this.$store.commit("campaign/setAttribute", {
-          name: "RSVP",
-          key: "additionalData",
-          value: { ...this.editingContent.additionalData, carouselTitle },
-        });
-      }
-      let coverImage = this.editingContent.coverImage;
-      if (!coverImage && this.event.concept) {
-        coverImage = this.event.concept.images[0].url;
-        this.$store.commit("campaign/setAttribute", {
-          name: "RSVP",
-          key: "coverImage",
-          value: coverImage,
-        });
-      }
-    } else {
-      this.editingContent.title = this.info.conceptName;
-      this.editingContent.coverImage = this.event.concept
-        ? this.event.concept.images[0].url
-        : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
-      this.editingContent.additionalData.greetingWords = `Hello ${
-        user.companyName ? user.companyName : user.currentTenant
-      }} ${event.guestType || "Employee"}`;
-      this.$store.commit("campaign/setCampaign", {
-        name: "RSVP",
-        data: this.editingContent,
-      });
-    }
-    this.$store.commit("campaign/setAttribute", {
-      name: "RSVP",
-      key: "companyName",
-      value: this.user.companyName ? this.user.companyName : this.user.currentTenant,
-    });
-    this.originContent = Object.assign({}, this.editingContent);
-  },
   computed: {
     event() {
       return this.$store.state.event.eventData;
@@ -353,6 +309,64 @@ export default {
       return 0;
     },
   },
+  created() {
+    if (this.$store.state.campaign.RSVP) {
+      this.editingContent = this.$store.state.campaign.RSVP;
+      if (!this.editingContent.additionalData.greetingWords) {
+        const greetingWords = `Hello ${this.user.companyName ? this.user.companyName : this.user.currentTenant} ${
+          this.event.guestType || "Employee"
+        }`;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "additionalData",
+          value: { ...this.editingContent.additionalData, greetingWords },
+        });
+      }
+      if (!this.editingContent.additionalData.prefixEvent) {
+        const prefixEvent = "YOU ARE INVITED TO";
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "additionalData",
+          value: { ...this.editingContent.additionalData, prefixEvent },
+        });
+      }
+      if (!this.editingContent.additionalData.carouselTitle) {
+        const carouselTitle = "ADD YOUR TITLE HERE";
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "additionalData",
+          value: { ...this.editingContent.additionalData, carouselTitle },
+        });
+      }
+      let coverImage = this.editingContent.coverImage;
+      if (!coverImage && this.event.concept) {
+        coverImage = this.event.concept.images[0].url;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "coverImage",
+          value: coverImage,
+        });
+      }
+    } else {
+      this.editingContent.title = this.info.conceptName;
+      this.editingContent.coverImage = this.event.concept
+        ? this.event.concept.images[0].url
+        : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+      this.editingContent.additionalData.greetingWords = `Hello ${
+        user.companyName ? user.companyName : user.currentTenant
+      }} ${event.guestType || "Employee"}`;
+      this.$store.commit("campaign/setCampaign", {
+        name: "RSVP",
+        data: this.editingContent,
+      });
+    }
+    this.$store.commit("campaign/setAttribute", {
+      name: "RSVP",
+      key: "companyName",
+      value: this.user.companyName ? this.user.companyName : this.user.currentTenant,
+    });
+    this.originContent = Object.assign({}, this.editingContent);
+  },
   methods: {
     saveTitle(type) {
       if (type === "knowledge") {
@@ -372,7 +386,7 @@ export default {
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
-        text: `You won't be able to revert this!`,
+        text: "You won't be able to revert this!",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success btn-fill",
         cancelButtonClass: "md-button md-danger btn-fill",

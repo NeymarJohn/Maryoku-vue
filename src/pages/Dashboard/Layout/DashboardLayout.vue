@@ -1,14 +1,14 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
-    <notifications></notifications>
-    <side-bar :event="eventData"></side-bar>
+    <notifications />
+    <side-bar :event="eventData" />
     <div class="main-panel" style="height: 50%">
       <!-- <top-navbar></top-navbar> -->
 
       <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
-          <router-view></router-view>
+          <router-view />
         </zoom-center-transition>
       </div>
     </div>

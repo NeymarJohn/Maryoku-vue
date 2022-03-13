@@ -1,31 +1,49 @@
 <template>
   <div class="event-header__count">
     <div class="count-item">
-      <div class="number">{{days}}</div>
-      <div class="count-label">DAYS</div>
+      <div class="number">
+        {{ days }}
+      </div>
+      <div class="count-label">
+        DAYS
+      </div>
     </div>
-    <div class="count-item divider">:</div>
-    <div class="count-item">
-      <div class="number">{{hours}}</div>
-      <div class="count-label">HOURS</div>
+    <div class="count-item divider">
+      :
     </div>
-    <div class="count-item divider">:</div>
     <div class="count-item">
-      <div class="number">{{mins}}</div>
-      <div class="count-label">MINUTES</div>
+      <div class="number">
+        {{ hours }}
+      </div>
+      <div class="count-label">
+        HOURS
+      </div>
+    </div>
+    <div class="count-item divider">
+      :
+    </div>
+    <div class="count-item">
+      <div class="number">
+        {{ mins }}
+      </div>
+      <div class="count-label">
+        MINUTES
+      </div>
     </div>
     <div class="count-item with-icon">
       <div class="icon">
-        <img :src="`${$iconURL}common/timer-white.svg`" width="20" />
+        <img :src="`${$iconURL}common/timer-white.svg`" width="20">
       </div>
-      <div class="count-label">To Event</div>
+      <div class="count-label">
+        To Event
+      </div>
     </div>
   </div>
 </template>
 <script>
 import moment from "moment";
 export default {
-  name: "time-counter",
+  name: "TimeCounter",
   props: {
     target: {
       type: [Number, Date]
@@ -37,6 +55,20 @@ export default {
       hours: "00",
       mins: "00"
     };
+  },
+  watch: {
+    target: function() {
+      this.updateTime();
+    }
+  },
+  created() {
+    this.updateTime();
+  },
+  mounted() {
+    this.updateTime();
+    setInterval(() => {
+      this.updateTime();
+    }, 60000);
   },
   methods: {
     updateTime() {
@@ -63,20 +95,6 @@ export default {
         // diff -= this.horus * 3600;
         // this.mins = diff / 60;
       }
-    }
-  },
-  created() {
-    this.updateTime();
-  },
-  mounted() {
-    this.updateTime();
-    setInterval(() => {
-      this.updateTime();
-    }, 60000);
-  },
-  watch: {
-    target: function() {
-      this.updateTime()
     }
   }
 

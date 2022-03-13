@@ -2,36 +2,46 @@
   <div class="progress-sidebar">
     <div class="summer-party">
       <md-button class="md-default md-sm md-simple expand-sidebar">
-        <img :src="`${$iconURL}Timeline-New/expand.svg`" />
+        <img :src="`${$iconURL}Timeline-New/expand.svg`">
       </md-button>
       <div class="title-label">
         summer party
         <small>checklist</small>
       </div>
       <div class="completion-progress">
-        <div class="progress-done"></div>
+        <div class="progress-done" />
       </div>
       <div class="percentage">
         <ul>
-          <li class="green-label">56%</li>
-          <li class>17 of 26</li>
+          <li class="green-label">
+            56%
+          </li>
+          <li class>
+            17 of 26
+          </li>
         </ul>
       </div>
-      <div class="small-label">Things are warming up!</div>
+      <div class="small-label">
+        Things are warming up!
+      </div>
       <transition name="slide">
-        <event-note-panel v-if="isOpenNote"></event-note-panel>
+        <event-note-panel v-if="isOpenNote" />
       </transition>
 
       <div class="my-notes">
         <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote = true">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
+          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px">
           On my plate
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_down</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px">
+            keyboard_arrow_down
+          </md-icon>
         </md-button>
         <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote = false">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
+          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px">
           Close
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_up</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px">
+            keyboard_arrow_up
+          </md-icon>
         </md-button>
       </div>
     </div>
@@ -40,8 +50,10 @@
       <div class="event-elements">
         <draggable :list="eventElements">
           <div
+            v-for="(item, index) in eventElements"
+            :id="item.id"
+            :key="index"
             class="event-elements__item"
-            @click="goToRoute(item, index)"
             :class="{
               current: isActiveRoute(item),
               progress_100: item.progress === 100,
@@ -50,17 +62,15 @@
               progress_50: item.progress === 50,
               progress_75: item.progress === 75,
             }"
-            v-for="(item, index) in eventElements"
-            :id="item.id"
-            :key="index"
+            @click="goToRoute(item, index)"
           >
             <div class="item-title">
               <img
                 v-if="item.status === 'completed' || item.progress === 100"
                 :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
                 width="25"
-              />
-              <img :src="item.icon" v-if="isActiveRoute(item)" width="25" style="max-width: 25px; max-height: 25px" />
+              >
+              <img v-if="isActiveRoute(item)" :src="item.icon" width="25" style="max-width: 25px; max-height: 25px">
               {{ item.title }}
             </div>
           </div>
@@ -91,7 +101,7 @@ import EventBlocks from "../components/NewEventBlocks";
 import EventNotePanel from "../components/EventNotePanel";
 
 export default {
-  name: "progress-sidebar",
+  name: "ProgressSidebar",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -224,14 +234,6 @@ export default {
       this.currentUrl = this.$router.history.current.path;
     },
   },
-  created() {
-    this.fetchUrl();
-    const currentUser = this.$store.state.auth.user;
-    this.calendar = new Calendar({ id: currentUser.profile.defaultCalendarId });
-    this.event = this.$store.state.event.eventData;
-    this.generatedItems(this.event);
-  },
-  mounted() {},
   watch: {
     $route: "fetchUrl",
     event(newValue) {
@@ -241,6 +243,14 @@ export default {
       this.setConstantStates(newValue);
     },
   },
+  created() {
+    this.fetchUrl();
+    const currentUser = this.$store.state.auth.user;
+    this.calendar = new Calendar({ id: currentUser.profile.defaultCalendarId });
+    this.event = this.$store.state.event.eventData;
+    this.generatedItems(this.event);
+  },
+  mounted() {},
 };
 </script>
 <style lang="scss">

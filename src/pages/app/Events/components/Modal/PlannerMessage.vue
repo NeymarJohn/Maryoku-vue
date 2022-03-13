@@ -11,25 +11,39 @@
           >
             <div class="md-layout-item pl-0 md-size-100 mt-20 text-center px-20 ">
               <div class="my-25 d-flex align-center justify-content-start ml-40">
-                <h3 class="header">Event Information & Details</h3>
+                <h3 class="header">
+                  Event Information & Details
+                </h3>
               </div>
 
               <div class="">
                 <div class="d-flex align-center justify-content-around">
                   <div>
-                    <h2 class="t_text">Name</h2>
-                    <p class="s_text ma-0">March Madness event</p>
+                    <h2 class="t_text">
+                      Name
+                    </h2>
+                    <p class="s_text ma-0">
+                      March Madness event
+                    </p>
                   </div>
-                  <div class="divider"></div>
+                  <div class="divider" />
                   <div>
-                    <h2 class="t_text">Date</h2>
-                    <p class="s_text ma-0">December 25, 2021</p>
+                    <h2 class="t_text">
+                      Date
+                    </h2>
+                    <p class="s_text ma-0">
+                      December 25, 2021
+                    </p>
                   </div>
-                  <div class="divider"></div>
+                  <div class="divider" />
 
                   <div>
-                    <h2 class="t_text">Guest Arrival Time</h2>
-                    <p class="s_text ma-0">11:00 AM</p>
+                    <h2 class="t_text">
+                      Guest Arrival Time
+                    </h2>
+                    <p class="s_text ma-0">
+                      11:00 AM
+                    </p>
                   </div>
                 </div>
               </div>
@@ -37,19 +51,20 @@
           </div>
           <div class="md-layout-item pl-0 md-size-100 text-center">
             <div class="mt-40">
-              <img :src="`${$iconURL}group-22314.svg`" alt="icon" />
+              <img :src="`${$iconURL}group-22314.svg`" alt="icon">
             </div>
             <div>
-              <h2 class="title">We’re so sorry that this match failed :(</h2>
+              <h2 class="title">
+                We’re so sorry that this match failed :(
+              </h2>
               <p class="subtitle">
-                The vendor wasn’t able to work with you on this event <br />
+                The vendor wasn’t able to work with you on this event <br>
                 What now? Well, we're happy to help you find more vendors that will suit your event perfectly.
               </p>
             </div>
           </div>
           <div class="md-layout-item pl-0 md-size-100 mt-50">
             <div class="d-flex align-center justify-content-center">
-             
               <md-button class="px-20 py-5  md-primary " @click="go()">
                 Find More Vendors
               </md-button>
@@ -69,7 +84,7 @@ export default {
   },
   methods: {
     go() {
-     this.$emit("goVendors")
+     this.$emit("goVendors");
     }
   }
 };

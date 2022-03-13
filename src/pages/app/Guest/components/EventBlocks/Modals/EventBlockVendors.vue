@@ -3,7 +3,7 @@
     <div class="md-layout">
       <div class="md-layout-item md-size-100">
         <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
-          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
+          <md-button class="md-button md-theme-default md-simple md-just-icon" @click="closePanel">
             <md-icon>arrow_back</md-icon>
           </md-button>
           {{ categoryTitle }}'s Vendors List
@@ -11,17 +11,20 @@
             <md-button
               v-if="blockVendors.length && !isLoading"
               class="md-primary md-sm"
-              @click="manageVendors()"
               :disabled="isLoading"
-              >Manage Vendors</md-button
+              @click="manageVendors()"
             >
+              Manage Vendors
+            </md-button>
           </div>
         </h4>
 
         <div class="md-layout">
           <div class="md-layout-item md-size-100" style="padding-left: 42px; min-height: 240px">
             <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-            <div style="padding-left: 6px">Send vendors of your choice a request for proposal</div>
+            <div style="padding-left: 6px">
+              Send vendors of your choice a request for proposal
+            </div>
             <md-card v-show="blockVendors.length && !isLoading" class="md-card-plain clear-margins">
               <md-card-content>
                 <md-table v-model="filteredBlockVendors" table-header-color="orange" class="vendors-table">
@@ -29,15 +32,15 @@
                     <div class="md-toolbar-section-start">
                       <md-field>
                         <md-input
+                          v-model="searchQuery"
                           type="search"
                           class="mb-3"
                           clearable
                           placeholder="Search vendors"
-                          v-model="searchQuery"
-                        ></md-input>
+                        />
                       </md-field>
                     </div>
-                    <div class="md-toolbar-section-end" v-if="false">
+                    <div v-if="false" class="md-toolbar-section-end">
                       <md-button class="md-icon-button">
                         <md-icon>delete</md-icon>
                       </md-button>
@@ -45,10 +48,10 @@
                   </md-table-toolbar>
 
                   <md-table-row
-                    :class="[{ 'table-warning': item.rfpStatus === 'Sent' }]"
                     slot="md-table-row"
-                    slot-scope="{ item }"
                     :key="blockVendors.indexOf(item)"
+                    slot-scope="{ item }"
+                    :class="[{ 'table-warning': item.rfpStatus === 'Sent' }]"
                   >
                     <md-table-cell md-label="Vendor Name">
                       <a href="javascript: void(null);" @click="vendorDetails(item.vendor)">{{
@@ -71,16 +74,20 @@
                       />
                     </md-table-cell>
                     <md-table-cell md-label="Inquiry Status">
-                      <template v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus === null">{{
-                        `Ready`
-                      }}</template>
-                      <template v-else-if="item.rfpStatus === 'Sent'"
-                        >{{ `Request sent ` }} {{ getVendorDate(item.rfpSentMillis) }}</template
-                      >
-                      <template v-else-if="item.rfpStatus === ''">Ready</template>
+                      <template v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus === null">
+                        {{
+                          `Ready`
+                        }}
+                      </template>
+                      <template v-else-if="item.rfpStatus === 'Sent'">
+                        {{ `Request sent ` }} {{ getVendorDate(item.rfpSentMillis) }}
+                      </template>
+                      <template v-else-if="item.rfpStatus === ''">
+                        Ready
+                      </template>
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions">
-                      <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C"></vue-element-loading>
+                      <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C" />
                       <md-button
                         v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus === null)"
                         class="md-primary md-just-icon md-round"
@@ -88,7 +95,9 @@
                         @click="sendVendor(item)"
                       >
                         <md-icon>near_me</md-icon>
-                        <md-tooltip class="md-primary">Send RFP</md-tooltip>
+                        <md-tooltip class="md-primary">
+                          Send RFP
+                        </md-tooltip>
                       </md-button>
                     </md-table-cell>
                   </md-table-row>
@@ -106,12 +115,14 @@
 
             </template>-->
 
-            <md-card class="md-card-plain" v-if="!blockVendors.length && !isLoading">
+            <md-card v-if="!blockVendors.length && !isLoading" class="md-card-plain">
               <md-card-content>
                 <div class="text-center">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png" style="width: 120px" />
+                  <img src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png" style="width: 120px">
                   <h4>No vendors found that match '{{ categoryTitle }}'</h4>
-                  <md-button class="md-purple md-sm" @click="manageVendors">Manage Vendors Pool</md-button>
+                  <md-button class="md-purple md-sm" @click="manageVendors">
+                    Manage Vendors Pool
+                  </md-button>
                 </div>
               </md-card-content>
             </md-card>
@@ -120,7 +131,7 @@
       </div>
     </div>
 
-    <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+    <upload-vendors-modal ref="uploadModal" />
   </div>
 </template>
 <script>
@@ -148,7 +159,7 @@ import VendorsPoolPanel from "@/pages/app/Vendors/VendorsPoolPanel";
 import companyForm from "@/pages/app/Vendors/Form/companyForm";
 
 export default {
-  name: "event-blocks-vendors",
+  name: "EventBlocksVendors",
   components: {
     MdCardHeader,
     MdCardContent,
@@ -187,6 +198,27 @@ export default {
     searchQuery: "",
     sendingRfp: false,
   }),
+  computed: {},
+  watch: {
+    searchQuery(newVal, oldVal) {
+      this.filterVendors();
+    },
+    selectedVendors(newVal, oldVal) {
+      console.log(newVal);
+    },
+  },
+  created() {
+    if (this.caseStatus === "get-offers") {
+      this.addingVendors = true;
+    }
+  },
+  mounted() {
+    this.isLoading = false;
+    this.getBlockVendors();
+    this.$root.$on("VendorAdded", () => {
+      this.getBlockVendors();
+    });
+  },
   methods: {
     openUploadModal() {
       this.$refs.uploadModal.toggleModal(true);
@@ -372,27 +404,6 @@ export default {
     },
     onSelect(item) {
       // console.log(item);
-    },
-  },
-  created() {
-    if (this.caseStatus === "get-offers") {
-      this.addingVendors = true;
-    }
-  },
-  mounted() {
-    this.isLoading = false;
-    this.getBlockVendors();
-    this.$root.$on("VendorAdded", () => {
-      this.getBlockVendors();
-    });
-  },
-  computed: {},
-  watch: {
-    searchQuery(newVal, oldVal) {
-      this.filterVendors();
-    },
-    selectedVendors(newVal, oldVal) {
-      console.log(newVal);
     },
   },
 };

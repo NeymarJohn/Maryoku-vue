@@ -11,10 +11,10 @@ import UserEvent from "@/models/UserEvent";
 import ProposalVersion from "@/models/ProposalVersion";
 
 const setStateFromData = (state, data) => {
-  Object.keys(data).map(key => {
+  Object.keys(data).map((key) => {
     Vue.set(state, key, JSON.parse(JSON.stringify(data[key])));
-  })
-}
+  });
+};
 const setStateByVersion = (state, { key, value }) => {
   if (state.id) {
     if (state.currentVersion === -1) {
@@ -23,7 +23,7 @@ const setStateByVersion = (state, { key, value }) => {
       Vue.set(state.versions[state.currentVersion].data, key, value);
     }
   }
-}
+};
 
 const state = {
   id: null,
@@ -49,7 +49,8 @@ const state = {
   original: null,
   seatingData: null,
   currentVersion: -1,
-  expiredDate:moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()
+  expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate(),
+  isNegotiation: false
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -63,7 +64,7 @@ const getters = {
   },
   totalPriceByCategory(state, getters) {
     const prices = {};
-    state.additionalServices.forEach(service => {
+    state.additionalServices.forEach((service) => {
       if (!state.costServices[service]) {
         prices[service] = 0;
       }
@@ -92,11 +93,11 @@ const getters = {
     let total = sumPrice - discount.price;
     const taxPrice = Math.round((total * tax.percentage) / 100);
 
-    return  total + taxPrice;
+    return total + taxPrice;
   },
   pricesByCategory(state, getters) {
     const prices = {};
-    state.additionalServices.forEach(service => {
+    state.additionalServices.forEach((service) => {
       if (!state.costServices[service]) {
         prices[service] = 0;
       }
@@ -125,59 +126,58 @@ const getters = {
   },
   totalBeforeDiscount(state, getter) {
     let sum = 0;
-    Object.keys(getter.totalPriceByCategory).forEach(category => {
-      sum += Number(getter.totalPriceByCategory[category])
-    })
+    Object.keys(getter.totalPriceByCategory).forEach((category) => {
+      sum += Number(getter.totalPriceByCategory[category]);
+    });
     // check tax
-    let tax = state.taxes['total'] || { price: 0, percentage: 0 };
-    sum = sum + sum * tax.percentage / 100;
+    let tax = state.taxes["total"] || { price: 0, percentage: 0 };
+    sum = sum + (sum * tax.percentage) / 100;
     return sum.toFixed(2);
   },
   totalBeforeBundle(state, getter) {
     let sum = 0;
-    Object.keys(getter.totalPriceByCategory).forEach(category => {
-      sum += Number(getter.totalPriceByCategory[category])
-    })
+    Object.keys(getter.totalPriceByCategory).forEach((category) => {
+      sum += Number(getter.totalPriceByCategory[category]);
+    });
 
     // check default discount
-    const discount = state.discounts['total'] || { price: 0, percentage: 0 };
-    sum = sum - sum * discount.percentage / 100;
+    const discount = state.discounts["total"] || { price: 0, percentage: 0 };
+    sum = sum - (sum * discount.percentage) / 100;
 
-    const negotiation = state.negotiationDiscount || {price: 0, percentage: 0}
-    sum = sum - sum * negotiation.percentage / 100;
+    const negotiation = state.negotiationDiscount || { price: 0, percentage: 0 };
+    sum = sum - (sum * negotiation.percentage) / 100;
 
     // check tax
-    let tax = state.taxes['total'] || { price: 0, percentage: 0 };
-    sum = sum + sum * tax.percentage / 100;
+    let tax = state.taxes["total"] || { price: 0, percentage: 0 };
+    sum = sum + (sum * tax.percentage) / 100;
 
-    return sum.toFixed(2)
-
+    return sum.toFixed(2);
   },
   totalPriceOfProposal(state, getter) {
     let sum = 0;
-    Object.keys(getter.totalPriceByCategory).forEach(category => {
-      sum += Number(getter.totalPriceByCategory[category])
-    })
+    Object.keys(getter.totalPriceByCategory).forEach((category) => {
+      sum += Number(getter.totalPriceByCategory[category]);
+    });
 
     // check discount
-    const discount = state.discounts['total'] || { price: 0, percentage: 0 };
-    sum = sum - sum * discount.percentage / 100;
+    const discount = state.discounts["total"] || { price: 0, percentage: 0 };
+    sum = sum - (sum * discount.percentage) / 100;
 
     // check negotiation discount
     if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
-       sum -= state.negotiationDiscount.price
+      sum -= state.negotiationDiscount.price;
     }
 
     // check tax
-    const tax = state.taxes['total'] || { price: 0, percentage: 0 };
-    sum = sum + sum * tax.percentage / 100;
+    const tax = state.taxes["total"] || { price: 0, percentage: 0 };
+    sum = sum + (sum * tax.percentage) / 100;
     // check bundle discount
 
     if (state.bundleDiscount && state.bundleDiscount.isApplied) {
-      sum -= state.bundleDiscount.price
+      sum -= state.bundleDiscount.price;
     }
-    console.log('totalPrice', sum);
-    return sum
+    console.log("totalPrice", sum);
+    return sum;
   }
 };
 const mutations = {
@@ -201,6 +201,9 @@ const mutations = {
     state.vendor = vendor;
     state.personalMessage = vendor.personalMessage;
   },
+  setNegotiation: (state, value) => {
+    state.isNegotiation = value;
+  },
   setProposal: (state, proposal) => {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
@@ -212,21 +215,21 @@ const mutations = {
     state.personalMessage = proposal.personalMessage;
     state.taxs = proposal.taxs;
     state.discounts = proposal.discounts;
-    state.negotiationDiscount = proposal.negotiationDiscount,
-    state.suggestedNewSeatings = proposal.suggestedNewSeatings;
+    (state.negotiationDiscount = proposal.negotiationDiscount),
+      (state.suggestedNewSeatings = proposal.suggestedNewSeatings);
     state.eventData = proposal.eventData;
     state.coverImage = proposal.coverImage || [];
     state.inspirationalPhotos = proposal.inspirationalPhotos;
     state.seatingData = proposal.seatingData;
     state.bookedServices = proposal.bookedServices;
     state.initialized = true;
-    state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate();
-    state.versions = proposal.versions || []
-    state.currentVersion = proposal.selectedVersion || -1,
-    // state.wizardStep = proposal.step
+    state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate();
+    state.versions = proposal.versions || [];
+    (state.currentVersion = proposal.selectedVersion || -1),
+      // state.wizardStep = proposal.step
 
-    delete proposal.versions;
-    Vue.set(state, 'original', proposal);
+      delete proposal.versions;
+    Vue.set(state, "original", proposal);
   },
   setWizardStep: (state, step) => {
     state.wizardStep = step;
@@ -244,16 +247,16 @@ const mutations = {
     }
     Vue.set(state.costServices, category, services);
 
-    setStateByVersion(state, { key: 'costServices', value: JSON.parse(JSON.stringify(state.costServices)) })
+    setStateByVersion(state, { key: "costServices", value: JSON.parse(JSON.stringify(state.costServices)) });
   },
   setIncludedServices: (state, { category, services }) => {
     Vue.set(state.includedServices, category, services);
 
-    setStateByVersion(state, { key: 'includedServices', value: JSON.parse(JSON.stringify(state.includedServices)) })
+    setStateByVersion(state, { key: "includedServices", value: JSON.parse(JSON.stringify(state.includedServices)) });
   },
   setExtraServices: (state, { category, services }) => {
     Vue.set(state.extraServices, category, services);
-    setStateByVersion(state, { key: 'extraServices', value: JSON.parse(JSON.stringify(state.extraServices)) })
+    setStateByVersion(state, { key: "extraServices", value: JSON.parse(JSON.stringify(state.extraServices)) });
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -263,26 +266,29 @@ const mutations = {
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
-    setStateByVersion(state, { key: 'discounts', value: JSON.parse(JSON.stringify(state.discounts)) })
+    setStateByVersion(state, { key: "discounts", value: JSON.parse(JSON.stringify(state.discounts)) });
   },
   setNegotiationDiscount: (state, discount) => {
     state.negotiationDiscount = discount;
-    setStateByVersion(state, { key: 'negotiationDiscount', value: JSON.parse(JSON.stringify(state.negotiationDiscount)) })
+    setStateByVersion(state, {
+      key: "negotiationDiscount",
+      value: JSON.parse(JSON.stringify(state.negotiationDiscount))
+    });
   },
   setBundleDiscount: (state, bundleDiscount) => {
     state.bundleDiscount = bundleDiscount;
-    setStateByVersion(state, { key: 'bundleDiscount', value: JSON.parse(JSON.stringify(state.bundleDiscount)) })
+    setStateByVersion(state, { key: "bundleDiscount", value: JSON.parse(JSON.stringify(state.bundleDiscount)) });
   },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
-    setStateByVersion(state, { key: 'taxes', value: state.taxes })
+    setStateByVersion(state, { key: "taxes", value: state.taxes });
   },
   setAdditionalServices: (state, services) => {
     Vue.set(state.additionalServices, services);
-    setStateByVersion(state, { key: 'additionalServices', value: state.additionalServices })
+    setStateByVersion(state, { key: "additionalServices", value: state.additionalServices });
   },
   removeCategoryFromAdditional: (state, category) => {
-    const index = state.additionalServices.findIndex(item => item == category);
+    const index = state.additionalServices.findIndex((item) => item == category);
     state.additionalServices.splice(index, 1);
   },
   setValue: (state, { key, value }) => {
@@ -291,16 +297,18 @@ const mutations = {
     setStateByVersion(state, { key, value: JSON.parse(JSON.stringify(value)) });
   },
   setEventProperty: (state, { key, value }) => {
-    Vue.set(state.eventData, key, value)
+    Vue.set(state.eventData, key, value);
   },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo);
-    setStateByVersion(state, { key: 'inspirationalPhotos', value: JSON.parse(JSON.stringify(state.inspirationalPhotos)) })
+    setStateByVersion(state, {
+      key: "inspirationalPhotos",
+      value: JSON.parse(JSON.stringify(state.inspirationalPhotos))
+    });
   },
   setSeatingData: (state, data) => {
-
-    Vue.set(state, 'seatingData', JSON.parse(JSON.stringify(data)));
-    setStateByVersion(state, { key: 'seatingData', value: JSON.parse(JSON.stringify(data)) })
+    Vue.set(state, "seatingData", JSON.parse(JSON.stringify(data)));
+    setStateByVersion(state, { key: "seatingData", value: JSON.parse(JSON.stringify(data)) });
   },
   initState(state) {
     Vue.set(state, "costServices", {});
@@ -318,37 +326,38 @@ const mutations = {
     Vue.set(state, "negotiationDiscount", {
       isApplied: false,
       percent: 0,
-      price: 0,
+      price: 0
     });
     Vue.set(state, "bundleDiscount", {
       isApplied: false,
       services: [],
       discountPercentage: 0,
-      discountAmount: 0,
+      discountAmount: 0
     });
-  },
+  }
 };
 const actions = {
   addPrice({ commit, state, dispatch }, { category, selectedItem }) {
     const includedServices = state.includedServices[category];
-    const includedIndex = includedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
-    includedServices.splice(includedIndex, 1)
-    commit("setIncludedServices", { category, services: [...includedServices] })
+    const includedIndex = includedServices.findIndex((item) => item.requirementTitle == selectedItem.requirementTitle);
+    includedServices.splice(includedIndex, 1);
+    commit("setIncludedServices", { category, services: [...includedServices] });
     const costServices = state.costServices[category];
     costServices.push(selectedItem);
-    commit("setCostServices", { category, services: costServices })
+    commit("setCostServices", { category, services: costServices });
   },
   getProposalByRequestId: ({ commit, state }, proposalRequestId) => {
     return new Promise((resolve, reject) => {
       new Proposal()
         .for(new ProposalRequest({ id: proposalRequestId }))
         .get()
-        .then(res => {
+        .then((res) => {
           const proposal = res[0];
           commit("setProposal", proposal);
-          if (proposal.selectedVersion && proposal.selectedVersion > -1) commit("selectVersion", proposal.selectedVersion)
+          if (proposal.selectedVersion && proposal.selectedVersion > -1)
+            commit("selectVersion", proposal.selectedVersion);
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     });
@@ -356,11 +365,11 @@ const actions = {
   getVendor: ({ commit, state }, vendorId) => {
     return new Promise((resolve, reject) => {
       Vendors.find(vendorId)
-        .then(resp => {
+        .then((resp) => {
           commit("setVendor", resp);
           resolve(resp);
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     });
@@ -368,12 +377,12 @@ const actions = {
   getProposal: ({ commit, state }, proposalId) => {
     return new Promise((resolve, reject) => {
       Proposal.find(proposalId)
-        .then(resp => {
+        .then((resp) => {
           commit("setProposal", resp);
-          if (resp.selectedVersion && resp.selectedVersion > -1) commit("selectVersion", resp.selectedVersion)
+          if (resp.selectedVersion && resp.selectedVersion > -1) commit("selectVersion", resp.selectedVersion);
           resolve(resp);
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     });
@@ -383,7 +392,7 @@ const actions = {
       new EventTimelineDate()
         .for(new CalendarEvent({ id: eventId }))
         .get()
-        .then(res => {
+        .then((res) => {
           commit("setValue", "timelineDates", res);
         });
     });
@@ -394,10 +403,12 @@ const actions = {
     }
     return new Promise((resolve, reject) => {
       const additionalServices = state.additionalServices || [];
-      const availableAdditionalSerivces = additionalServices.filter(category => getters.pricesByCategory[category] > 0);
-      console.log('saveProposal', state.id);
+      const availableAdditionalSerivces = additionalServices.filter(
+        (category) => getters.pricesByCategory[category] > 0
+      );
+      console.log("saveProposal", state.id);
       const proposal = new Proposal({
-        id: status == 'duplicate' ? undefined : state.id ? state.id : undefined,
+        id: status == "duplicate" ? undefined : state.id ? state.id : undefined,
         eventData: state.eventData,
         personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
         additionalServices: availableAdditionalSerivces,
@@ -426,49 +437,48 @@ const actions = {
         bookedServices: state.bookedServices.length ? state.bookedServices : Object.keys(state.costServices), // Set all secondary services as booked services
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
-        selectedVersion: state.currentVersion,
+        selectedVersion: state.currentVersion
       });
       proposal
         .save()
-        .then(res => {
+        .then((res) => {
           commit("setProposal", res);
           resolve(res);
         })
-        .catch(e => {
-          console.error(e)
+        .catch((e) => {
+          console.error(e);
           reject(e);
         });
     });
   },
 
   saveEvent({ commit, state, getters }, userEvent) {
-
     return new Promise((resolve, reject) => {
       try {
-        return new UserEvent(userEvent).save().then(savedEvent => {
-          commit('setEventProperty', { key: 'id', value: savedEvent.id })
-          resolve(savedEvent)
+        return new UserEvent(userEvent).save().then((savedEvent) => {
+          commit("setEventProperty", { key: "id", value: savedEvent.id });
+          resolve(savedEvent);
         });
-      }
-      catch (e) {
-        reject(e)
+      } catch (e) {
+        reject(e);
       }
     });
   },
   saveVersion({ commit, state }, data) {
     return new Promise(async (resolve, reject) => {
-      const query = new ProposalVersion({ ...data, proposal: new Proposal({ id: state.id }) })
-        .for(new Proposal({ id: state.id }));
+      const query = new ProposalVersion({ ...data, proposal: new Proposal({ id: state.id }) }).for(
+        new Proposal({ id: state.id })
+      );
       let res = await query.save();
-      console.log('res', res);
-      let idx = state.versions.findIndex(v => v.id === res.id);
+      console.log("res", res);
+      let idx = state.versions.findIndex((v) => v.id === res.id);
       if (idx === -1) {
         commit("setVersions", [...state.versions, res]);
       } else {
         Vue.set(state.versions, idx, res);
-        commit("setVersions", state.versions)
+        commit("setVersions", state.versions);
       }
-    })
+    });
   },
   removeVersion: ({ commit, state }, idx) => {
     return new Promise(async (resolve, reject) => {
@@ -477,19 +487,19 @@ const actions = {
 
       let versions = state.versions.filter((v, index) => index !== idx);
 
-      commit("setVersions", versions)
+      commit("setVersions", versions);
       resolve();
-    })
+    });
   },
-  saveVendor: ({commit, state} , vendor) => {
-    return new Promise(async resolve => {
+  saveVendor: ({ commit, state }, vendor) => {
+    return new Promise(async (resolve) => {
       let query = new Vendor(vendor);
       let res = await query.save();
-      console.log('res', res);
-      commit('setVendor', res);
-      resolve(res)
-    })
-  },
+      console.log("res", res);
+      commit("setVendor", res);
+      resolve(res);
+    });
+  }
 };
 
 export default {
@@ -497,5 +507,5 @@ export default {
   state,
   getters,
   actions,
-  mutations,
+  mutations
 };
