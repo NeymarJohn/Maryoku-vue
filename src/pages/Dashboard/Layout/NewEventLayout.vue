@@ -259,10 +259,6 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import EventPlannerVuexModule from "../../app/Events/EventPlanner.vuex";
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition, FadeTransition } from "vue2-transitions";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 // import auth from "src/auth";
@@ -285,10 +281,6 @@ function initScrollbar(className) {
 
 export default {
   components: {
-    TopNavbar,
-    ContentFooter,
-    MobileMenu,
-    UserMenu,
     ZoomCenterTransition,
     FadeTransition,
     SideBar,
@@ -418,6 +410,32 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState("event", ["eventData"]),
+  },
+  watch: {
+    $route: "checkTour",
+  },
+  created() {
+    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+  },
+  mounted() {
+    if (this.$route.query.walkWithMe) {
+      setTimeout(() => {
+        this.$tours["invite"].start();
+      }, 1000);
+    }
+
+    this.$store
+      .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
+      .then(() => {
+        this.initData();
+      })
+      .catch(() => {
+        this.$router.push({ path: "/signin" });
+        return;
+      });
+  },
   methods: {
     ...mapMutations("EventPlannerVuex", [
       "setEventModal",
@@ -498,32 +516,6 @@ export default {
         this.$tours["invite"].start();
       }
     },
-  },
-  created() {
-    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
-  },
-  mounted() {
-    if (this.$route.query.walkWithMe) {
-      setTimeout(() => {
-        this.$tours["invite"].start();
-      }, 1000);
-    }
-
-    this.$store
-      .dispatch("auth/checkToken", this.$store.state.auth.user.access_token)
-      .then(() => {
-        this.initData();
-      })
-      .catch(() => {
-        this.$router.push({ path: "/signin" });
-        return;
-      });
-  },
-  computed: {
-    ...mapState("event", ["eventData"]),
-  },
-  watch: {
-    $route: "checkTour",
   },
 };
 </script>

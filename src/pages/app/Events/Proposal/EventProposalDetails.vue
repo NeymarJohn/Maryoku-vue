@@ -1111,7 +1111,7 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     showCommentPanel(){
-      console.log("showCommentPanel",this.$store.state.eventPlan)
+      console.log("showCommentPanel",this.$store.state.eventPlan);
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
   },

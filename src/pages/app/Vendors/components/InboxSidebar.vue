@@ -121,38 +121,40 @@
           </div>
         </div>
 
-        <div class="sidebar__items d-flex flex-column pb-70" v-if="!fullDiscussion && commentsProposals.length > 0">
-            <div class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" v-for="(proposal, pindex) in commentsProposals" :key="pindex" @click="changeProposal(proposal)" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}">
-                <div class="d-flex align-item-center sidebar__item__content">
-                    <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" v-if="proposal.nonMaryoku"></Avartar>
-                    <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
-                    <div class="sidebar__item__details d-flex flex-column">
-
-                        <span class="productLaunchParty" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-                            {{ proposal.eventData.customer.companyName }}
-                        </span>
-<!--                        <span class="productLaunchParty" v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle">-->
-<!--                            {{proposal.vendor.eventCategory.fullTitle}}-->
-<!--                        </span>-->
-                        <div v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
-                            {{ proposal.proposalRequest.eventData.title }}
-                        </div>
-                        <div v-else>New Event</div>
-                        <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
-                    </div>
+        <div v-if="!fullDiscussion && commentsProposals.length > 0" class="sidebar__items d-flex flex-column pb-70">
+          <div v-for="(proposal, pindex) in commentsProposals" :key="pindex" class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}" @click="changeProposal(proposal)">
+            <div class="d-flex align-item-center sidebar__item__content">
+              <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+              <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
+              <div class="sidebar__item__details d-flex flex-column">
+                <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
+                  {{ proposal.eventData.customer.companyName }}
+                </span>
+                <!--                        <span class="productLaunchParty" v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle">-->
+                <!--                            {{proposal.vendor.eventCategory.fullTitle}}-->
+                <!--                        </span>-->
+                <div v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
+                  {{ proposal.proposalRequest.eventData.title }}
                 </div>
-                <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
-                <button class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(proposal,true)" v-if="proposal.unread_count == 0 && proposal.commentComponent.length">Full Discussion</button>
-                <span class="unread-count" v-if="proposal.unread_count">{{proposal.unread_count}}</span>
-
+                <div v-else>
+                  New Event
+                </div>
+                <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
+              </div>
             </div>
+            <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
+            <button v-if="proposal.unread_count == 0 && proposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(proposal,true)">
+              Full Discussion
+            </button>
+            <span v-if="proposal.unread_count" class="unread-count">{{ proposal.unread_count }}</span>
           </div>
         </div>
-        <!-- <div v-if="showReplyComment == commentIndex " style="float: right;">
+      </div>
+      <!-- <div v-if="showReplyComment == commentIndex " style="float: right;">
                     <md-button class="md-simple normal-btn"">Cancel</md-button>
                         <button class="md-button md-vendor md-theme-default sidebar__item__btn">Submit</button>
                 </div> -->
-      </div>
+    </div>
 
     <div v-if="!fullDiscussion && commentsProposals.length > 0" class="sidebar__items d-flex flex-column">
       <div v-for="(proposal, pindex) in commentsProposals" :key="pindex" class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}" @click="changeProposal(proposal)">
@@ -294,16 +296,16 @@ export default {
         selectedProposal() {
 
             if(this.$store.state.commentProposal.proposal){
-              this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent
+              this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
             }
-            console.log("comput this.commentComponents",this.commentComponents)
+            console.log("comput this.commentComponents",this.commentComponents);
             return this.$store.state.commentProposal.proposal;
         },
         updatedCommentComponents(){
             if(this.$store.state.commentProposal.proposal){
-              this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent
+              this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
             }
-            console.log("comput this.commentComponents1",this.commentComponents)
+            console.log("comput this.commentComponents1",this.commentComponents);
             return this.$store.state.commentProposal.proposal.commentComponent;
         }
     },

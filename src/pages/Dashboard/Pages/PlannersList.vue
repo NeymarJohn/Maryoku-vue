@@ -65,8 +65,7 @@
         </md-select>
       </md-field>
       <div>
-        {{ `${pagination.limit * (pagination.page - 1) + 1} - ${pagination.limit * pagination.page < pagination.total ?
-          pagination.limit * pagination.page : pagination.total} of ${pagination.total}` }}
+        {{ pageNumber }}
       </div>
       <md-button class="md-icon-button md-simple collapse-button ml-10" @click="preview">
         <md-icon>keyboard_arrow_left</md-icon>
@@ -115,6 +114,12 @@ export default {
       plannerEvents: [],
       showPlannerTable: false,
     };
+  },
+  computed: {
+    pageNumber() {
+      return `${this.pagination.limit * (this.pagination.page - 1) + 1} - ${this.pagination.limit * this.pagination.page < this.pagination.total ?
+          this.pagination.limit * this.pagination.page : this.pagination.total} of ${this.pagination.total}`; 
+    }
   },
   async created() {
       if(this.$store.state.auth.user){

@@ -1,5 +1,4 @@
 <template>
-
   <div class="proposal-main-container" style="">
     <loader :active="loading" :is-full-screen="true" page="vendor" />
     <template v-if="showProposal">
@@ -185,11 +184,11 @@ export default {
             this.$store.commit("commentProposal/setVersions", versions);
         },
         removeVersion(id){
-            this.$store.dispatch('commentProposal/removeVersion', id);
+            this.$store.dispatch("commentProposal/removeVersion", id);
         },
         async saveCommentComponent(data){
-            await this.saveComment(data)
-            console.log("this.commentComponents",this.commentComponents)
+            await this.saveComment(data);
+            console.log("this.commentComponents",this.commentComponents);
             this.updateCommentComponents(this.commentComponents);
         }
     },

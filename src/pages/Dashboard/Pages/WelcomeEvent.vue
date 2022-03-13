@@ -32,7 +32,7 @@
         Explore Mayroku's Main Features
       </div>
       <div class="video-list mt-50">
-        <div v-for="(video, index) in videos" :key="video.title" class="video-item">
+        <div v-for="(video) in videos" :key="video.title" class="video-item">
           <div class="video-item-wrapper">
             <div class="video-item-title font-bold-extra">
               {{ video.title }}

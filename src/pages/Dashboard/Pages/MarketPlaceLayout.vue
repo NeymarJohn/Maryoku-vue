@@ -19,11 +19,8 @@
   </div>
 </template>
 <script>
-import { ZoomCenterTransition } from "vue2-transitions";
-
 export default {
   components: {
-    ZoomCenterTransition,
   },
   props: {
     backgroundColor: {

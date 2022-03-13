@@ -201,7 +201,7 @@
                   {{ policy.name }}
                 </div>
                 <div v-if="policy.type === 'MultiSelection'" class="item">
-                  <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
+                  <span v-for="(v, vIndex) in policy.value" :key="vIndex" class="mr-10">{{
                     `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                   }}</span>
                 </div>
@@ -325,7 +325,7 @@
                   </div>
                 </div>
                 <div v-if="policy.type === 'MultiSelection'" class="item">
-                  <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
+                  <span v-for="(v, vIndex) in policy.value" :key="vIndex" class="mr-10">{{
                     `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                   }}</span>
                 </div>
@@ -354,15 +354,12 @@
                     {{ policy.attendees }} attendees
                   </span>
                   <span v-if="policy.unit" class="ml-50 text-transform-capitalize">
-                    <!-- {{ policy.unit }}{{ policy.value > 1 ? "s" : "" }} -->
                     {{ getUnit(policy) }}
                   </span>
                 </div>
               </div>
             </div>
-            <div class="item">
-              <!-- <h6 class="underline">Relish caterers & venues:</h6> -->
-            </div>
+            <div class="item" />
             <div class="signatures">
               <div
                 v-if="vendor.signature"
@@ -390,38 +387,38 @@ import moment from "moment";
 import Vendors from "@/models/Vendors";
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "../components/VendorServiceItem.vue";
-import LightBox from "vue-image-lightbox";
 import carousel from "vue-owl-carousel";
 import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
-import HeaderImageCarousel from "@/components/HeaderImageCarousel.vue";
 import { GuaranteedOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
-import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
 import AttachmentItem from "../components/AttachmentItem.vue";
 export default {
   name: "VendorSignupStep4",
   components: {
-    VendorServiceItem,
-    LightBox,
     carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
     VendorImagesList,
-    AttachmentTagList,
     AttachmentItem,
-    HeaderImageCarousel,
   },
   filters: {},
   props: {
-    categories: Array,
-    icon: String,
-    vendor: Object,
+    categories: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
+    vendor: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {

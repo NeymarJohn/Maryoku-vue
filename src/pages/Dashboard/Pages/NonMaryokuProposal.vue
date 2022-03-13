@@ -265,6 +265,34 @@ export default {
       cursorLeftPosition: "0px",
     };
   },
+  computed: {
+    loggedInUser() {
+      return this.$store.state.auth.user;
+    },
+    customer() {
+      return this.$store.state.comment.customer;
+    },
+    guestName() {
+      return this.$store.state.comment.guestName;
+    },
+    vendor() {
+      return this.proposal.vendor;
+    },
+    contract() {
+      if (!this.proposal) return false;
+      return this.proposal.status === PROPOSAL_STATUS.WON;
+    },
+    headerBackgroundImage() {
+      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
+      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
+        return this.proposal.inspirationalPhotos[0].url;
+      if (this.proposal.vendor.images && this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
+      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
+        return this.proposal.vendor.vendorImages[0];
+
+      return "";
+    },
+  },
   async created() {
     let tenantUser = null;
     if (this.loggedInUser) {
@@ -548,34 +576,7 @@ export default {
       return proposal;
     },
   },
-  computed: {
-    loggedInUser() {
-      return this.$store.state.auth.user;
-    },
-    customer() {
-      return this.$store.state.comment.customer;
-    },
-    guestName() {
-      return this.$store.state.comment.guestName;
-    },
-    vendor() {
-      return this.proposal.vendor;
-    },
-    contract() {
-      if (!this.proposal) return false;
-      return this.proposal.status === PROPOSAL_STATUS.WON;
-    },
-    headerBackgroundImage() {
-      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
-      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
-        return this.proposal.inspirationalPhotos[0].url;
-      if (this.proposal.vendor.images && this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
-      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
-        return this.proposal.vendor.vendorImages[0];
 
-      return "";
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

@@ -297,15 +297,6 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
-
-//COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "../components/VendorServiceItem.vue";
-import LightBox from "vue-image-lightbox";
-import carousel from "vue-owl-carousel";
 import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
@@ -317,10 +308,6 @@ import S3Service from "@/services/s3.service";
 export default {
   name: "VendorSignupStep4",
   components: {
-    VueElementLoading,
-    VendorServiceItem,
-    LightBox,
-    carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
     VendorImagesList,
@@ -328,8 +315,14 @@ export default {
   },
   filters: {},
   props: {
-    categories: Array,
-    icon: String,
+    categories: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {

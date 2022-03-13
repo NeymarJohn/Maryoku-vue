@@ -236,7 +236,7 @@ export default {
         },
         url(){
             let proposal = this.$store.state.eventPlan.proposal;
-            return proposal ? `/proposals/${this.$store.state.eventPlan.proposal.id}` : '/proposals/'
+            return proposal ? `/proposals/${this.$store.state.eventPlan.proposal.id}` : "/proposals/";
         }
     },
     watch: {

@@ -98,27 +98,13 @@ import { isWrong } from "@/utils/helperFunction";
 // MODELS
 import VueElementLoading from "vue-element-loading";
 import Me from "@/models/Me";
-// import auth from '@/auth';
 
 // COMPONENTS
-import InputText from "@/components/Inputs/InputText.vue";
-import Select from "@/components/Select/Select.vue";
-import Title from "@/components/Title/Title.vue";
-import Button from "@/components/Button/Button.vue";
-import Autocomplete from "@/components/Autocomplete/Autocomplete.vue";
 import { SignupCard } from "@/components";
-import Places from "vue-places";
 
 export default {
   name: "Employee",
   components: {
-    InputText,
-    Select,
-    Title,
-    Button,
-    Autocomplete,
-    LightBox,
-    Places,
     SignupCard,
     VueElementLoading,
   },
@@ -148,6 +134,11 @@ export default {
       maxlength: this.maxlength,
     };
   },
+  computed: {
+    ...mapGetters({
+      industryList: "user/getIndustryList",
+    }),
+  },
   mounted: function () {
     this.$auth.currentUser(this, true, () => {
       let user = this.$auth.user;
@@ -155,12 +146,6 @@ export default {
       this.email_address = user.username;
     });
   },
-  computed: {
-    ...mapGetters({
-      industryList: "user/getIndustryList",
-    }),
-  },
-
   methods: {
     next() {
       this.loading = true;

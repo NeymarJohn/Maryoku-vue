@@ -40,7 +40,7 @@
         Please rate your experience?
       </h5>
       <div class="d-flex align-center mt-10 mb-40">
-        <img v-for="rate in rates" :src="`${$iconURL}popups/${rate.url}${score == rate.score ? '_red' : ''}.svg`" class="ml-20" @click="selectRate(rate.score)">
+        <img v-for="(rate, index) in rates" :key="{index}" :src="`${$iconURL}popups/${rate.url}${score == rate.score ? '_red' : ''}.svg`" class="ml-20" @click="selectRate(rate.score)">
       </div>
     </div>
   </div>

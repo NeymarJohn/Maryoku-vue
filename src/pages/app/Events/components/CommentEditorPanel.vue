@@ -56,17 +56,17 @@
           </div>
 
           <div class="form-group position-relative reply-form" :class="{'main-form':!(this.selectedCommentComponent && this.selectedCommentComponent.length) }">
-              <fade-transition v-if="showAddress">
-                  <md-card class="position-absolute notification-card">
-                      <md-card-content class="d-flex align-center position-relative p-10">
-                          <md-menu md-size="medium" class="action-menu">
-                              <md-menu-item v-for="c in customers" :key="c.id" @click="toAddress(c)">
-                                  {{c.name}}
-                              </md-menu-item>
-                          </md-menu>
-                      </md-card-content>
-                  </md-card>
-              </fade-transition>
+            <fade-transition v-if="showAddress">
+              <md-card class="position-absolute notification-card">
+                <md-card-content class="d-flex align-center position-relative p-10">
+                  <md-menu md-size="medium" class="action-menu">
+                    <md-menu-item v-for="c in customers" :key="c.id" @click="toAddress(c)">
+                      {{ c.name }}
+                    </md-menu-item>
+                  </md-menu>
+                </md-card-content>
+              </md-card>
+            </fade-transition>
             <textarea
               ref="commentEditor"
               v-model="editingComment"
@@ -248,7 +248,7 @@ export default {
       if (this.selectedComponentIndex >=0 ) {
 
         if (!(this.updatedCommentComponents[this.selectedComponentIndex] && this.updatedCommentComponents[this.selectedComponentIndex].comments) || this.updatedCommentComponents[this.selectedComponentIndex].comments.length === 0 ) {
-          this.updatedCommentComponents.splice(this.selectedComponentIndex, 1)
+          this.updatedCommentComponents.splice(this.selectedComponentIndex, 1);
         }
       }
       this.isCommentEditing = false;

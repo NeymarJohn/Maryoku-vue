@@ -91,6 +91,7 @@ export default {
       if (this.responsive) {
         return "simple";
       }
+      return "";
     }
   },
   mounted () {

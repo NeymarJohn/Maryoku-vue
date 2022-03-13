@@ -54,7 +54,7 @@
           v-if="tooltipModels[index].value && openPopup"
           v-click-outside="closeModal"
           class="popup-box"
-          :md-active.sync="tooltipModels[index].value"
+          :md-active="tooltipModels[index].value"
           md-direction="left"
         >
           <div class="header-position">
@@ -66,20 +66,21 @@
             </button>
           </div>
           <div class="md-layout-item md-size-100 md-small-size-100">
-            <div v-for="(item, index) in tooltipModels[index].rankingParameters" class="space-between box-rate">
+            <div v-for="(paramItem, paramIndex) in tooltipModels[index].rankingParameters" :key="paramIndex" class="space-between box-rate">
               <h3 class="">
-                {{ item.name }}
+                {{ paramItem.name }}
               </h3>
               <div class="pull-right">
                 <div class="star-rating">
                   <label
-                    v-for="rating in ratings"
+                    v-for="(rating, ratingIndex) in ratings"
+                    :key="ratingIndex"
                     class="star-rating__star"
-                    :class="{ 'is-selected': item.value >= rating && item.value != null }"
+                    :class="{ 'is-selected': paramItem.value >= rating && paramItem.value != null }"
                     @click="setRanking(rating, index)"
                   >
                     <input
-                      v-model="item.value"
+                      v-model="paramItem.value"
                       class="star-rating star-rating__checkbox"
                       type="radio"
                       :value="rating"
@@ -107,7 +108,7 @@
           v-if="tooltipModels[index].value && openPopupTags"
           v-click-outside="closeTagsModal"
           class="popup-box"
-          :md-active.sync="tooltipModels[index].value"
+          :md-active="tooltipModels[index].value"
           md-direction="left"
         >
           <div class="header-position">
@@ -145,21 +146,11 @@
 </template>
 
 <script>
-import { Modal, SimpleWizard, WizardTab } from "@/components";
 import Swal from "sweetalert2";
 import Vendors from "@/models/Vendors";
-import RankingModal from "./RankingModal";
-import TagsModal from "./TagsModal";
-import ClickOutside from "vue-click-outside";
 
 export default {
   components: {
-    Modal,
-    SimpleWizard,
-    WizardTab,
-    TagsModal,
-    RankingModal,
-    ClickOutside,
   },
   props: {
     vendorsList: {
@@ -194,31 +185,12 @@ export default {
   },
   created() {},
   methods: {
-    openInviteModal() {
-      this.$refs.inviteModal.toggleModal(true);
-    },
     setRanking: function (value, index) {
       if (!this.disabled) {
         this.temp_value = value;
         console.log(value, "temp_value");
         return (this.rankingParameters[index].value = value);
       }
-    },
-
-    openTagsModal() {
-      this.$refs.tagsModal.toggleModal(true);
-    },
-    noticeModalHide: function () {
-      this.inviteModalOpen = false;
-    },
-    toggleModal: function (show) {
-      this.inviteModalOpen = show;
-    },
-    noticeModalHide: function () {
-      this.tagsModalOpen = false;
-    },
-    toggleModal: function (show) {
-      this.tagsModalOpen = show;
     },
     validateStep(ref) {
       return this.$refs[ref].validate();

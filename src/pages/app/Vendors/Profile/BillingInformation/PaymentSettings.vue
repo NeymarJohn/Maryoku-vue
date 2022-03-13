@@ -75,20 +75,22 @@
                       <div class="md-layout-item md-size-100">
                         <md-field>
                           <label>Verification</label>
-                          <md-input v-model="bankDetails.address" type="text"></md-input>
+                          <md-input v-model="bankDetails.address" type="text" />
                         </md-field>
                       </div>
-                      <div class="md-layout-item md-size-100">
-                      </div>
+                      <div class="md-layout-item md-size-100" />
                     </div>
                   </div>
                 </div>
-                <md-button @click="sendBankInfo" class="md-vendor md-vendor-review">Save details</md-button>
-                <md-button @click="sendTest" class="md-vendor md-vendor-review">Verify Account</md-button>
-
+                <md-button class="md-vendor md-vendor-review" @click="sendBankInfo">
+                  Save details
+                </md-button>
+                <md-button class="md-vendor md-vendor-review" @click="sendTest">
+                  Verify Account
+                </md-button>
               </md-card-content>
             </md-card>
-<!--            <button id="verify-button" @click="sendTest">Verify</button>-->
+            <!--            <button id="verify-button" @click="sendTest">Verify</button>-->
           </div>
         </div>
       </md-card-content>
@@ -119,19 +121,20 @@ export default {
       adId:"",
     }
   }),
+  computed: {},
   methods: {
     sendTest(){
-      var stripe = Stripe('');
-      stripe.verifyIdentity('vs_1KcCl2BvFPeKz0zX7nYGzaRS_secret_CJ3fAnRmp8raDXHQEBYFLhow9Tdtg')
+      var stripe = Stripe("");
+      stripe.verifyIdentity("vs_1KcCl2BvFPeKz0zX7nYGzaRS_secret_CJ3fAnRmp8raDXHQEBYFLhow9Tdtg")
         .then(function(result) {
-            console.log('##-175, PaymentSettings.vue',result)});
+            console.log("##-175, PaymentSettings.vue",result);});
       // var verifyButton = document.getElementById('verify-button');
       //
       // verifyButton.addEventListener('click', function() {
           // Get the VerificationSession client secret using the server-side
           // endpoint you created in step 3.
-          fetch('https://api.stripe.com/v1/identity/verification_sessions ', {
-            method: 'POST',
+          fetch("https://api.stripe.com/v1/identity/verification_sessions ", {
+            method: "POST",
             data:{
               vendorId: this.$store.state.auth.user.id
             }
@@ -144,10 +147,10 @@ export default {
             .then(function(session) {
               // Show the verification modal.
 
-              return stripe.verifyIdentity('');
+              return stripe.verifyIdentity("");
             })
             .then(function(result) {
-              console.log('##-175, PaymentSettings.vue',result)
+              console.log("##-175, PaymentSettings.vue",result);
               // If `verifyIdentity` fails, you should display the localized
               // error message to your user using `error.message`.
               if (result.error) {
@@ -155,12 +158,12 @@ export default {
               }
             })
             .catch(function(error) {
-              console.error('Error:', error);
+              console.error("Error:", error);
             });
     // });
     },
      test (e){
-      console.log('##-133, PaymentSettings.vue', this.$store.state.auth.user.id)
+      console.log("##-133, PaymentSettings.vue", this.$store.state.auth.user.id);
     },
     sendBankInfo(){
 
@@ -181,7 +184,6 @@ export default {
       let self = this;
     },
   },
-  computed: {},
 };
 </script>
 <style scoped lang="scss">

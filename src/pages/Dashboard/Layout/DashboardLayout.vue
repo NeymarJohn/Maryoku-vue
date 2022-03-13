@@ -19,18 +19,8 @@
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-
-import EventModal from "../../app/Events/EventModal/";
 import EventPlannerVuexModule from "../../app/Events/EventPlanner.vuex";
-
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition } from "vue2-transitions";
-// import auth from "src/auth";
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 
@@ -51,10 +41,6 @@ function initScrollbar(className) {
 
 export default {
   components: {
-    TopNavbar,
-    ContentFooter,
-    MobileMenu,
-    UserMenu,
     ZoomCenterTransition,
     SideBar,
   },
@@ -64,6 +50,12 @@ export default {
       event: null,
       createEventModalOpen: false,
     };
+  },
+  computed: {
+    ...mapState("event", ["eventData"]),
+  },
+  created() {
+    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   methods: {
     ...mapMutations("EventPlannerVuex", [
@@ -106,28 +98,6 @@ export default {
         this.createEventModalOpen = false;
       });
     },
-  },
-  created() {
-    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
-  },
-  mounted() {
-    /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!! */
-    // this.$auth.currentUser(this, true, function(){
-    //   let docClasses = document.body.classList;
-    //   let isWindows = navigator.platform.startsWith("Win");
-    //   if (isWindows) {
-    //     // if we are on windows OS we activate the perfectScrollbar function
-    //     initScrollbar("sidebar");
-    //     initScrollbar("sidebar-wrapper");
-    //     initScrollbar("main-panel");
-    //     docClasses.add("perfect-scrollbar-on");
-    //   } else {
-    //     docClasses.add("perfect-scrollbar-off");
-    //   }
-    // });
-  },
-  computed: {
-      ...mapState("event", ["eventData"]),
   },
 };
 </script>

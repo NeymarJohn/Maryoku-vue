@@ -126,19 +126,8 @@
 
 <script>
 import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
-import Multiselect from "vue-multiselect";
 import _ from "underscore";
-
-//COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "../components/VendorServiceItem.vue";
 import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
-import TimePicker from "@/components/Inputs/TimePicker";
-// import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
-import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy, VendorCategories } from "@/constants/vendor";
 import { capitalize } from "@/utils/string.util";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
@@ -152,19 +141,19 @@ export default {
   components: {
     VendorPricingPolicyItem,
     VendorPolicyItem,
-    VueElementLoading,
-    VendorServiceItem,
     VSignupAddRules,
-    FunctionalCalendar,
-    VueTimepicker,
-    Multiselect,
     CancellationPolicy,
-    MaryokuInput,
   },
   filters: {},
   props: {
-    categories: Array,
-    icon: String,
+    categories: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {

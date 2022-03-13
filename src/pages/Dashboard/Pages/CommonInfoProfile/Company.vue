@@ -101,27 +101,11 @@ import VueElementLoading from "vue-element-loading";
 import CustomerFile from "@/models/CustomerFile";
 import Customer from "@/models/Customer";
 import Me from "@/models/Me";
-// import auth from '@/auth';
-
-// COMPONENTS
-import InputText from "@/components/Inputs/InputText.vue";
-import Select from "@/components/Select/Select.vue";
-import Title from "@/components/Title/Title.vue";
-import Button from "@/components/Button/Button.vue";
-import Autocomplete from "@/components/Autocomplete/Autocomplete.vue";
 import { SignupCard } from "@/components";
-import Places from "vue-places";
 
 export default {
   name: "Employee",
   components: {
-    InputText,
-    Select,
-    Title,
-    Button,
-    Autocomplete,
-    LightBox,
-    Places,
     SignupCard,
     VueElementLoading
   },
@@ -129,7 +113,6 @@ export default {
     return {
       // auth: auth,
       loading: false,
-
       companyName: "",
       fullName: "",
       email: "",

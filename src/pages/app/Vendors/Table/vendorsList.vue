@@ -16,10 +16,8 @@
                 <md-option value>
                   all
                 </md-option>
-                <md-option v-for="(cat, index) in buildingBlocksList" :key="index" v-model="cat.id" :value="cat.id">
-                  {{
-                    cat.value
-                  }}
+                <md-option v-for="(cat, blockIndex) in buildingBlocksList" :key="blockIndex" v-model="cat.id" :value="cat.id">
+                  {{ cat.value }}
                 </md-option>
               </md-select>
             </md-field>
@@ -30,8 +28,8 @@
         </md-table-row>
 
         <md-table-row
-          v-for="(vendor, index) in vendorsList"
-          :key="index"
+          v-for="(vendor, vendorIndex) in vendorsList"
+          :key="vendorIndex"
           style="cursor: pointer"
           @click="selectVendor(vendor)"
         >
@@ -97,14 +95,8 @@
 </template>
 
 <script>
-import { Modal, SimpleWizard, WizardTab } from "@/components";
 import Swal from "sweetalert2";
 import Vendors from "@/models/Vendors";
-import RankingModal from "./RankingModal";
-import TagsModal from "./TagsModal";
-import ClickOutside from "vue-click-outside";
-// import auth from '@/auth';
-
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
@@ -113,12 +105,6 @@ import _ from "underscore";
 
 export default {
   components: {
-    Modal,
-    SimpleWizard,
-    WizardTab,
-    TagsModal,
-    RankingModal,
-    ClickOutside,
   },
   props: {
     vendorsList: {
@@ -135,12 +121,11 @@ export default {
     },
     tooltipModels: {
       type: Array,
-      default: () => {
-        return {};
-      },
+      default: () => [],
     },
     fetchVendors: {
       type: Function,
+      default: () => {}
     },
     item: {
       type: Object,
@@ -148,7 +133,10 @@ export default {
         return {};
       },
     },
-    mode: String,
+    mode: {
+      type: String,
+      default: ""
+    },
     selectedBlock: {
       type: Object,
       default: null,

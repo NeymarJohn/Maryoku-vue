@@ -124,11 +124,7 @@ const components = {
 
 export default {
   components: {
-    VueElementLoading,
-    Tabs,
-    LabelEdit,
     VendorAccountSettings,
-    UserAvatar,
     CompanyLogo,
     CompanyDetails,
     MyServices,

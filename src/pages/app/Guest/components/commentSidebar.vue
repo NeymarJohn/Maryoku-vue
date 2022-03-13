@@ -238,7 +238,7 @@ export default {
         },
         url(){
             let proposal = this.$store.state.EventGuestVuex.proposal;
-            return proposal ? `/proposals/${this.$store.state.EventGuestVuex.proposal.id}` : '/proposals/'
+            return proposal ? `/proposals/${this.$store.state.EventGuestVuex.proposal.id}` : "/proposals/";
         }
     },
     watch: {

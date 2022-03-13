@@ -38,8 +38,9 @@
             trim
           />
           <div
-            v-for="item in add_dates"
-            v-if="add_dates.length!==0"
+            v-for="(item, index) in add_dates"
+            v-show="add_dates.length!==0"
+            :key="index"
             class="events-add-new-date-block"
           >
             <div class="event-add-new-date_input">
@@ -132,6 +133,7 @@
           <div
             v-for="(item,index) in add_dates"
             v-show="add_dates.length!==0"
+            :key="index"
             class="events-add-new-date-block"
           >
             <div class="event-add-new-date_input">

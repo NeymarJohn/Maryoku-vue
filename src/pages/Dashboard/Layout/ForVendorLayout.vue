@@ -127,23 +127,13 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
-import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
 import { Modal, Loader } from "@/components";
 
 export default {
   components: {
-    TopNavbar,
-    ContentFooter,
-    MobileMenu,
     VendorBidTimeCounter,
-    UserMenu,
     SignupRequestModal,
     Modal,
     Loader,
@@ -162,6 +152,38 @@ export default {
       openedModal: "",
       showCloseProposalModal: false,
     };
+  },
+  computed: {
+    backgroundImage() {
+      const defaultImage = "https://maryoku.s3.amazonaws.com/proposal/background-default.jpg";
+      try {
+        if (this.event && this.event.concept) {
+          return this.event.concept.images[new Date().getTime() % this.event.concept.images.length].url || defaultImage;
+        }
+      } catch (e) {}
+      return defaultImage;
+    },
+    getRemainingTime() {
+      if (!this.proposalRequest || !this.proposalRequest.expiredTime) {
+        return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      }
+      console.log(this.proposalRequest.expiredTime);
+      console.log(new Date().getTime());
+      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
+      if (remainingMs < 0) {
+        // this.isTimeUp = true;
+        // this.openedModal = "timeIsUp";
+        return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      }
+      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
+      remainingMs = remainingMs - days * 24 * 3600 * 1000;
+      const hours = Math.floor(remainingMs / 3600 / 1000);
+      remainingMs = remainingMs - hours * 3600 * 1000;
+      const mins = Math.floor(remainingMs / 60 / 1000);
+      remainingMs = remainingMs - mins * 60 * 1000;
+      const seconds = Math.floor(remainingMs / 1000);
+      return { days, hours, mins, seconds };
+    },
   },
   async mounted() {
       console.log("proposal.layout.created", this.$store.state.auth.user);
@@ -195,38 +217,7 @@ export default {
     },
   },
 
-  computed: {
-    backgroundImage() {
-      const defaultImage = "https://maryoku.s3.amazonaws.com/proposal/background-default.jpg";
-      try {
-        if (this.event && this.event.concept) {
-          return this.event.concept.images[new Date().getTime() % this.event.concept.images.length].url || defaultImage;
-        }
-      } catch (e) {}
-      return defaultImage;
-    },
-    getRemainingTime() {
-      if (!this.proposalRequest || !this.proposalRequest.expiredTime) {
-        return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      }
-      console.log(this.proposalRequest.expiredTime);
-      console.log(new Date().getTime());
-      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
-      if (remainingMs < 0) {
-        this.isTimeUp = true;
-        this.openedModal = "timeIsUp";
-        return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      }
-      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
-      remainingMs = remainingMs - days * 24 * 3600 * 1000;
-      const hours = Math.floor(remainingMs / 3600 / 1000);
-      remainingMs = remainingMs - hours * 3600 * 1000;
-      const mins = Math.floor(remainingMs / 60 / 1000);
-      remainingMs = remainingMs - mins * 60 * 1000;
-      const seconds = Math.floor(remainingMs / 1000);
-      return { days, hours, mins, seconds };
-    },
-  },
+
 };
 </script>
 <style lang="scss" scoped>
