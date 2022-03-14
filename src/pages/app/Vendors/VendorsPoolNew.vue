@@ -105,7 +105,7 @@
           </div>
 
           <div v-if="filter.title.toLowerCase() == 'rank'" class="rank-filters-section d-flex justify-content-end">
-            <div v-for="(rank, index) in [5, 4, 3, 2, 1, 0]" :key="`rank-${index}`" class="rank-item">
+            <div v-for="(rank, rankIndex) in [5, 4, 3, 2, 1, 0]" :key="`rank-${rankIndex}`" class="rank-item">
               <md-checkbox v-model="searchModel.rank" :value="rank">
                 <div v-if="rank" class="label-title">
                   {{ rank }} Stars<span class="rank-counter">(59)</span>
@@ -167,14 +167,10 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
 import Swal from "sweetalert2";
-import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
 import VendorsGrid from "./VendorsGridNew";
 import VendorsList from "./VendorsList";
-
-import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import { Modal, Loader } from "@/components";
 import Vendors from "@/models/Vendors";
 import _ from "underscore";
@@ -183,12 +179,9 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
   name: "VendorsPool",
   components: {
-    VueElementLoading,
-    companyForm,
     UploadModal,
     VendorsGrid,
     VendorsList,
-    SideBar,
     Loader,
     VueGoogleAutocomplete,
   },
@@ -298,7 +291,6 @@ export default {
   watch: {},
   mounted() {
     this.working = true;
-    // this.$auth.currentUser(this, true, () => {
     this.$store.dispatch("common/fetchAllCategories").then((categories) => {
       const filterCategories = [];
 
@@ -317,9 +309,6 @@ export default {
     Vendors.find("categories").then((res) => {
       let list = [];
       _.each(res, (parentBuildingBlock) => {
-        /* parentBuildingBlock.childComponents.forEach((bb)=>{
-                            list.push({id: bb.id, value: bb.title});
-                        }); */
         list.push({
           id: parentBuildingBlock.id,
           value: parentBuildingBlock.value,
@@ -327,7 +316,6 @@ export default {
       });
       this.loadVendors();
       this.buildingBlocksList = list;
-      console.log("vendor-pool.categories", list);
     });
     // })
   },
@@ -353,7 +341,6 @@ export default {
         .page(this.page)
         .get()
         .then((vendors) => {
-          console.log(vendors);
           this.pagingData = vendors[0].model;
           this.vendorsList = [...this.vendorsList, ...vendors[0].results];
           this.working = false;
@@ -439,8 +426,6 @@ export default {
       this.searchVendors();
     },
     searchByRank(rank) {
-      console.log(rank);
-      // this.searchModelLabels.rank = "";
       this.searchVendors();
     },
     searchByQuery(event) {
@@ -454,9 +439,6 @@ export default {
       this.loadVendors();
     },
     getAddressData: function (addressData, placeResultData, id) {
-      console.log(addressData);
-      console.log(placeResultData);
-      console.log(id);
       this.searchLocation.fullString = placeResultData.formatted_address;
       this.searchLocation.city = addressData.locality;
       this.value = `${addressData.route}  ${addressData.administrative_area_level_1}  ${addressData.country}`;

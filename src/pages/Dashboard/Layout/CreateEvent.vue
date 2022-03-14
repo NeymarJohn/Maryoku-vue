@@ -93,15 +93,14 @@
 </template>
 <script>
 import { FadeTransition } from "vue2-transitions";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { MaryokuInput, SignInContent } from "@/components";
+import { mapState, mapMutations } from "vuex";
+import { MaryokuInput } from "@/components";
 import AuthService from "@/services/auth.service";
 
 export default {
   components: {
     FadeTransition,
     MaryokuInput,
-    SignInContent,
   },
   data() {
     return {

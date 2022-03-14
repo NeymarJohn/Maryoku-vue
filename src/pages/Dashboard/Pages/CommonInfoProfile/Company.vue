@@ -90,13 +90,8 @@
 </template>
 <script>
 // MAIN MODULES
-import LightBox from "vue-image-lightbox";
 import { mapGetters } from "vuex";
-
-// HELPER FUNC
 import { isWrong } from "@/utils/helperFunction";
-
-// MODELS
 import VueElementLoading from "vue-element-loading";
 import CustomerFile from "@/models/CustomerFile";
 import Customer from "@/models/Customer";
@@ -153,6 +148,11 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapGetters({
+      industryList: "user/getIndustryList"
+    })
+  },
   watch: {
     email () {
       this.touched.email = true;
@@ -177,6 +177,7 @@ export default {
       maxlength: this.maxlength
     };
   },
+  
   mounted: function () {
     this.$auth.currentUser(this, true, () => {
       /* this.$store.dispatch("user/getIndustry"); */
@@ -187,21 +188,9 @@ export default {
 
       let customer = this.$auth.user.customer;
       this.companyName = customer.name;
-      /* this.main_office_adddress = {
-                  label: `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`,
-                  data: {}
-                };
-                this.industry = customer.industry;
-                this.number_of_employees = customer.numberOfEmployees;
-                this.website = customer.website;
-                this.workspace_domain = customer.workspaceDomain; */
     });
   },
-  computed: {
-    ...mapGetters({
-      industryList: "user/getIndustryList"
-    })
-  },
+
 
   methods: {
     next () {
@@ -295,7 +284,6 @@ export default {
     createImage (file) {
       let reader = new FileReader();
       let _this = this;
-      console.log(file);
       reader.onload = e => {
         if (true) {
           this.isImageShow = true;
@@ -305,12 +293,7 @@ export default {
             thumb: e.target.result
           };
           this.images.push(newImage);
-
-          //     this.isModalLoading = true;
-          //     let _calendar = new Calendar({id: this.$store.state.calendarId});
-          //     let editedEvent = new CalendarEvent({id: this.event.id});
           this.logo_name = file.name;
-          console.log(e.target);
           return new CustomerFile({ customerFile: e.target.result })
             .save()
             .then(result => {
@@ -328,7 +311,7 @@ export default {
               this.images.push(newImage);
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           _this.uploadedImages.push({

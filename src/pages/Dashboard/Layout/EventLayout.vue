@@ -52,6 +52,10 @@ export default {
       createEventModalOpen: false,
     };
   },
+  computed: {},
+  created() {
+    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+  },
   methods: {
     ...mapMutations("EventPlannerVuex", [
       "setEventModal",
@@ -93,26 +97,6 @@ export default {
         this.createEventModalOpen = false;
       });
     },
-  },
-  computed: {},
-  created() {
-    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
-  },
-  mounted() {
-    /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!! */
-    // this.$auth.currentUser(this, true, function(){
-    //   let docClasses = document.body.classList;
-    //   let isWindows = navigator.platform.startsWith("Win");
-    //   if (isWindows) {
-    //     // if we are on windows OS we activate the perfectScrollbar function
-    //     initScrollbar("sidebar");
-    //     initScrollbar("sidebar-wrapper");
-    //     initScrollbar("main-panel");
-    //     docClasses.add("perfect-scrollbar-on");
-    //   } else {
-    //     docClasses.add("perfect-scrollbar-off");
-    //   }
-    // });
   },
 };
 </script>

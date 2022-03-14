@@ -230,12 +230,10 @@ export default {
 
     },
     async searchOnTable() {
-        console.log("searchOnTable", this.search);
         this.pagination.page = 1;
         this.vendors = await this.getVendors();
     },
     async updatePagination(){
-        console.log("updatePage", this.pagination.limit);
         this.vendors = await this.getVendors();
     },
     async next(){
@@ -249,7 +247,6 @@ export default {
         this.vendors = await this.getVendors();
     },
     async sort(value) {
-        console.log("sort", this.sortFields);
         this.pagination.page = 1;
         this.vendors = await this.getVendors();
     },

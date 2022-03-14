@@ -220,37 +220,34 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
 import VendorDetailReviews from "./components/VendorDetailReviews";
 import { capitalize } from "@/utils/string.util";
-//COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./components/VendorServiceItem.vue";
 import carousel from "vue-owl-carousel";
 import VendorStartingFeeItem from "./components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "./components/VendorExtraPayItem.vue";
 import _ from "underscore";
-import VendorImagesList from "./components/VendorImagesList.vue";
-import HeaderImageCarousel from "@/components/HeaderImageCarousel";
 export default {
   name: "VendorSignupStep4",
   components: {
-    VueElementLoading,
-    VendorServiceItem,
     carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
     VendorDetailReviews,
-    VendorImagesList,
-    HeaderImageCarousel,
   },
   filters: {},
   props: {
-    categories: Array,
-    icon: String,
-    vendor: Object,
+    categories: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
+    vendor: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {

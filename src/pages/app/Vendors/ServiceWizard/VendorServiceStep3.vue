@@ -272,14 +272,6 @@ export default {
       return this.$store.state.vendorService.service;
     },
   },
-  watch: {
-    vendor: {
-      handler(newVal) {
-        console.log("signup.step3", newVal);
-      },
-      deep: true,
-    },
-  },
   mounted() {
     this.init();
   },
@@ -294,13 +286,11 @@ export default {
       return VendorCategories.filter((c) => c.value == value)[0].name;
     },
     updateExDonts(religion, holiday) {
-      console.log("updateExDonts", holiday);
       holiday.selected = !holiday.selected;
 
       let date = moment(holiday.start).format("YYYY-M-D");
       let day = moment(holiday.start).date();
 
-      console.log("updateExDonts", day, date);
       if (this.markedDates.find((m) => m === date)) {
         this.markedDates = this.markedDates.filter((m) => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
@@ -317,8 +307,6 @@ export default {
           religion: religion.name,
         });
       }
-      console.log("updateExDonts.markedDates", date, this.markedDates);
-
       this.$root.$emit("update-vendor-value", "exDonts", this.currentService.exDonts);
     },
     updateNa(item) {
@@ -337,7 +325,6 @@ export default {
       }
     },
     updateWeekdays(item) {
-      // console.log("updateWeekdays", item);
       if (this.selectedWeekdays.includes(item)) {
         this.selectedWeekdays = this.selectedWeekdays.filter((s) => s != item);
       } else {
@@ -347,7 +334,6 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
-      // console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
       if (this.selectedReligion.length && this.selectedReligion.find((s) => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
       } else {
@@ -365,16 +351,12 @@ export default {
         this.markedDates = this.markedDates.filter((m) => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
       }
-      // console.log("selectedDays", day, e, this.markedDates, this.date);
-
       this.$root.$emit("update-vendor-value", "dontWorkDays", selectedDates);
     },
     changeMonth(e) {
-      // console.log("changeMonth", this.markedDates, this.date);
       this.month = moment(e).month();
     },
     changeYear(e) {
-      // console.log("changeYear", e);
       this.month = moment(e).month();
     },
     updateStartA() {
@@ -410,18 +392,14 @@ export default {
       return res;
     },
     setPricePolicy(e, index) {
-      console.log(e);
-      console.log("setPricePolicy", e);
       this.vendorPricingPolicies.items[index] = e;
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, index) {
-      console.log("setPolicy", e);
       this.vendorPolicies.items[index] = e;
       this.$root.$emit("update-vendor-value", "policies", this.vendorPolicies.items);
     },
     changeCategorySelector(type, item, value) {
-      // console.log(type, item, value);
       item.value = value;
 
       if (type === "policy") {
@@ -455,7 +433,6 @@ export default {
           this.currentService.exDonts = this.currentService.exDonts.filter((e) => e.holiday !== it.holiday);
         }
       });
-      console.log("updateAllExDonts", this.markedDates);
       this.$root.$emit("update-vendor-value", "exDonts", this.currentService.exDonts);
     },
     isAllHolidays(data) {
@@ -465,7 +442,6 @@ export default {
       // set vendorPricingPolicies from initial pricing policies
       let vendorPricingPolicies = this.pricingPolicies.find((p) => p.category === this.currentService.vendorCategory);
 
-      console.log("vendorPricingPolicies", vendorPricingPolicies);
       // replace vendorPricingPolicies with saved vendor
       if (this.currentService.pricingPolicies && this.currentService.pricingPolicies.length) {
         this.$set(this.vendorPricingPolicies, "items", this.currentService.pricingPolicies);
@@ -484,7 +460,6 @@ export default {
         });
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
-        console.log(vendorPricingPolicies);
         this.vendorPricingPolicies.items.map((it) => {
           if (it.type == "Boolean") {
             this.$set(it, "value", false);
@@ -509,7 +484,6 @@ export default {
         });
       }
 
-      // set selectedReligion from saved vendor
       if (this.currentService.selectedReligion && this.currentService.selectedReligion.length) {
         this.selectedReligion = this.currentService.selectedReligion;
         this.isReligion = true;
@@ -524,7 +498,6 @@ export default {
         this.religions = res.data;
         localStorage.setItem("two62-app.holidays", JSON.stringify(this.religions));
       }
-      // console.log('holidays', this.religions);
       if (this.currentService.exDonts && this.currentService.exDonts.length) {
         this.religions.map((r) => {
           r.holidays.map((h) => {
@@ -533,12 +506,10 @@ export default {
         });
       }
 
-      // set selectedWeekdays from saved vendor
       if (this.currentService.selectedWeekdays && this.currentService.selectedWeekdays.length) {
         this.selectedWeekdays = this.currentService.selectedWeekdays;
       }
 
-      // set dontWorkSays from saved vendor
       if (this.currentService.dontWorkDays) {
         this.$set(this.date, "selectedDates", this.currentService.dontWorkDays);
         if (this.currentService.dontWorkDays.length > 0) {
@@ -549,17 +520,11 @@ export default {
         }
       }
 
-      //
       if (this.currentService.exDonts && this.currentService.exDonts.length) {
         this.currentService.exDonts.map((h) => {
-          // console.log("exdonts", moment(h.date).format("YYYY-M-D"));
           this.markedDates.push(moment(h.date).format("YYYY-M-D"));
         });
       }
-
-      console.log("init.policies", this.vendorPolicies.items);
-      console.log("init.pricingPolicies", this.vendorPricingPolicies.items);
-
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;
     },
@@ -603,7 +568,6 @@ export default {
             ($(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") ||
               $(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed"))
           ) {
-            // console.log('vfc-end-mark', day)
             $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
             if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
           }
@@ -614,7 +578,6 @@ export default {
             !$(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
             !$(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
           ) {
-            // console.log("alone", day);
             $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
             $(day).find("div.vfc-base-start").remove();
             $(day).find("div.vfc-base-end").remove();

@@ -126,32 +126,24 @@
 import selectIcons from "./Modals/SelectIcon.vue";
 import PieChart from "@/components/Chart/PieChart.vue";
 import IncomeBarChart from "./IncomeBarChart.vue";
-import { FunctionalCalendar } from "vue-functional-calendar";
-import IncomeChart from "./IncomeChart";
 import moment from "moment";
 import _ from "underscore";
 import VendorCreateEventModal from "./Modals/VendorCreateEvent";
-import SyncCalendarModal from "./Modals/SyncCalendar";
 import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
 import ProposalRequestSection from "./Components/ProposalRequestSection.vue";
-import Modal from "@/components/Modal.vue";
 import YearSelect from "../../../../components/Select/YearSelect.vue";
 import {eventIcons} from "@/constants/event";
 
 export default {
   components: {
-    IncomeChart,
     selectIcons,
-    FunctionalCalendar,
     PieChart,
     IncomeBarChart,
     VendorCreateEventModal,
     UpcomingEvent,
     EventCalendar,
-    Modal,
-    SyncCalendarModal,
     ProposalRequestSection,
     YearSelect
   },
@@ -309,8 +301,7 @@ export default {
     },
     updateEventIcon(event) {
       new UserEvent(event).save().then((res) => {
-        console.log("res", res);
-      }).catch((error) => {console.log("error", error);});
+      }).catch((error) => {console.error( error);});
     },
     show(ev) {
       this.iconsModal = true;
@@ -404,18 +395,15 @@ export default {
         });
     },
     showEvent(event) {
-      console.log("showEvent", event);
       this.showVendorCreateModal = true;
       this.defaultEventData = { ...event };
     },
 
     ShowModal(event) {
-      console.log("showModal", event);
       this.iconsModal = true;
       this.defaultEventData = { ...event };
     },
     createEventFromCalendar(data) {
-      console.log("createEventFromCalendar", data);
       if (data.hasOwnProperty("event")) {
         this.defaultEventData = { ...data.event };
       } else {

@@ -3,13 +3,22 @@
     export default {
         extends: Line,
         mixins: [mixins.reactiveProp],
+        props: {
+            chartData: {
+                type: Object,
+                default: () => {}
+            },
+            options: {
+                type: Array,
+                default: () => []
+            }
+        }
         props: ["chartData", "options"],
         data() {
             return {
             };
         },
         mounted () {
-            console.log("data", this.chartData, this.options);
             this.renderChart(this.chartData, this.options);
         },
         methods: {

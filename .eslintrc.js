@@ -22,6 +22,7 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "vue/html-indent": ["error", "space"],
     "vue/html-quotes": ["error", "double"],
-    "vue/max-attributes-per-line": "off"
+    "vue/max-attributes-per-line": "off",
+    "no-console": ["warn", { allow: ["warn", "error"] }]
   }
 }
