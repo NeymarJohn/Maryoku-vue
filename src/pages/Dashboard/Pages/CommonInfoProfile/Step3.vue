@@ -210,7 +210,6 @@ export default {
     createImage(file) {
       let reader = new FileReader();
       let _this = this;
-      console.log(file);
       reader.onload = (e) => {
         if (true) {
           this.isImageShow = true;
@@ -225,7 +224,6 @@ export default {
           //     let _calendar = new Calendar({id: this.$store.state.calendarId});
           //     let editedEvent = new CalendarEvent({id: this.event.id});
           this.logo_name = file.name;
-          console.log(e.target);
           return new CustomerFile({ customerFile: e.target.result })
             .save()
             .then((result) => {
@@ -243,7 +241,7 @@ export default {
               this.images.push(newImage);
             })
             .catch((error) => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           _this.uploadedImages.push({

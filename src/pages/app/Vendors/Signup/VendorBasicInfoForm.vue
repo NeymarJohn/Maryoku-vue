@@ -89,7 +89,10 @@ export default {
         VSignupCategorySelector,
     },
     props: {
-        vendor: Object,
+        vendor: {
+            type: Object,
+            default: () => {}
+        },
     },
     data() {
         return {

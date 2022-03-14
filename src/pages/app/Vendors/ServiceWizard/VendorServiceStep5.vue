@@ -271,7 +271,6 @@ export default {
       this.$store.commit("vendorService/setField", { field: "recommendations", value: newRecommendations });
     },
     open() {
-      console.log("open");
       this.opened = !this.opened;
     },
   },

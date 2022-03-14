@@ -44,14 +44,22 @@ import { VendorCategories } from "@/constants/vendor";
 export default {
   name: "VendorSignupStep2",
   components: {
-    VueElementLoading,
     VendorServiceItem,
   },
   filters: {},
   props: {
-    categories: Array,
-    icon: String,
-    vendor: Object,
+    categories: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
+    vendor: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {
@@ -65,7 +73,6 @@ export default {
   watch: {},
   created() {},
   mounted() {
-    console.log("vendor.signup.step2.mounted", this.vendor);
   },
   methods: {
     getCategoryNameByValue(value) {

@@ -39,18 +39,6 @@
             </div>
           </div>
 
-          <!-- Email Address -->
-          <!--<div class="md-layout">
-                        <label class="md-layout-item md-size-35 md-form-label">
-                            Email Address
-                        </label>
-                        <div class="md-layout-item">
-                            <md-field>
-                                <md-input v-model="email" type="text" required data-vv-name="email" v-validate="modelValidations.email"></md-input>
-                            </md-field>
-                        </div>
-          </div>-->
-
           <!-- Birthday -->
 
           <div class="md-layout" style="display: none;">
@@ -262,7 +250,6 @@ export default {
     createImage (file) {
       let reader = new FileReader();
       let _this = this;
-      console.log(file);
       reader.onload = e => {
         if (true) {
           this.isImageShow = true;
@@ -277,7 +264,6 @@ export default {
           //     let _calendar = new Calendar({id: this.$store.state.calendarId});
           //     let editedEvent = new CalendarEvent({id: this.event.id});
           this.logo_name = file.name;
-          console.log(e.target);
           return new CustomerFile({ customerFile: e.target.result })
             .save()
             .then(result => {
@@ -295,7 +281,7 @@ export default {
               this.images.push(newImage);
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           _this.uploadedImages.push({
