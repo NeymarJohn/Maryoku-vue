@@ -103,7 +103,7 @@
               </td>
               <td class="expand">
                 <div class="text-right" @click="showDeleteModal">
-                  <img :src="`${$iconURL}menu _ checklist/SVG/Group 2763 (2).svg`" class="colour-filter" style="width: 13px">
+                  <img :src="`${$iconURL}menu _ checklist/SVG/Group 2763 (2).svg`" style="width: 20px">
                 </div>
               </td>
             </template>
@@ -299,9 +299,3 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-.colour-filter{
-  cursor: pointer;
-  filter: invert(80%) sepia(0%) saturate(160%) hue-rotate(260deg) brightness(82%) contrast(81%);
-}
-</style>
