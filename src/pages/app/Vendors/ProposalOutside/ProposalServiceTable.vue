@@ -1,6 +1,12 @@
 <template>
   <div v-if="services.length > 0" class="proposal-service-table-wrapper">
     <div class="editable-sub-items-cont">
+      <div class="editable-sub-items-header">
+        <span>Description</span>
+        <span class="text-center">QTY</span>
+        <span class="text-right">{{ tableCategory !== "included" ? "Price per unit" : "" }}</span>
+        <span class="text-right">{{ tableCategory !== "included" ? "Subtotal" : "" }}</span>
+      </div>
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
         :key="req.requirementTitle"
