@@ -2,6 +2,12 @@
   <div class="v-signup-steps-wrapper">
     <div class="steps-cont">
       <ul class="progressbar">
+        <!-- <li @click="goToStep(1)" :class="[{ active: step >= 1 }, { current: step == 1 }]">
+          <span v-if="step == 0"><i>&#8226;</i></span>
+          <span v-else><md-icon>check</md-icon></span>
+          <br />
+          <strong class="text">about your <br />company</strong>
+        </li> -->
         <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
@@ -35,10 +41,7 @@ export default {
   name: "VSignupSteps",
   components: {},
   props: {
-    step: {
-      type: Number,
-      default: 0
-    },
+    step: Number,
   },
   data() {
     return {};

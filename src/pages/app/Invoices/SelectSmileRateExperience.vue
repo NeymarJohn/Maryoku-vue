@@ -31,10 +31,10 @@ export default {
   data() {
     return {
       smiles: [
-        { url: "static/img/smile-27727.png", rate: 1, status: "Poor" },
-        { url: "static/img/smile-27728.png", rate: 2, status: "Okay" },
-        { url: "static/img/smile-27730.png", rate: 3, status: "Good" },
-        { url: "static/img/smile-28046.png", rate: 4, status: "Very Good" },
+        { url: "static/img/smile-27727.png", rate: 1, status: "We're sad to hear that!" },
+        { url: "static/img/smile-27728.png", rate: 2, status: "We're sad to hear that!" },
+        { url: "static/img/smile-27730.png", rate: 3, status: "Thank you for your feedback" },
+        { url: "static/img/smile-28046.png", rate: 4, status: "Enjoyable!" },
         { url: "static/img/smile-enjoyable.png", rate: 5, status: "Enjoyable!" },
       ]
     };
@@ -54,17 +54,17 @@ export default {
   padding: 0 20px;
 
   .select-smile-rate-experience-item {
-    min-height: 147px;
+    min-height: 172px;
     margin: 15px;
 
     .select-smile-rate-experience-item-status {
+      max-width: 114px;
       display: none;
       margin-top: 5px;
       font-size: 12px;
       font-weight: bold;
       font-stretch: normal;
       font-style: normal;
-      line-height: 2.25;
       letter-spacing: normal;
       text-align: center;
       color: #f51355;

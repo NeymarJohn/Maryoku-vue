@@ -41,24 +41,25 @@
 </template>
 
 <script>
+import moment from "moment";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
+
+//COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
+import VendorServiceItem from "../components/VendorServiceItem.vue";
+
 export default {
   name: "VendorSignupFinalForm",
   components: {
+    VueElementLoading,
+    VendorServiceItem,
   },
   filters: {},
   props: {
-    categories: {
-      type: Array,
-      default: () => []
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    vendor: {
-      type: Object,
-      default: () => {}
-    },
+    categories: Array,
+    icon: String,
+    vendor: Object,
   },
   data() {
     return {
@@ -108,6 +109,7 @@ export default {
         }/#/vendor/signedin?vendorId=${this.vendor.id}&token=`,
       );
 
+      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
       document.location.href = `${
         this.$data.serverURL
       }/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;

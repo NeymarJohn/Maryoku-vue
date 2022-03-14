@@ -12,7 +12,8 @@
                 type: Array,
                 default: () => []
             }
-        },
+        }
+        props: ["chartData", "options"],
         data() {
             return {
             };

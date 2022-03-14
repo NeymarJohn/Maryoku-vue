@@ -138,6 +138,7 @@ export default {
       this.year = moment(e).year();
     },
     changeDate(e) {
+      console.log("changeDate", e, this.dateData);
       this.dateClick = !this.dateClick;
 
       if (this.dateClick) {

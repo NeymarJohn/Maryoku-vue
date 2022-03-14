@@ -9,6 +9,20 @@
       </div>
       <div class="right-side">
         <div class="card">
+          <!-- <div class="tabs">
+            <div
+              class="tab"
+              :class="{ active: t == activeTab }"
+              v-for="(t, tIndex) in tabs"
+              :key="tIndex"
+              @click="goToSection(t)"
+            >
+              {{ t }}
+            </div>
+          </div> -->
+          <!-- <div class="banner">
+            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
+          </div> -->
           <div id="About" class="about-cont">
             <!-- <div class="block">
               <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
@@ -153,7 +167,7 @@
                   {{ policy.name }}
                 </div>
                 <div v-if="policy.type === 'MultiSelection'" class="item">
-                  <span v-for="(v, vIndex) in policy.value" :key="vIndex" class="mr-10">{{
+                  <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
                     `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                   }}</span>
                 </div>
@@ -231,7 +245,7 @@
                   </div>
                 </div>
                 <div v-if="policy.type === 'MultiSelection'" class="item">
-                  <span v-for="(v, vIndex) in policy.value" :key="vIndex" class="mr-10">
+                  <span v-for="(v, vIndex) in policy.value" class="mr-10">
                     {{ `${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}
                   </span>
                 </div>
@@ -491,8 +505,17 @@ export default {
       return this.$store.state.vendorService.service;
     },
   },
+  watch: {
+    vendor: {
+      handler: function (newVal) {
+        console.log("handler", newVal);
+      },
+      deep: true,
+    },
+  },
   created() {},
   mounted() {
+    console.log("vendorService.step4", this.vendor);
     if (this.currentService.hasOwnProperty("images") && this.currentService.images.length) {
       this.currentService.images.forEach((item) => {
         this.medias.push({
@@ -531,6 +554,7 @@ export default {
       return !isBlank;
     },
     getExtraPayItems() {
+      console.log("getExtraPayItems");
       let extraPayItems = [];
       _.each(this.currentService.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
@@ -616,6 +640,7 @@ export default {
       }
     },
     changeServiceItem(item) {
+      console.log("changeServiceItem", item);
       _.each(this.currentService.services, (s, key) => {
         if (s.label === item.label) {
           this.currentService.services[key] = item;

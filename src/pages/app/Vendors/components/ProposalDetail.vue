@@ -183,7 +183,7 @@
         @changeAddedServices="updateAddedServices"
       />
       <EventProposalPrice
-        v-for="service in vendorProposal.additionalServices"
+        v-for="service in this.vendorProposal.additionalServices"
         :key="`secondary-${service}-section`"
         :proposal-data="vendorProposal"
         :service-category="service"
@@ -354,7 +354,7 @@
                     {{ policy.name }}
                   </div>
                   <div v-if="policy.type === 'MultiSelection'" class="item">
-                    <span v-for="(v, vIndex) in policy.value" :key="vIndex" class="mr-10">{{
+                    <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
                       `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
                     }}</span>
                   </div>
@@ -544,6 +544,7 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
+      console.log("discount", discount);
       return discount;
     },
     bundledDiscountPrice() {
@@ -574,9 +575,11 @@ export default {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
+        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
 
+      console.log(this.addedServices);
       // added service item price
       Object.keys(this.addedServices).forEach(serviceCategory => {
         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
@@ -596,15 +599,18 @@ export default {
   },
   watch: {
     vendorProposal(newVal, oldVal) {
+      console.log("download", this.vendorProposal);
       this.eventData = this.vendorProposal ? this.vendorProposal.proposalRequest.eventData : {};
     },
   },
   mounted() {
+    console.log("detail.mounted", this.vendorProposal);
     if (this.vendorProposal.nonMaryoku) {
       this.eventData = this.vendorProposal.eventData;
     } else {
       this.eventData = this.vendorProposal.proposalRequest.eventData;
     }
+    console.log("detail.mounted", this.eventData);
   },
   methods: {
     getDiffDaysFromOriginal() {

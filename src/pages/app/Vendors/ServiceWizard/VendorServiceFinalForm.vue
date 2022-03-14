@@ -48,21 +48,14 @@ import VendorServiceItem from "../components/VendorServiceItem.vue";
 export default {
   name: "VendorSignupFinalForm",
   components: {
+    VueElementLoading,
+    VendorServiceItem,
   },
   filters: {},
   props: {
-    categories: {
-      type: Array,
-      default: () => []
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    vendor: {
-      type: Object,
-      default: () => {}
-    },
+    categories: Array,
+    icon: String,
+    vendor: Object,
   },
   data() {
     return {

@@ -40,7 +40,6 @@ const components = {
 
 export default {
   components,
-  filters: {},
   data() {
     return {
       // selected_vendor: {
@@ -55,12 +54,6 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
-  computed: {
-    ...mapGetters({
-      vendor: "vendorSignup/getVendor",
-      step: "vendorSignup/getStep",
-    }),
-  },
   mounted() {
     //if this is edit page
     if (this.$route.params.id) {
@@ -68,6 +61,8 @@ export default {
     }
     this.$root.$on("approve-vendor-basic-info", (vendor) => {
       if (vendor) this.vendor = { ...this.vendor, ...vendor };
+      console.log("vendor", this.vendor);
+      console.log("*** Save vendor - done: ");
       this.isApproved = true;
 
       this.step = 1;
@@ -83,8 +78,10 @@ export default {
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images") {
         if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
+          console.log("!update.vendor.image", value);
           vendor[field].push(value.data);
         } else {
+          console.log("update.vendor.image", value);
           vendor[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
@@ -122,8 +119,13 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
   },
-
-  
+  computed: {
+    ...mapGetters({
+      vendor: "vendorSignup/getVendor",
+      step: "vendorSignup/getStep",
+    }),
+  },
+  filters: {},
 };
 </script>
 <style lang="scss" scoped>

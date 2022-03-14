@@ -460,6 +460,7 @@ export default {
             caption: index,
           });
         });
+        console.log(temp);
         return temp;
       } else {
         return [];

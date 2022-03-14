@@ -49,9 +49,8 @@
 
 export default {
     props:{
-      rfps: {
-        type: Array,
-        default: () => []
+        rfps: {
+          type: Array,
       }
     },
     methods:{
