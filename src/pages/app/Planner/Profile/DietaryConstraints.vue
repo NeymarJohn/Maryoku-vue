@@ -30,14 +30,6 @@
             >
           </div>
         </div>
-
-        <!--<div class="md-layout"   style="margin-top:5%">
-          <div class="md-layout-item" v-for="(item,index) in dietaryIconOnSecondList" :key="item.id">
-            <img :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
-            <img :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
-          </div>
-
-        </div>-->
       </md-card-content>
     </md-card>
   </div>
@@ -52,11 +44,13 @@ import _ from "underscore";
 
 export default {
   components: {
-    Collapse,
     VueElementLoading,
   },
   props: {
-    userInfo: Object,
+    userInfo: {
+      type: Object,
+      default: () => {}
+    },
     isLoading: {
       type: Boolean,
       default: false,

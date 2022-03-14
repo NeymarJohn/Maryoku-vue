@@ -11,7 +11,6 @@
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
         My Events
       </h4>
-
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-left: -15px;">
         <div class="md-layout-item md-size-100">
           <my-events :user-info="userInfo" :is-loading="isLoading" />
@@ -21,24 +20,12 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
-import PersonalInformation from "./PersonalInformation.vue";
 import MyEvents from "./MyEvents.vue";
-import DietaryConstraints from "./DietaryConstraints.vue";
-import MySpecialDates from "./MySpecialDates.vue";
-import HolidaysCelebrate from "./HolidaysCelebrate.vue";
-import {LabelEdit} from "@/components";
 import Me from "@/models/Me";
-// import auth from '@/auth';
-import {
-  mapGetters
-} from "vuex";
 
 export default {
   components: {
-    VueElementLoading,
     MyEvents,
-    LabelEdit
   },
   data () {
     return {

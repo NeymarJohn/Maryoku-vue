@@ -17,30 +17,13 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
-import PersonalInformation from "./PersonalInformation.vue";
-import MyEvents from "./MyEvents.vue";
-import PersonalPicture from "./PersonalPicture.vue";
-import DietaryConstraints from "./DietaryConstraints.vue";
-import MySpecialDates from "./MySpecialDates.vue";
-import HolidaysCelebrate from "./HolidaysCelebrate.vue";
 import Me from "@/models/Me";
-import { LabelEdit, Tabs } from "@/components";
+import { Tabs } from "@/components";
 import ProfileDetails from "./ProfileDetails";
 import Permissions from "./Permissions";
-// import auth from '@/auth';
-import { mapGetters } from "vuex";
 
 export default {
   components: {
-    VueElementLoading,
-    PersonalInformation,
-    MyEvents,
-    PersonalPicture,
-    DietaryConstraints,
-    MySpecialDates,
-    HolidaysCelebrate,
-    LabelEdit,
     Tabs,
     ProfileDetails,
     Permissions,

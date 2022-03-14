@@ -71,13 +71,15 @@ export default {
   name: "Employee",
   components: {
     InputText,
-    Select,
     Title,
     ButtonDiv,
     Button,
   },
   props: {
-    officeManager: String,
+    officeManager: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {

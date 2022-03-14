@@ -76,12 +76,6 @@
 </template>
 
 <script>
-import VueElementLoading from "vue-element-loading";
-import PersonalInformation from "./PersonalInformation.vue";
-import DietaryConstraints from "./DietaryConstraints.vue";
-import MySpecialDates from "./MySpecialDates.vue";
-import HolidaysCelebrate from "./HolidaysCelebrate.vue";
-import { LabelEdit, Tabs } from "@/components";
 import ProfileSettings from "./ProfileSettings";
 import MyEvents from "./MyEvents.vue";
 // import auth from '@/auth';
@@ -92,13 +86,6 @@ import CompanyLogo from "@/components/CompanyLogo.vue";
 
 export default {
   components: {
-    VueElementLoading,
-    PersonalInformation,
-    DietaryConstraints,
-    MySpecialDates,
-    HolidaysCelebrate,
-    Tabs,
-    LabelEdit,
     ProfileSettings,
     MyEvents,
     Inspirations,
@@ -123,6 +110,9 @@ export default {
     userData() {
       return this.$store.state.auth.user;
     },
+  },
+  watch: {
+    $route: "getPageName",
   },
   mounted() {
     // TODO : user state should be reviewed
@@ -203,9 +193,7 @@ export default {
       this.$router.push("/signout");
     },
   },
-  watch: {
-    $route: "getPageName",
-  },
+
 };
 </script>
 <style lang="scss" scoped>
