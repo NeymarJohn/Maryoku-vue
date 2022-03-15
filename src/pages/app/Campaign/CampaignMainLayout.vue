@@ -621,6 +621,7 @@ const defaultSettings = {
 export default {
   components: {
     Loader,
+    Tabs,
     Modal,
     HeaderActions,
     CommentEditorPanel,

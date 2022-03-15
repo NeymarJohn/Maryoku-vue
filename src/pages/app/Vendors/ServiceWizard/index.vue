@@ -20,26 +20,21 @@ import Vendors from "@/models/Vendors";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 //COMPONENTS
-import VServiceEditableField from "@/components/Inputs/VSignupEditableField.vue";
 import VendorServiceStep1 from "./VendorServiceStep1.vue";
 import VendorServiceStep2 from "./VendorServiceStep2.vue";
 import VendorServiceStep3 from "./VendorServiceStep3.vue";
 import VendorServiceStep4 from "./VendorServiceStep4.vue";
 import VendorServiceStep5 from "./VendorServiceStep5.vue";
-import VendorServiceFinalForm from "./VendorServiceFinalForm.vue";
 
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
 export default {
   components: {
-    VueElementLoading,
-    VServiceEditableField,
     VendorServiceStep1,
     VendorServiceStep2,
     VendorServiceStep3,
     VendorServiceStep4,
     VendorServiceStep5,
-    VendorServiceFinalForm,
   },
   data() {
     return {
@@ -55,6 +50,15 @@ export default {
       companyServices: companyServices,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
+  },
+  computed: {
+    ...mapGetters({
+      vendor: "vendorService/getVendor",
+      step: "vendorService/getStep",
+    }),
+    service() {
+      return this.$store.state.vendorService.service;
+    },
   },
   created() {
     if (this.step === 6) {
@@ -91,8 +95,6 @@ export default {
     }
     this.$root.$on("approve-vendor-basic-info", (vendor) => {
       if (vendor) this.vendor = { ...this.vendor, ...vendor };
-      console.log("vendor", this.vendor);
-      console.log("*** Save vendor - done: ");
       this.isApproved = true;
 
       this.step = 1;
@@ -105,14 +107,11 @@ export default {
       this.setStep(step);
     });
     this.$root.$on("update-vendor-value", (field, value) => {
-      console.log("update-vendor-value", field, value);
       let service = JSON.parse(JSON.stringify(this.service));
       if (field == "images") {
         if (!Object.keys(service[field]).includes(`${value.index}`)) {
-          console.log("!update.service.image", value);
           service[field].push(value.data);
         } else {
-          console.log("update.service.image", value);
           service[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
@@ -137,12 +136,10 @@ export default {
       } else if (field.indexOf(".") > -1) {
         const serviceField = field.split(".")[0];
         if (!service[serviceField]) this.$set(service, serviceField, {});
-        console.log(service[serviceField]);
         this.$set(service[serviceField], field.split(".")[1], value);
       } else {
         this.$set(service, this.camelize(field), value);
       }
-      console.log(service);
       this.setService(service);
     });
   },
@@ -155,16 +152,7 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
   },
-  computed: {
-    ...mapGetters({
-      vendor: "vendorService/getVendor",
-      step: "vendorService/getStep",
-    }),
-    service() {
-      return this.$store.state.vendorService.service;
-    },
-  },
-  filters: {},
+
 };
 </script>
 <style lang="scss" scoped>

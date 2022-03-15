@@ -81,9 +81,7 @@
 </template>
 
 <script>
-import { SignupCard, MaryokuInput, Modal } from "@/components";
-import InputText from "@/components/Inputs/InputText.vue";
-import VueElementLoading from "vue-element-loading";
+import { SignupCard, MaryokuInput } from "@/components";
 import TenantUser from "@/models/TenantUser";
 import Loader from "@/components/loader/Loader.vue";
 
@@ -92,9 +90,6 @@ export default {
   components: {
     Loader,
     SignupCard,
-    Modal,
-    InputText,
-    VueElementLoading,
     MaryokuInput,
   },
   data() {

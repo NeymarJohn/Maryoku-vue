@@ -39,7 +39,7 @@ export default {
   props: {
     events: {
       type: Array,
-      default: [],
+      default: () => [],
     },
   },
   data() {
@@ -51,7 +51,6 @@ export default {
     },
   },
   mounted(){
-    console.log(this.events);
   },
   methods: {
     getUpcomingPeriod(dateString) {
@@ -73,7 +72,6 @@ export default {
       this.$emit("show", event);
     },
     getProposalUrl(eventId) {
-      console.log("proposalUrl", eventId, this.proposals.map(p => p));
       let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id.toString() === eventId.toString());
       return proposal ? `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}` : null;
     },

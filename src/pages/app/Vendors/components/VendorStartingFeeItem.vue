@@ -21,13 +21,13 @@
           </div>
         </div>
         <div class="qty text-transform-capitalize">
-          <span v-if="this.item.value && this.item.value.constructor.name !== 'Array'">{{ getQty() }}</span>
+          <span v-if="item.value && item.value.constructor.name !== 'Array'">{{ getQty() }}</span>
           <img v-if="item.desc" :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`">
           <img v-else :src="`${$iconURL}Vendor Signup/Asset 528.svg`">
         </div>
       </div>
       <div
-        v-if="this.item.value && this.item.value.constructor.name == 'Array'"
+        v-if="item.value && item.value.constructor.name == 'Array'"
         class="text-transform-capitalize pl-40"
       >
         {{ getQty() }}
@@ -48,7 +48,10 @@ export default {
   components: {},
   filters: {},
   props: {
-    item: Object,
+    item: {
+      type: Object,
+      default: () => {}
+    },
     theme: {
       type: String,
       default: "purple",

@@ -77,7 +77,7 @@
                       :src="`${$iconURL}Booking-New/Group+28553.svg`"
                       @click="openChoice"
                     >
-                    <span :class="{ 'like-dot': this.proposalUnviewed == true }" />
+                    <span :class="{ 'like-dot': proposalUnviewed == true }" />
                   </div>
                 </li>
                 <li class="md-small-hide">
@@ -97,7 +97,7 @@
               :requirement="false"
               :hide-download="true"
               :hide-share="true"
-              :proposal-unviewed="this.proposalUnviewed"
+              :proposal-unviewed="proposalUnviewed"
               :cart-count="cartCount"
               :custom-styles="{ showCommentsText: { paddingLeft: '2px' } }"
               @toggleCommentMode="toggleCommentMode"
@@ -704,10 +704,8 @@
             isAnyCart(){
                 let cartItems = Object.keys(this.cart);
                 if(cartItems){
-                    this.cartCount = cartItems.length;
                     return cartItems.length > 0;
                 }
-                this.cartCount = 0;
                 return false;
             },
         },
@@ -744,7 +742,6 @@
             }
             this.setOpen("REQUIREMENT");
 
-            console.log("this.event",this.event);
             this.isLoadingProposal = true;
             const tenantId = this.$authService.resolveTenantId();
             await this.getRequirements(this.event.id);
@@ -820,7 +817,6 @@
                 return false;
             },
             getSpecification({ category, services }) {
-                console.log("getSpecification", this.allRequirements, category, services);
                 let getSelectedCategory = this.$store.state.common.serviceCategories.find(
                     item => item.key === category.componentId,
                 );
@@ -1054,7 +1050,6 @@
                     });
 
                     let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save();
-                    console.log("ask.result", res);
                     this.selectedProposal.negotiations.push(res);
                 }
             },
@@ -1063,11 +1058,6 @@
                 this.selectedProposal = null;
             },
         },
-        watch:{
-            requirements(newVal){
-                console.log("requirement.watch", newVal);
-            }
-        }
     };
 </script>
 <style lang="scss" scoped>

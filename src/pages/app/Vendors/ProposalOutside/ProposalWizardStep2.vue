@@ -27,13 +27,11 @@
   </div>
 </template>
 <script>
-import ReferNewVendor from "../components/ReferNewVendor";
 import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
 import _ from "underscore";
 
 export default {
     components: {
-        ReferNewVendor,
         ProposalItemSecondaryService,
     },
     computed: {
@@ -57,7 +55,6 @@ export default {
         // remove costServiceItem already in included section
         costServiceItems: {
             handler(newVal) {
-                console.log("handler", this.costServiceItems);
                 let includeItems = this.includedServiceItems;
                 if (newVal.length) {
                     newVal.map((costItem) => {
@@ -66,7 +63,6 @@ export default {
                         );
                     });
                 }
-                console.log("costServiceItems", includeItems);
                 this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
                     category: this.vendor.eventCategory.key,
                     services: includeItems,
@@ -120,7 +116,6 @@ export default {
     },
     methods: {
         getTaxFromState() {
-            console.log("taxRate", this.event.location);
             if (!this.event.location) return 0;
 
             let tax = 0;

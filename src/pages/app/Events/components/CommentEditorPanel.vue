@@ -55,7 +55,7 @@
             />
           </div>
 
-          <div class="form-group position-relative reply-form" :class="{'main-form':!(this.selectedCommentComponent && this.selectedCommentComponent.length) }">
+          <div class="form-group position-relative reply-form" :class="{'main-form':!(selectedCommentComponent && selectedCommentComponent.length) }">
             <fade-transition v-if="showAddress">
               <md-card class="position-absolute notification-card">
                 <md-card-content class="d-flex align-center position-relative p-10">
@@ -99,7 +99,7 @@
 import { mapActions } from "vuex";
 import CommentCircleButton from "./CommentCircleButton";
 import EventCommentComponent from "@/models/EventCommentComponent";
-import { postReq, getReq } from "@/utils/token";
+import { getReq } from "@/utils/token";
 import { FadeTransition } from "vue2-transitions";
 import CommentItem from "./CommentItem";
 
@@ -116,15 +116,14 @@ export default {
       },
       proposal:{
         type: Object,
-        required: false,
+        default: () => {}
       },
       url:{
         type: String,
-        required: false,
+        default: ""
       },
       ignoreXOffset:{
         type: Number,
-        required: false,
         default:0
       },
       isVendor:{
@@ -158,6 +157,7 @@ export default {
       updatedCommentComponents:updatedCommentComponents
     };
   },
+
   computed: {
     selectedCommentComponent() {
       return this.updatedCommentComponents[this.selectedComponentIndex];
@@ -176,6 +176,11 @@ export default {
     },
     unresolvedComponents() {
       return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
+    }
+  },
+  watch:{
+    commentComponents(newVal){
+      this.updatedCommentComponents = JSON.parse(JSON.stringify(newVal));
     }
   },
   created() {
@@ -202,15 +207,6 @@ export default {
       this.selectedComponentIndex = this.updatedCommentComponents.findIndex(item=>item.index === commentComponent.index);
       this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY );
       this.isOpenCommentListsPane = true;
-
-      // this.getCommentsAction(commentComponent.id).then(comments => {
-      //   this.hoveredComponent = commentComponent;
-      //   this.comments = comments;
-      //   this.comments = comments;
-      //   if (!comments || comments.length === 0) return;
-      //   this.setEditPanePosition(this.hoveredComponent.positionX, this.hoveredComponent.positionY )
-      //   this.isOpenCommentListsPane = true;
-      // });
     },
 
     setEditPanePosition(x, y) {
@@ -270,7 +266,6 @@ export default {
             return index;
           }, 0)
         : 0;
-        console.log("event",event,event.clientX,event.clientY);
         let letfOffset = $(".click-capture").offset().left;
         let topOffset = $(".click-capture").offset().top;
       const newComentComponent = {
@@ -283,16 +278,6 @@ export default {
       };
       this.updatedCommentComponents = this.updatedCommentComponents.concat([newComentComponent]);
       this.selectedComponentIndex = this.updatedCommentComponents.length - 1;
-      // this.addCommentComponent({
-      //   dateTime: Date.now(),
-      //   positionX: event.clientX - 80,
-      //   positionY: event.clientY - topOffset + window.scrollY,
-      //   index: maxIndex + 1,
-      //   isEditing: false,
-      //   url: this.$route.path
-      // }).then(commentComponent => {
-      //   this.selectedCommentComponent = commentComponent
-      // });
       this.setEditPanePosition(event.clientX - letfOffset, event.clientY - topOffset + window.scrollY );
       this.openEditor();
       this.mostRecentClickCoordinates = {
@@ -373,20 +358,6 @@ export default {
       this.$emit("updateComment", {comment, component: new EventCommentComponent({id: selectedComponent.id})});
     },
 
-    /*markAsRead(commentComponent){
-      for(let comment of commentComponent.comments){
-        if(!comment.viewed){
-          comment.viewed = true;
-        }
-      }
-      commentComponent = new EventCommentComponent({
-            id: commentComponent.id,
-            comments:commentComponent.comments
-        });
-      commentComponent.save()
-        // this.$emit('updateCommentComponent', {component: commentComponent})
-    },*/
-
     deleteComment(comment) {
       this.$emit("deleteComment", {comment, index:this.selectedComponentIndex} );
     },
@@ -403,9 +374,7 @@ export default {
         positionY: movedCommentComponent.positionY
       });
       this.$emit("updateCommentComponent", commentComponent);
-      // this.updateCommentComponent(commentComponent).then(() => {
-        this.isOpenCommentListsPane = false;
-      // });
+      this.isOpenCommentListsPane = false;
     },
     draggingButton(component, position) {
       if (this.isCommentEditing && this.selectedCommentComponent) {
@@ -451,11 +420,7 @@ export default {
       return {left: `${item.positionX}px`, top: `${item.positionY}px`};
     }
   },
-  watch:{
-    commentComponents(newVal){
-      this.updatedCommentComponents = JSON.parse(JSON.stringify(newVal));
-    }
-  }
+
 };
 </script>
 

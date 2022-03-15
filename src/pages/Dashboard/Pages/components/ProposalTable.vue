@@ -54,12 +54,11 @@ export default {
     props:{
       proposals: {
           type: Array,
+          default: () => []
       }
     },
     created() {
-        console.log("proposals", this.proposals);
     },
-
     methods:{
         getIndex (item){
             return this.proposals.findIndex(v => v.id === item.id);

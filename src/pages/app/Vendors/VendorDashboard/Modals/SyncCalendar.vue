@@ -73,7 +73,7 @@
   </modal>
 </template>
 <script>
-import { Modal, MaryokuInput } from "@/components";
+import { Modal } from "@/components";
 import { convertTimezoneName } from "@/utils/helperFunction";
 import moment from "moment-timezone";
 import { addOutlookCalendarEvent, loginWithMsal } from "@/auth/msAuth.js";
@@ -90,7 +90,6 @@ const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.go
 export default {
   components: {
     Modal,
-    MaryokuInput,
   },
   props: {
     screen: {
@@ -101,7 +100,10 @@ export default {
       type: Object,
       default: () => {},
     },
-    events: [Array],
+    events: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {

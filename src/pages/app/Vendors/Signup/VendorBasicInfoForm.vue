@@ -89,7 +89,10 @@ export default {
         VSignupCategorySelector,
     },
     props: {
-        vendor: Object,
+        vendor: {
+            type: Object,
+            default: () => {}
+        },
     },
     data() {
         return {
@@ -106,7 +109,6 @@ export default {
     watch: {
         vendor(newVal) {},
         loading(){
-            console.log("loading", this.loading);
         }
     },
     methods: {

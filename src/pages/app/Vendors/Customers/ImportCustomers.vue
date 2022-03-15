@@ -112,7 +112,7 @@
           </div>
         </div>
         <div v-if="showError&&!csv" class="md-error error_text">
-          {{ this.errorMessage }}
+          {{ errorMessage }}
         </div>
       </div>
       <div class="md-layout-item pl-0 md-size-100 mt-40">
@@ -340,10 +340,6 @@ export default {
     firstRow() {
       return _.get(this, "sample.0");
     },
-    preRow() {
-      // this.form.csv.shift();
-      // return this.form.csv
-    },
     vendorData() {
       return this.$store.state.vendor.profile;
     },
@@ -445,7 +441,7 @@ export default {
             }
           })
           .catch(error => {
-              console.log("error", error);
+              console.error("error", error);
           });
       } else {
         _this.callback(this.form.csv);
