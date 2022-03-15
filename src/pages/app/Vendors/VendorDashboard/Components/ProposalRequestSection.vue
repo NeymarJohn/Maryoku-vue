@@ -22,7 +22,7 @@
 
     <template v-if="!requests.length">
       <div v-if="field == 'new'" class="d-flex flex-column align-center p-60"
-           :style="{minHeight: this.proposalNegotiationRequest.length > 1 ? '298px' : '260px'} "
+           :style="{minHeight: proposalNegotiationRequest.length > 1 ? '298px' : '260px'} "
       >
         <img class="mb-20" :src="`${$iconURL}vendordashboard/group-17116.png`">
         <div class="color-vendor font-bold font-size-14">
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div v-if="field == 'negotiation'" class="d-flex flex-column align-center p-60"
-           :style="{minHeight: this.proposalRequest.length > 1 ? '298px' : '260px'}"
+           :style="{minHeight: proposalRequest.length > 1 ? '298px' : '260px'}"
       >
         <img class="mb-15" :src="`${$iconURL}vendordashboard/group-16558.svg`">
         <div class="color-vendor font-bold font-size-14">
@@ -272,44 +272,49 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
-      negotiation(){
-          if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
+    negotiation(){
+        if (!this.selectedProposal || !this.selectedProposal.negotiations.length ) return null;
 
-          if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
-              return new Date(this.selectedProposal.expiredDate).getTime();
-          }
+        if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
+            return new Date(this.selectedProposal.expiredDate).getTime();
+        }
 
-          else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
-              let {startTime, endTime, numberOfParticipants, location, eventType} = this.selectedProposal.eventData;
-              let { event } = this.selectedProposal.negotiations[0];
-              return {
-                  originalDate: moment(startTime * 1000).format("DD-MM-YY"),
-                  date: moment(event.startTime * 1000).format("DD-MM-YY"),
-                  originalStartTime: moment(startTime * 1000).format("hh:mm a"),
-                  originalEndTime: moment(endTime * 1000).format("hh:mm a"),
-                  startTime: moment(event.startTime * 1000).format("hh:mm a"),
-                  endTime: moment(event.endTime * 1000).format("hh:mm a"),
-                  originalNumberOfParticipants: numberOfParticipants,
-                  numberOfParticipants: event.numberOfParticipants,
-                  originalLocation: location,
-                  location: event.location,
-                  originalEventType: eventType,
-                  eventType: event.eventType,
-              };
-          } else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-              console.log("price.negotiation");
-              let {numberOfParticipants} = this.selectedProposal.eventData;
-              let data = this.selectedProposal.negotiations[0].price;
-              let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : data.value;
+        else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
+            let {startTime, endTime, numberOfParticipants, location, eventType} = this.selectedProposal.eventData;
+            let { event } = this.selectedProposal.negotiations[0];
+            return {
+                originalDate: moment(startTime * 1000).format("DD-MM-YY"),
+                date: moment(event.startTime * 1000).format("DD-MM-YY"),
+                originalStartTime: moment(startTime * 1000).format("hh:mm a"),
+                originalEndTime: moment(endTime * 1000).format("hh:mm a"),
+                startTime: moment(event.startTime * 1000).format("hh:mm a"),
+                endTime: moment(event.endTime * 1000).format("hh:mm a"),
+                originalNumberOfParticipants: numberOfParticipants,
+                numberOfParticipants: event.numberOfParticipants,
+                originalLocation: location,
+                location: event.location,
+                originalEventType: eventType,
+                eventType: event.eventType,
+            };
+        } else if ( this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
+            let {numberOfParticipants} = this.selectedProposal.eventData;
+            let data = this.selectedProposal.negotiations[0].price;
+            let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : data.value;
 
-              return {
-                  originalBudget: this.selectedProposal.cost,
-                  budget,
-                  originalBudgetPerGuest: (this.selectedProposal.cost / numberOfParticipants).toFixed(2),
-                  budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
-              };
-          }
-      },
+            return {
+                originalBudget: this.selectedProposal.cost,
+                budget,
+                originalBudgetPerGuest: (this.selectedProposal.cost / numberOfParticipants).toFixed(2),
+                budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
+            };
+        }
+        return {
+          originalBudget: 0,
+          budget: 0,
+          originalBudgetPerGuest:0,
+          budgetPerGuest: 0,
+        };
+    },
   },
 
   updated() {
@@ -332,7 +337,6 @@ export default {
       window.open(link, "_blank");
     },
     approveBudget(index) {
-      console.log("approveBudget");
       let proposalRequest = this.requests[index];
       if (this.field !== "new") {
 

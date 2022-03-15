@@ -83,7 +83,7 @@
 
             <div class="md-layout-item md-size-100" style="margin-bottom: 16px">
               <md-field
-                v-if="!this.editMode"
+                v-if="!editMode"
                 class="height-auto"
                 :class="[{ 'md-valid': !errors.has('email') && touched.email }, { 'md-error': errors.has('email') }]"
               >
@@ -113,7 +113,7 @@
                 <span v-if="errors.has('email')" class="md-error">{{ errors.first("email") }}</span>
               </md-field>
               <md-field
-                v-if="this.editMode"
+                v-if="editMode"
                 class="height-auto"
                 :class="[{ 'md-valid': !errors.has('email') && touched.email }, { 'md-error': errors.has('email') }]"
               >
@@ -239,8 +239,6 @@
 <script>
 // import auth from '@/auth';
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { Modal, SimpleWizard, WizardTab } from "@/components";
-import Swal from "sweetalert2";
 import Teams from "@/models/Team";
 import TeamMember from "@/models/TeamMember";
 import { SlideYDownTransition } from "vue2-transitions";
@@ -248,10 +246,7 @@ import _ from "underscore";
 
 export default {
   components: {
-    Modal,
     SlideYDownTransition,
-    SimpleWizard,
-    WizardTab,
   },
   props: {
     team: {
@@ -366,7 +361,7 @@ export default {
     get noticeModalHide() {
       return this._noticeModalHide;
     },
-    set noticeModalHide(value) {
+    set setNoticeModalHide(value) {
       this._noticeModalHide = value;
     },
     onStepValidated(validated, model) {

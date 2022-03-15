@@ -9,30 +9,30 @@
       </div>
       <div class="status-bar">
         <div class="status-step">
-          {{ this.currentStep }} Step of 5
+          {{ currentStep }} Step of 5
         </div>
         <md-progress-bar
           class="md-red progress-bar"
           md-mode="determinate"
-          :md-value="(this.currentStep / 5) * 100"
+          :md-value="(currentStep / 5) * 100"
         />
-        <div v-if="this.currentStep == 1" class="status-description">
+        <div v-if="currentStep == 1" class="status-description">
           <img :src="`${$iconURL}Onboarding/clover.svg`">
           Only 5 simple steps to your perfect event
         </div>
-        <div v-if="this.currentStep == 2" class="status-description">
+        <div v-if="currentStep == 2" class="status-description">
           <img :src="`${$iconURL}Onboarding/strength.svg`">
           You are fantastic! !
         </div>
-        <div v-if="this.currentStep == 3" class="status-description">
+        <div v-if="currentStep == 3" class="status-description">
           <img :src="`${$iconURL}Onboarding/promise.svg`">
           We promise it will pay off in the end!
         </div>
-        <div v-if="this.currentStep == 4" class="status-description">
+        <div v-if="currentStep == 4" class="status-description">
           <img :src="`${$iconURL}Onboarding/heart.svg`">
           Sharing is caring!
         </div>
-        <div v-if="this.currentStep == 5" class="status-description">
+        <div v-if="currentStep == 5" class="status-description">
           <img :src="`${$iconURL}Onboarding/quality.svg`">
           Last one!
         </div>
@@ -67,30 +67,30 @@
     <template v-else>
       <div class="status-bar" style="width: 100%">
         <div class="status-step">
-          {{ this.currentStep }} Step of 5
+          {{ currentStep }} Step of 5
         </div>
         <md-progress-bar
           class="md-red progress-bar"
           md-mode="determinate"
-          :md-value="(this.currentStep / 5) * 100"
+          :md-value="(currentStep / 5) * 100"
         />
-        <div v-if="this.currentStep == 1" class="status-description">
+        <div v-if="currentStep == 1" class="status-description">
           <img :src="`${$iconURL}Onboarding/clover.svg`">
           Only 5 simple steps & you're signed!
         </div>
-        <div v-if="this.currentStep == 2" class="status-description">
+        <div v-if="currentStep == 2" class="status-description">
           <img :src="`${$iconURL}Onboarding/strength.svg`">
           You are fantastic! !
         </div>
-        <div v-if="this.currentStep == 3" class="status-description">
+        <div v-if="currentStep == 3" class="status-description">
           <img :src="`${$iconURL}Onboarding/promise.svg`">
           We promise it will pay off in the end!
         </div>
-        <div v-if="this.currentStep == 4" class="status-description">
+        <div v-if="currentStep == 4" class="status-description">
           <img :src="`${$iconURL}Onboarding/heart.svg`">
           Sharing is caring!
         </div>
-        <div v-if="this.currentStep == 5" class="status-description">
+        <div v-if="currentStep == 5" class="status-description">
           <img :src="`${$iconURL}Onboarding/quality.svg`">
           Last one!
         </div>
@@ -141,7 +141,7 @@ export default {
     },
     currentStep: {
       type: Number,
-      default: "",
+      default: 0,
     },
     canNext: {
       type: Boolean,

@@ -29,9 +29,11 @@
             </div>
           </div>
           <div class="card-accept-conditions-actions">
-            <md-button class="card-accept-conditions-actions-button md-button md-red maryoku-btn">
-              I Would More Details
-            </md-button>
+            <button class="card-accept-conditions-actions-button md-button md-red maryoku-btn">
+              <router-link to="/user-events/61ddf35fcfefec75142519a4/booking/planningboard" >
+                I Would More Details
+              </router-link>
+            </button>
             <span class="card-accept-conditions-actions-description">
               Thank You, But No.
             </span>
@@ -58,7 +60,7 @@
         <div class="footer-content-text">
           Who are we and why are we great?
         </div>
-        <md-button class="footer-content-action edit-btn md-round nav-right nav-btn md-raised md-white">
+        <md-button href="http://www.maryoku.com" target="_blank" class="footer-content-action edit-btn md-round nav-right nav-btn md-raised md-white">
           <md-icon class="footer-content-action-icon">
             keyboard_arrow_right
           </md-icon>
@@ -192,6 +194,22 @@ export default {
           border-radius: 3px;
           box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
           background-color: #f51355;
+
+          a {
+            font-size: 20px;
+            font-weight: 800;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.42px;
+            text-transform: initial;
+            text-align: center;
+            color: #fff;
+
+            &:hover {
+              text-decoration: initial;
+            }
+          }
         }
 
         .card-accept-conditions-actions-description {

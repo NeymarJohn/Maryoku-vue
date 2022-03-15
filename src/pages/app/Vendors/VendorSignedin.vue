@@ -6,13 +6,6 @@
         Hi there, one moment please ...
       </h2>
     </div>
-    <!-- <div v-else class="md-layout-item font-size-30" style="text-align: center; color: #050505">
-      {{ messages[messageIndex] }}
-      <div class="mt-4rem">
-        <md-button class="md-simple md-red normal-btn" @click="toCreateWorkspace">Create Worspace</md-button>
-        <md-button class="md-simple md-red normal-btn" @click="toChooseWorkspace">Choose Workspace</md-button>
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
@@ -28,13 +21,11 @@ export default {
     };
   },
   async created() {
-    console.log("signedIn", this.$route.query.token);
     const givenToken = this.$route.query.token;
     const vendorId = this.$route.query.vendorId;
     this.$store.dispatch("auth/checkToken", givenToken).then(
       (tenantUser) => {
         const tenantId = this.$authService.resolveTenantId();
-          console.log("vendorSignedIn.vendor", vendorId, tenantUser);
         this.$authService.setTenant(tenantId);
 
         // SET LIVE CHAT INFORMANTION
@@ -56,7 +47,6 @@ export default {
         // SET VENDOR Tenant
         if (vendorId) {
             new Vendors({ id: vendorId, tenantUser: { id: tenantUser.id }, isEditing: false }).save().then(res => {
-                console.log("updateVendor", res);
                 this.$router.push("/vendor/profile/settings");
             });
             return;

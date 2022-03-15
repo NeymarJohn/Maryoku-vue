@@ -54,9 +54,9 @@
               </md-icon>
             </md-button>
           </div>
-          <div v-for="(limitation, index) in limitations" :key="index" class="md-layout-item md-size-30 mb-50">
+          <div v-for="(limitation, index) in limitations" :key="index" class="md-layout-item md-size-30 mb-20 w-max-120">
             <md-checkbox v-model="selectedLimitations" :value="limitation.value">
-              <span><img style="margin: -10px 15px" :src="`${$iconURL}RSVP/${limitation.icon}`">
+              <span><img class="mx-1" width="20px" :src="`${$iconURL}RSVP/${limitation.icon}`">
                 {{ limitation.name }}</span>
             </md-checkbox>
           </div>
@@ -149,10 +149,11 @@ export default {
     box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
     border: solid 0.5px #a0a0a0;
     background-color: #ffffff;
-    padding: 30px;
+    padding: 24px;
     position: absolute;
     z-index: 99;
     margin-left: 40px;
+    max-width: 700px;
     .collapse-button {
       right: 40px;
       top: 40px;

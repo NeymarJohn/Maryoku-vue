@@ -63,6 +63,7 @@
         <div v-if="customer.proposals.length" class="sort-bar px-20 mt-30 ml-40">
           <span
             v-for="it in proposalHeaders"
+            :key="it.key"
             class="sort-item"
             :class="{ selected: it.key && sortFields['sort'] == it.key }"
             @click="selectSort(it.key)"
@@ -87,21 +88,14 @@
   </div>
 </template>
 <script>
-import Button from "../../../../components/Button/ButtonDiv";
 import ProposalListItem from "./ProposalListItem";
-import { VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import { FadeTransition } from "vue2-transitions";
 import {PROPOSAL_STATUS} from "@/constants/status";
 
 export default {
   components: {
     FadeTransition,
-    Button,
     ProposalListItem,
-    VsaItem,
-    VsaHeading,
-    VsaContent,
-    VsaIcon,
   },
   props: {
     customer: {

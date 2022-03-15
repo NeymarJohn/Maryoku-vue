@@ -47,6 +47,7 @@
       class="md-icon-button md-simple close-btn"
       @click="remove(template)"
     >
+
       <md-icon class="close-icon">
         close
       </md-icon>
@@ -149,20 +150,19 @@ export default {
     handleDrop(index, droppedData) {
       let block = Object.assign({}, droppedData.block);
       block.mode = "edit";
-      if (index == 0) {
-        if (this.groupIndex == 0) {
-            if (this.event.eventDayPart == "evening") {
-                block.startTime = moment(`${this.timelineDate.date} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
-                block.endTime = moment(`${this.timelineDate.date} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
-            } else {
-                block.startTime = moment(`${this.timelineDate.date} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
-                block.endTime = moment(`${this.timelineDate.date} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
-            }
+      if (index === 0) {
+        if (this.groupIndex === 0) {
+          const dayTime = this.event.eventDayPart === "evening" ? "PM" : "AM";
+          block.startTime = moment(`${this.timelineDate.date} 07:00  ${dayTime}`, "YYYY-MM-DD hh:mm A").valueOf();
+          block.endTime = moment(`${this.timelineDate.date} 08:00 ${dayTime}`, "YYYY-MM-DD hh:mm A").valueOf();
         } else {
-            let lastGroupItems = this.timelineItems.filter((item) => item && item.groupNumber == (this.groupIndex - 1));
-            let lastItem = lastGroupItems[lastGroupItems.length - 1];
-            block.startTime = Number(lastItem.endTime);
-            block.endTime = Number(lastItem.endTime) + 3600 * 1000;
+          let lastGroupItems = this.timelineItems.filter((item) => item && item.groupNumber === (this.groupIndex - 1));
+          let lastItem = lastGroupItems[lastGroupItems.length - 1];
+          if (!lastItem) {
+            lastItem = this.timelineItems[this.timelineItems.length - 1];
+          }
+          block.startTime = Number(lastItem.endTime);
+          block.endTime = Number(lastItem.endTime) + 3600 * 1000;
         }
       } else {
         const prevItem = this.groupedItems[index - 1];

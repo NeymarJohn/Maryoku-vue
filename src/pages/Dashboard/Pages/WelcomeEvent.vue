@@ -90,9 +90,6 @@ export default {
       this.selectedVideoId = id;
       this.openPlayer = true;
     },
-    playing() {
-      console.log("o/ we are watching!!!");
-    },
     gotoEvent() {
       const currentEventId = localStorage.getItem("currentEventId");
       this.$router.push({ path: `/events/${currentEventId}/booking/overview?walkWithMe=true` });

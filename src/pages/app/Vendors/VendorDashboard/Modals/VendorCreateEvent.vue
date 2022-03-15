@@ -146,7 +146,7 @@
           </div>
         </div>
         <div v-if="showError" class="md-error">
-          {{ this.errorMessage }}
+          {{ errorMessage }}
         </div>
       </div>
     </template>
@@ -161,7 +161,6 @@
   </modal>
 </template>
 <script>
-import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { Modal, MaryokuInput } from "@/components";
 import LocationInput from "../LocationInput";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
@@ -180,13 +179,12 @@ export default {
     VueTimepicker,
     LocationInput,
     Autocomplete,
-    VueGoogleAutocomplete,
     vueDropzone: vue2Dropzone,
   },
   props: {
     defaultData: {
       type: Object,
-      default: {},
+      default: () => {},
     },
   },
   data() {
@@ -235,7 +233,6 @@ export default {
     },
   },
   async created() {
-    console.log("vendorCreateEvent.created", this.defaultData);
     this.isLoading = true;
     this.customers = await this.getVendorCustomers();
     this.companyName = this.defaultData.company;
@@ -256,7 +253,6 @@ export default {
 
     this.selectedCustomer = this.defaultData.customer;
     this.isLoading = false;
-    console.log("selectedCustomer", this.selectedCustomer);
   },
   methods: {
     async getVendorCustomers() {

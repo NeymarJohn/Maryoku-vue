@@ -128,8 +128,6 @@
 <script>
 
 import {
-  StatsCard,
-  ChartCard,
   AnimatedNumber,
   Slider,
   Collapse
@@ -137,8 +135,6 @@ import {
 
 export default {
   components: {
-    StatsCard,
-    ChartCard,
     AnimatedNumber,
     Slider,
     Collapse

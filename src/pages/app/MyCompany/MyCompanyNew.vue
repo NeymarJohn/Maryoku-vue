@@ -507,7 +507,6 @@
           <div>
             <LineIndicator
               v-for="item in participantsList"
-              v-if="participantsList"
               :key="item.total + item.typeEvent"
               left-indicator-style="left-side-indicator-participants"
               right-indicator-style="right-side-indicator"
@@ -563,7 +562,6 @@
           <div>
             <LineIndicator
               v-for="item in ratesList"
-              v-if="ratesList"
               :key="item.total + item.typeEvent"
               left-indicator-style="left-side-indicator-rate"
               right-indicator-style="right-side-indicator"
@@ -609,14 +607,8 @@ import Swal from "sweetalert2";
 import { Tabs, NavTabsCard } from "@/components";
 import VueElementLoading from "vue-element-loading";
 import Select from "@/components/Select/Select.vue";
-import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
-import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
-import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
-import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
-import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
 import InputText from "@/components/Inputs/InputText.vue";
 import ButtonDiv from "@/components/Button/ButtonDiv.vue";
-import Button from "@/components/Button/Button.vue";
 import ControlPanel from "@/components/Button/ControlPanel.vue";
 import LineIndicator from "@/components/Chart/LineIndicator.vue";
 import LineChart from "@/components/Chart/LineChart.vue";
@@ -635,19 +627,10 @@ const currentYear = new Date().getFullYear();
 
 export default {
   components: {
-    Tabs,
-    NavTabsCard,
-    MyCompanyDashboard,
-    MyCompanyApprovals,
-    MyCompanyProfile,
-    MyCompanyBilling,
-    MyCompanySettings,
     "input-text": InputText,
     ButtonDiv,
-    Button,
     ControlPanel,
     LineIndicator,
-    Datepicker,
     "select-common": Select,
     LineChart,
     VueElementLoading,
@@ -739,28 +722,7 @@ export default {
       isLoading: true,
     };
   },
-  mounted() {
-    const options = {
-      types: ["geocode"],
-    };
-    let input = document.getElementById("branch_address_search");
-    // let autocomplete = new google.maps.places.Autocomplete(input, options)
 
-    if (this.industryList === 0) {
-      this.$store.dispatch("user/getIndustry");
-    }
-
-    this.$auth.currentUser(
-      this,
-      true,
-      function () {
-        this.$store.dispatch("user/getUserFromApi");
-        this.customerLogoUrl = this.$auth.user.me.customer.logoFileId
-          ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}`
-          : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
-      }.bind(this),
-    );
-  },
   computed: {
     ...mapGetters({
       customer: "user/getCustomer",
@@ -783,9 +745,8 @@ export default {
         for (let key in charts) {
           if (key === year) return charts[key];
         }
-      } else {
-        return 0;
-      }
+      } 
+      return 0;
     },
     getAvatar() {
       return this.customer.logoFileId
@@ -824,7 +785,7 @@ export default {
       if (this.from && this.to && this.startPerion && this.finishPerion) {
         const from = this.listMonth.indexOf(this.from);
         const to = this.listMonth.indexOf(this.to);
-        const duration = this.listMonth.splice(from, to);
+        const duration = this.listMonth.slice(from, to);
         return duration;
       } else {
         return this.listMonth;
@@ -837,7 +798,6 @@ export default {
         const y = year.split("__");
         if (!duration.includes(y[0])) duration.push(y[0]);
       }
-      this.duration = duration;
       return duration;
     },
     getDataFromDuration() {
@@ -893,6 +853,7 @@ export default {
           ],
         };
       }
+      return {labels: "", datasets: []};
     },
   },
   watch: {
@@ -908,6 +869,28 @@ export default {
     monthRate(newVal, oldVal) {
       this.chechParticipant();
     },
+  },
+    mounted() {
+    const options = {
+      types: ["geocode"],
+    };
+    let input = document.getElementById("branch_address_search");
+    // let autocomplete = new google.maps.places.Autocomplete(input, options)
+
+    if (this.industryList === 0) {
+      this.$store.dispatch("user/getIndustry");
+    }
+
+    this.$auth.currentUser(
+      this,
+      true,
+      function () {
+        this.$store.dispatch("user/getUserFromApi");
+        this.customerLogoUrl = this.$auth.user.me.customer.logoFileId
+          ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}`
+          : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
+      }.bind(this),
+    );
   },
   methods: {
     checkMonth() {

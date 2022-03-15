@@ -268,8 +268,6 @@ export default {
         this.$store.commit("vendorProposal/removeCategoryFromAdditional");
         this.isExpanded = false;
       }
-      console.log(this.additionalServices);
-
       this.$root.$emit("update-additional-services", category);
     },
     setRange(value, type) {
@@ -403,11 +401,9 @@ export default {
       this.files = this.files.filter((f) => f.tag != tag);
     },
     totalOffer() {
-      // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
       let total = 0;
       let vm = this;
       let requirements = [];
-      console.log("total.requirements", this.newProposalRequest);
       if (this.newProposalRequest.requirements.length) {
         requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty("requirementTitle"));
       }
@@ -434,7 +430,6 @@ export default {
         total = total - this.discount_by_amount;
       }
       total += (total * this.tax) / 100;
-      console.log("calculateTotal", total);
       return total;
     },
     prev() {

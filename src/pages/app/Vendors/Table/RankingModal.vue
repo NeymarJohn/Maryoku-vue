@@ -19,7 +19,8 @@
               <div class="pull-right">
                 <div class="star-rating">
                   <label
-                    v-for="rating in ratings"
+                    v-for="(rating, ratingIndex) in ratings"
+                    :key="ratingIndex"
                     class="star-rating__star"
                     :class="{ 'is-selected': item.value >= rating && item.value != null }"
                     @click="setRanking(rating, index)"
@@ -55,22 +56,28 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import vendorsVuex from "../vendors.vuex";
 import Popover from "@/components/Popover";
-import Swal from "sweetalert2";
 import Vendors from "@/models/Vendors";
-import { SlideYDownTransition } from "vue2-transitions";
 
 export default {
   components: {
     popover: Popover,
-    SlideYDownTransition,
   },
   props: {
-    name: String,
-    value: null,
-    id: String,
+    name: {
+      type: String,
+      default: ""
+    },
+    value: {
+      type: Object,
+      default: () => {}
+    },
+    id: {
+      type: String,
+      default: ""
+    },
     required: Boolean,
   },
   data() {
@@ -108,7 +115,6 @@ export default {
         },
       ],
       temp_value: null,
-      name: "md-transparent",
       value1: null,
       value2: null,
       ratings: [1, 2, 3, 4, 5],
@@ -117,71 +123,16 @@ export default {
       categories: ["Space / Venue ", "Catering", "Content ", "Services ", "Products Rental / Purchase"],
     };
   },
+  computed: {
+    ...mapState("vendors", ["vendorsMemberData"]),
+  },
   created() {
-    console.log(this.$store);
     this.$store.registerModule("vendors", vendorsVuex);
   },
   destroyed() {
-    console.log(this.$store);
-    console.log(this.vendorsMemberData);
-
     this.$store.unregisterModule("vendors", vendorsVuex);
   },
-  computed: {
-    ...mapState("vendors", ["vendorsMemberData"]),
 
-    //      name: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorDisplayName
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
-    //        },
-    //
-    //      },
-    //
-    //      address: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorAddressLine1
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
-    //        },
-    //
-    //      },
-    //      email: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorMainEmail
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
-    //        }
-    //      },
-    //      category: {
-    //        get() {
-    //          return this.vendorsMemberData.productsCategory
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'productsCategory', actualValue: value})
-    //        }
-    //      },
-    //      web: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorWebsite
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
-    //        }
-    //      },
-    //      phoneNumber: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorMainPhoneNumber
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
-    //        }
-    //      }
-  },
   methods: {
     ...mapMutations("vendors", ["setMemberProperty"]),
     noticeModalHide: function () {
@@ -202,30 +153,9 @@ export default {
     setRanking: function (value, index) {
       if (!this.disabled) {
         this.temp_value = value;
-        console.log(value, "temp_value");
         return (this.rankingParameters[index].value = value);
       }
     },
-  },
-  watch: {
-    //      displayName() {
-    //        this.touched.displayName = true;
-    //      },
-    //      vendorAddress() {
-    //        this.touched.vendorAddress = true;
-    //      },
-    //      vendorEmail() {
-    //        this.touched.vendorEmail = true;
-    //      },
-    //      vendorCategory() {
-    //        this.touched.username = true;
-    //      },
-    //      webSite() {
-    //        this.touched.webSite = true;
-    //      },
-    //      vendorPhoneNumber() {
-    //        this.touched.vendorPhoneNumber = true;
-    //      }
   },
 };
 </script>

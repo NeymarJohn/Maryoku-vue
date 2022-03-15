@@ -121,25 +121,14 @@
 <style lang="scss" scoped>
 </style>
 <script>
-import RequirementItemComment from "./RequirementItemComment";
-import Multiselect from "vue-multiselect";
-import HeaderActions from "@/components/HeaderActions";
 import { MaryokuInput, LocationInput, HolidayInput } from "@/components";
-import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import Swal from "sweetalert2";
-import { extendMoment } from "moment-range";
-import { timelineTempates } from "@/constants/event.js";
 
 export default {
   name: "EventOverviewSection",
   components: {
-    RequirementItemComment,
-    Multiselect,
-    HeaderActions,
-    FunctionalCalendar,
     MaryokuInput,
     LocationInput,
     HolidayInput,
@@ -262,6 +251,26 @@ export default {
       holidays: [],
     };
   },
+  computed: {
+    ...mapGetters({
+      eventTypesList: "event/getEventTypesList",
+    }),
+    inOutDoorValue() {
+      let inOutDoor = this.inOutDoorTypes.find((it) => it.value === this.section.inOutDoor);
+      return inOutDoor ? inOutDoor["label"] : "";
+    },
+  },
+  watch: {
+    section: {
+      handler(newVal) {
+        if (newVal) this.init();
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.init();
+  },
   methods: {
     getIconUrl(name) {
       if (name === "outdoors") {
@@ -277,7 +286,6 @@ export default {
       }
     },
     changeLocation(loc) {
-      // console.log("change.location", loc);
       if (!loc) return;
       this.$emit("change", { location: loc });
     },
@@ -288,22 +296,17 @@ export default {
       this.$emit("change", { numberOfParticipants: parseInt(e) });
     },
     inputQuestType(e) {
-      // console.log('inputQuestType', e);
     },
     guestTypeChange(e) {
-      // console.log('guestTypeChange', e);
       this.$emit("change", { guestType: e });
     },
     eventTypeChange(e) {
-      // console.log('eventTypeChange', e);
       this.$emit("change", { eventType: e });
     },
     occasionChange(e) {
-      // console.log('occasionChange', e);
       this.$emit("change", { occasion: e });
     },
     holidayChange(e) {
-      // console.log('holidayChange', e);
       this.$emit("change", { holiday: e });
     },
     init: async function () {
@@ -327,26 +330,6 @@ export default {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
       });
     },
-  },
-  computed: {
-    ...mapGetters({
-      eventTypesList: "event/getEventTypesList",
-    }),
-    inOutDoorValue() {
-      let inOutDoor = this.inOutDoorTypes.find((it) => it.value === this.section.inOutDoor);
-      return inOutDoor ? inOutDoor["label"] : "";
-    },
-  },
-  watch: {
-    section: {
-      handler(newVal) {
-        if (newVal) this.init();
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.init();
   },
 };
 </script>

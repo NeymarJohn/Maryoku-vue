@@ -124,7 +124,7 @@
               <md-field>
                 <label for="tag">Tags</label>
                 <md-select v-model="tag" name="select">
-                  <md-option v-for="(option, index) in tags" :key="index" :value="option">
+                  <md-option v-for="(option, tagIndex) in tags" :key="tagIndex" :value="option">
                     {{ option }}
                   </md-option>
                 </md-select>
@@ -165,12 +165,6 @@ export default {
         return {};
       },
     },
-    item: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
   },
   data() {
     return {
@@ -188,7 +182,6 @@ export default {
     setRanking: function (value, index) {
       if (!this.disabled) {
         this.temp_value = value;
-        console.log(value, "temp_value");
         return (this.rankingParameters[index].value = value);
       }
     },

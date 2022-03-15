@@ -95,6 +95,48 @@ export default {
       isLoading: false,
     };
   },
+  computed: {
+    ...mapGetters({
+      vendor: "vendorSignup/getVendor",
+      step: "vendorSignup/getStep",
+      validateBasicFields: "vendorSignup/validateBasicFields",
+    }),
+    nextLabel() {
+      if (this.step == 6) {
+        return "Sign Up";
+      } else if (this.step == 5) {
+        if (this.vendor.tenantUser) {
+          return "Update";
+        }
+        return "Finish";
+      } else if (this.step == 3) {
+        return "Check out your new profile!";
+      } else {
+        return "Next";
+      }
+    },
+    status() {
+      return this.$store.getters["vendorSignup/getStatus"];
+    },
+  },
+  watch: {
+    step(newVal) {
+      if (this.step === 7) this.addVendor();
+    },
+  },
+  beforeCreate() {
+    if (this.$store.vendorSignup) {
+      this.$store.unregisterModule("vendorSignup");
+    }
+    this.$store.registerModule("vendorSignup", VendorSignupState);
+  },
+  beforeDestroy() {
+    this.$store.unregisterModule("vendorSignup");
+  },
+  created() {
+    this.$store.commit("vendorSignup/setInitialState");
+  },
+
   methods: {
     ...mapMutations("vendorSignup", ["setVendor", "setEditing", "setStep", "setLoading"]),
     goTo(router) {
@@ -117,8 +159,6 @@ export default {
             const params = {};
             params.companyName = this.vendor.companyName;
             const vendors = await this.$store.dispatch("vendorSignup/searchVendor", params);
-
-            console.log("vendors", vendors);
 
             if (vendors.length) {
               this.setVendor(vendors[0]);
@@ -254,47 +294,6 @@ export default {
           }
         }
       });
-    },
-  },
-  beforeCreate() {
-    if (this.$store.vendorSignup) {
-      this.$store.unregisterModule("vendorSignup");
-    }
-    this.$store.registerModule("vendorSignup", VendorSignupState);
-  },
-  beforeDestroy() {
-    this.$store.unregisterModule("vendorSignup");
-  },
-  created() {
-    this.$store.commit("vendorSignup/setInitialState");
-  },
-  computed: {
-    ...mapGetters({
-      vendor: "vendorSignup/getVendor",
-      step: "vendorSignup/getStep",
-      validateBasicFields: "vendorSignup/validateBasicFields",
-    }),
-    nextLabel() {
-      if (this.step == 6) {
-        return "Sign Up";
-      } else if (this.step == 5) {
-        if (this.vendor.tenantUser) {
-          return "Update";
-        }
-        return "Finish";
-      } else if (this.step == 3) {
-        return "Check out your new profile!";
-      } else {
-        return "Next";
-      }
-    },
-    status() {
-      return this.$store.getters["vendorSignup/getStatus"];
-    },
-  },
-  watch: {
-    step(newVal) {
-      if (this.step === 7) this.addVendor();
     },
   },
 };

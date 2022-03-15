@@ -67,13 +67,11 @@
 
 <script>
     import { SignupCard, MaryokuInput } from "@/components";
-    import InputText from "@/components/Inputs/InputText.vue";
     import Loader from "@/components/loader/Loader.vue";
 
     export default {
         components: {
             SignupCard,
-            InputText,
             MaryokuInput,
             Loader,
         },
@@ -116,7 +114,6 @@
             forgotPassword () {
                 this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email, field:"vendor" }, { "ContentType": "application/json" })
                     .then((resp) => {
-                        console.log(resp);
                         this.loading = false;
                         if (resp.data.status) {
                             this.submitted = true;

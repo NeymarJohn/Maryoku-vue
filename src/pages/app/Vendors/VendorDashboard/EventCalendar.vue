@@ -11,19 +11,19 @@
       </div>
       <div class="calendar__body">
         <ul class="calendar__heading">
-          <li v-for="item in heading" @click="clickDate(item)">
+          <li v-for="(item, index) in heading" :key="index" @click="clickDate(item)">
             <div class="calendar__item">
               {{ item }}
             </div>
           </li>
         </ul>
         <ul class="calendar__content">
-          <li v-for="item in buildCalendar" @click="clickDate(item)">
+          <li v-for="(item, index) in buildCalendar" :key="index" @click="clickDate(item)">
             <popper v-if="eventsForDate[Number(item.number)]" trigger="hover" :options="{ placement: 'right' }">
               <div class="popper-content white-card">
                 <div class="font-size-22 popper-header" />
                 <div>
-                  <div v-for="(event, index) in eventsForDate[Number(item.number)]">
+                  <div v-for="(event, eventIndex) in eventsForDate[Number(item.number)]" :key="eventIndex">
                     <div class="color-gray">
                       {{ $dateUtil.formatScheduleDay(event.startTime, "HH:mm") }} -
                       {{ $dateUtil.formatScheduleDay(event.endTime, "HH:mm") }}
@@ -216,7 +216,6 @@ export default {
       return moment(this.convertTwoDigits, "MM").format("MMMM");
     },
     profile() {
-      console.log(this.$store.state.vendor);
       return this.$store.state.vendor.profile;
     },
     blackoutDays() {
@@ -298,7 +297,6 @@ export default {
       return events;
     },
     clickDate(day) {
-      console.log("clickDate", day, this.eventsForDate[Number(day.number)]);
       if (this.eventsForDate[Number(day.number)].length) {
         this.$emit("clickDate", {event: this.eventsForDate[Number(day.number)][0]});
       } else {
