@@ -83,14 +83,17 @@ import ViewProposals from "./Modals/ViewProposals.vue";
 export default {
   name: "EventBlocks",
   components: {
-    VueElementLoading,
     UploadVendorsModal,
-    // ManageBlockVendors,
-    ViewProposals
   },
   props: {
-    selectedBlock: Object,
-    event: Object
+    selectedBlock: {
+      type: Object,
+      default: () => {}
+    },
+    event: {
+      type: Object,
+      default: () => {}
+    }
   },
   data: () => ({
     // auth: auth,
@@ -140,7 +143,7 @@ export default {
           this.blockVendors = resp;
         })
         .catch(error => {
-          console.log("EventComponentVendor error =>", error);
+          console.error("EventComponentVendor error =>", error);
         });
     },
     viewProposals (item) {

@@ -94,6 +94,11 @@ import _ from "underscore";
 import { mapGetters } from "vuex";
 
 export default {
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   props: {
     event: {
       type: Object,
@@ -101,7 +106,10 @@ export default {
         return { statistics: {} };
       },
     },
-    items: [Array, Function],
+    items: {
+      type: [Array, Function],
+      default: () => null
+    },
     type: {
       type: String,
       default: "total",
@@ -150,6 +158,46 @@ export default {
       defaultColor: "#641956",
     };
   },
+
+  computed: {
+    ...mapGetters({
+      components: "event/getComponentsList",
+    }),
+    reorderingData() {
+      let maxIndex = this.sortedData.findIndex((item) => item.budget == this.maxValue);
+      const endData = { ...this.sortedData[maxIndex] };
+      endData.strikeDash = 2 + " " + (this.circleLength - 2) + " " + this.circleLength;
+      if (maxIndex == 0) maxIndex = this.sortedData.length - 1;
+      else maxIndex -= 1;
+      const newData = [...this.sortedData.slice(maxIndex), ...this.sortedData.slice(0, maxIndex)];
+      newData.push(this.sortedData[maxIndex]);
+      newData.push(endData);
+      if (maxIndex >= 0) {
+        return newData;
+      }
+      return this.sortedData;
+    },
+  },
+  watch: {
+    event(newVal, oldVal) {
+      this.drawChart();
+    },
+    items(newVal, oldVal) {
+      this.drawChart();
+    },
+  },
+  mounted() {
+    this.drawChart();
+    this.$root.$on("event-building-block-budget-changed", (eventComponents) => {
+      this.drawChart();
+    });
+    window.addEventListener("resize", this.onResize);
+  },
+  beforeDestroy() {
+    // Unregister the event listener before destroying this Vue instance
+    window.removeEventListener("resize", this.onResize);
+  },
+
   methods: {
     setTooltipPos: function (event, item) {
       let CTM = this.$refs.pie_chart.getScreenCTM();
@@ -258,28 +306,6 @@ export default {
         ctx.drawImage(img, 0, 0);
       });
       this.$forceUpdate();
-      // var svgElement = document.getElementById("pie_chart");
-      // let { width, height } = svgElement.getBBox();
-      // let clonedSvgElement = svgElement.cloneNode(true);
-      // let outerHTML = clonedSvgElement.outerHTML;
-      // let blob = new Blob([outerHTML], { type: "image/svg+xml;charset=utf-8" });
-      // let URL = window.URL || window.webkitURL || window;
-      // const blobURL = URL.createObjectURL(blob);
-      // this.blobURL = blobURL;
-      // console.log(blobURL);
-      // let image = new Image();
-      // image.onload = () => {
-      //   alert();
-      //   let canvas = document.createElement("canvas");
-      //   canvas.widht = width;
-      //   canvas.height = height;
-      //   let context = canvas.getContext("2d");
-      //   context.drawImage(image, 0, 0, width, height);
-      //   const dataURL = canvas.toDataURL();
-      //   console.log("dataURL", dataURL);
-      //   this.blobURL = dataURL;
-      // };
-      // image.src = blobURL;
     },
     getElementColor(category) {
       let element = _.findWhere(this.components, { title: category });
@@ -294,49 +320,6 @@ export default {
     onResize() {
       this.$refs.pie_chart.style.display = this.$refs.pie_chart.style.display === "inline" ? "inline-block" : "inline";
       this.drawChart();
-    },
-  },
-  computed: {
-    ...mapGetters({
-      components: "event/getComponentsList",
-    }),
-    reorderingData() {
-      let maxIndex = this.sortedData.findIndex((item) => item.budget == this.maxValue);
-      const endData = { ...this.sortedData[maxIndex] };
-      endData.strikeDash = 2 + " " + (this.circleLength - 2) + " " + this.circleLength;
-      if (maxIndex == 0) maxIndex = this.sortedData.length - 1;
-      else maxIndex -= 1;
-      const newData = [...this.sortedData.slice(maxIndex), ...this.sortedData.slice(0, maxIndex)];
-      newData.push(this.sortedData[maxIndex]);
-      newData.push(endData);
-      if (maxIndex >= 0) {
-        return newData;
-      }
-      return this.sortedData;
-    },
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.drawChart();
-    },
-    items(newVal, oldVal) {
-      this.drawChart();
-    },
-  },
-  mounted() {
-    this.drawChart();
-    this.$root.$on("event-building-block-budget-changed", (eventComponents) => {
-      this.drawChart();
-    });
-    window.addEventListener("resize", this.onResize);
-  },
-  beforeDestroy() {
-    // Unregister the event listener before destroying this Vue instance
-    window.removeEventListener("resize", this.onResize);
-  },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
     },
   },
 };

@@ -108,9 +108,6 @@ var card = undefined;
 
 export default {
   components: {
-    VueElementLoading,
-    Tabs,
-    EventBlockRequirements,
   },
   props: {
   },
@@ -150,7 +147,6 @@ export default {
               return stripe.verifyIdentity("");
             })
             .then(function(result) {
-              console.log("##-175, PaymentSettings.vue",result);
               // If `verifyIdentity` fails, you should display the localized
               // error message to your user using `error.message`.
               if (result.error) {
@@ -163,7 +159,6 @@ export default {
     // });
     },
      test (e){
-      console.log("##-133, PaymentSettings.vue", this.$store.state.auth.user.id);
     },
     sendBankInfo(){
 
@@ -174,11 +169,9 @@ export default {
           token: "lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3"
         }
         }).then(res=>{
-        console.log("##-125, PaymentSettings.vue",res);
       }).catch(error => {
-        console.log("##-126, PaymentSettings.vue",error);});
-      console.log("##-119, PaymentSettings.vue",this.bankDetails,  process.env.SERVER_URL );
-
+        console.error(error);
+      });
     },
     submitPayment(event) {
       let self = this;

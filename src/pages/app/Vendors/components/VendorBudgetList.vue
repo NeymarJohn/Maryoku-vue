@@ -33,12 +33,10 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
 
 export default {
   name: "VendorBudgetList",
   components: {
-    VueElementLoading,
   },
   filters: {
     withComma(amount) {
@@ -46,10 +44,22 @@ export default {
     },
   },
   props: {
-    title: String,
-    description: String,
-    proposalRequest: Object,
-    requirements: Array,
+    title: {
+      type: String,
+      default: ""
+    },
+    description: {
+      type: String,
+      default: ""
+    },
+    proposalRequest: {
+      type: Object,
+      default: () => {}
+    },
+    requirements: {
+      type: Array,
+      default: () => []
+    },
   },
   data: () => ({
     isLoading: true,

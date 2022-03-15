@@ -11,6 +11,7 @@
       </div>
       <div
         v-for="(service, index) in vendorData.secondaryServices"
+        :key="index"
         class="service-tab-item"
         :class="{ active: selectedIndex === index + 1 }"
         @click="selectService(index + 1)"
@@ -37,17 +38,10 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
-import { LabelEdit, Tabs } from "@/components";
 import ServiceContent from "./ServiceContent";
 export default {
   components: {
-    VueElementLoading,
-    LabelEdit,
-    Tabs,
     ServiceContent,
-    // ProfileDetails,
-    // Permissions,
   },
   data() {
     return {

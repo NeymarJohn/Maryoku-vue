@@ -142,12 +142,6 @@ import { Pagination, Tabs } from "@/components";
 import _ from "underscore";
 import moment from "moment";
 import numeral from "numeral";
-
-// import auth from '@/auth';
-
-import UploadVendorsModal from "../../../../Vendors/ImportVendors";
-import ManageBlockVendors from "./ManageBlockVendors.vue";
-import ViewProposals from "./ViewProposals.vue";
 import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
 import MdCardHeader from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardHeader/MdCardHeader.vue";
 import VendorsTable from "@/pages/app/Vendors/Table/vendorsList";
@@ -160,22 +154,19 @@ import ViewProposal from "./ViewProposal.vue";
 export default {
 	name: "EventBlockProposalVendors",
 	components: {
-		MdCardHeader,
 		MdCardContent,
 		VueElementLoading,
-		UploadVendorsModal,
-		ManageBlockVendors,
-		ViewProposals,
-		VendorsTable,
-		Pagination,
-		ManageProposalsAccept,
 		ManageProposalsVendors,
-		companyForm,
-		Tabs,
 	},
 	props: {
-		selectedBlock: Object,
-		event: Object,
+		selectedBlock: {
+			type: Object,
+			default: () => {}
+		},
+		event: {
+			type: Object,
+			default: () => {}
+		},
 		// blockVendors : Array,
 	},
 	data: () => ({
@@ -244,7 +235,7 @@ export default {
 					})
 					.catch((error) => {
 						this.isLoading = false;
-						console.log("EventComponentVendor error =>", error);
+						console.error(error);
 					});
 			} else {
 				this.blockVendors = this.selectedBlock.vendors;
@@ -292,7 +283,7 @@ export default {
 				})
 				.catch((error) => {
 					// this.isLoading = false;
-					console.log("EventComponentVendor error =>", error);
+					console.error("EventComponentVendor error =>", error);
 
 					this.$notify({
 						message: "Error while trying to add vendor, try again!",
@@ -468,7 +459,7 @@ export default {
 				.save()
 				.then((resp) => {})
 				.catch((error) => {
-					console.log("EventComponentVendor error =>", error);
+					console.error("EventComponentVendor error =>", error);
 				});
 		},
 		switchList(listType) {
