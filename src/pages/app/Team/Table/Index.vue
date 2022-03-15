@@ -120,6 +120,9 @@ import moment from "moment";
 
 export default {
   components: {
+    Modal,
+    SimpleWizard,
+    WizardTab,
     LabelEdit,
   },
   filters: {
@@ -128,13 +131,9 @@ export default {
     },
   },
   props: {
-    currentUserId: {
-      type: String,
-      default: ""
-    },
+    currentUserId: String,
     teamId: {
       type: String,
-      default: ""
     },
     teamMembers: {
       type: Array,

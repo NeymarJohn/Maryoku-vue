@@ -83,18 +83,20 @@
 
 <script>
 import VueElementLoading from "vue-element-loading";
+import StatsCard from "@/components/Cards/StatsCard";
+import personalInformationModal from "./ProfileModal";
 import { LabelEdit } from "@/components";
 import Me from "@/models/Me";
 export default {
   components: {
+    StatsCard,
+    personalInformationModal,
     LabelEdit,
     VueElementLoading,
+    Me,
   },
   props: {
-    userInfo: {
-      type: Object,
-      default: () => {}
-    },
+    userInfo: Object,
     isLoading: {
       type: Boolean,
       default: false,

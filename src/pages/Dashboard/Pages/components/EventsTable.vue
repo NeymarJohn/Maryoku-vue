@@ -43,11 +43,12 @@ export default {
     props:{
       events: {
           type: Array,
-          default: () =>[]
       }
     },
     created() {
+        console.log("events", this.events);
     },
+
     methods:{
     }
 };

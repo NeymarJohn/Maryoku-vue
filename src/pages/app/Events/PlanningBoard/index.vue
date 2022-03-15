@@ -78,7 +78,7 @@
                       :src="`${$iconURL}Booking-New/Group+28553.svg`"
                       @click="openChoice"
                     >
-                    <span :class="{ 'like-dot': proposalUnviewed == true }" />
+                    <span :class="{ 'like-dot': this.proposalUnviewed == true }" />
                   </div>
                 </li>
                 <li class="md-small-hide">
@@ -98,7 +98,7 @@
               :requirement="false"
               :hide-download="true"
               :hide-share="true"
-              :proposal-unviewed="proposalUnviewed"
+              :proposal-unviewed="this.proposalUnviewed"
               :cart-count="cartCount"
               :custom-styles="{showCommentsText: {paddingLeft: '2px'}}"
               @toggleCommentMode="toggleCommentMode"
@@ -671,6 +671,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     percentOfBudgetCategories() {
+      console.log("percentOfBudgetCategories", Object.keys(this.requirements).length, this.event.components.length);
       return Object.keys(this.requirements).length;
     },
 
@@ -741,11 +742,14 @@ export default {
     isAnyCart(){
         let cartItems = Object.keys(this.cart);
         if(cartItems){
+            this.cartCount = cartItems.length;
             return cartItems.length > 0;
         }
+        this.cartCount = 0;
         return false;
     },
     showCommentPanel(){
+        console.log("this.$store.state.eventPlan.showCommentPanel",this.$store.state.eventPlan.showCommentPanel);
       return this.$store.state.eventPlan.showCommentPanel;
     },
   },

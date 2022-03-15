@@ -61,13 +61,10 @@ export default {
     StartModal,
   },
   props: {
-    eventId: {
-      type: String,
-      default: ""
-    },
+    eventId: String,
     events: {
       type: Array,
-      default: () => [],
+      default: [],
     },
   },
   data: () => ({

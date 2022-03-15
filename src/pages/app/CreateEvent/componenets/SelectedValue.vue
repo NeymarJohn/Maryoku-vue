@@ -2,7 +2,7 @@
   <div class="selected-value">
     <img :src="`${$iconURL}Onboarding/${icon}`">
     <div>
-      {{ value }}
+      {{ this.value }}
     </div>
     <div>
       <md-icon style="color:#f51355">

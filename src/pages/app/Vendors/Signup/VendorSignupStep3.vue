@@ -172,7 +172,7 @@
                   />
                   <!-- todo update page when month change -->
                   <div style="display: none">
-                    {{ month }}
+                    {{ this.month }}
                   </div>
                 </template>
               </div>
@@ -338,7 +338,13 @@
 
 <script>
 import moment from "moment";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
+import Multiselect from "vue-multiselect";
 import _ from "underscore";
+
+//COMPONENTS
+import VendorServiceItem from "../components/VendorServiceItem.vue";
 import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
@@ -353,24 +359,18 @@ export default {
   components: {
     VendorPricingPolicyItem,
     VendorPolicyItem,
+    VueElementLoading,
+    VendorServiceItem,
     VSignupAddRules,
     FunctionalCalendar,
     VueTimepicker,
+    Multiselect,
   },
   filters: {},
   props: {
-    categories: {
-      type: Array,
-      default: () => []
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    vendor: {
-      type: Object,
-      default: () => {}
-    },
+    categories: Array,
+    icon: String,
+    vendor: Object,
   },
   data() {
     return {
@@ -487,6 +487,14 @@ export default {
       return this.$store.state.vendorSignup.vendor;
     },
   },
+  watch: {
+    vendor: {
+      handler(newVal) {
+        console.log("signup.step3", newVal);
+      },
+      deep: true,
+    },
+  },
   mounted() {
     this.init();
   },
@@ -498,11 +506,13 @@ export default {
   },
   methods: {
     updateExDonts(religion, holiday) {
+      console.log("updateExDonts", holiday);
       holiday.selected = !holiday.selected;
 
       let date = moment(holiday.start).format("YYYY-M-D");
       let day = moment(holiday.start).date();
 
+      console.log("updateExDonts", day, date);
       if (this.markedDates.find(m => m === date)) {
         this.markedDates = this.markedDates.filter(m => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
@@ -519,6 +529,8 @@ export default {
           religion: religion.name,
         });
       }
+      console.log("updateExDonts.markedDates", date, this.markedDates);
+
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     setDontAllowThirdParty(status) {
@@ -551,6 +563,7 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
+      console.log("updateReligion", item);
       if (this.selectedReligion.length && this.selectedReligion.find(s => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter(s => s.name !== item.name);
         this.updateAllExDonts(item, false);
@@ -606,6 +619,7 @@ export default {
       let res = [];
       const wds = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
+      console.log("weekDays", weekDays);
       if (weekDays) {
         weekDays.forEach(wd => {
           res.push(wds[(wds.indexOf(capitalize(wd.slice(0, 2))) + 6) % 7]);
@@ -613,15 +627,27 @@ export default {
       }
       return res;
     },
+    // setPricePolicy(e, type, name, value) {
+    //   alert("xx");
+    //   // console.log('setPricePolicy', value);
+    //   if ((type === "option" || type === "Including") && name) {
+    //     let p = this.vendorPricingPolicies.items.find((it) => it.name === name);
+    //     p.value = value;
+    //   }
+    // },
     setPricePolicy(e, index) {
+      console.log(e);
+      console.log("setPricePolicy", e);
       this.vendorPricingPolicies.items[index] = e;
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, index) {
+      console.log("setPolicy", e);
       this.vendorPolicies.items[index] = e;
       this.$root.$emit("update-vendor-value", "policies", this.vendorPolicies.items);
     },
     changeCategorySelector(type, item, value) {
+      // console.log(type, item, value);
       item.value = value;
 
       if (type === "policy") {
@@ -653,15 +679,18 @@ export default {
             religion: data.name,
           });
         } else {
+          console.log("updateAllExDonts", it.holiday);
           this.vendor.exDonts = this.vendor.exDonts.filter(e => e.holiday !== it.holiday);
         }
       });
+      console.log("updateAllExDonts", this.vendor.exDonts);
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     isAllHolidays(data) {
       return data.holidays.every(it => it.selected);
     },
     init: async function() {
+      // set vendorPricingPolicies from initial pricing policies
       let vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPricingPolicies with saved vendor
@@ -688,6 +717,7 @@ export default {
           }
         });
       }
+      // console.log("vendor.price.policy", this.vendorPricingPolicies);
 
       // set vendorPolicies from initial policies
       let vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
@@ -758,6 +788,9 @@ export default {
           this.markedDates.push(moment(h.date).format("YYYY-M-D"));
         });
       }
+
+      console.log("init.policies", this.vendorPolicies.items);
+      console.log("init.pricingPolicies", this.vendorPricingPolicies.items);
 
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;

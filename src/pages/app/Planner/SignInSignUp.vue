@@ -1,4 +1,12 @@
 <template>
+  <!--  <div class="md-layout">-->
+  <!--    <loader :active="loading" :isFullScreen="true"/>-->
+  <!--    <div class="md-layout-item">-->
+  <!--      <signup-card>-->
+  <!--        <div-->
+  <!--          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain"-->
+  <!--          slot="content-right"-->
+  <!--        >-->
   <div>
     <div class="social-line text-center">
       <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
@@ -52,17 +60,25 @@
       </div>
     </div>
   </div>
+<!--      </signup-card>-->
+<!--    </div>-->
+<!--  </div>-->
 </template>
 
 <script>
-import { MaryokuInput } from "@/components";
+import { SignupCard, MaryokuInput, Modal, Loader } from "@/components";
 import { USER_TYPE } from "@/constants/user";
+import InputText from "@/components/Inputs/InputText.vue";
 import TenantUser from "@/models/TenantUser";
 import CalendarEvent from "@/models/CalendarEvent";
 import eventService from "@/services/event.service";
 export default {
   name: "SignIn",
   components: {
+    SignupCard,
+    Modal,
+    InputText,
+    Loader,
     MaryokuInput,
   },
   data() {

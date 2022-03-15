@@ -283,6 +283,7 @@ export default {
 
   },
   mounted() {
+      console.log("mounted.step0", this.selectedCustomer);
       const customerId = this.$route.query.customerId;
       if (customerId) {
           let customer = this.customers.find(it => it.id === customerId);
@@ -437,7 +438,7 @@ export default {
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);
       }).catch((err) => {
-        console.error(err);
+        console.log(err);
       });
     },
     getAddressData(addressData, placeResultData, id) {

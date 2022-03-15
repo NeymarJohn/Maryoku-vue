@@ -141,6 +141,7 @@ export default {
   mounted() {
     setTimeout(
       function () {
+        console.log("avatar: " + this.$auth.user.avatar);
         this.avatar =
           this.$auth.user.avatar != null
             ? this.$auth.user.avatar

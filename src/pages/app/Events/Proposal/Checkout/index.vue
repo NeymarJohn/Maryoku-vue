@@ -50,7 +50,7 @@
               :service-category="proposal.vendor.vendorCategory"
             />
 
-            <div v-if="proposal.extraServices[vendor.eventCategory.key]" class="p-30">
+            <div v-if="this.proposal.extraServices[this.vendor.eventCategory.key]" class="p-30">
               <div>Would you like to upgrade & add one of those?</div>
               <div v-if="proposal.serviceCategory" class="mb-30">
                 You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
@@ -61,7 +61,7 @@
                 will be added to the overall vendor cost.
               </div>
               <div
-                v-for="service in proposal.extraServices[vendor.eventCategory.key].filter(
+                v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
                   (item) => !item.added && item.price,
                 )"
                 :key="service.subCategory"
@@ -194,7 +194,7 @@
           </template>
         </collapse-panel>
         <div v-if="pageType === 0" class="total-price-panel mt-20 white-card">
-          <template v-if="discount(proposal).percentage">
+          <template v-if="discount(this.proposal).percentage">
             <div class="discount-row">
               <span class="font-bold">Discount </span>
               <span class="font-bold">-{{ discount(proposal).percentage }}%</span>
@@ -211,7 +211,7 @@
           <div class="discount-row">
             <span class="font-bold">Fee </span>
             <span class="font-bold">{{ feePercentail }}%</span>
-            <span class="text-right">${{ feePrice(proposal) | withComma }}</span>
+            <span class="text-right">${{ feePrice(this.proposal) | withComma }}</span>
           </div>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
@@ -316,7 +316,6 @@
           });
           return sum;
         }
-        return 0;
       },
     },
     async created() {
@@ -413,18 +412,22 @@
       },
       discountedPrice(proposal) {
         let totalPriceOfProposal = this.totalPriceOfProposal(proposal);
+        console.log("totalPriceOfProposal", totalPriceOfProposal);
 
         totalPriceOfProposal = discounting(totalPriceOfProposal, this.discount(proposal));
         totalPriceOfProposal -=  this.bundledDiscountPrice(proposal);
 
+        console.log("discountedPrice", totalPriceOfProposal);
         return totalPriceOfProposal;
       },
       taxedPrice (proposal) {
+        console.log("taxedPrice", addingTax(this.discountedPrice(proposal), this.tax(proposal)));
         return addingTax(this.discountedPrice(proposal), this.tax(proposal));
       },
       discountedAndTaxedPrice(proposal) {
 
         let totalPriceOfProposal = this.totalPriceOfProposal(proposal);
+        console.log("total", totalPriceOfProposal);
 
         // minus bundled discount
         totalPriceOfProposal -=  this.bundledDiscountPrice(proposal);
@@ -464,6 +467,7 @@
                   },
                   {headers: this.$auth.getAuthHeader()},
           );
+          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -484,6 +488,7 @@
                   },
                   { headers: this.$auth.getAuthHeader() },
           );
+          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -502,6 +507,7 @@
                   },
                   { headers: this.$auth.getAuthHeader() },
           );
+          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -518,6 +524,7 @@
                   },
                   { headers: this.$auth.getAuthHeader() },
           );
+          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 

@@ -99,10 +99,10 @@
             </button>
           </div>
         </div>
-        <div v-if="errorMessage" class="md-layout-item md-size-100 form-group maryoku-field mt-30">
+        <div v-if="this.errorMessage" class="md-layout-item md-size-100 form-group maryoku-field mt-30">
           <div class="error-message">
             <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`">
-            {{ errorMessage }}
+            {{ this.errorMessage }}
           </div>
         </div>
       </div>
@@ -134,18 +134,9 @@ export default {
   },
   props: {
     show: [Boolean],
-    value: {
-      type: Number,
-      default: 0
-    },
-    event: {
-      type: Object,
-      default: () => {}
-    },
-    selectedComponent: {
-      type: Object,
-      default: () => {}
-    },
+    value: [Number],
+    event: Object,
+    selectedComponent: Object,
   },
   data: () => {
     return {
@@ -242,7 +233,7 @@ export default {
             });
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
           this.isLoading = false;
           if (error.response) {
             if (error.response.status === 422) {

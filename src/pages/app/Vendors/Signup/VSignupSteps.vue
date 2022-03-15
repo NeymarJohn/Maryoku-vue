@@ -41,10 +41,7 @@ export default {
   name: "VSignupSteps",
   components: {},
   props: {
-    step: {
-      type: Number,
-      default: 0
-    },
+    step: Number,
   },
   data() {
     return {};

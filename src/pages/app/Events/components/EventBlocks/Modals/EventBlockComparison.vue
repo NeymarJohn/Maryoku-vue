@@ -480,6 +480,8 @@ export default {
   name: "EventBlockComparison",
   components: {
     VueElementLoading,
+    ManageProposalsAccept,
+    ViewProposal,
   },
   filters: {
     withComma(amount) {
@@ -487,18 +489,9 @@ export default {
     },
   },
   props: {
-    selectedBlock: {
-      type: Object,
-      default: () => {}
-    },
-    event: {
-      type: Object,
-      default: () => {}
-    },
-    blockVendors: {
-      type: Array,
-      default: () => []
-    },
+    selectedBlock: Object,
+    event: Object,
+    blockVendors: Array,
   },
   data: () => ({
     isLoading: false,
@@ -791,10 +784,11 @@ export default {
         .for(calendar, event)
         .save()
         .then((resp) => {
+          console.log(resp);
           this.$forceUpdate();
         })
         .catch((error) => {
-          console.error(error);
+          console.log("EventComponentVendor error =>", error);
           this.$forceUpdate();
         });
     },

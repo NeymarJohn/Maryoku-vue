@@ -64,6 +64,7 @@ export default {
   name: "VendorsPool",
   components: {
     VueElementLoading,
+    companyForm,
     UploadModal,
     VendorsGrid,
     VendorsList,

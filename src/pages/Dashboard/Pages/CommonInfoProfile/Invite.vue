@@ -71,15 +71,13 @@ export default {
   name: "Employee",
   components: {
     InputText,
+    Select,
     Title,
     ButtonDiv,
     Button,
   },
   props: {
-    officeManager: {
-      type: String,
-      default: ""
-    },
+    officeManager: String,
   },
   data() {
     return {
@@ -98,8 +96,10 @@ export default {
       document.getElementById("csv-upload").click();
     },
     onFileChange: function (e) {
+      console.log(e, "@ eto func");
       const reader = new FileReader();
       reader.onload = (e) => {
+        console.log(e.target.result);
       };
       reader.readAsDataURL(e.target.files[0]);
     },

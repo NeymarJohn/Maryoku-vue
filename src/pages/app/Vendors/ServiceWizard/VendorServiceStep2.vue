@@ -47,14 +47,8 @@ export default {
   },
   filters: {},
   props: {
-    categories: {
-      type: Array,
-      default: () => []
-    },
-    icon:  {
-      type: String,
-      default: ""
-    },
+    categories: Array,
+    icon: String,
   },
   data() {
     return {
@@ -74,6 +68,7 @@ export default {
   watch: {},
   created() {},
   mounted() {
+    console.log("vendor.signup.step2.mounted", this.vendor);
   },
   methods: {
     getCategoryNameByValue(value) {

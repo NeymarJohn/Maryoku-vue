@@ -22,10 +22,7 @@ export default {
     EventOverviewSection,
   },
   props: {
-    event: {
-      type: Object,
-      default: () => {}
-    },
+    event: Object,
   },
   data() {
     return {
@@ -41,6 +38,7 @@ export default {
   watch: {
     event(newVal, oldVal) {
       this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      console.log("event.detail.watch", newVal);
     },
     eventTypeList(newVal) {
       this.init();

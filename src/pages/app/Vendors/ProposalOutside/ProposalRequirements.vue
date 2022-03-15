@@ -123,7 +123,6 @@ export default {
           return this.$store.state.proposalForNonMaryoku.includedServices[this.vendorCategory];
         else if (this.tableCategory === "extra")
           return this.$store.state.proposalForNonMaryoku.extraServices[this.vendorCategory];
-        return [];
       },
       set: function(newServices) {
         if (this.tableCategory === "cost")

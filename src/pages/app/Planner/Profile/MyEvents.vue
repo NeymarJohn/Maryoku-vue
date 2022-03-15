@@ -13,16 +13,20 @@
 </template>
 
 <script>
+import { Collapse } from "@/components";
+import EventDetails from "./EventDetails";
+import CalendarEvent from "@/models/CalendarEvent";
+import VueElementLoading from "vue-element-loading";
 import MyEventItem from "./components/MyEventItem.vue";
 export default {
   components: {
+    Collapse,
+    EventDetails,
+    VueElementLoading,
     MyEventItem,
   },
   props: {
-    userInfo: {
-      type: Object, 
-      default: () => {}
-    },
+    userInfo: Object,
   },
   data() {
     return {
