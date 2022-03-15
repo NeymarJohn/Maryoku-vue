@@ -136,11 +136,6 @@ const components = {
 
 export default {
   components,
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
   props: {
     newProposalRequest: {
       type: Object,
@@ -170,39 +165,8 @@ export default {
       proposalLink: "",
     };
   },
-
-  computed: {
-    getHeaderImage() {
-      if (this.event && this.event.concept) {
-        return this.event.concept.images[new Date().getTime() % 4].url;
-      }
-      return "";
-    },
-    vendor() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
-    },
-    event() {
-      return this.$store.state.proposalForNonMaryoku.eventData;
-    },
-    selectedVersion() {
-      return this.$store.state.proposalForNonMaryoku.currentVersion;
-    },
-    versions() {
-      return this.$store.state.proposalForNonMaryoku.versions;
-    },
-    isNegotiation() {
-        return this.$store.state.proposalForNonMaryoku.isNegotiation;
-    },
-    step: {
-      get: function() {
-        return this.$store.state.proposalForNonMaryoku.wizardStep;
-      },
-      set: function(newValue) {
-        this.$store.commit("proposalForNonMaryoku/setWizardStep", newValue);
-      },
-    },
-  },
   async mounted() {
+    console.log("non-maryoku.proposal.created");
     if (this.$store.state.auth.user) {
       await this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token);
     } else {
@@ -483,7 +447,42 @@ export default {
     },
   },
 
-
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
+  computed: {
+    getHeaderImage() {
+      if (this.event && this.event.concept) {
+        return this.event.concept.images[new Date().getTime() % 4].url;
+      }
+      return "";
+    },
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    },
+    event() {
+      return this.$store.state.proposalForNonMaryoku.eventData;
+    },
+    selectedVersion() {
+      return this.$store.state.proposalForNonMaryoku.currentVersion;
+    },
+    versions() {
+      return this.$store.state.proposalForNonMaryoku.versions;
+    },
+    isNegotiation() {
+        return this.$store.state.proposalForNonMaryoku.isNegotiation;
+    },
+    step: {
+      get: function() {
+        return this.$store.state.proposalForNonMaryoku.wizardStep;
+      },
+      set: function(newValue) {
+        this.$store.commit("proposalForNonMaryoku/setWizardStep", newValue);
+      },
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

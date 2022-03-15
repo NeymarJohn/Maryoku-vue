@@ -32,8 +32,14 @@
   </div>
 </template>
 <script>
+import { Modal, SimpleWizard, WizardTab } from "@/components";
 import Swal from "sweetalert2";
 import Vendors from "@/models/Vendors";
+import RankingModal from "./Table/RankingModal";
+import TagsModal from "./Table/TagsModal";
+import ClickOutside from "vue-click-outside";
+// import auth from '@/auth';
+
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
@@ -43,15 +49,9 @@ import _ from "underscore";
 export default {
   name: "VendorCard",
   props: {
-    vendor: {
-      type: Object,
-      default: () => {}
-    },
+    vendor: Object,
     grid: Boolean,
-    index: {
-      type: Number,
-      default: 0
-    },
+    index: Number,
     vendorsList: {
       type: Array,
       default: () => {
@@ -72,7 +72,6 @@ export default {
     },
     fetchVendors: {
       type: Function,
-      default: () => {}
     },
     item: {
       type: Object,
@@ -80,10 +79,7 @@ export default {
         return {};
       },
     },
-    mode: {
-      type:String,
-      default: ""  
-    },
+    mode: String,
     selectedBlock: {
       type: Object,
       default: null,
@@ -95,6 +91,7 @@ export default {
   },
   methods: {
     async setRanking(id, ranking) {
+      console.log("sss");
       let vendor = await Vendors.find(id);
       vendor.rank = ranking;
       vendor.save();
@@ -192,7 +189,7 @@ export default {
             this.blockVendors = resp;
           })
           .catch((error) => {
-            console.error(error);
+            console.log("error =>", error);
           });
       }
     },

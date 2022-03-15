@@ -61,6 +61,9 @@ export default {
       return this.$store.state.proposalForNonMaryoku.currentVersion;
     }
   },
+  watch: {
+    versions(newVal){console.log("versions", newVal);}
+  },
   methods: {
     select(index){
       if (this.selected === index) return;

@@ -16,12 +16,13 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { Loader } from "@/components";
 import EventGuestVuexModule from "../../app/Guest/EventGuest.vuex";
-import { ZoomCenterTransition } from "vue2-transitions";
+import { ZoomCenterTransition, FadeTransition } from "vue2-transitions";
 
 export default {
   components: {
     Loader,
     ZoomCenterTransition,
+    FadeTransition,
   },
   data() {
     return {
@@ -30,11 +31,18 @@ export default {
       loading: true,
     };
   },
-  computed: {
-    ...mapState("event", ["eventData"]),
-    loggedInUser(){
-       return this.$store.state.auth.user;
-    }
+  methods: {
+    ...mapMutations("EventGuestVuex", [
+    ]),
+    ...mapActions("event", ["getEventAction"]),
+
+    async initData() {
+      const id = this.$route.params.id;
+        console.log("initData", id);
+      await this.$store.dispatch("EventGuestVuex/getUserEvent", {id});
+      await this.$store.dispatch("common/fetchAllCategories");
+      // await this.$store.dispatch("common/getEventTypes");
+    },
   },
   created() {
     this.$store.registerModule("EventGuestVuex", EventGuestVuexModule);
@@ -48,19 +56,12 @@ export default {
         this.$router.push({ path: "/signin" });
     }
   },
-  methods: {
-    ...mapMutations("EventGuestVuex", [
-    ]),
-    ...mapActions("event", ["getEventAction"]),
-
-    async initData() {
-      const id = this.$route.params.id;
-      await this.$store.dispatch("EventGuestVuex/getUserEvent", {id});
-      await this.$store.dispatch("common/fetchAllCategories");
-      // await this.$store.dispatch("common/getEventTypes");
-    },
+  computed: {
+    ...mapState("event", ["eventData"]),
+    loggedInUser(){
+       return this.$store.state.auth.user;
+    }
   },
-
 };
 </script>
 <style lang="scss">

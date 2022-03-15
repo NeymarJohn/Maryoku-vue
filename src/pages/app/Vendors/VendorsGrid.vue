@@ -91,26 +91,14 @@
 import { categoryTitle, categoryColor } from "./helpers";
 import _ from "underscore";
 
-import { ProductCard } from "@/components";
+import { ProductCard, AnimatedNumber } from "@/components";
 
 export default {
   components: {
     ProductCard,
+    AnimatedNumber,
   },
-  props: {
-    vendorsList: {
-      type: Array,
-      default: () => []
-    },
-    ratings: {
-      type: Array,
-      default: () => []
-    },
-    buildingBlocksList: {
-      type: Array,
-      default: () => []
-    }
-  },
+  props: ["vendorsList", "ratings", "buildingBlocksList"],
   data() {
     return {
       searchQuery: "",

@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <div v-if="messageIndex < 0" class="md-layout-item" style="text-align: center">
+    <div v-if="this.messageIndex < 0" class="md-layout-item" style="text-align: center">
       <img src="/static/img/maryoku-loader.gif">
       <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
       <h2 slot="title" class="title text-center" style="text-align: center">
@@ -36,9 +36,11 @@ export default {
     };
   },
   async created() {
+    console.log("signedIn", this.$route.query.token);
     const givenToken = this.$route.query.token;
     let tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
 
+    console.log("user", tenantUser);
     const tenantId = this.$authService.resolveTenantId();
     this.$authService.setTenant(tenantId);
 
@@ -113,7 +115,7 @@ export default {
                 document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
               })
               .catch((err) => {
-                console.error(err);
+                console.log(err);
               });
     } else {
       let redirectURL = this.$route.query.redirectURL;
@@ -121,6 +123,7 @@ export default {
         redirectURL = atob(redirectURL);
         this.$router.push({path: `${redirectURL}`});
       } else {
+        console.log("gotoLInk");
         if (tenantUser.currentUserType === USER_TYPE.PLANNER) { // get last event
           let events = await CalendarEvent.get();
           if (events.length > 0) {
@@ -132,6 +135,7 @@ export default {
             params: {filters: {myEvents: true}},
           });
           let events = res.data;
+          console.log("events", events);
           if (events.length > 0) {
             this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
           }

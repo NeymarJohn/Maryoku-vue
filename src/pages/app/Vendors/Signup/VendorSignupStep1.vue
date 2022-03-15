@@ -327,6 +327,8 @@ import { Drop } from "vue-drag-drop";
 import { VendorCategories, categoryDescriptions } from "@/constants/vendor";
 
 //COMPONENTS
+import VendorServiceItem from "../components/VendorServiceItem.vue";
+import VendorCheckbox from "../components/VendorCheckbox.vue";
 import vueSignature from "vue-signature";
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
@@ -336,6 +338,10 @@ import { TooltipNotification } from "@/components";
 export default {
   name: "VendorSignupStep1",
   components: {
+    Drop,
+    VueElementLoading,
+    VendorCheckbox,
+    VendorServiceItem,
     vueSignature,
     VendorPhotosCarousel,
     CompanyServiceSelector,
@@ -343,18 +349,9 @@ export default {
   },
   filters: {},
   props: {
-    categories: {
-      type: Array,
-      default: () => []
-    },
-    generalInfos: {
-      type: Array,
-      default: () => []
-    },
-    companyServices: {
-      type: Array,
-      default: () => []
-    }
+    categories: Array,
+    generalInfos: Array,
+    companyServices: Array,
   },
   data() {
     return {
@@ -383,6 +380,7 @@ export default {
     },
   },
   created() {
+    console.log("step2.created");
     this.$store.dispatch("vendorSignup/checkImages");
     // refactoring vendor data in vuex
     const vendorData = Object.assign({}, this.vendor);
@@ -413,6 +411,7 @@ export default {
         }
 
         if (message) {
+          console.log(message, files);
           this.$notify({
             message,
             horizontalAlign: "center",
@@ -473,6 +472,7 @@ export default {
     updateVendorImage({ index, photo }) {
       const fileId = `${new Date().getTime()}_${makeid()}`;
       S3Service.fileUpload(photo, fileId, "vendor/cover-images").then(uploadedName => {
+        console.log("createImage", uploadedName);
         this.$root.$emit("update-vendor-value", "images", {
           index,
           data: `${uploadedName}`,
@@ -497,6 +497,7 @@ export default {
           const fileId = `${new Date().getTime()}_${makeid()}`;
           const currentIndex = this.vendor.images.length;
           S3Service.fileUpload(file, fileId, "vendor/cover-images").then(uploadedName => {
+            console.log("createImage", uploadedName);
             this.$root.$emit("update-vendor-value", "images", {
               index: currentIndex,
               data: `${uploadedName}`,
@@ -509,6 +510,10 @@ export default {
         }
       };
       reader.readAsDataURL(file);
+    },
+    removeVendorImage(image) {
+      console.log("removeVendorImage", image);
+      this.$root.$emit("update-vendor-value", "removeImage", image);
     },
     getCategoryNameByValue(value) {
       return this.categoryNames.filter(c => c.value == value)[0].name;
@@ -555,8 +560,6 @@ export default {
     },
     removeVendorImage(index) {
       this.$store.commit("vendorSignup/removeImage", index);
-      this.$root.$emit("update-vendor-value", "removeImage", image);
-
     },
   },
 };

@@ -16,7 +16,7 @@
     </a>
 
     <collapse-transition>
-      <div v-if="$slots.default || isMenu" v-show="!collapsed">
+      <div v-if="$slots.default || this.isMenu" v-show="!collapsed">
         <ul class="nav">
           <slot />
         </ul>
@@ -100,13 +100,13 @@ export default {
         let words = this.link.name.split(" ");
         return words.map((word) => word.substring(0, 1)).join("");
       }
-      return [];
     },
     isMenu() {
       return this.children.length > 0 || this.menu === true;
     },
     isActive() {
       if (this.$route.path.startsWith(this.link.path)) {
+        this.link.active = true;
         return true;
       }
 

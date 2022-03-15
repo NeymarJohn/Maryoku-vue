@@ -10,7 +10,7 @@
     </div>
     <div class="md-layout-item md-size-95" style="max-height: 90vh">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
-        {{ editMode ? "Edit Event" : "Create Event" }}
+        {{ this.editMode ? "Edit Event" : "Create Event" }}
       </h4>
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px">
         <div class="md-layout-item mx-auto">
@@ -173,7 +173,7 @@
                   <md-button class="md-success create-new-event-panel-submit-button" @click="validateEvent">
                     {{ modalSubmitTitle }}
                   </md-button>
-                  <md-button v-if="editMode" class="md-danger md-just-icon" @click="showDeleteAlert">
+                  <md-button v-if="this.editMode" class="md-danger md-just-icon" @click="showDeleteAlert">
                     <md-icon class="md-theme-warning" style="font-size: 1.5rem !important">
                       delete
                     </md-icon>
@@ -204,35 +204,17 @@ export default {
     VueElementLoading,
   },
   props: {
-    year: {
-      type: Number,
-      default: 0
-    },
-    month: {
-      type: Number,
-      default: 0
-    },
-    occasionsOptions: {
-      type: Array,
-      default: () => []
-    },
+    year: Number,
+    month: Number,
+    occasionsOptions: Array,
     currentEvent: {
       type: Object,
       default: null,
     },
-    modalSubmitTitle: {
-      type: String,
-      default: ""
-    },
+    modalSubmitTitle: String,
     editMode: Boolean,
-    modalTitle: {
-      type: String,
-      default: ""
-    },
-    sourceEventData: {
-      type: Object,
-      default: () => {}
-    },
+    modalTitle: String,
+    sourceEventData: Object,
     openInPlannerOption: Boolean,
   },
   data: () => ({
@@ -281,19 +263,7 @@ export default {
       },
     },
   }),
-  computed: {
-    ...mapState("AnnualPlannerVuex", ["eventModalOpen"]),
-    ...mapGetters({
-      categories: "event/getCategoriesList",
-      currencies: "event/getCurrenciesList",
-      eventTypes: "event/getEventTypesList",
-    }),
-  },
-  watch: {
-    value(newValue, oldValue) {
-      this.initAnimation(newValue, oldValue);
-    },
-  },
+
   created() {
     if (this.editMode) {
       this.eventData = {
@@ -342,7 +312,14 @@ export default {
 
     this.hoursArray.push();
   },
-
+  computed: {
+    ...mapState("AnnualPlannerVuex", ["eventModalOpen"]),
+    ...mapGetters({
+      categories: "event/getCategoriesList",
+      currencies: "event/getCurrenciesList",
+      eventTypes: "event/getEventTypesList",
+    }),
+  },
   mounted() {
     this.getOccasionList();
     this.$store.dispatch("event/getEventTypes", { data: this.$auth.user.defaultCalendarId, ctx: this });
@@ -354,6 +331,8 @@ export default {
     this.$root.$on("submitForm", () => {
       this.validateEvent();
     });
+
+    console.log(this.$auth.user.defaultCalendarId);
   },
   methods: {
     ...mapMutations("AnnualPlannerVuex", ["resetForm", "setEventModal", "setEventProperty"]),
@@ -414,7 +393,7 @@ export default {
             this.$root.$emit("calendar-refresh-events");
           })
           .catch((error) => {
-            console.error(error);
+            console.log(error);
             this.working = false;
             // this.$parent.isLoading = false;
           });
@@ -498,13 +477,15 @@ export default {
           .for(_calendar)
           .save()
           .then((response) => {
+            console.log("new event => ", response);
+            // this.$parent.isLoading = false;
             this.closePanel();
             this.working = false;
             this.$root.$emit("calendar-refresh-events");
             this.$root.$emit("get-started-event-created", response);
           })
           .catch((error) => {
-            console.error(error);
+            console.log(error);
             this.working = false;
             // this.$parent.isLoading = false;
           });
@@ -566,12 +547,16 @@ export default {
             });
           })
           .catch((error) => {
-            console.error(error);
+            console.log("error =>> ", error);
           });
       }
     },
   },
-
+  watch: {
+    value(newValue, oldValue) {
+      this.initAnimation(newValue, oldValue);
+    },
+  },
 };
 </script>
 <style lang="scss" scope>

@@ -93,14 +93,15 @@
 </template>
 <script>
 import { FadeTransition } from "vue2-transitions";
-import { mapState, mapMutations } from "vuex";
-import { MaryokuInput } from "@/components";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { MaryokuInput, SignInContent } from "@/components";
 import AuthService from "@/services/auth.service";
 
 export default {
   components: {
     FadeTransition,
     MaryokuInput,
+    SignInContent,
   },
   data() {
     return {
@@ -132,26 +133,6 @@ export default {
       error: "",
     };
   },
-  computed: {
-    ...mapState("PublicEventPlanner", ["publicEventData", "shoWSignupModal", "currentStep"]),
-    isLoggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-    tenantUser() {
-      return this.$store.state.auth.user;
-    },
-  },
-  watch: {
-    email() {
-      this.touched.email = true;
-    },
-    password() {
-      this.touched.password = true;
-    },
-    department() {
-      this.touched.department = true;
-    },
-  },
   methods: {
     ...mapMutations("PublicEventPlanner", ["setEventProperty", "setSingupModal"]),
     closeSingupModal() {
@@ -164,6 +145,7 @@ export default {
       this.$router.push("/signin");
     },
     singup() {
+      console.log("signup", this.email, this.password);
       this.loading = true;
 
       if (this.email && this.password) {
@@ -204,7 +186,26 @@ export default {
         });
     },
   },
-  
+  computed: {
+    ...mapState("PublicEventPlanner", ["publicEventData", "shoWSignupModal", "currentStep"]),
+    isLoggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    tenantUser() {
+      return this.$store.state.auth.user;
+    },
+  },
+  watch: {
+    email() {
+      this.touched.email = true;
+    },
+    password() {
+      this.touched.password = true;
+    },
+    department() {
+      this.touched.department = true;
+    },
+  },
   beforeRouteUpdate(to, from, next) {
     next();
   },

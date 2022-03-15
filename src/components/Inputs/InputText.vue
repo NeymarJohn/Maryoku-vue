@@ -34,68 +34,30 @@ export default {
   },
   props: {
     required: Boolean,
-    value: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: ""
-    },
-    label: {
-      type: String,
-      default: ""
-    },
-    title: {
-      type: String,
-      default: ""
-    },
+    value: String,
+    type: String,
+    label: String,
+    title: String,
     placeholder: {
       type: String,
       default: ""
     },
-    icon: {
-      type: String,
-      default: ""
-    },
+    icon: String,
     focus: Boolean,
     disabled: Boolean,
-    labelStyle: {
-      type: String,
-      default: ""
-    },
-    fieldStyle: {
-      type: String,
-      default: ""
-    },
-    name: {
-      type: String,
-      default: ""
-    },
-    onChange: {
-      type: Function,
-      default: () => {}
-    },
+    labelStyle: String,
+    fieldStyle: String,
+    name: String,
+    onChange: Function,
     isErrors: Boolean,
-    id: {
-      type: String,
-      default: ""
-    },
-    onChangeInput: {
-      type: Function,
-      default: () => {}
-    },
+    id: String,
+    onChangeInput: Function,
+    disabled: Boolean,
     count: Boolean,
     isEditable: Boolean,
     editebleMode: Boolean,
-    actionFunc: {
-      type: Function,
-      default: () => {}
-    },
-    ctx: {
-      type: Object,
-      default: () => {}
-    },
+    actionFunc: Function,
+    ctx: Object,
     googleSearch: Boolean
   },
   data () {
@@ -121,6 +83,7 @@ export default {
       this.$emit("update-focus-value", false);
     },
     triggerFunc: function (value, name, count) {
+      console.log(this.id);
       if (this.onChange) {
         this.onChange(value, name, count);
       }

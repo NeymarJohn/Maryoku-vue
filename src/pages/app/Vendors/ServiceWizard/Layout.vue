@@ -82,44 +82,6 @@ export default {
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
     };
   },
-  computed: {
-    ...mapGetters({
-      vendor: "vendorService/getVendor",
-      step: "vendorService/getStep",
-      validateBasicFields: "vendorService/validateBasicFields",
-    }),
-    nextLabel() {
-      if (this.step == 5) {
-        return "Sign Up";
-      } else {
-        return "Next";
-      }
-    },
-    status() {
-      return this.$store.getters["vendorService/getStatus"];
-    },
-    vendor() {
-      return this.$store.state.vendorService.vendor;
-    },
-    service() {
-      return this.$store.state.vendorService.service;
-    },
-  },
-  watch: {
-    step(newVal) {
-      if (this.step === 7) this.addService();
-    },
-  },
-  created() {
-    this.$store.commit("vendorService/setStep", 1);
-    this.$store.commit("vendorService/initState");
-  },
-  beforeCreate() {
-    this.$store.registerModule("vendorService", vendorServiceModule);
-  },
-  beforeDestroy() {
-    this.$store.unregisterModule("vendorService");
-  },
   methods: {
     ...mapMutations("vendorService", ["setVendor", "setEditing", "setStep"]),
     goTo(router) {
@@ -228,6 +190,44 @@ export default {
         .then((res) => {
           this.$router.push("/vendor/profile/services");
         });
+    },
+  },
+  created() {
+    this.$store.commit("vendorService/setStep", 1);
+    this.$store.commit("vendorService/initState");
+  },
+  beforeCreate() {
+    this.$store.registerModule("vendorService", vendorServiceModule);
+  },
+  beforeDestroy() {
+    this.$store.unregisterModule("vendorService");
+  },
+  computed: {
+    ...mapGetters({
+      vendor: "vendorService/getVendor",
+      step: "vendorService/getStep",
+      validateBasicFields: "vendorService/validateBasicFields",
+    }),
+    nextLabel() {
+      if (this.step == 5) {
+        return "Sign Up";
+      } else {
+        return "Next";
+      }
+    },
+    status() {
+      return this.$store.getters["vendorService/getStatus"];
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    service() {
+      return this.$store.state.vendorService.service;
+    },
+  },
+  watch: {
+    step(newVal) {
+      if (this.step === 7) this.addService();
     },
   },
 };

@@ -220,7 +220,7 @@
         </template>
       </CollapsePanel>
     </template>
-    <v-tour v-if="isNegotiation" name="discount" :steps="steps" :callbacks="callbacks">
+    <v-tour name="discount" :steps="steps" :callbacks="callbacks">
       <template slot-scope="tour">
         <fade-transition>
           <v-step
@@ -326,118 +326,6 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapGetters("proposalForNonMaryoku", [
-      "finalPriceOfMainCategory",
-      "pricesByCategory",
-      "originalPriceOfMainCategory",
-      "totalPriceByCategory",
-      "totalPriceOfProposal",
-      "totalBeforeDiscount",
-      "totalBeforeBundle",
-    ]),
-    proposalRequest() {
-      return this.$store.state.proposalForNonMaryoku.proposalRequest;
-    },
-    proposal() {
-      return this.$store.state.proposalForNonMaryoku;
-    },
-    isNegotiation() {
-      return this.$store.state.proposalForNonMaryoku.isNegotiation;
-    },
-    event() {
-      if (!this.proposalRequest) return {};
-      return this.proposalRequest.eventData;
-    },
-    vendor() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
-    },
-    additionalServices() {
-      return this.$store.state.proposalForNonMaryoku.additionalServices.filter(
-        (category) => this.pricesByCategory[category] > 0,
-      );
-    },
-    mainService() {
-      const category = this.$store.state.proposalForNonMaryoku.vendor.eventCategory.key;
-      const proposalServices = this.$store.state.proposalForNonMaryoku.proposalServices;
-      if (!proposalServices[category]) {
-        return {};
-      }
-      return proposalServices[category];
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-
-    totalPrice() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) -
-        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0) -
-        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
-      );
-    },
-    totalPriceBeforeBundle() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0) -
-        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0)
-      );
-    },
-    totalPriceBeforeDiscount() {
-      let s = 0;
-      Object.keys(this.totalPriceByCategory).forEach((category) => {
-        s += this.totalPriceByCategory[category];
-      });
-      return s;
-    },
-    totalPriceForBundle() {
-      let s = 0;
-      Object.keys(this.pricesByCategory).forEach((category) => {
-        if (this.bundleDiscountServices.includes(category)) {
-          s += this.pricesByCategory[category];
-        }
-      });
-      return s;
-    },
-    bundledServicesString() {
-      let result = "";
-      this.bundleDiscount.services.forEach((service, index) => {
-        if (index !== 0) result += " + ";
-        result += this.getServiceCategory(service).title;
-      });
-      return result;
-    },
-    defaultTax() {
-      return this.$store.state.proposalForNonMaryoku.taxes["total"] || { percentage: 0, price: 0 };
-    },
-    defaultDiscount() {
-      return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
-    },
-    negotiationDiscount(){
-      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
-    },
-    bundleDiscount() {
-      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
-    },
-  },
-  watch: {
-    defaultTax(newValue) {
-      this.tax = newValue;
-    },
-    defaultDiscount(newValue) {
-      this.discount = newValue;
-    },
-    step(newValue){
-        if (this.step === 3 && this.$store.state.proposalForNonMaryoku.negotiationDiscount) this.$tours["discount"].start();
-        this.render = false;
-        setTimeout(_ => {
-            this.render = true;
-        }, 100);
-    }
-  },
   created() {
     window.addEventListener("scroll", this.handleScroll);
   },
@@ -468,7 +356,8 @@ export default {
   },
   methods: {
     closeTour(){
-      this.$store.commit("proposalForNonMaryoku/setNegotiation", false);
+      console.log("closeTour");
+        this.$store.commit("proposalForNonMaryoku/setNegotiation", false);
     },
     flatDeep(arr, d = 1) {
       return d > 0
@@ -564,6 +453,7 @@ export default {
       return 0;
     },
     saveDiscount(field, discount) {
+        console.log("saveDiscount", field, discount);
         if (field === "discount")
             this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount});
         else if (field === "negotiation")
@@ -579,7 +469,121 @@ export default {
   destoryed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
+  computed: {
+    ...mapGetters("proposalForNonMaryoku", [
+      "finalPriceOfMainCategory",
+      "pricesByCategory",
+      "originalPriceOfMainCategory",
+      "totalPriceByCategory",
+      "totalPriceOfProposal",
+      "totalBeforeDiscount",
+      "totalBeforeBundle",
+    ]),
+    proposalRequest() {
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+    },
+    proposal() {
+      return this.$store.state.proposalForNonMaryoku;
+    },
+    isNegotiation() {
+      return this.$store.state.proposalForNonMaryoku.isNegotiation;
+    },
+    event() {
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
+    },
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    },
+    additionalServices() {
+      return this.$store.state.proposalForNonMaryoku.additionalServices.filter(
+        (category) => this.pricesByCategory[category] > 0,
+      );
+    },
+    mainService() {
+      const category = this.$store.state.proposalForNonMaryoku.vendor.eventCategory.key;
+      const proposalServices = this.$store.state.proposalForNonMaryoku.proposalServices;
+      if (!proposalServices[category]) {
+        return {};
+      }
+      return proposalServices[category];
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
 
+    totalPrice() {
+      console.log("totalPrice1", this.totalPriceBeforeDiscount, this.defaultDiscount, this.negotiationDiscount, this.defaultTax);
+      return (
+        this.totalPriceBeforeDiscount -
+        (this.defaultDiscount ? this.defaultDiscount.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0) +
+        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
+      );
+    },
+    totalPriceBeforeBundle() {
+      return (
+        this.totalPriceBeforeDiscount -
+        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
+        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0)
+      );
+    },
+    totalPriceBeforeDiscount() {
+      let s = 0;
+      Object.keys(this.totalPriceByCategory).forEach((category) => {
+        s += this.totalPriceByCategory[category];
+      });
+      return s;
+    },
+    totalPriceForBundle() {
+      let s = 0;
+      Object.keys(this.pricesByCategory).forEach((category) => {
+        if (this.bundleDiscountServices.includes(category)) {
+          s += this.pricesByCategory[category];
+        }
+      });
+      return s;
+    },
+    bundledServicesString() {
+      let result = "";
+      this.bundleDiscount.services.forEach((service, index) => {
+        if (index !== 0) result += " + ";
+        result += this.getServiceCategory(service).title;
+      });
+      return result;
+    },
+    defaultTax() {
+      console.log("defaultTax", this.$store.state.proposalForNonMaryoku.taxes["total"]);
+      return this.$store.state.proposalForNonMaryoku.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
+    },
+    negotiationDiscount(){
+      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
+    },
+    bundleDiscount() {
+      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
+    },
+  },
+  watch: {
+    defaultTax(newValue) {
+      this.tax = newValue;
+    },
+    defaultDiscount(newValue) {
+      this.discount = newValue;
+    },
+    step(newValue){
+        console.log("step", newValue);
+        if (this.step === 3 && this.$store.state.proposalForNonMaryoku.negotiationDiscount) this.$tours["discount"].start();
+        this.render = false;
+        setTimeout(_ => {
+            this.render = true;
+        }, 100);
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -22,7 +22,7 @@
         <p class="font-size-16">
           The missing requirements
         </p>
-        <div v-for="(option, optionIndex) in data" :key="optionIndex" class="d-flex font-bold-extra align-center font-size-16 mb-10">
+        <div v-for="option in data" class="d-flex font-bold-extra align-center font-size-16 mb-10">
           <img
             class="mr-20"
             :src="`${$iconURL}${option.icon}`"
@@ -33,7 +33,7 @@
       </div>
       <div class="p-20">
         <template v-for="option in data">
-          <p v-if="option.message" :key="option.message" class="font-size-16 d-flex align-start">
+          <p v-if="option.message" class="font-size-16 d-flex align-start">
             <img :src="`${$iconURL}common/light.svg`" class="label-icon mr-10">
             {{ option.message }}
           </p>
@@ -60,8 +60,7 @@ export default {
     components,
     props:{
       data: {
-        type:  Array,
-        default: () => []
+        type: Array,
       }
     },
     data(){

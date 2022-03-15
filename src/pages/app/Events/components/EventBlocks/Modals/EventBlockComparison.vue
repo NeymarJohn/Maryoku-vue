@@ -108,7 +108,7 @@
             <md-card class="clear-margins no-shadow catering-wrapper">
               <md-card-header class="md-card-header-text text-left">
                 <h5 class="title">
-                  {{ selectedBlock.category }}
+                  {{ this.selectedBlock.category }}
                 </h5>
               </md-card-header>
               <md-card-content class="table-padding">
@@ -480,6 +480,8 @@ export default {
   name: "EventBlockComparison",
   components: {
     VueElementLoading,
+    ManageProposalsAccept,
+    ViewProposal,
   },
   filters: {
     withComma(amount) {
@@ -487,18 +489,9 @@ export default {
     },
   },
   props: {
-    selectedBlock: {
-      type: Object,
-      default: () => {}
-    },
-    event: {
-      type: Object,
-      default: () => {}
-    },
-    blockVendors: {
-      type: Array,
-      default: () => []
-    },
+    selectedBlock: Object,
+    event: Object,
+    blockVendors: Array,
   },
   data: () => ({
     isLoading: false,
@@ -791,10 +784,11 @@ export default {
         .for(calendar, event)
         .save()
         .then((resp) => {
+          console.log(resp);
           this.$forceUpdate();
         })
         .catch((error) => {
-          console.error(error);
+          console.log("EventComponentVendor error =>", error);
           this.$forceUpdate();
         });
     },

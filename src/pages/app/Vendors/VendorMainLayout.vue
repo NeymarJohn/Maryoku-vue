@@ -31,6 +31,13 @@ export default {
       loading : true
     };
   },
+  methods: {
+    toggleSidebar() {
+      if (this.$sidebar.showSidebar) {
+        this.$sidebar.displaySidebar(false);
+      }
+    },
+  },
   computed: {
     ...mapState("event", ["eventData"]),
   },
@@ -54,13 +61,6 @@ export default {
     await this.$store.dispatch("vendorDashboard/getProposalRequests", vendor.id);
     await this.$store.dispatch("comment/getCommentsProposalsByVendor", vendor.id);
     this.loading = false;
-  },
-  methods: {
-    toggleSidebar() {
-      if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
-      }
-    },
   },
 };
 </script>

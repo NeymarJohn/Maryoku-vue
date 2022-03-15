@@ -65,11 +65,13 @@ import Vendors from "@/models/Vendors";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import {CommentMixins, ShareMixins} from "@/mixins";
 import { socialIcons } from "@/constants/links.js";
+import { Tabs, Modal } from "@/components";
 import VendorDetailContent from "./VendorDetailContent";
 import HeaderActions from "@/components/HeaderActions";
 export default {
   components: {
     CommentEditorPanel,
+    Tabs,
     VendorDetailContent,
     HeaderActions,
   },
@@ -93,6 +95,7 @@ export default {
     getVendorData() {
       const vendorId = this.$route.params.id;
       Vendors.find(vendorId).then((res) => {
+        console.log("vendor", res);
         this.vendor = res;
       });
     },

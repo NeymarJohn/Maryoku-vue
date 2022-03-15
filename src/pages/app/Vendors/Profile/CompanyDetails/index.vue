@@ -15,8 +15,11 @@ import Invoices from "./Invoices";
 
 export default {
   components: {
+    VueElementLoading,
+    LabelEdit,
     Tabs,
     VendorCompanyDetail,
+    Invoices,
   },
   data() {
     return {

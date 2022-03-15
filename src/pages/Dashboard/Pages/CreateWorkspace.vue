@@ -133,7 +133,7 @@ export default {
                       document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&userType=planner&redirectURL=${callback}`;
                     })
                     .catch((err) => {
-                      console.error(err);
+                      console.log(err);
                     });
                 } else if (action === "register") {
                   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&userType=planner&redirectURL=${callback}`;
@@ -145,9 +145,28 @@ export default {
                       document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&userType=planner&redirectURL=${callback}`;
                     })
                     .catch((err) => {
-                      console.error(err);
+                      console.log(err);
                     });
                 }
+
+                // const signedInLink = btoa(`${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`);
+                // this.$router.push({path: `${redirectionURL}?callback=${signedInLink}`})
+
+                //document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                // if (refer === 'signup') {
+                //   const redirectionURL = btoa('/create-event-wizard')
+                //   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${redirectionURL}`;
+                // } else {
+                //   this.createEvent().then(event=>{
+                //     console.log(event)
+                //     document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
+                //   })
+                //   .catch(error=>{
+                //     console.error(error)
+                //     this.loading = false
+                //     document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
+                //   })
+                // }
               } else {
                 this.loading = false;
                 this.workspaceValid = false;
@@ -197,7 +216,7 @@ export default {
             resolve(response.item);
           })
           .catch((error) => {
-            console.error(error);
+            console.log(error);
             this.working = false;
             reject(error);
             // this.$parent.isLoading = false

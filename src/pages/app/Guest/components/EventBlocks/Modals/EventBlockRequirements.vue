@@ -103,7 +103,7 @@
         class="md-title md-layout-item md-size-100 clear-margins"
         style="margin: 0; line-height: 51px; width: 100%; font-size: 20px"
       >
-        {{ selectedBlock.title }} Requirements
+        {{ this.selectedBlock.title }} Requirements
 
         <md-button class="md-info md-sm add-new-requirements pull-right" @click="addNewValue">
           <md-icon>add</md-icon> Add Requirement
@@ -112,7 +112,38 @@
       <div class="md-layout-item md-size-100 clear-margins">
         <md-card class="clear-margins">
           <md-card-content>
+            <!--<h6 v-if="predefinedRequirements" class="small text-gray text-right clear-margins" style="display: block; width: 100%;">Predefined Requirements</h6>
+                        <ul class="requirements-list text-right clear-margins" v-if="predefinedRequirements">
+                            <li class="list-item" v-for="(item,index) in predefinedRequirements">
+                                <div
+                                    :class="`md-button ${item.color}`"
+                                    @click="handleDrop(item)">
+                                    {{item.title}}
+                                    <md-icon>add_circle_outline</md-icon>
+                                </div>
+                            </li>
+                        </ul>
+                        <div style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" >&nbsp;</div>-->
             <md-table v-if="eventBlockRequirements" v-model="filteredEventBlockRequirements" class="clear-margins">
+              <!--                            <md-table-toolbar >-->
+              <!--                                <div class="md-toolbar-section-start">-->
+              <!--                                    <md-field>-->
+              <!--                                        <md-input-->
+              <!--                                            type="search"-->
+              <!--                                            class="mb-3"-->
+              <!--                                            clearable-->
+              <!--                                            placeholder="Search requirements"-->
+              <!--                                            v-model="searchQuery">-->
+              <!--                                        </md-input>-->
+              <!--                                    </md-field>-->
+              <!--                                </div>-->
+              <!--                                <div class="md-toolbar-section-end" v-if="false">-->
+              <!--                                    <md-button class="md-icon-button">-->
+              <!--                                        <md-icon>delete</md-icon>-->
+              <!--                                    </md-button>-->
+              <!--                                </div>-->
+              <!--                            </md-table-toolbar>-->
+
               <md-table-empty-state
                 :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`"
               >
@@ -121,12 +152,12 @@
                 </md-button>
               </md-table-empty-state>
 
-              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item }">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement
                     :delete-value="deleteValue"
-                    :requirement="item"
+                    :requirement.sync="item"
                     :event-id="event.id"
                     :selected-block-id="selectedBlock.id"
                     :requirement-properties="getRequirementProperties(item)"
@@ -135,12 +166,12 @@
               </md-table-row>
             </md-table>
             <md-table v-else v-model="dummyList" class="clear-margins">
-              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item }">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement
                     :delete-value="deleteValue"
-                    :requirement="item"
+                    :requirement.sync="item"
                     :event-id="event.id"
                     :selected-block-id="selectedBlock.id"
                     :requirement-properties="getRequirementProperties(item)"
@@ -167,11 +198,20 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
+import ClickOutside from "vue-click-outside";
+import { LabelEdit } from "@/components";
+import draggable from "vuedraggable";
+import { Drag, Drop } from "vue-drag-drop";
 import EventBlockRequirement from "./EventBlockRequirement";
 export default {
   components: {
     MdCardContent,
     VueElementLoading,
+    LabelEdit,
+    draggable,
+    Drag,
+    Drop,
+    ClickOutside,
     EventBlockRequirement,
   },
   filters: {
@@ -186,14 +226,8 @@ export default {
     },
   },
   props: {
-    event: {
-      type: Object,
-      default: () => {}
-    },
-    selectedBlock: {
-      type: Object,
-      default: () => {}
-    },
+    event: Object,
+    selectedBlock: Object,
     predefinedRequirements: {
       type: Array,
       default: null,
@@ -450,7 +484,7 @@ export default {
                 type: "danger",
               });
 
-              console.error(error);
+              console.log(error);
             });
         }
       });
@@ -484,7 +518,7 @@ export default {
           this.getBuildingBlockValues();
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
           this.isLoading = false;
           this.$notify({
             message: "Error while trying to modify this requirement",
@@ -569,6 +603,8 @@ export default {
         .for(calendar, event)
         .save()
         .then((resp) => {
+          console.log(resp);
+
           this.$notify({
             message: "Field updated successfully",
             horizontalAlign: "center",
@@ -577,7 +613,7 @@ export default {
           });
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
 
           this.$notify({
             message: "Error while trying to modify this requirement",

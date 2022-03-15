@@ -167,6 +167,8 @@ export default {
       if (!this.proposalRequest || !this.proposalRequest.expiredTime) {
         return { days: 0, hours: 0, mins: 0, seconds: 0 };
       }
+      console.log(this.proposalRequest.expiredTime);
+      console.log(new Date().getTime());
       let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
       if (remainingMs < 0) {
         // this.isTimeUp = true;
@@ -184,6 +186,7 @@ export default {
     },
   },
   async mounted() {
+      console.log("proposal.layout.created", this.$store.state.auth.user);
       if(this.$store.state.auth.user){
           this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token).then(user => {
 

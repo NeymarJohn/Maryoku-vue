@@ -28,10 +28,14 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import vendorsVuex from "../vendors.vuex";
 import { Modal } from "@/components";
+import Swal from "sweetalert2";
+import Vendors from "@/models/Vendors";
+import { SlideYDownTransition } from "vue2-transitions";
 
 export default {
   components: {
     Modal,
+    SlideYDownTransition,
   },
   props: {},
   data() {
@@ -41,14 +45,66 @@ export default {
       tag: " ",
     };
   },
-  computed: {
-    ...mapState("vendors", ["vendorsMemberData"]),
-  },
   created() {
     this.$store.registerModule("vendors", vendorsVuex);
   },
   destroyed() {
     this.$store.unregisterModule("vendors", vendorsVuex);
+  },
+  computed: {
+    ...mapState("vendors", ["vendorsMemberData"]),
+
+    //      name: {
+    //        get() {
+    //          return this.vendorsMemberData.vendorDisplayName
+    //        },
+    //        set(value) {
+    //          this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
+    //        },
+    //
+    //      },
+    //
+    //      address: {
+    //        get() {
+    //          return this.vendorsMemberData.vendorAddressLine1
+    //        },
+    //        set(value) {
+    //          this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
+    //        },
+    //
+    //      },
+    //      email: {
+    //        get() {
+    //          return this.vendorsMemberData.vendorMainEmail
+    //        },
+    //        set(value) {
+    //          this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
+    //        }
+    //      },
+    //      category: {
+    //        get() {
+    //          return this.vendorsMemberData.productsCategory
+    //        },
+    //        set(value) {
+    //          this.setMemberProperty({key: 'productsCategory', actualValue: value})
+    //        }
+    //      },
+    //      web: {
+    //        get() {
+    //          return this.vendorsMemberData.vendorWebsite
+    //        },
+    //        set(value) {
+    //          this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
+    //        }
+    //      },
+    //      phoneNumber: {
+    //        get() {
+    //          return this.vendorsMemberData.vendorMainPhoneNumber
+    //        },
+    //        set(value) {
+    //          this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
+    //        }
+    //      }
   },
   methods: {
     ...mapMutations("vendors", ["setMemberProperty"]),

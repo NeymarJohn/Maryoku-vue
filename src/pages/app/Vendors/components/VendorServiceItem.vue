@@ -58,22 +58,10 @@ export default {
   },
   filters: {},
   props: {
-    serviceItem: {
-      type: Object,
-      default: () => {}
-    },
-    vendorCategory: {
-      type: String,
-      default: ""
-    },
-    vendor: {
-      type: Object,
-      default: () => {}
-    },
-    service: {
-      type: Object,
-      default: () => {}
-    },
+    serviceItem: Object,
+    vendorCategory: String,
+    vendor: Object,
+    service: Object,
     theme: {
       type: String,
       default: "red",

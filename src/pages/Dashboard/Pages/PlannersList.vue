@@ -124,6 +124,7 @@ export default {
   async created() {
       if(this.$store.state.auth.user){
           this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token).then(user => {
+              console.log("user", user);
           });
       }
       this.planners = await this.getPlanners();
@@ -182,6 +183,7 @@ export default {
 
         let query = new Event().for(new Planner({ id: item.id }));
         this.plannerEvents = await query.get();
+        console.log("res", this.plannerEvents);
         this.showPlannerTable = true;
         this.loading = false;
       } else {
@@ -207,6 +209,7 @@ export default {
         this.planners = await this.getPlanners();
     },
     async sort(value) {
+        console.log("sort", this.sortFields);
         this.pagination.page = 1;
         this.planners = await this.getPlanners();
     },

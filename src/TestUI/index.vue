@@ -25,6 +25,7 @@ export default {
     created() {
         if(this.$store.state.auth.user){
             this.$store.dispatch("auth/checkToken", this.$store.state.auth.user.access_token).then(user => {
+                console.log("user", user);
             });
         }
     },
@@ -39,9 +40,11 @@ export default {
 
             let reader = new FileReader();
             reader.onload = (e) => {
+                console.log("file", e);
                 return new CustomersCSV({ file: e.target.result, vendorId: "60c21d02cfefec3756b70f17" })
                     .save()
                     .then((result) => {
+                        console.log("upload.res", result);
                     });
             };
 

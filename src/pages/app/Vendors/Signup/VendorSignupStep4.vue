@@ -613,7 +613,17 @@ export default {
       return [];
     },
   },
+  watch: {
+    vendor: {
+      handler: function(newVal) {
+        console.log("handler", newVal);
+      },
+      deep: true,
+    },
+  },
+  created() {},
   mounted() {
+    console.log("vendorSignup.step4", this.vendor);
     if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
       this.vendor.images.forEach(item => {
         this.medias.push({
@@ -668,6 +678,7 @@ export default {
       return !isBlank;
     },
     getExtraPayItems() {
+      console.log("getExtraPayItems");
       let extraPayItems = [];
       _.each(this.vendor.services, item => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
@@ -757,6 +768,7 @@ export default {
       }
     },
     changeServiceItem(item) {
+      console.log("changeServiceItem", item);
       _.each(this.vendor.services, s => {
         if (s.label === item.label) {
           this.vendor.services[s] = item;

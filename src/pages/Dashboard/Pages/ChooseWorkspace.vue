@@ -91,6 +91,16 @@ export default {
     },
   },
   created() {
+    console.log("choose.workspace");
+    // const givenToken = this.$route.query.token;
+    // this.$auth.setToken(givenToken);
+    // this.$auth.currentUser(this, true);
+    /* let tenantId = document.location.hostname.replace(".maryoku.com","");
+      new Tenant().find(tenantId).then(res =>{
+        if (!res.status){
+          this.$router.push({name:"CreateWorkspace"});
+        }
+      }); */
   },
   mounted() {
     if (this.$store.state.auth.user.tenants.length === 1) {
@@ -149,6 +159,7 @@ export default {
       }
     },
     tenantUrl(tenant) {
+      console.log("tenantUrl", `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`);
       return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`;
     },
   },

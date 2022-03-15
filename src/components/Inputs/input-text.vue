@@ -1,5 +1,7 @@
 <template>
-  <div class="choice">
+  <div class="choice"
+       :class=""
+  >
     <input type="text"
            :name="name"
            class="input-default"
@@ -17,22 +19,10 @@ export default {
   model: {
   },
   props: {
-    name: {
-      type: String,
-      default: ""
-    },
-    title: {
-      type: String,
-      default: ""
-    },
-    placeholder: {
-      type: String,
-      default: ""
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
+    name: String,
+    title: String,
+    placeholder: String,
+    icon: String,
     disabled: Boolean
   },
   methods: {
@@ -40,8 +30,9 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-    .input-default {
+<style>
+    .input-default{
+       border: 1px solid $light-gray-1;
         padding: 15px;
         width: 100%;
     }

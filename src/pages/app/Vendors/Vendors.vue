@@ -45,7 +45,7 @@
             <div class="">
               <p class="card-category">
                 Showing {{ pagination.from }} to
-                {{ numberOfRecords }} of
+                {{ pagination.limit < pagination.total ? pagination.limit : pagination.total }} of
                 {{ pagination.total }} records
               </p>
             </div>
@@ -76,13 +76,15 @@
 
 <script>
 import CreateModal from "./CreateModal";
-import { mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import VendorsTable from "./Table/vendorsList";
 import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
 import { Loader, Pagination } from "@/components";
 import Vendors from "@/models/Vendors";
 import EventComponent from "@/models/EventComponent";
+import VendorCategories from "@/models/VendorCategories";
+// import auth from '@/auth';
 import { paginationMixins } from "@/mixins";
 
 export default {
@@ -109,11 +111,6 @@ export default {
       buildingBlocksList: [],
       myVendors: false,
     };
-  },
-  computed: {
-    numberOfRecords() {
-      return this.pagination.limit < this.pagination.total ? this.pagination.limit : this.pagination.total;
-    }
   },
   created() {
     this.$auth.currentUser(
@@ -198,7 +195,7 @@ export default {
             });
           },
           (error) => {
-            console.error(error);
+            console.log(error);
           },
         );
     },
