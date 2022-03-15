@@ -21,7 +21,7 @@
         >
           <md-button
 
-            v-if="showCommentPanel"
+            v-if="!showCommentPanel"
             class="md-simple md-just-icon hide-long-button"
             @click="click('comment')"
           >

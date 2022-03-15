@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-item" :class="{child: !isMain}">
+  <div class="comment-item" :class="{child: !isMain}" v-if="comment.planner || comment.customer">
     <div class="d-flex justify-content-between">
       <div class="comment-item-avatar">
         <Avartar v-if="comment.planner && comment.planner.name"
@@ -132,6 +132,8 @@ export default {
       }
       return true;
     }
+  },
+  mounted(){
   },
   methods: {
     cancelEditing() {
