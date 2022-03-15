@@ -70,7 +70,7 @@
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px">
-            {{ this.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request' }}
+            {{ negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request' }}
           </div>
         </div>
         <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">
@@ -137,8 +137,6 @@ export default {
     }
   },
   mounted() {
-    console.log("proposal.card.mounted", this.proposalRequest);
-    console.log("proposal.card.hasNegotiation", this.hasNegotiation);
   },
   methods: {
     gotoProposalRequest() {

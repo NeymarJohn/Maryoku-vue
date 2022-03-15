@@ -25,12 +25,12 @@
       <div v-if="step == 2" class="md-layout">
         <div class="md-layout-item md-size-100 d-flex align-center">
           <img
-            :src="`${this.$iconURL}Budget Elements/${this.categoryItem.componentId}.svg`"
+            :src="`${$iconURL}Budget Elements/${categoryItem.componentId}.svg`"
             class="page-icon"
             style="width: 30px"
           >
 
-          <span class="font-size-20 font-bold">&ensp;&ensp;{{ this.categoryItem.fullTitle }}</span>
+          <span class="font-size-20 font-bold">&ensp;&ensp;{{ categoryItem.fullTitle }}</span>
         </div>
         <div class="md-layout-item md-size-100">
           <h2 class="font-bold font-size-30">
@@ -66,8 +66,14 @@ export default {
     Modal,
   },
   props: {
-    categoryItem: [Object],
-    vendor: [Object],
+    categoryItem: {
+      type: Object,
+      default: () => {}
+    },
+    vendor: {
+      type: Object,
+      default: () => {}
+    },
   },
   data: () => {
     return {

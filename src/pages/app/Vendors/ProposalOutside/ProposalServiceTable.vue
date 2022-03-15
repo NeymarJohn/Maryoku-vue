@@ -12,95 +12,6 @@
         @save="updateItem"
         @remove="removeItem"
       />
-      <!-- <div class="tax-discount-wrapper" v-if="tableCategory === 'cost'">
-        <div class="row grid-tax-row">
-          <div class="item-cont">
-            <div class="plabel">
-              <img :src="`${iconUrl}Asset 612.svg`" />
-              <span>Add Discount</span>
-            </div>
-            <div class="ptitle text-center" v-if="isEditDiscount">
-              % Percentage
-              <br />
-              <money
-                v-model="discount.percentage"
-                v-bind="percentageFormat"
-                :class="[{ 'active-discount': isDiscountPercentage }, { 'inactive-discount': !isDiscountPercentage }]"
-                @keyup.native="setRange(discount.percentage, 'percentage')"
-                @click.native="
-                  isDiscountPercentage = true;
-                  switchDiscountMethod();
-                "
-              />
-            </div>
-          </div>
-          <div class="percent-cont text-center" :class="{ 'text-right': isEditDiscount }">
-            <span v-if="isEditDiscount">Or</span>
-            <span v-else>{{ discount.percentage }}%</span>
-          </div>
-          <div class="price-cont text-center">
-            <template v-if="isEditDiscount">
-              <span class="pl-2">Amount</span>
-              <br />
-              <money
-                v-model="discount.price"
-                v-bind="currencyFormat"
-                :class="[{ 'active-discount': !isDiscountPercentage }, { 'inactive-discount': isDiscountPercentage }]"
-                @keyup.native="setRange(discount.price, 'discount_by_amount')"
-                @click.native="
-                  isDiscountPercentage = false;
-                  switchDiscountMethod();
-                "
-              />
-            </template>
-            <template v-else>
-              <span>-${{ discount.price | withComma }}</span>
-            </template>
-          </div>
-          <div class="edit-cont">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
-            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
-            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
-          </div>
-        </div>
-        <div class="row grid-tax-row">
-          <div class="item-cont">
-            <div class="plabel">
-              <img :src="`${iconUrl}Asset 613.svg`" />
-              <span>Add Taxes</span>
-            </div>
-            <div class="ptitle" v-if="isEditTax">
-              % Percentage
-              <br />
-              <money
-                v-model="tax"
-                v-bind="percentageFormat"
-                class="active-discount"
-                @keyup.native="setRange(tax, 'tax')"
-              />
-            </div>
-          </div>
-          <div class="percent-cont">
-            <span>{{ tax }}%</span>
-          </div>
-          <div class="price-cont text-center">
-            <span>${{ taxPrice | withComma }}</span>
-          </div>
-          <div class="edit-cont">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
-            <a
-              class="cancel"
-              v-if="isEditTax"
-              @click="
-                isEditTax = false;
-                tax = 0;
-              "
-              >Cancel</a
-            >
-            <a class="save" v-if="isEditTax" @click="saveTax">Save</a>
-          </div>
-        </div>
-      </div> -->
       <div v-if="tableCategory === 'cost'" class="editable-sub-items-footer">
         <span class="text-right">Total</span>
         <span />
@@ -208,7 +119,6 @@ export default {
   },
   computed: {
     requirements() {
-      console.log(this.category);
       return this.proposalRequest.componentRequirements[this.category];
     },
     optionalRequirements() {
@@ -229,10 +139,10 @@ export default {
       get: function () {
         if (this.tableCategory === "cost") return this.$store.state.proposalForNonMaryoku.costServices[this.category];
         else if (this.tableCategory === "included") {
-          console.log("object", this.$store.state.proposalForNonMaryoku.includedServices[this.category]);
           return this.$store.state.proposalForNonMaryoku.includedServices[this.category];
         } else if (this.tableCategory === "extra")
           return this.$store.state.proposalForNonMaryoku.extraServices[this.category];
+        return [];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")
@@ -387,7 +297,6 @@ export default {
     },
     saveDiscount() {
       this.isEditDiscount = false;
-      console.log("this.discount", this.discount);
       this.$store.commit("proposalForNonMaryoku/setDiscount", { category: this.category, discount: this.discount });
       this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {
         category: this.category,

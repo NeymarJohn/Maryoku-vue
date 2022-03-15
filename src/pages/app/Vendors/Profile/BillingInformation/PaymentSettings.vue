@@ -25,62 +25,74 @@
             <md-card class="cost-pros-cons-section">
               <md-card-content>
                 <div class="payment-details">
-                  <div class="form-section">
+                  <form class="form-section">
+                    <div v-if="errors.length">
+                      <b>Please correct the following error(s):</b>
+                      <ul>
+                        <li v-for="error in errors">{{ error }}</li>
+                      </ul>
+                    </div>
                     <div class="md-layout-item">
                       <label>ID Number</label>
                       <br>
                       <input v-for="(option, index) in bankDetails.id"
                              :key="index" v-model="bankDetails.id[index]"
-                             style="width: 50px; margin-right: 5px" maxlength="1"
+                             style="width: 51px; margin-right: 5px" maxlength="1"
                              pattern="([12345])\w{0}"
                              :name="index"
+                             type="number"
                       >
                       <label>-</label>
                       <input v-model="bankDetails.adId"
-                             style="width: 50px"
+                             style="width: 51px"
                              maxlength="1" pattern="([12345])\w{0}"
                       >
                     </div>
-                    <div class="md-layout">
-                      <div class="md-layout-item md-size-50">
-                        <md-field>
+                    <div class="md-layout mt-1">
+                      <div class="md-layout-item md-size-40">
+                        <div class="input-wrapper">
                           <label>Beneficiary Name</label>
-                          <md-input id="name" v-model="bankDetails.holderName" type="text" />
-                        </md-field>
+                          <md-input id="name" v-model="bankDetails.holderName" type="text"/>
+                        </div>
                       </div>
-                      <div class="md-layout-item md-size-50">
-                        <md-field>
+                      <div class="md-layout-item md-size-40">
+                        <div class="input-wrapper">
                           <label>Account No.</label>
-                          <md-input id="email" v-model="bankDetails.accountNumber" type="text" />
-                        </md-field>
+                          <md-input id="email" v-model="bankDetails.accountNumber" type="text"/>
+                        </div>
                       </div>
-                      <div class="md-layout-item md-size-50">
-                        <md-field>
+                      <div class="md-layout-item md-size-40">
+                        <div class="input-wrapper">
                           <label>Bank No.</label>
-                          <md-input v-model="bankDetails.routingNumber" type="text" />
-                        </md-field>
+                          <md-input v-model="bankDetails.routingNumber" v-validate="modelValidations.username"
+                                    type="text"/>
+                        </div>
                       </div>
-                      <div class="md-layout-item md-size-50">
-                        <md-field>
+                      <md-field class="md-layout-item md-size-40">
+                        <div class="input-wrapper">
                           <label>Branch No.</label>
-                          <md-input v-model="bankDetails.branch" type="text" />
-                        </md-field>
-                      </div>
-                      <div class="md-layout-item md-size-100">
-                        <md-field>
+                          <md-input v-model="bankDetails.branch" v-validate="modelValidations.password" type="text"/>
+                        </div>
+                      </md-field>
+                      <div class="md-layout-item md-size-80"
+                           :class="[{'valid': !errors.has('email') && touched.email},{'error': errors.has('email')}]">
+                        <div class="input-wrapper"
+                             :class="[{'valid': !errors.has('email')},{'error': errors.has('email')}]">
                           <label>Address and name of the bank</label>
-                          <md-input v-model="bankDetails.address" type="text" />
-                        </md-field>
+                          <md-input v-model="bankDetails.address" :class="{valid: this.ariaInnvalid}"
+                                    v-validate="modelValidations.email" type="text"/>
+                          <div>{{ errors.first('email') }}</div>
+                        </div>
                       </div>
-                      <div class="md-layout-item md-size-100">
-                        <md-field>
+                      <div class="md-layout-item md-size-80">
+                        <div class="input-wrapper">
                           <label>Verification</label>
-                          <md-input v-model="bankDetails.address" type="text" />
-                        </md-field>
+                          <md-input v-model="bankDetails.address" type="text"/>
+                        </div>
                       </div>
-                      <div class="md-layout-item md-size-100" />
+                      <div class="md-layout-item md-size-100"/>
                     </div>
-                  </div>
+                  </form>
                 </div>
                 <md-button class="md-vendor md-vendor-review" @click="sendBankInfo">
                   Save details
@@ -99,11 +111,12 @@
 </template>
 
 <script>
-import { Tabs } from "@/components";
+import {Tabs} from "@/components";
 
 import VueElementLoading from "vue-element-loading";
 import EventBlockRequirements from "../../../Guest/components/EventBlocks/Modals/EventBlockRequirements";
 import axios from "axios";
+
 var card = undefined;
 
 export default {
@@ -112,72 +125,118 @@ export default {
     Tabs,
     EventBlockRequirements,
   },
-  props: {
-  },
+  props: {},
   data: () => ({
     isLoaded: false,
-    bankDetails:{
-      id:["","","","","","","",],
-      adId:"",
+    error: "",
+    modelValidations: {
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        min: 8
+      },
+      username: {
+        required: true
+      }
+    },
+    touched: {
+      email: false,
+      password: false,
+      username: false
+    },
+    bankDetails: {
+      id: ["", "", "", "", "", "", "",],
+      adId: "",
+      accountNumber: "",
+      address: ""
+
     }
   }),
   computed: {},
   methods: {
-    sendTest(){
-      var stripe = Stripe("");
+    checkForm: function (e) {
+
+    },
+    sendTest() {
+      var stripe = Stripe("pk_test_51In2qMBvFPeKz0zXs5ShSv1qjb6YAnonaqamWN4e9f4cTygxBMkMbYXcUAGp7deorwFS5ohy4vuQZFfeIVgxPPMF00nSOnDeQy");
       stripe.verifyIdentity("vs_1KcCl2BvFPeKz0zX7nYGzaRS_secret_CJ3fAnRmp8raDXHQEBYFLhow9Tdtg")
-        .then(function(result) {
-            console.log("##-175, PaymentSettings.vue",result);});
+        .then(function (result) {
+          console.log("##-175, PaymentSettings.vue", result);
+        });
       // var verifyButton = document.getElementById('verify-button');
       //
       // verifyButton.addEventListener('click', function() {
-          // Get the VerificationSession client secret using the server-side
-          // endpoint you created in step 3.
-          fetch("https://api.stripe.com/v1/identity/verification_sessions ", {
-            method: "POST",
-            data:{
-              vendorId: this.$store.state.auth.user.id
-            }
-          })
-            .then(function(response) {
-              return stripe.verifyIdentity(response.secret);
+      // Get the VerificationSession client secret using the server-side
+      // endpoint you created in step 3.
+      fetch("https://api.stripe.com/v1/identity/verification_sessions ", {
+        method: "POST",
+        data: {
+          vendorId: this.$store.state.auth.user.id
+        }
+      })
+        .then(function (response) {
+          return stripe.verifyIdentity(response.secret);
 
-              // return response.json();
-            })
-            .then(function(session) {
-              // Show the verification modal.
+          // return response.json();
+        })
+        .then(function (session) {
+          // Show the verification modal.
 
-              return stripe.verifyIdentity("");
-            })
-            .then(function(result) {
-              console.log("##-175, PaymentSettings.vue",result);
-              // If `verifyIdentity` fails, you should display the localized
-              // error message to your user using `error.message`.
-              if (result.error) {
-                alert(result.error.message);
-              }
-            })
-            .catch(function(error) {
-              console.error("Error:", error);
-            });
-    // });
+          return stripe.verifyIdentity("");
+        })
+        .then(function (result) {
+          console.log("##-175, PaymentSettings.vue", result);
+          // If `verifyIdentity` fails, you should display the localized
+          // error message to your user using `error.message`.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+        });
+      // });
     },
-     test (e){
-      console.log("##-133, PaymentSettings.vue", this.$store.state.auth.user.id);
-    },
-    sendBankInfo(){
+    test(e) {
+      e.preventDefault();
 
-      axios.post( process.env.SERVER_URL +"/stripe/v1/customer/destinations/account", {
+      this.errors = [];
+
+      if (this.name === "") {
+        this.errors.push("Product name is required.");
+      } else {
+        console.log('##-211, PaymentSettings.vue',);
+        // console.log("##-133, PaymentSettings.vue",);
+        // fetch(apiUrl + encodeURIComponent(this.name))
+        //   .then(async res => {
+        //     if (res.status === 204) {
+        //       alert("OK");
+        //     } else if (res.status === 400) {
+        //       let errorResponse = await res.json();
+        //       this.errors.push(errorResponse.error);
+        //     }
+        //   });
+      }
+      console.log('##-222, PaymentSettings.vue',);
+
+    },
+    sendBankInfo() {
+
+      axios.post(' https://api.stripe.com'+ "/v1/stripe/person/verify", {
         ...this.bankDetails,
-        accept:"application/json",
-        headers:{
+        accept: "application/json",
+        headers: {
           token: "lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3"
         }
-        }).then(res=>{
-        console.log("##-125, PaymentSettings.vue",res);
+      }).then(res => {
+        console.log("##-125, PaymentSettings.vue", res);
       }).catch(error => {
-        console.log("##-126, PaymentSettings.vue",error);});
-      console.log("##-119, PaymentSettings.vue",this.bankDetails,  process.env.SERVER_URL );
+        console.log("##-126, PaymentSettings.vue", error);
+      });
+      console.log("##-119, PaymentSettings.vue", this.bankDetails, process.env.SERVER_URL);
 
     },
     submitPayment(event) {
@@ -187,36 +246,66 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.billing-information-block{
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-family: 'Manrope-Bold';
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  input::after {
+    &valid {
+      background-color: red;
+    }
+  }
+
+  &valid {
+    background-color: red;
+  }
+
+  &error {
+    background-color: red;
+  }
+}
+
+.billing-information-block {
   min-height: 75vh;
   margin: 0;
   box-shadow: none;
-  .header-title{
-    .bank-details-icon{
+
+  .header-title {
+    .bank-details-icon {
       display: inline-block;
       width: 30px;
       height: 30px;
       margin-top: -18px;
     }
-    p{
+
+    p {
       display: inline-block;
       font-weight: 800;
       font-size: 22px;
       margin: 6px;
     }
   }
-  .info-block{
+
+  .info-block {
     display: flex;
     flex-direction: row;
     color: #641856;
     border: solid #641856;
-    border-width: 1px 0 ;
-    .info-icon{
+    border-width: 1px 0;
+
+    .info-icon {
       margin-right: 27px;
       width: 37px;
     }
   }
-  .cost-pros-cons-section{
+
+  .cost-pros-cons-section {
     box-shadow: none;
   }
 }

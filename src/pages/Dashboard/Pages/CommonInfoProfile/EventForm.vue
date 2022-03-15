@@ -198,7 +198,6 @@ import Select from "@/components/Select/Select.vue";
 import Title from "@/components/Title/Title.vue";
 import ButtonDiv from "@/components/Button/ButtonDiv.vue";
 import Button from "@/components/Button/Button.vue";
-import Modal from "@/components/Modal.vue";
 
 export default {
   name: "Employee",
@@ -209,10 +208,12 @@ export default {
     ButtonDiv,
     Button,
     InputText,
-    Modal,
   },
   props: {
-    officeManager: String,
+    officeManager: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {
@@ -256,16 +257,14 @@ export default {
     },
     onChange: function (value, name, count) {
       this[name] = value;
-      console.log(value, name, count);
       if (this.new_number_of_event && count) {
         this.add_dates[this.new_number_of_event - 1][name] = value;
       }
     },
     onNext: function () {
-      console.log(this.add_dates);
-      // const event=isWrong(this,this.listComponentName)
-      // this.$store.dispatch("user/sendEvent",event)
-      // this.$router.push('/dietary')
+      const event=isWrong(this,this.listComponentName);
+      this.$store.dispatch("user/sendEvent",event);
+      this.$router.push("/dietary");
     },
     onAddDate: function () {
       const newDate = {
@@ -276,8 +275,6 @@ export default {
       this.add_dates.push(newDate);
     },
     deleteDate: function (value) {
-      console.log(value, this.add_dates);
-      console.log(this.add_dates.filter((item) => item.description !== value));
       this.add_dates = this.add_dates.filter(
         (item) => item.description !== value,
       );

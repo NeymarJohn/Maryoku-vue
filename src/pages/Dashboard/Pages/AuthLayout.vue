@@ -27,12 +27,6 @@
                 <li>
                   <a href="https://www.maryoku.com/privacy" target="_blank">Privacy</a>
                 </li>
-
-                <!--<li>
-                    <a href="https://www.maryoku.com/blog">
-                        Blog
-                    </a>
-                </li>-->
               </ul>
             </nav>
             <div class="copyright text-center">
@@ -105,7 +99,6 @@ export default {
     window.addEventListener("resize", this.onResponsiveInverted);
   },
   beforeMount() {
-    console.log(this.$store.state.auth.status.loggedIn);
     if (this.$store.state.auth.status.loggedIn) {
       this.$store
         .dispatch("auth/checkToken")

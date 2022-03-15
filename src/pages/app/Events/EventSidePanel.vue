@@ -10,7 +10,7 @@
     </div>
     <div class="md-layout-item md-size-95" style="max-height: 90vh">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
-        {{ this.editMode ? "Edit Event" : "Create Event" }}
+        {{ editMode ? "Edit Event" : "Create Event" }}
       </h4>
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px">
         <div class="md-layout-item mx-auto">
@@ -204,17 +204,35 @@ export default {
     VueElementLoading,
   },
   props: {
-    year: Number,
-    month: Number,
-    occasionsOptions: Array,
+    year: {
+      type: Number,
+      default: 0
+    },
+    month: {
+      type: Number,
+      default: 0
+    },
+    occasionsOptions: {
+      type: Array,
+      default: () => []
+    },
     currentEvent: {
       type: Object,
       default: null,
     },
-    modalSubmitTitle: String,
+    modalSubmitTitle: {
+      type: String,
+      default: ""
+    },
     editMode: Boolean,
-    modalTitle: String,
-    sourceEventData: Object,
+    modalTitle: {
+      type: String,
+      default: ""
+    },
+    sourceEventData: {
+      type: Object,
+      default: () => {}
+    },
     openInPlannerOption: Boolean,
   },
   data: () => ({
@@ -263,7 +281,19 @@ export default {
       },
     },
   }),
-
+  computed: {
+    ...mapState("AnnualPlannerVuex", ["eventModalOpen"]),
+    ...mapGetters({
+      categories: "event/getCategoriesList",
+      currencies: "event/getCurrenciesList",
+      eventTypes: "event/getEventTypesList",
+    }),
+  },
+  watch: {
+    value(newValue, oldValue) {
+      this.initAnimation(newValue, oldValue);
+    },
+  },
   created() {
     if (this.editMode) {
       this.eventData = {
@@ -312,14 +342,7 @@ export default {
 
     this.hoursArray.push();
   },
-  computed: {
-    ...mapState("AnnualPlannerVuex", ["eventModalOpen"]),
-    ...mapGetters({
-      categories: "event/getCategoriesList",
-      currencies: "event/getCurrenciesList",
-      eventTypes: "event/getEventTypesList",
-    }),
-  },
+
   mounted() {
     this.getOccasionList();
     this.$store.dispatch("event/getEventTypes", { data: this.$auth.user.defaultCalendarId, ctx: this });
@@ -331,8 +354,6 @@ export default {
     this.$root.$on("submitForm", () => {
       this.validateEvent();
     });
-
-    console.log(this.$auth.user.defaultCalendarId);
   },
   methods: {
     ...mapMutations("AnnualPlannerVuex", ["resetForm", "setEventModal", "setEventProperty"]),
@@ -393,7 +414,7 @@ export default {
             this.$root.$emit("calendar-refresh-events");
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
             this.working = false;
             // this.$parent.isLoading = false;
           });
@@ -477,15 +498,13 @@ export default {
           .for(_calendar)
           .save()
           .then((response) => {
-            console.log("new event => ", response);
-            // this.$parent.isLoading = false;
             this.closePanel();
             this.working = false;
             this.$root.$emit("calendar-refresh-events");
             this.$root.$emit("get-started-event-created", response);
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
             this.working = false;
             // this.$parent.isLoading = false;
           });
@@ -547,16 +566,12 @@ export default {
             });
           })
           .catch((error) => {
-            console.log("error =>> ", error);
+            console.error(error);
           });
       }
     },
   },
-  watch: {
-    value(newValue, oldValue) {
-      this.initAnimation(newValue, oldValue);
-    },
-  },
+
 };
 </script>
 <style lang="scss" scope>

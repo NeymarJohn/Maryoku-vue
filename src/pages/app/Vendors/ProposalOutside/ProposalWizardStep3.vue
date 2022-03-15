@@ -208,7 +208,7 @@
       </div>
       <p>What would you like to take from our suggested services?</p>
       <proposal-pricing-item
-        v-for="(c, cIndex) in categories.filter((category) => this.pricesByCategory[category] > 0)"
+        v-for="(c, cIndex) in categories.filter((category) => pricesByCategory[category] > 0)"
         :key="cIndex"
         :icon-url="iconUrl"
         :category-icon="`${iconUrl}Asset 614.svg`"
@@ -266,14 +266,14 @@
           </div>
           <div class="md-layout mt-20">
             <div
-              v-for="option in guaranteedOptions"
-              :key="option.value"
+              v-for="opt in guaranteedOptions"
+              :key="opt.value"
               class="md-layout-item md-size-30 py-10"
-              :style="{ display: vendor.guaranteed.includes(option.value) ? '' : 'none' }"
+              :style="{ display: vendor.guaranteed.includes(opt.value) ? '' : 'none' }"
             >
-              <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+              <div v-if="vendor.guaranteed.includes(opt.value)" class="d-flex align-center">
                 <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px">
-                {{ option.label }}
+                {{ opt.label }}
               </div>
             </div>
           </div>
@@ -418,63 +418,8 @@
             <h5>We don't allow these 3rd party vendor:</h5>
             <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
           </div>
-          <!-- <div class="dont-work mt-20">
-              <h5>We don't work on:</h5>
-              <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ mergeStringItems(vendor.selectedWeekdays) }}
-              </div>
-              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ d.holiday }}
-              </div>
-              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ dontWorkDays() }}
-              </div>
-              <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ dontWorkTime() }}
-              </div>
-            </div> -->
         </div>
         <div id="Rules" class="cancellation pricing-policy-cont">
-          <!-- <h5 class="subtitle">OUR PRICING POLICY</h5>
-            <div class="rules">
-              <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
-                <div class="item">
-                  <div>{{ policy.name }}</div>
-                  <div class="mt-10 color-gray">{{ policy.desc }}</div>
-                </div>
-                <div class="item" v-if="policy.type === 'MultiSelection'">
-                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                  }}</span>
-                </div>
-                <div class="item" v-else-if="policy.type === 'Including'">
-                  <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                </div>
-                <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
-                  <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
-                </div>
-                <div class="item" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                  <span v-if="policy.value === true">Yes</span>
-                  <span v-else>{{ policy.value }}</span>
-                  <span v-if="policy.isPercentage">%</span>
-                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                    {{ policy.attendees }} attendees
-                  </span>
-                  <span class="ml-50" v-if="policy.unit">
-                    {{ policy.unit }}
-                  </span>
-                </div>
-              </div>
-            </div> -->
-
           <div class="signature-wrapper">
             <div class="half-side">
               <h6>{{ vendor.companyName }}</h6>
@@ -608,145 +553,6 @@ export default {
       expiredMinutes:null,
     };
   },
-  created() {
-    console.log(this.vendor);
-    //Get attachments from vendor profile,
-    this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: this.vendor.attachments });
-  },
-  mounted() {
-    this.savedItModal = false;
-    this.isTimeUp = true;
-    this.categories.push(this.vendor.vendorCategory);
-    this.additionalServices.forEach((service) => {
-      this.categories.push(service);
-    });
-
-    let end = moment(this.$store.state.proposalForNonMaryoku.expiredDate);
-    let diff = moment.duration(end.diff(new Date()));
-
-    function pad(n) {
-        return (n < 10 && n >= 0) ? ("0" + n) : n;
-    }
-
-    let minutes = diff.asMinutes();
-    this.expiredDate = Math.floor(minutes/24/60);
-    this.expiredDate = pad(this.expiredDate);
-    this.expiredHours = Math.floor(minutes/60%24);
-    this.expiredHours = pad(this.expiredHours);
-    this.expiredMinutes = Math.floor(minutes%60);
-    this.expiredMinutes = pad(this.expiredMinutes);
-
-  },
-  methods: {
-    changeTimer() {
-        if(this.showTimerInputs == false){
-            this.showTimerInputs = true;
-        } else {
-            this.showTimerInputs = false;
-        }
-    },
-    chooseFiles() {
-      document.getElementById("coverImage").click();
-    },
-    hideModal() {
-      this.savedItModal = false;
-    },
-    mouseOver() {
-      this.hover = true;
-    },
-    mouseLeave() {
-      this.hover = false;
-    },
-    uploadVendorSignature(imageId = null, attachmentType = null) {
-      this.$refs.signatureFile.click();
-    },
-
-    async onUploadVendorSignature(event) {
-      this.signatureImage = await getBase64(event.target.files[0]);
-    },
-    save() {
-      let _this = this;
-      let jpeg = _this.$refs.signature.save("image/jpeg");
-      this.$root.$emit("update-proposal-value", "signature", jpeg);
-      console.log(this.vendor);
-    },
-    clear() {
-      let _this = this;
-      _this.$refs.signature.clear();
-    },
-    removeSignature() {},
-    getServices(category) {
-      if (this.tableCategory === "cost") return this.$store.state.proposalForNonMaryoku.costServices[category];
-      else if (this.tableCategory === "included")
-        return this.$store.state.proposalForNonMaryoku.includedServices[category];
-      else if (this.tableCategory === "extra") return this.$store.state.proposalForNonMaryoku.extraServices[category];
-    },
-    flatDeep(arr, d = 1) {
-      return d > 0
-        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
-        : arr.slice();
-    },
-    servicesByCategory(category) {
-      const services = this.services.filter((s) => s.name == category);
-
-      if (services.length > 0) {
-        return this.flatDeep(
-          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-          Infinity,
-        );
-      } else {
-        return [];
-      }
-    },
-    selectedServices() {
-      return this.event.components.filter((item) => this.categories.includes(item.componentId));
-    },
-    mergeStringItems(items) {
-      let naItems = "";
-      _.each(items, (n) => {
-        if (n.constructor.name == "Object") {
-          naItems += `${capitalize(n.name)}s, `;
-        } else {
-          naItems += `${capitalize(n)}s, `;
-        }
-      });
-      naItems = naItems.substring(0, naItems.length - 2);
-      if (naItems) return "All " + naItems;
-      return "";
-    },
-    dontWorkDays() {
-      let selectedDates = "";
-      _.each(this.vendor.dontWorkDays, (s) => {
-        selectedDates += `${s.date}, `;
-      });
-      selectedDates = selectedDates.substring(0, selectedDates.length - 2);
-      return selectedDates;
-    },
-    dontWorkTime() {
-      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
-    },
-    async onFileChange(event) {
-      let image = await getBase64(event.target.files[0]);
-      this.coverImage = [image, ...this.coverImage];
-    },
-    addNewAttachment(file) {
-      S3Service.fileUpload(file, file.name, `${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}`).then((res) => {
-        const attachments = this.attachments ? [...this.attachments] : [];
-        attachments.push({
-          name: file.name,
-          isRequired: false,
-          fileName: file.name,
-          url: `${res}`,
-        });
-        this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
-      });
-    },
-    removeAttachment(index) {
-      const attachments = this.attachments ? [...this.attachments] : [];
-      attachments.splice(index, 1);
-      this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
-    },
-  },
   computed: {
     ...mapGetters("proposalForNonMaryoku", [
       "totalPriceOfProposal",
@@ -852,6 +658,143 @@ export default {
       this.$store.commit("proposalForNonMaryoku/setValue", { key: "expiredDate", value: date });
     }
   },
+  created() {
+    this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: this.vendor.attachments });
+  },
+  mounted() {
+    this.savedItModal = false;
+    this.isTimeUp = true;
+    this.categories.push(this.vendor.vendorCategory);
+    this.additionalServices.forEach((service) => {
+      this.categories.push(service);
+    });
+
+    let end = moment(this.$store.state.proposalForNonMaryoku.expiredDate);
+    let diff = moment.duration(end.diff(new Date()));
+
+    function pad(n) {
+        return (n < 10 && n >= 0) ? ("0" + n) : n;
+    }
+
+    let minutes = diff.asMinutes();
+    this.expiredDate = Math.floor(minutes/24/60);
+    this.expiredDate = pad(this.expiredDate);
+    this.expiredHours = Math.floor(minutes/60%24);
+    this.expiredHours = pad(this.expiredHours);
+    this.expiredMinutes = Math.floor(minutes%60);
+    this.expiredMinutes = pad(this.expiredMinutes);
+
+  },
+  methods: {
+    changeTimer() {
+        if(this.showTimerInputs == false){
+            this.showTimerInputs = true;
+        } else {
+            this.showTimerInputs = false;
+        }
+    },
+    chooseFiles() {
+      document.getElementById("coverImage").click();
+    },
+    hideModal() {
+      this.savedItModal = false;
+    },
+    mouseOver() {
+      this.hover = true;
+    },
+    mouseLeave() {
+      this.hover = false;
+    },
+    uploadVendorSignature(imageId = null, attachmentType = null) {
+      this.$refs.signatureFile.click();
+    },
+
+    async onUploadVendorSignature(event) {
+      this.signatureImage = await getBase64(event.target.files[0]);
+    },
+    save() {
+      let _this = this;
+      let jpeg = _this.$refs.signature.save("image/jpeg");
+      this.$root.$emit("update-proposal-value", "signature", jpeg);
+    },
+    clear() {
+      let _this = this;
+      _this.$refs.signature.clear();
+    },
+    removeSignature() {},
+    getServices(category) {
+      if (this.tableCategory === "cost") return this.$store.state.proposalForNonMaryoku.costServices[category];
+      else if (this.tableCategory === "included")
+        return this.$store.state.proposalForNonMaryoku.includedServices[category];
+      else if (this.tableCategory === "extra") return this.$store.state.proposalForNonMaryoku.extraServices[category];
+    },
+    flatDeep(arr, d = 1) {
+      return d > 0
+        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
+        : arr.slice();
+    },
+    servicesByCategory(category) {
+      const services = this.services.filter((s) => s.name == category);
+
+      if (services.length > 0) {
+        return this.flatDeep(
+          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+          Infinity,
+        );
+      } else {
+        return [];
+      }
+    },
+    selectedServices() {
+      return this.event.components.filter((item) => this.categories.includes(item.componentId));
+    },
+    mergeStringItems(items) {
+      let naItems = "";
+      _.each(items, (n) => {
+        if (n.constructor.name == "Object") {
+          naItems += `${capitalize(n.name)}s, `;
+        } else {
+          naItems += `${capitalize(n)}s, `;
+        }
+      });
+      naItems = naItems.substring(0, naItems.length - 2);
+      if (naItems) return "All " + naItems;
+      return "";
+    },
+    dontWorkDays() {
+      let selectedDates = "";
+      _.each(this.vendor.dontWorkDays, (s) => {
+        selectedDates += `${s.date}, `;
+      });
+      selectedDates = selectedDates.substring(0, selectedDates.length - 2);
+      return selectedDates;
+    },
+    dontWorkTime() {
+      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
+    },
+    async onFileChange(event) {
+      let image = await getBase64(event.target.files[0]);
+      this.coverImage = [image, ...this.coverImage];
+    },
+    addNewAttachment(file) {
+      S3Service.fileUpload(file, file.name, `${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}`).then((res) => {
+        const attachments = this.attachments ? [...this.attachments] : [];
+        attachments.push({
+          name: file.name,
+          isRequired: false,
+          fileName: file.name,
+          url: `${res}`,
+        });
+        this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
+      });
+    },
+    removeAttachment(index) {
+      const attachments = this.attachments ? [...this.attachments] : [];
+      attachments.splice(index, 1);
+      this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value: attachments });
+    },
+  },
+
 };
 </script>
 <style lang="scss" scoped>

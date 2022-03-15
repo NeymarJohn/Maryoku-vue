@@ -1,4 +1,5 @@
 <template>
+
   <div class="proposal-main-container" style="">
     <loader :active="loading" :is-full-screen="true" page="vendor" />
     <template v-if="showProposal">
@@ -6,7 +7,7 @@
         v-if="showCommentEditorPanel"
         :comment-components="commentComponents"
         :proposal="proposal"
-        :url="`/unregistered/proposals/${proposal.id}`"
+        :url="`/proposals/${proposal.id}`"
         :ignore-x-offset="400"
         :is-vendor="true"
         @saveComment="saveCommentComponent"

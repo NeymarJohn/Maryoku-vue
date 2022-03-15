@@ -140,28 +140,14 @@ import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
 import { extendMoment } from "moment-range";
 import Swal from "sweetalert2";
-import { SlideYDownTransition } from "vue2-transitions";
-import InputMask from "vue-input-mask";
-import { Modal, LabelEdit, LocationInput } from "@/components";
 
-import TimelineTemplateItem from "./components/TimelineTemplateItem";
-import TimelineItem from "./components/TimelineItem";
-import TimelineEmpty from "./components/TimelineEmpty";
-
-import VueElementLoading from "vue-element-loading";
-// import auth from '@/auth';
-import EventBlocks from "./components/NewEventBlocks";
-import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
-import _ from "underscore";
-
 const VueHtml2pdf = () => import("vue-html2pdf");
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 import TimelineEditPanel from "./components/TimelineEditPanel";
 import TimelinePdfPanel from "./components/TimelinePdfPanel";
-import ProgressSidebar from "./components/progressSidebar";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
 import TimelineGapModal from "./Modals/TimelineGapModal";
@@ -172,22 +158,10 @@ import { postReq, getReq } from "@/utils/token";
 export default {
   name: "EventDetailsTimeline",
   components: {
-    VueElementLoading,
-    EventBlocks,
-    draggable,
     Drag,
-    Drop,
-    SlideYDownTransition,
-    InputMask,
-    ProgressSidebar,
-    Modal,
-    LocationInput,
     HeaderActions,
     CommentEditorPanel,
     PlannerEventFooter,
-    TimelineTemplateItem,
-    TimelineItem,
-    TimelineEmpty,
     TimelineGapModal,
     TimelineEditPanel,
     VueHtml2pdf,
@@ -631,20 +605,13 @@ export default {
     },
     async revert() {
       Swal.fire({
-        title: "Do you really want to start again from scratch?",
-        text: "Any changes you have made will not be saved\n" +
-            "and you’ll start over with an empty board.",
+        title: "Do you really want to revert all?",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
-        confirmButtonText: "Yes, start over",
+        confirmButtonText: "Yes, revert all",
         cancelButtonClass: "md-button md-danger md-simple md-red ",
         cancelButtonText: "Cancel",
         buttonsStyling: false,
-        customClass: {
-          popup:"swal-alert-container",
-          header: "swal-alert-header",
-          htmlContainer: "swal-alert-html",
-        }
       }).then(async (result) => {
         if (result.value === true) {
           await this.clearTimeline();
@@ -669,13 +636,20 @@ export default {
     },
     async startFromScratch() {
       Swal.fire({
-        title: "Do you really want to start from scratch?",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        confirmButtonText: "Ok",
-        cancelButtonClass: "md-button md-danger md-simple md-red ",
-        cancelButtonText: "Cancel",
-        buttonsStyling: false,
+          title: "Do you really want to start again from scratch?",
+          text: "Any changes you have made will not be saved\n" +
+              "and you’ll start over with an empty board.",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          confirmButtonText: "Yes, start over",
+          cancelButtonClass: "md-button md-danger md-simple md-red ",
+          cancelButtonText: "Cancel",
+          buttonsStyling: false,
+          customClass: {
+              popup:"swal-alert-container",
+              header: "swal-alert-header",
+              htmlContainer: "swal-alert-html",
+          }
       })
         .then(async (result) => {
           console.log(result);
@@ -734,28 +708,22 @@ export default {
         });
         this.$store.dispatch("event/saveEventAction", newEvent).then((event) => {
           this.isEditMode = false;
-          // Swal.fire({
-          //   title: "Good Job! ",
-          //   text: "You finalise timeline and your event will be processed according your timelines!",
-          //   showCancelButton: false,
-          //   confirmButtonClass: "md-button md-success",
-          //   confirmButtonText: "Ok",
-          //   buttonsStyling: false,
-          // })
-          //   .then((result) => {
-          //     // if (result.value === true) {
-          //     //   console.log(this.eventData);
-          //     //   const updatedEvent = new CalendarEvent({
-          //     //     id: this.eventData.id,
-          //     //     calendar: new Calendar({
-          //     //       id: this.eventData.calendar.id,
-          //     //     }),
-          //     //   });
-          //     //   this.$store.dispatch("event/saveEventAction", updatedEvent);
-          //     //   return;
-          //     // }
-          //   })
-          //   .catch((err) => {});
+            this.$notify({
+                message: {
+                    title: "Good Job!",
+                    content: "Your timeline has been saved successfully!\n" +
+                        "\n" +
+                        "Feel free to come back and work on it at any time.",
+                },
+                icon: `${this.$iconURL}messages/info.svg`,
+                horizontalAlign: "right",
+                verticalAlign: "top",
+                type: "info",
+                cancelBtn: false,
+                sendBtn: "OK",
+                closeBtn: true,
+                timeout: 5000,
+            });
         });
         // this.$http
         //   .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {

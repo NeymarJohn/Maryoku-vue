@@ -51,73 +51,6 @@
           </div>
         </div>
       </div>
-      <!--      <product-card-->
-      <!--        header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">-->
-      <!--        <img class="img imgHeader" slot="imageHeader" :src="vendorMainImage(vendor)">-->
-      <!--        <div slot="card-buttons">-->
-      <!--          <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">-->
-      <!--            <md-icon >more_horiz</md-icon>-->
-      <!--            <md-tooltip md-direction="bottom">View</md-tooltip>-->
-      <!--          </md-button>-->
-      <!--          <md-button-->
-      <!--            v-if="vendor.vendorWebsite && isValidVendorWebsite(vendor)"-->
-      <!--            class="md-info md-xs md-round md-just-icon"-->
-      <!--            :href="`${vendor.vendorWebsite}`"-->
-      <!--            target="_blank"-->
-      <!--          >-->
-      <!--            <md-icon>open_in_browser</md-icon>-->
-      <!--            <md-tooltip md-direction="bottom">Open website</md-tooltip>-->
-      <!--          </md-button>-->
-      <!--          <md-button class="md-warning md-xs md-round md-just-icon" @click="editVendorDetails(vendor)">-->
-      <!--            <md-icon >edit</md-icon>-->
-      <!--            <md-tooltip md-direction="bottom">Edit</md-tooltip>-->
-      <!--          </md-button>-->
-      <!--          <md-button class="md-danger md-xs md-round md-just-icon">-->
-      <!--            <md-icon >delete</md-icon>-->
-      <!--            <md-tooltip md-direction="bottom">Remove</md-tooltip>-->
-      <!--          </md-button>-->
-      <!--        </div>-->
-      <!--        <h4 slot="title" class="title">-->
-      <!--          <a class="fw-bold" href="#pablo">{{vendor.vendorDisplayName}}</a>-->
-      <!--          <div class="small">-->
-      <!--            <label-->
-      <!--              class="star-rating__star"-->
-      <!--              v-for="(rating, ratingIndex) in ratings"-->
-      <!--              :key="ratingIndex"-->
-      <!--              :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"-->
-      <!--              >★</label>-->
-      <!--            <span class="small text-gray">({{vendor.voters}})</span>-->
-      <!--          </div>-->
-      <!--        </h4>-->
-      <!--        <div slot="description" class="card-description ">-->
-      <!--          <div class="">-->
-      <!--            <p>-->
-      <!--              {{vendor.vendorTagLine}}-->
-      <!--            </p>-->
-      <!--          </div>-->
-      <!--          <div class="tags" v-if="vendor.vendorTagging && vendor.vendorTagging.length">-->
-      <!--            <div v-for="(tag, index) in vendor.vendorTagging" :key="index">-->
-      <!--              <span class="tt-capitalize">{{tag}}</span><span v-if="index <=  vendor.vendorTagging.length"> &middot; </span>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--        <template slot="footer">-->
-      <!--          <div class="price">-->
-      <!--            <div-->
-      <!--              class="badge badge-primary"-->
-      <!--              :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"-->
-      <!--            >-->
-      <!--              {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--          <div class="stats">-->
-      <!--            <p class="category">-->
-      <!--              <md-icon>place</md-icon>-->
-      <!--              Geography-->
-      <!--            </p>-->
-      <!--          </div>-->
-      <!--        </template>-->
-      <!--      </product-card>-->
     </div>
   </div>
 </template>
@@ -129,10 +62,25 @@ import { ProductCard, AnimatedNumber } from "@/components";
 
 export default {
   components: {
-    ProductCard,
-    AnimatedNumber,
   },
-  props: ["vendorsList", "ratings", "buildingBlocksList", "pagingData"],
+  props: {
+    vendorsList: {
+      type: Array,
+      default: () => []
+    },
+    ratings: {
+      type: Array,
+      default: () => []
+    },
+    buildingBlocksList: {
+      type: Array,
+      default: () => []
+    },
+    pagingData: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       searchQuery: "",
@@ -181,7 +129,6 @@ export default {
   },
   mounted() {
     this.filteredVendorsList = this.vendorsList;
-    console.log("vendorsList => ", this.vendorsList);
   },
   methods: {
     categoryTitle,

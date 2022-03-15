@@ -143,8 +143,14 @@ export default {
   name: "",
   components: {},
   props: {
-    item: Object,
-    vendor: Object,
+    item: {
+      type: Object,
+      default: () => {}
+    },
+    vendor: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {};

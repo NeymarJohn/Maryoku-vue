@@ -701,6 +701,7 @@
           <template v-for="(s, sIndex) in socialMediaBlocks">
             <a
               v-if="proposal.vendor.social[s.name]"
+              :key="sIndex"
               class="mx-10"
               :href="proposal.vendor.social[s.name]"
               target="_blank"
@@ -715,10 +716,10 @@
     <div v-if="!isLoading" class="book-proposal-form">
       <div class="form-title">
         Would You Like To Book
-        <a :href="`/#/vendors/${this.proposal.vendor.id}/detail`" target="_blank" class="font-bold-extra">
+        <a :href="`/#/vendors/${proposal.vendor.id}/detail`" target="_blank" class="font-bold-extra">
           {{ proposal.vendor.companyName }} </a>?
       </div>
-      <div v-if="this.proposal.suggestionDate" class="agree-checkbox">
+      <div v-if="proposal.suggestionDate" class="agree-checkbox">
         <md-checkbox v-model="acceptNewTimes">
           I agree to the new time of this proposal
         </md-checkbox>
@@ -753,7 +754,7 @@
         </md-menu>
         <md-button
           class="md-red maryoku-btn"
-          :disabled="this.proposal.suggestionDate && !acceptNewTimes"
+          :disabled="proposal.suggestionDate && !acceptNewTimes"
           @click="bookVendor"
         >
           Book this vendor
@@ -795,6 +796,17 @@ const components = {
 
 export default {
   components,
+  filters: {
+    formatDate: function(date) {
+      return moment(date).format("MMM Do YYYY ");
+    },
+    formatTime: function(date) {
+      return moment(date).format("h:00 A");
+    },
+    formatDuration: function(startDate, endDate) {
+      return moment(endDate).diff(startDate, "hours");
+    },
+  },
   mixins: [CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins],
   props: {
     sh: {
@@ -807,6 +819,7 @@ export default {
     },
     category: {
       type: Object,
+      default: () => {}
     },
     landingPage: {
       type: Boolean,
@@ -878,6 +891,47 @@ export default {
       url:`/proposals/${this.proposal.id}`
     };
   },
+  computed: {
+    ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
+    ...mapGetters({
+      components: "event/getComponentsList",
+    }),
+    extraMissingRequirements() {
+      return _.union(this.proposal.extras, this.proposal.missing);
+    },
+    headerBackgroundImage() {
+      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
+      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
+        return this.proposal.inspirationalPhotos[0].url;
+      if (this.proposal.vendor.images && this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
+      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
+        return this.proposal.vendor.vendorImages[0];
+
+      return "";
+    },
+    attachments() {
+      if (this.proposal.attachments && this.proposal.attachments.length > 0) return this.proposal.attachments;
+      if (this.proposal.vendor.attachments && this.proposal.vendor.attachments.length > 0)
+        return this.proposal.vendor.attachments;
+      return [];
+    },
+    validPolicy() {
+      if (this.proposal.vendor.policies)
+        return this.proposal.vendor.policies.filter(
+          item => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    additionalRules() {
+      return this.proposal.vendor.additionalRules;
+    },
+    categories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    showCommentPanel(){
+      return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
+    },
+  },
   created() {
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
@@ -899,7 +953,6 @@ export default {
     this.expiredMinutes = pad(this.expiredMinutes);
     this.expiredSeconds = Math.floor(seconds%60);
     this.expiredSeconds = pad(this.expiredSeconds);
-    console.log("eventProposaldetail",this.proposal.commentComponent);
     this.commentComponents = this.proposal.commentComponent;
   },
 
@@ -1028,11 +1081,9 @@ export default {
       this.$emit("close");
     },
     updateExpireDate() {
-      console.log("updateExpireDate");
       this.$emit("ask", "expiredDate");
     },
     async changeBookedServices({ serviceCategory }) {
-      console.log("this.category", serviceCategory);
 
       // update the pricce of category
       const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
@@ -1069,69 +1120,10 @@ export default {
     },
     async saveCommentComponent(data){
       await this.saveComment(data);
-      console.log("this.commentComponents",this.commentComponents);
       this.updateCommentComponents(this.commentComponents);
     }
   },
-  computed: {
-    ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
-    ...mapGetters({
-      components: "event/getComponentsList",
-    }),
-    extraMissingRequirements() {
-      return _.union(this.proposal.extras, this.proposal.missing);
-    },
-    headerBackgroundImage() {
-      if (this.proposal.coverImage && this.proposal.coverImage[0]) return this.proposal.coverImage[0];
-      if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0])
-        return this.proposal.inspirationalPhotos[0].url;
-      if (this.proposal.vendor.images && this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
-      if (this.proposal.vendor.vendorImages && this.proposal.vendor.vendorImages[0])
-        return this.proposal.vendor.vendorImages[0];
 
-      return "";
-    },
-    attachments() {
-      if (this.proposal.attachments && this.proposal.attachments.length > 0) return this.proposal.attachments;
-      if (this.proposal.vendor.attachments && this.proposal.vendor.attachments.length > 0)
-        return this.proposal.vendor.attachments;
-      return [];
-    },
-    validPolicy() {
-      if (this.proposal.vendor.policies)
-        return this.proposal.vendor.policies.filter(
-          item => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
-        );
-      return null;
-    },
-    additionalRules() {
-      return this.proposal.vendor.additionalRules;
-    },
-    categories() {
-      return this.$store.state.common.serviceCategories;
-    },
-    showCommentPanel(){
-      console.log("showCommentPanel",this.$store.state.eventPlan);
-      return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
-    },
-  },
-  filters: {
-    formatDate: function(date) {
-      return moment(date).format("MMM Do YYYY ");
-    },
-    formatTime: function(date) {
-      return moment(date).format("h:00 A");
-    },
-    formatDuration: function(startDate, endDate) {
-      return moment(endDate).diff(startDate, "hours");
-    },
-  },
-  watch: {
-    proposal() {
-      console.log("proposal.watch",this.proposal);
-    },
-    step(newVal) {},
-  },
 };
 </script>
 

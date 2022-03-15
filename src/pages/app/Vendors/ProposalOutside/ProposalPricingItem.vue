@@ -155,6 +155,11 @@ export default {
     EditableProposalSubItem,
     ProposalRequirements,
   },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   props: {
     category: {
       type: String,
@@ -182,60 +187,7 @@ export default {
       iconsWithCategory: null,
     };
   },
-  created() {},
-  mounted() {
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-  },
-  methods: {
-    expand() {
-      if (this.itemType == "price") {
-        this.isExpanded = !this.isExpanded;
-      }
-    },
-    getCategoryIcon() {
-      console.log(`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`);
-      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`;
-    },
-    servicesByCategory() {
-      return this.requirements.filter((r) => r.requirementsCategory == this.category);
-    },
-    getOrgPrice() {
-      let total = 0;
-
-      if (this.itemType == "price") {
-        this.servicesByCategory().forEach((s) => {
-          total += s.price;
-        });
-      } else if (this.itemType == "total") {
-        this.requirements.forEach((r) => {
-          total += r.price;
-        });
-      } else {
-        total = 0;
-      }
-
-      return total;
-    },
-    getServiceCategory(category) {
-      return this.serviceCategories.find((item) => item.key === category);
-    },
-    getDiscount(category) {
-      console.log("this.defaultDiscount.percentage", this.defaultDiscount.percentage);
-      return ((this.pricesByCategory[category] * this.defaultDiscount.percentage) / 100).toFixed(2);
-    },
-    getDiscountedPrice(category) {
-      console.log("this.getDiscount()", this.getDiscount(category));
-      console.log("this.pricesByCategory[category]", this.pricesByCategory[category]);
-      return (this.pricesByCategory[category] - Number(this.getDiscount(category))).toFixed(2);
-    },
-    getTaxPrice(category) {
-      return ((Number(this.getDiscountedPrice(category)) * this.defaultTax.percentage) / 100).toFixed(2);
-    },
-    getTotalPrice(category) {
-      return Number(this.getDiscountedPrice(category)) + Number(this.getTaxPrice(category));
-    },
-  },
-  computed: {
+    computed: {
     ...mapGetters("proposalForNonMaryoku", [
       "finalPriceOfMainCategory",
       "pricesByCategory",
@@ -278,6 +230,7 @@ export default {
           return this.$store.state.proposalForNonMaryoku.includedServices[this.vendorCategory];
         else if (this.tableCategory === "extra")
           return this.$store.state.proposalForNonMaryoku.extraServices[this.vendorCategory];
+        return [];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")
@@ -303,56 +256,57 @@ export default {
     defaultDiscount() {
       return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
     },
-    // serviceTime() {
-    //   // if (!this.proposalRequest) {
-    //   //   return {
-    //   //     time: "",
-    //   //     date: "",
-    //   //   };
-    //   // }
-    //   const proposalRequest = this.$store.state.proposalForNonMaryoku.proposalRequest;
-    //   const timelineDates = proposalRequest.eventData.timelineDates;
-    //   // if (!timelineDates)
-    //   //   return {
-    //   //     time: "",
-    //   //     date: "",
-    //   //   };
-    //   let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
-    //   let serviceDate = "";
-    //   timelineDates.forEach((td) => {
-    //     td.timelineItems.forEach((timelineItem) => {
-    //       if (
-    //         timelineItem &&
-    //         timelineItem.eventCategory &&
-    //         timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
-    //       ) {
-    //         console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
-    //         serviceTimeString = `${this.$dateUtil.formatScheduleDay(
-    //           Number(timelineItem.startTime),
-    //           "hh:mm A",
-    //         )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}`;
-    //         serviceDate = this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MMM DD, YYYY");
-    //       }
-    //     });
-    //   });
-    //   if (!serviceDate) {
-    //     serviceDate = `${this.$dateUtil.formatScheduleDay(
-    //       Number(proposalRequest.eventData.eventStartMillis),
-    //       "MMM DD, YYYY",
-    //     )}`;
-    //   }
-    //   return {
-    //     time: serviceTimeString,
-    //     date: serviceDate,
-    //   };
-    // },
   },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
+
+  created() {},
+  mounted() {
+    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
+  },
+  methods: {
+    expand() {
+      if (this.itemType == "price") {
+        this.isExpanded = !this.isExpanded;
+      }
+    },
+    getCategoryIcon() {
+      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`;
+    },
+    servicesByCategory() {
+      return this.requirements.filter((r) => r.requirementsCategory == this.category);
+    },
+    getOrgPrice() {
+      let total = 0;
+
+      if (this.itemType == "price") {
+        this.servicesByCategory().forEach((s) => {
+          total += s.price;
+        });
+      } else if (this.itemType == "total") {
+        this.requirements.forEach((r) => {
+          total += r.price;
+        });
+      } else {
+        total = 0;
+      }
+
+      return total;
+    },
+    getServiceCategory(category) {
+      return this.serviceCategories.find((item) => item.key === category);
+    },
+    getDiscount(category) {
+      return ((this.pricesByCategory[category] * this.defaultDiscount.percentage) / 100).toFixed(2);
+    },
+    getDiscountedPrice(category) {
+      return (this.pricesByCategory[category] - Number(this.getDiscount(category))).toFixed(2);
+    },
+    getTaxPrice(category) {
+      return ((Number(this.getDiscountedPrice(category)) * this.defaultTax.percentage) / 100).toFixed(2);
+    },
+    getTotalPrice(category) {
+      return Number(this.getDiscountedPrice(category)) + Number(this.getTaxPrice(category));
     },
   },
-  watch: {},
 };
 </script>
 <style lang="scss" scoped>

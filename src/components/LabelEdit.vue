@@ -4,7 +4,7 @@
       v-if="!edit"
       tabindex="1"
       class="vlabeledit-label"
-      :class="{'vlabeledit-empty' : this.vlabel === empty}"
+      :class="{'vlabeledit-empty' : vlabel === empty}"
       @click="onLabelClick"
     >
       <span>{{ showCurrency }}</span>
@@ -48,16 +48,37 @@ export default {
     InputMask
   },
   props: {
-    text: [String, Number],
-    placeholder: String,
+    text: {
+      type: [String, Number],
+      default: ""
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
     required: Boolean,
-    fieldName: [String, Object],
-    mask: String,
-    scope: [String, Object],
+    fieldName: {
+      type: [String, Object],
+      default: () => {}
+    },
+    mask: {
+      type: String,
+      default: ""
+    },
+    scope: {
+      type: [String, Object],
+      default: () => {}
+    },
     empty: { type: String, default: "Click to set" },
     numeric: Boolean,
-    subDescription: String,
-    currency: String,
+    subDescription: {
+      type: String,
+      default: ""
+    },
+    currency: {
+      type: String,
+      default: ""
+    },
     icon: {
       type: Boolean,
       default: true
@@ -92,16 +113,17 @@ export default {
       if (this.currency !== undefined && this.currency != "") {
         return this.currency;
       }
+      return "";
     },
     showSubDescription: function () {
       if (this.subDescription !== undefined && this.subDescription != "") {
         return "Per " + this.subDescription;
       }
+      return "";
     }
   },
   watch: {
     text: function (newVal, oldValue) {
-      console.log(`'text' changed from ${oldValue} to ${newVal}`);
       if (newVal === "" || newVal === undefined) {
         this.label = this.vplaceholder;
       }

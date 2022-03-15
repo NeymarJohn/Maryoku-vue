@@ -21,7 +21,8 @@
         >
           <md-button
 
-            v-if="showCommentPanel"
+
+            v-if="!showCommentPanel"
             class="md-simple md-just-icon hide-long-button"
             @click="click('comment')"
           >
@@ -34,12 +35,12 @@
           </md-button>
           <md-button
             v-else
-            class="md-simple md-just-icon hide-long-button"
+            class="md-simple md-just-icon hide-long-button active"
             @click="click('comment')"
           >
-            <div class="d-flex">
-              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
-                Hide comments
+            <div class="d-flex show-comment-wrapper">
+              <div class="hide-comments-text"  :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
+                Show comments
               </div>
               <div class="hide-circle-for-img">
                 <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
@@ -174,15 +175,18 @@ export default {
   border-radius: 30px;
   border: solid 1px #ffc001;
 }
+.hide-long-button .active{
+  background-color: #ffc001 !important;
+}
 .hide-comments-text{
-  margin-left: 10px;
+  color: white;
+  margin-left: 3px;
   padding-left: 10px;
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0.34px;
   text-align: center;
   text-transform: none;
-  color: #4e4e4e;
   flex-grow: 1;
 }
 .show-comments-text{
@@ -212,7 +216,7 @@ export default {
   height: 50px;
   border-radius: 50%;
   margin-left: 10px;
-  background-color: #ffc001;
+  background-color: white;
 }
 .d-flex{
   align-items: center;
@@ -224,6 +228,7 @@ export default {
 }
 
 .hide-svg-icon-long-button{
+  filter: invert(30%) sepia(26%) saturate(4932%) hue-rotate(4deg) brightness(109%) contrast(105%);
   width: 32px !important;
   height: 32px !important;
 }

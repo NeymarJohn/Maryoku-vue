@@ -185,15 +185,12 @@ export default {
       this.$emit("change", { location: loc });
     },
     guestNumberChange(e) {
-      console.log("guestNumberChange", e);
       this.$emit("change", { numberOfParticipants: parseInt(e) });
     },
     eventTypeChange(e) {
-      console.log("eventTypeChange", e);
       this.$emit("change", { eventType: e });
     },
     changeDate(field = null){
-        console.log("changeDate", this.eventDate, this.startTime, this.endTime, this.amPack);
         if(field == "start") this.amPack.start = this.amPack.start === "am" ? "pm" : "am";
         if(field == "end") this.amPack.end = this.amPack.end === "am" ? "pm" : "am";
         this.$emit("change", {dateData: {

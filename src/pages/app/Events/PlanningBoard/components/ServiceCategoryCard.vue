@@ -34,9 +34,10 @@
               <img
                 v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
                 class="non-selected"
-                :src="`${$iconURL}Req/group-22450-2.svg`"
+                :src="`${$iconURL}Req/group-22450.svg`"
+                width="24px"
               >
-              <img v-else style="" :src="`${$iconURL}Req/group-22450-2.svg`">
+              <img v-else style="" :src="`${$iconURL}Req/group-22450-2.svg`" width="24px">
               <md-tooltip md-direction="top">
                 Click here to show vendors your vision for the event
               </md-tooltip>
@@ -54,10 +55,10 @@
               <img
                 v-if="!selectedServices.includes(serviceCategory.clipTitles[index])"
                 class="non-selected"
-                :src="`${$iconURL}Requirements/Group+16153.svg`"
-                width="30px"
+                :src="`${$iconURL}Req/group-22450.svg`"
+                width="24px"
               >
-              <img v-else :src="`${$iconURL}common/heart-red.svg`" width="30px">
+              <img v-else :src="`${$iconURL}Req/group-22450-2.svg`" width="24px">
               <md-tooltip md-direction="top">
                 Click here to show vendors your vision for the event
               </md-tooltip>

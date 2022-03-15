@@ -25,10 +25,10 @@
       <md-checkbox v-model="checked" class="md-checkbox-circle md-red" />
       <div>
         <div class="music-title">
-          {{ this.data.title }}
+          {{ data.title }}
         </div>
         <div class="music-singer">
-          {{ this.data.singer }}
+          {{ data.singer }}
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@ export default {
     },
     data: {
       type: Object,
-      default: {},
+      default: () => {},
     },
   },
   data() {

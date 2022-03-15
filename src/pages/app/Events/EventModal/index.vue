@@ -180,12 +180,20 @@ import moment from "moment";
 
 export default {
   components: {
-    Modal,
   },
   props: {
-    year: Number,
-    month: Number,
-    occasionsOptions: Array,
+    year: {
+      type: Number,
+      default: 0
+    },
+    month: {
+      type: Number,
+      default: 0
+    },
+    occasionsOptions: {
+      type: Array,
+      default: () => []
+    },
     currentEvent: {
       type: Object,
       default: null,
@@ -231,13 +239,6 @@ export default {
     occasionList: [],
   }),
 
-  created() {
-    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 PM") : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 AM") : this.hoursArray.push(`${x}:00 AM`)));
-
-    this.hoursArray.push();
-  },
   computed: {
     ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
     ...mapGetters({
@@ -366,6 +367,14 @@ export default {
       },
     },
   },
+  created() {
+    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 PM") : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push("12:00 AM") : this.hoursArray.push(`${x}:00 AM`)));
+
+    this.hoursArray.push();
+  },
+
   mounted() {
     this.$root.$on("statusChange", (newStatus) => {
       this.status = newStatus;

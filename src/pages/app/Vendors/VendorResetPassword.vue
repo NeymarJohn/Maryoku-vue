@@ -75,13 +75,11 @@
 
 <script>
     import { SignupCard, MaryokuInput } from "@/components";
-    import InputText from "@/components/Inputs/InputText.vue";
     import Loader from "@/components/loader/Loader.vue";
 
     export default {
         components: {
             SignupCard,
-            InputText,
             Loader,
         },
         data () {
@@ -96,7 +94,6 @@
                 succeded: false,
                 isForgot: false,
                 serverURL: process.env.SERVER_URL,
-                // auth: auth,
                 touched: {
                     password: false,
                 },
@@ -112,7 +109,6 @@
             const token = this.$route.query.resetToken;
             this.$http.post(`${process.env.SERVER_URL}/1/check-password-token`, { token: token }, { "ContentType": "application/json" })
                 .then((resp) => {
-                    console.log(resp);
                     this.loading = false;
                     if (resp.data.isValid) {
                         this.inValidToken = false;
@@ -132,16 +128,13 @@
         },
         methods: {
             updatePassword () {
-                console.log(this.$validator);
                 const email = this.$route.query.email;
                 const token = this.$route.query.resetToken;
                 if (this.password !== this.confirm_password) return;
                 this.$validator.validateAll().then(isValid => {
-                    console.log(this.$validator);
                     if (isValid) {
                         this.$http.post(`${process.env.SERVER_URL}/1/reset-password`, { username : email, token : token, password: this.password}, { "ContentType": "application/json" })
                             .then((resp) => {
-                                console.log(resp);
                                 this.loading = false;
                                 if (resp.status) {
                                     this.succeded = true;

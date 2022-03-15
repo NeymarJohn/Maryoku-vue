@@ -188,7 +188,6 @@
 </template>
 <script>
 // import auth from '@/auth';
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
@@ -198,20 +197,11 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
-import ClickOutside from "vue-click-outside";
-import { LabelEdit } from "@/components";
-import draggable from "vuedraggable";
-import { Drag, Drop } from "vue-drag-drop";
 import EventBlockRequirement from "./EventBlockRequirement";
 export default {
   components: {
     MdCardContent,
     VueElementLoading,
-    LabelEdit,
-    draggable,
-    Drag,
-    Drop,
-    ClickOutside,
     EventBlockRequirement,
   },
   filters: {
@@ -226,8 +216,14 @@ export default {
     },
   },
   props: {
-    event: Object,
-    selectedBlock: Object,
+    event: {
+      type: Object,
+      default: () => {}
+    },
+    selectedBlock: {
+      type: Object,
+      default: () => {}
+    },
     predefinedRequirements: {
       type: Array,
       default: null,
@@ -484,7 +480,7 @@ export default {
                 type: "danger",
               });
 
-              console.log(error);
+              console.error(error);
             });
         }
       });
@@ -518,7 +514,7 @@ export default {
           this.getBuildingBlockValues();
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           this.isLoading = false;
           this.$notify({
             message: "Error while trying to modify this requirement",
@@ -603,8 +599,6 @@ export default {
         .for(calendar, event)
         .save()
         .then((resp) => {
-          console.log(resp);
-
           this.$notify({
             message: "Field updated successfully",
             horizontalAlign: "center",
@@ -613,7 +607,7 @@ export default {
           });
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
 
           this.$notify({
             message: "Error while trying to modify this requirement",

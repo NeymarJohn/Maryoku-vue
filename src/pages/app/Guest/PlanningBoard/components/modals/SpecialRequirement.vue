@@ -1,5 +1,5 @@
 <template>
-  <modal class="planning-board-additioal-modal" :container-class="`modal-container lg`">
+  <modal class="planning-board-additioal-modal" :container-class="`modal-container lg w-min-800`">
     <template slot="header">
       <div class="maryoku-modal-header text-center">
         <img :src="`${$iconURL}NewRequirements/group-16281.svg`">
@@ -15,7 +15,7 @@
       <div class="md-layout maryoku-modal-body" />
       <div>
         <div class="font-bold font-size-22">
-          Anyting else?
+          Anything else?
         </div>
         <div class="mt-20">
           Would you like to add any of those categories?

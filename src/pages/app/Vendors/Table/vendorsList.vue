@@ -171,7 +171,6 @@ export default {
   },
   methods: {
     async setRanking(id, ranking) {
-      console.log("sss");
       let vendor = await Vendors.find(id);
       vendor.rank = ranking;
       vendor.save();
@@ -269,7 +268,7 @@ export default {
             this.blockVendors = resp;
           })
           .catch((error) => {
-            console.log("error =>", error);
+            console.error(error);
           });
       }
     },

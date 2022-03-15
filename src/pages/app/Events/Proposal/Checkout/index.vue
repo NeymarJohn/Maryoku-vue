@@ -50,7 +50,7 @@
               :service-category="proposal.vendor.vendorCategory"
             />
 
-            <div v-if="this.proposal.extraServices[this.vendor.eventCategory.key]" class="p-30">
+            <div v-if="proposal.extraServices[vendor.eventCategory.key]" class="p-30">
               <div>Would you like to upgrade & add one of those?</div>
               <div v-if="proposal.serviceCategory" class="mb-30">
                 You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
@@ -61,7 +61,7 @@
                 will be added to the overall vendor cost.
               </div>
               <div
-                v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
+                v-for="service in proposal.extraServices[vendor.eventCategory.key].filter(
                   (item) => !item.added && item.price,
                 )"
                 :key="service.subCategory"
@@ -194,7 +194,7 @@
           </template>
         </collapse-panel>
         <div v-if="pageType === 0" class="total-price-panel mt-20 white-card">
-          <template v-if="discount(this.proposal).percentage">
+          <template v-if="discount(proposal).percentage">
             <div class="discount-row">
               <span class="font-bold">Discount </span>
               <span class="font-bold">-{{ discount(proposal).percentage }}%</span>
@@ -211,7 +211,7 @@
           <div class="discount-row">
             <span class="font-bold">Fee </span>
             <span class="font-bold">{{ feePercentail }}%</span>
-            <span class="text-right">${{ feePrice(this.proposal) | withComma }}</span>
+            <span class="text-right">${{ feePrice(proposal) | withComma }}</span>
           </div>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
@@ -241,11 +241,6 @@
             :success-u-r-l="successURL"
           />
         </div>
-        <div>
-          <button @click="showModal = !showModal">
-            Your signature
-          </button>
-        </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
@@ -257,64 +252,6 @@
       </md-button>
     </div>
     <success-modal v-if="showSuccessModal" />
-
-    <Modal v-if="showModal">
-      <template slot="header">
-        <div>
-          <button @click="showModal = !showModal">
-            close
-          </button>
-        </div>
-      </template>
-      <template slot="body">
-        <div class="signature-editor">
-          <md-button class="md-outlined maryoku-btn md-simple md-vendor">
-            Choose File
-          </md-button>
-          <div class="or">
-            Or
-          </div>
-          <div class="sign-here">
-            <!--            <img v-if="signatureData" :src="`${signatureData}`">-->
-            <vueSignature ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
-            <md-button class="md-simple md-vendor edit-btn">
-              Clear
-            </md-button>
-          </div>
-          <input
-            ref="signatureFile"
-            type="file"
-            class="d-none"
-            name="vendorSignature"
-            accept="image/gif, image/jpg, image/png"
-          >
-        </div>
-        <div class="signature-editor">
-          <md-button class="md-outlined maryoku-btn md-simple md-vendor" @click="uploadSignatureFile">
-            Choose File
-          </md-button>
-          <div class="or">
-            Or
-          </div>
-          <div class="sign-here">
-            <img v-if="signatureData" :src="`${signatureData}`">
-            <vueSignature v-else ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
-            <md-button class="md-simple md-vendor edit-btn" @click="clear">
-              Clear
-            </md-button>
-          </div>
-
-          <input
-            ref="signatureFile"
-            type="file"
-            class="d-none"
-            name="vendorSignature"
-            accept="image/gif, image/jpg, image/png"
-            @change="onSignatureFilePicked"
-          >
-        </div>
-      </template>
-    </Modal>
   </div>
 </template>
 <script>
@@ -328,7 +265,6 @@
   import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
   import moment from "moment";
   import Loader from "@/components/loader/Loader.vue";
-  import {Modal} from "../../../../../components";
 
   // checkout page type
   const VENDOR = 0;
@@ -339,14 +275,9 @@
   const CUSTOMER = "customer";
 
   export default {
-    components: {Loader, CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable, Modal},
+    components: {Loader, CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
     data() {
       return {
-        option: {
-          penColor: "rgb(0, 0, 0)",
-          backgroundColor: "rgb(255,255,255)",
-        },
-        showModal: false,
         vendor: null,
         proposal: null,
         cart: {},
@@ -385,6 +316,7 @@
           });
           return sum;
         }
+        return 0;
       },
     },
     async created() {
@@ -408,25 +340,6 @@
 
     },
     methods: {
-
-      clear() {
-        this.signatureData = "";
-        this.$refs.signature.clear();
-      },
-      async onSignatureFilePicked(e) {
-        const file = e.target.files[0];
-        const extension = file.type.split("/")[1];
-        const fileId = `${new Date().getTime()}`;
-        S3Service.fileUpload(file, fileId, "vendor/signatures").then(async (uploadedName) => {
-          this.content = `https://maryoku.s3.amazonaws.com/vendor/signatures/${fileId}.${extension}`;
-          this.signatureData = await getBase64(file);
-        });
-
-        // this.$refs.signature.fromDataURL(imageData);
-      },
-      uploadSignatureFile() {
-        this.$refs.signatureFile.click();
-      },
       ...mapActions("planningBoard", ["getCartItems"]),
       getEventDays(){
         if ( this.proposal.nonMaryoku ) {
@@ -500,22 +413,18 @@
       },
       discountedPrice(proposal) {
         let totalPriceOfProposal = this.totalPriceOfProposal(proposal);
-        console.log("totalPriceOfProposal", totalPriceOfProposal);
 
         totalPriceOfProposal = discounting(totalPriceOfProposal, this.discount(proposal));
         totalPriceOfProposal -=  this.bundledDiscountPrice(proposal);
 
-        console.log("discountedPrice", totalPriceOfProposal);
         return totalPriceOfProposal;
       },
       taxedPrice (proposal) {
-        console.log("taxedPrice", addingTax(this.discountedPrice(proposal), this.tax(proposal)));
         return addingTax(this.discountedPrice(proposal), this.tax(proposal));
       },
       discountedAndTaxedPrice(proposal) {
 
         let totalPriceOfProposal = this.totalPriceOfProposal(proposal);
-        console.log("total", totalPriceOfProposal);
 
         // minus bundled discount
         totalPriceOfProposal -=  this.bundledDiscountPrice(proposal);
@@ -555,7 +464,6 @@
                   },
                   {headers: this.$auth.getAuthHeader()},
           );
-          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -576,7 +484,6 @@
                   },
                   { headers: this.$auth.getAuthHeader() },
           );
-          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -595,7 +502,6 @@
                   },
                   { headers: this.$auth.getAuthHeader() },
           );
-          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -612,7 +518,6 @@
                   },
                   { headers: this.$auth.getAuthHeader() },
           );
-          console.log("res", res);
           this.stripePriceData.push(res.data);
         }
 
@@ -636,10 +541,6 @@
   };
 </script>
 <style lang="scss" scoped>
-.sign-here{
-  width: 100px;
-height: 100px;
-}
   .event-vendor-checkout {
     .disabled {
       opacity: 0.5;

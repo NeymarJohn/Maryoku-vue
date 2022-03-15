@@ -46,21 +46,13 @@
 </template>
 
 <script>
-import VueElementLoading from "vue-element-loading";
-import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector.vue";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 import { VendorCategories } from "@/constants/vendor";
-import vue2Dropzone from "vue2-dropzone";
 
 export default {
   name: "VendorBasicInfoForm",
   components: {
-    vueDropzone: vue2Dropzone,
-    VueElementLoading,
-    VSignupEditableField,
-    VSignupCategorySelector,
     CategorySelector,
     VendorPhotosCarousel,
   },
@@ -95,7 +87,6 @@ export default {
       this.$store.commit("vendorService/setField", { field, value });
     },
     updateCategory(category) {
-      console.log(category);
       const categoryData = VendorCategories.find((item) => item.name == category);
       this.$store.commit("vendorService/setField", { field: "vendorCategory", value: categoryData.value });
     },
@@ -108,7 +99,6 @@ export default {
     updateVendorImage({ index, photo }) {
       const fileId = `${new Date().getTime()}_${makeid()}`;
       S3Service.fileUpload(photo, fileId, "vendor/cover-images").then((uploadedName) => {
-        console.log("createImage", uploadedName);
         this.$root.$emit("update-vendor-value", "images", {
           index,
           data: `${uploadedName}`,
