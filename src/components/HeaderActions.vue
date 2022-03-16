@@ -20,9 +20,7 @@
           class="md-small-hide"
         >
           <md-button
-
-
-            v-if="!showCommentPanel"
+            v-if="!isCommentMode"
             class="md-simple md-just-icon hide-long-button"
             @click="click('comment')"
           >

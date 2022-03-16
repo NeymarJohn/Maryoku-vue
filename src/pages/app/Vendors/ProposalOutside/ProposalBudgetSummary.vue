@@ -220,7 +220,7 @@
         </template>
       </CollapsePanel>
     </template>
-    <v-tour v-if="isNegotiation" name="discount" :steps="steps" :callbacks="callbacks">
+    <v-tour name="discount" :steps="steps" :callbacks="callbacks">
       <template slot-scope="tour">
         <fade-transition>
           <v-step
@@ -330,7 +330,6 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   mounted() {
-    console.log('budget.summary', this.isNegotiation);
     setTimeout(_ => {
         if (this.isNegotiation)
         this.$tours["discount"].start();
