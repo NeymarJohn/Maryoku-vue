@@ -1,8 +1,14 @@
 <template>
   <div class="company-details-container">
-    <tabs :tab-name="['Company Details']" color-button="info" theme="purple">
+    <tabs :tab-name="['Business profile','Bank Details','Invoices']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
-        <vendor-company-detail />
+        <vendor-company-detail/>
+      </template>
+      <template slot="tab-pane-2">
+        <PaymentSettings/>
+      </template>
+      <template slot="tab-pane-3">
+        <invoices/>
       </template>
     </tabs>
   </div>
@@ -12,11 +18,13 @@ import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
 import VendorCompanyDetail from "./VendorCompanyDetail";
 import Invoices from "./Invoices";
+import PaymentSettings from "./PaymentSettings";
 
 export default {
   components: {
     VueElementLoading,
     LabelEdit,
+    PaymentSettings,
     Tabs,
     VendorCompanyDetail,
     Invoices,

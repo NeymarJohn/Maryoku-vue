@@ -26,14 +26,6 @@
               <md-card-content>
                 <div class="payment-details">
                   <form class="form-section">
-                    <div :class="{ error: v$.firstName.$errors.length }">
-                      <input v-model="firstName" @blur="v$.firstName.$touch">
-                      <div class="input-errors" v-for="error of v$.firstName.$errors" :key="error.$uid">
-                        <div class="error-msg">
-                          {{ error.$message }}
-                        </div>
-                      </div>
-                    </div>
                     <div class="md-layout-item">
                       <label>ID Number</label>
                       <br>
@@ -52,54 +44,97 @@
                     </div>
                     <div class="md-layout mt-1">
                       <div class="md-layout-item md-size-40">
-                        <div class="input-wrapper">
+                        <div class="input-wrapper" :class="{ error: v$.bankDetails.holderName.$errors.length }">
                           <label>Beneficiary Name</label>
-                          <md-input id="name" v-model="bankDetails.holderName" type="text"/>
+                          <input id="name" v-model="bankDetails.holderName" @blur="v$.bankDetails.holderName.$touch" type="text"/>
+                        </div>
+                        <div class="input-errors" v-for="error of v$.bankDetails.holderName.$errors" :key="error.$uid">
+                          <div class="error-msg">
+                            {{ error.$message }}
+                          </div>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Account No.</label>
-                          <md-input id="email" v-model="bankDetails.accountNumber" type="text"/>
+                          <input id="email" v-model="bankDetails.accountNumber" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Bank No.</label>
-                          <md-input v-model="bankDetails.routingNumber"
-                                    type="text"/>
+                          <input v-model="bankDetails.routingNumber" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Branch No.</label>
-                          <md-input v-model="bankDetails.branch" type="text"/>
+                          <input v-model="bankDetails.branch" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-80">
                         <div class="input-wrapper">
                           <label>Address and name of the bank</label>
-                          <md-input v-model="bankDetails.address"
-                                    type="text"/>
+                          <input v-model="bankDetails.address" type="text"/>
                           <div>{{ errors.first('email') }}</div>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-80">
                         <div class="input-wrapper">
                           <label>Verification</label>
-                          <md-input v-model="bankDetails.address" type="text"/>
+                          <input v-model="bankDetails.verification" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-100"/>
                     </div>
                   </form>
                 </div>
-                <md-button class="md-vendor md-vendor-review" @click="sendBankInfo">
+                <span class="block-separator"></span>
+                <div  class="md-layout-item md-size-100 authentication-header-block">
+                  <img class="shield-icon" :src="`/static/icons/shield.svg`">
+                  <span class="authentication-header">User Authentication</span>
+                </div>
+                <div class="md-layout-item md-size-60 authentication-block">
+                  <div>
+                    <span class="name">MCC</span>
+                  </div>
+                  <div>
+                    <span class="description">
+                      Please fill in your personal account so that we can transfer money to you.
+                    </span>
+                  </div>
+                  <div>
+                    <input>
+                  </div>
+                  <span>
+                    <md-icon data-v-69344496="" class="md-icon md-icon-font color-vendor mr-5 md-theme-default">
+                      add_circle_outline
+                    </md-icon>
+                    Add another MCC
+                  </span>
+                </div>
+
+                <div class="md-layout-item md-size-60 authentication-block">
+                  <div class="select-ssn-type">
+                    <input v-model="ssnType" id="ssn" value="ssn" class="radio-input" type="radio">
+                    <label for="ssn" class="radio-label name">SSN</label>
+
+                    <input v-model="ssnType" id="ein" value="ein"  class="radio-input" type="radio">
+                    <label for="ein" class="radio-label name">EIN</label>
+                  </div>
+                  <div>
+                    <span class="description">Please fill in the last four digits of SSN</span>
+                  </div>
+                  <div>
+                    <input>
+                  </div>
+                </div>
+                <md-button class="md-vendor md-vendor-review" style="margin: 20px 15px" @click="sendBankInfo">
                   Save details
                 </md-button>
-                <md-button class="md-vendor md-vendor-review" @click="sendTest">
-                  Verify Account
-                </md-button>
+<!--                <md-button class="md-vendor md-vendor-review" @click="sendTest">-->
+<!--                  Verify Account-->
+<!--                </md-button>-->
               </md-card-content>
             </md-card>
             <!--            <button id="verify-button" @click="sendTest">Verify</button>-->
@@ -111,10 +146,9 @@
 </template>
 
 <script>
-import {Tabs} from "@/components";
-
-import VueElementLoading from "vue-element-loading";
-import EventBlockRequirements from "../../../Guest/components/EventBlocks/Modals/EventBlockRequirements";
+// import {Tabs} from "@/components";
+// import VueElementLoading from "vue-element-loading";
+// import EventBlockRequirements from "../../../Guest/components/EventBlocks/Modals/EventBlockRequirements";
 import axios from "axios";
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
@@ -127,17 +161,22 @@ export default {
   },
   validations () {
     return {
-      firstName: {required}, // Matches this.firstName
-      lastName: {required}, // Matches this.lastName
-      contact: {
-        email: {required, email} // Matches this.contact.email
-      }
+      bankDetails: {
+        id:{required},
+        adId: {required},
+        accountNumber: {required},
+        address: {required},
+        holderName:{required},
+        routingNumber:{required},
+        branch:{required},
+        verification:{required},
+      },
     };
   },
   components: {
-    VueElementLoading,
-    Tabs,
-    EventBlockRequirements,
+    // VueElementLoading,
+    // Tabs,
+    // EventBlockRequirements,
   },
   props: {},
   data: () => ({
@@ -148,12 +187,16 @@ export default {
     contact: {
       email: "{required, email}" // Matches this.contact.email
     },
+    ssnType: "ssn",
     bankDetails: {
       id: ["", "", "", "", "", "", "",],
       adId: "",
       accountNumber: "",
-      address: ""
-
+      address: "",
+      holderName: "",
+      branch: "",
+      verification: "",
+      routingNumber: "",
     }
   }),
   computed: {},
@@ -247,6 +290,65 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.authentication-header-block{
+  margin-bottom: 15px;
+  .authentication-header{
+    font-family: 'Manrope-Regular';
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .shield-icon {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-top: -10px;
+  }
+}
+
+.authentication-block{
+  *{
+    margin: 5px;
+  }
+  border-radius: 3px;
+  border: solid 1px #bcbcbc;
+  margin: 10px 15px;
+  .select-ssn-type{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    .radio-input{
+      display: inline-block;
+      height: fit-content;
+      min-height: unset;
+    }
+    .radio-input:checked {
+     border-color:  #641856;
+      background-color: #641856;
+    }
+      .radio-label{
+      display: inline-block;
+    }
+  }
+  .name{
+    font-family: 'Manrope-bold';
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .description{
+    font-family: 'Manrope-regular';
+    font-size: 12px;
+    color: #818080;
+  }
+}
+.block-separator{
+  margin: 28px 15px;
+  display: block;
+  width: 100%;
+  height: 1px;
+  border-bottom: black solid 1px;
+}
+
 .input-wrapper {
   display: flex;
   flex-direction: column;

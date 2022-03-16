@@ -1,5 +1,5 @@
 <template>
-  <modal class="planning-board-additioal-modal" :container-class="`modal-container lg`">
+  <modal class="planning-board-additioal-modal" :container-class="`modal-container lg w-min-800`">
     <template slot="header">
       <div class="maryoku-modal-header text-center">
         <img :src="`${$iconURL}NewRequirements/group-16281.svg`">
@@ -15,7 +15,7 @@
       <div class="md-layout maryoku-modal-body" />
       <div>
         <div class="font-bold font-size-22">
-          Anyting else?
+          Anything else?
         </div>
         <div class="mt-20">
           Would you like to add any of those categories?
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      tags: ["Sustainability", "Inclusion", "Security", "Signage & Printing", "Covid-19", "Transporation"],
+      tags: ["Sustainability", "Inclusion", "Covid-19"],
       selectedTags: [],
       speicalRequirements: {
         Sustainability: [
@@ -114,78 +114,78 @@ export default {
             ],
           },
         ],
-        Security: [
-          {
-            subCategory: "Services",
-            items: [
-              { name: "Day of security", selected: false },
-              { name: "Security consultation", selected: false },
-              { name: "Personal security", selected: false },
-              { name: "VIP security", selected: false },
-              { name: "Parameter security", selected: false },
-              { name: "Risk assessment", selected: false },
-              { name: "Crowd control", selected: false },
-            ],
-          },
-          {
-            subCategory: "Staff",
-            items: [
-              { name: "Patrolling officers", selected: false },
-              { name: "Bouncers", selected: false },
-              { name: "Unarmed security", selected: false },
-              { name: "Undercover", selected: false },
-              { name: "Chaperones", selected: false },
-              { name: "Body guards", selected: false },
-              { name: "Armed security offices", selected: false },
-              { name: "Paramedic", selected: false },
-            ],
-          },
-        ],
-        "Signage & Printing": [
-          {
-            subCategory: "Services",
-            items: [
-              { name: "Social media promotion", selected: false },
-              { name: "Event registration tracking", selected: false },
-              { name: "Graphic design services", selected: false },
-            ],
-          },
-          {
-            subCategory: "High profile sourcing",
-            items: [
-              { name: "Politicians", selected: false },
-              { name: "Celebrities", selected: false },
-              { name: "Influencers", selected: false },
-              { name: "Artists", selected: false },
-            ],
-          },
-        ],
-        Transporation: [
-          {
-            subCategory: "Amenities",
-            items: [
-              { name: "Wifi", selected: false },
-              { name: "Bar", selected: false },
-              { name: "TV/Cable TV", selected: false },
-              { name: "Restrooms", selected: false },
-              { name: "Luggage", selected: false },
-              { name: "Food", selected: false },
-            ],
-          },
-          {
-            subCategory: "Services",
-            items: [
-              { name: "Round trip", selected: false },
-              { name: "One way", selected: false },
-              { name: "Airport pickup/drop off", selected: false },
-              { name: "Tours", selected: false },
-            ],
-          },
-          {
-            subCategory: "Staff",
-            items: [{ name: "Uniformed drivers", selected: false }],
-          },
-        ],
+        // Security: [
+        //   {
+        //     subCategory: "Services",
+        //     items: [
+        //       { name: "Day of security", selected: false },
+        //       { name: "Security consultation", selected: false },
+        //       { name: "Personal security", selected: false },
+        //       { name: "VIP security", selected: false },
+        //       { name: "Parameter security", selected: false },
+        //       { name: "Risk assessment", selected: false },
+        //       { name: "Crowd control", selected: false },
+        //     ],
+        //   },
+        //   {
+        //     subCategory: "Staff",
+        //     items: [
+        //       { name: "Patrolling officers", selected: false },
+        //       { name: "Bouncers", selected: false },
+        //       { name: "Unarmed security", selected: false },
+        //       { name: "Undercover", selected: false },
+        //       { name: "Chaperones", selected: false },
+        //       { name: "Body guards", selected: false },
+        //       { name: "Armed security offices", selected: false },
+        //       { name: "Paramedic", selected: false },
+        //     ],
+        //   },
+        // ],
+        // "Signage & Printing": [
+        //   {
+        //     subCategory: "Services",
+        //     items: [
+        //       { name: "Social media promotion", selected: false },
+        //       { name: "Event registration tracking", selected: false },
+        //       { name: "Graphic design services", selected: false },
+        //     ],
+        //   },
+        //   {
+        //     subCategory: "High profile sourcing",
+        //     items: [
+        //       { name: "Politicians", selected: false },
+        //       { name: "Celebrities", selected: false },
+        //       { name: "Influencers", selected: false },
+        //       { name: "Artists", selected: false },
+        //     ],
+        //   },
+        // ],
+        // Transporation: [
+        //   {
+        //     subCategory: "Amenities",
+        //     items: [
+        //       { name: "Wifi", selected: false },
+        //       { name: "Bar", selected: false },
+        //       { name: "TV/Cable TV", selected: false },
+        //       { name: "Restrooms", selected: false },
+        //       { name: "Luggage", selected: false },
+        //       { name: "Food", selected: false },
+        //     ],
+        //   },
+        //   {
+        //     subCategory: "Services",
+        //     items: [
+        //       { name: "Round trip", selected: false },
+        //       { name: "One way", selected: false },
+        //       { name: "Airport pickup/drop off", selected: false },
+        //       { name: "Tours", selected: false },
+        //     ],
+        //   },
+        //   {
+        //     subCategory: "Staff",
+        //     items: [{ name: "Uniformed drivers", selected: false }],
+        //   },
+        // ],
         "Covid-19": [
           {
             subCategory: "Requests for all stuff members",
