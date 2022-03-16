@@ -26,13 +26,11 @@
               <md-card-content>
                 <div class="payment-details">
                   <form class="form-section">
-                    <div :class="{ error: v$.firstName.$errors.length }">
-                      <input v-model="firstName" @blur="v$.firstName.$touch">
-                      <div class="input-errors" v-for="error of v$.firstName.$errors" :key="error.$uid">
-                        <div class="error-msg">
-                          {{ error.$message }}
-                        </div>
-                      </div>
+                    <div v-if="errors.length">
+                      <b>Please correct the following error(s):</b>
+                      <ul>
+                        <li v-for="error in errors">{{ error }}</li>
+                      </ul>
                     </div>
                     <div class="md-layout-item">
                       <label>ID Number</label>
@@ -66,21 +64,23 @@
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Bank No.</label>
-                          <md-input v-model="bankDetails.routingNumber"
+                          <md-input v-model="bankDetails.routingNumber" v-validate="modelValidations.username"
                                     type="text"/>
                         </div>
                       </div>
-                      <div class="md-layout-item md-size-40">
+                      <md-field class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Branch No.</label>
-                          <md-input v-model="bankDetails.branch" type="text"/>
+                          <md-input v-model="bankDetails.branch" v-validate="modelValidations.password" type="text"/>
                         </div>
-                      </div>
-                      <div class="md-layout-item md-size-80">
-                        <div class="input-wrapper">
+                      </md-field>
+                      <div class="md-layout-item md-size-80"
+                           :class="[{'valid': !errors.has('email') && touched.email},{'error': errors.has('email')}]">
+                        <div class="input-wrapper"
+                             :class="[{'valid': !errors.has('email')},{'error': errors.has('email')}]">
                           <label>Address and name of the bank</label>
-                          <md-input v-model="bankDetails.address"
-                                    type="text"/>
+                          <md-input v-model="bankDetails.address" :class="{valid: this.ariaInnvalid}"
+                                    v-validate="modelValidations.email" type="text"/>
                           <div>{{ errors.first('email') }}</div>
                         </div>
                       </div>
@@ -116,24 +116,10 @@ import {Tabs} from "@/components";
 import VueElementLoading from "vue-element-loading";
 import EventBlockRequirements from "../../../Guest/components/EventBlocks/Modals/EventBlockRequirements";
 import axios from "axios";
-import useVuelidate from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
 
 var card = undefined;
 
 export default {
-  setup () {
-    return { v$: useVuelidate() };
-  },
-  validations () {
-    return {
-      firstName: {required}, // Matches this.firstName
-      lastName: {required}, // Matches this.lastName
-      contact: {
-        email: {required, email} // Matches this.contact.email
-      }
-    };
-  },
   components: {
     VueElementLoading,
     Tabs,
@@ -143,10 +129,23 @@ export default {
   data: () => ({
     isLoaded: false,
     error: "",
-    firstName: "{required}", // Matches this.firstName
-    lastName: "{required}", // Matches this.lastName
-    contact: {
-      email: "{required, email}" // Matches this.contact.email
+    modelValidations: {
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        min: 8
+      },
+      username: {
+        required: true
+      }
+    },
+    touched: {
+      email: false,
+      password: false,
+      username: false
     },
     bankDetails: {
       id: ["", "", "", "", "", "", "",],

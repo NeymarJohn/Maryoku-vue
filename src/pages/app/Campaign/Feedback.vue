@@ -21,11 +21,11 @@
           <div class="wrapper-btn-switch">
             <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
           </div>
-          <div v-if="isUploadedFiles" class="view-presentation-description">
+          <div v-if="isUploadedFiles" class="view-presentation-footer">
             <img class="mr-10" src="static/icons/red-arrow-down.svg">
             <span class="text-description">Download all the attachments (3) </span>
           </div>
-          <div v-else class="view-presentation-description">
+          <div v-else class="view-presentation-footer">
             <img src="static/icons/red-arrow-down.svg">
             <div class="text-description-upload-files" @click="openModalWindow">
               Upload Files
@@ -34,7 +34,7 @@
               Add attachments to the event
             </div>
           </div>
-          <feedback-upload-files-modal v-if="showModalWindowOpen" @close="closeModalWindow" />
+          <feedback-upload-files-modal v-if="showModalWindowOpen" :upload-to-folder-name="`events/${event.id}`" @close="closeModalWindow" />
         </div>
         <div class="footer-change-cover">
           <div class="wrapper-logo-microsoft">
@@ -354,7 +354,11 @@ export default {
     },
     handleChangeData(sectionName, key, value) {
       this.additionalData[sectionName][key] = value;
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "additionalData", value: this.additionalData });
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "additionalData",
+        value: this.additionalData
+      });
     },
   },
 };
