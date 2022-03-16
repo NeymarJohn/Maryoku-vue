@@ -476,12 +476,12 @@ export default {
     &-wrapper {
       flex-flow: wrap;
       justify-content: flex-start;
-      height: 130px;
+      height: 120px;
       overflow: hidden;
       width: 100%;
       transition: height 0.5s;
       &.expanded {
-        height: 330px;
+        height: 300px;
         max-height: max-content;
         transition: height 0.5s;
       }
@@ -500,7 +500,6 @@ export default {
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      white-space: nowrap;
       img {
         width: 15px;
         margin-left: 0.5em;

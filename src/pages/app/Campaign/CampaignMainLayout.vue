@@ -595,6 +595,7 @@ import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
+import FeedbackList from "./components/FeedbackList";
 import { Loader } from "@/components";
 const defaultSettings = {
   phone: {
@@ -634,6 +635,7 @@ export default {
     CollapsePanel,
     ComingsoonAnalytics,
     FeedbackAnalytics,
+    FeedbackList,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -841,28 +843,22 @@ export default {
     sendPreviewEmail() {
       const campaignData =
         this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-
+      console.log(campaignData);
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true
       ).then((res) => {});
-
-        let tabName = null;
-        if (this.selectedTab === 1) {
-            tabName = "Save The Date";
-        } else if (this.selectedTab === 2) {
-            tabName = "RSVP";
-        } else if (this.selectedTab === 3) {
-            tabName = "Coming Soon";
-        } else if (this.selectedTab === 4) {
-            tabName = "Feedback";
-        }
-        this.$notify({
+      this.$notify({
         message: {
           title: "Your preview email is on the way!",
-          content: `The preview email for ${ tabName }
-            has been sent to ${ this.event.owner ? this.event.owner.name : ""}.You should receive it shortly.`,
+          content: `The preview email for ${this.campaignTabs[
+            this.selectedTab
+          ].name
+            .split("_")
+            .join(" ")} has been sent to ${
+            this.event.owner.name
+          }.You should receive it shortly.`,
         },
         icon: `${this.$iconURL}messages/info.svg`,
         horizontalAlign: "right",

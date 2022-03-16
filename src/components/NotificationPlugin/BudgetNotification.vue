@@ -75,9 +75,9 @@ export default {
       type: Boolean,
       default: true,
     },
-     confirmBtn: {
-      type: String,
-      default: null,
+      confirmBtn: {
+      type: Boolean,
+      default: false,
     },
     closeBtn: {
        type: Boolean,
