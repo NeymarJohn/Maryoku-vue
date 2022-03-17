@@ -50,15 +50,36 @@ export default {
   name: "InputProposalSubItem",
   model: {},
   props: {
-    name: String,
-    title: String,
-    placeholder: String,
-    icon: String,
-    img: String,
-    bkImg: String,
+    name: {
+      type: String,
+      default: ""
+    },
+    title: {
+      type: String,
+      default: ""
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
+    img: {
+      type: String,
+      default: ""
+    },
+    bkImg: {
+      type: String,
+      default: ""
+    },
     disabled: Boolean,
     isLeft: Boolean,
-    items: Array,
+    items: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {

@@ -30,7 +30,7 @@
         </template>
       </div>
     </div>
-    <div v-for="(property, idx) in specialRequirements">
+    <div v-for="(property, idx) in specialRequirements" :key="idx">
       <special-requirement-item
         v-if="property.isSelected"
         :index="idx"
@@ -75,6 +75,7 @@ export default {
     note: {
       type: String,
       required: false,
+      default: ""
     },
   },
   data() {
@@ -98,11 +99,9 @@ export default {
   },
   methods: {
     getSpecialRequirements() {
-      console.log("specialRequirements", this.anythingElse);
       this.specialRequirements = this.data;
     },
     handleChangeItem() {
-      console.log("handleChangeItem", this.data);
       this.$emit("change");
     },
     handleNoteChange() {

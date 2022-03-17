@@ -161,23 +161,27 @@ import companyForm from "@/pages/app/Vendors/Form/companyForm";
 export default {
   name: "EventBlocksVendors",
   components: {
-    MdCardHeader,
     MdCardContent,
     VueElementLoading,
     UploadVendorsModal,
-    ManageBlockVendors,
-    ViewProposals,
-    VendorsTable,
-    Pagination,
   },
   props: {
-    selectedBlock: Object,
-    event: Object,
+    selectedBlock: {
+      type: Object,
+      default: () => {},
+    },
+    event: {
+      type: Object,
+      default: () => {},
+    },
     caseStatus: {
       type: String,
       default: null,
     },
-    categoryTitle: String,
+    categoryTitle: {
+      type: String,
+      default: "",
+    },
   },
   data: () => ({
     // auth: auth,
@@ -202,9 +206,6 @@ export default {
   watch: {
     searchQuery(newVal, oldVal) {
       this.filterVendors();
-    },
-    selectedVendors(newVal, oldVal) {
-      console.log(newVal);
     },
   },
   created() {
@@ -248,7 +249,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          console.log("EventComponentVendor error =>", error);
+          console.error("EventComponentVendor error =>", error);
         });
     },
     viewProposals(item) {
@@ -284,7 +285,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          console.log("EventComponentVendor error =>", error);
+          console.error("EventComponentVendor error =>", error);
 
           this.$notify({
             message: "Error while trying to add vendor, try again!",
@@ -344,7 +345,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          console.log("EventComponentVendor error =>", error);
+          console.error("EventComponentVendor error =>", error);
 
           this.$notify({
             message: "Error while trying to add vendor, try again!",

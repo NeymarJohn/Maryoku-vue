@@ -103,7 +103,7 @@
         class="md-title md-layout-item md-size-100 clear-margins"
         style="margin: 0; line-height: 51px; width: 100%; font-size: 20px"
       >
-        {{ this.selectedBlock.title }} Requirements
+        {{ selectedBlock.title }} Requirements
 
         <md-button class="md-info md-sm add-new-requirements pull-right" @click="addNewValue">
           <md-icon>add</md-icon> Add Requirement
@@ -152,12 +152,12 @@
                 </md-button>
               </md-table-empty-state>
 
-              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement
                     :delete-value="deleteValue"
-                    :requirement.sync="item"
+                    :requirement="item"
                     :event-id="event.id"
                     :selected-block-id="selectedBlock.id"
                     :requirement-properties="getRequirementProperties(item)"
@@ -166,12 +166,12 @@
               </md-table-row>
             </md-table>
             <md-table v-else v-model="dummyList" class="clear-margins">
-              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement
                     :delete-value="deleteValue"
-                    :requirement.sync="item"
+                    :requirement="item"
                     :event-id="event.id"
                     :selected-block-id="selectedBlock.id"
                     :requirement-properties="getRequirementProperties(item)"

@@ -29,7 +29,9 @@
                     <div v-if="errors.length">
                       <b>Please correct the following error(s):</b>
                       <ul>
-                        <li v-for="error in errors">{{ error }}</li>
+                        <li v-for="error in errors">
+                          {{ error }}
+                        </li>
                       </ul>
                     </div>
                     <div class="md-layout-item">
@@ -52,45 +54,49 @@
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Beneficiary Name</label>
-                          <md-input id="name" v-model="bankDetails.holderName" type="text"/>
+                          <md-input id="name" v-model="bankDetails.holderName" type="text" />
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Account No.</label>
-                          <md-input id="email" v-model="bankDetails.accountNumber" type="text"/>
+                          <md-input id="email" v-model="bankDetails.accountNumber" type="text" />
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Bank No.</label>
                           <md-input v-model="bankDetails.routingNumber" v-validate="modelValidations.username"
-                                    type="text"/>
+                                    type="text"
+                          />
                         </div>
                       </div>
                       <md-field class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Branch No.</label>
-                          <md-input v-model="bankDetails.branch" v-validate="modelValidations.password" type="text"/>
+                          <md-input v-model="bankDetails.branch" v-validate="modelValidations.password" type="text" />
                         </div>
                       </md-field>
                       <div class="md-layout-item md-size-80"
-                           :class="[{'valid': !errors.has('email') && touched.email},{'error': errors.has('email')}]">
+                           :class="[{'valid': !errors.has('email') && touched.email},{'error': errors.has('email')}]"
+                      >
                         <div class="input-wrapper"
-                             :class="[{'valid': !errors.has('email')},{'error': errors.has('email')}]">
+                             :class="[{'valid': !errors.has('email')},{'error': errors.has('email')}]"
+                        >
                           <label>Address and name of the bank</label>
-                          <md-input v-model="bankDetails.address" :class="{valid: this.ariaInnvalid}"
-                                    v-validate="modelValidations.email" type="text"/>
+                          <md-input v-model="bankDetails.address" v-validate="modelValidations.email"
+                                    :class="{valid: this.ariaInnvalid}" type="text"
+                          />
                           <div>{{ errors.first('email') }}</div>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-80">
                         <div class="input-wrapper">
                           <label>Verification</label>
-                          <md-input v-model="bankDetails.address" type="text"/>
+                          <md-input v-model="bankDetails.address" type="text" />
                         </div>
                       </div>
-                      <div class="md-layout-item md-size-100"/>
+                      <div class="md-layout-item md-size-100" />
                     </div>
                   </form>
                 </div>
@@ -121,9 +127,6 @@ var card = undefined;
 
 export default {
   components: {
-    VueElementLoading,
-    Tabs,
-    EventBlockRequirements,
   },
   props: {},
   data: () => ({
@@ -164,80 +167,49 @@ export default {
       var stripe = Stripe("pk_test_51In2qMBvFPeKz0zXs5ShSv1qjb6YAnonaqamWN4e9f4cTygxBMkMbYXcUAGp7deorwFS5ohy4vuQZFfeIVgxPPMF00nSOnDeQy");
       stripe.verifyIdentity("vs_1KcCl2BvFPeKz0zX7nYGzaRS_secret_CJ3fAnRmp8raDXHQEBYFLhow9Tdtg")
         .then(function (result) {
-          console.log("##-175, PaymentSettings.vue", result);
         });
-      // var verifyButton = document.getElementById('verify-button');
-      //
-      // verifyButton.addEventListener('click', function() {
-      // Get the VerificationSession client secret using the server-side
-      // endpoint you created in step 3.
-      fetch("https://api.stripe.com/v1/identity/verification_sessions ", {
-        method: "POST",
-        data: {
-          vendorId: this.$store.state.auth.user.id
-        }
-      })
-        .then(function (response) {
-          return stripe.verifyIdentity(response.secret);
+          fetch("https://api.stripe.com/v1/identity/verification_sessions ", {
+            method: "POST",
+            data:{
+              vendorId: this.$store.state.auth.user.id
+            }
+          })
+            .then(function(response) {
+              return stripe.verifyIdentity(response.secret);
 
-          // return response.json();
-        })
-        .then(function (session) {
-          // Show the verification modal.
+              // return response.json();
+            })
+            .then(function(session) {
+              // Show the verification modal.
 
-          return stripe.verifyIdentity("");
-        })
-        .then(function (result) {
-          console.log("##-175, PaymentSettings.vue", result);
-          // If `verifyIdentity` fails, you should display the localized
-          // error message to your user using `error.message`.
-          if (result.error) {
-            alert(result.error.message);
-          }
-        })
-        .catch(function (error) {
-          console.error("Error:", error);
-        });
-      // });
+              return stripe.verifyIdentity("");
+            })
+            .then(function(result) {
+              // If `verifyIdentity` fails, you should display the localized
+              // error message to your user using `error.message`.
+              if (result.error) {
+                alert(result.error.message);
+              }
+            })
+            .catch(function(error) {
+              console.error("Error:", error);
+            });
+    // });
     },
-    test(e) {
-      e.preventDefault();
-
-      this.errors = [];
-
-      if (this.name === "") {
-        this.errors.push("Product name is required.");
-      } else {
-        console.log('##-211, PaymentSettings.vue',);
-        // console.log("##-133, PaymentSettings.vue",);
-        // fetch(apiUrl + encodeURIComponent(this.name))
-        //   .then(async res => {
-        //     if (res.status === 204) {
-        //       alert("OK");
-        //     } else if (res.status === 400) {
-        //       let errorResponse = await res.json();
-        //       this.errors.push(errorResponse.error);
-        //     }
-        //   });
-      }
-      console.log('##-222, PaymentSettings.vue',);
-
+     test (e){
     },
     sendBankInfo() {
 
-      axios.post(' https://api.stripe.com'+ "/v1/stripe/person/verify", {
+      axios.post(" https://api.stripe.com"+ "/v1/stripe/person/verify", {
         ...this.bankDetails,
         accept: "application/json",
         headers: {
           token: "lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3"
         }
-      }).then(res => {
-        console.log("##-125, PaymentSettings.vue", res);
+        }).then(res=>{
       }).catch(error => {
-        console.log("##-126, PaymentSettings.vue", error);
+        console.error(error);
       });
-      console.log("##-119, PaymentSettings.vue", this.bankDetails, process.env.SERVER_URL);
-
     },
     submitPayment(event) {
       let self = this;

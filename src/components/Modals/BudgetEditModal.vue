@@ -51,7 +51,7 @@
       <md-button class="md-default md-simple cancel-btn" @click="close">
         Cancel
       </md-button>
-      <md-button class=" add-category-btn" :class="{ disabled: !updateAvailable }" @click="updateBudget">
+      <md-button class="add-category-btn" @click="updateBudget">
         Save
       </md-button>
     </template>

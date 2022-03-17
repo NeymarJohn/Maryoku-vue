@@ -154,8 +154,16 @@ const components = {
 
 export default {
   components,
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   props: {
-    newProposalRequest: Object,
+    newProposalRequest: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {
@@ -179,16 +187,39 @@ export default {
       option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
     };
   },
+  computed: {
+    getServiceCategory() {
+      if (this.proposalRequest.requirementsCategory) {
+        return this.proposalRequest.requirementsCategory;
+      } else {
+        return this.vendorCategory;
+      }
+    },
+    getHeaderImage() {
+      if (this.event && this.event.concept) {
+        return this.event.concept.images[new Date().getTime() % 4].url;
+      }
+      return "";
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    selectedVersion(){
+      return this.$store.state.vendorProposal.currentVersion;
+    },
+    versions(){
+      return this.$store.state.vendorProposal.versions;
+    },
+    step: {
+      get: function () {
+        return this.$store.state.vendorProposal.wizardStep;
+      },
+      set: function (newValue) {
+        this.$store.commit("vendorProposal/setWizardStep", newValue);
+      },
+    },
+  },
   async created() {
-
-    console.log("proposal.layout.created", this.$store.state.auth.user);
-    // if(this.$store.state.auth.user){
-    //   this.$store.dispatch('auth/checkToken', this.$store.state.auth.user.access_token).then(user => {
-    //
-    //   }).catch(err => this.$router.push({ path: `/vendor/signin`}));
-    // } else {
-    //     this.$router.push({ path: `/vendor/signin`});
-    // }
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -413,46 +444,7 @@ export default {
     }
   },
 
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  computed: {
-    getServiceCategory() {
-      if (this.proposalRequest.requirementsCategory) {
-        return this.proposalRequest.requirementsCategory;
-      } else {
-        return this.vendorCategory;
-      }
-    },
-    getHeaderImage() {
-      if (this.event && this.event.concept) {
-        return this.event.concept.images[new Date().getTime() % 4].url;
-      }
-      return "";
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    selectedVersion(){
-      return this.$store.state.vendorProposal.currentVersion;
-    },
-    versions(){
-      return this.$store.state.vendorProposal.versions;
-    },
-    step: {
-      get: function () {
-        return this.$store.state.vendorProposal.wizardStep;
-      },
-      set: function (newValue) {
-        this.$store.commit("vendorProposal/setWizardStep", newValue);
-      },
-    },
-  },
-  watch: {
-    vendor(newVal){console.log("vendor.watch", newVal);}
-  }
+  
 };
 </script>
 <style lang="scss" scoped>

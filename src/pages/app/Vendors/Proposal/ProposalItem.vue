@@ -33,7 +33,7 @@
           />
         </div>
         <span
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
+          v-if="serviceSlidePos >= 0 || servicesWidth + serviceSlidePos - 200 > 0"
           class="next"
           @click="next()"
         >
@@ -102,7 +102,7 @@
           <select-proposal-sub-item v-for="(s, sIndex) in services" :key="sIndex" :active="true" :item="s" />
         </div>
         <span
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
+          v-if="serviceSlidePos >= 0 || servicesWidth + serviceSlidePos - 200 > 0"
           class="next"
           @click="next()"
         >
@@ -657,7 +657,6 @@ export default {
       let total = 0;
       let vm = this;
       let requirements = [];
-      console.log("total.requirements", this.newProposalRequest);
       if (this.newProposalRequest.requirements.length) {
         requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty("requirementTitle"));
       }
@@ -684,7 +683,6 @@ export default {
         total = total - this.discount_by_amount;
       }
       total += (total * this.tax) / 100;
-      console.log("calculateTotal", total);
       return total;
     },
     prev() {

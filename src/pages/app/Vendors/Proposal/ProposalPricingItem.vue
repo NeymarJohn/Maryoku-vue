@@ -153,18 +153,31 @@ import ProposalRequirements from "./ProposalRequirements.vue";
 
 export default {
   name: "ProposalPricingItem",
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   components: {
     EditableProposalSubItem,
-    CheckListItem,
     ProposalRequirements,
   },
   props: {
-    category: String,
+    category: {
+      type: String,
+      default: ""
+    },
     isCollapsed: Boolean,
     isDropdown: Boolean,
     proposalRange: Boolean,
-    iconUrl: String,
-    itemType: String,
+    iconUrl: {
+      type: String,
+      default: ""
+    },
+    itemType: {
+      type: String,
+      default: ""
+    },
     // requirements: Array,
   },
   data() {
@@ -172,59 +185,6 @@ export default {
       isExpanded: false,
       iconsWithCategory: null,
     };
-  },
-  created() {},
-  mounted() {
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
-  },
-  methods: {
-    expand() {
-      if (this.itemType == "price") {
-        this.isExpanded = !this.isExpanded;
-      }
-    },
-    getCategoryIcon() {
-      console.log(`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`);
-      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`;
-    },
-    servicesByCategory() {
-      return this.requirements.filter((r) => r.requirementsCategory == this.category);
-    },
-    getOrgPrice() {
-      let total = 0;
-
-      if (this.itemType == "price") {
-        this.servicesByCategory().forEach((s) => {
-          total += s.price;
-        });
-      } else if (this.itemType == "total") {
-        this.requirements.forEach((r) => {
-          total += r.price;
-        });
-      } else {
-        total = 0;
-      }
-
-      return total;
-    },
-    getServiceCategory(category) {
-      return this.serviceCategories.find((item) => item.key === category);
-    },
-    getDiscount(category) {
-      console.log("this.defaultDiscount.percentage", this.defaultDiscount.percentage);
-      return ((this.pricesByCategory[category] * this.defaultDiscount.percentage) / 100).toFixed(2);
-    },
-    getDiscountedPrice(category) {
-      console.log("this.getDiscount()", this.getDiscount(category));
-      console.log("this.pricesByCategory[category]", this.pricesByCategory[category]);
-      return (this.pricesByCategory[category] - Number(this.getDiscount(category))).toFixed(2);
-    },
-    getTaxPrice(category) {
-      return ((Number(this.getDiscountedPrice(category)) * this.defaultTax.percentage) / 100).toFixed(2);
-    },
-    getTotalPrice(category) {
-      return Number(this.getDiscountedPrice(category)) + Number(this.getTaxPrice(category));
-    },
   },
   computed: {
     ...mapGetters("vendorProposal", [
@@ -269,6 +229,7 @@ export default {
           return this.$store.state.vendorProposal.includedServices[this.vendorCategory];
         else if (this.tableCategory === "extra")
           return this.$store.state.vendorProposal.extraServices[this.vendorCategory];
+        return [];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")
@@ -306,7 +267,6 @@ export default {
             timelineItem.eventCategory &&
             timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
           ) {
-            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
             serviceTimeString = `${this.$dateUtil.formatScheduleDay(
               Number(timelineItem.startTime),
               "hh:mm A",
@@ -327,16 +287,63 @@ export default {
       };
     },
   },
-  filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
+
   watch: {
     costedServices(newVal){},
     includedServices(newVal){},
     extraServices(newVal){},
   },
+  created() {},
+  mounted() {
+    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
+  },
+  methods: {
+    expand() {
+      if (this.itemType == "price") {
+        this.isExpanded = !this.isExpanded;
+      }
+    },
+    getCategoryIcon() {
+      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`;
+    },
+    servicesByCategory() {
+      return this.requirements.filter((r) => r.requirementsCategory == this.category);
+    },
+    getOrgPrice() {
+      let total = 0;
+
+      if (this.itemType == "price") {
+        this.servicesByCategory().forEach((s) => {
+          total += s.price;
+        });
+      } else if (this.itemType == "total") {
+        this.requirements.forEach((r) => {
+          total += r.price;
+        });
+      } else {
+        total = 0;
+      }
+
+      return total;
+    },
+    getServiceCategory(category) {
+      return this.serviceCategories.find((item) => item.key === category);
+    },
+    getDiscount(category) {
+      return ((this.pricesByCategory[category] * this.defaultDiscount.percentage) / 100).toFixed(2);
+    },
+    getDiscountedPrice(category) {
+      return (this.pricesByCategory[category] - Number(this.getDiscount(category))).toFixed(2);
+    },
+    getTaxPrice(category) {
+      return ((Number(this.getDiscountedPrice(category)) * this.defaultTax.percentage) / 100).toFixed(2);
+    },
+    getTotalPrice(category) {
+      return Number(this.getDiscountedPrice(category)) + Number(this.getTaxPrice(category));
+    },
+  },
+
+
 };
 </script>
 <style lang="scss" scoped>
