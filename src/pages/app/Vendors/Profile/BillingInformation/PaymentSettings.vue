@@ -67,22 +67,20 @@
                         <div class="input-wrapper">
                           <label>Bank No.</label>
                           <md-input v-model="bankDetails.routingNumber"
-                                    type="text"
-                          />
+                                    type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Branch No.</label>
-                          <md-input v-model="bankDetails.branch" type="text" />
+                          <md-input v-model="bankDetails.branch" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-80">
                         <div class="input-wrapper">
                           <label>Address and name of the bank</label>
                           <md-input v-model="bankDetails.address"
-                                    type="text"
-                          />
+                                    type="text"/>
                           <div>{{ errors.first('email') }}</div>
                         </div>
                       </div>
@@ -207,7 +205,7 @@ export default {
       if (this.name === "") {
         this.errors.push("Product name is required.");
       } else {
-        console.log("##-211, PaymentSettings.vue",);
+        console.log('##-211, PaymentSettings.vue',);
         // console.log("##-133, PaymentSettings.vue",);
         // fetch(apiUrl + encodeURIComponent(this.name))
         //   .then(async res => {
@@ -219,12 +217,12 @@ export default {
         //     }
         //   });
       }
-      console.log("##-222, PaymentSettings.vue",);
+      console.log('##-222, PaymentSettings.vue',);
 
     },
     sendBankInfo() {
 
-      axios.post(" https://api.stripe.com"+ "/v1/stripe/person/verify", {
+      axios.post(' https://api.stripe.com'+ "/v1/stripe/person/verify", {
         ...this.bankDetails,
         accept: "application/json",
         headers: {

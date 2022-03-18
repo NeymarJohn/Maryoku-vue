@@ -24,10 +24,9 @@
 export default {
   name: "CustomizableSelect",
   props: {
+    width: String,
     data: {type: Array, required: true},
-    initialValue: {
-      type:[String, Number],
-      required: true,
+    initialValue: {type:[String , Number], required: true,
     },
   },
   data () {

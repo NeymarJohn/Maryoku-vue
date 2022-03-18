@@ -154,10 +154,10 @@
         </form>
       </div>
       <div class="actions-section md-layout-item md-size-100 text-right">
-        <md-button v-if="editMode" class="md-danger move-left" @click="showDeleteAlert">
+        <md-button v-if="this.editMode" class="md-danger move-left" @click="showDeleteAlert">
           Delete
         </md-button>
-        <md-button v-if="editMode" class="md-success" @click="openEventPlanner">
+        <md-button v-if="this.editMode" class="md-success" @click="openEventPlanner">
           Open in Event Planner
         </md-button>
         <md-button class="md-success pull-right" @click="validateEvent">
@@ -522,6 +522,7 @@ export default {
         .for(_calendar)
         .save()
         .then((response) => {
+          console.log("new event => ", response.id);
           this.$parent.isLoading = false;
           this.closeModal();
           // this.$emit("refresh-events");
@@ -583,6 +584,7 @@ export default {
       }
     },
   },
+  watch: {},
 };
 </script>
 <style lang="scss" scope>

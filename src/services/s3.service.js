@@ -26,10 +26,10 @@ class S3Service {
 
       let formData = new FormData();
       formData.append("file", file);
-      formData.append("path", dirName);
+      formData.append("key", key);
 
       axios.defaults.headers.common.Authorization = authHeader().Authorization;
-      axios
+      const result = axios
         .post(`${process.env.SERVER_URL}/uploadFile`, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
@@ -37,9 +37,8 @@ class S3Service {
         })
         .then((result) => {
           let data = result.data;
-          console.log("data", data);
           data.url = process.env.S3_URL + data.key;
-          resolve(data.upload);
+          resolve(data.url);
         })
         .catch((error) => {
           reject(error);

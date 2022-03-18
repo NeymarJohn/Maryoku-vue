@@ -16,10 +16,7 @@
           <template slot="prev">
             <span ref="prevButton" class="prev handle-btn"><md-icon>keyboard_arrow_left</md-icon></span>
           </template>
-          <p
-            v-for="(text, index) in about"
-            :key="index"
-          >
+          <p v-for="text in about">
             {{ text }}
           </p>
           <template slot="next">

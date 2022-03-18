@@ -197,7 +197,6 @@ export default {
       selectedBlock: null,
       commonIncludedServices: [],
       comparedPolicies: [],
-      comparedServices: [],
     };
   },
   computed: {
@@ -254,6 +253,7 @@ export default {
                     comparedItems.proposalServices.push({ ...item, included: true });
                   } else if (proposal.vendor.services[camelize(item.name)]) {
                     // checking extra servcie
+                    console.log("object", proposal.vendor.services[camelize(item.name)]);
                     const service = proposal.vendor.services[camelize(item.name)];
                     comparedItems.proposalServices.push({
                       ...item,
@@ -277,11 +277,13 @@ export default {
         // checking policy
         this.comparedPolicies = [];
         const categoryPolicy = VendorPolicy.find((item) => item.category === this.selectedBlock.componentId);
+        console.log(categoryPolicy);
         if (categoryPolicy) {
           categoryPolicy.items.forEach((policyItem) => {
             const proposalPolicies = [];
             this.proposals.forEach((proposal) => {
               const vendorPolicy = proposal.vendor.policies.find((policy) => policy.name === policyItem.name);
+              console.log(vendorPolicy);
               if (vendorPolicy) {
                 proposalPolicies.push(vendorPolicy);
               } else {
@@ -291,6 +293,7 @@ export default {
             this.comparedPolicies.push({ name: policyItem.name, proposalPolicies });
           });
         }
+        console.log("comparedServices", this.comparedPolicies);
       });
   },
   methods: {

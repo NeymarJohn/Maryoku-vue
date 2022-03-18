@@ -104,7 +104,6 @@ export default {
       default: 0
     },
     removeHeader: {
-      type: Boolean,
       default: true
     },
     title: {

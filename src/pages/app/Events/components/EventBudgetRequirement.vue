@@ -167,12 +167,12 @@
       </div>
       <div v-if="currentStep < 3" class="status">
         <div class="status-step">
-          {{ currentStep }} Step of 2
+          {{ this.currentStep }} Step of 2
         </div>
         <md-progress-bar
           class="md-red progress-bar"
           md-mode="determinate"
-          :md-value="(currentStep / 2) * 100"
+          :md-value="(this.currentStep / 2) * 100"
         />
       </div>
       <div v-if="currentStep < 3" class="footer-actions">
@@ -251,25 +251,6 @@ export default {
       showBudgetModal: false,
     };
   },
-  computed: {
-    ...mapGetters({
-      showBudgetNotification: "event/showBudgetNotification",
-      budgetStatistics: "event/budgetStatistics",
-      currentUser: "auth/currentUser",
-    }),
-    canEdit() {
-      return !this.permission || this.permission === "edit";
-    },
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    categoryList() {
-      return this.$store.state.event.eventData.components.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
-    },
-    pieChartData() {
-      return this.categoryList.filter((item) => item.componentId !== "unexpected");
-    },
-  },
   async mounted() {
     this.currentStep = this.event.budgetProgress >= 50 ? 3 : 1;
       // notify budget states
@@ -339,16 +320,19 @@ export default {
       window.scrollTo(0, 0);
     },
     setEventStep1(eventInfo) {
+      console.log(eventInfo);
       this.editingEvent.totalBudget = eventInfo.noBudget ? 0 : eventInfo.budget;
       this.editingEvent.eventDecisionFactor3 = eventInfo.selectedLevel;
       this.editingEvent.noBudget = eventInfo.noBudget;
       this.budgetInfo1 = eventInfo;
     },
     setEventStep2(eventInfo) {
+      console.log(eventInfo);
       this.budgetInfo2 = eventInfo;
       this.editingEvent.eventMovieId = eventInfo.label;
     },
     notifyStates() {
+        console.log("checkMessageStatus");
           this.budgetStates = [];
           let now = moment();
           let created_at = moment(this.event.dateCreated);
@@ -379,7 +363,9 @@ export default {
       let _calendar = this.getCalendar();
       let eventComponent = new EventComponent().for(_calendar, event);
       let components = await eventComponent.get();
+      console.log("getEventComponents", components);
       components.sort((a, b) => a.order - b.order);
+      console.log(components);
       this.event.components = components;
       this.selectedComponents = components;
     },
@@ -389,6 +375,25 @@ export default {
     onAddMoreBudget(value) {
       // this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       // this.updateBudget();
+    },
+  },
+  computed: {
+    ...mapGetters({
+        showBudgetNotification: "event/showBudgetNotification",
+        budgetStatistics: "event/budgetStatistics",
+        currentUser: "auth/currentUser",
+    }),
+    canEdit() {
+      return !this.permission || this.permission === "edit";
+    },
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    categoryList() {
+      return this.$store.state.event.eventData.components.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
+    },
+    pieChartData() {
+      return this.categoryList.filter((item) => item.componentId !== "unexpected");
     },
   },
 };

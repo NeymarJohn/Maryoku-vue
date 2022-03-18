@@ -46,9 +46,9 @@
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper" :class="{ error: v$.bankDetails.holderName.$errors.length }">
                           <label>Beneficiary Name</label>
-                          <input id="name" v-model="bankDetails.holderName" type="text" @blur="v$.bankDetails.holderName.$touch">
+                          <input id="name" v-model="bankDetails.holderName" @blur="v$.bankDetails.holderName.$touch" type="text"/>
                         </div>
-                        <div v-for="error of v$.bankDetails.holderName.$errors" :key="error.$uid" class="input-errors">
+                        <div class="input-errors" v-for="error of v$.bankDetails.holderName.$errors" :key="error.$uid">
                           <div class="error-msg">
                             {{ error.$message }}
                           </div>
@@ -57,40 +57,40 @@
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Account No.</label>
-                          <input id="email" v-model="bankDetails.accountNumber" type="text">
+                          <input id="email" v-model="bankDetails.accountNumber" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Bank No.</label>
-                          <input v-model="bankDetails.routingNumber" type="text">
+                          <input v-model="bankDetails.routingNumber" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-40">
                         <div class="input-wrapper">
                           <label>Branch No.</label>
-                          <input v-model="bankDetails.branch" type="text">
+                          <input v-model="bankDetails.branch" type="text"/>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-80">
                         <div class="input-wrapper">
                           <label>Address and name of the bank</label>
-                          <input v-model="bankDetails.address" type="text">
+                          <input v-model="bankDetails.address" type="text"/>
                           <div>{{ errors.first('email') }}</div>
                         </div>
                       </div>
                       <div class="md-layout-item md-size-80">
                         <div class="input-wrapper">
                           <label>Verification</label>
-                          <input v-model="bankDetails.verification" type="text">
+                          <input v-model="bankDetails.verification" type="text"/>
                         </div>
                       </div>
-                      <div class="md-layout-item md-size-100" />
+                      <div class="md-layout-item md-size-100"/>
                     </div>
                   </form>
                 </div>
-                <span class="block-separator" />
-                <div class="md-layout-item md-size-100 authentication-header-block">
+                <span class="block-separator"></span>
+                <div  class="md-layout-item md-size-100 authentication-header-block">
                   <img class="shield-icon" :src="`/static/icons/shield.svg`">
                   <span class="authentication-header">User Authentication</span>
                 </div>
@@ -116,10 +116,10 @@
 
                 <div class="md-layout-item md-size-60 authentication-block">
                   <div class="select-ssn-type">
-                    <input id="ssn" v-model="ssnType" value="ssn" class="radio-input" type="radio">
+                    <input v-model="ssnType" id="ssn" value="ssn" class="radio-input" type="radio">
                     <label for="ssn" class="radio-label name">SSN</label>
 
-                    <input id="ein" v-model="ssnType" value="ein" class="radio-input" type="radio">
+                    <input v-model="ssnType" id="ein" value="ein"  class="radio-input" type="radio">
                     <label for="ein" class="radio-label name">EIN</label>
                   </div>
                   <div>
@@ -132,9 +132,9 @@
                 <md-button class="md-vendor md-vendor-review" style="margin: 20px 15px" @click="sendBankInfo">
                   Save details
                 </md-button>
-                <!--                <md-button class="md-vendor md-vendor-review" @click="sendTest">-->
-                <!--                  Verify Account-->
-                <!--                </md-button>-->
+<!--                <md-button class="md-vendor md-vendor-review" @click="sendTest">-->
+<!--                  Verify Account-->
+<!--                </md-button>-->
               </md-card-content>
             </md-card>
             <!--            <button id="verify-button" @click="sendTest">Verify</button>-->
@@ -252,7 +252,7 @@ export default {
       if (this.name === "") {
         this.errors.push("Product name is required.");
       } else {
-        console.log("##-211, PaymentSettings.vue",);
+        console.log('##-211, PaymentSettings.vue',);
         // console.log("##-133, PaymentSettings.vue",);
         // fetch(apiUrl + encodeURIComponent(this.name))
         //   .then(async res => {
@@ -264,12 +264,12 @@ export default {
         //     }
         //   });
       }
-      console.log("##-222, PaymentSettings.vue",);
+      console.log('##-222, PaymentSettings.vue',);
 
     },
     sendBankInfo() {
 
-      axios.post(" https://api.stripe.com"+ "/v1/stripe/person/verify", {
+      axios.post(' https://api.stripe.com'+ "/v1/stripe/person/verify", {
         ...this.bankDetails,
         accept: "application/json",
         headers: {
