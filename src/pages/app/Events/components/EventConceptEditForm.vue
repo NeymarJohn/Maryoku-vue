@@ -121,47 +121,51 @@
           <div v-for="indx in 5" :key="indx" :class="`images-list__item`">
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
+              <span
+                v-show="!uploadImageData[indx - 1]"
+                data-design-type="A4Document"
+                data-button-size="default"
+                data-button-theme="default"
+                data-api-key="no5x5PRx6hMNshFZIrRpevKJ"
+                class="canva-design-button"
+                style="
+                  display: none;
+                  position: absolute;
+                  left: 0;
+                  right: 0;
+                  width: 180px;
+                  margin: 0 auto;
+                  top: 15%;
+                  color: #050505;
+                  background: white;
+                  border: 1px solid #050505;
+                  z-index: 10;
+                "
+              >Design on Canva</span>
               <img
                 v-if="uploadImageData[indx - 1]"
                 class="concept-image"
                 :src="`${uploadImageData[indx - 1]}`"
                 @click="uploadPhoto(indx)"
               >
-              <div class="image-section-actions" :class="uploadImageData[indx - 1]?'hover-action':''">
-                <md-button
-                  class="canva-design-button md-simple md-red normal-btn"
-                  style="
-                  position: absolute;
-                  left: 0;
-                  right: 0;
-                  width: 150px;
-                  margin: 0 auto;
-                  top: 15%;
-                  z-index: 10;
-                "
-                  @click="handleClickCanva(indx-1)"
-                >
-                  Design on Canva
-                </md-button>
-                <div class="image-selector" @click="uploadPhoto(indx)">
-                  <div :class="indx === 2 || indx === 5 ? 'mt-2' : 'mt-1'">
-                    <div class="font-size-14">
-                      Or
-                    </div>
-                    <div class="color-black-middle font-size-14">
-                      Upload Photo
-                    </div>
+              <div v-else class="image-selector" @click="uploadPhoto(indx)">
+                <div :class="indx === 2 || indx === 5 ? 'mt-2' : 'mt-1'">
+                  <div class="font-size-14">
+                    Or
+                  </div>
+                  <div class="color-black-middle font-size-14">
+                    Upload Photo
                   </div>
                 </div>
-                <input
-                  :id="`file-${indx}`"
-                  style="display: none"
-                  name="attachment"
-                  type="file"
-                  multiple="multiple"
-                  :data-fileIndex="indx - 1"
-                >
               </div>
+              <input
+                :id="`file-${indx}`"
+                style="display: none"
+                name="attachment"
+                type="file"
+                multiple="multiple"
+                :data-fileIndex="indx - 1"
+              >
             </div>
           </div>
         </div>
@@ -262,7 +266,6 @@ export default {
       4: false,
     },
     canvaTooltip: "Access high quality images to convey your inspiration using our integration to Canva",
-    canvaApi: null
   }),
   computed: {
     canSave() {
@@ -276,16 +279,12 @@ export default {
         this.uploadImageData[i] = `${image.url ? image.url : ""}`;
       });
     }
-
-    (async () => {
-      if (!window.Canva || !window.Canva.DesignButton) {
-        return;
-      }
-
-      this.canvaApi = await window.Canva.DesignButton.initialize({
-        apiKey: "no5x5PRx6hMNshFZIrRpevKJ",
-      });
-    })();
+    (function (c, a, n) {
+      var w = c.createElement(a),
+        s = c.getElementsByTagName(a)[0];
+      w.src = n;
+      s.parentNode.insertBefore(w, s);
+    })(document, "script", "https://sdk.canva.com/designbutton/v2/api.js");
   },
   mounted() {
     this.taggingOptions.forEach((item, index) => {
@@ -333,21 +332,18 @@ export default {
           const extension = files[0].type.split("/")[1];
           const fileName = new Date().getTime() + "";
           const dirName = "concepts";
-          
+          const fileInfo = {
+            originName: files[0].name,
+            name: `${fileName}`,
+            url: `${process.env.S3_URL}${dirName}/${fileName}.${extension}`,
+          };
+          this.editConcept.images[itemIndex] = fileInfo;
 
           const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
           this.$set(this.uploadImageData, itemIndex, imageData);
           this.$set(this.uploadingStatus, itemIndex, true);
-
-          const fileInfo = {
-              originName: files[0].name,
-              name: `${fileName}`,
-            };
           S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
-            fileInfo.url = res.url;
             this.uploadingStatus[itemIndex] = false;
-            
-          this.editConcept.images[itemIndex] = fileInfo;
             this.$set(this.uploadingStatus, itemIndex, false);
           });
         }
@@ -382,16 +378,16 @@ export default {
         const fileName = new Date().getTime() + "";
         const dirName = "concepts";
         const fileInfo = {
-            originName: files[0].name,
-            name: `${fileName}`,
-          };
+          originName: files[0].name,
+          name: `${fileName}`,
+          url: `${process.env.S3_URL}${dirName}/${fileName}.${extension}`,
+        };
+        this.editConcept.images[itemIndex] = fileInfo;
 
         this.uploadImageData[itemIndex] = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
         this.uploadingStatus[itemIndex] = true;
         S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
-          fileInfo.url = res.url;
           this.uploadingStatus[itemIndex] = false;
-          this.editConcept.images[itemIndex] = fileInfo;
         });
       }
     },
@@ -399,29 +395,20 @@ export default {
       let calendar = new Calendar({
         id: this.$store.state.auth.user.profile.defaultCalendarId,
       });
+      let imageKeys = Object.keys(this.uploadImages);
       this.isLoading = true;
 
       this.editConcept.event = new CalendarEvent({ id: this.$store.state.event.eventData.id });
       const eventConcept = await new EventConcept(this.editConcept).save();
+
       eventConcept.imageData = this.uploadImageData;
+      // for (let i in Object.keys(this.uploadImageData)) {
+      //   if (evenConcept.images[i])
+      //     evenConcept.images[i].url = this.uploadImageData[i]
+      // }
 
       this.isLoading = false;
       this.$emit("saved", eventConcept);
-    },
-    handleClickCanva(imageIndex) {
-      this.canvaApi.createDesign({
-        design: {
-          type: "Poster",
-        },
-        onDesignPublish: (opts) => {
-          this.editConcept.images[imageIndex] = {
-            name: opts.designId,
-            originName: opts.designTitle,
-            url: opts.exportUrl
-          };
-          this.uploadImageData[imageIndex] = opts.exportUrl;
-        },
-      });
     },
   },
 };
@@ -480,6 +467,8 @@ export default {
   }
   .add-tags-field {
     margin-top: 60px;
+    .md-button {
+    }
   }
   .tags-list {
     margin: 0 0 3em;
@@ -487,12 +476,12 @@ export default {
     &-wrapper {
       flex-flow: wrap;
       justify-content: flex-start;
-      height: 130px;
+      height: 120px;
       overflow: hidden;
       width: 100%;
       transition: height 0.5s;
       &.expanded {
-        height: 330px;
+        height: 300px;
         max-height: max-content;
         transition: height 0.5s;
       }
@@ -511,7 +500,6 @@ export default {
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      white-space: nowrap;
       img {
         width: 15px;
         margin-left: 0.5em;
@@ -632,20 +620,6 @@ export default {
                 margin-right: 0.5em;
               }
             }
-          }
-        }
-        .image-section-actions {
-          width: 100%;
-          height: 100%;
-          background-color: rgba(255, 255, 255, 0.7);
-          z-index: 2;
-        }
-        .hover-action {
-          display: none;
-        }
-        &:hover{
-          .hover-action {
-            display: block;
           }
         }
       }

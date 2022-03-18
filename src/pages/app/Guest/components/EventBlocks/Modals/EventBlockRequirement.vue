@@ -51,7 +51,6 @@
                 <div class="multi-select-options">
                   <div
                     v-for="(option, index) in tempOptions"
-                    :key="index"
                     class="multi-select-options__item"
                     :class="{ 'with-amount': requirementPropertiesType === 'multi-selection-with-amount' }"
                   >
@@ -167,25 +166,14 @@ import _ from "underscore";
 export default {
 	name: "EventBlockRequirement",
 	components: {
+		LabelEdit,
 		Badge,
 	},
 	props: {
-		requirement: {
-      type: Object,
-      default: () => {},
-    },
-		deleteValue: {
-      type: Function,
-      default: () => {},
-    },
-		eventId: {
-      type: String,
-      default: "",
-    },
-		selectedBlockId: {
-      type: String,
-      default: "",
-    },
+		requirement: Object,
+		deleteValue: Function,
+		eventId: String,
+		selectedBlockId: String,
 		requirementProperties: {
 			type: Object,
 			default: null,
@@ -218,6 +206,7 @@ export default {
 	},
 	computed: {
 		requirementPropertiesType() {
+			console.log(this.requirementProperties);
 			if (this.requirementProperties != null) {
 				return this.requirementProperties.type;
 			} else {

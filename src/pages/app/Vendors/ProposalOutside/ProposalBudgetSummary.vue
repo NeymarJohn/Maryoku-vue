@@ -7,10 +7,7 @@
             <span class="font-bold font-size-22">Total</span>
             <span class="font-bold font-size-22 ml-auto">${{ (totalPrice) | withComma }}</span>
           </div>
-          <div
-            v-if="defaultDiscount.percentage || negotiationDiscount.isApplied"
-            class="d-flex align-center font-size-14 pb-20 mr-30"
-          >
+          <div v-if="defaultDiscount.percentage || negotiationDiscount.isApplied" class="d-flex align-center font-size-14 pb-20 mr-30">
             <span> Before discount </span>
             <span class="ml-auto mr-10">{{ `(${defaultDiscount.percentage}% off)` }}</span>
             <span> ${{ totalBeforeDiscount | withComma }} </span>
@@ -21,7 +18,7 @@
             <div
               v-if="additionalServices.length > 0 && step === 2"
               class="bundle-discount mt-20"
-              @click="toggleBundleDiscount"
+              @click="isBundleDiscount = !isBundleDiscount"
             >
               <img class="black" :src="`${iconUrl}Asset 579.svg`">
               <span>
@@ -86,7 +83,6 @@
                 </ul>
               </div>
             </div>
-
             <div v-if="step > 1 && additionalServices.length > 0" class="item additional">
               <div
                 v-for="(a, aIndex) in additionalServices.filter((item) => pricesByCategory[item] > 0)"
@@ -118,58 +114,7 @@
                   <li />
                 </ul>
               </div>
-
-              <div v-if="isBundleDiscount" class="item bundle">
-                <div class="bundle-header-description">
-                  <img width="24" height="24" src="static/icons/Group%205280.svg">
-                  <span>Creating a bundle, event if a small ome, increases your chances of winning a job</span>
-                </div>
-                <div class="element">
-                  <label class="">
-                    <span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
-                  </label>
-                  <money
-                    v-model="bundleDiscountAmount"
-                    v-bind="{
-                      decimal: '.',
-                      thousands: ',',
-                      prefix: '$ ',
-                      suffix: '',
-                      precision: 2,
-                      masked: false,
-                    }"
-                    class="bundle-discount-input"
-                    @keyup.native="setBundleDiscountAmount(bundleDiscountAmount)"
-                    @click.native="discountOption = 'amount'"
-                  />
-                </div>
-                <div class="element">
-                  <label class="font-bold">Or by percentage </label>
-                  <money
-                    v-model="bundleDiscountPercentage"
-                    v-bind="{
-                      decimal: '.',
-                      thousands: ',',
-                      prefix: '',
-                      suffix: ' %',
-                      precision: 2,
-                      masked: false,
-                    }"
-                    class="bundle-discount-input"
-                    @keyup.native="setBundleDiscountPercentage(bundleDiscountPercentage)"
-                    @click.native="discountOption = 'percentage'"
-                  />
-                </div>
-                <div class="element dis-value">
-                  <span> ${{ bundleDiscountAmount.toFixed(2) }} Discount </span>
-                </div>
-                <div class="action-cont">
-                  <a class="clear" @click="cancelBundle">Cancel</a>
-                  <a class="add" @click="addBundleDiscount">Add bundle</a>
-                </div>
-              </div>
             </div>
-
             <ItemForm
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
@@ -197,6 +142,52 @@
               :non-maryoku="true"
               @saveDiscount="saveDiscount('tax', $event)"
             />
+            <div v-if="isBundleDiscount" class="item bundle">
+              <div class="element">
+                <label class="">
+                  <span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
+                </label>
+                <money
+                  v-model="bundleDiscountAmount"
+                  v-bind="{
+                    decimal: '.',
+                    thousands: ',',
+                    prefix: '$ ',
+                    suffix: '',
+                    precision: 2,
+                    masked: false,
+                  }"
+                  class="bundle-discount-input"
+                  @keyup.native="setPercentage"
+                  @click.native="discoutOption = 'amount'"
+                />
+              </div>
+              <div class="element">
+                <label class="font-bold">Or by percentage </label>
+                <money
+                  v-model="bundleDiscountPercentage"
+                  v-bind="{
+                    decimal: '.',
+                    thousands: ',',
+                    prefix: '',
+                    suffix: ' %',
+                    precision: 2,
+                    masked: false,
+                  }"
+                  class="bundle-discount-input"
+                  @keyup.native="setRange"
+                  @click.native="discoutOption = 'percentage'"
+                />
+              </div>
+              <div class="element dis-value">
+                <span v-if="discoutOption == 'percentage'"> {{ bundleDiscountPercentage }}% </span>
+                <span v-else> ${{ bundleDiscountAmount }} </span>
+              </div>
+              <div class="action-cont">
+                <a class="clear" @click="cancelBundle">Cancel</a>
+                <a class="add" @click="addBundlDiscount">Add bundle</a>
+              </div>
+            </div>
           </div>
           <div v-if="bundleDiscount && bundleDiscount.percentage" class="bundle-information">
             <div>
@@ -273,21 +264,17 @@
 import { categoryNameWithIcons } from "@/constants/vendor";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import { Money } from "v-money";
 
 const components = {
     CollapsePanel: () => import("@/components/CollapsePanel.vue"),
+    Money: () => import("v-money"),
     DiscountForm: () => import("../components/DiscountForm.vue"),
     ItemForm: () => import("../components/ItemForm.vue"),
 };
 
 export default {
   name: "ProposalBudgetSummary",
-  components: {
-    ...components,
-    FadeTransition,
-    Money,
-  },
+  components: {...components, FadeTransition},
   props: {
     step: {
       type: Number,
@@ -298,8 +285,8 @@ export default {
       default: () => []
     },
     taxes: {
-      type: Array,
-      required: true,
+        type: Array,
+        required: true,
     }
   },
   data() {
@@ -313,149 +300,39 @@ export default {
         eventData: {},
       },
       discountBlock: {},
+      // additionalServices: [],
       iconsWithCategory: null,
       panelTopPos: 0,
       bundleDiscountServices: [],
       bundleDiscountPercentage: 0,
       bundleDiscountAmount: 0,
-      discountOption: "",
+      discoutOption: "",
       render: true,
       steps: [
-        {
-          target: ".negotiation",
-          header: {
-           title: "You approved the new rate"
-          },
-          content: "The new discount after the negotiation is separate from the original discount.",
-          params: {
-            placement: "left",
-            enableScrolling: false,
+          {
+              target: ".negotiation",
+              header: {
+               title: "You approved the new rate"
+              },
+              content: "The new discount after the negotiation is separate from the original discount.",
+              params: {
+                  placement: "left",
+                  enableScrolling: false,
+              }
           }
-        }
       ],
       callbacks: {
         onFinish: this.closeTour,
       },
     };
   },
-  computed: {
-    ...mapGetters("proposalForNonMaryoku", [
-      "finalPriceOfMainCategory",
-      "pricesByCategory",
-      "originalPriceOfMainCategory",
-      "totalPriceByCategory",
-      "totalPriceOfProposal",
-      "totalBeforeDiscount",
-      "totalBeforeBundle",
-    ]),
-    proposalRequest() {
-      return this.$store.state.proposalForNonMaryoku.proposalRequest;
-    },
-    proposal() {
-      return this.$store.state.proposalForNonMaryoku;
-    },
-    isNegotiation() {
-      return this.$store.state.proposalForNonMaryoku.isNegotiation;
-    },
-    event() {
-      if (!this.proposalRequest) return {};
-      return this.proposalRequest.eventData;
-    },
-    vendor() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
-    },
-    additionalServices() {
-      return this.$store.state.proposalForNonMaryoku.additionalServices.filter(
-        (category) => this.pricesByCategory[category] > 0,
-      );
-    },
-    mainService() {
-      const category = this.$store.state.proposalForNonMaryoku.vendor.eventCategory.key;
-      const proposalServices = this.$store.state.proposalForNonMaryoku.proposalServices;
-      if (!proposalServices[category]) {
-        return {};
-      }
-      return proposalServices[category];
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-
-    totalPrice() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) -
-        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0) -
-        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
-      );
-    },
-    totalPriceBeforeBundle() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0) -
-        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0)
-      );
-    },
-    totalPriceBeforeDiscount() {
-      let s = 0;
-      Object.keys(this.totalPriceByCategory).forEach((category) => {
-        s += this.totalPriceByCategory[category];
-      });
-      return s;
-    },
-    totalPriceForBundle() {
-      let s = 0;
-      Object.keys(this.pricesByCategory).forEach((category) => {
-        if (this.bundleDiscountServices.includes(category)) {
-          s += this.pricesByCategory[category];
-        }
-      });
-      return s;
-    },
-    bundledServicesString() {
-      let result = "";
-      this.bundleDiscount.services.forEach((service, index) => {
-        if (index !== 0) result += " + ";
-        result += this.getServiceCategory(service).title;
-      });
-      return result;
-    },
-    defaultTax() {
-      return this.$store.state.proposalForNonMaryoku.taxes["total"] || { percentage: 0, price: 0 };
-    },
-    defaultDiscount() {
-      return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
-    },
-    negotiationDiscount(){
-      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
-    },
-    bundleDiscount() {
-      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
-    },
-  },
-  watch: {
-    defaultTax(newValue) {
-      this.tax = newValue;
-    },
-    defaultDiscount(newValue) {
-      this.discount = newValue;
-    },
-    step(newValue){
-        if (this.step === 3 && this.$store.state.proposalForNonMaryoku.negotiationDiscount) this.$tours["discount"].start();
-        this.render = false;
-        setTimeout(_ => {
-            this.render = true;
-        }, 100);
-    }
-  },
   created() {
     window.addEventListener("scroll", this.handleScroll);
   },
   mounted() {
+    console.log('budget.summary', this.isNegotiation);
     setTimeout(_ => {
-      if (this.isNegotiation)
+        if (this.isNegotiation)
         this.$tours["discount"].start();
     }, 600);
 
@@ -480,7 +357,8 @@ export default {
   },
   methods: {
     closeTour(){
-      this.$store.commit("proposalForNonMaryoku/setNegotiation", false);
+      console.log("closeTour");
+        this.$store.commit("proposalForNonMaryoku/setNegotiation", false);
     },
     flatDeep(arr, d = 1) {
       return d > 0
@@ -530,6 +408,7 @@ export default {
       return total;
     },
     calculatedTotal(requirements) {
+      // console.log("requirements", requirements);
       let total = this.total(requirements);
       if (this.discountBlock.value != undefined) {
         total = total - (total * this.discountBlock.value) / 100;
@@ -543,7 +422,7 @@ export default {
         this.panelTopPos = 0;
       }
     },
-    addBundleDiscount() {
+    addBundlDiscount() {
       this.discountBlock = {};
       this.bundleDiscountServices.forEach((category) => {
         this.discountBlock[category] = { value: this.bundleDiscountAmount };
@@ -559,16 +438,14 @@ export default {
     cancelBundle() {
       this.isBundleDiscount = false;
     },
-    setBundleDiscountAmount(value) {
-      if (!this.totalPriceForBundle) return;
-      this.bundleDiscountPercentage = ((value / this.totalPriceForBundle) * 100).toFixed(2);
+    setRange() {
+      if (this.bundleDiscountPercentage > 100) {
+        this.bundleDiscountPercentage = 100;
+      }
+      this.bundleDiscountAmount = this.totalPriceForBundle * (this.bundleDiscountPercentage / 100);
     },
-    setBundleDiscountPercentage(value) {
-      if (!this.totalPriceForBundle) return;
-      if (value > 100) value = 100;
-      if (value < 0) value = 0;
-      this.bundleDiscountPercentage = value;
-      this.bundleDiscountAmount = (this.totalPriceForBundle * (value / 100));
+    setPercentage() {
+      this.bundleDiscountPercentage = (this.bundleDiscountAmount / this.totalPriceForBundle) * 100;
     },
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category);
@@ -577,6 +454,7 @@ export default {
       return 0;
     },
     saveDiscount(field, discount) {
+        console.log("saveDiscount", field, discount);
         if (field === "discount")
             this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount});
         else if (field === "negotiation")
@@ -585,17 +463,128 @@ export default {
             this.$store.commit("proposalForNonMaryoku/setTax", { category: "total", tax: discount });
     },
     stopTour() {
-      const tourName = Object.keys(this.steps)[this.currentTourIndex];
-      this.$tours[tourName].stop();
+          const tourName = Object.keys(this.steps)[this.currentTourIndex];
+          this.$tours[tourName].stop();
     },
-    toggleBundleDiscount() {
-      this.isBundleDiscount = !this.isBundleDiscount;
-    }
   },
   destoryed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
+  computed: {
+    ...mapGetters("proposalForNonMaryoku", [
+      "finalPriceOfMainCategory",
+      "pricesByCategory",
+      "originalPriceOfMainCategory",
+      "totalPriceByCategory",
+      "totalPriceOfProposal",
+      "totalBeforeDiscount",
+      "totalBeforeBundle",
+    ]),
+    proposalRequest() {
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+    },
+    proposal() {
+      return this.$store.state.proposalForNonMaryoku;
+    },
+    isNegotiation() {
+      return this.$store.state.proposalForNonMaryoku.isNegotiation;
+    },
+    event() {
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
+    },
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
+    },
+    additionalServices() {
+      return this.$store.state.proposalForNonMaryoku.additionalServices.filter(
+        (category) => this.pricesByCategory[category] > 0,
+      );
+    },
+    mainService() {
+      const category = this.$store.state.proposalForNonMaryoku.vendor.eventCategory.key;
+      const proposalServices = this.$store.state.proposalForNonMaryoku.proposalServices;
+      if (!proposalServices[category]) {
+        return {};
+      }
+      return proposalServices[category];
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
 
+    totalPrice() {
+      console.log("totalPrice1", this.totalPriceBeforeDiscount, this.defaultDiscount, this.negotiationDiscount, this.defaultTax);
+      return (
+        this.totalPriceBeforeDiscount -
+        (this.defaultDiscount ? this.defaultDiscount.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0) +
+        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
+      );
+    },
+    totalPriceBeforeBundle() {
+      return (
+        this.totalPriceBeforeDiscount -
+        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
+        (this.defaultTax ? this.defaultTax.price : 0) -
+        (this.negotiationDiscount && this.negotiationDiscount.isApplied ? this.negotiationDiscount.price : 0)
+      );
+    },
+    totalPriceBeforeDiscount() {
+      let s = 0;
+      Object.keys(this.totalPriceByCategory).forEach((category) => {
+        s += this.totalPriceByCategory[category];
+      });
+      return s;
+    },
+    totalPriceForBundle() {
+      let s = 0;
+      Object.keys(this.pricesByCategory).forEach((category) => {
+        if (this.bundleDiscountServices.includes(category)) {
+          s += this.pricesByCategory[category];
+        }
+      });
+      return s;
+    },
+    bundledServicesString() {
+      let result = "";
+      this.bundleDiscount.services.forEach((service, index) => {
+        if (index !== 0) result += " + ";
+        result += this.getServiceCategory(service).title;
+      });
+      return result;
+    },
+    defaultTax() {
+      console.log("defaultTax", this.$store.state.proposalForNonMaryoku.taxes["total"]);
+      return this.$store.state.proposalForNonMaryoku.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
+    },
+    negotiationDiscount(){
+      return this.$store.state.proposalForNonMaryoku.negotiationDiscount || {percent: 0, price: 0, isApplied: false};
+    },
+    bundleDiscount() {
+      return this.$store.state.proposalForNonMaryoku.bundleDiscount;
+    },
+  },
+  watch: {
+    defaultTax(newValue) {
+      this.tax = newValue;
+    },
+    defaultDiscount(newValue) {
+      this.discount = newValue;
+    },
+    step(newValue){
+        console.log("step", newValue);
+        if (this.step === 3 && this.$store.state.proposalForNonMaryoku.negotiationDiscount) this.$tours["discount"].start();
+        this.render = false;
+        setTimeout(_ => {
+            this.render = true;
+        }, 100);
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -684,11 +673,6 @@ export default {
         font-weight: 800;
       }
 
-      &.additional .service-item {
-        margin-bottom: 0;
-        border-bottom: 1px solid #333333 !important;
-      }
-
       &.tax {
         color: #818080;
         .service-item {
@@ -696,11 +680,9 @@ export default {
           grid-template-columns: 30% 30% 30% 10%;
         }
       }
-
       .service-item {
         border-top: solid 1px #d3d3d3;
         padding: 30px 0;
-
         ul {
           list-style: none;
           padding: 0;
@@ -796,16 +778,6 @@ export default {
         margin: 0 -25px;
         padding: 33px 25px;
 
-        .bundle-header-description {
-          display: flex;
-          align-items: flex-start;
-          margin-bottom: 40px;
-
-          img {
-            margin-right: 15px;
-          }
-        }
-
         .element {
           margin-bottom: 22px;
           width: 75%;
@@ -813,9 +785,8 @@ export default {
           &.dis-value {
             background-color: #ffedb7;
             border-radius: 3px;
-            padding: 11px 10px;
+            padding: 11px 90px;
             font-size: 14px;
-            font-weight: bold;
             text-align: center;
           }
         }

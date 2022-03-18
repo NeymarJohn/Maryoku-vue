@@ -20,7 +20,9 @@
           class="md-small-hide"
         >
           <md-button
-            v-if="isCommentMode"
+
+
+            v-if="!showCommentPanel"
             class="md-simple md-just-icon hide-long-button"
             @click="click('comment')"
           >
@@ -28,7 +30,7 @@
               <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
             </div>
             <div class="show-comments-text">
-              Hide comments
+              Show comments
             </div>
           </md-button>
           <md-button
@@ -37,7 +39,7 @@
             @click="click('comment')"
           >
             <div class="d-flex show-comment-wrapper">
-              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
+              <div class="hide-comments-text"  :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
                 Show comments
               </div>
               <div class="hide-circle-for-img">
@@ -179,6 +181,7 @@ export default {
 .hide-comments-text{
   color: white;
   margin-left: 3px;
+  padding-left: 10px;
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0.34px;
@@ -212,7 +215,7 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  margin-left: 20px;
+  margin-left: 10px;
   background-color: white;
 }
 .d-flex{

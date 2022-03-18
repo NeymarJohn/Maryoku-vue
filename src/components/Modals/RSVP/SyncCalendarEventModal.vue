@@ -60,6 +60,7 @@ const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 export default {
   components: {
     Modal,
+    MaryokuInput,
   },
   props: {
     screen: {
@@ -70,10 +71,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    rsvp: {
-      type: Object,
-      default: () => {},
-    },
+    rsvp: [Object],
   },
   data() {
     return {
@@ -84,6 +82,7 @@ export default {
     };
   },
   created() {
+    console.log(this.campaign);
     this.api = gapi;
     this.initClient();
   },

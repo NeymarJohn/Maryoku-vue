@@ -50,17 +50,17 @@
       </div>
 
       <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value align-self-center d-flex">
-        <div v-for="item in section.inOutDoor" :key="item" class="mr-50">
+        <div v-for="item in section.inOutDoor" class="mr-50">
           <img :src="getIconUrl(item.toLowerCase())">
           {{ item.toLowerCase() }}
         </div>
       </div>
       <div v-if="!isEdit && section.hasOwnProperty('guestType')" class="value align-self-center d-flex">
-        <img v-if="section.guestType" :src="getIconUrl('guestType')">
+        <img v-if="this.section.guestType" :src="getIconUrl('guestType')">
         {{ section.guestType }}
       </div>
       <div v-if="!isEdit && section.hasOwnProperty('occasion')" class="value align-self-center d-flex">
-        <img v-if="section.occasion" :src="getIconUrl('occasion')">
+        <img v-if="this.section.occasion" :src="getIconUrl('occasion')">
         {{ section.occasion }}
       </div>
       <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center">

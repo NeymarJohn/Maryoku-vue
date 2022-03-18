@@ -103,7 +103,7 @@
         class="md-title md-layout-item md-size-100 clear-margins"
         style="margin: 0; line-height: 51px; width: 100%; font-size: 20px"
       >
-        {{ selectedBlock.title }} Requirements
+        {{ this.selectedBlock.title }} Requirements
 
         <md-button class="md-info md-sm add-new-requirements pull-right" @click="addNewValue">
           <md-icon>add</md-icon> Add Requirement
@@ -112,6 +112,18 @@
       <div class="md-layout-item md-size-100 clear-margins">
         <md-card class="clear-margins">
           <md-card-content>
+            <!--<h6 v-if="predefinedRequirements" class="small text-gray text-right clear-margins" style="display: block; width: 100%;">Predefined Requirements</h6>
+                        <ul class="requirements-list text-right clear-margins" v-if="predefinedRequirements">
+                            <li class="list-item" v-for="(item,index) in predefinedRequirements">
+                                <div
+                                    :class="`md-button ${item.color}`"
+                                    @click="handleDrop(item)">
+                                    {{item.title}}
+                                    <md-icon>add_circle_outline</md-icon>
+                                </div>
+                            </li>
+                        </ul>
+                        <div style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" >&nbsp;</div>-->
             <md-table v-if="eventBlockRequirements" v-model="filteredEventBlockRequirements" class="clear-margins">
               <md-table-empty-state
                 :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`"
@@ -135,7 +147,7 @@
               </md-table-row>
             </md-table>
             <md-table v-else v-model="dummyList" class="clear-margins">
-              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item }">
+              <md-table-row slot="md-table-row" :key="item.id" slot-scope="{ item, index }">
                 <md-table-cell>
                   <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                   <event-block-requirement

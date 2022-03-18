@@ -49,22 +49,13 @@ export default {
     title: {
         type: String,
         require: true,
-        default: ""
     },
     action: {
         type: String,
         require: true,
-        default: ""
     },
-    message: {
-        type: Object,
-        default: () => {}
-    },
-    icon: {
-        type: String,
-        require: true,
-        default: ""
-    },
+    message: Object,
+    icon: String,
     verticalAlign: {
       type: String,
       default: "top"
@@ -75,7 +66,6 @@ export default {
     },
     type: {
       type: String,
-      default: ""
     },
     timeout: {
       type: Number,

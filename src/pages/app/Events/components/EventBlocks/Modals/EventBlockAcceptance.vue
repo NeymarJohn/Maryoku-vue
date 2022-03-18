@@ -111,19 +111,22 @@ import ViewProposal from "./ViewProposal.vue";
 export default {
   name: "EventBlockAcceptance",
   components: {
+    MdCardHeader,
     MdCardContent,
     VueElementLoading,
+    UploadVendorsModal,
+    ManageBlockVendors,
+    ViewProposals,
+    VendorsTable,
+    Pagination,
+    ManageProposalsAccept,
     ManageProposalsVendors,
+    companyForm,
+    Tabs,
   },
   props: {
-    selectedBlock: {
-      type: Object,
-      default: () => {}
-    },
-    event: {
-      type: Object,
-      default: () => {}
-    },
+    selectedBlock: Object,
+    event: Object,
     // blockVendors : Array,
   },
   data: () => ({
@@ -262,7 +265,7 @@ export default {
         })
         .catch((error) => {
           // this.isLoading = false;
-          console.error(error);
+          console.log("EventComponentVendor error =>", error);
 
           this.$notify({
             message: "Error while trying to add vendor, try again!",
@@ -443,7 +446,7 @@ export default {
         .save()
         .then((resp) => {})
         .catch((error) => {
-          console.error("EventComponentVendor error =>", error);
+          console.log("EventComponentVendor error =>", error);
         });
     },
   },
