@@ -46,12 +46,27 @@
     components: {
     },
     props: {
-      name: String, 
-      qty: Number,
-      iconUrl: String,
-      desc: String,
+      name: {
+        type: String,
+        default: ""
+      }, 
+      qty: {
+        type: Number,
+        default: 0
+      },
+      iconUrl: {
+        type: String,
+        default: ""
+      },
+      desc: {
+        type: String,
+        default: ""
+      },
       extra: Boolean,
-      price: String,
+      price: {
+        type: String,
+        default: ""
+      },
     },
     data () {
       return {

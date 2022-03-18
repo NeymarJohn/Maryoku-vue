@@ -49,21 +49,26 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
-import VSignupAddressEditor from "./VSignupAddress";
 export default {
   name: "VSignupEditableField",
   components: {
-    VueElementLoading,
-    VSignupAddressEditor,
   },
   props: {
-    title: String,
-    field: String,
-    img: String,
+    title: {
+      type: String,
+      default: ""
+    },
+    field: {
+      type: String,
+      default: ""
+    },
+    img: {
+      type: String,
+      default: ""
+    },
     defaultVal: {
       type: [String, Array],
-      defaultValue: () => null,
+      default: () => null,
     },
     borderBottom: Boolean,
     required: {

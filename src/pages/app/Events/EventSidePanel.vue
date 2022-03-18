@@ -173,7 +173,7 @@
                   <md-button class="md-success create-new-event-panel-submit-button" @click="validateEvent">
                     {{ modalSubmitTitle }}
                   </md-button>
-                  <md-button v-if="this.editMode" class="md-danger md-just-icon" @click="showDeleteAlert">
+                  <md-button v-if="editMode" class="md-danger md-just-icon" @click="showDeleteAlert">
                     <md-icon class="md-theme-warning" style="font-size: 1.5rem !important">
                       delete
                     </md-icon>

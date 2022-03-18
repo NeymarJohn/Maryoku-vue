@@ -7,10 +7,12 @@
       <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
       Original
     </div>
-    <div v-for="(version, idx) in versions"
-         class="version d-flex align-center cursor-pointer text-center py-30 font-size-16 text-center w-min-250 color-black-middle border-right"
-         :class="{'selected': selected === idx}"
-         @click="select(idx)"
+    <div
+      v-for="(version, idx) in versions"
+      :key="idx"
+      class="version d-flex align-center cursor-pointer text-center py-30 font-size-16 text-center w-min-250 color-black-middle border-right"
+      :class="{'selected': selected === idx}"
+      @click="select(idx)"
     >
       <img src="/static/icons/vendor/proposal.svg" width="20px" class="mr-10">
       <template v-if="idx !== editIdx">
@@ -45,13 +47,14 @@ export default {
   name: "ProposalVersionsBar",
   components,
   props: {
-      versions:{
-          type: Array,
-      },
-      selected:{
-          type: Number,
-          default: -1,
-      }
+    versions: {
+      type: Array,
+      required: true,
+    },
+    selected:{
+      type: Number,
+      default: -1,
+    }
   },
   data() {
     return {
@@ -60,12 +63,8 @@ export default {
         versionName: null,
     };
   },
-  watch: {
-    versions(newVal){console.log("versions", newVal);}
-  },
   methods: {
     select(index){
-      console.log("select", index, this.selected);
       if (this.selected === index) return;
       this.$emit("select", index);
     },

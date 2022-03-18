@@ -9,7 +9,16 @@
 import Chart from "chart.js";
 
 export default {
-  props: ["chartData", "options"],
+  props: {
+    chartData: {
+      type: Object,
+      required: true,
+    },
+    options: {
+      type: Object,
+      default: () => ({}),
+    }
+  },
   mounted() {
     new Chart(
       this.$refs.line_chart,

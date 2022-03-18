@@ -1,18 +1,23 @@
 <template>
-  <div class="comment-item" :class="{child: !isMain}" v-if="comment.planner || comment.customer">
-    <div class="d-flex justify-content-between">
+  <div v-if="comment.planner || comment.customer" class="comment-item" :class="{child: !isMain}">
+    <div class="d-flex justify-content-between header-comment">
       <div class="comment-item-avatar">
-        <Avartar v-if="comment.planner && comment.planner.name"
-                 :name="comment.planner.name"
+        <Avartar
+          v-if="comment.planner && comment.planner.name"
+          :name="comment.planner.name"
         />
-        <Avartar v-else-if="comment.customer && comment.customer.name"
-                 :name="comment.customer.name"
+        <Avartar
+          v-else-if="comment.customer && comment.customer.name"
+          :name="comment.customer.name"
         />
-        <img v-else-if="!comment.customer && !comment.planner " class="user-avatar"
-             :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px"
+        <img
+          v-else-if="!comment.customer && !comment.planner "
+          :src="`${$iconURL}comments/SVG/user-dark.svg`"
+          class="user-avatar"
+          width="33px"
         >
       </div>
-      <div class="comment-item-description">
+      <div class="comment-item-header">
         <div v-if="comment.planner">
           {{ comment.planner.name }}
         </div>
@@ -22,6 +27,10 @@
         <div class="post-date">
           <timeago :datetime="comment.dateCreated" />
         </div>
+      </div>
+    </div>
+    <div>
+      <div class="comment-item-description">
         <div v-if="!isEditing" class="comment-item-content">
           {{ comment.description }}
         </div>
@@ -90,6 +99,7 @@
         </div>
       </div>
     </div>
+    <div class="comment-item-footer" />
   </div>
 </template>
 <script>
@@ -123,8 +133,6 @@ export default {
     };
   },
   computed: {
-    getTimeDiffString() {
-    },
     myFavorite() {
       if (!this.comment.favoriteUsers) return false;
       if (this.comment.favoriteUsers.findIndex(userId => userId === this.user.id) < 0) {
@@ -175,8 +183,7 @@ export default {
   }
 
   &.child {
-    & > div {
-      border-top: solid 1px #cecece;
+    & > .header-comment {
       padding-top: 20px;
       padding-left: 10px
     }
@@ -188,6 +195,13 @@ export default {
   .user-avatar {
     border-radius: 50%;
     margin-right: 10px;
+  }
+  .comment-item-header {
+    flex-grow: 1;
+    padding-left: 10px;
+  }
+  .comment-item-footer {
+    border-top: solid 1px #cecece;
   }
   .comment-item-description {
     color: black !important;

@@ -244,25 +244,6 @@ export default {
               const profileService = this.profileServices[this.camelize(capitalized)];
 
               const requestItemByPlanner = null;
-              console.log("requestItemByPlanner", requestItemByPlanner);
-              if (item.available) {
-                item.available.forEach(availableItem => {
-                  const description = availableItem.charAt(0).toUpperCase() + availableItem.slice(1);
-                  if (items.findIndex(it => it.description.toLowerCase() === description.toLowerCase()) < 0) {
-                    items.push({
-                      description,
-                      qty: item.value ? item.value : 1,
-                      included:
-                        profileService &&
-                        profileService.checked &&
-                        !profileService.xIncluded &&
-                        profileService.included,
-                      price: profileService ? Number(profileService.value) : "",
-                      requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-                    });
-                  }
-                });
-              }
 
               if (item.available) {
                 item.available.forEach(availableItem => {
@@ -361,43 +342,40 @@ export default {
     },
 
     async saveItem(serviceItem, size, qty, price) {
-      console.log("save.item", this.serviceType, serviceItem, size, qty, price);
-
       const editingService = {
-          comment: this.comment,
-          dateCreated: "",
-          includedInPrice: true,
-          itemNotAvailable: false,
-          price: price,
-          priceUnit: "qty",
-          requirementComment: null,
-          requirementId: "",
-          requirementMandatory: false,
-          requirementPriority: null,
-          requirementTitle: serviceItem,
-          requirementSize: size,
-          requirementValue: `${qty}`,
-          isComplementary: this.isComplementary,
-          isComplimentary: false,
-          plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
+        comment: this.comment,
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: price,
+        priceUnit: "qty",
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: serviceItem,
+        requirementSize: size,
+        requirementValue: `${qty}`,
+        isComplementary: this.isComplementary,
+        isComplimentary: false,
+        plannerOptions: this.plannerChoices.filter(item => item.description && item.price),
       };
 
       if (this.selectedItem ) {
-          if (price !== this.selectedItem.price) this.showAskSaveChangeModal = true;
+        if (price !== this.selectedItem.price) this.showAskSaveChangeModal = true;
       } else if (this.serviceType === "included") {
-          let vendor = this.vendor;
-          const newServiceItem = {
-              checked: true,
-              label: this.camelize(this.serviceItem),
-              included: true,
-              value: null,
-              xIncluded: true,
-          };
-          this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
-          await this.$store.dispatch("proposalForNonMaryoku/saveVendor", vendor);
-
+        let vendor = this.vendor;
+        const newServiceItem = {
+          checked: true,
+          label: this.camelize(this.serviceItem),
+          included: true,
+          value: null,
+          xIncluded: true,
+        };
+        this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
+        await this.$store.dispatch("proposalForNonMaryoku/saveVendor", vendor);
       } else {
-          this.cancel();
+        this.cancel();
       }
       this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },

@@ -47,7 +47,6 @@
       class="md-icon-button md-simple close-btn"
       @click="remove(template)"
     >
-
       <md-icon class="close-icon">
         close
       </md-icon>

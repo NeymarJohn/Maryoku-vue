@@ -42,21 +42,21 @@
       </div>
       <div class="filter-bar mt-30">
         <md-button
-          v-for="tab in proposalTabs"
-          :key="tab.key"
+          v-for="proposalTab in proposalTabs"
+          :key="proposalTab.key"
           class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
-          @click="selectTab(tab.value)"
+          @click="selectTab(proposalTab.value)"
         >
-          <div class="d-flex align-center px-20 py-10 font-size-16" :class="tab.class">
+          <div class="d-flex align-center px-20 py-10 font-size-16" :class="proposalTab.class">
             <img
               class="mr-10"
-              :src="`/static/icons/vendor/proposalBoard/${tab.icon}`"
+              :src="`/static/icons/vendor/proposalBoard/${proposalTab.icon}`"
               alt=""
               style="width: 20px; height: 20px"
             >
-            {{ tab.title }}
-            <span v-if="tab.key === 'all'" class="ml-5" :class="tab.class">({{ pagination.total }})</span>
-            <span v-else class="ml-5" :class="tab.class">({{ pagination[tab.key] }})</span>
+            {{ proposalTab.title }}
+            <span v-if="proposalTab.key === 'all'" class="ml-5" :class="proposalTab.class">({{ pagination.total }})</span>
+            <span v-else class="ml-5" :class="proposalTab.class">({{ pagination[proposalTab.key] }})</span>
           </div>
         </md-button>
       </div>
@@ -69,6 +69,7 @@
           <div class="sort-bar px-40" style="background: #f3f7fd">
             <span
               v-for="it in proposalHeaders"
+              :key="it.title"
               class="sort-item"
               :class="{ selected: it.key && sortFields['sort'] === it.key, 'text-center': it.key === 'update' }"
               @click="selectSort(it.key)"
@@ -101,7 +102,7 @@
               />
             </div>
           </div>
-          <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">
+          <div v-if="proposals.length < 4" class="my-auto d-flex flex-column align-center">
             <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" alt="">
             <p class="text-transform-uppercase font-size-14">
               No More Proposal To Show
@@ -415,7 +416,7 @@ export default {
       return this.$store.state.vendorDashboard.proposals.filter(p => p.status !== PROPOSAL_STATUS.INACTIVE);
     },
     negotiation() {
-       const negotiations = this.getNegotiations(this.selectedProposal);
+      const negotiations = this.getNegotiations(this.selectedProposal);
       if ( !negotiations.length ) return null;
 
       if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
@@ -438,7 +439,6 @@ export default {
           eventType: event.eventType,
         };
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
-        console.log("price.negotiation");
         let { numberOfParticipants } = this.selectedProposal.eventData;
         let data = negotiations[0].price;
         let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
@@ -450,11 +450,7 @@ export default {
           budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
         };
       }
-    },
-  },
-  watch: {
-    proposalRequests(newVal) {
-      console.log("proposalRequests.watch", newVal);
+      return null;
     },
   },
   async mounted() {
@@ -630,7 +626,6 @@ export default {
           data,
           proposal: this.selectedProposal,
         });
-          console.log("negotiation", negotiation);
         if (this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
             this.showRequestNegotiationModal = false;
 
@@ -746,7 +741,6 @@ export default {
         name: `Ver${proposal.versions.length + 1}-${moment().format("DD/MM/YYYY")}`,
         data,
       };
-      console.log("versionData", versionData);
       const version = await this.$store.dispatch("vendorDashboard/saveVersion", { version: versionData, proposal });
       return version;
     },
@@ -825,7 +819,6 @@ export default {
       this.loading = false;
     },
     showGraphModal(proposal) {
-        console.log("Open GraphModal", proposal);
         this.showProposalGraph = true;
         this.selectedProposalForGraph = proposal;
     },
