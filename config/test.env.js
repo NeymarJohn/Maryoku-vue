@@ -20,11 +20,4 @@ module.exports = merge(devEnv, {
             minimize: true
         })
     ],
-    S3_BUCKET_NAME: '"maryoku"',
-    AWS_REGION: '"us-east-1"',
-    AWS_ACCESSKEY: '"AKIAT5QXLXDJKEP27SUQ"',
-    AWS_SECRETKEY: '"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"',
-    S3_URL: '"https://maryoku.s3.amazonaws.com/"',
-    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
-    STRIPE_PK: `"${process.env.STRIPE_PK}"`
 })
