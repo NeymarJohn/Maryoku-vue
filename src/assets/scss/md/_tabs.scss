@@ -70,35 +70,3 @@
 .md-tab{
   padding: 15px 0 0 0;
 }
-
-.service-tabs {
-    .md-tabs-navigation{
-        margin: 0;
-        padding: 0;
-        align-items: center;
-        box-shadow: none;
-        overflow: hidden;
-
-        .md-button{
-            height: 80px;
-            min-width: 300px;
-            &:not(:last-child) {
-                border-right: 1px solid #050505;
-            }
-
-            .md-button-content{
-                span{
-                    font-size: 20px;
-                    font-family: "Manrope-regular", "Roboto", "Helvetica", "Arial", sans-serif
-                }
-            }
-        }
-
-        .md-active{
-            background-color: rgba(255, 255, 255, 0.2) !important;
-            box-shadow: none;
-            font-weight: bold;
-            border-bottom: solid 5px #641856;
-        }
-    }
-}

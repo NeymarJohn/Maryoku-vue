@@ -22,7 +22,7 @@
         </label>
       </div>
 
-      <div class="tags-list ">
+      <div class="tags-list">
         <div class="tags-list-wrapper d-flex justify-content-start" :class="{ expanded: tagExpanded }">
           <template v-for="(tag, index) in taggingOptions">
             <div
