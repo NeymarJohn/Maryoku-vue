@@ -122,10 +122,7 @@ export default {
       default: "event",
     },
     show: [Boolean],
-    value: {
-      type: Number,
-      default: 0
-    },
+    value: [Number],
   },
   data: () => {
     return {
@@ -146,6 +143,7 @@ export default {
     };
   },
   created() {
+    console.log("sharing.modal.created", this.page);
     this.generateShareLink();
   },
   methods: {

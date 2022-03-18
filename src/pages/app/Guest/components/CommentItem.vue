@@ -2,22 +2,17 @@
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
       <div class="comment-item-avatar">
-        <Avartar
-          v-if="comment.planner && comment.planner.name"
-          :name="comment.planner.name"
+        <Avartar v-if="comment.planner && comment.planner.name"
+                 :name="comment.planner.name"
         />
-        <Avartar
-          v-else-if="comment.customer && comment.customer.name"
-          :name="comment.customer.name"
+        <Avartar v-else-if="comment.customer && comment.customer.name"
+                 :name="comment.customer.name"
         />
-        <img
-          v-else-if="!comment.customer && !comment.planner "
-          :src="`${$iconURL}comments/SVG/user-dark.svg`"
-          class="user-avatar"
-          width="33px"
+        <img v-else-if="!comment.customer && !comment.planner " class="user-avatar"
+             :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px"
         >
       </div>
-      <div class="comment-item-header">
+      <div class="comment-item-description">
         <div v-if="comment.planner">
           {{ comment.planner.name }}
         </div>
@@ -27,10 +22,6 @@
         <div class="post-date">
           <timeago :datetime="comment.dateCreated" />
         </div>
-      </div>
-    </div>
-    <div>
-      <div class="comment-item-description">
         <div v-if="!isEditing" class="comment-item-content">
           {{ comment.description }}
         </div>
@@ -71,7 +62,6 @@
               Resolve
             </md-button>
             <md-button
-              v-if="comment.planner.name === user.name"
               class="edit-btn md-simple comment-action-btn"
               @click="editComment(comment)"
             >
@@ -83,9 +73,16 @@
             </md-button>
             <md-button class="edit-btn md-simple comment-action-btn">
               <img
-                :src="`${$iconURL}comments/SVG/${!myFavorite?'heart-dark.svg':'heart-yellow.svg'}`"
+                v-if="!myFavorite"
+                :src="`${$iconURL}comments/SVG/heart-dark.svg`"
                 class="comment-actions-icon"
-                @click="markAsFavorite(comment, !myFavorite)"
+                @click="markAsFavorite(comment, true)"
+              >
+              <img
+                v-if="myFavorite"
+                :src="`${$iconURL}comments/SVG/heart-yellow.svg`"
+                class="comment-actions-icon"
+                @click="markAsFavorite(comment, false)"
               >
             </md-button>
             <md-button class="edit-btn md-simple comment-action-btn">
@@ -99,7 +96,6 @@
         </div>
       </div>
     </div>
-    <div class="comment-item-footer" />
   </div>
 </template>
 <script>
@@ -132,6 +128,7 @@ export default {
     };
   },
   computed: {
+    getTimeDiffString() {},
     myFavorite() {
       if (!this.comment.favoriteUsers) return false;
       if (this.comment.favoriteUsers.findIndex(userId => userId === this.user.id) < 0) {
@@ -180,7 +177,8 @@ export default {
   }
 
   &.child {
-    & > .header-comment {
+    & > div {
+      border-top: solid 1px #cecece;
       padding-top: 20px;
       padding-left: 10px
     }
@@ -193,17 +191,9 @@ export default {
     border-radius: 50%;
     margin-right: 10px;
   }
-  .comment-item-header {
-    flex-grow: 1;
-    padding-left: 10px;
-  }
-  .comment-item-footer {
-    border-top: solid 1px #cecece;
-  }
   .comment-item-description {
     color: black !important;
     flex-grow: 1;
-    padding-left: 10px;
   }
   .post-date {
     font-family: "Manrope-Regular";

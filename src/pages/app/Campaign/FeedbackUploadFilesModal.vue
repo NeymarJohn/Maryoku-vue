@@ -24,7 +24,6 @@
         <div v-if="files.length" class="upload-files-list">
           <div
             v-for="(file, index) in files"
-            :key="index"
             :class="{
               'upload-files-list-item': true,
               'upload-files-list-item-active': carouselItemIndex === index,
@@ -93,10 +92,7 @@
           <div class="cancel-text-bottom-block" @click="close">
             Cancel
           </div>
-          <md-button
-            class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default"
-            @click="uploadAllFiles"
-          >
+          <md-button class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default">
             Upload files
           </md-button>
         </div>
@@ -112,7 +108,6 @@ import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import S3Service from "@/services/s3.service";
 import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
-import { getBase64 } from "@/utils/file.util";
 
 export default {
   name: "FeedbackUploadImagesModal",
@@ -121,39 +116,42 @@ export default {
     vueDropzone: vue2Dropzone,
     FeedbackUploadImagesCarousel,
   },
-  props: {
-    uploadToFolderName: {
-      type: String,
-      required: true,
-    }
-  },
   data() {
     return {
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         maxFilesize: 25,
         maxFiles: 10,
-        createImageThumbnails: false,
         uploadMultiple: true,
         acceptedFiles: "image/*, video/*",
         headers: { "My-Awesome-Header": "header value" },
       },
       files: [],
-      images: [],
       carouselItemIndex: 0,
     };
   },
+  computed: {
+    images() {
+      return this.files
+        .filter((file) => file.type.includes("image"))
+        .map((file) => ({ src: file.url }));
+    }
+  },
   methods: {
     close() {
-      this.$emit("close");
+        this.$emit("close");
     },
     chooseFiles() {
-      document.getElementById("coverImage").click();
+        document.getElementById("coverImage").click();
     },
     async fileAdded(file) {
-      const image = await getBase64(file);
-      this.images.push({ src: image });
-      this.files.push(file);
+      if (this.files.length === this.dropzoneOptions.maxFiles) return;
+      const fileName = uuidv4();
+      S3Service.fileUpload(file, `${fileName}`, "events/proposal").then((fileURL) => {
+        this.isLoading = false;
+        if (this.files.length === this.dropzoneOptions.maxFiles) return;
+        this.files.push({ name: file.name, type: file.type, url: fileURL });
+      });
     },
     deleteFile(fileURL) {
       const deleteItemIndex = this.files.findIndex(file => file.url === fileURL);
@@ -169,16 +167,6 @@ export default {
     },
     changeCarouselItemIndex(itemIndex) {
       this.carouselItemIndex = itemIndex;
-    },
-    uploadAllFiles() {
-      console.log(this.files);
-      this.files.forEach((file) => {
-        const extension = file.type.split("/")[1];
-        const fileName = uuidv4();
-        S3Service.fileUpload(file, `${fileName}`, this.uploadToFolderName, extension).then(() => {
-          this.isLoading = false;
-        });
-      });
     }
   },
 };

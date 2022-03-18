@@ -60,6 +60,18 @@
           </md-list-item>
           <md-list-item
             :md-ripple="false"
+            :class="{ 'font-bold-extra': pageName === 'billing' }"
+            @click="goTo('billing')"
+          >
+            <label class="menu-label">
+              <img class="page-icon" :src="`/static/icons/vendor/${
+                pageName === 'billing' ? 'revenue-active.svg':'revenue.svg'}`"
+              >
+              <span class="pl-20 font-size-20">Billing Information</span>
+            </label>
+          </md-list-item>
+          <md-list-item
+            :md-ripple="false"
             :class="{ 'font-bold-extra': pageName === 'settings' }"
             @click="goTo('settings')"
           >

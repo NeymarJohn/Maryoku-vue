@@ -108,7 +108,7 @@
             <md-card class="clear-margins no-shadow catering-wrapper">
               <md-card-header class="md-card-header-text text-left">
                 <h5 class="title">
-                  {{ selectedBlock.category }}
+                  {{ this.selectedBlock.category }}
                 </h5>
               </md-card-header>
               <md-card-content class="table-padding">

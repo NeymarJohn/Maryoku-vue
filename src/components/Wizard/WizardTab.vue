@@ -13,18 +13,9 @@
 export default {
   name: "WizardTab",
   props: {
-    label: {
-      type: String,
-      default: ""
-    },
-    id: {
-      type: String,
-      default: ""
-    },
-    beforeChange: {
-      type: Function,
-      default: () => {}
-    }
+    label: String,
+    id: String,
+    beforeChange: Function
   },
   inject: ["addTab", "removeTab"],
   data () {
