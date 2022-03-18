@@ -49,13 +49,22 @@ export default {
     title: {
         type: String,
         require: true,
+        default: ""
     },
     action: {
         type: String,
         require: true,
+        default: ""
     },
-    message: Object,
-    icon: String,
+    message: {
+        type: Object,
+        default: () => {}
+    },
+    icon: {
+        type: String,
+        require: true,
+        default: ""
+    },
     verticalAlign: {
       type: String,
       default: "top"
@@ -66,6 +75,7 @@ export default {
     },
     type: {
       type: String,
+      default: ""
     },
     timeout: {
       type: Number,
@@ -75,9 +85,9 @@ export default {
       type: Boolean,
       default: true,
     },
-      confirmBtn: {
-      type: Boolean,
-      default: false,
+     confirmBtn: {
+      type: String,
+      default: null,
     },
     closeBtn: {
        type: Boolean,

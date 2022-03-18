@@ -41,17 +41,29 @@ import ClickOutside from "vue-click-outside";
 export default {
   name: "MaryokuInput",
   components: {
-    Popup,
-    FunctionalCalendar,
     Calendar,
-    ClickOutside,
   },
   props: {
-    value: [String, Array],
-    name: String,
-    type: String,
-    placeholder: String,
-    inputStyle: String,
+    value: {
+      type: [String, Array],
+      default: null
+    },
+    name: {
+      type: String,
+      default: ""
+    },
+    type: {
+      type: String,
+      default: ""
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
+    inputStyle: {
+      type: String,
+      default: ""
+    },
     readonly: Boolean,
     size: {
       type: String,

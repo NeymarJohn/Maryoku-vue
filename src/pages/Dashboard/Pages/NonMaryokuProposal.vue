@@ -242,6 +242,7 @@ const components = {
   SignInContent: () => import("@/components/SignInContent/index.vue"),
   CollapsePanel: () => import("@/components/CollapsePanel.vue"),
   CommentSidebar: () => import("@/components/CommentSidebar"),
+  CommentCursor: () => import("@/components/CommentCursor")
 };
 
 export default {

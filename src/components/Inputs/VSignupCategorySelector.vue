@@ -37,7 +37,7 @@
       </div>
       <div v-else>
         <template v-if="selectedValue.length">
-          <div v-for="item of selectedValue" class="content mt-10">
+          <div v-for="item of selectedValue" :key="item" class="content mt-10">
             <img
               v-if="field === 'vendorCategories' && item"
               class="mr-10"
@@ -74,14 +74,22 @@ import LocationInput from "../LocationInput.vue";
 export default {
   name: "VSignupEditableField",
   components: {
-    VueGoogleAutocomplete,
     CategorySelector,
     LocationInput,
   },
   props: {
-    title: String,
-    field: String,
-    img: String,
+    title: {
+      type: String,
+      default: ""
+    },
+    field: {
+      type: String,
+      default: ""
+    },
+    img: {
+      type: String,
+      default: ""
+    },
     borderBottom: Boolean,
     required: {
       type: Boolean,
@@ -89,7 +97,7 @@ export default {
     },
     value: {
       type: [String, Array],
-      defaultValue: () => null,
+      default: () => null,
     },
   },
   data: () => ({
@@ -101,7 +109,6 @@ export default {
   }),
   computed: {
     isInputValid() {
-      console.log(this.selectedValue);
       if (!this.selectedValue) return false;
       return this.selectedValue.length > 0 && this.selectedValue.every((item) => item);
     },

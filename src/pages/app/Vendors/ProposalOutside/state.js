@@ -145,7 +145,7 @@ const getters = {
     sum = sum - (sum * discount.percentage) / 100;
 
     const negotiation = state.negotiationDiscount || { price: 0, percentage: 0 };
-    sum = sum - (sum * negotiation.percentage) / 100;
+    sum = sum - (sum * (negotiation.percentage || 0)) / 100;
 
     // check tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };

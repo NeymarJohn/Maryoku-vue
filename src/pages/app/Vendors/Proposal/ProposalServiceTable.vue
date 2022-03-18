@@ -23,10 +23,6 @@
 </template>
 <script>
 import ProposalRequest from "@/models/ProposalRequest";
-import ProposalRequestFile from "@/models/ProposalRequestFile";
-
-import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
 import ProposalServiceTableItem from "./ProposalServiceTableItem.vue";
 import { Money } from "v-money";
 
@@ -37,11 +33,7 @@ import _ from "underscore";
 export default {
   name: "ProposalServiceTable",
   components: {
-    InputProposalSubItem,
-    SelectProposalSubItem,
     ProposalServiceTableItem,
-    Money,
-    vueDropzone: vue2Dropzone,
   },
   filters: {
     withComma(amount) {
@@ -49,14 +41,29 @@ export default {
     },
   },
   props: {
-    category: String,
+    category: {
+      type: String,
+      default: ""
+    },
     isCollapsed: Boolean,
     isDropdown: Boolean,
     proposalRange: Boolean,
-    subTitle: String,
-    img: String,
-    service: Object,
-    tableCategory: String,
+    subTitle: {
+      type: String,
+      default: ""
+    },
+    img: {
+      type: String,
+      default: ""
+    },
+    service: {
+      type: Object,
+      default: () => {}
+    },
+    tableCategory: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {
@@ -116,7 +123,6 @@ export default {
   },
   computed: {
     requirements() {
-      console.log(this.category);
       return this.proposalRequest.componentRequirements[this.category];
     },
     optionalRequirements() {
@@ -135,12 +141,12 @@ export default {
     },
     services: {
       get: function () {
-        console.log("services", this.category);
         if (this.tableCategory === "cost") return this.$store.state.vendorProposal.costServices[this.category];
         else if (this.tableCategory === "included") {
           return this.$store.state.vendorProposal.includedServices[this.category];
         } else if (this.tableCategory === "extra")
           return this.$store.state.vendorProposal.extraServices[this.category];
+        return [];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")
@@ -290,7 +296,6 @@ export default {
     },
     saveDiscount() {
       this.isEditDiscount = false;
-      console.log("this.discount", this.discount);
       this.$store.commit("vendorProposal/setDiscount", { category: this.category, discount: this.discount });
       this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {
         category: this.category,

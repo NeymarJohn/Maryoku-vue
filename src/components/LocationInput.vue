@@ -19,16 +19,43 @@ export default {
      * Data binding
      * @model
      */
-    value: String,
-    name: String,
-    srcLogo: String,
-    type: String,
-    onChange: Function,
-    inputBlock: String,
-    placeholder: String,
+    value: {
+      type: String,
+      default: ""
+    },
+    name: {
+      type: String,
+      default: ""
+    },
+    srcLogo: {
+      type: String,
+      default: ""
+    },
+    type: {
+      type: String,
+      default: ""
+    },
+    onChange: {
+      type: Function,
+      default: () => {}
+    },
+    inputBlock: {
+      type: String,
+      default: ""
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
     disabled: Boolean,
-    imgStyle: String,
-    inputStyle: String,
+    imgStyle: {
+      type: String,
+      default: ""
+    },
+    inputStyle: {
+      type: String,
+      default: ""
+    },
     theme: {
       type: String,
       default: "purple",
@@ -87,7 +114,6 @@ export default {
       this.$emit("input", this.content);
     },
     addressSuggestions(predictions, status) {
-      console.log("addressSuggestions", predictions, status);
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         return;
       }
@@ -99,9 +125,7 @@ export default {
       this.updateSuggestionStyle();
     },
     updateSuggestionStyle(){
-        console.log("updateSuggestionStyle", this.theme, this.locations);
         if ( this.theme === "purple" ) {
-            console.log("purple");
             setTimeout((_) => {
                 $(".md-list-item-button").hover(
                     function (el) {

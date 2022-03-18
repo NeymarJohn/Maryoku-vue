@@ -33,6 +33,7 @@
         <div>
           <div v-if="selectedCommentComponent && selectedCommentComponent.comments">
             <comment-item
+              v-if="mainComment"
               :comment="mainComment"
               :is-editing="editingCommentId == mainComment.id"
               :is-main="true"
@@ -69,20 +70,28 @@
               ref="commentEditor"
               v-model="editingComment"
               rows="4"
-              class="form-control"
+              class="form-control comment-editor"
               placeholder="Write reply here"
               @input="getMessage"
             />
-            <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
+            <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon icon-mention">
             <div class="footer">
-              <md-button class="md-simple normal-btn" @click="closeCommentListPane">
+              <md-button
+                class="md-simple normal-btn md-button-cancel md-button-submi"
+                @click="closeCommentListPane"
+              >
                 Cancel
               </md-button>
               <md-button
                 class="md-simple md-black normal-btn"
                 @click="saveComment($event, 'reply')"
               >
-                Submit
+                <span class="md-button-submit-text">
+                  Submit
+                </span>
+                <span class="md-button-submit-icon">
+                  <md-icon>keyboard_arrow_right</md-icon>
+                </span>
               </md-button>
             </div>
           </div>
@@ -486,7 +495,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  &.comment-edit-pane{
+  &.comment-edit-pane {
     padding: 20px 25px;
   }
   textarea {
@@ -495,12 +504,14 @@ export default {
     border-radius: 3px;
     border: solid 1px #989898;
     background-image: none;
-    padding: 10px;
-    padding-right: 25px;
+    padding: 17px 13px 17px 19px;
+    border: solid 1px #707070;
   }
   .footer {
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
     width: 100%;
+    margin: 20px 0;
   }
   .comments-child {
     padding-left: 40px;
@@ -521,9 +532,52 @@ export default {
   }
   .text-icon {
     position: absolute;
-    right: 30px;
-    top: 30px;
+    right: 37px;
+    top: 35px;
     width: 20px;
+  }
+  .md-button-cancel {
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #050505 !important;
+  }
+  .md-button-submit {
+    display: flex;
+    text-align: center;
+    padding: 0;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+    background: #641856;
+
+    .md-button-submit-text {
+      align-self: center;
+      padding: 5px 10px;
+      font-size: 16px;
+      font-weight: 800;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #fff;
+    }
+
+    .md-button-submit-icon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 2px;
+      background-color: #741e64;
+      i {
+        color: #fff;
+      }
+    }
   }
   .font-size-30 {
     font-size: 30px !important;

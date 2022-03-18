@@ -349,7 +349,7 @@
           @updateProposalCost="updateProposalCost"
         />
         <EventProposalPrice
-          v-for="(service, index) in this.proposal.additionalServices"
+          v-for="(service, index) in proposal.additionalServices"
           :key="`secondary-${service}-section`"
           :proposal-data="proposal"
           :service-category="service"
