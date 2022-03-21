@@ -28,7 +28,7 @@
         src="static/icons/arrow-up-red.svg"
       >
       <div class="view-presentation-footer-action-download">
-        <span @click="$emit('download-files', $event)" class="view-presentation-footer-action-download-text">
+        <span class="view-presentation-footer-action-download-text">
           Download the presentation
         </span>
         <button
@@ -108,7 +108,7 @@ export default {
   methods: {
     toggleMenuSelectDownloadFiles() {
       this.showMenuSelectDownloadFiles = !this.showMenuSelectDownloadFiles;
-    },
+    }
   }
 };
 </script>

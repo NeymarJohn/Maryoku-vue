@@ -94,7 +94,6 @@ import {Modal} from "@/components";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
-import Calendar from "@/models/Calendar";
 
 export default {
   components: {

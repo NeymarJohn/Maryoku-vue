@@ -6,9 +6,9 @@ const state = {
 };
 
 const mutations = {
-  toggleCommentMode: (state, mode) => {
+  toggleCommentMode: (state, showCommentPanel) => {
     // console.trace("toggleCommentMode", showCommentPanel,state.showCommentPanel)
-    state.showCommentPanel = mode !== null ? mode : !state.showCommentPanel;
+    state.showCommentPanel = !state.showCommentPanel;
   },
   setProposal: (state, proposal) => {
     console.log("setProposal");
@@ -23,9 +23,6 @@ const mutations = {
 const actions = {
   setProposal: ({ commit, state }, proposal) => {
     commit("setProposal", proposal);
-  },
-  toggleCommentMode: ({ commit, state }, mode = null) => {
-    commit("toggleCommentMode", mode);
   }
 };
 

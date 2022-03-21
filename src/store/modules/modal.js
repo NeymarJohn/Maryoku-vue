@@ -29,6 +29,15 @@ const actions = {
     });
   },
 
+  saveProposalRequest({ state }, { request, vendor }) {
+    return new Promise(async (resolve, reject) => {
+      let query = new ProposalRequest(request);
+      let res = await query.for(vendor).save();
+      console.log("saveProposalRequest", res);
+      resolve(res);
+    });
+  },
+
   saveProposalNegotiationRequest({ state }, { negotiation, proposal }) {
     return new Promise(async (resolve, reject) => {
       let query = new ProposalNegotiationRequest(negotiation);

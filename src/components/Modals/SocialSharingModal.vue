@@ -31,8 +31,6 @@
 
 <script>
 import { Modal, MaryokuInput } from "@/components";
-import SharingRoleOptions from "@/components/SharingRoleOptions";
-import InputTag from "vue-input-tag";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup.vue";
 
 export default {
@@ -40,14 +38,13 @@ export default {
   components: {
     Modal,
     MaryokuInput,
-    SharingRoleOptions,
-    InputTag,
     SharingButtonGroup,
   },
   props: {
-    show: [Boolean],
-    value: [Number],
-    defaultSharingData: Object,
+    defaultSharingData: {
+      type: Object,
+      default: () => ({})
+    },
   },
   data: () => {
     return {

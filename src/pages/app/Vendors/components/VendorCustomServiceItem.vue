@@ -131,7 +131,10 @@ export default {
     Money,
   },
   props: {
-    vendor: Object,
+    vendor: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data () {
     return {
@@ -153,7 +156,6 @@ export default {
       this.vendor.services.customService.data :
       [];
   },
-
   methods: {
     addedService ({ target }) {
       if (!target.form[0].value || target.form[1].value === "$ 0.00") {
@@ -206,12 +208,11 @@ export default {
     weight: 800;
     size: 16px;
   }
+  display: block;
   letter-spacing: normal;
-  display: inline-block;
   margin-bottom: 21px;
   line-height: normal;
   color: #050505;
-  display: block;
 }
 .custom-checkbox {
   position: absolute;

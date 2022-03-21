@@ -34,6 +34,7 @@
         @remove="removeAttachment"
       />
     </div>
+    <!-- <vendor-images-list :images="serviceData.images"></vendor-images-list> -->
     <vendor-photos-carousel
       class="service-photos mt-40"
       theme="purple"
@@ -56,7 +57,10 @@ import ExtraPayTable from "./ExtraPayTable.vue";
 import Policy from "./Policy.vue";
 import PricePolicy from "./PricePolicy.vue";
 import VendorPhotosCarousel from "../../components/VendorPhotosCarousel.vue";
+import S3Service from "@/services/s3.service";
+import { makeid } from "@/utils/helperFunction";
 import { getBase64 } from "@/utils/file.util";
+import Vendors from "@/models/Vendors";
 import _ from "underscore";
 export default {
   components: {
@@ -65,6 +69,7 @@ export default {
     Policy,
     PricePolicy,
     AttachmentItem,
+    VendorImagesList,
     VendorPhotosCarousel,
   },
   props: {

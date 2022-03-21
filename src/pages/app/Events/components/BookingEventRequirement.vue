@@ -101,8 +101,6 @@ import moment from "moment";
 import InputMask from "vue-input-mask";
 import _ from "underscore";
 import Multiselect from "vue-multiselect";
-import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea.vue";
 
 import { postReq, getReq } from "@/utils/token";
 import { Modal, Loader } from "@/components";
@@ -129,8 +127,6 @@ export default {
     HeaderActions,
     CommentEditorPanel,
     Multiselect,
-    MaryokuInput,
-    MaryokuTextarea,
     VendorRequirementMultiselectPanel,
     VendorRequirementSingleselectPanel,
     SpecialRequirementSection,

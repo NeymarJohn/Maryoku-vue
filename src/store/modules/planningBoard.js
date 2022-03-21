@@ -39,8 +39,8 @@ const actions = {
         .get()
         .then((res) => {
           if (res && res.length) {
-            res.forEach((requirement) => {
-              commit("setCategoryRequirements", { category: requirement.category, requirement });
+            res.forEach((requirements) => {
+              commit("setCategoryRequirements", { category: requirements.category, requirements });
             });
           }
           resolve(res);
@@ -77,7 +77,7 @@ const actions = {
         .for(new CalendarEvent({ id: event.id }))
         .save()
         .then((res) => {
-          commit("setCategoryRequirements", { category, requirement: res });
+          commit("setCategoryRequirements", { category, requirements: res });
           resolve(res);
         })
         .catch((err) => {
@@ -94,7 +94,7 @@ const actions = {
         .for(new CalendarEvent({ id: event.id }))
         .save()
         .then((res) => {
-          commit("setCategoryRequirements", { category, requirement: res });
+          commit("setCategoryRequirements", { category, requirements: res });
           resolve(res);
         })
         .catch((err) => {
@@ -112,7 +112,7 @@ const actions = {
         .for(new CalendarEvent({ id: event.id }))
         .save()
         .then((res) => {
-          commit("setCategoryRequirements", { category, requirement: res });
+          commit("setCategoryRequirements", { category, requirements: res });
           resolve(res);
         })
         .catch((err) => {
@@ -126,7 +126,7 @@ const actions = {
         .for(new CalendarEvent({ id: requirements.event.id }))
         .save()
         .then((res) => {
-          commit("setCategoryRequirements", { category: res.category, requirement: res });
+          commit("setCategoryRequirements", { category: res.category, requirements: res });
           resolve(res);
         })
         .catch((err) => {
@@ -179,9 +179,8 @@ const mutations = {
   setData(state, { key, value }) {
     Vue.set(state, key, value);
   },
-  setCategoryRequirements(state, { category, requirement }) {
-    console.log('state.setReq', category, requirement)
-    Vue.set(state.requirements, category, requirement);
+  setCategoryRequirements(state, { category, requirements }) {
+    Vue.set(state.requirements, category, requirements);
   },
   setMainRequirements(state, { category, data }) {
     Vue.set(state.mainRequirements, category, data);

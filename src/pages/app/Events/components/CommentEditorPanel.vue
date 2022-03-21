@@ -6,7 +6,7 @@
       class="item"
       :style="getCirclePosition(item)"
       :comment-component="item"
-      :selected-componet="selectedCommentComponent"
+      :selected-component="selectedCommentComponent"
       @save="saveComment"
       @show="showComments"
       @toggleEditPane="toggleEditPane"
@@ -496,9 +496,6 @@ export default {
   -moz-user-select: none;
   -webkit-user-select: none;
   z-index: 4999;
-}
-.event-plan .click-capture {
-  left: 400px;
 }
 .comments-list {
   position: absolute;

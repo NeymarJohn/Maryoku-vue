@@ -30,7 +30,7 @@
           </div>
           <div class="card-accept-conditions-actions">
             <button class="card-accept-conditions-actions-button md-button md-red maryoku-btn">
-              <router-link to="/user-events/61ddf35fcfefec75142519a4/booking/planningboard" >
+              <router-link to="/user-events/61ddf35fcfefec75142519a4/booking/planningboard">
                 I Would More Details
               </router-link>
             </button>
