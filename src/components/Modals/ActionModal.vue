@@ -165,8 +165,9 @@
 import Swal from "sweetalert2";
 import moment from "moment";
 import { ACTION } from "@/constants/modal";
-import { PROPOSAL_STATUS, NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
+import { NEGOTIATION_REQUEST_TYPE } from "@/constants/status";
 import Proposal from "@/models/Proposal";
+import ProposalRequest from "@/models/ProposalRequest";
 import Vendor from "@/models/Vendors";
 
 const components = {
@@ -273,16 +274,10 @@ export default {
       this.showLinkRoleEditor = false;
     },
     async saveNegotiation(params) {
-        const request = {
-            vendorId: this.proposal.vendor.id,
-            requestedTime: new Date().getTime(),
-            expiredTime: moment(new Date()).add(3, "days").valueOf(),
-        };
-        const res1 = await this.$store.dispatch("modal/saveProposalRequest",{
-            request,
-            vendor: new Vendor({id: this.proposal.vendor.id}),
-        });
-        await this.$store.dispatch("modal/saveProposal", {...this.proposal, proposalRequestId: res1.id});
+        let request = await ProposalRequest.find(this.proposal.proposalRequestId);
+        request.expiredTime = moment(new Date()).add(3, "days").valueOf();
+        await request.save();
+
         const negotiation = {
             proposalId: this.proposal.id,
             proposal: new Proposal({ id: this.proposal.id }),

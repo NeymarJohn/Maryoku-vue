@@ -229,8 +229,11 @@
           </div>
         </div>
         <div class="mt-40 policy-confirmation-block">
-          <span class="font-regular">I agree to the</span>
-          <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
+          <md-checkbox v-model="agreedCancellationPolicy" class="m-0">
+            <span class="font-regular">I agree to the</span>
+            <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
+          </md-checkbox>
+
           <stripe-checkout
             v-if="showStripeCheckout"
             :items="stripePriceData"
@@ -238,8 +241,8 @@
             :success-u-r-l="successURL"
           />
         </div>
-        <div class="signature-wrapper">
-          <button class="signature-button" @click="showSignatureModal = true">
+        <div>
+          <button @click="showModal = !showModal">
             Your signature
           </button>
         </div>
@@ -249,15 +252,69 @@
       <md-button class="maryoku-btn md-simple md-black" @click="back">
         Back
       </md-button>
-      <md-button class="maryoku-btn" :class="{'md-red': agreedCancellationPolicy}" :disabled="!agreedCancellationPolicy" @click="pay">
+      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay">
         Submit Payment
       </md-button>
     </div>
     <success-modal v-if="showSuccessModal" />
-    <add-signature-modal
 
-      :show-modal="showSignatureModal"
-    />
+    <Modal v-if="showModal">
+      <template slot="header">
+        <div>
+          <button @click="showModal = !showModal">
+            close
+          </button>
+        </div>
+      </template>
+      <template slot="body">
+        <div class="signature-editor">
+          <md-button class="md-outlined maryoku-btn md-simple md-vendor">
+            Choose File
+          </md-button>
+          <div class="or">
+            Or
+          </div>
+          <div class="sign-here">
+            <!--            <img v-if="signatureData" :src="`${signatureData}`">-->
+            <vueSignature ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
+            <md-button class="md-simple md-vendor edit-btn">
+              Clear
+            </md-button>
+          </div>
+          <input
+            ref="signatureFile"
+            type="file"
+            class="d-none"
+            name="vendorSignature"
+            accept="image/gif, image/jpg, image/png"
+          >
+        </div>
+        <div class="signature-editor">
+          <md-button class="md-outlined maryoku-btn md-simple md-vendor" @click="uploadSignatureFile">
+            Choose File
+          </md-button>
+          <div class="or">
+            Or
+          </div>
+          <div class="sign-here">
+            <img v-if="signatureData" :src="`${signatureData}`">
+            <vueSignature v-else ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
+            <md-button class="md-simple md-vendor edit-btn" @click="clear">
+              Clear
+            </md-button>
+          </div>
+
+          <input
+            ref="signatureFile"
+            type="file"
+            class="d-none"
+            name="vendorSignature"
+            accept="image/gif, image/jpg, image/png"
+            @change="onSignatureFilePicked"
+          >
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 <script>
@@ -271,7 +328,7 @@
   import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
   import moment from "moment";
   import Loader from "@/components/loader/Loader.vue";
-  import AddSignatureModal from "../../Modals/AddSignatureModal";
+  import {Modal} from "../../../../../components";
 
   // checkout page type
   const VENDOR = 0;
@@ -282,22 +339,14 @@
   const CUSTOMER = "customer";
 
   export default {
-    components: {
-      Loader,
-      CheckoutPriceTable,
-      CollapsePanel,
-      StripeCheckout,
-      SuccessModal,
-      CheckoutProposalTable,
-      AddSignatureModal,
-      },
+    components: {Loader, CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable, Modal},
     data() {
       return {
         option: {
           penColor: "rgb(0, 0, 0)",
           backgroundColor: "rgb(255,255,255)",
         },
-        showSignatureModal: false,
+        showModal: false,
         vendor: null,
         proposal: null,
         cart: {},
@@ -360,6 +409,25 @@
 
     },
     methods: {
+
+      clear() {
+        this.signatureData = "";
+        this.$refs.signature.clear();
+      },
+      async onSignatureFilePicked(e) {
+        const file = e.target.files[0];
+        const extension = file.type.split("/")[1];
+        const fileId = `${new Date().getTime()}`;
+        S3Service.fileUpload(file, fileId, "vendor/signatures").then(async (uploadedName) => {
+          this.content = `https://maryoku.s3.amazonaws.com/vendor/signatures/${fileId}.${extension}`;
+          this.signatureData = await getBase64(file);
+        });
+
+        // this.$refs.signature.fromDataURL(imageData);
+      },
+      uploadSignatureFile() {
+        this.$refs.signatureFile.click();
+      },
       ...mapActions("planningBoard", ["getCartItems"]),
       getEventDays(){
         if ( this.proposal.nonMaryoku ) {
@@ -561,19 +629,11 @@
   };
 </script>
 <style lang="scss" scoped>
+.sign-here{
+  width: 100px;
+height: 100px;
+}
   .event-vendor-checkout {
-    .signature-wrapper{
-      margin: 30px 0;
-      .signature-button{
-        background-color: white;
-        border: 1px solid #f51355;
-        padding: 10px;
-        color: #f51355;
-        font-family: 'Manrope-bold';
-        font-size: 16px;
-        font-weight: 800;
-      }
-    }
     .disabled {
       opacity: 0.5;
     }
