@@ -22,7 +22,7 @@
         </label>
       </div>
 
-      <div class="tags-list">
+      <div class="tags-list ">
         <div class="tags-list-wrapper d-flex justify-content-start" :class="{ expanded: tagExpanded }">
           <template v-for="(tag, index) in taggingOptions">
             <div
@@ -333,18 +333,21 @@ export default {
           const extension = files[0].type.split("/")[1];
           const fileName = new Date().getTime() + "";
           const dirName = "concepts";
-          const fileInfo = {
-            originName: files[0].name,
-            name: `${fileName}`,
-            url: `${process.env.S3_URL}${dirName}/${fileName}.${extension}`,
-          };
-          this.editConcept.images[itemIndex] = fileInfo;
+          
 
           const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
           this.$set(this.uploadImageData, itemIndex, imageData);
           this.$set(this.uploadingStatus, itemIndex, true);
+
+          const fileInfo = {
+              originName: files[0].name,
+              name: `${fileName}`,
+            };
           S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
+            fileInfo.url = res.url;
             this.uploadingStatus[itemIndex] = false;
+            
+          this.editConcept.images[itemIndex] = fileInfo;
             this.$set(this.uploadingStatus, itemIndex, false);
           });
         }
@@ -379,16 +382,16 @@ export default {
         const fileName = new Date().getTime() + "";
         const dirName = "concepts";
         const fileInfo = {
-          originName: files[0].name,
-          name: `${fileName}`,
-          url: `${process.env.S3_URL}${dirName}/${fileName}.${extension}`,
-        };
-        this.editConcept.images[itemIndex] = fileInfo;
+            originName: files[0].name,
+            name: `${fileName}`,
+          };
 
         this.uploadImageData[itemIndex] = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
         this.uploadingStatus[itemIndex] = true;
         S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
+          fileInfo.url = res.url;
           this.uploadingStatus[itemIndex] = false;
+          this.editConcept.images[itemIndex] = fileInfo;
         });
       }
     },

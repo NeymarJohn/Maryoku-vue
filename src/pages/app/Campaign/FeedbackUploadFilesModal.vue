@@ -122,7 +122,7 @@ export default {
     FeedbackUploadImagesCarousel,
   },
   props: {
-    uploadToFolderName: {
+    folderNameForUpload: {
       type: String,
       required: true,
     }
@@ -171,13 +171,15 @@ export default {
       this.carouselItemIndex = itemIndex;
     },
     uploadAllFiles() {
-      console.log(this.files);
-      this.files.forEach((file) => {
-        const extension = file.type.split("/")[1];
-        const fileName = uuidv4();
-        S3Service.fileUpload(file, `${fileName}`, this.uploadToFolderName, extension).then(() => {
-          this.isLoading = false;
+      const functionsUploadFiles = this.files
+        .map((file) => {
+          const extension = file.type.split("/")[1];
+          const fileName = uuidv4();
+          return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload);
         });
+      Promise.all(functionsUploadFiles).then((responses) => {
+        this.isLoading = false;
+        this.$emit("upload-files", responses);
       });
     }
   },

@@ -361,7 +361,7 @@
           @updateProposalCost="updateProposalCost"
         />
         <EventProposalPrice
-          v-for="(service, index) in this.proposal.additionalServices"
+          v-for="(service, index) in proposal.additionalServices"
           :key="`secondary-${service}-section`"
           :proposal-data="proposal"
           :service-category="service"
@@ -556,9 +556,12 @@
                       {{ policy.name }}
                     </div>
                     <div v-if="policy.type === 'MultiSelection'" class="item">
-                      <span v-for="(v, vIndex) in policy.value" class="mr-10">{{
-                        `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                      }}</span>
+                      <span
+                        v-for="(v, vIndex) in policy.value"
+                        :key="vIndex"
+                        class="mr-10"
+                      >
+                        {{`${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}</span>
                     </div>
                     <div v-else-if="policy.type === 'Including'" class="item">
                       <span v-if="policy.value" class="mr-10"> Yes </span>
