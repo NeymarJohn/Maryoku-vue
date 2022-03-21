@@ -34,7 +34,12 @@
               Add attachments to the event
             </div>
           </div>
-          <feedback-upload-files-modal v-if="showModalWindowOpen" :upload-to-folder-name="`events/${event.id}`" @close="closeModalWindow" />
+          <feedback-upload-files-modal
+            v-if="showModalWindowOpen"
+            :folder-name-for-upload="`events/${event.id}`"
+            @close="closeModalWindow"
+            @upload-files="uploadFiles"
+          />
         </div>
         <div class="footer-change-cover">
           <div class="wrapper-logo-microsoft">
@@ -196,6 +201,8 @@ import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
+import { mapActions } from "vuex";
+import S3Service from "@/services/s3.service";
 
 export default {
   components: {
@@ -252,7 +259,10 @@ export default {
           description: "",
         }
       };
-      return this.campaignData.additionalData || defaultAdditionalData;
+      return {
+        ...defaultAdditionalData,
+        ...(this.campaignData.additionalData || {})
+      };
     },
   },
   created() {
@@ -293,8 +303,10 @@ export default {
       key: "feedbackQuestions",
       value: this.feedbackQuestions,
     });
+    console.log(this.$store.state.campaign.FEEDBACK.files);
   },
   methods: {
+    ...mapActions("campaign", ["saveCampaign"]),
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
@@ -360,6 +372,26 @@ export default {
         value: this.additionalData
       });
     },
+    uploadFiles(files) {
+      // const additionalData = {
+      //   ...(this.campaignData.additionalData || {}),
+      //   files: files.map(({ status, ...file }) => file),
+      // };
+      S3Service.downloadFiles(files.map((file) => file.url)).then((result) => {
+        const blob = result.data.blob();
+        console.log({ blob });
+        const tagA = document.createElement("a");
+        tagA.setAttribute("href", blob);
+        tagA.setAttribute("target", "_blank");
+        tagA.click();
+      });
+      // this.saveCampaign({ id: this.campaignData.id, files }).then((result) => console.log(result));
+      // this.$store.commit("campaign/setAttribute", {
+      //   name: "FEEDBACK",
+      //   key: "files",
+      //   value: files
+      // });
+    }
   },
 };
 </script>

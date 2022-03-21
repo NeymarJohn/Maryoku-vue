@@ -1,4 +1,5 @@
 <template>
+
   <div class="proposal-main-container" style="">
     <loader :active="loading" :is-full-screen="true" page="vendor" />
     <template v-if="showProposal">

@@ -32,7 +32,7 @@ const mutations = {
         setStateFromData(state.proposal, JSON.parse(JSON.stringify(state.proposal.versions[index].data)));
     }
 
-    console.log(state.currentVersion, state.proposal);
+    console.log(state.currentVersion, state.proposal)
     },
     setVersions: (state, versions) => {
         state.proposal.versions = versions;
@@ -41,13 +41,13 @@ const mutations = {
         state.proposal = proposal;
         state.proposal.versions = proposal.versions || [];
         state.currentVersion = -1;
-        Vue.set(state, "original", proposal);
+        Vue.set(state, 'original', proposal);
     },
     updateCommentComponents: (state, commentComponents) => {
         console.log("updateCommentComponents");
         state.proposal.commentComponent = commentComponents;
     },
-};
+}
 
 const actions = {
   setProposal: ({ commit, state }, proposal) => {

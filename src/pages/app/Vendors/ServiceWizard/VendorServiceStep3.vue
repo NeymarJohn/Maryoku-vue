@@ -134,6 +134,7 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
 import CancellationPolicy from "@/components/CancellationPolicy.vue";
+import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 
 export default {
   name: "VendorSignupStep3",

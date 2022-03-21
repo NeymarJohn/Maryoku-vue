@@ -33,15 +33,19 @@
 </template>
 <script>
 import { Modal } from "@/components";
+import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
+import EventComponent from "@/models/EventComponent";
+import CalendarEvent from "@/models/CalendarEvent";
 
 export default {
   components: {
     Modal,
+    MaryokuInput,
   },
   props: {
     serviceCategory: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
   },
   data() {

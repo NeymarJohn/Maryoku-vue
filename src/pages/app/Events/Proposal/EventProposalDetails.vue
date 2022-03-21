@@ -561,7 +561,7 @@
                         :key="vIndex"
                         class="mr-10"
                       >
-                        {{ `${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}</span>
+                        {{`${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}</span>
                     </div>
                     <div v-else-if="policy.type === 'Including'" class="item">
                       <span v-if="policy.value" class="mr-10"> Yes </span>

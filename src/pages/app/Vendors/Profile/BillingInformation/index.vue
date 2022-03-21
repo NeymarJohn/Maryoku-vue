@@ -2,7 +2,6 @@
   <div class="company-details-container">
     <tabs :tab-name="['Payment Setting', 'Invoices']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
-        <PaymentSettings />
       </template>
       <template slot="tab-pane-2">
         <div class="p-40">
@@ -17,7 +16,6 @@ import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
 import Invoices from "./Invoices";
 import MyCompanyBilling from "../../../MyCompany/MyCompanyBilling";
-import PaymentSettings from "./PaymentSettings";
 export default {
   components: {
     VueElementLoading,
@@ -25,7 +23,6 @@ export default {
     Tabs,
     Invoices,
     MyCompanyBilling,
-    PaymentSettings,
   },
   data() {
     return {
