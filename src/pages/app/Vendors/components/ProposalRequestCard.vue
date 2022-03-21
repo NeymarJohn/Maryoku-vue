@@ -137,6 +137,7 @@ export default {
     }
   },
   mounted() {
+      console.log('req.card', this.proposalRequest)
   },
   methods: {
     gotoProposalRequest() {

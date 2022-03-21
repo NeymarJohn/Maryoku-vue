@@ -310,7 +310,6 @@
 import moment from "moment";
 import NoInsight from "./NoInsight.vue";
 import _ from "underscore";
-import carousel from "vue-owl-carousel";
 import {avatarColors} from "@/constants/color";
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
@@ -320,7 +319,6 @@ import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS }
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
-import CentredModal from "../../../../components/CentredModal.vue";
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
