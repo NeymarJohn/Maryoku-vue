@@ -310,6 +310,7 @@
 import moment from "moment";
 import NoInsight from "./NoInsight.vue";
 import _ from "underscore";
+import carousel from "vue-owl-carousel";
 import {avatarColors} from "@/constants/color";
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";

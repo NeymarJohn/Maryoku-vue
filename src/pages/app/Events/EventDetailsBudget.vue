@@ -1,5 +1,5 @@
 <template>
-  <div class="event-plan" :class="{'x-mouse': xCursor}" @mousemove="handleMouseMove">
+  <div>
     <budget-notifications />
     <!-- todo show event checklist temp-->
     <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList" />
@@ -12,7 +12,6 @@
         @deleteComment="deleteComment"
         @updateCommentComponent="updateCommentComponent"
       />
-      <comment-sidebar v-if="showCommentEditorPanel" />
       <!-- Event Header -->
       <div class="event-header d-flex justify-content-between">
         <div class="header-title">
@@ -21,12 +20,7 @@
             Budget
           </h3>
         </div>
-        <header-actions
-          :custom-styles="{ marginForCircle: {marginLeft: '20px'}}"
-          @toggleCommentMode="toggleCommentMode"
-          @share="share"
-          @export="exportToPdf"
-        />
+        <header-actions @toggleCommentMode="toggleCommentMode" @share="share" @export="exportToPdf" />
       </div>
       <div class="md-layout justify-content-between">
         <div class="md-layout-item md-size-40">
@@ -251,7 +245,7 @@
         </template>
         <template slot="body">
           <div class="add-category-model__header">
-            <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra }}</span></h2>
+            <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra | withComma(Number) }}</span></h2>
             <h2 v-if="extra<0">
               Oops, these changes have put you in the red!
             </h2>
@@ -291,7 +285,6 @@
 <script>
 // MAIN MODULES
 import { Tabs, Modal } from "@/components";
-import state from "./state";
 
 // import auth from '@/auth';
 import moment from "moment";
@@ -300,10 +293,13 @@ import Swal from "sweetalert2";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
+import EventStateMessage from "./components/EventStateMessage";
 import { BUDGET_MESSAGES } from "@/constants/messages";
 import { mapState, mapMutations, mapGetters } from "vuex";
 
 import EventBudgetVendors from "./components/EventBudgetVendors";
+import EditEventBlocksBudget from "./components/EditEventBlocksBudget";
+import EventBudgetActivityPanel from "./components/EventBudgetActivityPanel";
 import ProgressSidebar from "./components/progressSidebarForEvent";
 
 // COMPONENTS
@@ -316,7 +312,6 @@ import {CommentMixins, ShareMixins} from "@/mixins";
 
 import BudgetEditModal from "@/components/Modals/BudgetEditModal";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
-import CommentSidebar from "./components/CommentSidebar.vue";
 import axios from "axios";
 const VueHtml2pdf = () => import("vue-html2pdf");
 
@@ -334,7 +329,6 @@ export default {
     BudgetEditModal,
     AddNewCategoryModal,
     VueHtml2pdf,
-    CommentSidebar
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -371,11 +365,7 @@ export default {
       extra:"0",
       extraBudgetMethod:"betweenCategories",
       addNewCategoryLoading:false,
-      xCursor: false
     };
-  },
-  beforeCreate() {
-    this.$store.registerModule("eventPlan", state);
   },
   created() {
     this.routeName = this.$route.name;
@@ -415,10 +405,6 @@ export default {
       "setEventData",
     ]),
     ...mapMutations("event", ["setBudgetNotification"]),
-    handleMouseMove(event) {
-      if (!this.showCommentEditorPanel) return;
-      this.xCursor = event.target.className === "click-capture";
-    },
     changeCheckList(e) {
       const updatedEvent = new CalendarEvent({
         id: this.event.id,
