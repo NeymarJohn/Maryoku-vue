@@ -1026,7 +1026,6 @@ export default {
             this.$store.dispatch("eventPlan/setProposal",{...proposal}).then(res => { console.log("eventPlan/setProposal", {...proposal}); });
         }
         else{
-            // this.$store.dispatch("planningBoard/setProposal", null);
             this.$store.dispatch("eventPlan/setProposal", null).then(res => { console.log("eventPlan/setProposal", null); });
         }
     },

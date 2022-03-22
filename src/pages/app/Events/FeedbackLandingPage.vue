@@ -37,6 +37,7 @@
                 <div class="view-presentation">
                   <view-presentation
                     cover-image="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/fde9a712-f55d-4a96-b0ce-7df0ac9c1661.png"
+                    @download-files="downloadFiles"
                   />
                 </div>
               </div>
@@ -76,7 +77,6 @@
                 <div v-if="campaign && campaign.visibleSettings.showFeedback">
                   <feedback-question
                     v-for="(question, index) in feedbackQuestions"
-                    v-if="question.showQuestion"
                     :key="index"
                     :feedback-data="question"
                     :disabled="false"
@@ -176,31 +176,23 @@ import Feedback from "@/models/Feedback";
 import Campaign from "@/models/Campaign";
 import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
-import TitleEditor from "@/pages/app/Campaign/components/TitleEditor";
-import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import S3Service from "@/services/s3.service";
-import { Drag, Drop } from "vue-drag-drop";
+import { Drop } from "vue-drag-drop";
 
 export default {
   components: {
-    MaryokuTextarea,
     FeedbackImageCarousel,
     SharingButtonGroup,
     FeedbackQuestion,
-    TitleEditor,
-    HideSwitch,
     FeedbackLogo,
     ViewPresentation,
-    Drag,
     Drop,
   },
-
   data() {
     return {
       isLoading: true,
@@ -210,6 +202,8 @@ export default {
       originalContent: {},
       info: {},
       images: [],
+      attachments: [],
+      feedbackQuestions: [],
       showFeedbackMessageSuccessful: false,
     };
   },
@@ -232,7 +226,10 @@ export default {
       this.campaign = campaigns["FEEDBACK"];
       this.event = this.campaign.event;
       this.images = this.campaign.images;
-      this.feedbackQuestions = this.campaign.feedbackQuestions;
+      if (this.campaign.attachments) {
+        this.attachments = this.campaign.attachments.map(({ url }) => url);
+      }
+      this.feedbackQuestions = this.campaign.feedbackQuestions.filter((question) => question.showQuestion);
     });
   },
   methods: {
@@ -339,12 +336,15 @@ export default {
       }
       alert(`You dropped files: ${JSON.stringify(filenames)}`);
     },
-  },
-  computed: {
-    availableQuestions() {
-      return this.campaign.feedbackQuestions.filter((item) => item.showQuestion);
+    downloadFiles() {
+      S3Service.downloadFiles(this.attachments).then((result) => {
+        const tagA = document.createElement("a");
+        tagA.setAttribute("href", `data:application/zip,${result.data}`);
+        tagA.setAttribute("target", "_blank");
+        tagA.click();
+      });
     },
-  },
+  }
 };
 </script>
 

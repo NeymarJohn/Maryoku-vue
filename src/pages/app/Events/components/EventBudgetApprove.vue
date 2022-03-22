@@ -196,7 +196,7 @@
           </md-checkbox>
           <br>
           <md-checkbox v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="onUnexpected">
-            {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Allocate funds from the “Unexpected” category' }}
+            {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Recalculate according to the new budget' }}
           </md-checkbox>
           <br>
           <md-checkbox v-show="extra<0" v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="goBack">

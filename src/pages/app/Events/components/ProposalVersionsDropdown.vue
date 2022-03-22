@@ -48,26 +48,23 @@ export default {
   name: "ProposalVersionsDropdown",
   components,
   props: {
-      versions:{
-          type: Array,
-      },
-      selected:{
-          type: Number,
-          default: -1,
-      }
+    versions:{
+      type: Array,
+      default: () => [],
+    },
+    selected:{
+      type: Number,
+      default: -1,
+    }
   },
   data() {
     return {
-        versionFields: PROPOSAL_VERSION_FIELDS,
-        versionName: null,
+      versionFields: PROPOSAL_VERSION_FIELDS,
+      versionName: null,
     };
-  },
-  watch: {
-    versions(newVal){console.log("versions", newVal);}
   },
   methods: {
     select(index){
-      console.log("select", index, this.selected);
       this.$emit("select", index);
     },
 

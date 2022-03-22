@@ -211,7 +211,7 @@ export default {
     proposal(newVal) {},
   },
   mounted() {
-    console.log("mounted", this.proposal);
+    // console.log("mounted", this.proposal);
   },
   methods: {
     getStatusIcon(status) {

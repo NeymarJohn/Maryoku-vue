@@ -35,10 +35,6 @@ export default {
   components: {
     Modal,
   },
-  props: {
-    show: [Boolean],
-    value: [Number],
-  },
   data: () => {
     return {
       message: "",
