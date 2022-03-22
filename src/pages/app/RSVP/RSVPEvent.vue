@@ -378,7 +378,7 @@ export default {
       event: {},
 
       isLoading: true,
-      showRsvpModal: true,
+      showRsvpModal: false,
       showReminderModal: false,
       showZoomModal: false,
       showSyncCalendarForZoom: false,

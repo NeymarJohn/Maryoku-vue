@@ -40,7 +40,7 @@
               <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
                 Show comments
               </div>
-              <div class="hide-circle-for-img">
+              <div class="hide-circle-for-img" :style="customStyles.marginForCircle ? customStyles.marginForCircle : {marginLeft: '10px'}">
                 <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
               </div>
             </div>
@@ -59,6 +59,7 @@
 <script>
 import SharingModal from "@/components/Modals/SharingModal";
 import { HeaderActions, HeaderActionsRequirements, } from "@/constants/tabs";
+import { mapActions } from "vuex";
 
 export default {
   name: "HeaderActions",
@@ -132,6 +133,7 @@ export default {
     const tenantId = this.$authService.resolveTenantId();
   },
   methods: {
+    ...mapActions("eventPlan", ["toggleCommentMode"]),
     click(key) {
       console.log("action", key);
       if (key === "download") {
@@ -141,6 +143,7 @@ export default {
       } else if (key === "comment") {
         this.isCommentMode = !this.isCommentMode;
         this.$emit("toggleCommentMode", this.isCommentMode);
+        this.toggleCommentMode(this.isCommentMode);
       }
     },
 
@@ -212,7 +215,6 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  margin-left: 20px;
   background-color: white;
 }
 .d-flex{

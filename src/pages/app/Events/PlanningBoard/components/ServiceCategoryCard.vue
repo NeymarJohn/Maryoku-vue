@@ -97,6 +97,7 @@ const components = {
     carousel: () => import("vue-owl-carousel"),
     Popper: () => import("vue-popperjs"),
     MusicPlayer: () => import("./MusicPlayer.vue"),
+    AddBudgetModal: () => import("./modals/AddBudget.vue"),
     AddBudgetConfirmModal: () => import("./modals/AddBudgetConfirm.vue")
 };
 export default {

@@ -1,7 +1,7 @@
 <template>
-  <div class="event-plan">
+  <div class="event-plan" :class="{'x-mouse': xCursor}" @mousemove="handleMouseMove">
     <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
-    <!-- <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList"></comment-sidebar> -->
+    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
     <router-view />
   </div>
 </template>
@@ -23,6 +23,7 @@ export default {
       eventElements: [],
       pageId: "",
       resevedPages: [],
+      xCursor: false
     };
   },
   beforeCreate() {
@@ -100,15 +101,15 @@ export default {
         componentId: "planningboard",
         id: "planningboard-item",
       };
-      const chooseVendor = {
-        title: "Booking Vendors",
-        status: "not-complete",
-        route: "booking/choose-vendor",
-        icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-        progress: this.event.campaignProgress,
-        componentId: "chooseVendor",
-        id: "bookingboard-item",
-      };
+      // const chooseVendor = {
+      //   title: "Booking Vendors",
+      //   status: "not-complete",
+      //   route: "booking/choose-vendor",
+      //   icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+      //   progress: this.event.campaignProgress,
+      //   componentId: "chooseVendor",
+      //   id: "bookingboard-item",
+      // };
       const elements = [];
 
       if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
@@ -119,7 +120,6 @@ export default {
           elements.push(campaign);
           if (this.event.budgetProgress > 0) {
               elements.push(planningBoard);
-              elements.push(chooseVendor);
           }
       } else if(this.user.currentUserType === "guest") {
           elements.push(overview);
@@ -161,6 +161,11 @@ export default {
   },
   created() {},
   methods: {
+    ...mapActions("eventPlan", ["toggleCommentMode"]),
+    handleMouseMove(event) {
+      if (!this.showCommentPanel) return;
+      this.xCursor = event.target.className === "click-capture";
+    },
     setConstantStates(event) {
       const overviewIndex = this.eventElements.findIndex((item) => item.componentId === "overview");
       const conceptIndex = this.eventElements.findIndex((item) => item.componentId === "concept");
@@ -204,6 +209,7 @@ export default {
         reCalculate: false,
       });
       this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
+        this.toggleCommentMode(false);
       });
     },
   },

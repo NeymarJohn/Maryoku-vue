@@ -35,13 +35,11 @@
 </template>
 <script>
 import { Modal } from "@/components";
-import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponent from "@/models/EventComponent";
 
 export default {
   components: {
     Modal,
-    MaryokuInput,
   },
   props: {
     event: {

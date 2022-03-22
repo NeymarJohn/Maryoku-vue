@@ -46,7 +46,10 @@ export default {
       type: String,
       default: "",
     },
-    value: String,
+    value: {
+      type: String,
+      default: "",
+    },
     rows: {
       type: String,
       default: "3",
@@ -73,6 +76,7 @@ export default {
     },
     fontSize: {
       type: [String, Number],
+      default: "16",
     },
   },
   data() {

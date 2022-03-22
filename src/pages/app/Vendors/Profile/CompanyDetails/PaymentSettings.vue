@@ -1,5 +1,8 @@
 <template>
   <div class="proposal-payment">
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet">
     <md-card class="text-left acceptance-section billing-information-block">
       <md-card-header class="acceptance-section-header">
         <div class="header-title">
@@ -24,30 +27,12 @@
             <div class=" md-card-content" style="padding: unset">
               <div class="payment-details">
                 <form class="form-section">
-                  <div class="md-layout-item">
-                    <label>ID Number</label>
-                    <br>
-                    <input v-for="(option, index) in bankDetails.id"
-                           :key="index" v-model="bankDetails.id[index]"
-                           style="width: 51px; margin-right: 5px" maxlength="1"
-                           pattern="[0-9]*"
-                           :name="index"
-                           type="password"
-                           inputmode="numeric"
-                    >
-                    <label>-</label>
-                    <input v-model="bankDetails.adId"
-                           style="width: 51px"
-                           maxlength="1" pattern="([12345])\w{0}"
-                           type="number"
-                    >
-                  </div>
                   <div class="md-layout mt-1">
                     <div class="md-layout-item md-size-40">
                       <div class="input-wrapper"
                            :class="{
-                               error: v$.bankDetails.holderName.$errors.length,
-                               valid: !v$.bankDetails.holderName.$errors.length && v$.bankDetails.holderName.$dirty}">
+                             error: v$.bankDetails.holderName.$errors.length,
+                             valid: !v$.bankDetails.holderName.$errors.length && v$.bankDetails.holderName.$dirty}">
                         <label>Beneficiary Name</label>
                         <input id="name" v-model="bankDetails.holderName" type="text"
                                @blur="v$.bankDetails.holderName.$touch"/>
@@ -57,8 +42,8 @@
                     <div class="md-layout-item md-size-40">
                       <div class="input-wrapper"
                            :class="{
-                               error: v$.bankDetails.accountNumber.$errors.length,
-                               valid: !v$.bankDetails.accountNumber.$errors.length && v$.bankDetails.accountNumber.$dirty}">
+                             error: v$.bankDetails.accountNumber.$errors.length,
+                             valid: !v$.bankDetails.accountNumber.$errors.length && v$.bankDetails.accountNumber.$dirty}">
                         <label>Account No.</label>
                         <input id="email" v-model="bankDetails.accountNumber" type="number"
                                @blur="v$.bankDetails.accountNumber.$touch"/>
@@ -67,8 +52,8 @@
                     </div>
                     <div class="md-layout-item md-size-40">
                       <div class="input-wrapper" :class="{
-                          error: v$.bankDetails.routingNumber.$errors.length,
-                          valid: !v$.bankDetails.routingNumber.$errors.length && v$.bankDetails.routingNumber.$dirty}"
+                        error: v$.bankDetails.routingNumber.$errors.length,
+                        valid: !v$.bankDetails.routingNumber.$errors.length && v$.bankDetails.routingNumber.$dirty}"
                       >
                         <label>Bank No.</label>
                         <input v-model="bankDetails.routingNumber"
@@ -78,8 +63,8 @@
                     </div>
                     <div class="md-layout-item md-size-40">
                       <div class="input-wrapper" :class="{
-                          error: v$.bankDetails.branch.$errors.length,
-                          valid: !v$.bankDetails.branch.$errors.length && v$.bankDetails.branch.$dirty}"
+                        error: v$.bankDetails.branch.$errors.length,
+                        valid: !v$.bankDetails.branch.$errors.length && v$.bankDetails.branch.$dirty}"
                       >
                         <label>Branch No.</label>
                         <input v-model="bankDetails.branch"
@@ -89,12 +74,14 @@
                     </div>
                     <div class="md-layout-item md-size-80">
                       <div class="input-wrapper" :class="{
-                          error: v$.bankDetails.address.$errors.length,
-                          valid: !v$.bankDetails.address.$errors.length && v$.bankDetails.address.$dirty}"
+                        error: v$.bankDetails.address.$errors.length,
+                        valid: !v$.bankDetails.address.$errors.length && v$.bankDetails.address.$dirty}"
                       >
                         <label>Address and name of the bank</label>
                         <input v-model="bankDetails.address" @blur="v$.bankDetails.address.$touch" type="text">
-                        <div class="valid-msg"></div>
+                        <div class="location-icon">
+                          <i class="material-icons-outlined">location_on</i>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -110,19 +97,43 @@
                   <span class="name">MCC</span>
                 </div>
                 <div>
-                    <span class="description">
-                      Please fill in your personal account so that we can transfer money to you.
-                    </span>
+                  <span class="description">
+                    Please fill in your personal account so that we can transfer money to you.
+                  </span>
                 </div>
                 <div class="input-wrapper mcc-wrapper" :class="{
-                    error: v$.bankDetails.mcc.$errors.length,
-                    valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty}"
+                       error: v$.bankDetails.mcc.$errors.length,
+                       valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty}"
+                     @click="v$.bankDetails.mcc.$touch"
                 >
-                  <input v-model="bankDetails.mcc" @blur="v$.bankDetails.mcc.$touch">
-                  <div class="valid-msg"></div>
+                  <PincodeInput v-model="bankDetails.mcc" :secure="true" @blur="v$.bankDetails.mcc.$touch"/>
+                  <div class="valid-msg auth"></div>
                 </div>
-                <span class="add-mcc">
+                <div class="input-wrapper mcc-wrapper" :class="{
+                       error: v$.bankDetails.mcc.$errors.length,
+                       valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty}"
+                     @click="v$.bankDetails.mcc.$touch"
+                >
+                  <div>
+                    <span class="name">EIN</span>
+                  </div>
+                  <PincodeInput v-model="bankDetails.ein" :length="9"/>
+                </div>
+              </div>
+              <div class="md-layout-item md-size-60 authentication-block">
+                <div>
+                  <span class="name">Date of birth</span>
+                </div>
+                <div>
+                  <span class="description">
+                    Please enter your date of birth.
                   </span>
+                </div>
+                <div class="date-wrapper" id="bankDetailsDateWrapper">
+                  <md-datepicker ref="datePicker" :md-model-type="String" v-model="bankDetails.date"
+                                 name="todo-date"></md-datepicker>
+                  <img class="calendar-icon" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
+                </div>
               </div>
               <md-button class="md-vendor md-vendor-review" style="margin: 20px 15px" @click="test">
                 Save details
@@ -139,10 +150,29 @@
 import axios from "axios";
 import useVuelidate from "@vuelidate/core";
 import {required, minLength, numeric} from "@vuelidate/validators";
-
-var card = undefined;
+import PincodeInput from "vue-pincode-input";
 
 export default {
+  components: {
+    PincodeInput
+  },
+  props: {},
+  data: () => ({
+    isLoaded: false,
+    error: "",
+    ssnType: "ssn",
+    bankDetails: {
+      date: new Date("01/01/1990"),
+      accountNumber: "",
+      address: "",
+      holderName: "",
+      branch: "",
+      verification: "",
+      routingNumber: "",
+      mcc: "",
+      ein: ""
+    }
+  }),
   setup() {
     return {v$: useVuelidate()};
   },
@@ -153,49 +183,25 @@ export default {
           required,
           minLength: minLength(9),
         },
-        idNumber: {
+        address: {required},
+        mcc: {
           numeric,
           required,
-          minLength: minLength(8),
+          minLength: minLength(4),
         },
-        address: {required},
-        mcc: {required},
+        ein: {
+          numeric,
+          required,
+          minLength: minLength(9),
+        },
         holderName: {required},
         routingNumber: {required},
         branch: {required},
       },
     };
   },
-  components: {},
-  props: {},
-  data: () => ({
-    isLoaded: false,
-    error: "",
-    ssnType: "ssn",
-    bankDetails: {
-      id: ["", "", "", "", "", "", "",],
-      adId: "",
-      idNumber: "",
-      accountNumber: "",
-      address: "",
-      holderName: "",
-      branch: "",
-      verification: "",
-      routingNumber: "",
-      mcc: ""
-    }
-  }),
-  computed: {},
-  watch: {
-    bankDetails: {
-      handler(newValue) {
-        const newIdNumber = [...newValue.id, newValue.adId].join("");
-        if (this.idNumber !== newIdNumber) {
-          this.idNumber = +newIdNumber;
-        }
-      },
-      deep: true,
-    }
+  mounted() {
+    this.$material.locale.dateFormat = "MM/DD/YYYY";
   },
   methods: {
     checkForm: function (e) {
@@ -277,6 +283,7 @@ label {
     font-size: 22px;
     font-weight: 600;
   }
+
   .shield-icon {
     display: inline-block;
     width: 25px;
@@ -299,6 +306,7 @@ label {
   * {
     margin: 5px;
   }
+
   border-radius: 3px;
   border: solid 1px #bcbcbc;
   margin: 10px 15px;
@@ -326,6 +334,20 @@ label {
     font-size: 12px;
     color: #818080;
   }
+
+  .date-wrapper {
+    max-width: 200px;
+    margin-bottom: 30px;
+    position: relative;
+
+    .calendar-icon {
+      width: 19px;
+      position: absolute;
+      bottom: 11px;
+      left: 170px;
+      filter: invert(63%) sepia(0%) saturate(7177%) hue-rotate(3deg) brightness(80%) contrast(107%);
+    }
+  }
 }
 
 .block-separator {
@@ -347,6 +369,10 @@ label {
     transform: rotate(-45deg);
     right: 20px;
     bottom: 25px;
+
+    &.auth {
+      right: -13px;
+    }
   }
 }
 
@@ -362,7 +388,13 @@ label {
   position: relative;
   display: flex;
   flex-direction: column;
-
+  .location-icon {
+    position: absolute;
+    width: 15px;
+    right: 20px;
+    bottom: 9px;
+    filter: invert(10%) sepia(33%) saturate(4724%) hue-rotate(289deg) brightness(94%) contrast(96%);
+  }
   &.mcc-wrapper {
     width: 200px;
   }

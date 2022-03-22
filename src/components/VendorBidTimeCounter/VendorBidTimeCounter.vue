@@ -8,15 +8,15 @@
         <li class="fix-digit">
           {{ d | attachZero }}<br><span>Days</span>
         </li>
-        <li>:</li>
+        <li class="mt-10">:</li>
         <li class="fix-digit">
           {{ h | attachZero }}<br><span>Hours</span>
         </li>
-        <li>:</li>
+        <li class="mt-10">:</li>
         <li class="fix-digit">
           {{ m | attachZero }}<br><span>Min</span>
         </li>
-        <li>:</li>
+        <li class="mt-10">:</li>
         <li class="fix-digit">
           {{ s | attachZero }}<br><span>Sec</span>
         </li>
@@ -107,6 +107,7 @@ export default {
       list-style: none;
       display: flex;
       justify-content: center;
+
       li {
         margin-right: 16px;
 

@@ -54,10 +54,18 @@ export default {
     Modal,
   },
   props: {
-    show: [Boolean],
-    value: [Number],
-    newValue: [Number],
-    categoryName: [String],
+    value: {
+      type: Number,
+      required: true,
+    },
+    newValue: {
+      type: Number,
+      required: true,
+    },
+    categoryName: {
+      type: String,
+      required: true,
+    },
   },
   data: () => {
     return {
