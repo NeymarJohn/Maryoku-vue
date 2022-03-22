@@ -159,7 +159,7 @@
         </div>
 
         <div v-if="selectedProposal.nonMaryoku" class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
-          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime, "MM/DD/YY") }}
+          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime * 1000, "MM/DD/YY") }}
         </div>
         <div v-else class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
