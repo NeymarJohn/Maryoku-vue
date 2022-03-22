@@ -64,7 +64,6 @@ import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import PermittedUserRow from "./components/PermittedUserRow.vue";
 import Collaborator from "@/models/Collaborator";
 import CalendarEvent from "@/models/CalendarEvent";
-
 export default {
   components: {
     MaryokuInput,

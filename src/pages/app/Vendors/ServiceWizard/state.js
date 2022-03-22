@@ -56,7 +56,7 @@ const actions = {
         return;
       }
       // getting from API
-      getReq("/1/vendorProperties").then((res) => {
+      getReq(`/1/vendorProperties`).then((res) => {
         commit("setAllProperties", res.data);
         if (!categoryName) {
           resolve(res.data);

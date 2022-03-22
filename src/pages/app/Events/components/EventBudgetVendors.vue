@@ -212,33 +212,51 @@
 
 <script>
 import { mapMutations, mapGetters, mapActions } from "vuex";
-import EventComponent from "@/models/EventComponent";
-import CalendarEvent from "@/models/CalendarEvent";
+import Multiselect from "vue-multiselect";
 import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import EventCategory from "@/models/EventCategory";
+import EventComponentTodo from "@/models/EventComponentTodo";
+import EventComponentValue from "@/models/EventComponentValue";
+import Occasion from "@/models/Occasion";
+import { Modal, LabelEdit } from "@/components";
+import Popup from "@/components/Popup";
+// import auth from '@/auth';
 import AddBuildingBlockModal from "../components/EventBlocks/Modals/AddBuildingBlocks.vue";
 import AddEventElementsModal from "../components/EventBlocks/Modals/AddEventElements.vue";
-import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
+import EventActualCostIconTooltip from "../components/EventActualCostIconTooltip.vue";
 import EventBlockVendors from "./EventBlocks/Modals/EventBlockVendors.vue";
-import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
 import ViewProposals from "./EventBlocks/Modals/ViewProposals.vue";
-import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
-import EventBudgetVendorsItem from "./EventBudgetVendorsItem";
-import Swal from "sweetalert2";
 import _ from "underscore";
-
+import draggable from "vuedraggable";
+import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
+import BudgetResizeModal from "@/components/Modals/BudgetResizeModal";
+import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
+import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
+import EventComponentVendorItem from "./EventComponentVendorItem";
+import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
+import Swal from "sweetalert2";
+import EventBudgetVendorsItem from "./EventBudgetVendorsItem";
 export default {
   name: "EventBudgetVendors",
   components: {
+    LabelEdit,
+    EventActualCostIconTooltip,
+    Modal,
+    draggable,
+    BudgetHandleMinusModal,
+    Multiselect,
+    AddMyVendorModal,
+    EventComponentVendorItem,
+    Popup,
     MaryokuInput,
     AddNewCategoryModal,
-    BudgetHandleMinusModal,
+    BudgetResizeModal,
     EventBudgetVendorsItem,
   },
   props: {
-    eventComponents: {
-      type: [Array, Function],
-      default: () => [],
-    },
+    eventComponents: [Array, Function],
     type: {
       type: String,
       default: "total",

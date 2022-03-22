@@ -97,6 +97,8 @@
           </div>
         </div>
       </div>
+
+
       <div class="green-block-wrapper">
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
@@ -185,6 +187,7 @@
 <script>
 import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import HideSwitch from "@/components/HideSwitch";
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
@@ -196,6 +199,7 @@ export default {
     SharingButtonGroup,
     FeedbackLogo,
     ViewPresentation,
+    MaryokuTextarea,
     HideSwitch,
     FeedbackQuestion,
     FeedbackImageCarousel,

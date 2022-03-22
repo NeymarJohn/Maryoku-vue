@@ -83,6 +83,7 @@
 </template>
 <script>
 import moment from "moment";
+import Popup from "@/components/Popup";
 import TimeInput from "@/components/TimeInput";
 import { FunctionalCalendar } from "vue-functional-calendar";
 
@@ -94,6 +95,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 export default {
   name: "MaryokuInput",
   components: {
+        Popup,
         TimeInput,
         FunctionalCalendar,
   },
@@ -102,26 +104,16 @@ export default {
      * Data binding
      * @model
      */
-    value: {
-      type: [String, Number],
-      required: true,
-    },
-    name: {
-      type: String,
-      default: "",
-    },
-    type: {
-      type: String,
-      default: "",
-    },
-    placeholder: {
-      type: String,
-      default: "",
-    },
-    inputStyle: {
-      type: String,
-      default: "",
-    },
+    value: [String, Number],
+    name: String,
+    srcLogo: String,
+    type: String,
+    onChange: Function,
+    inputBlock: String,
+    placeholder: String,
+    disabled: Boolean,
+    imgStyle: String,
+    inputStyle: String,
     readonly: Boolean,
     size: {
       type: String,
@@ -131,10 +123,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    validation: {
-      type: String,
-      default: "",
-    },
+    validation: String,
     fieldName: {
       type: String,
       default: "",

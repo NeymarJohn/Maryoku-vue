@@ -41,7 +41,7 @@ export default {
     commentComponent: {
       type: [Object, Array]
     },
-    selectedComponent: {
+    selectedComponet: {
       type: [Object]
     }
   },

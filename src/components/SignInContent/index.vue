@@ -130,65 +130,68 @@
   </div>
 </template>
 <script>
-import MaryokuInput  from "../Inputs/MaryokuInput";
+    import { FadeTransition } from "vue2-transitions";
+    import MaryokuInput  from "../Inputs/MaryokuInput";
 
-export default {
-    components: {
-        MaryokuInput,
-    },
-    props:{
-        page:{
-            type: String,
-            default: "signin",
-        }
-    },
-    data() {
-        return {
-            name: null,
-            company: null,
-            email: null,
-            password: null,
-            department: null,
-            terms: false,
-            validations: {
-                email: {
-                    required: true,
-                    email: true,
+    export default {
+        components: {
+            FadeTransition,
+            MaryokuInput,
+        },
+        props:{
+            page:{
+                type: String,
+                default: "signin",
+            }
+        },
+        data() {
+            return {
+                name: null,
+                company: null,
+                email: null,
+                password: null,
+                department: null,
+                terms: false,
+                validations: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    password: {
+                        required: true,
+                        min: 8,
+                    },
                 },
-                password: {
-                    required: true,
-                    min: 8,
-                },
-            },
-            keepMe: false,
-            errorMsg: "",
-            error: "",
-        };
-    },
-    methods: {
-        signup() {
-            console.log("signup", this.$validator);
-            this.$validator.validateAll().then((isValid) => {
-                if (isValid) {
-                    if (this.page === "signin") {
-                        this.$emit("signIn", {email: this.email, password: this.password});
+                keepMe: false,
+                errorMsg: "",
+                error: "",
+            };
+        },
+        methods: {
+            signup() {
+                console.log("signup", this.$validator);
+                this.$validator.validateAll().then((isValid) => {
+                    if (isValid) {
+                        if (this.page === "signin") {
+                            this.$emit("signIn", {email: this.email, password: this.password});
+                        } else {
+                            this.$emit("signUp", {name: this.name, company: this.company, email: this.email, password: this.password});
+                        }
+
                     } else {
-                        this.$emit("signUp", {name: this.name, company: this.company, email: this.email, password: this.password});
+                        this.error = "Sorry, invalid email or wrong password, try again.";
                     }
+                });
+            },
+            authenticate(provider) {
+                this.$emit("authenticate", provider);
+            },
+            changePage(){
+                this.$emit("changePage");
+            }
+        },
 
-                } else {
-                    this.error = "Sorry, invalid email or wrong password, try again.";
-                }
-            });
-        },
-        authenticate(provider) {
-            this.$emit("authenticate", provider);
-        },
-        changePage(){
-            this.$emit("changePage");
-        }
-    },
-};
+    };
 </script>
 <style lang="scss" scoped>
 .signin{
