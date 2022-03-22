@@ -159,7 +159,7 @@
         </div>
 
         <div v-if="selectedProposal.nonMaryoku" class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
-          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime * 1000, "MM/DD/YY") }}
+          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime, "MM/DD/YY") }}
         </div>
         <div v-else class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
@@ -310,6 +310,7 @@
 import moment from "moment";
 import NoInsight from "./NoInsight.vue";
 import _ from "underscore";
+import carousel from "vue-owl-carousel";
 import {avatarColors} from "@/constants/color";
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
@@ -319,6 +320,7 @@ import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS }
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
+import CentredModal from "../../../../components/CentredModal.vue";
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
