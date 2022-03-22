@@ -202,6 +202,7 @@ import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
 import { mapActions } from "vuex";
+import S3Service from "@/services/s3.service";
 
 export default {
   components: {
@@ -217,7 +218,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
   },
   data() {
@@ -302,6 +303,7 @@ export default {
       key: "feedbackQuestions",
       value: this.feedbackQuestions,
     });
+    console.log(this.$store.state.campaign.FEEDBACK.files);
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
@@ -347,6 +349,13 @@ export default {
       };
       this.feedbackQuestions.push(newQuestion);
       this.newQuestion = "";
+      // const feedbackQuestions = [...this.campaignData.feedbackQuestions, newQuestion];
+      // console.log(feedbackQuestions);
+      // this.$store.commit("campaign/setAttribute", {
+      //   name: "FEEDBACK",
+      //   key: "feedbackQuestions",
+      //   value: feedbackQuestions,
+      // });
       this.isEditingNewQuestion = false;
     },
     openModalWindow(){
@@ -364,13 +373,24 @@ export default {
       });
     },
     uploadFiles(files) {
-      const attachments = files.map(({ status, ...file }) => file);
-      this.saveCampaign({ id: this.campaignData.id, attachments });
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "attachments",
-        value: files
+      // const additionalData = {
+      //   ...(this.campaignData.additionalData || {}),
+      //   files: files.map(({ status, ...file }) => file),
+      // };
+      S3Service.downloadFiles(files.map((file) => file.url)).then((result) => {
+        const blob = result.data.blob();
+        console.log({ blob });
+        const tagA = document.createElement("a");
+        tagA.setAttribute("href", blob);
+        tagA.setAttribute("target", "_blank");
+        tagA.click();
       });
+      // this.saveCampaign({ id: this.campaignData.id, files }).then((result) => console.log(result));
+      // this.$store.commit("campaign/setAttribute", {
+      //   name: "FEEDBACK",
+      //   key: "files",
+      //   value: files
+      // });
     }
   },
 };

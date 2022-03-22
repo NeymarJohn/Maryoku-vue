@@ -154,6 +154,7 @@
 </template>
 <script>
 import EventActualCostIconTooltip from "../components/EventActualCostIconTooltip.vue";
+import EventComponentVendorItem from "./EventComponentVendorItem";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import BudgetResizeModal from "@/components/Modals/BudgetResizeModal";
 import CategoryDeleteModal from "@/components/Modals/CategoryDeleteModal";
@@ -166,6 +167,7 @@ import Swal from "sweetalert2";
 export default {
   components: {
     EventActualCostIconTooltip,
+    EventComponentVendorItem,
     MaryokuInput,
     BudgetResizeModal,
     CategoryDeleteModal,

@@ -89,7 +89,7 @@ export default {
   props: {
     component: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
     type: {
       type: String,

@@ -306,10 +306,7 @@ export default {
     type: String,
     label: String,
     item: Object,
-    vendor: {
-      type: Object,
-      default: () => ({}),
-    },
+    vendor: Object,
     service: Object,
     theme: {
       type: String,

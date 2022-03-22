@@ -3,62 +3,59 @@
     <template slot="header">
       <div class="header">
         <span>Enter Your Signature</span>
-        <div @click="showModal = false">
-          <md-icon >close</md-icon>
-        </div>
+        <button @click="showModal = !showModal">
+          close
+        </button>
       </div>
     </template>
-    <template slot="body">
-      <div class="body">
-        <div class="select-sign-type">
-          <input type="radio" name="draw" id="draw" v-model="signatureType" value="draw">
-          <label for="draw">
-            Draw
-          </label>
-          <input type="radio" name="type" id="type" v-model="signatureType" value="type">
-          <label for="type">
-            Type
-          </label>
-          <input type="radio" name="upload" id="upload" v-model="signatureType" value="upload">
-          <label for="upload">
-            Upload
-          </label>
-        </div>
-        <div class="block-separator"></div>
-        <div class="signature-editor" v-show="signatureType === 'draw'">
-          <img v-if="signatureData" :src="`${signatureData}`">
-          <vueSignature ref="signature" :sig-option="option" :w="'100%'" :h="'300px'"/>
-          <input
-            ref="signatureFile"
-            type="file"
-            class="d-none"
-            name="vendorSignature"
-            accept="image/gif, image/jpg, image/png"
-            @change="onSignatureFilePicked"
-          >
-        </div>
-        <vue-dropzone
-          v-show="signatureType === 'upload'"
-          id="drop"
-          ref="csv"
-          :options="dropzoneOptions"
-          :use-custom-slot="true"
-          class="file-drop-zone upload-section text-center"
-          @vdropzone-file-added="handleAdded"
-        >
-          <md-button class="md-outlined md-simple md-rose md-dense font-size-14">
-            <i class="fas fa-paperclip md-simple pr-5"/>
-            <span>Choose File</span>
-          </md-button>
-
-          <div class="font-size-13 font-bold" style="">
-            Or
-          </div>
-          <div class="font-size-14">
-            Drag your file here
-          </div>
-        </vue-dropzone>
+    <template slot="body" class="body">
+      <div class="select-sign-type">
+        <input type="radio" name="draw" id="draw" v-model="signatureType" value="draw">
+        <label for="draw">
+          draw
+        </label>
+        <input type="radio" name="type" id="type" v-model="signatureType" value="type">
+        <label for="type">
+          type
+        </label>
+        <input type="radio" name="upload" id="upload" v-model="signatureType" value="upload">
+        <label for="upload">
+          Upload
+        </label>
       </div>
+      <div class="signature-editor" v-show="signatureType === 'draw'">
+        <img v-if="signatureData" :src="`${signatureData}`">
+        <vueSignature ref="signature" :sig-option="option" :w="'100%'" :h="'100%'"/>
+        <input
+          ref="signatureFile"
+          type="file"
+          class="d-none"
+          name="vendorSignature"
+          accept="image/gif, image/jpg, image/png"
+          @change="onSignatureFilePicked"
+        >
+      </div>
+      <vue-dropzone
+        v-show="signatureType === 'upload'"
+        id="drop"
+        ref="csv"
+        :options="dropzoneOptions"
+        :use-custom-slot="true"
+        class="file-drop-zone upload-section text-center"
+        @vdropzone-file-added="handleAdded"
+      >
+        <md-button class="md-outlined md-simple md-rose md-dense font-size-14">
+          <i class="fas fa-paperclip md-simple pr-5"/>
+          <span>Choose File</span>
+        </md-button>
+
+        <div class="font-size-13 font-bold" style="">
+          Or
+        </div>
+        <div class="font-size-14">
+          Drag your file here
+        </div>
+      </vue-dropzone>
     </template>
     <template slot="footer">
       <div class="sign-here">
@@ -123,6 +120,7 @@ export default {
     save() {
       let jpeg = this.$refs.signature.save("image/jpeg");
       this.$root.$emit("update-proposal-value", "signature", jpeg);
+      console.log(this.vendor);
     },
     clear() {
       this.signatureData = "";
@@ -161,8 +159,7 @@ export default {
   padding: 20px 50px;
   display: flex;
   justify-content: space-between;
-  min-width: 800px;
-  max-width: 900px;
+  min-width: 60vw;
   width: 100%;
 
   span {
@@ -173,42 +170,21 @@ export default {
 
 }
 
-.body {
-  min-height: 400px;
-
-  .select-sign-type {
-    display: flex;
-
-    input {
-      display: none;
-    }
-
-    label {
-      width: 60px;
-      margin-left: 30px;
-      font-size: 20px;
-      font-family: "Manrope-regular";
-    }
+.select-sign-type {
+  input {
+    //display: none;
   }
+}
 
-  .block-separator {
-    margin: 30px -40px;
-    display: block;
-    width: 900px;
-    height: 1px;
-    border-bottom: black solid 1px;
-  }
+.signature-editor {
+  text-align: center;
 
-  .signature-editor {
-    text-align: center;
+  .sign-here {
+    border: dashed 1px #f51355;
 
-    .sign-here {
-      border: dashed 1px #f51355;
-
-      img {
-        max-height: 300px;
-        object-fit: contain;
-      }
+    img {
+      max-height: 300px;
+      object-fit: contain;
     }
   }
 }
@@ -217,18 +193,5 @@ export default {
   display: flex;
   justify-content: end;
   align-items: center;
-}
-
-@media screen and (max-width: 970px) {
-  .header {
-    min-width: unset;
-    max-width: unset;
-  }
-  .body {
-    .block-separator {
-      margin: 30px 0;
-      width: 100%;
-    }
-  }
 }
 </style>

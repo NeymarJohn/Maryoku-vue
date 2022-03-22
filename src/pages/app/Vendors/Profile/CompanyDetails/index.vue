@@ -2,13 +2,13 @@
   <div class="company-details-container">
     <tabs :tab-name="['Business profile','Bank Details','Invoices']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
-        <vendor-company-detail />
+        <vendor-company-detail/>
       </template>
       <template slot="tab-pane-2">
-        <PaymentSettings />
+        <PaymentSettings/>
       </template>
       <template slot="tab-pane-3">
-        <invoices />
+        <invoices/>
       </template>
     </tabs>
   </div>

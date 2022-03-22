@@ -64,19 +64,19 @@ const defaultCampaignData = {
     },
     images: [
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg",
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg`,
         default: true
       },
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg",
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg`,
         default: true
       },
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg",
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg`,
         default: true
       },
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg",
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg`,
         default: true
       }
     ]
@@ -124,16 +124,16 @@ const defaultCampaignData = {
     ],
     images: [
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg"
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg`
       },
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg"
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg`
       },
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg"
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg`
       },
       {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg"
+        src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg`
       }
     ],
     files: [],

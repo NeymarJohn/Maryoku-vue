@@ -28,7 +28,7 @@
                   :key="remainingCategory.title + i"
                   class="remaining-list"
                 >
-                  <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory)">
+                  <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory, 'select')">
                     <div class="remaining-name">
                       <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`">
                                         &nbsp;&nbsp;
@@ -46,7 +46,7 @@
                   :key="additionalCategory.title + i"
                   class="category-list"
                 >
-                  <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory)">
+                  <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
                     <div class="category-name">
                       <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
                                             &nbsp;&nbsp;
@@ -167,79 +167,91 @@
           <div v-if="proposals[selectedCategory.componentId].length > 0">
             <div>
               <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
-                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
-                {{ selectedCategory.fullTitle }}
-              </div>
+                      <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                      {{ selectedCategory.fullTitle }}
+                  </div>
             </div>
             <div>
-              <div class="d-flex justify-content-between">
-                <div>
-                  We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book
-                  now before it’s too late
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-30">
-              <div class="proposals-booking-items">
-                <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
-                  <ProposalHeader
-                    :event="event"
-                    :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
-                    :proposal-request="ourproposal"
-                    @click.native="selectProposal(ourproposal)"
-                  />
-                </div>
-              </div>
-
-              <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
-                <div class="d-flex align-center">
-                  <div class="company-logo">
-                    <img
-                      v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
-                      alt=""
-                      :src="`${selectedProposal.vendor.vendorLogoImage}`"
-                    >
-                    <img v-else alt="" src="">
+                  <div class="d-flex justify-content-between">
+                      <div>
+                          We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book
+                          now before it’s too late
+                      </div>
                   </div>
-                  <div class="category-title">
-                    <img
-                      :src="
-                        `${$iconURL}Budget+Elements/${
-                          selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
-                        }`
-                      "
-                      alt="category-logo"
-                    >
-                    <span class="text-decoration-underline">
-                                &nbsp;&nbsp;
-                      <u>
-                        {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
-                      </u>
-                    </span>
-                    <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
-                  </div>
-                </div>
-                <ProposalVersionsDropdown
-                  v-if="selectedProposal"
-                  :versions="selectedProposal.versions"
-                  :selected="selectedVersion"
-                  @select="selectVersion"
-                />
               </div>
+            <template v-if="selectedProposal">
+                <div class="mt-30">
+                    <div class="proposals-booking-items">
+                        <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
+                            <ProposalHeader
+                                :event="event"
+                                :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
+                                :proposal-request="ourproposal"
+                                @click.native="selectProposal(ourproposal)"
+                            />
+                        </div>
+                    </div>
 
-              <div>
-                <EventProposalDetails
-                  :key="selectedProposal.id"
-                  :proposal="selectedProposal"
-                  :category="selectedCategory"
-                  :show-timer-box="true"
-                  :hide-footer="true"
-                  @favorite="favoriteProposal"
-                  @close="closeProposal"
-                  @ask="handleAsk"
-                />
-              </div>
+                    <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
+                        <div class="d-flex align-center">
+                            <div class="company-logo">
+                                <img
+                                    v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
+                                    alt=""
+                                    :src="`${selectedProposal.vendor.vendorLogoImage}`"
+                                >
+                                <img v-else alt="" src="">
+                            </div>
+                            <div class="category-title">
+                                <img
+                                    :src="
+                    `${$iconURL}Budget+Elements/${
+                      selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
+                    }`
+                  "
+                                    alt="category-logo"
+                                >
+                                <span class="text-decoration-underline">
+                            &nbsp;&nbsp;
+                  <u>
+                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
+                  </u>
+                </span>
+                                <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
+                            </div>
+                        </div>
+                        <ProposalVersionsDropdown
+                            v-if="selectedProposal"
+                            :versions="selectedProposal.versions"
+                            :selected="selectedVersion"
+                            @select="selectVersion"
+                        />
+                    </div>
+
+                    <div>
+                        <EventProposalDetails
+                            :key="selectedProposal.id"
+                            :proposal="selectedProposal"
+                            :category="selectedCategory"
+                            :show-timer-box="true"
+                            :hide-footer="true"
+                            @favorite="favoriteProposal"
+                            @close="closeProposal"
+                            @ask="handleAsk"
+                        />
+                    </div>
+                </div>
+            </template>
+            <div v-else class="proposal-card-items">
+              <ProposalCard
+                  v-for="(proposal, index) in categoryProposals.slice(0, 3).slice(0, 3)"
+                  :key="index"
+                  :proposal="proposal"
+                  :component="selectedCategory"
+                  :is-collapsed="showDetails"
+                  :is-selected="selectedProposal && selectedProposal.id === proposal.id"
+                  @goDetail="goDetailPage"
+              />
             </div>
           </div>
           <PendingForVendors v-else :expired-time="expireTime" />
@@ -459,12 +471,7 @@
     </div>
     <div v-else class="proposal-footer white-card d-flex justify-content-end">
       <div>
-        <!-- <md-button class="md-simple md-outlined md-red maryoku-btn">
-                    <img :src="`${$iconURL}common/save-red.svg`" />
-                    Save Draft
-                </md-button> -->
         <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
-          <!-- <img :src="`${$iconURL}Booking-New/Path+13791.svg`" /> -->
           <md-icon>shopping_cart</md-icon>
           &nbsp;&nbsp; Add To Cart
         </md-button>
@@ -504,7 +511,7 @@
     <CustomPopup v-if="popup" @cancel="popup = false" />
     <AddBudgetModal
       v-if="showAddNewCategory"
-      :service-category="selectedCategory"
+      :service-category="additionalCategory"
       @cancel="showAddNewCategory = false"
       @save="saveBudget"
     />
@@ -564,6 +571,7 @@ export default {
       isOpenedAdditionalModal: false,
       isOpenedFinalModal: false,
       selectedCategory: null,
+      additionalCategory: null,
       isLoading: false,
       isLoadingStoredData: false,
       isLoadingProposal: false,
@@ -889,34 +897,28 @@ export default {
             this.$set(proposal, "viewed", true);
           });
         });
-        this.selectProposal(getProposals[category.componentId][0]);
       }
 
       if(this.showCommentPanel){
         this.toggleCommentMode();
       }
     },
-    selectRemainingCategory(category, clicked) {
-      if (category.key) {
-        category["componentId"] = category.key;
-      }
-      this.selectedCategory = category;
-      let getProposals = this.proposals;
-      if (getProposals[category.componentId]) {
-        getProposals[category.componentId].forEach((proposal, index) => {
-          new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
-            this.$set(proposal, "viewed", true);
-          });
-        });
-        this.selectProposal(getProposals[category.componentId][0]);
-      }
+    selectRemainingCategory(category, action) {
+        if (action === 'add') {
+            this.additionalCategory = category;
+            this.showAddNewCategory = true;
+        } else if (action === 'select') {
+            this.selectedCategory = category;
+        }
+
     },
     addBudget() {
       this.showAddBudgetConfirm = false;
-      this.showAddNewCategory = true;
+
     },
     saveBudget() {
       this.showAddNewCategory = false;
+
     },
     getIsRow(indx) {
       if (indx == 0) {
@@ -1118,8 +1120,10 @@ export default {
   }
   .proposal-footer {
     padding: 40px 50px;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     z-index: 3;
     button {
@@ -1328,6 +1332,16 @@ export default {
   }
   .md-menu-content .md-list {
     padding: 37px 37px !important;
+  }
+
+  .proposal-card-items {
+    padding: 0 0em;
+    margin-bottom: 1em;
+    align-items: stretch;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
   }
 }
 </style>
