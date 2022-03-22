@@ -251,7 +251,7 @@
         </template>
         <template slot="body">
           <div class="add-category-model__header">
-            <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra }}</span></h2>
+            <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra | withComma(Number) }}</span></h2>
             <h2 v-if="extra<0">
               Oops, these changes have put you in the red!
             </h2>

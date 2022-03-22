@@ -19,6 +19,7 @@
           width="77"
           height="77"
           src="static/icons/play-white.svg"
+          @click="$emit('on-play', $event)"
         >
       </div>
     </div>
@@ -28,7 +29,7 @@
         src="static/icons/arrow-up-red.svg"
       >
       <div class="view-presentation-footer-action-download">
-        <span class="view-presentation-footer-action-download-text">
+        <span @click="$emit('download-files', $event)" class="view-presentation-footer-action-download-text">
           Download the presentation
         </span>
         <button
@@ -90,17 +91,20 @@ export default {
         {
           id: 1,
           checkbox: true,
-          title: "Lecture by Chris Smith: 'Society and Technology'",
+          type: "image",
+          title: "Download images",
         },
         {
           id: 1,
           checkbox: false,
-          title: "Lecture by Shlomi Cohen: 'My New Life'",
+          type: "document",
+          title: "Download Documents",
         },
         {
           id: 1,
           checkbox: true,
-          title: "Lecture by Dr. Ronit Ronel: 'Social Networks and Cyber'",
+          type: "video",
+          title: "Download Videos",
         },
       ]
     };
@@ -108,7 +112,13 @@ export default {
   methods: {
     toggleMenuSelectDownloadFiles() {
       this.showMenuSelectDownloadFiles = !this.showMenuSelectDownloadFiles;
-    }
+      if (this.showMenuSelectDownloadFiles === false) {
+        const selectedDownloadFiles = this.listMenu
+          .filter(({ checkbox }) => checkbox)
+          .map(({ type }) => type);
+        this.$emit("selected-download-files", selectedDownloadFiles);
+      }
+    },
   }
 };
 </script>

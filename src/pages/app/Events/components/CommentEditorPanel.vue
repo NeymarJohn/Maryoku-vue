@@ -6,7 +6,7 @@
       class="item"
       :style="getCirclePosition(item)"
       :comment-component="item"
-      :selected-componet="selectedCommentComponent"
+      :selected-component="selectedCommentComponent"
       @save="saveComment"
       @show="showComments"
       @toggleEditPane="toggleEditPane"

@@ -36,7 +36,10 @@
               <div v-if="campaign && campaign.visibleSettings.showImages" class="wrapper-view-presentation">
                 <div class="view-presentation">
                   <view-presentation
-                    cover-image="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/fde9a712-f55d-4a96-b0ce-7df0ac9c1661.png"
+                    :cover-image="attachmentsImages.length ? attachmentsImages[0].src : 'https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/fde9a712-f55d-4a96-b0ce-7df0ac9c1661.png'"
+                    @on-play="onPlay"
+                    @download-files="downloadFiles"
+                    @selected-download-files="selectedDownloadFiles"
                   />
                 </div>
               </div>
@@ -76,7 +79,6 @@
                 <div v-if="campaign && campaign.visibleSettings.showFeedback">
                   <feedback-question
                     v-for="(question, index) in feedbackQuestions"
-                    v-if="question.showQuestion"
                     :key="index"
                     :feedback-data="question"
                     :disabled="false"
@@ -168,6 +170,26 @@
         </md-button>
       </div>
     </div>
+    <fullscreen v-model="fullScreen">
+      <div v-if="fullScreen" class="wrapper-full-screen-carousel">
+        <md-button
+          class="md-icon-button md-dense md-black md-button-close"
+          @click="closeFullScreen"
+        >
+          <md-icon>close</md-icon>
+        </md-button>
+        <feedback-upload-images-carousel
+          :images="attachmentsImages"
+          :auto-play="true"
+          :disable-filter="true"
+          :auto-play-timeout="2500"
+          :smart-speed="2500"
+          :show-button-actions="false"
+          class="carousel-upload-images"
+          class-image="carousel-upload-image"
+        />
+      </div>
+    </fullscreen>
   </div>
 </template>
 <script>
@@ -176,40 +198,45 @@ import Feedback from "@/models/Feedback";
 import Campaign from "@/models/Campaign";
 import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
+import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
-import TitleEditor from "@/pages/app/Campaign/components/TitleEditor";
-import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import S3Service from "@/services/s3.service";
-import { Drag, Drop } from "vue-drag-drop";
+import { Drop } from "vue-drag-drop";
+import video_extension from "video-extensions";
 
 export default {
   components: {
-    MaryokuTextarea,
+    FeedbackUploadImagesCarousel,
     FeedbackImageCarousel,
     SharingButtonGroup,
     FeedbackQuestion,
-    TitleEditor,
-    HideSwitch,
     FeedbackLogo,
     ViewPresentation,
-    Drag,
     Drop,
   },
-
   data() {
     return {
       isLoading: true,
+      fullScreen: false,
       campaign: null,
       event: null,
       placeHolder: "",
       originalContent: {},
       info: {},
       images: [],
+      attachmentsImages: [],
+      attachments: [],
+      feedbackQuestions: [],
+      selectedAttachments: [],
+      extensionsFiles: {
+        image: [".jpeg", ".jpg", ".gif", ".png"],
+        document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
+        video: video_extension.map(ext => `.${ext}`),
+      },
       showFeedbackMessageSuccessful: false,
     };
   },
@@ -232,7 +259,12 @@ export default {
       this.campaign = campaigns["FEEDBACK"];
       this.event = this.campaign.event;
       this.images = this.campaign.images;
-      this.feedbackQuestions = this.campaign.feedbackQuestions;
+      if (this.campaign.attachments) {
+        this.attachments = this.campaign.attachments;
+        this.attachmentsImages = this.filterFilesByType(["image"], this.attachments)
+          .map(({ url }) => ({ src: url }));
+      }
+      this.feedbackQuestions = this.campaign.feedbackQuestions.filter((question) => question.showQuestion);
     });
   },
   methods: {
@@ -321,9 +353,6 @@ export default {
           });
         });
     },
-    changeFeedback(index, value) {
-      this.campaign.feedbackQuestions[index] = value;
-    },
     closeFeedbackMessageSuccessful() {
       this.showFeedbackMessageSuccessful = false;
     },
@@ -339,12 +368,37 @@ export default {
       }
       alert(`You dropped files: ${JSON.stringify(filenames)}`);
     },
-  },
-  computed: {
-    availableQuestions() {
-      return this.campaign.feedbackQuestions.filter((item) => item.showQuestion);
+    downloadFiles() {
+      const attachments = this.selectedAttachments.map(({ url }) => url);
+      S3Service.downloadFiles(attachments).then((result) => {
+        const tagA = document.createElement("a");
+        tagA.setAttribute("href", `data:application/zip,${result.data}`);
+        tagA.setAttribute("target", "_blank");
+        tagA.click();
+      });
     },
-  },
+    filterFilesByType(selectedTypeFiles, files) {
+      const extensions = [];
+      for (const type of selectedTypeFiles) {
+        const extensionsOfType = this.extensionsFiles[type];
+        extensions.push(...extensionsOfType);
+      }
+      return files.filter((file) => {
+        const slittedURL = file.url.split(".");
+        const extension = slittedURL[slittedURL.length - 1];
+        return extensions.includes(`.${extension}`);
+      });
+    },
+    selectedDownloadFiles(selectedTypeFiles) {
+      this.selectedAttachments = this.filterFilesByType(selectedTypeFiles, this.attachments);
+    },
+    onPlay() {
+      this.fullScreen = true;
+    },
+    closeFullScreen() {
+      this.fullScreen = false;
+    }
+  }
 };
 </script>
 
@@ -695,5 +749,30 @@ export default {
   background-color: #fec02d !important;
   margin-left: 920px;
   text-transform: none;
+}
+.wrapper-full-screen-carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .md-button-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 25px 35px;
+  }
+
+  .carousel-upload-images {
+    max-width: 942px;
+    max-height: 530px;
+
+    .carousel-upload-image {
+      width: 942px;
+      height: 530px;
+    }
+  }
 }
 </style>

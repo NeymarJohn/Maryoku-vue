@@ -135,7 +135,7 @@ export default {
         maxFiles: 10,
         createImageThumbnails: false,
         uploadMultiple: true,
-        acceptedFiles: "image/*, video/*",
+        acceptedFiles: "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
         headers: { "My-Awesome-Header": "header value" },
       },
       files: [],
@@ -375,6 +375,4 @@ export default {
     height: 530px;
   }
 }
-
-
 </style>
