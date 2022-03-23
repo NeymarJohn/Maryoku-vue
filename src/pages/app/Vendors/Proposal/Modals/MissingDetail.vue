@@ -22,7 +22,7 @@
         <p class="font-size-16">
           The missing requirements
         </p>
-        <div v-for="option in data" class="d-flex font-bold-extra align-center font-size-16 mb-10">
+        <div v-for="(option, index) in data" :key="`option-${index}`" class="d-flex font-bold-extra align-center font-size-16 mb-10">
           <img
             class="mr-20"
             :src="`${$iconURL}${option.icon}`"
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="p-20">
-        <p v-for="ref in references" class="font-size-16 d-flex align-start">
+        <p v-for="(ref, index) in references" :key="`ref-${index}`" class="font-size-16 d-flex align-start">
           <img :src="`${$iconURL}common/light.svg`" class="label-icon mr-10">
           {{ ref }}
         </p>
