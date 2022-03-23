@@ -23,6 +23,7 @@
         </div>
         <header-actions
           :custom-styles="{ marginForCircle: {marginLeft: '20px'}}"
+          :positioning="'stretch'"
           @toggleCommentMode="toggleCommentMode"
           @share="share"
           @export="exportToPdf"
@@ -252,7 +253,7 @@
         <template slot="body">
           <div class="add-category-model__header">
             <h2> <span :style="{color: extra<0?'red':'green', display: 'inline-block'}">${{ extra | withComma(Number) }}</span></h2>
-            <h2 v-if="extra<0">
+            <h2 class="text-lowercase" v-if="extra < 0">
               Oops, these changes have put you in the red!
             </h2>
             <span class="black">What would you like to do? </span>
@@ -262,7 +263,7 @@
             </md-checkbox>
             <br>
             <md-checkbox v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="onUnexpected">
-              {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Allocate funds from the “Unexpected” category' }}
+              {{ extra > 0 ? 'Store that money to ‘Unexpected’ category' : 'Recalculate according to the new budget ' }}
             </md-checkbox>
             <br>
             <md-checkbox v-show="extra<0" v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="goBack">

@@ -65,60 +65,26 @@
         />
       </template>
     </div>
-    <!-- Confirm Modal-->
-    <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
-      <template slot="header">
-        <div class="maryoku-modal-header delete-timeline-model__header">
-          <h2>
-            Are you sure you want to say
-            <br>goodbye to your changes?
-          </h2>
-          <div class="header-description">
-            Your changes will be deleted after that
-          </div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button modal-close-button"
-            @click="showDeleteConfirmModal = false"
-          >
-            <md-icon>clear</md-icon>
-          </md-button>
-        </div>
-      </template>
-      <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal = false">
-          Cancel
-        </md-button>
-        <md-button class="md-red add-category-btn" @click="removeTimelineItem">
-          Yes,I'm sure
-        </md-button>
-      </template>
-    </modal>
   </div>
 </template>
 <script>
 import { numberToWord } from "@/utils/helperFunction";
-import { Drag, Drop } from "vue-drag-drop";
-import TimelineTemplateItem from "./TimelineTemplateItem";
-import TimelineItem from "./TimelineItem";
-import TimelineEmpty from "./TimelineEmpty";
-import TimelineTemplateContainer from "./TimelineTemplateContainer";
-import TimelineGapModal from "../Modals/TimelineGapModal";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
+
 import moment from "moment";
-import { Modal } from "@/components";
 import { timelineTempates } from "@/constants/event.js";
+import Swal from "sweetalert2";
+
+const components = {
+    TimelineItem: () => import("./TimelineItem.vue"),
+    TimelineEmpty: () => import("./TimelineEmpty.vue"),
+    TimelineTemplateContainer: () => import("./TimelineTemplateContainer.vue"),
+
+};
 export default {
   name: "EventDetailsTimeline",
-  components: {
-    Drop,
-    TimelineTemplateItem,
-    TimelineItem,
-    TimelineEmpty,
-    TimelineGapModal,
-    TimelineTemplateContainer,
-    Modal,
-  },
+  components,
   props: {
     isEditMode: {
       type: Boolean,
@@ -202,19 +168,41 @@ export default {
           });
       }
     },
-    askRemoveTimelineItem(scheduleDate) {
+    async askRemoveTimelineItem(scheduleDate) {
       this.delItem = scheduleDate;
       this.deletingDate = scheduleDate;
-      this.showDeleteConfirmModal = true;
+      const res = await Swal.fire({
+            title: "Are you sure you want to say goodbye to your changes?",
+            text: "Your changes will be deleted after that",
+            showCancelButton: true,
+            cancelButtonClass: "md-button md-danger",
+            confirmButtonClass: "md-button md-success",
+            confirmButtonText: "Yes I'm sure",
+            buttonsStyling: false,
+            customClass: {
+                popup:"swal-alert-container",
+                header: "swal-alert-header",
+                htmlContainer: "swal-alert-html",
+            }
+        });
+
+        if (res.isConfirmed) {
+            const q = new EventTimelineDate({id: this.timelineDates[this.delItem].id})
+                .for(new CalendarEvent({ id: this.event.id }));
+            await q.delete();
+
+            this.timelineDates.splice(this.delItem, 1);
+        }
+
     },
     removeItem() {
-    
+
       alert();
     },
     removeTimelineItem() {
       // alert();
       // const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
-      this.timelineDates.splice(this.delItem, 1);
+
       this.showDeleteConfirmModal = false;
     },
     addSlot(dateIndex, templateIndex, slotData) {

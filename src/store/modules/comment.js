@@ -123,6 +123,21 @@ const actions = {
     });
   },
 
+  getProposalById({ commit, state }, proposalId) {
+    return new Promise(async (resolve, reject) => {
+      let query = new Proposal();
+      const res = await query.find(proposalId);
+      if (res.success) {
+        commit("setSelectedProposal", res.data);
+        // save customer when user comment as guest
+        resolve(res.data);
+      } else {
+        commit("setError", res.message);
+        resolve([]);
+      }
+    });
+  },
+
   /****Event comments  */
   getCommentsAction({ commit, state }, commentComponentId) {
     const eventComponent = new EventCommentComponent({ id: commentComponentId });
