@@ -182,6 +182,7 @@ export default {
     }
   },
   created() {
+    console.log('service.card', this.defaultData)
     this.selectedServices = [...this.defaultData];
   },
   methods: {

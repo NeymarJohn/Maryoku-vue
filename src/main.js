@@ -11,7 +11,6 @@ import vSelectMenu from "v-selectmenu";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
 import VueGmaps from "vue-gmaps";
 import VueLazyLoad from "vue-lazyload";
-import VueFullscreen from "vue-fullscreen";
 // import VuePhoneNumberInput from "vue-phone-number-input";
 // import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import VTooltip from "v-tooltip";
@@ -76,7 +75,7 @@ Vue.use(VueScrollTo);
 Vue.use(VueYoutube);
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
-Vue.use(VueFullscreen)
+
 Vue.use(VueTimeago, {
   name: "Timeago", // Component name, `Timeago` by default
   locale: "en", // Default locale

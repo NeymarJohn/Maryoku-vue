@@ -22,7 +22,7 @@
         </label>
       </div>
 
-      <div class="tags-list">
+      <div class="tags-list ">
         <div class="tags-list-wrapper d-flex justify-content-start" :class="{ expanded: tagExpanded }">
           <template v-for="(tag, index) in taggingOptions">
             <div
@@ -333,7 +333,7 @@ export default {
           const extension = files[0].type.split("/")[1];
           const fileName = new Date().getTime() + "";
           const dirName = "concepts";
-
+          
 
           const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
           this.$set(this.uploadImageData, itemIndex, imageData);
@@ -346,7 +346,7 @@ export default {
           S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
             fileInfo.url = res.url;
             this.uploadingStatus[itemIndex] = false;
-
+            
           this.editConcept.images[itemIndex] = fileInfo;
             this.$set(this.uploadingStatus, itemIndex, false);
           });
@@ -512,7 +512,6 @@ export default {
       justify-content: center;
       cursor: pointer;
       white-space: nowrap;
-      max-width: 130px;
       img {
         width: 15px;
         margin-left: 0.5em;

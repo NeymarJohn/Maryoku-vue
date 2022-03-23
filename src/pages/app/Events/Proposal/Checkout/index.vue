@@ -239,15 +239,9 @@
           />
         </div>
         <div class="signature-wrapper">
-          <button class="signature-button" @click="toggleShowSignatureModal">
+          <button class="signature-button" @click="showSignatureModal = true">
             Your signature
           </button>
-        </div>
-        <div class="signatures-block">
-          <img v-if="signature.jpeg" :src="signature.jpeg">
-          <img v-if="signature.uploadedSignature" :src="signature.uploadedSignature.dataURL">
-          <br/>
-          <span v-if="signature.signatureName">{{signature.signatureName}}</span>
         </div>
       </div>
     </div>
@@ -255,15 +249,14 @@
       <md-button class="maryoku-btn md-simple md-black" @click="back">
         Back
       </md-button>
-      <md-button class="maryoku-btn" :class="{'md-red': handleSubmitDisabled}" :disabled="!handleSubmitDisabled" @click="pay">
+      <md-button class="maryoku-btn" :class="{'md-red': agreedCancellationPolicy}" :disabled="!agreedCancellationPolicy" @click="pay">
         Submit Payment
       </md-button>
     </div>
     <success-modal v-if="showSuccessModal" />
     <add-signature-modal
+
       :show-modal="showSignatureModal"
-      @modal-closed="toggleShowSignatureModal"
-      @update-signature="updateSignature"
     />
   </div>
 </template>
@@ -305,9 +298,6 @@
           backgroundColor: "rgb(255,255,255)",
         },
         showSignatureModal: false,
-        signature:{
-          uploadedSignature:null
-        },
         vendor: null,
         proposal: null,
         cart: {},
@@ -330,12 +320,6 @@
       };
     },
     computed: {
-      handleSubmitDisabled(){
-        if(!this.signature.jpeg || !this.signature.signatureName || !this.signature.uploadedSignature){
-           return false;
-        }
-        return true;
-      },
       event() {
         return this.$store.state.event.eventData;
       },
@@ -377,12 +361,6 @@
     },
     methods: {
       ...mapActions("planningBoard", ["getCartItems"]),
-      toggleShowSignatureModal(){
-        this.showSignatureModal = !this.showSignatureModal;
-      },
-      updateSignature(files){
-        this.signature = files;
-      },
       getEventDays(){
         if ( this.proposal.nonMaryoku ) {
           let startTime = moment(this.proposal.eventData.startTime * 1000);
@@ -583,13 +561,6 @@
   };
 </script>
 <style lang="scss" scoped>
-.signatures-block{
-  //display: flex;
-  img{
-    width: 250px;
-    margin-left: 5px;
-  }
-}
   .event-vendor-checkout {
     .signature-wrapper{
       margin: 30px 0;
