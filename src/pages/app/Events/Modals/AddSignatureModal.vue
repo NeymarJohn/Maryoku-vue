@@ -2,8 +2,7 @@
   <Modal v-if="showModal" :styles="modalCustomStyles">
     <template slot="header">
       <div class="header">
-
-        <span> <i class="fas fa-pencil-alt" /> Enter Your Signature</span>
+        <span>Enter Your Signature</span>
         <div @click="closeModal">
           <md-icon>close</md-icon>
         </div>
@@ -27,11 +26,9 @@
         </div>
         <div class="block-separator"></div>
         <div class="signature-editor" id="signatureEditor" v-show="signatureType === 'draw'"
-             @mousedown="signatureAdded = true">
+             @click="signatureAdded = false">
           <img v-if="signatureData" :src="`${signatureData}`">
-          <div v-if="!signatureAdded" class="signature-description">
-            <i class="fas fa-pencil-alt" />
-            <br/>
+          <div v-if="signatureAdded" class="signature-description">
             <span>
               Tap here to start drawing
               <br/>
@@ -113,7 +110,7 @@ export default {
   data() {
     return {
       signatureName: "",
-      signatureAdded: false,
+      signatureAdded: true,
       signatureType: "draw",
       signatureData: "",
       uploadedSignature: "",
@@ -159,7 +156,7 @@ export default {
     },
     save() {
       let jpeg;
-      if(this.signatureAdded) {
+      if(!this.signatureAdded) {
          jpeg = this.$refs.signature.save("image/svg+xml");
          this.signatureData = jpeg;
       }
@@ -171,7 +168,7 @@ export default {
         case "draw":
           this.signatureData = "";
           this.$refs.signature.clear();
-          this.signatureAdded = false;
+          this.signatureAdded = true;
           break;
         case "type":
           this.signatureName = "";
