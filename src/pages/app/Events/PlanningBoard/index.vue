@@ -73,7 +73,7 @@
                       @click="openChoice"
                     >
                     <img
-                      v-else
+                      v-if="!isAnyLiked"
                       class="svg-icon-header cursor-pointer"
                       :src="`${$iconURL}Booking-New/Group+28553.svg`"
                       @click="openChoice"
@@ -88,7 +88,7 @@
                       :src="`${$iconURL}Booking-New/Path+13791.svg`"
                       @click="openCart"
                     >
-                    <span class="cart-dot">{{ countInCart }}</span>
+                    <span v-if="isAnyCart || isCart" class="cart-dot">{{ cartCount }}</span>
                   </div>
                 </li>
               </ul>
@@ -99,7 +99,7 @@
               :hide-download="true"
               :hide-share="true"
               :proposal-unviewed="proposalUnviewed"
-              :cart-count="countInCart"
+              :cart-count="cartCount"
               :custom-styles="{showCommentsText: {paddingLeft: '2px'}}"
               @toggleCommentMode="toggleCommentMode"
             />
@@ -228,7 +228,7 @@
                         />
                     </div>
 
-                    <div class="mb-100">
+                    <div>
                         <EventProposalDetails
                             :key="selectedProposal.id"
                             :proposal="selectedProposal"
@@ -458,12 +458,12 @@
         </drop-down>
       </div>
       <div class="d-flex justify-content-end">
-
+        <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
         <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor">
           Book This Vendor
           <md-icon>keyboard_arrow_right</md-icon>
         </md-button>
-
+        <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
         <md-button class="md-red maryoku-btn" @click="addToCart">
           Add To Cart
         </md-button>
@@ -590,6 +590,8 @@ export default {
       selectedProposal: null,
       proposalRequest: null,
       originalProposal: {},
+      isCart: false,
+      cartCount: 0,
     };
   },
   computed: {
@@ -716,8 +718,12 @@ export default {
     selectedVersion() {
       return this.$store.state.planningBoard.currentVersion;
     },
-    countInCart(){
-        return this.cart ? Object.keys(this.cart).length : 0;
+    isAnyCart(){
+        let cartItems = Object.keys(this.cart);
+        if(cartItems){
+            return cartItems.length > 0;
+        }
+        return false;
     },
     showCommentPanel(){
       return this.$store.state.eventPlan.showCommentPanel;
@@ -735,6 +741,8 @@ export default {
       this.isLoadingStoredData = true;
 
       await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
+
+
       this.isLoadingStoredData = false;
     }
     this.isLoadingProposal = true;
@@ -745,8 +753,6 @@ export default {
     await this.getCartItems(this.event.id);
     this.isLoadingProposal = false;
     this.selectCategory(this.categories[0]);
-
-    console.log('planning.created', this.cart)
   },
   methods: {
     ...mapMutations("event", ["setProposalsByCategory"]),
@@ -884,18 +890,15 @@ export default {
       }
       this.currentRequirement = this.requirements[category.componentId];
       this.selectedCategory = category;
-
-      const newProposals = this.proposals[category.componentId].filter(p => p.viewd);
-      if (newProposals.length) {
-          newProposals.map(p => {
-              this.updateProposal({
-                  proposal: { id: p.id, viewed: true },
-                  category
-              })
-          })
+      let getProposals = this.proposals;
+      if (getProposals[category.componentId]) {
+        getProposals[category.componentId].forEach((proposal, index) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
+            this.$set(proposal, "viewed", true);
+          });
+        });
       }
 
-      this.closeProposal();
       if(this.showCommentPanel){
         this.toggleCommentMode();
       }
@@ -970,29 +973,26 @@ export default {
     },
     async addToCart() {
       if (!this.selectedProposal || !this.selectedCategory) return;
-      await this.updateCartItem({
+      this.updateCartItem({
         category: this.selectedCategory.componentId,
         event: { id: this.event.id },
         proposalId: this.selectedProposal.id,
       });
-      await this.updateProposal( {
-          proposal: { ...this.selectedProposal, isFavorite: false },
-          category: this.selectedProposal.vendor.vendorCategory });
+      this.$store.dispatch("event/updateProposal", {
+        proposal: { ...this.selectedProposal, isFavorite: false },
+        category: this.selectedProposal.vendor.vendorCategory,
+      });
+      this.isCart = true;
     },
     async favoriteProposal(isFavorite) {
-
-      this.selectedProposal = await this.updateProposal({
-          proposal: { ...this.selectedProposal, isFavorite },
-          category: this.selectedCategory.componentId,
+      this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
+        proposal: { ...this.selectedProposal, isFavorite },
+        category: this.selectedCategory.componentId,
       });
-
-      await this.setCategoryCartItem({
+      this.setCategoryCartItem({
         category: this.selectedCategory.componentId,
         item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.selectedProposal, isFavorite } },
       });
-    },
-    async updateProposal(params) {
-        return await this.$store.dispatch("event/updateProposal", params);
     },
     async handleAsk(ask) {
       if (ask === "expiredDate") {
@@ -1119,12 +1119,13 @@ export default {
     height: 100vh;
   }
   .proposal-footer {
-    padding: 40px 50px 40px 480px;
+    padding: 40px 50px;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 3;
     button {
       width: 250px;
       margin-left: 20px;

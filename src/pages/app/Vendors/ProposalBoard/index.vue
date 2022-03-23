@@ -420,31 +420,24 @@ export default {
       if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
         return new Date(negotiations[0].expiredTime).getTime();
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) {
-        const { nonMaryoku } = this.selectedProposal;
-        let eventData;
-        if (this.selectedProposal.nonMaryoku) {
-           eventData = this.selectedProposal.eventData;
-        } else {
-           eventData = this.selectedProposalRequest.eventData;
-        }
-
+        let { startTime, endTime, numberOfParticipants, location, eventType } = this.selectedProposal.eventData;
         let { event } = negotiations[0];
         return {
-          originalDate: moment( nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("DD-MM-YY"),
+          originalDate: moment(startTime * 1000).format("DD-MM-YY"),
           date: moment(event.startTime * 1000).format("DD-MM-YY"),
-          originalStartTime: moment(nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("hh:mm a"),
-          originalEndTime: moment(nonMaryoku ? eventData.endTime * 1000 : eventData.eventEndMillis).format("hh:mm a"),
+          originalStartTime: moment(startTime * 1000).format("hh:mm a"),
+          originalEndTime: moment(endTime * 1000).format("hh:mm a"),
           startTime: moment(event.startTime * 1000).format("hh:mm a"),
           endTime: moment(event.endTime * 1000).format("hh:mm a"),
-          originalNumberOfParticipants: eventData.numberOfParticipants,
+          originalNumberOfParticipants: numberOfParticipants,
           numberOfParticipants: event.numberOfParticipants,
-          originalLocation: eventData.location,
+          originalLocation: location,
           location: event.location,
-          originalEventType: eventData.eventType,
+          originalEventType: eventType,
           eventType: event.eventType,
         };
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
-        let { numberOfParticipants } = this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData : this.selectedProposalRequest.eventData;
+        let { numberOfParticipants } = this.selectedProposal.eventData;
         let data = negotiations[0].price;
         let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
 

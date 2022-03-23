@@ -20,7 +20,11 @@
         <img src="/static/icons/facebook.svg">
       </li>
     </ul>
-    <md-button v-if="copyLink" class="md-simple md-red normal-btn copy-link-button">
+    <md-button
+      v-if="copyLink"
+      class="md-simple md-red normal-btn copy-link-button"
+      @click="clinkButtonCopyLink"
+    >
       <img :src="`${$iconURL}Campaign/Path 2639.svg`"><span class="ml-10 mr-20">Copy Link</span>
     </md-button>
   </div>
@@ -31,6 +35,10 @@ export default {
     copyLink: {
       type: Boolean,
       default: true,
+    },
+    link: {
+      type: String,
+      default: "",
     },
     sharingData: {
       type: Object,
@@ -67,6 +75,14 @@ export default {
         var win = window.open(this.socialLinks[socialType], "_blank");
         win.focus();
       }
+    },
+    clinkButtonCopyLink() {
+      const tempInput = document.createElement("input");
+      tempInput.value = this.link;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
     },
   },
 };

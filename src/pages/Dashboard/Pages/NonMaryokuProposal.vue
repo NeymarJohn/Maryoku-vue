@@ -541,7 +541,7 @@ export default {
     updateCommentComponentWithAuth(component) {
       // console.log("updateCommentComponent");
       if (this.loggedInUser || this.guestName) {
-        this.updateCommentComponent(component);
+        this.updateMixinCommentComponent(component);
       } else {
         localStorage.setItem(
           "nonMaryokuAction",
