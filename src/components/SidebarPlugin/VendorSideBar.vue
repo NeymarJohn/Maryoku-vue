@@ -67,7 +67,7 @@
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
-          :has-badge="hasBadge"
+          :has-badge="!!comments.length"
           :link="{
             name: 'Inbox',
             iconUrl: '/static/icons/vendor/message.svg',
@@ -149,12 +149,8 @@ export default {
     },
     event: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
-    hasBadge: {
-      type: Boolean,
-      default: false,
-    }
   },
   data: () => {
     return {

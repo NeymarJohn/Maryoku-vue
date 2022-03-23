@@ -159,7 +159,7 @@
         </div>
 
         <div v-if="selectedProposal.nonMaryoku" class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
-          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime * 1000, "MM/DD/YY") }}
+          {{ $dateUtil.formatScheduleDay(selectedProposal.eventData.startTime, "MM/DD/YY") }}
         </div>
         <div v-else class="border-right font-size-20 font-bold-extra text-center pr-10 mr-10">
           {{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
@@ -310,6 +310,7 @@
 import moment from "moment";
 import NoInsight from "./NoInsight.vue";
 import _ from "underscore";
+import carousel from "vue-owl-carousel";
 import {avatarColors} from "@/constants/color";
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
@@ -319,6 +320,7 @@ import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS }
 import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
 import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
+import CentredModal from "../../../../components/CentredModal.vue";
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
@@ -420,31 +422,24 @@ export default {
       if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
         return new Date(negotiations[0].expiredTime).getTime();
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) {
-        const { nonMaryoku } = this.selectedProposal;
-        let eventData;
-        if (this.selectedProposal.nonMaryoku) {
-           eventData = this.selectedProposal.eventData;
-        } else {
-           eventData = this.selectedProposalRequest.eventData;
-        }
-
+        let { startTime, endTime, numberOfParticipants, location, eventType } = this.selectedProposal.eventData;
         let { event } = negotiations[0];
         return {
-          originalDate: moment( nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("DD-MM-YY"),
+          originalDate: moment(startTime * 1000).format("DD-MM-YY"),
           date: moment(event.startTime * 1000).format("DD-MM-YY"),
-          originalStartTime: moment(nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("hh:mm a"),
-          originalEndTime: moment(nonMaryoku ? eventData.endTime * 1000 : eventData.eventEndMillis).format("hh:mm a"),
+          originalStartTime: moment(startTime * 1000).format("hh:mm a"),
+          originalEndTime: moment(endTime * 1000).format("hh:mm a"),
           startTime: moment(event.startTime * 1000).format("hh:mm a"),
           endTime: moment(event.endTime * 1000).format("hh:mm a"),
-          originalNumberOfParticipants: eventData.numberOfParticipants,
+          originalNumberOfParticipants: numberOfParticipants,
           numberOfParticipants: event.numberOfParticipants,
-          originalLocation: eventData.location,
+          originalLocation: location,
           location: event.location,
-          originalEventType: eventData.eventType,
+          originalEventType: eventType,
           eventType: event.eventType,
         };
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
-        let { numberOfParticipants } = this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData : this.selectedProposalRequest.eventData;
+        let { numberOfParticipants } = this.selectedProposal.eventData;
         let data = negotiations[0].price;
         let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
 

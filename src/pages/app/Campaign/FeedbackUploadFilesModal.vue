@@ -122,7 +122,7 @@ export default {
     FeedbackUploadImagesCarousel,
   },
   props: {
-    folderNameForUpload: {
+    uploadToFolderName: {
       type: String,
       required: true,
     }
@@ -135,7 +135,7 @@ export default {
         maxFiles: 10,
         createImageThumbnails: false,
         uploadMultiple: true,
-        acceptedFiles: "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
+        acceptedFiles: "image/*, video/*",
         headers: { "My-Awesome-Header": "header value" },
       },
       files: [],
@@ -171,15 +171,13 @@ export default {
       this.carouselItemIndex = itemIndex;
     },
     uploadAllFiles() {
-      const functionsUploadFiles = this.files
-        .map((file) => {
-          const extension = file.type.split("/")[1];
-          const fileName = uuidv4();
-          return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload);
+      console.log(this.files);
+      this.files.forEach((file) => {
+        const extension = file.type.split("/")[1];
+        const fileName = uuidv4();
+        S3Service.fileUpload(file, `${fileName}`, this.uploadToFolderName, extension).then(() => {
+          this.isLoading = false;
         });
-      Promise.all(functionsUploadFiles).then((responses) => {
-        this.isLoading = false;
-        this.$emit("upload-files", responses);
       });
     }
   },
@@ -375,4 +373,6 @@ export default {
     height: 530px;
   }
 }
+
+
 </style>

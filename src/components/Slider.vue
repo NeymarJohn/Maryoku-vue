@@ -10,8 +10,14 @@ import noUiSlider from "nouislider";
 export default {
   name: "Slider",
   props: {
-    value: [String, Array, Number],
-    disabled: Boolean,
+    value: {
+      type: [String, Array, Number],
+      required: true,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+    },
     start: {
       type: [Number, Array],
       default: 0

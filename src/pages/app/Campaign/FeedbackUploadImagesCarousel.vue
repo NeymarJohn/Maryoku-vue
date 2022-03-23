@@ -2,38 +2,29 @@
   <div class="feedback-upload-images-carousel">
     <carousel
       v-if="images.length"
+      :key="Math.random()"
       :items="1"
-      :autoplay="autoPlay"
-      :autoplay-timeout="autoPlayTimeout"
-      :smart-spped="smartSpeed"
       :nav="false"
       :dots="false"
-      :loop="true"
       class="carousel"
       :number="2"
       @changed="change"
     >
-      <template v-if="showButtonActions" slot="prev">
+      <template slot="prev">
         <button class="carousel-btn-prev nav-btn nav-left">
           <md-icon class="btn-prev-icon-arrow-left">
             keyboard_arrow_left
           </md-icon>
         </button>
       </template>
-      <div v-for="(item, index) in images" :key="index">
+      <div v-for="(item, index) in images" :key="index" class="carousel-item">
         <img
           :src="item.src"
-          :class="[
-            {
-              'carousel-item-image': true,
-              'carousel-item-with-filter': !disableFilter
-            },
-            classImage
-          ]"
+          :class="['carousel-item-image', classImage]"
           @error="setAltImg($event, item)"
         >
       </div>
-      <template v-if="showButtonActions" slot="next">
+      <template slot="next">
         <button class="carousel-btn-next nav-btn nav-right">
           <md-icon class="btn-next-icon-arrow-right">
             keyboard_arrow_right
@@ -54,26 +45,6 @@ export default {
     carousel,
   },
   props: {
-    autoPlay: {
-      type: Boolean,
-      default: false,
-    },
-    autoPlayTimeout: {
-      type: Number,
-      default: 500,
-    },
-    smartSpeed: {
-      type: Number,
-      default: 250,
-    },
-    showButtonActions: {
-      type: Boolean,
-      default: true,
-    },
-    disableFilter: {
-      type: Boolean,
-      default: false,
-    },
     images: {
       type: Array,
       default: () => [],
@@ -81,11 +52,12 @@ export default {
     classImage: {
       type: String,
       default: "",
-    },
+    }
   },
   methods: {
     change(event) {
       const itemIndex = event.item.index;
+      console.log({ itemIndex });
       this.$emit("change-item-index", itemIndex);
     },
     uploadImage(index) {
@@ -127,15 +99,12 @@ export default {
       width: 942px;
       height: 530px;
       object-fit: cover;
+      filter: brightness(80%);
       position: absolute;
       top: 0;
       left: 0;
       bottom: 0;
       right: 0;
-    }
-
-    .carousel-item-with-filter {
-      filter: brightness(80%);
     }
 
     &:hover {

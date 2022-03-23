@@ -20,49 +20,36 @@ class S3Service {
 
   fileUpload(file, fileName, dirName, ext) {
     return new Promise((resolve, reject) => {
+      ext = ext ? ext : file.type.split("/").pop();
+      let key = `${dirName}/${fileName}.${ext}`;
+      console.log("upload.key", key, process.env.S3_URL);
 
       let formData = new FormData();
       formData.append("file", file);
       formData.append("path", dirName);
-      formData.append("name", fileName);
 
       axios.defaults.headers.common.Authorization = authHeader().Authorization;
-      const result = axios
+      axios
         .post(`${process.env.SERVER_URL}/uploadFile`, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
         })
-        .then((result) => resolve(result.data.upload.url))
-        .catch((error) => reject(error));
+        .then((result) => {
+          let data = result.data;
+          console.log("data", data);
+          data.url = process.env.S3_URL + data.key;
+          resolve(data.upload);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
-  }
-
-  downloadFiles(files) {
-    const result = axios
-      .post(`${process.env.SERVER_URL}/downloadFiles`, { files }, {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then((result) => {
-        // const filesName = files.map((file) => {
-        //   const splittedFileURL = file.split("/");
-        //   return splittedFileURL[splittedFileURL.length - 1];
-        // });
-        // console.log({ filesName });
-        // const regExp = new RegExp(`^(${filesName.join("|")})$`);
-        // const filesArrayStream = result.data.split(regExp);
-        // console.log(filesArrayStream[0]);
-        resolve(result.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
   }
 
   deleteFile(fileName) {
     return new Promise((resolve, reject) => {
+      console.log("key", fileName);
       let key = fileName.replace(process.env.S3_URL, "");
 
       axios.defaults.headers.common.Authorization = authHeader().Authorization;

@@ -1,11 +1,6 @@
 <template>
   <div v-if="vendorData" class="my-service white-card">
-    <carousel :items="4" :margin="25" :dots="false" :number="2" :nav="false" class="services-header">
-      <template slot="prev">
-        <button class="nav-left nav-btn">
-          <span><md-icon>arrow_left</md-icon></span>
-        </button>
-      </template>
+    <div class="services-header">
       <div class="service-tab-item" :class="{ active: selectedIndex === 0 }" @click="selectService(0)">
         <img
           v-if="vendorData.vendorCategories"
@@ -35,15 +30,7 @@
           Sign new service
         </md-button>
       </div>
-      <template slot="next">
-        <button class="nav-right nav-btn">
-          <md-icon>
-            arrow_right
-          </md-icon>
-        </button>
-      </template>
-    </carousel>
-
+    </div>
     <service-content
       :key="getSelectedServiceCategory().key"
       :service-category="getSelectedServiceCategory()"
@@ -51,19 +38,17 @@
   </div>
 </template>
 <script>
-const components = {
-    ServiceContent: () => import("./ServiceContent.vue"),
-    carousel: () => import("vue-owl-carousel"),
-};
-
+import ServiceContent from "./ServiceContent";
 export default {
-  components,
+  components: {
+    ServiceContent,
+  },
   data() {
     return {
+      // auth: auth,
       userInfo: { role: "guest" },
       isLoading: false,
       selectedIndex: 0,
-      tabSlidePos: 0,
     };
   },
   computed: {
@@ -87,6 +72,9 @@ export default {
     startAddNewService() {
       return this.$router.push(`/vendor/${this.vendorData.id}/service/add`);
     },
+    selectService(index) {
+      this.selectedIndex = index;
+    },
     getSelectedServiceCategory(index) {
       if (!this.vendorData.vendorCategories || !this.vendorData.vendorCategories.length) return {};
       if (this.selectedIndex === 0) {
@@ -95,58 +83,31 @@ export default {
         return this.getServiceCategory(this.vendorData.secondaryServices[this.selectedIndex - 1].vendorCategory);
       }
     },
-      selectService(index) {
-          this.selectedIndex = index;
-      },
   },
 };
 </script>
 <style lang="scss" scoped>
 .my-service {
-    .services-header {
-        display: flex;
-        position: relative;
-
-        .service-tab-item {
-            min-width: 300px;
-            height: 90px;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            cursor: pointer;
-            &:not(:last-child) {
-                border-right: 1px solid #050505;
-            }
-            &.active {
-                border-bottom: solid 5px #641856;
-                font-weight: bold;
-                padding: 10px 20px;
-            }
-        }
-
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translate(0, -50%);
-            z-index: 10;
-            width: 33px;
-            height: 33px;
-            background-color: white;
-            border: none;
-            border-radius: 50%;
-            box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
-            cursor: pointer;
-            &.nav-left {
-                left: 10px;
-            }
-            &.nav-right {
-                right: 10px;
-            }
-        }
+  .services-header {
+    height: 90px;
+    display: flex;
+    .service-tab-item {
+      min-width: 300px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      cursor: pointer;
+      &:not(:last-child) {
+        border-right: 1px solid #050505;
+      }
+      &.active {
+        border-bottom: solid 5px #641856;
+        font-weight: bold;
+        padding: 10px 20px;
+      }
     }
-
-
+  }
 }
 </style>

@@ -13,18 +13,22 @@
         </div>
       </div>
       <div class="header-tabs d-flex justify-content-around ">
-        <div v-for="tab in commentsTab"
-             :key="tab.value"
-             class="header-tab"
-             :class="{'tab-selected': tab.value === activeTab}"
-             @click="activeTab = tab.value"
-        >
-          {{ tab.label }}
+        <div class="header-tab">
+          {{ 'All' }}
+        </div>
+        <div class="header-tab">
+          {{ 'Internal' }}
+        </div>
+        <div class="header-tab tab-selected">
+          {{ 'Vendors' }}
+        </div>
+        <div class="header-tab">
+          {{ '@ Mensions' }}
         </div>
       </div>
     </div>
     <div class="sidebar__items d-flex flex-column ">
-      <div v-for="(commentComponent, commentIndex) in sortedComponents"
+      <div v-for="(commentComponent, commentIndex) in commentComponents"
            v-if="commentComponent.comments && commentComponent.comments.length"
            :key="commentIndex"
            class="comment_item fullDiscussion align-items-center justify-content-between cursor-pointer"
@@ -212,8 +216,7 @@ export default {
     props: {
 
     },
-    data() {
-      return {
+    data: () => ({
         loading: false,
         pagination: PROPOSAL_PAGE_PAGINATION,
         showReply: false,
@@ -223,36 +226,17 @@ export default {
         showAddress: false,
         selectedComponent:null,
         customers: [],
-        commentsTab: [
-          {label: "All", value: "all"},
-          {label: "Internal", value: "internal"},
-          {label: "Vendors", value: "vendors"},
-          {label: "@ Mentions", value: "mentions"},
-        ],
-        activeTab: "all"
-      };
-    },
+    }),
     computed: {
         proposal(){
-            return this.$store.state.eventPlan.proposal;
+
+            let proposal = this.$store.state.eventPlan.proposal;
+            this.commentComponents = proposal ? proposal.commentComponent : {};
+            return proposal;
         },
         url(){
             let proposal = this.$store.state.eventPlan.proposal;
-            return proposal ? `/proposals/${this.$store.state.eventPlan.proposal.id}` : this.$route.path;
-        },
-        sortedComponents() {
-          let components = [...this.filteredComponents];
-          return components.sort((a,b) => b.lastUpdated - a.lastUpdated);
-        },
-        filteredComponents() {
-          switch (this.activeTab) {
-            case "internal": return this.commentComponents.filter(component => component.planner && !component.customer);
-            case "vendors": return this.commentComponents.filter(component => component.customer && !component.planner);
-            case "mentions": return this.commentComponents.filter(component => component.mentions);
-            default: {
-              return this.commentComponents;
-            }
-          }
+            return proposal ? `/proposals/${this.$store.state.eventPlan.proposal.id}` : "/proposals/";
         }
     },
     watch: {

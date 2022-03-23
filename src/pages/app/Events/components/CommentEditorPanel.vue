@@ -497,9 +497,6 @@ export default {
   -webkit-user-select: none;
   z-index: 4999;
 }
-.event-plan .click-capture {
-  left: 400px;
-}
 .comments-list {
   position: absolute;
   width: 550px;

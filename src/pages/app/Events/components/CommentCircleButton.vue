@@ -36,16 +36,13 @@ export default {
      * @model
      */
     value: {
-      type: [Object, String],
-      default: () => null
+      type: [Object, String]
     },
     commentComponent: {
-      type: [Object, Array],
-      default: () => null
+      type: [Object, Array]
     },
     selectedComponent: {
-      type: [Object],
-      default: () => null
+      type: [Object]
     }
   },
   data: () => ({

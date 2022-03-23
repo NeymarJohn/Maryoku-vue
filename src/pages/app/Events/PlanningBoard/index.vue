@@ -28,7 +28,7 @@
                   :key="remainingCategory.title + i"
                   class="remaining-list"
                 >
-                  <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory, 'select')">
+                  <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory)">
                     <div class="remaining-name">
                       <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`">
                                         &nbsp;&nbsp;
@@ -46,7 +46,7 @@
                   :key="additionalCategory.title + i"
                   class="category-list"
                 >
-                  <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
+                  <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory)">
                     <div class="category-name">
                       <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
                                             &nbsp;&nbsp;
@@ -73,7 +73,7 @@
                       @click="openChoice"
                     >
                     <img
-                      v-else
+                      v-if="!isAnyLiked"
                       class="svg-icon-header cursor-pointer"
                       :src="`${$iconURL}Booking-New/Group+28553.svg`"
                       @click="openChoice"
@@ -88,7 +88,7 @@
                       :src="`${$iconURL}Booking-New/Path+13791.svg`"
                       @click="openCart"
                     >
-                    <span class="cart-dot">{{ countInCart }}</span>
+                    <span v-if="isAnyCart || isCart" class="cart-dot">{{ cartCount }}</span>
                   </div>
                 </li>
               </ul>
@@ -100,8 +100,6 @@
               :hide-share="true"
               :proposal-unviewed="proposalUnviewed"
               :cart-count="cartCount"
-              :show-menu="false"
-              :cart-count="countInCart"
               :custom-styles="{showCommentsText: {paddingLeft: '2px'}}"
               @toggleCommentMode="toggleCommentMode"
             />
@@ -181,87 +179,84 @@
                 </div>
               </div>
             </div>
-            <template v-if="selectedProposal">
-              <div class="mt-30">
-                <div class="proposals-booking-items">
-                  <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
-                    <ProposalHeader
-                      :event="event"
-                      :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
-                      :proposal-request="ourproposal"
-                      @click.native="selectProposal(ourproposal)"
-                    />
-                  </div>
-                </div>
-
-                <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
-                  <div class="d-flex align-center">
-                    <div class="company-logo">
-                      <img
-                        v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
-                        alt=""
-                        :src="`${selectedProposal.vendor.vendorLogoImage}`"
-                      >
-                      <img v-else alt="" src="">
-                    </div>
-                    <div class="category-title">
-                      <img
-                        :src="
-                          `${$iconURL}Budget+Elements/${
-                            selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
-                          }`
-                        "
-                        alt="category-logo"
-                      >
-                      <span class="text-decoration-underline">
-                            &nbsp;&nbsp;
-                        <u>
-                          {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
-                        </u>
-                      </span>
-                      <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
-                    </div>
-                  </div>
-                  <ProposalVersionsDropdown
-                    v-if="selectedProposal"
-                    :versions="selectedProposal.versions"
-                    :selected="selectedVersion"
-                    @select="selectVersion"
-                  />
-                </div>
-
-                <div class="mb-100">
-                  <EventProposalDetails
-                    :key="selectedProposal.id"
-                    :proposal="selectedProposal"
-                    :category="selectedCategory"
-                    :show-timer-box="true"
-                    :hide-footer="true"
-                    @favorite="favoriteProposal"
-                    @close="closeProposal"
-                    @ask="handleAsk"
+            <!-- Event Booking Items -->
+            <!-- <div class="events-booking-items" v-if="proposals.length">
+                                    <ProposalCard
+                                        @goDetail="goDetailPage"
+                                        v-for="(proposal, index) in proposals.slice(0, 3)"
+                                        :key="index"
+                                        :proposal="proposal"
+                                        :component="selectedCategory"
+                                        :probability="getProbability(index)"
+                                        :isCollapsed="showDetails"
+                                        :isSelected="selectedProposal && selectedProposal.id === proposal.id"
+                                    >
+                                    </ProposalCard>
+                                </div> -->
+            <div class="mt-30">
+              <div class="proposals-booking-items">
+                <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
+                  <ProposalHeader
+                    :event="event"
+                    :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
+                    :proposal-request="ourproposal"
+                    @click.native="selectProposal(ourproposal)"
                   />
                 </div>
               </div>
-            </template>
+
+              <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
+                <div class="d-flex align-center">
+                  <div class="company-logo">
+                    <img
+                      v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
+                      alt=""
+                      :src="`${selectedProposal.vendor.vendorLogoImage}`"
+                    >
+                    <img v-else alt="" src="">
+                  </div>
+                  <div class="category-title">
+                    <img
+                      :src="
+                        `${$iconURL}Budget+Elements/${
+                          selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
+                        }`
+                      "
+                      alt="category-logo"
+                    >
+                    <span class="text-decoration-underline">
+                                &nbsp;&nbsp;
+                      <u>
+                        {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
+                      </u>
+                    </span>
+                    <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
+                  </div>
+                </div>
+                <ProposalVersionsDropdown
+                  v-if="selectedProposal"
+                  :versions="selectedProposal.versions"
+                  :selected="selectedVersion"
+                  @select="selectVersion"
+                />
+              </div>
+
+              <div>
+                <EventProposalDetails
+                  :key="selectedProposal.id"
+                  :proposal="selectedProposal"
+                  :category="selectedCategory"
+                  :show-timer-box="true"
+                  :hide-footer="true"
+                  @favorite="favoriteProposal"
+                  @close="closeProposal"
+                  @ask="handleAsk"
+                />
+              </div>
+            </div>
           </div>
+          <PendingForVendors v-else :expired-time="expireTime" />
         </template>
-        <div v-else class="proposal-card-items">
-          <ProposalCard
-            v-for="(proposal, index) in categoryProposals.slice(0, 3).slice(0, 3)"
-            :key="index"
-            :proposal="proposal"
-            :component="selectedCategory"
-            :is-collapsed="showDetails"
-            :is-selected="selectedProposal && selectedProposal.id === proposal.id"
-            @goDetail="goDetailPage"
-          />
-        </div>
-      </template>
-    </div>
-    <PendingForVendors v-else :expired-time="expireTime" />
-  </div>
-</template>
         <template v-else-if="!( selectedCategory &&
           requirements[selectedCategory.componentId] &&
           requirements[selectedCategory.componentId].isIssued)
@@ -415,6 +410,17 @@
              requirements[selectedCategory.componentId].isIssued == true"
          class="proposal-footer white-card d-flex justify-content-between"
     >
+      <!-- <div>
+                    <md-button class="md-simple maryoku-btn md-black">
+                        <span class="text-transform-capitalize">I already have a vendor</span>
+                    </md-button>
+                    <md-button
+                        class="md-simple maryoku-btn md-black text-transform-capitalize"
+                        @click="isOpenedAdditionalModal = true"
+                        >
+                        <span class="text-transform-capitalize">Chanage requirements</span>
+                    </md-button>
+                </div> -->
       <div class="d-flex justify-content-start">
         <md-button
           class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
@@ -433,17 +439,19 @@
           </button>
           <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
             <li class="other-list">
-              <a class="other-item font-size-16" @click="handleAction('download')">
+              <a class="other-item font-size-16">
                 <div class="other-name">
-                  <img :src="`${$iconURL}common/download.svg`" width="20px" class="mr-10">
-                  {{ "Download Proposal" }}
+                  <md-icon>download</md-icon>
+                        &nbsp;&nbsp;
+                  {{ "Download Proposals" }}
                 </div>
               </a>
             </li>
             <li class="other-list">
-              <a class="other-item font-size-16" @click="handleAction('negotiate')">
+              <a class="other-item font-size-16">
                 <div class="other-name">
-                  <img :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`" width="16px" class="mr-15">
+                  <md-icon>attach_money</md-icon>
+                        &nbsp;&nbsp;
                   <span>
                     {{ "Negotiate Rate" }}
                   </span>
@@ -451,9 +459,10 @@
               </a>
             </li>
             <li class="other-list">
-              <a class="other-item font-size-16" @click="handleAction('contact')">
+              <a class="other-item font-size-16">
                 <div class="other-name">
-                  <img src="/static/icons/vendor/message-dark.svg" width="20px" class="mr-10">
+                  <md-icon>textsms</md-icon>
+                        &nbsp;&nbsp;
                   <span>
                     {{ "Contact Vendor" }}
                   </span>
@@ -464,12 +473,12 @@
         </drop-down>
       </div>
       <div class="d-flex justify-content-end">
-
+        <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
         <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor">
           Book This Vendor
           <md-icon>keyboard_arrow_right</md-icon>
         </md-button>
-
+        <!-- :disabled="proposals[selectedCategory.componentId].length === 0 || !selectedProposal" -->
         <md-button class="md-red maryoku-btn" @click="addToCart">
           Add To Cart
         </md-button>
@@ -477,7 +486,12 @@
     </div>
     <div v-else class="proposal-footer white-card d-flex justify-content-end">
       <div>
+        <!-- <md-button class="md-simple md-outlined md-red maryoku-btn">
+                    <img :src="`${$iconURL}common/save-red.svg`" />
+                    Save Draft
+                </md-button> -->
         <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
+          <!-- <img :src="`${$iconURL}Booking-New/Path+13791.svg`" /> -->
           <md-icon>shopping_cart</md-icon>
           &nbsp;&nbsp; Add To Cart
         </md-button>
@@ -517,7 +531,7 @@
     <CustomPopup v-if="popup" @cancel="popup = false" />
     <AddBudgetModal
       v-if="showAddNewCategory"
-      :service-category="additionalCategory"
+      :service-category="selectedCategory"
       @cancel="showAddNewCategory = false"
       @save="saveBudget"
     />
@@ -542,7 +556,7 @@ import { postReq, getReq } from "@/utils/token";
 import Proposal from "@/models/Proposal";
 
 const components = {
-  ActionModal: () => import("@/components/ActionModal.vue"),
+  CustomPopup: () => import("./components/modals/Popup.vue"),
   ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
   ProgressRadialBar: () => import("./components/ProgressRadialBar.vue"),
   AdditionalRequestModal: () => import("./components/modals/AdditionalRequest.vue"),
@@ -577,7 +591,6 @@ export default {
       isOpenedAdditionalModal: false,
       isOpenedFinalModal: false,
       selectedCategory: null,
-      additionalCategory: null,
       isLoading: false,
       isLoadingStoredData: false,
       isLoadingProposal: false,
@@ -591,15 +604,18 @@ export default {
       showAddBudgetConfirm: false,
       booked: false,
 
+      requirements: {},
       showDifferentProposals: false,
       showDetails: false,
       selectedProposal: null,
       proposalRequest: null,
       originalProposal: {},
+      isCart: false,
+      cartCount: 0,
     };
   },
   computed: {
-    requirements() {
+    eventRequirements() {
       return this.$store.state.planningBoard.requirements;
     },
     categories() {
@@ -722,8 +738,12 @@ export default {
     selectedVersion() {
       return this.$store.state.planningBoard.currentVersion;
     },
-    countInCart(){
-        return this.cart ? Object.keys(this.cart).length : 0;
+    isAnyCart(){
+        let cartItems = Object.keys(this.cart);
+        if(cartItems){
+            return cartItems.length > 0;
+        }
+        return false;
     },
     showCommentPanel(){
       return this.$store.state.eventPlan.showCommentPanel;
@@ -741,24 +761,31 @@ export default {
       this.isLoadingStoredData = true;
 
       await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
+
+      if (
+        localStorage.getItem("planner-requirements") &&
+        JSON.parse(localStorage.getItem("eventId")) == this.event.id
+      ) {
+        this.requirements = JSON.parse(localStorage.getItem("planner-requirements")) || {};
+      } else {
+        this.requirements = this.$store.state.planningBoard.requirements;
+      }
+
       this.isLoadingStoredData = false;
     }
     this.isLoadingProposal = true;
     const tenantId = this.$authService.resolveTenantId();
-    await this.$store
-          .dispatch("planningBoard/getRequirements", this.event.id);
+    await this.getRequirements(this.event.id);
     await this.getProposals({ eventId: this.event.id, tenantId });
     await this.getCartItems(this.event.id);
     this.isLoadingProposal = false;
     this.selectCategory(this.categories[0]);
-
-    console.log("planning.created", this.cart);
   },
   methods: {
     ...mapMutations("event", ["setProposalsByCategory"]),
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapActions("event", ["getProposals"]),
-    ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
+    ...mapMutations("modal", ["setOpen"]),
     ...mapMutations("eventPlan", ["toggleCommentMode"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements", "setCategoryCartItem"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem"]),
@@ -769,36 +796,56 @@ export default {
       this.isOpenedFinalModal = true;
     },
     async saveSpecialRequirements(data) {
+      let issuedState = false;
+      let requirementId = null;
+      if (this.requirements[this.selectedCategory.componentId]) {
+        requirementId = this.requirements[this.selectedCategory.componentId].id;
+      }
+      else if (this.eventRequirements[this.selectedCategory.componentId]) {
+        this.requirements = this.eventRequirements;
+        requirementId = this.eventRequirements[this.selectedCategory.componentId].id;
+      }
       this.isOpenedFinalModal = false;
 
-      this.setSpecialRequirements(data);
-      this.expiredTime = moment(new Date())
-        .add(3, "days")
-        .valueOf();
+      if (requirementId) {
+        this.setSpecialRequirements(data);
+        this.expiredTime = moment(new Date())
+          .add(3, "days")
+          .valueOf();
 
-      postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
-        issuedTime: new Date().getTime(),
-        expiredBusinessTime: this.expiredTime,
-      }).then(async res => {
-        console.log("saveReq", res.data.data);
-        await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
-
-        await this.$store.dispatch(
-        "event/saveEventAction",
-        new CalendarEvent({
-          id: this.event.id,
+        const requestRequirement = {
+          issuedTime: new Date().getTime(),
+          expiredBusinessTime: this.expiredTime,
           vendorCategory: this.selectedCategory,
-          processingStatus: "accept-proposal",
-        }),
-        );
-    });
+        };
+        // postReq(`/1/events/${this.event.id}/find-vendors`, {
+        postReq(`/1/requirements/${requirementId}/find-vendors`, {
+          issuedTime: new Date().getTime(),
+          expiredBusinessTime: this.expiredTime,
+          vendorCategory: this.selectedCategory,
+        }).then(res => {
+          this.$store.dispatch(
+            "event/saveEventAction",
+            new CalendarEvent({
+              id: this.event.id,
+              vendorCategory: this.selectedCategory,
+              processingStatus: "accept-proposal",
+            }),
+          );
+          issuedState = true;
+          this.requirements[this.selectedCategory.componentId].isIssued = issuedState;
+          localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
+        });
 
+        await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
+
+      }
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find(item => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
-      console.log("category", category, this.allRequirements, this.requirements);
+      console.log("category", category);
       let getSelectedCategory = this.$store.state.common.serviceCategories.find(
         item => item.key === category.componentId,
       );
@@ -843,8 +890,8 @@ export default {
         ...this.event,
         requirementProgress: (this.percentOfBudgetCategories / this.event.components.length) * 100,
       });
-      // localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
-      // localStorage.setItem("eventId", JSON.stringify(this.event.id));
+      localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
+      localStorage.setItem("eventId", JSON.stringify(this.event.id));
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     async saveAdditionalRequest({ category, requirements }) {
@@ -864,6 +911,13 @@ export default {
 
     async addNewCategory(category) {
       this.selectedCategory = this.$store.state.common.serviceCategories.find(item => item.key === category);
+      // const event = new CalendarEvent({
+      //   id: this.event.id,
+      //   unexpectedBudget: this.event.unexpectedBudget - newCategory.allocatedBudget,
+      //   calendar: new Calendar({ id: this.event.calendar.id }),
+      // });
+      // this.showAddNewCategory = false;
+      // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     getRequirements(category) {
       if (!this.$store.state.planningBoard.requirements[category]) return null;
@@ -888,40 +942,43 @@ export default {
       if (category.key) {
         category["componentId"] = category.key;
       }
-      this.currentRequirement = this.requirements[category.componentId];
+      this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
-
-      const newProposals = this.proposals[category.componentId].filter(p => p.viewd);
-      if (newProposals.length) {
-          newProposals.map(p => {
-              this.updateProposal({
-                  proposal: { id: p.id, viewed: true },
-                  category
-              });
+      let getProposals = this.proposals;
+      if (getProposals[category.componentId]) {
+        getProposals[category.componentId].forEach((proposal, index) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
+            this.$set(proposal, "viewed", true);
           });
+        });
+        this.selectProposal(getProposals[category.componentId][0]);
       }
 
-      this.closeProposal();
       if(this.showCommentPanel){
         this.toggleCommentMode();
       }
     },
-    selectRemainingCategory(category, action) {
-        if (action === "add") {
-            this.additionalCategory = category;
-            this.showAddNewCategory = true;
-        } else if (action === "select") {
-            this.selectedCategory = category;
-        }
-
+    selectRemainingCategory(category, clicked) {
+      if (category.key) {
+        category["componentId"] = category.key;
+      }
+      this.selectedCategory = category;
+      let getProposals = this.proposals;
+      if (getProposals[category.componentId]) {
+        getProposals[category.componentId].forEach((proposal, index) => {
+          new Proposal({ id: proposal.id, viewed: true }).save().then(res => {
+            this.$set(proposal, "viewed", true);
+          });
+        });
+        this.selectProposal(getProposals[category.componentId][0]);
+      }
     },
     addBudget() {
       this.showAddBudgetConfirm = false;
-
+      this.showAddNewCategory = true;
     },
     saveBudget() {
       this.showAddNewCategory = false;
-
     },
     getIsRow(indx) {
       if (indx == 0) {
@@ -956,6 +1013,9 @@ export default {
     compareProposal() {
       this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
     },
+    getProbability(index) {
+      return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
+    },
     goDetailPage(proposal) {
       this.showDetails = true;
 
@@ -976,29 +1036,26 @@ export default {
     },
     async addToCart() {
       if (!this.selectedProposal || !this.selectedCategory) return;
-      await this.updateCartItem({
+      this.updateCartItem({
         category: this.selectedCategory.componentId,
         event: { id: this.event.id },
         proposalId: this.selectedProposal.id,
       });
-      await this.updateProposal( {
-          proposal: { ...this.selectedProposal, isFavorite: false },
-          category: this.selectedProposal.vendor.vendorCategory });
+      this.$store.dispatch("event/updateProposal", {
+        proposal: { ...this.selectedProposal, isFavorite: false },
+        category: this.selectedProposal.vendor.vendorCategory,
+      });
+      this.isCart = true;
     },
     async favoriteProposal(isFavorite) {
-
-      this.selectedProposal = await this.updateProposal({
-          proposal: { ...this.selectedProposal, isFavorite },
-          category: this.selectedCategory.componentId,
+      this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
+        proposal: { ...this.selectedProposal, isFavorite },
+        category: this.selectedCategory.componentId,
       });
-
-      await this.setCategoryCartItem({
+      this.setCategoryCartItem({
         category: this.selectedCategory.componentId,
         item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.selectedProposal, isFavorite } },
       });
-    },
-    async updateProposal(params) {
-        return await this.$store.dispatch("event/updateProposal", params);
     },
     async handleAsk(ask) {
       if (ask === "expiredDate") {
@@ -1024,16 +1081,24 @@ export default {
       this.showDetails = false;
       this.selectedProposal = null;
     },
+    getproposalRequest() {
+      let getProposals = this.proposals;
+      this.proposalRequest = getProposals[this.selectedCategory.componentId][0];
+      return this.proposalRequest;
+    },
     selectProposal(thisProposal){
         this.selectedProposal = thisProposal;
         this.originalProposal = thisProposal;
         let proposal = thisProposal;
         if(proposal){
+            // this.commentComponents = proposal.commentComponent;
+            // this.showProposal = !!this.commentComponents.length
             proposal.versions = !proposal.versions ? [] : proposal.versions;
             this.$store.dispatch("planningBoard/setProposal",{...proposal});
             this.$store.dispatch("eventPlan/setProposal",{...proposal}).then(res => { console.log("eventPlan/setProposal", {...proposal}); });
         }
         else{
+            // this.$store.dispatch("planningBoard/setProposal", null);
             this.$store.dispatch("eventPlan/setProposal", null).then(res => { console.log("eventPlan/setProposal", null); });
         }
     },
@@ -1044,24 +1109,10 @@ export default {
         this.selectedProposal = this.versionProposal;
       }
     },
-    handleAction(action) {
-        if (action === "download") {
-            this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.selectedProposal.id}/download`);
-        } else if (action === "negotiate") {
-            this.setProposal(this.selectedProposal);
-            this.setOpen("NEGOTIATION");
-        }
-    },
-    openNewTab(link) {
-      window.open(link, "_blank");
-    },
   },
   watch: {
-    requirements: {
-        handler(newVal) {
-            console.log("req.watch", newVal);
-        },
-        deep: true,
+    requirements(newVal) {
+      console.log("requirement.watch", newVal);
     },
     event(newVal) {
       console.log("event.watch", newVal);
@@ -1125,12 +1176,11 @@ export default {
     height: 100vh;
   }
   .proposal-footer {
-    padding: 40px 50px 40px 480px;
-    position: fixed;
+    padding: 40px 50px;
+    position: sticky;
     bottom: 0;
-    left: 0;
-    right: 0;
     width: 100%;
+    z-index: 3;
     button {
       width: 250px;
       margin-left: 20px;
@@ -1270,6 +1320,9 @@ export default {
   }
   .other-list {
     cursor: pointer;
+    img {
+      width: 30px;
+    }
     .other-heading {
       padding: 10px 1.5rem;
       margin: 0 5px;
@@ -1337,16 +1390,6 @@ export default {
   }
   .md-menu-content .md-list {
     padding: 37px 37px !important;
-  }
-
-  .proposal-card-items {
-    padding: 0 0em;
-    margin-bottom: 1em;
-    align-items: stretch;
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
   }
 }
 </style>

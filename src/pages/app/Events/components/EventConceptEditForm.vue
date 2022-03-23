@@ -295,20 +295,6 @@ export default {
     });
   },
   methods: {
-    downloadTest () {
-      this.$http.post(`${process.env.SERVER_URL}/downloadFiles`, {
-        "files":[
-          "https://s3.amazonaws.com/maryoku/events/61ddf35fcfefec75142519a4/b4e82bf3-f603-4d95-9158-a9bf33e4fa93.jpeg",
-          "https://s3.amazonaws.com/maryoku/events/61ddf35fcfefec75142519a4/00b1f3a2-5056-4bd5-a511-cef9324c11aa.jpeg"]
-      }).then(res => {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "file.zip");
-        document.body.appendChild(link);
-        link.click();
-      });
-    },
     addTag(newTag, tagIndex) {
       this.editConcept.tags.push(newTag);
       this.taggingOptions[tagIndex].selected = true;
@@ -347,7 +333,7 @@ export default {
           const extension = files[0].type.split("/")[1];
           const fileName = new Date().getTime() + "";
           const dirName = "concepts";
-
+          
 
           const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
           this.$set(this.uploadImageData, itemIndex, imageData);
@@ -358,9 +344,9 @@ export default {
               name: `${fileName}`,
             };
           S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
-            fileInfo.url = res;
+            fileInfo.url = res.url;
             this.uploadingStatus[itemIndex] = false;
-
+            
           this.editConcept.images[itemIndex] = fileInfo;
             this.$set(this.uploadingStatus, itemIndex, false);
           });
@@ -403,7 +389,7 @@ export default {
         this.uploadImageData[itemIndex] = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
         this.uploadingStatus[itemIndex] = true;
         S3Service.fileUpload(files[0], fileInfo.name, dirName).then((res) => {
-          fileInfo.url = res;
+          fileInfo.url = res.url;
           this.uploadingStatus[itemIndex] = false;
           this.editConcept.images[itemIndex] = fileInfo;
         });
@@ -526,7 +512,6 @@ export default {
       justify-content: center;
       cursor: pointer;
       white-space: nowrap;
-      max-width: 130px;
       img {
         width: 15px;
         margin-left: 0.5em;

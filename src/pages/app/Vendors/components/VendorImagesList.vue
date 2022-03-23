@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-images-list">
+  <div class="venodr-images-list">
     <span v-show="startIndex > 0" class="prev" @click="prev()">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
@@ -82,7 +82,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.vendor-images-list {
+.venodr-images-list {
   display: block;
   overflow: hidden;
   padding: 2rem 0;

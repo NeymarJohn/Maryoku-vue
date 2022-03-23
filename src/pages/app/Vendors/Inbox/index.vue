@@ -11,9 +11,17 @@
 
     <section v-if="selectedProposal" class="footer-wrapper">
       <div>
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`"> Back
+        </md-button>
         <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
           <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17">
         </md-button>
+      </div>
+      <div class="next-cont">
+        <a class="save" @click="">
+          <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
+        </a>
       </div>
     </section>
   </div>

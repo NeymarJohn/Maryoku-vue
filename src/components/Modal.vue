@@ -10,7 +10,7 @@
     >
       <div class="modal-wrapper">
         <div v-click-outside="closeModal" :class="containerClass">
-          <div class="modal-header" :style="styles.header">
+          <div class="modal-header">
             <slot name="header" />
           </div>
 
@@ -30,14 +30,6 @@
 <script>
 export default {
   props: {
-    styles: {
-      type: Object,
-      default(){
-        return{
-          header:""
-        };
-      }
-    },
     containerClass: {
       type: String,
       default: "modal-container",

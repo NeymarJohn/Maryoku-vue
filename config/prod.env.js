@@ -5,8 +5,7 @@ require('dotenv').config({ path: './.env' });
 
 module.exports = merge(devEnv, {
     NODE_ENV: '"production"',
-    // SERVER_URL: '"https://api.maryoku.com"',
-    SERVER_URL: '"http://localhost:8080"',
+    SERVER_URL: '"https://api.maryoku.com"',
     HOST_URL: '"app.maryoku.com"',
     GOOGLE_API_KEY: '"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"',
 
