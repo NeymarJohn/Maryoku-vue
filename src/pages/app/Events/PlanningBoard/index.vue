@@ -100,6 +100,7 @@
               :hide-share="true"
               :proposal-unviewed="proposalUnviewed"
               :cart-count="cartCount"
+              :show-menu="false"
               :custom-styles="{showCommentsText: {paddingLeft: '2px'}}"
               @toggleCommentMode="toggleCommentMode"
             />
@@ -167,90 +168,90 @@
           <div v-if="proposals[selectedCategory.componentId].length > 0">
             <div>
               <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
-                      <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
-                      {{ selectedCategory.fullTitle }}
-                  </div>
+                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                {{ selectedCategory.fullTitle }}
+              </div>
             </div>
             <div>
-                  <div class="d-flex justify-content-between">
-                      <div>
-                          We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book
-                          now before it’s too late
-                      </div>
-                  </div>
-              </div>
-            <template v-if="selectedProposal">
-                <div class="mt-30">
-                    <div class="proposals-booking-items">
-                        <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
-                            <ProposalHeader
-                                :event="event"
-                                :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
-                                :proposal-request="ourproposal"
-                                @click.native="selectProposal(ourproposal)"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
-                        <div class="d-flex align-center">
-                            <div class="company-logo">
-                                <img
-                                    v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
-                                    alt=""
-                                    :src="`${selectedProposal.vendor.vendorLogoImage}`"
-                                >
-                                <img v-else alt="" src="">
-                            </div>
-                            <div class="category-title">
-                                <img
-                                    :src="
-                    `${$iconURL}Budget+Elements/${
-                      selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
-                    }`
-                  "
-                                    alt="category-logo"
-                                >
-                                <span class="text-decoration-underline">
-                            &nbsp;&nbsp;
-                  <u>
-                    {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
-                  </u>
-                </span>
-                                <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
-                            </div>
-                        </div>
-                        <ProposalVersionsDropdown
-                            v-if="selectedProposal"
-                            :versions="selectedProposal.versions"
-                            :selected="selectedVersion"
-                            @select="selectVersion"
-                        />
-                    </div>
-
-                    <div>
-                        <EventProposalDetails
-                            :key="selectedProposal.id"
-                            :proposal="selectedProposal"
-                            :category="selectedCategory"
-                            :show-timer-box="true"
-                            :hide-footer="true"
-                            @favorite="favoriteProposal"
-                            @close="closeProposal"
-                            @ask="handleAsk"
-                        />
-                    </div>
+              <div class="d-flex justify-content-between">
+                <div>
+                  We found the top {{ proposals[selectedCategory.componentId].length }} proposals for your event, Book
+                  now before it’s too late
                 </div>
+              </div>
+            </div>
+            <template v-if="selectedProposal">
+              <div class="mt-30">
+                <div class="proposals-booking-items">
+                  <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
+                    <ProposalHeader
+                      :event="event"
+                      :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
+                      :proposal-request="ourproposal"
+                      @click.native="selectProposal(ourproposal)"
+                    />
+                  </div>
+                </div>
+
+                <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
+                  <div class="d-flex align-center">
+                    <div class="company-logo">
+                      <img
+                        v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
+                        alt=""
+                        :src="`${selectedProposal.vendor.vendorLogoImage}`"
+                      >
+                      <img v-else alt="" src="">
+                    </div>
+                    <div class="category-title">
+                      <img
+                        :src="
+                          `${$iconURL}Budget+Elements/${
+                            selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
+                          }`
+                        "
+                        alt="category-logo"
+                      >
+                      <span class="text-decoration-underline">
+                            &nbsp;&nbsp;
+                        <u>
+                          {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
+                        </u>
+                      </span>
+                      <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
+                    </div>
+                  </div>
+                  <ProposalVersionsDropdown
+                    v-if="selectedProposal"
+                    :versions="selectedProposal.versions"
+                    :selected="selectedVersion"
+                    @select="selectVersion"
+                  />
+                </div>
+
+                <div>
+                  <EventProposalDetails
+                    :key="selectedProposal.id"
+                    :proposal="selectedProposal"
+                    :category="selectedCategory"
+                    :show-timer-box="true"
+                    :hide-footer="true"
+                    @favorite="favoriteProposal"
+                    @close="closeProposal"
+                    @ask="handleAsk"
+                  />
+                </div>
+              </div>
             </template>
             <div v-else class="proposal-card-items">
               <ProposalCard
-                  v-for="(proposal, index) in categoryProposals.slice(0, 3).slice(0, 3)"
-                  :key="index"
-                  :proposal="proposal"
-                  :component="selectedCategory"
-                  :is-collapsed="showDetails"
-                  :is-selected="selectedProposal && selectedProposal.id === proposal.id"
-                  @goDetail="goDetailPage"
+                v-for="(proposal, index) in categoryProposals.slice(0, 3).slice(0, 3)"
+                :key="index"
+                :proposal="proposal"
+                :component="selectedCategory"
+                :is-collapsed="showDetails"
+                :is-selected="selectedProposal && selectedProposal.id === proposal.id"
+                @goDetail="goDetailPage"
               />
             </div>
           </div>
@@ -405,8 +406,8 @@
 
     <div v-if="
            selectedCategory &&
-           requirements[selectedCategory.componentId] &&
-           requirements[selectedCategory.componentId].isIssued == true"
+             requirements[selectedCategory.componentId] &&
+             requirements[selectedCategory.componentId].isIssued == true"
          class="proposal-footer white-card d-flex justify-content-between"
     >
       <div class="d-flex justify-content-start">
@@ -748,7 +749,7 @@ export default {
     this.isLoadingProposal = true;
     const tenantId = this.$authService.resolveTenantId();
     await this.$store
-          .dispatch("planningBoard/getRequirements", this.event.id)
+          .dispatch("planningBoard/getRequirements", this.event.id);
     await this.getProposals({ eventId: this.event.id, tenantId });
     await this.getCartItems(this.event.id);
     this.isLoadingProposal = false;
@@ -780,7 +781,7 @@ export default {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
       }).then(async res => {
-        console.log('saveReq', res.data.data)
+        console.log("saveReq", res.data.data);
         await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
 
         await this.$store.dispatch(
@@ -904,10 +905,10 @@ export default {
       }
     },
     selectRemainingCategory(category, action) {
-        if (action === 'add') {
+        if (action === "add") {
             this.additionalCategory = category;
             this.showAddNewCategory = true;
-        } else if (action === 'select') {
+        } else if (action === "select") {
             this.selectedCategory = category;
         }
 
@@ -1039,11 +1040,11 @@ export default {
       }
     },
     handleAction(action) {
-        if (action === 'download') {
+        if (action === "download") {
             this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.selectedProposal.id}/download`);
-        } else if (action === 'negotiate') {
+        } else if (action === "negotiate") {
             this.setProposal(this.selectedProposal);
-            this.setOpen('NEGOTIATION');
+            this.setOpen("NEGOTIATION");
         }
     },
     openNewTab(link) {
@@ -1053,7 +1054,7 @@ export default {
   watch: {
     requirements: {
         handler(newVal) {
-            console.log('req.watch', newVal)
+            console.log("req.watch", newVal);
         },
         deep: true,
     },

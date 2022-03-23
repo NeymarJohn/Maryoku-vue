@@ -23,6 +23,7 @@
         </div>
         <header-actions
           :custom-styles="{ marginForCircle: {marginLeft: '20px'}}"
+          :positioning="'stretch'"
           @toggleCommentMode="toggleCommentMode"
           @share="share"
           @export="exportToPdf"
