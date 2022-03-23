@@ -40,8 +40,7 @@ export default {
       let updatedComment = await this.updateCommentAction(comment);
       console.log("updateComment", updatedComment);
     },
-    async updateCommentComponent(component) {
-      this.editingCommentId = "";
+    async updateMixinCommentComponent(component) {
       await this.updateCommentComponent(component);
     },
     async deleteComment({ comment, index }) {

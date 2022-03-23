@@ -123,7 +123,7 @@
 <script>
 import { MaryokuInput, LocationInput, HolidayInput } from "@/components";
 import moment from "moment";
-import { mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {

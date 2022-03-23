@@ -34,7 +34,12 @@
               Add attachments to the event
             </div>
           </div>
-          <feedback-upload-files-modal v-if="showModalWindowOpen" :upload-to-folder-name="`events/${event.id}`" @close="closeModalWindow" />
+          <feedback-upload-files-modal
+            v-if="showModalWindowOpen"
+            :folder-name-for-upload="`events/${event.id}`"
+            @close="closeModalWindow"
+            @upload-files="uploadFiles"
+          />
         </div>
         <div class="footer-change-cover">
           <div class="wrapper-logo-microsoft">
@@ -196,6 +201,7 @@ import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -211,7 +217,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
   },
   data() {
@@ -252,7 +258,10 @@ export default {
           description: "",
         }
       };
-      return this.campaignData.additionalData || defaultAdditionalData;
+      return {
+        ...defaultAdditionalData,
+        ...(this.campaignData.additionalData || {})
+      };
     },
   },
   created() {
@@ -295,6 +304,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions("campaign", ["saveCampaign"]),
     setDefault() {
       Swal.fire({
         title: "Are you sure?",
@@ -337,13 +347,6 @@ export default {
       };
       this.feedbackQuestions.push(newQuestion);
       this.newQuestion = "";
-      // const feedbackQuestions = [...this.campaignData.feedbackQuestions, newQuestion];
-      // console.log(feedbackQuestions);
-      // this.$store.commit("campaign/setAttribute", {
-      //   name: "FEEDBACK",
-      //   key: "feedbackQuestions",
-      //   value: feedbackQuestions,
-      // });
       this.isEditingNewQuestion = false;
     },
     openModalWindow(){
@@ -360,6 +363,15 @@ export default {
         value: this.additionalData
       });
     },
+    uploadFiles(files) {
+      const attachments = files.map(({ status, ...file }) => file);
+      this.saveCampaign({ id: this.campaignData.id, attachments });
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "attachments",
+        value: files
+      });
+    }
   },
 };
 </script>

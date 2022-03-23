@@ -495,6 +495,11 @@
     border-radius: 0;
   }
 }
+#signatureEditor{
+  canvas{
+    height: 100%;
+  }
+}
 
 @media (max-width: 960px) {
   .proposal-images-carousel{

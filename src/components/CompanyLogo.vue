@@ -69,7 +69,6 @@ export default {
 
       const extension = files[0].type.split("/")[1];
       let imageName = this.user.id;
-      console.log("process.env.S3_URL",process.env.S3_URL );
       this.isLoading = true;
       S3Service.fileUpload(files[0], `${imageName}`, "company/logos").then((res) => {
         this.isLoading = false;

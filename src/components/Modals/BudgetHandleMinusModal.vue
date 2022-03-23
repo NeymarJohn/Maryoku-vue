@@ -49,10 +49,7 @@ export default {
   },
   props: {
     show:[Boolean],
-    value: {
-      type: [Number, String],
-      required: true,
-    },
+    value:[ Number ],
   },
   data: ()=>{
     return {

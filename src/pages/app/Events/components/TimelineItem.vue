@@ -297,6 +297,7 @@ export default {
       return moment(new Date(Number(date))).format("hh:mm A");
     },
     applyToTemplate({ item: template, block: selectedBlock, index }) {
+      console.log('apply.template', template, selectedBlock, index);
       if (selectedBlock) {
         let block = Object.assign({}, selectedBlock);
         block.id = template.id;
