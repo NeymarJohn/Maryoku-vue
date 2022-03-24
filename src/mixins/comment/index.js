@@ -54,5 +54,5 @@ export default {
   },
   async created() {
     this.commentComponents = await this.getCommentComponents(this.url ? this.url : this.$route.path);
-  }
+  },
 };

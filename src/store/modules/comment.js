@@ -183,6 +183,34 @@ const actions = {
     });
   },
 
+  updateCommentsComponentsViewed({ commit, state }, proposal) {
+    return new Promise((resolve, reject) => {
+      new Proposal({ ...proposal, viewed: true }).save()
+        .then((res) => {
+          const foundProposalIndex = state.commentsProposals
+            .findIndex((proposal) => proposal.id === res.id);
+          console.log({ foundProposalIndex });
+          if (foundProposalIndex > -1) {
+            const proposals = state.commentsProposals;
+            proposals[foundProposalIndex] = {
+              ...proposals[foundProposalIndex],
+              viewed: true
+            };
+            commit("setCommentsProposals", proposals);
+          }
+          commit("setSelectedProposal", {
+            ...proposal,
+            ...res
+          });
+          resolve(res);
+        })
+        .catch((res) => {
+          commit("setError", res.message);
+          reject(res.message);
+        });
+    });
+  },
+
   updateCommentComponent({ commit, state }, commentComponent) {
     return new Promise((resolve, reject) => {
       if (state.guestName) commentComponent = { ...commentComponent, name: state.guestName };
