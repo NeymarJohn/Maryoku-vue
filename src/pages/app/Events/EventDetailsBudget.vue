@@ -751,15 +751,15 @@ export default {
         // };
         const elements = [];
         elements.push(overview);
-        // if (this.event.eventType.hasConcept) {
         elements.push(concept);
-        // }
         elements.push(budget);
-        elements.push(timeline);
-        elements.push(campaign);
-        if (this.event.budgetProgress > 0) {
+
+        if (this.event.budgetProgress === 100) {
           elements.push(planningBoard);
         }
+        elements.push(timeline);
+        elements.push(campaign);
+
         return elements;
       } else {
         return this.event.checkList;
