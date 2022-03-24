@@ -155,9 +155,14 @@
                         <button class="md-button md-vendor md-theme-default sidebar__item__btn">Submit</button>
                 </div> -->
     </div>
-
     <div v-if="!fullDiscussion && commentsProposals.length > 0" class="sidebar__items d-flex flex-column">
-      <div v-for="(proposal, pindex) in commentsProposals" :key="pindex" class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer" :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}" @click="changeProposal(proposal)">
+      <div
+        v-for="(proposal, pindex) in commentsProposals"
+        :key="pindex"
+        class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer"
+        :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}"
+        @click="changeProposal(proposal)"
+      >
         <div class="d-flex align-item-center sidebar__item__content">
           <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
           <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
@@ -176,7 +181,7 @@
         <button v-if="proposal.unread_count == 0 && proposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(proposal,true)">
           Full Discussion
         </button>
-        <span v-if="proposal.unread_count" class="unread-count">{{ proposal.unread_count }}</span>
+        <span v-if="!proposal.viewed && proposal.unread_count" class="unread-count">{{ proposal.unread_count }}</span>
       </div>
     </div>
     <div class="no-comments-wrapper">
@@ -201,7 +206,6 @@
 </template>
 
 <script>
-
 import {mapMutations} from "vuex";
 import {PROPOSAL_PAGE_PAGINATION} from "@/constants/pagination";
 import {getReq} from "@/utils/token";
@@ -217,10 +221,9 @@ const components = {
 };
 
 export default {
-    name: "InboxSidebar",
-    components,
-    mixins: [CommentMixins],
-    props: {},
+  name: "InboxSidebar",
+  components,
+  mixins: [CommentMixins],
   data: () => ({
     loading: false,
     pagination: PROPOSAL_PAGE_PAGINATION,
@@ -242,215 +245,199 @@ export default {
     selectedComponent: null,
     customers: [],
   }),
-    computed: {
-        vendor() {
-            return this.$store.state.vendor.profile;
-        },
-        commentsProposals() {
-
-            let proposals = [];
-
-            for (let proposal of this.proposals) {
-                // if (proposal.commentComponent.length) {
-                    proposal.unread_count = this.getViewCount(proposal.commentComponent);
-                    proposals.push(proposal);
-                // }
-                proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
-            }
-
-            if (this.sortBy == "status") {
-                proposals.sort((a, b) => {
-                    if (this.statusSortType == "asc") {
-                        return b.unread_count - a.unread_count;
-                    }
-
-                    return a.unread_count - b.unread_count;
-                });
-            }
-
-            if (this.sortBy == "date") {
-                proposals.sort((a, b) => {
-                    if (this.sortType == "asc") {
-                        return a.dateCreated - b.dateCreated;
-                    }
-
-                    return b.dateCreated - a.dateCreated;
-                });
-            }
-
-            if (this.sortBy == "name") {
-                proposals.sort((a, b) => {
-                    if (this.sortType == "asc") {
-                        return a.eventData.customer.name > b.eventData.customer.name ? 1 : -1;
-                    }
-
-                    return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
-                });
-            }
-            return proposals;
-        },
-        proposals() {
-            console.log("checkpoint", this.$store.state.comment.commentsProposals);
-            return this.$store.state.comment.commentsProposals;
-        },
-        selectedProposal() {
-
-            if(this.$store.state.commentProposal.proposal){
-              this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
-            }
-            console.log("comput this.commentComponents",this.commentComponents);
-            return this.$store.state.commentProposal.proposal;
-        },
-        updatedCommentComponents(){
-            if(this.$store.state.commentProposal.proposal){
-              this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
-            }
-            console.log("comput this.commentComponents1",this.commentComponents);
-            return this.$store.state.commentProposal.proposal.commentComponent;
-        }
+  computed: {
+    vendor() {
+      return this.$store.state.vendor.profile;
     },
-    watch: {
-        proposals() {
-            console.log("this.commentsProposals", this.commentsProposals.length);
-            if (this.commentsProposals.length && this.selectedProposal == null) {
-                this.changeProposal(this.commentsProposals[0]);
-            }
-        }
-    },
+    commentsProposals() {
+      let proposals = [];
+      for (let proposal of this.proposals) {
+        // if (proposal.commentComponent.length) {
+        proposal.unread_count = this.getViewCount(proposal.commentComponent);
+        proposals.push(proposal);
+        // }
+        proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
+      }
 
-    created() {},
-    mounted() {
-    },
-    methods: {
-        ...mapMutations("comment", ["setSelectedProposal"]),
-      createNewProposal() {
-        let routeData = this.$router.resolve({
-          name: "outsideProposalCreate",
-          params: {
-            vendorId: this.vendor.id,
-          },
+      if (this.sortBy == "status") {
+        proposals.sort((a, b) => {
+          if (this.statusSortType == "asc") {
+            return b.unread_count - a.unread_count;
+          }
+          return a.unread_count - b.unread_count;
         });
-        window.open(routeData.href, "_blank");
-      },
-        changeProposal(proposal,fullDiscussion = false) {
-            this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
-            setTimeout(() => {
-                this.fullDiscussion = fullDiscussion;
-            },100);
-        },
-        getViewCount(commentComponents = []) {
-            let count = 0;
-            for (let commentComponent of commentComponents) {
-                for (let comment of (commentComponent.comments || [])) {
-                    if (!comment.viewed) {
-                        count++;
-                    }
-                }
-            }
+      }
 
-            return count;
-        },
-        changeStatusSortType() {
-            this.statusSortType = this.statusSortType == "asc" ? "desc" : "asc";
-            this.sortBy = "status";
-        },
-        changeSortType() {
-            this.sortType = this.sortType == "asc" ? "desc" : "asc";
-            if (this.sortBy == "") {
-                this.sortBy = "date";
-            }
-        },
-        changeCommentSortType(sortByType) {
-            if(sortByType == "name"){
-                this.commentSortType = this.commentSortType == "asc" ? "desc" : "asc";
-            }
+      if (this.sortBy == "date") {
+        proposals.sort((a, b) => {
+            if (this.sortType == "asc") {
+            return a.dateCreated - b.dateCreated;
+          }
+          return b.dateCreated - a.dateCreated;
+        });
+      }
 
-            if(sortByType == "status"){
-                this.commentStatusSortType = this.commentStatusSortType == "asc" ? "desc" : "asc";
-            }
-
-            this.commentSortBy = sortByType;
-
-            let components2 = [];
-
-            for (let component of this.commentComponents) {
-                if (component.comments.length) {
-                    component.unread_count = this.getViewCount(component.comments);
-                    components2.push(component);
-                }
-            }
-            if(sortByType == "name"){
-                if (this.commentSortBy == "name") {
-                    components2.sort((a, b) => {
-                        let name1 = a.customer ? a.customer.name : a.planner.name;
-                        let name2 = b.customer ? b.customer.name : b.planner.name;
-                        if (this.commentSortType == "asc") {
-                            return name1 > name2 ? 1 : -1;
-                        }else{
-                            return name1 < name2 ? 1 : -1;
-                        }
-                    });
-                }
-            }
-
-
-            if(sortByType == "status"){
-                if (this.commentSortBy == "status") {
-                    components2.sort((a, b) => {
-                        if (this.commentStatusSortType == "asc") {
-                            return b.unread_count - a.unread_count;
-                        }
-
-                        return a.unread_count - b.unread_count;
-                    });
-                }
-            }
-
-            this.commentComponents = components2;
-        },
-        toggleshowReply(commentIndex) {
-            this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
-            this.selectedComponent = this.selectedProposal.commentComponent[commentIndex];
-        },
-        async getMessage(e) {
-            if (e.target.value.includes("@")) {
-                let queryArray = e.target.value.split("@");
-
-                let res = await getReq(`/1/customers?name=${queryArray[1]}`);
-                console.log("customers", res);
-                this.customers = res.data;
-
-                this.showAddress = true;
-            }
-        },
-        async saveCommentReply(event, type) {
-          let selectedComponent = this.selectedComponent;
-          console.log("saveComment", selectedComponent);
-          const comment = {
-                commentComponent: { id: selectedComponent.id },
-                description: this.editingComment,
-                parentId: this.mainComment ? this.mainComment.id : null,
-                email: this.selectedCustomer ? this.selectedCustomer.email : null,
-                viewed:true
-          };
-          this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
-          this.editingComment = "";
-          event.stopPropagation();
-        },
-        toAddress(customer){
-          console.log("toAddress", customer, this.editingComment);
-
-          this.selectedCustomer = customer;
-          let queryArray = this.editingComment.split("@");
-          queryArray[1] = customer.name;
-
-          this.editingComment = queryArray.join("@") + " ";
-          this.showAddress = false;
-        },
-        daysDiff(date){
-            return moment(moment()).diff(moment(date), "days");
-        }
+      if (this.sortBy == "name") {
+        proposals.sort((a, b) => {
+          if (this.sortType == "asc") {
+            return a.eventData.customer.name > b.eventData.customer.name ? 1 : -1;
+          }
+          return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
+        });
+      }
+      return proposals;
+    },
+    proposals() {
+      console.log("checkpoint", this.$store.state.comment.commentsProposals);
+      return this.$store.state.comment.commentsProposals;
+    },
+    selectedProposal() {
+      if (this.$store.state.commentProposal.proposal){
+        this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
+      }
+      console.log("comput this.commentComponents",this.commentComponents);
+      return this.$store.state.commentProposal.proposal;
+    },
+  },
+  watch: {
+    proposals() {
+      console.log("this.commentsProposals", this.commentsProposals.length);
+      if (this.commentsProposals.length && this.selectedProposal == null) {
+        this.changeProposal(this.commentsProposals[0]);
+      }
     }
+  },
+  created() {
+    console.log("show log 5", this.$store.state.comment.commentsProposals);
+  },
+  methods: {
+      ...mapMutations("comment", ["setSelectedProposal"]),
+    createNewProposal() {
+      let routeData = this.$router.resolve({
+        name: "outsideProposalCreate",
+        params: {
+          vendorId: this.vendor.id,
+        },
+      });
+      window.open(routeData.href, "_blank");
+    },
+    changeProposal(proposal,fullDiscussion = false) {
+      this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
+      setTimeout(() => {
+        this.fullDiscussion = fullDiscussion;
+      },100);
+    },
+    getViewCount(commentComponents = []) {
+      let count = 0;
+      for (let commentComponent of commentComponents) {
+        for (let comment of (commentComponent.comments || [])) {
+          if (!comment.viewed) {
+            count++;
+          }
+        }
+      }
+      return count;
+    },
+    changeStatusSortType() {
+      this.statusSortType = this.statusSortType == "asc" ? "desc" : "asc";
+      this.sortBy = "status";
+    },
+    changeSortType() {
+      this.sortType = this.sortType == "asc" ? "desc" : "asc";
+      if (this.sortBy == "") {
+        this.sortBy = "date";
+      }
+    },
+    changeCommentSortType(sortByType) {
+      if(sortByType == "name"){
+        this.commentSortType = this.commentSortType == "asc" ? "desc" : "asc";
+      }
+
+      if(sortByType == "status"){
+        this.commentStatusSortType = this.commentStatusSortType == "asc" ? "desc" : "asc";
+      }
+
+      this.commentSortBy = sortByType;
+
+      let components2 = [];
+
+      for (let component of this.commentComponents) {
+        if (component.comments.length) {
+          component.unread_count = this.getViewCount(component.comments);
+          components2.push(component);
+        }
+      }
+      if(sortByType == "name"){
+        if (this.commentSortBy == "name") {
+          components2.sort((a, b) => {
+            let name1 = a.customer ? a.customer.name : a.planner.name;
+            let name2 = b.customer ? b.customer.name : b.planner.name;
+            if (this.commentSortType == "asc") {
+                return name1 > name2 ? 1 : -1;
+            } else{
+                return name1 < name2 ? 1 : -1;
+            }
+          });
+        }
+      }
+
+
+      if(sortByType == "status"){
+        if (this.commentSortBy == "status") {
+          components2.sort((a, b) => {
+            if (this.commentStatusSortType == "asc") {
+              return b.unread_count - a.unread_count;
+            }
+            return a.unread_count - b.unread_count;
+          });
+        }
+      }
+
+      this.commentComponents = components2;
+    },
+    toggleshowReply(commentIndex) {
+      this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
+      this.selectedComponent = this.selectedProposal.commentComponent[commentIndex];
+    },
+    async getMessage(e) {
+      if (e.target.value.includes("@")) {
+        let queryArray = e.target.value.split("@");
+
+        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
+        console.log("customers", res);
+        this.customers = res.data;
+
+        this.showAddress = true;
+      }
+    },
+    async saveCommentReply(event, type) {
+      let selectedComponent = this.selectedComponent;
+      console.log("saveComment", selectedComponent);
+      const comment = {
+        commentComponent: { id: selectedComponent.id },
+        description: this.editingComment,
+        parentId: this.mainComment ? this.mainComment.id : null,
+        email: this.selectedCustomer ? this.selectedCustomer.email : null,
+        viewed: true
+      };
+      this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
+      this.editingComment = "";
+      event.stopPropagation();
+    },
+    toAddress(customer){
+      console.log("toAddress", customer, this.editingComment);
+
+      this.selectedCustomer = customer;
+      let queryArray = this.editingComment.split("@");
+      queryArray[1] = customer.name;
+
+      this.editingComment = queryArray.join("@") + " ";
+      this.showAddress = false;
+    },
+    daysDiff(date){
+        return moment(moment()).diff(moment(date), "days");
+    }
+  }
 };
 
 </script>

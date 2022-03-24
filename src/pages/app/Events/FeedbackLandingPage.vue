@@ -144,7 +144,7 @@
         <div class="lets_share_text">
           Let's share all this fun :)
         </div>
-        <sharing-button-group class="sharing-button-group-wrapper" :link="this.campaign.referenceUrl" :copy-link="true" />
+        <sharing-button-group class="sharing-button-group-wrapper" :link="campaign.referenceUrl" :copy-link="true" />
       </div>
       <div style="color: #fff" class="ml-50">
         last block

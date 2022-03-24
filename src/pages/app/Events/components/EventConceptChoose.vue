@@ -268,7 +268,6 @@ import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 import { Modal, Loader } from "@/components";
 
-import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
@@ -289,7 +288,6 @@ export default {
     SlideYDownTransition,
     InputMask,
     Modal,
-    ColorButton,
     EventConceptEditForm,
     HeaderActions,
     CommentEditorPanel,

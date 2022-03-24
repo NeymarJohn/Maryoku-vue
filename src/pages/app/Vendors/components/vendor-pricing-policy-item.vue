@@ -302,6 +302,7 @@
 </template>
 <script>
 import CategorySelector from "@/components/Inputs/CategorySelector";
+
 export default {
   name: "VendorPricingPolicyItem",
   components: [CategorySelector],
