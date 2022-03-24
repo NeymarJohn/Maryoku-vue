@@ -88,109 +88,116 @@
 </template>
 <script>
 
-import Chart from "../components/Chart";
+    import Chart from "../components/Chart";
+    import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 
-export default {
-  components: {
-    Chart,
-  },
-  props: {
+    export default {
+        components: {
+          VendorBidTimeCounter,
+          Chart,
+        },
+        props: {
 
-  },
-  data() {
-    return {
-      data: {
-        labels: ["Jan", "", "", "", "", "Jun", "", "", "", "", "", "Dec" ],
-        datasets: [
-          {
-            label: "",
-            data : [0, 10, 30, 60, 45, 30, 40, 40, 30, 15, 30, 20],
-            fill: true,
-            borderColor: "#2cde6b",
-            backgroundColor: "#2cde6b",
-            gradient: true,
-            // tension: 0.4,
-          },
-          {
-            label: "",
-            data : [0, 15, 40, 80, 60, 40, 50, 45, 40, 25, 35, 30],
-            fill: true,
-            borderColor: "#641856",
-            backgroundColor: "#641856",
-            gradient: true,
-            // tension: 0.4,
-          },
-        ]
-      },
-      options: {
-        legend: {
-            display: false,
         },
-        elements: {
-            point: {
-                radius: 0,
-            },
-        },
-        layout: {
-            padding: {
-                left: 20,
-                right: 10,
-                top: 25,
-                bottom: 10,
-            },
-        },
-        scales: {
-          y: {
-            suggestedMin: 0,
-            suggestedMax: 100,
-          },
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: false,
-                fontColor: "black",
-                padding: 5,
-                fontSize: 10,
-                min: 0,
-                max: 100,
-                callback: function (label, idx, labels) {
-                  return `${label}%`;
-                }
+        data() {
+          return {
+              data: {
+                  labels: ["Jan", "", "", "", "", "Jun", "", "", "", "", "", "Dec" ],
+                  datasets: [
+                      {
+                          label: "",
+                          data : [0, 10, 30, 60, 45, 30, 40, 40, 30, 15, 30, 20],
+                          fill: true,
+                          borderColor: "#2cde6b",
+                          backgroundColor: "#2cde6b",
+                          gradient: true,
+                          // tension: 0.4,
+                      },
+                      {
+                          label: "",
+                          data : [0, 15, 40, 80, 60, 40, 50, 45, 40, 25, 35, 30],
+                          fill: true,
+                          borderColor: "#641856",
+                          backgroundColor: "#641856",
+                          gradient: true,
+                          // tension: 0.4,
+                      },
+                  ]
               },
-            },
-          ],
-          xAxes: [
-            {
-              barThickness: 10,
-              ticks: {
-                beginAtZero: false,
-                fontColor: "black",
-                padding: 5,
-                fontSize: 12,
-              },
-            },
-          ],
+              options: {
+                  legend: {
+                      display: false,
+                  },
+                  elements: {
+                      point: {
+                          radius: 0,
+                      },
+                  },
+                  layout: {
+                      padding: {
+                          left: 20,
+                          right: 10,
+                          top: 25,
+                          bottom: 10,
+                      },
+                  },
+                  scales: {
+                      y: {
+                          suggestedMin: 0,
+                          suggestedMax: 100,
+                      },
+                      yAxes: [
+                          {
+                              ticks: {
+                                  beginAtZero: false,
+                                  fontColor: "black",
+                                  padding: 5,
+                                  fontSize: 10,
+                                  min: 0,
+                                  max: 100,
+                                  callback: function (label, idx, labels) {
+                                    return `${label}%`;
+                                  }
+                              },
+                          },
+                      ],
+                      xAxes: [
+                          {
+                              barThickness: 10,
+                              ticks: {
+                                  beginAtZero: false,
+                                  fontColor: "black",
+                                  padding: 5,
+                                  fontSize: 12,
+                              },
+                          },
+                      ],
+                  },
+              }
+          };
         },
-      }
+        computed: {
+
+        },
+        watch:{
+        },
+        mounted() {
+          this.init();
+        },
+        methods: {
+           init(){
+           },
+           next(){
+             console.log("next");
+           },
+           prev(){
+             console.log("prev");
+           },
+           getRadius(ctx){
+               console.log(ctx.dataIndex);
+           }
+        }
     };
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-   init(){
-   },
-   next(){
-     console.log("next");
-   },
-   prev(){
-     console.log("prev");
-   },
-   getRadius(ctx){
-       console.log(ctx.dataIndex);
-   }
-  }
-};
 </script>
 <style lang="scss" scoped>
 .num {

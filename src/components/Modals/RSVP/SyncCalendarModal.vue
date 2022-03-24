@@ -97,10 +97,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    rsvp: {
-      type: [Object],
-      default: () => ({}),
-    },
+    rsvp: [Object],
   },
   data() {
     return {
@@ -111,6 +108,7 @@ export default {
     };
   },
   created() {
+    console.log(this.campaign);
     this.api = gapi;
     this.initClient();
   },
@@ -172,6 +170,7 @@ export default {
         const vm = this;
         request.execute(function (event) {
           // appendPre("Event created: " + event.htmlLink);
+          console.log(event.htmlLink);
           Swal.fire({
             title: "Thank you for your attending!",
             text: "See you there!",

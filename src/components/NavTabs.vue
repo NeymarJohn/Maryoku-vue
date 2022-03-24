@@ -48,30 +48,12 @@
 export default {
   name: "NavTabs",
   props: {
-    navigationDisabled: {
-      type: Boolean,
-      required: true,
-    },
-    flexColumn: {
-      type: Boolean,
-      required: true,
-    },
-    navPillsIcons: {
-      type: Boolean,
-      required: true,
-    },
-    plain: {
-      type: Boolean,
-      required: true,
-    },
-    tabName: {
-      type: Array,
-      required: true,
-    },
-    tabIcon: {
-      type: Array,
-      required: true,
-    },
+    navigationDisabled: Boolean,
+    flexColumn: Boolean,
+    navPillsIcons: Boolean,
+    plain: Boolean,
+    tabName: Array,
+    tabIcon: Array,
     colorButton: {
       type: String,
       default: ""

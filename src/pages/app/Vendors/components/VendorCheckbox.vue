@@ -284,7 +284,12 @@
 </template>
 
 <script>
+import moment from "moment";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
+
 //COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import VendorCustomServiceItem from "../components/VendorCustomServiceItem.vue";
 
@@ -292,6 +297,7 @@ export default {
   name: "VendorCheckbox",
   components: {
     CategorySelector,
+    VueElementLoading,
     VendorCustomServiceItem,
   },
   filters: {},

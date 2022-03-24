@@ -120,6 +120,7 @@
         <div class="md-layout-item md-size-75">
           <div class="text-center">
             <TablePagination
+
               v-if="pagination.pageCount"
               class="mt-30"
               :page-count="pagination.pageCount"

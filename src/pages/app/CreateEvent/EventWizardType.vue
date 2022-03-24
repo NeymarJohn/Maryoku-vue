@@ -6,7 +6,7 @@
       </div>
       <div class="event-type event-basic-info">
         <div class="setting-title mt-3">
-          What type of event are you planning on?
+          What type of event are you planning?
         </div>
         <div class="mt-3 types">
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />

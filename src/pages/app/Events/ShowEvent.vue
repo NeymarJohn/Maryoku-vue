@@ -116,6 +116,7 @@
 
 <script>
 // MAIN MODULES
+import ChartComponent from "@/components/Cards/ChartComponent";
 
 import ProfileSettings from "@/pages/app/Profile/ProfileSettings";
 import MyEventsPanel from "@/pages/app/Profile/MyEventsPanel";
@@ -127,7 +128,10 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventInvitee from "@/models/EventInvitee";
 
 // COMPONENTS
+import { AnimatedNumber } from "@/components";
+import Icon from "@/components/Icon/Icon.vue";
 import { Tabs } from "@/components";
+import { Collapse } from "@/components";
 
 // EVENT COMPONENTs
 import EventBanner from "./components/EventBlocks/EventBanner.vue";
@@ -135,18 +139,28 @@ import EventTabs from "./components/EventBlocks/EventTabs.vue";
 import EventImages from "./components/EventBlocks/EventImages.vue";
 import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue";
 import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue";
+import EventConfirmation from "./components/EventBlocks/EventConfirmation.vue";
 import SignInSignUpPanel from "./SignInSignUpPanel.vue";
+import DietaryConstraintsModal from "./components/EventBlocks/Modals/DietaryConstraintsModal.vue";
 import EventInviteeResponse from "../../../models/EventInviteeResponse";
 
 export default {
   components: {
     VueElementLoading,
+    ChartComponent,
+    AnimatedNumber,
+    Icon,
+    Collapse,
     Tabs,
     EventBanner,
     EventTabs,
     EventImages,
     EventQuestionsAnswers,
     EventTimeLineItems,
+    EventConfirmation,
+    SignInSignUpPanel,
+    DietaryConstraintsModal,
+    MyEventsPanel,
   },
   filters: {
     formatDate: function (date) {

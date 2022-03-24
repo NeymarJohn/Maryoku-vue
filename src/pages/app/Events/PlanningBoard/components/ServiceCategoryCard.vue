@@ -182,6 +182,7 @@ export default {
     }
   },
   created() {
+    console.log('service.card', this.defaultData)
     this.selectedServices = [...this.defaultData];
   },
   methods: {
@@ -286,6 +287,7 @@ export default {
     position: absolute;
     right: 20px;
     height: 50px;
+    z-index: 2;
     border: 1px solid #f51355;
     &.notSelected {
       background-color: white !important;
