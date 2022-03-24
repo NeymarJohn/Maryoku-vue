@@ -59,8 +59,7 @@
   </transition>
 </template>
 <script>
-
-import { NOTIFICATION } from "@/constants/modal";
+import {NOTIFICATION} from "@/constants/modal";
 import {mapMutations} from "vuex";
 
 const components = {
@@ -69,50 +68,51 @@ const components = {
 };
 
 export default {
-    components,
-    props: {
-        containerClass: {
-            type: String,
-            default: "modal-container",
-        },
-        allowClickOutside: {
-            type: Boolean,
-            default: true,
-        },
-        name: {
-            type: String,
-        }
+  components,
+  props: {
+    containerClass: {
+      type: String,
+      default: "modal-container",
     },
-    data(){
-        return {
-            notification: NOTIFICATION,
-            loading: false,
-        };
+    allowClickOutside: {
+      type: Boolean,
+      default: true,
     },
-    methods:{
-        ...mapMutations("modal", ["setOpen"]),
-        closeModal: function () {
-            this.setOpen(null);
-        },
-        modalMaskClick: function (event) {
-            event.stopPropagation();
-            return;
-        },
-        async selectRate(score){
-            if (!this.proposal) return;
-            this.loading = true;
-            this.score = score;
-            this.proposal = {...this.proposal, score};
-
-            await this.$store.dispatch("modal/saveProposal", this.proposal);
-            this.loading = false;
-        }
-    },
-    computed:{
-        proposal() {
-            return this.$store.state.modal.proposal;
-        }
+    name: {
+      type: String,
+      required: true,
     }
+  },
+  data(){
+    return {
+      notification: NOTIFICATION,
+      loading: false,
+    };
+  },
+  computed:{
+    proposal() {
+      return this.$store.state.modal.proposal;
+    }
+  },
+  methods: {
+    ...mapMutations("modal", ["setOpen"]),
+    closeModal: function () {
+      this.setOpen(null);
+    },
+    modalMaskClick: function (event) {
+      event.stopPropagation();
+      return;
+    },
+    async selectRate(score){
+      if (!this.proposal) return;
+      this.loading = true;
+      this.score = score;
+      this.proposal = {...this.proposal, score};
+
+      await this.$store.dispatch("modal/saveProposal", this.proposal);
+      this.loading = false;
+    }
+  },
 };
 </script>
 <style lang="scss">

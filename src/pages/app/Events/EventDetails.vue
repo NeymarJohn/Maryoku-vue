@@ -6,41 +6,18 @@
 
 <script>
 // MAIN MODULES
-import ChartComponent from "@/components/Cards/ChartComponent";
-// import auth from '@/auth'
 import moment from "moment";
-import VueElementLoading from "vue-element-loading";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventPlannerVuexModule from "./EventPlanner.vuex";
-import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 // COMPONENTS
-import { AnimatedNumber } from "@/components";
-import Icon from "@/components/Icon/Icon.vue";
-import { Collapse } from "@/components";
-
-// EVENT COMPONENTs
-import EventBanner from "./components/EventBlocks/EventBanner.vue";
-import EventTabs from "./components/EventBlocks/EventTabs.vue";
-import EventImages from "./components/EventBlocks/EventImages.vue";
-import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue";
-import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue";
-import PublishEventModal from "./components/EventBlocks/Modals/PublishEvent.vue";
+import VueElementLoading from "vue-element-loading";
 
 export default {
   components: {
     VueElementLoading,
-    ChartComponent,
-    AnimatedNumber,
-    Icon,
-    Collapse,
-    EventBanner,
-    EventTabs,
-    EventImages,
-    EventQuestionsAnswers,
-    EventTimeLineItems,
-    PublishEventModal
   },
   props: {
     event: {

@@ -95,16 +95,18 @@ export default {
   },
   async created() {
     this.loading = true;
-    this.selectProposal();
     if (this.loggedInUser) {
       await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
     }
     await this.$store.dispatch("common/getEventTypes");
     this.loading = false;
   },
+  mounted(){
+    this.selectProposal();
+  },
   methods: {
     ...mapActions("commentProposal", ["saveVersion"]),
-    ...mapActions("comment", ["getProposalById", "updateCommentsComponentsViewed"]),
+    ...mapActions("comment", ["getProposalById"]),
     ...mapMutations("commentProposal", ["updateCommentComponents"]),
     ...mapMutations("comment", ["setGuestName","setSelectedProposal"]),
     ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
@@ -222,15 +224,6 @@ export default {
     proposals(){
       this.selectProposal();
     },
-    proposal(newValue) {
-      const everyCommentViewed = newValue.commentComponent.every(
-        ({ comments }) => comments.every(({ viewed }) => viewed)
-      );
-      if (!newValue.viewed && everyCommentViewed) {
-        console.log("show log everyCommentViewed");
-        this.updateCommentsComponentsViewed();
-      }
-    }
   }
 };
 

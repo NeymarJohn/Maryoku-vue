@@ -40,7 +40,6 @@
               :is-main="true"
               :replies="replies.length"
               @updateComment="updateComment"
-              @updateCommentViewed="updateCommentViewed"
               @resolve="resolveCommentComponent"
               @favorite="markAsFavorite"
               @delete="deleteComment"
@@ -51,7 +50,6 @@
               :comment="comment"
               :is-main="false"
               @updateComment="updateComment"
-              @updateCommentViewed="updateCommentViewed"
               @resolve="resolveCommentComponent"
               @favorite="markAsFavorite"
               @delete="deleteComment"
@@ -118,34 +116,34 @@ export default {
     CommentItem,
   },
   props:{
-    commentComponents:{
-      type: Array,
-      required: true,
-    },
-    proposal:{
-      type: Object,
-      default: () => {}
-    },
-    url:{
-      type: String,
-      default: ""
-    },
-    ignoreXOffset:{
-      type: Number,
-      default:0
-    },
-    isVendor:{
-      type: Boolean,
-      required: false,
-      default:false
-    }
+      commentComponents:{
+        type: Array,
+        required: true,
+      },
+      proposal:{
+        type: Object,
+        default: () => {}
+      },
+      url:{
+        type: String,
+        default: ""
+      },
+      ignoreXOffset:{
+        type: Number,
+        default:0
+      },
+      isVendor:{
+        type: Boolean,
+        required: false,
+        default:false
+      }
   },
   data() {
     let updatedCommentComponents = JSON.parse(JSON.stringify(this.commentComponents));
     return {
       items: [],
       mostRecentClickCoordinates: null,
-      selectedComponentIndex: -1,
+      selectedComponentIndex : -1,
       hoveredComponent: null,
       comments: [],
       editingComment: "",
@@ -162,9 +160,10 @@ export default {
       showAddress: false,
       customers: [],
       selectedCustomer: null,
-      updatedCommentComponents: updatedCommentComponents
+      updatedCommentComponents:updatedCommentComponents
     };
   },
+
   computed: {
     selectedCommentComponent() {
       return this.updatedCommentComponents[this.selectedComponentIndex];
@@ -186,9 +185,11 @@ export default {
     }
   },
   watch:{
-    commentComponents(newVal) {
+    commentComponents(newVal){
       this.updatedCommentComponents = JSON.parse(JSON.stringify(newVal));
-    },
+    }
+  },
+  created() {
   },
   methods: {
     ...mapActions("comment", [
@@ -317,11 +318,11 @@ export default {
     async saveComment(event, type) {
       let selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
       const comment = {
-        commentComponent: { id: selectedComponent.id },
-        description: this.editingComment,
-        parentId: this.mainComment ? this.mainComment.id : null,
-        email: this.selectedCustomer ? this.selectedCustomer.email : null,
-        viewed: this.isVendor
+            commentComponent: { id: selectedComponent.id },
+            description: this.editingComment,
+            parentId: this.mainComment ? this.mainComment.id : null,
+            email: this.selectedCustomer ? this.selectedCustomer.email : null,
+            viewed:this.isVendor
       };
       this.$emit("saveComment", {component: selectedComponent, comment, index: this.selectedComponentIndex});
 
@@ -362,6 +363,7 @@ export default {
       this.updatedCommentComponents[this.selectedComponentIndex].comments[commentIndex] = comment;
       this.$emit("updateComment", {comment, component: new EventCommentComponent({id: selectedComponent.id})});
     },
+
     deleteComment(comment) {
       this.$emit("deleteComment", {comment, index:this.selectedComponentIndex} );
     },
@@ -369,10 +371,7 @@ export default {
       this.editingCommentId = "";
 
       const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
-      this.$emit("updateComment", {comment, component: new EventCommentComponent({ id: selectedComponent.id })});
-    },
-    updateCommentViewed(comment) {
-      this.$emit("updateComment", { comment, component: new EventCommentComponent({ id: selectedComponent.id }) });
+      this.$emit("updateComment", {comment, component: new EventCommentComponent({id: selectedComponent.id})});
     },
     movedCommentComponent(movedCommentComponent) {
       const commentComponent = new EventCommentComponent({
@@ -499,7 +498,7 @@ export default {
   z-index: 4999;
 }
 .event-plan .click-capture {
-  //left: 400px;
+  left: 400px;
 }
 .comments-list {
   position: absolute;

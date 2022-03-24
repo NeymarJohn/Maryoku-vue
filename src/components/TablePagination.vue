@@ -27,7 +27,8 @@
     </li>
 
     <li
-      v-for="page in pages"
+      v-for="(page, key) in pages"
+      :key="key"
       class="page-item"
       :class="[
         pageClass,
@@ -89,6 +90,7 @@ export default {
     },
     value: {
       type: Number,
+      default: 0,
     },
     pageCount: {
       type: Number,
@@ -96,6 +98,7 @@ export default {
     },
     forcePage: {
       type: Number,
+      default: 0,
     },
     clickHandler: {
       type: Function,
@@ -121,32 +124,37 @@ export default {
       type: String,
       default: "…",
     },
-    containerClass: {
-      type: String,
-    },
     pageClass: {
       type: String,
+      default: "",
     },
     pageLinkClass: {
       type: String,
+      default: "",
     },
     prevClass: {
       type: String,
+      default: "",
     },
     prevLinkClass: {
       type: String,
+      default: "",
     },
     nextClass: {
       type: String,
+      default: "",
     },
     nextLinkClass: {
       type: String,
+      default: "",
     },
     breakViewClass: {
       type: String,
+      default: "",
     },
     breakViewLinkClass: {
       type: String,
+      default: "",
     },
     activeClass: {
       type: String,

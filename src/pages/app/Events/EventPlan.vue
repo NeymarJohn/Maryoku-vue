@@ -116,16 +116,15 @@ export default {
           elements.push(overview);
           elements.push(concept);
           elements.push(budget);
-          elements.push(timeline);
-          elements.push(campaign);
-          if (this.event.budgetProgress > 0) {
+          if (this.event.budgetProgress === 100) {
               elements.push(planningBoard);
           }
+          elements.push(timeline);
+          elements.push(campaign);
       } else if(this.user.currentUserType === "guest") {
           elements.push(overview);
           elements.push(planningBoard);
       }
-
 
       // show when you approve budget
       // if (this.event.budgetProgress == 100) {
