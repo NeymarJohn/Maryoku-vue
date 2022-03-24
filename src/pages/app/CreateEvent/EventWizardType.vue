@@ -20,7 +20,13 @@
             <div>
               <img :src="`${$iconURL}Onboarding/${type.key}.svg`">
             </div>
-            <div>
+             <div v-if="type.name === 'Reception'">
+              Reception / Party
+            </div>
+            <div v-else-if="type.name === 'Establishment / Activity Day'">
+             Activity Day
+            </div>
+            <div v-else>
               {{ type.name }}
             </div>
             <div>
