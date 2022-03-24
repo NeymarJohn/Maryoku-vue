@@ -180,6 +180,7 @@ const mutations = {
     Vue.set(state, key, value);
   },
   setCategoryRequirements(state, { category, requirement }) {
+    console.log('state.setReq', category, requirement)
     Vue.set(state.requirements, category, requirement);
   },
   setMainRequirements(state, { category, data }) {

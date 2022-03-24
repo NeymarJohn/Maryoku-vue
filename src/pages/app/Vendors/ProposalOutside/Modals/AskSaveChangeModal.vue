@@ -7,7 +7,9 @@
     </template>
     <template slot="body">
       <div class="text-left font-size-28 font-bold-extra pl-20">
-        <img :src="`${$iconURL}vendordashboard/group-10662.svg`" class="page-icon mr-10">
+        <img :src="`${$iconURL}vendordashboard/group-
+10662.svg`" class="page-icon mr-10"
+        >
         Pricing Change
       </div>
       <div class="my-40 pl-20 text-left">
@@ -34,12 +36,16 @@
 </template>
 
 <script>
-import { Modal } from "@/components";
+import { Modal, MaryokuInput } from "@/components";
 
 export default {
-  name: "AskSaveChangeModal",
+  name: "QuestionModal",
   components: {
     Modal,
+  },
+  props: {
+    show: [Boolean],
+    value: [Number],
   },
   data: () => {
     return {

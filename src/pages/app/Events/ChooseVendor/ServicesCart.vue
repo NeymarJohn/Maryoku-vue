@@ -205,7 +205,6 @@ export default {
     proposal(newVal){}
   },
   created() {
-      console.log('cart.created', this.cart)
   },
   methods: {
     close() {

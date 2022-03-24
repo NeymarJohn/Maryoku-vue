@@ -18,7 +18,7 @@
         />
         <div v-if="currentStep == 1" class="status-description">
           <img :src="`${$iconURL}Onboarding/clover.svg`">
-          Only 5 simple steps to begin planning your perfect event!
+          Only 5 simple steps to your perfect event
         </div>
         <div v-if="currentStep == 2" class="status-description">
           <img :src="`${$iconURL}Onboarding/strength.svg`">

@@ -129,7 +129,7 @@
         </md-button>
       </div>
     </div>
-    <ask-save-change-modal
+    <ask-save-change
       v-if="showAskSaveChangeModal"
       @cancel="showAskSaveChangeModal = false"
       @save="handleSave"
@@ -138,11 +138,11 @@
 </template>
 
 <script>
-import AskSaveChangeModal from "./Modals/AskSaveChangeModal";
+import AskSaveChange from "./Modals/AskSaveChangeModal";
 
 export default {
-  components: {
-    AskSaveChangeModal,
+  components: { 
+    AskSaveChange 
   },
   props: {
     optionalRequirements: {

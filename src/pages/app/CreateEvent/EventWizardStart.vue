@@ -13,11 +13,11 @@
           <span v-else>!</span>
         </div>
         <div>
-          Please answer a few questions to complete the background we need to begin!
+          Please answer a few questions to complete the background we need!
         </div>
         <div class="font-bold mt-4rem">
           <img :src="`${$iconURL}Onboarding/clover.svg`">
-          Only 5 simple steps & you're signed in!
+          Only 5 simple steps & you're signed!
         </div>
         <div class="font-bold mt-4rem">
           <md-button class="md-default md-red md-maryoku mt-4" @click="goToNext">

@@ -15,9 +15,8 @@
             v-for="type in guestsTypes"
             :key="type.value"
             class="type-card"
-            :class="{ selected: isSelected(type.value) }"
-            @click="addType(type.value)"
-          
+            :class="{ selected: type.value == selectedType.value }"
+            @click="selectedType = type"
           >
             <div>
               <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
@@ -26,7 +25,7 @@
               {{ type.name }}
             </div>
             <div>
-              <md-checkbox v-model="selectedTypes" class="md-checkbox-circle md-red" :value="type" />
+              <md-checkbox v-model="selectedType" class="md-checkbox-circle md-red" :value="type" />
             </div>
           </div>
         </div>
@@ -56,7 +55,7 @@ export default {
   },
   created() {
     if (this.publicEventData.guestType) {
-      this.selectedTypes = this.guestsTypes.find((item) => item.value === this.publicEventData.guestType.value);
+      this.selectedType = this.guestsTypes.find((item) => item.value === this.publicEventData.guestType.value);
     }
     if (this.publicEventData.guestGroupName) {
       this.groupName = this.publicEventData.guestGroupName;
@@ -104,7 +103,7 @@ export default {
       });
     },
     goToNext() {
-      this.setEventProperty({ key: "guestType", actualValue: this.selectedTypes });
+      this.setEventProperty({ key: "guestType", actualValue: this.selectedType });
       this.setEventProperty({ key: "guestGroupName", actualValue: this.groupName });
       this.$router.push({ path: "/event-wizard-location" });
     },
@@ -114,21 +113,10 @@ export default {
     back() {
       this.$router.push({ path: "/event-wizard-guests" });
     },
-    addType(value) {
-      if (this.isSelected(value)) {
-        this.selectedTypes.splice(this.selectedTypes.indexOf(value), 1);
-      } else {
-        this.selectedTypes.push(value);
-      }
-    },
-      isSelected(value) {
-      return this.selectedTypes.indexOf(value) > -1;
-    },
   },
   data() {
     return {
       selectedType: "",
-      selectedTypes: [],
       groupName: "",
       guestsTypes: [
         {
@@ -138,7 +126,7 @@ export default {
         },
         {
           value: "employees-spouses",
-          name: " Employees Plus 1",
+          name: "Plus 1",
           selected: false,
         },
         {
@@ -153,7 +141,7 @@ export default {
         },
         {
           value: "customers",
-          name: "Clients or Customers",
+          name: "Customers",
           selected: false,
         },
         {

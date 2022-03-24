@@ -128,10 +128,10 @@
 <script>
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
+import { firstLetters } from "@/utils/helperFunction";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import ColorButton from "@/components/ColorButton";
-
 export default {
   components: {
     vSelect,
@@ -140,7 +140,7 @@ export default {
   props: {
     event: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
     editable: {
       type: Boolean,

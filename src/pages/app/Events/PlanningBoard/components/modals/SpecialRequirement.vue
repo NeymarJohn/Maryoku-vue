@@ -18,9 +18,7 @@
           Anything else?
         </div>
         <div class="mt-20">
-            Whether these values are at the heart of your event or simply close to your heart, we make it easy to <br/>
-            filter vendors based on various social, environmental, and wellbeing factors. <br/>
-            Simply check the boxes most relevant to your needs or concerns.
+          Would you like to add any of those categories?
         </div>
         <div class="tags mt-30">
           <tag-item
@@ -98,10 +96,10 @@ export default {
             subCategory: "",
             items: [
               { name: "Green policy", selected: false },
-              { name: "Water saving protocol", selected: false },
-              { name: "Renewable energy / energy efficient", selected: false },
-              { name: "Waste recycling procedure", selected: false },
-              { name: "Non-toxic products", selected: false },
+              { name: "Water saving protocols", selected: false },
+              { name: "Green power and energy efficient", selected: false },
+              { name: "Waste recycle procedures", selected: false },
+              { name: "Non toxic products", selected: false },
             ],
           },
         ],
@@ -109,10 +107,10 @@ export default {
           {
             subCategory: "",
             items: [
-              { name: "Prioritizes diversity and inclusion", selected: false },
-              { name: "Women in senior roles", selected: false },
-              { name: "Strict sexual harassment policy", selected: false },
-              { name: "Acknowledges all religious and cultural holidays", selected: false },
+              { name: "Prioritizing diversity and inclution", selected: false },
+              { name: "Women on senior staff", selected: false },
+              { name: "Strict sexual harrasment policy", selected: false },
+              { name: "Acknowledge all religious and cultural holidays", selected: false },
             ],
           },
         ],
@@ -246,21 +244,21 @@ export default {
         icon = "Shopping center";
       } else if (name === "Dining options within walking distance") {
         icon = "Food2";
-      } else if (name === "Water saving protocol") {
+      } else if (name === "Water saving protocols") {
         icon = "Water saving";
-      } else if (name === "Renewable energy / energy efficient") {
+      } else if (name === "Green power and energy efficient") {
         icon = "Green power";
-      } else if (name === "Waste recycling procedure") {
+      } else if (name === "Waste recycle procedures") {
         icon = "Waste recycle";
-      } else if (name === "Non-toxic products") {
+      } else if (name === "Non toxic products") {
         icon = "Non toxic";
-      } else if (name === "Prioritizes diversity and inclusion") {
+      } else if (name === "Prioritizing diversity and inclution") {
         icon = "Diversity";
-      } else if (name === "Women in senior roles") {
+      } else if (name === "Women on senior staff") {
         icon = "Women on senior";
-      } else if (name === "Strict sexual harassment policy") {
+      } else if (name === "Strict sexual harrasment policy") {
         icon = "sexual harassment";
-      } else if (name === "Acknowledges all religious and cultural holidays") {
+      } else if (name === "Acknowledge all religious and cultural holidays") {
         icon = "All religious";
       } else if (name === "Green policy") {
         icon = "Green policy";

@@ -126,15 +126,17 @@ const actions = {
   getProposalById({ commit, state }, proposalId) {
     return new Promise(async (resolve, reject) => {
       let query = new Proposal();
-      const res = await query.find(proposalId);
-      if (res.success) {
-        commit("setSelectedProposal", res.data);
-        // save customer when user comment as guest
-        resolve(res.data);
-      } else {
-        commit("setError", res.message);
-        resolve([]);
-      }
+      await query.find(proposalId)
+        .then((res) => {
+          const foundCommentsProposal = state.commentsProposals.find((proposal) => proposal.id === res.id);
+          commit("setSelectedProposal", { ...foundCommentsProposal, ...res });
+          // save customer when user comment as guest
+          resolve(res);
+        })
+        .catch((res) => {
+          commit("setError", res.message);
+          resolve([]);
+        });
     });
   },
 
