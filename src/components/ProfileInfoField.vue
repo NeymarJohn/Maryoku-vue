@@ -246,7 +246,7 @@ export default {
       const extension = file.type.split("/")[1];
       const fileId = `${new Date().getTime()}`;
       S3Service.fileUpload(file, fileId, "vendor/signatures").then(async (uploadedName) => {
-        this.content = uploadedName;
+        this.content = `https://maryoku.s3.amazonaws.com/vendor/signatures/${fileId}.${extension}`;
         this.signatureData = await getBase64(file);
       });
 

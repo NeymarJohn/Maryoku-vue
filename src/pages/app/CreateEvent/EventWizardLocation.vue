@@ -4,7 +4,7 @@
       <div class="title">
         3/5
         <div class="mt-1">
-          Location, Location, Location
+          Location Location Location
         </div>
       </div>
       <div class="text-center">

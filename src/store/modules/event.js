@@ -288,13 +288,15 @@ const actions = {
     });
   },
   updateProposal({ commit, state }, payload) {
-    console.log("updateProposal", payload);
+
+    const proposals = state.proposals[payload.category];
+
     return new Promise((resolve, reject) => {
+
       new Proposal({ ...payload.proposal }).save().then((result) => {
-        let proposals = state.proposals[payload.category];
         if (proposals) {
           let index = proposals.findIndex((p) => p.id == payload.proposal.id);
-          console.log(payload.category, index, payload.proposal);
+
           Vue.set(proposals, index, result);
           commit("setProposalsByCategory", { category: payload.category, proposals });
         }

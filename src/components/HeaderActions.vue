@@ -1,62 +1,51 @@
 <template>
   <div class="header-actions" :class="className">
-    <ul class="list-style-none">
+    <ul class="d-flex list-style-none">
       <template>
-        <div class="drop-down-action" :style="{alignItems: positioning}">
-          <div>
-            <li
-              class="md-small-hide"
+        <template>
+          <li v-for="(action, j) in actions" v-if="action.key === 'share' && !hideShare || action.key === 'download' && !hideDownload || action.key === 'comment' && canComment"
+              :key="j"
+              :class="{'md-small-hide':action.key !== 'share'}"
+          >
+            <md-button
+              class="md-simple md-just-icon adaptive-button"
+              :class="{active: action.key === 'comment' && isCommentMode}"
+              @click="click(action.key)"
             >
-              <md-button
-                v-if="isCommentMode"
-                class="md-simple md-just-icon hide-long-button"
-                @click="click('comment')"
-              >
-                <div class="show-circle-for-img">
-                  <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
-                </div>
-                <div class="show-comments-text">
-                  Hide comments
-                </div>
-              </md-button>
-              <md-button
-                v-else
-                class="md-simple md-just-icon hide-long-button active"
-                @click="click('comment')"
-              >
-                <div class="d-flex show-comment-wrapper">
-                  <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
-                    Show comments
-                  </div>
-                  <div class="hide-circle-for-img" :style="customStyles.marginForCircle ? customStyles.marginForCircle : {marginLeft: '10px'}">
-                    <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
-                  </div>
-                </div>
-              </md-button>
-            </li>
-          </div>
-          <drop-down v-if="showMenu" class="d-inline-block">
-            <button class="more-button" data-toggle="dropdown">
-              <md-icon class="font-size-40">
-                more_vert
-              </md-icon>
-            </button>
-            <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-              <li v-for="(action, j) in actions" v-if="action.key === 'share' || action.key === 'download'|| action.key === 'comment'"
-                  :key="j"
-                  :class="{'md-small-hide':action.key !== 'share'}"
-              >
-                <div class="other-name" @click="click(action.key)">
-                  <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`">
-                            &nbsp;&nbsp;
-                  <span>
-                    {{ action.title }}
-                  </span>
-                </div>
-              </li>
-            </ul>
-          </drop-down>
-        </div>
+              <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`">
+            </md-button>
+          </li>
+        </template>
+        <li
+          class="md-small-hide"
+        >
+          <md-button
+            v-if="isCommentMode"
+            class="md-simple md-just-icon hide-long-button"
+            @click="click('comment')"
+          >
+            <div class="show-circle-for-img">
+              <img class="show-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
+            </div>
+            <div class="show-comments-text">
+              Hide comments
+            </div>
+          </md-button>
+          <md-button
+            v-else
+            class="md-simple md-just-icon hide-long-button active"
+            @click="click('comment')"
+          >
+            <div class="d-flex show-comment-wrapper">
+              <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
+                Show comments
+              </div>
+              <div class="hide-circle-for-img" :style="customStyles.marginForCircle ? customStyles.marginForCircle : {marginLeft: '10px'}">
+                <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
+              </div>
+            </div>
+          </md-button>
+        </li>
       </template>
     </ul>
     <sharing-modal
@@ -113,33 +102,16 @@ export default {
     customStyles: {
       type: Object,
       default: () => ({})
-    },
-    showMenu: {
-      type: Boolean,
-      default: true
-    },
-    positioning: {
-      type: String,
-      default: "center"
     }
   },
   data() {
     return {
+      actions: HeaderActions,
       isCommentMode: false,
       isSharing: false,
     };
   },
   computed: {
-    actions() {
-      HeaderActions.forEach((element) => {
-        if(element.key === "download") {
-          element.title = "Download";
-        } else if(element.key === "share") {
-          element.title = "Create link";
-        }
-      });
-      return HeaderActions;
-    },
     permission() {
       try {
         return this.$store.state.event.eventData.permit;
@@ -163,6 +135,7 @@ export default {
   methods: {
     ...mapActions("eventPlan", ["toggleCommentMode"]),
     click(key) {
+      console.log("action", key);
       if (key === "download") {
         this.$emit("export", { type: "pdf" });
       } else if (key === "share") {
@@ -329,19 +302,5 @@ export default {
         border-radius: 50%;
         position: absolute;
     }
-  
-  .drop-down-action {
-    display: flex;
-    .more-button {
-      background: none;
-      border: none;
-    }
-    .dropdown-menu {
-      .other-name {
-        cursor: pointer;
-        padding: 5px 0px;
-      }
-    }
-  }
 
 </style>

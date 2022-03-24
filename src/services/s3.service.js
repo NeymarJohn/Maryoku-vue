@@ -20,6 +20,9 @@ class S3Service {
 
   fileUpload(file, fileName, dirName, ext) {
     return new Promise((resolve, reject) => {
+      // ext = ext ? ext : file.type.split("/").pop();
+      // let key = `${dirName}/${fileName}.${ext}`;
+      // console.log("upload.key", key, process.env.S3_URL);
 
       let formData = new FormData();
       formData.append("file", file);
@@ -33,7 +36,7 @@ class S3Service {
             "Content-Type": "multipart/form-data"
           }
         })
-        .then((result) => resolve(result.data.upload.url))
+        .then((result) => resolve(result.data.upload))
         .catch((error) => reject(error));
     });
   }
@@ -63,6 +66,7 @@ class S3Service {
 
   deleteFile(fileName) {
     return new Promise((resolve, reject) => {
+      console.log("key", fileName);
       let key = fileName.replace(process.env.S3_URL, "");
 
       axios.defaults.headers.common.Authorization = authHeader().Authorization;
