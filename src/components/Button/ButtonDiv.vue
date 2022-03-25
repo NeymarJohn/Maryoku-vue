@@ -9,12 +9,26 @@ export default {
   model: {
   },
   props: {
-    text: String,
-    buttonStyle: String,
-    onClick: Function,
-    filter: String,
-    secondClass: {type: String, default: ""},
-    classChenger: {type: Boolean, default: true}
+    text: {
+      type: String,
+      required: true,
+    },
+    buttonStyle: {
+      type: String,
+      default: "",
+    },
+    onClick: {
+      type: Function,
+      required: true,
+    },
+    secondClass: {
+      type: String,
+      default: ""
+    },
+    classChanger: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     triggerFunc: function () {

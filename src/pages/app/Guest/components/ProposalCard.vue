@@ -101,7 +101,6 @@
 </template>
 <script>
 import moment from "moment";
-import Timer from "@/components/Timer.vue";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import Proposal from "@/models/Proposal";
 import TimerPanel from "./TimerPanel";
@@ -109,7 +108,7 @@ import Swal from "sweetalert2";
 import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
 
 export default {
-  components: { Timer, TimerPanel },
+  components: { TimerPanel },
   props: {
     proposal: {
       type: Object,

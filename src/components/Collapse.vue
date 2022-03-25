@@ -97,9 +97,18 @@ export default {
     CollapseTransition
   },
   props: {
-    collapse: Array,
-    icon: String,
-    colorCollapse: String
+    collapse: {
+      type: Array,
+      required: true,
+    },
+    icon: {
+      type: String,
+      required: true,
+    },
+    colorCollapse: {
+      type: String,
+      required: true,
+    }
   },
   data () {
     return {

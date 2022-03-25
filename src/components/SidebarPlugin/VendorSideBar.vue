@@ -176,9 +176,6 @@ export default {
       };
     },
     isEventPage() {
-      return this.currentUrl.indexOf("event") >= 0;
-    },
-    isEventPage() {
       return this.$router.history.current.path.indexOf("event") >= 0;
     },
     vendorData() {
@@ -197,7 +194,6 @@ export default {
     comments(){
       const commentsComponents = this.$store.state.comment.commentsProposals.map(p => p.commentComponent).flat();
       const comments = commentsComponents.map(c => c.comments).flat();
-      console.log("comments", comments);
       return comments.filter(c => !c.viewed);
     }
   },

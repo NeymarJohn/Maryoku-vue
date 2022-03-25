@@ -141,7 +141,13 @@ export default {
       return true;
     }
   },
-  mounted(){
+  mounted() {
+    if (!this.comment.viewed) {
+      this.$emit("updateCommentViewed", {
+        ...comment,
+        viewed: true
+      });
+    }
   },
   methods: {
     cancelEditing() {

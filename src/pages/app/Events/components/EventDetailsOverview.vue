@@ -37,7 +37,7 @@
       </div>
     </div>
     <div id="footer-panel" class="event-footer-container">
-      <div class="ml-20">
+      <div class="ml-60">
         <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
         </md-button>

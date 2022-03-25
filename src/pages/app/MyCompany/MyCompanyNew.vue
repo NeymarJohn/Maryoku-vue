@@ -471,14 +471,14 @@
                 text="Yearly"
                 class="button-filter"
                 second-class="chenge-filter"
-                :class-chenger="!showFilter"
+                :class-changer="!showFilter"
                 :on-click="onChangeFilterToEarly"
               />
               <ButtonDiv
                 text="Monthly"
                 class="button-filter"
                 second-class="chenge-filter"
-                :class-chenger="showFilter"
+                :class-changer="showFilter"
                 :on-click="onChangeFilter"
               />
             </div>
@@ -604,7 +604,6 @@ import { mapGetters, mapMutations, mapState } from "vuex";
 import Swal from "sweetalert2";
 
 // COMPONENTS
-import { Tabs, NavTabsCard } from "@/components";
 import VueElementLoading from "vue-element-loading";
 import Select from "@/components/Select/Select.vue";
 import InputText from "@/components/Inputs/InputText.vue";
