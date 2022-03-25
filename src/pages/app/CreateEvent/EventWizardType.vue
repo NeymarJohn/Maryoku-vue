@@ -6,7 +6,7 @@
       </div>
       <div class="event-type event-basic-info">
         <div class="setting-title mt-3">
-          What type of event are you planning?
+          What type of event are you planning on?
         </div>
         <div class="mt-3 types">
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
@@ -20,13 +20,7 @@
             <div>
               <img :src="`${$iconURL}Onboarding/${type.key}.svg`">
             </div>
-             <div v-if="type.name === 'Reception'">
-              Reception / Party
-            </div>
-            <div v-else-if="type.name === 'Establishment / Activity Day'">
-             Activity Day
-            </div>
-            <div v-else>
+            <div>
               {{ type.name }}
             </div>
             <div>

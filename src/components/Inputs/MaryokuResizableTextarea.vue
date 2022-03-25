@@ -17,7 +17,10 @@ export default {
       type: String,
       default: ""
     },
-    value: String,
+    value: {
+      type: String,
+      required: true,
+    },
     rows: {
       type: String,
       default: "3"
