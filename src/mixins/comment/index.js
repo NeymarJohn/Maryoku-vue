@@ -4,6 +4,7 @@ export default {
   data() {
     return {
       commentComponents: []
+      // isOpenCommentListsPane: false,
     };
   },
   methods: {
@@ -19,6 +20,7 @@ export default {
       "getCommentsProposalsByVendor"
     ]),
     async saveComment({ component, comment, index }) {
+      console.log("saveComment", comment);
       if (!component.comments || !component.comments.length) {
         const savedComponent = await this.addCommentComponent(component);
         this.commentComponents[index] = savedComponent;
@@ -33,8 +35,10 @@ export default {
       this.commentComponents[index].comments.push(addedComment);
       this.commentComponents = this.commentComponents.slice(0);
     },
-    async updateComment(comment) {
-      await this.updateCommentAction(comment);
+    async updateComment({ comment, component }) {
+      console.log("comment.updateCommentAction", comment, component);
+      let updatedComment = await this.updateCommentAction(comment);
+      console.log("updateComment", updatedComment);
     },
     async updateMixinCommentComponent(component) {
       await this.updateCommentComponent(component);
@@ -52,6 +56,7 @@ export default {
     }
   },
   async created() {
+    console.log("comment.mixin.created", this.url);
     this.commentComponents = await this.getCommentComponents(this.url ? this.url : this.$route.path);
-  },
+  }
 };

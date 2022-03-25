@@ -5,9 +5,7 @@
         5/5
       </div>
       <div class="event-basic-info">
-        <div class="text-center mt-2">
-          Here is a fun question for you,
-        </div>
+      
         <div class="setting-title mt-2">
           Try describing your guest’s vibes using a song
         </div>

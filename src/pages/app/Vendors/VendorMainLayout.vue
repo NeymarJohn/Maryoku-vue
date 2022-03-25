@@ -28,12 +28,11 @@ export default {
   },
   data() {
     return {
-      loading : true,
+      loading : true
     };
   },
   computed: {
     ...mapState("event", ["eventData"]),
-    ...mapState("comment", ["commentsProposals"]),
   },
   beforeCreate() {
     if(this.$store.state.auth.user){
@@ -49,6 +48,7 @@ export default {
     }
   },
   async mounted() {
+
     this.loading = true;
     let vendor = await this.$store.dispatch("vendor/getProfile");
     await this.$store.dispatch("vendorDashboard/getProposalRequests", vendor.id);

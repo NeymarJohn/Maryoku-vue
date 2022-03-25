@@ -1,10 +1,7 @@
 <template>
   <div class="progress-sidebar">
     <div class="summer-party">
-      <md-button class="md-default md-sm md-simple expand-sidebar">
-        <img :src="`${$iconURL}Timeline-New/expand.svg`">
-      </md-button>
-      <div class="title-label">
+     <div class="title-label">
         summer party
         <small>checklist</small>
       </div>

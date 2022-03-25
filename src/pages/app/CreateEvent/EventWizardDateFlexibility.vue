@@ -9,7 +9,7 @@
         <div class="mt-4rem setting-title">
           Between a camel yoga pose and plywood
         </div>
-        <div class="mt-1 font-size-20">
+        <div class="mt-1 setting-subtitle">
           How flexible is this date?
         </div>
         <div class="mt-4rem slider-wrapper">
