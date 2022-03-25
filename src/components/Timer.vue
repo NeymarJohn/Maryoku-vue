@@ -50,7 +50,6 @@ export default {
   props: {
     target: {
       type: [Number, Date],
-      default: new Date(),
     },
     size: {
       type: String,

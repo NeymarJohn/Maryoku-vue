@@ -168,6 +168,7 @@ import {mapState, mapMutations, mapGetters, mapActions} from "vuex";
 
 // COMPONENTS
 import {AnimatedNumber, NavTabs} from "@/components";
+import Icon from "@/components/Icon/Icon.vue";
 import EventElements from "./EventElements.vue";
 import EventBlocks from "./components/NewEventBlocks";
 import EventBuildingBlocks from "./components/EventBuildingBlocks";
@@ -192,6 +193,7 @@ export default {
     VueElementLoading,
     ChartComponent,
     AnimatedNumber,
+    Icon,
     EventElements,
     EventBlocks,
     EventModal,

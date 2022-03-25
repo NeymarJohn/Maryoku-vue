@@ -3,7 +3,7 @@
     <div class="main-panel" style="height: 50%">
       <notifications />
       <div :class="{ content: !$route.meta.hideContent }" style="padding-right: 0" @click="toggleSidebar">
-        <side-bar :event="eventData" :has-badge="hasBadge" />
+        <side-bar :event="eventData" />
         <loader :active="loading" page="vendor" />
         <zoom-center-transition v-if="!loading" :duration="200" mode="out-in">
           <router-view />
@@ -28,15 +28,12 @@ export default {
   },
   data() {
     return {
-      loading : true
+      loading : true,
     };
   },
   computed: {
     ...mapState("event", ["eventData"]),
     ...mapState("comment", ["commentsProposals"]),
-    hasBadge() {
-      return this.commentsProposals.some((proposal) => !proposal.viewed);
-    }
   },
   beforeCreate() {
     if(this.$store.state.auth.user){

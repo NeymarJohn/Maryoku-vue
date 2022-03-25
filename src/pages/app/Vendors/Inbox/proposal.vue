@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     ...mapActions("commentProposal", ["saveVersion"]),
-    ...mapActions("comment", ["getProposalById", "updateCommentsComponentsViewed"]),
+    ...mapActions("comment", ["getProposalById", "updateProposal"]),
     ...mapMutations("commentProposal", ["updateCommentComponents"]),
     ...mapMutations("comment", ["setGuestName","setSelectedProposal"]),
     ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
@@ -142,7 +142,6 @@ export default {
       if (data.action === "updateCommentComponent"){
         await this.saveComment({ component: data.component });
       }
-
       this.updateCommentComponents(this.commentComponents);
       this.showCommentEditorPanel = true;
     },
@@ -227,8 +226,7 @@ export default {
         ({ comments }) => comments.every(({ viewed }) => viewed)
       );
       if (!newValue.viewed && everyCommentViewed) {
-        console.log("show log everyCommentViewed");
-        this.updateCommentsComponentsViewed();
+        this.updateProposal({ ...this.proposal, viewed: true });
       }
     }
   }

@@ -108,10 +108,7 @@ export default {
     },
   },
   props: {
-    chartData: {
-      type: [Array, Function],
-      required: true,
-    },
+    chartData: [Array, Function],
     type: {
       type: String,
       default: "total",

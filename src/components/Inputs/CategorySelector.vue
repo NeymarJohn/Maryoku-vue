@@ -70,7 +70,10 @@ export default {
     },
     trackBy: {
       type: String,
-      default: "",
+      required: false,
+    },
+    customClass: {
+      type: String,
     },
     theme: {
       type: String,
@@ -103,15 +106,17 @@ export default {
     },
   },
   watch: {
-    value(newValue) {
+    value(newValue, oldValue) {
       this.getSelectedCategory(newValue);
     },
   },
   mounted() {
+    // console.log("category-selector.mounted", this.value);
     this.getSelectedCategory(this.value);
   },
   methods: {
     updateCategory(category) {
+      console.log("updateCategory", category);
       if (this.multiple) {
         if (!this.selectedCategory) this.selectedCategory = [];
         if (this._find(this.selectedCategory, category)) {
