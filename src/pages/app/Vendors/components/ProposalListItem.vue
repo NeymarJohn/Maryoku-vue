@@ -163,12 +163,11 @@
   </div>
 </template>
 <script>
-import Button from "@/components/Button/ButtonDiv";
 import Avartar from "@/components/Avartar.vue";
 import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
-  components: { Avartar, Button },
+  components: { Avartar },
   props: {
     proposal: {
       type: Object,

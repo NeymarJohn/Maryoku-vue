@@ -123,6 +123,23 @@ const actions = {
     });
   },
 
+  getProposalById({ commit, state }, proposalId) {
+    return new Promise(async (resolve, reject) => {
+      let query = new Proposal();
+      await query.find(proposalId)
+        .then((res) => {
+          const foundCommentsProposal = state.commentsProposals.find((proposal) => proposal.id === res.id);
+          commit("setSelectedProposal", { ...foundCommentsProposal, ...res });
+          // save customer when user comment as guest
+          resolve(res);
+        })
+        .catch((res) => {
+          commit("setError", res.message);
+          resolve([]);
+        });
+    });
+  },
+
   /****Event comments  */
   getCommentsAction({ commit, state }, commentComponentId) {
     const eventComponent = new EventCommentComponent({ id: commentComponentId });
@@ -163,6 +180,34 @@ const actions = {
         commit("removeCommentComponent", commentComponent);
         resolve(res);
       });
+    });
+  },
+
+  updateCommentsComponentsViewed({ commit, state }, proposal) {
+    return new Promise((resolve, reject) => {
+      new Proposal({ ...proposal, viewed: true }).save()
+        .then((res) => {
+          const foundProposalIndex = state.commentsProposals
+            .findIndex((proposal) => proposal.id === res.id);
+          console.log({ foundProposalIndex });
+          if (foundProposalIndex > -1) {
+            const proposals = state.commentsProposals;
+            proposals[foundProposalIndex] = {
+              ...proposals[foundProposalIndex],
+              viewed: true
+            };
+            commit("setCommentsProposals", proposals);
+          }
+          commit("setSelectedProposal", {
+            ...proposal,
+            ...res
+          });
+          resolve(res);
+        })
+        .catch((res) => {
+          commit("setError", res.message);
+          reject(res.message);
+        });
     });
   },
 

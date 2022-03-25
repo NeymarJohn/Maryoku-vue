@@ -157,6 +157,7 @@
 </style>
 <script>
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
+
 export default {
   components: {
     VendorBidTimeCounter,

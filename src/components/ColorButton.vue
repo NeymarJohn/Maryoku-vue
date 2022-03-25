@@ -64,6 +64,7 @@ export default {
      */
     value: {
       type: [Object, String],
+      default: "",
     },
     size: {
       type: Number,

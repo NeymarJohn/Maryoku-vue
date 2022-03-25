@@ -29,17 +29,11 @@
 </template>
 
 <script>
-import { Modal, MaryokuInput } from "@/components";
+import { Modal } from "@/components";
 
 export default {
-  name: "QuestionModal",
-  components: {
-    Modal,
-  },
-  props: {
-    show: [Boolean],
-    value: [Number],
-  },
+  name: "AskSaveChangeModal",
+  components: { Modal },
   data: () => {
     return {
       message: "",

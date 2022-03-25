@@ -1,7 +1,10 @@
 <template>
   <div class="progress-sidebar">
     <div class="summer-party">
-         <div v-if="page === 'plan'" class="title-label">
+      <md-button class="md-default md-sm md-simple expand-sidebar">
+        <img :src="`${$iconURL}Timeline-New/expand.svg`">
+      </md-button>
+      <div v-if="page === 'plan'" class="title-label">
         summer party
         <small>checklist</small>
       </div>

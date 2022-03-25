@@ -33,6 +33,9 @@
               <div class="md-vendor lets-begin" @click="$emit('show')">
                 <a class="lets-text">Let's Go</a>
               </div>
+              <div class="md-vendor lets-begin test" @click="test">
+                <a class="lets-text">test first transaction modal</a>
+              </div>
             </div>
           </div>
         </div>
@@ -41,10 +44,16 @@
         </div>
       </div>
     </div>
+    <first-transaction v-show="showModal" >
+    </first-transaction>
   </div>
 </template>
 <script>
+import FirstTransaction from "../../../../components/Modals/FirstTransaction";
 export default {
+  components:{
+    FirstTransaction
+  },
     filters: {},
     props: {
         proposal: {
@@ -53,7 +62,9 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+          showModal:false
+        };
     },
     computed: {
         link(){
@@ -63,7 +74,11 @@ export default {
     watch: {},
     created() {},
 
-    methods: {},
+    methods: {
+      test(){
+        this.showModal = true;
+      }
+    },
 };
 
 </script>
@@ -225,6 +240,13 @@ export default {
                     background-color: #641856;
                     cursor: pointer;
                 }
+              .test{
+                display: none;
+                padding: 0;
+                margin:3px auto ;
+                width: fit-content;
+                height: fit-content;
+              }
 
                 .lets-text {
                     width: 110px;

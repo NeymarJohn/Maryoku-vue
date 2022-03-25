@@ -67,7 +67,7 @@
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-events-list"
-          :has-badge="!!comments.length"
+          :has-badge="hasBadge"
           :link="{
             name: 'Inbox',
             iconUrl: '/static/icons/vendor/message.svg',
@@ -149,8 +149,12 @@ export default {
     },
     event: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
+    hasBadge: {
+      type: Boolean,
+      default: false,
+    }
   },
   data: () => {
     return {
@@ -172,9 +176,6 @@ export default {
       };
     },
     isEventPage() {
-      return this.currentUrl.indexOf("event") >= 0;
-    },
-    isEventPage() {
       return this.$router.history.current.path.indexOf("event") >= 0;
     },
     vendorData() {
@@ -193,7 +194,6 @@ export default {
     comments(){
       const commentsComponents = this.$store.state.comment.commentsProposals.map(p => p.commentComponent).flat();
       const comments = commentsComponents.map(c => c.comments).flat();
-      console.log("comments", comments);
       return comments.filter(c => !c.viewed);
     }
   },

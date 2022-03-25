@@ -434,43 +434,41 @@
           v-else
           class="d-flex align-center"
         >
-          <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendToAddtionalGuests"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                class="mr-20"
-                :src="`${$iconURL}Campaign/Group 8871.svg`"
-              >Send To Additional Guests
-            </span>
-          </md-button>
-          <span
-            class="seperator"
-            style="margin-top: 0"
-          />
-          <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendPreviewEmail"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                class="mr-20"
-                :src="`${$iconURL}Campaign/Group 1855.svg`"
-              >
-              Send Me A Preview
-            </span>
-          </md-button>
-          <span
-            class="seperator"
-            style="margin-top: 0; margin-right: 30px"
-          />
-          <div
-            v-if="!canSchedule"
-            class="ml-40"
-          >
+<!--          <md-button-->
+<!--            class="md-simple md-button md-black maryoku-btn"-->
+<!--            @click="sendToAddtionalGuests"-->
+<!--          >-->
+<!--            <span class="font-size-16 text-transform-capitalize">-->
+<!--              <img-->
+<!--                class="mr-20"-->
+<!--                :src="`${$iconURL}Campaign/Group 8871.svg`"-->
+<!--              >Send To Additional Guests-->
+<!--            </span>-->
+<!--          </md-button>-->
+<!--          <span-->
+<!--            class="seperator"-->
+<!--            style="margin-top: 0"-->
+<!--          />-->
+<!--          <md-button-->
+<!--            class="md-simple md-button md-black maryoku-btn"-->
+<!--            @click="sendPreviewEmail"-->
+<!--          >-->
+<!--            <span class="font-size-16 text-transform-capitalize">-->
+<!--              <img-->
+<!--                class="mr-20"-->
+<!--                :src="`${$iconURL}Campaign/Group 1855.svg`"-->
+<!--              >-->
+<!--              Send Me A Preview-->
+<!--            </span>-->
+<!--          </md-button>-->
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
             <img :src="`${$iconURL}Campaign/Group 9222.svg`">
-            Campaign Sent
+            <span class="ml-10">Scheduled To {{' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
+          </div>
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
+            <span class="seperator small" style="margin-top: 0; margin-right: 30px"/>
+            <i class="far fa-clock"></i>
+            <span class="ml-10" style="font-weight: bold"> Change Schedule </span>
           </div>
           <div
             v-else
@@ -989,6 +987,9 @@ export default {
       border-left: solid 1px #050505;
       height: 2rem;
       // margin-top: 1rem;
+      &.small{
+        height: 25px;
+      }
     }
     .schedule-campaign-btn {
       &::after {

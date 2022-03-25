@@ -19,7 +19,10 @@ export default {
   name: "HolidayInput",
   model: {},
   props: {
-    value: String,
+    value: {
+      type: String,
+      required: true,
+    },
     options: {
       type: Array,
       default: this.religions,
@@ -77,7 +80,6 @@ export default {
   },
   methods: {
     change(e) {
-      console.log("holiday.change", e);
       this.$emit("change", e);
     },
   }

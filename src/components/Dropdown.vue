@@ -30,8 +30,14 @@ export default {
       type: Boolean,
       default: false
     },
-    title: String,
-    icon: String,
+    title: {
+      type: String,
+      default: "",
+    },
+    icon: {
+      type: String,
+      default: "",
+    },
     hover: {
       type: Boolean,
       default: false

@@ -17,10 +17,14 @@
 export default {
   name: "Button",
   props: {
-    text: String,
-    buttonStyle: String,
-    onClick: Function,
-    controlBlockStyle: String
+    onClick: {
+      type: Function,
+      required: true,
+    },
+    controlBlockStyle: {
+      type: String,
+      required: true,
+    }
   },
   data () {
     return {
