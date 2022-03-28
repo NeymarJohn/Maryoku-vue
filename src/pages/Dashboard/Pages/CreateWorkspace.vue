@@ -1,35 +1,79 @@
 <template>
   <div class="md-layout" style="text-align: center">
-    <h2 class="title text-center" style="text-align: center; width: 100%">
-      Welcome, lets create your workspace
-    </h2>
-    <div class="md-layout-item md-size-50 mx-auto">
+   
+    <div class="md-layout-item md-size-100 mx-auto md-alignment-center">
       <signup-card>
+
+        <div
+         slot="content-right"
+         class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto"
+          style=""
+        >
+
+        <div class="mb-10" style=" display: flex;
+         justify-content: center; margin-top: 140px">
+           <img class="" src="/static/icons/welcome.svg" style="  width:77.5px;" >
+        </div>
+        <div>
+           <h2 class="title text-center" style="text-align: center; width: 100%">
+            Welcome to Maryoku!
+                  
+         </h2>
+         <h2 class="title text-center" style="text-align: center; width: 100%">
+              
+            Let's create your workspace
+         </h2>
+        </div>
+
+         <div>
+           <div class=" subtitle text-center" style="text-align: center; width: 100%">
+             In order to share the content, we have created a domain for you. Ability to
+            <br>  rename the domain to your business or workspace name.
+                  
+           </div>
+      
+        </div>
+
+      </div>
         <div
           slot="content-right"
-          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto"
-          style="padding: 24px"
+         class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto my-0"
+
+          
         >
+         
           <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
           <div>&nbsp;</div>
+
+          <div style="display: flex;
+           align-items: center; justify-content: center; ">
+             <div class="align-center" style=" display: flex;
+            justify-content: center; height: 30px">
+            <span class="md-prefix mr-15">www.</span>
           <md-field
+                  
             :class="[
               { 'md-valid': !errors.has('workspace') && touched.workspace },
               { 'md-error': errors.has('workspace') },
               { 'extra-margin': error },
             ]"
           >
-            <label>Workspace Name</label>
-            <span class="md-prefix">https://</span>
+           <div class="md-prefix mx-10" style=" display: flex;
+            justify-content: center;">
+           <img class="" src="/static/icons/edit.svg" style="  width:20px;" >
+        </div>
             <md-input
               v-model="workspace"
               v-focus
               type="text"
+              id="input_field"
               data-vv-name="workspace"
               required
               @keyup="checkWorkspace"
-            />
-            <span class="md-suffix">.maryoku.com</span>
+              
+           />
+            
+            
             <div
               v-if="!workspaceValid"
               class="md-error"
@@ -38,17 +82,25 @@
               {{ error }}
             </div>
           </md-field>
+          <span class="md-suffix ml-15">maryoku.com</span>
+       </div>
+      </div>
+      
 
-          <div class="button-container">
+          <div class="button-container mt-40">
             <md-button
               slot="footer"
               class="md-default md-red md-maryoku mt-4"
               :disabled="!workspaceValid"
               @click="createWorkSpace"
             >
-              Continue
+            Create a domain
             </md-button>
           </div>
+          <div class="mb-50 mt-70" style=" display: flex;
+         justify-content: center;">
+           <img class="" src="/static/icons/maryoku - logo dark@2x@2x.png" style="  width:16%" >
+        </div>
         </div>
       </signup-card>
     </div>
@@ -267,12 +319,50 @@ h4.info-title {
   font-weight: 400;
 }
 
-.extra-margin {
-  margin-bottom: 64px !important;
+// .extra-margin {
+//   margin-bottom: 64px !important;
+// }
+
+
+.md-input {
+  border: 2px solid #E0E0E0;
+  margin-left: -45px;
+  padding-left: 50px;
+  width: 425px;
+  height: 64px;
+  
+  
+
 }
+
+.md-field.md-focused .md-input, .md-field.md-focused .md-textarea, .md-field.md-has-value .md-input, .md-field.md-has-value .md-textarea {
+    font-size: 16px;
+    
+}
+
+
+
 .title {
-  font-family: "Manrope-ExtraBold";
   color: #050505;
+ font-size: 37px;
+ font-weight: bold;
+ text-transform: uppercase;
+
 }
+.subtitle {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #050505;
+
+  margin-bottom: 20px;
+  margin-top: 30px;
+
+}
+
+
 </style>
 

@@ -38,9 +38,10 @@
               :proposal="proposal"
               :is-editing="editingCommentId == mainComment.id"
               :is-main="true"
+              :is-vendor="isVendor"
               :replies="replies.length"
-              @updateComment="updateComment"
               @updateCommentViewed="updateCommentViewed"
+              @updateComment="updateComment"
               @resolve="resolveCommentComponent"
               @favorite="markAsFavorite"
               @delete="deleteComment"
@@ -50,8 +51,9 @@
               :key="comment.id"
               :comment="comment"
               :is-main="false"
-              @updateComment="updateComment"
+              :is-vendor="isVendor"
               @updateCommentViewed="updateCommentViewed"
+              @updateComment="updateComment"
               @resolve="resolveCommentComponent"
               @favorite="markAsFavorite"
               @delete="deleteComment"
@@ -138,7 +140,7 @@ export default {
       type: Boolean,
       required: false,
       default:false
-    }
+    },
   },
   data() {
     let updatedCommentComponents = JSON.parse(JSON.stringify(this.commentComponents));
@@ -317,7 +319,7 @@ export default {
     async saveComment(event, type) {
       let selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
       const comment = {
-        commentComponent: { id: selectedComponent.id },
+        eventCommentComponent: { id: selectedComponent.id },
         description: this.editingComment,
         parentId: this.mainComment ? this.mainComment.id : null,
         email: this.selectedCustomer ? this.selectedCustomer.email : null,
@@ -360,19 +362,20 @@ export default {
       const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
       const commentIndex = hoveredComponent.comments.findIndex(item=>item.id===comment.id);
       this.updatedCommentComponents[this.selectedComponentIndex].comments[commentIndex] = comment;
-      this.$emit("updateComment", {comment, component: new EventCommentComponent({id: selectedComponent.id})});
+      this.$emit("updateComment", {...comment, eventCommentComponent: new EventCommentComponent({id: selectedComponent.id})});
     },
     deleteComment(comment) {
       this.$emit("deleteComment", {comment, index:this.selectedComponentIndex} );
     },
     updateComment(comment) {
       this.editingCommentId = "";
-
       const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
-      this.$emit("updateComment", {comment, component: new EventCommentComponent({ id: selectedComponent.id })});
+      this.$emit("updateComment", {...comment, eventCommentComponent: new EventCommentComponent({ id: selectedComponent.id })});
     },
     updateCommentViewed(comment) {
-      this.$emit("updateComment", { comment, component: new EventCommentComponent({ id: selectedComponent.id }) });
+      this.editingCommentId = "";
+      const selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
+      this.$emit("updateComment", { ...comment, eventCommentComponent: new EventCommentComponent({ id: selectedComponent.id }) });
     },
     movedCommentComponent(movedCommentComponent) {
       const commentComponent = new EventCommentComponent({
