@@ -936,7 +936,6 @@ export default {
     },
   },
   created() {
-    console.log('event.detail.proposal', this.proposal);
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
   mounted() {

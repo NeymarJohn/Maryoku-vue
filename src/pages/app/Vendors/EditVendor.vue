@@ -455,10 +455,12 @@
 </template>
 
 <script>
+import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
 
 // COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import VendorSimilarProposals from "./components/VendorSimilarProposals.vue";
 import VendorFeedbacks from "./components/VendorFeedbacks.vue";
 import VendorSimilarItem from "./components/VendorSimilarItem.vue";
@@ -471,6 +473,7 @@ export default {
     VendorSimilarProposals,
     VendorSimilarItem,
     VendorFeedbacks,
+    Icon,
     SlideYDownTransition,
     LightBox,
   },

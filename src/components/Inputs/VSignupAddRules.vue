@@ -71,17 +71,16 @@
   </div>
 </template>
 <script>
+import VueElementLoading from "vue-element-loading";
+
 export default {
   name: "VSignupAddRules",
+  components: {
+    VueElementLoading,
+  },
   props: {
-    comType: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: Object,
-      required: true,
-    },
+    comType: String,
+    title: Object,
     defaultRules: {
       type: Array,
       default: () => [],
@@ -131,6 +130,7 @@ export default {
       this.policies = this.policies.filter((policy) => policy != p);
     },
     addRule() {
+      console.log(this.$refs.additionalRule.value);
       this.rules.push(this.$refs.additionalRule.value);
       this.$refs.additionalRule.value = null;
       this.focusedRule = null;

@@ -14,47 +14,21 @@
 <script>
 export default {
   name: "InputWithIcon",
+  model: {
+  },
   props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    srcLogo: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-    },
-    onChange: {
-      type: Function,
-      required: true,
-    },
-    inputBlock: {
-      type: String,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      required: true,
-    },
-    inputStyle: {
-      type: String,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      required: true,
-    },
-    imgStyle: {
-      type: String,
-      required: true,
-    },
+    name: String,
+    srcLogo: String,
+    value: String,
+    type: String,
+    onChange: Function,
+    inputBlock: String,
+    placeholder: String,
+    inputStyle: String,
+    disabled: Boolean,
+    imgStyle: String,
+    inputStyle: String
+
   },
   methods: {
     triggerFunc: function (event) {

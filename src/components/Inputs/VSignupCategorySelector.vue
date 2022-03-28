@@ -66,6 +66,7 @@
   </div>
 </template>
 <script>
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import { VendorCategories } from "@/constants/vendor";
 import LocationInput from "../LocationInput.vue";

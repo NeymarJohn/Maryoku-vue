@@ -116,9 +116,11 @@
 import SidebarItem from "./NewSidebarItem";
 import eventService from "@/services/event.service";
 import EventNotePanel from "../../pages/app/Events/components/EventNotePanel";
+import Button from "../Button/ControlPanel";
 export default {
   name: "Sidebar",
   components: {
+    Button,
     SidebarItem,
     EventNotePanel,
   },

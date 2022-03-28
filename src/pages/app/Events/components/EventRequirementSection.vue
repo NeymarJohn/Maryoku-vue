@@ -134,11 +134,15 @@
 <style lang="scss" scoped>
 </style>
 <script>
+import RequirementItemComment from "./RequirementItemComment";
+import Multiselect from "vue-multiselect";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {
   name: "EventRequirementSection",
   components: {
+    RequirementItemComment,
+    Multiselect,
     CategorySelector,
   },
   props: {
@@ -242,6 +246,8 @@ export default {
     },
 
     handleChangeCategorySelector(property, value) {
+      // console.log("handleChangeCategorySelector", property, value);
+
       let index = this.properties.findIndex((pt) => pt.item === property.item);
 
       this.requirements[this.category][index].options.map((op) => {
@@ -251,6 +257,7 @@ export default {
           op.selected = false;
         }
       });
+      // console.log("handleChangeCategorySelector", this.requirements[this.category][index]);
       this.$emit("change", this.requirements);
     },
     handleNoteChange() {

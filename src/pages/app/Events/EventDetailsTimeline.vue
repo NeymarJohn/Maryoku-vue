@@ -9,7 +9,7 @@
       @deleteComment="deleteComment"
       @updateCommentComponent="updateCommentComponent"
     />
-    <div class="event-page-header md-layout-item md-size-100 ml-40">
+    <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
           <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon">
@@ -30,7 +30,7 @@
         @export="exportToPdf"
       />
     </div>
-    <div class="md-layout ml-40">
+    <div class="md-layout">
       <div
         ref="content"
         class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"

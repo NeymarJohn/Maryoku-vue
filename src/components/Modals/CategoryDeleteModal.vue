@@ -46,10 +46,7 @@ export default {
   },
   props: {
     show: [Boolean],
-    category: {
-      type: Object,
-      required: true,
-    },
+    category: [Object],
   },
   data: () => {
     return {

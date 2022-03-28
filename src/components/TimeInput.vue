@@ -22,7 +22,6 @@ export default {
      */
     value: {
       type: [String, Date, Number],
-      required: true,
     },
   },
   data() {
