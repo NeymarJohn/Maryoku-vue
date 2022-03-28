@@ -66,6 +66,8 @@ import EventTimelineDate from "@/models/EventTimelineDate";
 export default {
   components: {
     TimelineItem,
+    TimelineTemplateItem,
+    TimelineEmpty,
     Drop,
   },
   props: {
@@ -81,9 +83,6 @@ export default {
     return {
       isHover: false,
     };
-  },
-  mounted() {
-    console.log('timeline.template', this.groupedItems, this.groupIndex);
   },
   computed: {
     event() {
@@ -148,19 +147,15 @@ export default {
       this.isHover = false;
     },
     handleDrop(index, droppedData) {
-      console.log('handleDrop', index, droppedData, this.groupIndex)
       let block = Object.assign({}, droppedData.block);
       block.mode = "edit";
       if (index === 0) {
-
-        let lastGroupItems = this.timelineItems.filter((item) => item && item.groupNumber === (this.groupIndex - 1));
-
-        if (this.groupIndex === 0 || !lastGroupItems.length) {
+        if (this.groupIndex === 0) {
           const dayTime = this.event.eventDayPart === "evening" ? "PM" : "AM";
           block.startTime = moment(`${this.timelineDate.date} 07:00  ${dayTime}`, "YYYY-MM-DD hh:mm A").valueOf();
           block.endTime = moment(`${this.timelineDate.date} 08:00 ${dayTime}`, "YYYY-MM-DD hh:mm A").valueOf();
         } else {
-
+          let lastGroupItems = this.timelineItems.filter((item) => item && item.groupNumber === (this.groupIndex - 1));
           let lastItem = lastGroupItems[lastGroupItems.length - 1];
           if (!lastItem) {
             lastItem = this.timelineItems[this.timelineItems.length - 1];

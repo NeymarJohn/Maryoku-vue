@@ -18,7 +18,7 @@ class S3Service {
     return new File([u8arr], filename, { type: mime });
   }
 
-  fileUpload(file, fileName, dirName, ext) {
+  fileUpload(file, fileName, dirName, fullResponse = false) {
     return new Promise((resolve, reject) => {
 
       let formData = new FormData();
@@ -33,7 +33,13 @@ class S3Service {
             "Content-Type": "multipart/form-data"
           }
         })
-        .then((result) => resolve(result.data.upload.url))
+        .then((result) => {
+          if (fullResponse) {
+            resolve(result);
+          } else {
+            resolve(result.data.upload.url);
+          }
+        })
         .catch((error) => reject(error));
     });
   }
