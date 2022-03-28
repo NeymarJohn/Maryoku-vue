@@ -31,7 +31,7 @@
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="word-break mb-30 font-size-20 campaign-description">
-                {{ campaign.description }}
+                {{ campaignDescription }}
               </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
@@ -344,6 +344,8 @@ import { mapActions, mapGetters } from "vuex";
 import Modal from "../../../components/Modal.vue";
 import MoreInfoItem from "./mobile/MoreInfoItem.vue";
 import { Model } from "vue-api-query";
+import dateUtil from "@/utils/date.util";
+
 export default {
   components: {
     RsvpTimelineItem,
@@ -437,6 +439,18 @@ export default {
       }
       return this.event.concept.colors[0].color;
     },
+    campaignDescription() {
+      return this.campaign.description || this.defaultCampaignDescription;
+    },
+    defaultCampaignDescription () {
+      return `Hey, you've been invited to ${this.event.title} on ${dateUtil.formatScheduleDay(
+        this.event.eventStartMillis,
+        "dddd, MMMM D, YYYY",
+      )} at ${this.event.location}. I can hardly wait to see you, please RSVP  by ${dateUtil.formatScheduleDay(
+        this.event.eventStartMillis,
+        "dddd, MMMM D, YYYY",
+      )}, so I'll know you feel the same way :)`;
+    }
   },
   created() {
     const rsvpRequestId = this.$route.params.rsvpRequestId;
