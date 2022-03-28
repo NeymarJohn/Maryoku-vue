@@ -15,10 +15,10 @@
         we can transfer money to you.
       </div>
       <div class="batons-wrapper">
-        <p @click="$emit('close-modal')" style="cursor: pointer">
+        <p>
           Remind me later
         </p>
-        <md-button class="md-vendor" @click="$emit('start')">Lets start</md-button>
+        <md-button class="md-vendor">Lets start</md-button>
       </div>
     </template>
   </modal-as-header>
