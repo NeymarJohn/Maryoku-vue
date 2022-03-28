@@ -44,15 +44,15 @@ export default {
   props: {
     event: {
       type: Object,
-      default: {},
+      default: () => {},
     },
     components: {
       type: Array,
-      default: [],
+      default: () => [],
     },
     vendor: {
       type: Object,
-      default: [],
+      default: () => [],
     },
   },
   data() {
@@ -95,7 +95,6 @@ export default {
       this.$emit("cancel");
     },
     addNewCategory() {
-      console.log(this.newBuildingBlock);
       this.$emit("save", this.newBuildingBlock);
     },
     addMoreMoney() {},

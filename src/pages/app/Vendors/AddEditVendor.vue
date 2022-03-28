@@ -113,7 +113,6 @@ import VendorPropertyField from "./VendorPropertyField";
 import Vendors from "@/models/Vendors";
 
 // COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
 import LightBox from "vue-image-lightbox";
 import { SlideYDownTransition } from "vue2-transitions";
 

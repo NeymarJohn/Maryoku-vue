@@ -240,12 +240,19 @@
         </div>
         <div class="signature-wrapper">
           <button class="signature-button" @click="toggleShowSignatureModal">
+            <i class="fas fa-pencil-alt" />
             Your signature
           </button>
         </div>
         <div class="signatures-block">
-          <img v-if="signature.jpeg" :src="signature.jpeg">
-          <img v-if="signature.uploadedSignature" :src="signature.uploadedSignature.dataURL">
+          <div v-if="signature.jpeg">
+            <img class="signatures-image" :src="signature.jpeg">
+            <img class="trash" @click="signature.jpeg = null" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+          </div>
+          <div v-if="signature.uploadedSignature">
+            <img class="signatures-image" :src="signature.uploadedSignature.dataURL">
+            <img class="trash" @click="signature.uploadedSignature = null" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+          </div>
           <br/>
           <span v-if="signature.signatureName">{{signature.signatureName}}</span>
         </div>
@@ -583,11 +590,34 @@
   };
 </script>
 <style lang="scss" scoped>
-.signatures-block{
-  //display: flex;
-  img{
-    width: 250px;
-    margin-left: 5px;
+.signatures-block {
+  div{
+    display: inline-block;
+    position: relative;
+    width: fit-content;
+    .trash {
+      display: none;
+      cursor: pointer;
+      border-radius: 0 3px;
+      width: 20px;
+      position: absolute;
+      left: 229px;
+      background-color: #f51355;
+      padding: 3px;
+      top: 0;
+    }
+    img {
+      border-radius: 3px;
+      width: 250px;
+      margin-left: 5px;
+      position: relative;
+    }
+    &:hover img {
+      border: solid 1px #f51355;
+    }
+    &:hover .trash {
+      display: block;
+    }
   }
 }
   .event-vendor-checkout {

@@ -12,7 +12,6 @@
       <div class="header-title">
         <div class="d-flex align-center">
           Created on {{ getFormattedDate }}
-         
         </div>
         <h3>
           <img
@@ -38,14 +37,9 @@
       </div>
     </div>
     <div id="footer-panel" class="event-footer-container">
-      <div class="ml-20">
-        <md-button class="md-bold add-category-btn md-black md-simple">
-          <md-icon>arrow_back</md-icon>Back
-        </md-button>
-        <md-button class="md-simple md-just-icon md-black">
-          <md-icon style="font-size: 40px">
-            expand_less
-          </md-icon>
+      <div class="ml-60">
+        <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
         </md-button>
       </div>
 
@@ -84,13 +78,8 @@ import Calendar from "@/models/Calendar";
 export default {
   name: "EventOverview",
   components: {
-    VueElementLoading,
-    FunctionalCalendar,
     HeaderActions,
     CommentEditorPanel,
-    LocationInput,
-    MaryokuInput,
-    Multiselect,
     EventOverviewSection,
     EventOverviewDate,
   },
@@ -109,10 +98,6 @@ export default {
     },
   },
   mixins: [CommentMixins, ShareMixins],
-  props: {
-    // event: Object,
-    // eventComponents: [Array, Function]
-  },
   data() {
     return {
       // auth: auth,
@@ -296,6 +281,12 @@ export default {
         },
       ];
     },
+    scrollToTop() {
+      setTimeout(() => {
+          window.scrollTo(0, 0);
+      }, 100);
+    },
+
     init() {
       if (this.eventTypeList.length) {
         this.isLoading = false;

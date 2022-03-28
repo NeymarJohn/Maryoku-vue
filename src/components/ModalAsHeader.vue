@@ -8,18 +8,10 @@
       @dragover="modalMaskClick"
       @dragleave="modalMaskClick"
     >
-      <div class="modal-wrapper">
+      <div class="modal-wrapper modal-modified">
         <div v-click-outside="closeModal" :class="containerClass">
-          <div class="modal-header" :style="styles.header">
-            <slot name="header" />
-          </div>
-
-          <div class="modal-body text-center" :style="styles.body">
+          <div class="modal-body text-center body-modified" :style="styles.body">
             <slot name="body" />
-          </div>
-
-          <div class="modal-footer" :style="styles.footer">
-            <slot name="footer" />
           </div>
         </div>
       </div>
@@ -34,9 +26,7 @@ export default {
       type: Object,
       default(){
         return{
-          header:"",
-          body:"",
-          footer:"",
+          body:""
         };
       }
     },
@@ -68,28 +58,42 @@ export default {
 };
 </script>
 
-<style lang="scss">
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
+<style lang="scss" scoped>
 
-.modal-enter {
-  opacity: 0;
+.modal-modified{
+  width: 100%;
+  position: absolute;
+  top: 0;
+.modal-container{
+  width: 100%;
+  max-width: unset;
+  padding-left: 72px;
+  position: fixed;
+  top: 0;
+  .body-modified{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
-.modal-leave-active {
-  opacity: 0;
 }
-
-.modal-enter .modal-container-wizard,
-.modal-leave-active .modal-container-wizard .modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
+//
+//.modal-enter {
+//  opacity: 0;
+//}
+//
+//.modal-leave-active {
+//  opacity: 0;
+//}
+//
+//
+//.modal-enter .modal-container-wizard,
+//.modal-leave-active .modal-container-wizard .modal-enter .modal-container,
+//.modal-leave-active .modal-container {
+//  -webkit-transform: scale(1.1);
+//  transform: scale(1.1);
+//}
 </style>

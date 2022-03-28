@@ -13,14 +13,6 @@
       <div class="header-title">
         <div class="d-flex align-center">
           Created on {{ getFormattedDate }}
-          <md-button class="md-simple md-red" style="color: white">
-            See event history
-            <img
-              class="ml-5"
-              src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%2010036.svg"
-              width="10"
-            >
-          </md-button>
         </div>
         <h3>
           <img

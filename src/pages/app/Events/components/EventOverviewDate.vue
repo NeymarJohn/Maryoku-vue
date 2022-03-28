@@ -53,17 +53,9 @@
 <style lang="scss" scoped>
 </style>
 <script>
-import RequirementItemComment from "./RequirementItemComment";
-import Multiselect from "vue-multiselect";
-import HeaderActions from "@/components/HeaderActions";
-import { MaryokuInput, LocationInput, HolidayInput } from "@/components";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import CategorySelector from "@/components/Inputs/CategorySelector";
-import Swal from "sweetalert2";
 import { extendMoment } from "moment-range";
-import { timelineTempates } from "@/constants/event.js";
 
 export default {
   name: "EventOverviewDate",
@@ -147,7 +139,6 @@ export default {
       this.year = moment(e).year();
     },
     changeDate(e) {
-      console.log("changeDate", e, this.dateData);
       this.dateClick = !this.dateClick;
 
       if (this.dateClick) {

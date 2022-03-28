@@ -16,7 +16,7 @@
       <div class="header-content">
         <ul>
           <li class="font-size-30">
-            {{ vendor ? vendor.name : "" }}
+            {{ vendor ? vendor.companyName : "" }}
           </li>
         </ul>
       </div>

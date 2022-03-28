@@ -245,7 +245,6 @@ const components = {
 };
 
 export default {
-
   components,
   mixins: [CommentMixins, ShareMixins, MobileMixins, TimerMixins],
   data() {
@@ -321,6 +320,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions("comment", ["updateProposal"]),
     ...mapMutations("comment", ["setGuestName"]),
     ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
     async bookProposal() {
@@ -491,7 +491,6 @@ export default {
       }
     },
     saveCommentWithAuth(params) {
-      // console.log("saveComment");
       if (this.loggedInUser || this.guestName) {
         this.saveComment(params);
       } else {
@@ -504,6 +503,9 @@ export default {
         );
         this.showCommentEditorPanel = false;
         this.showGuestSignupModal = true;
+      }
+      if (!params.comment.viewed) {
+        this.updateProposal({ ...this.proposal, viewed: false });
       }
     },
     updateCommentWithAuth(params) {
