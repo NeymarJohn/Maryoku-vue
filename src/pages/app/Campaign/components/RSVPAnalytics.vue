@@ -108,7 +108,7 @@
             </div>
             <rsvp-food-limitations
               v-if="Object.keys(foodLimitations).length"
-              :limitations="foodLimitations"
+              :data="foodLimitations"
             />
             <div v-else class="text-center" style="padding: 10px">
               Nobody replied yet.
@@ -165,14 +165,34 @@ export default {
         { value: 0, label: "Online Participants", color: "#43536a", list: [], category: "online" },
         { value: 0, label: "No reply", color: "#cbc8c8", list: [], category: "noreply" },
       ],
-      foodLimitations: {
-        "Shellfish": [],
-        "Soy": [],
-        "Kosher food": [],
-        "vegan": [],
-        "Wheat": [],
-        "Eggs": [],
-      },
+      foodLimitations: [
+        {
+          value: 26,
+          label: "Vegetarian",
+          icon: "RSVP/milk.svg",
+          color: "#2cde6b",
+        },
+        {
+          value: 6,
+          label: "Vegan",
+          icon: "RSVP/food+(4).svg",
+          color: "#f3423a",
+        },
+        { value: 13, label: "Milk", icon: "RSVP/kosher.svg", color: "#ffc001" },
+        {
+          value: 2,
+          label: "Kosher",
+          icon: "RSVP/food+(2).svg",
+          color: "#43536a",
+        },
+        {
+          value: 6,
+          label: "Halal",
+          icon: "RSVP/spiritual.svg",
+          color: "#cbc8c8",
+        },
+        { value: 2, label: "Other", icon: "", color: "#cbc8c8" },
+      ],
       timer: null,
     };
   },
@@ -244,7 +264,6 @@ export default {
         this.analyticsData[2].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "CONSIDERED");
         this.analyticsData[3].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "VIRTUAL");
         this.analyticsData[4].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REQUESTED");
-        console.log("getAnalyzingData", res.data, res.data.limitations);
         this.foodLimitations = res.data.limitations;
       });
     },
