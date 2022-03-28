@@ -188,11 +188,6 @@
           v-if="campaignData.visibleSettings.showSharingOption"
         />
       </div>
-      <button
-        @click="handleResetDataImages"
-      >
-        Reset
-      </button>
     </div>
   </div>
 </template>
@@ -376,9 +371,6 @@ export default {
         key: "attachments",
         value: files
       });
-    },
-    handleResetDataImages() {
-      this.saveCampaign({ id: this.campaignData.id, attachments: [] });
     }
   },
 };
