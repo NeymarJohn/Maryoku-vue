@@ -666,7 +666,6 @@ import ProposalRequestFile from "@/models/ProposalRequestFile";
 import Vendors from "@/models/Vendors";
 
 // COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
 import { Collapse, LabelEdit } from "@/components";
 
 import moment from "moment";
@@ -677,7 +676,6 @@ import _ from "underscore";
 export default {
   components: {
     VueElementLoading,
-    Icon,
     Collapse,
     LabelEdit,
   },

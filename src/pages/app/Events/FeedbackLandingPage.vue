@@ -32,11 +32,11 @@
         <div class="content-article">
           <div class="content-article-header">
             <div class="d-flex mb-70">
-              <feedback-logo v-if="campaign && campaign.visibleSettings.showLogo" class="mt-30" />
-              <div v-if="campaign && campaign.visibleSettings.showImages" class="wrapper-view-presentation">
+              <feedback-logo v-if="campaign && campaign.logoUrl && campaign.visibleSettings.showLogo" class="mt-30" review />
+              <div v-if="showImages" class="wrapper-view-presentation">
                 <div class="view-presentation">
                   <view-presentation
-                    :cover-image="attachmentsImages.length ? attachmentsImages[0].src : 'https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/fde9a712-f55d-4a96-b0ce-7df0ac9c1661.png'"
+                    :cover-image="attachmentsImages[0].src"
                     @on-play="onPlay"
                     @download-files="downloadFiles"
                     @selected-download-files="selectedDownloadFiles"
@@ -239,6 +239,11 @@ export default {
       },
       showFeedbackMessageSuccessful: false,
     };
+  },
+  computed: {
+    showImages() {
+      return this.campaign && this.campaign.visibleSettings.showImages && this.attachmentsImages.length;
+    }
   },
   created() {
     this.placeHolder = `Thank you so much for attending! We are so glad you could join us.

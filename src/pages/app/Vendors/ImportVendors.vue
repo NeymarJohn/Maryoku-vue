@@ -164,27 +164,20 @@
   </div>
 </template>
 <script>
-import Vendors from "@/models/Vendors";
 import VendorsFile from "@/models/VendorsFile";
 import vendorsModule from "./vendors.vuex";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { GlobalSalesTable, Modal } from "@/components";
-import Swal from "sweetalert2";
-import _ from "underscore";
+import { mapMutations } from "vuex";
+import { Modal } from "@/components";
 import * as lodash from "lodash";
 import VueElementLoading from "vue-element-loading";
-import Button from "../../../components/Button/ControlPanel";
 import draggable from "vuedraggable";
-import { Drop, Drag } from "vue-drag-drop";
+import { Drop } from "vue-drag-drop";
 
 export default {
   components: {
-    Button,
     Modal,
-    GlobalSalesTable,
     VueElementLoading,
     draggable,
-    Drag,
     Drop,
   },
   filters: {

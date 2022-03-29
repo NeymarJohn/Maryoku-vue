@@ -917,6 +917,9 @@ $baseColor: #5c2153;
     font-size: 30px;
     text-transform: uppercase;
   }
+  .setting-subtitle {
+    font-size: 28px;
+  }
   .event-basic-info {
     text-align: center;
   }

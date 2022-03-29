@@ -311,7 +311,6 @@ import VendorPropertyField from "./VendorPropertyField";
 import ProposalRequest from "@/models/ProposalRequest";
 
 // COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
 import VendorSimilarProposals from "./components/VendorSimilarProposals.vue";
 import VendorFeedbacks from "./components/VendorFeedbacks.vue";
 import VendorSimilarItem from "./components/VendorSimilarItem.vue";
@@ -323,8 +322,6 @@ export default {
     VendorSimilarProposals,
     VendorSimilarItem,
     VendorFeedbacks,
-    VendorPropertyField,
-    Icon,
     LightBox,
   },
   filters: {},

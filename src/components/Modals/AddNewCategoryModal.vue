@@ -103,11 +103,11 @@ export default {
   props: {
     event: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
     components: {
       type: Array,
-      default: [],
+      default: () => [],
     },
   },
   data() {
@@ -150,8 +150,6 @@ export default {
       this.$emit("cancel");
     },
     async addNewCategory() {
-      console.log(this.newBuildingBlock);
-
       let newComponent = this.newBuildingBlock.category;
       if (newComponent.id === "other") {
         const newCategory = {

@@ -123,6 +123,10 @@ export default {
     },
     isMain: {
       type: Boolean
+    },
+    isVendor: {
+      type: Boolean,
+      required: true,
     }
   },
   data() {
@@ -141,7 +145,10 @@ export default {
       return true;
     }
   },
-  mounted(){
+  mounted() {
+    if (!this.comment.viewed && this.isVendor) {
+      this.updateCommentViewed(true);
+    }
   },
   methods: {
     cancelEditing() {
@@ -165,7 +172,10 @@ export default {
     deleteComment(comment) {
       this.$emit("delete", comment);
     },
-  }
+    updateCommentViewed(viewed) {
+      this.$emit("updateCommentViewed", { ...this.comment, viewed });
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>

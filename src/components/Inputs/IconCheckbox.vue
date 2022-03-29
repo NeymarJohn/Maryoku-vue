@@ -30,9 +30,18 @@ export default {
       type: Boolean,
       default: false
     },
-    name: String,
-    title: String,
-    icon: String,
+    name: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    icon: {
+      type: String,
+      required: true,
+    },
     disabled: Boolean
   },
   methods: {

@@ -229,7 +229,6 @@
 </template>
 <script>
 import InputText from "@/components/Inputs/InputText.vue";
-import Select from "@/components/Select/Select.vue";
 import Title from "@/components/Title/Title.vue";
 import ButtonDiv from "@/components/Button/ButtonDiv.vue";
 import Button from "@/components/Button/Button.vue";

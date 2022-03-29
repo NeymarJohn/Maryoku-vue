@@ -126,15 +126,17 @@ const actions = {
   getProposalById({ commit, state }, proposalId) {
     return new Promise(async (resolve, reject) => {
       let query = new Proposal();
-      const res = await query.find(proposalId);
-      if (res.success) {
-        commit("setSelectedProposal", res.data);
-        // save customer when user comment as guest
-        resolve(res.data);
-      } else {
-        commit("setError", res.message);
-        resolve([]);
-      }
+      await query.find(proposalId)
+        .then((res) => {
+          const foundCommentsProposal = state.commentsProposals.find((proposal) => proposal.id === res.id);
+          commit("setSelectedProposal", { ...foundCommentsProposal, ...res });
+          // save customer when user comment as guest
+          resolve(res);
+        })
+        .catch((res) => {
+          commit("setError", res.message);
+          resolve([]);
+        });
     });
   },
 
@@ -153,7 +155,7 @@ const actions = {
   },
 
   addComment({ commit, state }, comment) {
-    const commentComponent = new EventCommentComponent({ id: comment.commentComponent.id });
+    const commentComponent = new EventCommentComponent({ id: comment.eventCommentComponent.id });
     if (state.guestName) comment = { ...comment, name: state.guestName };
     return new Promise((resolve, reject) => {
       new EventComment(comment)
@@ -178,6 +180,27 @@ const actions = {
         commit("removeCommentComponent", commentComponent);
         resolve(res);
       });
+    });
+  },
+
+  updateProposal({ commit, state }, proposal) {
+    return new Promise((resolve, reject) => {
+      new Proposal({ ...proposal }).save()
+        .then((res) => {
+          const proposals = state.commentsProposals.map(
+            (proposal) => proposal.id === res.id ? { ...proposal, viewed: res.viewed } : proposal
+          );
+          commit("setCommentsProposals", proposals);
+          commit("setSelectedProposal", {
+            ...proposal,
+            ...res
+          });
+          resolve(res);
+        })
+        .catch((res) => {
+          commit("setError", res.message);
+          reject(res.message);
+        });
     });
   },
 
@@ -206,13 +229,38 @@ const actions = {
         .for(commentComponent)
         .save()
         .then((res) => {
-          console.log(res);
-          // save customer when user comment as guest
-          if (res.customer) commit("setCustomer", res.customer);
-          resolve(res);
+          if (res.success) {
+            const commentComponent = state.selectedProposal.commentComponent.map((commentComponent) => {
+              const foundCommentIndex = commentComponent.comments.findIndex((comment) => comment.id === res.data.id);
+              if (foundCommentIndex > -1) {
+                return {
+                  ...commentComponent,
+                  comments: [
+                    ...commentComponent.comments.slice(0, foundCommentIndex),
+                    { ...commentComponent.comments[foundCommentIndex], viewed: res.data.viewed },
+                    ...commentComponent.comments.slice(foundCommentIndex + 1)
+                  ]
+                };
+              }
+              return commentComponent;
+            });
+            commit("setSelectedProposal", { ...state.selectedProposal, commentComponent });
+            commit(
+              "setCommentsProposals",
+              state.commentsProposals
+                .map((proposal) => proposal.id === state.selectedProposal.id ? { ...proposal, commentComponent } : proposal)
+            );
+            // save customer when user comment as guest
+            if (res.data.customer) commit("setCustomer", res.data.customer);
+            resolve(res);
+          } else {
+            commit("setError", res.message);
+            resolve(null);
+          }
         });
     });
   },
+
   deleteCommentAction({ commit, state }, comment) {
     return new Promise(async (resolve, reject) => {
       const eventCommentComponent = new EventCommentComponent({ id: comment.id });

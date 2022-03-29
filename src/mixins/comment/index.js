@@ -4,7 +4,6 @@ export default {
   data() {
     return {
       commentComponents: []
-      // isOpenCommentListsPane: false,
     };
   },
   methods: {
@@ -34,8 +33,8 @@ export default {
       this.commentComponents[index].comments.push(addedComment);
       this.commentComponents = this.commentComponents.slice(0);
     },
-    async updateComment({ comment, component }) {
-      let updatedComment = await this.updateCommentAction(comment);
+    async updateComment(comment) {
+      await this.updateCommentAction(comment);
     },
     async updateMixinCommentComponent(component) {
       await this.updateCommentComponent(component);
@@ -54,5 +53,5 @@ export default {
   },
   async created() {
     this.commentComponents = await this.getCommentComponents(this.url ? this.url : this.$route.path);
-  }
+  },
 };

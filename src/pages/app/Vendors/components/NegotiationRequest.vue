@@ -128,100 +128,98 @@
 </template>
 <script>
 
-    import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
-    import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
+import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 
-    export default {
-        components: {
-          VendorBidTimeCounter
-        },
-        props: {
-          type: Number,
-          negotiation: {
-            type: [Object, Number]
-          },
+export default {
+  components: {
+    VendorBidTimeCounter
+  },
+  props: {
+    type: Number,
+    negotiation: {
+      type: [Object, Number]
+    },
 
-          processed: {
-            type: Number,
-            default: NEGOTIATION_REQUEST_STATUS.NONE,
-          },
-        },
-        data() {
-          return {
-            negotiationTypes: NEGOTIATION_REQUEST_TYPE,
-            days: 0,
-            hours: 0,
-            mins: 0,
-            seconds: 0,
-          };
-        },
-        computed: {
-          title(){
-            if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return "Time added successfully";
-            else if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "Time extension Declined";
-
-            if ( this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
-              return "Planner needs extra time";
-            } else if ( this.type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
-              return "The planner changed the event details";
-            } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-              return "Planner want to negotiate the rate";
-            }
-          },
-          subTitle(){
-            if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return "You successfully extended the offer expiration by 2 days";
-            else if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "We will make sure to inform the planner";
-
-            if ( this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
-              return "You can extend the offer expiration by 2 days";
-            } else if ( this.type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
-              return "You can change the rate right from here. If the change entails further changes on your part you can edit the proposal before sending to the planner";
-            } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-              return "You can change the rate right from here or see the offer with all details";
-            }
-          },
-          icon(){
-            if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "VendorsProposalPage/group-20091.svg";
-
-            if ( this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
-              return "VendorsProposalPage/group-18823.svg";
-            } else if ( this.type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
-              return "VendorsProposalPage/group-21671.svg";
-            } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
-              return "Customer/group-8488.svg";
-            }
-          }
-        },
-        watch:{
-          processed(newVal){
-              this.init();
-          },
-          negotiation(newVal){
-             console.log("negotiation.watch", newVal);
-             this.init();
-          }
-        },
-        mounted() {
-          console.log("negotiation.request.mounted", this.negotiation, this.type);
-          this.init();
-        },
-        methods: {
-           init(){
-               if (this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
-                   let diff = (this.negotiation - new Date().getTime()) / 1000;
-
-                   if (diff < 0) return;
-                   this.days = Math.floor(diff / (24 * 3600));
-                   diff = diff - this.days * 24 * 3600;
-                   this.hours = Math.floor(diff / 3600);
-                   diff = diff - this.hours * 3600;
-                   this.mins = Math.floor(diff / 60);
-                   diff -= this.mins * 60;
-                   this.seconds = Math.floor(diff);
-               }
-           }
-        }
+    processed: {
+      type: Number,
+      default: NEGOTIATION_REQUEST_STATUS.NONE,
+    },
+  },
+  data() {
+    return {
+      negotiationTypes: NEGOTIATION_REQUEST_TYPE,
+      days: 0,
+      hours: 0,
+      mins: 0,
+      seconds: 0,
     };
+  },
+  computed: {
+    title() {
+      if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return "Time added successfully";
+      else if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "Time extension Declined";
+
+      if ( this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
+        return "Planner needs extra time";
+      } else if ( this.type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
+        return "The planner changed the event details";
+      } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
+        return "Planner want to negotiate the rate";
+      }
+    },
+    subTitle() {
+      if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return "You successfully extended the offer expiration by 2 days";
+      else if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "We will make sure to inform the planner";
+
+      if ( this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
+        return "You can extend the offer expiration by 2 days";
+      } else if ( this.type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
+        return "You can change the rate right from here. If the change entails further changes on your part you can edit the proposal before sending to the planner";
+      } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
+        return "You can change the rate right from here or see the offer with all details";
+      }
+    },
+    icon() {
+      if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "VendorsProposalPage/group-20091.svg";
+
+      if ( this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME ) {
+        return "VendorsProposalPage/group-18823.svg";
+      } else if ( this.type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE ) {
+        return "VendorsProposalPage/group-21671.svg";
+      } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
+        return "Customer/group-8488.svg";
+      }
+    }
+  },
+  watch:{
+    processed(newVal){
+        this.init();
+    },
+    negotiation(newVal){
+       this.init();
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      if (this.type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME) {
+        let diff = (this.negotiation - new Date().getTime()) / 1000;
+
+        if (diff < 0) return;
+        this.days = Math.floor(diff / (24 * 3600));
+        diff = diff - this.days * 24 * 3600;
+        this.hours = Math.floor(diff / 3600);
+        diff = diff - this.hours * 3600;
+        this.mins = Math.floor(diff / 60);
+        diff -= this.mins * 60;
+        this.seconds = Math.floor(diff);
+      }
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
 

@@ -42,23 +42,11 @@
           />
         </div>
         <div class="footer-change-cover">
-          <div class="wrapper-logo-microsoft">
-            <div class="logo-microsoft">
-              <div class="icon-microsoft">
-                <div class="block block1" />
-                <div class="block block2" />
-                <div class="block block3" />
-                <div class="block block4" />
-              </div>
-              <h2>
-                Microsoft
-              </h2>
-            </div>
-            <hide-switch v-model="campaignData.visibleSettings.showLogo" label=" Logo" />
-          </div>
-          <span class="hello-microsoft-special-employee">
-            Hello Microsoft special employee!
-          </span>
+          <feedback-logo
+            v-model="campaignData.visibleSettings.showLogo"
+            :logo-url="campaignData.logoUrl"
+            :logo-title="campaignData.title"
+          />
         </div>
       </div>
       <div class="mt-70 mb-40">
@@ -202,9 +190,11 @@ import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
 import { mapActions } from "vuex";
+import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
 
 export default {
   components: {
+    FeedbackLogo,
     MaryokuTextarea,
     FeedbackImageCarousel,
     SharingButtonGroup,

@@ -247,8 +247,8 @@ export default {
         "Huston, Texas",
       ],
       eventTypes: [
-        "Reception",
-        "Establishment / Activity day",
+        "Reception/Party",
+        "Activity day",
         "Offsite meeting",
         "Hackathon",
         "Networking Incentive meeting",
