@@ -175,11 +175,12 @@ export default {
         .map((file) => {
           const extension = file.type.split("/")[1];
           const fileName = uuidv4();
-          return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload);
+          return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true);
         });
       Promise.all(functionsUploadFiles).then((responses) => {
         this.isLoading = false;
-        this.$emit("upload-files", responses);
+        const files = responses.map(({ data }) => data.upload);
+        this.$emit("upload-files", files);
       });
     }
   },
