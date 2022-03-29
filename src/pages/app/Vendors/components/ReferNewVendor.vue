@@ -22,25 +22,39 @@
     </div>
     <modal v-if="referModal" class="refer-vendor-modal" container-class="modal-container sl">
       <template slot="header">
-        <div class="refer-vendor-modal__header">
-          <div class="title-cont">
+        <div class="md-layout">
+            <div class="md-layout-item pl-0 md-size-90">
+          <div class="d-flex align-center refer-vendor-modal__header">
             <img :src="`${$iconURL}Submit Proposal/group-17528.svg`">
-            <h3>
+            <h3 class="ml-30 mt-30">
               Refer a new vendor
-              <br>and get a commission!!
+              <br>and get a commission!
             </h3>
           </div>
           <div class="header-description">
-            <p>Mark the related service and fill the vendor's details</p>
+            Mark the related service and fill the vendor's details
           </div>
         </div>
-        <button class="close" @click="hideModal()">
+        
+        <div class="md-layout-item pl-0 md-size-10">
+           <md-button
+              class=" md-simple text-decoration-none cursor-pointer "
+              style=""
+
+              @click="hideModal()"
+            >
+              <md-icon>close</md-icon>
+            </md-button>
+          <!-- <button class="close" @click="hideModal()" style="margin-top: -20px;">
           <img :src="`${iconUrl}Group 3671 (2).svg`">
-        </button>
+        </button> -->
+        </div>
+        </div>
       </template>
       <template slot="body">
         <div class="refer-vendor-modal__body">
-          <refer-modal-item
+           
+            <refer-modal-item
             v-for="(service, index) in referringServices"
             :key="index"
             :category="service"
@@ -49,14 +63,22 @@
             @set="setVendorInfo"
             @cancel="removeVendorInfo"
           />
+
+        </div>
+
           <!-- <refer-modal-item :category="`Bar`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 606.svg`" />
           <refer-modal-item :category="`Dj`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 605.svg`" /> -->
-        </div>
+       
       </template>
       <template slot="footer">
         <div class="refer-vendor-modal__footer">
-          <a class="cancel" @click="hideModal()">Cancel</a>
-          <a class="cool" @click="referVendors()">Refer</a>
+         
+           <md-button class=" md-simple  text-decoration-none  " @click="hideModal()">
+            <span style="color: black">Cancel</span>
+          </md-button>
+           <md-button class="md-vendor  md-bold "  @click="referVendors()">
+             Refer
+          </md-button>
         </div>
       </template>
     </modal>
@@ -89,11 +111,14 @@
 import { Modal } from "@/components";
 import ReferModalItem from "./ReferModalItem.vue";
 import Vendors from "@/models/Vendors";
+import StartModal from "@/components/StartModal.vue";
+
 export default {
   name: "ReferNewVendor",
   components: {
     Modal,
     ReferModalItem,
+    StartModal
   },
   props: {
     event: {
@@ -247,9 +272,12 @@ export default {
         }
       }
       h3 {
-        font-size: 30px;
+        
         color: #641856;
+        font-size: 30px;
         font-weight: 800;
+          line-height: 1.5;
+
         margin: 0;
         text-transform: capitalize;
         img {
@@ -257,13 +285,13 @@ export default {
         }
       }
       .header-description {
-        p {
-          font-size: 16px;
+      
+          font-size: 12px;
           font-weight: bold;
           line-height: 1.29;
           margin-top: 43px;
           margin-bottom: 7px;
-        }
+      
       }
       & + .close {
         background: transparent;
@@ -284,7 +312,7 @@ export default {
     &__footer {
       width: 100%;
       text-align: right;
-      margin: 0 1.5rem;
+      
       margin-top: -2rem;
       padding: 2rem 0 1rem 0;
       .cancel {
@@ -295,6 +323,7 @@ export default {
         padding: 8px 36px;
         cursor: pointer;
         border: none;
+        
       }
     }
   }
@@ -360,4 +389,14 @@ export default {
     border: none;
   }
 }
+
+ .header-description {
+   font-size: 16px;
+   font-weight: bold;
+   margin-top: 10px;
+   line-height: 1.29;
+   margin-bottom: 7px;
+   margin-left: 14px;
+      
+ }
 </style>
