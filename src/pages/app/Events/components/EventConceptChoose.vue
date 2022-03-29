@@ -277,86 +277,6 @@ import ConceptBox from "../../../../components/ConceptBox.vue";
 
 const VueHtml2pdf = () => import("vue-html2pdf");
 
-// [
-//   {
-//     option: 1,
-//     name: "March Madness",
-//     description:
-//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-//     fontFamily: "Cooperative-Regular",
-//     tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
-//     images: [
-//       {
-//         url: "https://placeimg.com/200/200/any?1",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?2",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?3",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?4",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?5",
-//       },
-//     ],
-//     colors: [{ value: "#ffc001" }, { value: "#f3423a" }, { value: "#ff7600" }],
-//   },
-//   {
-//     option: 2,
-//     name: "Horror movies",
-//     description:
-//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-//     fontFamily: "CFNightofTerrorPERSONAL-Reg",
-//     tags: [{ name: "romantic" }, { name: "luxurry" }, { name: "fun" }, { name: "colourful" }],
-//     images: [
-//       {
-//         url: "https://placeimg.com/200/200/any?1",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?2",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?3",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?4",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?5",
-//       },
-//     ],
-//     colors: [{ value: "#de0300" }, { value: "#d1d1d1" }, { value: "#ff7600" }],
-//   },
-//   {
-//     option: 3,
-//     name: "Intergalactic",
-//     description:
-//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-//     fontFamily: "IntergalacticHalftoneItalic",
-//     tags: [{ name: "festive" }, { name: "elegant" }, { name: "respectable" }],
-//     images: [
-//       {
-//         url: "https://placeimg.com/200/200/any?1",
-//         backgroundColor: "#00165d",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?2",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?3",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?4",
-//         backgroundColor: "linear-gradient(#ff0082,#a700ff)",
-//       },
-//     ],
-//     colors: [{ value: "#00165d" }, { value: "linear-gradient(#ff0082,#a700ff)" }, { value: "#ff7600" }],
-//   },
-// ],
-
 export default {
   name: "EventConceptChoose",
   components: {
@@ -376,6 +296,29 @@ export default {
     VueHtml2pdf,
   },
   mixins: [CommentMixins, ShareMixins],
+  props: {},
+  computed: {
+    ...mapState("event", ["eventData"]),
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    userName() {
+      return this.currentUser ? this.currentUser.name : "";
+    },
+    permission() {
+      try {
+        return this.$store.state.event.eventData.permit;
+      } catch (e) {
+        return "edit";
+      }
+    },
+    canComment() {
+      return this.canEdit || this.permission === "comment";
+    },
+    canEdit() {
+      return !this.permission || this.permission === "edit";
+    },
+  },
   data: () => ({
     // auth: auth,
     colour: "#FF00FF",
@@ -408,8 +351,24 @@ export default {
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
         fontFamily: "Cooperative-Regular",
         tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
-        images: [],
-        colors: [],
+        images: [
+          {
+            url: "https://placeimg.com/200/200/any?1",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?2",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?3",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?4",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?5",
+          },
+        ],
+        colors: [{ value: "#ffc001" }, { value: "#f3423a" }, { value: "#ff7600" }],
       },
       {
         option: 2,
@@ -418,8 +377,24 @@ export default {
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
         fontFamily: "CFNightofTerrorPERSONAL-Reg",
         tags: [{ name: "romantic" }, { name: "luxurry" }, { name: "fun" }, { name: "colourful" }],
-        images: [],
-        colors: [],
+        images: [
+          {
+            url: "https://placeimg.com/200/200/any?1",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?2",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?3",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?4",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?5",
+          },
+        ],
+        colors: [{ value: "#de0300" }, { value: "#d1d1d1" }, { value: "#ff7600" }],
       },
       {
         option: 3,
@@ -428,8 +403,23 @@ export default {
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
         fontFamily: "IntergalacticHalftoneItalic",
         tags: [{ name: "festive" }, { name: "elegant" }, { name: "respectable" }],
-        images: [],
-        colors: [],
+        images: [
+          {
+            url: "https://placeimg.com/200/200/any?1",
+            backgroundColor: "#00165d",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?2",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?3",
+          },
+          {
+            url: "https://placeimg.com/200/200/any?4",
+            backgroundColor: "linear-gradient(#ff0082,#a700ff)",
+          },
+        ],
+        colors: [{ value: "#00165d" }, { value: "linear-gradient(#ff0082,#a700ff)" }, { value: "#ff7600" }],
       },
     ],
     expandCreateConcept: false,
@@ -463,28 +453,6 @@ export default {
     },
     uploadImage: "",
   }),
-  computed: {
-    ...mapState("event", ["eventData"]),
-    currentUser() {
-      return this.$store.state.auth.user;
-    },
-    userName() {
-      return this.currentUser ? this.currentUser.name : "";
-    },
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit;
-      } catch (e) {
-        return "edit";
-      }
-    },
-    canComment() {
-      return this.canEdit || this.permission === "comment";
-    },
-    canEdit() {
-      return !this.permission || this.permission === "edit";
-    },
-  },
   methods: {
     ...mapMutations("event", ["setEventData"]),
     expandConcept(item, index) {

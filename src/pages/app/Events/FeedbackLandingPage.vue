@@ -32,7 +32,7 @@
         <div class="content-article">
           <div class="content-article-header">
             <div class="d-flex mb-70">
-              <feedback-logo v-if="campaign && campaign.logoUrl && visibleSettings.showLogo" class="mt-30" review />
+              <feedback-logo v-if="campaign && campaign.logoUrl && campaign.visibleSettings.showLogo" class="mt-30" review />
               <div v-if="showImages" class="wrapper-view-presentation">
                 <div class="view-presentation">
                   <view-presentation
@@ -65,7 +65,7 @@
             </div>
           </div>
           <div
-            v-if="!showFeedbackMessageSuccessful && visibleSettings.showFeedback"
+            v-if="!showFeedbackMessageSuccessful && campaign.visibleSettings.showFeedback"
             class="content-article-main-content"
           >
             <div class="feedback-question-list">
@@ -76,7 +76,7 @@
                     <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
                   </div>
                 </div>
-                <div v-if="visibleSettings.showFeedback">
+                <div v-if="campaign && campaign.visibleSettings.showFeedback">
                   <feedback-question
                     v-for="(question, index) in feedbackQuestions"
                     :key="index"
@@ -106,12 +106,13 @@
                 :items="2.5"
                 :margin-items="10"
                 :images="images"
+                @addImage="addNewImage"
               />
             </div>
           </div>
         </div>
       </div>
-      <div v-if="visibleSettings.allowUploadPhoto" class="green-block-wrapper">
+      <div v-if="campaign && campaign.visibleSettings.allowUploadPhoto" class="green-block-wrapper">
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
             <div class="icon-and-text">
@@ -139,7 +140,7 @@
           </div>
         </div>
       </div>
-      <div v-if="visibleSettings.showSharingOption" class="lets_share_block">
+      <div v-if="campaign && campaign.visibleSettings.showSharingOption" class="lets_share_block">
         <div class="lets_share_text">
           Let's share all this fun :)
         </div>
@@ -231,13 +232,6 @@ export default {
       attachments: [],
       feedbackQuestions: [],
       selectedAttachments: [],
-      visibleSettings: {
-        showImages: false,
-        showSharingOption: false,
-        allowUploadPhoto: false,
-        downloadFiles: false,
-        showFeedback: false
-      },
       extensionsFiles: {
         image: [".jpeg", ".jpg", ".gif", ".png"],
         document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
@@ -270,15 +264,12 @@ export default {
       this.campaign = campaigns["FEEDBACK"];
       this.event = this.campaign.event;
       this.images = this.campaign.images;
-      this.visibleSettings = this.campaign.visibleSettings;
       if (this.campaign.attachments) {
         this.attachments = this.campaign.attachments;
         this.attachmentsImages = this.filterFilesByType(["image"], this.attachments)
           .map(({ url }) => ({ src: url }));
       }
-      this.feedbackQuestions = this.campaign.feedbackQuestions
-        .filter((question) => question.showQuestion)
-        .map((question) => ({ ...question, errors: { rank: null, comment: null }}));
+      this.feedbackQuestions = this.campaign.feedbackQuestions.filter((question) => question.showQuestion);
     });
   },
   methods: {
@@ -304,6 +295,15 @@ export default {
         }
       });
     },
+    addNewImage({ imageString, file }) {
+      const fileName = `${this.campaign.id}-${new Date().getTime()}`;
+      const extension = file.type.split("/")[1];
+      this.images.unshift({
+        src: `${process.env.S3_URL}feedback/${this.campaign.id}/${fileName}.${extension}`,
+        imageData: imageString,
+      });
+      S3Service.fileUpload(file, "fileName", `feedback/${this.campaign.id}`).then((res) => {});
+    },
     uploadFile() {
       document.getElementById("file-uploader").click();
     },
@@ -315,11 +315,11 @@ export default {
     },
     sendFeedback() {
       let email = this.$route.query.email;
-      if (!email) {
+      if (email === undefined) {
         email = "test@gmail.com";
       }
       const feedbackQuestions = [];
-      this.feedbackQuestions.forEach((item) => {
+      this.campaign.feedbackQuestions.forEach((item) => {
         if (!item.showQuestion) return;
         feedbackQuestions.push({
           question: item.question,
@@ -329,24 +329,6 @@ export default {
           event: new CalendarEvent({ id: this.event.id }),
         });
       });
-      // validate questions
-      this.feedbackQuestions.forEach((item, index) => {
-        if (!item.rank) {
-          this.feedbackQuestions[index].errors.rank = `Please selected rank for the ${item.label}`;
-        }
-        else if (item.errors.rank) {
-          this.feedbackQuestions[index].errors.rank = null;
-        }
-        if (!item.comment) {
-          this.feedbackQuestions[index].errors.comment = `Please write comment for the question ${item.question}`;
-        }
-        else if (item.errors.comment) {
-          this.feedbackQuestions[index].errors.comment = null;
-        }
-      });
-      const someQuestionHasError = this.feedbackQuestions
-        .some((question) => question.errors.rank || question.errors.comment);
-      if (someQuestionHasError) return;
       new Feedback({
         guestName: email,
         guestEmail: email,

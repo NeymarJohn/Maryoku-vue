@@ -1,12 +1,23 @@
 <template>
   <div class="d-flex sharing-button-group-content">
     <ul class="d-flex sharing-button-group">
-      <li v-for="social in Object.keys(socialLinks)"
-          :key="social"
-          :data-social="social"
-          @click="shareSocial(social)"
-      >
-        <img :src="`/static/icons/${social}.svg`">
+      <li data-social="linkedin" @click="shareSocial('linkedin')">
+        <img src="/static/icons/linkedin.svg">
+      </li>
+      <li data-social="pinterest" @click="shareSocial('pinterest')">
+        <img src="/static/icons/pintrerst.svg">
+      </li>
+      <li data-social="gmail" @click="shareSocial('gmail')">
+        <img src="/static/icons/gmail.svg">
+      </li>
+      <li data-social="whatsapp" @click="shareSocial('whatsapp')">
+        <img src="/static/icons/whatsapp.svg">
+      </li>
+      <li data-social="outlook" @click="shareSocial('outlook')">
+        <img src="/static/icons/outlook.svg">
+      </li>
+      <li data-social="facebook" @click="shareSocial('facebook')">
+        <img src="/static/icons/facebook.svg">
       </li>
     </ul>
     <md-button
@@ -19,9 +30,6 @@
   </div>
 </template>
 <script>
-
-import Swal from "sweetalert2";
-
 export default {
   props: {
     copyLink: {
@@ -43,48 +51,30 @@ export default {
         linkedin: "https://linkedin.com",
         pinterest: "https://pinterest.com",
         gmail: "https://gmail.com",
-        whatsapp: "https://www.whatsapp.com/",
-        outlook: "https://outlook.live.com/mail/0/",
+        whatsapp: "whatsapp://send?text=The text to share!",
+        outlook: "https://outlook.com",
         facebook: "https://facebook.com",
       },
     };
   },
-  computed: {
-    campaignTitle() {
-      const campaignData = this.$store.state.campaign.FEEDBACK;
-      return campaignData && campaignData.title ? campaignData.title : "Maryoku";
-    }
-  },
   methods: {
     shareSocial(socialType) {
-      let url = encodeURIComponent(this.link);
-      const title = `${this.campaignTitle} RSVP`;
-      switch(socialType) {
-        case "linkedin":
-          this.openShareWindow(`http://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`);
-          break;
-        case "facebook":
-          this.openShareWindow(`https://www.facebook.com/sharer/sharer.php?u=${url}&amp;src=sdkpreparse"`);
-          break;
-        case "pinterest":
-          this.openShareWindow(`http://pinterest.com/pin/create/button/?url=${url}&description=${title}`);
-          break;
-        case "gmail":
-          this.openShareWindow(`https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=${title}&body=${url}&ui=2&tf=1&pli=1`);
-          break;
-        case "outlook":
-          this.openShareWindow(`https://outlook.live.com/mail/0/deeplink/compose?mailtouri=mailto:?body=${url}%26subject=${title}`);
-          break;
-        case "whatsapp":
-          window.open(`whatsapp://send?text=${this.link}`);
-          break;
-        default:
-          const win = window.open(this.socialLinks[socialType], "_blank");
-          win.focus();
+      if (socialType === "linkedin") {
+        var title = "Maryoku RSVP";
+        var text = "Replace this with your share copy.";
+        window.open(
+          `http://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
+            sharingData.pageUrl,
+          )}&title=${title}`,
+          "",
+          "left=0,top=0,width=650,height=420,personalbar=0,toolbar=0,scrollbars=0,resizable=0",
+        );
+      } else if (socialType === "whatsapp") {
+        window.open(`whatsapp://send?text=${this.sharingData.pageUrl}`);
+      } else {
+        var win = window.open(this.socialLinks[socialType], "_blank");
+        win.focus();
       }
-    },
-    openShareWindow(link) {
-      window.open(link, "", "left=0,top=0,width=650,height=420,personalbar=0,toolbar=0,scrollbars=0,resizable=0");
     },
     clinkButtonCopyLink() {
       const tempInput = document.createElement("input");
@@ -93,12 +83,6 @@ export default {
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-      Swal.fire({
-        title: "The link successfully copied to your clipboard!",
-        buttonsStyling: false,
-        type: "success",
-        confirmButtonClass: "md-button md-success",
-      });
     },
   },
 };

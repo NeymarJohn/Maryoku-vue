@@ -221,6 +221,9 @@
         </div>
       </div>
     </div>
+    <button @click="handleResetDataLogoUrl" >
+      Reset
+    </button>
   </div>
 </template>
 <script>
