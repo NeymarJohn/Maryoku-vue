@@ -59,32 +59,21 @@
                 :component="selectedCategory"
                 :probability="getProbability(index)"
                 :is-collapsed="showDetails"
-                :is-selected="proposal && proposal.id === proposal.id"
+                :is-selected="selectedProposal && selectedProposal.id === proposal.id"
                 @goDetail="goDetailPage"
               />
             </div>
             <template v-if="showDetails">
               <transition name="component-fade" mode="out-in">
                 <EventProposalDetails
+                  :key="selectedProposal.id"
                   class="mt-20"
-                  :proposal="proposal"
+                  :proposal="selectedProposal"
                   :category="selectedCategory"
                   @favorite="favoriteProposal"
                   @close="closeProposal"
                   @ask="handleAsk"
-                >
-                    <template slot="timer">
-                        <TimerPanel
-                            :class="'time-counter'"
-                            :target="targetTime"
-                            :pending="negotiationPending"
-                            :status="proposal.status"
-                            :declined="negotiationDeclined"
-                            :approved="negotiationProcessed"
-                            @updateExpireDate="handleAsk('expiredDate')"
-                        />
-                    </template>
-                </EventProposalDetails>
+                />
               </transition>
             </template>
           </div>
@@ -101,19 +90,19 @@
           class="md-simple maryoku-btn md-black text-transform-capitalize"
           @click="isOpenedAdditionalModal = true"
         >
-          <span class="text-transform-capitalize">Change requirements</span>
+          <span class="text-transform-capitalize">Chanage requirements</span>
         </md-button>
       </div>
       <div>
         <md-button
           class="md-simple md-outlined md-red maryoku-btn"
-          :disabled="proposals.length === 0 || !this.proposal"
+          :disabled="proposals.length === 0 || !selectedProposal"
           @click="bookVendor"
         >
           Book Now
         </md-button>
         <md-button class="md-red maryoku-btn"
-                   :disabled="proposals.length === 0 || !this.proposal"
+                   :disabled="proposals.length === 0 || !selectedProposal"
                    @click="addToCart"
         >
           Add To Cart
@@ -152,12 +141,13 @@ import EventComponent from "@/models/EventComponent";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
-import { CommentMixins } from "@/mixins";
+import { MaryokuInput } from "@/components";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
     Modal: () => import("@/components/Modal.vue"),
     InputMask: () => import("vue-input-mask"),
+    // MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
     ServicesCart: () => import("./ServicesCart.vue"),
     ProposalsBar: () => import("./ProposalsBar.vue"),
     ProposalCard: () => import("../components/ProposalCard"),
@@ -166,16 +156,13 @@ const components = {
     EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
     AdditionalRequestModal: () => import("../PlanningBoard/components/modals/AdditionalRequest.vue"),
     ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
-    MaryokuInput: () => import('@/components/Inputs/MaryokuInput.vue'),
     NegotiationNotification: () => import("./components/NegotiationNotification"),
     EventChangeProposalModal: () => import("@/components/Modals/EventChangeProposalModal"),
-    TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
 };
 
 export default {
   name: "EventBooking",
   components: {...components, MaryokuInput},
-  mixins: [ CommentMixins ],
   props: {},
   data: () => ({
     // auth: auth,
@@ -201,7 +188,7 @@ export default {
     showShareVendorModal: false,
     showCommentEditorPanel: false,
     showDetails: false,
-    proposal: null,
+    selectedProposal: null,
     showDifferentProposals: false,
     showNegotiationNotification: false,
     showCart: false,
@@ -289,13 +276,14 @@ export default {
       this.showDetails = true;
 
       if(proposal.selectedVersion > -1)
-        this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
-      else this.proposal = proposal;
+        this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
+      else this.selectedProposal = proposal;
+      console.log("selectedProposal", proposal, this.selectedProposal);
 
     },
     closeProposal() {
       this.showDetails = false;
-      this.proposal = null;
+      this.selectedProposal = null;
     },
     getProbability(index) {
       return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
@@ -331,24 +319,24 @@ export default {
       return true;
     },
     async bookVendor() {
-      if(!this.proposal) return;
-      await new Proposal({ ...this.proposal }).save();
+      if(!this.selectedProposal) return;
+      await new Proposal({ ...this.selectedProposal }).save();
       this.$router.push({
         name: "CheckoutWithVendor",
         params: {
-            proposalId: this.proposal.id,
+            proposalId: this.selectedProposal.id,
             proposalType: "planner",
         },
       });
     },
     async favoriteProposal(isFavorite){
-      this.proposal = await this.$store.dispatch("event/updateProposal", {
-          proposal: {...this.proposal, isFavorite},
+      this.selectedProposal = await this.$store.dispatch("event/updateProposal", {
+          proposal: {...this.selectedProposal, isFavorite},
           category: this.selectedCategory.componentId
       });
       this.setCategoryCartItem({
           category: this.selectedCategory.componentId,
-          item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.proposal, isFavorite}}
+          item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.selectedProposal, isFavorite}}
       });
     },
     async handleAsk(ask){
@@ -356,28 +344,28 @@ export default {
             let expiredTime = moment().add(2, "days").unix() * 1000;
             let query = new ProposalNegotiationRequest({
                 eventId: this.event.id,
-                proposalId: this.proposal.id,
-                proposal: new Proposal({id: this.proposal.id}),
+                proposalId: this.selectedProposal.id,
+                proposal: new Proposal({id: this.selectedProposal.id}),
                 expiredTime,
                 type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
                 url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
             });
 
-            let res = await query.for(new Proposal({ id: this.proposal.id })).save();
+            let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save();
             console.log("ask.result", res);
-            this.proposal.negotiations.push(res);
+            this.selectedProposal.negotiations.push(res);
         }
     },
     async addToCart() {
-      if(!this.proposal) return;
+      if(!this.selectedProposal) return;
       this.updateCartItem({
           category: this.selectedCategory.componentId,
           event: {id: this.event.id},
-          proposalId: this.proposal.id,
+          proposalId: this.selectedProposal.id,
       });
       this.$store.dispatch("event/updateProposal", {
-         proposal: {...this.proposal, isFavorite: false},
-         category: this.proposal.vendor.vendorCategory,
+         proposal: {...this.selectedProposal, isFavorite: false},
+         category: this.selectedProposal.vendor.vendorCategory,
       });
     },
     openCart(){

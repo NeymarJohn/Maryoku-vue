@@ -14,19 +14,21 @@
     <div class="images-box" :style="`transform:scale(${scale});transform-origin:left`">
       <div class="image-backgrounds">
         <div
-          v-for="(bg, bgIndex) in concept.colors"
+          v-for="(bg, bgIndex) in colors"
           :key="bgIndex"
           class="image-background"
           :style="`background:${bg.color}; opacity:${bg.opacity}`"
         />
       </div>
       <div>
-        <div v-for="(image, imageIndex) in concept.images" :key="imageIndex" :class="`images-list__item`">
+        <div v-for="(image, imageIndex) in images" :key="imageIndex" :class="`images-list__item`">
           <img
+            v-if="image.url"
             class="image-section"
             :src="`${image.url}`"
             @error="imageUrlAlt(concept.imageData[imageIndex], $event)"
-          >
+          />
+          <div v-else class="image-section" />
         </div>
       </div>
     </div>
@@ -44,6 +46,32 @@ export default {
       default: 1,
     },
   },
+  data() {
+    return {
+      colors: this.concept.colors,
+      images: this.concept.images,
+    };
+  },
+  created() {
+    const concept = this.concept;
+    if (!concept.colors || !concept.colors.length) {
+      this.colors = [
+        { color: "#d2d2d2", opacity: 1 },
+        { color: "#d2d2d2", opacity: 1 },
+        { color: "#d2d2d2", opacity: 1 },
+        { color: "#d2d2d2", opacity: 1 },
+      ];
+    }
+    if (!concept.images || !concept.images.length) {
+      this.images = [
+        { url: "" },
+        { url: "" },
+        { url: "" },
+        { url: "" },
+        { url: "" },
+      ];
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

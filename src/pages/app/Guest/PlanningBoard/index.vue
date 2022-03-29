@@ -242,6 +242,7 @@
 
               <div>
                 <EventProposalDetails
+                  :key="selectedProposal.id"
                   :proposal="selectedProposal"
                   :category="selectedCategory"
                   :show-timer-box="true"
