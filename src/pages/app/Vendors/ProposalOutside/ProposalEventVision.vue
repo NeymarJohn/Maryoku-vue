@@ -155,8 +155,8 @@ export default {
      .conceptTitle{
       display: flex;
       align-items: center;
-      margin-right: 20px;
       .tags-wrapper{
+        margin-left: 20px;
         span{
           margin-right: 20px;
           padding: 4px 14px;
