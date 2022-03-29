@@ -17,7 +17,7 @@
         </div>
       </radial-progress-bar>
       <div class="text-transform-uppercase font-size-30 font-bold mt-4rem">
-        Calculating your budget breakdown
+        Loading your budget breakdown
       </div>
       <div class="font-size-16 mt-2">
         Soon our smart algorithm will organize a budget breakdown based on hundreds of previous events we did

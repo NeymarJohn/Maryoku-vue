@@ -22,36 +22,21 @@
             @change="onFileChange"
           >
         </div>
-        <div class="wrapper-change-logo">
-          <div class="change-logo">
-            <div class="over-logo-campaign">
-              <input
-                id="replace-logo"
-                style="display: none"
-                name="attachment"
-                type="file"
-                multiple="multiple"
-                @change="onFileChangeLogo"
-              >
-              <div class="color-white font-bold font-size-16 button cursor-pointer" @click="replaceLogo">
-                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"> Replace
-              </div>
-            </div>
-            <img class="logo" :src="logoUrl">
-          </div>
+        <div v-if="campaignData.logoUrl" class="preview-logo p-40 d-flex align-center">
+          <img :src="campaignData.logoUrl" style="max-width: 200px">
           <md-switch v-model="showLogo" class="large-switch below-label">
             Hide logo
           </md-switch>
         </div>
-        <div class="font-size-30 font-bold d-flex align-center">
+        <div class="font-size-30 font-bold mt-20 d-flex align-center">
           <title-editor
             :key="campaignData.additionalData.greetingWords"
             :default-value="campaignData.additionalData.greetingWords"
-            class="mt-20 mb-10 font-bold-extra"
+            class="mt-40 mb-30 font-bold-extra"
             @change="handleChangeAddtionalData('greetingWords', ...arguments)"
           />
         </div>
-        <div class="font-size-20 mt-20">
+        <div class="font-size-20 mt-50">
           <title-editor
             :default-value="campaignData.additionalData.prefixEvent"
             @change="handleChangeAddtionalData('prefixEvent', ...arguments)"
@@ -60,7 +45,7 @@
         <title-editor
           :key="campaignTitle"
           :default-value="campaignTitle"
-          class="mt-30 mb-30 font-size-60 font-bold-extra"
+          class="mt-40 mb-30 font-size-60 font-bold-extra"
           @change="changeTitle"
         />
 
@@ -221,9 +206,6 @@
         </div>
       </div>
     </div>
-    <button @click="handleResetDataLogoUrl" >
-      Reset
-    </button>
   </div>
 </template>
 <script>
@@ -237,8 +219,6 @@ import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
 import CalendarEvent from "@/models/CalendarEvent";
-import S3Service from "@/services/s3.service";
-import { mapActions } from "vuex";
 export default {
   components: {
     MaryokuTextarea,
@@ -252,7 +232,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
     defaultData: {
       type: Object,
@@ -327,9 +307,6 @@ export default {
         return Number(this.timelineDates[0].timelineItems[0] ? this.timelineDates[0].timelineItems[0].startTime : 0);
       }
       return 0;
-    },
-    logoUrl() {
-      return this.campaignData.logoUrl || "static/img/Image%20199.png";
     },
   },
   created() {
@@ -426,13 +403,10 @@ export default {
       const coverImageData = await getBase64(event.target.files[0]);
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
     },
-    async onFileChangeLogo(event) {
-      const file = event.target.files[0];
-      await S3Service.fileUpload(file, file.name, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-      });
-    },
+    // changeTitle(newTitle) {
+    //   this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+
+    // },
     changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
@@ -461,9 +435,6 @@ export default {
     changeImage(images) {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "images", value: images });
     },
-    replaceLogo() {
-      document.getElementById("replace-logo").click();
-    }
   },
 };
 </script>
@@ -494,42 +465,6 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-    }
-  }
-  .wrapper-change-logo {
-    display: flex;
-    align-items: center;
-    margin-top: 27px;
-
-    .change-logo {
-      width: 259px;
-      height: 134px;
-      margin-right: 27px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      border-radius: 3px;
-      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-
-      .over-logo-campaign {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(5, 5, 5, 0.55);
-        z-index: 900;
-      }
-
-      & img.logo {
-        width: 178px;
-        height: 99px;
-        object-fit: contain;
-      }
     }
   }
   .md-switch {
