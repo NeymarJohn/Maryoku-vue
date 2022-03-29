@@ -25,10 +25,7 @@
         @rating-selected="setRating"
       />
       <star-rating v-else :border-width="0" :star-size="30" :show-rating="false" read-only />
-      <span v-if="data.errors && data.errors.rank" class="d-block text-danger mt-10">
-        {{ data.errors.rank }}
-      </span>
-      <div v-else class="font-size-15 mt-10 text-transform-capitalize">
+      <div class="font-size-15 mt-10 text-transform-capitalize">
         {{ rankLabel }}
       </div>
     </div>
@@ -39,9 +36,6 @@
       <div>
         <maryoku-textarea v-model="data.comment" size="narrow" :placeholder="placeholder" :disabled="disabled" />
       </div>
-      <span v-if="data.errors && data.errors.comment" class="d-block text-danger mt-10">
-        {{ data.errors.comment }}
-      </span>
     </div>
     <md-switch v-if="showSwitch" v-model="data.showQuestion" class="feedback-btn-switch section below-label large-switch md-switch-rose" :value="true">
       <span v-if="data.showQuestion">Hide this question</span>

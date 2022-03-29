@@ -130,7 +130,7 @@ import _ from "underscore";
 import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
 import { VendorPolicy, VendorPricingPolicy, VendorCategories } from "@/constants/vendor";
 import { capitalize } from "@/utils/string.util";
-import VueGoogleAutocomplete from "vue-google-autocomplete";
+
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
 import CancellationPolicy from "@/components/CancellationPolicy.vue";

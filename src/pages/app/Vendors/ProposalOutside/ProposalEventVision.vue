@@ -1,9 +1,16 @@
 <template>
-  <div class="event-vison">
+  <div class="event-vision">
     <div class="event-vision-wrapper p-40 white-card proposal-add-personal-message-wrapper mt-40">
       <template v-if="event.concept">
-        <div class="conceptTitle font-size-40 line-height-1 mb-20">
-          {{ event.concept.name }}
+        <div class="conceptTitle mb-20">
+          <div class="font-size-40 line-height-1">
+            {{ event.concept.name }}
+          </div>
+          <div class="tags-wrapper" @click="test">
+            <span v-for="tag in event.concept.tags" :key="tag.name">
+              {{ tag.name }}
+            </span>
+          </div>
         </div>
         <div class="d-flex concept-image-wrapper">
           <div
@@ -143,8 +150,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.event-vison {
+.event-vision {
   .event-vision-wrapper {
+     .conceptTitle{
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      .tags-wrapper{
+        span{
+          margin-right: 20px;
+          padding: 4px 14px;
+          border-radius: 100px;
+          border: solid 1px #a0a0a0;
+          text-transform: capitalize;
+        }
+      }
+    }
     .concept-image-wrapper {
       width: 80%;
       .concept-color {
