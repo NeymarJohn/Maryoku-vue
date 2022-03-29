@@ -457,6 +457,9 @@ export default {
     },
     changeImage(images) {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "images", value: images });
+    },
+    replaceLogo() {
+      document.getElementById("replace-logo").click();
     }
   },
 };
