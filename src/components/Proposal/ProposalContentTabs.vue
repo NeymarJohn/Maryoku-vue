@@ -1,8 +1,7 @@
 <template>
   <div class="md-layout md-elevation-1" style="width: 100vw;">
     <div
-      v-for="(option, key) in options"
-      :key="key"
+      v-for="option in options"
       class="md-layout-item text-center font-size-14 border-right p-5 flex-1"
       :class="option.value === selected ? 'active' : ''"
       @click="select(option.value)"
@@ -19,7 +18,6 @@
       props: {
          options: {
            type: Array,
-           default: () => ({}),
          },
          selected: {
            type: Number,

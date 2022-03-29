@@ -14,11 +14,11 @@
             <slot name="header" />
           </div>
 
-          <div class="modal-body text-center" :style="styles.body">
+          <div class="modal-body text-center">
             <slot name="body" />
           </div>
 
-          <div class="modal-footer" :style="styles.footer">
+          <div class="modal-footer">
             <slot name="footer" />
           </div>
         </div>
@@ -34,9 +34,7 @@ export default {
       type: Object,
       default(){
         return{
-          header:"",
-          body:"",
-          footer:"",
+          header:""
         };
       }
     },

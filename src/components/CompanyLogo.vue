@@ -23,15 +23,17 @@
 <script>
 import S3Service from "@/services/s3.service";
 import VueElementLoading from "vue-element-loading";
+import AvatarCropper from "vue-avatar-cropper";
 
 export default {
   components: {
     VueElementLoading,
+    AvatarCropper,
   },
   props: {
     user: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
     defaultImage: {
       type: String,
@@ -64,6 +66,8 @@ export default {
     onUserAvatarChange(event) {
       let files = event.target.files || event.dataTransfer.files;
       if (!files.length) return;
+
+      const extension = files[0].type.split("/")[1];
       let imageName = this.user.id;
       this.isLoading = true;
       S3Service.fileUpload(files[0], `${imageName}`, "company/logos").then((res) => {

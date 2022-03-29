@@ -113,8 +113,8 @@ import Swal from "sweetalert2";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import {NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
-import {TimerMixins} from "@/mixins";
+import {NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE} from "@/constants/status";
+import { TimerMixins } from "@/mixins";
 
 const components = {
     Timer: () => import("@/components/Timer.vue"),

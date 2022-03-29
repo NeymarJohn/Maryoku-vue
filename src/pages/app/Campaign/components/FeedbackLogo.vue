@@ -1,13 +1,21 @@
 <template>
   <div class="wrapper-logo">
     <div class="wrapper-logo-microsoft">
-      <div class="logo-campaign">
-        <img :src="logoUrl" />
+      <div class="logo-microsoft">
+        <div class="icon-microsoft">
+          <div class="block block1" />
+          <div class="block block2" />
+          <div class="block block3" />
+          <div class="block block4" />
+        </div>
+        <h2>
+          Microsoft
+        </h2>
       </div>
-      <hide-switch v-if="!review" :value="value" @input="$emit('input', $event)" label="Logo" />
+      <hide-switch v-if="showSwitch" label="Hide Logo" />
     </div>
     <span class="hello-microsoft-special-employee">
-      {{ logoTitle }}
+      Hello Microsoft special employee!
     </span>
   </div>
 </template>
@@ -22,21 +30,9 @@ export default {
     HideSwitch
   },
   props: {
-    value: {
+    showSwitch: {
       type: Boolean,
       default: false,
-    },
-    logoUrl: {
-      type: String,
-      required: true,
-    },
-    logoTitle: {
-      type: String,
-      default: ""
-    },
-    review: {
-      type: Boolean,
-      default: false
     }
   }
 };
@@ -55,11 +51,48 @@ export default {
     align-items: center;
     flex-grow: 1;
 
-    .logo-campaign {
+    .logo-microsoft {
       width: 250px;
       height: 75px;
       display: flex;
       align-items: center;
+
+      .icon-microsoft {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+
+        .block {
+          width: 20px;
+          height: 20px;
+        }
+
+        .block1 {
+          background: #f25022;
+        }
+
+        .block2 {
+          background: #7fba00;
+        }
+
+        .block3 {
+          background: #00a4ef;
+        }
+
+        .block4 {
+          background: #ffb600;
+        }
+      }
+
+      h2 {
+        font-size: 30px;
+        color: #737373;
+        font-weight: 900;
+        margin-left: 10px;
+        flex-grow: 1;
+      }
     }
   }
 

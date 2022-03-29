@@ -15,38 +15,19 @@ export default {
   model: {
   },
   props: {
-    iconSourceOne: {
-      type: String,
-      required: true,
-    },
-    iconSourceTwo: {
-      type: String,
-      required: true,
-    },
-    iconStyle: {
-      type: String,
-      default: "",
-    },
-    imageStyle: {
-      type: String,
-      required: true,
-    },
-    titleStyle: {
-      type: String,
-      default: "",
-    },
+    iconSourceOne: String,
+    iconSourceTwo: String,
+    checked: Boolean,
+    iconStyle: String,
+    imageStyle: String,
+    titleStyle: String,
+    logoName: String,
     title: {
       type: String,
       default: ""
     },
-    onClick: {
-      type: Function,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    }
+    onClick: Function,
+    name: String
   },
   data () {
     return {

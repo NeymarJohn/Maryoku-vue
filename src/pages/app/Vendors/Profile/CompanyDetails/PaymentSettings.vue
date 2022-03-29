@@ -130,9 +130,7 @@
                   </span>
                 </div>
                 <div class="date-wrapper" id="bankDetailsDateWrapper">
-                  <md-datepicker ref="datePicker"
-                                 :md-model-type="String"
-                                 v-model="bankDetails.date"
+                  <md-datepicker ref="datePicker" :md-model-type="String" v-model="bankDetails.date"
                                  name="todo-date"></md-datepicker>
                   <img class="calendar-icon" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
                 </div>
@@ -164,7 +162,7 @@ export default {
     error: "",
     ssnType: "ssn",
     bankDetails: {
-      date: "",
+      date: new Date("01/01/1990"),
       accountNumber: "",
       address: "",
       holderName: "",
@@ -204,8 +202,6 @@ export default {
   },
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
-    this.bankDetails = {...this.bankDetails, date: new Date("01/01/1990"),
-      ...JSON.parse(localStorage.bankDetails)};
   },
   methods: {
     checkForm: function (e) {
@@ -239,8 +235,6 @@ export default {
     },
     async test(e) {
       e.preventDefault();
-      localStorage.bankDetails = JSON.stringify(this.bankDetails);
-
       const formIsValid = await this.v$.$validate();
       if (formIsValid) {
       }

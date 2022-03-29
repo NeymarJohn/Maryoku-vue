@@ -37,34 +37,13 @@ export default {
     },
   },
   props: {
-    days: {
-      type: Number,
-      required: true,
-    },
-    hours: {
-      type: Number,
-      required: true,
-    },
-    minutes: {
-      type: Number,
-      required: true,
-    },
-    seconds: {
-      type: Number,
-      required: true,
-    },
-    topContent: {
-      type: String,
-      default: "",
-    },
-    bottomContent: {
-      type: String,
-      default: "",
-    },
-    customClass: {
-      type: String,
-      default: "",
-    },
+    days: Number,
+    hours: Number,
+    minutes: Number,
+    seconds: Number,
+    topContent: String,
+    bottomContent: String,
+    customClass: String,
   },
   data() {
     return {

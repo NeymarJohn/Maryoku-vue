@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex food-limitaions">
     <div v-for="(key, index) in Object.keys(limitations)" :key="index" class="flex-1 food-limit-item text-center">
-      <img class="food-limitaions_icon" :src="`${$iconURL}RSVP/${icons[key]}`">
+      <img :src="`${$iconURL}RSVP/${icons[key]}`">
       <div>
         <div class="text-transform-capitalize">
           {{ key }}
@@ -22,13 +22,14 @@
 <script>
 export default {
   props: {
-    limitations: {
-      type: Object,
-      default: () => ({}),
+    data: {
+      type: Array,
+      default: [],
     },
   },
   data() {
     return {
+      limitations: [],
       icons: {
         vegetarian: "milk.svg",
         vegan: "food+(4).svg",
@@ -45,6 +46,9 @@ export default {
       openedKey: "",
     };
   },
+  created() {
+    this.limitations = this.data;
+  },
   methods: {
     showPannel(key) {
       if (this.openedKey === key) this.openedKey = "";
@@ -55,11 +59,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .food-limitaions {
-  padding-top: 10px;
-  &_icon {
-    width: 24px;
-    height: 24px;
-  }
   .food-limit-item {
     height: 100px;
     border-right: solid 1px #a0a0a0;
@@ -67,7 +66,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
     position: relative;
     &:last-child {
       border: none;
