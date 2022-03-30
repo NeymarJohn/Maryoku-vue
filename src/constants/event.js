@@ -340,7 +340,7 @@ export const ServiceCards = [
     },
     {
       seqNo: "1/1",
-      name: "Photography  Videography",
+      name: "Photography  Style",
       serviceCategory: "videographyandphotography",
       images: [
         "Photography+_+Videography/Black_White.jpg",
@@ -427,7 +427,7 @@ export const ServiceCards = [
     },
     {
       seqNo: "1/1",
-      name: "Giveaways",
+      name: "Swag Type",
       serviceCategory: "giveaways",
       images: [
         "Giveaways/Apparel.png",
@@ -512,7 +512,7 @@ export const ServiceCards = [
     },
     {
       seqNo: "1/1",
-      name: "Guest Serivces & Staffing",
+      name: "Staff",
       serviceCategory: "administration",
       images: [
         "Staff/Concierge.png",
@@ -534,37 +534,37 @@ export const ServiceCards = [
       ],
       icon: "NewRequirements/Group 18026.svg"
     },
-    //  {
-    //   seqNo: "1/1",
-    //   name: "Transportation",
-    //   serviceCategory: "transportation",
-    //   images: [
-    //     "Transportation/Air Services.png",
-    //     "Transportation/ATV.png",
-    //     "Transportation/Bicycle.png",
-    //     "Transportation/Boat.png",
-    //     "Transportation/Bus.png",
-    //     "Transportation/Ferry.png",
-    //     "Transportation/Gold Carts.png",
-    //     "Transportation/Private Black Car.jpg",
-    //     "Transportation/Van.png",
-    //   ],
-    //   imageTitles: [
-    //     "Air Services",
-    //     "ATV",
-    //     "Bicycle",
-    //     "Boat",
-    //     "Bus",
-    //     "Ferry",
-    //     "Gold Carts",
-    //     "Private Black Car",
-    //     "Van",
-    //   ],
-    //   icon: "NewRequirements/Group 18016.svg",
-    // },
+     {
+      seqNo: "1/1",
+      name: "Transportation",
+      serviceCategory: "transportation",
+      images: [
+        "Transportation/Air Services.png",
+        "Transportation/ATV.png",
+        "Transportation/Bicycle.png",
+        "Transportation/Boat.png",
+        "Transportation/Bus.png",
+        "Transportation/Ferry.png",
+        "Transportation/Gold Carts.png",
+        "Transportation/Private Black Car.jpg",
+        "Transportation/Van.png",
+      ],
+      imageTitles: [
+        "Air Services",
+        "ATV",
+        "Bicycle",
+        "Boat",
+        "Bus",
+        "Ferry",
+        "Gold Carts",
+        "Private Black Car",
+        "Van",
+      ],
+      icon: "NewRequirements/Group 18016.svg",
+    },
     {
       seqNo: "1/1",
-      name: "Equipment Rentals",
+      name: "Equipment",
       serviceCategory: "equipmentrentals",
       images: ["Rentals/Furniture.jpg", "Rentals/Tech Equpiment.jpg", "Rentals/Tent.jpg"],
       imageTitles: ["Furniture", "Tech Equipment", "Tent"],

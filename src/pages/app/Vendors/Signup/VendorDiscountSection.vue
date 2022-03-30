@@ -70,8 +70,14 @@ export default {
       changeTab(value) {
           this.tab = value;
       },
-      changeDiscountItem() {
-
+      changeDiscountItem(value) {
+        if (this.tab === "coupon") this.$emit("change", {coupon: this.value});
+        else if (this.tab === "number_of_participiants")
+            this.$emit("change", {number_of_participiants: this.number});
+        else if (this.tab === "customer_type")
+            this.$emit("change", {customer_type: this.number});
+        else if (this.tab === "seasonal")
+            this.$emit("change", {seasonal: this.number});
       }
   },
 };
