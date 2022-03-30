@@ -383,6 +383,8 @@
 </template>
 
 <script>
+import moment from "moment";
+import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import carousel from "vue-owl-carousel";
