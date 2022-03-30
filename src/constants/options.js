@@ -6,6 +6,19 @@ export const GuaranteedOptions = [
   { value: "vaccination_certificate", label: "Vaccination Certificate" }
 ];
 
+export const DiscountOptions = [
+    { value: "highest_discount", label: "Highest discount" },
+    { value: "lowest_discount", label: "Lowest discount" },
+    { value: "decoration", label: "Decoration" },
+];
+
+export const DiscountTabOptions = [
+    { value: "coupon", label: "Coupon" },
+    { value: "number_of_guests", label: "Number Of Guests" },
+    { value: "customer_type", label: "Customer Types" },
+    { value: "seasonal", label: "Seasonal" },
+];
+
 export const CancellationData = [
   {
     notice: "the client cancel on the day of the Event",
