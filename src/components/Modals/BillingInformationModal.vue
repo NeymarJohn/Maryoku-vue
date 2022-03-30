@@ -28,10 +28,15 @@
     </template>
     <template slot="body">
       <div class="body">
+        <div class="body-header">
+          <span>Business Profile</span>
+          <md-button class="md-simple md-vendor">
+            <span style="font-weight: bold">Edit</span>
+          </md-button>
+        </div>
         <div class="signature-editor" id="signatureEditor" v-show="step === 0"
              @mousedown="signatureAdded = true">
-
-
+          <business-profile/>
         </div>
         <div class="signature-editor type" v-show="step === 1">
         </div>
@@ -54,10 +59,11 @@
 
 <script>
 import {Modal} from "../index";
-
+import BusinessProfile from "./ModalComponents/BusinessProfile";
 export default {
   name: "AddSignatureModal",
   components: {
+    BusinessProfile,
     Modal,
   },
   props: {},
@@ -110,6 +116,7 @@ export default {
     }
   },
   methods: {
+
     template: function () {
       return `<div class="dz-preview dz-file-preview">
                 <div class="dz-image">
@@ -268,8 +275,8 @@ export default {
   //padding: 20px 50px;
   display: flex;
   justify-content: space-between;
-  min-width: 800px;
-  max-width: 900px;
+  min-width: 700px;
+  max-width: 800px;
   width: 100%;
 
   span {
@@ -282,7 +289,13 @@ export default {
 
 .body {
   position: relative;
-
+  max-width: 700px;
+  padding: 0 60px;
+  .body-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .select-sign-type {
     display: flex;
 
@@ -309,7 +322,7 @@ export default {
   }
 
   .drop-zone {
-    height: 300px;
+    min-height: 300px;
     border: 1px solid #a0a0a0;
     border-radius: 3px;
   }
@@ -325,7 +338,7 @@ export default {
   .signature-editor {
     text-align: center;
     width: 100%;
-    height: 300px;
+    min-height: 300px;
     border: 1px solid #a0a0a0;
     background-color: white;
     border-radius: 3px;

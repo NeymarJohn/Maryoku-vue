@@ -1,6 +1,5 @@
 <template>
   <div class="proposal-payment">
-    <Loader :active="isLoading" :is-full-screen="true"/>
     <link
       href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
       rel="stylesheet">
@@ -184,24 +183,22 @@
 </template>
 
 <script>
+import axios from "axios";
 import useVuelidate from "@vuelidate/core";
 import {required, minLength, numeric} from "@vuelidate/validators";
 import PincodeInput from "vue-pincode-input";
-import Loader from "../../../../../components/loader/Loader";
-import { mapActions } from "vuex";
 
 export default {
   components: {
-    PincodeInput,
-    Loader,
+    PincodeInput
   },
   props: {},
   data: () => ({
-    isLoading: false,
-    user:{},
-    vendorId:"",
+    isLoaded: false,
+    error: "",
+    ssnType: "ssn",
+    bankDetailsEditing: false,
     profileId:"",
-    bankDetailsEditing: true,
     bankDetails: {
       date: "",
       accountNumber: "",
@@ -258,18 +255,14 @@ export default {
   },
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
-    this.bankDetails = {
-      ...this.bankDetails,
-      date: new Date("01/01/1990"),
-      ...JSON.parse(localStorage.bankDetails),
-    };
+    this.bankDetails = {...this.bankDetails, date: new Date("01/01/1990"),
+      ...JSON.parse(localStorage.bankDetails)};
     this.vendorId = this.$store.state.vendor.profile.id;
     this.profileId = this.$store.state.auth.user.id;
-    this.user = this.$store.state.vendor.profile.tenantUser;
+
   },
   methods: {
-    ...mapActions("stripe", ["createDestinationAccount", "createStripeAccount"]),
-    setEditing() {
+    setEditing(){
       this.bankDetailsEditing = true;
     },
     sendTest() {
@@ -298,46 +291,72 @@ export default {
           console.error("Error:", error);
         });
     },
-    sendBankInfo() {
-      this.isLoading = true;
+    async test(e) {
+      e.preventDefault();
+      this.vendorId = this.$store.state;
       localStorage.bankDetails = JSON.stringify(this.bankDetails);
-      this.createDestinationAccount({
-        "holderName": this.bankDetails.holderName,
-        "routingNumber": this.bankDetails.routingNumber,
-        "accountNumber": this.bankDetails.accountNumber
-      }).then(res => { this.createStripeAccount({
-          "vendorId": this.vendorId,
-          "personId": this.profileId,
-          "bankAccountToken": res,
-          "representative": {
-            "taxId": this.bankDetails.ein,
-            "ssnLast4": this.bankDetails.mcc || "0000",
-            "phoneNumber": this.user.phoneNumber || "000 000 0000",
-            "idNumber": "000000000",
-            "email": this.user.email.a || "email@email.email",
-            "dob": {
-              "year": this.bankDetails.date.getFullYear(),
-              "month": this.bankDetails.date.getMonth() + 1,
-              "day": this.bankDetails.date.getDate()
-            },
-            "address": {
-              "line1": "address_full_match",
-              "line2": "address_full_match",
-              "postalCode": "address_full_match",
-              "city": "address_full_match",
-              "state": "address_full_match"
+      console.log("\x1b[32m ##-244, PaymentSettings.vue",this.vendorId);
+      // const formIsValid = await this.v$.$validate();
+      // if (formIsValid) {
+      // }
+      // if (this.name === "") {
+      //   console.log("\x1b[32m ##-249, PaymentSettings.vue",);
+      // }
+      // console.log("##-222, PaymentSettings.vue", this.errors);
+
+    },
+    sendBankInfo() {
+      localStorage.bankDetails = JSON.stringify(this.bankDetails);
+      console.log("\x1b[32m ##-255, PaymentSettings.vue",this.bankDetails, this.vendorId);
+      this.bankDetailsEditing = false;
+      axios.post(process.env.SERVER_URL+"/stripe/v1/customer/destinations/account", {
+          "holderName": this.bankDetails.holderName,
+          "routingNumber": this.bankDetails.routingNumber,
+          "accountNumber": this.bankDetails.accountNumber
+        },
+        {
+        headers: {
+          accept: "application/json",
+          Authorization: "Bearer 4ntj088p045kpl0tdqr5vu4lrq168qdc"
+        }
+      }).then(res => {
+        console.log("\x1b[32m ##-271, PaymentSettings.vue", this.profileId);
+        axios.post(process.env.SERVER_URL+"/stripe/v1/account/", {
+            "vendorId": this.vendorId,
+            "personId": this.profileId,
+            "bankAccountToken": res.data.token,
+            "representative": {
+              "taxId": "000000000",
+              "ssnLast4": "0000",
+              "phoneNumber": "000 000 0000",
+              "idNumber": "000000000",
+              "email": "email@email.email",
+              "dob": {
+                "year": 1992,
+                "month": 1,
+                "day": 1
+              },
+              "address": {
+                "line1": "address_full_match",
+                "line2": "",
+                "postalCode": "",
+                "city": "",
+                "state": ""
+              }
             }
-          }
-        }).then(res => {
-          this.bankDetailsEditing = false;
-          this.isLoading = false;
-        }).catch(error => {
-          this.bankDetailsEditing = false;
-          this.isLoading = false;
+          },
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: "Bearer 4ntj088p045kpl0tdqr5vu4lrq168qdc"
+            }
+          }).then(res => {
+          console.log("\x1b[32m ##-303, PaymentSettings.vue",res);
+
         });
-        ;
+        console.log("\x1b[32m ##-262, PaymentSettings.vue",res);
       }).catch(error => {
-        this.isLoading = false;
+        console.log("##-126, PaymentSettings.vue", error);
       });
     },
   },
