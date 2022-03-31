@@ -10,7 +10,6 @@
             </div>
             <div class="mt-2 d-flex align-center">
               <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
-
               <span>in your current invitee list</span>
             </div>
           </div>
@@ -207,7 +206,7 @@
                   <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each
                   address
                 </label>
-                <div class="d-flex align-start width-100">
+                <div class="d-flex align-center width-100">
                   <div class="width-60 position-relative">
                     <maryoku-textarea
                       v-model="settingData.email.addressString"
@@ -230,7 +229,7 @@
                       :content="invalidPastedEmails"
                     />
                   </div>
-                  <span class="font-size-16" style="padding: 20px 40px">Or</span>
+                  <span class="font-size-16" style="padding: 18px 30px">Or</span>
 
                   <!-- Emails Excel File Upload  -->
                   <md-button
@@ -253,7 +252,7 @@
                       <span class="color-red">remove</span>
                     </md-button>
                   </div>
-                  <span class="ml-20 mt-10">
+                  <span class="ml-20">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                     <md-tooltip>
                       <div class="font-size-14 input-tooltip">
