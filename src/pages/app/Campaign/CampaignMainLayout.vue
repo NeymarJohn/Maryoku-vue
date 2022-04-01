@@ -481,10 +481,10 @@
             <img :src="`${$iconURL}Campaign/Group 9222.svg`">
             <span class="ml-10">Scheduled To {{' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
           </div>
-          <div v-if="!canSchedule" @click="showScheduleModal = true" class="ml-40 d-flex flex-centered align-center cursor-pointer">
+          <div v-if="!canSchedule" @click="startCampaign" class="ml-40 d-flex flex-centered align-center cursor-pointer">
             <span class="seperator small" style="margin-top: 0; margin-right: 30px"/>
             <i class="far fa-clock"></i>
-            <span class="ml-10" style="font-weight: bold"> Change Schedule </span>
+            <span class="ml-10" style="font-weight: bold"> Send again </span>
           </div>
           <div
             v-else
@@ -777,7 +777,6 @@ export default {
           coverImage,
           `${this.event.id}-${campaignType}`
         );
-        const extenstion = fileObject.type.split("/")[1];
         let fileUpload = await S3Service.fileUpload(
           fileObject,
           `${this.event.id}-${campaignType}`,
@@ -901,6 +900,12 @@ export default {
         value: "EDITING",
       });
     },
+    sendAgain() {
+      this.callSaveCampaign(
+        this.campaignTabs[this.selectedTab].name,
+        "STARTED"
+      );
+    }
   },
   computed: {
     ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),
