@@ -5,9 +5,7 @@
         <div v-if="!isEditable" class="col label">
           {{ editingData.code }}
         </div>
-        <div v-else class="col">
-            <input v-model="editingData.code" class="text-left number-field">
-        </div>
+        <input v-else v-model="editingData.code" class="col">
 
         <div v-if="!isEditable" class="col">
           <span v-if="editingData.validDate">{{ editingData.validDate }}</span>
@@ -76,21 +74,13 @@
         </div>
         <input v-else v-model="editingData.code" class="col">
 
-        <div class="col text-capitalize">
-          {{ editingData.season }}
-          <template v-for="(month, idx) in editingData.months">
-            <span class="ml-10">{{ getMonthLabel(month) }}{{ idx < editingData.months.length - 1 ? ',' : '' }}</span>
-          </template>
-        </div>
+        <div class="col" />
       </template>
       <div v-if="!isEditable" class="col text-right">
         {{ `${editingData.value}${editingData.rate}` }}
       </div>
       <div v-else class="col">
-        <div class="position-relative">
-            <money v-model="editingData.value" class="text-center number-field" v-bind="rateFormat" />
-            <button class="suffix" @click="changeRate('seasonal')">{{editingData.rate}}</button>
-        </div>
+        <money v-model="editingData.value" class="text-center number-field" v-bind="rateFormat" />
       </div>
       <div v-if="!isEditable" class="col action">
         <img class="mr-20 ml-auto" :src="`${$iconURL}Requirements/edit-dark.svg`" @click="edit">
@@ -116,13 +106,13 @@
 </template>
 
 <script>
-import { DiscountCustomerTypes, CouponRules, MonthOptions } from "@/constants/options";
+import { DiscountCustomerTypes, CouponRules } from "@/constants/options";
 
 const components = {
-    MaryokuInput: () => import("@/components/inputs/MaryokuInput.vue"),
+    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
     Multiselect: () => import("vue-multiselect"),
+    Money: () => import("v-money"),
 };
-
 export default {
     components,
     filters: {},
@@ -141,10 +131,10 @@ export default {
                 decimal: ".",
                 thousands: ",",
                 prefix: "",
+                suffix: " %",
                 precision: 2,
                 masked: false,
             },
-            monthOptions: MonthOptions,
             rules: CouponRules,
             customerTypes: DiscountCustomerTypes,
         };
@@ -154,14 +144,6 @@ export default {
         this.editingData = Object.assign({}, this.item);
     },
     methods: {
-        changeRate(tab){
-            this.editingData.rate = this.editingData.rate === "%" ? "$" : "%";
-        },
-        getMonthLabel(value) {
-            console.log('mon.val', value);
-            if (!value) return "";
-            return this.monthOptions.find(r => r.value == value).label;
-        },
         getRuleLabel(value) {
             if (!value) return "";
             return this.rules.find(r => r.value === value).label;
@@ -192,14 +174,15 @@ export default {
 
         },
         changeItem() {
-            this.$emit("change", {type: 'update', value: this.editingData} );
+            this.$emit("change", this.editingData);
         },
         edit() {
             this.isEditable = true;
-            console.log('editing', this.editingData);
         },
         remove() {
-            this.$emit("change", {type: 'remove'});
+            this.item.checked = false;
+            console.log("remvoe", this.item);
+            this.$emit("change", this.item);
         },
         cancel() {
             this.editingItem = Object.assign({}, this.item);
@@ -219,9 +202,8 @@ export default {
     border-bottom: 1px solid #dddddd;
 
     .collapsed {
-        position: relative;
         display: grid;
-        grid-template-columns: 30% 30% 30% 20%;
+        grid-template-columns: 35% 35% 10% 10% 10%;
         padding: 1rem 0;
         grid-gap: 5px;
         .col {
@@ -229,7 +211,6 @@ export default {
             display: flex;
             align-items: center;
             padding: 10px 0;
-
             img {
                 width: 20px;
             }
@@ -243,46 +224,28 @@ export default {
 
             input {
                 text-align: center;
-                font-size: 16px;
-                padding: 12px 20px;
-                border: 1px solid #dddddd;
-                border-radius: 0;
-                min-height: 55px;
+                border-radius: 3px;
+                border: 1px solid #818080;
+                max-width: 160px;
+                font: normal 16px Manrope-Regular, sans-serif;
+                color: #050505;
             }
 
             .field {
                 display: inline-block;
             }
 
-            .number-field {
-                text-align: left;
-                font-size: 16px;
-                padding: 12px 20px;
-                border: 1px solid #dddddd;
-                border-radius: 0;
-                width: 90%;
-            }
-
-            button.suffix{
+            .field:before {
+                content: "$";
                 position: absolute;
-                transform: translateX(-100%);
-                height: 100%;
-                width: 60px;
-                background: white;
-                border: 0.5px solid #dddddd;
-                font-size: 16px;
-                cursor: pointer;
+                margin-top: 15px;
+                margin-left: 3rem;
             }
         }
 
         .action {
-            position: absolute;
-            right: -100px;
-            top: 0;
-            height: 100%;
             opacity: 0;
             display: flex;
-            align-items: center;
             flex-flow: nowrap;
             cursor: pointer;
         }

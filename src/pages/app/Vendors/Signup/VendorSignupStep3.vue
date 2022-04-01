@@ -69,7 +69,7 @@
             </div>
           </div>
           <div class="card">
-            <vendor-discount-section :data="vendorDiscountPolicies" />
+            <vendor-discount-section />
             <div class="title-cont">
               <div class="top mt-30 mb-2">
                 <h5>Does this include double discounts?</h5>
@@ -377,7 +377,7 @@ import CheckBox from "@/components/CheckBox.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
-import { GuaranteedOptions, DiscountOptions, DefNa } from "@/constants/options";
+import { GuaranteedOptions, DiscountOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
@@ -468,12 +468,48 @@ export default {
         start: "AM",
         end: "AM",
       },
-      defNa: DefNa,
+      defNa: [
+        {
+          name: "Food & Beverage",
+          value: "foodandbeverage",
+        },
+        {
+          name: "Design and Decor",
+          value: "decor",
+        },
+        {
+          name: "Entertainment",
+          value: "entertainment",
+        },
+        {
+          name: "Security",
+          value: "securityservices",
+        },
+        {
+          name: "Videography and Photography",
+          value: "videographyandphotography",
+        },
+        {
+          name: "Equipment Rental",
+          value: "equipmentrentals",
+        },
+        {
+          name: "Staffing and Guest Services",
+          value: "staffingandguestservices",
+        },
+        {
+          name: "Rentals",
+          value: "rentals",
+        },
+        {
+          name: "Other",
+          value: "Other",
+        },
+      ],
       policies: VendorPolicy,
       pricingPolicies: VendorPricingPolicy,
       vendorPolicies: {},
       vendorPricingPolicies: {},
-      vendorDiscountPolicies: {},
       discountOptions: DiscountOptions,
       guaranteedOptions: GuaranteedOptions,
     };
@@ -713,9 +749,6 @@ export default {
           }
         });
       }
-
-      // set vendorDiscountPolicies from db
-      this.vendorDiscountPolicies = this.vendor.discountPolicies;
 
       // set selectedReligion from saved vendor
       if (this.vendor.selectedReligion && this.vendor.selectedReligion.length) {
