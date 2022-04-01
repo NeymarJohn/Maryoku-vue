@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="header-cover-image">
-        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png">
+        <img :src="campaign.coverImage">
       </div>
       <div class="content">
         <div class="decoration-line">
@@ -48,18 +48,14 @@
               <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`">
               <div class="mt-10">
                 <div class="font-size-40 font-bold line-height-1">
-                  THANKS FOR PARTICIPATING!
+                  {{ additionalData.sectionReview.title }}
                 </div>
                 <div class="subtitle">
-                  80’s Disco Party
+                  {{ additionalData.sectionReview.description }}
                 </div>
               </div>
               <div class="message">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-                ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam. Clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                {{ description }}
               </div>
               <img width="27" height="37" src="static/icons/double-arrow-down-gray.svg">
             </div>
@@ -96,7 +92,7 @@
               <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`">
               <div class="ml-20 d-flex flex-wrap flex-column">
                 <div class="d-flex">
-                  <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
+                  <span class="font-size-30 font-bold line-height-1">{{ additionalData.sectionEventPhotos.title }}</span>
                 </div>
               </div>
             </div>
@@ -223,14 +219,23 @@ export default {
       fullScreen: false,
       campaign: null,
       event: null,
-      placeHolder: "",
+      description: "",
       originalContent: {},
-      info: {},
       images: [],
       attachmentsImages: [],
       attachments: [],
       feedbackQuestions: [],
       selectedAttachments: [],
+      additionalData: {
+        sectionReview: {
+          title: "",
+          description: "",
+        },
+        sectionEventPhotos: {
+          title: "",
+          description: "",
+        }
+      },
       visibleSettings: {
         showImages: false,
         showSharingOption: false,
@@ -252,16 +257,6 @@ export default {
     }
   },
   created() {
-    this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
-      Please take a moment to help us improve future events by taking a brief survey.
-      Your feedback is extremely valuable to our ongoing effort to offer great experience.
-
-      If you have photos, documents or other event materials that you want to share, you can upload them here.
-      All materials is also available for download from this page.
-
-      We look forward to seeing you again soon!
-    `;
-
     const eventId = this.$route.params.eventId;
     const calendarEvent = new CalendarEvent({ id: eventId });
 
@@ -269,8 +264,12 @@ export default {
       this.isLoading = false;
       this.campaign = campaigns["FEEDBACK"];
       this.event = this.campaign.event;
+      this.description = this.campaign.description;
       this.images = this.campaign.images;
       this.visibleSettings = this.campaign.visibleSettings;
+      if (this.campaign.additionalData) {
+        this.additionalData = this.campaign.additionalData;
+      }
       if (this.campaign.attachments) {
         this.attachments = this.campaign.attachments;
         this.attachmentsImages = this.filterFilesByType(["image"], this.attachments)

@@ -69,12 +69,13 @@
             </div>
           </div>
           <div class="card">
+            <vendor-discount-section />
             <div class="title-cont">
-              <div class="top mb-2">
+              <div class="top mt-30 mb-2">
                 <h5>Does this include double discounts?</h5>
               </div>
             </div>
-            <check-box :checked="doubleDiscounts" @changed="changedCheckBox('doubleDiscounts', $event)"></check-box>
+            <check-box :checked="doubleDiscounts" @changed="changedCheckBox('doubleDiscounts', $event)" />
             <div class="title-cont mt-3">
               <div class="top">
                 <h5>What a valid discount?</h5>
@@ -89,7 +90,6 @@
                 </md-checkbox>
               </div>
             </div>
-            <vendor-discount-section></vendor-discount-section>
           </div>
         </div>
         <div v-if="vendor.vendorCategories[0] == 'venuerental'" class="3rd-party-vendor-wrapper mb-50">
@@ -381,7 +381,7 @@ import { GuaranteedOptions, DiscountOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
-import VendorDiscountSection from './VendorDiscountSection';
+import VendorDiscountSection from "./VendorDiscountSection";
 
 export default {
   name: "VendorSignupStep3",

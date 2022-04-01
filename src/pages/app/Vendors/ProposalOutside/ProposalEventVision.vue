@@ -152,12 +152,16 @@ export default {
 <style lang="scss" scoped>
 .event-vision {
   .event-vision-wrapper {
-     .conceptTitle{
+    .conceptTitle {
       display: flex;
       align-items: center;
-      .tags-wrapper{
+      .tags-wrapper {
+        display: flex;
+        flex-wrap: wrap;
         margin-left: 20px;
-        span{
+        span {
+          display: block;
+          margin-bottom: 2px;
           margin-right: 20px;
           padding: 4px 14px;
           border-radius: 100px;

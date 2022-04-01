@@ -18,7 +18,7 @@
         </md-button>
       </template>
       <div v-for="(item, index) in images" :key="index" class="carousel-item">
-        <img :src="item.src" class="carousel-image" @error="setAltImg($event, item)">
+        <img :src="item.src" class="carousel-image" :class="{ 'white-black': item.default }" @error="setAltImg($event, item)">
       </div>
       <template slot="next">
         <md-button class="btn-next edit-btn md-round nav-right nav-btn md-raised md-white">
@@ -81,7 +81,7 @@ export default {
     };
   },
   methods: {
-    uploadImage(index) {
+    uploadImage() {
       document.getElementById("carousel-file").click();
     },
     async onFileChange(event) {
@@ -172,6 +172,10 @@ export default {
       left: 0;
       bottom: 0;
       right: 0;
+
+      &.white-black {
+        filter: grayscale(1);
+      }
     }
 
     &:hover {

@@ -19,6 +19,18 @@ export const DiscountTabOptions = [
     { value: "seasonal", label: "Seasonal" },
 ];
 
+export const CouponRules = [
+    {label: "", value: 0},
+    {label: "Greater Than", value: 1},
+    {label: "Less Than", value: 2},
+    {label: "Same as", value: 3},
+];
+export const DiscountCustomerTypes = [
+    {label: "", value: 0},
+    {label: "New", value: 1},
+    {label: "Return", value: 2},
+];
+
 export const CancellationData = [
   {
     notice: "the client cancel on the day of the Event",

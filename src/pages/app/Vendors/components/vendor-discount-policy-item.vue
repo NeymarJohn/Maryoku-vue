@@ -1,29 +1,83 @@
 <template>
-  <div class="vendor-extra-pay-item-wrapper">
+  <div class="vendor-discount-item-wrapper">
     <div class="collapsed" @click="expand()">
-      <div class="col label">
-        {{ editingData.name }}
-      </div>
-      <div v-if="!isEditable" class="col">
-        <span v-if="editingData.sub">{{ editingData.sub }}</span>
-        <span v-else>-</span>
-      </div>
-      <div v-else class="col">
-        <div>
-          <input v-model="editingData.sub">
+      <template v-if="tab === 'coupon'">
+        <div v-if="!isEditable" class="col label">
+          {{ editingData.code }}
         </div>
-      </div>
-      <div v-if="!isEditable" class="col">
-        <span v-if="editingData.qty">{{editingData.qty }}</span>
-        <span v-else></span>
-      </div>
-      <div v-else class="col">
-        <div>
+        <input v-else v-model="editingData.code" class="col">
+
+        <div v-if="!isEditable" class="col">
+          <span v-if="editingData.validDate">{{ editingData.validDate }}</span>
+        </div>
+        <div v-else class="col">
+          <maryoku-input
+            v-model="editingData.validDate"
+            :value="editingData.validDate"
+            class="form-input width-90"
+            placeholder="Choose date…"
+            input-style="date"
+            @input="changeDate"
+          />
+        </div>
+      </template>
+      <template v-if="tab === 'number_of_guests'">
+        <div v-if="!isEditable" class="col text-left">
+          <span>{{ getRuleLabel(editingData.rule) }}</span>
+        </div>
+        <div v-else class="col">
+          <Multiselect
+            :key="rules.length"
+            v-model="editingData.rule"
+            class="width-90 mt-5 form-input md-purple"
+            :options="rules"
+            :close-on-select="true"
+            :clear-on-select="true"
+            tag-placeholder="Add this as new tag"
+            placeholder="Type to search category"
+            label="label"
+            track-by="value"
+          />
+        </div>
+
+        <div v-if="!isEditable" class="col">
+          <span v-if="editingData.qty">{{ editingData.qty | withComma(Number) }} Guests</span>
+        </div>
+        <div v-else class="col">
           <input v-model="editingData.qty">
         </div>
-      </div>
+      </template>
+
+      <template v-if="tab === 'customer_type'">
+        <div v-if="!isEditable" class="col text-left">
+          <span>{{ getCustomerTypeLabel(editingData.type) }} Customer</span>
+        </div>
+        <div v-else class="col">
+          <Multiselect
+            :key="rules.length"
+            v-model="editingData.type"
+            class="width-90 mt-5 form-input md-purple"
+            :options="rules"
+            :close-on-select="true"
+            :clear-on-select="true"
+            tag-placeholder="Add this as new tag"
+            placeholder="Type to search category"
+            label="label"
+            track-by="value"
+          />
+        </div>
+        <div class="col" />
+      </template>
+      <template v-if="tab === 'seasonal'">
+        <div v-if="!isEditable" class="col text-left">
+          {{ editingData.name }}
+        </div>
+        <input v-else v-model="editingData.code" class="col">
+
+        <div class="col" />
+      </template>
       <div v-if="!isEditable" class="col text-right">
-        {{editingData.value}}
+        {{ `${editingData.value}${editingData.rate}` }}
       </div>
       <div v-else class="col">
         <money v-model="editingData.value" class="text-center number-field" v-bind="rateFormat" />
@@ -37,8 +91,7 @@
           Cancel
         </md-button>
         <md-button
-          class="md-red maryoku-btn"
-          :class="{ 'md-red': theme === 'red', 'md-vendor': theme === 'purple' }"
+          class="md-vendor maryoku-btn"
           @click="save"
         >
           Save
@@ -53,14 +106,21 @@
 </template>
 
 <script>
-import { Money } from "v-money";
+import { DiscountCustomerTypes, CouponRules } from "@/constants/options";
+
+const components = {
+    MaryokuInput: () => import("@/components/inputs/MaryokuInput.vue"),
+    Multiselect: () => import("vue-multiselect"),
+    Money: () => import("v-money"),
+};
 export default {
-    components: {
-        Money,
-    },
+    components,
     filters: {},
     props: {
         item: Object,
+        tab: {
+            type: String,
+        }
     },
     data() {
         return {
@@ -75,16 +135,23 @@ export default {
                 precision: 2,
                 masked: false,
             },
+            rules: CouponRules,
+            customerTypes: DiscountCustomerTypes,
         };
     },
-    computed: {},
-    watch: {},
-    created() {},
     mounted() {
-        console.log("discount.item", this.item);
+        console.log("discount.item", this.item, this.tab);
         this.editingData = Object.assign({}, this.item);
     },
     methods: {
+        getRuleLabel(value) {
+            if (!value) return "";
+            return this.rules.find(r => r.value === value).label;
+        },
+        getCustomerTypeLabel(value){
+            if (!value) return "";
+            return this.customerTypes.find(c => c.value === value).label;
+        },
         expand() {
             if (this.item.desc) {
                 this.expanded = !this.expanded;
@@ -102,6 +169,9 @@ export default {
         },
         changePrice(value) {
             console.log(value);
+        },
+        changeDate() {
+
         },
         changeItem() {
             this.$emit("change", this.editingData);
@@ -126,7 +196,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.vendor-extra-pay-item-wrapper {
+.vendor-discount-item-wrapper {
     font-family: Manrope-Regular, sans-serif;
     color: #050505;
     border-bottom: 1px solid #dddddd;
