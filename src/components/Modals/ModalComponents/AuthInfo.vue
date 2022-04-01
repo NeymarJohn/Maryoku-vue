@@ -126,8 +126,8 @@ export default {
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
     this.bankDetails = {
+      ...this.bankDetails,
       ...JSON.parse(localStorage.bankDetails),
-      ...this.bankDetails, date: "",
     };
     this.vendorId = this.$store.state.vendor.profile.id;
     this.profileId = this.$store.state.auth.user.id;
