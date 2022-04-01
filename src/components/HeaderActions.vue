@@ -36,13 +36,13 @@
             </li>
           </div>
           <drop-down v-if="showMenu" class="d-inline-block">
-            <button class="more-button md-simple" data-toggle="dropdown">
+            <button class="more-button" data-toggle="dropdown">
               <md-icon class="font-size-40">
                 more_vert
               </md-icon>
             </button>
             <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-              <li v-for="(action, j) in actions" v-show="action.key === 'share' || action.key === 'download'|| action.key === 'comment'"
+              <li v-for="(action, j) in actions" v-if="action.key === 'share' || action.key === 'download'|| action.key === 'comment'"
                   :key="j"
                   :class="{'md-small-hide':action.key !== 'share'}"
               >
@@ -173,8 +173,10 @@ export default {
         this.toggleCommentMode(this.isCommentMode);
       }
     },
+
     shareLink(args){
       this.$emit("share", {...args, cb: params => {
+          console.log("shareLink", params);
           this.isSharing = false;
         }});
     }
@@ -331,7 +333,6 @@ export default {
   .drop-down-action {
     display: flex;
     .more-button {
-      cursor: pointer;
       background: none;
       border: none;
     }

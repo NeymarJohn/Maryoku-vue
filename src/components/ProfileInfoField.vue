@@ -106,7 +106,6 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 import vueSignature from "vue-signature";
 import { getBase64 } from "@/utils/file.util";
 import S3Service from "@/services/s3.service";
-import {socialIcons} from "../constants/links";
 export default {
   components: {
     VueGoogleAutocomplete,
@@ -148,7 +147,48 @@ export default {
       content: "",
       signatureData: "",
       passwordConfirm: "",
-      socialMediaBlocks: socialIcons,
+      socialMediaBlocks: [
+        {
+          name: "website",
+          icon: "Asset 539.svg",
+        },
+        {
+          name: "facebook",
+          icon: "Asset 540.svg",
+        },
+        {
+          name: "instagram",
+          icon: "Group 4569 (2).svg",
+        },
+        {
+          name: "youtube",
+          icon: "socialmedia/Youtube.svg",
+        },
+        {
+          name: "linkedin",
+          icon: "socialmedia/Linkdin.svg",
+        },
+        {
+          name: "google",
+          icon: "socialmedia/GooglePlus.svg",
+        },
+        {
+          name: "pinterest",
+          icon: "socialmedia/Pinterest.svg",
+        },
+        {
+          name: "foursquare",
+          icon: "socialmedia/foursquare.svg",
+        },
+        {
+          name: "reddit",
+          icon: "socialmedia/Twitter.svg",
+        },
+        {
+          name: "tiktok",
+          icon: "socialmedia/Tiktok.svg",
+        },
+      ],
       option: {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",

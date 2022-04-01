@@ -236,7 +236,6 @@ import Swal from "sweetalert2";
 import CalendarEvent from "@/models/CalendarEvent";
 import S3Service from "@/services/s3.service";
 import { mapActions } from "vuex";
-
 export default {
   components: {
     MaryokuTextarea,
@@ -389,7 +388,6 @@ export default {
     this.originContent = Object.assign({}, this.editingContent);
   },
   methods: {
-    ...mapActions("campaign", ["saveCampaign"]),
     saveTitle(type) {
       if (type === "knowledge") {
         this.campaignData.additionalData.knowledgeTitle = this.knowledgeTitleContent;
@@ -428,12 +426,8 @@ export default {
     async onFileChangeLogo(event) {
       const file = event.target.files[0];
       await S3Service.fileUpload(file, file.name, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-        this.saveCampaign({ id: this.campaignData.id, logoUrl }).then(() => {
-          this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
-          this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
-          this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
-          this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-        });
+        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
       });
     },
     changeTitle(newTitle) {

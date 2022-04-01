@@ -268,6 +268,8 @@
     </div>
     <success-modal v-if="showSuccessModal" />
     <add-signature-modal
+      :data="signature"
+      :proposalId="proposal.id"
       :show-modal="showSignatureModal"
       @modal-closed="toggleShowSignatureModal"
       @update-signature="updateSignature"
@@ -369,6 +371,10 @@
         const proposalId = this.$route.params.proposalId;
         this.proposal = await Proposal.find(proposalId);
         this.vendor = this.proposal.vendor;
+
+        // set signature from db
+        if ( this.proposal.signature )  this.signature = this.vendor.signature;
+
         this.pageType = VENDOR;
 
         this.successURL = this.proposal.nonMaryoku
@@ -387,23 +393,15 @@
       toggleShowSignatureModal(){
         this.showSignatureModal = !this.showSignatureModal;
       },
-      updateSignature(files){
+      async updateSignature(files){
         this.signature = files;
+        this.proposal.signature = files;
+        console.log('update.signature', files);
+        // await this.saveProposal();
       },
-      getEventDays(){
-        if ( this.proposal.nonMaryoku ) {
-          let startTime = moment(this.proposal.eventData.startTime * 1000);
-          let endTime = moment(this.proposal.eventData.endTime * 1000);
-
-          return endTime.diff(startTime, "days");
-        } else {
-          let startTime = moment(this.proposal.proposalRequest.eventData.eventStartMillis);
-          let endTime = moment(this.proposal.proposalRequest.eventData.eventEndMillis);
-
-          return endTime.diff(startTime, "days");
-        }
+      async saveProposal() {
+        await new Proposal({ ...this.proposal }).save();
       },
-
       tax(proposal) {
         if (!proposal.taxes) return { percentage: 0, price: 0 };
         let tax = proposal.taxes["total"];

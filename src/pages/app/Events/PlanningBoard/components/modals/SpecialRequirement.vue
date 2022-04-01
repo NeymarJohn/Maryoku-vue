@@ -14,13 +14,9 @@
     <template slot="body">
       <div class="md-layout maryoku-modal-body" />
       <div>
-        <div class="font-bold font-size-22">
-          Anything else?
-        </div>
         <div class="mt-20">
-            Whether these values are at the heart of your event or simply close to your heart, we make it easy to <br/>
-            filter vendors based on various social, environmental, and wellbeing factors. <br/>
-            Simply check the boxes most relevant to your needs or concerns.
+            if you'd like to filter vendors based on various social, <br/>
+            environmental, or wellbeing factors, simply check the relevant boxes.
         </div>
         <div class="tags mt-30">
           <tag-item
