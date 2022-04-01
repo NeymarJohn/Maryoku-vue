@@ -160,17 +160,12 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
-import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
-import Swal from "sweetalert2";
 import InputMask from "vue-input-mask";
 import BookingEventRequirement from "./BookingEventRequirement.vue";
-
-// import auth from '@/auth';
 import EventBlocks from "../components/NewEventBlocks";
 import ProposalCard from "./ProposalCard";
 import _ from "underscore";
@@ -178,19 +173,15 @@ import { Modal, MaryokuInput, Loader } from "@/components";
 import Proposal from "@/models/Proposal";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import PendingForVendors from "../components/PendingForVendors";
-
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
 import {CommentMixins, ShareMixins} from "@/mixins";
+import { getReq } from "@/utils/token";
 
-import { postReq, getReq } from "@/utils/token";
 export default {
   name: "EventBooking",
   components: {
-    Loader,
-    EventBlocks,
-    InputMask,
     Modal,
     EventChangeProposalModal,
     HeaderActions,
@@ -200,10 +191,22 @@ export default {
     ProposalCard,
     MaryokuInput,
   },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format("MMM Do YYYY ");
+    },
+    formatTime: function (date) {
+      return moment(date).format("h:00 A");
+    },
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, "hours");
+    },
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
+  },
   mixins: [CommentMixins, ShareMixins],
-  props: {},
   data: () => ({
-    // auth: auth,
     calender: null,
     isLoading: true,
     somethingMessage: null,
@@ -221,6 +224,36 @@ export default {
     showCounterPage: false,
     currentRequirement: null,
   }),
+  computed: {
+    ...mapGetters({
+      storedRequirements: "event/getBookingRequirements",
+    }),
+    categoryList() {
+      return this.$store.state.event.eventData.components;
+    },
+    expiredTime() {
+      return this.currentRequirement.expiredBusinessTime;
+    },
+  },
+  watch: {
+    event() {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    $route: "fetchData",
+  },
+  created() {
+    this.isLoading = true;
+    this.calendar = new Calendar({
+      id: this.$store.state.auth.user.profile.defaultCalendarId,
+    });
+    this.fetchData();
+
+    this.$root.$on("clearVendorRequirement", (event) => {
+      let requirements = this.storedRequirements;
+      if (requirements[event.id]) requirements[event.id] = null;
+      this.setBookingRequirements(requirements);
+    });
+  },
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
@@ -277,7 +310,6 @@ export default {
         });
     },
     toggleCommentMode(mode) {
-      console.log("toggle.comment", mode);
       this.showCommentEditorPanel = mode;
     },
     fetchData: async function () {
@@ -326,52 +358,6 @@ export default {
     },
     compareProposal() {
       this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/compare`);
-    },
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    $route: "fetchData",
-  },
-  created() {
-    console.log("bookingEvent");
-    this.isLoading = true;
-    this.calendar = new Calendar({
-      id: this.$store.state.auth.user.profile.defaultCalendarId,
-    });
-    this.fetchData();
-
-    this.$root.$on("clearVendorRequirement", (event) => {
-      console.log("clearVendorRequirement");
-      let requirements = this.storedRequirements;
-      if (requirements[event.id]) requirements[event.id] = null;
-      this.setBookingRequirements(requirements);
-    });
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMM Do YYYY ");
-    },
-    formatTime: function (date) {
-      return moment(date).format("h:00 A");
-    },
-    formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, "hours");
-    },
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  computed: {
-    ...mapGetters({
-      storedRequirements: "event/getBookingRequirements",
-    }),
-    categoryList() {
-      return this.$store.state.event.eventData.components;
-    },
-    expiredTime() {
-      return this.currentRequirement.expiredBusinessTime;
     },
   },
 };

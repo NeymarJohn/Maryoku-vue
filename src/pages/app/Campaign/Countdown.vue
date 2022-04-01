@@ -78,7 +78,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
   },
   data() {
@@ -106,15 +106,14 @@ export default {
     },
     campaignDescription: {
       get() {
-          return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.description : "";
+        return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.description : "";
       },
       set(newValue) {
-          this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newValue });
+        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newValue });
       },
     },
   },
   created() {
-    console.log("countDown.created");
     const defaultCoverImage = `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
       (new Date().getDate() % 4) + 1
     }.png`;
@@ -157,15 +156,6 @@ export default {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
-      // this.$store
-      //   .dispatch(
-      //     "event/saveEventAction",
-      //     new CalendarEvent({
-      //       id: this.event.id,
-      //       title: newTitle,
-      //     }),
-      //   )
-      //   .then((result) => {});
     },
     chooseFiles() {
       document.getElementById("countdown-coverImage").click();
@@ -182,16 +172,19 @@ export default {
   .countdown-cover-image {
     position: relative;
     overflow: hidden;
+
     img {
       max-height: 500px;
       width: 100%;
       border-radius: 30px;
       object-fit: cover;
     }
+
     .countdown-time-panel {
       margin: auto;
       transform: translate(70px, -50%);
     }
+
     .cover-image-button {
       position: absolute;
       left: 50%;
@@ -199,6 +192,7 @@ export default {
       transform: translate(-50%, -50%);
     }
   }
+
   .countdown-guests {
     position: absolute;
     right: 50px;
@@ -206,9 +200,11 @@ export default {
     background-color: #fff;
     border-radius: 3px;
   }
+
   .logo-section {
     margin-left: auto;
     margin-right: auto;
+
     img {
       max-width: 200px;
     }

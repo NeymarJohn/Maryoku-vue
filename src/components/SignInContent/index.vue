@@ -167,7 +167,6 @@ export default {
     },
     methods: {
         signup() {
-            console.log("signup", this.$validator);
             this.$validator.validateAll().then((isValid) => {
                 if (isValid) {
                     if (this.page === "signin") {

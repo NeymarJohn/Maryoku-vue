@@ -290,7 +290,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       const campaign = new Campaign(data);
       campaign.save().then((res) => {
-        console.log("campaignData", res.item);
         commit("setCampaign", {
           name: res.item.campaignType,
           data: res.item
