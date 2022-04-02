@@ -4,9 +4,7 @@
       <div>
         <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
         <div>
-          Our vendors will create proposals based on your choices below, so be sure to select everything you really
-          want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can
-          lead to more back-and-forth later on).
+          Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
         </div>
       </div>
       <progress-radial-bar :value="percentOfBudgetCategories" :total="total" />
@@ -69,11 +67,12 @@
   </div>
 </template>
 <script>
-import { VsaList, VsaItem, VsaHeading, VsaContent } from "vue-simple-accordion";
+import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import RequirementTagItem from "./components/RequirementTagItem.vue";
 import { ServiceCards } from "@/constants/event.js";
+import _ from "underscore";
 
 export default {
   components: {
@@ -81,22 +80,23 @@ export default {
     VsaItem,
     VsaHeading,
     VsaContent,
+    VsaIcon,
     ProgressRadialBar,
     RequirementTagItem,
   },
-  props: {
-    requirements: {
-      type: Object,
-      required: true,
+  props:{
+    requirements:{
+        type: Object,
+        required: true,
     },
-    serviceCategories: {
-      type: Array,
-      required: true,
+    serviceCategories:{
+        type: Array,
+        required: true,
     },
-    total: {
-      type: Number,
-      required: true,
-    },
+    total:{
+        type: Number,
+        required: true,
+    }
   },
   data() {
     return {
@@ -109,6 +109,7 @@ export default {
       serviceCards: ServiceCards,
     };
   },
+
   computed: {
     selectedCategories() {
       const categoryKeys = Object.keys(this.requirements);
@@ -149,11 +150,9 @@ export default {
   z-index: 10;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   overflow: auto;
-
   .category-icon {
     width: 30px;
   }
-
   &-header {
     padding: 40px;
     display: flex;
@@ -164,28 +163,23 @@ export default {
       right: 0px;
     }
   }
-
   .vsa-list {
     --vsa-heading-padding: 1rem 2.5rem;
     --vsa-content-padding: 1rem 2.5rem;
     border: none;
-
     .vsa-item {
       border: none;
       box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
       margin-top: 8px;
     }
-
     /deep/ .vsa-item__heading {
       border: none;
       cursor: pointer;
-
       .vsa-item__trigger {
         background-color: white;
         color: black;
       }
     }
-
     /deep/ .vsa-item__trigger__icon--is-default:after,
     /deep/ .vsa-item__trigger__icon--is-default:before {
       content: "";
@@ -196,27 +190,22 @@ export default {
       width: 16px;
       background-color: #818080;
     }
-
     /deep/ .vsa-item__trigger__icon--is-default:after {
       transform: rotate(-50deg) translate3d(-24px, 14px, 0);
     }
-
     /deep/ .vsa-item__trigger__icon--is-default:before {
       transform: rotate(50deg) translate3d(24px, 14px, 0);
     }
-
     /deep/ .vsa-item--is-active {
       .vsa-item__trigger__icon--is-default {
         transform: rotate(-180deg);
       }
     }
   }
-
   .requirement-grid {
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
-
     .requirement-item {
       margin-bottom: 20px;
       text-transform: capitalize;
@@ -226,12 +215,10 @@ export default {
       display: inline-block;
     }
   }
-
   .checkmark {
     display: inline-block;
     margin-right: 5px;
     margin-top: 0.4em;
-
     &:after {
       /*Add another block-level blank space*/
       content: "";

@@ -338,6 +338,7 @@ const actions = {
     }
   },
   putUserFromApi({ commit, state }, data) {
+    console.log(data, "putUserFromApi");
     if (data["phoneNumber"]) {
       new Me({ ...data })
         .save()

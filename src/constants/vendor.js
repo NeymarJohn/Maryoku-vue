@@ -1503,33 +1503,6 @@ export const businessCategories = [
         name: "services",
         subCategories: [
           {
-            name: "style",
-            items: [
-              {
-                name: "journalistic",
-                type: "Boolean",
-                value: false,
-                hideOnAutoComplete: true
-              },
-              {
-                name: "studio",
-                type: "Boolean",
-                value: false,
-                hideOnAutoComplete: true
-              },
-              {
-                name: "traditional",
-                type: "Boolean",
-                value: false,
-                hideOnAutoComplete: true
-              },
-              {
-                name: "candid",
-                type: "Boolean",
-                value: false,
-                hideOnAutoComplete: true
-              }
-            ]
           },
           {
             name: "editing",

@@ -25,6 +25,7 @@
           <span style="padding: 0 15px">Oops! Seems like you don’t have enough cash in your “Unexpected” category</span>
           <md-button
             class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra"
+            @click="addMoreMoney"
           >
             Add More Money
           </md-button>
@@ -46,7 +47,7 @@ import { Modal } from "@/components";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
-import { mapActions } from "vuex";
+import {mapActions} from "vuex";
 
 export default {
   components: {
@@ -56,7 +57,7 @@ export default {
   props: {
     serviceCategory: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
   },
   data() {
@@ -82,6 +83,7 @@ export default {
     },
 
   },
+  created: async function () {},
   methods: {
     close() {
       this.$emit("cancel");

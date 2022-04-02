@@ -123,10 +123,12 @@ export default {
         this.$emit("signUp", {email, password, name, company});
     },
     handle(){
+        console.log("save", this.terms, this.name);
         if(!this.terms || !this.name) return;
         this.$emit("save", this.name);
     },
     authenticate(provider){
+      console.log("authenticate", provider);
       this.$emit("authenticate", provider);
     }
   },

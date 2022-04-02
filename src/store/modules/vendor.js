@@ -1,10 +1,11 @@
 import Vue from "vue";
 
-import { getReq } from "@/utils/token";
+import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
 import VendorService from "@/models/VendorService";
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
+import { getBase64 } from "@/utils/file.util";
 import ProposalRequest from "@/models/ProposalRequest";
 import { reject } from "promise-polyfill";
 const state = {
@@ -127,10 +128,12 @@ const actions = {
   updateServiceImage: async ({ commit, state, dispatch }, { vendorId, index, file, images, serviceId }) => {
     return new Promise((resolve, reject) => {
       const fileId = `${new Date().getTime()}_${makeid()}`;
+      console.log(file);
       const isAllImageUploaded = () => {
         return !images.some((img) => img.indexOf("base64") >= 0);
       };
       S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
+        console.log("createImage", uploadedName);
         images[index] = `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`;
         if (isAllImageUploaded()) {
           if (!serviceId) {

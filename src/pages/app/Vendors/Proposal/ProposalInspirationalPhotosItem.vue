@@ -87,7 +87,7 @@ export default {
   methods: {
     async onFileChange(event) {
       if (!event.target.files[0]) return;
-      console.log(event.target.files[0].size);
+      console.log(event.target.files[0]);
       if (event.target.files[0].size > 1024 * 1024 * 5) {
         Swal.fire({
           title: `The size of file that you selected is ${Math.floor(

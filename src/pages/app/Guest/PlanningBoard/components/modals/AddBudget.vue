@@ -56,7 +56,7 @@ export default {
   props: {
     serviceCategory: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
   },
   data() {
@@ -86,6 +86,7 @@ export default {
       );
     },
   },
+  created: async function () {},
   methods: {
     close() {
       this.$emit("cancel");
@@ -122,8 +123,7 @@ export default {
           console.log("Error while saving ", error);
         });
     },
-    addMoreMoney() {
-    },
+    addMoreMoney() {},
   },
 };
 </script>

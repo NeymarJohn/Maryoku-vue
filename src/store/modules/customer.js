@@ -33,6 +33,7 @@ const actions = {
         }
 
         const res = await query.get();
+        console.log("res", res);
 
         commit("setCustomers", res[0].customers);
         resolve(res[0].customers);
