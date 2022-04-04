@@ -53,7 +53,7 @@
         />
       </div>
       <div class="p-50 comment">
-        <maryoku-textarea v-model="campaignDescription" class="width-100" :placeholder="placeHolder" />
+        <maryoku-textarea v-model="campaignDescription" :placeholder="placeHolder" />
       </div>
       <div class="p-50 text-center">
         <div class="font-size-22 mb-50">

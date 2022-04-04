@@ -19,6 +19,71 @@ export const DiscountTabOptions = [
     { value: "seasonal", label: "Seasonal" },
 ];
 
+export const CouponRules = [
+    {label: "", value: 0},
+    {label: "Greater Than", value: 1},
+    {label: "Less Than", value: 2},
+];
+export const DiscountCustomerTypes = [
+    {label: "", value: 0},
+    {label: "New", value: 1},
+    {label: "Return", value: 2},
+];
+
+export const MonthOptions = [
+    {label: "January", value: 1},
+    {label: "February", value: 2},
+    {label: "March", value: 3},
+    {label: "April", value: 4},
+    {label: "May", value: 5},
+    {label: "Jun", value: 6},
+    {label: "July", value: 7},
+    {label: "August", value: 8},
+    {label: "September", value: 9},
+    {label: "October", value: 10},
+    {label: "November", value: 11},
+    {label: "December", value: 12},
+];
+
+export const DefNa = [
+    {
+        name: "Food & Beverage",
+        value: "foodandbeverage",
+    },
+    {
+        name: "Design and Decor",
+        value: "decor",
+    },
+    {
+        name: "Entertainment",
+        value: "entertainment",
+    },
+    {
+        name: "Security",
+        value: "securityservices",
+    },
+    {
+        name: "Videography and Photography",
+        value: "videographyandphotography",
+    },
+    {
+        name: "Equipment Rental",
+        value: "equipmentrentals",
+    },
+    {
+        name: "Staffing and Guest Services",
+        value: "staffingandguestservices",
+    },
+    {
+        name: "Rentals",
+        value: "rentals",
+    },
+    {
+        name: "Other",
+        value: "Other",
+    },
+];
+
 export const CancellationData = [
   {
     notice: "the client cancel on the day of the Event",

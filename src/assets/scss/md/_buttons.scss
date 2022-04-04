@@ -396,7 +396,20 @@
 
 .md-outlined {
   border: solid 1px #F51355;
+  &.md-vendor{
+    border: solid 1px #641856;
+  }
   &.md-black {
     border: solid 1px #050505;
+  }
+  &.md-black-middle {
+    border: solid 1px #707070;
+  }
+
+  // custom bg
+  &.purple-bg {
+      .md-ripple{
+          background: #e9dfe8;
+      }
   }
 }

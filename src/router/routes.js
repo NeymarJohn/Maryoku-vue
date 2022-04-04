@@ -44,7 +44,6 @@ const ChooseVendor = () => import("@/pages/app/Events/ChooseVendor");
 const ChooseGuestVendor = () => import("@/pages/app/Guest/ChooseVendor");
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
-const Landing = () => import("@/pages/app/Landing/Landing");
 
 // OnBoardingPages
 const EventWizardStart = () => import("@/pages/app/CreateEvent/EventWizardStart.vue");
@@ -277,12 +276,6 @@ let ProfilePages = {
       }
     }
   ]
-};
-
-let rsvpFeedback = {
-  path: "/rsvp/feedback-landing-page",
-  name: "Landing",
-  component: Landing
 };
 
 let EventPages = {
@@ -850,7 +843,6 @@ const routes = [
   UserEventPages,
   landingPages,
   invoicesPage,
-  rsvpFeedback,
   plannerListPage,
   vendorListPage,
   feedbackPages,

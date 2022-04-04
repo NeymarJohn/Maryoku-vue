@@ -6,13 +6,13 @@
         <div style="display: inline-block">
           Congratulations!
           <br/>
-          First transaction closed.
+          <span style="font-weight: normal">  You’ve closed your 1st transaction! </span>
         </div>
       </div>
       <div class="middle-slot">
-        Please fill in your personal account so that
+        Please enter your personal account details
         <br/>
-        we can transfer money to you.
+        so we can transfer money to you
       </div>
       <div class="batons-wrapper">
         <p @click="$emit('close-modal')" style="cursor: pointer">

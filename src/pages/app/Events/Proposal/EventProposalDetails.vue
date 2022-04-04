@@ -265,6 +265,7 @@
           v-for="(service, index) in proposal.additionalServices"
           :proposal-data="proposal"
           :service-category="service"
+          :key="index"
           :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
           @changeBookedServices="changeBookedServices"
           @updateProposalCost="updateProposalCost"
