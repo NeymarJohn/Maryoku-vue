@@ -5,8 +5,15 @@
         Create Feedback Campaign
       </div>
       <div class="wrapper-change-cover">
-        <img src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
-        <div class="change-cover-feedback">
+        <img v-if="campaignCoverImage" :src="campaignCoverImage" class="change-cover mr-10">
+        <concept-image-block
+          v-else-if="concept"
+          class="ml-50 hidden"
+          :images="concept.images"
+          :colors="concept.colors"
+          border="no-border"
+        />
+        <div v-if="concept" class="change-cover-feedback">
           <input
             id="change-feedback-cover-image"
             type="file"
@@ -214,6 +221,7 @@ import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
 import { mapActions } from "vuex";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
 import vue2Dropzone from "vue2-dropzone";
@@ -231,6 +239,7 @@ export default {
     FeedbackUploadFilesModal,
     CustomTitleEditor,
     vueDropzone: vue2Dropzone,
+    ConceptImageBlock,
   },
   props: {
     info: {
@@ -242,6 +251,7 @@ export default {
     return {
       placeHolder: "",
       originalContent: {},
+      concept: {},
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
@@ -286,6 +296,9 @@ export default {
     campaignImages() {
       return this.campaignData.images || [];
     },
+    campaignCoverImage() {
+      return this.campaignData.coverImage || "";
+    },
     campaignLogoUrl() {
       return this.campaignData.logoUrl || "";
     },
@@ -327,6 +340,7 @@ export default {
       Your feedback is important to help us understand what worked especially well, on top of
       anything you feel could be improved in the future.
     `;
+    this.concept = this.event.concept;
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
@@ -494,6 +508,7 @@ export default {
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    z-index: 13;
 
     .wrapper-icon-play {
       width: 40%;
@@ -586,10 +601,7 @@ export default {
   position: absolute;
   top: 25%;
   left: 40%;
-
-  .change-cover-btn {
-
-  }
+  z-index: 14;
 }
 .green-block-wrapper{
   background-color: rgba(87, 242, 195, 0.23);
