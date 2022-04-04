@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="fields-cont font-bold mb-10" :class="tab">
-      <span v-for="column in tabsHeader[tab]" :key="column" class="text-left font-size-14">{{ column }}</span>
+      <span v-for="column in tabsHeader[tab]" :key="column" class="text-left font-size-14">{{column}}</span>
     </div>
     <hr style="background-color: #dddddd; height: 1px">
     <div class="fields-cont mt-20 mb-30" :class="tab">
@@ -63,15 +63,13 @@
           <input v-model="form[tab].name" type="text" class="text-left number-field" placeholder="Season Name">
         </div>
         <div class="field">
-          <SeasonalCalendarInput :season="form[tab].season" :months="form[tab].months" size="width-90" @change="handleSeasonalChange" />
+          <SeasonalCalendarInput  :season="form[tab].season" :months="form[tab].months" size="width-90" @change="handleSeasonalChange"></SeasonalCalendarInput>
         </div>
       </template>
-      <div class="field">
-        <money v-model="form.value" class="text-left number-field" v-bind="rateFormat" />
-        <button class="suffix" @click="changeRate">
-          {{ form.rate }}
-        </button>
-      </div>
+        <div class="field">
+            <money v-model="form.value" class="text-left number-field" v-bind="rateFormat" />
+            <button class="suffix" @click="changeRate">{{form.rate}}</button>
+        </div>
       <md-button
         class="md-vendor maryoku-btn"
         :disabled="isDisabledAdd"
@@ -89,8 +87,8 @@ import moment from "moment";
 import { DiscountCustomerTypes, CouponRules } from "@/constants/options";
 
 const components = {
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    SeasonalCalendarInput: () => import("@/components/Inputs/SeasonalCalendarInput.vue"),
+    MaryokuInput: () => import("@/components/inputs/MaryokuInput.vue"),
+    SeasonalCalendarInput: () => import("@/components/inputs/SeasonalCalendarInput.vue"),
     Multiselect: () => import("vue-multiselect"),
 };
 export default {
@@ -157,9 +155,9 @@ export default {
         },
         reset(){
             Object.keys(this.form[this.tab]).forEach(key => {
-                if (key === "validDate") {
+                if (key === 'validDate') {
                     this.form[this.tab][key] = moment().format("DD.MM.YYYY");
-                } else if (key === "rule" || key === "type") {
+                } else if (key === 'rule' || key === 'type') {
                     this.form[this.tab][key] = 0;
                 } else {
                     this.form[this.tab][key] = null;
@@ -177,10 +175,10 @@ export default {
         },
         save(){
             let value = {...this.form[this.tab], value: this.form.value, rate: this.form.rate};
-            if (this.tab === "number_of_guests") value.rule = this.form[this.tab].rule.value;
-            if (this.tab === "customer_type") value.type = this.form[this.tab].type.value;
+            if (this.tab === 'number_of_guests') value.rule = this.form[this.tab].rule.value;
+            if (this.tab === 'customer_type') value.type = this.form[this.tab].type.value;
 
-            this.$emit("add", value);
+            this.$emit('add', value);
             this.reset();
         }
     }

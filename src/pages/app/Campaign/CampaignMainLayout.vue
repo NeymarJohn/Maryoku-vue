@@ -740,6 +740,36 @@ export default {
         return;
       }
 
+      if (this.selectedTab === 4 && !campaignData.coverImage) {
+        Swal.fire({
+          title: "Please select image for cover",
+          buttonsStyling: false,
+          icon: "warning",
+          confirmButtonClass: "md-button md-success",
+        });
+        return;
+      }
+
+      if (this.selectedTab === 4 && !campaignData.description) {
+        Swal.fire({
+          title: "Please write description for Feedback page",
+          buttonsStyling: false,
+          icon: "warning",
+          confirmButtonClass: "md-button md-success",
+        });
+        return;
+      }
+
+      if (this.selectedTab === 4 && !campaignData.images || !campaignData.images.length) {
+        Swal.fire({
+          title: "Please select images for event",
+          buttonsStyling: false,
+          icon: "warning",
+          confirmButtonClass: "md-button md-success",
+        });
+        return;
+      }
+
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         "STARTED"
