@@ -76,10 +76,9 @@
           class="text-left sub-category"
         >
           <div class="font-bold-extra">
-            {{ section }}
+            {{ section === 'Services' ? 'Tell us what you need' : section }}
           </div>
           <div class="md-layout text-left">
-            <!-- {{ subCategory.requirements[section] }} -->
             <div
               v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
               :key="item.item"
@@ -93,7 +92,7 @@
                   v-if="item.qtyEnabled"
                   v-model="item.defaultQty"
                   placeholder="QTY"
-                  class="w-max-80 ml-auto"
+                  class="w-max-80 ml-10"
                 />
               </div>
             </div>
@@ -336,6 +335,7 @@ export default {
     }
   },
   created() {
+    console.log('additionalRequest.created', this.subCategory);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",

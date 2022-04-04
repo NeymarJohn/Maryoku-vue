@@ -117,7 +117,6 @@ export default {
   },
   created() {
     this.api = window.gapi;
-    console.log(this.api);
     this.handleClientLoad();
   },
   methods: {
@@ -189,7 +188,6 @@ export default {
         })
         .then((response) => {
           vm.items = this.syntaxHighlight(response.result.items);
-          console.log(vm.items);
         });
     },
 

@@ -1,6 +1,6 @@
 <template>
   <div class="booking-section planning-board-layout">
-
+    <budget-notifications field="negotiation" />
     <loader :active="isLoading" />
 
     <template v-if="!isLoading">
@@ -144,15 +144,15 @@
                 </div>
               </div>
             </div>
-            <template v-if="selectedProposal">
+            <template v-if="proposal">
               <div class="mt-30">
                 <div class="proposals-booking-items">
-                  <div v-for="(ourproposal, index) in categoryProposals.slice(0, 3)" :key="index" class="">
+                  <div v-for="(p, index) in categoryProposals.slice(0, 3)" :key="index" class="">
                     <ProposalHeader
                       :event="event"
-                      :proposal-selected="selectedProposal && ourproposal.id === selectedProposal.id"
-                      :proposal-request="ourproposal"
-                      @click.native="selectProposal(ourproposal)"
+                      :proposal-selected="proposal && p.id === proposal.id"
+                      :proposal-request="p"
+                      @click.native="selectProposal(p)"
                     />
                   </div>
                 </div>
@@ -161,9 +161,9 @@
                   <div class="d-flex align-center">
                     <div class="company-logo">
                       <img
-                        v-if="selectedProposal.vendor && selectedProposal.vendor.vendorLogoImage"
+                        v-if="proposal.vendor && proposal.vendor.vendorLogoImage"
                         alt=""
-                        :src="`${selectedProposal.vendor.vendorLogoImage}`"
+                        :src="`${proposal.vendor.vendorLogoImage}`"
                       >
                       <img v-else alt="" src="">
                     </div>
@@ -171,7 +171,7 @@
                       <img
                         :src="
                           `${$iconURL}Budget+Elements/${
-                            selectedProposal.vendor ? selectedProposal.vendor.eventCategory.icon : ''
+                            proposal.vendor ? proposal.vendor.eventCategory.icon : ''
                           }`
                         "
                         alt="category-logo"
@@ -179,41 +179,53 @@
                       <span class="text-decoration-underline">
                             &nbsp;&nbsp;
                         <u>
-                          {{ selectedProposal.vendor ? selectedProposal.vendor.companyName : "" }}
+                          {{ proposal.vendor ? proposal.vendor.companyName : "" }}
                         </u>
                       </span>
                       <span class="">&nbsp;&nbsp;{{ "Proposal" }}</span>
                     </div>
                   </div>
                   <ProposalVersionsDropdown
-                    v-if="selectedProposal"
-                    :versions="selectedProposal.versions"
+                    v-if="proposal"
+                    :versions="proposal.versions"
                     :selected="selectedVersion"
                     @select="selectVersion"
                   />
                 </div>
                 <div class="mb-140">
                     <EventProposalDetails
-                        :key="selectedProposal.id"
-                        :proposal="selectedProposal"
+                        :proposal="proposal"
                         :category="selectedCategory"
                         :show-timer-box="true"
                         :hide-footer="true"
                         @favorite="favoriteProposal"
                         @close="closeProposal"
                         @ask="handleAsk"
-                    />
+                    >
+                        <template slot="timer">
+                            <TimerPanel
+                                class="time-counter"
+                                :target="targetTime"
+                                :pending="negotiationPending"
+                                :status="proposal.status"
+                                :declined="negotiationDeclined"
+                                :approved="negotiationProcessed"
+                                theme="red"
+                                @updateExpireDate="handleAsk('expiredDate')"
+                            />
+                        </template>
+                    </EventProposalDetails>
                 </div>
               </div>
             </template>
               <div v-else class="proposal-card-items">
                   <ProposalCard
-                      v-for="(proposal, index) in categoryProposals.slice(0, 3).slice(0, 3)"
+                      v-for="(p, index) in categoryProposals.slice(0, 3).slice(0, 3)"
                       :key="index"
-                      :proposal="proposal"
+                      :proposal="p"
                       :component="selectedCategory"
                       :is-collapsed="showDetails"
-                      :is-selected="selectedProposal && selectedProposal.id === proposal.id"
+                      :is-selected="proposal && proposal.id === p.id"
                       @goDetail="goDetailPage"
                   />
              </div>
@@ -356,7 +368,7 @@
       </div>
 
 
-      <div v-if="requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued"
+      <div v-if="categoryProposals.length"
              class="proposal-footer white-card d-flex justify-content-between"
         >
           <div class="d-flex justify-content-start">
@@ -389,12 +401,12 @@
           </div>
           <div class="d-flex justify-content-end">
 
-            <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor" :disabled="this.selectedProposal === null">
+            <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor" :disabled="this.proposal === null">
               Book This Vendor
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
 
-            <md-button class="md-red maryoku-btn" @click="addToCart" :disabled="(this.selectedProposal === null ) || isInCart">
+            <md-button class="md-red maryoku-btn" @click="addToCart" :disabled="(this.proposal === null ) || isInCart">
               Add To Cart
             </md-button>
           </div>
@@ -439,7 +451,6 @@
       />
     </transition>
     <ServicesCart v-if="showCart" @close="showCart = false" />
-    <CustomPopup v-if="popup" @cancel="popup = false" />
     <AddBudgetModal
       v-if="showAddNewCategory"
       :service-category="additionalCategory"
@@ -455,16 +466,18 @@
   </div>
 </template>
 <script>
+import moment from "moment";
 import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
-import moment from "moment";
-
-import { postReq, getReq } from "@/utils/token";
-
 import Proposal from "@/models/Proposal";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+
+import { postReq } from "@/utils/token";
+import { TimerMixins } from "@/mixins";
+import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 
 const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
@@ -487,13 +500,14 @@ const components = {
   ProposalHeader: () => import("./ProposalHeader.vue"),
   ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
   CommentSidebar: () => import("../components/CommentSidebar.vue"),
+  TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
 };
 
 export default {
   components,
+  mixins: [ TimerMixins ],
   data() {
     return {
-      popup: false,
       showChoice: false,
       showCart: false,
       allRequirements: null,
@@ -516,12 +530,12 @@ export default {
 
       showDifferentProposals: false,
       showDetails: false,
-      selectedProposal: null,
+      proposal: null,
       proposalRequest: null,
       originalProposal: {},
 
       functionActions: [
-          {label: 'Share proposal', value: 'share', icon: 'share'},
+          {label: 'Share proposals', value: 'share', icon: 'share'},
           {label: 'Compare proposals', value: 'compare', icon: 'equalizer'},
           {label: 'I already have a venue for my event', value: 'already_have_venue', icon: 'add_circle_outline'},
           {label: 'I want something different', value: 'something_different', icon: 'autorenew'},
@@ -529,7 +543,7 @@ export default {
       moreActions: [
           {label: 'Download proposal', value: 'download', icon: 'common/download.svg'},
           {label: 'Negotiate Rate', value: 'negotiate', icon: 'budget+screen/SVG/Asset%2010.svg'},
-          {label: 'Contact vendor', value: 'contact', icon: ''},
+          // {label: 'Contact vendor', value: 'contact', icon: ''},
       ]
     };
   },
@@ -602,7 +616,7 @@ export default {
     categoryProposals() {
       let categoryProposals = this.$store.state.event.proposals;
       if (this.selectedCategory) {
-        return categoryProposals[this.selectedCategory.componentId];
+        return categoryProposals[this.selectedCategory.componentId] || [];
       }
       return [];
     },
@@ -672,10 +686,28 @@ export default {
 
       return this.cart[this.selectedCategory.componentId] &&
           this.cart[this.selectedCategory.componentId].proposal &&
-          this.cart[this.selectedCategory.componentId].proposal.id === this.selectedProposal.id;
+          this.cart[this.selectedCategory.componentId].proposal.id === this.proposal.id;
     },
+
     showCommentPanel(){
       return this.$store.state.eventPlan.showCommentPanel;
+    },
+    negotiationProposals(){
+      let proposals = this.$store.state.event.proposals;
+      if(!Object.keys(proposals).length) return {};
+      let negotiationProposals = {};
+      Object.keys(proposals).map(key => {
+          let subProposals = [];
+          proposals[key].map(p => {
+              let negotiations = p.negotiations.filter(n =>
+                  n.status === NEGOTIATION_REQUEST_STATUS.APPROVED || n.status === NEGOTIATION_REQUEST_STATUS.DECLINE);
+              if(negotiations.length) {
+                  subProposals.push(p);
+              }
+          });
+          if(subProposals.length) negotiationProposals[key] = subProposals;
+      });
+      return negotiationProposals;
     },
   },
   async created() {
@@ -725,6 +757,7 @@ export default {
         expiredBusinessTime: this.expiredTime,
       }).then(async res => {
         await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
+        this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
 
         await this.$store.dispatch(
         "event/saveEventAction",
@@ -828,22 +861,25 @@ export default {
     },
     addRequirements() {},
     selectCategory(category) {
+      console.log('sel.category', category);
+
       if (category.key) {
         category["componentId"] = category.key;
       }
       this.currentRequirement = this.requirements[category.componentId];
       this.selectedCategory = category;
 
-      const newProposals = this.proposals[category.componentId].filter(p => !p.viewd);
+      if (this.proposals[category.componentId]) {
+          const newProposals = this.proposals[category.componentId].filter(p => !p.viewd);
 
-      if (newProposals.length) {
-          newProposals.map(p => {
-              this.updateProposal({
-                  proposal: { id: p.id, viewed: true },
-                  category:category.key,
+          if (newProposals.length) {
+              newProposals.map(p => {
+                  this.updateProposal({
+                      proposal: { id: p.id, viewed: true },
+                      category:category.key,
+                  })
               })
-          })
-
+          }
       }
 
       this.closeProposal();
@@ -864,9 +900,10 @@ export default {
       this.showAddBudgetConfirm = false;
 
     },
-    saveBudget() {
-      this.showAddNewCategory = false;
+    saveBudget(category) {
+      this.selectCategory(category);
 
+      this.showAddNewCategory = false;
     },
     getIsRow(indx) {
       if (indx == 0) {
@@ -901,44 +938,44 @@ export default {
       this.showDetails = true;
 
       if (proposal.selectedVersion > -1)
-        this.selectedProposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
-      else this.selectedProposal = proposal;
+        this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
+      else this.proposal = proposal;
     },
     async bookVendor() {
-      if (!this.selectedProposal) return;
-      await new Proposal({ ...this.selectedProposal }).save();
+      if (!this.proposal) return;
+      await new Proposal({ ...this.proposal }).save();
       this.$router.push({
         name: "CheckoutWithVendor",
         params: {
-          proposalId: this.selectedProposal.id,
+          proposalId: this.proposal.id,
           proposalType: "planner",
         },
       });
     },
     async addToCart() {
-      if (!this.selectedProposal || !this.selectedCategory) return;
+      if (!this.proposal || !this.selectedCategory) return;
 
       const cartItem = this.cart[this.selectedCategory.componentId];
       await this.updateCartItem({
         id: cartItem ? cartItem.id : undefined,
         category: this.selectedCategory.componentId,
         event: { id: this.event.id },
-        proposalId: this.selectedProposal.id,
+        proposalId: this.proposal.id,
       });
       await this.updateProposal( {
-          proposal: { ...this.selectedProposal, isFavorite: false },
-          category: this.selectedProposal.vendor.vendorCategory });
+          proposal: { ...this.proposal, isFavorite: false },
+          category: this.proposal.vendor.vendorCategory });
     },
     async favoriteProposal(isFavorite) {
 
-      this.selectedProposal = await this.updateProposal({
-          proposal: { ...this.selectedProposal, isFavorite },
+      this.proposal = await this.updateProposal({
+          proposal: { ...this.proposal, isFavorite },
           category: this.selectedCategory.componentId,
       });
 
       await this.setCategoryCartItem({
         category: this.selectedCategory.componentId,
-        item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.selectedProposal, isFavorite } },
+        item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.proposal, isFavorite } },
       });
     },
     async updateProposal(params) {
@@ -952,26 +989,26 @@ export default {
             .unix() * 1000;
         let query = new ProposalNegotiationRequest({
           eventId: this.event.id,
-          proposalId: this.selectedProposal.id,
-          proposal: new Proposal({ id: this.selectedProposal.id }),
+          proposalId: this.proposal.id,
+          proposal: new Proposal({ id: this.proposal.id }),
           expiredTime,
           type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
           url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`,
         });
 
-        let res = await query.for(new Proposal({ id: this.selectedProposal.id })).save();
+        let res = await query.for(new Proposal({ id: this.proposal.id })).save();
         console.log("ask.result", res);
-        this.selectedProposal.negotiations.push(res);
+        this.proposal.negotiations.push(res);
       }
     },
     closeProposal() {
       this.showDetails = false;
-      this.selectedProposal = null;
+      this.proposal = null;
     },
-    selectProposal(thisProposal){
-        this.selectedProposal = thisProposal;
-        this.originalProposal = thisProposal;
-        let proposal = thisProposal;
+    selectProposal(p){
+        this.proposal = p;
+        this.originalProposal = p;
+        let proposal = p;
         if(proposal){
             proposal.versions = !proposal.versions ? [] : proposal.versions;
             this.$store.dispatch("planningBoard/setProposal",{...proposal});
@@ -983,17 +1020,17 @@ export default {
     },
     selectVersion(index) {
       this.$store.commit("planningBoard/selectVersion", index);
-      this.selectedProposal = this.originalProposal;
+      this.proposal = this.originalProposal;
       if (index >= 0 && this.versionProposal.versions) {
-        this.selectedProposal = this.versionProposal;
+        this.proposal = this.versionProposal;
       }
     },
     handleAction(action) {
         if (action === "download") {
-            this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.selectedProposal.id}/download`);
+            this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
 
         } else if (action === 'negotiate' || action === 'share') {
-            this.setProposal(this.selectedProposal);
+            this.setProposal(this.proposal);
             if (action === 'negotiation') this.setOpen('NEGOTIATION')
             else this.setOpen('SHARE')
         } else if (action === 'compare') {
@@ -1003,16 +1040,46 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
+    async processNotification(){
+
+      let proposals = this.negotiationProposals;
+      this.showNegotiationNotification = false;
+      Object.keys(proposals).map(key => {
+          this.negotiationProposals[key].map(proposal => {
+              let { negotiations } = proposal;
+              negotiations.map(it => it.status = 3);
+              this.$store.dispatch("event/updateProposal", {
+                  category: key,
+                  proposal: {...proposal, negotiations}
+              });
+          });
+      });
+    },
   },
   watch: {
     requirements: {
         handler(newVal) {
-            console.log("req.watch", newVal);
+            console.log("rquireement.watch", newVal);
         },
         deep: true,
     },
     event(newVal) {
-      console.log("event.watch", newVal);
+    },
+    negotiationProposals(newVal){
+
+      if(Object.keys(newVal).length) {
+          this.$notify({
+              message: {
+                  title: "Great News!",
+                  content: "The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide",
+                  close: this.processNotification
+              },
+              icon: `${this.$iconURL}messages/group-21013.svg`,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              timeout: 5000,
+          });
+      }
     },
   },
 };

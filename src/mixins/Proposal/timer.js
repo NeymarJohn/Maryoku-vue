@@ -7,6 +7,7 @@ export default {
   methods: {},
   computed: {
     targetTime() {
+      console.log('computed.timer');
       return new Date(this.proposal.expiredDate);
     },
     negotiationProcessed() {

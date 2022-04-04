@@ -13,24 +13,36 @@
       </div>
       <div class="dropdown2 d-flex">
         <md-menu md-size="medium" class="action-menu myr-1" :md-offset-x="-300" :md-offset-y="-36">
-          <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('name')">
+          <md-button
+            md-menu-trigger
+            class="edit-btn md-simple sortStatus"
+            @click.stop="changeCommentSortType('name')"
+          >
             Sort
-            <i v-if="commentSortType == 'asc'" class="fas fa-chevron-up my-chevron" @click.stop="changeCommentSortType('name')" @click="sortBy='name'" />
-            <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('name')" @click="sortBy='name'" />
+            <i v-if="commentSortType == 'asc'" class="fas fa-chevron-up my-chevron"
+               @click.stop="changeCommentSortType('name')" @click="sortBy='name'" />
+            <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('name')"
+               @click="sortBy='name'" />
           </md-button>
         </md-menu>
-        <md-button md-menu-trigger class="edit-btn md-simple sortStatus" @click.stop="changeCommentSortType('status')">
+        <md-button
+          md-menu-trigger
+          class="edit-btn md-simple sortStatus"
+          @click.stop="changeCommentSortType('status')"
+        >
           Status
-          <i v-if="commentStatusSortType == 'asc'" class="fas fa-chevron-up my-chevron" @click.stop="changeCommentSortType('status')" />
+          <i v-if="commentStatusSortType == 'asc'" class="fas fa-chevron-up my-chevron"
+             @click.stop="changeCommentSortType('status')" />
           <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('status')" />
         </md-button>
       </div>
     </div>
     <div class="sidebar__items d-flex flex-column fullDiscussion">
-      <div v-for="(commentComponent, commentIndex) in commentComponents"
-           v-if="commentComponent.comments && commentComponent.comments.length"
-           :key="commentIndex"
-           class="comment_item align-items-center justify-content-between cursor-pointer"
+      <div
+        v-for="(commentComponent, commentIndex) in commentComponents"
+        v-if="commentComponent.comments && commentComponent.comments.length"
+        :key="commentIndex"
+        class="comment_item align-items-center justify-content-between cursor-pointer"
       >
         <div class="d-flex justify-content-between">
           <div class="sidebar__item__details2 d-flex">
@@ -51,16 +63,22 @@
         </div>
         <div class="d-flex sidebar__item__content">
           <div class="dot" />
-          <span class="comment">{{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : '' }} </span>
+          <span class="comment">
+            {{
+              (commentComponent.comments && commentComponent.comments.length)
+                ? commentComponent.comments[0].description : ""
+            }}
+          </span>
         </div>
         <div class="d-flex sidebar__item__content justify-content-between mt-1 mb-1">
-          <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length-1 }} Reply
+          <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length - 1 }} Reply
             <i class="fas fa-chevron-down" />
           </span>
           <span class="unread-count2">02</span>
         </div>
         <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4">
-          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem" :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
+          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem"
+               :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
             <div class="d-flex sidebar__item__content2 justify-content-between">
               <!-- <div class="d-flex sidebar__item__content"> -->
               <div class="sidebar__item__details d-flex">
@@ -98,7 +116,8 @@
                 </md-card-content>
               </md-card>
             </fade-transition>
-            <textarea ref="commentEditor" v-model="editingComment" rows="4" class="form-control reply-text-area" placeholder="Write reply here" @input="getMessage" />
+            <textarea ref="commentEditor" v-model="editingComment" rows="4" class="form-control reply-text-area"
+                      placeholder="Write reply here" @input="getMessage" />
             <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
             <div class="footer text-right my-top my-bottom">
               <md-button class="md-simple normal-btn md-black" @click="">
@@ -117,18 +136,16 @@
 </template>
 
 <script>
-
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 import { FadeTransition } from "vue2-transitions";
-import {CommentMixins} from "@/mixins";
+import { CommentMixins } from "@/mixins";
 import moment from "moment";
 import { getReq } from "@/utils/token";
-
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
   Avartar: () => import("@/components/Avartar.vue"),
-  FadeTransition
+  FadeTransition,
 };
 
 export default {
@@ -153,24 +170,19 @@ export default {
     colors: ["#428dfc", "#21cfe0", "#a3809d", "#ff5888", "#77ad8c", "#fdbe00"],
     editingComment: "",
     showAddress: false,
-    selectedComponent:null,
+    selectedComponent: null,
     customers: [],
   }),
-  computed: {},
-
-  created() {},
   mounted() {
-    console.log("Commentside bar mounted");
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
   },
-
   methods: {
     changeCommentSortType(sortByType) {
-      if(sortByType == "name"){
+      if (sortByType == "name") {
         this.commentSortType = this.commentSortType == "asc" ? "desc" : "asc";
       }
 
-      if(sortByType == "status"){
+      if (sortByType == "status") {
         this.commentStatusSortType = this.commentStatusSortType == "asc" ? "desc" : "asc";
       }
 
@@ -184,22 +196,22 @@ export default {
           components2.push(component);
         }
       }
-      if(sortByType == "name"){
+
+      if (sortByType == "name") {
         if (this.commentSortBy == "name") {
           components2.sort((a, b) => {
             let name1 = a.customer ? a.customer.name : a.planner.name;
             let name2 = b.customer ? b.customer.name : b.planner.name;
             if (this.commentSortType == "asc") {
               return name1 > name2 ? 1 : -1;
-            }else{
+            } else {
               return name1 < name2 ? 1 : -1;
             }
           });
         }
       }
 
-
-      if(sortByType == "status"){
+      if (sortByType == "status") {
         if (this.commentSortBy == "status") {
           components2.sort((a, b) => {
             if (this.commentStatusSortType == "asc") {
@@ -216,36 +228,31 @@ export default {
     async getMessage(e) {
       if (e.target.value.includes("@")) {
         let queryArray = e.target.value.split("@");
-
         let res = await getReq(`/1/customers?name=${queryArray[1]}`);
-        console.log("customers", res);
         this.customers = res.data;
-
         this.showAddress = true;
       }
     },
     toggleshowReply(commentIndex) {
       this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
       this.selectedComponent = this.commentComponents[commentIndex];
-
     },
     async saveCommentReply(event, type) {
       let selectedComponent = this.selectedComponent;
-      console.log("saveComment", selectedComponent);
       const comment = {
         commentComponent: { id: selectedComponent.id },
         description: this.editingComment,
         parentId: this.mainComment ? this.mainComment.id : null,
         email: this.selectedCustomer ? this.selectedCustomer.email : null,
       };
-      this.saveComment({component: selectedComponent, comment, index: this.showReplyComment});
+      this.saveComment({ component: selectedComponent, comment, index: this.showReplyComment });
       this.editingComment = "";
       event.stopPropagation();
     },
-    daysDiff(date){
+    daysDiff(date) {
       return moment(moment()).diff(moment(date), "days");
-    }
-  }
+    },
+  },
 };
 
 </script>
@@ -263,6 +270,7 @@ export default {
   justify-content: center;
   margin-left: 10px;
 }
+
 .sidebar__item__details2 {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
@@ -295,7 +303,8 @@ export default {
   text-align: left;
   color: #050505;
 }
-.progress-sidebar{
+
+.progress-sidebar {
   height: 80vh;
 }
 
@@ -427,7 +436,7 @@ img.header-img {
     border-bottom: 1.3px solid rgba(112, 112, 112, 0.45);
     transition: 0.3s ease-in-out all;
     position: relative;
-    padding-top:1rem;
+    padding-top: 1rem;
   }
 
   .commentsReplies {
@@ -479,20 +488,25 @@ img.header-img {
 .md-button.md-simple i.my-chevron {
   color: #050505 !important;
 }
+
 .time-color {
   color: #818080;
 }
+
 .my-top {
   margin-top: 20px;
 }
+
 .my-bottom {
   margin-bottom: 20px;
 }
-.adaptive{
+
+.adaptive {
   overflow-y: hidden !important;
 }
-.background-red{
-  background-color: #f51355!important;
+
+.background-red {
+  background-color: #f51355 !important;
 }
 
 </style>

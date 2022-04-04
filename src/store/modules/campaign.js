@@ -110,32 +110,7 @@ const defaultCampaignData = {
       allowUploadPhoto: true,
       downloadFiles: true
     },
-    sections: [
-      {
-        sectionName: "review",
-        title: "",
-        description: ""
-      },
-      {
-        sectionName: "photos",
-        title: "",
-        description: ""
-      }
-    ],
-    images: [
-      {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg"
-      },
-      {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg"
-      },
-      {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg"
-      },
-      {
-        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg"
-      }
-    ],
+    images: [],
     files: [],
     feedbackQuestions: [
       {
@@ -315,7 +290,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       const campaign = new Campaign(data);
       campaign.save().then((res) => {
-        console.log("camppaignData", res.item);
         commit("setCampaign", {
           name: res.item.campaignType,
           data: res.item
