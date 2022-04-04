@@ -1,6 +1,6 @@
 <template>
 	<div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
-		<progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
+		<progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
 		<comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
 		<router-view />
 	</div>
@@ -171,6 +171,19 @@ export default {
 			const budgetIndex = this.eventElements.findIndex((item) => item.componentId === "budget");
 			const timelineIndex = this.eventElements.findIndex((item) => item.componentId === "timeline");
 			const campaignIndex = this.eventElements.findIndex((item) => item.componentId === "campaign");
+			if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
+				elements.push(overview);
+				elements.push(concept);
+				elements.push(budget);
+				if (this.event.budgetProgress === 100) {
+					elements.push(planningBoard);
+				}
+				elements.push(timeline);
+				elements.push(campaign);
+			} else if (this.user.currentUserType === "guest") {
+				elements.push(overview);
+				elements.push(planningBoard);
+			}
 
 			// show when you approve budget
 			// if (this.event.budgetProgress == 100) {

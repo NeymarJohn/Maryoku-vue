@@ -87,6 +87,7 @@ const actions = {
         commit("addCommentComponent", res.data);
         // save customer when user comment as guest
         if (res.customer) commit("setCustomer", res.customer);
+        console.log(res);
         resolve(res.data);
       });
     });
@@ -313,6 +314,7 @@ const actions = {
         new Proposal({ id: state.selectedProposal.id })
       );
       let res = await query.save();
+      console.log("res", res);
 
       if (!state.selectedProposal.versions) {
         commit("setVersions", [res]);

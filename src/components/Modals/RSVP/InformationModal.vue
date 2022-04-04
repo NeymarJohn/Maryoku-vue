@@ -69,7 +69,6 @@
 import CalendarEvent from "@/models/CalendarEvent";
 import { Modal, MaryokuInput } from "@/components";
 import FoodLimitationSet from "./FoodLimitationSet";
-
 export default {
   components: {
     Modal,
@@ -79,7 +78,7 @@ export default {
   props: {
     event: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
   },
   data() {
@@ -153,9 +152,12 @@ export default {
     },
     setMyFoodLimitation(foodLimitation) {
       this.foodLimitaion = foodLimitation;
+      console.log(foodLimitation);
     },
     setGuestFoodLimitation(index, foodLimitation) {
       this.joinedGuests[index] = { ...this.joinedGuests[index], ...foodLimitation };
+      console.log(index);
+      console.log(foodLimitation);
     },
   },
 };
@@ -164,32 +166,26 @@ export default {
 .rsvp-information-model {
   .user-info {
     padding: 0px 0 50px;
-
     .input-wrapper {
       width: 50%;
-
       &:first-child {
         padding-right: 35px;
       }
     }
   }
-
   .information-section {
     border-top: solid 2px #dbdbdb;
     padding: 30px 0;
     text-align: left;
-
     .guestNumber {
       display: flex;
       align-items: center;
       margin-top: 10px;
-
       .handle-btn {
         width: 40px;
         height: 40px;
         border-radius: 50%;
       }
-
       &-input {
         height: 80px;
         text-align: center;

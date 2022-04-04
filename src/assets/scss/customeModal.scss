@@ -1,18 +1,4 @@
 @import "./common.scss";
-.mcc-wrapper {
-    &.valid {
-        input.vue-pincode-input {
-            border: 1px solid #0fac4c;
-            box-shadow: none;
-        }
-    }
-    &.error {
-        input.vue-pincode-input {
-            border: 1px solid #f44e4e;
-            box-shadow: none;
-        }
-    }
-}
 
 .modal-container {
     .md-button {

@@ -99,13 +99,16 @@
 </template>
 <script>
 import { Modal } from "@/components";
+import carousel from "vue-owl-carousel";
 import VendorPhotosCarouselItem from "./VendorPhotosCarouselItem.vue";
 import Swal from "sweetalert2";
 import vue2Dropzone from "vue2-dropzone";
+import { getBase64 } from "@/utils/file.util";
 
 export default {
   components: {
     vueDropzone: vue2Dropzone,
+    carousel,
     VendorPhotosCarouselItem,
     Modal,
   },
@@ -202,6 +205,7 @@ export default {
     next() {
       this.imageSlidePos = -document.getElementsByClassName("photo-inpirational-item")[this.startIndex + 1].offsetLeft;
       this.startIndex += 1;
+      console.log(document.getElementsByClassName("photo-inpirational-item")[this.startIndex].offsetLeft);
     },
     async fileAdded(file) {
       this.addNewPhoto(file);
@@ -222,7 +226,6 @@ export default {
     display: flex;
     transition: all 0.5s;
   }
-
   .handle-btn {
     background-color: white !important;
     height: 25px;
@@ -231,38 +234,30 @@ export default {
     position: absolute;
     top: 120px;
     transform: translateY(-50%);
-
     &.next-btn {
       right: 1px;
     }
-
     &.prev-btn {
       left: 1px;
     }
   }
-
   /deep/ .modal-container {
     max-width: 1200px !important;
   }
-
   .add-image-item {
     height: 220px;
     min-width: 340px;
     cursor: pointer;
-
     &.red {
       border: dashed 1px #f51355;
     }
-
     &.purple {
       border: dashed 1px #641856;
     }
   }
-
   .photo-inpirational-item:first-child {
     margin-left: 60px;
   }
-
   span {
     cursor: pointer;
     position: absolute;
@@ -278,24 +273,20 @@ export default {
     transform: translateY(-50%);
     display: flex;
     align-items: center;
-
     &.prev {
       left: 50px;
     }
-
     &.next {
       right: 50px;
     }
   }
 }
-
 .file-drop-zone.vue-dropzone {
   border: dashed 1px #641856;
   margin-left: 60px;
   margin-right: 60px;
   text-align: center;
   padding: 30px;
-
   & .file-upload-btn {
     border: solid 1px #641856;
     padding: 10px 20px;

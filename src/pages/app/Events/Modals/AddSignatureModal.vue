@@ -2,6 +2,7 @@
   <Modal v-if="showModal" :styles="modalCustomStyles">
     <template slot="header">
       <div class="header">
+
         <span> <i class="fas fa-pencil-alt" /> Enter Your Signature</span>
         <div @click="closeModal">
           <md-icon>close</md-icon>
@@ -28,7 +29,7 @@
         <div class="signature-editor" id="signatureEditor" v-show="signatureType === 'draw'"
              @mousedown="signatureAdded = true">
           <img v-if="signatureData" :src="`${signatureData}`">
-          <div v-if="!signatureAdded && !signatureData" class="signature-description">
+          <div v-if="!signatureAdded" class="signature-description">
             <i class="fas fa-pencil-alt" />
             <br/>
             <span>
@@ -38,6 +39,14 @@
             </span>
           </div>
           <vueSignature v-if="!signatureData" ref="signature" :sig-option="option" :w="'100%'" :h="'99%'"/>
+          <input
+            ref="signatureFile"
+            type="file"
+            class="d-none"
+            name="vendorSignature"
+            accept="image/gif, image/jpg, image/png"
+            @change="onSignatureFilePicked"
+          >
         </div>
         <div class="signature-editor type" v-show="signatureType === 'type'">
           <input v-model="signatureName"/>
@@ -65,7 +74,6 @@
               Drag your file here
             </div>
           </div>
-          <img v-else :src="uploadedSignature" style="max-height: 300px">
         </vue-dropzone>
       </div>
     </template>
@@ -97,12 +105,6 @@ export default {
 
   },
   props: {
-    data: {
-        type: Object,
-    },
-    proposalId: {
-        type: String,
-    },
     showModal: {
       type: Boolean,
       default: false
@@ -110,11 +112,11 @@ export default {
   },
   data() {
     return {
+      signatureName: "",
       signatureAdded: false,
       signatureType: "draw",
-      signatureName: this.data.signatureName,
-      signatureData: this.data.jpeg,
-      uploadedSignature: this.data.uploadedSignature,
+      signatureData: "",
+      uploadedSignature: "",
       option: {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",
@@ -129,7 +131,6 @@ export default {
       },
     };
   },
-
   methods: {
     template: function () {
       return `<div class="dz-preview dz-file-preview">
@@ -144,24 +145,26 @@ export default {
     async handleAdded(file) {
       this.$refs.myVueDropzone.removeFile(this.uploadedSignature);
       this.fileIsLoading = true;
-
-      this.uploadedSignature = await this.uploadSignatureFile(file, file.name, `vendor/signatures/${this.proposalId}`);
-      console.log('signature', this.uploadedSignature);
+      this.uploadedSignature = file;
+      this.fileName = file.name;
+      // let data = {
+        // vendorId: this.vendorData.id,
+        // file: await getBase64(file)
+      // };
+      // this.submit(data);
     },
     closeModal(){
+      this.showModal = false;
       this.$emit("modal-closed");
     },
-    async save() {
-
+    save() {
+      let jpeg;
       if(this.signatureAdded) {
-         const dataURL = this.$refs.signature.save("image/svg+xml");
-         const file = await this.$dateUtil.dataURLtoFIle(dataURL, 'signature.png');
-
-         this.signatureData = await this.uploadSignatureFile(file, file.name, `vendor/signatures/${this.proposalId}`);
+         jpeg = this.$refs.signature.save("image/svg+xml");
+         this.signatureData = jpeg;
       }
-
-      console.log('save', {uploadedSignature: this.uploadedSignature, jpeg: this.signatureData, signatureName: this.signatureName})
-      this.$emit("update-signature", {uploadedSignature: this.uploadedSignature, jpeg: this.signatureData, signatureName: this.signatureName});
+      this.$emit("update-signature", {uploadedSignature: this.uploadedSignature, jpeg, signatureName: this.signatureName});
+      this.$root.$emit("update-proposal-value", "signature", jpeg);
     },
     clear() {
       switch (this.signatureType) {
@@ -179,10 +182,19 @@ export default {
           break;
       }
     },
+    async onSignatureFilePicked(e) {
+      const file = e.target.files[0];
+      const extension = file.type.split("/")[1];
+      const fileId = `${new Date().getTime()}`;
+      S3Service.fileUpload(file, fileId, "vendor/signatures").then(async (uploadedName) => {
+        this.content = `https://maryoku.s3.amazonaws.com/vendor/signatures/${fileId}.${extension}`;
+        // this.signatureData = await getBase64(file);
+      });
 
-    async uploadSignatureFile(file, name, path) {
-      const uploadName =  await S3Service.fileUpload(file, name, path);
-      return uploadName;
+      this.$refs.signature.fromDataURL(imageData);
+    },
+    uploadSignatureFile() {
+      this.$refs.signatureFile.click();
     },
   },
   computed: {
@@ -191,16 +203,6 @@ export default {
         header: "padding: 0"
       };
     }
-  },
-  watch: {
-      data: {
-          handler(newVal){
-              this.signatureData = newVal.jpeg;
-              this.signatureName = newVal.signatureName;
-              this.uploadedSignature = newVal.uploadedSignature;
-          },
-          deep: true
-      },
   }
 
 };

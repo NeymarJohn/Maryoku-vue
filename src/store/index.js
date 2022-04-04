@@ -12,7 +12,6 @@ import campaign from "./modules/campaign";
 import vendorProposal from "./modules/vendorProposal";
 import planningBoard from "./modules/planningBoard";
 import customer from "./modules/customer";
-import stripe from "./modules/stripe";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -28,7 +27,6 @@ export default new Vuex.Store({
     vendorProposal,
     common,
     customer,
-    planningBoard,
-    stripe,
+    planningBoard
   }
 });

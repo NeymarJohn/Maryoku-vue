@@ -59,39 +59,6 @@
             </div>
           </div>
         </div>
-        <div class="pricing-policy-wrapper mb-50">
-          <div class="title-cont">
-            <div class="top">
-              <h5>Discount policy</h5>
-            </div>
-            <div class="bottom">
-              <p>The discount will be calculated automatically</p>
-            </div>
-          </div>
-          <div class="card">
-            <vendor-discount-section :data="vendorDiscountPolicies" />
-            <div class="title-cont">
-              <div class="top mt-30 mb-2">
-                <h5>Does this include double discounts?</h5>
-              </div>
-            </div>
-            <check-box :checked="doubleDiscounts" @changed="changedCheckBox('doubleDiscounts', $event)" />
-            <div class="title-cont mt-3">
-              <div class="top">
-                <h5>What a valid discount?</h5>
-              </div>
-            </div>
-            <div class="md-layout my-2">
-              <div v-for="option in discountOptions" :key="option.value" class="md-layout-item md-size-33 ">
-                <md-checkbox v-model="vendor.discount" :value="option.value" class="md-vendor">
-                  {{
-                    option.label
-                  }}
-                </md-checkbox>
-              </div>
-            </div>
-          </div>
-        </div>
         <div v-if="vendor.vendorCategories[0] == 'venuerental'" class="3rd-party-vendor-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
@@ -176,7 +143,7 @@
               <div class="check-item" @click="workAllDay = false">
                 <img v-if="!workAllDay" :src="`/static/icons/vendor/Icon_V.svg`">
                 <span v-else class="unchecked" />
-                <span>There are times I don't work </span>
+                <span>There are times I don't work ></span>
               </div>
             </div>
             <div v-if="!workAllDay" class="calendar-cont">
@@ -230,7 +197,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="block border-bottom border-top">
+                <div class="block border">
                   <div class="check-field" @click="exDont = !exDont">
                     <img v-if="exDont" :src="`${iconPurple}Purple Icons/Icon_V.svg`">
                     <img v-else :src="`${iconUrl}Rectangle 1245.svg`">
@@ -373,26 +340,22 @@
 import moment from "moment";
 import _ from "underscore";
 import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
-import CheckBox from "@/components/CheckBox.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
-import { GuaranteedOptions, DiscountOptions, DefNa } from "@/constants/options";
+import { GuaranteedOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
-import VendorDiscountSection from "./VendorDiscountSection";
 
 export default {
   name: "VendorSignupStep3",
   components: {
     VendorPricingPolicyItem,
     VendorPolicyItem,
-    VendorDiscountSection,
     VSignupAddRules,
     FunctionalCalendar,
     VueTimepicker,
-    CheckBox,
   },
   filters: {},
   props: {
@@ -415,7 +378,6 @@ export default {
       iconPurple: `${this.$iconURL}`,
       allowThirdVendor: null,
       workAllDay: false,
-      doubleDiscounts: false,
       date: {
         selectedDates: [],
       },
@@ -431,6 +393,10 @@ export default {
           than: "the client wil pay:",
         },
         placeholder: "Like two weeks before the event ",
+        // placeholder: {
+        //   if: 'Like two weeks before the event ',
+        //   than: 'Like: 30% of deposit',
+        // },
       },
       yesRules: [],
       noRules: [],
@@ -468,13 +434,48 @@ export default {
         start: "AM",
         end: "AM",
       },
-      defNa: DefNa,
+      defNa: [
+        {
+          name: "Food & Beverage",
+          value: "foodandbeverage",
+        },
+        {
+          name: "Design and Decor",
+          value: "decor",
+        },
+        {
+          name: "Entertainment",
+          value: "entertainment",
+        },
+        {
+          name: "Security",
+          value: "securityservices",
+        },
+        {
+          name: "Videography and Photography",
+          value: "videographyandphotography",
+        },
+        {
+          name: "Equipment Rental",
+          value: "equipmentrentals",
+        },
+        {
+          name: "Staffing and Guest Services",
+          value: "staffingandguestservices",
+        },
+        {
+          name: "Rentals",
+          value: "rentals",
+        },
+        {
+          name: "Other",
+          value: "Other",
+        },
+      ],
       policies: VendorPolicy,
       pricingPolicies: VendorPricingPolicy,
       vendorPolicies: {},
       vendorPricingPolicies: {},
-      vendorDiscountPolicies: {},
-      discountOptions: DiscountOptions,
       guaranteedOptions: GuaranteedOptions,
     };
   },
@@ -660,11 +661,6 @@ export default {
     isAllHolidays(data) {
       return data.holidays.every(it => it.selected);
     },
-    changedCheckBox(field, value) {
-        if (field === "doubleDiscounts") {
-            this.doubleDiscounts = value;
-        }
-    },
     init: async function() {
       let vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
@@ -713,9 +709,6 @@ export default {
           }
         });
       }
-
-      // set vendorDiscountPolicies from db
-      this.vendorDiscountPolicies = this.vendor.discountPolicies;
 
       // set selectedReligion from saved vendor
       if (this.vendor.selectedReligion && this.vendor.selectedReligion.length) {
@@ -1174,7 +1167,7 @@ export default {
       /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-today.vfc-marked {
         color: #fff !important;
       }
-
+      
       /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
         margin: auto;
         background-color: #642a56 !important;
@@ -1395,6 +1388,10 @@ export default {
             }
           }
         }
+        &.border {
+          border-top: 1px solid #dddddd;
+          border-bottom: 1px solid #dddddd;
+        }
       }
     }
   }
@@ -1608,13 +1605,6 @@ export default {
     .multiselect__placeholder {
       line-height: 20px;
     }
-  }
-
-  .border-bottom {
-     border-bottom: 1px solid #dddddd;
-  }
-  .border-top {
-     border-top: 1px solid #dddddd;
   }
 }
 </style>

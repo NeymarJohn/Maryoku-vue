@@ -109,10 +109,12 @@
       <div class="images-list new-concept">
         <div class="image-backgrounds">
           <div
-            v-for="(item, idx) in editConcept.colors"
+            v-for="idx in 4"
             :key="idx"
             class="image-background"
-            :style="`background-color: ${item.color}; opacity:${item.opacity}`"
+            :style="`background-color: ${editConcept.colors[idx - 1].color}; opacity:${
+              editConcept.colors[idx - 1].opacity
+            }`"
           />
         </div>
         <div>
@@ -174,6 +176,7 @@
   </div>
 </template>
 <script>
+
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventConcept from "@/models/EventConcept";
@@ -220,15 +223,9 @@ const initialConcept = {
   name: "",
   description: "",
   tags: [],
-  colors: [
-    { color: "#d2d2d2", opacity: 1 },
-    { color: "#d2d2d2", opacity: 1 },
-    { color: "#d2d2d2", opacity: 1 },
-    { color: "#d2d2d2", opacity: 1 },
-  ],
+  colors: [{ value: "#ff48b2", opacity: 1 }, { value: "#71ecf8", opacity: 1 }, { value: "" }, { value: "" }],
   images: [],
 };
-
 export default {
   name: "EventConceptEditForm",
   components: {
@@ -243,7 +240,7 @@ export default {
   data: () => ({
     isLoading: false,
     tagExpanded: false,
-    editConcept: initialConcept,
+    editConcept: this.defaultStatus ? this.defaultConcept : initialConcept,
     newTag: "",
     selectedTag: {},
     addedTags: [],
@@ -273,22 +270,10 @@ export default {
     },
   },
   created() {
-    const defaultConcept = this.defaultConcept;
-    if (defaultConcept.name && defaultConcept.name.length) {
-      this.editConcept.name = defaultConcept.name;
-    }
-    if (defaultConcept.description && defaultConcept.description.length) {
-      this.editConcept.description = defaultConcept.description;
-    }
-    if (defaultConcept.tags && defaultConcept.tags.length) {
-      this.editConcept.tags = defaultConcept.tags;
-    }
-    if (defaultConcept.colors && defaultConcept.colors.length) {
-      this.editConcept.colors = defaultConcept.colors;
-    }
-    if (defaultConcept.images && defaultConcept.images.length) {
+    if (this.defaultConcept) {
+      this.editConcept = this.defaultConcept;
       this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = image.url ? image.url : "";
+        this.uploadImageData[i] = `${image.url ? image.url : ""}`;
       });
     }
 

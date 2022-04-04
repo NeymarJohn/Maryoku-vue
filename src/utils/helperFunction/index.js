@@ -58,9 +58,11 @@ export const firstLetter = (fullString) => {
   const result = phrases.reduce((s, phrase) => {
     return `${s}${phrase.substr(0, 1).toUpperCase()}`;
   }, "");
+  console.log(result);
   return result;
 };
 export const oppositeColor = (rgba) => {
+  console.log(rgba);
   rgba = rgba.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
   return rgba && rgba.length >= 4
     ? "#" +

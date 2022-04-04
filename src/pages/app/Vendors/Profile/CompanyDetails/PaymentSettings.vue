@@ -1,6 +1,5 @@
 <template>
   <div class="proposal-payment">
-    <Loader :active="isLoading" :is-full-screen="true"/>
     <link
       href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
       rel="stylesheet">
@@ -16,12 +15,13 @@
       <md-card-content>
         <div class="info-block md-layout-item md-size-60">
           <p>
-            Please enter your bank account details. All money owed to you will be transferred
-            to this account, so please check that your details are correct and up to date.
+            Please write down the details of the bank to which you would like us to transfer the money.
+            iriure dolor in hendrerit in vulputate velit esse
+            molestie consequat Vel illum dolore eu feugiat nulla.
           </p>
         </div>
       </md-card-content>
-      <div  v-if="bankDetailsEditing" class=" md-card-content" style="padding: unset">
+      <div class=" md-card-content" style="padding: unset">
         <div class="md-layout-item md-size-100">
           <md-card class="cost-pros-cons-section">
             <div class=" md-card-content" style="padding: unset">
@@ -78,9 +78,7 @@
                         valid: !v$.bankDetails.address.$errors.length && v$.bankDetails.address.$dirty}"
                       >
                         <label>Address and name of the bank</label>
-                        <VueGoogleAutocomplete id="billingAddress"
-                                               @placechanged="getAddressData"
-                        />
+                        <input v-model="bankDetails.address" @blur="v$.bankDetails.address.$touch" type="text">
                         <div class="location-icon">
                           <i class="material-icons-outlined">location_on</i>
                         </div>
@@ -135,83 +133,43 @@
                   <md-datepicker ref="datePicker"
                                  :md-model-type="String"
                                  v-model="bankDetails.date"
-                                 name="todo-date">
-                    <label v-if="!bankDetails.date">MM/DD/YYYY</label>
-                  </md-datepicker>
+                                 name="todo-date"></md-datepicker>
                   <img class="calendar-icon" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
                 </div>
               </div>
-              <md-button class="md-vendor md-vendor-review" style="margin: 20px 15px" @click="sendBankInfo">
+              <md-button class="md-vendor md-vendor-review" style="margin: 20px 15px" @click="test">
                 Save details
               </md-button>
             </div>
           </md-card>
         </div>
       </div>
-      <md-card-content v-else>
-        <div class="filled-detail md-layout-item md-size-60">
-          <div class="bank-info-block md-layout-item md-size-90">
-            <img class="bank-icon" src="/static/icons/bank-icon.svg">
-            <md-button @click="setEditing" class="md-simple md-vendor edit-button">
-              edit
-            </md-button>
-            <div class="bank-name-wrapper">
-              <p class="bank-name">bank of america</p>
-              <span>037</span>
-              <br/>
-              <i class="material-icons-outlined location-icon">location_on</i>
-              <span style="color: #641856">{{ bankDetails.address }}</span>
-            </div>
-            <span class="block-separator" style="margin: 28px 0; border-color: #a9a9a9"></span>
-            <div class="account-details">
-              <div class="left">
-                <div>ID number</div>
-                <div>Beneficiary name</div>
-                <div>Account No.</div>
-              </div>
-              <div class="right">
-                <div>{{ hiddenId }}</div>
-                <div>{{ bankDetails.holderName }}</div>
-                <div>{{ hiddenAccount }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <md-button class="md-simple md-vendor">
-          <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`">
-          <span class="button-name">Delete Account</span>
-        </md-button>
-      </md-card-content>
     </md-card>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import useVuelidate from "@vuelidate/core";
 import {required, minLength, numeric} from "@vuelidate/validators";
 import PincodeInput from "vue-pincode-input";
-import Loader from "../../../../../components/loader/Loader";
-import { mapActions } from "vuex";
-import VueGoogleAutocomplete from "vue-google-autocomplete";
+
 export default {
   components: {
-    PincodeInput,
-    Loader,
-    VueGoogleAutocomplete,
+    PincodeInput
   },
   props: {},
   data: () => ({
-    isLoading: false,
-    user:{},
-    googleAddress:{},
-    vendorId:"",
-    profileId:"",
-    bankDetailsEditing: true,
+    isLoaded: false,
+    error: "",
+    ssnType: "ssn",
     bankDetails: {
       date: "",
       accountNumber: "",
+      address: "",
       holderName: "",
       branch: "",
+      verification: "",
       routingNumber: "",
       mcc: "",
       ein: ""
@@ -244,39 +202,14 @@ export default {
       },
     };
   },
-  computed:{
-    hiddenId(){
-      if(!this.bankDetails.ein) return;
-      const hiddenId = this.bankDetails.ein.split("",);
-      hiddenId.fill("X", 0, hiddenId.length - 1);
-      hiddenId[hiddenId.length] = hiddenId[hiddenId.length - 1];
-      hiddenId[hiddenId.length - 2] = "-";
-      return hiddenId.join("");
-    },
-    hiddenAccount(){
-      if(!this.bankDetails.accountNumber) return;
-      const hiddenAccount = Array.from(this.bankDetails.accountNumber);
-      hiddenAccount.fill("X", 2, hiddenAccount.length - 3);
-      return hiddenAccount.join("");
-    }
-  },
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
-    this.bankDetails = {
-      ...this.bankDetails,
-      ...JSON.parse(localStorage.bankDetails),
-    };
-    this.vendorId = this.$store.state.vendor.profile.id;
-    this.profileId = this.$store.state.auth.user.id;
-    this.user = this.$store.state.vendor.profile.tenantUser;
+    this.bankDetails = {...this.bankDetails, date: new Date("01/01/1990"),
+      ...JSON.parse(localStorage.bankDetails)};
   },
   methods: {
-    ...mapActions("stripe", ["createDestinationAccount", "createStripeAccount"]),
-    setEditing() {
-      this.bankDetailsEditing = true;
-    },
-    getAddressData(addressData){
-      this.googleAddress = addressData;
+    checkForm: function (e) {
+
     },
     sendTest() {
       var stripe = Stripe("pk_test_51In2qMBvFPeKz0zXs5ShSv1qjb6YAnonaqamWN4e9f4cTygxBMkMbYXcUAGp7deorwFS5ohy4vuQZFfeIVgxPPMF00nSOnDeQy");
@@ -304,47 +237,34 @@ export default {
           console.error("Error:", error);
         });
     },
-    sendBankInfo() {
-      this.isLoading = true;
+    async test(e) {
+      e.preventDefault();
       localStorage.bankDetails = JSON.stringify(this.bankDetails);
-      this.createDestinationAccount({
-        "holderName": this.bankDetails.holderName,
-        "routingNumber": this.bankDetails.routingNumber,
-        "accountNumber": this.bankDetails.accountNumber
-      }).then(res => { this.createStripeAccount({
-          "vendorId": this.vendorId,
-          "personId": this.profileId,
-          "bankAccountToken": res,
-          "representative": {
-            "taxId": "",
-            "ssnLast4": this.bankDetails.mcc || "0000",
-            "phoneNumber": this.user.phoneNumber || "000 000 0000",
-            "idNumber": this.bankDetails.ein || "000000000",
-            "email": this.user.email || "email@email.email",
-            "dob": {
-              "year": this.bankDetails.date.getFullYear(),
-              "month": this.bankDetails.date.getMonth() + 1,
-              "day": this.bankDetails.date.getDate()
-            },
-            "address": {
-              "line1": this.googleAddress.route,
-              "line2": this.googleAddress.street_number || "address_full_match",
-              "postalCode": this.googleAddress.postal_code,
-              "city": this.googleAddress.locality,
-              "state":this.googleAddress.administrative_area_level_1,
-            }
-          }
-        }).then(res => {
-          this.bankDetailsEditing = false;
-          this.isLoading = false;
-        }).catch(error => {
-          this.bankDetailsEditing = false;
-          this.isLoading = false;
-        });
-        ;
+
+      const formIsValid = await this.v$.$validate();
+      if (formIsValid) {
+      }
+      if (this.name === "") {
+        console.log("\x1b[32m ##-249, PaymentSettings.vue",);
+      }
+      console.log("##-222, PaymentSettings.vue", this.errors);
+
+    },
+    sendBankInfo() {
+
+      axios.post("https://api.stripe.com" + "/v1/stripe/person/verify", {
+        ...this.bankDetails,
+        accept: "application/json",
+        headers: {
+          token: "lobqt2kdc5pfmfbro0ljk0g0hq6k6qb3"
+        }
+      }).then(res => {
       }).catch(error => {
-        this.isLoading = false;
+        console.log("##-126, PaymentSettings.vue", error);
       });
+    },
+    submitPayment(event) {
+      let self = this;
     },
   },
 };
@@ -377,73 +297,7 @@ label {
     margin-top: -10px;
   }
 }
-.filled-detail{
-  position: relative;
-  padding: 0 25px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #a9a9a9;
-  background-color: #e9dfe8;
-  .bank-info-block{
-    padding: 0 25px;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    .bank-icon {
-      width: 47px;
-      position: absolute;
-      left: 10px;
-      top: 10px;
-    }
-    .edit-button{
-      position: absolute;
-      right: 0;
-      top: 0;
-      text-transform: capitalize;
-      font-family: 'Manrope-bold';
-    }
-    .bank-name{
-      display: inline-block;
-      text-transform: uppercase;
-      font-family: 'Manrope-bold';
-      font-size: 16px;
-      border-right: 1px solid black;
-      padding-right: 10px;
-      margin-right: 10px;
-    }
-    .location-icon{
-      color: #641856;
-      font-size: 18px;
-    }
-    .account-details {
-      display: flex;
-      .left {
-        font-family: 'Manrope-bold';
-        width: 50%;
-        div{
-          margin-bottom: 20px;
-        }
-      }
-      .right {
-        width: 50%;
-        div{
-          margin-bottom: 20px;
-        }
-      }
-    }
-  }
-}
-.button-name {
-  text-transform: capitalize;
-  font-family: 'Manrope-bold';
-  text-decoration: underline;
-}
-.trash{
-  width: 14px;
-  margin-right: 5px;
-  margin-left: -30px;
-  margin-top: -4px;
-}
+
 .authentication-block {
   .add-mcc {
     display: block;
@@ -584,7 +438,8 @@ label {
     display: flex;
     flex-direction: row;
     color: #641856;
-    border: 1px solid #9f2488;
+    border: 1px solid #641856;
+
     .info-icon {
       margin-right: 27px;
       width: 37px;

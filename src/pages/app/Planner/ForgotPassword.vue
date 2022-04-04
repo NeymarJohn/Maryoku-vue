@@ -9,8 +9,7 @@
         </div>
       </div>
       <signup-card>
-        <div slot="content-right"
-             class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain w-max-600">
+        <div slot="content-right" class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain w-max-600">
           <p v-if="!submitted" class="font-size-16 text-center font-bold">
             Please enter the email address you used to create your Maryoku account:
           </p>
@@ -44,9 +43,7 @@
           </div>
           <div v-if="!submitted">
             <p class="text-center">
-              If your email address is in our records, you will receive an email enabling you to create a temporary
-              password that will be valid for 24 hours. Simply sign in using this temporary password and then replace it
-              with a new permanent one.
+              If your email address is in our records, you will receive an email enabling you to create a temporary password that will be valid for 24 hours. Simply sign in using this temporary password and then replace it with a new permanent one.
             </p>
           </div>
           <div v-else class="d-flex flex-column">
@@ -67,103 +64,101 @@
 
 <script>
 import { SignupCard, MaryokuInput } from "@/components";
+import InputText from "@/components/Inputs/InputText.vue";
 import Loader from "@/components/loader/Loader.vue";
 
 export default {
   components: {
     SignupCard,
+    InputText,
     MaryokuInput,
     Loader,
   },
-  data() {
-    return {
-      error: "",
-      loading: false,
-      firstname: null,
-      terms: false,
-      email: null,
-      password: null,
-      isForgot: false,
-      serverURL: process.env.SERVER_URL,
-      // auth: auth,
-      touched: {
-        email: false,
-        password: false,
-      },
-      modelValidations: {
-        email: {
-          required: true,
-          email: true,
+    data () {
+        return {
+            error: "",
+            loading: false,
+            firstname: null,
+            terms: false,
+            email: null,
+            password: null,
+            isForgot: false,
+            serverURL: process.env.SERVER_URL,
+            // auth: auth,
+            touched: {
+                email: false,
+                password: false
+            },
+            modelValidations: {
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            forgotPasswordValidations: {
+                email: {
+                    required: true,
+                    email: true
+                },
+            },
+            submitted:false
+        };
+    },
+    watch: {
+        email () {
+            this.touched.email = true;
+        }
+    },
+    methods: {
+        forgotPassword () {
+            this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email }, { "ContentType": "application/json" })
+                .then((resp) => {
+                    console.log(resp);
+                    this.loading = false;
+                    if (resp.data.status) {
+                        this.submitted = true;
+                    } else {
+                        this.error = resp.data.message;
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    this.loading = false;
+                    if (error.response.status === 401) {
+                        this.error = "Sorry, No such user name or email address.";
+                    } else {
+                        this.error = "Temporary failure, try again later";
+                    }
+                });
         },
-      },
-      forgotPasswordValidations: {
-        email: {
-          required: true,
-          email: true,
+        changeEmail(){
+            this.error = null;
         },
-      },
-      submitted: false,
-    };
-  },
-  watch: {
-    email() {
-      this.touched.email = true;
+        reset(){
+            this.email = null;
+            this.submitted = false;
+        },
+        toSingUp() {
+            this.$router.push({ path: "/signup" });
+        }
     },
-  },
-  methods: {
-    forgotPassword() {
-      this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email: this.email }, { "ContentType": "application/json" })
-        .then((resp) => {
-          console.log(resp);
-          this.loading = false;
-          if (resp.data.status) {
-            this.submitted = true;
-          } else {
-            this.error = resp.data.message;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          this.loading = false;
-          if (error.response.status === 401) {
-            this.error = "Sorry, No such user name or email address.";
-          } else {
-            this.error = "Temporary failure, try again later";
-          }
-        });
-    },
-    changeEmail() {
-      this.error = null;
-    },
-    reset() {
-      this.email = null;
-      this.submitted = false;
-    },
-    toSingUp() {
-      this.$router.push({ path: "/signup" });
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>
-p.description {
-  font-size: 16px;
-}
-
-.md-error {
-  color: red;
-}
-
-.form-input {
-  margin: 30px 0px;
-  min-width: 300px;
-}
-
-.form-buttons {
-  text-align: center;
-}
-
-.signin-contain {
-  padding: 20px 60px;
-}
+    p.description {
+        font-size: 16px;
+    }
+    .md-error {
+        color: red;
+    }
+    .form-input{
+        margin:30px 0px;
+        min-width: 300px;
+    }
+    .form-buttons {
+        text-align: center;
+    }
+    .signin-contain {
+        padding: 20px 60px;
+    }
 </style>

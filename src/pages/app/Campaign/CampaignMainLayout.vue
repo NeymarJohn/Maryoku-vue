@@ -34,7 +34,7 @@
         <header-actions
           :custom-styles="{ showCommentsText: { paddingLeft: '2px' } }"
           @toggleCommentMode="toggleCommentMode"
-          @export="exportToPdf"
+          @share="share"
         />
       </div>
       <div class="campaign-content md-layout-item md-size-100 mt-30">
@@ -169,130 +169,114 @@
         />
 
         <!-- Save the date -->
-        <vue-html2pdf
-          ref="html2Pdf"
-          :show-layout="false"
-          :float-layout="false"
-          :enable-download="false"
-          :preview-modal="true"
-          :paginate-elements-by-height="1400"
-          :filename="`budget-${event.id}`"
-          :pdf-quality="2"
-          :manual-pagination="false"
-          pdf-format="a4"
-          pdf-orientation="landscape"
-          pdf-content-width="100%"
-        >
-          <section slot="pdf-content">
-            <template v-if="selectedTab == 1">
-              <collapse-panel
-                v-if="campaignIssued['SAVING_DATE']"
-                class="white-card"
-                :default-status="false"
-              >
-                <template slot="header">
-                  <div class="d-flex align-center p-50 font-size-30 font-bold">
-                    Open ‘Save The Date’ Campaign
-                  </div>
-                </template>
-                <template slot="content">
-                  <save-date
-                    :info="{ ...campaignTabs[1], ...campaignInfo }"
-                    :show-change-cover="true"
-                    @changeInfo="changeInfo"
-                    @showModal="test"
-                  />
-                </template>
-              </collapse-panel>
+        <template v-if="selectedTab == 1">
+          <collapse-panel
+            v-if="campaignIssued['SAVING_DATE']"
+            class="white-card"
+            :default-status="false"
+          >
+            <template slot="header">
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘Save The Date’ Campaign
+              </div>
+            </template>
+            <template slot="content">
               <save-date
-                v-else
-                ref="savedateCampaign"
                 :info="{ ...campaignTabs[1], ...campaignInfo }"
-                class="white-card"
                 :show-change-cover="true"
                 @changeInfo="changeInfo"
                 @showModal="test"
               />
             </template>
+          </collapse-panel>
+          <save-date
+            v-else
+            ref="savedateCampaign"
+            :info="{ ...campaignTabs[1], ...campaignInfo }"
+            class="white-card"
+            :show-change-cover="true"
+            @changeInfo="changeInfo"
+            @showModal="test"
+          />
+        </template>
 
-            <template v-if="selectedTab == 2">
-              <collapse-panel
-                v-if="campaignIssued['RSVP']"
-                class="white-card"
-                :default-status="false"
-              >
-                <template slot="header">
-                  <div class="d-flex align-center p-50 font-size-30 font-bold">
-                    Open ‘RSVP’ Campaign
-                  </div>
-                </template>
-                <template slot="content">
-                  <rsvp
-                    ref="rsvp"
-                    :info="{ ...campaignTabs[2], ...campaignInfo }"
-                  />
-                </template>
-              </collapse-panel>
+        <template v-if="selectedTab == 2">
+          <collapse-panel
+            v-if="campaignIssued['RSVP']"
+            class="white-card"
+            :default-status="false"
+          >
+            <template slot="header">
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘RSVP’ Campaign
+              </div>
+            </template>
+            <template slot="content">
               <rsvp
-                v-else
                 ref="rsvp"
                 :info="{ ...campaignTabs[2], ...campaignInfo }"
               />
             </template>
+          </collapse-panel>
+          <rsvp
+            v-else
+            ref="rsvp"
+            :info="{ ...campaignTabs[2], ...campaignInfo }"
+          />
+        </template>
 
-            <template v-if="selectedTab == 3">
-              <collapse-panel
-                v-if="campaignIssued['COMING_SOON']"
-                class="white-card"
-                :default-status="false"
-              >
-                <template slot="header">
-                  <div class="d-flex align-center p-50 font-size-30 font-bold">
-                    Open ‘Cooming Soon’ Campaign
-                  </div>
-                </template>
-                <template slot="content">
-                  <countdown
-                    ref="countdown"
-                    :info="{ ...campaignTabs[3], ...campaignInfo }"
-                  />
-                </template>
-              </collapse-panel>
+        <template v-if="selectedTab == 3">
+          <collapse-panel
+            v-if="campaignIssued['COMING_SOON']"
+            class="white-card"
+            :default-status="false"
+          >
+            <template slot="header">
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘Cooming Soon’ Campaign
+              </div>
+            </template>
+            <template slot="content">
               <countdown
-                v-else
                 ref="countdown"
                 :info="{ ...campaignTabs[3], ...campaignInfo }"
-                class="white-card"
               />
             </template>
+          </collapse-panel>
+          <countdown
+            v-else
+            ref="countdown"
+            :info="{ ...campaignTabs[3], ...campaignInfo }"
+            class="white-card"
+          />
+        </template>
 
-            <template v-if="selectedTab == 4">
-              <collapse-panel
-                v-if="campaignIssued['FEEDBACK']"
-                class="white-card"
-                :default-status="false"
-              >
-                <template slot="header">
-                  <div class="d-flex align-center p-50 font-size-30 font-bold">
-                    Open ‘Feedback’ Campaign
-                  </div>
-                </template>
-                <template slot="content">
-                  <feedback
-                    ref="feedback"
-                    :info="{ ...campaignTabs[4], ...campaignInfo }"
-                  />
-                </template>
-              </collapse-panel>
+        <template v-if="selectedTab == 4">
+          <collapse-panel
+            v-if="campaignIssued['FEEDBACK']"
+            class="white-card"
+            :default-status="false"
+          >
+            <template slot="header">
+              <div class="d-flex align-center p-50 font-size-30 font-bold">
+                Open ‘Feedback’ Campaign
+              </div>
+            </template>
+            <template slot="content">
               <feedback
-                v-else
                 ref="feedback"
                 :info="{ ...campaignTabs[4], ...campaignInfo }"
-                class="white-card"
               />
             </template>
-          </section>
-        </vue-html2pdf>
+          </collapse-panel>
+          <feedback
+            v-else
+            ref="feedback"
+            :info="{ ...campaignTabs[4], ...campaignInfo }"
+            class="white-card"
+          />
+        </template>
+
         <delivery-settings
           :default-settings="deliverySettings"
           :campaign="campaignTabs[selectedTab]"
@@ -481,10 +465,10 @@
             <img :src="`${$iconURL}Campaign/Group 9222.svg`">
             <span class="ml-10">Scheduled To {{' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
           </div>
-          <div v-if="!canSchedule" @click="startCampaign" class="ml-40 d-flex flex-centered align-center cursor-pointer">
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
             <span class="seperator small" style="margin-top: 0; margin-right: 30px"/>
             <i class="far fa-clock"></i>
-            <span class="ml-10" style="font-weight: bold"> Send again </span>
+            <span class="ml-10" style="font-weight: bold"> Change Schedule </span>
           </div>
           <div
             v-else
@@ -610,8 +594,6 @@ import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import { Loader } from "@/components";
-const VueHtml2pdf = () => import("vue-html2pdf");
-
 const defaultSettings = {
   phone: {
     selected: false,
@@ -650,7 +632,6 @@ export default {
     CollapsePanel,
     ComingsoonAnalytics,
     FeedbackAnalytics,
-    VueHtml2pdf,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -717,9 +698,6 @@ export default {
         this.deliverySettings = { ...this.defaultSettings };
       }
     },
-    exportToPdf() {
-      this.$refs.html2Pdf.generatePdf();
-    },
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -777,6 +755,7 @@ export default {
           coverImage,
           `${this.event.id}-${campaignType}`
         );
+        const extenstion = fileObject.type.split("/")[1];
         let fileUpload = await S3Service.fileUpload(
           fileObject,
           `${this.event.id}-${campaignType}`,
@@ -900,12 +879,6 @@ export default {
         value: "EDITING",
       });
     },
-    sendAgain() {
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "STARTED"
-      );
-    }
   },
   computed: {
     ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),

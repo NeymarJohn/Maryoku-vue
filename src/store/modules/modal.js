@@ -33,6 +33,7 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       let query = new ProposalNegotiationRequest(negotiation);
       let res = await query.for(proposal).save();
+      console.log("saveProposalNegotiationRequest", res);
       resolve(res);
     });
   },

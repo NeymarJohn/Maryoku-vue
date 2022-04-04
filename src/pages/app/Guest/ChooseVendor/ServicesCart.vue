@@ -2,7 +2,7 @@
   <div class="requirements-cart">
     <div class="requirements-cart-header">
       <div class="font-size-18 font-bold-extra">
-        {{ `MY CART (${cartItems.length} ITEM${cartItems.length > 1 ? "S" : ""})` }}
+        {{ `MY CART (${cartItems.length} ITEM${cartItems.length > 1 ? 'S' : ''})` }}
       </div>
 
       <md-button class="md-simple close-btn" @click="close">
@@ -11,10 +11,9 @@
     </div>
     <div>
       <table width="100%">
-        <tr
-          v-for="item in cartItems"
-          :key="`price-${item.key}`"
-          class="d-flex align-center"
+        <tr v-for="item in cartItems"
+            :key="`price-${item.key}`"
+            class="d-flex align-center"
         >
           <td width="70%" class="d-flex align-center pl-40 py-20">
             <img :src="`${$iconURL}Budget+Elements/${item.icon}`" style="width: 30px">
@@ -85,8 +84,7 @@
                   class="d-flex align-center"
               >
                 <td width="75%" class="d-flex align-center py-20">
-                  <img :src="`${$iconURL}Budget+Elements/${serviceCategory(proposal.vendor.vendorCategory).icon}`"
-                       style="width: 30px">
+                  <img :src="`${$iconURL}Budget+Elements/${serviceCategory(proposal.vendor.vendorCategory).icon}`" style="width: 30px">
                   <div class="ml-10">
                     <p class="mb-5 font-size-14 font-bold-extra">
                       {{ proposal.vendor.companyName }}
@@ -100,8 +98,7 @@
                   ${{ proposal.cost | withComma }}
                 </td>
                 <td width="10%" class="py-20">
-                  <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36"
-                           @md-opened="isOpened">
+                  <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
                     <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
                       <md-icon style="font-size: 30px !important">
                         more_vert
@@ -139,8 +136,11 @@
   </div>
 </template>
 <script>
-import { VsaList, VsaItem, VsaHeading, VsaContent } from "vue-simple-accordion";
+import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
+import ProgressRadialBar from "./components/ProgressRadialBar";
+import RequirementTagItem from "./components/RequirementTagItem.vue";
+import _ from "underscore";
 
 export default {
   components: {
@@ -148,6 +148,9 @@ export default {
     VsaItem,
     VsaHeading,
     VsaContent,
+    VsaIcon,
+    ProgressRadialBar,
+    RequirementTagItem,
   },
   data() {
     return {
@@ -164,10 +167,10 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
-    proposals() {
+    proposals(){
       let proposals = [];
       Object.keys(this.$store.state.event.proposals).map(key => {
-        proposals = proposals.concat(this.$store.state.event.proposals[key]);
+          proposals = proposals.concat(this.$store.state.event.proposals[key]);
       });
       return proposals.filter(p => !!p.isFavorite);
     },
@@ -175,7 +178,7 @@ export default {
       const categoryKeys = Object.keys(this.$store.state.planningBoard.cart);
       const cartItems = [];
       categoryKeys.forEach((categoryKey) => {
-        if (!this.$store.state.planningBoard.cart[categoryKey].proposal.isFavorite) {
+        if(!this.$store.state.planningBoard.cart[categoryKey].proposal.isFavorite){
           const category = this.serviceCategory(categoryKey);
           if (category) {
             cartItems.push(category);
@@ -188,19 +191,18 @@ export default {
     cart() {
       return this.$store.state.planningBoard.cart;
     },
-    totalPrice() {
-      if (!this.cartItems.length) return 0;
+    totalPrice(){
+      if(!this.cartItems.length) return 0;
       return this.cartItems.reduce((s, item) => {
-        return s + this.cart[item.key].proposal.cost;
+          return s + this.cart[item.key].proposal.cost;
       }, 0);
     },
     percentOfBudgetCategories() {
       return Object.keys(this.cart).length;
     },
   },
-  watch: {
-    proposal(newVal) {
-    },
+  watch:{
+    proposal(newVal){}
   },
   created() {
   },
@@ -216,49 +218,49 @@ export default {
     },
     isOpened() {
       setTimeout((_) => {
-        $("li.md-list-item").hover(
-          function(el) {
-            $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
-          },
-          function() {
-            $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
-          },
-        );
+          $("li.md-list-item").hover(
+              function (el) {
+                  $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
+              },
+              function () {
+                  $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
+              },
+          );
       }, 0);
     },
-    toFavorite(item) {
+    toFavorite(item){
       this.$store.dispatch("event/updateProposal", {
-        proposal: { ...item.proposal, isFavorite: true },
-        category: item.category,
+          proposal: {...item.proposal, isFavorite: true},
+          category: item.category,
       });
     },
-    toCart(proposal) {
-      this.$store.dispatch("planningBoard/updateCartItem", {
+    toCart(proposal){
+      this.$store.dispatch("planningBoard/updateCartItem",{
         category: proposal.vendor.vendorCategory,
-        event: { id: this.event.id },
+        event: {id: this.event.id},
         proposalId: proposal.id,
       });
       this.$store.dispatch("event/updateProposal", {
-        proposal: { ...proposal, isFavorite: false },
+        proposal: {...proposal, isFavorite: false},
         category: proposal.vendor.vendorCategory,
       });
     },
-    removeCart(item) {
-      this.$store.dispatch("planningBoard/removeCartItem", { id: item.id, event: this.event });
+    removeCart(item){
+      this.$store.dispatch("planningBoard/removeCartItem", {id: item.id, event: this.event});
     },
-    removeFavorite(proposal) {
+    removeFavorite(proposal){
       this.$store.dispatch("event/updateProposal", {
-        proposal: { ...proposal, isFavorite: false },
-        category: proposal.vendor.vendorCategory,
+          proposal: {...proposal, isFavorite: false},
+          category: proposal.vendor.vendorCategory,
       });
     },
-    bookCart() {
-      this.$router.push({ name: "CheckoutWithCart", params: { eventId: this.event.id } });
+    bookCart(){
+      this.$router.push({name: "CheckoutWithCart", params:{eventId: this.event.id}});
     },
     serviceCategory(category) {
       return this.$store.state.common.serviceCategories.find(it => it.key === category);
     },
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -272,11 +274,9 @@ export default {
   z-index: 10;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   overflow: auto;
-
   .category-icon {
     width: 30px;
   }
-
   &-header {
     padding: 40px;
     display: flex;
@@ -287,28 +287,23 @@ export default {
       right: 0px;
     }
   }
-
   .vsa-list {
     --vsa-heading-padding: 1rem 2.5rem;
     --vsa-content-padding: 1rem 2.5rem;
     border: none;
-
     .vsa-item {
       border: none;
       box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
       margin-top: 8px;
     }
-
     /deep/ .vsa-item__heading {
       border: none;
       cursor: pointer;
-
       .vsa-item__trigger {
         background-color: white;
         color: black;
       }
     }
-
     /deep/ .vsa-item__trigger__icon--is-default:after,
     /deep/ .vsa-item__trigger__icon--is-default:before {
       content: "";
@@ -319,27 +314,22 @@ export default {
       width: 16px;
       background-color: #818080;
     }
-
     /deep/ .vsa-item__trigger__icon--is-default:after {
       transform: rotate(-50deg) translate3d(-24px, 14px, 0);
     }
-
     /deep/ .vsa-item__trigger__icon--is-default:before {
       transform: rotate(50deg) translate3d(24px, 14px, 0);
     }
-
     /deep/ .vsa-item--is-active {
       .vsa-item__trigger__icon--is-default {
         transform: rotate(-180deg);
       }
     }
   }
-
   .requirement-grid {
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
-
     .requirement-item {
       margin-bottom: 20px;
       text-transform: capitalize;
@@ -349,12 +339,10 @@ export default {
       display: inline-block;
     }
   }
-
   .checkmark {
     display: inline-block;
     margin-right: 5px;
     margin-top: 0.4em;
-
     &:after {
       /*Add another block-level blank space*/
       content: "";

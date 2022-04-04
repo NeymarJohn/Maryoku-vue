@@ -21,7 +21,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: {
     proposals: {
@@ -33,6 +32,7 @@ export default {
       default: "",
     },
   },
+
   methods: {
     handleClick(proposal) {
       this.$emit("goDetail", proposal);
@@ -53,12 +53,10 @@ export default {
   background-color: white;
   height: 162px;
   cursor: pointer;
-
   .proposal-item {
     color: white;
     overflow: hidden;
     position: relative;
-
     &::after {
       content: "";
       position: absolute;
@@ -69,7 +67,6 @@ export default {
       top: 0;
       left: 0;
     }
-
     img {
       width: 100%;
       height: 100%;
@@ -78,17 +75,14 @@ export default {
       top: 0;
       object-fit: cover;
     }
-
     .proposal-content {
       position: absolute;
       z-index: 1;
       padding: 30px;
     }
-
     &:not(:last-child) {
       margin-right: 3px;
     }
-
     &.isActive {
       font-weight: bold;
       border-bottom: solid 3px #f51355;
