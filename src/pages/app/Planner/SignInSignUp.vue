@@ -170,8 +170,6 @@ export default {
       this.$router.push({ path: "/forgot-password" });
     },
     async redirectPage() {
-      console.log("redirect.page", this.$route.query.action, this.currentUser);
-
       let action = this.$route.query.action;
       const tenantId = this.$authService.resolveTenantId();
 
@@ -185,37 +183,32 @@ export default {
           }
         } else {
           if (this.currentUser.currentTenant === "DEFAULT" && this.currentUser.tenants.length > 1) {
-              this.$router.push({ path: "/choose-workspace" });
-          }
-          if (this.currentUser.currentTenant) {
+            this.$router.push({ path: "/choose-workspace" });
+          } else if (this.currentUser.tenants.length == 1) {
+            const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#/events`;
+            location.href = firstWorksapce;
+          } else if (this.currentUser.tenants.length === 0) {
+            const callback = btoa("/create-event-wizard");
+            this.$router.push({ path: `/create-workspace?callback=${callback}` });
+          } else if (this.currentUser.currentTenant) {
             if(this.currentUser.currentUserType === USER_TYPE.PLANNER) { // get last event
                 CalendarEvent.get().then((events) => {
                     if (events.length > 0) {
                         const gotoLink = eventService.getFirstTaskLink(events[0]);
-                        console.log("redirect.events", gotoLink);
                         this.$router.push({path: gotoLink});
-                    } else this.$router.push({path: "/create-event-wizard"});
+                    } else {
+                      this.$router.push({path: "/create-event-wizard"});
+                    }
                 });
             } else if (this.currentUser.currentUserType === USER_TYPE.GUEST) { // get last customer event
                 let res = await this.$http.get(`${process.env.SERVER_URL}/1/events`, {
                         params: {filters:{myEvents: true}},
                     });
                 let events = res.data;
-                console.log("events", events);
                 if (events.length > 0) {
                     this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
                 }
-
             }
-          } else if (this.currentUser.tenants.length === 0) {
-            console.log("redirect.create-event-wizard");
-            const callback = btoa("/create-event-wizard");
-            this.$router.push({ path: `/create-workspace?callback=${callback}` });
-          } else if (this.currentUser.tenants.length > 1) {
-            this.$router.push({ path: "/choose-workspace" });
-          } else if (this.currentUser.tenants.length == 1) {
-            const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#/events`;
-            location.href = firstWorksapce;
           } else {
             this.$router.push({ path: "/error" });
           }
