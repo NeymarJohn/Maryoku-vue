@@ -31,8 +31,13 @@
         </div>
         <div class="content-article">
           <div class="content-article-header">
-            <div class="d-flex mb-70">
-              <feedback-logo v-if="campaign && campaign.logoUrl && visibleSettings.showLogo" class="mt-30" review />
+            <div v-if="showLogo || showImages" class="sub-cover">
+              <feedback-logo
+                v-if="showLogo"
+                :logo-url="campaign.logoUrl"
+                class="mt-30"
+                review
+              />
               <div v-if="showImages" class="wrapper-view-presentation">
                 <div class="view-presentation">
                   <view-presentation
@@ -252,6 +257,9 @@ export default {
     };
   },
   computed: {
+    showLogo() {
+      return this.campaign && this.campaign.logoUrl && this.visibleSettings.showLogo;
+    },
     showImages() {
       return this.campaign && this.campaign.visibleSettings.showImages && this.attachmentsImages.length;
     }
@@ -642,23 +650,29 @@ export default {
       padding-left: 167px;
       margin-bottom: 45px;
 
-      .wrapper-view-presentation {
-        margin-bottom: 70px;
-        position: relative;
-        flex-grow: 1;
+      .sub-cover {
+        height: 130px;
+        display: flex;
 
-        .view-presentation {
-          width: 635px;
-          height: 357px;
-          position: absolute;
-          top: -110px;
-          right: 85px;
-          z-index: 1;
+        .wrapper-view-presentation {
+          margin-bottom: 70px;
+          position: relative;
+          flex-grow: 1;
+
+          .view-presentation {
+            width: 635px;
+            height: 357px;
+            position: absolute;
+            top: -110px;
+            right: 85px;
+            z-index: 1;
+          }
         }
       }
 
       .wrapper-thanks-for-participating {
         max-width: 900px;
+        margin-top: 70px;
         flex: 1 1 300px;
 
         .icon-thanks-for-participating {
