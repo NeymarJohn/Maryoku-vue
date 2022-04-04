@@ -89,8 +89,8 @@ import moment from "moment";
 import { DiscountCustomerTypes, CouponRules } from "@/constants/options";
 
 const components = {
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    SeasonalCalendarInput: () => import("@/components/Inputs/SeasonalCalendarInput.vue"),
+    MaryokuInput: () => import("@/components/inputs/MaryokuInput.vue"),
+    SeasonalCalendarInput: () => import("@/components/inputs/SeasonalCalendarInput.vue"),
     Multiselect: () => import("vue-multiselect"),
 };
 export default {
@@ -169,11 +169,11 @@ export default {
             this.form.value = 0;
         },
         changeDate(e) {
-            this.coupon.validDate = e;
+            this.form.coupon.validDate = e;
         },
         handleSeasonalChange({season, months}) {
-            this.seasonal.season = season;
-            this.seasonal.months = months;
+            this.form.seasonal.season = season;
+            this.form.seasonal.months = months;
         },
         save(){
             let value = {...this.form[this.tab], value: this.form.value, rate: this.form.rate};

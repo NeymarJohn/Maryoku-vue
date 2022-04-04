@@ -11,20 +11,14 @@
           <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
           <span v-if="isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
           <span v-if="!isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Invited</span>
-          <hide-switch
-            :value="campaignVisibleSettings.showComing"
-            class="ml-20"
-            label="coming"
-            @input="changeVisibleSettings('showComing', $event)"
-          />
+          <hide-switch v-model="campaignData.visibleSettings.showComing" class="ml-20" label="coming" />
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
           <countdown-time :event="event" />
           <hide-switch
-            :value="campaignVisibleSettings.showCountdown"
+            v-model="campaignData.visibleSettings.showCountdown"
             class="ml-20"
             label="countdown"
-            @input="changeVisibleSettings('showCountdown', $event)"
           />
         </div>
         <div class="cover-image-button">
@@ -41,6 +35,7 @@
           >
         </div>
       </div>
+      <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
       <title-editor
         :default-value="campaignTitle"
         class="font-size-50 font-bold-extra text-center line-height-1 mb-60"
@@ -49,22 +44,16 @@
       <hr>
       <div class="d-flex mt-60">
         <maryoku-textarea
-          :value="campaignDescription"
+          v-model="campaignData.description"
           :placeholder="placeholder"
           class="mr-60 flex-1"
           style="padding: 40px 60px 40px 40px"
-          @input="changeDescription"
         />
         <rsvp-event-info-panel class="flex-1" :event="event" />
       </div>
       <div class="mt-60 logo-section d-flex align-center justify-content-center">
         <img :src="campaignData.logoUrl">
-        <hide-switch
-          :value="campaignVisibleSettings.showLogo"
-          class="ml-20"
-          label="logo"
-          @input="changeVisibleSettings('showLogo', $event)"
-        />
+        <hide-switch v-model="campaignData.visibleSettings.showLogo" class="ml-20" label="logo" />
       </div>
     </div>
   </div>
@@ -107,26 +96,22 @@ export default {
       return this.$store.state.event.eventData;
     },
     campaignData() {
-      return this.$store.state.campaign.COMING_SOON || {};
+      return this.$store.state.campaign.COMING_SOON;
     },
     campaignTitle() {
-      return this.$store.state.campaign.COMING_SOON.title || "Event Name";
+      return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.title : "Event Name";
     },
     coverImage() {
-      return this.$store.state.campaign.COMING_SOON.coverImage || "";
+      return this.$store.state.campaign.COMING_SOON.coverImage;
     },
-    campaignDescription() {
-      return this.$store.state.campaign.COMING_SOON.description || "";
+    campaignDescription: {
+      get() {
+        return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.description : "";
+      },
+      set(newValue) {
+        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newValue });
+      },
     },
-    campaignVisibleSettings() {
-      const visibleSettings = this.campaignData.visibleSettings;
-      return {
-        showComing: false,
-        showCountdown: false,
-        showLogo: false,
-        ...visibleSettings,
-      };
-    }
   },
   created() {
     const defaultCoverImage = `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
@@ -171,17 +156,6 @@ export default {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
-    },
-    changeDescription(newDescription) {
-      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newDescription });
-    },
-    changeVisibleSettings(key, value) {
-      const visibleSettings = this.campaignVisibleSettings;
-      this.$store.commit("campaign/setAttribute", {
-        name: "COMING_SOON",
-        key: "visibleSettings",
-        value: { ...visibleSettings, [key]: value }
-      });
     },
     chooseFiles() {
       document.getElementById("countdown-coverImage").click();

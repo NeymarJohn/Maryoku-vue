@@ -5,7 +5,7 @@
         Create Feedback Campaign
       </div>
       <div class="wrapper-change-cover">
-        <img src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
+        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
         <div class="change-cover-feedback">
           <input
             id="change-feedback-cover-image"
@@ -13,14 +13,14 @@
             style="display: none;"
             @change="onFileChangeCoverImage"
           />
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button @click="handleChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
           </md-button>
         </div>
         <div class="view-event-photos">
           <div class="wrapper-icon-play">
-            <img class="icon-play" src="static/icons/play-black.svg">
+            <img class="icon-play" src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg">
           </div>
           <div class="wrapper-btn-switch">
             <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
@@ -66,6 +66,9 @@
             class="disco-party"
             @change="handleChangeData('sectionReview', 'description', ...arguments)"
           />
+          <div class="font-size-22 line-height-1">
+            {{ campaignData.name }}
+          </div>
         </div>
       </div>
       <maryoku-textarea v-model="campaignDescription" :placeholder="placeHolder" />
@@ -281,7 +284,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     campaignData() {
-      return this.$store.state.campaign.FEEDBACK || {};
+      return this.$store.state.campaign.FEEDBACK;
     },
     campaignImages() {
       return this.campaignData.images || [];
@@ -307,8 +310,7 @@ export default {
       }
     },
     additionalData() {
-      const campaignAdditionalData = this.campaignData.additionalData || {};
-      return {
+      const defaultAdditionalData = {
         sectionReview: {
           title: "THANKS FOR PARTICIPATING!",
           description: "80’s Disco Party",
@@ -316,8 +318,11 @@ export default {
         sectionEventPhotos: {
           title: "EVENT PHOTOS – RELIVE THE BEST MOMENTS",
           description: "",
-        },
-        ...campaignAdditionalData,
+        }
+      };
+      return {
+        ...defaultAdditionalData,
+        ...(this.campaignData.additionalData || {})
       };
     },
   },
@@ -359,13 +364,6 @@ export default {
       key: "feedbackQuestions",
       value: this.feedbackQuestions,
     });
-    if (!this.campaignData.additionalData) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "additionalData",
-        value: this.additionalData,
-      });
-    }
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
@@ -453,12 +451,13 @@ export default {
       const extension = file.type.split("/")[1];
       const fileName = uuidv4();
       S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((coverImage) => {
-        this.$store.commit("campaign/setAttribute", {
-          name: "FEEDBACK",
-          key: "coverImage",
-          value: coverImage,
+        this.saveCampaign({ id: this.campaignData.id, coverImage }).then(() => {
+          this.$store.commit("campaign/setAttribute", {
+            name: "FEEDBACK",
+            key: "coverImage",
+            value: coverImage,
+          });
         });
-        this.saveCampaign({ id: this.campaignData.id, coverImage });
       });
     },
   },
@@ -586,10 +585,6 @@ export default {
   position: absolute;
   top: 25%;
   left: 40%;
-
-  .change-cover-btn {
-
-  }
 }
 .green-block-wrapper{
   background-color: rgba(87, 242, 195, 0.23);
