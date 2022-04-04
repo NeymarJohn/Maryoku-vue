@@ -82,7 +82,7 @@
                   </p>
                 </div>
               </div>
-              <md-divider />
+              <md-divider/>
               <p class="font-size-14 px-30 py-20 m-0" style="max-height: 200px">
                 Dear Rachel, Relish caterers & venues is pleased to provide you with the attached catering proposal for
                 your, which is currently scheduled to be held on  at. We understand that this is a very important
@@ -283,6 +283,34 @@
             -${{ bundledDiscountPrice | withComma }}
           </div>
         </div>
+        <div class="element-pricing-table total-list md-small-hide" @click="test">
+          <table>
+            <tbody>
+              <tr>
+                <td colspan="3">
+                  <b class="font-size-22">Total</b>
+                  <div v-if="proposal.bundleDiscount.percentage" class="font-size-14">
+                    Before discount
+                  </div>
+                </td>
+                <td class="element-value">
+                  <div class="element-price">
+                    ${{ totalPrice | withComma }}
+                  </div>
+                  <div v-if="proposal.bundleDiscount.percentage" class="discount-details">
+                    ({{ proposal.bundleDiscount.percentage }}% off)
+                    <span>{{ totalPrice + bundledDiscountPrice | withComma }}</span>
+                  </div>
+                </td>
+                <td class="element-actions">
+                  <md-button class="md-simple md-just-icon">
+                    <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`">
+                  </md-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div v-if="isMobile" class="total-section p-30">
           <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
             Current bid
@@ -333,7 +361,7 @@
 
                 <img src="/static/img/nn1.webp" alt="">
               </div>
-              <div class="md-layout-item pl-0 md-size-5" />
+              <div class="md-layout-item pl-0 md-size-5"/>
               <div class="md-layout-item pl-0 md-size-40">
                 <div class="ml-10">
                   <h2 class="font-bold font-size-16">
@@ -825,17 +853,35 @@ export default {
     showCommentPanel(){
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
+
+    tax() {
+      if (!this.proposal.taxes) return { percentage: 0, price: 0 };
+      let tax = { ...this.proposal.taxes["total"] };
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
+      }
+      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * (tax.percentage || 0)) / 100);
+      return tax;
+    },
+    totalPrice(){
+      let totalPrice = 0;
+      for (const key in this.proposal.pricesByCategory){
+        totalPrice += this.proposal.pricesByCategory[key];
+      }
+      return totalPrice - ((totalPrice * this.proposal.bundleDiscount.percentage) / 100);
+    },
   },
   created() {
-    console.log('event.detail.proposal', this.proposal);
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
   mounted() {
 
     this.commentComponents = this.proposal.commentComponent;
   },
-
   methods: {
+    test(){
+      console.log("\x1b[32m ##-878, EventProposalDetails.vue",this.proposal);
+    },
     ...mapMutations("eventPlan", ["updateCommentComponents"]),
     ...mapMutations("EventPlannerVuex", [
       "setEventModal",
@@ -1000,6 +1046,158 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.element-pricing-table {
+  margin-top: 35px;
+  padding: 1.5em;
+  font-family: "Manrope-Regular", sans-serif;
+  &-header {
+    display: grid;
+    grid-template-columns: 30% 20% 20% 20% 10%;
+    font-weight: bold;
+    padding: 1em 0;
+  }
+  &-body {
+    &-row {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      border-top: 1px solid #ddd;
+      padding: 1.5em 0;
+    }
+    .options-list {
+      img {
+        position: absolute;
+      }
+    }
+    .option-row {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      padding: 1em 0;
+      &.border-top {
+        border-top: 1px solid #ddd;
+      }
+    }
+  }
+  &.elements-list {
+    background: #f7f7f7;
+    margin-bottom: -21px;
+
+    th,
+    td {
+      font-size: 16px;
+    }
+    th {
+      font-family: "Manrope-ExtraBold", sans-serif;
+      padding-bottom: 15px;
+    }
+
+    tr {
+      td {
+        font-weight: normal;
+        border-top: 1px solid #ddd;
+        padding: 21px 0;
+
+        &.element-actions {
+          .md-button {
+            visibility: hidden;
+          }
+        }
+      }
+
+      &:hover {
+        td {
+          font-weight: bold;
+
+          &.element-actions {
+            .md-button {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.taxes-list {
+    background: #ededed;
+    color: #818080;
+    padding: 0.6em 1.5em;
+    border-top: 1px solid;
+    tr {
+      &:first-child {
+        td {
+          border-bottom: 1px solid;
+        }
+      }
+      td {
+        .taxes-title {
+          display: inline-block;
+          width: 90px;
+        }
+        .taxes-percentage {
+          margin-left: 1em;
+        }
+
+        &.element-actions {
+          .md-button {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
+
+  &.total-list {
+    background: #404040;
+    color: #fff;
+    margin-bottom: 3em;
+
+    td {
+      .discount-details {
+        color: #fff !important;
+      }
+      small {
+        display: block;
+      }
+      &.element-actions {
+        .md-button {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      text-align: left;
+    }
+
+    td,
+    th {
+      &:nth-last-child(2):not(:first-child),
+      &:nth-last-child(3):not(:first-child),
+      &:nth-last-child(4):not(:first-child) {
+        width: 150px;
+        text-align: center;
+      }
+      .md-button {
+        img {
+          width: 15px;
+        }
+      }
+
+      &.element-actions {
+        width: 20px;
+      }
+
+      &.element-value {
+        text-align: right !important;
+        padding-right: 44px;
+      }
+    }
+  }
+}
 .md-layout,
 .md-layout-item {
   width: initial;

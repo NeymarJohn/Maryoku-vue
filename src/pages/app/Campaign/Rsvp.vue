@@ -39,9 +39,7 @@
             </div>
             <img class="logo" :src="logoUrl">
           </div>
-          <md-switch v-model="showLogo" class="large-switch below-label">
-            Hide logo
-          </md-switch>
+          <hide-switch v-model="campaignData.visibleSettings.showLogo" class="large-switch below-label" label="Logo" />
         </div>
         <div class="font-size-30 font-bold d-flex align-center">
           <title-editor
@@ -261,7 +259,6 @@ export default {
     return {
       coverImage: "",
       logoImage: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
-      showLogo: true,
       content: "",
       originContent: {},
       isEditingKnowledge: false,
@@ -275,6 +272,7 @@ export default {
         campaignStatus: "EDITING",
         allowOnline: false,
         visibleSettings: {
+          showLogo: true,
           showWearingGuide: true,
           showKnowledge: true,
           showTimeline: true,
@@ -428,12 +426,11 @@ export default {
     async onFileChangeLogo(event) {
       const file = event.target.files[0];
       await S3Service.fileUpload(file, file.name, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-        this.saveCampaign({ id: this.campaignData.id, logoUrl }).then(() => {
-          this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
-          this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
-          this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
-          this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-        });
+        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
+        this.saveCampaign({ id: this.campaignData.id, logoUrl });
       });
     },
     changeTitle(newTitle) {
@@ -513,12 +510,11 @@ export default {
       justify-content: center;
       position: relative;
       border-radius: 3px;
-      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
       .over-logo-campaign {
+        display: none;
         width: 100%;
         height: 100%;
-        display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
@@ -532,6 +528,11 @@ export default {
         width: 178px;
         height: 99px;
         object-fit: contain;
+      }
+      &:hover {
+        .over-logo-campaign {
+          display: flex;
+        }
       }
     }
   }
