@@ -6,8 +6,8 @@ export const ProposalContentTabOptions = [
 ];
 
 export const HeaderActions = [
-  { key: "download", icon: "common/download-dark.svg" },
-  { key: "share", icon: "common/share-dark.svg" }
+  { key: "share", icon: "common/share-dark.svg" },
+  { key: "download", icon: "common/download-dark.svg" }
 ];
 
 export const HeaderActionsRequirements = [

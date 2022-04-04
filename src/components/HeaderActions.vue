@@ -46,14 +46,13 @@
               </md-icon>
             </button>
             <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-              <li v-for="(action, j) in actions"
-                  v-show="action.key === 'share' || action.key === 'download'|| action.key === 'comment'"
+              <li v-for="(action, j) in actions" v-show="action.key === 'share' || action.key === 'download'|| action.key === 'comment'"
                   :key="j"
-                  :class="{'md-small-hide':action.key !== 'share'}"
+                  class="action-item"
+                  :class="{ 'md-small-hide':action.key !== 'share'}"
               >
                 <div class="other-name" @click="click(action.key)">
                   <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`">
-                  &nbsp;&nbsp;
                   <span>
                     {{ action.title }}
                   </span>
@@ -144,7 +143,7 @@ export default {
           if (element.key === "download") {
             element.title = "Download";
           } else if (element.key === "share") {
-            element.title = "Create link";
+            element.title = "Share";
           }
         });
       return HeaderActions;
@@ -264,12 +263,7 @@ export default {
   align-items: center;
 }
 
-.svg-icon-header-action {
-  width: 22px !important;
-  margin-left: 2px;
-}
-
-.hide-svg-icon-long-button {
+.hide-svg-icon-long-button{
   filter: invert(30%) sepia(26%) saturate(4932%) hue-rotate(4deg) brightness(109%) contrast(105%);
   width: 32px !important;
   height: 32px !important;
@@ -285,40 +279,49 @@ export default {
   height: 40px;
   margin-left: 5px;
 }
-
-.dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active {
-  background-color: #ffedb7 !important;
-  color: #000 !important;
-}
-
-.dropdown-width {
-  // width: max-content;
-}
-
-.category-list {
-  border-bottom: 2px ridge;
-  cursor: pointer;
-
-  img {
-    width: 30px;
-  }
-
-  .category-heading {
-    padding: 10px 1.5rem;
-    margin: 0 5px;
-  }
-
-  .category-item {
-    // display: flow-root;
-    .category-name {
-      float: left;
+    .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active {
+        background-color: #ffedb7 !important;
+        color: #000 !important;
     }
-  }
-}
-
-.svg-icon-header {
-  width: 50px !important;
-}
+    .dropdown-width{
+        // width: max-content;
+      font-size: 16px;
+      .action-item{
+        &:hover{
+          color: #f51355;
+          font-weight: bold;
+          .svg-icon-header-action {
+            filter: invert(30%) sepia(26%) saturate(4932%) hue-rotate(4deg) brightness(109%) contrast(105%);
+          }
+        }
+        margin: 20px 20px;
+        padding: 0 15px;
+        .svg-icon-header-action{
+          width: 18px;
+          margin: -4px 7px 0 2px;
+        }
+      }
+    }
+  .category-list{
+        border-bottom: 2px ridge;
+        cursor: pointer;
+        img {
+            width: 30px;
+        }
+        .category-heading{
+            padding: 10px 1.5rem;
+            margin: 0 5px;
+        }
+        .category-item{
+            // display: flow-root;
+            .category-name{
+                float: left;
+            }
+        }
+    }
+    .svg-icon-header{
+        width: 50px !important;
+    }
 
 .like-dot {
   width: 20px;
