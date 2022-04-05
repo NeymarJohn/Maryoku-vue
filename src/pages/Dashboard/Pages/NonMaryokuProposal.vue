@@ -430,7 +430,6 @@ export default {
     },
     showModal(name) {
       this.setProposal(this.proposal);
-      this.setProposalRequest(this.proposal.proposalRequest);
       this.setOpen(name);
     },
     openNewTab(link) {

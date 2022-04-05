@@ -64,14 +64,8 @@ export default {
     Drop,
   },
   props: {
-    event: {
-      type: Object,
-      default: () => {}
-    },
-    default: {
-      type: Object,
-      default: () => {}
-    },
+    event: Object,
+    default: () => ({}),
   },
   data: () => ({
     categoryBuildingBlocks: [],

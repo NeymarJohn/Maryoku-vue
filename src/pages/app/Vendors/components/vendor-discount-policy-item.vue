@@ -6,7 +6,7 @@
           {{ editingData.code }}
         </div>
         <div v-else class="col">
-          <input v-model="editingData.code" class="text-left number-field">
+            <input v-model="editingData.code" class="text-left number-field">
         </div>
 
         <div v-if="!isEditable" class="col">
@@ -88,10 +88,8 @@
       </div>
       <div v-else class="col">
         <div class="position-relative">
-          <money v-model="editingData.value" class="text-center number-field" v-bind="rateFormat" />
-          <button class="suffix" @click="changeRate('seasonal')">
-            {{ editingData.rate }}
-          </button>
+            <money v-model="editingData.value" class="text-center number-field" v-bind="rateFormat" />
+            <button class="suffix" @click="changeRate('seasonal')">{{editingData.rate}}</button>
         </div>
       </div>
       <div v-if="!isEditable" class="col action">
@@ -160,7 +158,7 @@ export default {
             this.editingData.rate = this.editingData.rate === "%" ? "$" : "%";
         },
         getMonthLabel(value) {
-            console.log("mon.val", value);
+            console.log('mon.val', value);
             if (!value) return "";
             return this.monthOptions.find(r => r.value == value).label;
         },
@@ -188,18 +186,20 @@ export default {
             }
         },
         changePrice(value) {
+            console.log(value);
         },
         changeDate() {
 
         },
         changeItem() {
-            this.$emit("change", {type: "update", value: this.editingData} );
+            this.$emit("change", {type: 'update', value: this.editingData} );
         },
         edit() {
             this.isEditable = true;
+            console.log('editing', this.editingData);
         },
         remove() {
-            this.$emit("change", {type: "remove"});
+            this.$emit("change", {type: 'remove'});
         },
         cancel() {
             this.editingItem = Object.assign({}, this.item);

@@ -311,14 +311,15 @@ export default {
     SlideYDownTransition,
   },
   props: {
+    selectedVendor: {
+      type: Object,
+      default: {},
+    },
     creationMode: {
       type: Boolean,
       default: false,
     },
-    categories: {
-      type: Array,
-      default: () => []
-    },
+    categories: Array,
   },
   data() {
     return {
@@ -330,6 +331,7 @@ export default {
         searchPlace: "",
         location: {},
       },
+      selectedVendor: this.selected_vendor,
       modelValidations: {
         vendorDisplayName: {
           required: true,

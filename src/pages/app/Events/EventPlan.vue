@@ -1,9 +1,9 @@
 <template>
-	<div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
-		<progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
-		<comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
-		<router-view />
-	</div>
+  <div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
+    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
+    <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
+    <router-view />
+  </div>
 </template>
 <script>
 import ProgressSidebar from "./components/progressSidebarForEvent";
@@ -24,6 +24,14 @@ export default {
 			pageId: "",
 			resevedPages: [],
 			xCursor: false,
+            sections: [
+                {title: "Create an event to remember", status: "completed", route: "overview", icon: null, progress: 100, componentId: "overview", id: "overview-item"},
+                {title: "Get Inspired", status: "not-complete", route: "booking/concept", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "concept", id: "concept-item"},
+                {title: "Craft Event Budget", status: "not-complete", route: "booking/budget", icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`, progress: 0, componentId: "budget", id: "budget-item"},
+                {title: "Booking Vendors", status: "not-complete", route: "booking/planningboard", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "planningboard", id: "planningboard-item"},
+                {title: "Set The Schedule", status: "not-complete", route: "booking/timeline", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "timeline", id: "timeline-item"},
+                {title: "Communicate With Guests", status: "not-complete", route: "booking/campaign", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "campaign", id: "campaign-item"},
+            ]
 		};
 	},
 	beforeCreate() {
@@ -46,16 +54,7 @@ export default {
 			return this.$store.state.eventPlan.showCommentPanel;
 		},
 		barItems() {
-			if (!this.event.checkList) {
-				const overview = {
-					title: "Create an event to remember",
-					status: "completed",
-					route: "overview",
-					// icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-					progress: 100,
-					componentId: "overview",
-					id: "overview-item",
-				};
+
 				const concept = {
 					title: "Get Inspired",
 					status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
@@ -101,52 +100,28 @@ export default {
 					componentId: "planningboard",
 					id: "planningboard-item",
 				};
-				// const chooseVendor = {
-				//   title: "Booking Vendors",
-				//   status: "not-complete",
-				//   route: "booking/choose-vendor",
-				//   icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-				//   progress: this.event.campaignProgress,
-				//   componentId: "chooseVendor",
-				//   id: "bookingboard-item",
-				// };
-				const elements = [];
+
+                const sections = this.updateSection();
+				let elements = [];
 
 				if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
-					elements.push(overview);
-					elements.push(concept);
-					elements.push(budget);
-					elements.push(timeline);
-					elements.push(campaign);
-					if (this.event.budgetProgress > 0) {
-						elements.push(planningBoard);
-					}
+                    if (this.event.checkList && this.event.checkList.length) {
+                        this.event.checkList.forEach(it => {
+                            const section = sections.find(s => s.componentId === it.componentId);
+                            elements.push(section);
+                        });
+                    } else {
+                        elements = sections;
+                    }
 				} else if (this.user.currentUserType === "guest") {
-					elements.push(overview);
-					elements.push(planningBoard);
+                    this.sections.forEach(it => {
+                        if (it.componentId === "overview" || it.componentId === "planningboard") {
+                            elements.push(it);
+                        }
+                    });
 				}
 
-				// show when you approve budget
-				// if (this.event.budgetProgress == 100) {
-				//   this.event.components.sort((a, b) => a.order - b.order);
-				//   this.event.components.forEach((item) => {
-				//     if (item.componentId !== "unexpected") {
-				//       elements.push({
-				//         title: item.bookTitle,
-				//         status: "not-complete",
-				//         route: "booking/" + item.id,
-				//         icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
-				//         progress: item.progress ? item.progress : 0,
-				//         id: item.id,
-				//       });
-				//     }
-				//   });
-				// }
-
 				return elements;
-			} else {
-				return this.event.checkList;
-			}
 		},
 	},
 	watch: {
@@ -158,9 +133,36 @@ export default {
 			this.setConstantStates(newValue);
 		},
 	},
-	created() {},
+	created() {
+        console.log("event.plan", this.event);
+    },
 	methods: {
 		...mapActions("eventPlan", ["toggleCommentMode"]),
+        updateSection() {
+            let elements = [];
+            this.sections.forEach(it => {
+                if(it.componentId === "concept") {
+                    it.status = this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete";
+                    it.progress = this.event.concept ? this.event.conceptProgress : 0;
+                } else if (it.componentId === "budget-item") {
+                    it.route = this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget";
+                } else if (it.componentId === "planningboard") {
+                    it.status = this.event.requirementProgresss === 100 ? "completed" : "not-complete";
+                } else if (it.componentId === "timeline") {
+                    it.status = this.event.timelineProgress === 100 ? "completed" : "not-complete";
+                } else if (it.componentId === "campaign") {
+                    it.status = this.event.campaignProgress === 100 ? "completed" : "not-complete";
+                }
+
+                if (it.componentId === "planningboard" ) {
+                    if (this.event.budgetProgress > 0) elements.push(it);
+                } else {
+                    elements.push(it);
+                }
+
+            });
+            return elements;
+        },
 		handleMouseMove(event) {
 			if (!this.showCommentPanel) return;
 			this.xCursor = event.target.className === "click-capture";
