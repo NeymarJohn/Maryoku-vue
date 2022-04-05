@@ -296,15 +296,30 @@ export default {
   },
   filters: {},
   props: {
-    category: String,
-    type: String,
-    label: String,
-    item: Object,
+    category: {
+      type: String,
+      default: ""
+    },
+    type: {
+      type: String,
+      default: ""
+    },
+    label: {
+      type: String,
+      default: ""
+    },
+    item: {
+      type: Object,
+      default: () => {}
+    },
     vendor: {
       type: Object,
       default: () => ({}),
     },
-    service: Object,
+    service: {
+      type: Object,
+      default: () => {}
+    },
     theme: {
       type: String,
       default: "pink",
@@ -355,8 +370,6 @@ export default {
     } else if (this.vendor) {
       item = this.vendor.services[this.camelize(this.label)];
     }
-
-    console.log("service.check.box", this.label, this.item, item);
     if (item) {
       this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
       this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
@@ -368,7 +381,6 @@ export default {
     this.currentItem.checked = this.checked;
     this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
     this.currentItem.xIncluded = this.item.xIncluded;
-    console.log("service.checkbox", this.currentItem);
   },
   beforeDestroy () {
     // this.$root.$off('update-vendor-value')

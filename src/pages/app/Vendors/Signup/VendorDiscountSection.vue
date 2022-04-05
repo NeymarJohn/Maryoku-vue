@@ -44,7 +44,8 @@ export default {
   components,
   props: {
     data: {
-        type: Object,
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -60,12 +61,8 @@ export default {
 
       };
   },
-  mounted () {
-      this.init();
-  },
   methods: {
       init() {
-        console.log('discount.section', this.data);
         Object.keys(this.discountData).forEach(key => {
            if(this.data[key] && this.data[key].length)  this.discountData[key] = this.data[key];
         });
@@ -75,23 +72,17 @@ export default {
       },
       addDiscountItem(value){
           this.discountData[this.tab].push(value);
-          this.$emit("change", this.discountData);
+          this.$emit("save", this.discountData);
       },
       changeDiscountItem(index, {type, value}) {
-        console.log("change.item", index, type, value);
         if (type === "update") {
             this.discountData[this.tab][index] = value;
         } else if (type === "remove") {
             this.discountData[this.tab].splice(index, 1);
         }
-        this.$emit("change", this.discountData);
+        this.$emit("save", this.discountData);
       }
   },
-  watch: {
-      data(newVal){
-          this.init();
-      }
-  }
 };
 </script>
 <style lang="scss" scoped>

@@ -1,187 +1,209 @@
 <template>
-	<div class="event-budget-vendors">
-		<table class="event-blocks__table">
-			<thead>
-				<tr>
-					<th width="60%">Vendor</th>
-					<th width="25%">Planned</th>
-					<th width="15%">Booked</th>
-					<th width="10%">Status</th>
-					<th />
-				</tr>
-			</thead>
-		</table>
+  <div class="event-budget-vendors">
+    <table class="event-blocks__table">
+      <thead>
+        <tr>
+          <th width="60%">
+            Vendor
+          </th>
+          <th width="25%">
+            Planned
+          </th>
+          <th width="15%">
+            Booked
+          </th>
+          <th width="10%">
+            Status
+          </th>
+          <th />
+        </tr>
+      </thead>
+    </table>
 
-		<!-- Event Blocks -->
-		<!-- <draggable :list="eventBuildingBlocks"> -->
-		<event-budget-vendors-item
-			v-for="block in eventCategoryList"
-			:key="block.id"
-			:event="event"
-			:event-category-item="block"
-			:type="type"
-			:editing-mode="editingMode"
-			@update="updateCategoryBudget"
-			@delete="deleteCategory"
-			@addVendor="addMyVendor"
-		/>
+    <!-- Event Blocks -->
+    <!-- <draggable :list="eventBuildingBlocks"> -->
+    <event-budget-vendors-item
+      v-for="block in eventCategoryList"
+      :key="block.id"
+      :event="event"
+      :event-category-item="block"
+      :type="type"
+      :editing-mode="editingMode"
+      @update="updateCategoryBudget"
+      @delete="deleteCategory"
+      @addVendor="addMyVendor"
+    />
 
-		<table
-			class="event-blocks__table event-block-table"
-			:style="editingMode ? `border-left: 10px solid #80B93D;color:#80B93D` : `border: 2px solid #80B93D;color:#80B93D`"
-		>
-			<tbody>
-				<tr class="unexpected-budget">
-					<td width="40%" class="event-block-element unexpected">
-						<img
-							:src="editingMode ? `${$iconURL}Budget Elements/unexpected.svg` : `/static/icons/budget/unexpected.png`"
-						/>
-						Unexpected
-					</td>
-					<td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma(Number) }}</td>
-					<td width="15%" class="actual red-label" />
-					<td width="15%" class="status" />
-					<td class="expand" />
-				</tr>
-			</tbody>
-		</table>
-		<table
-			class="event-blocks__table event-block-table"
-			:style="editingMode ? `border-left: 10px solid #818080;color:#818080` : `border: 2px solid #818080;color:#80B93D`"
-		>
-			<tbody>
-				<tr class="extra">
-					<td width="40%" class="event-block-element extra">
-						<img
-							:src="editingMode ? `${$iconURL}budget screen/SVG/extra-gray.svg` : `/static/icons/budget/extra-gray.png`"
-						/>
-						Extras
-					</td>
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #80B93D;color:#80B93D` : `border: 2px solid #80B93D;color:#80B93D`"
+    >
+      <tbody>
+        <tr class="unexpected-budget">
+          <td width="40%" class="event-block-element unexpected">
+            <img
+              :src="editingMode ? `${$iconURL}Budget Elements/unexpected.svg` : `/static/icons/budget/unexpected.png`"
+            >
+            Unexpected
+          </td>
+          <td width="20%" class="planned unexpected">
+            $ {{ event.unexpectedBudget | withComma(Number) }}
+          </td>
+          <td width="15%" class="actual red-label" />
+          <td width="15%" class="status" />
+          <td class="expand" />
+        </tr>
+      </tbody>
+    </table>
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #818080;color:#818080` : `border: 2px solid #818080;color:#80B93D`"
+    >
+      <tbody>
+        <tr class="extra">
+          <td width="40%" class="event-block-element extra">
+            <img
+              :src="editingMode ? `${$iconURL}budget screen/SVG/extra-gray.svg` : `/static/icons/budget/extra-gray.png`"
+            >
+            Extras
+          </td>
 
-					<td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma(Number) }}</td>
-					<td width="15%" class="actual red-label" />
-					<td width="15%" class="status" />
-					<td class="expand">
-						<div class="text-right" @click="showTips = !showTips">
-							<img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: showTips }" />
-						</div>
-					</td>
-				</tr>
-				<template v-if="showTips">
-					<tr class="extra">
-						<td width="40%" class="event-block-element extra">
-							<img
-								:src="editingMode ? `${$iconURL}budget screen/SVG/tips-gray.png` : `/static/icons/budget/tips-gray.png`"
-							/>
+          <td width="20%" class="planned">
+            $ {{ (event.allocatedTips + event.allocatedFees) | withComma(Number) }}
+          </td>
+          <td width="15%" class="actual red-label" />
+          <td width="15%" class="status" />
+          <td class="expand">
+            <div class="text-right" @click="showTips = !showTips">
+              <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{ expanded: showTips }">
+            </div>
+          </td>
+        </tr>
+        <template v-if="showTips">
+          <tr class="extra">
+            <td width="40%" class="event-block-element extra">
+              <img
+                :src="editingMode ? `${$iconURL}budget screen/SVG/tips-gray.png` : `/static/icons/budget/tips-gray.png`"
+              >
 
-							Tips 12%
-						</td>
-						<td width="20%" class="planned">
-							$ {{ event.allocatedTips | withComma(Number) }}
-							<md-button v-if="!editTips" class="md-rose md-sm md-simple edit-btn" @click="showEditElementBudget()">
-								Edit
-							</md-button>
-							<img
-								v-else
-								:src="`${$iconURL}Event Page/arrow-left-gray.svg`"
-								style="width: 25px; float: right; margin: 3px 0px"
-							/>
-						</td>
-						<template v-if="!editTips">
-							<td width="15%" class="actual red-label" />
-							<td width="15%" class="status" />
-							<td class="expand" />
-						</template>
-						<template v-if="editTips">
-							<td colspan="3" align="right" style="white-space: nowrap">
-								<!-- <input class="inline-input" v-model="newAllocatedTips" /> -->
-								<maryoku-input
-									v-model="newAllocatedTips"
-									input-style="budget"
-									size="small"
-									style="width: 150px; display: inline-block"
-									@focus="$event.target.select()"
-								/>
-								<md-button class="md-simple md-black normal-btn" style="height: 50px" @click="editTips = false">
-									cancel
-								</md-button>
-								<md-button class="md-red normal-btn" style="height: 50px" @click="updateTips()"> save </md-button>
-							</td>
-						</template>
-					</tr>
-					<tr class="extra">
-						<td colspan="5">
-							<hr />
-						</td>
-					</tr>
-					<tr class="extra">
-						<td width="40%" class="event-block-element extra">
-							<img
-								:src="editingMode ? `${$iconURL}budget screen/SVG/fees-gray.svg` : `/static/icons/budget/fees-gray.png`"
-							/>
+              Tips 12%
+            </td>
+            <td width="20%" class="planned">
+              $ {{ event.allocatedTips | withComma(Number) }}
+              <md-button v-if="!editTips" class="md-rose md-sm md-simple edit-btn" @click="showEditElementBudget()">
+                Edit
+              </md-button>
+              <img
+                v-else
+                :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
+                style="width: 25px; float: right; margin: 3px 0px"
+              >
+            </td>
+            <template v-if="!editTips">
+              <td width="15%" class="actual red-label" />
+              <td width="15%" class="status" />
+              <td class="expand" />
+            </template>
+            <template v-if="editTips">
+              <td colspan="3" align="right" style="white-space: nowrap">
+                <!-- <input class="inline-input" v-model="newAllocatedTips" /> -->
+                <maryoku-input
+                  v-model="newAllocatedTips"
+                  input-style="budget"
+                  size="small"
+                  style="width: 150px; display: inline-block"
+                  @focus="$event.target.select()"
+                />
+                <md-button class="md-simple md-black normal-btn" style="height: 50px" @click="editTips = false">
+                  cancel
+                </md-button>
+                <md-button class="md-red normal-btn" style="height: 50px" @click="updateTips()">
+                  save
+                </md-button>
+              </td>
+            </template>
+          </tr>
+          <tr class="extra">
+            <td colspan="5">
+              <hr>
+            </td>
+          </tr>
+          <tr class="extra">
+            <td width="40%" class="event-block-element extra">
+              <img
+                :src="editingMode ? `${$iconURL}budget screen/SVG/fees-gray.svg` : `/static/icons/budget/fees-gray.png`"
+              >
 
-							Fees 3%
-						</td>
-						<td width="20%" class="planned">$ {{ event.allocatedFees | withComma(Number) }}</td>
-						<td width="15%" class="actual red-label" />
-						<td width="15%" class="status" />
-						<td class="expand" />
-					</tr>
-				</template>
-			</tbody>
-		</table>
-		<table
-			class="event-blocks__table event-block-table"
-			:style="editingMode ? `border-left: 10px solid #0047cc` : `border: 1px solid #0047cc`"
-		>
-			<tbody>
-				<tr class="unused-budget">
-					<td width="40%" class="event-block-element unused-budget">
-						<img
-							:src="editingMode ? `${$iconURL}budget+screen/SVG/Asset+487.svg` : `/static/icons/budget/unused.png`"
-						/>
-						Unused
-					</td>
-					<td width="20%" class="planned">$ {{ unusedBudget | withComma(Number) }}</td>
-					<td width="15%" class="actual red-label" />
-					<td width="15%" class="status" />
-					<td class="expand" />
-				</tr>
-			</tbody>
-		</table>
-		<!-- </draggable> -->
+              Fees 3%
+            </td>
+            <td width="20%" class="planned">
+              $ {{ event.allocatedFees | withComma(Number) }}
+            </td>
+            <td width="15%" class="actual red-label" />
+            <td width="15%" class="status" />
+            <td class="expand" />
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #0047cc` : `border: 1px solid #0047cc`"
+    >
+      <tbody>
+        <tr class="unused-budget">
+          <td width="40%" class="event-block-element unused-budget">
+            <img
+              :src="editingMode ? `${$iconURL}budget+screen/SVG/Asset+487.svg` : `/static/icons/budget/unused.png`"
+            >
+            Unused
+          </td>
+          <td width="20%" class="planned">
+            $ {{ unusedBudget | withComma(Number) }}
+          </td>
+          <td width="15%" class="actual red-label" />
+          <td width="15%" class="status" />
+          <td class="expand" />
+        </tr>
+      </tbody>
+    </table>
+    <!-- </draggable> -->
 
-		<table class="event-blocks__table actions-table">
-			<tbody>
-				<tr class="total">
-					<td class="total-title" width="40%">Total</td>
-					<td width="20%" class="total-value">
-						${{ Math.round(event.totalBudget) | roundNumber | withComma(Number) }}
-					</td>
-					<td width="15%" class="total-value">${{ bookedTotal | withComma(Number) }}</td>
-					<td colspan="2" />
-				</tr>
-				<tr v-if="canEdit && editingMode" class="add-category">
-					<td colspan="5">
-						<md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
-							<img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
-							Add new category
-						</md-button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+    <table class="event-blocks__table actions-table">
+      <tbody>
+        <tr class="total">
+          <td class="total-title" width="40%">
+            Total
+          </td>
+          <td width="20%" class="total-value">
+            ${{ Math.round(event.totalBudget) | roundNumber | withComma(Number) }}
+          </td>
+          <td width="15%" class="total-value">
+            ${{ bookedTotal | withComma(Number) }}
+          </td>
+          <td colspan="2" />
+        </tr>
+        <tr v-if="canEdit && editingMode" class="add-category">
+          <td colspan="5">
+            <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
+              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg">
+              Add new category
+            </md-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-		<add-new-category-modal
-			v-if="showCategoryModal"
-			:event="event"
-			:components="filteredEventBlocks"
-			@cancel="showCategoryModal = false"
-			@save="addBuildingBlock"
-		/>
+    <add-new-category-modal
+      v-if="showCategoryModal"
+      :event="event"
+      :components="filteredEventBlocks"
+      @cancel="showCategoryModal = false"
+      @save="addBuildingBlock"
+    />
 
-		<budget-handle-minus-modal v-if="showMinusHandleModal" :value="overAddedValue" @select="handleMinusBudget" />
-	</div>
+    <budget-handle-minus-modal v-if="showMinusHandleModal" :value="overAddedValue" @select="handleMinusBudget" />
+  </div>
 </template>
 
 <script>
@@ -607,7 +629,6 @@ export default {
 
 		addBuildingBlock() {
 			this.showCategoryModal = false;
-			console.log("addBuildingBlock");
 			this.$root.$emit("clearVendorRequirement", this.event);
 			this.$emit("change");
 		},
@@ -623,10 +644,10 @@ export default {
 		},
 		addbudget() {
 			const arrow =
-				'<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>';
+				"<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
 			const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
 			const description =
-				'<div class="description">Your edits changed the total budget, do you want to change it?</div>';
+				"<div class=\"description\">Your edits changed the total budget, do you want to change it?</div>";
 			Swal.fire({
 				title: `<div class="text-left">${arrow}${budgetString}<div>Are You Sure?</div>${description}</div>`,
 				showCancelButton: true,
@@ -659,7 +680,7 @@ export default {
 				case "add":
 					const budgetString = `<div class="font-size-40 font-regular color-red" style="margin-bottom:20px">+$${formattedValue}</div>`;
 					const description =
-						'<div class="description">Your edits changed the total budget, do you want to change it?</div>';
+						"<div class=\"description\">Your edits changed the total budget, do you want to change it?</div>";
 					Swal.fire({
 						title: `<div class="text-left">${budgetString}<div>Would you like to add extra $${formattedValue} to your budget?</div>${description}</div>`,
 						showCancelButton: true,

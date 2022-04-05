@@ -113,13 +113,16 @@ export default {
   },
   props: {
     comment: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     proposal: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     replies: {
-      type: Number
+      type: Number,
+      default: 0
     },
     isMain: {
       type: Boolean
