@@ -155,34 +155,29 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import Vue from "vue";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import CalendarEvent from "@/models/CalendarEvent";
-import Calendar from "@/models/Calendar";
-import EventComponent from "@/models/EventComponent";
 import { Tabs } from "@/components";
-
-import Swal from "sweetalert2";
 import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import _ from "underscore";
-import ViewProposal from "./ViewProposal.vue";
-import EventBlockRequirements from "../Modals/EventBlockRequirements.vue";
 import EventComponentProposal from "@/models/EventComponentProposal";
 import ProposalPayment from "./ProposalPayment";
 
 export default {
   components: {
-    VueElementLoading,
     Tabs,
-    EventBlockRequirements,
     ProposalPayment,
   },
   props: {
-    event: Object,
-    selectedBlock: Object,
-    proposal: Object,
+    event: {
+      type: Object,
+      default: () => {}
+    },
+    selectedBlock: {
+      type: Object,
+      default: () => {}
+    },
+    proposal: {
+      type: Object,
+      default: () => {}
+    },
     winnerId: {
       type: String,
       default: null,

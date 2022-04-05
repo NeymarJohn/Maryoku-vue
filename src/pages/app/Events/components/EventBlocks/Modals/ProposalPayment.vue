@@ -174,14 +174,20 @@ var card = undefined;
 
 export default {
   components: {
-    VueElementLoading,
-    Tabs,
-    EventBlockRequirements,
   },
   props: {
-    event: Object,
-    selectedBlock: Object,
-    proposal: Object,
+    event: {
+      type: Object, 
+      default: () => {}
+    },
+    selectedBlock: {
+      type: Object,
+      default: () => {}
+    },
+    proposal: {
+      type: Object,
+      default: () => {}
+    },
     winnerId: {
       type: String,
       default: null,

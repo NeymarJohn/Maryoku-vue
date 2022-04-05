@@ -107,13 +107,13 @@
       <div>
         <md-button
           class="md-simple md-outlined md-red maryoku-btn"
-          :disabled="proposals.length === 0 || !this.proposal"
+          :disabled="proposals.length === 0 || !proposal"
           @click="bookVendor"
         >
           Book Now
         </md-button>
         <md-button class="md-red maryoku-btn"
-                   :disabled="proposals.length === 0 || !this.proposal"
+                   :disabled="proposals.length === 0 || !proposal"
                    @click="addToCart"
         >
           Add To Cart

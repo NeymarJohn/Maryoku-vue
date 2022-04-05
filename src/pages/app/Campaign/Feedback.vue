@@ -601,7 +601,7 @@ export default {
   position: absolute;
   top: 25%;
   left: 40%;
-  z-index: 12;
+  z-index: 14;
 }
 .green-block-wrapper{
   background-color: rgba(87, 242, 195, 0.23);
