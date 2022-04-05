@@ -345,7 +345,7 @@ export default {
 		this.routeName = this.$route.name;
 	},
 	mounted() {
-		this.loadEventData("init", this.event);
+		this.loadEventData("init");
 		const tab = this.$route.query.t || 0;
 		if (this.$refs.eventPlannerTabs) {
 			this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", tab);

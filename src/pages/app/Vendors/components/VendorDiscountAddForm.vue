@@ -169,11 +169,11 @@ export default {
             this.form.value = 0;
         },
         changeDate(e) {
-            this.coupon.validDate = e;
+            this.form.coupon.validDate = e;
         },
         handleSeasonalChange({season, months}) {
-            this.seasonal.season = season;
-            this.seasonal.months = months;
+            this.form.seasonal.season = season;
+            this.form.seasonal.months = months;
         },
         save(){
             let value = {...this.form[this.tab], value: this.form.value, rate: this.form.rate};

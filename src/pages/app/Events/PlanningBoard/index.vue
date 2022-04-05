@@ -5,7 +5,6 @@
 
     <template v-if="!isLoading">
       <div class="ml-60 mt-40 mr-30">
-
         <div class="d-flex justify-content-between align-center">
           <div>
             <ResizableToggleButton
@@ -113,7 +112,7 @@
                 </md-icon>
               </button>
               <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-                <li v-for="action in functionActions" class="other-list">
+                <li v-for="action in functionActions" class="other-list" :key="action.label">
                   <a class="other-item font-size-16" @click="handleAction(action.value)">
                     <div class="other-name">
                       <md-icon>{{ action.icon }}</md-icon>  &nbsp;&nbsp;
@@ -193,42 +192,42 @@
                   />
                 </div>
                 <div class="mb-140">
-                    <EventProposalDetails
-                        :proposal="proposal"
-                        :category="selectedCategory"
-                        :show-timer-box="true"
-                        :hide-footer="true"
-                        @favorite="favoriteProposal"
-                        @close="closeProposal"
-                        @ask="handleAsk"
-                    >
-                        <template slot="timer">
-                            <TimerPanel
-                                class="time-counter"
-                                :target="targetTime"
-                                :pending="negotiationPending"
-                                :status="proposal.status"
-                                :declined="negotiationDeclined"
-                                :approved="negotiationProcessed"
-                                theme="red"
-                                @updateExpireDate="handleAsk('expiredDate')"
-                            />
-                        </template>
-                    </EventProposalDetails>
+                  <EventProposalDetails
+                    :proposal="proposal"
+                    :category="selectedCategory"
+                    :show-timer-box="true"
+                    :hide-footer="true"
+                    @favorite="favoriteProposal"
+                    @close="closeProposal"
+                    @ask="handleAsk"
+                  >
+                    <template slot="timer">
+                      <TimerPanel
+                        class="time-counter"
+                        :target="targetTime"
+                        :pending="negotiationPending"
+                        :status="proposal.status"
+                        :declined="negotiationDeclined"
+                        :approved="negotiationProcessed"
+                        theme="red"
+                        @updateExpireDate="handleAsk('expiredDate')"
+                      />
+                    </template>
+                  </EventProposalDetails>
                 </div>
               </div>
             </template>
-              <div v-else class="proposal-card-items">
-                  <ProposalCard
-                      v-for="(p, index) in categoryProposals.slice(0, 3).slice(0, 3)"
-                      :key="index"
-                      :proposal="p"
-                      :component="selectedCategory"
-                      :is-collapsed="showDetails"
-                      :is-selected="proposal && proposal.id === p.id"
-                      @goDetail="goDetailPage"
-                  />
-             </div>
+            <div v-else class="proposal-card-items">
+              <ProposalCard
+                v-for="(p, index) in categoryProposals.slice(0, 3).slice(0, 3)"
+                :key="index"
+                :proposal="p"
+                :component="selectedCategory"
+                :is-collapsed="showDetails"
+                :is-selected="proposal && proposal.id === p.id"
+                @goDetail="goDetailPage"
+              />
+            </div>
           </div>
           <PendingForVendors v-else :expired-time="expireTime" />
         </template>
@@ -369,59 +368,58 @@
 
 
       <div v-if="categoryProposals.length"
-             class="proposal-footer white-card d-flex justify-content-between"
-        >
-          <div class="d-flex justify-content-start">
-            <md-button
-              class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
-              @click="scrollToTop"
-            >
-              <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
-            </md-button>
-            <drop-down class="d-inline-block">
-              <button class="more-button cursor-pointer" data-toggle="dropdown">
-                <span class="more-actions font-size-16">
-                  {{ "More actions" }}
-                </span>
-                <md-icon class="more-actions font-size-22">
-                  keyboard_arrow_up
-                </md-icon>
-              </button>
-              <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
-                <li v-for="action in moreActions" class="other-list">
-                  <a class="other-item font-size-16" @click="handleAction(action.value)">
-                    <div class="other-name">
-                      <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
-                      {{ action.label }}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </drop-down>
-          </div>
-          <div class="d-flex justify-content-end">
-
-            <md-button class="book-this-vendor md-simple maryoku-btn" @click="bookVendor" :disabled="this.proposal === null">
-              Book This Vendor
-              <md-icon>keyboard_arrow_right</md-icon>
-            </md-button>
-
-            <md-button class="md-red maryoku-btn" @click="addToCart" :disabled="(this.proposal === null ) || isInCart">
-              Add To Cart
-            </md-button>
-          </div>
+           class="proposal-footer white-card d-flex justify-content-between"
+      >
+        <div class="d-flex justify-content-start">
+          <md-button
+            class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
+            @click="scrollToTop"
+          >
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+          </md-button>
+          <drop-down class="d-inline-block">
+            <button class="more-button cursor-pointer" data-toggle="dropdown">
+              <span class="more-actions font-size-16">
+                {{ "More actions" }}
+              </span>
+              <md-icon class="more-actions font-size-22">
+                keyboard_arrow_up
+              </md-icon>
+            </button>
+            <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
+              <li v-for="action in moreActions" class="other-list" :key="action.label">
+                <a class="other-item font-size-16" @click="handleAction(action.value)">
+                  <div class="other-name">
+                    <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
+                    {{ action.label }}
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </drop-down>
         </div>
-        <div v-else class="proposal-footer white-card d-flex justify-content-end">
-          <div>
-            <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
-              <md-icon>shopping_cart</md-icon>
-              &nbsp;&nbsp; Add To Cart
-            </md-button>
-            <md-button v-if="step === 1" class="md-red maryoku-btn" @click="findVendors">
-              Find Me Vendors
-            </md-button>
-          </div>
+        <div class="d-flex justify-content-end">
+          <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
+            Book This Vendor
+            <md-icon>keyboard_arrow_right</md-icon>
+          </md-button>
+
+          <md-button class="md-red maryoku-btn" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
+            Add To Cart
+          </md-button>
         </div>
+      </div>
+      <div v-else class="proposal-footer white-card d-flex justify-content-end">
+        <div>
+          <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
+            <md-icon>shopping_cart</md-icon>
+            &nbsp;&nbsp; Add To Cart
+          </md-button>
+          <md-button v-if="step === 1" class="md-red maryoku-btn" @click="findVendors">
+            Find Me Vendors
+          </md-button>
+        </div>
+      </div>
     </template>
 
     <AdditionalRequestModal
@@ -535,14 +533,14 @@ export default {
       originalProposal: {},
 
       functionActions: [
-          {label: 'Share proposals', value: 'share', icon: 'share'},
-          {label: 'Compare proposals', value: 'compare', icon: 'equalizer'},
-          {label: 'I already have a venue for my event', value: 'already_have_venue', icon: 'add_circle_outline'},
-          {label: 'I want something different', value: 'something_different', icon: 'autorenew'},
+          {label: "Share proposals", value: "share", icon: "share"},
+          {label: "Compare proposals", value: "compare", icon: "equalizer"},
+          {label: "I already have a venue for my event", value: "already_have_venue", icon: "add_circle_outline"},
+          {label: "I want something different", value: "something_different", icon: "autorenew"},
       ],
       moreActions: [
-          {label: 'Download proposal', value: 'download', icon: 'common/download.svg'},
-          {label: 'Negotiate Rate', value: 'negotiate', icon: 'budget+screen/SVG/Asset%2010.svg'},
+          {label: "Download proposal", value: "download", icon: "common/download.svg"},
+          {label: "Negotiate Rate", value: "negotiate", icon: "budget+screen/SVG/Asset%2010.svg"},
           // {label: 'Contact vendor', value: 'contact', icon: ''},
       ]
     };
@@ -674,12 +672,12 @@ export default {
     countInCart(){
       if (!this.cart) return 0;
 
-      let count = 0
+      let count = 0;
       Object.keys(this.cart).forEach(key => {
         if (this.cart[key] && this.cart[key].proposal && !this.cart[key].proposal.isFavorite) count++;
-      })
+      });
 
-      return count
+      return count;
     },
     isInCart() {
       if (!this.cart) return false;
@@ -861,7 +859,7 @@ export default {
     },
     addRequirements() {},
     selectCategory(category) {
-      console.log('sel.category', category);
+      console.log("sel.category", category);
 
       if (category.key) {
         category["componentId"] = category.key;
@@ -877,8 +875,8 @@ export default {
                   this.updateProposal({
                       proposal: { id: p.id, viewed: true },
                       category:category.key,
-                  })
-              })
+                  });
+              });
           }
       }
 
@@ -1029,11 +1027,11 @@ export default {
         if (action === "download") {
             this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
 
-        } else if (action === 'negotiate' || action === 'share') {
+        } else if (action === "negotiate" || action === "share") {
             this.setProposal(this.proposal);
-            if (action === 'negotiation') this.setOpen('NEGOTIATION')
-            else this.setOpen('SHARE')
-        } else if (action === 'compare') {
+            if (action === "negotiate") this.setOpen("NEGOTIATION");
+            else this.setOpen("SHARE");
+        } else if (action === "compare") {
             this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
         }
     },
