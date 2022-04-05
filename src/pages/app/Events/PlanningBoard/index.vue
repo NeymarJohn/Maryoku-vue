@@ -616,7 +616,7 @@ export default {
     categoryProposals() {
       let categoryProposals = this.$store.state.event.proposals;
       if (this.selectedCategory) {
-        return categoryProposals[this.selectedCategory.componentId] || [];
+        return categoryProposals[this.selectedCategory.componentId];
       }
       return [];
     },
@@ -757,7 +757,6 @@ export default {
         expiredBusinessTime: this.expiredTime,
       }).then(async res => {
         await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
-        this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
 
         await this.$store.dispatch(
         "event/saveEventAction",
@@ -869,17 +868,16 @@ export default {
       this.currentRequirement = this.requirements[category.componentId];
       this.selectedCategory = category;
 
-      if (this.proposals[category.componentId]) {
-          const newProposals = this.proposals[category.componentId].filter(p => !p.viewd);
+      const newProposals = this.proposals[category.componentId].filter(p => !p.viewd);
 
-          if (newProposals.length) {
-              newProposals.map(p => {
-                  this.updateProposal({
-                      proposal: { id: p.id, viewed: true },
-                      category:category.key,
-                  })
+      if (newProposals.length) {
+          newProposals.map(p => {
+              this.updateProposal({
+                  proposal: { id: p.id, viewed: true },
+                  category:category.key,
               })
-          }
+          })
+
       }
 
       this.closeProposal();

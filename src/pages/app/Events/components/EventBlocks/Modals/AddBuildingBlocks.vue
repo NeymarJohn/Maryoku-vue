@@ -52,41 +52,39 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from "vuex";
+// import auth from '@/auth';
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
+import EventPageHeaderImage from "@/models/EventPageHeaderImage";
+import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
+
+import Swal from "sweetalert2";
+import moment from "moment";
+import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
+import VueElementLoading from "vue-element-loading";
 
 export default {
   components: {
+    draggable,
     Drag,
     Drop,
+    VueElementLoading,
   },
   props: {
-    event: {
-      type: Object,
-      default: () => {}
-    },
-    default: {
-      type: Object,
-      default: () => {}
-    },
+    event: Object,
   },
   data: () => ({
+    // auth: auth,
     categoryBuildingBlocks: [],
     isLoaded: false,
     filteredEventBlocks: [],
     searchQuery: "",
   }),
-  computed: {
-    ...mapState("EventPlannerVuex", ["addBuildingBlockModal"]),
-  },
-  watch: {
-    searchQuery() {
-      this.filterEventElements();
-    },
-  },
+
+  created() {},
   mounted() {
     this.getCategoryBlocks();
   },
@@ -166,9 +164,17 @@ export default {
       });
     },
   },
+  computed: {
+    ...mapState("EventPlannerVuex", ["addBuildingBlockModal"]),
+  },
+  watch: {
+    searchQuery(newVal, oldVal) {
+      this.filterEventElements();
+    },
+  },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" scope>
 .md-datepicker {
   .md-icon.md-date-icon {
     display: none;

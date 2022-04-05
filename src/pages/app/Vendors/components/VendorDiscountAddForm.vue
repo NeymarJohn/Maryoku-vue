@@ -1,23 +1,36 @@
 <template>
   <div>
     <div class="fields-cont font-bold mb-10" :class="tab">
-      <span v-for="column in tabsHeader[tab]" :key="column" class="text-left font-size-14">{{ column }}</span>
+      <template v-if="tab === 'number_of_guests'">
+        <span>Name</span>
+        <span class="text-left font-size-14">Rules</span>
+        <span class="text-left font-size-14">QTY</span>
+        <span class="font-size-14 text-left">Discount value / Percentage</span>
+      </template>
+      <template v-if="tab === 'coupon'">
+        <span class="text-left font-size-14">Coupon Code</span>
+        <span class="text-left font-size-14">Benefit Valid</span>
+        <span class="font-size-14 text-left">Discount value / Percentage</span>
+      </template>
     </div>
     <hr style="background-color: #dddddd; height: 1px">
-    <div class="fields-cont mt-20 mb-30" :class="tab">
+    <div class="fields-cont mt-20" :class="tab">
       <template v-if="tab === 'coupon'">
         <div class="field">
-          <input v-model="form[tab].code" type="text" class="text-left number-field" placeholder="Coupon code">
+          <input v-model="coupon.code" type="text" class="text-center number-field" placeholder="Coupon code">
         </div>
         <div class="field">
           <maryoku-input
-            v-model="form[tab].validDate"
-            :value="form[tab].validDate"
+            v-model="coupon.validDate"
+            :value="coupon.validDate"
             class="form-input width-90"
             placeholder="Choose date…"
             input-style="date"
             @input="changeDate"
           />
+        </div>
+        <div class="field">
+          <money v-model="coupon.value" class="text-center number-field" v-bind="rateFormat" />
         </div>
       </template>
       <template v-if="tab === 'number_of_guests'">
@@ -27,7 +40,7 @@
         <div class="field">
           <Multiselect
             :key="rules.length"
-            v-model="form[tab].rule"
+            v-model="number_of_guests.rule"
             class="width-90 mt-5 form-input md-purple"
             :options="rules"
             :close-on-select="true"
@@ -39,16 +52,19 @@
           />
         </div>
         <div class="field">
-          <input v-model="form[tab].qty" type="number" class="text-left number-field" placeholder="100">
+          <input v-model="number_of_guests.gty" type="number" class="text-center number-field" placeholder="100">
+        </div>
+        <div class="field">
+          <money v-model="number_of_guests.value" class="text-center number-field" v-bind="rateFormat" />
         </div>
       </template>
       <template v-if="tab === 'customer_type'">
         <div class="field">
           <Multiselect
-            :key="customerTypes.length"
-            v-model="form[tab].type"
+            :key="rules.length"
+            v-model="customer_type.type"
             class="width-90 mt-5 form-input md-purple"
-            :options="customerTypes"
+            :options="rules"
             :close-on-select="true"
             :clear-on-select="true"
             tag-placeholder="Add this as new tag"
@@ -57,40 +73,34 @@
             track-by="value"
           />
         </div>
+        <div class="field">
+          <money v-model="customer_type.value" class="text-center number-field" v-bind="rateFormat" />
+        </div>
       </template>
       <template v-if="tab === 'seasonal'">
         <div class="field">
-          <input v-model="form[tab].name" type="text" class="text-left number-field" placeholder="Season Name">
+          <input v-model="seasonal.name" type="text" class="text-center number-field" placeholder="Coupon code">
         </div>
+        <div class="field" />
         <div class="field">
-          <SeasonalCalendarInput :season="form[tab].season" :months="form[tab].months" size="width-90" @change="handleSeasonalChange" />
+          <money v-model="seasonal.value" class="text-center number-field" v-bind="rateFormat" />
         </div>
       </template>
-      <div class="field">
-        <money v-model="form.value" class="text-left number-field" v-bind="rateFormat" />
-        <button class="suffix" @click="changeRate">
-          {{ form.rate }}
-        </button>
-      </div>
       <md-button
         class="md-vendor maryoku-btn"
         :disabled="isDisabledAdd"
-        @click="save"
       >
         Add Line
       </md-button>
     </div>
-    <hr style="background-color: #dddddd; height: 1px">
   </div>
 </template>
 
 <script>
-import moment from "moment";
 import { DiscountCustomerTypes, CouponRules } from "@/constants/options";
 
 const components = {
     MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    SeasonalCalendarInput: () => import("@/components/Inputs/SeasonalCalendarInput.vue"),
     Multiselect: () => import("vue-multiselect"),
 };
 export default {
@@ -105,83 +115,46 @@ export default {
             rateFormat: {
                 decimal: ".",
                 thousands: ",",
+                prefix: "",
+                suffix: " %",
                 precision: 2,
                 masked: false,
             },
-            tabsHeader: {
-                number_of_guests: [
-                    "Name", "Rules", "QTY", "Discount value / Percentage",
-                ],
-                coupon: [
-                    "Coupon Code", "Benefit Valid", "Discount value / Percentage",
-                ],
-                customer_type: [
-                    "Customer Types", "Discount value / Percentage",
-                ],
-                seasonal: [
-                    "Period Name", "Benefit Valid", "Discount value / Percentage",
-                ],
-            },
             rules: CouponRules,
             customerTypes: DiscountCustomerTypes,
-            form: {
-                coupon: {
-                    code: "",
-                    validDate: moment().format("DD.MM.YYYY"),
-                },
-                number_of_guests: {
-                    rule: 0,
-                    qty: 0,
-                },
-                customer_type: {
-                    type: 0,
-                },
-                seasonal: {
-                    name: null,
-                    season: null,
-                    months: [],
-                },
-                value: 0,
+            coupon: {
+              code: "",
+              validDate: new Date(),
+              value: "0",
+              rate: "%"
+            },
+            number_of_guests: {
+                rule: 0,
+                qty: 0,
+                value: "0",
                 rate: "%"
+            },
+            customer_type: {
+                type: 0,
+                value: "0",
+                rate: "%",
+            },
+            seasonal: {
+                name: null,
+                season: null,
+                months: [],
+                dates: [],
             }
         };
     },
     computed: {
         isDisabledAdd() {
-            return !Object.values(this.form[this.tab]).every(value => !!value);
+            return !this.qty || !this.unit;
         },
     },
     methods: {
-        changeRate(){
-            this.rate = this.rate === "%" ? "$" : "%";
-        },
-        reset(){
-            Object.keys(this.form[this.tab]).forEach(key => {
-                if (key === "validDate") {
-                    this.form[this.tab][key] = moment().format("DD.MM.YYYY");
-                } else if (key === "rule" || key === "type") {
-                    this.form[this.tab][key] = 0;
-                } else {
-                    this.form[this.tab][key] = null;
-                }
+        changeDate(value) {
 
-            });
-            this.form.value = 0;
-        },
-        changeDate(e) {
-            this.coupon.validDate = e;
-        },
-        handleSeasonalChange({season, months}) {
-            this.seasonal.season = season;
-            this.seasonal.months = months;
-        },
-        save(){
-            let value = {...this.form[this.tab], value: this.form.value, rate: this.form.rate};
-            if (this.tab === "number_of_guests") value.rule = this.form[this.tab].rule.value;
-            if (this.tab === "customer_type") value.type = this.form[this.tab].type.value;
-
-            this.$emit("add", value);
-            this.reset();
         }
     }
 };
@@ -199,11 +172,11 @@ export default {
     &.number_of_guests{
         grid-template-columns: 20% 20% 20% 25% 10%;
     }
-    &.customer_type{
-        grid-template-columns: 40% 40% 20%;
+    &.customer_types{
+        grid-template-columns: 20% 20% 20% 40%;
     }
     &.seasonal{
-        grid-template-columns: 30% 30% 30% 10%;
+        grid-template-columns: 20% 20% 20% 40%;
     }
 
     .field {
@@ -216,17 +189,6 @@ export default {
 
         &:last-child {
             margin-right: 0;
-        }
-
-        button.suffix{
-            position: absolute;
-            transform: translateX(-100%);
-            height: 100%;
-            width: 60px;
-            background: white;
-            border: 0.5px solid #dddddd;
-            font-size: 16px;
-            cursor: pointer;
         }
     }
 }
@@ -248,7 +210,7 @@ input {
 }
 
 .number-field {
-    text-align: left;
+    text-align: center;
     font-size: 16px;
     padding: 12px 20px;
     border: 1px solid #dddddd;

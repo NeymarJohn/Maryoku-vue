@@ -136,13 +136,9 @@ export default {
     VendorBidTimeCounter
   },
   props: {
-    type: {
-      type: Number,
-      default: 0
-    },
+    type: Number,
     negotiation: {
-      type: [Object, Number],
-      default: () => {}
+      type: [Object, Number]
     },
 
     processed: {
@@ -171,7 +167,6 @@ export default {
       } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
         return "Planner want to negotiate the rate";
       }
-      return "";
     },
     subTitle() {
       if (this.processed === NEGOTIATION_REQUEST_STATUS.APPROVED) return "You successfully extended the offer expiration by 2 days";
@@ -184,7 +179,6 @@ export default {
       } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
         return "You can change the rate right from here or see the offer with all details";
       }
-      return "";
     },
     icon() {
       if(this.processed === NEGOTIATION_REQUEST_STATUS.DECLINE) return "VendorsProposalPage/group-20091.svg";
@@ -196,7 +190,6 @@ export default {
       } else if ( this.type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION ) {
         return "Customer/group-8488.svg";
       }
-      return "";
     }
   },
   watch:{

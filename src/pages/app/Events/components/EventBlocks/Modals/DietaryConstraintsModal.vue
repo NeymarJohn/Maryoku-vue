@@ -12,7 +12,7 @@
         </template>
         <template slot="body">
           <div class="md-layout" style="margin-top: 5%">
-            <div v-for="(item, index) in dietaryIconOnFirstList" :key="index" class="md-layout-item dietary-item">
+            <div v-for="(item, index) in dietaryIconOnFirstList" class="md-layout-item dietary-item">
               <img
                 v-if="item.flagOn"
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
@@ -27,7 +27,7 @@
           </div>
 
           <div class="md-layout" style="margin-top: 5%">
-            <div v-for="(item, index) in dietaryIconOnSecondList" :key="index" class="md-layout-item dietary-item">
+            <div v-for="(item, index) in dietaryIconOnSecondList" class="md-layout-item dietary-item">
               <img
                 v-if="item.flagOn"
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
@@ -50,24 +50,26 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from "vuex";
+// import auth from '@/auth';
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import CalendarEvent from "@/models/CalendarEvent";
 import { Modal } from "@/components";
+import Calendar from "@/models/Calendar";
+import EventComponent from "@/models/EventComponent";
+
+import Swal from "sweetalert2";
+import moment from "moment";
 
 export default {
   components: {
     Modal,
   },
   props: {
-    event: {
-      type: Object,
-      default: () => ({}),
-    },
-    isGoing: {
-      type: [Boolean, String],
-      default: "",
-    },
+    event: Object,
+    isGoing: [Boolean, String],
   },
   data: () => ({
+    // auth: auth,
     error: "",
     showOnIcon: true,
     showOffIcon: false,
@@ -106,9 +108,9 @@ export default {
       },
     ],
   }),
-  computed: {
-    ...mapState("EventPlannerVuex", ["DietaryConstraintsModal"]),
-  },
+
+  created() {},
+  mounted() {},
   methods: {
     ...mapMutations("EventPlannerVuex", ["setDietaryConstraintsModal"]),
     closeModal() {
@@ -124,6 +126,9 @@ export default {
     send() {
       this.closeModal();
     },
+  },
+  computed: {
+    ...mapState("EventPlannerVuex", ["DietaryConstraintsModal"]),
   },
 };
 </script>

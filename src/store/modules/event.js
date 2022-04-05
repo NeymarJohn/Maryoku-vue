@@ -99,10 +99,12 @@ const getters = {
 const actions = {
   saveEventAction({ commit, state, dispatch }, event) {
     return new Promise((resolve, reject) => {
+      console.log("saveEventAction", event);
       event
         // .for(event.calendar)
         .save()
         .then((res) => {
+          console.log("event", res);
           commit("setEventData", res);
           dispatch("getTimelineDates", event.id);
           resolve(event);

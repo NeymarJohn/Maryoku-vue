@@ -25,14 +25,10 @@
                 @click="click('comment')"
               >
                 <div class="d-flex show-comment-wrapper">
-                  <div class="hide-comments-text"
-                       :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}"
-                  >
+                  <div class="hide-comments-text" :style="customStyles.showCommentsText ? customStyles.showCommentsText : {}">
                     Show comments
                   </div>
-                  <div class="hide-circle-for-img"
-                       :style="customStyles.marginForCircle ? customStyles.marginForCircle : {marginLeft: '10px'}"
-                  >
+                  <div class="hide-circle-for-img" :style="customStyles.marginForCircle ? customStyles.marginForCircle : {marginLeft: '10px'}">
                     <img class="hide-svg-icon-long-button" src="../../static/icons/icon-comment.svg">
                   </div>
                 </div>
@@ -48,11 +44,11 @@
             <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
               <li v-for="(action, j) in actions" v-show="action.key === 'share' || action.key === 'download'|| action.key === 'comment'"
                   :key="j"
-                  class="action-item"
-                  :class="{ 'md-small-hide':action.key !== 'share'}"
+                  :class="{'md-small-hide':action.key !== 'share'}"
               >
                 <div class="other-name" @click="click(action.key)">
                   <img class="svg-icon-header-action" :src="`${$iconURL}${action.icon}`">
+                            &nbsp;&nbsp;
                   <span>
                     {{ action.title }}
                   </span>
@@ -73,7 +69,7 @@
 </template>
 <script>
 import SharingModal from "@/components/Modals/SharingModal";
-import { HeaderActions } from "@/constants/tabs";
+import { HeaderActions, HeaderActionsRequirements, } from "@/constants/tabs";
 import { mapActions } from "vuex";
 
 export default {
@@ -116,16 +112,16 @@ export default {
     },
     customStyles: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     showMenu: {
       type: Boolean,
-      default: true,
+      default: true
     },
     positioning: {
       type: String,
-      default: "center",
-    },
+      default: "center"
+    }
   },
   data() {
     return {
@@ -135,17 +131,13 @@ export default {
   },
   computed: {
     actions() {
-      HeaderActions
-        .filter((action) => {
-          return action.key === "share" || action.key === "download" || action.key === "comment";
-        })
-        .forEach((element) => {
-          if (element.key === "download") {
-            element.title = "Download";
-          } else if (element.key === "share") {
-            element.title = "Share";
-          }
-        });
+      HeaderActions.forEach((element) => {
+        if(element.key === "download") {
+          element.title = "Download";
+        } else if(element.key === "share") {
+          element.title = "Create link";
+        }
+      });
       return HeaderActions;
     },
     permission() {
@@ -161,7 +153,7 @@ export default {
     canEdit() {
       return !this.permission || this.permission === "edit";
     },
-    showCommentPanel() {
+    showCommentPanel(){
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
   },
@@ -181,43 +173,38 @@ export default {
         this.toggleCommentMode(this.isCommentMode);
       }
     },
-    shareLink(args) {
-      this.$emit("share", {
-        ...args, cb: params => {
+    shareLink(args){
+      this.$emit("share", {...args, cb: params => {
           this.isSharing = false;
-        },
-      });
-    },
+        }});
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.adaptive-button {
+.adaptive-button{
   height: 48px;
   width: 48px;
 }
 
-.show-long-button {
+.show-long-button{
   width: 214px;
   height: 56px;
   border-radius: 30px;
   border: solid 1px #ffc001;
   background-color: #f5f5f5;
 }
-
-.hide-long-button {
+.hide-long-button{
   width: 214px;
   height: 56px;
   border-radius: 30px;
   border: solid 1px #ffc001;
 }
-
-.hide-long-button .active {
+.hide-long-button .active{
   background-color: #ffc001 !important;
 }
-
-.hide-comments-text {
+.hide-comments-text{
   color: white;
   margin-left: 3px;
   font-size: 16px;
@@ -227,8 +214,7 @@ export default {
   text-transform: none;
   flex-grow: 1;
 }
-
-.show-comments-text {
+.show-comments-text{
   padding-left: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -237,8 +223,7 @@ export default {
   text-transform: none;
   color: #4e4e4e;
 }
-
-.show-circle-for-img {
+.show-circle-for-img{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -248,8 +233,7 @@ export default {
   margin-left: -7px;
   background-color: #ffc001;
 }
-
-.hide-circle-for-img {
+.hide-circle-for-img{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -258,9 +242,13 @@ export default {
   border-radius: 50%;
   background-color: white;
 }
-
-.d-flex {
+.d-flex{
   align-items: center;
+}
+
+.svg-icon-header-action{
+  width: 22px !important;
+  margin-left: 2px;
 }
 
 .hide-svg-icon-long-button{
@@ -268,12 +256,10 @@ export default {
   width: 32px !important;
   height: 32px !important;
 }
-
-.show-svg-icon-long-button {
+.show-svg-icon-long-button{
   width: 32px !important;
   height: 32px !important;
 }
-
 .svg-icon-more-header-action {
   width: 8px;
   height: 40px;
@@ -285,24 +271,8 @@ export default {
     }
     .dropdown-width{
         // width: max-content;
-      font-size: 16px;
-      .action-item{
-        &:hover{
-          color: #f51355;
-          font-weight: bold;
-          .svg-icon-header-action {
-            filter: invert(30%) sepia(26%) saturate(4932%) hue-rotate(4deg) brightness(109%) contrast(105%);
-          }
-        }
-        margin: 20px 20px;
-        padding: 0 15px;
-        .svg-icon-header-action{
-          width: 18px;
-          margin: -4px 7px 0 2px;
-        }
-      }
     }
-  .category-list{
+    .category-list{
         border-bottom: 2px ridge;
         cursor: pointer;
         img {
@@ -323,56 +293,54 @@ export default {
         width: 50px !important;
     }
 
-.like-dot {
-  width: 20px;
-  height: 20px;
-  margin: 37px 34px 57px 13px;
-  padding: 3px 11px 3px 10px;
-  background-color: #ffc001;
-  font-size: 16px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #fff;
-  border-radius: 50%;
-  position: absolute;
-}
-
-.cart-dot {
-  width: 22px;
-  height: 22px;
-  margin: 0px 0px 0px -22px;
-  padding: 0px 0px 0px 7px;
-  background-color: #ffc001;
-  font-size: 16px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #fff;
-  border-radius: 50%;
-  position: absolute;
-}
-
-.drop-down-action {
-  display: flex;
-
-  .more-button {
-    cursor: pointer;
-    background: none;
-    border: none;
-  }
-
-  .dropdown-menu {
-    .other-name {
+    .like-dot {
+        width: 20px;
+        height: 20px;
+        margin: 37px 34px 57px 13px;
+        padding: 3px 11px 3px 10px;
+        background-color: #ffc001;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+        border-radius: 50%;
+        position: absolute;
+    }
+    .cart-dot {
+        width: 22px;
+        height: 22px;
+        margin: 0px 0px 0px -22px;
+        padding: 0px 0px 0px 7px;
+        background-color: #ffc001;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+        border-radius: 50%;
+        position: absolute;
+    }
+  
+  .drop-down-action {
+    display: flex;
+    .more-button {
       cursor: pointer;
-      padding: 5px 0px;
+      background: none;
+      border: none;
+    }
+    .dropdown-menu {
+      .other-name {
+        cursor: pointer;
+        padding: 5px 0px;
+      }
     }
   }
-}
+
 </style>

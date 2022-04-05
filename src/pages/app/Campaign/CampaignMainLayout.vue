@@ -450,41 +450,41 @@
           v-else
           class="d-flex align-center"
         >
-<!--          <md-button-->
-<!--            class="md-simple md-button md-black maryoku-btn"-->
-<!--            @click="sendToAddtionalGuests"-->
-<!--          >-->
-<!--            <span class="font-size-16 text-transform-capitalize">-->
-<!--              <img-->
-<!--                class="mr-20"-->
-<!--                :src="`${$iconURL}Campaign/Group 8871.svg`"-->
-<!--              >Send To Additional Guests-->
-<!--            </span>-->
-<!--          </md-button>-->
-<!--          <span-->
-<!--            class="seperator"-->
-<!--            style="margin-top: 0"-->
-<!--          />-->
-<!--          <md-button-->
-<!--            class="md-simple md-button md-black maryoku-btn"-->
-<!--            @click="sendPreviewEmail"-->
-<!--          >-->
-<!--            <span class="font-size-16 text-transform-capitalize">-->
-<!--              <img-->
-<!--                class="mr-20"-->
-<!--                :src="`${$iconURL}Campaign/Group 1855.svg`"-->
-<!--              >-->
-<!--              Send Me A Preview-->
-<!--            </span>-->
-<!--          </md-button>-->
+          <!-- <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendToAddtionalGuests"
+          >
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 8871.svg`"
+              >Send To Additional Guests
+            </span>
+          </md-button>
+          <span
+            class="seperator"
+            style="margin-top: 0"
+          />
+          <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendPreviewEmail"
+          >
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 1855.svg`"
+              >
+              Send Me A Preview
+            </span>
+          </md-button> -->
           <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
             <img :src="`${$iconURL}Campaign/Group 9222.svg`">
-            <span class="ml-10">Scheduled To {{' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
+            <span class="ml-10">Scheduled To {{ ' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
           </div>
-          <div v-if="!canSchedule" @click="startCampaign" class="ml-40 d-flex flex-centered align-center cursor-pointer">
-            <span class="seperator small" style="margin-top: 0; margin-right: 30px"/>
-            <i class="far fa-clock"></i>
-            <span class="ml-10" style="font-weight: bold"> Send again </span>
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
+            <span class="seperator small" style="margin-top: 0; margin-right: 30px" />
+            <i class="far fa-clock" />
+            <span class="ml-10" style="font-weight: bold"> Change Schedule </span>
           </div>
           <div
             v-else
@@ -740,36 +740,6 @@ export default {
         return;
       }
 
-      if (this.selectedTab === 4 && !campaignData.coverImage) {
-        Swal.fire({
-          title: "Please select image for cover",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      if (this.selectedTab === 4 && !campaignData.description) {
-        Swal.fire({
-          title: "Please write description for Feedback page",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      if (this.selectedTab === 4 && !campaignData.images || !campaignData.images.length) {
-        Swal.fire({
-          title: "Please select images for event",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         "STARTED"
@@ -807,6 +777,7 @@ export default {
           coverImage,
           `${this.event.id}-${campaignType}`
         );
+        const extenstion = fileObject.type.split("/")[1];
         let fileUpload = await S3Service.fileUpload(
           fileObject,
           `${this.event.id}-${campaignType}`,
@@ -930,12 +901,6 @@ export default {
         value: "EDITING",
       });
     },
-    sendAgain() {
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "STARTED"
-      );
-    }
   },
   computed: {
     ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),

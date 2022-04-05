@@ -323,7 +323,7 @@
   </div>
 </template>
 <script>
-import { MaryokuInput, MaryokuTextarea } from "@/components";
+import { Modal, MaryokuInput, LocationInput, MaryokuTextarea, MaryokuResizableTextarea } from "@/components";
 import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
 import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
@@ -336,6 +336,7 @@ export default {
     CollapsePanel,
     MaryokuTextarea,
     InvalidAddressPanel,
+    MaryokuResizableTextarea,
   },
   props: {
     defaultSettings: {
