@@ -143,7 +143,7 @@
         class="p-10"
         :items="2.5"
         :margin-items="10"
-        :images="images"
+        :images="campaignImages"
         :show-upload-file="true"
         :show-images-details="true"
         @addImage="addNewImage"
@@ -270,20 +270,6 @@ export default {
         acceptedFiles: "image/*",
         headers: { "My-Awesome-Header": "header value" },
       },
-      defaultImages: [
-        {
-          src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg",
-          default: true,
-        },
-        {
-          src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg",
-          default: true,
-        },
-        {
-          src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg",
-          default: true,
-        }
-      ],
     };
   },
   computed: {
@@ -301,12 +287,6 @@ export default {
     },
     campaignLogoUrl() {
       return this.campaignData.logoUrl || "";
-    },
-    images() {
-      return [
-        ...this.campaignImages,
-        ...this.defaultImages.slice(this.campaignImages.length),
-      ];
     },
     campaignTitle() {
       return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
