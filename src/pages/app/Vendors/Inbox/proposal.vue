@@ -53,7 +53,7 @@
         @remove="removeVersion"
       />
       <div class="proposal-container event-proposal">
-        <EventProposalDetails v-if="proposal" :proposal="proposal" :landing-page="true" :non-maryoku="true" :step="step" :sh="true" @change="handleStep" />
+        <EventProposalDetails v-if="proposal" :proposal="proposal" :landing-page="true" :non-maryoku="true" :step="step" :sh="true" :hide-footer="true" @change="handleStep" />
       </div>
     </template>
     <template v-else>

@@ -11,22 +11,25 @@
       </md-button>
     </div>
     <VendorDiscountAddForm
-        :tab="tab"
-    ></VendorDiscountAddForm>
-    <div v-for="option in tabOptions" :key="option.value" class="citems">
-      <div class="citem font-size-18 font-bold-extra mt-50 pb-10">
-        {{ option.label }}
+      :tab="tab"
+      @add="addDiscountItem"
+    />
+    <template v-for="option in tabOptions">
+      <div v-if="discountData[option.value].length" :key="option.value" class="citems">
+        <div class="citem font-size-18 font-bold-extra mt-50 pb-10">
+          {{ option.label }}
+        </div>
+        <div class="citem cursor-pointer">
+          <vendor-discount-policy-item
+            v-for="(cs, csIndex) in discountData[option.value]"
+            :key="csIndex"
+            :tab="option.value"
+            :item="cs"
+            @change="changeDiscountItem(csIndex, $event)"
+          />
+        </div>
       </div>
-      <div class="citem cursor-pointer">
-        <vendor-discount-policy-item
-          v-for="(cs, csIndex) in discountData[option.value]"
-          :key="csIndex"
-          :tab="option.value"
-          :item="cs"
-          @change="changeDiscountItem"
-        />
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 <script>
@@ -40,44 +43,44 @@ const components = {
 export default {
   components,
   props: {
-
+    data: {
+        type: Object,
+    }
   },
   data() {
       return {
         tab: "coupon",
         tabOptions: DiscountTabOptions,
         discountData: {
-            coupon: [
-                {code: "Happyholiday22", validDate : "Holidays 2022", value: "15", rate: "%"},
-                {code: "Nice-to-meet", validDate : "new customer", value: "7", rate: "%"},
-            ],
-            number_of_guests: [
-                  {rule: 2, qty : 9999, value: "15", rate: "%"},
-                  {rule: 1, qty : 1000, value: "7", rate: "%"},
-            ],
-            customer_type: [
-                {type: 1, value: "7" , rate: "%"},
-                {type: 2, value: "4", rate: "%"},
-            ],
-            seasonal: [
-                {name: "Winter", period : "21 December -20 March 2022", value: "7", rate: "%"},
-                {name: "Above $4000", period : "22 September - 21 December", value: "4", rate: "%"},
-            ],
-        }
+            coupon: [],
+            number_of_guests: [],
+            customer_type: [],
+            seasonal: [],
+        },
+
       };
   },
   methods: {
+      init() {
+        Object.keys(this.discountData).forEach(key => {
+           if(this.data[key] && this.data[key].length)  this.discountData[key] = this.data[key];
+        });
+      },
       changeTab(value) {
           this.tab = value;
       },
-      changeDiscountItem(value) {
-        if (this.tab === "coupon") this.$emit("change", {coupon: this.value});
-        else if (this.tab === "number_of_participiants")
-            this.$emit("change", {number_of_participiants: this.number});
-        else if (this.tab === "customer_type")
-            this.$emit("change", {customer_type: this.number});
-        else if (this.tab === "seasonal")
-            this.$emit("change", {seasonal: this.number});
+      addDiscountItem(value){
+          this.discountData[this.tab].push(value);
+          this.$emit("save", this.discountData);
+      },
+      changeDiscountItem(index, {type, value}) {
+        console.log('change.item', index, type, value);
+        if (type === "update") {
+            this.discountData[this.tab][index] = value;
+        } else if (type === "remove") {
+            this.discountData[this.tab].splice(index, 1);
+        }
+        this.$emit("save", this.discountData);
       }
   },
 };
@@ -94,5 +97,8 @@ export default {
     display: grid;
     grid-column-gap: 3rem;
     align-items: center;
+}
+.citem {
+    border-bottom: .5px solid #dddddd;
 }
 </style>

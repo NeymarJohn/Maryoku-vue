@@ -10,18 +10,18 @@
             Please fill in your personal account so that we can transfer money to you.
           </span>
         </div>
-        <div  class="input-wrapper mcc-wrapper" :class="{
-          error: v$.bankDetails.mcc.$errors.length,
-                    valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty}"
+        <div class="input-wrapper mcc-wrapper"
+             :class="{error: v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty,
+                      valid: !v$.bankDetails.mcc.$errors.length }"
              @click="v$.bankDetails.mcc.$touch"
         >
           <PincodeInput v-model="bankDetails.mcc" :secure="true" @blur="v$.bankDetails.mcc.$touch"/>
           <div class="valid-msg auth"></div>
         </div>
-        <div  class="input-wrapper mcc-wrapper" :class="{
-                       error: v$.bankDetails.mcc.$errors.length,
-                       valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty}"
-             @click="v$.bankDetails.mcc.$touch"
+        <div class="input-wrapper mcc-wrapper"
+             :class="{error: v$.bankDetails.ein.$errors.length && v$.bankDetails.ein.$dirty,
+                      valid: !v$.bankDetails.ein.$errors.length }"
+             @click="v$.bankDetails.ein.$touch"
         >
           <div>
             <span class="name">EIN</span>
@@ -42,7 +42,9 @@
           <md-datepicker ref="datePicker"
                          :md-model-type="String"
                          v-model="bankDetails.date"
-                         name="todo-date"></md-datepicker>
+                         name="todo-date">
+            <label v-if="!bankDetails.date" style="margin-left: -17px;">MM/DD/YYYY</label>
+          </md-datepicker>
           <img class="calendar-icon" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
         </div>
       </div>
@@ -124,8 +126,8 @@ export default {
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
     this.bankDetails = {
-      ...this.bankDetails, date: new Date("01/01/1990"),
-      ...JSON.parse(localStorage.bankDetails)
+      ...this.bankDetails,
+      ...JSON.parse(localStorage.bankDetails),
     };
     this.vendorId = this.$store.state.vendor.profile.id;
     this.profileId = this.$store.state.auth.user.id;
@@ -159,12 +161,10 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-
+  padding: 0 10px;
   .md-layout-item {
     padding-left: 11px;
   }
-
   label {
     font-family: 'Manrope-Bold';
     font-size: 16px;
@@ -172,99 +172,6 @@ export default {
     font-weight: 800;
     text-align: left;
   }
-
-  .authentication-header-block {
-    margin-bottom: 15px;
-
-    .authentication-header {
-      font-family: 'Manrope-Regular';
-      font-size: 22px;
-      font-weight: 600;
-    }
-
-    .shield-icon {
-      display: inline-block;
-      width: 25px;
-      height: 25px;
-      margin-top: -10px;
-    }
-  }
-
-  .filled-detail {
-    position: relative;
-    padding: 0 25px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #a9a9a9;
-    background-color: #e9dfe8;
-
-    .bank-info-block {
-      padding: 0 25px;
-      display: flex;
-      flex-direction: column;
-      margin: auto;
-
-      .bank-icon {
-        width: 47px;
-        position: absolute;
-        left: 10px;
-        top: 10px;
-      }
-
-      .edit-button {
-        position: absolute;
-        right: 0;
-        top: 0;
-        text-transform: capitalize;
-        font-family: 'Manrope-bold';
-      }
-
-      .bank-name {
-        display: inline-block;
-        text-transform: uppercase;
-        font-family: 'Manrope-bold';
-        font-size: 16px;
-        border-right: 1px solid black;
-        padding-right: 10px;
-        margin-right: 10px;
-      }
-
-      .account-details {
-        display: flex;
-
-        .left {
-          font-family: 'Manrope-bold';
-          width: 50%;
-
-          div {
-            margin-bottom: 20px;
-          }
-        }
-
-        .right {
-          width: 50%;
-
-          div {
-            margin-bottom: 20px;
-          }
-        }
-      }
-    }
-  }
-
-  .button-name {
-    text-transform: capitalize;
-    font-family: 'Manrope-bold';
-    text-decoration: underline;
-  }
-
-  .trash {
-    width: 14px;
-    margin-right: 5px;
-    margin-left: -30px;
-    margin-top: -4px;
-  }
-
   .authentication-block {
     border-radius: 3px;
     margin: 10px 15px;
@@ -272,7 +179,6 @@ export default {
     * {
       margin: 5px;
       display: flex;
-
       align-items: flex-start;
     }
     .name {
@@ -280,36 +186,24 @@ export default {
       font-size: 15px;
       font-weight: 800;
     }
-
     .description {
       font-family: 'Manrope-regular';
       font-size: 12px;
       color: #818080;
     }
-
     .date-wrapper {
       max-width: 200px;
       margin-bottom: 30px;
       position: relative;
-
       .calendar-icon {
         width: 19px;
         position: absolute;
-        bottom: 11px;
+        bottom: 17px;
         left: 170px;
         color: #641856;
       }
     }
   }
-
-  .block-separator {
-    margin: 28px 13px;
-    display: block;
-    width: 100%;
-    height: 1px;
-    border-bottom: black solid 1px;
-  }
-
   .input-wrapper.valid {
     .valid-msg {
       position: absolute;
@@ -321,13 +215,11 @@ export default {
       transform: rotate(-45deg);
       right: 20px;
       bottom: 25px;
-
       &.auth {
         right: -13px;
       }
     }
   }
-
   .input-wrapper {
     &.error {
       input {
@@ -335,20 +227,16 @@ export default {
         border-width: 1px 1px 1px 9px;
       }
     }
-
     &.valid {
       input {
         border-left: 9px #0fac4c solid;
       }
     }
-
   }
-
   .input-wrapper {
     position: relative;
     display: flex;
     flex-direction: column;
-
     .location-icon {
       position: absolute;
       width: 15px;
@@ -356,23 +244,19 @@ export default {
       bottom: 9px;
       color: #641856;
     }
-
     &.mcc-wrapper {
       width: 200px;
     }
-
     label {
       font-family: 'Manrope-Bold';
       font-size: 16px;
       font-weight: 800;
     }
   }
-
   .billing-information-block {
     min-height: 75vh;
     margin: 0;
     box-shadow: none;
-
     .header-title {
       .bank-details-icon {
         display: inline-block;
@@ -380,7 +264,6 @@ export default {
         height: 30px;
         margin-top: -18px;
       }
-
       p {
         display: inline-block;
         font-weight: 800;
@@ -388,20 +271,17 @@ export default {
         margin: 6px;
       }
     }
-
     .info-block {
       padding: 0 25px;
       display: flex;
       flex-direction: row;
       color: #641856;
       border: 1px solid #9f2488;
-
       .info-icon {
         margin-right: 27px;
         width: 37px;
       }
     }
-
     .cost-pros-cons-section {
       box-shadow: none;
     }

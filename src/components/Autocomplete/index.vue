@@ -66,12 +66,10 @@ export default {
   },
   watch: {
     selectedValue(newValue, oldValue) {
-      console.log("selectedValue", newValue);
       this.searchWord = `${newValue.companyName} / ${newValue.name}`;
     },
   },
   mounted() {
-      console.log("Autocomplete.mounted", this.selectedValue, this.options);
       if (this.selectedValue) {
           this.selectedSuggestItemIndex = this.filteredSuggestItems.findIndex(it =>
               it.companyName === this.selectedValue.companyName && it.name === this.selectedValue.name);

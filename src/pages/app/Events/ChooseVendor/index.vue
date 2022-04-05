@@ -73,17 +73,17 @@
                   @close="closeProposal"
                   @ask="handleAsk"
                 >
-                    <template slot="timer">
-                        <TimerPanel
-                            :class="'time-counter'"
-                            :target="targetTime"
-                            :pending="negotiationPending"
-                            :status="proposal.status"
-                            :declined="negotiationDeclined"
-                            :approved="negotiationProcessed"
-                            @updateExpireDate="handleAsk('expiredDate')"
-                        />
-                    </template>
+                  <template slot="timer">
+                    <TimerPanel
+                      :class="'time-counter'"
+                      :target="targetTime"
+                      :pending="negotiationPending"
+                      :status="proposal.status"
+                      :declined="negotiationDeclined"
+                      :approved="negotiationProcessed"
+                      @updateExpireDate="handleAsk('expiredDate')"
+                    />
+                  </template>
                 </EventProposalDetails>
               </transition>
             </template>
@@ -146,40 +146,33 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import moment from "moment";
 import { getReq } from "@/utils/token";
-
 import Proposal from "@/models/Proposal";
 import EventComponent from "@/models/EventComponent";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
-
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 import { CommentMixins } from "@/mixins";
 
 const components = {
-    Loader: () => import("@/components/loader/Loader.vue"),
-    Modal: () => import("@/components/Modal.vue"),
-    InputMask: () => import("vue-input-mask"),
-    ServicesCart: () => import("./ServicesCart.vue"),
-    ProposalsBar: () => import("./ProposalsBar.vue"),
-    ProposalCard: () => import("../components/ProposalCard"),
-    ProgressRadialBar: () => import("../PlanningBoard/components/ProgressRadialBar.vue"),
-    PendingForVendors: () => import("../components/PendingForVendors.vue"),
-    EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
-    AdditionalRequestModal: () => import("../PlanningBoard/components/modals/AdditionalRequest.vue"),
-    ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
-    MaryokuInput: () => import('@/components/Inputs/MaryokuInput.vue'),
-    NegotiationNotification: () => import("./components/NegotiationNotification"),
-    EventChangeProposalModal: () => import("@/components/Modals/EventChangeProposalModal"),
-    TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
+  Loader: () => import("@/components/loader/Loader.vue"),
+  Modal: () => import("@/components/Modal.vue"),
+  InputMask: () => import("vue-input-mask"),
+  ServicesCart: () => import("./ServicesCart.vue"),
+  ProposalCard: () => import("../components/ProposalCard"),
+  ProgressRadialBar: () => import("../PlanningBoard/components/ProgressRadialBar.vue"),
+  PendingForVendors: () => import("../components/PendingForVendors.vue"),
+  EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
+  AdditionalRequestModal: () => import("../PlanningBoard/components/modals/AdditionalRequest.vue"),
+  ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
+  EventChangeProposalModal: () => import("@/components/Modals/EventChangeProposalModal"),
+  TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
 };
 
 export default {
   name: "EventBooking",
-  components: {...components, MaryokuInput},
-  mixins: [ CommentMixins ],
+  components,
+  mixins: [CommentMixins],
   props: {},
   data: () => ({
-    // auth: auth,
-
     selectedCategory: null,
     calender: null,
     somethingMessage: null,
@@ -187,11 +180,9 @@ export default {
     blockVendors: null,
     allRequirements: null,
     selectedBlock: null,
-    // proposals: [],
     blockId: "",
     currentRequirement: null,
     proposalsByCategory: {},
-
     isOpenedAdditionalModal: false,
     isLoading: true,
     isLoadingProposal: false,
@@ -206,6 +197,99 @@ export default {
     showNegotiationNotification: false,
     showCart: false,
   }),
+  computed: {
+    ...mapGetters({
+      storedRequirements: "event/getBookingRequirements",
+    }),
+    ...mapState({
+      eventRequirements: (state) => state.planningBoard.requirements || {},
+    }),
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    categoryList() {
+      return this.$store.state.event.eventData.components;
+    },
+    expiredTime() {
+      if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
+      return 0;
+    },
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    cart() {
+      return this.$store.state.planningBoard.cart;
+    },
+    categories() {
+      const categories = this.event.components;
+      categories.sort((a, b) => a.order - b.order);
+      return categories;
+    },
+    proposals() {
+      let proposals = this.$store.state.event.proposals;
+      if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
+      return proposals[this.selectedCategory.componentId];
+    },
+    negotiationProposals() {
+      let proposals = this.$store.state.event.proposals;
+      if (!Object.keys(proposals).length) return {};
+      let negotiationProposals = {};
+      Object.keys(proposals).map(key => {
+        let subProposals = [];
+        proposals[key].map(p => {
+          let negotiations = p.negotiations.filter(n =>
+            n.status === NEGOTIATION_REQUEST_STATUS.APPROVED || n.status === NEGOTIATION_REQUEST_STATUS.DECLINE);
+          if (negotiations.length) {
+            subProposals.push(p);
+          }
+        });
+        if (subProposals.length) negotiationProposals[key] = subProposals;
+      });
+      return negotiationProposals;
+    },
+  },
+  watch: {
+    event() {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    negotiationProposals(newVal) {
+      if (Object.keys(newVal).length) {
+        this.$notify({
+          message: {
+            title: "Great News!",
+            content: "The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide",
+            close: this.processNotification,
+          },
+          icon: `${this.$iconURL}messages/group-21013.svg`,
+          horizontalAlign: "right",
+          verticalAlign: "top",
+          timeout: 5000,
+        });
+      }
+    },
+    proposals(newVal) {
+    },
+    $route: "fetchData",
+  },
+  async created() {
+    await this.$store.dispatch("planningBoard/resetCartItems");
+    this.isLoadingProposal = true;
+    const tenantId = this.$authService.resolveTenantId();
+    await this.getRequirements(this.event.id);
+    await this.getProposals({ eventId: this.event.id, tenantId });
+    await this.getCartItems(this.event.id);
+
+    this.isLoadingProposal = false;
+
+    this.selectCategory(this.categories[0]);
+
+    let self = this;
+    this.$root.$on("clearVendorRequirement", (event) => {
+      let requirements = self.storedRequirements;
+      if (requirements[event.id]) requirements[event.id] = null;
+      self.setBookingRequirements(requirements);
+    });
+  },
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements", "setProposalsByCategory"]),
     ...mapMutations("planningBoard", ["setCategoryCartItem"]),
@@ -253,7 +337,7 @@ export default {
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
-    fetchData: async function () {
+    fetchData: async function() {
       this.blockId = this.$route.params.blockId;
       this.event = this.$store.state.event.eventData;
       this.getSelectedBlock();
@@ -277,7 +361,6 @@ export default {
       this.showProposals = false;
     },
     async updateExpiredTime() {
-      console.log("updateExpiredTime");
       // let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
       //   id: this.currentRequirement.id,
       //   expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
@@ -287,8 +370,7 @@ export default {
     },
     goDetailPage(proposal) {
       this.showDetails = true;
-
-      if(proposal.selectedVersion > -1)
+      if (proposal.selectedVersion > -1)
         this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
       else this.proposal = proposal;
 
@@ -327,75 +409,72 @@ export default {
       if (this.proposalsByCategory[component.componentId].length === 0) return false;
       const notViewedProposals = this.proposalsByCategory[component.componentId].filter((item) => !item.viewed);
       if (notViewedProposals.length === 0) return false;
-      console.log(notViewedProposals);
       return true;
     },
     async bookVendor() {
-      if(!this.proposal) return;
+      if (!this.proposal) return;
       await new Proposal({ ...this.proposal }).save();
       this.$router.push({
         name: "CheckoutWithVendor",
         params: {
-            proposalId: this.proposal.id,
-            proposalType: "planner",
+          proposalId: this.proposal.id,
+          proposalType: "planner",
         },
       });
     },
-    async favoriteProposal(isFavorite){
+    async favoriteProposal(isFavorite) {
       this.proposal = await this.$store.dispatch("event/updateProposal", {
-          proposal: {...this.proposal, isFavorite},
-          category: this.selectedCategory.componentId
+        proposal: { ...this.proposal, isFavorite },
+        category: this.selectedCategory.componentId,
       });
       this.setCategoryCartItem({
-          category: this.selectedCategory.componentId,
-          item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.proposal, isFavorite}}
+        category: this.selectedCategory.componentId,
+        item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.proposal, isFavorite } },
       });
     },
-    async handleAsk(ask){
-        if (ask === "expiredDate") {
-            let expiredTime = moment().add(2, "days").unix() * 1000;
-            let query = new ProposalNegotiationRequest({
-                eventId: this.event.id,
-                proposalId: this.proposal.id,
-                proposal: new Proposal({id: this.proposal.id}),
-                expiredTime,
-                type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
-                url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`
-            });
+    async handleAsk(ask) {
+      if (ask === "expiredDate") {
+        let expiredTime = moment().add(2, "days").unix() * 1000;
+        let query = new ProposalNegotiationRequest({
+          eventId: this.event.id,
+          proposalId: this.proposal.id,
+          proposal: new Proposal({ id: this.proposal.id }),
+          expiredTime,
+          type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
+          url: `${location.protocol}//${location.host}/#/events/${this.event.id}/booking/choose-vendor`,
+        });
 
-            let res = await query.for(new Proposal({ id: this.proposal.id })).save();
-            console.log("ask.result", res);
-            this.proposal.negotiations.push(res);
-        }
+        let res = await query.for(new Proposal({ id: this.proposal.id })).save();
+        this.proposal.negotiations.push(res);
+      }
     },
     async addToCart() {
-      if(!this.proposal) return;
+      if (!this.proposal) return;
       this.updateCartItem({
-          category: this.selectedCategory.componentId,
-          event: {id: this.event.id},
-          proposalId: this.proposal.id,
+        category: this.selectedCategory.componentId,
+        event: { id: this.event.id },
+        proposalId: this.proposal.id,
       });
       this.$store.dispatch("event/updateProposal", {
-         proposal: {...this.proposal, isFavorite: false},
-         category: this.proposal.vendor.vendorCategory,
+        proposal: { ...this.proposal, isFavorite: false },
+        category: this.proposal.vendor.vendorCategory,
       });
     },
-    openCart(){
+    openCart() {
       this.showCart = true;
     },
-    async processNotification(){
-      console.log("processNotification");
+    async processNotification() {
       let proposals = this.negotiationProposals;
       this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
-          this.negotiationProposals[key].map(proposal => {
-              let { negotiations } = proposal;
-              negotiations.map(it => it.status = 3);
-              this.$store.dispatch("event/updateProposal", {
-                  category: key,
-                  proposal: {...proposal, negotiations}
-              });
+        this.negotiationProposals[key].map(proposal => {
+          let { negotiations } = proposal;
+          negotiations.map(it => it.status = 3);
+          this.$store.dispatch("event/updateProposal", {
+            category: key,
+            proposal: { ...proposal, negotiations },
           });
+        });
       });
     },
     getUpdatedProposal(proposal, data) {
@@ -403,115 +482,6 @@ export default {
         this.$set(proposal, key, data[key]);
       });
       return proposal;
-    }
-  },
-  watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    negotiationProposals(newVal){
-      console.log("negotiationProposals", newVal);
-      if(Object.keys(newVal).length) {
-          this.$notify({
-              message: {
-                  title: "Great News!",
-                  content: "The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide",
-                  close: this.processNotification
-              },
-              icon: `${this.$iconURL}messages/group-21013.svg`,
-              horizontalAlign: "right",
-              verticalAlign: "top",
-              timeout: 5000,
-          });
-      }
-    },
-    proposals(newVal){},
-    $route: "fetchData",
-  },
-  async created() {
-    console.log("choose-vendors.created");
-    await this.$store.dispatch("planningBoard/resetCartItems");
-    this.isLoadingProposal = true;
-    const tenantId = this.$authService.resolveTenantId();
-    await this.getRequirements(this.event.id);
-    await this.getProposals({eventId: this.event.id, tenantId});
-    await this.getCartItems(this.event.id);
-
-    this.isLoadingProposal = false;
-
-    this.selectCategory(this.categories[0]);
-
-    let self = this;
-    this.$root.$on("clearVendorRequirement", (event) => {
-      let requirements = self.storedRequirements;
-      if (requirements[event.id]) requirements[event.id] = null;
-      self.setBookingRequirements(requirements);
-    });
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format("MMM Do YYYY ");
-    },
-    formatTime: function (date) {
-      return moment(date).format("h:00 A");
-    },
-    formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, "hours");
-    },
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-  computed: {
-    ...mapGetters({
-      storedRequirements: "event/getBookingRequirements",
-    }),
-    ...mapState({
-      eventRequirements: (state) => state.planningBoard.requirements || {},
-    }),
-    serviceCategories(){
-      return this.$store.state.common.serviceCategories;
-    },
-    categoryList() {
-      return this.$store.state.event.eventData.components;
-    },
-    expiredTime() {
-      console.log(this.currentRequirement);
-      if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
-      return 0;
-    },
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    cart(){
-      return this.$store.state.planningBoard.cart;
-    },
-    categories() {
-      const categories = this.event.components;
-      categories.sort((a, b) => a.order - b.order);
-      return categories;
-    },
-    proposals() {
-      let proposals = this.$store.state.event.proposals;
-      if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
-      return proposals[this.selectedCategory.componentId];
-    },
-    negotiationProposals(){
-      let proposals = this.$store.state.event.proposals;
-      if(!Object.keys(proposals).length) return {};
-      let negotiationProposals = {};
-      Object.keys(proposals).map(key => {
-          let subProposals = [];
-          proposals[key].map(p => {
-              let negotiations = p.negotiations.filter(n =>
-                  n.status === NEGOTIATION_REQUEST_STATUS.APPROVED || n.status === NEGOTIATION_REQUEST_STATUS.DECLINE);
-              if(negotiations.length) {
-                  subProposals.push(p);
-              }
-          });
-          if(subProposals.length) negotiationProposals[key] = subProposals;
-      });
-      return negotiationProposals;
     },
   },
 };
@@ -520,24 +490,28 @@ export default {
 .booking-section.booking-proposals {
   .choose-vendor-board {
     width: 100%;
-    padding: 3rem;
-    padding-bottom: 150px;
+    padding: 3rem 3rem 150px;
   }
+
   .category-title {
     img {
       width: 30px;
     }
   }
+
   .header {
     max-height: max-content;
   }
+
   .header-actions {
     display: flex;
     height: max-content;
   }
+
   .seperator {
     border-left: solid 1px #050505;
   }
+
   .events-booking-items {
     padding: 0 0em;
     margin-bottom: 1em;
@@ -547,6 +521,7 @@ export default {
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
   }
+
   .booking-section__actions {
     width: 100%;
     text-align: center;
@@ -558,6 +533,7 @@ export default {
     padding: 25px 1.9em;
     background: white;
   }
+
   .footer-container {
     position: fixed;
     bottom: 0;
@@ -570,6 +546,7 @@ export default {
     background: white;
     font-family: "Manrope-Regular", sans-serif;
   }
+
   .proposals-footer {
     position: fixed;
     bottom: 0;
@@ -579,6 +556,7 @@ export default {
     width: calc(100% - 490px);
     z-index: 10;
   }
+
   .add-category-button {
     border: none;
     width: 60px;
@@ -588,16 +566,20 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
     cursor: pointer;
+
     i {
       font-size: 40px !important;
     }
   }
+
   .component-fade-enter-active,
   .component-fade-leave-active {
     transition: opacity 0.3s ease;
   }
+
   .component-fade-enter, .component-fade-leave-to
-/* .component-fade-leave-active below version 2.1.8 */ {
+    /* .component-fade-leave-active below version 2.1.8 */
+  {
     opacity: 0;
   }
 }

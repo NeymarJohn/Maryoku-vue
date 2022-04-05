@@ -46,27 +46,25 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
-import EventPageHeaderImage from "@/models/EventPageHeaderImage";
-import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
-import Swal from "sweetalert2";
-import moment from "moment";
-import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
-import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 
 export default {
   components: {
-    draggable,
     Drag,
     Drop,
-    VueElementLoading,
   },
   props: {
-    event: Object,
-    eventBuildingBlocks: Array,
+    event: {
+      type: Object,
+      default: () => ({}),
+    },
+    eventBuildingBlocks: {
+      type: Array,
+      default: () => [],
+    },
   },
   data: () => ({
     categoryBuildingBlocks: [],
@@ -75,8 +73,6 @@ export default {
     selectedItems: [],
     selectedItemsRequests: [],
   }),
-
-  created() {},
   mounted() {
     this.getCategoryBlocks();
   },
@@ -100,7 +96,6 @@ export default {
 
           this.categoryBuildingBlocks = res;
           this.filteredEventBlocks = this.categoryBuildingBlocks;
-          console.log("filteredEventBlocks => ", this.filteredEventBlocks);
         })
         .catch((error) => {
           console.log("Error ", error);
@@ -175,26 +170,28 @@ export default {
       return _.findWhere(this.eventBuildingBlocks, { title: item.title });
     },
   },
-  computed: {},
-  watch: {},
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .md-datepicker {
   .md-icon.md-date-icon {
     display: none;
+
     & ~ label {
       left: 0;
     }
   }
+
   input {
     margin-left: 0 !important;
   }
+
   &.md-field::before,
   &.md-field::after {
     width: 100%;
   }
 }
+
 .md-field > .md-icon ~ .md-input {
   margin: 0;
 }
@@ -204,6 +201,7 @@ export default {
   max-height: 50vh;
   justify-content: center;
 }
+
 .md-title {
   display: flex;
   align-items: center;

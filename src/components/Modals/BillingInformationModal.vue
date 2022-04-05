@@ -50,28 +50,31 @@
         <div class="signature-editor type" v-show="step === 1">
           <billing-info ref="billingInfo"/>
         </div>
-        <div  v-show="step === 2" class="md-layout-item md-size-100 body-header mb-1">
+        <div v-show="step === 2" class="md-layout-item md-size-100 body-header mb-1">
           <div>
             <img class="shield-icon" :src="`/static/icons/shield.svg`">
             <span class="authentication-header">User Authentication</span>
           </div>
         </div>
         <div class="signature-editor type" v-show="step === 2">
-          <auth-info part="1"/>
+          <auth-info ref="authInfo1" part="1"/>
         </div>
         <div class="signature-editor type" style="margin-top: 20px; min-height: unset" v-show="step === 2">
-          <auth-info part="2"/>
+          <auth-info ref="authInfo2" part="2"/>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <div v-if="step>0" @click="step = step-1">
-        Back to previous step
-      </div>
-      <div class="sign-here">
-        <md-button class="md-vendor" @click="save">
-          {{ buttonText }}
-        </md-button>
+      <div class="footer">
+        <div>
+          <md-button class="md-vendor" @click="save">
+            {{ buttonText }}
+          </md-button>
+        </div>
+        <div v-if="step>0" class="go-back" @click="step = step-1">
+          <i class="material-icons-outlined location-icon mr-10">keyboard_backspace</i>
+          <span>Back to previous step</span>
+        </div>
       </div>
     </template>
   </Modal>
@@ -112,13 +115,13 @@ export default {
     buttonText() {
       switch (this.step) {
         case 0: {
-          return "confirmation";
+          return "CONFIRMATION";
         }
         case 1: {
-          return "next";
+          return "NEXT";
         }
         case 2: {
-          return "finish";
+          return "FINISH";
         }
       }
       return "";
@@ -127,7 +130,7 @@ export default {
       return {
         header: "padding: 0",
         body: "background-color: #f3f7fd;",
-        footer: "background-color: #f3f7fd"
+        footer: "background-color: #f3f7fd;"
       };
     }
   },
@@ -147,6 +150,8 @@ export default {
           break;
         }
         case 2: {
+          this.$refs.authInfo1.saveBillingInfo();
+          this.$refs.authInfo2.saveBillingInfo();
           this.$emit("close-modal");
           break;
         }
@@ -301,46 +306,6 @@ export default {
       border: 1px solid #9f2488;
     }
   }
-
-  //.select-sign-type {
-  //  display: flex;
-  //
-  //  input {
-  //    display: none;
-  //  }
-  //
-  //  label {
-  //    width: 60px;
-  //    margin-left: 30px;
-  //    font-size: 20px;
-  //    font-family: "Manrope-regular";
-  //    position: relative;
-  //
-  //    &.selected::after {
-  //      content: " ";
-  //      position: absolute;
-  //      width: 60px;
-  //      bottom: -31px;
-  //      left: 0;
-  //      border-bottom: solid 2px #f51355;
-  //    }
-  //  }
-  //}
-
-  //.drop-zone {
-  //  min-height: 300px;
-  //  border: 1px solid #a0a0a0;
-  //  border-radius: 3px;
-  //}
-
-  //.block-separator {
-  //  margin: 30px -40px;
-  //  display: block;
-  //  width: 900px;
-  //  height: 1px;
-  //  border-bottom: #a0a0a0 solid 1px;
-  //}
-
   .signature-editor {
     text-align: center;
     width: 100%;
@@ -350,59 +315,28 @@ export default {
     border-radius: 3px;
     padding-top: 1px;
     position: relative;
-
-    //.signature-description {
-    //  font-family: 'Manrope-bold';
-    //  font-size: 16px;
-    //  font-weight: 800;
-    //  position: absolute;
-    //  top: 43%;
-    //  left: 37%;
-    //  color: #a0a0a0;
-    //}
-
-    //&.type {
-    //  display: flex;
-    //  align-items: center;
-    //  justify-content: center;
-    //
-    //  input {
-    //    border: none;
-    //    border-radius: unset;
-    //    border-bottom: 1px solid #a0a0a0;
-    //    width: 85%;
-    //    text-align: center;
-    //    font-size: 85px;
-    //  }
-    //}
-
-    //.sign-here {
-    //  border: dashed 1px #f51355;
-    //
-    //  img {
-    //    max-height: 300px;
-    //    object-fit: contain;
-    //  }
-    //}
   }
 }
+.footer {
+  align-items: center;
+  width: 100%;
+  margin: 0 37px;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row-reverse;
 
-//.sign-here {
-//  display: flex;
-//  justify-content: end;
-//  align-items: center;
-//}
+  .go-back {
+    display: flex;
+    color: #818080;
+    font-size: 15px;
+    cursor: pointer;
+  }
+}
 
 @media screen and (max-width: 970px) {
   .header {
     min-width: unset;
     max-width: unset;
   }
-  //.body {
-  //  .block-separator {
-  //    margin: 30px 0;
-  //    width: 100%;
-  //  }
-  //}
 }
 </style>

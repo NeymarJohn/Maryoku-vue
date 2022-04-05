@@ -136,11 +136,8 @@
   </div>
 </template>
 <script>
-import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
+import { VsaList, VsaItem, VsaHeading, VsaContent } from "vue-simple-accordion";
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
-import ProgressRadialBar from "./components/ProgressRadialBar";
-import RequirementTagItem from "./components/RequirementTagItem.vue";
-import _ from "underscore";
 
 export default {
   components: {
@@ -148,9 +145,6 @@ export default {
     VsaItem,
     VsaHeading,
     VsaContent,
-    VsaIcon,
-    ProgressRadialBar,
-    RequirementTagItem,
   },
   data() {
     return {

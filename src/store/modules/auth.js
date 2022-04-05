@@ -22,7 +22,6 @@ export default {
     logout({ commit }) {
       return new Promise(async (resolve) => {
         const res = await AuthService.logout();
-        console.log("logout.res", res);
         commit("logout");
         resolve();
       });
@@ -67,7 +66,6 @@ export default {
       state.user = null;
     },
     logout(state) {
-      console.log("commit.logout");
       state.status.loggedIn = false;
       state.user = null;
     },

@@ -3,18 +3,11 @@
     <vue-element-loading :active="isLoading" color="#FF547C" />
     <div class="uploading-wrapper">
       <md-button id="pick-avatar" class="maryoku-btn md-simple md-white">
-        <md-icon>edit</md-icon>Edit
+        <md-icon>edit</md-icon>
+        Edit
       </md-button>
     </div>
     <img :src="`${userAvatarUrl}?q=${Math.random()}`" style="margin: auto">
-    <!-- <input
-      style="display: none"
-      id="user-avatar-file"
-      name="user-avatar"
-      type="file"
-      multiple="multiple"
-      @change="onUserAvatarChange"
-    /> -->
     <avatar-cropper
       :upload-handler="uploadHandler"
       trigger="#pick-avatar"
@@ -37,7 +30,7 @@ export default {
   props: {
     user: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
   },
   data() {
@@ -50,14 +43,13 @@ export default {
     this.userAvatarUrl = this.user.avatar || `${this.$iconURL}Planner+Profile/woman+(2).svg`;
   },
   methods: {
-    handleUploaded() {},
+    handleUploaded() {
+    },
     handleUploading(event) {
       console.log(event);
     },
     uploadHandler(cropper) {
-      // console.log(cropper);
       const imageData = cropper.getCroppedCanvas().toDataURL("image/png");
-      console.log("ijmageIDatae", imageData);
       this.onUserAvatarChange(imageData);
     },
     onClickAvtar() {
@@ -69,7 +61,6 @@ export default {
       let imageUrl = `https://maryoku.s3.amazonaws.com/user/avatars/${this.user.id}.png`;
       this.isLoading = true;
       S3Service.fileUpload(fileObject, `${imageName}`, "user/avatars").then((res) => {
-        console.log(res);
         this.isLoading = false;
         this.userAvatarUrl = imageUrl;
         this.$emit("set", imageUrl);
@@ -85,16 +76,19 @@ export default {
 
   border-radius: 3px;
   border: dashed 1.5px #f51355;
+
   img {
     width: 100%;
     height: 100%;
   }
+
   .uploading-wrapper {
     display: none;
     background-color: rgba(0, 0, 0, 0.3);
     position: absolute;
     height: 100%;
     width: 100%;
+
     #pick-avatar {
       position: absolute;
       top: 50%;
@@ -102,6 +96,7 @@ export default {
       transform: translate(-50%, -50%);
     }
   }
+
   &:hover {
     .uploading-wrapper {
       display: block;

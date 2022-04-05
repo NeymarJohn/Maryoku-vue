@@ -74,7 +74,7 @@ const actions = {
       if (!vendor.hasOwnProperty("notAllowed")) Vue.set(vendor, "notAllowed", []);
       if (!vendor.hasOwnProperty("exDonts")) Vue.set(vendor, "exDonts", []);
       if (!vendor.pricingPolicies) Vue.set(vendor, "pricingPolicies", []);
-      if (!vendor.hasOwnProperty("discountPolicies")) Vue.set(vendor, "discountPolicies", []);
+      if (!vendor.discountPolicies) Vue.set(vendor, "discountPolicies", {});
       if (!vendor.guaranteed) Vue.set(vendor, "guaranteed", []);
       else {
         // check default policies and saved data on profile

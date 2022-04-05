@@ -81,9 +81,7 @@ import Loader from "@/components/loader/Loader.vue";
 export default {
   components: {
     SignupCard,
-    InputText,
     Loader,
-    MaryokuInput
   },
     data () {
         return {
