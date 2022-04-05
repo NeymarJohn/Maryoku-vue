@@ -82,7 +82,7 @@
                   </p>
                 </div>
               </div>
-              <md-divider />
+              <md-divider/>
               <p class="font-size-14 px-30 py-20 m-0" style="max-height: 200px">
                 Dear Rachel, Relish caterers & venues is pleased to provide you with the attached catering proposal for
                 your, which is currently scheduled to be held on  at. We understand that this is a very important
@@ -274,14 +274,40 @@
           v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied && checkedAllBundledOffers"
           class="bundle-section d-flex justify-content-between align-center"
         >
-          <div>
-            <span class="font-size-30 font-bold">Bundle offer</span>
-            <span>{{ proposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(proposal.bookedServices) }}</span>
+          <div class="font-size-22 bundle-description">
+            <span class="material-icons" style="font-size: 32px;">redeem</span>
+            <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
+            <span style="font-size: 30px; margin-left: 20px">{{ proposal.bundleDiscount.percentage }}%</span>
+            <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
-          <div class="font-size-30 font-bold">
-            -${{ bundledDiscountPrice | withComma }}
+          <div class="font-size-22 font-bold" style="text-align: end;">
+            ${{ (totalPrice - bundledDiscount)| withComma(Number) }}
+            <br/>
+            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ totalPrice| withComma(Number) }}</span>
           </div>
+        </div>
+        <div class="element-pricing-table total-list md-small-hide">
+          <table>
+            <tbody>
+              <tr>
+                <td colspan="3">
+                  <b class="font-size-22">Total</b>
+                  <div v-if="proposal.bundleDiscount.percentage" class="font-size-14">
+                    Before discount
+                  </div>
+                </td>
+                <td class="element-value">
+                  <div class="element-price">
+                    ${{ totalPriceWithDiscount * tax  | withComma }}
+                  </div>
+                  <div v-if="proposal.bundleDiscount.percentage" class="discount-details">
+                    ({{ discount.percentage }}% off)
+                    <span style="text-decoration: line-through; font-size: 14px">{{ totalPrice * tax | withComma }}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div v-if="isMobile" class="total-section p-30">
           <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
@@ -333,7 +359,7 @@
 
                 <img src="/static/img/nn1.webp" alt="">
               </div>
-              <div class="md-layout-item pl-0 md-size-5" />
+              <div class="md-layout-item pl-0 md-size-5"/>
               <div class="md-layout-item pl-0 md-size-40">
                 <div class="ml-10">
                   <h2 class="font-bold font-size-16">
@@ -825,16 +851,44 @@ export default {
     showCommentPanel(){
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
+
+    tax() {
+      if (!this.proposal.taxes) return { percentage: 0, price: 0 };
+      let tax = { ...this.proposal.taxes["total"] };
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
+      }
+      tax.price = Math.round(((tax.percentage || 0)) / 100);
+      return tax.percentage / 100 + 1;
+    },
+    totalPrice(){
+      let totalPrice = 0;
+      for (const key in this.proposal.pricesByCategory){
+        if (this.proposal.bookedServices.includes(key) )
+        totalPrice += this.proposal.pricesByCategory[key];
+      }
+      return totalPrice;
+    },
+    bundledDiscount(){
+      return this.totalPrice * this.proposal.bundleDiscount.percentage / 100;
+    },
+    totalPriceWithDiscount(){
+     const price = this.totalPrice - (this.totalPrice * this.discount.percentage / 100 );
+     if(this.proposal.bundleDiscount.isApplied && this.proposal.bundleDiscount && this.checkedAllBundledOffers){
+       return this.proposal.bundleDiscount.percentage ?
+         price - (price * this.proposal.bundleDiscount.percentage / 100):
+         price - this.proposal.bundleDiscount.total;
+     }
+     return price;
+    },
   },
   created() {
-    console.log('event.detail.proposal', this.proposal);
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
   mounted() {
 
     this.commentComponents = this.proposal.commentComponent;
   },
-
   methods: {
     ...mapMutations("eventPlan", ["updateCommentComponents"]),
     ...mapMutations("EventPlannerVuex", [
@@ -1000,6 +1054,159 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.element-pricing-table {
+  margin-top: 35px;
+  padding: 1.5em;
+  font-family: "Manrope-Regular", sans-serif;
+  border-radius: 3px;
+  &-header {
+    display: grid;
+    grid-template-columns: 30% 20% 20% 20% 10%;
+    font-weight: bold;
+    padding: 1em 0;
+  }
+  &-body {
+    &-row {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      border-top: 1px solid #ddd;
+      padding: 1.5em 0;
+    }
+    .options-list {
+      img {
+        position: absolute;
+      }
+    }
+    .option-row {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      padding: 1em 0;
+      &.border-top {
+        border-top: 1px solid #ddd;
+      }
+    }
+  }
+  &.elements-list {
+    background: #f7f7f7;
+    margin-bottom: -21px;
+
+    th,
+    td {
+      font-size: 16px;
+    }
+    th {
+      font-family: "Manrope-ExtraBold", sans-serif;
+      padding-bottom: 15px;
+    }
+
+    tr {
+      td {
+        font-weight: normal;
+        border-top: 1px solid #ddd;
+        padding: 21px 0;
+
+        &.element-actions {
+          .md-button {
+            visibility: hidden;
+          }
+        }
+      }
+
+      &:hover {
+        td {
+          font-weight: bold;
+
+          &.element-actions {
+            .md-button {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.taxes-list {
+    background: #ededed;
+    color: #818080;
+    padding: 0.6em 1.5em;
+    border-top: 1px solid;
+    tr {
+      &:first-child {
+        td {
+          border-bottom: 1px solid;
+        }
+      }
+      td {
+        .taxes-title {
+          display: inline-block;
+          width: 90px;
+        }
+        .taxes-percentage {
+          margin-left: 1em;
+        }
+
+        &.element-actions {
+          .md-button {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
+
+  &.total-list {
+    background: #404040;
+    color: #fff;
+    margin-bottom: 3em;
+
+    td {
+      .discount-details {
+        color: #fff !important;
+      }
+      small {
+        display: block;
+      }
+      &.element-actions {
+        .md-button {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      text-align: left;
+    }
+
+    td,
+    th {
+      &:nth-last-child(2):not(:first-child),
+      &:nth-last-child(3):not(:first-child),
+      &:nth-last-child(4):not(:first-child) {
+        width: 150px;
+        text-align: center;
+      }
+      .md-button {
+        img {
+          width: 15px;
+        }
+      }
+
+      &.element-actions {
+        width: 20px;
+      }
+
+      &.element-value {
+        text-align: right !important;
+        padding-right: 44px;
+      }
+    }
+  }
+}
 .md-layout,
 .md-layout-item {
   width: initial;
@@ -1422,10 +1629,23 @@ export default {
       }
 
       .bundle-section {
-        padding: 40px 60px;
+        padding: 28px 60px 28px 25px;
         background-color: #ffedb7;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         border-radius: 3px;
+        border: solid 1px #c1c0c0;
+        .bundle-description{
+          display: flex;
+          align-items: center;
+          .bundle-title{
+            margin: 10px;
+            min-width: max-content;
+          }
+          .bundle-services{
+            font-size: 16px;
+            padding: 0 20px;
+          }
+        }
       }
       .policy-section {
         margin-top: 4em;

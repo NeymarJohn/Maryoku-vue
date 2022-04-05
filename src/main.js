@@ -76,7 +76,7 @@ Vue.use(VueScrollTo);
 Vue.use(VueYoutube);
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
-Vue.use(VueFullscreen);
+Vue.use(VueFullscreen)
 Vue.use(VueTimeago, {
   name: "Timeago", // Component name, `Timeago` by default
   locale: "en", // Default locale

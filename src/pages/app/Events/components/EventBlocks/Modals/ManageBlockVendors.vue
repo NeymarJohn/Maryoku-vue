@@ -1,6 +1,6 @@
 <template>
   <div class="adding-building-blocks-panel">
-    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" is-full-screen />
+    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" />
     <div class="md-layout" style="max-height: 50vh">
       <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
         <h4 class="md-title">
@@ -88,8 +88,14 @@ export default {
   },
   mixins: [paginationMixins],
   props: {
-    event: Object,
-    selectedBlock: Object,
+    event: {
+      type: Object,
+      default: () => {}
+    },
+    selectedBlock: {
+      type: Object,
+      default: () => {}
+    },
   },
   data: () => ({
     // auth: auth,
@@ -204,9 +210,6 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-
-          console.log("EventComponentVendor error =>", error);
-
           this.$notify({
             message: "Error while trying to add vendor, try again!",
             horizontalAlign: "center",
@@ -241,9 +244,6 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-
-          console.log("EventComponentVendor error =>", error);
-
           this.$notify({
             message: "Error while trying to delete vendor, try again!",
             horizontalAlign: "center",

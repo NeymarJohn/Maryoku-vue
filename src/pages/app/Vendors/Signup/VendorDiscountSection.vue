@@ -44,7 +44,8 @@ export default {
   components,
   props: {
     data: {
-        type: Object,
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -74,7 +75,6 @@ export default {
           this.$emit("save", this.discountData);
       },
       changeDiscountItem(index, {type, value}) {
-        console.log('change.item', index, type, value);
         if (type === "update") {
             this.discountData[this.tab][index] = value;
         } else if (type === "remove") {

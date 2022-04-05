@@ -78,29 +78,12 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-
-import { SlideYDownTransition } from "vue2-transitions";
-import InputMask from "vue-input-mask";
-import VueElementLoading from "vue-element-loading";
 import draggable from "vuedraggable";
-import { Drag, Drop } from "vue-drag-drop";
-import { SideBar, SidebarItem } from "@/components";
-import EventBlocks from "../components/NewEventBlocks";
-import EventNotePanel from "../components/EventNotePanel";
 
 export default {
 	name: "ProgressSidebar",
 	components: {
-		VueElementLoading,
-		EventBlocks,
 		draggable,
-		Drag,
-		Drop,
-		SlideYDownTransition,
-		InputMask,
-		SideBar,
-		SidebarItem,
-		EventNotePanel,
 	},
 	props: {
 		elements: {
@@ -109,6 +92,7 @@ export default {
 		},
 		event: {
 			type: Object,
+			default: null,
 		},
 		page: {
 			type: String,
@@ -131,6 +115,11 @@ export default {
 			return value ? value.length : 0;
 		},
 	},
+	watch: {
+		$route: "fetchUrl",
+		currentUrl(newVal) {},
+		elements(newValue) {},
+	},
 	created() {
 		this.fetchUrl();
 		this.event = this.$store.state.event.eventData;
@@ -138,7 +127,10 @@ export default {
 		setTimeout((_) => {
 			this.renderProgress();
 		}, 50);
-		console.log(">>>>", this.event);
+	},
+	updated() {
+		this.localElements = this.elements;
+		this.renderProgress();
 	},
 	methods: {
 		...mapActions("event", ["getEventAction"]),
@@ -167,16 +159,8 @@ export default {
 			});
 		},
 	},
-	watch: {
-		$route: "fetchUrl",
-		currentUrl(newVal) {},
-		elements(newValue) {},
-	},
-	updated() {
-		this.localElements = this.elements;
-		this.renderProgress();
-	},
-	mounted() {},
+
+
 };
 </script>
 <style lang="scss"></style>
