@@ -93,7 +93,7 @@ export default {
     &:first-child {
       top: 70px;
       left: 30px;
-      z-index: 15;
+      z-index: 10;
       .image-section {
         width: calc(234px - 50px);
         height: calc(234px - 50px);
@@ -102,7 +102,7 @@ export default {
     &:nth-child(2) {
       top: 172px;
       left: 168px;
-      z-index: 14;
+      z-index: 9;
       .image-section {
         width: calc(320.8px - 50px);
         height: calc(198px - 50px);
@@ -111,7 +111,7 @@ export default {
     &:nth-child(3) {
       top: 69px;
       left: 342px;
-      z-index: 13;
+      z-index: 8;
       .image-section {
         width: calc(311px - 50px);
         height: calc(236px - 50px);
@@ -120,7 +120,7 @@ export default {
     &:nth-child(4) {
       top: 94px;
       left: 583px;
-      z-index: 12;
+      z-index: 7;
       .image-section {
         width: calc(242px - 50px);
         height: calc(280px - 50px);
@@ -129,7 +129,7 @@ export default {
     &:nth-child(5) {
       top: 45px;
       left: 720px;
-      z-index: 11;
+      z-index: 6;
       .image-section {
         width: calc(287.6px - 50px);
         height: calc(202px - 50px);
