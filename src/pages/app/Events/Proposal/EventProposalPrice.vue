@@ -83,7 +83,7 @@
                   </div>
                 </div>
                 <template v-else>
-                  <div :key="`cost-service-${index}`" class="element-pricing-table-body-row">
+                  <div class="element-pricing-table-body-row">
                     <div>
                       <span class="font-bold">{{ service.requirementTitle }}</span> <br>
                       <span class="font-size-14">Please Choose:</span>
@@ -92,7 +92,7 @@
                     <div />
                     <div />
                   </div>
-                  <div :key="`cost-service-${index}`" class="options-list">
+                  <div class="options-list">
                     <img :src="`${$iconURL}common/enter-gray.svg`">
                     <div
                       v-for="(option, optionIndex) in [
@@ -287,7 +287,7 @@
           </template>
           <template slot="content">
             <div class="px-30 py-10">
-              <div v-for="item in includedServices" :key="item.requirementTitle" class="align-center included-service-item">
+              <div v-for="item in includedServices" class="align-center included-service-item">
                 <div class="d-flex align-center py-10">
                   <img :src="`${$iconURL}Submit%20Proposal/Group 4781.svg`" width="20px" class="mr-10">
                   {{ item.requirementTitle }}
@@ -353,7 +353,6 @@ export default {
     },
     className: {
       type: String,
-      default: ""
     },
   },
   data() {
@@ -367,7 +366,50 @@ export default {
       attachedFiles: [],
     };
   },
+  created() {
+    this.extraServices = this.proposalData.extraServices[this.serviceCategory]
+      ? this.proposalData.extraServices[this.serviceCategory].filter(item => !item.hideOnProposal)
+      : [];
+  },
+  methods: {
+    changeAlternatvies(serviceIndex, alternativeIndex) {
+      this.$emit("changeBookedServices", { serviceCategory: this.serviceCategory });
+    },
+    addExtraService(extraService) {
+      const itemIndex = this.extraServices.findIndex(item => item.requirementTitle === extraService.requirementTitle);
+      if (itemIndex >= 0) {
+        this.$set(this.extraServices[itemIndex], "added", true);
+        extraService.isExtra = true;
+        this.costServices.push(extraService);
+      }
+      this.extraServices = [...this.extraServices];
 
+      this.$emit("changeAddedServices", {
+        category: this.serviceCategory,
+        costServices: this.costServices,
+        extraServices: this.extraServices,
+      });
+      this.$forceUpdate();
+    },
+    removeService(extraService) {
+      const itemIndex = this.extraServices.findIndex(item => item.requirementTitle === extraService.requirementTitle);
+      const addedIndex = this.costServices.findIndex(item => item.requirementTitle === extraService.requirementTitle);
+      if (itemIndex >= 0) {
+        this.$set(this.extraServices[itemIndex], "added", false);
+        this.costServices.splice(addedIndex, 1);
+      }
+      this.extraServices = [...this.extraServices];
+      this.$emit("changeAddedServices", {
+        category: this.serviceCategory,
+        costServices: this.costServices,
+        extraServices: this.extraServices,
+      });
+      this.$forceUpdate();
+    },
+    changeBookService() {
+      this.$emit("changeBookedServices", { serviceCategory: this.serviceCategory });
+    },
+  },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
     ...mapGetters({
@@ -462,51 +504,6 @@ export default {
       return this.extraServices.filter(item => item.price);
     },
   },
-  created() {
-    this.extraServices = this.proposalData.extraServices[this.serviceCategory]
-      ? this.proposalData.extraServices[this.serviceCategory].filter(item => !item.hideOnProposal)
-      : [];
-  },
-  methods: {
-    changeAlternatvies(serviceIndex, alternativeIndex) {
-      this.$emit("changeBookedServices", { serviceCategory: this.serviceCategory });
-    },
-    addExtraService(extraService) {
-      const itemIndex = this.extraServices.findIndex(item => item.requirementTitle === extraService.requirementTitle);
-      if (itemIndex >= 0) {
-        this.$set(this.extraServices[itemIndex], "added", true);
-        extraService.isExtra = true;
-        this.costServices.push(extraService);
-      }
-      this.extraServices = [...this.extraServices];
-
-      this.$emit("changeAddedServices", {
-        category: this.serviceCategory,
-        costServices: this.costServices,
-        extraServices: this.extraServices,
-      });
-      this.$forceUpdate();
-    },
-    removeService(extraService) {
-      const itemIndex = this.extraServices.findIndex(item => item.requirementTitle === extraService.requirementTitle);
-      const addedIndex = this.costServices.findIndex(item => item.requirementTitle === extraService.requirementTitle);
-      if (itemIndex >= 0) {
-        this.$set(this.extraServices[itemIndex], "added", false);
-        this.costServices.splice(addedIndex, 1);
-      }
-      this.extraServices = [...this.extraServices];
-      this.$emit("changeAddedServices", {
-        category: this.serviceCategory,
-        costServices: this.costServices,
-        extraServices: this.extraServices,
-      });
-      this.$forceUpdate();
-    },
-    changeBookService() {
-      this.$emit("changeBookedServices", { serviceCategory: this.serviceCategory });
-    },
-  },
-
 };
 </script>
 <style lang="scss" scoped>

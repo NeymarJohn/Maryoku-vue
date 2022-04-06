@@ -24,18 +24,9 @@
 export default {
   name: "YearSelect",
   props: {
-    width: {
-      type: String,
-      default: ""
-    },
-    data: {
-      type: Array,
-      default: () => []
-    },
-    initialValue: {
-      type: [String, Number],
-      default: ""
-    },
+    width: String,
+    data: Array,
+    initialValue: String | Number,
   },
   data () {
     return {

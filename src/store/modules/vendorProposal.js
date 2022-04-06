@@ -359,6 +359,7 @@ const actions = {
         .params({ email })
         .get()
         .then((customer) => {
+          console.log("customer", customer);
           if (customer) {
             commit("setCustomer", customer[0]);
             resolve(customer[0]);
@@ -475,6 +476,7 @@ const actions = {
         new Proposal({ id: state.id })
       );
       let res = await query.save();
+      console.log("res", res);
       let idx = state.versions.findIndex((v) => v.id === res.id);
       if (idx === -1) {
         commit("setVersions", [...state.versions, res]);
@@ -499,6 +501,7 @@ const actions = {
     return new Promise(async (resolve) => {
       let query = new Vendor(vendor);
       let res = await query.save();
+      console.log("saveVEndor", res);
       commit("setVendor", res);
       resolve(res);
     });

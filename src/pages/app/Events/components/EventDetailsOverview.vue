@@ -59,18 +59,22 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
 
 import moment from "moment";
 import Swal from "sweetalert2";
+import { MaryokuInput } from "@/components";
+import VueElementLoading from "vue-element-loading";
+import { FunctionalCalendar } from "vue-functional-calendar";
+import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
 import {CommentMixins, ShareMixins} from "@/mixins";
+import Multiselect from "vue-multiselect";
 import EventOverviewSection from "./EventOverviewSection";
 import EventOverviewDate from "./EventOverviewDate";
 import Calendar from "@/models/Calendar";
-
 export default {
   name: "EventOverview",
   components: {
@@ -116,34 +120,11 @@ export default {
     };
   },
   watch: {
-    event() {
+    event(newVal, oldVal) {
       this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
     },
     eventTypeList(newVal) {
       this.init();
-    },
-  },
-  computed: {
-    ...mapGetters({
-      eventTypeList: "event/getEventTypesList",
-    }),
-    getFormattedDate() {
-      if (!this.event) return "";
-      return moment(new Date(this.event.dateCreated)).format("DD MMM YYYY");
-    },
-    // check permission
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit;
-      } catch (e) {
-        return "edit";
-      }
-    },
-    canComment() {
-      return this.permission === "edit" || this.permission === "comment";
-    },
-    canEdit() {
-      return this.permission === "edit";
     },
   },
   mounted() {
@@ -156,6 +137,7 @@ export default {
 
     let event = this.$store.state.event.eventData; // Fetch event from store
     this.event = JSON.parse(JSON.stringify(event));
+    console.log("event", event);
     this.init();
   },
   methods: {
@@ -310,6 +292,29 @@ export default {
         this.isLoading = false;
         this.setSection();
       }
+    },
+  },
+  computed: {
+    ...mapGetters({
+      eventTypeList: "event/getEventTypesList",
+    }),
+    getFormattedDate() {
+      if (!this.event) return "";
+      return moment(new Date(this.event.dateCreated)).format("DD MMM YYYY");
+    },
+    // check permission
+    permission() {
+      try {
+        return this.$store.state.event.eventData.permit;
+      } catch (e) {
+        return "edit";
+      }
+    },
+    canComment() {
+      return this.permission === "edit" || this.permission === "comment";
+    },
+    canEdit() {
+      return this.permission === "edit";
     },
   },
 };

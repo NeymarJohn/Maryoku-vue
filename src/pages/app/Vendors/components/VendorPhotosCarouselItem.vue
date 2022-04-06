@@ -36,10 +36,13 @@
   </div>
 </template>
 <script>
+import carousel from "vue-owl-carousel";
 import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
-
 export default {
+  components: {
+    carousel,
+  },
   props: {
     defaultPhoto: {
       type: [Object, String],
@@ -72,6 +75,7 @@ export default {
   methods: {
     async onFileChange(event) {
       if (!event.target.files[0]) return;
+      console.log(event.target.files[0].size);
       if (event.target.files[0].size > 1024 * 1024 * 5) {
         Swal.fire({
           title: `The size of file that you selected is ${Math.floor(
@@ -109,24 +113,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .photo-inpirational-item {
-  width: 340px;
+  width: 100%;
   min-height: 250px;
   min-width: 340px;
+  width: 340px;
   margin-right: 20px;
   display: inline-block;
   overflow: hidden;
-
   .empty-item {
     border: dashed #f51355 1px;
     width: 100%;
     height: 220px;
     position: relative;
   }
-
   .active-item {
     width: 100%;
     height: 220px;
-
     .remove-btn {
       background-color: white !important;
       width: 48px;
@@ -136,7 +138,6 @@ export default {
       right: 15px;
       top: 15px;
     }
-
     .photo-image {
       height: 100%;
       width: 100%;
@@ -145,7 +146,6 @@ export default {
       cursor: pointer;
     }
   }
-
   .photo-caption {
     margin-top: 10px;
     white-space: normal;

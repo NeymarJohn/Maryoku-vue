@@ -340,7 +340,7 @@ export const ServiceCards = [
     },
     {
       seqNo: "1/1",
-      name: "Photography  Style",
+      name: "Photography  Videography",
       serviceCategory: "videographyandphotography",
       images: [
         "Photography+_+Videography/Black_White.jpg",
@@ -427,7 +427,7 @@ export const ServiceCards = [
     },
     {
       seqNo: "1/1",
-      name: "Swag Type",
+      name: "Giveaways",
       serviceCategory: "giveaways",
       images: [
         "Giveaways/Apparel.png",
@@ -512,7 +512,7 @@ export const ServiceCards = [
     },
     {
       seqNo: "1/1",
-      name: "Staff",
+      name: "Guest Serivces & Staffing",
       serviceCategory: "administration",
       images: [
         "Staff/Concierge.png",
@@ -534,91 +534,42 @@ export const ServiceCards = [
       ],
       icon: "NewRequirements/Group 18026.svg"
     },
-     {
-      seqNo: "1/1",
-      name: "Transportation",
-      serviceCategory: "transportation",
-      images: [
-        "Transportation/Air Services.png",
-        "Transportation/ATV.png",
-        "Transportation/Bicycle.png",
-        "Transportation/Boat.png",
-        "Transportation/Bus.png",
-        "Transportation/Ferry.png",
-        "Transportation/Gold Carts.png",
-        "Transportation/Private Black Car.jpg",
-        "Transportation/Van.png",
-      ],
-      imageTitles: [
-        "Air Services",
-        "ATV",
-        "Bicycle",
-        "Boat",
-        "Bus",
-        "Ferry",
-        "Gold Carts",
-        "Private Black Car",
-        "Van",
-      ],
-      icon: "NewRequirements/Group 18016.svg",
-    },
+    //  {
+    //   seqNo: "1/1",
+    //   name: "Transportation",
+    //   serviceCategory: "transportation",
+    //   images: [
+    //     "Transportation/Air Services.png",
+    //     "Transportation/ATV.png",
+    //     "Transportation/Bicycle.png",
+    //     "Transportation/Boat.png",
+    //     "Transportation/Bus.png",
+    //     "Transportation/Ferry.png",
+    //     "Transportation/Gold Carts.png",
+    //     "Transportation/Private Black Car.jpg",
+    //     "Transportation/Van.png",
+    //   ],
+    //   imageTitles: [
+    //     "Air Services",
+    //     "ATV",
+    //     "Bicycle",
+    //     "Boat",
+    //     "Bus",
+    //     "Ferry",
+    //     "Gold Carts",
+    //     "Private Black Car",
+    //     "Van",
+    //   ],
+    //   icon: "NewRequirements/Group 18016.svg",
+    // },
     {
       seqNo: "1/1",
-      name: "Equipment",
+      name: "Equipment Rentals",
       serviceCategory: "equipmentrentals",
       images: ["Rentals/Furniture.jpg", "Rentals/Tech Equpiment.jpg", "Rentals/Tent.jpg"],
       imageTitles: ["Furniture", "Tech Equipment", "Tent"],
       icon: "NewRequirements/Group 18016.svg"
-    },
-    {
-      seqNo: "1/1",
-      name: "Security",
-      serviceCategory: "securityservices",
-      images: [
-          "Security/Day-of Security.jpg",
-          "Security/Perimeter Security.jpg",
-          "Security/Personal Security.jpg",
-          "Security/Risk Assessment.jpg",
-          "Security/Security Consultation.jpg",
-          "Security/VIP Security.jpg",
-
-      ],
-      imageTitles: [
-          "Day-of Security",
-          "Perimeter Security",
-          "Personal Security",
-          "Risk Assessment",
-          "Security Consultation",
-          "VIP Security"
-      ],
-      icon: "securityservices.svg"
-    },
-    {
-      seqNo: "1/1",
-      name: "Printing Styles",
-      serviceCategory: "signageprinting",
-      images: [
-          "Signage and Printing/Digital Printing.jpg",
-          "Signage and Printing/Screen Printing.jpg",
-          "Signage and Printing/Flexography Printing.jpg",
-          "Signage and Printing/Litho Printing.jpg",
-          "Signage and Printing/Transfer Printing.jpg",
-          "Signage and Printing/Engraving.jpg",
-          "Signage and Printing/Embossing.jpg",
-          "Signage and Printing/Embroider Printing.jpg",
-      ],
-      imageTitles: [
-          "Digital Printing",
-          "Screen Printing",
-          "Flexography Printing",
-          "Litho Printing",
-          "Transfer Printing",
-          "Engraving",
-          "Embossing",
-          "Embroider Printing",
-      ],
-      icon: "NewRequirements/Group 18016.svg",
-    },
+    }
   ]
 ];
 

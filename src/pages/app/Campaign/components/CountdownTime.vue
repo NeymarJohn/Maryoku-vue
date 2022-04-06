@@ -54,7 +54,7 @@ export default {
   props: {
     event: {
       type: Object,
-      default: () => ({}),
+      default: {},
     },
   },
   data() {
@@ -83,6 +83,7 @@ export default {
       }
     },
     fontColor() {
+      console.log(this.getBackColor);
       return oppositeColor(this.getBackColor);
     },
   },
@@ -105,7 +106,6 @@ export default {
 <style lang="scss" scoped>
 .countdown-time {
   width: max-content;
-
   &-item {
     width: 118px;
     height: 161px;
@@ -113,15 +113,12 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
     margin-right: 28px;
-
     &:last-child {
       margin-right: 0px;
     }
-
     display: flex;
     flex-direction: column;
   }
-
   &-value {
     width: 100%;
     text-align: center;
@@ -129,7 +126,6 @@ export default {
     font-size: 40px;
     font-family: "Manrope-ExtraBold";
   }
-
   &-label {
     width: 100%;
     text-align: center;

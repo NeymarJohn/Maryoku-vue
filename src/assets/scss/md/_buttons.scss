@@ -22,9 +22,7 @@
         text-transform: unset!important;
     }
 
-  &:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle):not(.choose-file-button) .md-ripple{
-    width: fit-content;
-    height: fit-content;
+  &:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle) .md-ripple{
     padding: 12px 30px;
   }
 
@@ -398,20 +396,7 @@
 
 .md-outlined {
   border: solid 1px #F51355;
-  &.md-vendor{
-    border: solid 1px #641856;
-  }
   &.md-black {
     border: solid 1px #050505;
-  }
-  &.md-black-middle {
-    border: solid 1px #707070;
-  }
-
-  // custom bg
-  &.purple-bg {
-      .md-ripple{
-          background: #e9dfe8;
-      }
   }
 }

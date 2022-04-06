@@ -12,6 +12,7 @@ const mutations = {
     const categoriesMap = categories.reduce((m, item) => {
       return { ...m, [item.key]: item };
     }, {});
+    console.log("categoriesMap", categoriesMap);
     state.serviceCategoriesMap = categoriesMap;
   },
   setCampanies: (state, companies) => {

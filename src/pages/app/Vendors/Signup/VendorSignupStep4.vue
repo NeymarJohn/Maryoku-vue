@@ -383,6 +383,8 @@
 </template>
 
 <script>
+import moment from "moment";
+import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import carousel from "vue-owl-carousel";
@@ -612,7 +614,6 @@ export default {
     },
   },
   mounted() {
-    console.log('vendor', this.vendor);
     if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
       this.vendor.images.forEach(item => {
         this.medias.push({

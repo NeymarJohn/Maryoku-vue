@@ -1,33 +1,22 @@
 <template>
   <div class="feedback-campaign">
     <div class="p-50">
+      <!--      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>-->
       <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">
         Create Feedback Campaign
       </div>
+      <!--      <hr />-->
       <div class="wrapper-change-cover">
-        <img v-if="campaignCoverImage" :src="campaignCoverImage" class="change-cover mr-10">
-        <concept-image-block
-          v-else-if="concept"
-          class="ml-50 hidden"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
-        />
-        <div v-if="concept" class="change-cover-feedback">
-          <input
-            id="change-feedback-cover-image"
-            type="file"
-            style="display: none;"
-            @change="onFileChangeCoverImage"
-          />
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
+        <div class="change-cover-feedback">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
           </md-button>
         </div>
         <div class="view-event-photos">
           <div class="wrapper-icon-play">
-            <img class="icon-play" src="static/icons/play-black.svg">
+            <img class="icon-play" src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/9b892cf0-5507-4cdb-9828-1d10baa61381.svg">
           </div>
           <div class="wrapper-btn-switch">
             <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
@@ -55,8 +44,8 @@
         <div class="footer-change-cover">
           <feedback-logo
             v-model="campaignData.visibleSettings.showLogo"
-            :logo-url="campaignLogoUrl"
-            :logo-title="campaignTitle"
+            :logo-url="campaignData.logoUrl"
+            :logo-title="campaignData.title"
           />
         </div>
       </div>
@@ -73,9 +62,13 @@
             class="disco-party"
             @change="handleChangeData('sectionReview', 'description', ...arguments)"
           />
+          <div class="font-size-22 line-height-1">
+            {{ campaignData.name }}
+          </div>
+          <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
       </div>
-      <maryoku-textarea v-model="campaignDescription" :placeholder="placeHolder" />
+      <maryoku-textarea v-model="campaignData.description" :placeholder="placeHolder" />
     </div>
     <div class="feedback-campaign-list p-50">
       <div>
@@ -133,46 +126,20 @@
             class="font-size-30 font-bold line-height-1 pt-20"
             @change="handleChangeData('sectionEventPhotos', 'title', ...arguments)"
           />
-          <span class="Include-photos-details-of-the-event mt-10">
+          <span class="Include-photos-details-of-the-event">
             (See photos and details about the event)
           </span>
         </div>
       </div>
       <feedback-image-carousel
-        v-if="campaignImages.length"
         class="p-10"
         :items="2.5"
         :margin-items="10"
-        :images="campaignImages"
+        :images="campaignData.images"
         :show-upload-file="true"
         :show-images-details="true"
         @addImage="addNewImage"
       />
-      <div v-else class="feedback-campaign-drop-zone-upload-images" >
-        <div class="wrapper-drop-zone">
-          <vue-dropzone
-            id="dropzone"
-            ref="myVueDropzone"
-            :options="dropzoneOptions"
-            :use-custom-slot="true"
-            class="file-drop-zone upload-section text-center drop feedback-drop-zone"
-            @vdropzone-file-added="uploadFileDropZone"
-          >
-            <md-button class="choose-file-button">
-              <img src="/static/icons/red-clip.svg">
-              <div class="ml-10">
-                Choose File
-              </div>
-            </md-button>
-            <div class="font-size-14">
-              Or
-            </div>
-            <div class="drag-your-file-text">
-              Drag your file here
-            </div>
-          </vue-dropzone>
-        </div>
-      </div>
     </div>
     <div class="green-block-wrapper">
       <div class="p-50 d-flex">
@@ -217,16 +184,13 @@ import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
 import SharingButtonGroup from "./components/SharingButtonGroup";
 import FeedbackQuestion from "./components/FeedbackQuestion";
+import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
 import { mapActions } from "vuex";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
-import vue2Dropzone from "vue2-dropzone";
-import S3Service from "@/services/s3.service";
-import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
@@ -235,11 +199,10 @@ export default {
     FeedbackImageCarousel,
     SharingButtonGroup,
     FeedbackQuestion,
+    TitleEditor,
     HideSwitch,
     FeedbackUploadFilesModal,
     CustomTitleEditor,
-    vueDropzone: vue2Dropzone,
-    ConceptImageBlock,
   },
   props: {
     info: {
@@ -251,7 +214,6 @@ export default {
     return {
       placeHolder: "",
       originalContent: {},
-      concept: {},
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
@@ -261,15 +223,7 @@ export default {
       showModalWindowOpen : false,
       feedbackTitle : "",
       feedbackSubTitle : "",
-      feedbackSliderTitle : "",
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        maxFilesize: 25,
-        createImageThumbnails: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*",
-        headers: { "My-Awesome-Header": "header value" },
-      },
+      feedbackSliderTitle : ""
     };
   },
   computed: {
@@ -277,31 +231,14 @@ export default {
       return this.$store.state.event.eventData;
     },
     campaignData() {
-      return this.$store.state.campaign.FEEDBACK || {};
-    },
-    campaignImages() {
-      return this.campaignData.images || [];
-    },
-    campaignCoverImage() {
-      return this.campaignData.coverImage || "";
-    },
-    campaignLogoUrl() {
-      return this.campaignData.logoUrl || "";
+        console.log("this.$store.state.campaign.FEEDBACK", this.$store.state.campaign.FEEDBACK);
+      return this.$store.state.campaign.FEEDBACK;
     },
     campaignTitle() {
       return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
     },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.FEEDBACK.description || "";
-      },
-      set(newDescription) {
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "description", value: newDescription });
-      }
-    },
     additionalData() {
-      const campaignAdditionalData = this.campaignData.additionalData || {};
-      return {
+      const defaultAdditionalData = {
         sectionReview: {
           title: "THANKS FOR PARTICIPATING!",
           description: "80’s Disco Party",
@@ -309,8 +246,11 @@ export default {
         sectionEventPhotos: {
           title: "EVENT PHOTOS – RELIVE THE BEST MOMENTS",
           description: "",
-        },
-        ...campaignAdditionalData,
+        }
+      };
+      return {
+        ...defaultAdditionalData,
+        ...(this.campaignData.additionalData || {})
       };
     },
   },
@@ -320,7 +260,6 @@ export default {
       Your feedback is important to help us understand what worked especially well, on top of
       anything you feel could be improved in the future.
     `;
-    this.concept = this.event.concept;
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
@@ -353,13 +292,6 @@ export default {
       key: "feedbackQuestions",
       value: this.feedbackQuestions,
     });
-    if (!this.campaignData.additionalData) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "additionalData",
-        value: this.additionalData,
-      });
-    }
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
@@ -382,15 +314,6 @@ export default {
       const images = this.campaignData.images;
       images.unshift({ src: image.imageString });
       this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
-    },
-    async uploadFileDropZone(file) {
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((src) => {
-        const images = this.campaignImages;
-        images.unshift({ src });
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
-      });
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
@@ -438,23 +361,7 @@ export default {
         key: "attachments",
         value: files
       });
-    },
-    handleChangeCoverImage() {
-      document.getElementById("change-feedback-cover-image").click();
-    },
-    onFileChangeCoverImage(event) {
-      const file = event.target.files[0];
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((coverImage) => {
-        this.$store.commit("campaign/setAttribute", {
-          name: "FEEDBACK",
-          key: "coverImage",
-          value: coverImage,
-        });
-        this.saveCampaign({ id: this.campaignData.id, coverImage });
-      });
-    },
+    }
   },
 };
 </script>
@@ -488,7 +395,6 @@ export default {
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-    z-index: 13;
 
     .wrapper-icon-play {
       width: 40%;
@@ -581,7 +487,6 @@ export default {
   position: absolute;
   top: 25%;
   left: 40%;
-  z-index: 12;
 }
 .green-block-wrapper{
   background-color: rgba(87, 242, 195, 0.23);
@@ -656,49 +561,7 @@ export default {
       z-index: 1;
     }
   }
-}
-.feedback-campaign-drop-zone-upload-images {
-  width: auto;
-  height: 320px;
-  margin: 0 auto;
-  background-color: #f3f7fd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
-  .wrapper-drop-zone {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    border: 1px dashed #818080;
-
-    .feedback-drop-zone {
-      border: none;
-      height: 100%;
-      background-color: #fff;
-
-      .choose-file-button{
-        background-color: #fff!important;
-        width: 148px;
-        height: 32px;
-        border: solid 2px #f51355;
-        color: #f51355!important;
-        font-size: 14px;
-        font-weight: 800;
-      }
-
-      .drag-your-file-text{
-        font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: center;
-        color: #818080;
-      }
-    }
-  }
 }
 .add-new-question-block{
     height: 172px;

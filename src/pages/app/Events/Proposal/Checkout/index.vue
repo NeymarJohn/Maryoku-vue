@@ -244,17 +244,17 @@
             Your signature
           </button>
         </div>
-        <div class="signatures-block" v-if="proposal.signature">
-          <div v-if="proposal.signature.jpeg">
-            <img class="signatures-image" :src="proposal.signature.jpeg">
-            <img class="trash" @click="removeSignature('jpeg')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+        <div class="signatures-block">
+          <div v-if="signature.jpeg">
+            <img class="signatures-image" :src="signature.jpeg">
+            <img class="trash" @click="signature.jpeg = null" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
           </div>
-          <div v-if="proposal.signature.uploadedSignature">
-            <img class="signatures-image" :src="proposal.signature.uploadedSignature">
-            <img class="trash" @click="removeSignature('uploadedSignature')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+          <div v-if="signature.uploadedSignature">
+            <img class="signatures-image" :src="signature.uploadedSignature.dataURL">
+            <img class="trash" @click="signature.uploadedSignature = null" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
           </div>
           <br/>
-          <span v-if="proposal.signature.signatureName">{{proposal.signature.signatureName}}</span>
+          <span v-if="signature.signatureName">{{signature.signatureName}}</span>
         </div>
       </div>
     </div>
@@ -268,8 +268,6 @@
     </div>
     <success-modal v-if="showSuccessModal" />
     <add-signature-modal
-      :signature="proposal.signature"
-      :proposalId="proposal.id"
       :show-modal="showSignatureModal"
       @modal-closed="toggleShowSignatureModal"
       @update-signature="updateSignature"
@@ -340,11 +338,10 @@
     },
     computed: {
       handleSubmitDisabled(){
-        console.log('handleSubmitDisabled', this.proposal.signature)
-        if(this.proposal && this.proposal.signature && this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
-           return true;
+        if(!this.signature.jpeg || !this.signature.signatureName || !this.signature.uploadedSignature){
+           return false;
         }
-        return false;
+        return true;
       },
       event() {
         return this.$store.state.event.eventData;
@@ -372,7 +369,6 @@
         const proposalId = this.$route.params.proposalId;
         this.proposal = await Proposal.find(proposalId);
         this.vendor = this.proposal.vendor;
-
         this.pageType = VENDOR;
 
         this.successURL = this.proposal.nonMaryoku
@@ -391,19 +387,23 @@
       toggleShowSignatureModal(){
         this.showSignatureModal = !this.showSignatureModal;
       },
-      async removeSignature(field){
-        this.proposal.signature[field] = null;
-        await this.saveProposal();
+      updateSignature(files){
+        this.signature = files;
       },
-      async updateSignature(files){
-        this.proposal.signature = files;
-        await this.saveProposal();
+      getEventDays(){
+        if ( this.proposal.nonMaryoku ) {
+          let startTime = moment(this.proposal.eventData.startTime * 1000);
+          let endTime = moment(this.proposal.eventData.endTime * 1000);
 
-        this.showSignatureModal = false;
+          return endTime.diff(startTime, "days");
+        } else {
+          let startTime = moment(this.proposal.proposalRequest.eventData.eventStartMillis);
+          let endTime = moment(this.proposal.proposalRequest.eventData.eventEndMillis);
+
+          return endTime.diff(startTime, "days");
+        }
       },
-      async saveProposal() {
-        await new Proposal({ ...this.proposal }).save();
-      },
+
       tax(proposal) {
         if (!proposal.taxes) return { percentage: 0, price: 0 };
         let tax = proposal.taxes["total"];

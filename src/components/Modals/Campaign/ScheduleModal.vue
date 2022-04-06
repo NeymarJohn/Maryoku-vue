@@ -140,6 +140,7 @@
             />
           </div>
           <div class="flex-1" style="padding-left: 80px; border-left: solid 1px #aeaeae">
+            <!-- <time-input v-model="startTime" :h24="false" displayFormat="hh:mm" class="mt-100"></time-input> -->
             <time-picker class="mt-100" style="width: 70%" @change="setTimeFromCalendar" />
           </div>
         </div>
@@ -163,13 +164,14 @@
 <script>
 import { Modal } from "@/components";
 import { FunctionalCalendar } from "vue-functional-calendar";
+import TimeInput from "@/components/Inputs/TimeInput";
 import TimePicker from "@/components/Inputs/TimePicker";
 import moment from "moment";
-
 export default {
   components: {
     Modal,
     FunctionalCalendar,
+    TimeInput,
     TimePicker,
   },
   props: {
@@ -245,7 +247,11 @@ export default {
           .minutes(0)
           .valueOf();
         const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
+        console.log("previouseCampaignTime", previouseCampaignTime);
         if (previouseCampaignTime) {
+          console.log(previouseCampaignTime);
+          console.log(this.campaigns[previouseCampaignTime.name]);
+          console.log(this.campaigns);
           newSettings.previousCampaign.calcTime = moment(
             new Date(this.campaignData[previouseCampaignTime.name].scheduleTime),
           )
@@ -263,6 +269,7 @@ export default {
     const currentCampaignData = this.$store.state.campaign[this.currentCampaign.name];
     if (currentCampaignData.scheduleSettings) {
       const scheduleSettings = currentCampaignData.scheduleSettings;
+      console.log(scheduleSettings);
       this.scheduleSettings[scheduleSettings.scheduleOption].value = scheduleSettings.scheduleOptionValue;
       this.scheduleSettings[scheduleSettings.scheduleOption].calcTime = scheduleSettings.scheduleTime;
       this.selectedOption = scheduleSettings.scheduleOption;
@@ -276,6 +283,7 @@ export default {
 
       // set after previous campaign
       const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
+      console.log(previouseCampaignTime);
       if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
         this.scheduleSettings.previousCampaign.calcTime = moment(previouseCampaignTime.scheduleTime)
           .add(1, "weeks")
@@ -299,6 +307,7 @@ export default {
     },
     saveSchedule() {
       if (this.showCalendar) {
+        console.log(`${this.dateData.selectedDate} ${this.startTime}`);
         this.scheduleSettings.calendar.calcTime = moment(
           `${this.dateData.selectedDate} ${this.startTime}`,
           "YYYY-M-DD hh:mm A",
@@ -325,14 +334,12 @@ export default {
     box-shadow: none;
   }
 }
-
 .schedule-date {
   padding: 12px 36px;
   background-color: #ededed;
   border-radius: 3px;
   float: left;
 }
-
 .campaign-schedule-modal {
   .invalid-notification {
     position: absolute;
@@ -343,7 +350,6 @@ export default {
     right: 0;
     margin-top: 10px;
     z-index: 1;
-
     &:before {
       content: "";
       width: 10px;
