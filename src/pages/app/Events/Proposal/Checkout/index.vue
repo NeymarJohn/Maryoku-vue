@@ -268,7 +268,7 @@
     </div>
     <success-modal v-if="showSuccessModal" />
     <add-signature-modal
-      :data="proposal.signature"
+      :signature="proposal.signature"
       :proposalId="proposal.id"
       :show-modal="showSignatureModal"
       @modal-closed="toggleShowSignatureModal"
@@ -340,10 +340,11 @@
     },
     computed: {
       handleSubmitDisabled(){
-        if(this.proposal.signature && !!this.proposal.signature.jpeg && !!this.proposal.signature.signatureName && !!this.proposal.signature.uploadedSignature){
-           return false;
+        console.log('handleSubmitDisabled', this.proposal.signature)
+        if(this.proposal && this.proposal.signature && this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
+           return true;
         }
-        return true;
+        return false;
       },
       event() {
         return this.$store.state.event.eventData;

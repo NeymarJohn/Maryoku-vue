@@ -612,6 +612,7 @@ export default {
     },
   },
   mounted() {
+    console.log('vendor', this.vendor);
     if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
       this.vendor.images.forEach(item => {
         this.medias.push({

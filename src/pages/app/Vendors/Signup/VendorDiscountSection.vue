@@ -61,8 +61,12 @@ export default {
 
       };
   },
+  mounted () {
+      this.init();
+  },
   methods: {
       init() {
+        console.log('discount.section', this.data);
         Object.keys(this.discountData).forEach(key => {
            if(this.data[key] && this.data[key].length)  this.discountData[key] = this.data[key];
         });
@@ -72,7 +76,7 @@ export default {
       },
       addDiscountItem(value){
           this.discountData[this.tab].push(value);
-          this.$emit("save", this.discountData);
+          this.$emit("change", this.discountData);
       },
       changeDiscountItem(index, {type, value}) {
         if (type === "update") {
@@ -80,9 +84,14 @@ export default {
         } else if (type === "remove") {
             this.discountData[this.tab].splice(index, 1);
         }
-        this.$emit("save", this.discountData);
+        this.$emit("change", this.discountData);
       }
   },
+  watch: {
+      data(newVal){
+          this.init();
+      }
+  }
 };
 </script>
 <style lang="scss" scoped>
