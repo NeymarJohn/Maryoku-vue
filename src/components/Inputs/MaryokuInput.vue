@@ -242,7 +242,6 @@ export default {
       }
     },
     clickMask() {
-      console.log("clickMast");
       this.showDatePicker = false;
     },
     setDate() {

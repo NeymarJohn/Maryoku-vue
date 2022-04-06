@@ -56,27 +56,11 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-
-import { SlideYDownTransition } from "vue2-transitions";
-import InputMask from "vue-input-mask";
-import VueElementLoading from "vue-element-loading";
 import draggable from "vuedraggable";
-import { Drag, Drop } from "vue-drag-drop";
-import { SideBar, SidebarItem } from "@/components";
 
 export default {
   name: "ProgressSidebar",
-  components: {
-    VueElementLoading,
-    draggable,
-    Drag,
-    Drop,
-    SlideYDownTransition,
-    InputMask,
-    SideBar,
-    SidebarItem,
-  },
+  components: { draggable },
   props: {
     elements: {
       type: Array,
@@ -112,12 +96,8 @@ export default {
   created() {
     this.fetchUrl();
   },
-  mounted() {
-    console.log("progressbar.mounted", this.elements);
-  },
   methods: {
-    goToRoute(item, index) {
-      console.log("goTo", this.event);
+    goToRoute(item) {
       this.$router.push(`/user-events/${this.event.id}/${item.route}`);
     },
     fetchUrl() {

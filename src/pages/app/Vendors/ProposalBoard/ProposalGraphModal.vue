@@ -65,8 +65,14 @@ export default {
     ProposalPieChart,
   },
   props: {
-    proposal: Object,
-    required: true,
+    proposal: {
+      type: Object,
+      default: () => {}
+    },
+    required: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {

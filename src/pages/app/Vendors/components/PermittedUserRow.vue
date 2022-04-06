@@ -1,6 +1,8 @@
 <template>
   <div class="permission-row">
-    <div><avartar :name="user.email" :color="palette[index]" /></div>
+    <div>
+      <avartar :name="user.email" :color="palette[index]" />
+    </div>
     <div>{{ user.email }}</div>
     <div>
       <md-menu md-size="big" md-align-trigger class="schedule-menu">
@@ -28,14 +30,13 @@
 </template>
 <script>
 import Avartar from "@/components/Avartar.vue";
-import Popper from "vue-popperjs";
 import Collaborator from "@/models/Collaborator";
 
 import "vue-popperjs/dist/vue-popper.css";
+
 export default {
   components: {
     Avartar,
-    Popper,
   },
   props: {
     index: {
@@ -44,7 +45,7 @@ export default {
     },
     user: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
   data() {
@@ -84,9 +85,6 @@ export default {
       return this.user.role;
     },
   },
-  created() {
-    console.log(this.user.role);
-  },
   methods: {
     selectRole(role) {
       new Collaborator({ id: this.user.id, role }).save().then((res) => {
@@ -120,8 +118,10 @@ export default {
       margin-bottom: 20px;
       display: inline-block;
       line-height: 100%;
+
       button {
         vertical-align: middle;
+
         i {
           font-size: 20px !important;
           font-weight: bolder;
@@ -129,6 +129,7 @@ export default {
       }
     }
   }
+
   .permit-page {
     width: 550px;
     padding: 40px;
@@ -137,9 +138,11 @@ export default {
     background-color: #ffffff;
     font-size: 16px;
     text-align: left;
+
     /deep/ .multiselect {
       box-shadow: 0 3px 13px 0 rgba(0, 0, 0, 0.15);
       border: none;
+
       .multiselect__tags {
         border: none;
         // display: none;
@@ -147,12 +150,16 @@ export default {
     }
   }
 }
+
 .permit-user-role.md-menu-content {
   min-width: 300px;
+
   .md-list {
     padding: 30px 0;
+
     .md-list-item {
       margin: 5px 0 !important;
+
       /deep/ .md-list-item-button {
         padding-left: 30px;
         padding-right: 30px;

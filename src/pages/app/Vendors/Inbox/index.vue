@@ -15,7 +15,6 @@
           <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17">
         </md-button>
       </div>
-      <md-button class="md-vendor" @click="showFirstModal = true">Save & send</md-button>
     </section>
     <FirstTransaction v-show="showFirstModal" @start="goNext" @close-modal="showFirstModal = false" />
     <BillingInformationModal v-show="showBillingModal" @close-modal="showBillingModal = false" />

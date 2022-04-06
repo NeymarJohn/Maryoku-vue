@@ -56,13 +56,14 @@
 </template>
 <script>
 import CollapsePanel from "@/components/CollapsePanel.vue";
-import CheckoutPriceTable from "./CheckoutPriceTable";
+
 export default {
-  components: { CollapsePanel, CheckoutPriceTable },
+  components: { CollapsePanel },
   props: {
     proposal: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     category: {
       type: String,
@@ -143,7 +144,6 @@ export default {
         return s + service.requirementValue * service.price;
       }, 0);
 
-      console.log("totalPrice", totalPrice);
       return totalPrice + (addedPrice || 0);
     },
     discounedAndTaxedPrice() {
@@ -180,20 +180,25 @@ export default {
     display: flex;
     align-items: center;
     padding-right: 100px;
+
     img {
       width: 30px;
     }
+
     .element-price {
       text-align: left;
       width: 120px;
     }
   }
+
   .proposal-table-content {
     padding: 0 30px;
+
     .border-top {
       border-top: solid 2px #e0e0e0;
     }
   }
+
   .element-price {
     text-align: right;
   }

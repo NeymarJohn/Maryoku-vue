@@ -1,64 +1,70 @@
 <template>
-	<div class="vendor-category-editor" :class="[{ 'border-bottom': borderBottom }]">
-		<div class="left" :class="[{ 'full-width': isEdit }]">
-			<div class="title">{{ title }}<span v-if="required"> *</span></div>
-			<div v-if="isEdit">
-				<div v-for="(item, index) of selectedValue" :key="item || index + 1" class="d-flex position-relative">
-					<!-- <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" /> -->
-					<category-selector
-						v-if="field === 'vendorCategories'"
-						:value="item || ''"
-						:categories="vendorCategories"
-						column="2"
-						track-by="name"
-						class="my-10"
-						@change="updateCategory(index, ...arguments)"
-					/>
-					<location-input
-						v-else-if="field === 'vendorAddresses'"
-						:value="item"
-						class="my-10 width-100 address"
-						theme="purple"
-						@change="changeAddress(index, ...arguments)"
-					/>
-					<img
-						v-if="selectedValue.length > 1"
-						class="ml-10 close-btn"
-						:src="`${$iconURL}Requirements/delete-dark.svg`"
-						@click="removeValue(index)"
-					/>
-				</div>
-				<div class="d-flex align-center py-10 font-bold cursor-pointer" style="color: #58154b" @click="addNewValue">
-					<img class="mr-10" :src="`/static/icons/vendor/Icon_+.svg`" />
-					<span v-if="field === 'vendorAddresses'">Add another address</span>
-					<span v-else>Add another category</span>
-				</div>
-			</div>
-			<div v-else>
-				<template v-if="selectedValue.length">
-					<div v-for="item of selectedValue" :key="item" class="content mt-10">
-						<img
-							v-if="field === 'vendorCategories' && item"
-							class="mr-10"
-							:src="vendorCategories.find((v) => v.name === item).icon"
-						/>
-						<img v-if="img != '' && item" class="mr-10" :src="img" />
-						{{ item }}
-					</div>
-				</template>
-			</div>
-			<div v-if="isEdit" class="action-cont">
-				<md-button class="md-black maryoku-btn md-simple" @click="cancel"> Cancel </md-button>
-				<md-button class="md-vendor maryoku-btn" :disabled="!isInputValid" @click="save"> Save </md-button>
-			</div>
-		</div>
-		<div v-if="!isEdit" class="right">
-			<a @click="isEdit = true">
-				Edit
-				<md-icon>navigate_next</md-icon>
-			</a>
-		</div>
-	</div>
+  <div class="vendor-category-editor" :class="[{ 'border-bottom': borderBottom }]">
+    <div class="left" :class="[{ 'full-width': isEdit }]">
+      <div class="title">
+        {{ title }}<span v-if="required"> *</span>
+      </div>
+      <div v-if="isEdit">
+        <div v-for="(item, index) of selectedValue" :key="item || index + 1" class="d-flex position-relative">
+          <!-- <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" /> -->
+          <category-selector
+            v-if="field === 'vendorCategories'"
+            :value="item || ''"
+            :categories="vendorCategories"
+            column="2"
+            track-by="name"
+            class="my-10"
+            @change="updateCategory(index, ...arguments)"
+          />
+          <location-input
+            v-else-if="field === 'vendorAddresses'"
+            :value="item"
+            class="my-10 width-100 address"
+            theme="purple"
+            @change="changeAddress(index, ...arguments)"
+          />
+          <img
+            v-if="selectedValue.length > 1"
+            class="ml-10 close-btn"
+            :src="`${$iconURL}Requirements/delete-dark.svg`"
+            @click="removeValue(index)"
+          >
+        </div>
+        <div class="d-flex align-center py-10 font-bold cursor-pointer" style="color: #58154b" @click="addNewValue">
+          <img class="mr-10" :src="`/static/icons/vendor/Icon_+.svg`">
+          <span v-if="field === 'vendorAddresses'">Add another address</span>
+          <span v-else>Add another category</span>
+        </div>
+      </div>
+      <div v-else>
+        <template v-if="selectedValue.length">
+          <div v-for="item of selectedValue" :key="item" class="content mt-10">
+            <img
+              v-if="field === 'vendorCategories' && item"
+              class="mr-10"
+              :src="vendorCategories.find((v) => v.name === item).icon"
+            >
+            <img v-if="img != '' && item" class="mr-10" :src="img">
+            {{ item }}
+          </div>
+        </template>
+      </div>
+      <div v-if="isEdit" class="action-cont">
+        <md-button class="md-black maryoku-btn md-simple" @click="cancel">
+          Cancel
+        </md-button>
+        <md-button class="md-vendor maryoku-btn" :disabled="!isInputValid" @click="save">
+          Save
+        </md-button>
+      </div>
+    </div>
+    <div v-if="!isEdit" class="right">
+      <a @click="isEdit = true">
+        Edit
+        <md-icon>navigate_next</md-icon>
+      </a>
+    </div>
+  </div>
 </template>
 <script>
 import CategorySelector from "@/components/Inputs/CategorySelector";

@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="header-cover-image">
-        <img src="https://cdn.zeplin.io/5e24629a581f9329a242e986/assets/b7f79f04-be35-428e-be75-e59ffa4dc187.png">
+        <img :src="campaign.coverImage">
       </div>
       <div class="content">
         <div class="decoration-line">
@@ -31,8 +31,13 @@
         </div>
         <div class="content-article">
           <div class="content-article-header">
-            <div class="d-flex mb-70">
-              <feedback-logo v-if="campaign && campaign.logoUrl && campaign.visibleSettings.showLogo" class="mt-30" review />
+            <div v-if="showLogo || showImages" class="sub-cover">
+              <feedback-logo
+                v-if="showLogo"
+                :logo-url="campaign.logoUrl"
+                class="mt-30"
+                review
+              />
               <div v-if="showImages" class="wrapper-view-presentation">
                 <div class="view-presentation">
                   <view-presentation
@@ -48,24 +53,20 @@
               <img class="icon-thanks-for-participating mr-20" :src="`${$iconURL}Campaign/group-9380.svg`">
               <div class="mt-10">
                 <div class="font-size-40 font-bold line-height-1">
-                  THANKS FOR PARTICIPATING!
+                  {{ additionalData.sectionReview.title }}
                 </div>
                 <div class="subtitle">
-                  80’s Disco Party
+                  {{ additionalData.sectionReview.description }}
                 </div>
               </div>
               <div class="message">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-                ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam. Clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                {{ description }}
               </div>
               <img width="27" height="37" src="static/icons/double-arrow-down-gray.svg">
             </div>
           </div>
           <div
-            v-if="!showFeedbackMessageSuccessful && campaign.visibleSettings.showFeedback"
+            v-if="!showFeedbackMessageSuccessful && visibleSettings.showFeedback"
             class="content-article-main-content"
           >
             <div class="feedback-question-list">
@@ -76,7 +77,7 @@
                     <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
                   </div>
                 </div>
-                <div v-if="campaign && campaign.visibleSettings.showFeedback">
+                <div v-if="visibleSettings.showFeedback">
                   <feedback-question
                     v-for="(question, index) in feedbackQuestions"
                     :key="index"
@@ -96,7 +97,7 @@
               <img :src="`${$iconURL}FeedbackForm/Group%2028057.svg`">
               <div class="ml-20 d-flex flex-wrap flex-column">
                 <div class="d-flex">
-                  <span class="font-size-30 font-bold line-height-1">EVENT PHOTOS – RELIVE THE BEST MOMENTS</span>
+                  <span class="font-size-30 font-bold line-height-1">{{ additionalData.sectionEventPhotos.title }}</span>
                 </div>
               </div>
             </div>
@@ -106,13 +107,12 @@
                 :items="2.5"
                 :margin-items="10"
                 :images="images"
-                @addImage="addNewImage"
               />
             </div>
           </div>
         </div>
       </div>
-      <div v-if="campaign && campaign.visibleSettings.allowUploadPhoto" class="green-block-wrapper">
+      <div v-if="visibleSettings.allowUploadPhoto" class="green-block-wrapper">
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
             <div class="icon-and-text">
@@ -140,7 +140,7 @@
           </div>
         </div>
       </div>
-      <div v-if="campaign && campaign.visibleSettings.showSharingOption" class="lets_share_block">
+      <div v-if="visibleSettings.showSharingOption" class="lets_share_block">
         <div class="lets_share_text">
           Let's share all this fun :)
         </div>
@@ -224,14 +224,30 @@ export default {
       fullScreen: false,
       campaign: null,
       event: null,
-      placeHolder: "",
+      description: "",
       originalContent: {},
-      info: {},
       images: [],
       attachmentsImages: [],
       attachments: [],
       feedbackQuestions: [],
       selectedAttachments: [],
+      additionalData: {
+        sectionReview: {
+          title: "",
+          description: "",
+        },
+        sectionEventPhotos: {
+          title: "",
+          description: "",
+        }
+      },
+      visibleSettings: {
+        showImages: false,
+        showSharingOption: false,
+        allowUploadPhoto: false,
+        downloadFiles: false,
+        showFeedback: false
+      },
       extensionsFiles: {
         image: [".jpeg", ".jpg", ".gif", ".png"],
         document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
@@ -241,21 +257,14 @@ export default {
     };
   },
   computed: {
+    showLogo() {
+      return this.campaign && this.campaign.logoUrl && this.visibleSettings.showLogo;
+    },
     showImages() {
       return this.campaign && this.campaign.visibleSettings.showImages && this.attachmentsImages.length;
     }
   },
   created() {
-    this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
-      Please take a moment to help us improve future events by taking a brief survey.
-      Your feedback is extremely valuable to our ongoing effort to offer great experience.
-
-      If you have photos, documents or other event materials that you want to share, you can upload them here.
-      All materials is also available for download from this page.
-
-      We look forward to seeing you again soon!
-    `;
-
     const eventId = this.$route.params.eventId;
     const calendarEvent = new CalendarEvent({ id: eventId });
 
@@ -263,13 +272,20 @@ export default {
       this.isLoading = false;
       this.campaign = campaigns["FEEDBACK"];
       this.event = this.campaign.event;
+      this.description = this.campaign.description;
       this.images = this.campaign.images;
+      this.visibleSettings = this.campaign.visibleSettings;
+      if (this.campaign.additionalData) {
+        this.additionalData = this.campaign.additionalData;
+      }
       if (this.campaign.attachments) {
         this.attachments = this.campaign.attachments;
         this.attachmentsImages = this.filterFilesByType(["image"], this.attachments)
           .map(({ url }) => ({ src: url }));
       }
-      this.feedbackQuestions = this.campaign.feedbackQuestions.filter((question) => question.showQuestion);
+      this.feedbackQuestions = this.campaign.feedbackQuestions
+        .filter((question) => question.showQuestion)
+        .map((question) => ({ ...question, errors: { rank: null, comment: null }}));
     });
   },
   methods: {
@@ -295,15 +311,6 @@ export default {
         }
       });
     },
-    addNewImage({ imageString, file }) {
-      const fileName = `${this.campaign.id}-${new Date().getTime()}`;
-      const extension = file.type.split("/")[1];
-      this.images.unshift({
-        src: `${process.env.S3_URL}feedback/${this.campaign.id}/${fileName}.${extension}`,
-        imageData: imageString,
-      });
-      S3Service.fileUpload(file, "fileName", `feedback/${this.campaign.id}`).then((res) => {});
-    },
     uploadFile() {
       document.getElementById("file-uploader").click();
     },
@@ -315,11 +322,11 @@ export default {
     },
     sendFeedback() {
       let email = this.$route.query.email;
-      if (email === undefined) {
+      if (!email) {
         email = "test@gmail.com";
       }
       const feedbackQuestions = [];
-      this.campaign.feedbackQuestions.forEach((item) => {
+      this.feedbackQuestions.forEach((item) => {
         if (!item.showQuestion) return;
         feedbackQuestions.push({
           question: item.question,
@@ -329,6 +336,24 @@ export default {
           event: new CalendarEvent({ id: this.event.id }),
         });
       });
+      // validate questions
+      this.feedbackQuestions.forEach((item, index) => {
+        if (!item.rank) {
+          this.feedbackQuestions[index].errors.rank = `Please selected rank for the ${item.label}`;
+        }
+        else if (item.errors.rank) {
+          this.feedbackQuestions[index].errors.rank = null;
+        }
+        if (!item.comment) {
+          this.feedbackQuestions[index].errors.comment = `Please write comment for the question ${item.question}`;
+        }
+        else if (item.errors.comment) {
+          this.feedbackQuestions[index].errors.comment = null;
+        }
+      });
+      const someQuestionHasError = this.feedbackQuestions
+        .some((question) => question.errors.rank || question.errors.comment);
+      if (someQuestionHasError) return;
       new Feedback({
         guestName: email,
         guestEmail: email,
@@ -625,23 +650,29 @@ export default {
       padding-left: 167px;
       margin-bottom: 45px;
 
-      .wrapper-view-presentation {
-        margin-bottom: 70px;
-        position: relative;
-        flex-grow: 1;
+      .sub-cover {
+        height: 130px;
+        display: flex;
 
-        .view-presentation {
-          width: 635px;
-          height: 357px;
-          position: absolute;
-          top: -110px;
-          right: 85px;
-          z-index: 1;
+        .wrapper-view-presentation {
+          margin-bottom: 70px;
+          position: relative;
+          flex-grow: 1;
+
+          .view-presentation {
+            width: 635px;
+            height: 357px;
+            position: absolute;
+            top: -110px;
+            right: 85px;
+            z-index: 1;
+          }
         }
       }
 
       .wrapper-thanks-for-participating {
         max-width: 900px;
+        margin-top: 70px;
         flex: 1 1 300px;
 
         .icon-thanks-for-participating {

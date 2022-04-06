@@ -55,7 +55,6 @@ export default {
       this.inputClass = `${this.inputStyle} ${newValue ? "active" : "" }`;
       this.$emit("input", newValue);
       this.$emit("change", { value: newValue, type: this.inputStyle});
-      console.log("emit");
     },
     value: function(newValue) {
       this.content = newValue;
@@ -78,7 +77,6 @@ export default {
       this.$emit("change", { value: this.content, type: this.inputStyle});
     },
     editing(evt) {
-      console.log("editing");
       var src = evt.target.innerHTML;
       // this.content = src
       this.$emit("input", src);

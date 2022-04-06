@@ -29,11 +29,18 @@ const actions = {
     });
   },
 
+    saveProposalRequest({ state }, { request, vendor }) {
+        return new Promise(async (resolve, reject) => {
+            let query = new ProposalRequest(request);
+            let res = await query.for(vendor).save();
+            resolve(res);
+        });
+    },
+
   saveProposalNegotiationRequest({ state }, { negotiation, proposal }) {
     return new Promise(async (resolve, reject) => {
       let query = new ProposalNegotiationRequest(negotiation);
       let res = await query.for(proposal).save();
-      console.log("saveProposalNegotiationRequest", res);
       resolve(res);
     });
   },

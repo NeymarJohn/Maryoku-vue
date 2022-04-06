@@ -137,25 +137,18 @@
 </template>
 
 <script>
-// import auth from '@/auth';
 import Vue from "vue";
-import { Tabs, ProductCard } from "@/components";
+import { ProductCard } from "@/components";
 
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
 
 import EventModal from "./EventModal/";
-import { mapMutations, mapGetters } from "vuex";
-import EventPlannerVuexModule from "./EventPlanner.vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
+import { mapMutations } from "vuex";
 import moment from "moment";
-import VueElementLoading from "vue-element-loading";
 import Swal from "sweetalert2";
 import TeamMember from "@/models/TeamMember";
-import _ from "underscore";
 import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
 import eventService from "@/services/event.service";
-import axios from "axios";
 import Loader from "../../../components/loader/Loader";
 
 const imageIndex = new Date().getTime() % backgroundImages.length;
@@ -165,14 +158,15 @@ const quote = quotes[quoteIndex];
 export default {
   components: {
     Loader,
-    Tabs,
     ProductCard,
-    VueElementLoading,
-    EventModal,
+  },
+  filters: {
+    moment: function (date) {
+      return moment(date).format("MMMM Do, GGGG");
+    },
   },
   data() {
     return {
-      // auth: auth,
       product3: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
       recentEvents: [],
       upcomingEvents: [],
@@ -181,6 +175,11 @@ export default {
       quoteIndex,
       quote,
     };
+  },
+  watch: {
+    upcomingEvents() {
+      this.isLoading = false;
+    },
   },
   created() {
     const query = this.$route.query;
@@ -330,17 +329,6 @@ export default {
         }
       });
       return allEvents;
-    },
-  },
-
-  filters: {
-    moment: function (date) {
-      return moment(date).format("MMMM Do, GGGG");
-    },
-  },
-  watch: {
-    upcomingEvents(newVal, oldVal) {
-      this.isLoading = false;
     },
   },
 };

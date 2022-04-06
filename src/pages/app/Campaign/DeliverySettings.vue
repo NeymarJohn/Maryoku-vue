@@ -10,7 +10,6 @@
             </div>
             <div class="mt-2 d-flex align-center">
               <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
-
               <span>in your current invitee list</span>
             </div>
           </div>
@@ -180,57 +179,64 @@
                   currentCampaign.campaignStatus == 'TESTING' ||
                   currentCampaign.campaignStatus == 'SAVED')
               "
+              class="d-flex"
             >
-              <div class="mt-50">
-                <label class="font-bold mb-10 line-height-2">Subject</label>
-                <div class="width-60 position-relative">
-                  <maryoku-input
-                    v-model="settingData.email.subject"
-                    placeholder="Type your email subject here…"
-                  />
-                </div>
-              </div>
-              <div class="mt-50">
-                <label class="font-bold mb-10 line-height-2">From</label>
-                <div class="width-60 position-relative">
-                  <maryoku-input v-model="settingData.email.from" placeholder="Your email address…" />
-                  <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
-                    <md-tooltip class="emailTooltip">
-                      Pick the email from which you wish the guests to get this mail
-                    </md-tooltip>
-                  </span>
-                </div>
-              </div>
-              <div class="mt-50 font-size-14">
-                <label class="mb-10 line-height-2">
-                  <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each
-                  address
-                </label>
-                <div class="d-flex align-start width-100">
-                  <div class="width-60 position-relative">
-                    <maryoku-textarea
-                      v-model="settingData.email.addressString"
-                      placeholder="Paste all emails here…"
-                      type="input"
-                      input-style="emails"
-                      hint="example : example@mail.com"
-                      @change="handleInputEmails"
-                    />
-                    <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                      <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
-                      <md-tooltip>
-                        <div class="font-size-14 input-tooltip">example : example@mail.com</div>
-                      </md-tooltip>
-                    </span>
-                    <invalid-address-panel
-                      v-if="invalidPastedEmails"
-                      type="email"
-                      class="mt-30"
-                      :content="invalidPastedEmails"
+              <div class="setting-item-fields">
+                <div class="mt-50">
+                  <label class="font-bold mb-10 line-height-2">Subject</label>
+                  <div class="width-100 position-relative">
+                    <maryoku-input
+                      v-model="settingData.email.subject"
+                      placeholder="Type your email subject here…"
                     />
                   </div>
-                  <span class="font-size-16" style="padding: 20px 40px">Or</span>
+                </div>
+                <div class="mt-50">
+                  <label class="font-bold mb-10 line-height-2">From</label>
+                  <div class="width-100 position-relative">
+                    <maryoku-input v-model="settingData.email.from" placeholder="Your email address…" />
+                    <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
+                      <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                      <md-tooltip class="emailTooltip">
+                        Pick the email from which you wish the guests to get this mail
+                      </md-tooltip>
+                    </span>
+                  </div>
+                </div>
+                <div class="mt-50 font-size-14">
+                  <label class="mb-10 line-height-2">
+                    <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each
+                    address
+                  </label>
+                  <div class="d-flex align-center width-100">
+                    <div class="width-100 position-relative">
+                      <maryoku-textarea
+                        v-model="settingData.email.addressString"
+                        placeholder="Paste all emails here…"
+                        type="input"
+                        input-style="emails"
+                        hint="example : example@mail.com"
+                        @change="handleInputEmails"
+                      />
+                      <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
+                        <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                        <md-tooltip>
+                          <div class="font-size-14 input-tooltip">example : example@mail.com</div>
+                        </md-tooltip>
+                      </span>
+                      <invalid-address-panel
+                        v-if="invalidPastedEmails"
+                        type="email"
+                        class="mt-30"
+                        :content="invalidPastedEmails"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex align-end setting-item-upload-field">
+                <div class="d-flex align-center">
+                  <span class="font-size-16" style="padding: 18px 30px">Or</span>
 
                   <!-- Emails Excel File Upload  -->
                   <md-button
@@ -253,7 +259,7 @@
                       <span class="color-red">remove</span>
                     </md-button>
                   </div>
-                  <span class="ml-20 mt-10">
+                  <span class="ml-20">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                     <md-tooltip>
                       <div class="font-size-14 input-tooltip">
@@ -317,19 +323,19 @@
   </div>
 </template>
 <script>
-import { Modal, MaryokuInput, LocationInput, MaryokuTextarea, MaryokuResizableTextarea } from "@/components";
+import { MaryokuInput, MaryokuTextarea } from "@/components";
 import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
 import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
 import XLSX from "xlsx";
 import FileSaver from "file-saver";
+
 export default {
   components: {
     MaryokuInput,
     CollapsePanel,
     MaryokuTextarea,
     InvalidAddressPanel,
-    MaryokuResizableTextarea,
   },
   props: {
     defaultSettings: {
@@ -555,24 +561,30 @@ export default {
 .delivery-setting {
   &-content {
     margin: 0px 50px 0px 50px;
+
     .setting-item {
       padding: 40px 0;
       margin: 0 50px;
       border-top: solid 1px #767676;
       position: relative;
+
       .check-wrapper {
         display: flex;
         align-items: center;
+
       }
     }
   }
+
   .collapse-button {
     position: absolute;
     right: 0;
+
     .icon {
       font-size: 35px !important;
     }
   }
+
   .uploadedFile {
     padding: 10px 20px;
     text-align: center;
@@ -580,14 +592,25 @@ export default {
     min-width: 200px;
   }
 }
+
 .input-tooltip {
   max-width: 250px !important;
   white-space: break-spaces;
   text-align: left;
 }
+
 .input-tooltip-wrapper {
   position: absolute;
   right: 10px;
   top: 5px;
+}
+.setting-item-fields {
+  max-width: 700px;
+  flex: 1 1 200px;
+}
+
+.setting-item-upload-field {
+  max-width: 410px;
+  flex: 1 1 410px;
 }
 </style>

@@ -59,102 +59,6 @@
                   {{ eventData.eventStartMillis | formatTime }}
                 </div>
               </li>
-              <li>
-                <div v-if="showTimerBox" class="time-box">
-                  <div class="time-layer">
-                    <div class="this-offer">
-                      This offer will expire in
-                    </div>
-                    <hr>
-                    <div v-if="showTimerInputs" class="time-display ">
-                      <div class="d-flex justify-content-center">
-                        <div class="mins-num">
-                          <input
-                            id="days-input"
-                            v-model="expiredDate"
-                            name="days-input"
-                            type="number"
-                          >
-                          :
-                        </div>
-                        <div class="mins-num">
-                          <input
-                            id="hours-input"
-                            v-model="expiredHours"
-                            name="hours-input"
-                            type="number"
-                          >
-                          :
-                        </div>
-                        <div class="mins-num">
-                          <input
-                            id="mins-input"
-                            v-model="expiredMinutes"
-                            name="mins-input"
-                            type="number"
-                          >
-                        </div>
-                        :
-                        <div class="mins-num">
-                          <input
-                            id="secs-input"
-                            v-model="expiredSeconds"
-                            name="secs-input"
-                            type="number"
-                          >
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <div class="mins">
-                          Days
-                        </div>
-                        <div class="mins">
-                          Hours
-                        </div>
-                        <div class="mins">
-                          Mins
-                        </div>
-                        <div class="mins">
-                          Secs
-                        </div>
-                      </div>
-                    </div>
-                    <div v-else class="time-display">
-                      <div class="d-flex justify-content-center">
-                        <div class="mins-num">
-                          {{ expiredDate }} :
-                        </div>
-                        <div class="mins-num">
-                          {{ expiredHours }} :
-                        </div>
-                        <div class="mins-num">
-                          {{ expiredMinutes }} :
-                        </div>
-                        <div class="mins-num">
-                          {{ expiredSeconds }}
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <div class="mins">
-                          Days
-                        </div>
-                        <div class="mins">
-                          Hours
-                        </div>
-                        <div class="mins">
-                          Mins
-                        </div>
-                        <div class="mins">
-                          Secs
-                        </div>
-                      </div>
-                    </div>
-                    <button class="timer-btn" @click="changeTimer">
-                      Ask for more time
-                    </button>
-                  </div>
-                </div>
-              </li>
             </ul>
           </div>
 
@@ -178,7 +82,7 @@
                   </p>
                 </div>
               </div>
-              <md-divider />
+              <md-divider/>
               <p class="font-size-14 px-30 py-20 m-0" style="max-height: 200px">
                 Dear Rachel, Relish caterers & venues is pleased to provide you with the attached catering proposal for
                 your, which is currently scheduled to be held on  at. We understand that this is a very important
@@ -252,7 +156,7 @@
                 </span>
               </template>
 
-              <div v-for="item in proposal.inspirationalPhotos.filter(item => !!item)" :key="item.url">
+              <div v-for="item in proposal.inspirationalPhotos.filter(item => !!item)">
                 <img class="item" :src="item.url">
                 <div class="mt-5">
                   {{ item.caption }}
@@ -307,7 +211,6 @@
               <div class="items mt-10">
                 <div
                   v-for="(s, sIndex) in socialMediaBlocks"
-                  :key="sIndex"
                   class="item"
                   :class="{ 'mr-20': proposal.vendor.social[s.name] }"
                 >
@@ -322,7 +225,6 @@
               <div class="attachment-tag-list">
                 <div
                   v-for="(attachment, index) in attachments.filter(attachement => attachement.url)"
-                  :key="index"
                   class="attachment-tag"
                 >
                   <img :src="`${$iconURL}common/pin-red.svg`">
@@ -351,7 +253,6 @@
           What would you like to take from our suggested services?
         </div>
         <EventProposalPrice
-          :key="`${proposal.vendor.vendorCategory}-section`"
           :proposal-data="proposal"
           :service-category="proposal.vendor.vendorCategory"
           :mandatory="true"
@@ -362,9 +263,9 @@
         />
         <EventProposalPrice
           v-for="(service, index) in proposal.additionalServices"
-          :key="`secondary-${service}-section`"
           :proposal-data="proposal"
           :service-category="service"
+          :key="index"
           :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
           @changeBookedServices="changeBookedServices"
           @updateProposalCost="updateProposalCost"
@@ -373,14 +274,40 @@
           v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied && checkedAllBundledOffers"
           class="bundle-section d-flex justify-content-between align-center"
         >
-          <div>
-            <span class="font-size-30 font-bold">Bundle offer</span>
-            <span>{{ proposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(proposal.bookedServices) }}</span>
+          <div class="font-size-22 bundle-description">
+            <img :src="`${iconUrl}Asset 577.svg`" style="width: 30px">
+            <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
+            <span style="font-size: 30px; margin-left: 20px">{{ proposal.bundleDiscount.percentage }}%</span>
+            <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
-          <div class="font-size-30 font-bold">
-            -${{ bundledDiscountPrice | withComma }}
+          <div class="font-size-22 font-bold" style="text-align: end;">
+            ${{ (totalPrice - bundledDiscount)| withComma(Number) }}
+            <br/>
+            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ totalPrice| withComma(Number) }}</span>
           </div>
+        </div>
+        <div class="element-pricing-table total-list md-small-hide">
+          <table>
+            <tbody>
+              <tr>
+                <td colspan="3">
+                  <b class="font-size-22">Total</b>
+                  <div v-if="proposal.bundleDiscount.percentage" class="font-size-14">
+                    Before discount
+                  </div>
+                </td>
+                <td class="element-value">
+                  <div class="element-price">
+                    ${{ totalPriceWithDiscount * tax  | withComma }}
+                  </div>
+                  <div v-if="proposal.bundleDiscount.percentage" class="discount-details">
+                    ({{ discount.percentage }}% off)
+                    <span style="text-decoration: line-through; font-size: 14px">{{ totalPrice * tax | withComma }}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div v-if="isMobile" class="total-section p-30">
           <div class="d-flex align-center justify-content-between my-10 font-size-15 color-gray">
@@ -432,7 +359,7 @@
 
                 <img src="/static/img/nn1.webp" alt="">
               </div>
-              <div class="md-layout-item pl-0 md-size-5" />
+              <div class="md-layout-item pl-0 md-size-5"/>
               <div class="md-layout-item pl-0 md-size-40">
                 <div class="ml-10">
                   <h2 class="font-bold font-size-16">
@@ -512,7 +439,6 @@
                   <div class="md-layout mt-20">
                     <div
                       v-for="option in guaranteedOptions"
-                      :key="option.value"
                       class="md-layout-item py-10"
                       :style="{ display: proposal.vendor.guaranteed.includes(option.value) ? '' : 'none' }"
                     >
@@ -551,14 +477,13 @@
             <div class="proposal-section ">
               <div class="policy-content">
                 <div class="rules">
-                  <div v-for="(policy, yIndex) in validPolicy" :key="yIndex" class="rule">
+                  <div v-for="(policy, yIndex) in validPolicy" class="rule">
                     <div class="item">
                       {{ policy.name }}
                     </div>
                     <div v-if="policy.type === 'MultiSelection'" class="item">
                       <span
                         v-for="(v, vIndex) in policy.value"
-                        :key="vIndex"
                         class="mr-10"
                       >
                         {{ `${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}</span>
@@ -603,7 +528,7 @@
                   <h5 class="font-bold font-size-20">
                     Additional Rules
                   </h5>
-                  <div v-for="(policy, yIndex) in additionalRules" :key="yIndex" class="rule">
+                  <div v-for="(policy, yIndex) in additionalRules" class="rule">
                     <div class="item">
                       Event must be {{ policy }}
                     </div>
@@ -704,7 +629,6 @@
           <template v-for="(s, sIndex) in socialMediaBlocks">
             <a
               v-if="proposal.vendor.social[s.name]"
-              :key="sIndex"
               class="mx-10"
               :href="proposal.vendor.social[s.name]"
               target="_blank"
@@ -791,9 +715,7 @@ const components = {
   carousel: () => import("vue-owl-carousel"),
   CancellationPolicy: () => import("@/components/CancellationPolicy.vue"),
   EventProposalPrice: () => import("./EventProposalPrice.vue"),
-  EventProposalPolicy: () => import("./EventProposalPolicy.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
-  MessageModal: () => import("../components/Modal/PlannerMessage.vue"),
   CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
 };
 
@@ -857,6 +779,7 @@ export default {
       isHealth: false,
       isSeating: false,
       isPolicy: false,
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       // auth: auth,
       showCommentEditorPanel: false,
       calendarEvent: {},
@@ -886,11 +809,6 @@ export default {
       guaranteedOptions: GuaranteedOptions,
       contentTabs: ProposalContentTabOptions,
 
-      showTimerInputs: false,
-      expiredDate:null,
-      expiredHours:null,
-      expiredMinutes:null,
-      expiredSeconds:null,
       url:`/proposals/${this.proposal.id}`
     };
   },
@@ -934,32 +852,44 @@ export default {
     showCommentPanel(){
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
+
+    tax() {
+      if (!this.proposal.taxes) return { percentage: 0, price: 0 };
+      let tax = { ...this.proposal.taxes["total"] };
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
+      }
+      tax.price = Math.round(((tax.percentage || 0)) / 100);
+      return tax.percentage / 100 + 1;
+    },
+    totalPrice(){
+      let totalPrice = 0;
+      for (const key in this.proposal.pricesByCategory){
+        if (this.proposal.bookedServices.includes(key) )
+        totalPrice += this.proposal.pricesByCategory[key];
+      }
+      return totalPrice;
+    },
+    bundledDiscount(){
+      return this.totalPrice * this.proposal.bundleDiscount.percentage / 100;
+    },
+    totalPriceWithDiscount(){
+     const price = this.totalPrice - (this.totalPrice * this.discount.percentage / 100 );
+     if(this.proposal.bundleDiscount.isApplied && this.proposal.bundleDiscount && this.checkedAllBundledOffers){
+       return this.proposal.bundleDiscount.percentage ?
+         price - (price * this.proposal.bundleDiscount.percentage / 100):
+         price - this.proposal.bundleDiscount.total;
+     }
+     return price;
+    },
   },
   created() {
-    console.log('event.detail.proposal', this.proposal);
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
   mounted() {
-    let end = moment(this.proposal.expiredDate);
-    let diff = moment.duration(end.diff(new Date()));
 
-    function pad(n) {
-        return (n < 10 && n >= 0) ? ("0" + n) : n;
-    }
-
-    let minutes = diff.asMinutes();
-    let seconds = diff.asSeconds();
-    this.expiredDate = Math.floor(minutes/24/60);
-    this.expiredDate = pad(this.expiredDate);
-    this.expiredHours = Math.floor(minutes/60%24);
-    this.expiredHours = pad(this.expiredHours);
-    this.expiredMinutes = Math.floor(minutes%60);
-    this.expiredMinutes = pad(this.expiredMinutes);
-    this.expiredSeconds = Math.floor(seconds%60);
-    this.expiredSeconds = pad(this.expiredSeconds);
     this.commentComponents = this.proposal.commentComponent;
   },
-
   methods: {
     ...mapMutations("eventPlan", ["updateCommentComponents"]),
     ...mapMutations("EventPlannerVuex", [
@@ -1115,13 +1045,6 @@ export default {
     selectTab(val) {
       this.$emit("change", val);
     },
-    changeTimer() {
-        if(this.showTimerInputs == false){
-            this.showTimerInputs = true;
-        } else {
-            this.showTimerInputs = false;
-        }
-    },
     async saveCommentComponent(data){
       await this.saveComment(data);
       this.updateCommentComponents(this.commentComponents);
@@ -1132,6 +1055,159 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.element-pricing-table {
+  margin-top: 35px;
+  padding: 1.5em;
+  font-family: "Manrope-Regular", sans-serif;
+  border-radius: 3px;
+  &-header {
+    display: grid;
+    grid-template-columns: 30% 20% 20% 20% 10%;
+    font-weight: bold;
+    padding: 1em 0;
+  }
+  &-body {
+    &-row {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      border-top: 1px solid #ddd;
+      padding: 1.5em 0;
+    }
+    .options-list {
+      img {
+        position: absolute;
+      }
+    }
+    .option-row {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      padding: 1em 0;
+      &.border-top {
+        border-top: 1px solid #ddd;
+      }
+    }
+  }
+  &.elements-list {
+    background: #f7f7f7;
+    margin-bottom: -21px;
+
+    th,
+    td {
+      font-size: 16px;
+    }
+    th {
+      font-family: "Manrope-ExtraBold", sans-serif;
+      padding-bottom: 15px;
+    }
+
+    tr {
+      td {
+        font-weight: normal;
+        border-top: 1px solid #ddd;
+        padding: 21px 0;
+
+        &.element-actions {
+          .md-button {
+            visibility: hidden;
+          }
+        }
+      }
+
+      &:hover {
+        td {
+          font-weight: bold;
+
+          &.element-actions {
+            .md-button {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.taxes-list {
+    background: #ededed;
+    color: #818080;
+    padding: 0.6em 1.5em;
+    border-top: 1px solid;
+    tr {
+      &:first-child {
+        td {
+          border-bottom: 1px solid;
+        }
+      }
+      td {
+        .taxes-title {
+          display: inline-block;
+          width: 90px;
+        }
+        .taxes-percentage {
+          margin-left: 1em;
+        }
+
+        &.element-actions {
+          .md-button {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
+
+  &.total-list {
+    background: #404040;
+    color: #fff;
+    margin-bottom: 3em;
+
+    td {
+      .discount-details {
+        color: #fff !important;
+      }
+      small {
+        display: block;
+      }
+      &.element-actions {
+        .md-button {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      text-align: left;
+    }
+
+    td,
+    th {
+      &:nth-last-child(2):not(:first-child),
+      &:nth-last-child(3):not(:first-child),
+      &:nth-last-child(4):not(:first-child) {
+        width: 150px;
+        text-align: center;
+      }
+      .md-button {
+        img {
+          width: 15px;
+        }
+      }
+
+      &.element-actions {
+        width: 20px;
+      }
+
+      &.element-value {
+        text-align: right !important;
+        padding-right: 44px;
+      }
+    }
+  }
+}
 .md-layout,
 .md-layout-item {
   width: initial;
@@ -1226,103 +1302,18 @@ export default {
                 font-size: 14px;
                 padding-bottom: 10px;
                 &:not(:last-child) {
-                border-right: 1px solid #818080;
-                padding-right: 80px;
-                margin-right: 80px;
+                    border-right: 1px solid #818080;
+                    padding-right: 80px;
+                    margin-right: 80px;
                 }
 
                 label {
-                font-weight: 800;
-                margin-bottom: 1em;
+                    font-weight: 800;
+                    margin-bottom: 1em;
                 }
+
                 .info-text {
-                color: #050505;
-                }
-            }
-
-            .time-box {
-                width: 290.6px;
-                height: 201.5px;
-                margin: -96px 0 0 73px;
-                padding: 13.4px 27px 18.1px 27.5px;
-                border-radius: 3px;
-                background-color: #f51355;
-                position: absolute;
-                right: 20px;
-
-                .time-layer {
-                    width: 239.1px;
-                    height: 170.1px;
-                }
-                .this-offer {
-                    width: 150px;
-                    height: 19px;
-                    margin: 0 42.6px 13.7px 43.5px;
-                    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-size: 14px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: center;
-                    color: #fff;
-                }
-
-                .time-display {
-                    width: 239px;
-                    height: 60.3px;
-                    margin: 8px 7px 25.1px 7px;
-                }
-
-                .mins-num {
-                    width: 58px;
-                    height: 41px;
-                    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-size: 30px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: left;
-                    color: #fff;
-                }
-
-                #mins-input {
-                    width: 60%; height: 40%; padding: 4px 4px;
-                }
-
-                .mins {
-                    width: 32px;
-                    height: 19px;
-                    margin: 14px 28px 0 0;
-                    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
-                    text-align: center;
-                    color: #fff;
-                }
-                .timer-btn {
-                    width: 224.9px;
-                    height: 44px;
-                    margin: 7.1px 5.6px 0 5.5px;
-                    padding: 11px 30px 11px 30px;
-                    border-radius: 3px;
-                    background-color: #fff;
-                    color: #f51355;
-                    font-size: 16px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: 0.34px;
-                    text-align: center;
-                    border: none;
+                    color: #050505;
                 }
             }
         }
@@ -1639,10 +1630,23 @@ export default {
       }
 
       .bundle-section {
-        padding: 40px 60px;
+        padding: 28px 60px 28px 25px;
         background-color: #ffedb7;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         border-radius: 3px;
+        border: solid 1px #c1c0c0;
+        .bundle-description{
+          display: flex;
+          align-items: center;
+          .bundle-title{
+            margin: 10px;
+            min-width: max-content;
+          }
+          .bundle-services{
+            font-size: 16px;
+            padding: 0 20px;
+          }
+        }
       }
       .policy-section {
         margin-top: 4em;

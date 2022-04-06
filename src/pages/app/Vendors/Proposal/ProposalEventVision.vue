@@ -1,8 +1,15 @@
 <template>
   <div class="event-vision-wrapper proposal-add-personal-message-wrapper mt-40">
     <template v-if="event.concept">
-      <div class="conceptTitle font-size-40 line-height-1 mb-20">
-        {{ event.concept.name }}
+      <div class="concept-title-wrap mb-20">
+        <div class="font-size-40 line-height-1 concept-title">
+          {{ event.concept.name }}
+        </div>
+        <div class="tags-wrapper">
+          <span v-for="tag in event.concept.tags" :key="tag.name">
+            {{ tag.name }}
+          </span>
+        </div>
       </div>
       <div class="d-flex concept-image-wrapper">
         <div
@@ -84,6 +91,28 @@ export default {
 </script>
 <style lang="scss" scoped>
 .event-vision-wrapper {
+  .concept-title-wrap{
+    display: flex;
+    align-items: center;
+    .concept-title{
+      min-width: max-content;
+    }
+    .tags-wrapper{
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: 20px;
+      max-width: 600px;
+      span{
+        display: block;
+        margin-bottom: 2px;
+        margin-right: 20px;
+        padding: 10px 14px;
+        border-radius: 100px;
+        border: solid 1px #a0a0a0;
+        text-transform: capitalize;
+      }
+    }
+  }
   .concept-image-wrapper {
     width: 80%;
     .concept-color {

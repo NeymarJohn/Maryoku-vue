@@ -76,7 +76,7 @@ Vue.use(VueScrollTo);
 Vue.use(VueYoutube);
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
-Vue.use(VueFullscreen)
+Vue.use(VueFullscreen);
 Vue.use(VueTimeago, {
   name: "Timeago", // Component name, `Timeago` by default
   locale: "en", // Default locale
@@ -109,7 +109,8 @@ router.beforeEach((to, from, next) => {
   } else {
     axios.defaults.headers.common.Authorization = authHeader().Authorization;
   }
-  const currentToken = localStorage.getItem("manage_id_token");
+
+  const currentToken = localStorage.getItem("manage_id_token") || to.query.token ; //gettig authentication token
 
   // check home router
   if (to.path === "/" && currentToken) {
