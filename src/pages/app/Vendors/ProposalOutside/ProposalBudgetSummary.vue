@@ -213,7 +213,7 @@
 							<span>Before bundle discount</span>
 							<div>
 								<span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-								<span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
+								<span class="crosslinedText">${{ Number(sumOfPrices) | withComma }}</span>
 							</div>
 						</div>
 						<div v-if="defaultDiscount.percentage || negotiationDiscount.isApplied" class="price-row">
@@ -341,6 +341,7 @@ export default {
 			"totalPriceOfProposal",
 			"totalBeforeDiscount",
 			"totalBeforeBundle",
+      "sumOfPrices",
 		]),
 		proposalRequest() {
 			return this.$store.state.proposalForNonMaryoku.proposalRequest;

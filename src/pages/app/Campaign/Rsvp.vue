@@ -92,8 +92,8 @@
           :style="`background-color:${event.concept.colors[0].color}`"
         />
         <div v-else class="rsvp-event-guid-background" :style="`background-color:#D5FCF3;opacity:1;`" />
-        <div class="rsvp-event-guid md-layout">
-          <div class="md-layout-item md-size-50 md-small-size-50">
+        <div class="rsvp-event-guid raw-rsvp">
+          <div class="md-size-50 md-small-size-50">
             <div v-if="!isEditingWearing" class="font-size-30 font-bold-extra mb-30 d-flex" style="height: 52px">
               <img
                 :src="
@@ -142,7 +142,7 @@
               :disabled="!campaignData.visibleSettings.showWearingGuide"
             />
           </div>
-          <div class="md-layout-item md-size-50 md-small-size-50">
+          <div class="md-size-50 md-small-size-50">
             <div v-if="!isEditingKnowledge" class="font-size-30 font-bold-extra mb-30 d-flex" style="height: 52px">
               <img
                 :src="
@@ -222,18 +222,18 @@
   </div>
 </template>
 <script>
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import { MaryokuInput } from "@/components";
-import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
+import { mapActions }     from "vuex";
+import Swal               from "sweetalert2";
+import MaryokuTextarea    from "@/components/Inputs/MaryokuTextarea";
+import { MaryokuInput }   from "@/components";
+import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import TitleEditor from "./components/TitleEditor";
-import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-import HideSwitch from "@/components/HideSwitch";
-import { getBase64 } from "@/utils/file.util";
-import Swal from "sweetalert2";
-import CalendarEvent from "@/models/CalendarEvent";
-import S3Service from "@/services/s3.service";
-import { mapActions } from "vuex";
+import TitleEditor        from "./components/TitleEditor";
+import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
+import HideSwitch         from "@/components/HideSwitch";
+import { getBase64 }      from "@/utils/file.util";
+import CalendarEvent      from "@/models/CalendarEvent";
+import S3Service          from "@/services/s3.service";
 
 export default {
   components: {
@@ -552,6 +552,23 @@ export default {
     height: 100%;
     left: 0;
     top: 0;
+  }
+
+  .raw-rsvp {
+    display        : flex;
+    flex-direction : row;
+    font-weight    : normal;
+    flex-wrap      : wrap;
+    margin-right: -25px;
+    margin-left: -25px;
+    & > div {
+      width: calc(50% - 50px);
+      margin-right: 25px;
+      margin-left: 25px;
+      @media(max-width: 992px){
+        width: 100%;
+      }
+    }
   }
 }
 </style>

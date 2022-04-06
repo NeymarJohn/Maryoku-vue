@@ -275,7 +275,7 @@
           class="bundle-section d-flex justify-content-between align-center"
         >
           <div class="font-size-22 bundle-description">
-            <span class="material-icons" style="font-size: 32px;">redeem</span>
+            <img :src="`${iconUrl}Asset 577.svg`" style="width: 30px">
             <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
             <span style="font-size: 30px; margin-left: 20px">{{ proposal.bundleDiscount.percentage }}%</span>
             <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
@@ -779,6 +779,7 @@ export default {
       isHealth: false,
       isSeating: false,
       isPolicy: false,
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       // auth: auth,
       showCommentEditorPanel: false,
       calendarEvent: {},
