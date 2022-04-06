@@ -284,7 +284,7 @@ export default {
         color: #000 !important;
     }
     .dropdown-width{
-        // width: max-content;
+         min-width: max-content;
       font-size: 16px;
       .action-item{
         &:hover{
