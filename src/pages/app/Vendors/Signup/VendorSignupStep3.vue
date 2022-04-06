@@ -69,13 +69,13 @@
             </div>
           </div>
           <div class="card">
-            <vendor-discount-section :data="vendorDiscountPolicies" @change="changeDiscountPolicy"/>
+            <vendor-discount-section :data="vendorDiscountPolicies" />
             <div class="title-cont">
               <div class="top mt-30 mb-2">
                 <h5>Does this include double discounts?</h5>
               </div>
             </div>
-            <check-box v-model="vendorDiscountPolicies.double" @changed="changedCheckBox" />
+            <check-box :checked="doubleDiscounts" @changed="changedCheckBox('doubleDiscounts', $event)" />
             <div class="title-cont mt-3">
               <div class="top">
                 <h5>What a valid discount?</h5>
@@ -83,7 +83,7 @@
             </div>
             <div class="md-layout my-2">
               <div v-for="option in discountOptions" :key="option.value" class="md-layout-item md-size-33 ">
-                <md-checkbox v-model="vendorDiscountPolicies.valid" :value="option.value" class="md-vendor" @change="changedCheckBox">
+                <md-checkbox v-model="vendor.discount" :value="option.value" class="md-vendor">
                   {{
                     option.label
                   }}
@@ -660,15 +660,12 @@ export default {
     isAllHolidays(data) {
       return data.holidays.every(it => it.selected);
     },
-    changeDiscountPolicy(e){
-        this.vendorDiscountPolicies = {...this.vendorDiscountPolicies, ...e};
-        this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
-    },
-    changedCheckBox() {
-        this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
+    changedCheckBox(field, value) {
+        if (field === "doubleDiscounts") {
+            this.doubleDiscounts = value;
+        }
     },
     init: async function() {
-      console.log('step3', this.vendor);
       let vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPricingPolicies with saved vendor
@@ -718,15 +715,7 @@ export default {
       }
 
       // set vendorDiscountPolicies from db
-      if (this.vendor.discountPolicies) {
-          this.vendorDiscountPolicies = this.vendor.discountPolicies;
-      } else {
-          this.vendorDiscountPolicies = {
-                double: false,
-                valid: "",
-          };
-      }
-
+      this.vendorDiscountPolicies = this.vendor.discountPolicies;
 
       // set selectedReligion from saved vendor
       if (this.vendor.selectedReligion && this.vendor.selectedReligion.length) {

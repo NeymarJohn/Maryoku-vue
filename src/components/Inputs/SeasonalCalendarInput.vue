@@ -12,35 +12,33 @@
       @input="handleInput"
     >
     <div v-if="showCalendarPicker" ref="datePicker">
-      <div ref="timePickerPanel" v-click-outside="closeDatePicker" class="seasonal-picker" style="z-index: 200 !important">
-        <div class="position-relative">
-            <div class="message-arrow"></div>
-        </div>
-        <div class=" d-flex md-layout">
-          <div class="md-layout-item md-size-60 md-layout">
-            <div v-for="month in monthOptions"
-                 :key="month.value"
-                 class="md-layout-item md-size-33 d-flex align-center justify-content-center position-relative"
-            >
-              <md-button
-                class="m-0"
-                :class="months.includes(month.value) ? 'md-vendor': 'md-simple md-black-middle'"
-                @click="changeMonth(month.value)"
-              >
-                {{ `${month.label}` }}
-              </md-button>
-            </div>
+      <div ref="timePickerPanel" v-click-outside="closeDatePicker" class="seasonal-picker picker-panel" style="z-index: 200 !important">
+        <div class="md-layout">
+          <div v-for="option in seasonOptions"
+               :key="option.value"
+               class="md-layout-item md-size-45 border d-flex flex-column align-center justify-content-center px-40 pt-30 pb-10 m-5"
+               :class="season === option.value ? 'purple-bg' : ''"
+               @click="changeSeason(option.value)"
+          >
+            <!--            <img :src="`${$iconURL}${season.icon}`">-->
+            <img src="/static/winter.png" width="108px">
+            <span class="mt-20 font-size-14 color-black-middle">{{ option.label }}</span>
           </div>
-          <div class="md-layout-item md-size-40 md-layout p-0">
-            <div v-for="option in seasonOptions"
-                 :key="option.value"
-                 class="md-layout-item md-size-50 d-flex flex-column align-center justify-content-center px-30 pt-10 pb-5"
-                 :class="season === option.value ? 'purple-bg' : ''"
-                 @click="changeSeason(option.value)"
+        </div>
+
+        <div class="md-layout">
+          <div v-for="month in monthOptions"
+               :key="month.value"
+               class="md-layout-item md-size-50 d-flex align-center justify-content-center position-relative"
+          >
+            <md-button
+              class="md-simple md-outlined"
+              :class="months.includes(month.value) ? 'md-vendor purple-bg': 'md-black-middle'"
+              @click="changeMonth(month.value)"
+              style="width: 180px"
             >
-              <img :src="`${$iconURL}Seasonal/${season === option.value ? 'purple_': ''}${option.icon}.svg`" width="40px">
-              <span class="mt-10 font-size-12 color-black-middle">{{ option.label }}</span>
-            </div>
+              {{ `${month.label} ${getYear}` }}
+            </md-button>
           </div>
         </div>
       </div>
@@ -97,10 +95,10 @@ export default {
       season: null,
       months: [],
       seasonOptions: [
-          {label: "Winter", value: "winter", icon: "winter"},
-          {label: "Spring", value: "spring", icon: "spring"},
-          {label: "Summer", value: "summer", icon: "summer"},
-          {label: "Fall",   value: "fall",   icon: "fall"},
+          {label: "Winter", value: "winter", icon: ""},
+          {label: "Spring", value: "spring", icon: ""},
+          {label: "Summer", value: "summer", icon: ""},
+          {label: "Fall", value: "fall", icon: ""},
       ],
       monthOptions: MonthOptions,
     };
@@ -130,11 +128,11 @@ export default {
       if (index > -1) this.months.splice(index, 1);
       else this.months.push(value);
 
-      this.$emit("change", {season: this.season, months: this.months});
+      this.$emit('change', {season: this.season, months: this.months});
     },
     changeSeason(value) {
       this.season = value;
-      this.$emit("change", {season: this.season, months: this.months});
+      this.$emit('change', {season: this.season, months: this.months});
     }
   },
 
@@ -146,13 +144,14 @@ export default {
 }
 .seasonal-picker{
     position: absolute;
-    left: 0;
+    left: -200px;
     top: 80px;
     background-color: #fff;
-    min-width: 540px;
-    padding: 20px;
+    min-width: 800px;
+    padding: 40px;
     z-index: 20;
     box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
+    display: flex !important;
 }
 input {
   border: 0.5px solid #dddddd;
@@ -169,15 +168,5 @@ input {
 }
 .purple-bg {
     background-color: #e9dfe8;
-}
-.message-arrow{
-    position: absolute;
-    top: -36px;
-    left: 30px;
-    width: 0;
-    height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-bottom: 18px solid white;
 }
 </style>
