@@ -104,9 +104,9 @@ export default {
       max-width: 600px;
       span{
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 10px;
         margin-right: 20px;
-        padding: 10px 14px;
+        padding: 4px 14px;
         border-radius: 100px;
         border: solid 1px #a0a0a0;
         text-transform: capitalize;
