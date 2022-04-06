@@ -1,34 +1,25 @@
-
 <template>
-  <modal class="send-proposal-modal">
-    <template slot="header">
-      <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
-        <md-icon>clear</md-icon>
-      </md-button>
-    </template>
-    <template slot="body">
-      <div>
-        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`">
-        <!-- <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div> -->
-        <div class="font-size-30 font-bold mt-30 color-purple p-success">
-          Proposal sent successfully!
-        </div>
-        <div class="mt-10 ">
-          <span class="text-to">To:</span><span class="to-email"> mayaetti@gmail.com</span>
-        </div>
-        <!-- <div class="mt-40">A copy will be sent to your email</div> -->
-        <div class="mt-50 copy-email">
-          you will receive a copy to your email
-        </div>
-        <div class="mt-30">
-          <md-button class="md-vendor maryoku-btn cool-dash" @click="goToDashboard">
-            Cool, Go To Dashboard
-          </md-button>
-        </div>
-      </div>
-    </template>
-    <template slot="footer" />
-  </modal>
+	<modal class="send-proposal-modal">
+		<template slot="header">
+			<md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
+				<md-icon>clear</md-icon>
+			</md-button>
+		</template>
+		<template slot="body">
+			<div>
+				<img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`" />
+				<!-- <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div> -->
+				<div class="font-size-30 font-bold mt-30 color-purple p-success">Proposal sent successfully!</div>
+				<div class="mt-10"><span class="text-to">To:</span><span class="to-email"> mayaetti@gmail.com</span></div>
+				<!-- <div class="mt-40">A copy will be sent to your email</div> -->
+				<div class="mt-50 copy-email">you will receive a copy to your email</div>
+				<div class="mt-30">
+					<md-button class="md-vendor maryoku-btn cool-dash" @click="goToDashboard"> Cool, Go To Dashboard </md-button>
+				</div>
+			</div>
+		</template>
+		<template slot="footer" />
+	</modal>
 </template>
 <script>
 import { Modal, MaryokuInput } from "@/components";
@@ -46,186 +37,188 @@ const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v
 const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events";
 
 export default {
-  components: {
-    Modal,
-    MaryokuInput,
-  },
-  props: {
-    screen: {
-      type: Number,
-      default: 1,
-    },
-    campaign: {
-      type: Object,
-      default: () => {},
-    },
-    events: [Array],
-  },
-  data() {
-    return {
-      showZoomLink: false,
-      showCalendar: false,
-      sender: "outlook",
-      authorized: false,
-    };
-  },
-  created() {
-    this.api = gapi;
-    this.api.load("client:auth2", this.initClient);
-  },
-  methods: {
-    close() {
-      this.$emit("close");
-    },
-    setRsvpToZoom() {
-      this.$emit("setRSVP");
-    },
-    initClient() {
-      let vm = this;
+	components: {
+		Modal,
+	},
+	props: {
+		screen: {
+			type: Number,
+			default: 1,
+		},
+		campaign: {
+			type: Object,
+			default: () => {},
+		},
+		events: {
+			type: Array,
+			default: () => [],
+		},
+	},
+	data() {
+		return {
+			showZoomLink: false,
+			showCalendar: false,
+			sender: "outlook",
+			authorized: false,
+		};
+	},
+	created() {
+		this.api = gapi;
+		this.api.load("client:auth2", this.initClient);
+	},
+	methods: {
+		close() {
+			this.$emit("close");
+		},
+		setRsvpToZoom() {
+			this.$emit("setRSVP");
+		},
+		initClient() {
+			let vm = this;
 
-      vm.api.client
-        .init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: DISCOVERY_DOCS,
-          scope: SCOPES,
-        })
-        .then((_) => {
-          // Listen for sign-in state changes.
-          vm.api.auth2.getAuthInstance().isSignedIn.listen(vm.authorized);
-        });
-    },
+			vm.api.client
+				.init({
+					apiKey: API_KEY,
+					clientId: CLIENT_ID,
+					discoveryDocs: DISCOVERY_DOCS,
+					scope: SCOPES,
+				})
+				.then((_) => {
+					// Listen for sign-in state changes.
+					vm.api.auth2.getAuthInstance().isSignedIn.listen(vm.authorized);
+				});
+		},
 
-    handleGoogleAuthClick() {
-      var zone_name = moment.tz.guess();
-      var timezone = moment.tz(zone_name).zoneAbbr();
-      const timeZoneName = convertTimezoneName(timezone);
-      console.log(timeZoneName);
+		handleGoogleAuthClick() {
+			var zone_name = moment.tz.guess();
+			var timezone = moment.tz(zone_name).zoneAbbr();
+			const timeZoneName = convertTimezoneName(timezone);
+			console.log(timeZoneName);
 
-      Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
-        this.authorized = true;
-        this.events.forEach((e) => {
-          var event = {
-            summary: e.customer.name,
-            location: e.location,
-            description: "",
-            start: {
-              dateTime: moment(e.startTime).toDate(),
-              timeZone: timeZoneName,
-            },
-            end: {
-              dateTime: moment(e.endTime).toDate(),
-              timeZone: timeZoneName,
-            },
-            recurrence: ["RRULE:FREQ=DAILY;COUNT=2"],
-            reminders: {
-              useDefault: false,
-              overrides: [
-                { method: "email", minutes: 24 * 60 },
-                { method: "popup", minutes: 10 },
-              ],
-            },
-          };
+			Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
+				this.authorized = true;
+				this.events.forEach((e) => {
+					var event = {
+						summary: e.customer.name,
+						location: e.location,
+						description: "",
+						start: {
+							dateTime: moment(e.startTime).toDate(),
+							timeZone: timeZoneName,
+						},
+						end: {
+							dateTime: moment(e.endTime).toDate(),
+							timeZone: timeZoneName,
+						},
+						recurrence: ["RRULE:FREQ=DAILY;COUNT=2"],
+						reminders: {
+							useDefault: false,
+							overrides: [
+								{ method: "email", minutes: 24 * 60 },
+								{ method: "popup", minutes: 10 },
+							],
+						},
+					};
 
-          var request = gapi.client.calendar.events.insert({
-            calendarId: "primary",
-            resource: event,
-          });
+					var request = gapi.client.calendar.events.insert({
+						calendarId: "primary",
+						resource: event,
+					});
 
-          const vm = this;
-          request.execute(function (event) {
-            console.log(event.htmlLink);
-          });
-        });
-      });
-    },
-    handleMsAuthClick() {
-      this.events.forEach((e) => {
-        let newEvent = {
-          subject: e.customer.name,
-          start: {
-            dateTime: moment(e.startTime).toDate(),
-            timeZone: "GMT",
-          },
-          end: {
-            dateTime: moment(e.startTime).toDate(),
-            timeZone: "GMT",
-          },
-        };
-        const vm = this;
-        addOutlookCalendarEvent(newEvent)
-          .then(() => {})
-          .catch((error) => {});
-      });
-    },
-    syncCalendar() {
-      if (this.sender === "google") {
-        this.handleGoogleAuthClick();
-      } else if (this.sender === "outlook") {
-        this.handleMsAuthClick();
-      }
-    },
-    goToDashboard() {
-      this.close();
-      this.$router.push("/vendor/dashboard");
-    },
-  },
+					const vm = this;
+					request.execute(function (event) {
+						console.log(event.htmlLink);
+					});
+				});
+			});
+		},
+		handleMsAuthClick() {
+			this.events.forEach((e) => {
+				let newEvent = {
+					subject: e.customer.name,
+					start: {
+						dateTime: moment(e.startTime).toDate(),
+						timeZone: "GMT",
+					},
+					end: {
+						dateTime: moment(e.startTime).toDate(),
+						timeZone: "GMT",
+					},
+				};
+				const vm = this;
+				addOutlookCalendarEvent(newEvent)
+					.then(() => {})
+					.catch((error) => {});
+			});
+		},
+		syncCalendar() {
+			if (this.sender === "google") {
+				this.handleGoogleAuthClick();
+			} else if (this.sender === "outlook") {
+				this.handleMsAuthClick();
+			}
+		},
+		goToDashboard() {
+			this.close();
+			this.$router.push("/vendor/dashboard");
+		},
+	},
 };
 </script>
 <style lang="scss" scoped>
 .send-proposal-modal {
-  .header-text {
-    line-height: 1.5em;
-  }
-  .sync_button {
-    width: 250px;
-    height: 50px;
-    border: solid 1px #641856;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  }
-  .tips {
-    max-width: 500px;
-  }
-  .calendar-selector {
-    background-color: #f3f7fd;
-    width: 150px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    cursor: pointer;
-    &.active {
-      background-color: #641856;
-      color: white;
-    }
-  }
+	.header-text {
+		line-height: 1.5em;
+	}
+	.sync_button {
+		width: 250px;
+		height: 50px;
+		border: solid 1px #641856;
+		box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+	}
+	.tips {
+		max-width: 500px;
+	}
+	.calendar-selector {
+		background-color: #f3f7fd;
+		width: 150px;
+		height: 150px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 5px;
+		cursor: pointer;
+		&.active {
+			background-color: #641856;
+			color: white;
+		}
+	}
 }
 .proposal-submitted {
-    .p-success {
-        line-height: 1.53;
-        letter-spacing: normal;
-    }
-    .to-email {
-        -webkit-text-stroke: 1px #707070;
-        font-size: 20px;
-        line-height: normal;
-        letter-spacing: normal;
-    }
-    .text-to {
-        font-weight: 600;
-        font-size: 20px;
-        line-height: normal;
-        letter-spacing: normal;
-    }
-    .copy-email {
-        font-size: 20px;
-        font-weight: 600;
-    }
-    .cool-dash {
-        width: 301px;
-        height: 52px;
-        padding: 15px 59.3px 16px 59.7px;
-    }
+	.p-success {
+		line-height: 1.53;
+		letter-spacing: normal;
+	}
+	.to-email {
+		-webkit-text-stroke: 1px #707070;
+		font-size: 20px;
+		line-height: normal;
+		letter-spacing: normal;
+	}
+	.text-to {
+		font-weight: 600;
+		font-size: 20px;
+		line-height: normal;
+		letter-spacing: normal;
+	}
+	.copy-email {
+		font-size: 20px;
+		font-weight: 600;
+	}
+	.cool-dash {
+		width: 301px;
+		height: 52px;
+		padding: 15px 59.3px 16px 59.7px;
+	}
 }
 </style>
