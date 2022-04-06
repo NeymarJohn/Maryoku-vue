@@ -274,16 +274,19 @@
           v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied && checkedAllBundledOffers"
           class="bundle-section d-flex justify-content-between align-center"
         >
-          <div>
-            <span class="font-size-30 font-bold">Bundle offer</span>
-            <span>{{ proposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(proposal.bookedServices) }}</span>
+          <div class="font-size-22 bundle-description">
+            <img :src="`${iconUrl}Asset 577.svg`" style="width: 30px">
+            <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
+            <span style="font-size: 30px; margin-left: 20px">{{ proposal.bundleDiscount.percentage }}%</span>
+            <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
-          <div class="font-size-30 font-bold">
-            -${{ bundledDiscountPrice | withComma }}
+          <div class="font-size-22 font-bold" style="text-align: end;">
+            ${{ (totalPrice - bundledDiscount)| withComma(Number) }}
+            <br/>
+            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ totalPrice| withComma(Number) }}</span>
           </div>
         </div>
-        <div class="element-pricing-table total-list md-small-hide" @click="test">
+        <div class="element-pricing-table total-list md-small-hide">
           <table>
             <tbody>
               <tr>
@@ -295,17 +298,12 @@
                 </td>
                 <td class="element-value">
                   <div class="element-price">
-                    ${{ totalPrice | withComma }}
+                    ${{ totalPriceWithDiscount * tax  | withComma }}
                   </div>
                   <div v-if="proposal.bundleDiscount.percentage" class="discount-details">
-                    ({{ proposal.bundleDiscount.percentage }}% off)
-                    <span>{{ totalPrice + bundledDiscountPrice | withComma }}</span>
+                    ({{ discount.percentage }}% off)
+                    <span style="text-decoration: line-through; font-size: 14px">{{ totalPrice * tax | withComma }}</span>
                   </div>
-                </td>
-                <td class="element-actions">
-                  <md-button class="md-simple md-just-icon">
-                    <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`">
-                  </md-button>
                 </td>
               </tr>
             </tbody>
@@ -781,6 +779,7 @@ export default {
       isHealth: false,
       isSeating: false,
       isPolicy: false,
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       // auth: auth,
       showCommentEditorPanel: false,
       calendarEvent: {},
@@ -860,15 +859,28 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
-      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * (tax.percentage || 0)) / 100);
-      return tax;
+      tax.price = Math.round(((tax.percentage || 0)) / 100);
+      return tax.percentage / 100 + 1;
     },
     totalPrice(){
       let totalPrice = 0;
       for (const key in this.proposal.pricesByCategory){
+        if (this.proposal.bookedServices.includes(key) )
         totalPrice += this.proposal.pricesByCategory[key];
       }
-      return totalPrice - ((totalPrice * this.proposal.bundleDiscount.percentage) / 100);
+      return totalPrice;
+    },
+    bundledDiscount(){
+      return this.totalPrice * this.proposal.bundleDiscount.percentage / 100;
+    },
+    totalPriceWithDiscount(){
+     const price = this.totalPrice - (this.totalPrice * this.discount.percentage / 100 );
+     if(this.proposal.bundleDiscount.isApplied && this.proposal.bundleDiscount && this.checkedAllBundledOffers){
+       return this.proposal.bundleDiscount.percentage ?
+         price - (price * this.proposal.bundleDiscount.percentage / 100):
+         price - this.proposal.bundleDiscount.total;
+     }
+     return price;
     },
   },
   created() {
@@ -879,9 +891,6 @@ export default {
     this.commentComponents = this.proposal.commentComponent;
   },
   methods: {
-    test(){
-      console.log("\x1b[32m ##-878, EventProposalDetails.vue",this.proposal);
-    },
     ...mapMutations("eventPlan", ["updateCommentComponents"]),
     ...mapMutations("EventPlannerVuex", [
       "setEventModal",
@@ -1050,6 +1059,7 @@ export default {
   margin-top: 35px;
   padding: 1.5em;
   font-family: "Manrope-Regular", sans-serif;
+  border-radius: 3px;
   &-header {
     display: grid;
     grid-template-columns: 30% 20% 20% 20% 10%;
@@ -1620,10 +1630,23 @@ export default {
       }
 
       .bundle-section {
-        padding: 40px 60px;
+        padding: 28px 60px 28px 25px;
         background-color: #ffedb7;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         border-radius: 3px;
+        border: solid 1px #c1c0c0;
+        .bundle-description{
+          display: flex;
+          align-items: center;
+          .bundle-title{
+            margin: 10px;
+            min-width: max-content;
+          }
+          .bundle-services{
+            font-size: 16px;
+            padding: 0 20px;
+          }
+        }
       }
       .policy-section {
         margin-top: 4em;

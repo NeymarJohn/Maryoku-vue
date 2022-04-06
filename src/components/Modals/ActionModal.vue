@@ -274,9 +274,26 @@ export default {
       this.showLinkRoleEditor = false;
     },
     async saveNegotiation(params) {
-        let request = await ProposalRequest.find(this.proposal.proposalRequestId);
-        request.expiredTime = moment(new Date()).add(3, "days").valueOf();
-        await request.save();
+        if (this.proposal.nonMaryoku) {
+
+            const request = {
+                vendorId: this.proposal.vendor.id,
+                requestedTime: new Date().getTime(),
+                expiredTime: moment(new Date()).add(3, "days").valueOf(),
+            };
+
+            const res1 = await this.$store.dispatch("modal/saveProposalRequest",{
+                request,
+                vendor: new Vendor({id: this.proposal.vendor.id}),
+            });
+
+            await this.$store.dispatch("modal/saveProposal", {...this.proposal, proposalRequestId: res1.id});
+        } else {
+            let request = await ProposalRequest.find(this.proposal.proposalRequestId);
+            request.expiredTime = moment(new Date()).add(3, "days").valueOf();
+            await request.save();
+        }
+
 
         const negotiation = {
             proposalId: this.proposal.id,

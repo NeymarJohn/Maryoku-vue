@@ -65,7 +65,6 @@
               Drag your file here
             </div>
           </div>
-          <img v-else :src="uploadedSignature" style="max-height: 300px">
         </vue-dropzone>
       </div>
     </template>
@@ -97,8 +96,8 @@ export default {
 
   },
   props: {
-    data: {
-        type: Object,
+    signature: {
+        type: [Object, null],
     },
     proposalId: {
         type: String,
@@ -112,25 +111,32 @@ export default {
     return {
       signatureAdded: false,
       signatureType: "draw",
-      signatureName: this.data.signatureName,
-      signatureData: this.data.jpeg,
-      uploadedSignature: this.data.uploadedSignature,
+      signatureName:  "",
+      signatureData:  "",
+      uploadedSignature:  "",
       option: {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",
       },
       dropzoneOptions: {
         previewTemplate: this.template(),
-        paramName: "images",
-        url: "https://httpbin.org/post",
+        paramName: "file",
+        url: `${process.env.SERVER_URL}/uploadFile`,
         acceptedFiles: "image/*",
         maxFilesize: 5,
-        headers: {"My-Awesome-Header": "header value"},
+        headers: {"Content-Type": "multipart/form-data"},
       },
     };
   },
-
-  methods: {
+  mounted() {
+      if (this.signature) {
+          this.signatureName = this.signature.signatureName;
+          this.signatureData = this.signature.jpeg;
+          this.uploadedSignature = this.signature.uploadedSignature || "";
+          console.log('mounted', this.signature)
+      }
+  },
+    methods: {
     template: function () {
       return `<div class="dz-preview dz-file-preview">
                 <div class="dz-image">
