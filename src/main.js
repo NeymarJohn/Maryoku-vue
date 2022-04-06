@@ -109,8 +109,7 @@ router.beforeEach((to, from, next) => {
   } else {
     axios.defaults.headers.common.Authorization = authHeader().Authorization;
   }
-
-  const currentToken = localStorage.getItem("manage_id_token") || to.query.token ; //gettig authentication token
+  const currentToken = localStorage.getItem("manage_id_token");
 
   // check home router
   if (to.path === "/" && currentToken) {

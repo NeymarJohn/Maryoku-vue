@@ -4,8 +4,9 @@
       <img v-if="clicked && selectedIcon" :src="selectedIcon">
       <img v-else :src="icon" :style="iconStyle">
       <span class="label-text">{{ label }}</span>
-      <span v-if="hasBadge && !clicked" class="badge-mark" />
+      <span v-if="proposalCategory" class="badge-mark" />
     </button>
+    <span v-if="hasBadge && !clicked" class="badge-mark" />
   </div>
 </template>
 <script>
@@ -46,24 +47,21 @@ export default {
   },
   data() {
     return {
-      clicked: this.defaultStatus,
+      clicked: false,
     };
   },
   watch: {
     defaultStatus(newValue, oldValue) {
-      console.log('default.status.watch', this.label, newValue)
       this.clicked = newValue;
     },
   },
-  mounted() {
+  created() {
     this.clicked = this.defaultStatus;
   },
   methods: {
     handleClick() {
       if (this.disabled) return;
-
-      this.clicked = this.proposalCategory ? true : !this.clicked;
-      console.log('click', this.clicked)
+      this.clicked = true;
       this.$emit("click", this.clicked);
     },
   },

@@ -148,7 +148,6 @@ export default {
           `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?action=${action}&token=`,
         );
       }
-      console.log("callback", callback);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     signIn() {

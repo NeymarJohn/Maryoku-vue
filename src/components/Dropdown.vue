@@ -69,7 +69,6 @@ export default {
     },
     closeDropDown () {
       this.isOpen = false;
-      this.$emit('close');
     }
   }
 };
