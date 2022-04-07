@@ -17,7 +17,9 @@
                 {{ tenantUser.name ? tenantUser.name : tenantUser.username }}
               </md-button>
               <md-menu-content class="user-menu-content">
-                <md-menu-item @click="logout"> Logout </md-menu-item>
+                <md-menu-item @click="logout">
+                  Logout
+                </md-menu-item>
               </md-menu-content>
             </md-menu>
             <md-button class="md-simple md-just-icon question" @click="showSingupDialog">
@@ -69,18 +71,20 @@
           placeholder="Type password here..."
         />
         <div class="terms-and-conditions">
-          <md-checkbox v-model="keepMe"> 
-            Keep me signed in 
+          <md-checkbox v-model="keepMe">
+            Keep me signed in
           </md-checkbox>
         </div>
         <div class="md-error">
           {{ error }}
         </div>
-        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup"> Sign In </md-button>
+        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">
+          Sign In
+        </md-button>
         <div class="text-center">
           <!-- <a href class="forget-password">Forgot your password ?</a> -->
-          <md-button class="md-black md-maryoku mt-4 md-simple mt-4"> 
-            Forgot my password? 
+          <md-button class="md-black md-maryoku mt-4 md-simple mt-4">
+            Forgot my password?
           </md-button>
         </div>
       </md-dialog-content>
@@ -180,6 +184,7 @@ export default {
             },
           );
       }
+
     },
     authenticate(provider) {
       this.loading = true;
@@ -190,10 +195,16 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     logout() {
-      this.$store.dispatch("auth/logout");
+      AuthService.logout()
+        .then(() => {
+          this.$store.dispatch("auth/logout");
+        })
+        .catch((err) => {
+          this.$store.dispatch("auth/logout");
+        });
     },
   },
-
+  
   beforeRouteUpdate(to, from, next) {
     next();
   },
@@ -209,6 +220,9 @@ $baseColor: #5c2153;
   width: 428px;
   z-index: 9999999;
   height: auto;
+
+  .md-dialog-container {
+  }
 
   .md-dialog-title {
     color: $baseColor;
