@@ -4,8 +4,8 @@
     <loader :active="isLoading" />
 
     <template v-if="!isLoading">
-      <div class="ml-60 mt-40 mr-30 mb-200">
-        <div class="headers d-flex justify-content-between align-center">
+      <div class="ml-60 mt-40 mr-30">
+        <div class="d-flex justify-content-between align-center">
           <div>
             <ResizableToggleButton
               v-for="(component, index) in topCategories"
@@ -1102,12 +1102,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
-
-  .headers {
-    background-color: transparent;
-  }
-  .fixed-top { box-shadow: 1px 1px 10px rgba(0,0,0,0.12); padding: 7px;}
-
   .proposalTitle {
     font-size: 30px;
     font-weight: 800;
@@ -1383,6 +1377,7 @@ export default {
 
   .proposal-card-items {
     padding: 0 0em;
+    margin-bottom: 1em;
     align-items: stretch;
     margin-top: 30px;
     display: grid;

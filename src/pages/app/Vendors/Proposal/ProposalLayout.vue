@@ -270,7 +270,6 @@ export default {
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "saveVendor", "setWizardStep"]),
     gotoNext() {
-      console.log('step', this.step, this.event.components.length)
       this.step = this.step + 1;
 
       // skip additional page if event doesn't have components
@@ -445,7 +444,7 @@ export default {
     }
   },
 
-
+  
 };
 </script>
 <style lang="scss" scoped>

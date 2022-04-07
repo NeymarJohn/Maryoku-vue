@@ -272,7 +272,7 @@ const mutations = {
     setStateByVersion(state, { key: "taxes", value: state.taxes });
   },
   setAdditionalServices: (state, services) => {
-    state.additionalServices = services;
+    Vue.set(state.additionalServices, services);
 
     setStateByVersion(state, {
       key: "additionalServices",
