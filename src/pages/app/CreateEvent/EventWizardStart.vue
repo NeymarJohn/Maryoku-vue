@@ -33,6 +33,43 @@
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
+  data () {
+    return {
+      selectedCountry: null,
+      selectedEmployee: null,
+      step: 1,
+      haveEventPlace: false,
+      flexibleWithDates: false,
+      eventTime: null,
+      eventDate: null,
+      eventData: {
+        location: null
+      },
+      modelValidations: {
+        location: {
+          required: true
+        },
+        date: {
+          required: true
+        },
+        eventType: {
+          required: true
+        }
+      },
+      options: ["ameed", "ahmad"]
+    };
+  },
+  computed: {
+    ...mapState("PublicEventPlanner", [
+      "publicEventData"
+    ]),
+    isLoggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    tenantUser() {
+      return this.$store.state.auth.user;
+    }
+  },
   created () {
     this.$set(this.eventData, "location", this.publicEventData.location);
     this.$set(this.eventData, "eventType", this.publicEventData.eventType);
@@ -86,46 +123,7 @@ export default {
         type: "danger"
       });
     }
-  },
-  data () {
-    return {
-      selectedCountry: null,
-      selectedEmployee: null,
-      step: 1,
-      haveEventPlace: false,
-      flexibleWithDates: false,
-      eventTime: null,
-      eventDate: null,
-      eventData: {
-        location: null
-      },
-      modelValidations: {
-        location: {
-          required: true
-        },
-        date: {
-          required: true
-        },
-        eventType: {
-          required: true
-        }
-      },
-      options: ["ameed", "ahmad"]
-    };
-  },
-  computed: {
-    ...mapState("PublicEventPlanner", [
-      "publicEventData"
-    ]),
-    isLoggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-    tenantUser() {
-        console.log("user", this.$store.state.auth.user);
-      return this.$store.state.auth.user;
-    }
   }
-
 };
 </script>
 <style lang="scss">

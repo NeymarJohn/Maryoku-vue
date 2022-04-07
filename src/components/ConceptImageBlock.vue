@@ -1,5 +1,11 @@
 <template>
-  <div ref="content" class="concept-image-block">
+  <div
+    ref="content"
+    :class="{
+      'concept-image-block': !isSmall,
+      'small-concept-image-block': isSmall
+    }"
+  >
     <div
       v-for="idx in 4"
       :key="idx"
@@ -34,6 +40,10 @@ export default {
       type: String,
       default: "",
     },
+    isSmall: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
@@ -133,6 +143,100 @@ export default {
       .image-section {
         width: calc(287.6px - 50px);
         height: calc(202px - 50px);
+      }
+    }
+  }
+}
+
+.small-concept-image-block {
+  position: relative;
+  height: 95.5px;
+  .image-background {
+    background: #ededed;
+    position: absolute;
+    &:first-child {
+      top: 35.5px;
+      left: 0;
+      width: calc(62.2px - 12.5px);
+      height: calc(58px - 12.5px);
+    }
+    &:nth-child(2) {
+      top: 10px;
+      left: 30.7px;
+      width: calc(74px - 12.5px);
+      height: calc(58px - 12.5px);
+    }
+    &:nth-child(3) {
+      top: 9.5px;
+      left: 111.2px;
+      width: calc(68px - 12.5px);
+      height: calc(81.2px - 12.5px);
+    }
+    &:nth-child(4) {
+      top: 18.5px;
+      left: 188px;
+      width: calc(45.5px - 12.5px);
+      height: calc(69.5px - 12.5px);
+    }
+  }
+  .images-list__item {
+    border: 2px dashed $rose;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    position: absolute;
+    &.no-border {
+      border: none;
+      border-radius: 2px;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    .image-section {
+      background-size: cover !important;
+      background-position: center center;
+    }
+    &:first-child {
+      top: 17.5px;
+      left: 7.5px;
+      z-index: 10;
+      .image-section {
+        width: calc(58.5px - 12.5px);
+        height: calc(58.5px - 12.5px);
+      }
+    }
+    &:nth-child(2) {
+      top: 43px;
+      left: 42px;
+      z-index: 9;
+      .image-section {
+        width: calc(80px - 12.5px);
+        height: calc(49.5px - 12.5px);
+      }
+    }
+    &:nth-child(3) {
+      top: 17.2px;
+      left: 85.5px;
+      z-index: 8;
+      .image-section {
+        width: calc(77.7px - 12.5px);
+        height: calc(59px - 12.5px);
+      }
+    }
+    &:nth-child(4) {
+      top: 23.5px;
+      left: 145.7px;
+      z-index: 7;
+      .image-section {
+        width: calc(60.5px - 12.5px);
+        height: calc(70px - 12.5px);
+      }
+    }
+    &:nth-child(5) {
+      top: 11px;
+      left: 180px;
+      z-index: 6;
+      .image-section {
+        width: calc(71.7px - 12.5px);
+        height: calc(50.5px - 12.5px);
       }
     }
   }

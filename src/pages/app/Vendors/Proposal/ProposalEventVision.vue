@@ -1,11 +1,11 @@
 <template>
   <div class="event-vision-wrapper proposal-add-personal-message-wrapper mt-40">
     <template v-if="event.concept">
-      <div class="conceptTitle mb-20">
-        <div class="font-size-40 line-height-1">
+      <div class="concept-title-wrap mb-20">
+        <div class="font-size-40 line-height-1 concept-title">
           {{ event.concept.name }}
         </div>
-        <div class="tags-wrapper" @click="test">
+        <div class="tags-wrapper">
           <span v-for="tag in event.concept.tags" :key="tag.name">
             {{ tag.name }}
           </span>
@@ -86,24 +86,25 @@ export default {
     }
   },
   methods: {
-    test(){
-      console.log("\x1b[32m ##-84, ProposalEventVision.vue",this.event);
-    }
   }
 };
 </script>
 <style lang="scss" scoped>
 .event-vision-wrapper {
-  .conceptTitle{
+  .concept-title-wrap{
     display: flex;
     align-items: center;
+    .concept-title{
+      min-width: max-content;
+    }
     .tags-wrapper{
       display: flex;
       flex-wrap: wrap;
       margin-left: 20px;
+      max-width: 600px;
       span{
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 10px;
         margin-right: 20px;
         padding: 4px 14px;
         border-radius: 100px;

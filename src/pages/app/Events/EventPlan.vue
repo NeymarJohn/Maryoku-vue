@@ -34,12 +34,6 @@ export default {
             ]
 		};
 	},
-	beforeCreate() {
-		this.$store.registerModule("eventPlan", state);
-	},
-	mounted() {
-		this.fetchData();
-	},
 	computed: {
 		...mapState("event", {
 			eventData: (state) => state.eventData,
@@ -55,73 +49,38 @@ export default {
 		},
 		barItems() {
 
-				const concept = {
-					title: "Get Inspired",
-					status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
-					route: "booking/concept",
-					icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-					progress: this.event.concept ? this.event.conceptProgress : 0,
-					componentId: "concept",
-					id: "concept-item",
-				};
-				const budget = {
-					title: "Craft Event Budget",
-					status: "not-complete",
-					route: this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget",
-					icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-					progress: this.event.budgetProgress,
-					componentId: "budget",
-					id: "budget-item",
-				};
-				const timeline = {
-					title: "Set The Schedule",
-					status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
-					route: "booking/timeline",
-					icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-					progress: this.event.timelineProgress,
-					componentId: "timeline",
-					id: "timeline-item",
-				};
-				const campaign = {
-					title: "Communicate With Guests",
-					status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-					route: "booking/campaign",
-					icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-					progress: this.event.campaignProgress,
-					componentId: "campaign",
-					id: "campaign-item",
-				};
-				const planningBoard = {
-					title: "Booking Vendors",
-					status: this.event.requirementProgresss === 100 ? "completed" : "not-complete",
-					route: "booking/planningboard",
-					icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-					progress: this.event.requirementProgress,
-					componentId: "planningboard",
-					id: "planningboard-item",
-				};
+            const sections = this.updateSection();
 
-                const sections = this.updateSection();
-				let elements = [];
+            let elements = [];
 
-				if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
-                    if (this.event.checkList && this.event.checkList.length) {
-                        this.event.checkList.forEach(it => {
-                            const section = sections.find(s => s.componentId === it.componentId);
-                            elements.push(section);
-                        });
-                    } else {
-                        elements = sections;
-                    }
-				} else if (this.user.currentUserType === "guest") {
-                    this.sections.forEach(it => {
-                        if (it.componentId === "overview" || it.componentId === "planningboard") {
-                            elements.push(it);
+            if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
+                if (this.event.checkList && this.event.checkList.length) {
+
+                    const bookingIndex = this.event.checkList.findIndex(it => it.componentId === "planningboard");
+
+                    this.event.checkList.forEach(it => {
+                        const section = sections.find(s => s.componentId === it.componentId);
+                        elements.push(section);
+
+
+                        if (it.componentId === "budget" && this.event.budgetProgress === 100 && bookingIndex === -1) {
+
+                            elements.push(sections[3]);
                         }
                     });
-				}
 
-				return elements;
+                } else {
+                    elements = sections;
+                }
+            } else if (this.user.currentUserType === "guest") {
+                this.sections.forEach(it => {
+                    if (it.componentId === "overview" || it.componentId === "planningboard") {
+                        elements.push(it);
+                    }
+                });
+            }
+
+            return elements;
 		},
 	},
 	watch: {
@@ -133,9 +92,15 @@ export default {
 			this.setConstantStates(newValue);
 		},
 	},
+	beforeCreate() {
+		this.$store.registerModule("eventPlan", state);
+	},
+	
+	mounted() {
+		this.fetchData();
+	},
 	created() {
-        console.log("event.plan", this.event);
-    },
+  },
 	methods: {
 		...mapActions("eventPlan", ["toggleCommentMode"]),
         updateSection() {
@@ -144,14 +109,23 @@ export default {
                 if(it.componentId === "concept") {
                     it.status = this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete";
                     it.progress = this.event.concept ? this.event.conceptProgress : 0;
-                } else if (it.componentId === "budget-item") {
+
+                } else if (it.componentId === "budget") {
                     it.route = this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget";
+                    it.progress = this.event.budgetProgress;
+
+
                 } else if (it.componentId === "planningboard") {
                     it.status = this.event.requirementProgresss === 100 ? "completed" : "not-complete";
+                    it.progress = this.event.requirementProgress;
+
                 } else if (it.componentId === "timeline") {
                     it.status = this.event.timelineProgress === 100 ? "completed" : "not-complete";
+                    it.progress = this.event.timelineProgress;
+
                 } else if (it.componentId === "campaign") {
                     it.status = this.event.campaignProgress === 100 ? "completed" : "not-complete";
+                    it.progress = this.event.campaignProgress;
                 }
 
                 if (it.componentId === "planningboard" ) {
