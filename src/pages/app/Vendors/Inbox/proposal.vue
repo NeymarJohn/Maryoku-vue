@@ -53,7 +53,7 @@
         @remove="removeVersion"
       />
       <div class="proposal-container event-proposal">
-        <EventProposalDetails v-if="proposal" :proposal="proposal" :landing-page="true" :non-maryoku="true" :step="step" :sh="true" :hide-footer="true" @change="handleStep" />
+        <EventProposalDetails v-if="proposal" :proposal="proposal" :landing-page="true" :non-maryoku="true" :step="step" :sh="true" @change="handleStep" />
       </div>
     </template>
     <template v-else>
@@ -160,11 +160,16 @@ export default {
         this.loading = false;
         let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
         if(proposal) {
-          this.commentComponents = proposal.commentComponent;
+          this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.$route.params.proposalId}`).then(res => {
+            console.log("res", res);
+            this.commentComponents = res;
+          });
           this.showProposal = !!this.commentComponents.length;
           proposal.versions = !proposal.versions ? [] : proposal.versions;
           this.$store.dispatch("vendorProposal/setProposal", { ...proposal });
           this.$store.dispatch("commentProposal/setProposal", { ...proposal });
+
+          //this.commentComponents = proposal.commentComponent;
         }
       });
     },

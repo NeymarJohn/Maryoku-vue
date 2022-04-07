@@ -80,12 +80,11 @@ export default {
     },
 
     showComments: function(event) {
-
       setTimeout(()=>{
         if (this.isDragging) return;
         this.$emit("show", this.commentComponent);
         this.showCommentList = true;
-      },500);
+      }, 500);
 
     },
     onDropped(component) {
