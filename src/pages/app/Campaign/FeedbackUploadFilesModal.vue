@@ -33,7 +33,7 @@
             <span class="upload-files-list-item-text">
               {{ file.name }}
             </span>
-            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.url)">
+            <span class="upload-files-list-item-button-delete" @click="deleteFile(index)">
               <md-icon class="icon-close">close</md-icon>
             </span>
           </div>
@@ -90,12 +90,13 @@
           </div>
         </div>
         <div class="footer-content-actions">
+          <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles" />
           <div class="cancel-text-bottom-block" @click="close">
             Cancel
           </div>
           <md-button
             class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default"
-            @click="uploadAllFiles"
+            @click="clickUploadFiles"
           >
             Upload files
           </md-button>
@@ -112,7 +113,6 @@ import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import S3Service from "@/services/s3.service";
 import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
-import { getBase64 } from "@/utils/file.util";
 
 export default {
   name: "FeedbackUploadImagesModal",
@@ -150,25 +150,44 @@ export default {
     chooseFiles() {
       document.getElementById("coverImage").click();
     },
-    async fileAdded(file) {
-      const image = await getBase64(file);
-      this.images.push({ src: image });
-      this.files.push(file);
+    fileAdded(file) {
+      const extension = file.type.split("/")[1];
+      const fileName = uuidv4();
+      return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true).then((response) => {
+        const file = response.data.upload;
+        this.images.push({ ...file, src: file.url });
+        this.files.push(file);
+        this.$emit("upload-files", this.images);
+      });
     },
-    deleteFile(fileURL) {
-      const deleteItemIndex = this.files.findIndex(file => file.url === fileURL);
-      const deleteCurrentItem = (deleteItemIndex === currentItemIndex);
+    deleteFile(deleteItemIndex) {
       const currentItemIndex = this.carouselItemIndex;
-      if (deleteCurrentItem) {
+      const deleteCurrentItem = (deleteItemIndex === currentItemIndex);
+      if (deleteCurrentItem && this.carouselItemIndex === 0) {
         this.carouselItemIndex = 0;
       }
-      if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
-        this.carouselItemIndex = this.carouselItemIndex - 1;
+      if (deleteCurrentItem && currentItemIndex > 0) {
+        this.carouselItemIndex = currentItemIndex - 1;
       }
+      if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
+        this.carouselItemIndex = currentItemIndex - 1;
+      }
+      this.images = this.images.filter((file, index) => index !== deleteItemIndex);
       this.files = this.files.filter((file, index) => index !== deleteItemIndex);
+      this.images = this.images.filter((file, index) => index !== deleteItemIndex);
+      this.$emit("upload-files", this.images);
     },
     changeCarouselItemIndex(itemIndex) {
       this.carouselItemIndex = itemIndex;
+    },
+    uploadFiles(event) {
+      event.target.files.forEach((file) => {
+        this.fileAdded(file);
+      });
+    },
+    clickUploadFiles() {
+      console.log({ input: document.getElementById("upload-files") });
+      document.getElementById("upload-files").click();
     },
     uploadAllFiles() {
       const functionsUploadFiles = this.files
@@ -214,9 +233,11 @@ export default {
   }
 
   .upload-files-list {
+    height: 80px;
     display: flex;
     flex-wrap: wrap;
-    padding-top: 35px;
+    margin-top: 35px;
+    overflow-y: auto;
 
     .upload-files-list-item {
       width: 200px;
