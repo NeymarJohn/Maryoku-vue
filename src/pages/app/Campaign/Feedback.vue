@@ -14,6 +14,12 @@
           border="no-border"
         />
         <div v-if="concept" class="change-cover-feedback">
+          <input
+            id="change-feedback-cover-image"
+            type="file"
+            style="display: none;"
+            @change="onFileChangeCoverImage"
+          />
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
@@ -434,7 +440,7 @@ export default {
       });
     },
     handleChangeCoverImage() {
-      this.$emit("change-cover-image", event);
+      document.getElementById("change-feedback-cover-image").click();
     },
     onFileChangeCoverImage(event) {
       const file = event.target.files[0];
@@ -465,7 +471,8 @@ export default {
   .change-cover {
     width: 1133px;
     height: 350px;
-    object-fit: cover;
+    filter: brightness(50%);
+    object-fit: none;
     border-radius: 20px;
   }
 

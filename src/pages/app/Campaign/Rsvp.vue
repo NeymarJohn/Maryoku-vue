@@ -6,18 +6,21 @@
           Get everyone to RSVP
         </div>
         <div class="cover-preview">
-          <img v-if="campaignData.coverImage" :src="campaignData.coverImage" class="mr-10">
-          <concept-image-block
-            v-else
-            class="hidden"
-            :images="concept.images"
-            :colors="concept.colors"
-            border="no-border"
-          />
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
-            Change Cover(Size 1200 * 400)
-          </md-button>
+          <img :src="campaignData.coverImage || campaignData.defaultCoverImage" class="mr-10">
+          <label for="cover">
+            <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
+              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
+              Change Cover(Size 1200 * 400)
+            </md-button>
+          </label>
+          <input
+            id="coverImage"
+            style="display: none"
+            name="attachment"
+            type="file"
+            multiple="multiple"
+            @change="onFileChange"
+          >
         </div>
         <div class="wrapper-change-logo">
           <div class="change-logo">
@@ -219,19 +222,18 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-import Swal from "sweetalert2";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import { MaryokuInput } from "@/components";
-import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
+import { mapActions }     from "vuex";
+import Swal               from "sweetalert2";
+import MaryokuTextarea    from "@/components/Inputs/MaryokuTextarea";
+import { MaryokuInput }   from "@/components";
+import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import TitleEditor from "./components/TitleEditor";
-import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-import HideSwitch from "@/components/HideSwitch";
-import { getBase64 } from "@/utils/file.util";
-import CalendarEvent from "@/models/CalendarEvent";
-import S3Service from "@/services/s3.service";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
+import TitleEditor        from "./components/TitleEditor";
+import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
+import HideSwitch         from "@/components/HideSwitch";
+import { getBase64 }      from "@/utils/file.util";
+import CalendarEvent      from "@/models/CalendarEvent";
+import S3Service          from "@/services/s3.service";
 
 export default {
   components: {
@@ -242,7 +244,6 @@ export default {
     TitleEditor,
     RsvpTimelinePanel,
     HideSwitch,
-    ConceptImageBlock,
   },
   props: {
     info: {
@@ -251,8 +252,7 @@ export default {
     },
     defaultData: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
   },
   data() {
@@ -290,10 +290,7 @@ export default {
   },
   computed: {
     event() {
-      return this.$store.state.event.eventData || {};
-    },
-    concept() {
-      return this.event.concept || {};
+      return this.$store.state.event.eventData;
     },
     user() {
       return this.$store.state.auth.user;
@@ -419,8 +416,8 @@ export default {
         this.$store.dispatch("campaign/revertCampaign", "RSVP");
       });
     },
-    handleChangeCoverImage(event) {
-      this.$emit("change-cover-image", event);
+    chooseFiles() {
+      document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
       const coverImageData = await getBase64(event.target.files[0]);
@@ -449,8 +446,7 @@ export default {
             title: newTitle,
           }),
         )
-        .then((result) => {
-        });
+        .then((result) => {});
     },
     handleChangeAddtionalData(key, value) {
       this.$store.commit("campaign/setAddtionalData", {
@@ -467,7 +463,7 @@ export default {
     },
     replaceLogo() {
       document.getElementById("replace-logo").click();
-    },
+    }
   },
 };
 </script>
@@ -479,7 +475,6 @@ export default {
     position: relative;
     overflow: hidden;
     border-radius: 30px;
-
     &:hover {
       .cover-preview::before {
         content: "";
@@ -489,13 +484,11 @@ export default {
         background: #050505;
       }
     }
-
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .change-cover-btn {
       position: absolute;
       left: 50%;
@@ -503,7 +496,6 @@ export default {
       transform: translate(-50%, -50%);
     }
   }
-
   .wrapper-change-logo {
     display: flex;
     align-items: center;
@@ -537,7 +529,6 @@ export default {
         height: 99px;
         object-fit: contain;
       }
-
       &:hover {
         .over-logo-campaign {
           display: flex;
@@ -545,18 +536,15 @@ export default {
       }
     }
   }
-
   .md-switch {
     .md-switch-label {
       display: block;
       padding: 0;
     }
   }
-
   .edit-btn {
     margin-top: 1em !important;
   }
-
   .rsvp-event-guid-background {
     position: absolute;
     opacity: 0.2;
@@ -567,18 +555,17 @@ export default {
   }
 
   .raw-rsvp {
-    display: flex;
-    flex-direction: row;
-    font-weight: normal;
-    flex-wrap: wrap;
+    display        : flex;
+    flex-direction : row;
+    font-weight    : normal;
+    flex-wrap      : wrap;
     margin-right: -25px;
     margin-left: -25px;
-
     & > div {
       width: calc(50% - 50px);
       margin-right: 25px;
       margin-left: 25px;
-      @media(max-width: 992px) {
+      @media(max-width: 992px){
         width: 100%;
       }
     }

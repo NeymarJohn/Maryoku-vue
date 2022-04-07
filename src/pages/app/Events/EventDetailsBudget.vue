@@ -1,328 +1,255 @@
 <template>
-  <div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
-    <budget-notifications />
-    <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
-    <div class="edit-event-details event-details-budget position-relative">
-      <comment-editor-panel
-        v-if="showCommentEditorPanel"
-        :comment-components="commentComponents"
-        @saveComment="saveComment"
-        @updateComment="updateComment"
-        @deleteComment="deleteComment"
-        @updateCommentComponent="updateCommentComponent"
-      />
-      <comment-sidebar v-if="showCommentEditorPanel" />
+	<div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
+		<budget-notifications />
+		<!-- todo show event checklist temp-->
+		<progress-sidebar :elements="barItems" page="plan" @change="changeCheckList" :event="event" />
+		<div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important">
+			<comment-editor-panel
+				v-if="showCommentEditorPanel"
+				:comment-components="commentComponents"
+				@saveComment="saveComment"
+				@updateComment="updateComment"
+				@deleteComment="deleteComment"
+				@updateCommentComponent="updateCommentComponent"
+			/>
+			<comment-sidebar v-if="showCommentEditorPanel" />
+			<!-- Event Header -->
+			<div class="event-header d-flex justify-content-between">
+				<div class="header-title">
+					<h3>
+						<img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15" />
+						Budget
+					</h3>
+				</div>
+				<header-actions
+					:custom-styles="{ marginForCircle: { marginLeft: '20px' } }"
+					:positioning="'stretch'"
+					@toggleCommentMode="toggleCommentMode"
+					@share="share"
+					@export="exportToPdf"
+				/>
+			</div>
+			<div class="md-layout justify-content-between">
+				<div class="md-layout-item md-size-40">
+					<div class="card-section card-overview">
+						<div class="section-header">Overview</div>
+						<div class="budget-list d-flex justify-content-center">
+							<div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #b7b7b7">
+								<div class="label-title mb-0">Budget</div>
+								<div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
+								<md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
+									Edit
+								</md-button>
+							</div>
+						</div>
+						<div class="budget-list d-flex justify-content-between">
+							<div class="budget-list__item width-50">
+								<div class="label-title">Allocated</div>
+								<div class="budget-value">${{ budgetStatistics.allocated | withComma }}</div>
+								<div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
+							</div>
+							<div class="budget-list__item width-50">
+								<div class="label-title">Booked</div>
+								<div class="budget-value">${{ budgetStatistics.booked | withComma }}</div>
+								<div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-section card-overview-saved text-center d-flex justify-center align-center">
+						<span>So far you saved :</span>
+						<md-icon v-if="budgetStatistics.saved >= 0" class="card-overview-saved-icon" style="color: #167c3a">
+							add_circle_outline
+						</md-icon>
+						<md-icon v-else class="card-overview-saved-icon color-red"> remove_circle_outline </md-icon>
+						<span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma }}</span>
+					</div>
+					<div class="card-section card-expense">
+						<div class="section-header">Expenses</div>
+						<div>
+							<pie-chart-round :event.sync="$store.state.event.eventData" :items="pieChartData" />
+						</div>
+					</div>
+				</div>
 
-      <div class="mx-30 mt-40">
-        <!-- Event Header -->
-        <div class="event-header d-flex justify-content-between">
-          <div class="header-title">
-            <h3>
-              <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-              Budget
-            </h3>
-          </div>
-          <header-actions
-            :custom-styles="{ marginForCircle: { marginLeft: '20px' } }"
-            :positioning="'stretch'"
-            @toggleCommentMode="toggleCommentMode"
-            @share="share"
-            @export="exportToPdf"
-          />
-        </div>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-40">
-            <div class="card-section card-overview">
-              <div class="section-header">
-                Overview
-              </div>
-              <div class="budget-list d-flex justify-content-center">
-                <div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #b7b7b7">
-                  <div class="label-title mb-0">
-                    Budget
-                  </div>
-                  <div class="budget-value">
-                    ${{ budgetStatistics.total | withComma }}
-                  </div>
-                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
-                    Edit
-                  </md-button>
-                </div>
-              </div>
-              <div class="budget-list d-flex justify-content-between">
-                <div class="budget-list__item width-50">
-                  <div class="label-title">
-                    Allocated
-                  </div>
-                  <div class="budget-value">
-                    ${{ budgetStatistics.allocated | withComma }}
-                  </div>
-                  <div class="percent">
-                    {{ budgetStatistics.allocatedPercentage }} %
-                  </div>
-                </div>
-                <div class="budget-list__item width-50">
-                  <div class="label-title">
-                    Booked
-                  </div>
-                  <div class="budget-value">
-                    ${{ budgetStatistics.booked | withComma }}
-                  </div>
-                  <div class="percent">
-                    {{ budgetStatistics.bookedPercentage }}%
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card-section card-overview-saved text-center d-flex justify-center align-center">
-              <span>So far you saved :</span>
-              <md-icon v-if="budgetStatistics.saved >= 0" class="card-overview-saved-icon" style="color: #167c3a">
-                add_circle_outline
-              </md-icon>
-              <md-icon v-else class="card-overview-saved-icon color-red">
-                remove_circle_outline
-              </md-icon>
-              <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma }}</span>
-            </div>
-            <div class="card-section card-expense">
-              <div class="section-header">
-                Expenses
-              </div>
-              <div>
-                <pie-chart-round :event.sync="$store.state.event.eventData" :items="pieChartData" />
-              </div>
-            </div>
-          </div>
-
-          <div class="md-layout-item md-size-60">
-            <div class="event-blocks-table">
-              <tabs
-                :tab-name="[
-                `<img src='${$iconURL}budget+screen/png/Asset+26.png'> Total`,
-                `<img src='${$iconURL}budget+screen/png/Asset+28.png'> Per Guest(${event.numberOfParticipants})`,
-              ]"
-              >
-                <!-- here you can add your content for tab-content -->
-                <template slot="tab-pane-1">
-                  <event-budget-vendors
-                    :event.sync="event"
-                    :event-components="selectedComponents"
-                    type="total"
-                    @change="onChangeComponent"
-                    @add="onAddMoreBudget"
-                  />
-                </template>
-                <template slot="tab-pane-2">
-                  <event-budget-vendors
-                    :event.sync="event"
-                    :event-components="selectedComponents"
-                    type="perGuest"
-                    @change="onChangeComponent"
-                    @add="onAddMoreBudget"
-                  />
-                </template>
-              </tabs>
-            </div>
-          </div>
-        </div>
-        <vue-html2pdf
-          ref="html2Pdf"
-          :show-layout="false"
-          :float-layout="true"
-          :enable-download="true"
-          :preview-modal="false"
-          :paginate-elements-by-height="1400"
-          :filename="`budget-${event.id}`"
-          :pdf-quality="2"
-          :manual-pagination="false"
-          pdf-format="a4"
-          pdf-orientation="portrait"
-          pdf-content-width="800px"
-        >
-          <section slot="pdf-content">
-            <div class="p-20 pdf-content">
-              <h3 class="font-bold-extra font-size-30">
-                <img :src="`/static/icons/budget/budget.png`" width="15">
-                Budget
-              </h3>
-              <div class="card-section card-overview" style="border: solid 2px #dbdbdb !important">
-                <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">
-                  Overview
-                </div>
-                <div class="budget-list d-flex justify-content-between">
-                  <div class="budget-list__item">
-                    <div class="label-title">
-                      Budget
-                    </div>
-                    <div class="budget-value">
-                      ${{ budgetStatistics.total | withComma(Number) }}
-                    </div>
-                    <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
-                      Edit
-                    </md-button>
-                  </div>
-                  <div class="budget-list__item">
-                    <div class="label-title">
-                      Allocated
-                    </div>
-                    <div class="budget-value">
-                      ${{ budgetStatistics.allocated | withComma(Number) }}
-                    </div>
-                    <div class="percent">
-                      {{ budgetStatistics.allocatedPercentage }} %
-                    </div>
-                  </div>
-                  <div class="budget-list__item">
-                    <div class="label-title">
-                      Booked
-                    </div>
-                    <div class="budget-value">
-                      ${{ budgetStatistics.booked | withComma(Number) }}
-                    </div>
-                    <div class="percent">
-                      {{ budgetStatistics.bookedPercentage }}%
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-section card-overview-saved text-center">
-                <span>So far you saved :</span>
-                <md-icon v-if="budgetStatistics.saved >= 0" class="card-overview-saved-icon" style="color: #167c3a">
-                  add_circle_outline
-                </md-icon>
-                <md-icon v-else class="card-overview-saved-icon color-red">
-                  remove_circle_outline
-                </md-icon>
-                <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma(Number) }}</span>
-              </div>
-              <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
-                <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">
-                  Expenses
-                </div>
-                <div>
-                  <pie-chart-round :event.sync="event" :items="pieChartData" :show-image="true" />
-                </div>
-              </div>
-            </div>
-            <div class="html2pdf__page-break" />
-            <div class="p-20 event-blocks-table">
-              <label class="font-size-26 font-bold">Total</label>
-              <event-budget-vendors
-                :event.sync="event"
-                :event-components="selectedComponents"
-                :editing-mode="false"
-                type="total"
-                @change="onChangeComponent"
-                @add="onAddMoreBudget"
-              />
-            </div>
-            <div class="html2pdf__page-break" />
-            <div class="p-20 event-blocks-table">
-              <label class="font-size-26 font-bold">Per Guest</label>
-              <event-budget-vendors
-                :event.sync="event"
-                :event-components="selectedComponents"
-                :editing-mode="false"
-                type="perGuest"
-                @change="onChangeComponent"
-                @add="onAddMoreBudget"
-              />
-            </div>
-          </section>
-        </vue-html2pdf>
-      </div>
-
-      <div class="wizard-footer d-flex">
-        <div>
-          <md-button class="md-black md-maryoku md-simple" @click="back">
-            <md-icon>keyboard_backspace</md-icon>
-            Back
-          </md-button>
-          <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
-          </md-button>
-        </div>
-
-        <div class="color-black-middle font-bold-extra d-flex align-center">
-          <img :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`" width="25">
-          <span class="pl-10 pr-30 border-right">Budget was divided</span>
-          <md-button class="md-simple md-black maryoku-btn" @click="editBudget">
-            Edit Budget
-          </md-button>
-        </div>
-
-      </div>
-      <upload-vendors-modal ref="uploadModal" />
-      <budget-edit-modal
-        v-if="editBudgetModalStep === 1"
-        :event="event"
-        @cancel="closeEditBudgetModal"
-        @save="onBudgetChangeModal"
-      />
-      <modal v-if="editBudgetModalStep === 2" class="add-category-model">
-        <template slot="header">
-          <div class="add-budget-modal-header">
-            <button @click="setModalStep('previous')">
-              <md-icon :class="'material-icons-two-tone'">
-                west
-              </md-icon>
-            </button>
-            <button @click="closeEditBudgetModal">
-              <md-icon>clear</md-icon>
-            </button>
-          </div>
-        </template>
-        <template slot="body">
-          <div class="add-category-model__header">
-            <h2>
-              <span :style="{ color: extra < 0 ? 'red' : 'green', display: 'inline-block' }">${{ extra | withComma(Number) }}</span>
-            </h2>
-            <h2 v-if="extra < 0" class="text-lowercase">
-              Oops, these changes have put you in the red!
-            </h2>
-            <span class="black">What would you like to do? </span>
-            <br>
-            <md-checkbox
-              v-show="extra > 0"
-              v-model="extraBudgetMethod"
-              class="md-checkbox-circle md-red"
-              value="betweenCategories"
-            >
-              Add new category
-            </md-checkbox>
-            <br>
-            <md-checkbox v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="onUnexpected">
-              {{ extra > 0 ? "Store that money to ‘Unexpected’ category" : "Recalculate according to the new budget " }}
-            </md-checkbox>
-            <br>
-            <md-checkbox
-              v-show="extra < 0"
-              v-model="extraBudgetMethod"
-              class="md-checkbox-circle md-red"
-              value="goBack"
-            >
-              Add more money to my budget
-            </md-checkbox>
-          </div>
-        </template>
-        <template slot="footer">
-          <md-button class="add-category-btn" @click="handleBudgetMethod()">
-            Select
-          </md-button>
-        </template>
-      </modal>
-      <add-new-category-modal
-        v-if="editBudgetModalStep === 3"
-        :event="event"
-        :components="categoryList"
-        @cancel="closeEditBudgetModal"
-        @save="addNewCategory"
-      />
-      <BudgetHandleMinusModal v-if="showHandleMinus" value="50" />
-    </div>
-
-  </div>
+				<div class="md-layout-item md-size-60">
+					<div class="event-blocks-table">
+						<tabs
+							:tab-name="[
+								`<img src='${$iconURL}budget+screen/png/Asset+26.png'> Total`,
+								`<img src='${$iconURL}budget+screen/png/Asset+28.png'> Per Guest(${event.numberOfParticipants})`,
+							]"
+						>
+							<!-- here you can add your content for tab-content -->
+							<template slot="tab-pane-1">
+								<event-budget-vendors
+									:event.sync="event"
+									:event-components="selectedComponents"
+									type="total"
+									@change="onChangeComponent"
+									@add="onAddMoreBudget"
+								/>
+							</template>
+							<template slot="tab-pane-2">
+								<event-budget-vendors
+									:event.sync="event"
+									:event-components="selectedComponents"
+									type="perGuest"
+									@change="onChangeComponent"
+									@add="onAddMoreBudget"
+								/>
+							</template>
+						</tabs>
+					</div>
+				</div>
+			</div>
+			<vue-html2pdf
+				ref="html2Pdf"
+				:show-layout="false"
+				:float-layout="true"
+				:enable-download="true"
+				:preview-modal="false"
+				:paginate-elements-by-height="1400"
+				:filename="`budget-${event.id}`"
+				:pdf-quality="2"
+				:manual-pagination="false"
+				pdf-format="a4"
+				pdf-orientation="portrait"
+				pdf-content-width="800px"
+			>
+				<section slot="pdf-content">
+					<div class="p-20 pdf-content">
+						<h3 class="font-bold-extra font-size-30">
+							<img :src="`/static/icons/budget/budget.png`" width="15" />
+							Budget
+						</h3>
+						<div class="card-section card-overview" style="border: solid 2px #dbdbdb !important">
+							<div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Overview</div>
+							<div class="budget-list d-flex justify-content-between">
+								<div class="budget-list__item">
+									<div class="label-title">Budget</div>
+									<div class="budget-value">${{ budgetStatistics.total | withComma(Number) }}</div>
+									<md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="setModalStep('next')">
+										Edit
+									</md-button>
+								</div>
+								<div class="budget-list__item">
+									<div class="label-title">Allocated</div>
+									<div class="budget-value">${{ budgetStatistics.allocated | withComma(Number) }}</div>
+									<div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
+								</div>
+								<div class="budget-list__item">
+									<div class="label-title">Booked</div>
+									<div class="budget-value">${{ budgetStatistics.booked | withComma(Number) }}</div>
+									<div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-section card-overview-saved text-center">
+							<span>So far you saved :</span>
+							<md-icon v-if="budgetStatistics.saved >= 0" class="card-overview-saved-icon" style="color: #167c3a">
+								add_circle_outline
+							</md-icon>
+							<md-icon v-else class="card-overview-saved-icon color-red"> remove_circle_outline </md-icon>
+							<span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma(Number) }}</span>
+						</div>
+						<div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
+							<div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>
+							<div>
+								<pie-chart-round :event.sync="event" :items="pieChartData" :show-image="true" />
+							</div>
+						</div>
+					</div>
+					<div class="html2pdf__page-break" />
+					<div class="p-20 event-blocks-table">
+						<label class="font-size-26 font-bold">Total</label>
+						<event-budget-vendors
+							:event.sync="event"
+							:event-components="selectedComponents"
+							:editing-mode="false"
+							type="total"
+							@change="onChangeComponent"
+							@add="onAddMoreBudget"
+						/>
+					</div>
+					<div class="html2pdf__page-break" />
+					<div class="p-20 event-blocks-table">
+						<label class="font-size-26 font-bold">Per Guest</label>
+						<event-budget-vendors
+							:event.sync="event"
+							:event-components="selectedComponents"
+							:editing-mode="false"
+							type="perGuest"
+							@change="onChangeComponent"
+							@add="onAddMoreBudget"
+						/>
+					</div>
+				</section>
+			</vue-html2pdf>
+			<upload-vendors-modal ref="uploadModal" />
+			<budget-edit-modal
+				v-if="editBudgetModalStep === 1"
+				:event="event"
+				@cancel="closeEditBudgetModal"
+				@save="onBudgetChangeModal"
+			/>
+			<modal v-if="editBudgetModalStep === 2" class="add-category-model">
+				<template slot="header">
+					<div class="add-budget-modal-header">
+						<button @click="setModalStep('previous')">
+							<md-icon :class="'material-icons-two-tone'"> west </md-icon>
+						</button>
+						<button @click="closeEditBudgetModal">
+							<md-icon>clear</md-icon>
+						</button>
+					</div>
+				</template>
+				<template slot="body">
+					<div class="add-category-model__header">
+						<h2>
+							<span :style="{ color: extra < 0 ? 'red' : 'green', display: 'inline-block' }"
+								>${{ extra | withComma(Number) }}</span
+							>
+						</h2>
+						<h2 class="text-lowercase" v-if="extra < 0">Oops, these changes have put you in the red!</h2>
+						<span class="black">What would you like to do? </span>
+						<br />
+						<md-checkbox
+							v-show="extra > 0"
+							v-model="extraBudgetMethod"
+							class="md-checkbox-circle md-red"
+							value="betweenCategories"
+						>
+							Add new category
+						</md-checkbox>
+						<br />
+						<md-checkbox v-model="extraBudgetMethod" class="md-checkbox-circle md-red" value="onUnexpected">
+							{{ extra > 0 ? "Store that money to ‘Unexpected’ category" : "Recalculate according to the new budget " }}
+						</md-checkbox>
+						<br />
+						<md-checkbox
+							v-show="extra < 0"
+							v-model="extraBudgetMethod"
+							class="md-checkbox-circle md-red"
+							value="goBack"
+						>
+							Add more money to my budget
+						</md-checkbox>
+					</div>
+				</template>
+				<template slot="footer">
+					<md-button class="add-category-btn" @click="handleBudgetMethod()"> Select </md-button>
+				</template>
+			</modal>
+			<add-new-category-modal
+				v-if="editBudgetModalStep === 3"
+				:event="event"
+				:components="categoryList"
+				@cancel="closeEditBudgetModal"
+				@save="addNewCategory"
+			/>
+			<BudgetHandleMinusModal v-if="showHandleMinus" value="50" />
+		</div>
+	</div>
 </template>
 
 <script>
@@ -409,14 +336,6 @@ export default {
 			extraBudgetMethod: "betweenCategories",
 			addNewCategoryLoading: false,
 			xCursor: false,
-            sections: [
-                {title: "Create an event to remember", status: "completed", route: "overview", icon: null, progress: 100, componentId: "overview", id: "overview-item"},
-                {title: "Get Inspired", status: "not-complete", route: "booking/concept", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "concept", id: "concept-item"},
-                {title: "Craft Event Budget", status: "not-complete", route: "booking/budget", icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`, progress: 0, componentId: "budget", id: "budget-item"},
-                {title: "Booking Vendors", status: "not-complete", route: "booking/planningboard", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "planningboard", id: "planningboard-item"},
-                {title: "Set The Schedule", status: "not-complete", route: "booking/timeline", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "timeline", id: "timeline-item"},
-                {title: "Communicate With Guests", status: "not-complete", route: "booking/campaign", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "campaign", id: "campaign-item"},
-            ]
 		};
 	},
 	beforeCreate() {
@@ -460,40 +379,6 @@ export default {
 			"setEventData",
 		]),
 		...mapMutations("event", ["setBudgetNotification"]),
-        updateSection() {
-            let elements = [];
-            this.sections.forEach(it => {
-                if(it.componentId === "concept") {
-                    it.status = this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete";
-                    it.progress = this.event.concept ? this.event.conceptProgress : 0;
-
-                } else if (it.componentId === "budget") {
-                    it.route = this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget";
-                    it.progress = this.event.budgetProgress;
-
-
-                } else if (it.componentId === "planningboard") {
-                    it.status = this.event.requirementProgresss === 100 ? "completed" : "not-complete";
-                    it.progress = this.event.requirementProgress;
-
-                } else if (it.componentId === "timeline") {
-                    it.status = this.event.timelineProgress === 100 ? "completed" : "not-complete";
-                    it.progress = this.event.timelineProgress;
-
-                } else if (it.componentId === "campaign") {
-                    it.status = this.event.campaignProgress === 100 ? "completed" : "not-complete";
-                    it.progress = this.event.campaignProgress;
-                }
-
-                if (it.componentId === "planningboard" ) {
-                    if (this.event.budgetProgress > 0) elements.push(it);
-                } else {
-                    elements.push(it);
-                }
-
-            });
-            return elements;
-        },
 		handleMouseMove(event) {
 			if (!this.showCommentEditorPanel) return;
 			this.xCursor = event.target.className === "click-capture";
@@ -662,24 +547,15 @@ export default {
 				this.addNewCategoryLoading = false;
 			});
 		},
-    editBudget(){
-
-    },
-    back() {
-
-    },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
 		updateBudget(eventBudget) {
 			let editedEvent = new CalendarEvent({ id: this.event.id });
 			const newBudget = eventBudget.totalBudget; //Number(eventBudget.totalBudget.replace(/,/g, ""))
 			if (newBudget < this.calendarEvent.totalBudget) {
 				const arrow =
-					"<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
+					'<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>';
 				const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
 				const description =
-					"<div class=\"description\">Your edits changed the total budget, do you want to change it?</div>";
+					'<div class="description">Your edits changed the total budget, do you want to change it?</div>';
 				Swal.fire({
 					title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
 					showCancelButton: true,
@@ -776,28 +652,85 @@ export default {
 			currentUser: "auth/currentUser",
 		}),
 		barItems() {
-            const sections = this.updateSection();
+			if (!this.event.checkList) {
+				const overview = {
+					title: "Create an event to remember",
+					status: "completed",
+					route: "overview",
+					// icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+					progress: 100,
+					componentId: "overview",
+					id: "overview-item",
+				};
+				const concept = {
+					title: "Get Inspired",
+					status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
+					route: "booking/concept",
+					icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+					progress: this.event.concept ? this.event.conceptProgress : 0,
+					componentId: "concept",
+					id: "concept-item",
+				};
+				const budget = {
+					title: "Craft Event Budget",
+					status: "not-complete",
+					route: this.event.budgetProgress === 100 ? "edit/budget" : "booking/budget",
+					icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
+					progress: this.event.budgetProgress,
+					componentId: "budget",
+					id: "budget-item",
+				};
+				const timeline = {
+					title: "Set The Schedule",
+					status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
+					route: "booking/timeline",
+					icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+					progress: this.event.timelineProgress,
+					componentId: "timeline",
+					id: "timeline-item",
+				};
+				const campaign = {
+					title: "Communicate With Guests",
+					status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
+					route: "booking/campaign",
+					icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+					progress: this.event.campaignProgress,
+					componentId: "campaign",
+					id: "campaign-item",
+				};
+				const planningBoard = {
+					title: "Booking Vendors",
+					status: this.event.requirementProgress === 100 ? "completed" : "not-complete",
+					route: "booking/planningboard",
+					icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+					progress: this.event.requirementProgress,
+					componentId: "planningboard",
+					id: "planningboard-item",
+				};
+				// const chooseVendor = {
+				//   title: "Booking Vendors",
+				//   status: "not-complete",
+				//   route: "booking/choose-vendor",
+				//   icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+				//   progress: this.event.campaignProgress,
+				//   componentId: "chooseVendor",
+				//   id: "bookingboard-item",
+				// };
+				const elements = [];
+				elements.push(overview);
+				elements.push(concept);
+				elements.push(budget);
 
-            let elements = [];
+				if (this.event.budgetProgress === 100) {
+					elements.push(planningBoard);
+				}
+				elements.push(timeline);
+				elements.push(campaign);
 
-            if (this.event.checkList && this.event.checkList.length) {
-
-                const bookingIndex = this.event.checkList.findIndex(it => it.componentId === "planningboard");
-
-                this.event.checkList.forEach(it => {
-                    const section = sections.find(s => s.componentId === it.componentId);
-                    elements.push(section);
-
-                    if (it.componentId === "budget" && this.event.budgetProgress === 100 && bookingIndex === -1) {
-                        elements.push(sections[3]);
-                    }
-                });
-
-            } else {
-                elements = sections;
-            }
-
-            return elements;
+				return elements;
+			} else {
+				return this.event.checkList;
+			}
 		},
 		pieChartData() {
 			return this.$store.state.event.eventData.components.filter((item) => item.bookTitle !== "Book Equipment");

@@ -43,8 +43,6 @@ class AuthService {
   }
 
   logout() {
-    const cookieToken = this.getCookie("authToken");
-    axios.defaults.headers.common.Authorization = `Bearer ${cookieToken}`;
     return axios
       .post(LOGOUT_URL)
       .then((response) => {
@@ -59,9 +57,6 @@ class AuthService {
         axios.defaults.headers.common.Authorization = null;
         this.removeCookie();
         throw err;
-      })
-      .finally(() => {
-        
       });
   }
 

@@ -14,80 +14,35 @@
     <div v-if="showCalendarPicker" ref="datePicker">
       <div ref="timePickerPanel" v-click-outside="closeDatePicker" class="seasonal-picker" style="z-index: 200 !important">
         <div class="position-relative">
-          <div class="message-arrow" />
+            <div class="message-arrow"></div>
         </div>
-        <div class="d-flex align-center font-size-14">
-          From
-          <span class="ml-20 cursor-pointer"
-                :class="from.year ? 'color-vendor' : 'color-black-middle'"
-                @click="select('from', 'year')"
-          >
-            {{ from.year ? from.year : 'Select a year' }}</span>
-          <span class="md-black-middle mx-10"> > </span>
-          <span class="cursor-pointer"
-                :class="from.season && from.months.length > 0 ? 'color-vendor' : 'color-black-middle'"
-                @click="select('from', 'season_month')"
-          >
-            {{ from.season && from.months.length > 0 ? `${from.season} / ${getMonths('from')}` : 'Select a month / season' }}</span>
-        </div>
-        <div class="d-flex align-center font-size-14">
-          To
-          <span class="ml-20 cursor-pointer"
-                :class="to.year ? 'color-vendor' : 'color-black-middle'"
-                @click="select('to', 'year')"
-          >
-            {{ to.year ? to.year : 'Select a year' }}</span>
-          <span class="md-black-middle mx-10"> > </span>
-          <span class="cursor-pointer"
-                :class="to.season && to.months.length > 0 ? 'color-vendor' : 'color-black-middle'"
-                @click="select('to', 'season_month')"
-          >
-            {{ to.season && to.months.length > 0 ? `${to.season} / ${getMonths('to')}` : 'Select a month / season' }}</span>
-        </div>
-        <template v-if="section === 'season_month'">
-          <div class=" d-flex md-layout">
-            <div class="md-layout-item md-size-60 md-layout">
-              <div v-for="month in monthOptions"
-                   :key="month.value"
-                   class="md-layout-item md-size-33 d-flex align-center justify-content-center position-relative"
-              >
-                <md-button
-                  class="m-0"
-                  :class="(selected === 'from' && from.months.includes(month.value) || selected === 'to' && to.months.includes(month.value)) ?
-                   'md-vendor': 'md-simple md-black-middle'"
-                  @click="changeMonth(selected, month.value)"
-                >
-                  {{ `${month.label}` }}
-                </md-button>
-              </div>
-            </div>
-            <div class="md-layout-item md-size-40 md-layout p-0">
-              <div v-for="option in seasonOptions"
-                   :key="option.value"
-                   class="md-layout-item md-size-50 d-flex flex-column align-center justify-content-center px-30 pt-10 pb-5"
-                   :class="(selected === 'from' && from.season === option.value || selected === 'to' && to.season === option.value ) ? 'purple-bg' : ''"
-                   @click="changeSeason(selected, option.value)"
-              >
-                <img :src="`${$iconURL}Seasonal/${(selected === 'from' && from.season === option.value || selected === 'to' && to.season === option.value) ?
-                 'purple_': ''}${option.icon}.svg`" width="40px">
-                <span class="mt-10 font-size-12 color-black-middle">{{ option.label }}</span>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template v-if="section === 'year'">
-          <div class=" d-flex md-layout">
-            <md-button
-              v-for="option in yearOptions"
-              :key="option"
-              class="md-layout-item md-size-20"
-              :class="(selected === 'from' && from.year === option || selected === 'to' && to.year === option ) ? 'md-vendor': 'md-simple md-black-middle'"
-              @click="changeYear(selected, option)"
+        <div class=" d-flex md-layout">
+          <div class="md-layout-item md-size-60 md-layout">
+            <div v-for="month in monthOptions"
+                 :key="month.value"
+                 class="md-layout-item md-size-33 d-flex align-center justify-content-center position-relative"
             >
-              {{ `${option}` }}
-            </md-button>
+              <md-button
+                class="m-0"
+                :class="months.includes(month.value) ? 'md-vendor': 'md-simple md-black-middle'"
+                @click="changeMonth(month.value)"
+              >
+                {{ `${month.label}` }}
+              </md-button>
+            </div>
           </div>
-        </template>
+          <div class="md-layout-item md-size-40 md-layout p-0">
+            <div v-for="option in seasonOptions"
+                 :key="option.value"
+                 class="md-layout-item md-size-50 d-flex flex-column align-center justify-content-center px-30 pt-10 pb-5"
+                 :class="season === option.value ? 'purple-bg' : ''"
+                 @click="changeSeason(option.value)"
+            >
+              <img :src="`${$iconURL}Seasonal/${season === option.value ? 'purple_': ''}${option.icon}.svg`" width="40px">
+              <span class="mt-10 font-size-12 color-black-middle">{{ option.label }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -139,87 +94,47 @@ export default {
     return {
       inputClass: `${this.inputStyle} ${this.size}`,
       showCalendarPicker: false,
-      from: {
-        year: "",
-        season: "",
-        months: [],
-      },
-      to: {
-        year: "",
-        season: "",
-        months: [],
-      },
-      section: "year",
-      selected: "from",
+      season: null,
+      months: [],
       seasonOptions: [
           {label: "Winter", value: "winter", icon: "winter"},
           {label: "Spring", value: "spring", icon: "spring"},
           {label: "Summer", value: "summer", icon: "summer"},
           {label: "Fall",   value: "fall",   icon: "fall"},
       ],
-      yearOptions: [2004, 2005, 2006, 2007, 2008, 2009, 2010,
-                    2011, 2012, 2013, 2014, 2015, 2016, 2017,
-                    2018, 2019, 2020, 2021, 2022, 2023],
       monthOptions: MonthOptions,
     };
   },
   computed: {
     content() {
-        const from_season = this.from.season ? this.seasonOptions.find(s => s.value === this.from.season).label : "";
-        const to_season = this.to.season ? this.seasonOptions.find(s => s.value === this.to.season).label : "";
-
-        return `${this.from.year} ${from_season} ${this.getMonths('from')} ${this.to.year} ${to_season} ${this.getMonths('to')}`;
+        const season = this.season ? this.seasonOptions.find(s => s.value === this.season).label : "";
+        const months = this.months.length ? this.months.map(m => this.monthOptions.find(op => op.value === m).label) : "";
+        return `${season} ${months}`;
     },
+    getYear(){
+        return moment().format("YYYY");
+    }
   },
   methods: {
+    init(){
+    },
     closeDatePicker(){this.showCalendarPicker = false;},
     handleInput(e) {
-      // this.$emit("change", this.content);
-    },
-    getMonths(selected) {
-      if (selected === 'from') {
-        return this.from.months.map(m => this.monthOptions.find(op => op.value === m).label);
-      } else if(selected === 'to') {
-        return this.to.months.map(m => this.monthOptions.find(op => op.value === m).label);
-      }
+      this.$emit("change", this.content);
     },
     onClickEvent() {
       this.showCalendarPicker = true;
     },
-    select(selected, section) {
-      this.selected = selected;
-      this.section = section;
-    },
-    changeYear(selected, value){
+    changeMonth(value) {
+      const index = this.months.indexOf(value);
+      if (index > -1) this.months.splice(index, 1);
+      else this.months.push(value);
 
-      if (selected === "from") {
-        this.from.year = value;
-      } else {
-        this.to.year = value;
-      }
-      this.$emit("change", {from: this.from, to: this.to});
+      this.$emit("change", {season: this.season, months: this.months});
     },
-    changeMonth(selected, value) {
-
-      if (selected === "from") {
-        const index = this.from.months.indexOf(value);
-        if (index > -1) this.from.months.splice(index, 1);
-        else this.from.months.push(value);
-      } else {
-        const index = this.to.months.indexOf(value);
-        if (index > -1) this.to.months.splice(index, 1);
-        else this.to.months.push(value);
-      }
-      this.$emit("change", {from: this.from, to: this.to});
-    },
-    changeSeason(selected, value) {
-      console.log('changeSeason', selected, value);
-      if (selected === "from") {
-        this.from.season = value;
-      } else {
-        this.to.season = value;
-      }
-      this.$emit("change", {from: this.from, to: this.to});
+    changeSeason(value) {
+      this.season = value;
+      this.$emit("change", {season: this.season, months: this.months});
     }
   },
 

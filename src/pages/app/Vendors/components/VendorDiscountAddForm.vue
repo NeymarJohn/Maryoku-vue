@@ -28,7 +28,7 @@
           <Multiselect
             :key="rules.length"
             v-model="form[tab].rule"
-            class="width-90 form-input md-purple"
+            class="width-90 mt-5 form-input md-purple"
             :options="rules"
             :close-on-select="true"
             :clear-on-select="true"
@@ -47,7 +47,7 @@
           <Multiselect
             :key="customerTypes.length"
             v-model="form[tab].type"
-            class="width-90 form-input md-purple"
+            class="width-90 mt-5 form-input md-purple"
             :options="customerTypes"
             :close-on-select="true"
             :clear-on-select="true"
@@ -63,7 +63,7 @@
           <input v-model="form[tab].name" type="text" class="text-left number-field" placeholder="Season Name">
         </div>
         <div class="field">
-          <SeasonalCalendarInput size="width-90" @change="handleSeasonalChange" />
+          <SeasonalCalendarInput :season="form[tab].season" :months="form[tab].months" size="width-90" @change="handleSeasonalChange" />
         </div>
       </template>
       <div class="field">
@@ -137,9 +137,9 @@ export default {
                     type: 0,
                 },
                 seasonal: {
-                    name: "",
-                    from: {},
-                    to: {},
+                    name: null,
+                    season: null,
+                    months: [],
                 },
                 value: 0,
                 rate: "%"
@@ -153,7 +153,7 @@ export default {
     },
     methods: {
         changeRate(){
-            this.form.rate = this.form.rate === "%" ? "$" : "%";
+            this.rate = this.rate === "%" ? "$" : "%";
         },
         reset(){
             Object.keys(this.form[this.tab]).forEach(key => {
@@ -171,8 +171,9 @@ export default {
         changeDate(e) {
             this.form.coupon.validDate = e;
         },
-        handleSeasonalChange(value) {
-            this.form.seasonal = {...this.form.seasonal, ...value};
+        handleSeasonalChange({season, months}) {
+            this.form.seasonal.season = season;
+            this.form.seasonal.months = months;
         },
         save(){
             let value = {...this.form[this.tab], value: this.form.value, rate: this.form.rate};

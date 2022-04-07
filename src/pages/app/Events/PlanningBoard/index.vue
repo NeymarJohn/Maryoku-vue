@@ -4,8 +4,8 @@
     <loader :active="isLoading" />
 
     <template v-if="!isLoading">
-      <div class="ml-60 mt-40 mr-30 mb-200">
-        <div class="headers d-flex justify-content-between align-center">
+      <div class="ml-60 mt-40 mr-30">
+        <div class="d-flex justify-content-between align-center">
           <div>
             <ResizableToggleButton
               v-for="(component, index) in topCategories"
@@ -17,22 +17,13 @@
               :default-status="selectedCategory && component.id === selectedCategory.id"
               :has-badge="hasBadge(component)"
               icon-style="opacity:0.8"
-              :proposalCategory="true"
               @click="selectCategory(component)"
             />
-            <drop-down class="d-inline-block"  @close="closeMoreCategories">
-              <ResizableToggleButton
-                class="mr-20 mb-10"
-                label="More categories"
-                data-toggle="dropdown"
-                :icon="`${$iconURL}Budget+Elements/foodandbeverage.svg`"
-                :selected-icon="`${$iconURL}Budget+Elements/foodandbeverage-white.svg`"
-                :default-status="showMoreCats === true"
-                :proposalCategory="false"
-                @click="showMoreCategories"
-              >
-              </ResizableToggleButton>
-              <ul class="dropdown-width dropdown-menu dropdown-color">
+            <drop-down class="d-inline-block">
+              <button class="add-category-button mb-10" data-toggle="dropdown" @click="addRequirements">
+                <md-icon>add</md-icon>
+              </button>
+              <ul class="dropdown-width dropdown-menu dropdown-color dropdown-menu-right ">
                 <li
                   v-for="(remainingCategory, i) in remainingCategories"
                   :key="remainingCategory.title + i"
@@ -243,7 +234,7 @@
         <template v-else>
           <div class="booking-proposals">
             <template v-if="selectedCategory">
-              <div v-if="selectedCategory" class="font-size-30 font-bold-extra category-title d-flex align-center mt-30 mb-30">
+              <div v-if="selectedCategory" class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
@@ -260,9 +251,8 @@
                   "
                 >
                   <template v-if="hasBudget(selectedCategory.componentId)">
-                    <md-button
-                      class="md-simple md-red maryoku-btn"
-                      :disabled="!getRequirements(selectedCategory.componentId)"
+                    <a
+                      class="font-size-18 md-red maryoku-btn cursor-pointer"
                       @click="
                         getSpecification({
                           category: selectedCategory,
@@ -271,7 +261,7 @@
                       "
                     >
                       Get Specific
-                    </md-button>
+                    </a>
                   </template>
                   <template v-else>
                     <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
@@ -439,7 +429,6 @@
       :selected-category="selectedCategory"
       :default-data="getRequirements(selectedCategory.key) || {}"
       :selected-types="getSelectedTypes(selectedCategory.key)"
-      page="planner"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
@@ -510,7 +499,6 @@ const components = {
   ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
   CommentSidebar: () => import("../components/CommentSidebar.vue"),
   TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
-  ClickOutside: () => import("vue-click-outside")
 };
 
 export default {
@@ -520,7 +508,6 @@ export default {
     return {
       showChoice: false,
       showCart: false,
-      showMoreCats: true,
       allRequirements: null,
       subCategory: null,
       serviceCards: ServiceCards,
@@ -853,7 +840,6 @@ export default {
       this.selectedCategory = this.$store.state.common.serviceCategories.find(item => item.key === category);
     },
     getRequirements(category) {
-      console.log("getRequirements", category, this.$store.state.planningBoard.requirements[category])
       if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },
@@ -871,12 +857,7 @@ export default {
       if (notViewedProposals.length === 0) return false;
       return true;
     },
-    showMoreCategories(value) {
-      this.showMoreCats = value;
-    },
-    closeMoreCategories(){
-      this.showMoreCats = false;
-    },
+    addRequirements() {},
     selectCategory(category) {
       console.log("sel.category", category);
 
@@ -899,12 +880,10 @@ export default {
           }
       }
 
-      this.showMoreCats = false;
       this.closeProposal();
       if(this.showCommentPanel){
         this.toggleCommentMode();
       }
-      console.log("sel.cat", this.showMoreCats)
     },
     selectRemainingCategory(category, action) {
         if (action === "add") {
@@ -913,7 +892,7 @@ export default {
         } else if (action === "select") {
             this.selectedCategory = category;
         }
-        this.showMoreCats = false;
+
     },
     addBudget() {
       this.showAddBudgetConfirm = false;
@@ -1105,12 +1084,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
-
-  .headers {
-    background-color: transparent;
-  }
-  .fixed-top { box-shadow: 1px 1px 10px rgba(0,0,0,0.12); padding: 7px;}
-
   .proposalTitle {
     font-size: 30px;
     font-weight: 800;
@@ -1198,10 +1171,6 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
     cursor: pointer;
-
-    &.opened {
-
-    }
     i {
       font-size: 40px !important;
     }
@@ -1386,6 +1355,7 @@ export default {
 
   .proposal-card-items {
     padding: 0 0em;
+    margin-bottom: 1em;
     align-items: stretch;
     margin-top: 30px;
     display: grid;
