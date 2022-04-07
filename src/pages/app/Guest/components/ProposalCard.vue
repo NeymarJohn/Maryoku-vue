@@ -221,8 +221,6 @@ export default {
       let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
       if (suggestionDate && suggestionDate.length > 0) {
         let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
-        suggestedDate.set({hour:0,minute:0,second:0,millisecond:0});
-        orignStartDate.set({hour:0,minute:0,second:0,millisecond:0});
         return suggestedDate.diff(orignStartDate, "days");
       }
       return 0;

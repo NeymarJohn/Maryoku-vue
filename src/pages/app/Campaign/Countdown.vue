@@ -6,14 +6,7 @@
       </div>
       <div />
       <div class="countdown-cover-image mt-50">
-        <img v-if="coverImage" :src="coverImage">
-        <concept-image-block
-          v-else
-          class="hidden"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
-        />
+        <img :src="coverImage">
         <div class="countdown-guests d-flex align-center p-20">
           <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
           <span v-if="isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
@@ -35,9 +28,17 @@
           />
         </div>
         <div class="cover-image-button">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">Change Cover
           </md-button>
+          <input
+            id="countdown-coverImage"
+            style="display: none"
+            name="attachment"
+            type="file"
+            multiple="multiple"
+            @change="onFileChange"
+          >
         </div>
       </div>
       <title-editor
@@ -72,7 +73,6 @@
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import CountdownTime from "./components/CountdownTime";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
@@ -82,7 +82,6 @@ export default {
   components: {
     CountdownTime,
     RsvpEventInfoPanel,
-    ConceptImageBlock,
     MaryokuTextarea,
     TitleEditor,
     HideSwitch,
@@ -106,9 +105,6 @@ export default {
   computed: {
     event() {
       return this.$store.state.event.eventData;
-    },
-    concept() {
-      return this.event.concept || {};
     },
     campaignData() {
       return this.$store.state.campaign.COMING_SOON || {};
@@ -187,8 +183,8 @@ export default {
         value: { ...visibleSettings, [key]: value }
       });
     },
-    handleChangeCoverImage(event) {
-      this.$emit("change-cover-image", event);
+    chooseFiles() {
+      document.getElementById("countdown-coverImage").click();
     },
     async onFileChange(event) {
       const imageData = await getBase64(event.target.files[0]);
