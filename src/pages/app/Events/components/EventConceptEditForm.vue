@@ -120,9 +120,8 @@
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
               <img
-                v-if="uploadImageData[indx - 1]"
                 class="concept-image"
-                :src="`${uploadImageData[indx - 1]}`"
+                :src="`${uploadImageData[indx - 1]}` || defaultConcept.images[indx - 1].url"
                 @click="uploadPhoto(indx)"
               >
               <div class="image-section-actions" :class="uploadImageData[indx - 1]?'hover-action':''">
@@ -310,20 +309,6 @@ export default {
     });
   },
   methods: {
-    downloadTest () {
-      this.$http.post(`${process.env.SERVER_URL}/downloadFiles`, {
-        "files":[
-          "https://s3.amazonaws.com/maryoku/events/61ddf35fcfefec75142519a4/b4e82bf3-f603-4d95-9158-a9bf33e4fa93.jpeg",
-          "https://s3.amazonaws.com/maryoku/events/61ddf35fcfefec75142519a4/00b1f3a2-5056-4bd5-a511-cef9324c11aa.jpeg"]
-      }).then(res => {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "file.zip");
-        document.body.appendChild(link);
-        link.click();
-      });
-    },
     addTag(newTag, tagIndex) {
       this.editConcept.tags.push(newTag);
       this.taggingOptions[tagIndex].selected = true;

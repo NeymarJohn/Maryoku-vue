@@ -33,7 +33,7 @@
             <span class="upload-files-list-item-text">
               {{ file.name }}
             </span>
-            <span class="upload-files-list-item-button-delete" @click="deleteFile(index)">
+            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.url)">
               <md-icon class="icon-close">close</md-icon>
             </span>
           </div>
@@ -155,19 +155,16 @@ export default {
       this.images.push({ src: image });
       this.files.push(file);
     },
-    deleteFile(deleteItemIndex) {
-      const currentItemIndex = this.carouselItemIndex;
+    deleteFile(fileURL) {
+      const deleteItemIndex = this.files.findIndex(file => file.url === fileURL);
       const deleteCurrentItem = (deleteItemIndex === currentItemIndex);
-      if (deleteCurrentItem && this.carouselItemIndex === 0) {
+      const currentItemIndex = this.carouselItemIndex;
+      if (deleteCurrentItem) {
         this.carouselItemIndex = 0;
       }
-      if (deleteCurrentItem && currentItemIndex > 0) {
-        this.carouselItemIndex = currentItemIndex - 1;
-      }
       if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
-        this.carouselItemIndex = currentItemIndex - 1;
+        this.carouselItemIndex = this.carouselItemIndex - 1;
       }
-      this.images = this.images.filter((file, index) => index !== deleteItemIndex);
       this.files = this.files.filter((file, index) => index !== deleteItemIndex);
     },
     changeCarouselItemIndex(itemIndex) {
