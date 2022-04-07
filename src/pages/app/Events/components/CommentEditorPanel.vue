@@ -585,7 +585,6 @@ export default {
       letter-spacing: normal;
       text-align: center;
       color: #fff;
-      cursor: pointer;
     }
 
     .md-button-submit-icon {

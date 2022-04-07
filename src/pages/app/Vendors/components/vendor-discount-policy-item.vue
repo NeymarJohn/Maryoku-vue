@@ -77,14 +77,26 @@
         <input v-else v-model="editingData.code" class="col">
 
         <div class="col text-capitalize">
-          {{ editingData.season }}
-          <template v-for="(month, idx) in editingData.months">
-            <span class="ml-10">{{ getMonthLabel(month) }}{{ idx < editingData.months.length - 1 ? ',' : '' }}</span>
-          </template>
+          <div>
+            <div class="d-flex align-center mr-10">
+              <span class="mr-5" v-if="editingData.from">{{ editingData.from.year }}</span>
+              <span v-if="editingData.from"> {{ editingData.from.season }}</span>
+              <template v-for="(month, idx) in editingData.from.months">
+                <span class="ml-10">{{ getMonthLabel(month) }}{{ idx < editingData.from.months.length - 1 ? ',' : '' }}</span>
+              </template>
+            </div>
+            <div class="d-flex align-center">
+              <span class="mr-5" v-if="editingData.to">{{ editingData.to.year }}</span>
+              <span v-if="editingData.to"> {{ editingData.to.season }}</span>
+              <template v-for="(month, idx) in editingData.to.months">
+                <span class="ml-10">{{ getMonthLabel(month) }}{{ idx < editingData.to.months.length - 1 ? ',' : '' }}</span>
+              </template>
+            </div>
+          </div>
         </div>
       </template>
       <div v-if="!isEditable" class="col text-right">
-        {{ `${editingData.value}${editingData.rate}` }}
+        {{ editingData.value | withComma }} {{ editingData.rate }}
       </div>
       <div v-else class="col">
         <div class="position-relative">
@@ -121,11 +133,12 @@
 import { DiscountCustomerTypes, CouponRules, MonthOptions } from "@/constants/options";
 
 const components = {
-    MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
-    Multiselect: () => import("vue-multiselect"),
+	MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
+	Multiselect: () => import("vue-multiselect"),
 };
 
 export default {
+
     components,
     filters: {},
     props: {
@@ -160,7 +173,6 @@ export default {
             this.editingData.rate = this.editingData.rate === "%" ? "$" : "%";
         },
         getMonthLabel(value) {
-            console.log("mon.val", value);
             if (!value) return "";
             return this.monthOptions.find(r => r.value == value).label;
         },
@@ -214,93 +226,93 @@ export default {
 </script>
 <style lang="scss" scoped>
 .vendor-discount-item-wrapper {
-    font-family: Manrope-Regular, sans-serif;
-    color: #050505;
-    border-bottom: 1px solid #dddddd;
+	font-family: Manrope-Regular, sans-serif;
+	color: #050505;
+	border-bottom: 1px solid #dddddd;
 
-    .collapsed {
-        position: relative;
-        display: grid;
-        grid-template-columns: 30% 30% 30% 20%;
-        padding: 1rem 0;
-        grid-gap: 5px;
-        .col {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
+	.collapsed {
+		position: relative;
+		display: grid;
+		grid-template-columns: 30% 30% 30% 20%;
+		padding: 1rem 0;
+		grid-gap: 5px;
+		.col {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			padding: 10px 0;
 
-            img {
-                width: 20px;
-            }
-            &:first-child {
-                flex: 2;
-                font: bold 16px Manrope-Regular, sans-serif;
-            }
-            &:last-child {
-                text-align: right;
-            }
+			img {
+				width: 20px;
+			}
+			&:first-child {
+				flex: 2;
+				font: bold 16px Manrope-Regular, sans-serif;
+			}
+			&:last-child {
+				text-align: right;
+			}
 
-            input {
-                text-align: center;
-                font-size: 16px;
-                padding: 12px 20px;
-                border: 1px solid #dddddd;
-                border-radius: 0;
-                min-height: 55px;
-            }
+			input {
+				text-align: center;
+				font-size: 16px;
+				padding: 12px 20px;
+				border: 1px solid #dddddd;
+				border-radius: 0;
+				min-height: 55px;
+			}
 
-            .field {
-                display: inline-block;
-            }
+			.field {
+				display: inline-block;
+			}
 
-            .number-field {
-                text-align: left;
-                font-size: 16px;
-                padding: 12px 20px;
-                border: 1px solid #dddddd;
-                border-radius: 0;
-                width: 90%;
-            }
+			.number-field {
+				text-align: left;
+				font-size: 16px;
+				padding: 12px 20px;
+				border: 1px solid #dddddd;
+				border-radius: 0;
+				width: 90%;
+			}
 
-            button.suffix{
-                position: absolute;
-                transform: translateX(-100%);
-                height: 100%;
-                width: 60px;
-                background: white;
-                border: 0.5px solid #dddddd;
-                font-size: 16px;
-                cursor: pointer;
-            }
-        }
+			button.suffix {
+				position: absolute;
+				transform: translateX(-100%);
+				height: 100%;
+				width: 60px;
+				background: white;
+				border: 0.5px solid #dddddd;
+				font-size: 16px;
+				cursor: pointer;
+			}
+		}
 
-        .action {
-            position: absolute;
-            right: -100px;
-            top: 0;
-            height: 100%;
-            opacity: 0;
-            display: flex;
-            align-items: center;
-            flex-flow: nowrap;
-            cursor: pointer;
-        }
+		.action {
+			position: absolute;
+			right: -100px;
+			top: 0;
+			height: 100%;
+			opacity: 0;
+			display: flex;
+			align-items: center;
+			flex-flow: nowrap;
+			cursor: pointer;
+		}
 
-        &:hover {
-            .action {
-                opacity: 1;
-            }
-        }
-    }
-    .expanded {
-        max-width: 40%;
-        font: normal 14px Manrope-Regular, sans-serif;
-        padding-bottom: 1rem;
+		&:hover {
+			.action {
+				opacity: 1;
+			}
+		}
+	}
+	.expanded {
+		max-width: 40%;
+		font: normal 14px Manrope-Regular, sans-serif;
+		padding-bottom: 1rem;
 
-        textarea {
-            min-width: 300px;
-        }
-    }
+		textarea {
+			min-width: 300px;
+		}
+	}
 }
 </style>

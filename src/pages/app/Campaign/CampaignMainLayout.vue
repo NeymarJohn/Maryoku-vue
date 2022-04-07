@@ -200,7 +200,7 @@
                     :info="{ ...campaignTabs[1], ...campaignInfo }"
                     :show-change-cover="true"
                     @changeInfo="changeInfo"
-                    @showModal="test"
+                    @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
               </collapse-panel>
@@ -211,7 +211,7 @@
                 class="white-card"
                 :show-change-cover="true"
                 @changeInfo="changeInfo"
-                @showModal="test"
+                @change-cover-image="showChangeCoverImageModal"
               />
             </template>
 
@@ -230,6 +230,7 @@
                   <rsvp
                     ref="rsvp"
                     :info="{ ...campaignTabs[2], ...campaignInfo }"
+                    @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
               </collapse-panel>
@@ -237,6 +238,7 @@
                 v-else
                 ref="rsvp"
                 :info="{ ...campaignTabs[2], ...campaignInfo }"
+                @change-cover-image="showChangeCoverImageModal"
               />
             </template>
 
@@ -255,6 +257,7 @@
                   <countdown
                     ref="countdown"
                     :info="{ ...campaignTabs[3], ...campaignInfo }"
+                    @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
               </collapse-panel>
@@ -263,6 +266,7 @@
                 ref="countdown"
                 :info="{ ...campaignTabs[3], ...campaignInfo }"
                 class="white-card"
+                @change-cover-image="showChangeCoverImageModal"
               />
             </template>
 
@@ -281,6 +285,7 @@
                   <feedback
                     ref="feedback"
                     :info="{ ...campaignTabs[4], ...campaignInfo }"
+                    @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
               </collapse-panel>
@@ -289,6 +294,7 @@
                 ref="feedback"
                 :info="{ ...campaignTabs[4], ...campaignInfo }"
                 class="white-card"
+                @change-cover-image="showChangeCoverImageModal"
               />
             </template>
           </section>
@@ -548,48 +554,16 @@
         </div>
       </div>
     </div>
-    <modal
+    <change-cover-image-modal
       v-if="showChangeCoverModal"
-      container-class="modal-container-wizard lg"
-    >
-      <template slot="header">
-        <div class="model__header">
-          <div class="font-size-30 arrow">
-            <md-icon @click="test">
-              close
-            </md-icon>
-          </div>
-          <h2>Change Cover</h2>
-          <div class="header-description">
-            Select the image that will appear on “Save the Date” cover. If you
-            want to change the collage you can always go back to concept page
-          </div>
-        </div>
-      </template>
-      <template slot="body">
-        <div class="md-layout" />
-      </template>
-      <template slot="footer">
-        <md-button
-          class="add-category-btn"
-          @click="test"
-        >
-          Cancel
-        </md-button>
-        <md-button
-          class="md-red add-category-btn"
-          @click="test"
-        >
-          Choose Image
-        </md-button>
-      </template>
-    </modal>
+      @close="close"
+      @choose-image="chooseImage"
+    />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { Modal } from "@/components";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import { CommentMixins, ShareMixins } from "@/mixins";
@@ -604,6 +578,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
 import CollapsePanel from "./CollapsePanel";
+import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
 
 import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
@@ -636,7 +611,6 @@ const defaultSettings = {
 export default {
   components: {
     Loader,
-    Modal,
     HeaderActions,
     CommentEditorPanel,
     SaveDate,
@@ -651,6 +625,7 @@ export default {
     ComingsoonAnalytics,
     FeedbackAnalytics,
     VueHtml2pdf,
+    ChangeCoverImageModal,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -695,10 +670,23 @@ export default {
     };
   },
   methods: {
-    test() {
+    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
+    ...mapMutations("campaign", ["setAttribute"]),
+    showChangeCoverImageModal() {
       this.showChangeCoverModal = !this.showChangeCoverModal;
     },
-    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
+    close() {
+      this.showChangeCoverModal = false;
+    },
+    chooseImage(url) {
+      this.showChangeCoverModal = false;
+      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
+      this.setAttribute({
+        name: currentCampaignType,
+        key: "coverImage",
+        value: url
+      });
+    },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -993,9 +981,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header-description {
-  font-size: 16px;
-}
 .campaign-content {
   padding: 0 3em;
   margin-bottom: 83px;

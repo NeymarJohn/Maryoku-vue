@@ -130,7 +130,8 @@
       <div v-if="!expandCreateConcept" class="concept-actions">
         <div>
           <md-button v-if="!showConceptList" class="md-simple md-black normal-btn" @click="showConceptList = true">
-            <md-icon>arrow_back</md-icon>Back
+            <md-icon>arrow_back</md-icon>
+            Back
           </md-button>
           <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
@@ -164,7 +165,7 @@
               style="padding-top: 4px"
               href="https://www.maryoku.com/contest-compete"
               target="_blank"
-            >Compete with my brilliant concept?</a>
+            >Earn points by sharing this concept</a>
             <span>
               <img
                 src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/light.svg"
@@ -172,10 +173,9 @@
                 width="20px"
               >
               <md-tooltip md-direction="bottom">
-                <strong class="font-size-16">A chance to win $1,000!</strong>
-                <div class="font-size-16">
-                  Don't miss this chance
-                  <br>to submit your concept <br>and compete for a grand <br>prize and recogintion.
+                <div class="font-size-16">When you share this concept you created with the Maryoku community</div>
+                <div class="font-size-16 d-flex align-start">
+                  you’ll earn points you can use toward discounts and coupons
                 </div>
               </md-tooltip>
             </span>
@@ -271,91 +271,11 @@ import { Modal, Loader } from "@/components";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import {CommentMixins, ShareMixins} from "@/mixins";
+import { CommentMixins, ShareMixins } from "@/mixins";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import ConceptBox from "../../../../components/ConceptBox.vue";
 
 const VueHtml2pdf = () => import("vue-html2pdf");
-
-// [
-//   {
-//     option: 1,
-//     name: "March Madness",
-//     description:
-//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-//     fontFamily: "Cooperative-Regular",
-//     tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
-//     images: [
-//       {
-//         url: "https://placeimg.com/200/200/any?1",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?2",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?3",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?4",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?5",
-//       },
-//     ],
-//     colors: [{ value: "#ffc001" }, { value: "#f3423a" }, { value: "#ff7600" }],
-//   },
-//   {
-//     option: 2,
-//     name: "Horror movies",
-//     description:
-//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-//     fontFamily: "CFNightofTerrorPERSONAL-Reg",
-//     tags: [{ name: "romantic" }, { name: "luxurry" }, { name: "fun" }, { name: "colourful" }],
-//     images: [
-//       {
-//         url: "https://placeimg.com/200/200/any?1",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?2",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?3",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?4",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?5",
-//       },
-//     ],
-//     colors: [{ value: "#de0300" }, { value: "#d1d1d1" }, { value: "#ff7600" }],
-//   },
-//   {
-//     option: 3,
-//     name: "Intergalactic",
-//     description:
-//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-//     fontFamily: "IntergalacticHalftoneItalic",
-//     tags: [{ name: "festive" }, { name: "elegant" }, { name: "respectable" }],
-//     images: [
-//       {
-//         url: "https://placeimg.com/200/200/any?1",
-//         backgroundColor: "#00165d",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?2",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?3",
-//       },
-//       {
-//         url: "https://placeimg.com/200/200/any?4",
-//         backgroundColor: "linear-gradient(#ff0082,#a700ff)",
-//       },
-//     ],
-//     colors: [{ value: "#00165d" }, { value: "linear-gradient(#ff0082,#a700ff)" }, { value: "#ff7600" }],
-//   },
-// ],
 
 export default {
   name: "EventConceptChoose",
@@ -488,12 +408,9 @@ export default {
   methods: {
     ...mapMutations("event", ["setEventData"]),
     expandConcept(item, index) {
-      console.log(item.name);
       if (!item.expand) {
-        console.log(" i am true");
         this.conceptOptions[index].expand = true;
       } else {
-        console.log(" i am false");
         this.conceptOptions[index].expand = false;
       }
       this.$forceUpdate();
@@ -510,7 +427,8 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
-    async saveConcept() {},
+    async saveConcept() {
+    },
     addColor(index) {
       const colors = ["#ff48b2", "#71ecf8", "#ededed"];
       this.newConcept.colors[index].value = "#ff48b2";
@@ -520,7 +438,6 @@ export default {
       this.$http
         .get(`${process.env.SERVER_URL}/1/concepts/${event.id}/select/${this.conceptOptions[index].id}`)
         .then((res) => {
-          console.log(res.data);
           this.onSaveConcept(res.data);
         });
 
@@ -569,7 +486,6 @@ export default {
   },
   watch: {
     eventData(newValue, oldValue) {
-      console.log(newValue);
       if (newValue.concept) {
         this.selectedConcept = newValue.concept;
         this.selectedConcept.images.forEach((item, i) => {
@@ -580,7 +496,6 @@ export default {
         this.showConceptList = true;
       }
       this.isLoading = false;
-      console.log(newValue.id);
     },
   },
   async created() {
@@ -682,13 +597,13 @@ export default {
     }
   },
   filters: {
-    formatDate: function (date) {
+    formatDate: function(date) {
       return moment(date).format("MMM Do YYYY ");
     },
-    formatTime: function (date) {
+    formatTime: function(date) {
       return moment(date).format("h:00 A");
     },
-    formatDuration: function (startDate, endDate) {
+    formatDuration: function(startDate, endDate) {
       return moment(endDate).diff(startDate, "hours");
     },
     withComma(amount) {

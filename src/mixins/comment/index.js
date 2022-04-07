@@ -22,7 +22,6 @@ export default {
       if (!component.comments || !component.comments.length) {
         const savedComponent = await this.addCommentComponent(component);
         this.commentComponents[index] = savedComponent;
-        comment.commentComponent = comment.eventCommentComponent;
         comment.commentComponent.id = savedComponent.id;
       }
 
@@ -53,11 +52,6 @@ export default {
     }
   },
   async created() {
-    // this.commentComponents = await this.getCommentComponents(this.url ? this.url : this.$route.path);
-    console.log("*******************" + this.$route.path);
-    let url = this.$route.path;
-    url = url.split("/");
-    url = "/proposals/" + url[url.length - 1];
-    this.commentComponents = await this.getCommentComponents(this.url ? this.url : url);
+    this.commentComponents = await this.getCommentComponents(this.url ? this.url : this.$route.path);
   },
 };

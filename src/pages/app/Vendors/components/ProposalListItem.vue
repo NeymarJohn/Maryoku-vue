@@ -216,7 +216,7 @@ export default {
     getStatusIcon(status) {
       let path = "/static/icons/vendor/proposalBoard/";
       if (status === PROPOSAL_STATUS.DRAFT) {
-        return `${path}filter-draft.svg`;
+        return `${this.$iconURL}VendorsProposalPage/path-14945.svg`;
       } else if (status === PROPOSAL_STATUS.PENDING) {
         return `${path}filter-pending.svg`;
       } else if (status === PROPOSAL_STATUS.TOP3) {

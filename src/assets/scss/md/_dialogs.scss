@@ -495,6 +495,34 @@
     border-radius: 0;
   }
 }
+
+.change-cover-image-modal {
+  .modal-container{
+    width: 1070px;
+    max-width: 1070px;
+    height: 1030px;
+    overflow: hidden;
+    border-radius: 0;
+  }
+  .modal-header {
+    padding: 60px 60px 55px 60px;
+    justify-content: start;
+  }
+  .modal-body {
+    padding: 0 60px 35px 60px;
+    justify-content: start;
+  }
+  .modal-footer {
+    padding: 0 60px 70px 60px;
+
+    .md-button {
+      &.btn-design-on-canva .md-ripple {
+        padding: 4px 30px 4px 12px !important;
+      }
+    }
+  }
+}
+
 #signatureEditor{
   canvas{
     height: 100%;

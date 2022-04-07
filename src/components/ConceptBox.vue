@@ -62,6 +62,9 @@ export default {
         { color: "#d2d2d2", opacity: 1 },
       ];
     }
+    if (concept.images.length > 4) {
+      this.images = concept.images.slice(0, 5);
+    }
     if (!concept.images || !concept.images.length) {
       this.images = [
         { url: "" },

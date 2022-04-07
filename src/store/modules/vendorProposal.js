@@ -203,7 +203,7 @@ const mutations = {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
     state.eventVision = proposal.eventVision;
-    state.services = proposal.vendor?proposal.vendor.services : [];
+    state.services = proposal.vendor.services;
     state.costServices = proposal.costServices;
     state.includedServices = proposal.includedServices;
     state.extraServices = proposal.extraServices;
@@ -272,7 +272,7 @@ const mutations = {
     setStateByVersion(state, { key: "taxes", value: state.taxes });
   },
   setAdditionalServices: (state, services) => {
-    Vue.set(state.additionalServices, services);
+    state.additionalServices = services;
 
     setStateByVersion(state, {
       key: "additionalServices",

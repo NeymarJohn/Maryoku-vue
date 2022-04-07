@@ -87,7 +87,7 @@
 }
 .modal-footer {
     padding: 0 60px 40px;
-    .md-button {
+    .md-button:not(.btn-design-on-canva):not(.btn-upload-photo) {
         padding: 0px 40px;
     }
 }
