@@ -34,6 +34,12 @@ export default {
             ]
 		};
 	},
+	beforeCreate() {
+		this.$store.registerModule("eventPlan", state);
+	},
+	mounted() {
+		this.fetchData();
+	},
 	computed: {
 		...mapState("event", {
 			eventData: (state) => state.eventData,
@@ -92,15 +98,9 @@ export default {
 			this.setConstantStates(newValue);
 		},
 	},
-	beforeCreate() {
-		this.$store.registerModule("eventPlan", state);
-	},
-	
-	mounted() {
-		this.fetchData();
-	},
 	created() {
-  },
+        console.log("event.plan", this.event);
+    },
 	methods: {
 		...mapActions("eventPlan", ["toggleCommentMode"]),
         updateSection() {

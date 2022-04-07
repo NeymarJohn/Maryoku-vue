@@ -56,10 +56,7 @@ export default {
       type: String,
       default: "",
     },
-    description: {
-      type: String,
-      default: ""
-    },
+    description: String,
     tableCategory: {
       type: String,
       default: "",
@@ -123,7 +120,6 @@ export default {
           return this.$store.state.vendorProposal.includedServices[this.vendorCategory];
         else if (this.tableCategory === "extra")
           return this.$store.state.vendorProposal.extraServices[this.vendorCategory];
-        return [];
       },
       set: function (newServices) {
         if (this.tableCategory === "cost")

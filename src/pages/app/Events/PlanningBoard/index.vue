@@ -17,22 +17,13 @@
               :default-status="selectedCategory && component.id === selectedCategory.id"
               :has-badge="hasBadge(component)"
               icon-style="opacity:0.8"
-              :proposalCategory="true"
               @click="selectCategory(component)"
             />
-            <drop-down class="d-inline-block"  @close="closeMoreCategories">
-              <ResizableToggleButton
-                class="mr-20 mb-10"
-                label="More categories"
-                data-toggle="dropdown"
-                :icon="`${$iconURL}Budget+Elements/foodandbeverage.svg`"
-                :selected-icon="`${$iconURL}Budget+Elements/foodandbeverage-white.svg`"
-                :default-status="showMoreCats === true"
-                :proposalCategory="false"
-                @click="showMoreCategories"
-              >
-              </ResizableToggleButton>
-              <ul class="dropdown-width dropdown-menu dropdown-color">
+            <drop-down class="d-inline-block">
+              <button class="add-category-button mb-10" data-toggle="dropdown" @click="addRequirements">
+                <md-icon>add</md-icon>
+              </button>
+              <ul class="dropdown-width dropdown-menu dropdown-color dropdown-menu-right ">
                 <li
                   v-for="(remainingCategory, i) in remainingCategories"
                   :key="remainingCategory.title + i"
@@ -508,7 +499,6 @@ const components = {
   ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
   CommentSidebar: () => import("../components/CommentSidebar.vue"),
   TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
-  ClickOutside: () => import("vue-click-outside")
 };
 
 export default {
@@ -518,7 +508,6 @@ export default {
     return {
       showChoice: false,
       showCart: false,
-      showMoreCats: true,
       allRequirements: null,
       subCategory: null,
       serviceCards: ServiceCards,
@@ -868,12 +857,7 @@ export default {
       if (notViewedProposals.length === 0) return false;
       return true;
     },
-    showMoreCategories(value) {
-      this.showMoreCats = value;
-    },
-    closeMoreCategories(){
-      this.showMoreCats = false;
-    },
+    addRequirements() {},
     selectCategory(category) {
       console.log("sel.category", category);
 
@@ -896,12 +880,10 @@ export default {
           }
       }
 
-      this.showMoreCats = false;
       this.closeProposal();
       if(this.showCommentPanel){
         this.toggleCommentMode();
       }
-      console.log("sel.cat", this.showMoreCats)
     },
     selectRemainingCategory(category, action) {
         if (action === "add") {
@@ -910,7 +892,7 @@ export default {
         } else if (action === "select") {
             this.selectedCategory = category;
         }
-        this.showMoreCats = false;
+
     },
     addBudget() {
       this.showAddBudgetConfirm = false;
@@ -1189,10 +1171,6 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
     cursor: pointer;
-
-    &.opened {
-
-    }
     i {
       font-size: 40px !important;
     }

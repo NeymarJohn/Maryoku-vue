@@ -39,7 +39,7 @@
     <div id="footer-panel" class="event-footer-container">
       <div class="ml-60">
         <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
         </md-button>
       </div>
 
@@ -115,6 +115,14 @@ export default {
       sections: [],
     };
   },
+  watch: {
+    event() {
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+    },
+    eventTypeList(newVal) {
+      this.init();
+    },
+  },
   computed: {
     ...mapGetters({
       eventTypeList: "event/getEventTypesList",
@@ -136,14 +144,6 @@ export default {
     },
     canEdit() {
       return this.permission === "edit";
-    },
-  },
-  watch: {
-    event() {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
-    },
-    eventTypeList(newVal) {
-      this.init();
     },
   },
   mounted() {
@@ -256,6 +256,7 @@ export default {
       this.setSection();
     },
     cancelEvent() {
+      console.log("cancelEvent");
     },
     setSection() {
       let places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];

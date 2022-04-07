@@ -9,20 +9,36 @@
         let's start with a "save the date"
       </div>
       <div class="concept-image-block-wrapper">
-        <div v-show="showChangeCover" class="change-cover-feedback" @click="handleChangeCoverImage">
+        <div v-show="showChangeCover" class="change-cover-feedback" @click="test">
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
-            Change Cover
+            Change Campaign Cover
           </md-button>
         </div>
-        <img v-if="coverImage" :src="coverImage" class="cover-image">
         <concept-image-block
-          v-else
-          class="hidden"
+          v-if="concept"
+          class="ml-50 hidden"
           :images="concept.images"
           :colors="concept.colors"
           border="no-border"
         />
+      </div>
+      <concept-canvas v-if="concept" class="ml-50" :event-concept="concept" style="display: none" />
+      <div v-else class="cover-preview">
+        <img :src="coverImage">
+        <label for="cover">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">Change Cover
+          </md-button>
+        </label>
+        <input
+          id="coverImage"
+          style="display: none"
+          name="attachment"
+          type="file"
+          multiple="multiple"
+          @change="onFileChange"
+        >
       </div>
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
@@ -33,15 +49,11 @@
           :key="campaignTitle"
           class="mt-40 font-size-60"
           :default-value="campaignTitle"
-          @change="handleChangeCampaignTitle"
+          @change="changeTitle"
         />
       </div>
       <div class="p-50 comment">
-        <maryoku-textarea
-          :value="campaignDescription"
-          :placeholder="placeHolder"
-          @input="handleChangeCampaignDescription"
-        />
+        <maryoku-textarea v-model="campaignDescription" :placeholder="placeHolder" />
       </div>
       <div class="p-50 text-center">
         <div class="font-size-22 mb-50">
@@ -83,12 +95,13 @@
             >
           </div>
           <div class="display-logo ml-50">
-            <hide-switch
-              label="Logo"
-              class="showlogo-switch large-switch"
-              :value="campaignVisibleSettings.showLogo"
-              @input="handleChangeCampaignVisibleSettings"
-            />
+            <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch" />
+            <div v-if="campaignData.visibleSettings.showLogo">
+              Show Logo
+            </div>
+            <div v-if="!campaignData.visibleSettings.showLogo">
+              Hide Logo
+            </div>
           </div>
         </div>
       </div>
@@ -103,20 +116,22 @@ import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import { getBase64 } from "@/utils/file.util";
 import TitleEditor from "./components/TitleEditor";
 import Swal from "sweetalert2";
+import VueElementLoading from "vue-element-loading";
 import S3Service from "@/services/s3.service";
+import ConceptCanvas from "./components/ConceptCanvas";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Loader } from "@/components";
-import HideSwitch from "@/components/HideSwitch";
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
 export default {
   components: {
-    HideSwitch,
     vueDropzone: vue2Dropzone,
     ConceptImageBlock,
     MaryokuTextarea,
     TitleEditor,
+    VueElementLoading,
+    ConceptCanvas,
     Loader,
   },
   props: {
@@ -139,8 +154,10 @@ export default {
         headers: { "My-Awesome-Header": "header value" },
       },
       logo: null,
+      showChangeCoverModal: false,
       logoImageData: "",
       placeHolder: placeHolder,
+      description: placeHolder,
       originContent: {
         title: "",
         description: "",
@@ -158,27 +175,37 @@ export default {
       return this.$store.state.event.eventData;
     },
     concept() {
-      return this.event.concept || {};
+      return this.event.concept ? this.event.concept : null;
     },
     campaignData() {
-      return this.$store.state.campaign.SAVING_DATE || {};
+      return this.$store.state.campaign.SAVING_DATE;
     },
     campaignTitle() {
-      return this.campaignData.title || "New Event";
+      return this.$store.state.campaign.SAVING_DATE ? this.$store.state.campaign.SAVING_DATE.title : "New Event";
     },
-    campaignDescription() {
-      return this.campaignData.description || "";
+    campaignDescription: {
+      get() {
+        return this.$store.state.campaign.SAVING_DATE ? this.$store.state.campaign.SAVING_DATE.description : "";
+      },
+      set(newValue) {
+        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "description", value: newValue });
+      },
     },
-    coverImage() {
-      return this.campaignData.coverImage || "";
-    },
-    campaignVisibleSettings() {
-      return this.campaignData.visibleSettings || {};
+    coverImage: {
+      get() {
+        return this.$store.state.campaign.SAVING_DATE
+          ? this.$store.state.campaign.SAVING_DATE.coverImage
+          : `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`;
+      },
+      set(newValue) {
+        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "coverImage", value: newValue });
+      },
     },
   },
   methods: {
-    handleChangeCoverImage(event) {
-      this.$emit("change-cover-image", event);
+    test(){
+      this.showChangeCoverModal = true;
+      this.$emit("showModal", this.showChangeCoverModal);
     },
     setDefault() {
       Swal.fire({
@@ -204,7 +231,7 @@ export default {
       });
       this.$emit("changeInfo", { field: "logo", value: this.logoImageData });
     },
-    handleChangeCampaignTitle(newTitle) {
+    changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
@@ -218,12 +245,6 @@ export default {
           }),
         )
         .then((result) => {});
-    },
-    handleChangeCampaignDescription(newDescription) {
-      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "description", value: newDescription });
-    },
-    handleChangeCampaignVisibleSettings(key, value) {
-      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key, value });
     },
     chooseFiles() {
       document.getElementById("coverImage").click();
@@ -246,17 +267,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .concept-image-block-wrapper{
-  width: 1170px;
-  height: 420px;
   position: relative;
+  height: fit-content;
   overflow: auto;
-  margin: 0 auto;
-
-  .cover-image {
-    width: 1170px;
-    height: 420px;
-    object-fit: cover;
-  }
 }
 .change-cover-feedback{
   position: absolute;
