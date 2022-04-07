@@ -179,14 +179,13 @@
           <md-icon>close</md-icon>
         </md-button>
         <feedback-upload-images-carousel
+          class-image="carousel-upload-image"
+          class="carousel-upload-images"
           :images="attachmentsImages"
-          :auto-play="true"
-          :disable-filter="true"
           :auto-play-timeout="2500"
           :smart-speed="2500"
-          :show-button-actions="false"
-          class="carousel-upload-images"
-          class-image="carousel-upload-image"
+          auto-play
+          loop
         />
       </div>
     </fullscreen>
@@ -199,7 +198,7 @@ import Campaign from "@/models/Campaign";
 import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
 import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
-import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
+import FeedbackUploadImagesCarousel from "./FeedbackUploadImagesCarousel";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
 import Swal from "sweetalert2";
