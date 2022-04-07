@@ -101,7 +101,8 @@ export default {
       display: flex;
       flex-wrap: wrap;
       margin-left: 20px;
-      max-width: 600px;
+      max-width: 770px;
+      width: 100%;
       span{
         display: block;
         margin-bottom: 10px;

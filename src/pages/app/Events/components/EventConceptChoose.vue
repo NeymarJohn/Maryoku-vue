@@ -274,6 +274,86 @@ import ConceptBox from "../../../../components/ConceptBox.vue";
 
 const VueHtml2pdf = () => import("vue-html2pdf");
 
+// [
+//   {
+//     option: 1,
+//     name: "March Madness",
+//     description:
+//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
+//     fontFamily: "Cooperative-Regular",
+//     tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
+//     images: [
+//       {
+//         url: "https://placeimg.com/200/200/any?1",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?2",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?3",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?4",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?5",
+//       },
+//     ],
+//     colors: [{ value: "#ffc001" }, { value: "#f3423a" }, { value: "#ff7600" }],
+//   },
+//   {
+//     option: 2,
+//     name: "Horror movies",
+//     description:
+//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
+//     fontFamily: "CFNightofTerrorPERSONAL-Reg",
+//     tags: [{ name: "romantic" }, { name: "luxurry" }, { name: "fun" }, { name: "colourful" }],
+//     images: [
+//       {
+//         url: "https://placeimg.com/200/200/any?1",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?2",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?3",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?4",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?5",
+//       },
+//     ],
+//     colors: [{ value: "#de0300" }, { value: "#d1d1d1" }, { value: "#ff7600" }],
+//   },
+//   {
+//     option: 3,
+//     name: "Intergalactic",
+//     description:
+//       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
+//     fontFamily: "IntergalacticHalftoneItalic",
+//     tags: [{ name: "festive" }, { name: "elegant" }, { name: "respectable" }],
+//     images: [
+//       {
+//         url: "https://placeimg.com/200/200/any?1",
+//         backgroundColor: "#00165d",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?2",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?3",
+//       },
+//       {
+//         url: "https://placeimg.com/200/200/any?4",
+//         backgroundColor: "linear-gradient(#ff0082,#a700ff)",
+//       },
+//     ],
+//     colors: [{ value: "#00165d" }, { value: "linear-gradient(#ff0082,#a700ff)" }, { value: "#ff7600" }],
+//   },
+// ],
+
 export default {
 	name: "EventConceptChoose",
 	components: {
@@ -405,9 +485,12 @@ export default {
 	methods: {
 		...mapMutations("event", ["setEventData"]),
 		expandConcept(item, index) {
+			console.log(item.name);
 			if (!item.expand) {
+				console.log(" i am true");
 				this.conceptOptions[index].expand = true;
 			} else {
+				console.log(" i am false");
 				this.conceptOptions[index].expand = false;
 			}
 			this.$forceUpdate();
@@ -434,6 +517,7 @@ export default {
 			this.$http
 				.get(`${process.env.SERVER_URL}/1/concepts/${event.id}/select/${this.conceptOptions[index].id}`)
 				.then((res) => {
+					console.log(res.data);
 					this.onSaveConcept(res.data);
 				});
 
@@ -482,6 +566,7 @@ export default {
 	},
 	watch: {
 		eventData(newValue, oldValue) {
+			console.log(newValue);
 			if (newValue.concept) {
 				this.selectedConcept = newValue.concept;
 				this.selectedConcept.images.forEach((item, i) => {
@@ -492,6 +577,7 @@ export default {
 				this.showConceptList = true;
 			}
 			this.isLoading = false;
+			console.log(newValue.id);
 		},
 	},
 	async created() {
