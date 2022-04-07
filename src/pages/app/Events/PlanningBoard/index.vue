@@ -4,8 +4,8 @@
     <loader :active="isLoading" />
 
     <template v-if="!isLoading">
-      <div class="ml-60 mt-40 mr-30">
-        <div class="d-flex justify-content-between align-center">
+      <div class="ml-60 mt-40 mr-30 mb-200">
+        <div class="headers d-flex justify-content-between align-center">
           <div>
             <ResizableToggleButton
               v-for="(component, index) in topCategories"
@@ -243,7 +243,7 @@
         <template v-else>
           <div class="booking-proposals">
             <template v-if="selectedCategory">
-              <div v-if="selectedCategory" class="font-size-30 font-bold-extra category-title mt-30 mb-30">
+              <div v-if="selectedCategory" class="font-size-30 font-bold-extra category-title d-flex align-center mt-30 mb-30">
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
@@ -260,8 +260,9 @@
                   "
                 >
                   <template v-if="hasBudget(selectedCategory.componentId)">
-                    <a
-                      class="font-size-18 md-red maryoku-btn cursor-pointer"
+                    <md-button
+                      class="md-simple md-red maryoku-btn"
+                      :disabled="!getRequirements(selectedCategory.componentId)"
                       @click="
                         getSpecification({
                           category: selectedCategory,
@@ -270,7 +271,7 @@
                       "
                     >
                       Get Specific
-                    </a>
+                    </md-button>
                   </template>
                   <template v-else>
                     <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
@@ -438,6 +439,7 @@
       :selected-category="selectedCategory"
       :default-data="getRequirements(selectedCategory.key) || {}"
       :selected-types="getSelectedTypes(selectedCategory.key)"
+      page="planner"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
@@ -851,6 +853,7 @@ export default {
       this.selectedCategory = this.$store.state.common.serviceCategories.find(item => item.key === category);
     },
     getRequirements(category) {
+      console.log("getRequirements", category, this.$store.state.planningBoard.requirements[category])
       if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },
@@ -1102,6 +1105,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
+
+  .headers {
+    background-color: transparent;
+  }
+  .fixed-top { box-shadow: 1px 1px 10px rgba(0,0,0,0.12); padding: 7px;}
+
   .proposalTitle {
     font-size: 30px;
     font-weight: 800;
@@ -1377,7 +1386,6 @@ export default {
 
   .proposal-card-items {
     padding: 0 0em;
-    margin-bottom: 1em;
     align-items: stretch;
     margin-top: 30px;
     display: grid;

@@ -232,6 +232,8 @@
   }
   .next-btn {
     width: 150px;
+    display: inline-flex;
+    justify-content: center;
   }
   @media screen and (max-width: 500px) {
     .wizard-footer {

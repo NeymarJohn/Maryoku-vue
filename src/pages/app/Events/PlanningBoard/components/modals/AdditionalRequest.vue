@@ -335,7 +335,7 @@ export default {
     }
   },
   created() {
-    console.log('additionalRequest.created', this.subCategory);
+    console.log('additionalRequest.created', this.defaultData);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -347,8 +347,8 @@ export default {
     } else {
       this.specialTags = [];
     }
-    console.log("additionalRequests.created", this.specialTags);
-    console.log("additionalRequests.created", this.subCategorySections);
+    // console.log("additionalRequests.created", this.specialTags);
+    // console.log("additionalRequests.created", this.subCategorySections);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
@@ -381,27 +381,6 @@ export default {
     getPeriod(timeslots, idxs) {
       console.log("getPeriod", timeslots);
       let duration = [];
-
-      // timeslots.map(timeslot => {
-      //     let startTime = moment(new Date(Number(timeslot.startTime)));
-      //     let endTime = moment(new Date(Number(timeslot.endTime)));
-      //     duration.push({
-      //         startTime: {
-      //             ampm: startTime.format('A'),
-      //             time: {
-      //                 hh: startTime.format('hh'),
-      //                 mm: startTime.format('mm'),
-      //             }
-      //         },
-      //         endTime: {
-      //             ampm: endTime.format('A'),
-      //             time: {
-      //                 hh: endTime.format('hh'),
-      //                 mm: endTime.format('mm'),
-      //             }
-      //         }
-      //     })
-      // })
 
       return duration;
     },
