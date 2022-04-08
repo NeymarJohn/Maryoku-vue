@@ -21,23 +21,6 @@
             <md-icon>clear</md-icon>
           </md-button>
         </div>
-        <div v-if="files.length" class="upload-files-list">
-          <div
-            v-for="(file, index) in files"
-            :key="index"
-            :class="{
-              'upload-files-list-item': true,
-              'upload-files-list-item-active': carouselItemIndex === index,
-            }"
-          >
-            <span class="upload-files-list-item-text">
-              {{ file.name }}
-            </span>
-            <span class="upload-files-list-item-button-delete" @click="deleteFile(index)">
-              <md-icon class="icon-close">close</md-icon>
-            </span>
-          </div>
-        </div>
       </div>
     </template>
     <template slot="body">
@@ -66,7 +49,24 @@
           </vue-dropzone>
         </div>
       </div>
-      <div v-else>
+      <div v-else class="upload-files-modal-body-content-with-carousel">
+        <div v-if="files.length" class="upload-files-list">
+          <div
+            v-for="(file, index) in files"
+            :key="index"
+            :class="{
+              'upload-files-list-item': true,
+              'upload-files-list-item-active': carouselItemIndex === index,
+            }"
+          >
+            <span class="upload-files-list-item-text">
+              {{ file.name }}
+            </span>
+            <span class="upload-files-list-item-button-delete" @click="deleteFile(index)">
+              <md-icon class="icon-close">close</md-icon>
+            </span>
+          </div>
+        </div>
         <feedback-upload-images-carousel
           class="carousel-upload-images"
           class-image="carousel-upload-image"
@@ -231,13 +231,72 @@ export default {
     color: #050505;
     width: 460px;
   }
+}
+
+.upload-files-modal-body-content {
+  width: 942px;
+  height: 530px;
+  margin: 0 auto;
+  background-color: #f3f7fd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .upload-files-white-cube {
+    width: 942px;
+    height: 530px;
+    background-color: white;
+    border: 1px dashed #818080;
+
+    .feedback-drop-zone {
+      border: none;
+      height: 100%;
+      background-color: #fff;
+
+      .choose-file-button{
+        background-color: #fff!important;
+        width: 148px;
+        height: 32px;
+        border: solid 2px #f51355;
+        color: #f51355!important;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .drag-your-file-text{
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #818080;
+      }
+    }
+  }
+}
+
+.upload-files-modal-body-content-with-carousel {
+  width: 949px;
+  height: 610px;
+  margin: 0 auto;
+  overflow-y: scroll;
+
+  .carousel-upload-images {
+    max-width: 942px;
+    max-height: 530px;
+
+    .carousel-upload-image {
+      width: 942px;
+      height: 530px;
+    }
+  }
 
   .upload-files-list {
-    height: 80px;
     display: flex;
     flex-wrap: wrap;
-    margin-top: 35px;
-    overflow-y: auto;
+    margin-Bottom: 15px;
 
     .upload-files-list-item {
       width: 200px;
@@ -284,50 +343,6 @@ export default {
 
       .upload-files-list-item-button-delete .icon-close {
         color: #f51355;
-      }
-    }
-  }
-}
-
-.upload-files-modal-body-content {
-  width: 942px;
-  height: 530px;
-  margin: 0 auto;
-  background-color: #f3f7fd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .upload-files-white-cube {
-    width: 942px;
-    height: 530px;
-    background-color: white;
-    border: 1px dashed #818080;
-
-    .feedback-drop-zone {
-      border: none;
-      height: 100%;
-      background-color: #fff;
-
-      .choose-file-button{
-        background-color: #fff!important;
-        width: 148px;
-        height: 32px;
-        border: solid 2px #f51355;
-        color: #f51355!important;
-        font-size: 14px;
-        font-weight: 800;
-      }
-
-      .drag-your-file-text{
-        font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: center;
-        color: #818080;
       }
     }
   }
@@ -385,16 +400,6 @@ export default {
       color: #000;
       cursor: pointer;
     }
-  }
-}
-
-.carousel-upload-images {
-  max-width: 942px;
-  max-height: 530px;
-
-  .carousel-upload-image {
-    width: 942px;
-    height: 530px;
   }
 }
 </style>
