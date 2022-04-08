@@ -182,10 +182,10 @@
           class-image="carousel-upload-image"
           class="carousel-upload-images"
           :images="attachmentsImages"
-          :auto-play-timeout="2500"
-          :smart-speed="2500"
-          auto-play
-          loop
+          :auto-play-timeout="3500"
+          :smart-speed="1500"
+          :auto-play="true"
+          :loop="true"
         />
       </div>
     </fullscreen>
