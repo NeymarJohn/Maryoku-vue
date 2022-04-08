@@ -252,6 +252,8 @@ export default {
         document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
         video: video_extension.map(ext => `.${ext}`),
       },
+      selectedAttachmentsTypes: false,
+      invalidSelectedFilesTypes: false,
       showFeedbackMessageSuccessful: false,
     };
   },
@@ -398,6 +400,11 @@ export default {
       alert(`You dropped files: ${JSON.stringify(filenames)}`);
     },
     downloadFiles() {
+      if (this.invalidSelectedFilesTypes) return;
+      if (!this.selectedAttachmentsTypes) {
+        const typeFiles = Object.keys(this.extensionsFiles);
+        this.selectedAttachments = this.filterFilesByType(typeFiles, this.attachments);
+      }
       const attachments = this.selectedAttachments.map(({ url }) => url);
       S3Service.downloadFiles(attachments).then((result) => {
         const tagA = document.createElement("a");
@@ -419,6 +426,18 @@ export default {
       });
     },
     selectedDownloadFiles(selectedTypeFiles) {
+      this.selectedAttachmentsTypes = true;
+      if (!selectedTypeFiles.length) {
+        this.invalidSelectedFilesTypes = true;
+        return Swal.fire({
+          title: "Invalid selected files types",
+          text: "Please select type files for download",
+          type: "error",
+          confirmButtonClass: "md-button md-red maryoku-btn",
+          buttonsStyling: false,
+        });
+      }
+      this.invalidSelectedFilesTypes = false;
       this.selectedAttachments = this.filterFilesByType(selectedTypeFiles, this.attachments);
     },
     onPlay() {

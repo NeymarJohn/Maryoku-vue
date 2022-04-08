@@ -195,7 +195,6 @@
           pdf-format="a4"
           pdf-orientation="portrait"
           pdf-content-width="800px"
-          :html-to-pdf-options="html2canvasOptions"
         >
           <section slot="pdf-content">
             <!-- PDF Content Here -->
@@ -383,12 +382,6 @@ export default {
       5: "",
     },
     uploadImage: "",
-    html2canvasOptions:{
-      html2canvas:{
-        allowTaint:true,
-        useCORS: true,
-      }
-    },
   }),
   computed: {
     ...mapState("event", ["eventData"]),
