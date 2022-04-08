@@ -127,7 +127,7 @@ export default {
       right: 40px;
     }
     &.nav-left {
-      left: 60px;
+      left: 40px;
     }
   }
 
