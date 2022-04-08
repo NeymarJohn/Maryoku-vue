@@ -705,21 +705,20 @@ export default {
     margin-right: 14px;
 }
 .add-new-question-input-1{
-    width: 400px;
+    width: 438px;
     height: 51px;
     margin-right: 46px;
 }
 .add-new-question-input-2{
-    width: 400px;
+    width: 476px;
     height: 51px;
     margin-right: 33px;
 }
-.add-new-question-title {
-  width: 400px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 16px;
+.add-new-question-title{
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 16px;
 }
 .add-new-question-button-block{
     display: flex;

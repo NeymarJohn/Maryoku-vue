@@ -2,62 +2,62 @@ export const VendorCategories = [
   {
     name: "Venue Rental",
     value: "venuerental",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/venuerental.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Path 11323.svg"
   },
   {
     name: "Food & Beverage",
     value: "foodandbeverage",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/foodandbeverage.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 19221.svg"
   },
   {
     name: "Design and Decor",
     value: "decor",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/decor.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Path 15037.svg"
   },
   {
     name: "Guest Services & Staffing",
     value: "administration",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/administration.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Guest services & Staffing (White).svg"
   },
   {
     name: "Signage / Printing",
     value: "signageprinting",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/signageprinting.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29313.svg"
   },
   {
     name: "AV / Staging",
     value: "audiovisualstagingservices",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/audiovisualstagingservices.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29316.svg"
   },
   {
     name: "Giveaways",
     value: "giveaways",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/swags.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 1734.svg"
   },
   {
     name: "Transportation & Tour operator",
     value: "transportation",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/transportation.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29304.svg"
   },
   {
     name: "Entertainment",
     value: "entertainment",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/entertainment.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29303.svg"
   },
   {
     name: "Security",
     value: "securityservices",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/securityservices.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29238.svg"
   },
   {
     name: "Videography and Photography",
     value: "videographyandphotography",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/videographyandphotography.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Videography and Photography (White).svg"
   },
   {
     name: "Equipment Rentals",
     value: "equipmentrentals",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/equipmentrentals.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29314.svg"
   }
 ];
 export const businessCategories = [
