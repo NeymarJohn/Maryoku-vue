@@ -121,7 +121,13 @@
                 share with us photos you took from the event
               </div>
             </div>
-            <drop @drop="handleDrop">
+            <vue-dropzone
+              id="dropzone"
+              ref="myVueDropzone"
+              :options="dropzoneOptions"
+              :use-custom-slot="true"
+              @vdropzone-file-added="fileAdded"
+            >
               <div class="white-cube drop">
                 <div class="border-cube">
                   <div class="title-text-drag-and-drop">
@@ -130,13 +136,13 @@
                   <div class="or-section">
                     \\ Or \\
                   </div>
-                  <div class="upload-text-area">
+                  <div class="upload-text-area cursor-pointer">
                     <img src="/static/icons/arrow-up-red.svg" class="mr-10">
                     Upload Files
                   </div>
                 </div>
               </div>
-            </drop>
+            </vue-dropzone>
           </div>
         </div>
       </div>
@@ -201,11 +207,12 @@ import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImage
 import FeedbackUploadImagesCarousel from "./FeedbackUploadImagesCarousel";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
+import vue2Dropzone from "vue2-dropzone";
 import Swal from "sweetalert2";
 import { mapActions } from "vuex";
 import S3Service from "@/services/s3.service";
-import { Drop } from "vue-drag-drop";
 import video_extension from "video-extensions";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
@@ -215,7 +222,7 @@ export default {
     FeedbackQuestion,
     CampaignLogo,
     ViewPresentation,
-    Drop,
+    vueDropzone: vue2Dropzone,
   },
   data() {
     return {
@@ -253,6 +260,12 @@ export default {
         image: [".jpeg", ".jpg", ".gif", ".png"],
         document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
         video: video_extension.map(ext => `.${ext}`),
+      },
+      dropzoneOptions: {
+        url: "https://httpbin.org/post",
+        createImageThumbnails: false,
+        uploadMultiple: true,
+        acceptedFiles: "image/*, video/*",
       },
       selectedAttachmentsTypes: false,
       invalidSelectedFilesTypes: false,
@@ -294,7 +307,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions("campaign", ["getCampaigns"]),
+    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -449,7 +462,15 @@ export default {
     },
     closeFullScreen() {
       this.fullScreen = false;
-    }
+    },
+    fileAdded(file) {
+      const extension = file.type.split("/")[1];
+      const fileName = uuidv4();
+      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`, true).then((response) => {
+        const file = response.data.upload;
+        this.images.unshift({ src: file.url });
+      });
+    },
   }
 };
 </script>
