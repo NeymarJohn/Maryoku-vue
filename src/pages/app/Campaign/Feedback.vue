@@ -57,7 +57,6 @@
             :logo-title="campaignTitle"
             :show-logo="campaignVisibleSettings.showLogo"
             @change-logo="handleChangeCampaignLogo"
-            @change-logo-title="handleChangeCampaignTitle"
             @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
           />
         </div>
@@ -238,7 +237,7 @@ import FeedbackQuestion from "./components/FeedbackQuestion";
 import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
-import CustomTitleEditor from "./components/CustomTitleEditor";
+import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import { mapActions } from "vuex";
 import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
@@ -307,13 +306,18 @@ export default {
       return this.campaignData.logoUrl || "";
     },
     campaignTitle() {
-      return this.campaignData.title || this.event.title;
+      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
     },
     campaignVisibleSettings() {
       return this.campaignData.visibleSettings || {};
     },
-    campaignDescription() {
-      return this.$store.state.campaign.FEEDBACK.description || "";
+    campaignDescription: {
+      get() {
+        return this.$store.state.campaign.FEEDBACK.description || "";
+      },
+      set(newDescription) {
+        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "description", value: newDescription });
+      }
     },
     additionalData() {
       const campaignAdditionalData = this.campaignData.additionalData || {};
@@ -458,23 +462,16 @@ export default {
     handleChangeCoverImage() {
       this.$emit("change-cover-image", event);
     },
-    handleChangeCampaignTitle(value) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "title",
-        value,
-      });
-    },
     handleChangeCampaignDescription(value) {
       this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
+        name: "RSVP",
         key: "description",
         value,
       });
     },
     handleChangeCampaignVisibleSettings(key, value) {
       this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
+        name: "RSVP",
         key: "visibleSettings",
         value: { ...this.campaignVisibleSettings, [key]: value },
       });

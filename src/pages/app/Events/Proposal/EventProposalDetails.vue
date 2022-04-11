@@ -281,9 +281,9 @@
             <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
           <div class="font-size-22 font-bold" style="text-align: end;">
-            ${{ (totalPrice - bundledDiscount)| withComma(Number) }}
+            ${{ (bundledServicePrice - bundledDiscountPrice)| withComma(Number) }}
             <br/>
-            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ totalPrice| withComma(Number) }}</span>
+            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ bundledServicePrice| withComma(Number) }}</span>
           </div>
         </div>
         <div class="element-pricing-table total-list md-small-hide">
@@ -298,11 +298,11 @@
                 </td>
                 <td class="element-value">
                   <div class="element-price">
-                    ${{ totalPriceWithDiscount * tax  | withComma }}
+                    ${{ discounedAndTaxedPrice | withComma }}
                   </div>
                   <div v-if="proposal.bundleDiscount.percentage" class="discount-details">
                     ({{ discount.percentage }}% off)
-                    <span style="text-decoration: line-through; font-size: 14px">{{ totalPrice * tax | withComma }}</span>
+                    <span style="text-decoration: line-through; font-size: 14px">{{ totalPrice * localTax | withComma }}</span>
                   </div>
                 </td>
               </tr>
@@ -732,7 +732,8 @@ export default {
       return moment(endDate).diff(startDate, "hours");
     },
   },
-  mixins: [CommentMixins, ShareMixins, MobileMixins, ProposalPriceMixins],
+  mixins: [CommentMixins, ShareMixins, MobileMixins,
+    ProposalPriceMixins],
   props: {
     sh: {
       type: Boolean,
@@ -853,7 +854,7 @@ export default {
       return this.$store.state.eventPlan ? this.$store.state.eventPlan.showCommentPanel : false;
     },
 
-    tax() {
+    localTax() {
       if (!this.proposal.taxes) return { percentage: 0, price: 0 };
       let tax = { ...this.proposal.taxes["total"] };
       if (!tax) {
@@ -873,15 +874,15 @@ export default {
     bundledDiscount(){
       return this.totalPrice * this.proposal.bundleDiscount.percentage / 100;
     },
-    totalPriceWithDiscount(){
-     const price = this.totalPrice - (this.totalPrice * this.discount.percentage / 100 );
-     if(this.proposal.bundleDiscount.isApplied && this.proposal.bundleDiscount && this.checkedAllBundledOffers){
-       return this.proposal.bundleDiscount.percentage ?
-         price - (price * this.proposal.bundleDiscount.percentage / 100):
-         price - this.proposal.bundleDiscount.total;
-     }
-     return price;
-    },
+    // totalPriceWithDiscount(){
+    //  const price = this.totalPrice - (this.totalPrice * this.discount.percentage / 100 );
+    //  if(this.proposal.bundleDiscount.isApplied && this.proposal.bundleDiscount && this.checkedAllBundledOffers){
+    //    return this.proposal.bundleDiscount.percentage ?
+    //      price - (price * this.proposal.bundleDiscount.percentage / 100):
+    //      price - this.proposal.bundleDiscount.total;
+    //  }
+    //  return price;
+    // },
   },
   created() {
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];

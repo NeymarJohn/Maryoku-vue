@@ -116,7 +116,7 @@ export default {
       return this.$store.state.campaign.COMING_SOON || {};
     },
     campaignTitle() {
-      return this.campaignData.title || this.event.title;
+      return this.campaignData.title || "Event Name";
     },
     campaignLogoUrl() {
       return this.campaignData.logoUrl || "";

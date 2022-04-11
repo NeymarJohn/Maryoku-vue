@@ -133,7 +133,7 @@ export default {
       return this.campaignData.coverImage || "";
     },
     campaignTitle() {
-      return this.campaignData.title || this.event.title;
+      return this.campaignData.title || "New Event";
     },
     campaignLogoUrl() {
       return this.campaignData.logoUrl || "";
