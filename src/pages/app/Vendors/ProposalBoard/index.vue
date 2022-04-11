@@ -98,7 +98,6 @@
                 class="row"
                 :color="colors[idx]"
                 @action="handleProposal"
-                @showGraphModal="showGraphModal"
               />
             </div>
           </div>
@@ -300,8 +299,8 @@
     />
     <ProposalGraphModal
       v-if="showProposalGraph"
-      :proposal="selectedProposalForGraph"
-      @close="closeProposalGraph"
+      :proposal="selectedProposal"
+      @close="showProposalGraph = false"
     />
   </div>
 </template>
@@ -373,6 +372,7 @@ export default {
         negotiation: 5,
         resend: 7,
         cancel: 8,
+        engagement: 9,
       },
       negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
       negotiationType: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
@@ -564,6 +564,8 @@ export default {
 
         await this.sendEmail({ type: "inactive", url, proposalId: this.selectedProposal.id });
         this.loading = false;
+      } else if (action === this.proposalStatus.engagement) {
+        this.showProposalGraph = true;
       }
     },
 
@@ -821,13 +823,6 @@ export default {
       await this.$store.dispatch("vendorDashboard/getProposalRequests", this.vendorData.id);
       await this.getProposal();
       this.loading = false;
-    },
-    showGraphModal(proposal) {
-        this.showProposalGraph = true;
-        this.selectedProposalForGraph = proposal;
-    },
-    closeProposalGraph() {
-      this.showProposalGraph = false;
     },
     getNegotiations(proposal) {
       if (!proposal || !proposal.negotiations) return [];

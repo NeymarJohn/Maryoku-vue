@@ -7,11 +7,12 @@
       :dots="false"
       :nav="false"
       :number="2"
-      :autoplay-timeout="autoPlayTimeout"
+      :auto-play-timeout="autoPlayTimeout"
       :smart-speed="smartSpeed"
-      :autoplay="autoPlay"
+      :auto-play="autoPlay"
       :loop="loop"
       class="feedback-carousel"
+      @changed="change"
     >
       <div v-for="(item, index) in images" :key="index" class="carousel-item">
         <img :src="item.src" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
@@ -53,7 +54,15 @@ export default {
       default: false,
     }
   },
+  created() {
+    const { loop, autoPlay } = this;
+    console.log({ loop, autoPlay });
+  },
   methods: {
+    change(event) {
+      const itemIndex = event.item.index;
+      this.$emit("change-item-index", itemIndex);
+    },
     setAltImg(event, item) {
       event.target.src = item.imageData;
     },

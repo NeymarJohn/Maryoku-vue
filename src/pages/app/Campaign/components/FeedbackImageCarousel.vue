@@ -42,7 +42,7 @@
         @change="onFileChange"
       >
     </div>
-    <div v-if="showDetailsUploadedFiles" class="feedback-images-footer">
+    <div class="feedback-images-footer">
       <img class="icon-photography-white" src="static/icons/Group%209348.svg">
       <span class="description">All Photos / video (5)</span>
     </div>
@@ -67,10 +67,6 @@ export default {
       default: 25,
     },
     showUploadFile: {
-      type: Boolean,
-      default: false,
-    },
-    showDetailsUploadedFiles: {
       type: Boolean,
       default: false,
     },
@@ -131,7 +127,7 @@ export default {
       right: 40px;
     }
     &.nav-left {
-      left: 40px;
+      left: 60px;
     }
   }
 

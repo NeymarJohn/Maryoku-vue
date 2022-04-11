@@ -54,28 +54,12 @@ export default {
   },
   created() {
     const concept = this.concept;
-    const defaultDataImages = [
-      { url: "" },
-      { url: "" },
-      { url: "" },
-      { url: "" },
-      { url: "" },
-    ];
     if (!concept.colors || !concept.colors.length) {
       this.colors = [
         { color: "#d2d2d2", opacity: 1 },
         { color: "#d2d2d2", opacity: 1 },
         { color: "#d2d2d2", opacity: 1 },
         { color: "#d2d2d2", opacity: 1 },
-      ];
-    }
-    if (concept.images.length > 4) {
-      this.images = concept.images.slice(0, 5);
-    }
-    if (concept.images.length < 5) {
-      this.images = [
-        ...concept.images,
-        defaultDataImages.slice(0, concept.images.length - 5)
       ];
     }
     if (!concept.images || !concept.images.length) {
