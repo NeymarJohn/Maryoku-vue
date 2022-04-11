@@ -12,16 +12,17 @@
       </md-button>
     </template>
     <template slot="body">
-      <div v-if="serviceCards && serviceCards.length > 1" class="md-layout mt-40">
+      <div v-if="serviceCards && serviceCards.length > 1" class="md-layout service-tabs mt-40">
         <div v-for="card in serviceCards"
-             class="md-layout-item md-size-50 service-tab-item"
+             class="md-layout-item service-tab-item"
              :class="{ active: card.value === selectedCard }"
+             :style="{flex: `0 1 ${100 / serviceCards.length}%`}"
              @click="selectCard(card.value)"
         >
-          <img
-            :src="`${$iconURL}Budget Elements/foodandbeverage.svg`"
-            class="page-icon mr-10"
-          >
+<!--          <img-->
+<!--            :src="`${$iconURL}Budget Elements/foodandbeverage.svg`"-->
+<!--            class="page-icon mr-10"-->
+<!--          >-->
           {{ card.label }}
         </div>
       </div>
@@ -101,7 +102,7 @@
                 class="md-layout-item md-size-33"
               >
                 <div class="d-flex align-center">
-                  <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                  <md-checkbox class="w-min-180" v-if="item.type !== 'single-selection'" v-model="item.selected">
                     <span class="text-transform-capitalize">{{ item.item }}</span>
                   </md-checkbox>
                   <MaryokuInput
@@ -625,6 +626,9 @@ export default {
     }
   }
 
+  .service-tabs{
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  }
   .service-tab-item {
     height: 90px;
     font-size: 20px;
@@ -633,10 +637,8 @@ export default {
     justify-content: center;
     padding: 10px;
     cursor: pointer;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    //&:not(:last-child) {
-    //  border-right: 1px solid #707070;
-    //}
+    border-right: .5px solid #707070;
+
     &.active {
       border-bottom: solid 3px #f51355;
       font-weight: bold;

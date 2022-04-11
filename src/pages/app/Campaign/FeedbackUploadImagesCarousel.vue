@@ -104,7 +104,6 @@ export default {
     border-radius: 3px;
     overflow: hidden;
     position: relative;
-    padding-top: 75%;
 
     .carousel-image {
       width: 942px;
