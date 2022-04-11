@@ -30,7 +30,7 @@ export default {
       }
       return discount;
     },
-    bundledDiscountPrice() {
+    bundledServicePrice(){
       let bundledServicePrice = 0;
 
       if (!this.checkedAllBundledOffers) return 0;
@@ -39,8 +39,10 @@ export default {
 
         bundledServicePrice += sumOfService;
       });
-
-      return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
+      return bundledServicePrice;
+    },
+    bundledDiscountPrice() {
+      return (this.bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
     },
 
     totalPriceOfProposal() {
