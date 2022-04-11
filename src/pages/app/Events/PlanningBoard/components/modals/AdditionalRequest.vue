@@ -12,227 +12,245 @@
       </md-button>
     </template>
     <template slot="body">
-      <div v-if="selectedCategory.key === 'venuerental'" class="text-left mt-20 mb-20">
-        <div class="font-bold font-size-22">
-          Any Additional Requests?
-        </div>
-        <div class="mt-20">
-          Would you like to add one of those items?
-        </div>
-        <div class="tags mt-30">
-          <TagItem
-            v-for="tag in specialTags"
-            :key="tag.subCategory"
-            :tag-label="tag.subCategory"
-            :is-selected="tag.isSelected"
-            theme="red"
-            class="mr-10"
-            @click="selectTag(tag)"
-          />
-        </div>
-      </div>
-      <div class="text-left p-20" style="background-color: #f3f7fd;">
-        <div class="d-flex align-center">
-          <div class="font-size-20 font-bold">
-            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28">
-            Time Slot
-          </div>
-          <md-switch v-if="page === 'planner'" v-model="isEntire" class="md-switch-rose large-switch ml-100">
-            <span class="color-black font-bold font-size-16">Entire Event</span>
-          </md-switch>
-        </div>
-        <template v-if="!isEntire">
-          <div v-if="page === 'planner'" class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
-            <div class="check-item" @click="checkTimeline(true)">
-              <img v-if="assignTimeline" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
-              <span v-else class="unchecked" />
-              <span>Assign to one of those timeline events</span>
-            </div>
-            <div class="check-item" @click="checkTimeline(false)">
-              <img v-if="!assignTimeline" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
-              <span v-else class="unchecked" />
-              <span>Specific Time Slot</span>
-            </div>
-          </div>
-          <template v-if="assignTimeline">
-            <div v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`" class="d-flex align-center ml-50">
-              <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index" />
-              <TimelineItem
-                :item="timelineItem"
-                :index="index"
-                class="my-10 timeline-group-wrapper"
-                :edit-mode="false"
-                size="medium"
-              />
-            </div>
-          </template>
-          <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime" />
-        </template>
-      </div>
-      <div>
-        <div
-          v-for="section in subCategorySections.filter((s) => isVisibleSection(selectedCategory.key, s))"
-          :key="section"
-          class="text-left sub-category"
+      <div v-if="serviceCards && serviceCards.length > 1" class="md-layout mt-40">
+        <div v-for="card in serviceCards"
+             class="md-layout-item md-size-50 service-tab-item"
+             :class="{ active: card.value === selectedCard }"
+             @click="selectCard(card.value)"
         >
-          <div class="font-bold-extra">
-            {{ section === 'Services' ? 'Tell us what you need' : section }}
-          </div>
-          <div class="md-layout text-left">
-            <div
-              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-              :key="item.item"
-              class="md-layout-item md-size-33"
-            >
-              <div class="d-flex align-center">
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                  <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
-                <MaryokuInput
-                  v-if="item.qtyEnabled"
-                  v-model="item.defaultQty"
-                  placeholder="QTY"
-                  class="w-max-80 ml-10"
-                />
-              </div>
-            </div>
-            <div v-if="subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)">
-              <div
-                v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
-                :key="item.item"
-                class="requirement-item-tags  mt-10"
-              >
-                <div class="mb-10">
-                  {{ item.item }}:
-                </div>
-                <TagItem
-                  v-for="tag in item.options"
-                  :key="tag.name"
-                  :tag-label="tag.name"
-                  :is-selected="tag.selected"
-                  :theme="`red`"
-                  class="mr-10"
-                  @click="tag.selected = !tag.selected"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          v-for="specialSection in specialTags"
-          :id="specialSection.subCategory"
-          :key="specialSection.subCategory"
-          class="text-left sub-category"
-        >
-          <div class="font-bold-extra">
-            {{ specialSection.subCategory }}
-          </div>
-          <div v-if="specialSection.subCategory !== 'Sitting arrangement'" class="md-layout text-left">
-            <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options" :key="item.name" class="md-layout-item md-size-33">
-              <md-checkbox v-model="item.selected">
-                <div class="checkbox-label-wrapper">
-                  <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)">
-                  {{ item.name }}
-                </div>
-              </md-checkbox>
-            </div>
-          </div>
-          <template v-else>
-            <div class="special-request-section-options">
-              <div class="md-layout">
-                <div
-                  v-for="(option, index) in specialSection.options"
-                  :key="index"
-                  class="md-layout-item md-size-50 md-small-size-100 pt-20 pl-0"
-                >
-                  <div>
-                    <md-checkbox v-model="option.selected" class="md-simple md-red">
-                      <span class="text-transform-capitalize">{{ option.item }}</span>
-                    </md-checkbox>
-                    <div class="ml-30">
-                      <span class="font-bold">Popular for:</span>
-                      {{ option.popular }}
-                      <div>
-                        <img :src="`${$iconURL}Requirements/${option.icon}`">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="md-layout-item md-size-50 md-small-size-100 pt-50 pl-0">
-                  <div class="d-flex">
-                    <md-checkbox v-model="specialSection.hasOtherOption" class="md-simple md-red">
-                      <span class="font-bold">Other:</span>
-                    </md-checkbox>
-                    <MaryokuInput v-model="specialSection.otherOptionContent" class="flex-1" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="special-request-section-description mt-20">
-              <div class="font-size-20 font-bold">
-                Is there going to be group work at the event?
-              </div>
-              <div class="mt-10">
-                Which will require dedicated tables?
-              </div>
-              <div>
-                <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="true">
-                  Yes
-                </md-checkbox>
-                <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="false">
-                  No
-                </md-checkbox>
-              </div>
-              <div v-if="isGroup" class="d-flex align-start mt-20">
-                <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top: -10px">
-                <div>
-                  <div class="font-size-20 font-bold">
-                    Around what size of groups?
-                  </div>
-                  <div class="d-flex justify-content-between mt-10">
-                    <md-radio
-                      v-for="(size, idx) in specialSection.groupSizes"
-                      :key="idx"
-                      v-model="groupSize"
-                      :value="size.item"
-                      @change="sizeChange"
-                    >
-                      {{ `${size.item} people` }}
-                    </md-radio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+          <img
+            :src="`${$iconURL}Budget Elements/foodandbeverage.svg`"
+            class="page-icon mr-10"
+          >
+          {{ card.label }}
         </div>
       </div>
 
-      <div class="anything-else-section text-left mt-50 mb-20">
-        <div class="d-flex align-center mb-20" style="min-width: 300px">
-          <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
-          <div class="title">
-            <div class="font-size-22 font-bold">
-              Special Requests
-            </div>
-            <div class="mt-10">
-              Would you like to add one of those items?
-            </div>
+      <div class="p-40">
+        <div v-if="selectedCategory.key === 'venuerental'" class="text-left mt-20 mb-20">
+          <div class="font-bold font-size-22">
+            Any Additional Requests?
+          </div>
+          <div class="mt-20">
+            Would you like to add one of those items?
+          </div>
+          <div class="tags mt-30">
+            <TagItem
+              v-for="tag in specialTags"
+              :key="tag.subCategory"
+              :tag-label="tag.subCategory"
+              :is-selected="tag.isSelected"
+              theme="red"
+              class="mr-10"
+              @click="selectTag(tag)"
+            />
           </div>
         </div>
-        <label class="font-bold">Get me a pink unicorn please</label>
-        <div class="mt-10">
-          We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.
+
+        <div class="text-left p-20" style="background-color: #f3f7fd;">
+          <div class="d-flex align-center">
+            <div class="font-size-20 font-bold">
+              <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28">
+              Time Slot
+            </div>
+            <md-switch v-if="page === 'planner'" v-model="isEntire" class="md-switch-rose large-switch ml-100">
+              <span class="color-black font-bold font-size-16">Entire Event</span>
+            </md-switch>
+          </div>
+          <template v-if="!isEntire">
+            <div v-if="page === 'planner'" class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
+              <div class="check-item" @click="checkTimeline(true)">
+                <img v-if="assignTimeline" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
+                <span v-else class="unchecked" />
+                <span>Assign to one of those timeline events</span>
+              </div>
+              <div class="check-item" @click="checkTimeline(false)">
+                <img v-if="!assignTimeline" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`">
+                <span v-else class="unchecked" />
+                <span>Specific Time Slot</span>
+              </div>
+            </div>
+            <template v-if="assignTimeline">
+              <div v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`" class="d-flex align-center ml-50">
+                <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index" />
+                <TimelineItem
+                  :item="timelineItem"
+                  :index="index"
+                  class="my-10 timeline-group-wrapper"
+                  :edit-mode="false"
+                  size="medium"
+                />
+              </div>
+            </template>
+            <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime" />
+          </template>
         </div>
-        <div class="anything-else-section-options mt-10">
+        <div>
+          <div
+            v-for="section in subCategorySections.filter((s) => isVisibleSection(selectedCategory.key, s))"
+            :key="section"
+            class="text-left sub-category"
+          >
+            <div class="font-bold-extra">
+              {{ section === 'Services' ? 'Tell us what you need' : section }}
+            </div>
+            <div class="md-layout text-left">
+              <div
+                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+                :key="item.item"
+                class="md-layout-item md-size-33"
+              >
+                <div class="d-flex align-center">
+                  <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                    <span class="text-transform-capitalize">{{ item.item }}</span>
+                  </md-checkbox>
+                  <MaryokuInput
+                    v-if="item.qtyEnabled"
+                    v-model="item.defaultQty"
+                    placeholder="QTY"
+                    class="w-max-80 ml-10"
+                  />
+                </div>
+              </div>
+              <div v-if="subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)">
+                <div
+                  v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
+                  :key="item.item"
+                  class="requirement-item-tags  mt-10"
+                >
+                  <div class="mb-10">
+                    {{ item.item }}:
+                  </div>
+                  <TagItem
+                    v-for="tag in item.options"
+                    :key="tag.name"
+                    :tag-label="tag.name"
+                    :is-selected="tag.selected"
+                    :theme="`red`"
+                    class="mr-10"
+                    @click="tag.selected = !tag.selected"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            v-for="specialSection in specialTags"
+            :id="specialSection.subCategory"
+            :key="specialSection.subCategory"
+            class="text-left sub-category"
+          >
+            <div class="font-bold-extra">
+              {{ specialSection.subCategory }}
+            </div>
+            <div v-if="specialSection.subCategory !== 'Sitting arrangement'" class="md-layout text-left">
+              <!-- {{ subCategory.requirements[section] }} -->
+              <div v-for="item in specialSection.options" :key="item.name" class="md-layout-item md-size-33">
+                <md-checkbox v-model="item.selected">
+                  <div class="checkbox-label-wrapper">
+                    <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)">
+                    {{ item.name }}
+                  </div>
+                </md-checkbox>
+              </div>
+            </div>
+            <template v-else>
+              <div class="special-request-section-options">
+                <div class="md-layout">
+                  <div
+                    v-for="(option, index) in specialSection.options"
+                    :key="index"
+                    class="md-layout-item md-size-50 md-small-size-100 pt-20 pl-0"
+                  >
+                    <div>
+                      <md-checkbox v-model="option.selected" class="md-simple md-red">
+                        <span class="text-transform-capitalize">{{ option.item }}</span>
+                      </md-checkbox>
+                      <div class="ml-30">
+                        <span class="font-bold">Popular for:</span>
+                        {{ option.popular }}
+                        <div>
+                          <img :src="`${$iconURL}Requirements/${option.icon}`">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="md-layout-item md-size-50 md-small-size-100 pt-50 pl-0">
+                    <div class="d-flex">
+                      <md-checkbox v-model="specialSection.hasOtherOption" class="md-simple md-red">
+                        <span class="font-bold">Other:</span>
+                      </md-checkbox>
+                      <MaryokuInput v-model="specialSection.otherOptionContent" class="flex-1" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="special-request-section-description mt-20">
+                <div class="font-size-20 font-bold">
+                  Is there going to be group work at the event?
+                </div>
+                <div class="mt-10">
+                  Which will require dedicated tables?
+                </div>
+                <div>
+                  <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="true">
+                    Yes
+                  </md-checkbox>
+                  <md-checkbox v-model="isGroup" class="md-checkbox-circle md-red" :value="false">
+                    No
+                  </md-checkbox>
+                </div>
+                <div v-if="isGroup" class="d-flex align-start mt-20">
+                  <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top: -10px">
+                  <div>
+                    <div class="font-size-20 font-bold">
+                      Around what size of groups?
+                    </div>
+                    <div class="d-flex justify-content-between mt-10">
+                      <md-radio
+                        v-for="(size, idx) in specialSection.groupSizes"
+                        :key="idx"
+                        v-model="groupSize"
+                        :value="size.item"
+                        @change="sizeChange"
+                      >
+                        {{ `${size.item} people` }}
+                      </md-radio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <div class="anything-else-section text-left mt-50 mb-20">
+          <div class="d-flex align-center mb-20" style="min-width: 300px">
+            <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
+            <div class="title">
+              <div class="font-size-22 font-bold">
+                Special Requests
+              </div>
+              <div class="mt-10">
+                Would you like to add one of those items?
+              </div>
+            </div>
+          </div>
+          <label class="font-bold">Get me a pink unicorn please</label>
+          <div class="mt-10">
+            We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.
+          </div>
+          <div class="anything-else-section-options mt-10">
           <textarea
             v-model="anythingElse"
             placeholder="Type name of element here..."
             rows="5"
             @input="handleNoteChange"
           />
+          </div>
         </div>
       </div>
+
     </template>
     <template slot="footer">
       <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
@@ -248,12 +266,15 @@
 <script>
 import Vue from "vue";
 import moment from "moment";
+import { ServiceCards } from "@/constants/event.js";
+import { camelize } from "@/utils/string.util";
 
 const components = {
     Modal: () => import("@/components/Modal.vue"),
     MaryokuInput: () => import("@/components/Inputs/MaryokuInput.vue"),
     TagItem: () => import("../TagItem.vue"),
     TimeSlot: () => import("../TimeSlot.vue"),
+    Tabs: () => import ("@/components/Tabs.vue"),
     TimelineItem: () =>  import("@/pages/app/Events/components/TimelineItem.vue")
 };
 
@@ -304,10 +325,17 @@ export default {
         "administration" : ["setup", "activity", "Show", "Speaker / Keynote", "meal"],
         "foodandbeverage" : ["break", "Relaxation", "meal"],
       },
+      selectedCard: null,
       timeSlotIdx: [],
     };
   },
   computed: {
+    serviceCards() {
+      const cards = ServiceCards.filter(c => c.serviceCategory === this.selectedCategory.key);
+      return cards.map(c => {
+        return { label: c.name, value: camelize(c.name)}
+      });
+    },
     event() {
       return this.$store.state.event.eventData;
     },
@@ -335,7 +363,7 @@ export default {
     }
   },
   created() {
-    console.log('additionalRequest.created', this.subCategory);
+    console.log('additionalRequest.created', this.serviceCards);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -347,8 +375,11 @@ export default {
     } else {
       this.specialTags = [];
     }
-    console.log("additionalRequests.created", this.specialTags);
-    console.log("additionalRequests.created", this.subCategorySections);
+
+    if (this.serviceCards && this.serviceCards.length > 1) {
+      this.selectedCard = this.serviceCards[0].value;
+    }
+
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
@@ -382,28 +413,10 @@ export default {
       console.log("getPeriod", timeslots);
       let duration = [];
 
-      // timeslots.map(timeslot => {
-      //     let startTime = moment(new Date(Number(timeslot.startTime)));
-      //     let endTime = moment(new Date(Number(timeslot.endTime)));
-      //     duration.push({
-      //         startTime: {
-      //             ampm: startTime.format('A'),
-      //             time: {
-      //                 hh: startTime.format('hh'),
-      //                 mm: startTime.format('mm'),
-      //             }
-      //         },
-      //         endTime: {
-      //             ampm: endTime.format('A'),
-      //             time: {
-      //                 hh: endTime.format('hh'),
-      //                 mm: endTime.format('mm'),
-      //             }
-      //         }
-      //     })
-      // })
-
       return duration;
+    },
+    selectCard(value){
+      this.selectedCard = value;
     },
     save: function () {
       const requirements = { ...this.subCategory };
@@ -554,6 +567,10 @@ export default {
     }
   }
 
+  /deep/ .modal-body {
+    padding: 0;
+  }
+
   .sub-category {
     border-top: solid 1px #dbdbdb;
     margin-top: 30px;
@@ -605,6 +622,26 @@ export default {
             border: 1px solid #d0d0d0;
         }
       }
+    }
+  }
+
+  .service-tab-item {
+    height: 90px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    //&:not(:last-child) {
+    //  border-right: 1px solid #707070;
+    //}
+    &.active {
+      border-bottom: solid 3px #f51355;
+      font-weight: bold;
+      padding: 10px 20px;
+      color: #f51355;
     }
   }
 }
