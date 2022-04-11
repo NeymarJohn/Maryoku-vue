@@ -243,7 +243,7 @@
         <template v-else>
           <div class="booking-proposals">
             <template v-if="selectedCategory">
-              <div v-if="selectedCategory" class="font-size-30 font-bold-extra category-title d-flex align-center mt-30 mb-30">
+              <div v-if="selectedCategory" class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
@@ -260,9 +260,8 @@
                   "
                 >
                   <template v-if="hasBudget(selectedCategory.componentId)">
-                    <md-button
-                      class="md-simple md-red maryoku-btn"
-                      :disabled="!getRequirements(selectedCategory.componentId)"
+                    <a
+                      class="font-size-18 md-red maryoku-btn cursor-pointer"
                       @click="
                         getSpecification({
                           category: selectedCategory,
@@ -271,7 +270,7 @@
                       "
                     >
                       Get Specific
-                    </md-button>
+                    </a>
                   </template>
                   <template v-else>
                     <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
@@ -298,7 +297,7 @@
               </div>
             </template>
           </div>
-          <template v-for="(service, serviceIndex) in serviceCards">
+          <template v-for="(service, serviceIndex) in serviceCards[0]">
             <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
               <div :key="`serviceGroup-${serviceIndex}`" class="mt-80 mb-140">
                 <div class="booking-proposals">
@@ -439,7 +438,6 @@
       :selected-category="selectedCategory"
       :default-data="getRequirements(selectedCategory.key) || {}"
       :selected-types="getSelectedTypes(selectedCategory.key)"
-      page="planner"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
@@ -825,12 +823,13 @@ export default {
       return typesList;
     },
     setServiceStyles({ category, services, type }) {
-      console.log("setServiceStyles", category, services, type);
+      // this.setTypes({ category: category.serviceCategory, data: services, type });
       this.$store.commit("event/setEventData", {
         ...this.event,
         requirementProgress: (this.percentOfBudgetCategories / this.event.components.length) * 100,
       });
-
+      // localStorage.setItem("planner-requirements", JSON.stringify(this.requirements));
+      // localStorage.setItem("eventId", JSON.stringify(this.event.id));
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     async saveAdditionalRequest({ category, requirements }) {
@@ -852,7 +851,6 @@ export default {
       this.selectedCategory = this.$store.state.common.serviceCategories.find(item => item.key === category);
     },
     getRequirements(category) {
-      console.log("getRequirements", category, this.$store.state.planningBoard.requirements[category])
       if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },

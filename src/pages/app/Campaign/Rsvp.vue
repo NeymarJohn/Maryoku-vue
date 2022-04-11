@@ -299,7 +299,7 @@ export default {
       return this.$store.state.campaign.RSVP || {};
     },
     campaignTitle() {
-      return this.campaignData.title || "Event Name";
+      return this.campaignData.title || this.event.title;
     },
     campaignLogoUrl() {
       return this.campaignData.logoUrl || "";
