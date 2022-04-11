@@ -61,7 +61,6 @@
   </div>
 </template>
 <script>
-import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
@@ -70,7 +69,6 @@ import TitleEditor from "./components/TitleEditor";
 import Swal from "sweetalert2";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Loader } from "@/components";
-import HideSwitch from "@/components/HideSwitch";
 import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 
 const placeHolder =
@@ -78,8 +76,6 @@ const placeHolder =
 export default {
   components: {
     CampaignLogo,
-    HideSwitch,
-    vueDropzone: vue2Dropzone,
     ConceptImageBlock,
     MaryokuTextarea,
     TitleEditor,
@@ -98,25 +94,9 @@ export default {
   },
   data: function () {
     return {
-      // dropzoneOptions: {
-      //   url: "https://httpbin.org/post",
-      //   thumbnailWidth: 150,
-      //   maxFilesize: 0.5,
-      //   headers: { "My-Awesome-Header": "header value" },
-      // },
       logo: null,
       logoImageData: "",
       placeHolder: placeHolder,
-      originContent: {
-        title: "",
-        description: "",
-        coverImage: `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`,
-        logoUrl: "",
-        campaignStatus: "EDITING",
-        visibleSettings: {
-          showLogo: true,
-        },
-      },
     };
   },
   computed: {
@@ -133,7 +113,7 @@ export default {
       return this.campaignData.coverImage || "";
     },
     campaignTitle() {
-      return this.campaignData.title || "New Event";
+      return this.campaignData.title || this.event.title;
     },
     campaignLogoUrl() {
       return this.campaignData.logoUrl || "";
@@ -142,7 +122,11 @@ export default {
       return this.campaignData.description || "";
     },
     campaignVisibleSettings() {
-      return this.campaignData.visibleSettings || {};
+      const visibleSettings = this.campaignData.visibleSettings;
+      return {
+        showLogo: true,
+        ...visibleSettings,
+      };
     },
   },
   methods: {

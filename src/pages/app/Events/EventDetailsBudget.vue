@@ -2,7 +2,7 @@
   <div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
     <budget-notifications />
     <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
+    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList" />
     <div class="edit-event-details event-details-budget position-relative">
       <comment-editor-panel
         v-if="showCommentEditorPanel"

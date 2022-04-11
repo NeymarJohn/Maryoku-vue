@@ -18,7 +18,7 @@
         </button>
       </template>
       <div v-for="(item, index) in images" :key="index" class="carousel-item">
-        <img :src="item.src" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
+        <img :src="item.url" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
       </div>
       <template slot="next">
         <button class="btn-next nav-right nav-btn">

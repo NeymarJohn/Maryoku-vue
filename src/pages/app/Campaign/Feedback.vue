@@ -28,7 +28,7 @@
               class="btn-switch"
               label="View event photo presentation"
               :value="campaignVisibleSettings.showImages"
-              @input="handleChangeCampaignVisibleSettings('showFeedback', $event)"
+              @input="handleChangeCampaignVisibleSettings('showImages', $event)"
             />
           </div>
           <div v-if="isUploadedFiles" class="view-presentation-footer">
@@ -44,12 +44,6 @@
               Add attachments to the event
             </div>
           </div>
-          <feedback-upload-files-modal
-            v-if="showModalWindowOpen"
-            :folder-name-for-upload="`events/${event.id}`"
-            @close="closeModalWindow"
-            @upload-files="uploadFiles"
-          />
         </div>
         <div class="footer-change-cover">
           <campaign-logo
@@ -57,6 +51,7 @@
             :logo-title="campaignTitle"
             :show-logo="campaignVisibleSettings.showLogo"
             @change-logo="handleChangeCampaignLogo"
+            @change-logo-title="handleChangeCampaignTitle"
             @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
           />
         </div>
@@ -227,6 +222,13 @@
         />
       </div>
     </div>
+    <feedback-upload-files-modal
+      v-if="showModalWindowOpen"
+      :attachments="campaignAttachments"
+      :folder-name-for-upload="`events/${event.id}`"
+      @close="closeModalWindow"
+      @upload-files="uploadFiles"
+    />
   </div>
 </template>
 <script>
@@ -237,7 +239,7 @@ import FeedbackQuestion from "./components/FeedbackQuestion";
 import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
-import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
+import CustomTitleEditor from "./components/CustomTitleEditor";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import { mapActions } from "vuex";
 import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
@@ -267,18 +269,13 @@ export default {
   data() {
     return {
       placeHolder: "",
-      originalContent: {},
       concept: {},
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
       newQuestionLabel : "",
-      editingContent: [],
       isUploadedFiles: false,
       showModalWindowOpen : false,
-      feedbackTitle : "",
-      feedbackSubTitle : "",
-      feedbackSliderTitle : "",
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         maxFilesize: 25,
@@ -291,7 +288,7 @@ export default {
   },
   computed: {
     event() {
-      return this.$store.state.event.eventData;
+      return this.$store.state.event.eventData || {};
     },
     campaignData() {
       return this.$store.state.campaign.FEEDBACK || {};
@@ -306,18 +303,24 @@ export default {
       return this.campaignData.logoUrl || "";
     },
     campaignTitle() {
-      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
+      return this.campaignData.title || (this.event.title || "");
     },
     campaignVisibleSettings() {
-      return this.campaignData.visibleSettings || {};
+      const visibleSettings = this.campaignData.visibleSettings || {};
+      return {
+        showImages: true,
+        showLogo: true,
+        showFeedback: true,
+        allowUploadPhoto: true,
+        showSharingOption: true,
+        ...visibleSettings,
+      };
     },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.FEEDBACK.description || "";
-      },
-      set(newDescription) {
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "description", value: newDescription });
-      }
+    campaignDescription() {
+      return this.campaignData.description || "";
+    },
+    campaignAttachments() {
+      return this.campaignData.attachments || [];
     },
     additionalData() {
       const campaignAdditionalData = this.campaignData.additionalData || {};
@@ -383,21 +386,6 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
-    setDefault() {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this feedback!",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, revert it!",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-          this.editingContent = Object.assign({}, this.originalContent);
-        }
-      });
-    },
     addNewImage(image) {
       const images = this.campaignData.images;
       images.unshift({ src: image.imageString });
@@ -414,12 +402,6 @@ export default {
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
-    },
-    changeUploadFile(event) {
-      const fileName = event.target.files[0].name;
-      this.editingContent.push({
-        name: fileName,
-      });
     },
     editNewQuestion() {
       this.isEditingNewQuestion = true;
@@ -452,26 +434,34 @@ export default {
     },
     uploadFiles(files) {
       const attachments = files.map(({ status, ...file }) => file);
-      this.saveCampaign({ id: this.campaignData.id, attachments });
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "attachments",
-        value: files
+      this.saveCampaign({ id: this.campaignData.id, attachments }).then(() => {
+        this.$store.commit("campaign/setAttribute", {
+          name: "FEEDBACK",
+          key: "attachments",
+          value: files
+        });
       });
     },
     handleChangeCoverImage() {
       this.$emit("change-cover-image", event);
     },
+    handleChangeCampaignTitle(value) {
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "title",
+        value,
+      });
+    },
     handleChangeCampaignDescription(value) {
       this.$store.commit("campaign/setAttribute", {
-        name: "RSVP",
+        name: "FEEDBACK",
         key: "description",
         value,
       });
     },
     handleChangeCampaignVisibleSettings(key, value) {
       this.$store.commit("campaign/setAttribute", {
-        name: "RSVP",
+        name: "FEEDBACK",
         key: "visibleSettings",
         value: { ...this.campaignVisibleSettings, [key]: value },
       });

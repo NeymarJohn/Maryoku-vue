@@ -59,7 +59,7 @@
           <div class="d-flex justify-content-end">
             <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
           </div>
-          <div class="form-buttons" id="vendorLoginButtonsBlock">
+          <div class="form-buttons">
             <md-button
               class="md-default md-red md-maryoku mt-30 md-vendor"
               :disabled="!user.password || !user.email"
