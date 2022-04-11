@@ -81,7 +81,7 @@
           </div>
         </template>
       </div>
-      <template v-for="(service, serviceIndex) in serviceCards[0]">
+      <template v-for="(service, serviceIndex) in serviceCards">
         <template v-if="selectedCategory && selectedCategory.key == service.serviceCategory">
           <div :key="`serviceGroup-${serviceIndex}` ">
             <div class="pl-100 pr-80 booking-proposals">
