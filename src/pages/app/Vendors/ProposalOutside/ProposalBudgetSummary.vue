@@ -119,7 +119,7 @@
 							<div v-if="isBundleDiscount" class="item bundle">
 								<div class="bundle-header-description">
 									<img width="24" height="24" src="static/icons/Group%205280.svg" />
-									<span>Creating a bundle, event if a small one, increases your chances of winning a job</span>
+									<span>Creating a bundle, even if it’s only a small one, appeals to planners and can increase your chances of winning</span>
 								</div>
 								<div class="element">
 									<label class="">
@@ -201,13 +201,13 @@
 						</div>
 						<div class="font-bold d-flex justify-content-between">
 							<span>Total Bundle</span
-							><span class="font-bold font-size-22">${{ bundleDiscount.price | withComma }}</span>
+							><span class="font-bold font-size-22">-${{ bundleDiscount.price | withComma }}</span>
 						</div>
 					</div>
 					<div class="total-cont">
 						<div class="price-row">
 							<span class="title">Total</span>
-							<strong>${{ Number(totalPrice) | withComma }}</strong>
+							<strong>${{ Number(totalPriceOfProposal) | withComma }}</strong>
 						</div>
 						<div v-if="bundleDiscount.isApplied" class="price-row">
 							<span>Before bundle discount</span>
