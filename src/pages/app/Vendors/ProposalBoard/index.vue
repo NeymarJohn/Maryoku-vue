@@ -539,7 +539,6 @@ export default {
         this.showShareProposalModal = true;
       } else if (action === this.proposalStatus.negotiation) {
         this.showRequestNegotiationModal = true;
-        this.selectedProposalRequest = this.selectedProposal.proposalRequest;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
         this.negotiationType = negotiations[0].type;
       } else if (action === this.proposalStatus.resend) {

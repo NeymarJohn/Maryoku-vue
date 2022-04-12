@@ -211,7 +211,6 @@ export const serviceCategoryImages = {
 };
 
 export const ServiceCards = [
-  [
     {
       seqNo: "1/1",
       name: "Venue Type",
@@ -534,7 +533,7 @@ export const ServiceCards = [
       ],
       icon: "NewRequirements/Group 18026.svg"
     },
-     {
+    {
       seqNo: "1/1",
       name: "Transportation",
       serviceCategory: "transportation",
@@ -619,8 +618,7 @@ export const ServiceCards = [
       ],
       icon: "NewRequirements/Group 18016.svg",
     },
-  ]
-];
+  ];
 
 export const eventIcons = [
   "Group 20904.svg",

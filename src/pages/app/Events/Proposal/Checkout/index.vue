@@ -228,7 +228,8 @@
             </div>
           </div>
         </div>
-        <div class="mt-40 policy-confirmation-block">
+        <div class="mt-40 policy-confirmation-block d-flex align-center">
+          <md-checkbox v-model="agreedCancellationPolicy" class="m-0 mr-10" />
           <span class="font-regular">I agree to the</span>
           <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
           <stripe-checkout
@@ -340,8 +341,8 @@
     },
     computed: {
       handleSubmitDisabled(){
-        console.log('handleSubmitDisabled', this.proposal.signature)
-        if(this.proposal && this.proposal.signature && this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
+        if(this.agreedCancellationPolicy && this.proposal && this.proposal.signature &&
+          this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
            return true;
         }
         return false;
@@ -453,11 +454,16 @@
           totalPrice += sumOfService;
         });
 
+        if (this.onDayCordinator) {
+          totalPrice += 1000;
+        }
+
         const categoryName = proposal.vendor.eventCategory.key;
         if (proposal.extraServices[categoryName] && proposal.extraServices[categoryName].length) {
           let addedPrice = extraCost(proposal.extraServices[proposal.vendor.eventCategory.key]);
           return totalPrice + (addedPrice || 0);
         }
+
         return totalPrice;
       },
       discountedPrice(proposal) {
@@ -512,6 +518,22 @@
                     serviceCategory,
                   },
                   {headers: this.$auth.getAuthHeader()},
+          );
+          this.stripePriceData.push(res.data);
+        }
+
+        if (this.onDayCordinator) {
+          let res = await this.$http.post(
+            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+            {
+              name: "On Day Coordinator",
+              price: Math.floor(1000 * 100),
+              proposalId: this.proposal.id,
+              vendorId: this.proposal.vendor.id,
+              eventId: this.proposal.eventData ? this.proposal.eventData.id : "", ///proposal.event.id,  //not defined yet for the non maryoku
+              serviceCategory: "onDayCoordinator",
+            },
+            { headers: this.$auth.getAuthHeader() },
           );
           this.stripePriceData.push(res.data);
         }

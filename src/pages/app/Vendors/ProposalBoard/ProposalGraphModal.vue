@@ -13,16 +13,7 @@
             Overview Hot Activity
           </div>
           <div class="info_proposal">
-
-            <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-              {{ proposal.eventData.customer.companyName }}
-            </span>
-            <span v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
-              {{ proposal.proposalRequest.eventData.title }}
-            </span>
-            <span v-else>
-              New Event
-            </span>
+            <span>{{ proposal.eventData.customer.companyName }}</span>
             <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
             <span>{{ proposal.dateCreated | date("DD/MM/YYYY") }}</span>
             <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
