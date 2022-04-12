@@ -363,7 +363,22 @@ export default {
   data() {
     return {
       windowWidth: window.innerWidth,
+      images: [
+        {
+          src: `${this.$iconURL}RSVP/Image+81.jpg`,
+        },
+        {
+          src: `${this.$iconURL}RSVP/Image+82.jpg`,
+        },
+        {
+          src: `${this.$iconURL}RSVP/Image+83.jpg`,
+        },
+        {
+          src: `${this.$iconURL}RSVP/Image+84.jpg`,
+        },
+      ],
       event: {},
+
       isLoading: true,
       showRsvpModal: false,
       showReminderModal: false,
@@ -391,12 +406,16 @@ export default {
         const color2 = this.event.concept.colors[1].color;
         const color3 = this.event.concept.colors[2].color;
         const color4 = this.event.concept.colors[3].color;
+        console.log(
+          `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`,
+        );
         return `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`;
       } else {
         return "";
       }
     },
     headerImage() {
+      console.log(this.event.concept);
       if (this.campaign) {
         return this.campaign.coverImage || this.campaign.defaultCoverImage;
       }
@@ -413,6 +432,12 @@ export default {
     },
     isVirtualEvent() {
       return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
+    },
+    conceptColor() {
+      if (!this.event.concept || !this.event.concept.colors[0]) {
+        return "rgba(87, 242, 195, 0.23)";
+      }
+      return this.event.concept.colors[0].color;
     },
     campaignDescription() {
       return this.campaign.description || this.defaultCampaignDescription;
@@ -441,8 +466,10 @@ export default {
     });
 
     this.isLoading = true;
+    console.log("isMobile", this.isMobile);
     RsvpRequest.find(rsvpRequestId)
       .then((rsvpRequest) => {
+        console.log(rsvpRequest);
         this.rsvpRequest = rsvpRequest;
         this.event = rsvpRequest.event;
         this.campaign = rsvpRequest.campaign;
@@ -471,6 +498,7 @@ export default {
       rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         this.isLoading = false;
+        console.log(requestedRSVP);
         this.showSyncCalendarModal = true;
         this.rsvpData = requestedRSVP;
         this.showRsvpModal = false;
@@ -491,6 +519,7 @@ export default {
     },
     setRsvp() {
       this.showRsvpModal = false;
+      // this.showReminderModal = true;
     },
     setZoomRsvp(rsvpData) {
       this.isLoading = true;
@@ -502,14 +531,19 @@ export default {
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         this.rsvpData = requestedRSVP;
       });
-      new RsvpRequest({ id: this.rsvpRequest.id, status: "VIRTUAL" }).save().then(() => {
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "VIRTUAL" }).save().then((res) => {
         this.showZoomModal = false;
         this.showSyncCalendarForZoom = true;
         this.isLoading = false;
       });
     },
     reject() {
-      new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then(() => {
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
+        // Swal.fire({
+        //   title: `Sorry to hear that. Hope to see you on next event! `,
+        //   buttonsStyling: false,
+        //   confirmButtonClass: "md-button md-success",
+        // });
         this.showRejectConformModal = true;
       });
     },
@@ -541,7 +575,6 @@ export default {
       max-height: 150px;
     }
     .campaign-description {
-      line-height: initial;
       font-size: 17px;
       width: 90%;
     }
