@@ -120,7 +120,6 @@
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
               <img
-                v-if="`${uploadImageData[indx - 1]}`|| defaultConcept.images[indx - 1] "
                 class="concept-image"
                 :src="`${uploadImageData[indx - 1]}` || defaultConcept.images[indx - 1].url"
                 @click="uploadPhoto(indx)"

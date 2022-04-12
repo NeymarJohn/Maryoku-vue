@@ -45,29 +45,26 @@ class S3Service {
   }
 
   downloadFiles(files) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${process.env.SERVER_URL}/downloadFiles`, {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          params: { files: files.join(",") }
-        })
-        .then((result) => {
-          // const filesName = files.map((file) => {
-          //   const splittedFileURL = file.split("/");
-          //   return splittedFileURL[splittedFileURL.length - 1];
-          // });
-          // console.log({ filesName });
-          // const regExp = new RegExp(`^(${filesName.join("|")})$`);
-          // const filesArrayStream = result.data.split(regExp);
-          // console.log(filesArrayStream[0]);
-          resolve(result.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const result = axios
+      .post(`${process.env.SERVER_URL}/downloadFiles`, { files }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then((result) => {
+        // const filesName = files.map((file) => {
+        //   const splittedFileURL = file.split("/");
+        //   return splittedFileURL[splittedFileURL.length - 1];
+        // });
+        // console.log({ filesName });
+        // const regExp = new RegExp(`^(${filesName.join("|")})$`);
+        // const filesArrayStream = result.data.split(regExp);
+        // console.log(filesArrayStream[0]);
+        resolve(result.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
   }
 
   deleteFile(fileName) {

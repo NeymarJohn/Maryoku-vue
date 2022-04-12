@@ -90,6 +90,10 @@ export default {
 			type: Array,
 			required: true,
 		},
+		event: {
+			type: Object,
+			default: null,
+		},
 		page: {
 			type: String,
 			required: true,
@@ -103,6 +107,9 @@ export default {
 		localElements: [],
 	}),
 	computed: {
+		// ...mapState("event", {
+		//   eventData: (state) => state.eventData,
+		// }),
 		warming() {
 			let value = this.elements.filter((it) => it.progress == 100);
 			return value ? value.length : 0;
