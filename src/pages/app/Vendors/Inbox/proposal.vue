@@ -156,9 +156,9 @@ export default {
     },
     selectProposal(){
       this.loading = true;
-      this.getProposalById(this.$route.params.proposalId).then((proposal) => {
+      this.getProposalById(this.$route.params.proposalId).then(() => {
         this.loading = false;
-
+        let proposal = this.proposals.find(x => x.id == this.$route.params.proposalId);
         if(proposal) {
           this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.$route.params.proposalId}`).then(res => {
             console.log("res", res);
@@ -204,7 +204,7 @@ export default {
       return this.proposal.vendor;
     },
     proposal(){
-      return this.$store.state.commentProposal.proposal;
+      return this.$store.state.comment.selectedProposal;
     },
     proposals(){
       return this.$store.state.comment.commentsProposals;

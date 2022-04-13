@@ -14,7 +14,6 @@
             v-model="form[tab].validDate"
             :value="form[tab].validDate"
             class="form-input width-90"
-            theme="purple"
             placeholder="Choose date…"
             input-style="date"
             @input="changeDate"

@@ -5,15 +5,8 @@
         <div class="d-flex align-center p-50">
           <div>
             <div class="font-size-30 font-bold-extra color-black">
-              <span>Let's talk numbers</span>
-              <span>
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`" class=":">
-                <md-tooltip class="w-max-350">
-                  <div class="font-size-14 tab-tooltip">
-                    <p>This section is filled automatically using your existing data</p>
-                  </div>
-                </md-tooltip>
-              </span>
+              Let's talk numbers
+              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class=":">
             </div>
           </div>
         </div>

@@ -914,7 +914,7 @@ export default {
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-  },
+  }, 
   created() {
     this.extraServices = this.proposal.extraServices[this.proposal.vendor.eventCategory.key];
   },
@@ -970,7 +970,6 @@ export default {
         this.$router.push({
           name: "CheckoutWithVendor",
           params: {
-            eventId: this.event.id,
             proposalId: this.proposal.id,
             proposalType: "planner",
           },

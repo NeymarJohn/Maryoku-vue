@@ -291,7 +291,7 @@ export default {
         this.uploadImageData[i] = image.url ? image.url : "";
       });
     }
-
+    localStorage.setItem("lastColors", JSON.stringify(this.editConcept.colors));
     (async () => {
       if (!window.Canva || !window.Canva.DesignButton) {
         return;
