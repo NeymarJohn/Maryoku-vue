@@ -25,8 +25,6 @@
                 class="mr-20 mb-10"
                 label="More categories"
                 data-toggle="dropdown"
-                :icon="`${$iconURL}Budget+Elements/foodandbeverage.svg`"
-                :selected-icon="`${$iconURL}Budget+Elements/foodandbeverage-white.svg`"
                 :default-status="showMoreCats === true"
                 :proposalCategory="false"
                 @click="showMoreCategories"
@@ -363,7 +361,7 @@
             class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
             @click="scrollToTop"
           >
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">>
           </md-button>
           <drop-down class="d-inline-block">
             <button class="more-button cursor-pointer" data-toggle="dropdown">
