@@ -141,6 +141,7 @@ import Swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
 import { PROPOSAL_STATUS } from "@/constants/status";
 import { MISSING_DETAILS } from "@/constants/proposal";
+import moment from "moment";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
@@ -373,6 +374,8 @@ export default {
         );
         coverImageUrl = await S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
       }
+
+      moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate()
 
       if (!this.isLoading) {
         this.isLoading = true;
