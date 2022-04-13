@@ -72,8 +72,7 @@ const state = {
   original: null,
   currentVersion: -1,
   tenantId: authService.resolveTenantId(),
-  expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate(),
-  issuedDate: null,
+  expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate()
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -221,7 +220,7 @@ const mutations = {
     state.bookedServices = proposal.bookedServices;
     state.currentVersion = proposal.selectedVersion || -1;
     state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate();
-    state.issuedDate = proposal.issuedDate;
+    // state.expiredDate = moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate();
 
     delete proposal.versions;
     Vue.set(state, "original", proposal);
@@ -454,7 +453,6 @@ const actions = {
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
         expiredDate: state.expiredDate,
-        issuedDate: state.issuedDate,
         bookedServices: state.bookedServices.length ? state.bookedServices : [state.vendor.eventCategory.key],
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,

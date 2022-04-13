@@ -25,6 +25,8 @@
                 class="mr-20 mb-10"
                 label="More categories"
                 data-toggle="dropdown"
+                :icon="`${$iconURL}Budget+Elements/foodandbeverage.svg`"
+                :selected-icon="`${$iconURL}Budget+Elements/foodandbeverage-white.svg`"
                 :default-status="showMoreCats === true"
                 :proposalCategory="false"
                 @click="showMoreCategories"
@@ -137,20 +139,9 @@
         <template v-if="requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued">
           <div v-if="proposals[selectedCategory.componentId].length > 0">
             <div>
-              <div class="font-size-30 font-bold-extra d-flex align-center category-title mt-30 mb-30">
+              <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                 <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
-                <md-button
-                  class="md-simple md-red maryoku-btn"
-                  @click="
-                      getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })
-                    "
-                >
-                  Update Specific
-                </md-button>
               </div>
             </div>
             <div>
@@ -258,19 +249,52 @@
                 </md-tooltip>
                 <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
-
-                <md-button
-                  class="md-simple md-red maryoku-btn"
-                  :disabled="!getRequirements(selectedCategory.componentId)"
-                  @click="
-                      getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })
-                    "
+                <template
+                  v-if="
+                    !booked &&
+                      (!(
+                        requirements[selectedCategory.componentId] &&
+                        requirements[selectedCategory.componentId].isIssued
+                      ) ||
+                      !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)
+                  "
                 >
-                  Get Specific
-                </md-button>
+                  <template v-if="hasBudget(selectedCategory.componentId)">
+                    <md-button
+                      class="md-simple md-red maryoku-btn"
+                      :disabled="!getRequirements(selectedCategory.componentId)"
+                      @click="
+                        getSpecification({
+                          category: selectedCategory,
+                          services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                        })
+                      "
+                    >
+                      Get Specific
+                    </md-button>
+                  </template>
+                  <template v-else>
+                    <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
+                  </template>
+                </template>
+                <template v-else>
+                  <div class="d-flex align-center justify-content-center">
+                    <div v-if="booked" class="color-red">
+                      Already booked
+                    </div>
+                    <a
+                      class="font-size-18 md-red maryoku-btn cursor-pointer"
+                      @click="
+                        getSpecification({
+                          category: selectedCategory,
+                          services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                        })
+                      "
+                    >
+                      Change specifications
+                    </a>
+                  </div>
+                </template>
               </div>
             </template>
           </div>
@@ -361,7 +385,7 @@
             class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
             @click="scrollToTop"
           >
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">>
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
           </md-button>
           <drop-down class="d-inline-block">
             <button class="more-button cursor-pointer" data-toggle="dropdown">
