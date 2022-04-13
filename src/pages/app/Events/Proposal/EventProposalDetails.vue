@@ -925,6 +925,7 @@ export default {
         this.$router.push({
           name: "CheckoutWithVendor",
           params: {
+            eventId: this.event.id,
             proposalId: this.proposal.id,
             proposalType: "planner",
           },

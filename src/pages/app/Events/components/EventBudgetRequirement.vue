@@ -73,7 +73,7 @@
       />
     </div>
 
-    <div class="wizard-footer d-flex" :class="{sticky: currentStep >= 3}" >
+    <div class="wizard-footer d-flex">
       <div>
         <md-button class="md-black md-maryoku md-simple" @click="back">
           <md-icon>keyboard_backspace</md-icon>
@@ -323,10 +323,6 @@ export default {
   }
   .wizard-footer {
     padding: 10px 40px;
-    &.sticky{
-      position: sticky;
-      z-index: 1;
-    }
 
     .status {
       text-align: center;
