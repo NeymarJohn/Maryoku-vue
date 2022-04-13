@@ -81,15 +81,18 @@
             <div class="d-flex align-center mr-10">
               <span class="mr-5" v-if="editingData.from">{{ editingData.from.year }}</span>
               <span v-if="editingData.from"> {{ editingData.from.season }}</span>
-              <template v-for="(month, idx) in editingData.from.months">
-                <span class="ml-10">{{ getMonthLabel(month) }}{{ idx < editingData.from.months.length - 1 ? ',' : '' }}</span>
+              <template v-if="editingData.from && editingData.from.months">
+                <span v-for="(month, idx) in editingData.from.months" :key="idx" class="ml-10">
+                  {{ getMonthLabel(month) }}{{ idx < editingData.from.months.length - 1 ? ',' : '' }}
+                </span>
               </template>
             </div>
             <div class="d-flex align-center">
               <span class="mr-5" v-if="editingData.to">{{ editingData.to.year }}</span>
               <span v-if="editingData.to"> {{ editingData.to.season }}</span>
-              <template v-for="(month, idx) in editingData.to.months">
-                <span class="ml-10">{{ getMonthLabel(month) }}{{ idx < editingData.to.months.length - 1 ? ',' : '' }}</span>
+              <template v-if="editingData.to && editingData.to.months">
+                <span v-for="(month, idx) in editingData.to.months" :key="idx"  class="ml-10">
+                  {{ getMonthLabel(month) }}{{ idx < editingData.to.months.length - 1 ? ',' : '' }}</span>
               </template>
             </div>
           </div>

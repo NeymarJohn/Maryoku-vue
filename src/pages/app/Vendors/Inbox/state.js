@@ -19,34 +19,23 @@ const mutations = {
   selectVersion: (state, index) => {
     state.currentVersion = index;
 
-    console.log("state.proposal", state.proposal);
     if (index === -1) {
       setStateFromData(state.proposal, JSON.parse(JSON.stringify(state.original)));
-    }
-
-    if (index > -1) {
+    } else {
       setStateFromData(state.proposal, JSON.parse(JSON.stringify(state.proposal.versions[index].data)));
     }
-
-    if (index > -1) {
-        setStateFromData(state.proposal, JSON.parse(JSON.stringify(state.proposal.versions[index].data)));
-    }
-
-    console.log(state.currentVersion, state.proposal);
-    },
-    setVersions: (state, versions) => {
-        state.proposal.versions = versions;
-    },
-    setProposal: (state, proposal) => {
-        state.proposal = proposal;
-        state.proposal.versions = proposal.versions || [];
-        state.currentVersion = -1;
-        Vue.set(state, "original", proposal);
-    },
-    updateCommentComponents: (state, commentComponents) => {
-        console.log("updateCommentComponents");
-        state.proposal.commentComponent = commentComponents;
-    },
+  },
+  setVersions: (state, versions) => {
+      state.proposal.versions = versions;
+  },
+  setProposal: (state, proposal) => {
+      console.log('set.version', proposal);
+      state.proposal = proposal;
+      Vue.set(state, "original", proposal);
+  },
+  updateCommentComponents: (state, commentComponents) => {
+      state.proposal.commentComponent = commentComponents;
+  },
 };
 
 const actions = {

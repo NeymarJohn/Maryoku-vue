@@ -92,10 +92,9 @@ export default {
   mounted () {
     console.log("mounted", this.proposal);
 
-    getReq(`/1/proposals/${this.proposal.id}/engagement/1`)
+    getReq(`/1/proposals/${this.proposal.id}/engagement/summary`)
       .then(res => {
         if (res.data && res.data.success) {
-          console.log("data", res.data.data);
 
           const {dates, proposal, vendor, system} = res.data.data;
           this.engageChartData = dates.map((it, idx) => {

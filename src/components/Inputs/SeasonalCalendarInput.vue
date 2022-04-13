@@ -17,8 +17,8 @@
           <div class="message-arrow" />
         </div>
         <div class="d-flex align-center font-size-14">
-          From
-          <span class="ml-20 cursor-pointer"
+          <span class="w-min-80">From</span>
+          <span class="cursor-pointer"
                 :class="from.year ? 'color-vendor' : 'color-black-middle'"
                 @click="select('from', 'year')"
           >
@@ -30,9 +30,9 @@
           >
             {{ from.season && from.months.length > 0 ? `${from.season} / ${getMonths('from')}` : 'Select a month / season' }}</span>
         </div>
-        <div class="d-flex align-center font-size-14">
-          To
-          <span class="ml-20 cursor-pointer"
+        <div class="d-flex align-center font-size-14 my-10">
+          <span class="w-min-80">To</span>
+          <span class="cursor-pointer"
                 :class="to.year ? 'color-vendor' : 'color-black-middle'"
                 @click="select('to', 'year')"
           >
@@ -54,7 +54,7 @@
                 <md-button
                   class="m-0"
                   :class="(selected === 'from' && from.months.includes(month.value) || selected === 'to' && to.months.includes(month.value)) ?
-                   'md-vendor': 'md-simple md-black-middle'"
+                    'md-vendor': 'md-simple md-black-middle'"
                   @click="changeMonth(selected, month.value)"
                 >
                   {{ `${month.label}` }}
@@ -69,7 +69,8 @@
                    @click="changeSeason(selected, option.value)"
               >
                 <img :src="`${$iconURL}Seasonal/${(selected === 'from' && from.season === option.value || selected === 'to' && to.season === option.value) ?
-                 'purple_': ''}${option.icon}.svg`" width="40px">
+                  'purple_': ''}${option.icon}.svg`" width="40px"
+                >
                 <span class="mt-10 font-size-12 color-black-middle">{{ option.label }}</span>
               </div>
             </div>
@@ -157,9 +158,10 @@ export default {
           {label: "Summer", value: "summer", icon: "summer"},
           {label: "Fall",   value: "fall",   icon: "fall"},
       ],
-      yearOptions: [2004, 2005, 2006, 2007, 2008, 2009, 2010,
-                    2011, 2012, 2013, 2014, 2015, 2016, 2017,
-                    2018, 2019, 2020, 2021, 2022, 2023],
+      yearOptions: [2021, 2022, 2023, 2024, 2025, 2026,
+                    2027, 2028, 2029, 2030, 2031, 2032,
+                    2033, 2034, 2035, 2036, 2037, 2038,
+                    2039, 2040 ],
       monthOptions: MonthOptions,
     };
   },
@@ -168,7 +170,7 @@ export default {
         const from_season = this.from.season ? this.seasonOptions.find(s => s.value === this.from.season).label : "";
         const to_season = this.to.season ? this.seasonOptions.find(s => s.value === this.to.season).label : "";
 
-        return `${this.from.year} ${from_season} ${this.getMonths('from')} ${this.to.year} ${to_season} ${this.getMonths('to')}`;
+        return `${this.from.year} ${from_season} ${this.getMonths("from")} ${this.to.year} ${to_season} ${this.getMonths("to")}`;
     },
   },
   methods: {
@@ -177,9 +179,9 @@ export default {
       // this.$emit("change", this.content);
     },
     getMonths(selected) {
-      if (selected === 'from') {
+      if (selected === "from") {
         return this.from.months.map(m => this.monthOptions.find(op => op.value === m).label);
-      } else if(selected === 'to') {
+      } else if(selected === "to") {
         return this.to.months.map(m => this.monthOptions.find(op => op.value === m).label);
       }
     },
@@ -213,7 +215,7 @@ export default {
       this.$emit("change", {from: this.from, to: this.to});
     },
     changeSeason(selected, value) {
-      console.log('changeSeason', selected, value);
+      console.log("changeSeason", selected, value);
       if (selected === "from") {
         this.from.season = value;
       } else {
@@ -235,7 +237,7 @@ export default {
     top: 80px;
     background-color: #fff;
     min-width: 540px;
-    padding: 20px;
+    padding: 32px;
     z-index: 20;
     box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
 }
