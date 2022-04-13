@@ -12,8 +12,8 @@
             Upload Files
           </div>
           <div class="upload-files-text">
-            Drag and drop your files, you can upload several files together,
-            click here to upload files from your computer
+            Drag and drop your files below. You can upload several files at a time.
+            Click here to browse for files on your computer.
           </div>
         </div>
         <div class="graph-close-button">
@@ -86,7 +86,7 @@
         <div v-else class="d-flex">
           <img src="/static/icons/red-delete-icon.svg">
           <div class="bottom-block-presentation-text">
-            Mark in V the presentation you want to appear in the main view
+            Put a check next to the file you want to appear in the main view.
           </div>
         </div>
         <div class="footer-content-actions">
