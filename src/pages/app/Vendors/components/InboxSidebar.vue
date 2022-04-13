@@ -159,57 +159,29 @@
       <div
         v-for="(proposal, pindex) in commentsProposals"
         :key="pindex"
-        class="sidebar__item_main cursor-pointer"
+        class="sidebar__item d-flex align-items-center justify-content-between cursor-pointer"
         :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}"
-        @click="showhide = !showhide"
+        @click="changeProposal(proposal)"
       >
-        <div class="d-flex justify-content-between">
-          <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex align-item-center sidebar__item__content">
-              <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
-              <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
-              <div class="sidebar__item__details d-flex flex-column">
-                <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
-                  {{ proposal.eventData.customer.companyName }}
-                </span>
-                <span v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
-                  {{ proposal.vendor.eventCategory.fullTitle }}
-                </span>
-                <span v-if="proposal.subProposals.length > 0">{{ proposal.subProposals.length }} events with this client</span>
-                <span v-else>No events with this client</span>
-              </div>
-            </div>
-          </div>
-          <div style="margin-top: 15px;">
-            <i v-if="!showhide" class="fas fa-chevron-right my-chevron" @click="showhide = !showhide" />
-            <i v-else class="fas fa-chevron-down my-chevron" @click="showhide = !showhide" />
-          </div>
-        </div>
-        <div v-if="proposal.subProposals.length > 0">
-          <div
-            v-for="(subProposal, subIndex) in proposal.subProposals"
-            :key="subIndex"
-            @click="changeProposal(subProposal)"
-            class="cursor-pointer">
-            <div class="d-flex" :class="{'hide_sub_item': (!showhide)}">
-              <div class="sidebar__bar"></div>
-              <div class="sidebar__item__details d-flex flex-column sub_item_box" :class="{'active':(selectedProposal && selectedProposal.id == subProposal.id)}">
-                <span v-if="subProposal.nonMaryoku && proposal.eventData && subProposal.eventData.customer" class="productLaunchParty">
-                  {{ subProposal.eventData.customer.companyName }}
-                </span>
-                <span v-else-if="subProposal.vendor && subProposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
-                  {{ subProposal.vendor.eventCategory.fullTitle }}
-                </span>
-                <span>{{ subProposal.dateCreated | date("DD") }} / {{ subProposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ subProposal.cost | withComma }}</span>
-              </div>
-            </div>
-            <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
-              Full Discussion
-            </button>
-            <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span>
+        <div class="d-flex align-item-center sidebar__item__content">
+          <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+          <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
+          <div class="sidebar__item__details d-flex flex-column">
+            <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
+              {{ proposal.eventData.customer.companyName }}
+            </span>
+            <span v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
+              {{ proposal.vendor.eventCategory.fullTitle }}
+            </span>
+
+            <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
           </div>
         </div>
         <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
+        <button v-if="proposal.unread_count == 0 && proposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(proposal,true)">
+          Full Discussion
+        </button>
+        <span v-if="!proposal.viewed && proposal.unread_count" class="unread-count">{{ proposal.unread_count }}</span>
       </div>
     </div>
     <div class="no-comments-wrapper">
@@ -272,7 +244,6 @@ export default {
     showAddress: false,
     selectedComponent: null,
     customers: [],
-    showhide: false,
   }),
   computed: {
     vendor() {
@@ -280,31 +251,14 @@ export default {
     },
     commentsProposals() {
       let proposals = [];
-      let exist = false;
       for (let proposal of this.proposals) {
-        exist = false;
+        // if (proposal.commentComponent.length) {
         proposal.unread_count = this.getViewCount(proposal.commentComponent);
-        proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
-        if(proposals.length > 0) {
-          for(var i = 0; i < proposals.length; i++) {
-            if(proposals[i].customerId == proposal.customerId) {
-              exist = true;
-              proposals[i].subProposals.push(proposal);
-            }
-          }
-          // if (proposal.commentComponent.length) {
-          if(!exist) {
-            proposal.subProposals = [];
-            proposal.subProposals.push(proposal);
-            proposals.push(proposal);
-          }
-        }else {
-          proposal.subProposals = [];
-          proposal.subProposals.push(proposal);
-          proposals.push(proposal);
-        }
+        proposals.push(proposal);
         // }
+        proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
       }
+
       if (this.sortBy == "status") {
         proposals.sort((a, b) => {
           if (this.statusSortType == "asc") {
@@ -392,13 +346,6 @@ export default {
       this.sortType = this.sortType == "asc" ? "desc" : "asc";
       if (this.sortBy == "") {
         this.sortBy = "date";
-      }
-    },
-    showHideSubEvent() {
-      if(this.showhide == "hide") {
-        this.showhide = "show";
-      }else {
-        this.showhide == "hide";
       }
     },
     changeCommentSortType(sortByType) {
@@ -532,22 +479,9 @@ export default {
     position: relative;
 }
 
-.sidebar__item_main {
-    align-items: center;
-    padding: 20px;
-    transition: 0.3s ease-in-out all;
-    height: 100px;
-    position: relative;
-}
-
 .sidebar__item:hover,
 .sidebar__item.active {
     background-color: #f6eef6;
-}
-.sub_item_box:hover,
-.sub_item_box.active {
-  background-color: #f6eef6;
-  box-shadow: 0px 0px 9px 1px #444343;
 }
 
 .sidebar__item__details {
@@ -734,31 +668,6 @@ export default {
 
 .sidebar__items::-webkit-scrollbar-thumb {
     border-radius: 0 !important;
-}
-
-.sidebar__bar {
-  border: 1px solid #646464;
-  width: 10px;
-  margin-left: 30px;
-  border-bottom-left-radius: 10px;
-  border-top: 0px;
-  border-right: 0px;
-  margin-top: -47px;
-  height: 60px;
-  padding-top: 90px;
-}
-
-.sub_item_box {
-  padding-top: 10px;
-  padding-left: 13px;
-  padding-right: 13px;
-  padding-bottom: 10px;
-  width: 100%;
-  margin-top: 5px;
-}
-
-.hide_sub_item { 
-  display: none;
 }
 
 .unread-count {

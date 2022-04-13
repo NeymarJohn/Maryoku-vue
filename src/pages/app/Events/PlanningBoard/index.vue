@@ -484,9 +484,10 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { postReq } from "@/utils/token";
+import { postReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
+import ProposalEngagement from '../../../../models/ProposalEngagement'
 
 const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
@@ -952,12 +953,32 @@ export default {
       }
       return null;
     },
-    goDetailPage(proposal) {
-      this.showDetails = true;
+    async goDetailPage(proposal) {
 
       if (proposal.selectedVersion > -1)
         this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
       else this.proposal = proposal;
+
+      const engagement = await getReq(`/1/proposal/${this.proposal.id}/engagement/proposal`);
+      console.log("engagement", engagement);
+
+      // if (engagement) {
+      //   new ProposalEngagement({
+      //     ...engagement.data,
+      //     open: [moment().format("MM/dd/yyyy")],
+      //   })
+      //     .for(new Proposal({id: this.proposal.id}))
+      //     .save();
+      // } else {
+      //   new ProposalEngagement({
+      //     open: [moment().format("MM/dd/yyyy")],
+      //     proposalId: this.proposal.id
+      //   })
+      //     .for(new Proposal({id: this.proposal.id}))
+      //     .save();
+      // }
+
+      this.showDetails = true;
     },
     async bookVendor() {
       if (!this.proposal) return;

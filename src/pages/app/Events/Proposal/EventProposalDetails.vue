@@ -277,7 +277,7 @@
           <div class="font-size-22 bundle-description">
             <img :src="`${iconUrl}Asset 577.svg`" style="width: 30px">
             <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
-            <span class="bundle-percentage">{{ proposal.bundleDiscount.percentage }}%</span>
+            <span style="font-size: 30px; margin-left: 20px">{{ proposal.bundleDiscount.percentage }}%</span>
             <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
           <div class="font-size-22 font-bold" style="text-align: end;">
@@ -716,8 +716,7 @@ const components = {
   CancellationPolicy: () => import("@/components/CancellationPolicy.vue"),
   EventProposalPrice: () => import("./EventProposalPrice.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
-  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel"),
-  EventProposalPolicy: ()=> import("./EventProposalPolicy.vue")
+  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
 };
 
 export default {
@@ -1646,10 +1645,6 @@ export default {
             margin: 10px;
             min-width: max-content;
           }
-          bundle-percentage{
-            font-size: 30px;
-            margin-left: 20px
-          }
           .bundle-services{
             font-size: 16px;
             padding: 0 20px;
@@ -1901,27 +1896,5 @@ export default {
 
 .click-capture{
   top: 0px !important;
-}
-@media screen and (max-width: 600px) {
-  .proposal-page_details .proposal-content {
-    .total-section{
-      padding: 30px 10px !important;
-      border-radius: 0;
-    }
-    .bundle-section {
-      padding: 28px 10px;
-      border-radius: 0;
-
-      .bundle-description {
-        .bundle-services {
-          display: none;
-        }
-
-        .bundle-percentage {
-          display: none;
-        }
-      }
-    }
-  }
 }
 </style>
