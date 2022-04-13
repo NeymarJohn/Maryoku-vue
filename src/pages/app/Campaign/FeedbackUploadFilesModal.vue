@@ -175,10 +175,12 @@ export default {
         this.carouselItemIndex = 0;
       }
       if (deleteCurrentItem && currentItemIndex > 0) {
-        this.carouselItemIndex = currentItemIndex - 1;
+        // this.carouselItemIndex = currentItemIndex - 1;
+        this.carouselItemIndex = 0;
       }
       if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
-        this.carouselItemIndex = currentItemIndex - 1;
+        // this.carouselItemIndex = currentItemIndex - 1;
+        this.carouselItemIndex = 0;
       }
       const images = this.attachments.filter((file, index) => index !== deleteItemIndex);
       this.$emit("upload-files", images);
@@ -222,7 +224,7 @@ export default {
 
 .upload-files-modal-body-content {
   width: 942px;
-  height: 530px;
+  min-height: 530px;
   margin: 0 auto;
   background-color: #f3f7fd;
   display: flex;
@@ -266,9 +268,8 @@ export default {
 
 .upload-files-modal-body-content-with-carousel {
   width: 949px;
-  height: 610px;
+  min-height: 610px;
   margin: 0 auto;
-  overflow-y: scroll;
 
   .carousel-upload-images {
     max-width: 942px;
@@ -290,9 +291,8 @@ export default {
       height: 50px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-around;
       margin: 5px 15px 5px 0;
-      padding: 0 20px;
       border-radius: 26px;
       background-color: #fff;
       box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
@@ -300,7 +300,6 @@ export default {
       .upload-files-list-item-text {
         width: 138px;
         height: 19px;
-        margin: 0 13.8px 0 0;
         white-space: nowrap;
         overflow: hidden;
         font-size: 14px;
