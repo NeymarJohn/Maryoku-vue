@@ -564,6 +564,7 @@
     </div>
     <change-cover-image-modal
       v-if="showChangeCoverModal"
+      :cover-image="currentCampaign.coverImage"
       @close="close"
       @choose-image="chooseImage"
     />
@@ -757,7 +758,7 @@ export default {
         return;
       }
 
-      if (this.selectedTab === 4 && !campaignData.images || !campaignData.images.length) {
+      if (this.selectedTab === 4 && (!campaignData.images || !campaignData.images.length)) {
         Swal.fire({
           title: "Please select images for event",
           buttonsStyling: false,
