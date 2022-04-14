@@ -19,17 +19,10 @@
             @click.stop="changeCommentSortType('name')"
           >
             Sort
-            <i
-              v-if="commentSortType == 'asc'"
-              class="fas fa-chevron-up my-chevron"
-              @click="sortBy='name'"
-              @click.stop="changeCommentSortType('name')"
-            />
-            <i v-else
-               class="fas fa-chevron-down my-chevron"
-               @click="sortBy='name'"
-               @click.stop="changeCommentSortType('name')"
-            />
+            <i v-if="commentSortType == 'asc'" class="fas fa-chevron-up my-chevron"
+               @click.stop="changeCommentSortType('name')" @click="sortBy='name'" />
+            <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('name')"
+               @click="sortBy='name'" />
           </md-button>
         </md-menu>
         <md-button
@@ -38,18 +31,16 @@
           @click.stop="changeCommentSortType('status')"
         >
           Status
-          <i
-            v-if="commentStatusSortType == 'asc'"
-            class="fas fa-chevron-up my-chevron"
-            @click.stop="changeCommentSortType('status')"
-          />
+          <i v-if="commentStatusSortType == 'asc'" class="fas fa-chevron-up my-chevron"
+             @click.stop="changeCommentSortType('status')" />
           <i v-else class="fas fa-chevron-down my-chevron" @click.stop="changeCommentSortType('status')" />
         </md-button>
       </div>
     </div>
     <div class="sidebar__items d-flex flex-column fullDiscussion">
       <div
-        v-for="(commentComponent, commentIndex) in filteredCommentComponent"
+        v-for="(commentComponent, commentIndex) in commentComponents"
+        v-if="commentComponent.comments && commentComponent.comments.length"
         :key="commentIndex"
         class="comment_item align-items-center justify-content-between cursor-pointer"
       >
@@ -86,13 +77,8 @@
           <span class="unread-count2">02</span>
         </div>
         <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4">
-          <div
-            v-for="(comment, cindex) in commentComponent.comments"
-            v-if="cindex>0"
-            :key="cindex"
-            class="commentItem"
-            :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}"
-          >
+          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem"
+               :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
             <div class="d-flex sidebar__item__content2 justify-content-between">
               <!-- <div class="d-flex sidebar__item__content"> -->
               <div class="sidebar__item__details d-flex">
@@ -130,17 +116,11 @@
                 </md-card-content>
               </md-card>
             </fade-transition>
-            <textarea
-              ref="commentEditor"
-              v-model="editingComment"
-              rows="4"
-              class="form-control reply-text-area"
-              placeholder="Write reply here"
-              @input="getMessage"
-            />
-            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+            <textarea ref="commentEditor" v-model="editingComment" rows="4" class="form-control reply-text-area"
+                      placeholder="Write reply here" @input="getMessage" />
+            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
             <div class="footer text-right my-top my-bottom">
-              <md-button class="md-simple normal-btn md-black">
+              <md-button class="md-simple normal-btn md-black" @click="">
                 Cancel
               </md-button>
               <md-button class="normal-btn background-red" @click="saveCommentReply($event, 'reply')">

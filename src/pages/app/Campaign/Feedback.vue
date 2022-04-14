@@ -318,7 +318,9 @@ export default {
       };
     },
     campaignDescription() {
-      return this.campaignData.description || "";
+      return this.campaignData.description || "Just a short note to thank you for participating in our recent event. " +
+        "We appreciate your attendance and hope you had an enjoyable, productive time. " +
+        "Your feedback will be very helpful and we look forward to welcoming you to more events in the future.";
     },
     campaignAttachments() {
       return this.campaignData.attachments || [];

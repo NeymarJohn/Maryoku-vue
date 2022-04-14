@@ -161,8 +161,7 @@
                 label=" "
                 class="ml-10"
                 :value="campaignVisibleSettings.showKnowledge"
-                @input="handleChangeCampaignVisibleSettings('showKnowledge', $event)"
-              />
+                @input="handleChangeCampaignVisibleSettings('showKnowledge', $event)" />
             </div>
             <div v-else class="mb-30 d-flex" style="height: 52px">
               <maryoku-input v-model="knowledgeTitleContent" class="flex-1" />
@@ -194,7 +193,7 @@
         <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10">
         Digital Participation
       </div>
-      <md-checkbox :value="campaignData.allowOnline" @input="handleChangeCampaignAllowOnline">
+      <md-checkbox :value="campaignData.allowOnline" @input="handleChangeCampaignAllowOnline" >
         <span class="font-bold">Allow digital participation</span>
       </md-checkbox>
       <br>
