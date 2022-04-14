@@ -207,15 +207,20 @@ export default {
         const index = this.from.months.indexOf(value);
         if (index > -1) this.from.months.splice(index, 1);
         else this.from.months.push(value);
+
+        this.from.months.sort((a, b) => a - b);
       } else {
         const index = this.to.months.indexOf(value);
         if (index > -1) this.to.months.splice(index, 1);
         else this.to.months.push(value);
+
+        this.to.months.sort((a, b) => a - b);
       }
+
+      if (!this.from.year || !this.from.months.length || !this.to.year || !this.to.months) return;
       this.$emit("change", {from: this.from, to: this.to});
     },
     changeSeason(selected, value) {
-      console.log("changeSeason", selected, value);
       if (selected === "from") {
         this.from.season = value;
       } else {
