@@ -1,6 +1,9 @@
 <template>
-  <div v-if="!isLoading" class="md-layout event-details-overview edit-event-details bg-white"
-       style="padding-left: 450px">
+  <div
+    v-if="!isLoading"
+    class="md-layout event-details-overview edit-event-details bg-white"
+    style="padding-left: 450px"
+  >
     <!--        <comment-editor-panel-->
     <!--            v-if="showCommentEditorPanel"-->
     <!--            :commentComponents="commentComponents"-->

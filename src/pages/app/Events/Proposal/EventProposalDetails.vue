@@ -82,7 +82,7 @@
                   </p>
                 </div>
               </div>
-              <md-divider/>
+              <md-divider />
               <p class="font-size-14 px-30 py-20 m-0" style="max-height: 200px">
                 Dear Rachel, Relish caterers & venues is pleased to provide you with the attached catering proposal for
                 your, which is currently scheduled to be held on  at. We understand that this is a very important
@@ -263,9 +263,9 @@
         />
         <EventProposalPrice
           v-for="(service, index) in proposal.additionalServices"
+          :key="index"
           :proposal-data="proposal"
           :service-category="service"
-          :key="index"
           :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
           @changeBookedServices="changeBookedServices"
           @updateProposalCost="updateProposalCost"
@@ -278,12 +278,12 @@
             <img :src="`${iconUrl}Asset 577.svg`" style="width: 30px">
             <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
             <span class="bundle-percentage">{{ proposal.bundleDiscount.percentage }}%</span>
-            <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
+            <span class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
           <div class="font-size-22 font-bold" style="text-align: end;">
             -${{ bundledDiscountPrice| withComma(Number) }}
-            <br/>
-            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ bundledServicePrice| withComma(Number) }}</span>
+            <br>
+            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal">${{ bundledServicePrice| withComma(Number) }}</span>
           </div>
         </div>
         <div class="element-pricing-table total-list md-small-hide">
@@ -359,7 +359,7 @@
 
                 <img src="/static/img/nn1.webp" alt="">
               </div>
-              <div class="md-layout-item pl-0 md-size-5"/>
+              <div class="md-layout-item pl-0 md-size-5" />
               <div class="md-layout-item pl-0 md-size-40">
                 <div class="ml-10">
                   <h2 class="font-bold font-size-16">

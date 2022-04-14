@@ -11,9 +11,10 @@
     </div>
     <div>
       <table width="100%">
-        <tr v-for="item in cartItems"
-            :key="`price-${item.key}`"
-            class="d-flex align-center"
+        <tr 
+          v-for="item in cartItems"
+          :key="`price-${item.key}`"
+          class="d-flex align-center"
         >
           <td width="70%" class="d-flex align-center pl-40 py-20">
             <img :src="`${$iconURL}Budget+Elements/${item.icon}`" style="width: 30px">
@@ -84,8 +85,10 @@
                   class="d-flex align-center"
               >
                 <td width="75%" class="d-flex align-center py-20">
-                  <img :src="`${$iconURL}Budget+Elements/${serviceCategory(proposal.vendor.vendorCategory).icon}`"
-                       style="width: 30px">
+                  <img
+                    :src="`${$iconURL}Budget+Elements/${serviceCategory(proposal.vendor.vendorCategory).icon}`"
+                    style="width: 30px"
+                  >
                   <div class="ml-10">
                     <p class="mb-5 font-size-14 font-bold-extra">
                       {{ proposal.vendor.companyName }}
@@ -99,8 +102,13 @@
                   ${{ proposal.cost | withComma }}
                 </td>
                 <td width="10%" class="py-20">
-                  <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36"
-                           @md-opened="isOpened">
+                  <md-menu 
+                    md-size="auto" 
+                    class="action-menu" 
+                    :md-offset-x="-300" 
+                    :md-offset-y="-36"
+                    @md-opened="isOpened"
+                  >
                     <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
                       <md-icon style="font-size: 30px !important">
                         more_vert
