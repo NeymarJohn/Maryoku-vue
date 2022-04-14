@@ -75,7 +75,7 @@
                 <h5>Does this include double discounts?</h5>
               </div>
             </div>
-            <check-box :checked="vendorDiscountPolicies.double" @changed="changedCheckBox('double', $event)" />
+            <check-box :checked="vendorDiscountPolicies.double" @changed="changedCheckBox" />
             <div class="title-cont mt-3">
               <div class="top">
                 <h5>What a valid discount?</h5>
@@ -83,7 +83,7 @@
             </div>
             <div class="md-layout my-2">
               <div v-for="option in discountOptions" :key="option.value" class="md-layout-item md-size-33 ">
-                <md-checkbox v-model="vendorDiscountPolicies.valid" :value="option.value" class="md-vendor" @change="changedCheckBox('valid', $event)">
+                <md-checkbox v-model="vendorDiscountPolicies.valid" :value="option.value" class="md-vendor" @change="changedCheckBox">
                   {{
                     option.label
                   }}
@@ -664,10 +664,10 @@ export default {
         this.vendorDiscountPolicies = {...this.vendorDiscountPolicies, ...e};
         this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
     },
-    changedCheckBox(type, value) {
-      if (type === 'double') this.vendorDiscountPolicies.double = value;
-      console.log('change', this.vendorDiscountPolicies);
+    changedCheckBox(double) {
+      this.vendorDiscountPolicies.double = double;
       this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
+      console.log('change', this.vendorDiscountPolicies)
     },
     init: async function() {
       console.log('step3', this.vendor);
