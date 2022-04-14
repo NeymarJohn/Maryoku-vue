@@ -75,7 +75,7 @@
                 <h5>Does this include double discounts?</h5>
               </div>
             </div>
-            <check-box v-model="vendorDiscountPolicies.double" @changed="changedCheckBox" />
+            <check-box :checked="vendorDiscountPolicies.double" @changed="changedCheckBox" />
             <div class="title-cont mt-3">
               <div class="top">
                 <h5>What a valid discount?</h5>
@@ -664,8 +664,10 @@ export default {
         this.vendorDiscountPolicies = {...this.vendorDiscountPolicies, ...e};
         this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
     },
-    changedCheckBox() {
-        this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
+    changedCheckBox(double) {
+      this.vendorDiscountPolicies.double = double;
+      this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
+      console.log('change', this.vendorDiscountPolicies)
     },
     init: async function() {
       console.log('step3', this.vendor);

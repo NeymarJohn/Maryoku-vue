@@ -1,17 +1,18 @@
 <template>
-  <div class="feedback-upload-images-carousel">
+  <div class="change-cover-images-carousel">
     <carousel
       v-if="images.length"
       :items="5"
       :nav="false"
       :dots="false"
-      :margin="0"
+      :margin="22"
       :auto-width="true"
       class="carousel"
       :number="2"
+      @changed="$emit('changed', $event)"
     >
       <template v-if="showButtonActions" slot="prev">
-        <md-button class="edit-btn carousel-btn-prev nav-btn btn-just-icon nav-left md-round md-raised md-white">
+        <md-button id="carousel-btn-prev" class="edit-btn carousel-btn-prev nav-btn btn-just-icon nav-left md-round md-raised md-white">
           <md-icon class="btn-prev-icon-arrow-left left">
             keyboard_arrow_left
           </md-icon>
@@ -21,6 +22,7 @@
         v-for="(item, index) in images"
         :key="index"
         :class="{
+          'carousel-item': true,
           'cursor-pointer': true,
           'carousel-first-item': !index,
           'carousel-last-item': index === (images.length - 1),
@@ -34,7 +36,7 @@
         >
       </div>
       <template v-if="showButtonActions && images.length > 5" slot="next">
-        <md-button class="edit-btn carousel-btn-next nav-btn btn-just-icon nav-right md-round md-raised md-white">
+        <md-button id="carousel-btn-next" class="edit-btn carousel-btn-next nav-btn btn-just-icon nav-right md-round md-raised md-white">
           <md-icon class="btn-next-icon-arrow-right right">
             keyboard_arrow_right
           </md-icon>
@@ -69,15 +71,13 @@ export default {
       type: String,
       default: "",
     },
-  },
-  data() {
-    return {
-      selectedIndex: 0,
-    };
+    selectedIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   methods: {
     handleClickItem(index) {
-      this.selectedIndex = index;
       this.$emit("select-image", index);
     }
   },
@@ -85,18 +85,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.feedback-upload-images-carousel {
+.change-cover-images-carousel {
   position: relative;
+}
+
+.owl-stage:first-child {
+  margin-left: 0 !important;
+}
+
+.owl-stage:last-child {
+  margin-right: 0 !important;
+}
+
+.owl-stage.owl-item {
+  margin: 0 22px !important;
 }
 
 .carousel {
   width: 950px;
-  height: 70px;
+  height: 85px;
 
-  & div {
+  & .carousel-item {
     width: 174px;
     height: 85px;
-    margin: 0 10px;
     border: solid 5px #fff;
   }
 

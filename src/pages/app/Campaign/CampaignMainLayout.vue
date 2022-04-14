@@ -564,6 +564,7 @@
     </div>
     <change-cover-image-modal
       v-if="showChangeCoverModal"
+      :cover-image="currentCampaign.coverImage"
       @close="close"
       @choose-image="chooseImage"
     />
