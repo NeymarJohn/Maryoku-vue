@@ -30,11 +30,11 @@ export default {
   props: {
     images: {
       type: Array,
-      default: () => [],
+      default: [],
     },
     colors: {
       type: Array,
-      default: () => [],
+      default: [],
     },
     border: {
       type: String,

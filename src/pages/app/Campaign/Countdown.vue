@@ -7,15 +7,13 @@
       <div />
       <div class="countdown-cover-image mt-50">
         <img v-if="coverImage" :src="coverImage">
-        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
-          <concept-image-block
-            class="change-cover-concept"
-            :images="concept.images"
-            :colors="concept.colors"
-            border="no-border"
-          />
-        </div>
-        <img v-else :src="defaultCoverImage" alt="default cover image">
+        <concept-image-block
+          v-else
+          class="hidden"
+          :images="concept.images"
+          :colors="concept.colors"
+          border="no-border"
+        />
         <div class="countdown-guests d-flex align-center p-20">
           <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
           <span v-if="isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
@@ -28,7 +26,7 @@
           />
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
-          <countdown-time class="countdown-time" :event="event" />
+          <countdown-time :event="event" />
           <hide-switch
             :value="campaignVisibleSettings.showCountdown"
             class="ml-20"
@@ -36,7 +34,7 @@
             @input="handleChangeCampaignVisibleSettings('showCountdown', $event)"
           />
         </div>
-        <div :class="{'cover-image-button': coverImage, 'concept-button': (concept && concept.images && concept.images.length) }">
+        <div class="cover-image-button">
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">Change Cover
           </md-button>
@@ -105,7 +103,6 @@ export default {
       editingContent: {
         coverImage: "",
       },
-      defaultCoverImage: null,
     };
   },
   computed: {
@@ -144,7 +141,6 @@ export default {
     const defaultCoverImage = `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
       (new Date().getDate() % 4) + 1
     }.png`;
-    this.defaultCoverImage = defaultCoverImage;
     if (this.$store.state.campaign.COMING_SOON) {
       this.editingContent = this.$store.state.campaign.COMING_SOON;
       this.editingContent.coverImage = this.event.concept ? this.event.concept.images[1].url : defaultCoverImage;
@@ -213,7 +209,7 @@ export default {
 .coundown-campaign {
   .countdown-cover-image {
     position: relative;
-    margin-bottom: 110px;
+    overflow: hidden;
 
     img {
       max-height: 500px;
@@ -222,17 +218,9 @@ export default {
       object-fit: cover;
     }
 
-    .change-cover-concept {
-      width: 1000px;
-      height: 350px;
-    }
-
     .countdown-time-panel {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -80px;
-      z-index: 15;
+      margin: auto;
+      transform: translate(70px, -50%);
     }
 
     .cover-image-button {
@@ -240,15 +228,6 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      z-index: 14;
-    }
-
-    .concept-button {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, 10%);
-      z-index: 14;
     }
   }
 
@@ -258,7 +237,6 @@ export default {
     top: 50px;
     background-color: #fff;
     border-radius: 3px;
-    z-index: 15;
   }
 
   .logo-section {
