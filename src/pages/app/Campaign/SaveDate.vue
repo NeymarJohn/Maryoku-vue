@@ -10,7 +10,7 @@
       </div>
       <div class="concept-image-block-wrapper">
         <div v-show="showChangeCover" class="change-cover-feedback" @click="handleChangeCoverImage">
-          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover
           </md-button>

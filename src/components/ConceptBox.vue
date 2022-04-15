@@ -1,5 +1,5 @@
 <template>
-  <div class="concept-box">
+  <div class="concept-box" >
     <div class="concept-box-header">
       <div class="concept-name">
         {{ concept.name }}
@@ -23,11 +23,10 @@
       <div>
         <div v-for="(image, imageIndex) in images" :key="imageIndex" :class="`images-list__item`">
           <img
-            crossorigin="anonymous"
             v-if="image.url"
+            crossorigin="anonymous"
             class="image-section"
             :src="`${image.url}`"
-            @error="imageUrlAlt(concept.imageData[imageIndex], $event)"
           />
           <div v-else class="image-section" />
         </div>

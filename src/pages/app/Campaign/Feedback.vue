@@ -15,7 +15,7 @@
           />
         </div>
         <div v-if="concept" class="change-cover-feedback">
-          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
           </md-button>
