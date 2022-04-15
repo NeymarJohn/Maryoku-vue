@@ -5,38 +5,55 @@
         <form class="form-section">
           <div class="md-layout">
             <div class="md-layout-item md-size-60">
-              <div class="input-wrapper"
-                   :class="{
-                     error: v$.bankDetails.holderName.$errors.length,
-                     valid: !v$.bankDetails.holderName.$errors.length }">
+              <div
+                class="input-wrapper"
+                :class="{
+                  error: v$.bankDetails.holderName.$errors.length,
+                  valid: !v$.bankDetails.holderName.$errors.length
+                }"
+              >
                 <label>Beneficiary Name</label>
                 <input id="name" v-model="bankDetails.holderName" type="text"
-                       @blur="v$.bankDetails.holderName.$touch"/>
-                <div class="valid-msg"></div>
+                       @blur="v$.bankDetails.holderName.$touch"
+                >
+                <div class="valid-msg" />
                 <span class="invalid-msg">The Beneficiary Name Is Invalid</span>
               </div>
             </div>
             <div class="md-layout-item md-size-60">
-              <div class="input-wrapper"
-                   :class="{
-                     error: v$.bankDetails.accountNumber.$errors.length,
-                     valid: !v$.bankDetails.accountNumber.$errors.length }">
+              <div
+                class="input-wrapper"
+                :class="{
+                  error: v$.bankDetails.accountNumber.$errors.length,
+                  valid: !v$.bankDetails.accountNumber.$errors.length
+                }"
+              >
                 <label>Account No.</label>
-                <input id="email" v-model="bankDetails.accountNumber" type="number"
-                       @blur="v$.bankDetails.accountNumber.$touch"/>
-                <div class="valid-msg"></div>
+                <input
+                  id="email"
+                  v-model="bankDetails.accountNumber"
+                  type="number"
+                  @blur="v$.bankDetails.accountNumber.$touch"
+                >
+                <div class="valid-msg" />
                 <span class="invalid-msg">The Account Number Is Invalid</span>
               </div>
             </div>
             <div class="md-layout-item md-size-60">
-              <div class="input-wrapper" :class="{
-                error: v$.bankDetails.routingNumber.$errors.length,
-                valid: !v$.bankDetails.routingNumber.$errors.length}"
+              <div
+                class="input-wrapper"
+                :class="{
+                  error: v$.bankDetails.routingNumber.$errors.length,
+                  valid: !v$.bankDetails.routingNumber.$errors.length
+                }"
               >
                 <label>Bank No.</label>
-                <input v-model="bankDetails.routingNumber"
-                       @blur="v$.bankDetails.routingNumber.$touch" type="text">
-                <div class="valid-msg"></div>
+                <input
+                  v-model="bankDetails.routingNumber"
+                  type="text"
+                  @blur="v$.bankDetails.routingNumber.$touch"
+                >
+                <div class="valid-msg" />
                 <span class="invalid-msg">The Bank Number Is Invalid</span>
               </div>
             </div>
@@ -46,9 +63,12 @@
                 valid: !v$.bankDetails.branch.$errors.length }"
               >
                 <label>Branch No.</label>
-                <input v-model="bankDetails.branch"
-                       @blur="v$.bankDetails.branch.$touch" type="text">
-                <div class="valid-msg"></div>
+                <input
+                  v-model="bankDetails.branch"
+                  type="text"
+                  @blur="v$.bankDetails.branch.$touch"
+                >
+                <div class="valid-msg" />
                 <span class="invalid-msg">The Branch Number Is Invalid</span>
               </div>
             </div>
@@ -58,9 +78,10 @@
                 valid: !v$.bankDetails.address.$errors.length && v$.bankDetails.address.$dirty}"
               >
                 <label>Address and name of the bank</label>
-                <vue-google-autocomplete id="modal-billing-address"
-                                         :placeholder="bankDetails.formattedAddress || 'Start typing'"
-                                         @placechanged="getAddressData"
+                <vue-google-autocomplete
+                  id="modal-billing-address"
+                  :placeholder="bankDetails.formattedAddress || 'Start typing'"
+                  @placechanged="getAddressData"
                 />
                 <div class="location-icon">
                   <i class="material-icons-outlined location-icon">location_on</i>

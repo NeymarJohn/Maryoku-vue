@@ -6,15 +6,16 @@
       </div>
       <div class="wrapper-change-cover">
         <img v-if="campaignCoverImage" :src="campaignCoverImage" class="change-cover mr-10">
-        <concept-image-block
-          v-else-if="concept"
-          class="ml-50 hidden"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
-        />
+        <div v-else-if="concept" class="d-flex justify-content-center align-center ">
+          <concept-image-block
+            class="change-cover-concept"
+            :images="concept.images"
+            :colors="concept.colors"
+            border="no-border"
+          />
+        </div>
         <div v-if="concept" class="change-cover-feedback">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
           </md-button>
@@ -24,7 +25,12 @@
             <img class="icon-play" src="static/icons/play-black.svg">
           </div>
           <div class="wrapper-btn-switch">
-            <hide-switch v-model="campaignData.visibleSettings.showImages" class="btn-switch" label="View event photo presentation" />
+            <hide-switch
+              class="btn-switch"
+              label="View event photo presentation"
+              :value="campaignVisibleSettings.showImages"
+              @input="handleChangeCampaignVisibleSettings('showImages', $event)"
+            />
           </div>
           <div v-if="isUploadedFiles" class="view-presentation-footer">
             <img class="mr-10" src="static/icons/red-arrow-down.svg">
@@ -39,18 +45,15 @@
               Add attachments to the event
             </div>
           </div>
-          <feedback-upload-files-modal
-            v-if="showModalWindowOpen"
-            :folder-name-for-upload="`events/${event.id}`"
-            @close="closeModalWindow"
-            @upload-files="uploadFiles"
-          />
         </div>
         <div class="footer-change-cover">
-          <feedback-logo
-            v-model="campaignData.visibleSettings.showLogo"
+          <campaign-logo
             :logo-url="campaignLogoUrl"
             :logo-title="campaignTitle"
+            :show-logo="campaignVisibleSettings.showLogo"
+            @change-logo="handleChangeCampaignLogo"
+            @change-logo-title="handleChangeCampaignTitle"
+            @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
           />
         </div>
       </div>
@@ -60,16 +63,20 @@
           <custom-title-editor
             :default-value="additionalData.sectionReview.title"
             class="font-size-60 font-bold line-height-1 mb-20"
-            @change="handleChangeData('sectionReview', 'title', ...arguments)"
+            @change="handleChangeAdditionalData('sectionReview', 'title', ...arguments)"
           />
           <custom-title-editor
             :default-value="additionalData.sectionReview.description"
             class="disco-party"
-            @change="handleChangeData('sectionReview', 'description', ...arguments)"
+            @change="handleChangeAdditionalData('sectionReview', 'description', ...arguments)"
           />
         </div>
       </div>
-      <maryoku-textarea v-model="campaignDescription" :placeholder="placeHolder" />
+      <maryoku-textarea
+        :placeholder="placeHolder"
+        :value="campaignDescription"
+        @input="handleChangeCampaignDescription"
+      />
     </div>
     <div class="feedback-campaign-list p-50">
       <div>
@@ -79,10 +86,14 @@
             <span class="font-size-30 font-bold line-height-1">YOUR FEEDBACK MATTERS TO US</span>
           </div>
           <div>
-            <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section" />
+            <hide-switch
+              label="feedback section"
+              :value="campaignVisibleSettings.showFeedback"
+              @input="handleChangeCampaignVisibleSettings('showFeedback', $event)"
+            />
           </div>
         </div>
-        <div v-if="campaignData.visibleSettings.showFeedback">
+        <div v-if="campaignVisibleSettings.showFeedback">
           <feedback-question
             v-for="(question, index) in feedbackQuestions"
             :key="index"
@@ -125,7 +136,7 @@
           <custom-title-editor
             :default-value="additionalData.sectionEventPhotos.title"
             class="font-size-30 font-bold line-height-1 pt-20"
-            @change="handleChangeData('sectionEventPhotos', 'title', ...arguments)"
+            @change="handleChangeAdditionalData('sectionEventPhotos', 'title', ...arguments)"
           />
           <span class="Include-photos-details-of-the-event mt-10">
             (See photos and details about the event)
@@ -179,9 +190,13 @@
           </div>
           <div class="d-flex align-center font-bold ml-60">
             Allow guests to upload photos from the event
-            <md-switch v-model="campaignData.visibleSettings.allowUploadPhoto" class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style">
-              <span v-if="campaignData.visibleSettings.allowUploadPhoto">Hide</span>
-              <span v-if="!campaignData.visibleSettings.allowUploadPhoto">Show</span>
+            <md-switch
+              :value="campaignVisibleSettings.allowUploadPhoto"
+              class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style"
+              @input="handleChangeCampaignVisibleSettings('allowUploadPhoto', $event)"
+            >
+              <span v-if="campaignVisibleSettings.allowUploadPhoto">Hide</span>
+              <span v-if="!campaignVisibleSettings.allowUploadPhoto">Show</span>
             </md-switch>
           </div>
         </div>
@@ -197,13 +212,24 @@
             </div>
             <div>(Share photos and details about the event)</div>
           </div>
-          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option" />
+          <hide-switch
+            label="sharing option"
+            :value="campaignVisibleSettings.showSharingOption"
+            @input="handleChangeCampaignVisibleSettings('showSharingOption', $event)"
+          />
         </div>
         <sharing-button-group
-          v-if="campaignData.visibleSettings.showSharingOption"
+          v-if="campaignVisibleSettings.showSharingOption"
         />
       </div>
     </div>
+    <feedback-upload-files-modal
+      v-if="showModalWindowOpen"
+      :attachments="campaignAttachments"
+      :folder-name-for-upload="`events/${event.id}`"
+      @close="closeModalWindow"
+      @upload-files="uploadFiles"
+    />
   </div>
 </template>
 <script>
@@ -214,17 +240,17 @@ import FeedbackQuestion from "./components/FeedbackQuestion";
 import HideSwitch from "@/components/HideSwitch";
 import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
-import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
+import CustomTitleEditor from "./components/CustomTitleEditor";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import { mapActions } from "vuex";
-import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
-    FeedbackLogo,
+    CampaignLogo,
     MaryokuTextarea,
     FeedbackImageCarousel,
     SharingButtonGroup,
@@ -244,18 +270,13 @@ export default {
   data() {
     return {
       placeHolder: "",
-      originalContent: {},
       concept: {},
       feedbackQuestions: [],
       isEditingNewQuestion: false,
       newQuestion: "",
       newQuestionLabel : "",
-      editingContent: [],
       isUploadedFiles: false,
       showModalWindowOpen : false,
-      feedbackTitle : "",
-      feedbackSubTitle : "",
-      feedbackSliderTitle : "",
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         maxFilesize: 25,
@@ -268,7 +289,7 @@ export default {
   },
   computed: {
     event() {
-      return this.$store.state.event.eventData;
+      return this.$store.state.event.eventData || {};
     },
     campaignData() {
       return this.$store.state.campaign.FEEDBACK || {};
@@ -283,15 +304,26 @@ export default {
       return this.campaignData.logoUrl || "";
     },
     campaignTitle() {
-      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
+      return this.campaignData.title || (this.event.title || "");
     },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.FEEDBACK.description || "";
-      },
-      set(newDescription) {
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "description", value: newDescription });
-      }
+    campaignVisibleSettings() {
+      const visibleSettings = this.campaignData.visibleSettings || {};
+      return {
+        showImages: true,
+        showLogo: true,
+        showFeedback: true,
+        allowUploadPhoto: true,
+        showSharingOption: true,
+        ...visibleSettings,
+      };
+    },
+    campaignDescription() {
+      return this.campaignData.description || "Just a short note to thank you for participating in our recent event. " +
+        "We appreciate your attendance and hope you had an enjoyable, productive time. " +
+        "Your feedback will be very helpful and we look forward to welcoming you to more events in the future.";
+    },
+    campaignAttachments() {
+      return this.campaignData.attachments || [];
     },
     additionalData() {
       const campaignAdditionalData = this.campaignData.additionalData || {};
@@ -357,21 +389,6 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
-    setDefault() {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this feedback!",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, revert it!",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-          this.editingContent = Object.assign({}, this.originalContent);
-        }
-      });
-    },
     addNewImage(image) {
       const images = this.campaignData.images;
       images.unshift({ src: image.imageString });
@@ -388,12 +405,6 @@ export default {
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
-    },
-    changeUploadFile(event) {
-      const fileName = event.target.files[0].name;
-      this.editingContent.push({
-        name: fileName,
-      });
     },
     editNewQuestion() {
       this.isEditingNewQuestion = true;
@@ -416,7 +427,7 @@ export default {
     closeModalWindow(){
         this.showModalWindowOpen = false;
     },
-    handleChangeData(sectionName, key, value) {
+    handleChangeAdditionalData(sectionName, key, value) {
       this.additionalData[sectionName][key] = value;
       this.$store.commit("campaign/setAttribute", {
         name: "FEEDBACK",
@@ -426,15 +437,40 @@ export default {
     },
     uploadFiles(files) {
       const attachments = files.map(({ status, ...file }) => file);
-      this.saveCampaign({ id: this.campaignData.id, attachments });
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "attachments",
-        value: files
+      this.saveCampaign({ id: this.campaignData.id, attachments }).then(() => {
+        this.$store.commit("campaign/setAttribute", {
+          name: "FEEDBACK",
+          key: "attachments",
+          value: files
+        });
       });
     },
     handleChangeCoverImage() {
       this.$emit("change-cover-image", event);
+    },
+    handleChangeCampaignTitle(value) {
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "title",
+        value,
+      });
+    },
+    handleChangeCampaignDescription(value) {
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "description",
+        value,
+      });
+    },
+    handleChangeCampaignVisibleSettings(key, value) {
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "visibleSettings",
+        value: { ...this.campaignVisibleSettings, [key]: value },
+      });
+    },
+    handleChangeCampaignLogo(file) {
+      this.$emit("change-logo", file);
     },
     onFileChangeCoverImage(event) {
       const file = event.target.files[0];
@@ -467,6 +503,11 @@ export default {
     height: 350px;
     object-fit: cover;
     border-radius: 20px;
+  }
+
+  .change-cover-concept {
+    width: 1000px;
+    height: 350px;
   }
 
   .view-event-photos {
@@ -705,20 +746,21 @@ export default {
     margin-right: 14px;
 }
 .add-new-question-input-1{
-    width: 438px;
+    width: 400px;
     height: 51px;
     margin-right: 46px;
 }
 .add-new-question-input-2{
-    width: 476px;
+    width: 400px;
     height: 51px;
     margin-right: 33px;
 }
-.add-new-question-title{
-    font-size: 18px;
-    font-weight: bold;
-    color: #000;
-    margin-bottom: 16px;
+.add-new-question-title {
+  width: 400px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 16px;
 }
 .add-new-question-button-block{
     display: flex;

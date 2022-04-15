@@ -200,6 +200,7 @@
                     :info="{ ...campaignTabs[1], ...campaignInfo }"
                     :show-change-cover="true"
                     @changeInfo="changeInfo"
+                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -211,6 +212,7 @@
                 class="white-card"
                 :show-change-cover="true"
                 @changeInfo="changeInfo"
+                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -230,6 +232,7 @@
                   <rsvp
                     ref="rsvp"
                     :info="{ ...campaignTabs[2], ...campaignInfo }"
+                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -238,6 +241,7 @@
                 v-else
                 ref="rsvp"
                 :info="{ ...campaignTabs[2], ...campaignInfo }"
+                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -257,6 +261,7 @@
                   <countdown
                     ref="countdown"
                     :info="{ ...campaignTabs[3], ...campaignInfo }"
+                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -266,6 +271,7 @@
                 ref="countdown"
                 :info="{ ...campaignTabs[3], ...campaignInfo }"
                 class="white-card"
+                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -285,6 +291,7 @@
                   <feedback
                     ref="feedback"
                     :info="{ ...campaignTabs[4], ...campaignInfo }"
+                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -294,6 +301,7 @@
                 ref="feedback"
                 :info="{ ...campaignTabs[4], ...campaignInfo }"
                 class="white-card"
+                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -487,9 +495,9 @@
             <img :src="`${$iconURL}Campaign/Group 9222.svg`">
             <span class="ml-10">Scheduled To {{ ' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
           </div>
-          <div v-if="!canSchedule" @click="startCampaign" class="ml-40 d-flex flex-centered align-center cursor-pointer">
-            <span class="seperator small" style="margin-top: 0; margin-right: 30px"/>
-            <i class="far fa-clock"></i>
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center cursor-pointer" @click="startCampaign">
+            <span class="seperator small" style="margin-top: 0; margin-right: 30px" />
+            <i class="far fa-clock" />
             <span class="ml-10" style="font-weight: bold"> Send again </span>
           </div>
           <div
@@ -556,6 +564,7 @@
     </div>
     <change-cover-image-modal
       v-if="showChangeCoverModal"
+      :cover-image="currentCampaign.coverImage"
       @close="close"
       @choose-image="chooseImage"
     />
@@ -567,10 +576,6 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import { CommentMixins, ShareMixins } from "@/mixins";
-const SaveDate = () => import("./SaveDate");
-const Rsvp = () => import("./Rsvp");
-const Countdown = () => import("./Countdown");
-const Feedback = () => import("./Feedback");
 import DeliverySettings from "./DeliverySettings";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 import Campaign from "@/models/Campaign";
@@ -579,12 +584,17 @@ import Swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
 import CollapsePanel from "./CollapsePanel";
 import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
-
 import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import { Loader } from "@/components";
+import { v4 as uuidv4 } from "uuid";
+
+const SaveDate = () => import("./SaveDate");
+const Rsvp = () => import("./Rsvp");
+const Countdown = () => import("./Countdown");
+const Feedback = () => import("./Feedback");
 const VueHtml2pdf = () => import("vue-html2pdf");
 
 const defaultSettings = {
@@ -608,6 +618,7 @@ const defaultSettings = {
     sentTime: new Date().getTime(),
   },
 };
+
 export default {
   components: {
     Loader,
@@ -668,6 +679,58 @@ export default {
       },
       campaigns: {},
     };
+  },
+  computed: {
+    ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    user() {
+      return this.$store.state.auth.user;
+    },
+    currentCampaign() {
+      return this.$store.state.campaign[
+        this.campaignTabs[this.selectedTab].name
+        ];
+    },
+    canSchedule() {
+      if (
+        this.currentCampaign.settings.email.selected &&
+        this.currentCampaign.settings.email.status !== "sent"
+      ) {
+        return true;
+      }
+      if (
+        this.currentCampaign.settings.phone.selected &&
+        this.currentCampaign.settings.phone.status !== "sent"
+      ) {
+        return true;
+      }
+      return false;
+    },
+    isScheduled() {
+      if (!this.currentCampaign) return false;
+      return this.currentCampaign.campaignStatus === "SCHEDULED";
+    },
+  },
+  watch: {
+    currentCampaign(newValue, oldValue) {
+      this.setDefaultSettings();
+    },
+    event(newValue, oldValue) {
+      this.campaignInfo.conceptName = this.event.concept
+        ? this.event.concept.name
+        : "Event Name";
+    },
+  },
+  created() {
+    this.campaignInfo.conceptName = this.event.concept
+      ? this.event.concept.name
+      : "Event Name";
+    this.getCampaigns({ event: this.event }).then((campaigns) => {
+      this.campaigns = campaigns;
+      this.setDefaultSettings();
+    });
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
@@ -748,7 +811,7 @@ export default {
         return;
       }
 
-      if (this.selectedTab === 4 && !campaignData.images || !campaignData.images.length) {
+      if (this.selectedTab === 4 && (!campaignData.images || !campaignData.images.length)) {
         Swal.fire({
           title: "Please select images for event",
           buttonsStyling: false,
@@ -923,59 +986,26 @@ export default {
         this.campaignTabs[this.selectedTab].name,
         "STARTED"
       );
+    },
+    changeCampaignLogo(file) {
+      const changeLogo = (logoUrl) => {
+        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
+        this.saveCampaign({ id: this.campaignData.id, logoUrl });
+      };
+      if (!file) {
+        changeLogo(file);
+      }
+      const extension = file.type.split("/")[1];
+      const fileName = uuidv4();
+      new Promise(() => {
+        S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
+          changeLogo(logoUrl);
+        });
+      });
     }
-  },
-  computed: {
-    ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    user() {
-      return this.$store.state.auth.user;
-    },
-    currentCampaign() {
-      return this.$store.state.campaign[
-        this.campaignTabs[this.selectedTab].name
-      ];
-    },
-    canSchedule() {
-      if (
-        this.currentCampaign.settings.email.selected &&
-        this.currentCampaign.settings.email.status !== "sent"
-      ) {
-        return true;
-      }
-      if (
-        this.currentCampaign.settings.phone.selected &&
-        this.currentCampaign.settings.phone.status !== "sent"
-      ) {
-        return true;
-      }
-      return false;
-    },
-    isScheduled() {
-      if (!this.currentCampaign) return false;
-      return this.currentCampaign.campaignStatus === "SCHEDULED";
-    },
-  },
-  watch: {
-    currentCampaign(newValue, oldValue) {
-      this.setDefaultSettings();
-    },
-    event(newValue, oldValue) {
-      this.campaignInfo.conceptName = this.event.concept
-        ? this.event.concept.name
-        : "Event Name";
-    },
-  },
-  created() {
-    this.campaignInfo.conceptName = this.event.concept
-      ? this.event.concept.name
-      : "Event Name";
-    this.getCampaigns({ event: this.event }).then((campaigns) => {
-      this.campaigns = campaigns;
-      this.setDefaultSettings();
-    });
   },
 };
 </script>

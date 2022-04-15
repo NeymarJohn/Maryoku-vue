@@ -1,7 +1,9 @@
 <template>
-  <div v-if="!isEditing" class="d-flex campaign-title-editor">
-    {{ content }}
-    <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" @click="isEditing = true">
+  <div v-if="!isEditing" class="d-flex align-center campaign-title-editor">
+    <span>{{ content }}</span>
+    <div>
+      <img class="icon-edit-dark" :src="`${$iconURL}common/edit-dark.svg`" @click="isEditing = true">
+    </div>
   </div>
   <div v-else class="d-flex campaign-title-editor">
     <input

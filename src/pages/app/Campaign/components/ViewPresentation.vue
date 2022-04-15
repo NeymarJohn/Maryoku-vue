@@ -29,7 +29,7 @@
         src="static/icons/arrow-up-red.svg"
       >
       <div class="view-presentation-footer-action-download">
-        <span @click="$emit('download-files', $event)" class="view-presentation-footer-action-download-text">
+        <span class="view-presentation-footer-action-download-text" @click="downloadFiles">
           Download the presentation
         </span>
         <button
@@ -78,7 +78,10 @@ export default {
     HideSwitch,
   },
   props: {
-    coverImage: String,
+    coverImage: {
+      type: String,
+      default: "",
+    },
     isEdit: {
       type: Boolean,
       default: false
@@ -110,6 +113,12 @@ export default {
     };
   },
   methods: {
+    downloadFiles(event) {
+      if (this.showMenuSelectDownloadFiles) {
+        this.toggleMenuSelectDownloadFiles();
+      }
+      this.$emit("download-files", event);
+    },
     toggleMenuSelectDownloadFiles() {
       this.showMenuSelectDownloadFiles = !this.showMenuSelectDownloadFiles;
       if (this.showMenuSelectDownloadFiles === false) {

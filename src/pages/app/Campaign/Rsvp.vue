@@ -14,53 +14,40 @@
             :colors="concept.colors"
             border="no-border"
           />
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover(Size 1200 * 400)
           </md-button>
         </div>
-        <div class="wrapper-change-logo">
-          <div class="change-logo">
-            <div class="over-logo-campaign">
-              <input
-                id="replace-logo"
-                style="display: none"
-                name="attachment"
-                type="file"
-                multiple="multiple"
-                @change="onFileChangeLogo"
-              >
-              <div class="color-white font-bold font-size-16 button cursor-pointer" @click="replaceLogo">
-                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"> Replace
-              </div>
-            </div>
-            <img class="logo" :src="logoUrl">
-          </div>
-          <hide-switch v-model="campaignData.visibleSettings.showLogo" class="large-switch below-label" label="Logo" />
-        </div>
+        <campaign-logo
+          :logo-url="campaignLogoUrl"
+          :show-logo="campaignVisibleSettings.showLogo"
+          @change-logo="handleChangeCampaignLogo"
+          @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
+        />
         <div class="font-size-30 font-bold d-flex align-center">
           <title-editor
             :key="campaignData.additionalData.greetingWords"
             :default-value="campaignData.additionalData.greetingWords"
             class="mt-20 mb-10 font-bold-extra"
-            @change="handleChangeAddtionalData('greetingWords', ...arguments)"
+            @change="handleChangeAdditionalData('greetingWords', ...arguments)"
           />
         </div>
         <div class="font-size-20 mt-20">
           <title-editor
             :default-value="campaignData.additionalData.prefixEvent"
-            @change="handleChangeAddtionalData('prefixEvent', ...arguments)"
+            @change="handleChangeAdditionalData('prefixEvent', ...arguments)"
           />
         </div>
         <title-editor
           :key="campaignTitle"
           :default-value="campaignTitle"
           class="mt-30 mb-30 font-size-60 font-bold-extra"
-          @change="changeTitle"
+          @change="handleChangeCampaignTitle"
         />
 
         <maryoku-textarea
-          v-model="campaignData.description"
+          :value="campaignData.description"
           :font-size="18"
           :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(
             event.eventStartMillis,
@@ -69,13 +56,14 @@
             event.eventStartMillis,
             'dddd, MMMM D, YYYY',
           )}, so I'll know you feel the same way :)`"
+          @input="handleChangeCampaignDescription"
         />
         <rsvp-event-info-panel class="mt-60" :event="event" :start-time="eventStartTime" />
         <div>
           <title-editor
             :default-value="campaignData.additionalData.carouselTitle"
             class="font-size-20 mb-20"
-            @change="handleChangeAddtionalData('carouselTitle', ...arguments)"
+            @change="handleChangeAdditionalData('carouselTitle', ...arguments)"
           />
           <div>
             <rsvp-venue-carousel :default-images="images" :event="event" @change="changeImage" />
@@ -94,7 +82,7 @@
             <div v-if="!isEditingWearing" class="font-size-30 font-bold-extra mb-30 d-flex" style="height: 52px">
               <img
                 :src="
-                  campaignData.visibleSettings && campaignData.visibleSettings.showWearingGuide
+                  campaignVisibleSettings && campaignVisibleSettings.showWearingGuide
                     ? `${$iconURL}RSVP/wear.svg`
                     : `${$iconURL}RSVP/wear-gray.svg`
                 "
@@ -103,7 +91,7 @@
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
-                  'color-gray': !campaignData.visibleSettings || !campaignData.visibleSettings.showWearingGuide,
+                  'color-gray': !campaignVisibleSettings || !campaignVisibleSettings.showWearingGuide,
                 }"
                 style="z-index: 1"
               >
@@ -112,16 +100,17 @@
               <div>
                 <md-button
                   class="edit-btn md-red md-simple"
-                  :disabled="!campaignData.visibleSettings.showWearingGuide"
+                  :disabled="!campaignVisibleSettings.showWearingGuide"
                   @click="isEditingWearing = true"
                 >
                   Edit
                 </md-button>
               </div>
               <hide-switch
-                v-model="campaignData.visibleSettings.showWearingGuide"
-                class="ml-10"
                 label=" "
+                class="ml-10"
+                :value="campaignVisibleSettings.showWearingGuide"
+                @input="handleChangeCampaignVisibleSettings('showWearingGuide', $event)"
               />
             </div>
             <div v-else class="mb-30 d-flex" style="height: 52px">
@@ -134,16 +123,17 @@
               </md-button>
             </div>
             <maryoku-textarea
-              v-model="campaignData.additionalData.wearingGuide"
+              :value="campaignData.additionalData.wearingGuide"
               placeholder="Give your guests details about the expected dress code"
-              :disabled="!campaignData.visibleSettings.showWearingGuide"
+              :disabled="!campaignVisibleSettings.showWearingGuide"
+              @input="handleChangeAdditionalData('wearingGuide', ...arguments)"
             />
           </div>
           <div class="md-size-50 md-small-size-50">
             <div v-if="!isEditingKnowledge" class="font-size-30 font-bold-extra mb-30 d-flex" style="height: 52px">
               <img
                 :src="
-                  campaignData.visibleSettings.showKnowledge
+                  campaignVisibleSettings.showKnowledge
                     ? `${$iconURL}RSVP/lamp.svg`
                     : `${$iconURL}RSVP/lamp-gray.svg`
                 "
@@ -152,7 +142,7 @@
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
-                  'color-gray': !campaignData.visibleSettings.showKnowledge,
+                  'color-gray': !campaignVisibleSettings.showKnowledge,
                 }"
                 style="z-index: 1"
               >
@@ -161,13 +151,18 @@
               <div>
                 <md-button
                   class="edit-btn md-red md-simple"
-                  :disabled="!campaignData.visibleSettings.showKnowledge"
+                  :disabled="!campaignVisibleSettings.showKnowledge"
                   @click="isEditingKnowledge = true"
                 >
                   Edit
                 </md-button>
               </div>
-              <hide-switch v-model="campaignData.visibleSettings.showKnowledge" class="ml-10" label=" " />
+              <hide-switch
+                label=" "
+                class="ml-10"
+                :value="campaignVisibleSettings.showKnowledge"
+                @input="handleChangeCampaignVisibleSettings('showKnowledge', $event)"
+              />
             </div>
             <div v-else class="mb-30 d-flex" style="height: 52px">
               <maryoku-input v-model="knowledgeTitleContent" class="flex-1" />
@@ -179,9 +174,10 @@
               </md-button>
             </div>
             <maryoku-textarea
-              v-model="campaignData.additionalData.knowledge"
+              :value="campaignData.additionalData.knowledge"
               placeholder="Give your guests any information you find relevant"
-              :disabled="!campaignData.visibleSettings.showKnowledge"
+              :disabled="!campaignVisibleSettings.showKnowledge"
+              @input="handleChangeAdditionalData('knowledge', ...arguments)"
             />
           </div>
         </div>
@@ -189,7 +185,7 @@
       <rsvp-timeline-panel
         class="p-50"
         :can-hide="true"
-        :visible="campaignData.visibleSettings.showTimeline"
+        :visible="campaignVisibleSettings.showTimeline"
         @changeVisibility="setVisibleTimeline"
       />
     </div>
@@ -198,7 +194,7 @@
         <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10">
         Digital Participation
       </div>
-      <md-checkbox v-model="campaignData.allowOnline">
+      <md-checkbox :value="campaignData.allowOnline" @input="handleChangeCampaignAllowOnline">
         <span class="font-bold">Allow digital participation</span>
       </md-checkbox>
       <br>
@@ -209,9 +205,10 @@
             Paste link to video communication
           </div>
           <maryoku-input
-            v-model="campaignData.additionalData.zoomlink"
-            placeholder="Paste Zoom link here..."
             field-name="link"
+            placeholder="Paste Zoom link here..."
+            :value="campaignData.additionalData.zoomlink"
+            @input="handleChangeAdditionalData('zoomlink', ...arguments)"
           />
         </div>
       </div>
@@ -219,29 +216,23 @@
   </div>
 </template>
 <script>
-// core
 import { mapActions } from "vuex";
-import Swal           from "sweetalert2";
-
-// helpers
+import Swal from "sweetalert2";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import { MaryokuInput } from "@/components";
+import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
+import TitleEditor from "./components/TitleEditor";
+import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
+import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
-import S3Service     from "@/services/s3.service";
-
-// pages
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
-import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-
-// components
-import { MaryokuInput }  from "@/components";
-import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
-import HideSwitch        from "@/components/HideSwitch";
-import TitleEditor       from "./components/TitleEditor";
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 
 export default {
   components: {
+    CampaignLogo,
     MaryokuTextarea,
     MaryokuInput,
     RsvpVenueCarousel,
@@ -305,18 +296,21 @@ export default {
     user() {
       return this.$store.state.auth.user;
     },
-    campaign() {
-      return this.$store.state.campaign;
-    },
     campaignData() {
-      return this.campaign.RSVP;
+      return this.$store.state.campaign.RSVP || {};
     },
     campaignTitle() {
-      return this.campaignData ? this.campaignData.title : "Event Name";
+      return this.campaignData.title || this.event.title;
+    },
+    campaignLogoUrl() {
+      return this.campaignData.logoUrl || "";
+    },
+    campaignVisibleSettings() {
+      return this.campaignData.visibleSettings || {};
     },
     campaignDescription: {
       get() {
-        return this.campaignData ? this.campaignData.description : "";
+        return this.campaignData.description || "";
       },
       set(newValue) {
         this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "description", value: newValue });
@@ -324,7 +318,7 @@ export default {
     },
     images: {
       get() {
-        return this.campaignData.images;
+        return this.$store.state.campaign.RSVP.images;
       },
     },
     timelineDates() {
@@ -337,13 +331,10 @@ export default {
       }
       return 0;
     },
-    logoUrl() {
-      return this.campaignData.logoUrl || "static/img/Image%20199.png";
-    },
   },
   created() {
-    if (this.campaignData) {
-      this.editingContent = this.campaignData;
+    if (this.$store.state.campaign.RSVP) {
+      this.editingContent = this.$store.state.campaign.RSVP;
       if (!this.editingContent.additionalData.greetingWords) {
         const greetingWords = `Hello ${this.user.companyName ? this.user.companyName : this.user.currentTenant} ${
           this.event.guestType || "Employee"
@@ -401,35 +392,30 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
-    setCampaignAttribute(attribute) {
-      return this.$store.commit("campaign/setAttribute", attribute);
-    },
     saveTitle(type) {
-      switch (type) {
-        case "knowledge": {
-          this.campaignData.additionalData.knowledgeTitle = this.knowledgeTitleContent;
-          this.isEditingKnowledge = false;
-          break;
-        }
-        case "wearing": {
-          this.campaignData.additionalData.wearingGuideTitle = this.wearingTitleContent;
-          this.isEditingWearing = false;
-          break;
-        }
+      if (type === "knowledge") {
+        this.campaignData.additionalData.knowledgeTitle = this.knowledgeTitleContent;
+        this.isEditingKnowledge = false;
+      } else if (type === "wearing") {
+        this.campaignData.additionalData.wearingGuideTitle = this.wearingTitleContent;
+        this.isEditingWearing = false;
       }
     },
-    saveData(data = this.editingContent) {
-      return this.setCampaignAttribute({ name: "RSVP", data });
+    saveData() {
+      this.$store.commit("campaign/setCampaign", {
+        name: "RSVP",
+        data: this.editingContent,
+      });
     },
     setDefault() {
       Swal.fire({
-        title              : "Are you sure?",
-        text               : "You won't be able to revert this!",
-        confirmButtonClass : "md-button md-success btn-fill",
-        cancelButtonClass  : "md-button md-danger btn-fill",
-        confirmButtonText  : "Yes, revert it!",
-        showCancelButton   : true,
-        buttonsStyling     : false,
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
+        buttonsStyling: false,
       }).then((result) => {
         this.$store.dispatch("campaign/revertCampaign", "RSVP");
       });
@@ -439,19 +425,15 @@ export default {
     },
     async onFileChange(event) {
       const coverImageData = await getBase64(event.target.files[0]);
-      return this.handleChangeAddtionalData("coverImage", coverImageData);
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
     },
-    async onFileChangeLogo(event) {
-      const file = event.target.files[0];
-      await S3Service.fileUpload(file, file.name, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-        this.saveCampaign({ id: this.campaignData.id, logoUrl });
-      });
+    handleChangeCampaignAllowOnline(value) {
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "allowOnline", value });
     },
-    changeTitle(newTitle) {
+    handleChangeCampaignLogo(file) {
+      this.$emit("change-logo", file);
+    },
+    handleChangeCampaignTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
@@ -467,17 +449,28 @@ export default {
         .then((result) => {
         });
     },
-    handleChangeAddtionalData(key, value) {
-      return this.setCampaignAttribute({ name: "RSVP", key, value });
+    handleChangeCampaignDescription(newDescription) {
+      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "description", value: newDescription });
+    },
+    handleChangeCampaignVisibleSettings(key, value) {
+      this.$store.commit("campaign/setAttribute", {
+        name: "RSVP",
+        key: "visibleSettings",
+        value: { ...this.campaignVisibleSettings, [key]: value },
+      });
+    },
+    handleChangeAdditionalData(key, value) {
+      this.$store.commit("campaign/setAddtionalData", {
+        name: "RSVP",
+        key,
+        value,
+      });
     },
     setVisibleTimeline(visibility) {
-      this.editingContent.visibleSettings.showTimeline = visibility;
+      this.handleChangeCampaignVisibleSettings("showTimeline", visibility);
     },
     changeImage(images) {
-      return this.handleChangeAddtionalData("images", images);
-    },
-    replaceLogo() {
-      document.getElementById("replace-logo").click();
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "images", value: images });
     },
   },
 };
@@ -512,48 +505,6 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-    }
-  }
-
-  .wrapper-change-logo {
-    display: flex;
-    align-items: center;
-    margin-top: 27px;
-
-    .change-logo {
-      width: 259px;
-      height: 134px;
-      margin-right: 27px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      border-radius: 3px;
-
-      .over-logo-campaign {
-        display: none;
-        width: 100%;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(5, 5, 5, 0.55);
-        z-index: 900;
-      }
-
-      & img.logo {
-        width: 178px;
-        height: 99px;
-        object-fit: contain;
-      }
-
-      &:hover {
-        .over-logo-campaign {
-          display: flex;
-        }
-      }
     }
   }
 

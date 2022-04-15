@@ -29,7 +29,7 @@
       </template>
     </carousel>
     <div v-if="showUploadFile" class="upload-button-wrapper">
-      <md-button class="md-red maryoku-btn" @click="uploadImage">
+      <md-button id="UploadImage" class="md-red maryoku-btn" @click="uploadImage">
         <img :src="`${$iconURL}Campaign/arrow-circle-white.svg`" class="mr-10">
         Upload photos from the event
       </md-button>
@@ -42,7 +42,7 @@
         @change="onFileChange"
       >
     </div>
-    <div class="feedback-images-footer">
+    <div v-if="showDetailsUploadedFiles" class="feedback-images-footer">
       <img class="icon-photography-white" src="static/icons/Group%209348.svg">
       <span class="description">All Photos / video (5)</span>
     </div>
@@ -67,6 +67,10 @@ export default {
       default: 25,
     },
     showUploadFile: {
+      type: Boolean,
+      default: false,
+    },
+    showDetailsUploadedFiles: {
       type: Boolean,
       default: false,
     },
@@ -127,7 +131,7 @@ export default {
       right: 40px;
     }
     &.nav-left {
-      left: 60px;
+      left: 40px;
     }
   }
 

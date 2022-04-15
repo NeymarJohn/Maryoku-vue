@@ -37,7 +37,7 @@
         {{ proposal.eventData.customer ? proposal.eventData.customer.name : "" }}
       </span>
     </div>
-    <div class="proposal-graph" @click="showGraph">
+    <div class="proposal-graph" @click="edit(proposalStatus.engagement)">
       <img src="/static/icons/vendor/proposalBoard/proposal-statistic.svg" class="label-icon mr-10">
     </div>
     <div v-if="hasNegotiation" class="text-center">
@@ -199,6 +199,7 @@ export default {
         duplicate: 6,
         resend: 7,
         cancel: 8,
+        engagement: 9,
       },
       requestType: {
         ADD_MORE_TIME: 0,
@@ -216,7 +217,7 @@ export default {
     getStatusIcon(status) {
       let path = "/static/icons/vendor/proposalBoard/";
       if (status === PROPOSAL_STATUS.DRAFT) {
-        return `${path}filter-draft.svg`;
+        return `${this.$iconURL}VendorsProposalPage/path-14945.svg`;
       } else if (status === PROPOSAL_STATUS.PENDING) {
         return `${path}filter-pending.svg`;
       } else if (status === PROPOSAL_STATUS.TOP3) {
@@ -263,9 +264,6 @@ export default {
           );
         });
       }, 0);
-    },
-    showGraph() {
-      this.$emit("showGraphModal", this.proposal);
     },
   },
 };

@@ -28,7 +28,10 @@
         </div>
         <div class="change-cover-image-modal-body-carousel-image">
           <change-cover-image-carousel
+            v-if="!loading"
             :images="conceptImages"
+            :selected-index="selectedIndex"
+            @changed="changedCarouselCurrentItem"
             @select-image="selectImage"
           />
         </div>
@@ -37,7 +40,12 @@
     <template slot="footer">
       <div class="change-cover-image-modal-footer">
         <div class="sections-for-upload-cover-image">
-          <div class="section-upload-cover-image d-flex justify-content-center">
+          <div
+            @click="selectConceptImages"
+            :class="[
+              'section-upload-cover-image', 'd-flex', 'justify-content-center', 'cursor-pointer',
+            ]"
+          >
             <div class="width-80">
               <concept-image-block
                 v-if="eventConcept"
@@ -75,7 +83,7 @@
             </vue-dropzone>
           </div>
         </div>
-        <div class="change-cover-image-modal-footer-actions" >
+        <div class="change-cover-image-modal-footer-actions">
           <md-button
             class="md-white btn-cancel"
             @click="close"
@@ -113,11 +121,20 @@ export default {
     ConceptImageBlock,
     Modal,
   },
+  props: {
+    coverImage: {
+      type: String,
+      default: "",
+    }
+  },
   data() {
     return {
+      loading: false,
       selectedImage: null,
+      selectedIndex: 0,
       canvaApi: null,
       destroyDropzone: false,
+      carouselCurrentItem: 0,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         thumbnailWidth: 60,
@@ -145,8 +162,12 @@ export default {
     },
   },
   created() {
-    if (this.conceptImages.length) {
-      this.selectedImage = this.conceptImages[0].url;
+    if (this.coverImage) {
+      this.selectedImage = this.coverImage;
+      this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
+    } else {
+      this.selectedImage = (this.conceptColors && this.conceptColors.length)
+        ? this.conceptColors[0].url : null;
     }
 
     (async () => {
@@ -168,7 +189,26 @@ export default {
       this.$emit("choose-image", this.selectedImage);
     },
     selectImage(index) {
+      this.selectedIndex = index;
       this.selectedImage = this.conceptImages[index].url;
+    },
+    changedCarouselCurrentItem({ item }) {
+      this.carouselCurrentItem = item.index;
+    },
+    selectConceptImages() {
+      this.$emit("choose-image", null);
+    },
+    carouselScrollingToIndex() {
+      const countImages = this.conceptImages.length;
+      // number 5 get from prop items carousel
+      const countScroll = countImages - 5;
+      if (countScroll < 1) return;
+      const btnNext = document.getElementById("carousel-btn-next");
+      for (let i = 0; i < countScroll; i++) {
+        if (btnNext) {
+          btnNext.click();
+        }
+      }
     },
     handleClickDesignOnCanva() {
       if (this.canvaApi) {
@@ -205,11 +245,15 @@ export default {
     async addNewImageConcept(newImage) {
       const event = new CalendarEvent({ id: this.event.id });
       const images = [...this.conceptImages, newImage];
+      this.loading = true;
       await new EventConcept({ ...this.eventConcept, event, images }).save().then(() => {
         this.setEventData({
           ...this.event,
           concept: { ...this.eventConcept, images }
         });
+        this.selectImage(images.length - 1);
+        this.loading = false;
+        setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
       });
     }
   }
@@ -254,6 +298,11 @@ export default {
     height: 430px;
     object-fit: cover;
   }
+}
+
+.change-cover-image-modal-body-carousel-image {
+  width: 950px;
+  height: 85px;
 }
 
 .change-cover-image-modal-footer {

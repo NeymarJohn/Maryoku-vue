@@ -1,4 +1,5 @@
 <template>
+
   <div class="event-vendor-checkout">
     <loader :active="loading" is-full-screen :page="proposalType ? 'planner' : 'vendor'" />
     <div v-if="!loading" class="checkout-content md-layout">
@@ -7,7 +8,7 @@
           class="background-section"
           :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg) `"
         />
-        <div class="content p-50">
+        <div class="content p-20" :class="{ 'p-50' : windowWidth > 350}">
           <div class="font-size-30">
             <span v-if="pageType === 0" class="font-bold">
               <img
@@ -50,7 +51,7 @@
               :service-category="proposal.vendor.vendorCategory"
             />
 
-            <div v-if="proposal.extraServices[vendor.eventCategory.key]" class="p-30">
+            <div v-if="proposal.extraServices[vendor.eventCategory.key]" class="p-10 description-block" :class="{'p-30': windowWidth > 350}">
               <div>Would you like to upgrade & add one of those?</div>
               <div v-if="proposal.serviceCategory" class="mb-30">
                 You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
@@ -198,7 +199,7 @@
             <div class="discount-row">
               <span class="font-bold">Discount </span>
               <span class="font-bold">-{{ discount(proposal).percentage }}%</span>
-              <span class="text-right">-${{ discountedPrice(proposal) - totalPriceOfProposal(proposal) | withComma }}</span>
+              <span class="text-right">-${{ totalPriceOfProposal(proposal) - discountedPrice(proposal)| withComma }}</span>
             </div>
             <hr>
           </template>
@@ -228,9 +229,9 @@
             </div>
           </div>
         </div>
-        <div class="mt-40 policy-confirmation-block">
-          <span class="font-regular">I agree to the</span>
-          <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
+        <div class="mt-40 policy-confirmation-block d-flex align-center">
+          <span class="font-regular">I agree to the </span>
+          <a href="#" class="font-bold color-black text-underline"> Cancellation policy </a>
           <stripe-checkout
             v-if="showStripeCheckout"
             :items="stripePriceData"
@@ -258,11 +259,11 @@
         </div>
       </div>
     </div>
-    <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
+    <div class="checkout-footer white-card  mt-30 d-flex justify-content-between" :class="{'p-30': windowWidth>350}">
       <md-button class="maryoku-btn md-simple md-black" @click="back">
         Back
       </md-button>
-      <md-button class="maryoku-btn" :class="{'md-red': handleSubmitDisabled}" :disabled="!handleSubmitDisabled" @click="pay">
+      <md-button class="maryoku-btn footer-submit"  :class="{'md-red': handleSubmitDisabled}" :disabled="!handleSubmitDisabled" @click="pay">
         Submit Payment
       </md-button>
     </div>
@@ -340,8 +341,8 @@
     },
     computed: {
       handleSubmitDisabled(){
-        console.log('handleSubmitDisabled', this.proposal.signature)
-        if(this.proposal && this.proposal.signature && this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
+        if(this.agreedCancellationPolicy && this.proposal && this.proposal.signature &&
+          this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
            return true;
         }
         return false;
@@ -453,11 +454,16 @@
           totalPrice += sumOfService;
         });
 
+        if (this.onDayCordinator) {
+          totalPrice += 1000;
+        }
+
         const categoryName = proposal.vendor.eventCategory.key;
         if (proposal.extraServices[categoryName] && proposal.extraServices[categoryName].length) {
           let addedPrice = extraCost(proposal.extraServices[proposal.vendor.eventCategory.key]);
           return totalPrice + (addedPrice || 0);
         }
+
         return totalPrice;
       },
       discountedPrice(proposal) {
@@ -512,6 +518,22 @@
                     serviceCategory,
                   },
                   {headers: this.$auth.getAuthHeader()},
+          );
+          this.stripePriceData.push(res.data);
+        }
+
+        if (this.onDayCordinator) {
+          let res = await this.$http.post(
+            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+            {
+              name: "On Day Coordinator",
+              price: Math.floor(1000 * 100),
+              proposalId: this.proposal.id,
+              vendorId: this.proposal.vendor.id,
+              eventId: this.proposal.eventData ? this.proposal.eventData.id : "", ///proposal.event.id,  //not defined yet for the non maryoku
+              serviceCategory: "onDayCoordinator",
+            },
+            { headers: this.$auth.getAuthHeader() },
           );
           this.stripePriceData.push(res.data);
         }
@@ -722,6 +744,9 @@
       padding: unset;
     }
     .event-vendor-checkout {
+      .signature-wrapper{
+        margin: 30px 20px;
+      }
       .checkout-content {
         .left-panel {
           min-width: unset;
@@ -737,4 +762,46 @@
       flex: unset;
     }
   }
+@media (max-width: 350px) {
+  .align-center {
+    max-width: unset;
+    a{
+      margin-left: 5px;
+    }
+  }
+  .description-block{
+   width: 99vw;
+  }
+  .event-vendor-checkout {
+    margin-top: -50px;
+    .signature-wrapper{
+     margin: 30px 20px;
+    }
+    .checkout-content {
+      .left-panel {
+        height: 400px;
+      }
+      .right-panel {
+        .total-price-panel {
+          .discount-row {
+            margin: 0 10px;
+          }
+          .total-price-row {
+            padding: 30px 10px;
+          }
+        }
+        .total-price-panel hr {
+          margin: 0;
+        }
+        .checkout-additional {
+          padding: 30px 10px;
+        }
+      }
+    }
+  }
+  .footer-submit{
+    border-radius: 0;
+  }
+}
+
 </style>

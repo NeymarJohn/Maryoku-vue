@@ -430,6 +430,30 @@ let EventPages = {
           }
         }
       ]
+    },
+
+    {
+      path: "/events/:eventId/checkout/proposal/:proposalId/:proposalType",
+      name: "CheckoutWithVendor",
+      component: Checkout,
+      meta: {
+        title: "Plan Event",
+        gtm: "Plan Event",
+        opaque: false,
+        requiresAuth: false
+      }
+    },
+
+    {
+      path: "/events/:eventId/checkout",
+      name: "CheckoutWithCart",
+      component: Checkout,
+      meta: {
+        title: "Plan Event",
+        gtm: "Plan Event",
+        opaque: false,
+        requiresAuth: true
+      }
     }
   ]
 };
@@ -758,29 +782,6 @@ let vendorListPage = {
     gtm: "Vendors"
   }
 };
-let checkoutPageWithVendor = {
-  path: "/checkout/proposal/:proposalId/:proposalType",
-  name: "CheckoutWithVendor",
-  component: Checkout,
-  meta: {
-    title: "Plan Event",
-    gtm: "Plan Event",
-    opaque: false,
-    requiresAuth: false
-  }
-};
-
-let checkoutPageWithCart = {
-  path: "/checkout/event/:eventId",
-  name: "CheckoutWithCart",
-  component: Checkout,
-  meta: {
-    title: "Plan Event",
-    gtm: "Plan Event",
-    opaque: false,
-    requiresAuth: true
-  }
-};
 
 let calendarSyncPage = {
   path: "/calendar/sync/:calendarName",
@@ -849,8 +850,6 @@ const routes = [
   welcomeEventPage,
   others,
   calendarSyncPage,
-  checkoutPageWithVendor,
-  checkoutPageWithCart,
   proposalForUnregisterPlanner,
   ...vendorRoutes,
   {

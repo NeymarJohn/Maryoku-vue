@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
-    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
+    <progress-sidebar v-if="!showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
     <comment-sidebar v-if="showCommentPanel" :elements="barItems" page="plan" @change="changeCheckList" />
     <router-view />
   </div>

@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="header-cover-image">
-        <img :src="campaign.coverImage">
+        <img :src="coverImage">
       </div>
       <div class="content">
         <div class="decoration-line">
@@ -32,9 +32,9 @@
         <div class="content-article">
           <div class="content-article-header">
             <div v-if="showLogo || showImages" class="sub-cover">
-              <feedback-logo
-                v-if="showLogo"
-                :logo-url="campaign.logoUrl"
+              <campaign-logo
+                v-if="showLogo && logoUrl"
+                :logo-url="logoUrl"
                 class="mt-30"
                 review
               />
@@ -121,7 +121,13 @@
                 share with us photos you took from the event
               </div>
             </div>
-            <drop @drop="handleDrop">
+            <vue-dropzone
+              id="dropzone"
+              ref="myVueDropzone"
+              :options="dropzoneOptions"
+              :use-custom-slot="true"
+              @vdropzone-file-added="fileAdded"
+            >
               <div class="white-cube drop">
                 <div class="border-cube">
                   <div class="title-text-drag-and-drop">
@@ -130,13 +136,13 @@
                   <div class="or-section">
                     \\ Or \\
                   </div>
-                  <div class="upload-text-area">
+                  <div class="upload-text-area cursor-pointer">
                     <img src="/static/icons/arrow-up-red.svg" class="mr-10">
                     Upload Files
                   </div>
                 </div>
               </div>
-            </drop>
+            </vue-dropzone>
           </div>
         </div>
       </div>
@@ -179,14 +185,13 @@
           <md-icon>close</md-icon>
         </md-button>
         <feedback-upload-images-carousel
-          :images="attachmentsImages"
-          :auto-play="true"
-          :disable-filter="true"
-          :auto-play-timeout="2500"
-          :smart-speed="2500"
-          :show-button-actions="false"
-          class="carousel-upload-images"
           class-image="carousel-upload-image"
+          class="carousel-upload-images"
+          :images="attachmentsImages"
+          :auto-play-timeout="3500"
+          :smart-speed="1500"
+          :auto-play="true"
+          :loop="true"
         />
       </div>
     </fullscreen>
@@ -197,16 +202,17 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Feedback from "@/models/Feedback";
 import Campaign from "@/models/Campaign";
 import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
-import FeedbackLogo from "@/pages/app/Campaign/components/FeedbackLogo";
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
-import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
+import FeedbackUploadImagesCarousel from "./FeedbackUploadImagesCarousel";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
+import vue2Dropzone from "vue2-dropzone";
 import Swal from "sweetalert2";
 import { mapActions } from "vuex";
 import S3Service from "@/services/s3.service";
-import { Drop } from "vue-drag-drop";
 import video_extension from "video-extensions";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
@@ -214,9 +220,9 @@ export default {
     FeedbackImageCarousel,
     SharingButtonGroup,
     FeedbackQuestion,
-    FeedbackLogo,
+    CampaignLogo,
     ViewPresentation,
-    Drop,
+    vueDropzone: vue2Dropzone,
   },
   data() {
     return {
@@ -224,6 +230,8 @@ export default {
       fullScreen: false,
       campaign: null,
       event: null,
+      coverImage: null,
+      logoUrl: null,
       description: "",
       originalContent: {},
       images: [],
@@ -253,6 +261,14 @@ export default {
         document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
         video: video_extension.map(ext => `.${ext}`),
       },
+      dropzoneOptions: {
+        url: "https://httpbin.org/post",
+        createImageThumbnails: false,
+        uploadMultiple: true,
+        acceptedFiles: "image/*, video/*",
+      },
+      selectedAttachmentsTypes: false,
+      invalidSelectedFilesTypes: false,
       showFeedbackMessageSuccessful: false,
     };
   },
@@ -274,6 +290,8 @@ export default {
       this.event = this.campaign.event;
       this.description = this.campaign.description;
       this.images = this.campaign.images;
+      this.coverImage = this.campaign.coverImage;
+      this.logoUrl = this.campaign.logoUrl;
       this.visibleSettings = this.campaign.visibleSettings;
       if (this.campaign.additionalData) {
         this.additionalData = this.campaign.additionalData;
@@ -289,7 +307,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions("campaign", ["getCampaigns"]),
+    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -399,6 +417,11 @@ export default {
       alert(`You dropped files: ${JSON.stringify(filenames)}`);
     },
     downloadFiles() {
+      if (this.invalidSelectedFilesTypes) return;
+      if (!this.selectedAttachmentsTypes) {
+        const typeFiles = Object.keys(this.extensionsFiles);
+        this.selectedAttachments = this.filterFilesByType(typeFiles, this.attachments);
+      }
       const attachments = this.selectedAttachments.map(({ url }) => url);
       S3Service.downloadFiles(attachments).then((result) => {
         const tagA = document.createElement("a");
@@ -420,6 +443,18 @@ export default {
       });
     },
     selectedDownloadFiles(selectedTypeFiles) {
+      this.selectedAttachmentsTypes = true;
+      if (!selectedTypeFiles.length) {
+        this.invalidSelectedFilesTypes = true;
+        return Swal.fire({
+          title: "Invalid selected files types",
+          text: "Please select type files for download",
+          type: "error",
+          confirmButtonClass: "md-button md-red maryoku-btn",
+          buttonsStyling: false,
+        });
+      }
+      this.invalidSelectedFilesTypes = false;
       this.selectedAttachments = this.filterFilesByType(selectedTypeFiles, this.attachments);
     },
     onPlay() {
@@ -427,7 +462,15 @@ export default {
     },
     closeFullScreen() {
       this.fullScreen = false;
-    }
+    },
+    fileAdded(file) {
+      const extension = file.type.split("/")[1];
+      const fileName = uuidv4();
+      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`, true).then((response) => {
+        const file = response.data.upload;
+        this.images.unshift({ src: file.url });
+      });
+    },
   }
 };
 </script>

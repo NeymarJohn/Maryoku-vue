@@ -287,7 +287,7 @@
               </div>
             </template>
           </div>
-          <template v-for="(service, serviceIndex) in serviceCards[0]">
+          <template v-for="(service, serviceIndex) in serviceCards">
             <template v-if="selectedCategory && selectedCategory.componentId == service.serviceCategory">
               <div :key="`serviceGroup-${serviceIndex}` " class="mt-80 mb-80">
                 <div class="booking-proposals">
@@ -980,6 +980,7 @@
                 this.$router.push({
                     name: "CheckoutWithVendor",
                     params: {
+                    eventId: this.event.id,
                     proposalId: this.selectedProposal.id,
                     proposalType: "planner",
                     },

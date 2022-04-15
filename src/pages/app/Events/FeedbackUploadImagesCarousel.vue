@@ -7,26 +7,15 @@
       :dots="false"
       :nav="false"
       :number="2"
+      :autoplay-timeout="autoPlayTimeout"
+      :smart-speed="smartSpeed"
+      :autoplay="autoPlay"
+      :loop="loop"
       class="feedback-carousel"
-      @changed="change"
     >
-      <template slot="prev">
-        <button class="btn-prev nav-left nav-btn">
-          <md-icon class="icon-arrow-left">
-            keyboard_arrow_left
-          </md-icon>
-        </button>
-      </template>
       <div v-for="(item, index) in images" :key="index" class="carousel-item">
-        <img :src="item.url" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
+        <img :src="item.src" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
       </div>
-      <template slot="next">
-        <button class="btn-next nav-right nav-btn">
-          <md-icon class="icon-arrow-right">
-            keyboard_arrow_right
-          </md-icon>
-        </button>
-      </template>
     </carousel>
   </div>
 </template>
@@ -47,12 +36,24 @@ export default {
       type: String,
       default: "",
     },
+    autoPlay: {
+      type: Boolean,
+      default: false
+    },
+    autoPlayTimeout: {
+      type: Number,
+      default: 500
+    },
+    smartSpeed: {
+      type: Number,
+      default: 500
+    },
+    loop: {
+      type: Boolean,
+      default: false,
+    }
   },
   methods: {
-    change(event) {
-      const itemIndex = event.item.index;
-      this.$emit("change-item-index", itemIndex);
-    },
     setAltImg(event, item) {
       event.target.src = item.imageData;
     },
@@ -69,7 +70,6 @@ export default {
   .btn-next, .btn-prev {
     width: 31px;
     height: 31px;
-    cursor: pointer;
 
     .icon-arrow-right, .icon-arrow-left {
       font-size: 31px !important;
@@ -105,6 +105,7 @@ export default {
     border-radius: 3px;
     overflow: hidden;
     position: relative;
+    padding-top: 75%;
 
     .carousel-image {
       width: 942px;

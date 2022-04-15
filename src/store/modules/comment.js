@@ -154,7 +154,12 @@ const actions = {
   },
 
   addComment({ commit, state }, comment) {
-    const commentComponent = new EventCommentComponent({ id: comment.eventCommentComponent.id });
+    let commentComponent = null;
+    if(comment.eventCommentComponent) {
+      commentComponent = new EventCommentComponent({ id: comment.eventCommentComponent.id });
+    } else {
+      commentComponent = new EventCommentComponent({ id: comment.commentComponent.id });
+    }
     if (state.guestName) comment = { ...comment, name: state.guestName };
     return new Promise((resolve, reject) => {
       new EventComment(comment)
