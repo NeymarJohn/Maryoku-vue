@@ -7,13 +7,15 @@
         </div>
         <div class="cover-preview">
           <img v-if="campaignData.coverImage" :src="campaignData.coverImage" class="mr-10">
-          <concept-image-block
-            v-else
-            class="hidden"
-            :images="concept.images"
-            :colors="concept.colors"
-            border="no-border"
-          />
+          <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
+            <concept-image-block
+              class="change-cover-concept"
+              :images="concept.images"
+              :colors="concept.colors"
+              border="no-border"
+            />
+          </div>
+          <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png">
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover(Size 1200 * 400)
