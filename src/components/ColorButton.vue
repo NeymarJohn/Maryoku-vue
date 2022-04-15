@@ -32,7 +32,7 @@
       <div>
         <div class="chosen-color-block">
           <input :value="bgc" style="width: 45%" @change="inputUpdateValue">
-          <md-button class="md-rose md-simple save-color-button"  @click="saveColor"> Save </md-button>
+          <md-button class="md-rose md-simple" style="border-radius: 3px; border: 1px solid; font-weight: 800; width: 45% " @click="saveColor"> Save </md-button>
         </div>
         <div class="select-colors">
           <span>My Saved Colors</span>
@@ -46,7 +46,7 @@
           <span v-else style="font-weight: normal; font-size: 12px; color: black">No saved colors</span>
         </div>
         <div class="select-colors">
-          <span>Last Piked Colors</span>
+          <span style="margin-bottom: 0 ">Last Piked Colors</span>
           <div class="colors-wrapper">
             <span v-for="(colorItem, i) in lastPickedColors"
                   :key="i"
@@ -121,7 +121,6 @@ export default {
       hex: this.value ? this.value.color : "",
       a: this.value ? this.value.opacity : 1,
     },
-    savedColors: null ,
   }),
   computed: {
     bgc() {
@@ -137,6 +136,10 @@ export default {
       if (this.selectedColour) return this.selectedColour.a;
       return 1;
     },
+    savedColors() {
+      if (localStorage.savedColors) return JSON.parse(localStorage.savedColors);
+      return null;
+    },
     lastPickedColors() {
       return JSON.parse(localStorage.lastColors);
     }
@@ -148,9 +151,6 @@ export default {
     },
   },
   created() {
-    if (localStorage.savedColors) {
-      this.savedColors = JSON.parse(localStorage.savedColors);
-    }
     this.selectedColour.hex = this.value.color;
     this.selectedColour.a = this.value.alpha;
   },
@@ -165,11 +165,10 @@ export default {
             hex: this.selectedColour.hex,
             a: this.selectedColour.a
           },
-          ...this.savedColors.slice(0, 5)
+          ...this.savedColors.slice(0, 4)
         ];
       }
       localStorage.setItem("savedColors", JSON.stringify(colors));
-      this.savedColors = JSON.parse(localStorage.savedColors);
     },
     inputUpdateValue(e){
       this.updateValue({hex:e.target.value});
@@ -232,19 +231,9 @@ export default {
     z-index: 16;
     background-color: white;
     .chosen-color-block{
-      padding: 0 5px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-    }
-    .save-color-button {
-      border-radius: 3px;
-      border: 1px solid;
-      font-weight: 800;
-      width: 45%;
-      color: #f51355;
-      font-family: 'Manrope-Bold';
-      font-size: 16px;
     }
     span{
          display: block;
@@ -253,8 +242,6 @@ export default {
     .select-colors {
       span{
         margin-bottom: 0;
-        text-align: left;
-        padding-left: 6px;
       }
       color: #a0a0a0;
       .colors-wrapper {

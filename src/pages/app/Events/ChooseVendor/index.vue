@@ -360,14 +360,6 @@ export default {
       this.showCounterPage = false;
       this.showProposals = false;
     },
-    async updateExpiredTime() {
-      // let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
-      //   id: this.currentRequirement.id,
-      //   expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
-      // })
-      // console.log('updateExpiredTime', res);
-      // this.currentRequirement = res.data.item;
-    },
     goDetailPage(proposal) {
       this.showDetails = true;
       if (proposal.selectedVersion > -1)

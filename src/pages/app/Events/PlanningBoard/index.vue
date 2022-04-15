@@ -354,60 +354,69 @@
         </template>
       </div>
 
-
-      <div v-if="categoryProposals.length"
-           class="proposal-footer white-card d-flex justify-content-between"
-      >
-        <div class="d-flex justify-content-start">
-          <md-button
-            class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
-            @click="scrollToTop"
-          >
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">>
-          </md-button>
-          <drop-down class="d-inline-block">
-            <button class="more-button cursor-pointer" data-toggle="dropdown">
-              <span class="more-actions font-size-16">
+      <template v-if="requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued">
+        <div v-if="categoryProposals.length"
+             class="proposal-footer white-card d-flex justify-content-between"
+        >
+          <div class="d-flex justify-content-start">
+            <md-button
+              class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
+              @click="scrollToTop"
+            >
+              <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+            </md-button>
+            <drop-down class="d-inline-block">
+              <button class="more-button cursor-pointer" data-toggle="dropdown">
+              <span class="more-actions font-size-16 ml-20">
                 {{ "More actions" }}
               </span>
               <md-icon class="more-actions font-size-22">
                 keyboard_arrow_up
               </md-icon>
-            </button>
-            <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
-              <li v-for="action in moreActions" class="other-list" :key="action.label">
-                <a class="other-item font-size-16" @click="handleAction(action.value)">
-                  <div class="other-name">
-                    <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
-                    {{ action.label }}
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </drop-down>
+              </button>
+              <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
+                <li v-for="action in moreActions" class="other-list" :key="action.label">
+                  <a class="other-item font-size-16" @click="handleAction(action.value)">
+                    <div class="other-name">
+                      <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
+                      {{ action.label }}
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </drop-down>
+          </div>
+          <div class="d-flex justify-content-end">
+            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
+              Book This Vendor
+              <md-icon>keyboard_arrow_right</md-icon>
+            </md-button>
+
+            <md-button class="md-red maryoku-btn w-min-250" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
+              Add To Cart
+            </md-button>
+          </div>
         </div>
-        <div class="d-flex justify-content-end">
-          <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
-            Book This Vendor
-            <md-icon>keyboard_arrow_right</md-icon>
+        <div v-else class="proposal-footer white-card d-flex align-center">
+          <md-button class="md-simple ml-auto md-black maryoku-btn" @click="getSpecification({
+                        category: selectedCategory,
+                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                      })">
+            Change Requirements
+          </md-button>
+          <md-button class="md-simple md-black ml-0 maryoku-btn" @click="updateExpiredTime">
+            I need those proposals urgent
           </md-button>
 
-          <md-button class="md-red maryoku-btn" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
-            Add To Cart
+        </div>
+      </template>
+      <template v-else>
+        <div class="proposal-footer white-card d-flex justify-content-end">
+          <md-button class="md-red maryoku-btn" @click="findVendors">
+            Find Vendors for this category
           </md-button>
         </div>
-      </div>
-      <div v-else class="proposal-footer white-card d-flex justify-content-end">
-        <div>
-          <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
-            <md-icon>shopping_cart</md-icon>
-            &nbsp;&nbsp; Add To Cart
-          </md-button>
-          <md-button v-if="step === 1" class="md-red maryoku-btn" @click="findVendors">
-            Find Me Vendors
-          </md-button>
-        </div>
-      </div>
+      </template>
     </template>
 
     <AdditionalRequestModal
@@ -465,7 +474,7 @@ import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { postReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
-import ProposalEngagement from '../../../../models/ProposalEngagement'
+import ProposalEngagement from '@/models/ProposalEngagement'
 
 const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
@@ -724,7 +733,6 @@ export default {
         } else {
           $(".headers").removeClass("fixed-top");
         }
-        console.log('scroll', scroll)
     });
 
     this.isLoading = false;
@@ -940,6 +948,13 @@ export default {
       }
       return null;
     },
+    async updateExpiredTime() {
+      let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
+        id: this.currentRequirement.id,
+        expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
+      })
+      this.currentRequirement = res.data.item;
+    },
     async goDetailPage(proposal) {
 
       if (proposal.selectedVersion > -1)
@@ -949,21 +964,21 @@ export default {
       const engagement = await getReq(`/1/proposal/${this.proposal.id}/engagement/proposal`);
       console.log("engagement", engagement);
 
-      // if (engagement) {
-      //   new ProposalEngagement({
-      //     ...engagement.data,
-      //     open: [moment().format("MM/dd/yyyy")],
-      //   })
-      //     .for(new Proposal({id: this.proposal.id}))
-      //     .save();
-      // } else {
-      //   new ProposalEngagement({
-      //     open: [moment().format("MM/dd/yyyy")],
-      //     proposalId: this.proposal.id
-      //   })
-      //     .for(new Proposal({id: this.proposal.id}))
-      //     .save();
-      // }
+      if (engagement) {
+        new ProposalEngagement({
+          ...engagement.data,
+          open: [moment().format("MM/dd/yyyy")],
+        })
+          .for(new Proposal({id: this.proposal.id}))
+          .save();
+      } else {
+        new ProposalEngagement({
+          open: [moment().format("MM/dd/yyyy")],
+          proposalId: this.proposal.id
+        })
+          .for(new Proposal({id: this.proposal.id}))
+          .save();
+      }
 
       this.showDetails = true;
     },
@@ -1124,6 +1139,7 @@ export default {
     position: fixed;
     right: 0;
     left: 0;
+    top: 0;
     padding-left: 480px;
     animation: slide-down 0.7s;
     opacity: 1;
@@ -1208,8 +1224,6 @@ export default {
     width: 100%;
 
     button {
-      width: 250px;
-      margin-left: 20px;
       img {
         width: 22px;
         margin-right: 10px;
