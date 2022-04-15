@@ -34,13 +34,8 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import WizardStatusBar from "./componenets/WizardStatusBar";
 
 export default {
-
-  components: {
-    WizardStatusBar,
-  },
 	data() {
 		return {
 			selectedType: {},

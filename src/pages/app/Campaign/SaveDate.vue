@@ -47,35 +47,73 @@
         <div class="font-size-22 mb-50">
           MORE DETAILS COMING SOON
         </div>
-        <div class="d-flex align-center justify-content-center">
-          <campaign-logo
-            class="d-flex justify-content-center"
-            :logo-url="campaignLogoUrl"
-            :show-logo="campaignVisibleSettings.showLogo"
-            @change-logo="handleChangeCampaignLogo"
-            @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
-          />
+        <vue-dropzone
+          v-if="!campaignData.logoUrl"
+          id="dropzone"
+          ref="myVueDropzone"
+          :options="dropzoneOptions"
+          :use-custom-slot="true"
+          @vdropzone-file-added="logoSelected"
+        >
+          <span class="color-red font-bold">
+            <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">Upload company logo
+          </span>
+          <br>Or
+          <br>
+          <span class="color-dark-gray">Drag your file here</span>
+        </vue-dropzone>
+        <div v-else class="d-flex align-center justify-content-center">
+          <div class="image-logo">
+            <div class="logo-action">
+              <div class="color-white mb-20 font-bold font-size-16 button" @click="removeLogo">
+                <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10"> Delete
+              </div>
+              <div class="color-white font-bold font-size-16 button" @click="changeLogo">
+                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"> Replace
+              </div>
+            </div>
+            <img :src="campaignData.logoUrl">
+            <input
+              id="logoImage"
+              style="display: none"
+              name="attachment"
+              type="file"
+              multiple="multiple"
+              @change="onLogoChange"
+            >
+          </div>
+          <div class="display-logo ml-50">
+            <hide-switch
+              label="Logo"
+              class="showlogo-switch large-switch"
+              :value="campaignVisibleSettings.showLogo"
+              @input="handleChangeCampaignVisibleSettings"
+            />
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import { getBase64 } from "@/utils/file.util";
 import TitleEditor from "./components/TitleEditor";
 import Swal from "sweetalert2";
+import S3Service from "@/services/s3.service";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Loader } from "@/components";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
+import HideSwitch from "@/components/HideSwitch";
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
 export default {
   components: {
-    CampaignLogo,
+    HideSwitch,
+    vueDropzone: vue2Dropzone,
     ConceptImageBlock,
     MaryokuTextarea,
     TitleEditor,
@@ -94,9 +132,25 @@ export default {
   },
   data: function () {
     return {
+      dropzoneOptions: {
+        url: "https://httpbin.org/post",
+        thumbnailWidth: 150,
+        maxFilesize: 0.5,
+        headers: { "My-Awesome-Header": "header value" },
+      },
       logo: null,
       logoImageData: "",
       placeHolder: placeHolder,
+      originContent: {
+        title: "",
+        description: "",
+        coverImage: `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`,
+        logoUrl: "",
+        campaignStatus: "EDITING",
+        visibleSettings: {
+          showLogo: true,
+        },
+      },
     };
   },
   computed: {
@@ -109,32 +163,22 @@ export default {
     campaignData() {
       return this.$store.state.campaign.SAVING_DATE || {};
     },
-    coverImage() {
-      return this.campaignData.coverImage || "";
-    },
     campaignTitle() {
-      return this.campaignData.title || this.event.title;
-    },
-    campaignLogoUrl() {
-      return this.campaignData.logoUrl || "";
+      return this.campaignData.title || "New Event";
     },
     campaignDescription() {
       return this.campaignData.description || "";
     },
+    coverImage() {
+      return this.campaignData.coverImage || "";
+    },
     campaignVisibleSettings() {
-      const visibleSettings = this.campaignData.visibleSettings;
-      return {
-        showLogo: true,
-        ...visibleSettings,
-      };
+      return this.campaignData.visibleSettings || {};
     },
   },
   methods: {
     handleChangeCoverImage(event) {
       this.$emit("change-cover-image", event);
-    },
-    handleChangeCampaignLogo(file) {
-      this.$emit("change-logo", file);
     },
     setDefault() {
       Swal.fire({
@@ -148,6 +192,17 @@ export default {
       }).then((result) => {
         this.$store.dispatch("campaign/revertCampaign", "SAVING_DATE");
       });
+    },
+    async logoSelected(file) {
+      this.logo = file;
+      this.logoImageData = await getBase64(file);
+      this.campaignData.logoUrl = this.logoImageData;
+      const extension = file.type.split("/")[1];
+      const logoName = `${this.event.id}`;
+      S3Service.fileUpload(file, logoName, "logos").then((res) => {
+        this.$store.dispatch("campaign/setLogo", { logoUrl: res });
+      });
+      this.$emit("changeInfo", { field: "logo", value: this.logoImageData });
     },
     handleChangeCampaignTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
@@ -168,17 +223,23 @@ export default {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "description", value: newDescription });
     },
     handleChangeCampaignVisibleSettings(key, value) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "RSVP",
-        key: "visibleSettings",
-        value: { ...this.campaignVisibleSettings, [key]: value },
-      });
+      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key, value });
     },
     chooseFiles() {
       document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
       this.coverImage = await getBase64(event.target.files[0]);
+    },
+    async onLogoChange(event) {
+      // this.campaignData.logoUrl = await getBase64(event.target.files[0]);
+      this.logoSelected(event.target.files[0]);
+    },
+    changeLogo() {
+      document.getElementById("logoImage").click();
+    },
+    removeLogo() {
+      this.campaignData.logoUrl = null;
     },
   },
 };
@@ -230,6 +291,11 @@ export default {
       line-height: 1.5em;
       font-size: 16px;
     }
+  }
+  .vue-dropzone {
+    border: dashed 2px #f51355;
+    width: 275px;
+    margin: auto;
   }
   .image-logo {
     margin-left: 200px;

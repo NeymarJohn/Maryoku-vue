@@ -40,6 +40,7 @@
             v-for="(service, index) in extraServices"
             :key="index"
             :category="service.title"
+            :services="servicesByCategory(service.componentId)"
             :is-collapsed="true"
             :is-dropdown="true"
             :proposal-range="true"
@@ -182,6 +183,7 @@ export default {
   },
   methods: {
     selectSecondCategory(serviceCategory) {
+      // console.log('selectSecondCategory', serviceCategory);
       this.$store.commit("vendorProposal/setValue", { key: "currentSecondaryService", value: serviceCategory });
     },
     flatDeep(arr, d = 1) {
@@ -193,11 +195,10 @@ export default {
       const services = this.services.filter((s) => s.name == category);
 
       if (services.length > 0) {
-        // return this.flatDeep(
-        //   services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-        //   Infinity,
-        // );
-        return []
+        return this.flatDeep(
+          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+          Infinity,
+        );
       } else {
         return [];
       }

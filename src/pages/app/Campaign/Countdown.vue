@@ -22,7 +22,7 @@
             :value="campaignVisibleSettings.showComing"
             class="ml-20"
             label="coming"
-            @input="handleChangeCampaignVisibleSettings('showComing', $event)"
+            @input="changeVisibleSettings('showComing', $event)"
           />
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
@@ -31,7 +31,7 @@
             :value="campaignVisibleSettings.showCountdown"
             class="ml-20"
             label="countdown"
-            @input="handleChangeCampaignVisibleSettings('showCountdown', $event)"
+            @input="changeVisibleSettings('showCountdown', $event)"
           />
         </div>
         <div class="cover-image-button">
@@ -43,7 +43,7 @@
       <title-editor
         :default-value="campaignTitle"
         class="font-size-50 font-bold-extra text-center line-height-1 mb-60"
-        @change="handleChangeCampaignTitle"
+        @change="changeTitle"
       />
       <hr>
       <div class="d-flex mt-60">
@@ -52,17 +52,17 @@
           :placeholder="placeholder"
           class="mr-60 flex-1"
           style="padding: 40px 60px 40px 40px"
-          @input="handleChangeCampaignDescription"
+          @input="changeDescription"
         />
         <rsvp-event-info-panel class="flex-1" :event="event" />
       </div>
       <div class="mt-60 logo-section d-flex align-center justify-content-center">
-        <campaign-logo
-          class="d-flex justify-content-center"
-          :logo-url="campaignLogoUrl"
-          :show-logo="campaignData.visibleSettings.showLogo"
-          @change-logo="handleChangeCampaignLogo"
-          @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
+        <img :src="campaignData.logoUrl">
+        <hide-switch
+          :value="campaignVisibleSettings.showLogo"
+          class="ml-20"
+          label="logo"
+          @input="changeVisibleSettings('showLogo', $event)"
         />
       </div>
     </div>
@@ -73,7 +73,6 @@ import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import CountdownTime from "./components/CountdownTime";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
@@ -82,7 +81,6 @@ import Swal from "sweetalert2";
 export default {
   components: {
     CountdownTime,
-    CampaignLogo,
     RsvpEventInfoPanel,
     ConceptImageBlock,
     MaryokuTextarea,
@@ -116,16 +114,13 @@ export default {
       return this.$store.state.campaign.COMING_SOON || {};
     },
     campaignTitle() {
-      return this.campaignData.title || this.event.title;
-    },
-    campaignLogoUrl() {
-      return this.campaignData.logoUrl || "";
+      return this.$store.state.campaign.COMING_SOON.title || "Event Name";
     },
     coverImage() {
-      return this.campaignData.coverImage || "";
+      return this.$store.state.campaign.COMING_SOON.coverImage || "";
     },
     campaignDescription() {
-      return this.campaignData.description || "";
+      return this.$store.state.campaign.COMING_SOON.description || "";
     },
     campaignVisibleSettings() {
       const visibleSettings = this.campaignData.visibleSettings;
@@ -175,16 +170,16 @@ export default {
         }
       });
     },
-    handleChangeCampaignTitle(newTitle) {
+    changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
     },
-    handleChangeCampaignDescription(newDescription) {
+    changeDescription(newDescription) {
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newDescription });
     },
-    handleChangeCampaignVisibleSettings(key, value) {
+    changeVisibleSettings(key, value) {
       const visibleSettings = this.campaignVisibleSettings;
       this.$store.commit("campaign/setAttribute", {
         name: "COMING_SOON",
@@ -194,9 +189,6 @@ export default {
     },
     handleChangeCoverImage(event) {
       this.$emit("change-cover-image", event);
-    },
-    handleChangeCampaignLogo() {
-      this.$emit("change-logo", event);
     },
     async onFileChange(event) {
       const imageData = await getBase64(event.target.files[0]);

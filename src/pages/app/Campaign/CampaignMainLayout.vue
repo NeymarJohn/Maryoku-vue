@@ -200,7 +200,6 @@
                     :info="{ ...campaignTabs[1], ...campaignInfo }"
                     :show-change-cover="true"
                     @changeInfo="changeInfo"
-                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -212,7 +211,6 @@
                 class="white-card"
                 :show-change-cover="true"
                 @changeInfo="changeInfo"
-                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -232,7 +230,6 @@
                   <rsvp
                     ref="rsvp"
                     :info="{ ...campaignTabs[2], ...campaignInfo }"
-                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -241,7 +238,6 @@
                 v-else
                 ref="rsvp"
                 :info="{ ...campaignTabs[2], ...campaignInfo }"
-                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -261,7 +257,6 @@
                   <countdown
                     ref="countdown"
                     :info="{ ...campaignTabs[3], ...campaignInfo }"
-                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -271,7 +266,6 @@
                 ref="countdown"
                 :info="{ ...campaignTabs[3], ...campaignInfo }"
                 class="white-card"
-                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -291,7 +285,6 @@
                   <feedback
                     ref="feedback"
                     :info="{ ...campaignTabs[4], ...campaignInfo }"
-                    @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
                 </template>
@@ -301,7 +294,6 @@
                 ref="feedback"
                 :info="{ ...campaignTabs[4], ...campaignInfo }"
                 class="white-card"
-                @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
             </template>
@@ -564,7 +556,6 @@
     </div>
     <change-cover-image-modal
       v-if="showChangeCoverModal"
-      :cover-image="currentCampaign.coverImage"
       @close="close"
       @choose-image="chooseImage"
     />
@@ -594,7 +585,6 @@ import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import { Loader } from "@/components";
-import { v4 as uuidv4 } from "uuid";
 const VueHtml2pdf = () => import("vue-html2pdf");
 
 const defaultSettings = {
@@ -758,7 +748,7 @@ export default {
         return;
       }
 
-      if (this.selectedTab === 4 && (!campaignData.images || !campaignData.images.length)) {
+      if (this.selectedTab === 4 && !campaignData.images || !campaignData.images.length) {
         Swal.fire({
           title: "Please select images for event",
           buttonsStyling: false,
@@ -933,25 +923,6 @@ export default {
         this.campaignTabs[this.selectedTab].name,
         "STARTED"
       );
-    },
-    changeCampaignLogo(file) {
-      const changeLogo = (logoUrl) => {
-        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-        this.saveCampaign({ id: this.campaignData.id, logoUrl });
-      };
-      if (!file) {
-        changeLogo(file);
-      }
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      new Promise(() => {
-        S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-          changeLogo(logoUrl);
-        });
-      });
     }
   },
   computed: {

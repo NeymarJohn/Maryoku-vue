@@ -2,7 +2,7 @@
   <Modal v-if="showModal" :styles="modalCustomStyles">
     <template slot="header">
       <div class="header">
-        <span> <i class="fas fa-pencil-alt" /> {{windowWidth>350? "Enter Your Signature " : "Sign here"}}</span>
+        <span> <i class="fas fa-pencil-alt" /> Enter Your Signature</span>
         <div @click="closeModal">
           <md-icon>close</md-icon>
         </div>
@@ -133,6 +133,7 @@ export default {
           this.signatureName = this.signature.signatureName;
           this.signatureData = this.signature.jpeg;
           this.uploadedSignature = this.signature.uploadedSignature || "";
+          console.log('mounted', this.signature)
       }
   },
     methods: {
@@ -193,8 +194,7 @@ export default {
   computed: {
     modalCustomStyles() {
       return {
-        header: "padding: 0",
-        footer: this.windowWidth < 960 ? "display: block; padding: 0":"",
+        header: "padding: 0"
       };
     }
   },
@@ -334,15 +334,6 @@ export default {
       margin: 30px 0;
       width: 100%;
     }
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .header {
-    padding: 20px 10px;
-  }
-  .body .signature-editor .signature-description{
-    left: 15%;
   }
 }
 </style>

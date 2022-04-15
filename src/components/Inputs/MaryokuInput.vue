@@ -53,9 +53,10 @@
       <div ref="timePickerPanel" class="date-picker maryoku picker-panel" style="z-index: 200 !important">
         <div class="d-flex pl-10">
           <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
+          <!-- {{dateData && dateData.selectedDate}} -->
           <span class="p-5">{{ getFormattedDate }}</span>
         </div>
-
+        <!-- <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div> -->
         <div>
           <FunctionalCalendar
             v-model="dateData"

@@ -171,11 +171,9 @@ export default {
     },
   },
   watch: {
-    service(newValue){console.log("proposal.item.secondary.service", newValue);},
-    additionalServices(newVal){console.log("proposal.additional", newVal);}
+    service(newValue){console.log("proposal.item.secondary.service", newValue);}
   },
   created() {
-    console.log("secondaryService", this.$store.state.vendorProposal);
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
       // if (
@@ -263,7 +261,6 @@ export default {
         services = services.filter(s => s !== category);
         this.isExpanded = false;
       }
-
       this.$store.commit("vendorProposal/setAdditionalServices", services);
 
       this.$root.$emit("update-additional-services", category);

@@ -2,7 +2,7 @@
   <modal
     :class="{
       'upload-files-modal': true,
-      'upload-files-modal-with-carousel': !!attachments.length
+      'upload-files-modal-with-carousel': !!files.length
     }"
   >
     <template slot="header">
@@ -12,8 +12,8 @@
             Upload Files
           </div>
           <div class="upload-files-text">
-            Drag and drop your files below. You can upload several files at a time.
-            Click here to browse for files on your computer.
+            Drag and drop your files, you can upload several files together,
+            click here to upload files from your computer
           </div>
         </div>
         <div class="graph-close-button">
@@ -21,10 +21,27 @@
             <md-icon>clear</md-icon>
           </md-button>
         </div>
+        <div v-if="files.length" class="upload-files-list">
+          <div
+            v-for="(file, index) in files"
+            :key="index"
+            :class="{
+              'upload-files-list-item': true,
+              'upload-files-list-item-active': carouselItemIndex === index,
+            }"
+          >
+            <span class="upload-files-list-item-text">
+              {{ file.name }}
+            </span>
+            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.url)">
+              <md-icon class="icon-close">close</md-icon>
+            </span>
+          </div>
+        </div>
       </div>
     </template>
     <template slot="body">
-      <div v-if="!attachments.length" class="upload-files-modal-body-content">
+      <div v-if="!files.length" class="upload-files-modal-body-content">
         <div class="upload-files-white-cube">
           <vue-dropzone
             id="dropzone"
@@ -32,7 +49,7 @@
             :options="dropzoneOptions"
             :use-custom-slot="true"
             class="file-drop-zone upload-section text-center drop feedback-drop-zone"
-            @vdropzone-files-added="filesAdded"
+            @vdropzone-file-added="fileAdded"
           >
             <md-button class="choose-file-button">
               <img src="/static/icons/red-clip.svg">
@@ -49,35 +66,18 @@
           </vue-dropzone>
         </div>
       </div>
-      <div v-else class="upload-files-modal-body-content-with-carousel">
-        <div v-if="attachments.length" class="upload-files-list">
-          <div
-            v-for="(file, index) in attachments"
-            :key="file.name"
-            :class="{
-              'upload-files-list-item': true,
-              'upload-files-list-item-active': carouselItemIndex === index,
-            }"
-          >
-            <span class="upload-files-list-item-text">
-              {{ file.name }}
-            </span>
-            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.name)">
-              <md-icon class="icon-close">close</md-icon>
-            </span>
-          </div>
-        </div>
+      <div v-else>
         <feedback-upload-images-carousel
           class="carousel-upload-images"
           class-image="carousel-upload-image"
-          :images="attachments"
+          :images="images"
           @change-item-index="changeCarouselItemIndex"
         />
       </div>
     </template>
     <template slot="footer">
       <div class="upload-files-modal-footer-content">
-        <div v-if="!attachments.length" class="d-flex">
+        <div v-if="!files.length" class="d-flex">
           <img src="/static/icons/red-delete-icon.svg">
           <div class="bottom-block-delete-text">
             Delete the images marked with V
@@ -86,17 +86,16 @@
         <div v-else class="d-flex">
           <img src="/static/icons/red-delete-icon.svg">
           <div class="bottom-block-presentation-text">
-            Put a check next to the file you want to appear in the main view.
+            Mark in V the presentation you want to appear in the main view
           </div>
         </div>
         <div class="footer-content-actions">
-          <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles" />
           <div class="cancel-text-bottom-block" @click="close">
             Cancel
           </div>
           <md-button
             class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default"
-            @click="clickUploadFiles"
+            @click="uploadAllFiles"
           >
             Upload files
           </md-button>
@@ -113,6 +112,7 @@ import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import S3Service from "@/services/s3.service";
 import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
+import { getBase64 } from "@/utils/file.util";
 
 export default {
   name: "FeedbackUploadImagesModal",
@@ -125,11 +125,7 @@ export default {
     folderNameForUpload: {
       type: String,
       required: true,
-    },
-    attachments: {
-      type: Array,
-      default: () => [],
-    },
+    }
   },
   data() {
     return {
@@ -142,6 +138,8 @@ export default {
         acceptedFiles: "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
         headers: { "My-Awesome-Header": "header value" },
       },
+      files: [],
+      images: [],
       carouselItemIndex: 0,
     };
   },
@@ -149,48 +147,42 @@ export default {
     close() {
       this.$emit("close");
     },
-    clickUploadFiles() {
-      document.getElementById("upload-files").click();
+    chooseFiles() {
+      document.getElementById("coverImage").click();
     },
-    filesAdded(files) {
-      const functionsUploadFiles = [];
-      for (const file of files) {
-        const extension = file.type.split("/")[1];
-        const fileName = uuidv4();
-        functionsUploadFiles.push(
-          S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true)
-        );
-      }
-      Promise.all(functionsUploadFiles).then((responses) => {
-        this.isLoading = false;
-        const files = responses.map(({ data }) => data.upload);
-        this.$emit("upload-files", [...this.attachments, ...files]);
-      });
+    async fileAdded(file) {
+      const image = await getBase64(file);
+      this.images.push({ src: image });
+      this.files.push(file);
     },
-    deleteFile(fileName) {
-      const deleteItemIndex = this.attachments.findIndex((file) => file.name === fileName);
-      const currentItemIndex = this.carouselItemIndex;
+    deleteFile(fileURL) {
+      const deleteItemIndex = this.files.findIndex(file => file.url === fileURL);
       const deleteCurrentItem = (deleteItemIndex === currentItemIndex);
-      if (deleteCurrentItem && this.carouselItemIndex === 0) {
-        this.carouselItemIndex = 0;
-      }
-      if (deleteCurrentItem && currentItemIndex > 0) {
-        // this.carouselItemIndex = currentItemIndex - 1;
+      const currentItemIndex = this.carouselItemIndex;
+      if (deleteCurrentItem) {
         this.carouselItemIndex = 0;
       }
       if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
-        // this.carouselItemIndex = currentItemIndex - 1;
-        this.carouselItemIndex = 0;
+        this.carouselItemIndex = this.carouselItemIndex - 1;
       }
-      const images = this.attachments.filter((file, index) => index !== deleteItemIndex);
-      this.$emit("upload-files", images);
+      this.files = this.files.filter((file, index) => index !== deleteItemIndex);
     },
     changeCarouselItemIndex(itemIndex) {
       this.carouselItemIndex = itemIndex;
     },
-    uploadFiles(event) {
-      this.filesAdded(event.target.files);
-    },
+    uploadAllFiles() {
+      const functionsUploadFiles = this.files
+        .map((file) => {
+          const extension = file.type.split("/")[1];
+          const fileName = uuidv4();
+          return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true);
+        });
+      Promise.all(functionsUploadFiles).then((responses) => {
+        this.isLoading = false;
+        const files = responses.map(({ data }) => data.upload);
+        this.$emit("upload-files", files);
+      });
+    }
   },
 };
 </script>
@@ -220,11 +212,65 @@ export default {
     color: #050505;
     width: 460px;
   }
+
+  .upload-files-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 35px;
+
+    .upload-files-list-item {
+      width: 200px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 5px 15px 5px 0;
+      padding: 0 20px;
+      border-radius: 26px;
+      background-color: #fff;
+      box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
+
+      .upload-files-list-item-text {
+        width: 138px;
+        height: 19px;
+        margin: 0 13.8px 0 0;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 14px;
+        font-weight: 600;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.29px;
+        text-align: left;
+        color: #707070;
+        text-overflow: ellipsis !important;
+      }
+
+      .upload-files-list-item-button-delete {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+
+        .icon-close {
+          color: #707070;
+          vertical-align: initial;
+        }
+      }
+    }
+
+    .upload-files-list-item-active {
+      border: 1px solid #f51355;
+
+      .upload-files-list-item-button-delete .icon-close {
+        color: #f51355;
+      }
+    }
+  }
 }
 
 .upload-files-modal-body-content {
   width: 942px;
-  min-height: 530px;
+  height: 530px;
   margin: 0 auto;
   background-color: #f3f7fd;
   display: flex;
@@ -261,74 +307,6 @@ export default {
         letter-spacing: normal;
         text-align: center;
         color: #818080;
-      }
-    }
-  }
-}
-
-.upload-files-modal-body-content-with-carousel {
-  width: 949px;
-  min-height: 610px;
-  margin: 0 auto;
-
-  .carousel-upload-images {
-    max-width: 942px;
-    max-height: 530px;
-
-    .carousel-upload-image {
-      width: 942px;
-      height: 530px;
-    }
-  }
-
-  .upload-files-list {
-    display: flex;
-    flex-wrap: wrap;
-    margin-Bottom: 15px;
-
-    .upload-files-list-item {
-      width: 200px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      margin: 5px 15px 5px 0;
-      border-radius: 26px;
-      background-color: #fff;
-      box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
-
-      .upload-files-list-item-text {
-        width: 138px;
-        height: 19px;
-        white-space: nowrap;
-        overflow: hidden;
-        font-size: 14px;
-        font-weight: 600;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.29px;
-        text-align: left;
-        color: #707070;
-        text-overflow: ellipsis !important;
-      }
-
-      .upload-files-list-item-button-delete {
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-
-        .icon-close {
-          color: #707070;
-          vertical-align: initial;
-        }
-      }
-    }
-
-    .upload-files-list-item-active {
-      border: 1px solid #f51355;
-
-      .upload-files-list-item-button-delete .icon-close {
-        color: #f51355;
       }
     }
   }
@@ -386,6 +364,16 @@ export default {
       color: #000;
       cursor: pointer;
     }
+  }
+}
+
+.carousel-upload-images {
+  max-width: 942px;
+  max-height: 530px;
+
+  .carousel-upload-image {
+    width: 942px;
+    height: 530px;
   }
 }
 </style>

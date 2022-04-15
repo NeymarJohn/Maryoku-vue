@@ -32,7 +32,6 @@
 </template>
 <script>
 import ProposalRequirements from "./ProposalRequirements.vue";
-import moment from "moment";
 import _ from "underscore";
 
 export default {
@@ -92,29 +91,6 @@ export default {
   async created() {
     let taxRate = 0;
     let discountRate = 0;
-    if (this.vendor.vendorDiscountPolicies) {
-      const now = moment();
-      const discounts = this.vendor.vendorDiscountPolicies;
-
-      if (discounts.hasOwnProperty("coupon") &&
-        now.format("DD.MM.YYYY") === discounts.code.validDate) {
-
-        discountRate = Number(discounts.code.value);
-
-      } else if (discounts.hasOwnProperty("number_of_guests") && (
-        discounts.number_of_guests.rule === 1 && Number(this.event.numberOfParticipants) >= Number(discounts.number_of_guests.qty) ||
-        discounts.number_of_guests.rule === 2 && Number(this.event.numberOfParticipants) <= Number(discounts.number_of_guests.qty))){
-
-        discountRate = Number(discounts.number_of_guests.value);
-
-      } else if (discounts.hasOwnProperty("customer_type")) {
-
-
-
-      } else if (discounts.hasOwnProperty("seasonal")) {
-
-      }
-    }
     if (this.vendor.pricingPolicies) {
       this.vendor.pricingPolicies.forEach((item) => {
         if (item.name === "Tax rate" && item.value) {

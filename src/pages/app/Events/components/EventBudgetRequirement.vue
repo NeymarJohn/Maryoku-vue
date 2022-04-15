@@ -72,8 +72,90 @@
         @change="setEventStep2"
       />
     </div>
-
-    <div class="wizard-footer d-flex" :class="{sticky: currentStep >= 3}" >
+    <!--<vue-html2pdf-->
+    <!--:show-layout="false"-->
+    <!--:float-layout="true"-->
+    <!--:enable-download="true"-->
+    <!--:preview-modal="false"-->
+    <!--:paginate-elements-by-height="1400"-->
+    <!--:filename="`budget-${event.id}`"-->
+    <!--:pdf-quality="2"-->
+    <!--:manual-pagination="false"-->
+    <!--pdf-format="a4"-->
+    <!--pdf-orientation="portrait"-->
+    <!--pdf-content-width="800px"-->
+    <!--ref="html2Pdf"-->
+    <!--&gt;-->
+    <!--<section slot="pdf-content">-->
+    <!--<div class="p-20 pdf-content">-->
+    <!--<h3 class="font-bold-extra font-size-30">-->
+    <!--<img :src="`/static/icons/budget/budget.png`" width="15" />-->
+    <!--Budget-->
+    <!--</h3>-->
+    <!--<div class="card-section card-overview" style="border: solid 2px #dbdbdb !important">-->
+    <!--<div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Overview</div>-->
+    <!--<div class="budget-list d-flex justify-content-between">-->
+    <!--<div class="budget-list__item">-->
+    <!--<div class="label-title">Budget</div>-->
+    <!--<div class="budget-value">${{ budgetStatistics.total | withComma(Number) }}</div>-->
+    <!--<md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"-->
+    <!--&gt;Edit</md-button-->
+    <!--&gt;-->
+    <!--</div>-->
+    <!--<div class="budget-list__item">-->
+    <!--<div class="label-title">Allocated</div>-->
+    <!--<div class="budget-value">${{ budgetStatistics.allocated | withComma(Number) }}</div>-->
+    <!--<div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>-->
+    <!--</div>-->
+    <!--<div class="budget-list__item">-->
+    <!--<div class="label-title">Booked</div>-->
+    <!--<div class="budget-value">${{ budgetStatistics.booked | withComma(Number) }}</div>-->
+    <!--<div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="card-section card-overview-saved text-center">-->
+    <!--<span>So far you saved :</span>-->
+    <!--<md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="budgetStatistics.saved >= 0"-->
+    <!--&gt;add_circle_outline</md-icon-->
+    <!--&gt;-->
+    <!--<md-icon class="card-overview-saved-icon color-red" v-else>remove_circle_outline</md-icon>-->
+    <!--<span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma(Number) }}</span>-->
+    <!--</div>-->
+    <!--<div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">-->
+    <!--<div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>-->
+    <!--<div>-->
+    <!--<pie-chart-round :event.sync="event" :items="pieChartData" :showImage="true"></pie-chart-round>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="html2pdf__page-break"></div>-->
+    <!--<div class="p-20 event-blocks-table">-->
+    <!--<label class="font-size-26 font-bold">Total</label>-->
+    <!--<event-budget-vendors-->
+    <!--:event.sync="event"-->
+    <!--:event-components="selectedComponents"-->
+    <!--:editingMode="false"-->
+    <!--type="total"-->
+    <!--@change="onChangeComponent"-->
+    <!--@add="onAddMoreBudget"-->
+    <!--&gt;</event-budget-vendors>-->
+    <!--</div>-->
+    <!--<div class="html2pdf__page-break"></div>-->
+    <!--<div class="p-20 event-blocks-table">-->
+    <!--<label class="font-size-26 font-bold">Per Guest</label>-->
+    <!--<event-budget-vendors-->
+    <!--:event.sync="event"-->
+    <!--:event-components="selectedComponents"-->
+    <!--:editingMode="false"-->
+    <!--type="perGuest"-->
+    <!--@change="onChangeComponent"-->
+    <!--@add="onAddMoreBudget"-->
+    <!--&gt;</event-budget-vendors>-->
+    <!--</div>-->
+    <!--</section>-->
+    <!--</vue-html2pdf>-->
+    <div class="wizard-footer d-flex">
       <div>
         <md-button class="md-black md-maryoku md-simple" @click="back">
           <md-icon>keyboard_backspace</md-icon>
@@ -167,7 +249,6 @@ export default {
       completedProgressValue: 0,
       selectedComponents: [],
       showBudgetModal: false,
-      skipToolTip: false,
     };
   },
   computed: {
@@ -314,7 +395,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .event-budget-section {
-  position: relative;
   .event-book-requirement-header {
     img {
       width: 100%;
@@ -323,10 +403,6 @@ export default {
   }
   .wizard-footer {
     padding: 10px 40px;
-    &.sticky{
-      position: sticky;
-      z-index: 1;
-    }
 
     .status {
       text-align: center;

@@ -1,8 +1,7 @@
 .event-details-budget {
   font-family: "Manrope-Regular";
   color : #050505;
-  padding: 0 0px 0 400px !important;
-
+  padding: 10px 50px;
   .pdf-content{
     .card-section {
       border:solid 1px #a0a0a0;
@@ -89,14 +88,6 @@
     }
   }
 }
-.wizard-footer{
-  z-index: 1;
-  position: sticky;
-}
 .x-mouse{
   cursor: url("/static/icons/comments-cursor.svg"), auto;
-}
-
-.border-right {
-  border-right: 1px solid #777777;
 }

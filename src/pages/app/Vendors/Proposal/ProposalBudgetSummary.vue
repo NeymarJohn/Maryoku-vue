@@ -241,7 +241,7 @@
 			<div class="total-cont">
 				<div class="price-row">
 					<span class="title">Total</span>
-					<strong>${{ Number(totalPriceOfProposal) | withComma }}</strong>
+					<strong>${{ Number(totalPrice) | withComma }}</strong>
 				</div>
 				<div v-if="bundleDiscount.isApplied" class="price-row">
 					<span>Before bundle discount</span>
