@@ -269,6 +269,7 @@
     </div>
     <success-modal v-if="showSuccessModal" />
     <add-signature-modal
+      v-if="proposal"
       :signature="proposal.signature"
       :proposalId="proposal.id"
       :show-modal="showSignatureModal"

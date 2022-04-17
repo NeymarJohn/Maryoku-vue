@@ -16,13 +16,14 @@
           </md-button>
         </div>
         <img v-if="coverImage" :src="coverImage" class="cover-image">
-        <concept-image-block
-          v-else
-          class="hidden"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
-        />
+        <div v-else class="d-flex justify-content-center align-center">
+          <concept-image-block
+            class="change-cover-concept"
+            :images="concept.images"
+            :colors="concept.colors"
+            border="no-border"
+          />
+        </div>
       </div>
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
@@ -196,6 +197,11 @@ export default {
     height: 420px;
     object-fit: cover;
   }
+
+  .change-cover-concept {
+    width: 1000px;
+    height: 350px;
+  }
 }
 .change-cover-feedback{
   position: absolute;
@@ -209,11 +215,13 @@ export default {
     position: relative;
     height: 500px;
     overflow: hidden;
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+
     .change-cover-btn {
       position: absolute;
       left: 50%;

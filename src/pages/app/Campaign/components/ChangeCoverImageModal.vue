@@ -41,14 +41,12 @@
       <div class="change-cover-image-modal-footer">
         <div class="sections-for-upload-cover-image">
           <div
+            class="section-upload-cover-image d-flex justify-content-center cursor-pointer"
             @click="selectConceptImages"
-            :class="[
-              'section-upload-cover-image', 'd-flex', 'justify-content-center', 'cursor-pointer',
-            ]"
           >
             <div class="width-80">
               <concept-image-block
-                v-if="eventConcept"
+                v-if="showConcept"
                 class="hidden"
                 :images="conceptImages"
                 :colors="conceptColors"
@@ -125,7 +123,11 @@ export default {
     coverImage: {
       type: String,
       default: "",
-    }
+    },
+    defaultCoverImage: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -160,14 +162,17 @@ export default {
     conceptColors() {
       return this.eventConcept.colors || [];
     },
+    showConcept() {
+      return this.eventConcept && this.conceptImages && this.conceptImages.length && this.conceptColors && this.conceptColors.length;
+    }
   },
   created() {
     if (this.coverImage) {
       this.selectedImage = this.coverImage;
       this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
     } else {
-      this.selectedImage = (this.conceptColors && this.conceptColors.length)
-        ? this.conceptColors[0].url : null;
+      this.selectedImage = (this.conceptImages && this.conceptImages.length)
+        ? this.conceptImages[0].url : this.defaultCoverImage;
     }
 
     (async () => {
