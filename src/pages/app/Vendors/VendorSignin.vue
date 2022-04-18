@@ -57,7 +57,7 @@
           <!--              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>-->
           <!--          </div>-->
           <div class="d-flex justify-content-end">
-            <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
+            <a class="color-black font-size-16 font-bold" style="cursor: pointer" @click="toForgotPassword">Forgot password?</a>
           </div>
           <div id="vendorLoginButtonsBlock" class="form-buttons">
             <md-button

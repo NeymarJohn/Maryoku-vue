@@ -11,6 +11,7 @@
     </ul>
     <md-button
       v-if="copyLink"
+      id="CopyLink"
       class="md-simple md-red normal-btn copy-link-button"
       @click="clinkButtonCopyLink"
     >

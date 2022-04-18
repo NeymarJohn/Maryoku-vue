@@ -36,8 +36,8 @@
             @input="handleChangeCampaignVisibleSettings('showCountdown', $event)"
           />
         </div>
-        <div :class="{'cover-image-button': coverImage, 'concept-button': (concept && concept.images && concept.images.length) }">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+        <div class="cover-image-button">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">Change Cover
           </md-button>
         </div>
@@ -71,15 +71,23 @@
   </div>
 </template>
 <script>
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import CountdownTime from "./components/CountdownTime";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
-import TitleEditor from "./components/TitleEditor";
-import HideSwitch from "@/components/HideSwitch";
-import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
+
+// components
+// global
+import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+import HideSwitch        from "@/components/HideSwitch";
+// local
+import CountdownTime from "./components/CountdownTime";
+import TitleEditor   from "./components/TitleEditor";
+
+// pages
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
+import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
+
+// dependencies
+import { getBase64 } from "@/utils/file.util";
 
 export default {
   components: {
@@ -99,10 +107,10 @@ export default {
   },
   data() {
     return {
-      isLaunched: false,
-      placeholder: "It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect? out of this world live shows amazing food refreshing cocktail bar best employee award see u soon",
-      originContent: {},
-      editingContent: {
+      isLaunched     : false,
+      placeholder    : "It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect? out of this world live shows amazing food refreshing cocktail bar best employee award see u soon",
+      originContent  : {},
+      editingContent : {
         coverImage: "",
       },
       defaultCoverImage: null,
@@ -199,7 +207,7 @@ export default {
     handleChangeCoverImage(event) {
       this.$emit("change-cover-image", event);
     },
-    handleChangeCampaignLogo() {
+    handleChangeCampaignLogo(event) {
       this.$emit("change-logo", event);
     },
     async onFileChange(event) {

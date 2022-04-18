@@ -573,29 +573,24 @@
 </template>
 
 <script>
+// core
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
+import { v4 as uuidv4 } from "uuid";
+const VueHtml2pdf = () => import("vue-html2pdf");
 
 // components
 // global
 import { Loader } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
-const VueHtml2pdf = () => import("vue-html2pdf");
-
 // local
-import DeliverySettings    from "../DeliverySettings";
-import CollapsePanel       from "../CollapsePanel";
-import RsvpAnalytics       from "../components/RSVPAnalytics";
-import SavedateAnalytics   from "../components/SavedateAnalytics";
-import ComingsoonAnalytics from "../components/ComingSoonAnalytics";
-import FeedbackAnalytics   from "../components/FeedbackAnalytics";
-const SaveDate  = () => import("../SaveDate");
-const Rsvp      = () => import("../Rsvp");
-const Countdown = () => import("../Countdown");
-const Feedback  = () => import("../Feedback");
-
+import RsvpAnalytics from "./components/RSVPAnalytics";
+import SavedateAnalytics from "./components/SavedateAnalytics";
+import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
+import FeedbackAnalytics from "./components/FeedbackAnalytics";
+import DeliverySettings from "./DeliverySettings";
+import CollapsePanel from "./CollapsePanel";
 
 // pages
 import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
@@ -608,6 +603,11 @@ import CalendarEvent from "@/models/CalendarEvent";
 // dependencies
 import { CommentMixins, ShareMixins } from "@/mixins";
 import S3Service from "@/services/s3.service";
+
+const SaveDate   = () => import("./SaveDate");
+const Rsvp       = () => import("./Rsvp");
+const Countdown  = () => import("./Countdown");
+const Feedback   = () => import("./Feedback");
 
 export default {
   components: {
