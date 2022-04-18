@@ -341,13 +341,7 @@ export default {
         "holderName": this.bankDetails.holderName,
         "routingNumber": this.bankDetails.routingNumber,
         "accountNumber": this.bankDetails.accountNumber,
-      }).then(res => {
-        this.createStripeAccount({
-          "vendorId": this.vendorId,
-          "personId": this.profileId,
-          "bankAccountToken": res,
           "representative": {
-            "taxId": "",
             "ssnLast4": this.bankDetails.mcc || "0000",
             "phoneNumber": this.user.phoneNumber || "000 000 0000",
             "idNumber": this.bankDetails.ein || "000000000",
@@ -364,18 +358,17 @@ export default {
               "city": this.googleAddress.locality,
               "state": this.googleAddress.administrative_area_level_1,
             },
-          },
+          }
         }).then(res => {
+          console.log("\x1b[32m ##-369, PaymentSettings.vue",res);
           this.bankDetailsEditing = false;
           this.isLoading = false;
         }).catch(error => {
+          console.log("\x1b[32m ##-373, PaymentSettings.vue", error);
           this.bankDetailsEditing = false;
           this.isLoading = false;
         });
         ;
-      }).catch(error => {
-        this.isLoading = false;
-      });
     },
   },
 };
