@@ -37,7 +37,7 @@ const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeli
 const EventConceptChoose = () => import("@/pages/app/Events/components/EventConceptChoose");
 const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
 const EventBudgetRequirement = () => import("@/pages/app/Events/components/EventBudgetRequirement.vue");
-const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout");
+const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 const PlanningBoard = () => import("@/pages/app/Events/PlanningBoard/index.vue");
 const GuestPlanningBoard = () => import("@/pages/app/Guest/PlanningBoard");
 const ChooseVendor = () => import("@/pages/app/Events/ChooseVendor");
@@ -81,11 +81,12 @@ const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout");
 
 const InvoicePage = () => import("@/pages/app/Invoices/InvoicePage.vue");
+const FeedbackNewsletter = () => import("@/pages/app/Guest/FeedbackNewsletter.vue");
 
 let testUI = {
   path: "/testui",
-  component: TestUI,
-  name: "TestUI"
+  component: FeedbackNewsletter,
+  name: "FeedbackNewsletter"
 };
 
 let authPages = {

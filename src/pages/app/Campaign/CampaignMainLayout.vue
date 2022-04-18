@@ -160,9 +160,7 @@
         <savedate-analytics
           v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"
         />
-        <rsvp-analytics
-          v-if="selectedTab == 2 && campaignIssued['RSVP']"
-        />
+        <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']" />
         <comingsoon-analytics
           v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"
         />
@@ -326,145 +324,78 @@
     </div>
     <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
-        <scroll-to-top-btn />
+        <div>
+          <md-button
+            class="
+              md-button md-simple md-just-icon md-theme-default
+              scroll-top-button
+            "
+            @click="scrollToTop"
+          >
+            <img
+              :src="`${$iconURL}Budget+Requirements/Asset+49.svg`"
+              width="17"
+            >
+          </md-button>
+        </div>
         <div
           v-if="!campaignIssued[campaignTabs[selectedTab].name]"
           class="d-flex align-center"
         >
-          <template v-if="isScheduled">
-            <template v-if="canSchedule">
-              <span class="seperator" />
-              <Schedule :time="currentCampaign.scheduleSettings.scheduleTime" />
-              <md-button
-                class="maryoku-btn md-simple md-red"
-                @click="cancelSchedule"
-              >
-                Cancel
-              </md-button>
-            </template>
-            <template v-else>
-              <Scheduled :time="event.eventStartMillis" />
-              <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
-              <SendAgainBtn v-else @click="showScheduleModal = true">
-                Change Schdeule
-              </SendAgainBtn>
-            </template>
-          </template>
-          <template v-else>
-            <md-button
-              class="md-simple md-button md-black maryoku-btn"
-              @click="sendPreviewEmail"
-            >
-              <Icon src="Campaign/Group 1855.svg">
-                Send Me A Preview
-              </Icon>
-            </md-button>
-            <span class="seperator" />
-            <md-button
-              class="md-simple md-button md-black maryoku-btn"
-              @click="startCampaign"
-            >
-              <Icon src="Campaign/group-2428.svg">
-                Send Now
-              </Icon>
-            </md-button>
-            <md-button
-              class="md-simple md-button md-black maryoku-btn"
-              @click="revertSetting"
-            >
-              <Icon src="Campaign/Group 8871.svg">
-                Revert to original
-              </Icon>
-            </md-button>
-            <div
-              class="schedule-btn d-flex"
-            >
-              <md-button
-                class="md-button md-red maryoku-btn schedule-campaign-btn"
-                @click="showScheduleModal = true"
-              >
-                <Icon src="Campaign/Path 4377.svg">
-                  Schedule Campaign
-                </Icon>
-              </md-button>
-              <md-menu
-                md-size="medium"
-                md-align-trigger
-                md-direction="top-end"
-                class="schedule-menu"
-              >
-                <md-button
-                  md-menu-trigger
-                  class="md-icon-button schedule-menu-btn"
-                >
-                  <md-icon class="schedule-menu-btn-icon">
-                    keyboard_arrow_down
-                  </md-icon>
-                </md-button>
-                <md-menu-content>
-                  <md-menu-item
-                    class="text-center"
-                    @click="saveDraftCampaign"
-                  >
-                    <Icon src="Campaign/Group 1908.svg">
-                      Save Draft
-                    </Icon>
-                  </md-menu-item>
-                  <md-menu-item
-                    class="text-center"
-                    @click="startCampaign"
-                  >
-                    <Icon src="Campaign/group-2428.svg">
-                      Send Now
-                    </Icon>
-                  </md-menu-item>
-                </md-menu-content>
-              </md-menu>
-            </div>
-          </template>
-        </div>
-        <div
-          v-else
-          class="d-flex align-center"
-        >
-          <!-- <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendToAddtionalGuests"
-          >
-            <Icon src="Campaign/Campaign/Group 8871.svg">
-              Send To Additional Guests
-            </Icon>
-          </md-button>
-          <span
-            class="seperator"
-            style="margin-top: 0"
-          />
           <md-button
             class="md-simple md-button md-black maryoku-btn"
             @click="sendPreviewEmail"
           >
-            <Icon src="Campaign/Group 1855.svg">
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 1855.svg`"
+              >
               Send Me A Preview
-            </Icon>
-          </md-button> -->
-          <template v-if="!canSchedule">
-            <Scheduled :time="event.eventStartMillis" />
-            <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
-            <SendAgainBtn v-else @click="showScheduleModal = true">
-              Change Schdeule
-            </SendAgainBtn>
-          </template>
-          <div
+            </span>
+          </md-button>
+          <span class="seperator" />
+          <md-button
+            v-if="!isScheduled"
+            class="md-simple md-button md-black maryoku-btn"
+            @click="revertSetting"
+          >
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 8871.svg`"
+              >Revert to original
+            </span>
+          </md-button>
+          <md-button
             v-else
+            class="md-simple md-button md-black maryoku-btn"
+            @click="startCampaign"
+          >
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                :src="`${$iconURL}Campaign/group-2428.svg`"
+                class="mr-10"
+                style="width: 20px; height: 20px"
+              >
+              Send Now
+            </span>
+          </md-button>
+          <div
+            v-if="!isScheduled"
             class="schedule-btn d-flex"
           >
             <md-button
               class="md-button md-red maryoku-btn schedule-campaign-btn"
               @click="showScheduleModal = true"
             >
-              <Icon src="Campaign/Path 4377.svg">
+              <span class="font-size-16 text-transform-capitalize">
+                <img
+                  class="mr-20"
+                  :src="`${$iconURL}Campaign/Path 4377.svg`"
+                >
                 Schedule Campaign
-              </Icon>
+              </span>
             </md-button>
             <md-menu
               md-size="medium"
@@ -485,17 +416,145 @@
                   class="text-center"
                   @click="saveDraftCampaign"
                 >
-                  <Icon src="Campaign/Group 1908.svg">
-                    Save Draft
-                  </Icon>
+                  <span class="font-size-16 font-bold-extra">
+                    <img
+                      :src="`${$iconURL}Campaign/Group 1908.svg`"
+                      class="mr-10"
+                      style="width: 20px; height: 20px"
+                    >Save Draft
+                  </span>
                 </md-menu-item>
                 <md-menu-item
                   class="text-center"
                   @click="startCampaign"
                 >
-                  <Icon src="Campaign/group-2428.svg">
+                  <span class="font-size-16 font-bold-extra">
+                    <img
+                      :src="`${$iconURL}Campaign/group-2428.svg`"
+                      class="mr-10"
+                      style="width: 20px; height: 20px"
+                    >Send Now
+                  </span>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+          <template v-else>
+            <span class="seperator" />
+            <img
+              class="mr-20 label-icon-25 ml-30"
+              :src="`${$iconURL}Campaign/clock-gray.svg`"
+            >
+            Scheduled Send:
+            {{
+              $dateUtil.formatScheduleDay(
+                currentCampaign.scheduleSettings.scheduleTime,
+                "DD.MM.YY  |  hh:mm A"
+              )
+            }}
+            <md-button
+              class="maryoku-btn md-simple md-red"
+              @click="cancelSchedule"
+            >
+              Cancel
+            </md-button>
+          </template>
+        </div>
+        <div
+          v-else
+          class="d-flex align-center"
+        >
+          <!-- <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendToAddtionalGuests"
+          >
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 8871.svg`"
+              >Send To Additional Guests
+            </span>
+          </md-button>
+          <span
+            class="seperator"
+            style="margin-top: 0"
+          />
+          <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendPreviewEmail"
+          >
+            <span class="font-size-16 text-transform-capitalize">
+              <img
+                class="mr-20"
+                :src="`${$iconURL}Campaign/Group 1855.svg`"
+              >
+              Send Me A Preview
+            </span>
+          </md-button> -->
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
+            <img :src="`${$iconURL}Campaign/Group 9222.svg`">
+            <span class="ml-10">Scheduled To {{ ' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
+          </div>
+          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center cursor-pointer" @click="startCampaign">
+            <span class="seperator small" style="margin-top: 0; margin-right: 30px" />
+            <i class="far fa-clock" />
+            <span class="ml-10" style="font-weight: bold"> Send again </span>
+          </div>
+          <div
+            v-else
+            class="schedule-btn d-flex"
+          >
+            <md-button
+              class="md-button md-red maryoku-btn schedule-campaign-btn"
+              @click="showScheduleModal = true"
+            >
+              <span class="font-size-16 text-transform-capitalize">
+                <img
+                  class="mr-20"
+                  :src="`${$iconURL}Campaign/Path 4377.svg`"
+                >
+                Schedule Campaign
+              </span>
+            </md-button>
+            <md-menu
+              md-size="medium"
+              md-align-trigger
+              md-direction="top-end"
+              class="schedule-menu"
+            >
+              <md-button
+                md-menu-trigger
+                class="md-icon-button schedule-menu-btn"
+              >
+                <md-icon class="schedule-menu-btn-icon">
+                  keyboard_arrow_down
+                </md-icon>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item
+                  class="text-center"
+                  @click="saveDraftCampaign"
+                >
+                  <span class="font-size-16 font-bold-extra">
+                    <img
+                      :src="`${$iconURL}Campaign/Group 1908.svg`"
+                      class="mr-10"
+                      style="width: 20px; height: 20px"
+                    >Save Draft
+                  </span>
+                </md-menu-item>
+                <md-menu-item
+                  class="text-center"
+                  @click="startCampaign"
+                >
+                  <span class="font-size-16 font-bold-extra">
+                    <img
+                      :src="`${$iconURL}Campaign/group-2428.svg`"
+                      class="mr-10"
+                      style="width: 20px; height: 20px"
+                    >
                     Send Now
-                  </Icon>
+                  </span>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
@@ -514,45 +573,41 @@
 </template>
 
 <script>
+// core
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
+import { v4 as uuidv4 } from "uuid";
+const VueHtml2pdf = () => import("vue-html2pdf");
 
 // components
 // global
-import { Loader }            from "@/components";
-import HeaderActions         from "@/components/HeaderActions";
+import { Loader } from "@/components";
+import HeaderActions from "@/components/HeaderActions";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
-const VueHtml2pdf = () => import("vue-html2pdf");
-
 // local
-import DeliverySettings    from "../DeliverySettings";
-import CollapsePanel       from "../CollapsePanel";
-import RsvpAnalytics       from "../components/RSVPAnalytics";
-import SavedateAnalytics   from "../components/SavedateAnalytics";
-import ComingsoonAnalytics from "../components/ComingSoonAnalytics";
-import FeedbackAnalytics   from "../components/FeedbackAnalytics";
-import ScrollToTopBtn      from "./Footer/ScrollToTopBtn";
-import Icon                from "./Footer/Icon";
-import Schedule            from "./Footer/Schedule";
-import Scheduled           from "./Footer/Scheduled";
-import SendAgainBtn        from "./Footer/SendAgainBtn";
-const SaveDate  = () => import("../SaveDate");
-const Rsvp      = () => import("../Rsvp");
-const Countdown = () => import("../Countdown");
-const Feedback  = () => import("../Feedback");
+import RsvpAnalytics from "./components/RSVPAnalytics";
+import SavedateAnalytics from "./components/SavedateAnalytics";
+import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
+import FeedbackAnalytics from "./components/FeedbackAnalytics";
+import DeliverySettings from "./DeliverySettings";
+import CollapsePanel from "./CollapsePanel";
 
 // pages
-import CommentEditorPanel    from "@/pages/app/Events/components/CommentEditorPanel";
+import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
 import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
 
 // models
-import Campaign      from "@/models/Campaign";
+import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 
 // dependencies
 import { CommentMixins, ShareMixins } from "@/mixins";
 import S3Service from "@/services/s3.service";
+
+const SaveDate   = () => import("./SaveDate");
+const Rsvp       = () => import("./Rsvp");
+const Countdown  = () => import("./Countdown");
+const Feedback   = () => import("./Feedback");
 
 export default {
   components: {
@@ -572,11 +627,6 @@ export default {
     FeedbackAnalytics,
     VueHtml2pdf,
     ChangeCoverImageModal,
-    ScrollToTopBtn,
-    Icon,
-    Schedule,
-    Scheduled,
-    SendAgainBtn,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -632,28 +682,29 @@ export default {
     user() {
       return this.$store.state.auth.user;
     },
-    currentCampaignType () {
-      return this.campaignTabs[this.selectedTab].name;
-    },
     currentCampaign() {
-      return this.$store.state.campaign[this.currentCampaignType];
+      return this.$store.state.campaign[
+        this.campaignTabs[this.selectedTab].name
+        ];
     },
     canSchedule() {
-      return (
+      if (
         this.currentCampaign.settings.email.selected &&
         this.currentCampaign.settings.email.status !== "sent"
-      ) || (
+      ) {
+        return true;
+      }
+      if (
         this.currentCampaign.settings.phone.selected &&
         this.currentCampaign.settings.phone.status !== "sent"
-      );
+      ) {
+        return true;
+      }
+      return false;
     },
     isScheduled() {
       if (!this.currentCampaign) return false;
-
-      const { scheduleTime = 0 } = (this.currentCampaign.scheduleSettings || { scheduleTime: 0});
-      return false
-          || this.currentCampaign.campaignStatus === "SCHEDULED"
-          || (scheduleTime < Date.now() && scheduleTime > 0);
+      return this.currentCampaign.campaignStatus === "SCHEDULED";
     },
   },
   watch: {
@@ -686,8 +737,9 @@ export default {
     },
     chooseImage(url) {
       this.showChangeCoverModal = false;
+      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
       this.setAttribute({
-        name: this.currentCampaignType,
+        name: currentCampaignType,
         key: "coverImage",
         value: url
       });
@@ -700,9 +752,11 @@ export default {
       this.setDefaultSettings();
     },
     setDefaultSettings() {
-      if (this.currentCampaign && this.currentCampaign.settings) {
+      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
+      const currentCampaign = this.$store.state.campaign[currentCampaignType];
+      if (currentCampaign && currentCampaign.settings) {
         this.deliverySettings = {
-          ...this.currentCampaign.settings,
+          ...currentCampaign.settings,
         };
       } else {
         this.deliverySettings = { ...this.defaultSettings };
@@ -715,8 +769,10 @@ export default {
       window.scrollTo(0, 0);
     },
     startCampaign() {
+      const campaignData =
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
       if (
-        !this.currentCampaign ||
+        !campaignData ||
         (!this.deliverySettings.email.selected &&
           !this.deliverySettings.phone.selected)
       ) {
@@ -729,7 +785,7 @@ export default {
         return;
       }
 
-      if (this.selectedTab === 4 && !this.currentCampaign.description) {
+      if (this.selectedTab === 4 && !campaignData.description) {
         Swal.fire({
           title: "Please write description for Feedback page",
           buttonsStyling: false,
@@ -739,7 +795,7 @@ export default {
         return;
       }
 
-      if (this.selectedTab === 4 && (!this.currentCampaign.images || !this.currentCampaign.images.length)) {
+      if (this.selectedTab === 4 && (!campaignData.images || !campaignData.images.length)) {
         Swal.fire({
           title: "Please select images for event",
           buttonsStyling: false,
@@ -750,24 +806,24 @@ export default {
       }
 
       this.callSaveCampaign(
-        this.currentCampaignType,
+        this.campaignTabs[this.selectedTab].name,
         "STARTED"
       );
     },
     saveDraftCampaign() {
-      this.callSaveCampaign(this.currentCampaignType, "SAVED");
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
     cancelSchedule() {
       this.$store.commit("campaign/setAttribute", {
-        name: this.currentCampaignType,
+        name: this.campaignTabs[this.selectedTab].name,
         key: "scheduleSettings",
         value: null,
       });
-      this.callSaveCampaign(this.currentCampaignType, "SAVED");
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
     scheduleCampaign() {
       this.callSaveCampaign(
-        this.currentCampaignType,
+        this.campaignTabs[this.selectedTab].name,
         "SCHEDULED"
       );
     },
@@ -849,6 +905,9 @@ export default {
         key: "scheduleSettings",
         value: scheduleSettingsData,
       });
+
+      const campaign =
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
       this.scheduleCampaign();
     },
     revertSetting() {
@@ -864,9 +923,12 @@ export default {
       }
     },
     sendPreviewEmail() {
+      const campaignData =
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+
       this.callSaveCampaign(
-        this.currentCampaignType,
-        this.campaignData.campaignStatus || "TESTING",
+        this.campaignTabs[this.selectedTab].name,
+        campaignData.campaignStatus || "TESTING",
         true
       ).then((res) => {});
 
@@ -898,14 +960,14 @@ export default {
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {
-        name: this.currentCampaignType,
+        name: this.campaignTabs[this.selectedTab].name,
         key: "campaignStatus",
         value: "EDITING",
       });
     },
     sendAgain() {
       this.callSaveCampaign(
-        this.currentCampaignType,
+        this.campaignTabs[this.selectedTab].name,
         "STARTED"
       );
     },
