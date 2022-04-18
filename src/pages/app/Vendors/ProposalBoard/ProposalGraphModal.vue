@@ -1,6 +1,6 @@
 <template>
   <modal class="proposal-graph-modal">
-    <loader :active="loading"></loader>
+    <loader :active="loading" />
     <template slot="header">
       <div class="graph-close-button">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -13,7 +13,6 @@
             Overview Hot Activity
           </div>
           <div class="info_proposal">
-
             <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
               {{ proposal.eventData.customer.companyName }}
             </span>
@@ -63,7 +62,7 @@
 </template>
 
 <script>
-import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue"
+import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 const components = {
   Modal: () => import("@/components/Modal.vue"),
@@ -75,12 +74,12 @@ export default {
   components: {...components, ProposalChart, ProposalPieChart},
   props: {
     proposal: {
-      type: Object,
-      default: () => {}
+      type    : Object,
+      default : () => {}
     },
     required: {
-      type: Boolean,
-      default: true
+      type    : Boolean,
+      default : true
     },
   },
   data() {
@@ -109,7 +108,6 @@ export default {
       this.$emit("close");
     },
   },
-
 };
 </script>
 
