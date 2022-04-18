@@ -361,11 +361,11 @@ export default {
           }
         }).then(res => {
           console.log("\x1b[32m ##-369, PaymentSettings.vue",res);
-          this.bankDetailsEditing = false;
+          // this.bankDetailsEditing = false;
           this.isLoading = false;
         }).catch(error => {
           console.log("\x1b[32m ##-373, PaymentSettings.vue", error);
-          this.bankDetailsEditing = false;
+          // this.bankDetailsEditing = false;
           this.isLoading = false;
         });
         ;
