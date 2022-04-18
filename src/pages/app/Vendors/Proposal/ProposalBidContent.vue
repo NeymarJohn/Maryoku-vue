@@ -32,7 +32,6 @@
 </template>
 <script>
 import ProposalRequirements from "./ProposalRequirements.vue";
-import { DiscountCustomerTypes, CouponRules } from "@/constants/options";
 import moment from "moment";
 import _ from "underscore";
 
@@ -93,34 +92,27 @@ export default {
   async created() {
     let taxRate = 0;
     let discountRate = 0;
-
-    if (this.vendor.discountPolicies) {
-      const evtDay = moment(this.proposalRequest.eventData.eventStartMillis);
-      const discounts = this.vendor.discountPolicies;
+    if (this.vendor.vendorDiscountPolicies) {
+      const now = moment();
+      const discounts = this.vendor.vendorDiscountPolicies;
 
       if (discounts.hasOwnProperty("coupon") &&
-        evtDay.format("DD.MM.YYYY") === discounts.coupon[0].validDate) {
+        now.format("DD.MM.YYYY") === discounts.code.validDate) {
 
-        discountRate = Number(discounts.coupon[0].value);
+        discountRate = Number(discounts.code.value);
 
-      }
-      if (discounts.hasOwnProperty("number_of_guests") && (
-        discounts.number_of_guests[0].rule === 1 && Number(this.event.numberOfParticipants) >= Number(discounts.number_of_guests[0].qty) ||
-        discounts.number_of_guests[0].rule === 2 && Number(this.event.numberOfParticipants) <= Number(discounts.number_of_guests[0].qty))){
+      } else if (discounts.hasOwnProperty("number_of_guests") && (
+        discounts.number_of_guests.rule === 1 && Number(this.event.numberOfParticipants) >= Number(discounts.number_of_guests.qty) ||
+        discounts.number_of_guests.rule === 2 && Number(this.event.numberOfParticipants) <= Number(discounts.number_of_guests.qty))){
 
-        discountRate = Number(discounts.number_of_guests[0].value);
+        discountRate = Number(discounts.number_of_guests.value);
 
-      }
-      if (discounts.hasOwnProperty("customer_type") && Number(this.proposalRequest.returning) === Number(discounts.customer_type[0].type)) {
+      } else if (discounts.hasOwnProperty("customer_type")) {
 
-        discountRate = Number(discounts.customer_type[0].value);
 
-      }
-      if (discounts.hasOwnProperty("seasonal") &&
-        evtDay.isBetween(`${discounts.seasonal[0].from.year}-${discounts.seasonal[0].from.months[0]}`,
-          `${discounts.seasonal[0].to.year}-${discounts.seasonal[0].to.months[0]}`)) {
 
-        discountRate = Number(discounts.seasonal[0].value);
+      } else if (discounts.hasOwnProperty("seasonal")) {
+
       }
     }
     if (this.vendor.pricingPolicies) {

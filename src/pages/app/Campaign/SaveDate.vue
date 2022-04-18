@@ -10,7 +10,7 @@
       </div>
       <div class="concept-image-block-wrapper">
         <div v-show="showChangeCover" class="change-cover-feedback" @click="handleChangeCoverImage">
-          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover
           </md-button>
@@ -62,20 +62,15 @@
   </div>
 </template>
 <script>
-// core
-import Swal from "sweetalert2";
-
-// components
-import { Loader } from "@/components";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import TitleEditor from "./components/TitleEditor";
-
-// dependencies
 import { getBase64 } from "@/utils/file.util";
+import TitleEditor from "./components/TitleEditor";
+import Swal from "sweetalert2";
 import CalendarEvent from "@/models/CalendarEvent";
+import { Loader } from "@/components";
 import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
