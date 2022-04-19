@@ -101,25 +101,15 @@
 </template>
 
 <script>
-// core
-import { mapMutations } from "vuex";
-import vue2Dropzone from "vue2-dropzone";
-import { v4 as uuidv4 } from "uuid";
-
-// components
-// gloabl
 import { Modal } from "@/components";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-//local
 import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
-
-// models
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+import vue2Dropzone from "vue2-dropzone";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventConcept from "@/models/EventConcept";
-
-// dependencies
+import { mapMutations } from "vuex";
 import S3Service from "@/services/s3.service";
-import loop      from "@/helpers/number/loop";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "ChangeCoverImageModal",
@@ -131,12 +121,12 @@ export default {
   },
   props: {
     coverImage: {
-      type    : String,
-      default : "",
+      type: String,
+      default: "",
     },
     defaultCoverImage: {
-      type    : String,
-      default : "",
+      type: String,
+      default: "",
     },
   },
   data() {
@@ -215,12 +205,13 @@ export default {
     },
     carouselScrollingToIndex() {
       const countImages = this.conceptImages.length;
-        // number 5 get from prop items carousel
-      if (countImages > 6) {
-        const btnNext = document.getElementById("carousel-btn-next");
+      // number 5 get from prop items carousel
+      const countScroll = countImages - 5;
+      if (countScroll < 1) return;
+      const btnNext = document.getElementById("carousel-btn-next");
+      for (let i = 0; i < countScroll; i++) {
         if (btnNext) {
-          const countScroll = countImages - 5;
-          loop(countScroll, () => btnNext.click());
+          btnNext.click();
         }
       }
     },
@@ -246,10 +237,9 @@ export default {
         dropZone[0].style.display = "block";
       }
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      const lastIndexPreview = preview.length - 1;
-      if (preview && preview[lastIndexPreview]) {
-        preview[lastIndexPreview].style.display = "none";
-        preview[lastIndexPreview].style.opacity = "0";
+      if (preview && preview[preview.length - 1]) {
+        preview[preview.length - 1].style.display = "none";
+        preview[preview.length - 1].style.opacity = "0";
       }
       const extension = file.type.split("/")[1];
       const fileName = uuidv4();

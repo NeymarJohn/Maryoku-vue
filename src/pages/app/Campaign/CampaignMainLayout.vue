@@ -573,41 +573,52 @@
 </template>
 
 <script>
-// core
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import Swal from "sweetalert2";
-import { v4 as uuidv4 } from "uuid";
-const VueHtml2pdf = () => import("vue-html2pdf");
-
-// components
-// global
-import { Loader } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
+import { CommentMixins, ShareMixins } from "@/mixins";
+import DeliverySettings from "./DeliverySettings";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
-// local
+import Campaign from "@/models/Campaign";
+import CalendarEvent from "@/models/CalendarEvent";
+import Swal from "sweetalert2";
+import S3Service from "@/services/s3.service";
+import CollapsePanel from "./CollapsePanel";
+import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
 import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
-import DeliverySettings from "./DeliverySettings";
-import CollapsePanel from "./CollapsePanel";
+import { Loader } from "@/components";
+import { v4 as uuidv4 } from "uuid";
 
-// pages
-import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
+const SaveDate = () => import("./SaveDate");
+const Rsvp = () => import("./Rsvp");
+const Countdown = () => import("./Countdown");
+const Feedback = () => import("./Feedback");
+const VueHtml2pdf = () => import("vue-html2pdf");
 
-// models
-import Campaign from "@/models/Campaign";
-import CalendarEvent from "@/models/CalendarEvent";
-
-// dependencies
-import { CommentMixins, ShareMixins } from "@/mixins";
-import S3Service from "@/services/s3.service";
-
-const SaveDate   = () => import("./SaveDate");
-const Rsvp       = () => import("./Rsvp");
-const Countdown  = () => import("./Countdown");
-const Feedback   = () => import("./Feedback");
+const defaultSettings = {
+  phone: {
+    selected: false,
+    numberString: "",
+    numberArray: [],
+    excelFileName: "",
+    excelFilePath: "",
+    smsOrWhatsapp: "",
+    sentTime: new Date().getTime(),
+  },
+  email: {
+    selected: false,
+    subject: "",
+    from: "",
+    addressString: "",
+    addressArray: [],
+    excelFileName: "",
+    excelFilePath: "",
+    sentTime: new Date().getTime(),
+  },
+};
 
 export default {
   components: {

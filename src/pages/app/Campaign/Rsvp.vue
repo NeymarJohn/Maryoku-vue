@@ -7,14 +7,16 @@
         </div>
         <div class="cover-preview">
           <img v-if="campaignData.coverImage" :src="campaignData.coverImage" class="mr-10">
-          <concept-image-block
-            v-else
-            class="hidden"
-            :images="concept.images"
-            :colors="concept.colors"
-            border="no-border"
-          />
-          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
+            <concept-image-block
+              class="change-cover-concept"
+              :images="concept.images"
+              :colors="concept.colors"
+              border="no-border"
+            />
+          </div>
+          <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover(Size 1200 * 400)
           </md-button>
@@ -216,28 +218,19 @@
   </div>
 </template>
 <script>
-// core
 import { mapActions } from "vuex";
 import Swal from "sweetalert2";
-
-// components
-// global
-import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
-import { MaryokuInput }  from "@/components";
-import HideSwitch        from "@/components/HideSwitch";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-// local
-import TitleEditor       from "./components/TitleEditor";
-
-// pages
-import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import { MaryokuInput } from "@/components";
+import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
-
-// dependencies
+import TitleEditor from "./components/TitleEditor";
+import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
+import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 
 export default {
   components: {
@@ -253,43 +246,44 @@ export default {
   },
   props: {
     info: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => ({}),
     },
     defaultData: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => {
+      },
     },
   },
   data() {
     return {
-      coverImage         : "",
-      logoImage          : "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
-      content            : "",
-      originContent      : {},
-      isEditingKnowledge : false,
-      isEditingWearing   : false,
-      wearingTitleContent   : "WHAT SHOULD I WEAR?",
-      knowledgeTitleContent : "WHAT SHOULD I KNOW?",
+      coverImage: "",
+      logoImage: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
+      content: "",
+      originContent: {},
+      isEditingKnowledge: false,
+      isEditingWearing: false,
+      wearingTitleContent: "WHAT SHOULD I WEAR?",
+      knowledgeTitleContent: "WHAT SHOULD I KNOW?",
       editingContent: {
-        title          : "",
-        description    : "",
-        coverImage     : "",
-        campaignStatus : "EDITING",
-        allowOnline    : false,
+        title: "",
+        description: "",
+        coverImage: "",
+        campaignStatus: "EDITING",
+        allowOnline: false,
         visibleSettings: {
-          showLogo         : true,
-          showWearingGuide : true,
-          showKnowledge    : true,
-          showTimeline     : true,
+          showLogo: true,
+          showWearingGuide: true,
+          showKnowledge: true,
+          showTimeline: true,
         },
         additionalData: {
-          greetingWords     : "",
-          wearingGuide      : "",
-          wearingGuideTitle : "WHAT SHOULD I WEAR?",
-          knowledge         : "",
-          knowledgeTitle    : "WHAT SHOULD I KNOW?",
-          zoomlink          : "",
+          greetingWords: "",
+          wearingGuide: "",
+          wearingGuideTitle: "WHAT SHOULD I WEAR?",
+          knowledge: "",
+          knowledgeTitle: "WHAT SHOULD I KNOW?",
+          zoomlink: "",
         },
       },
     };
