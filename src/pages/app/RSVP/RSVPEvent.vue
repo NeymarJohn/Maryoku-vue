@@ -542,6 +542,7 @@ export default {
     }
     .campaign-description {
       line-height: initial;
+      letter-spacing: 1.15px;
       font-size: 17px;
       width: 90%;
     }

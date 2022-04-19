@@ -3,6 +3,14 @@
     width: 100%;
   }
 }
+
+#ChangeCoverImage, #TitleEditorBtnSave, #UploadImage, #CopyLink {
+  .md-ripple {
+    width: auto;
+    height: auto;
+  }
+}
+
 .md-button{
   border: none;
   border-radius: $border-radius-base;

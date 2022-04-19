@@ -160,7 +160,9 @@
         <savedate-analytics
           v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"
         />
-        <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']" />
+        <rsvp-analytics
+          v-if="selectedTab == 2 && campaignIssued['RSVP']"
+        />
         <comingsoon-analytics
           v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"
         />
@@ -565,6 +567,7 @@
     <change-cover-image-modal
       v-if="showChangeCoverModal"
       :cover-image="currentCampaign.coverImage"
+      :default-cover-image="campaignTabs[selectedTab].defaultCoverImage"
       @close="close"
       @choose-image="chooseImage"
     />
@@ -572,52 +575,41 @@
 </template>
 
 <script>
+// core
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import { CommentMixins, ShareMixins } from "@/mixins";
-import DeliverySettings from "./DeliverySettings";
-import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
-import Campaign from "@/models/Campaign";
-import CalendarEvent from "@/models/CalendarEvent";
 import Swal from "sweetalert2";
-import S3Service from "@/services/s3.service";
-import CollapsePanel from "./CollapsePanel";
-import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
+import { v4 as uuidv4 } from "uuid";
+const VueHtml2pdf = () => import("vue-html2pdf");
+
+// components
+// global
+import { Loader } from "@/components";
+import HeaderActions from "@/components/HeaderActions";
+import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
+// local
 import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
-import { Loader } from "@/components";
-import { v4 as uuidv4 } from "uuid";
+import DeliverySettings from "./DeliverySettings";
+import CollapsePanel from "./CollapsePanel";
 
-const SaveDate = () => import("./SaveDate");
-const Rsvp = () => import("./Rsvp");
-const Countdown = () => import("./Countdown");
-const Feedback = () => import("./Feedback");
-const VueHtml2pdf = () => import("vue-html2pdf");
+// pages
+import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
+import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
 
-const defaultSettings = {
-  phone: {
-    selected: false,
-    numberString: "",
-    numberArray: [],
-    excelFileName: "",
-    excelFilePath: "",
-    smsOrWhatsapp: "",
-    sentTime: new Date().getTime(),
-  },
-  email: {
-    selected: false,
-    subject: "",
-    from: "",
-    addressString: "",
-    addressArray: [],
-    excelFileName: "",
-    excelFilePath: "",
-    sentTime: new Date().getTime(),
-  },
-};
+// models
+import Campaign from "@/models/Campaign";
+import CalendarEvent from "@/models/CalendarEvent";
+
+// dependencies
+import { CommentMixins, ShareMixins } from "@/mixins";
+import S3Service from "@/services/s3.service";
+
+const SaveDate   = () => import("./SaveDate");
+const Rsvp       = () => import("./Rsvp");
+const Countdown  = () => import("./Countdown");
+const Feedback   = () => import("./Feedback");
 
 export default {
   components: {
@@ -655,24 +647,28 @@ export default {
         1: {
           completed: false,
           name: "SAVING_DATE",
+          defaultCoverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/save-the-date${(new Date().getDate() % 2) + 1}.png`,
           tooltip:
             "Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding",
         },
         2: {
           completed: false,
           name: "RSVP",
+          defaultCoverImage: "static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png",
           tooltip:
             "Try sending your RSVP's a month in advance,  so you'll get the most accurate results",
         },
         3: {
           completed: false,
           name: "COMING_SOON",
+          defaultCoverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${(new Date().getDate() % 4) + 1}.png`,
           tooltip:
             "A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions",
         },
         4: {
           completed: false,
           name: "FEEDBACK",
+          defaultCoverImage: "static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png",
           tooltip:
             "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take.",
         },
@@ -784,16 +780,6 @@ export default {
       ) {
         Swal.fire({
           title: "Please select email or phone or both.",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      if (this.selectedTab === 4 && !campaignData.coverImage) {
-        Swal.fire({
-          title: "Please select image for cover",
           buttonsStyling: false,
           icon: "warning",
           confirmButtonClass: "md-button md-success",

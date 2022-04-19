@@ -8,13 +8,15 @@
         <div class="cover-preview">
           <img v-if="campaignData.coverImage" :src="campaignData.coverImage" class="mr-10">
           <concept-image-block
-            v-else
+            v-else-if="concept && concept.images && concept.images.length"
             class="hidden"
             :images="concept.images"
             :colors="concept.colors"
             border="no-border"
           />
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <img v-else-if="campaignData.defaultCoverImage" :src="campaignData.defaultCoverImage" alt="">
+          <img v-else :src="defaultCoverImage" alt="default cover image">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover(Size 1200 * 400)
           </md-button>
@@ -216,72 +218,84 @@
   </div>
 </template>
 <script>
+// core
 import { mapActions } from "vuex";
 import Swal from "sweetalert2";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import { MaryokuInput } from "@/components";
-import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
+
+// components
+// global
+import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
+import { MaryokuInput }  from "@/components";
+import HideSwitch        from "@/components/HideSwitch";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+// local
+import TitleEditor       from "./components/TitleEditor";
+
+// pages
+import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import TitleEditor from "./components/TitleEditor";
-import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-import HideSwitch from "@/components/HideSwitch";
+import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
+import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
+
+// dependencies
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 
 export default {
   components: {
-    CampaignLogo,
-    MaryokuTextarea,
-    MaryokuInput,
+    // pages
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
-    TitleEditor,
     RsvpTimelinePanel,
+    CampaignLogo,
+
+    // components
+    MaryokuTextarea,
+    MaryokuInput,
+    TitleEditor,
     HideSwitch,
     ConceptImageBlock,
   },
   props: {
     info: {
-      type: Object,
-      default: () => ({}),
+      type    : Object,
+      default : () => ({}),
     },
     defaultData: {
-      type: Object,
-      default: () => {
-      },
+      type    : Object,
+      default : () => ({}),
     },
   },
   data() {
     return {
-      coverImage: "",
-      logoImage: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
-      content: "",
-      originContent: {},
-      isEditingKnowledge: false,
-      isEditingWearing: false,
-      wearingTitleContent: "WHAT SHOULD I WEAR?",
-      knowledgeTitleContent: "WHAT SHOULD I KNOW?",
+      defaultCoverImage  : "https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/rsvp2.png",
+      coverImage         : "",
+      logoImage          : "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
+      content            : "",
+      originContent      : {},
+      isEditingKnowledge : false,
+      isEditingWearing   : false,
+      wearingTitleContent   : "WHAT SHOULD I WEAR?",
+      knowledgeTitleContent : "WHAT SHOULD I KNOW?",
       editingContent: {
-        title: "",
-        description: "",
-        coverImage: "",
-        campaignStatus: "EDITING",
-        allowOnline: false,
+        title          : "",
+        description    : "",
+        coverImage     : "",
+        campaignStatus : "EDITING",
+        allowOnline    : false,
         visibleSettings: {
-          showLogo: true,
-          showWearingGuide: true,
-          showKnowledge: true,
-          showTimeline: true,
+          showLogo         : true,
+          showWearingGuide : true,
+          showKnowledge    : true,
+          showTimeline     : true,
         },
         additionalData: {
-          greetingWords: "",
-          wearingGuide: "",
-          wearingGuideTitle: "WHAT SHOULD I WEAR?",
-          knowledge: "",
-          knowledgeTitle: "WHAT SHOULD I KNOW?",
-          zoomlink: "",
+          greetingWords     : "",
+          wearingGuide      : "",
+          wearingGuideTitle : "WHAT SHOULD I WEAR?",
+          knowledge         : "",
+          knowledgeTitle    : "WHAT SHOULD I KNOW?",
+          zoomlink          : "",
         },
       },
     };
@@ -295,6 +309,9 @@ export default {
     },
     user() {
       return this.$store.state.auth.user;
+    },
+    campaign() {
+      return this.$store.state.campaign;
     },
     campaignData() {
       return this.$store.state.campaign.RSVP || {};
@@ -318,7 +335,7 @@ export default {
     },
     images: {
       get() {
-        return this.$store.state.campaign.RSVP.images;
+        return this.campaignData.images;
       },
     },
     timelineDates() {
@@ -333,8 +350,8 @@ export default {
     },
   },
   created() {
-    if (this.$store.state.campaign.RSVP) {
-      this.editingContent = this.$store.state.campaign.RSVP;
+    if (this.campaignData) {
+      this.editingContent = this.campaignData;
       if (!this.editingContent.additionalData.greetingWords) {
         const greetingWords = `Hello ${this.user.companyName ? this.user.companyName : this.user.currentTenant} ${
           this.event.guestType || "Employee"
@@ -392,30 +409,35 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
+    setCampaignAttribute(attribute) {
+      return this.$store.commit("campaign/setAttribute", attribute);
+    },
     saveTitle(type) {
-      if (type === "knowledge") {
-        this.campaignData.additionalData.knowledgeTitle = this.knowledgeTitleContent;
-        this.isEditingKnowledge = false;
-      } else if (type === "wearing") {
-        this.campaignData.additionalData.wearingGuideTitle = this.wearingTitleContent;
-        this.isEditingWearing = false;
+      switch (type) {
+        case "knowledge": {
+          this.campaignData.additionalData.knowledgeTitle = this.knowledgeTitleContent;
+          this.isEditingKnowledge = false;
+          break;
+        }
+        case "wearing": {
+          this.campaignData.additionalData.wearingGuideTitle = this.wearingTitleContent;
+          this.isEditingWearing = false;
+          break;
+        }
       }
     },
-    saveData() {
-      this.$store.commit("campaign/setCampaign", {
-        name: "RSVP",
-        data: this.editingContent,
-      });
+    saveData(data = this.editingContent) {
+      return this.setCampaignAttribute({ name: "RSVP", data });
     },
     setDefault() {
       Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, revert it!",
-        buttonsStyling: false,
+        title              : "Are you sure?",
+        text               : "You won't be able to revert this!",
+        confirmButtonClass : "md-button md-success btn-fill",
+        cancelButtonClass  : "md-button md-danger btn-fill",
+        confirmButtonText  : "Yes, revert it!",
+        showCancelButton   : true,
+        buttonsStyling     : false,
       }).then((result) => {
         this.$store.dispatch("campaign/revertCampaign", "RSVP");
       });
@@ -425,7 +447,7 @@ export default {
     },
     async onFileChange(event) {
       const coverImageData = await getBase64(event.target.files[0]);
-      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
+      return this.handleChangeAddtionalData("coverImage", coverImageData);
     },
     handleChangeCampaignAllowOnline(value) {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "allowOnline", value });
@@ -470,7 +492,7 @@ export default {
       this.handleChangeCampaignVisibleSettings("showTimeline", visibility);
     },
     changeImage(images) {
-      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "images", value: images });
+      return this.handleChangeAddtionalData("images", images);
     },
   },
 };

@@ -81,11 +81,12 @@ const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout");
 
 const InvoicePage = () => import("@/pages/app/Invoices/InvoicePage.vue");
+const FeedbackNewsletter = () => import("@/pages/app/Guest/FeedbackNewsletter.vue");
 
 let testUI = {
   path: "/testui",
-  component: TestUI,
-  name: "TestUI"
+  component: FeedbackNewsletter,
+  name: "FeedbackNewsletter"
 };
 
 let authPages = {

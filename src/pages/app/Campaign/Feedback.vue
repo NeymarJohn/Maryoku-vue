@@ -6,7 +6,7 @@
       </div>
       <div class="wrapper-change-cover">
         <img v-if="campaignCoverImage" :src="campaignCoverImage" class="change-cover mr-10">
-        <div v-else-if="concept" class="d-flex justify-content-center align-center ">
+        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
           <concept-image-block
             class="change-cover-concept"
             :images="concept.images"
@@ -14,8 +14,9 @@
             border="no-border"
           />
         </div>
+        <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10" />
         <div v-if="concept" class="change-cover-feedback">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Campaign Cover
           </md-button>

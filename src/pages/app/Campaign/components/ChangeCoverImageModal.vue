@@ -41,14 +41,12 @@
       <div class="change-cover-image-modal-footer">
         <div class="sections-for-upload-cover-image">
           <div
+            class="section-upload-cover-image d-flex justify-content-center cursor-pointer"
             @click="selectConceptImages"
-            :class="[
-              'section-upload-cover-image', 'd-flex', 'justify-content-center', 'cursor-pointer',
-            ]"
           >
             <div class="width-80">
               <concept-image-block
-                v-if="eventConcept"
+                v-if="showConcept"
                 class="hidden"
                 :images="conceptImages"
                 :colors="conceptColors"
@@ -103,15 +101,25 @@
 </template>
 
 <script>
-import { Modal } from "@/components";
-import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
+// core
+import { mapMutations } from "vuex";
 import vue2Dropzone from "vue2-dropzone";
+import { v4 as uuidv4 } from "uuid";
+
+// components
+// gloabl
+import { Modal } from "@/components";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+//local
+import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
+
+// models
 import CalendarEvent from "@/models/CalendarEvent";
 import EventConcept from "@/models/EventConcept";
-import { mapMutations } from "vuex";
+
+// dependencies
 import S3Service from "@/services/s3.service";
-import { v4 as uuidv4 } from "uuid";
+import loop      from "@/helpers/number/loop";
 
 export default {
   name: "ChangeCoverImageModal",
@@ -123,9 +131,13 @@ export default {
   },
   props: {
     coverImage: {
-      type: String,
-      default: "",
-    }
+      type    : String,
+      default : "",
+    },
+    defaultCoverImage: {
+      type    : String,
+      default : "",
+    },
   },
   data() {
     return {
@@ -160,14 +172,17 @@ export default {
     conceptColors() {
       return this.eventConcept.colors || [];
     },
+    showConcept() {
+      return this.eventConcept && this.conceptImages && this.conceptImages.length && this.conceptColors && this.conceptColors.length;
+    }
   },
   created() {
     if (this.coverImage) {
       this.selectedImage = this.coverImage;
       this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
     } else {
-      this.selectedImage = (this.conceptColors && this.conceptColors.length)
-        ? this.conceptColors[0].url : null;
+      this.selectedImage = (this.conceptImages && this.conceptImages.length)
+        ? this.conceptImages[0].url : this.defaultCoverImage;
     }
 
     (async () => {
@@ -200,13 +215,12 @@ export default {
     },
     carouselScrollingToIndex() {
       const countImages = this.conceptImages.length;
-      // number 5 get from prop items carousel
-      const countScroll = countImages - 5;
-      if (countScroll < 1) return;
-      const btnNext = document.getElementById("carousel-btn-next");
-      for (let i = 0; i < countScroll; i++) {
+        // number 5 get from prop items carousel
+      if (countImages > 6) {
+        const btnNext = document.getElementById("carousel-btn-next");
         if (btnNext) {
-          btnNext.click();
+          const countScroll = countImages - 5;
+          loop(countScroll, () => btnNext.click());
         }
       }
     },
@@ -232,9 +246,10 @@ export default {
         dropZone[0].style.display = "block";
       }
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      if (preview && preview[preview.length - 1]) {
-        preview[preview.length - 1].style.display = "none";
-        preview[preview.length - 1].style.opacity = "0";
+      const lastIndexPreview = preview.length - 1;
+      if (preview && preview[lastIndexPreview]) {
+        preview[lastIndexPreview].style.display = "none";
+        preview[lastIndexPreview].style.opacity = "0";
       }
       const extension = file.type.split("/")[1];
       const fileName = uuidv4();

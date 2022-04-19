@@ -6,7 +6,7 @@
         v-if="showCommentEditorPanel"
         :comment-components="commentComponents"
         :proposal="proposal"
-        :url="`/proposals/${proposal.id}`"
+        :url="`/proposals/${proposalId}`"
         :ignore-x-offset="400"
         :is-vendor="true"
         @saveComment="saveCommentComponent"
@@ -91,10 +91,12 @@ export default {
       showUpdateSuccessModal: false,
       showCommentEditorPanel: false,
       showGuestSignupModal: false,
+      proposalId: "",
     };
   },
   async created() {
     this.loading = true;
+    this.proposalId = this.$route.params.proposalId;
     this.selectProposal();
     if (this.loggedInUser) {
       await this.$store.dispatch("auth/checkToken", this.loggedInUser.access_token);
@@ -158,13 +160,23 @@ export default {
       this.loading = true;
       this.getProposalById(this.$route.params.proposalId).then((proposal) => {
         this.loading = false;
-
         if(proposal) {
-          this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.$route.params.proposalId}`).then(res => {
-            console.log("res", res);
+          this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.proposalId}`).then(res => {
+            console.log("------------------------------------------------res", res);
             this.commentComponents = res;
+            if(this.commentComponents.length > 0) {
+              this.showProposal = true;
+            } else {
+              if( this.proposalId == this.$$route.params.proposalId ) {
+                this.showProposal = true;
+              } else {
+                this.showProposal = false;
+              }
+            }
+            // this.showProposal = !!this.commentComponents.length;
           });
-          this.showProposal = !!this.commentComponents.length;
+          
+          
           proposal.versions = !proposal.versions ? [] : proposal.versions;
           this.$store.dispatch("vendorProposal/setProposal", { ...proposal });
           this.$store.dispatch("commentProposal/setProposal", { ...proposal });
@@ -174,6 +186,12 @@ export default {
       });
     },
     selectVersion(index){
+      this.proposalId = this.$route.params.proposalId;
+      if(this.proposal.versions[index]) {
+        this.proposalId = this.proposal.versions[index].id;
+      }
+      console.log("version---------------------------------", this.proposal.versions[index]);
+      this.selectProposal();
       this.$store.commit("commentProposal/selectVersion", index);
     },
     saveVersion(version){
