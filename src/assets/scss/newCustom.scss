@@ -2789,6 +2789,7 @@
 
 .vendor-tooltip-theme{
     top: 10px !important;
+    z-index: 100;
     &[x-placement^="bottom"] {
         margin-bottom: 5px;
 
