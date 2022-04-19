@@ -26,9 +26,14 @@
         </div>
 
         <div class="next-cont">
-          <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"> Discard </a>
-          <a class="save" @click="calculateStage(proposalStatus.DRAFT)">
+          <a class="save" v-tooltip="{
+             content: 'You can return to it till the deadline!',
+             delay: { show: 200, hide: 100 },
+             trigger: 'hover',
+             placement: 'top',
+             classes: 'vendor-tooltip-theme',}"
+             @click="calculateStage(proposalStatus.DRAFT)">
             <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
           </a>
           <a v-if="step < 3" class="next active" :class="[{ active: selectedServices.length > 0 }]" @click="gotoNext">

@@ -60,7 +60,7 @@
             </div>
           </div>
           <div v-if="customers.length < 2" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${$iconURL}CustomerList/group-19735.svg`" width="30px">
+            <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px">
             <p class="text-transform-uppercase font-size-14">
               No More CUSTOMERS To Show
             </p>
@@ -134,9 +134,12 @@ export default {
       DoneModal: false,
       importCustomersModal: false,
       loading: true,
+      iconUrl: `${this.$resourceURL}storage/icons/`,
+      storageIcon: `${this.$IconURL}storage/icons/`,
+      iconUrl: `${this.$iconURL}`,
       customerTabs: CUSTOMER_PAGE_TABS,
       customerHeaders: CUSTOMER_TABLE_HEADERS,
-      tab: -1,
+      tab: 0,
       showProposalDetail: false,
       selectedProposal: null,
       selectedCustomer: null,

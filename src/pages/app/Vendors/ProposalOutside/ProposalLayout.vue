@@ -122,7 +122,6 @@ import S3Service from "@/services/s3.service";
 import state from "./state";
 import { PROPOSAL_STATUS } from "@/constants/status";
 import { MISSING_DETAILS } from "@/constants/proposal";
-import moment from 'moment'
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
@@ -202,9 +201,6 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setWizardStep", newValue);
       },
     },
-    taxes(){
-      return this.$store.state.common.taxes;
-    },
   },
   async mounted() {
     if (this.$store.state.auth.user) {
@@ -244,7 +240,6 @@ export default {
     if (this.step === 3 && this.$route.query.negotiation) {
         this.$store.commit("proposalForNonMaryoku/setNegotiation", true);
     }
-
     setTimeout(_ => {}, 10000);
     this.isLoading = false;
   },

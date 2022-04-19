@@ -5,7 +5,7 @@
         <template slot="header">
           <div class="d-flex align-center title py-20 mr-30">
             <span class="font-bold font-size-22">Total</span>
-            <span class="font-bold font-size-22 ml-auto">${{ totalPriceOfProposal | withComma }}</span>
+            <span class="font-bold font-size-22 ml-auto">${{ totalPrice | withComma }}</span>
           </div>
           <div
             v-if="defaultDiscount.percentage || negotiationDiscount.isApplied"
@@ -215,7 +215,7 @@
               <span>Before bundle discount</span>
               <div>
                 <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-                <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
+                <span class="crosslinedText">${{ Number(sumOfPrices) | withComma }}</span>
               </div>
             </div>
             <div v-if="defaultDiscount.percentage || negotiationDiscount.isApplied" class="price-row">
@@ -320,9 +320,9 @@ export default {
         {
           target: ".negotiation",
           header: {
-            title: "You've approved the new rate",
+            title: "You approved the new rate",
           },
-          content: "Remember, the new post-negotiation discount is separate from the original discount.",
+          content: "The new discount after the negotiation is separate from the original discount.",
           params: {
             placement: "left",
             enableScrolling: false,

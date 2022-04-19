@@ -263,7 +263,6 @@
 
                 <md-button
                   class="md-simple md-red maryoku-btn"
-                  :disabled="!getRequirements(selectedCategory.componentId)"
                   @click="
                       getSpecification({
                         category: selectedCategory,
