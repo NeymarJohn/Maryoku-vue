@@ -47,7 +47,9 @@ export default {
     };
   },
   beforeMount() {
-    this.isVendor =  this.$router.currentRoute.path.startsWith("/vendor");
+   setTimeout( ()=> {
+     this.isVendor = this.$router.currentRoute.path.startsWith("/vendor");
+   }, 1);
     this.zoomScale = 1 / (1770 / this.windowWidth);
     const savedZoom = localStorage.zoomParams ? JSON.parse(localStorage.zoomParams) : {};
     if (this.zoomScale === savedZoom.zoomScale && this.windowWidth === savedZoom.windowWidth) {
