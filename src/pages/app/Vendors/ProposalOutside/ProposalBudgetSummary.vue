@@ -173,7 +173,6 @@
             <ItemForm
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
-              :bundle-discount="bundleDiscount"
               :default-tax="defaultTax"
               field="discount"
               :non-maryoku="true"
@@ -183,7 +182,6 @@
               v-if="negotiationDiscount && negotiationDiscount.isApplied"
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
-              :bundle-discount="bundleDiscount"
               :default-tax="defaultTax"
               field="negotiation"
               :custom-class="isNegotiation ? 'negotiation' : ''"
@@ -194,7 +192,6 @@
             <ItemForm
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
-              :bundle-discount="bundleDiscount"
               :default-tax="defaultTax"
               field="tax"
               :non-maryoku="true"
@@ -276,6 +273,7 @@ import { Money } from "v-money";
 
 const components = {
   CollapsePanel: () => import("@/components/CollapsePanel.vue"),
+  DiscountForm: () => import("../components/DiscountForm.vue"),
   ItemForm: () => import("../components/ItemForm.vue"),
 };
 
@@ -294,6 +292,10 @@ export default {
     services: {
       type: Array,
       default: () => [],
+    },
+    taxes: {
+      type: Array,
+      required: true,
     },
   },
   data() {
@@ -450,7 +452,6 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   mounted() {
-    console.log('budget.summary', this.bundleDiscount);
     setTimeout((_) => {
       if (this.isNegotiation) this.$tours["discount"].start();
     }, 600);
@@ -462,6 +463,17 @@ export default {
     });
 
     this.$forceUpdate();
+    this.tax = this.$store.state.proposalForNonMaryoku.taxes[this.vendor.eventCategory.key];
+    if (!this.tax) this.tax = 0;
+    this.discount = this.$store.state.proposalForNonMaryoku.discounts[this.vendor.eventCategory.key];
+    if (!this.discount) {
+      this.discount = {
+        percentage: 0,
+        price: 0,
+      };
+    } else if (!this.discount.price) {
+      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
+    }
   },
   methods: {
     closeTour() {

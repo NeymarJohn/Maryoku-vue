@@ -78,7 +78,7 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.originalPriceOfMainCategory;
-
+    console.log('totalPriceByCategory', prices);
     return prices;
   },
 
@@ -131,10 +131,11 @@ const getters = {
     Object.keys(getter.totalPriceByCategory).forEach((category) => {
       sum += Number(getter.totalPriceByCategory[category]);
     });
-
+    console.log('total.price', sum, state.taxes["total"]);
     // check tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
+    console.log('total.price', state.taxes["total"], sum.toFixed(2));
     return sum.toFixed(2);
   },
   totalBeforeBundle(state, getter) {
@@ -177,6 +178,7 @@ const getters = {
     const tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
 
+    console.log("totalPrice", sum);
     return sum;
   }
 };
@@ -213,7 +215,7 @@ const mutations = {
     state.extraServices = proposal.extraServices;
     state.images = proposal.images;
     state.personalMessage = proposal.personalMessage;
-    state.taxes = proposal.taxes;
+    state.taxs = proposal.taxs;
     state.discounts = proposal.discounts;
     (state.negotiationDiscount = proposal.negotiationDiscount),
       (state.suggestedNewSeatings = proposal.suggestedNewSeatings);
