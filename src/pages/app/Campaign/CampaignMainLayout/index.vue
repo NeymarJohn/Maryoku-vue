@@ -761,7 +761,6 @@ export default {
       );
     },
     saveDraftCampaign() {
-      console.dir({ campaignType: this.currentCampaignType });
       this.callSaveCampaign(this.currentCampaignType, "SAVED");
     },
     cancelSchedule() {
@@ -802,7 +801,6 @@ export default {
         coverImage = fileUpload;
       }
 
-      console.log("-------------", this.deliverySettings);
 
       let referenceUrl = "";
       if (campaignType === "RSVP") {
@@ -813,18 +811,15 @@ export default {
         referenceUrl = `${document.location.origin}/#/feedback/${this.event.id}`;
       }
       const { deliverySettings } = this;
-      console.dir({ deliverySettings : { ...deliverySettings } });
 
       if (this.deliverySettings.email.selected) {
         this.deliverySettings.email.status = "sent";
       }
-      console.log(6);
 
       if (this.deliverySettings.phone.selected) {
         this.deliverySettings.phone.status = "sent";
       }
 
-      console.dir({ campaignType, campaignStatus });
       const newCampaign = new Campaign({
         campaignType,
         ...campaignData,
@@ -836,7 +831,6 @@ export default {
         coverImage,
         isPreview,
       });
-      console.dir({ campaignType, campaignStatus });
 
       const result = new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
@@ -851,7 +845,6 @@ export default {
           });
       });
 
-      console.dir({ campaignType, campaignStatus, result });
 
       return result;
     },
