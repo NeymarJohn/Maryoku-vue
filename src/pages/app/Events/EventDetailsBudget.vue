@@ -319,10 +319,6 @@
       <BudgetHandleMinusModal v-if="showHandleMinus" value="50" />
       <div class="wizard-footer d-flex">
         <div>
-          <md-button class="md-black md-maryoku md-simple" @click="back">
-            <md-icon>keyboard_backspace</md-icon>
-            Back
-          </md-button>
           <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
           </md-button>
@@ -335,7 +331,7 @@
               width="25"
               style="margin-right: 10px"
             >
-            {{ event.budgetProgress === 100 ? "Budget Allocated and Approved" : "You can edit this anytime" }}
+            {{ event.budgetProgress === 100 ? "Budget Was Divided" : "You can edit this anytime" }}
           </span>
           <md-button v-if="event.budgetProgress !== 100" class="md-default md-red md-maryoku" @click="next">
             Approve Budget Breakdown
