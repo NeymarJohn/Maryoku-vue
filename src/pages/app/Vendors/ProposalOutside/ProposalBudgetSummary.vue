@@ -5,7 +5,7 @@
         <template slot="header">
           <div class="d-flex align-center title py-20 mr-30">
             <span class="font-bold font-size-22">Total</span>
-            <span class="font-bold font-size-22 ml-auto">${{ totalPrice | withComma }}</span>
+            <span class="font-bold font-size-22 ml-auto">${{ totalPriceOfProposal | withComma }}</span>
           </div>
           <div
             v-if="defaultDiscount.percentage || negotiationDiscount.isApplied"
@@ -173,6 +173,7 @@
             <ItemForm
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
+              :bundle-discount="bundleDiscount"
               :default-tax="defaultTax"
               field="discount"
               :non-maryoku="true"
@@ -182,6 +183,7 @@
               v-if="negotiationDiscount && negotiationDiscount.isApplied"
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
+              :bundle-discount="bundleDiscount"
               :default-tax="defaultTax"
               field="negotiation"
               :custom-class="isNegotiation ? 'negotiation' : ''"
@@ -192,6 +194,7 @@
             <ItemForm
               :default-discount="defaultDiscount"
               :default-negotiation="negotiationDiscount"
+              :bundle-discount="bundleDiscount"
               :default-tax="defaultTax"
               field="tax"
               :non-maryoku="true"
@@ -215,7 +218,7 @@
               <span>Before bundle discount</span>
               <div>
                 <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-                <span class="crosslinedText">${{ Number(sumOfPrices) | withComma }}</span>
+                <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
               </div>
             </div>
             <div v-if="defaultDiscount.percentage || negotiationDiscount.isApplied" class="price-row">
@@ -273,7 +276,6 @@ import { Money } from "v-money";
 
 const components = {
   CollapsePanel: () => import("@/components/CollapsePanel.vue"),
-  DiscountForm: () => import("../components/DiscountForm.vue"),
   ItemForm: () => import("../components/ItemForm.vue"),
 };
 
@@ -292,10 +294,6 @@ export default {
     services: {
       type: Array,
       default: () => [],
-    },
-    taxes: {
-      type: Array,
-      required: true,
     },
   },
   data() {
@@ -320,9 +318,9 @@ export default {
         {
           target: ".negotiation",
           header: {
-            title: "You approved the new rate",
+            title: "You've approved the new rate",
           },
-          content: "The new discount after the negotiation is separate from the original discount.",
+          content: "Remember, the new post-negotiation discount is separate from the original discount.",
           params: {
             placement: "left",
             enableScrolling: false,
@@ -452,6 +450,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   mounted() {
+    console.log('budget.summary', this.bundleDiscount);
     setTimeout((_) => {
       if (this.isNegotiation) this.$tours["discount"].start();
     }, 600);
@@ -463,17 +462,6 @@ export default {
     });
 
     this.$forceUpdate();
-    this.tax = this.$store.state.proposalForNonMaryoku.taxes[this.vendor.eventCategory.key];
-    if (!this.tax) this.tax = 0;
-    this.discount = this.$store.state.proposalForNonMaryoku.discounts[this.vendor.eventCategory.key];
-    if (!this.discount) {
-      this.discount = {
-        percentage: 0,
-        price: 0,
-      };
-    } else if (!this.discount.price) {
-      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
-    }
   },
   methods: {
     closeTour() {

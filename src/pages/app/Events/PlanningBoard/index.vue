@@ -13,8 +13,8 @@
                 :key="index"
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
-                :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+                :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
+                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -26,6 +26,8 @@
                   class="mr-20 mb-10"
                   label="More categories"
                   data-toggle="dropdown"
+                  :icon="`${$iconURL}Services /more.svg`"
+                  :selected-icon="`${$iconURL}Services /more-white.svg`"
                   :default-status="showMoreCats === true"
                   :proposalCategory="false"
                   @click="showMoreCategories"
@@ -57,7 +59,7 @@
                   >
                     <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
                       <div class="category-name">
-                        <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
+                        <img :src="`${$iconURL}Services /${additionalCategory.icon}`">
                         &nbsp;&nbsp;
                         {{ additionalCategory.title }}
                       </div>
@@ -263,7 +265,6 @@
 
                 <md-button
                   class="md-simple md-red maryoku-btn"
-                  :disabled="!getRequirements(selectedCategory.componentId)"
                   @click="
                       getSpecification({
                         category: selectedCategory,
@@ -366,7 +367,7 @@
               <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
             </md-button>
             <drop-down class="d-inline-block">
-              <button class="more-button cursor-pointer" data-toggle="dropdown">
+              <button class="more-button cursor-pointer" data-toggle="dropdown" :disabled="proposal === null">
               <span class="more-actions font-size-16 ml-20">
                 {{ "More actions" }}
               </span>
@@ -387,12 +388,12 @@
             </drop-down>
           </div>
           <div class="d-flex justify-content-end">
-            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
+            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="proposal === null" @click="bookVendor">
               Book This Vendor
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
 
-            <md-button class="md-red maryoku-btn w-min-250" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
+            <md-button class="md-red maryoku-btn w-min-250" :disabled="(proposal === null ) || isInCart" @click="addToCart">
               Add To Cart
             </md-button>
           </div>
@@ -728,7 +729,7 @@ export default {
 
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
-        if (scroll >= 300) {
+        if (scroll >= 200) {
           $(".headers").addClass("fixed-top");
         } else {
           $(".headers").removeClass("fixed-top");
@@ -1143,12 +1144,10 @@ export default {
     padding-left: 480px;
     animation: slide-down 0.7s;
     opacity: 1;
-    z-index: 1030;
+    z-index: 10;
 
     .container {
-      background: white;
-      margin-left: 60px;
-      margin-right: 30px;
+      background: #f3f7fd;
     }
   }
   @keyframes slide-down {
