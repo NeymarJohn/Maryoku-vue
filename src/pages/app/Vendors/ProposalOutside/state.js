@@ -78,6 +78,7 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.originalPriceOfMainCategory;
+    console.log('totalPriceByCategory', prices);
     return prices;
   },
 
@@ -130,6 +131,7 @@ const getters = {
     Object.keys(getter.totalPriceByCategory).forEach((category) => {
       sum += Number(getter.totalPriceByCategory[category]);
     });
+
     // check tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
@@ -145,9 +147,6 @@ const getters = {
     const discount = state.discounts["total"] || { price: 0, percentage: 0 };
     sum = sum - (sum * discount.percentage) / 100;
 
-    const negotiation = state.negotiationDiscount || { price: 0, percentage: 0 };
-    sum = sum - (sum * (negotiation.percentage || 0)) / 100;
-
     // check tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
@@ -160,24 +159,24 @@ const getters = {
       sum += Number(getter.totalPriceByCategory[category]);
     });
 
-    // check discount
+    // minus default discount
     const discount = state.discounts["total"] || { price: 0, percentage: 0 };
     sum = sum - (sum * discount.percentage) / 100;
 
-    // check negotiation discount
+    // minus bundle discount
+    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
+      sum -= state.bundleDiscount.price;
+    }
+
+    // minus negotiation discount
     if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
       sum -= state.negotiationDiscount.price;
     }
 
-    // check tax
+    // add tax
     const tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
-    // check bundle discount
 
-    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
-      sum -= state.bundleDiscount.price;
-    }
-    console.log("totalPrice", sum);
     return sum;
   }
 };
@@ -214,7 +213,7 @@ const mutations = {
     state.extraServices = proposal.extraServices;
     state.images = proposal.images;
     state.personalMessage = proposal.personalMessage;
-    state.taxs = proposal.taxs;
+    state.taxes = proposal.taxes;
     state.discounts = proposal.discounts;
     (state.negotiationDiscount = proposal.negotiationDiscount),
       (state.suggestedNewSeatings = proposal.suggestedNewSeatings);

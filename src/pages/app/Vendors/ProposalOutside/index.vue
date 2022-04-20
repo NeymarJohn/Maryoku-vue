@@ -25,7 +25,6 @@
           :is-edit="true"
           :step="step"
           :services="services"
-          :taxes="taxes"
         />
       </div>
     </div>
@@ -56,7 +55,6 @@ export default {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
-      taxes: [],
       iconsWithCategory: null,
       isLoading: false,
       markedDates: [],
@@ -96,9 +94,6 @@ export default {
       return this.$store.state.proposalForNonMaryoku.currentVersion;
     }
   },
-  watch: {
-      taxes(newVal){console.log("taxes", newVal);}
-  },
   created() {},
   async mounted() {
     this.services = Object.assign([], businessCategories);
@@ -108,7 +103,7 @@ export default {
     await this.$store.dispatch("common/getTaxes");
 
     // handling uploading photo backhand process
-      this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName}) => {
+    this.$root.$on("update-inspirational-photo", async ({ file, index, link, fileName}) => {
           const currentPhoto = this.inspirationalPhotos[index];
 
 
@@ -116,7 +111,7 @@ export default {
           this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url }});
 
       });
-      this.$root.$on("remove-inspirational-photo", async (index) => {
+    this.$root.$on("remove-inspirational-photo", async (index) => {
           if ( this.version !== -1 ) await S3Service.deleteFile(this.inspirationalPhotos[index].url);
           this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: null });
       });

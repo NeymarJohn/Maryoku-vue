@@ -13,8 +13,8 @@
                 :key="index"
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
-                :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
+                :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
+                :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -26,8 +26,6 @@
                   class="mr-20 mb-10"
                   label="More categories"
                   data-toggle="dropdown"
-                  :icon="`${$iconURL}Services /more.svg`"
-                  :selected-icon="`${$iconURL}Services /more-white.svg`"
                   :default-status="showMoreCats === true"
                   :proposalCategory="false"
                   @click="showMoreCategories"
@@ -59,7 +57,7 @@
                   >
                     <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
                       <div class="category-name">
-                        <img :src="`${$iconURL}Services /${additionalCategory.icon}`">
+                        <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
                         &nbsp;&nbsp;
                         {{ additionalCategory.title }}
                       </div>
@@ -265,6 +263,7 @@
 
                 <md-button
                   class="md-simple md-red maryoku-btn"
+                  :disabled="!getRequirements(selectedCategory.componentId)"
                   @click="
                       getSpecification({
                         category: selectedCategory,
@@ -729,7 +728,7 @@ export default {
 
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
-        if (scroll >= 200) {
+        if (scroll >= 300) {
           $(".headers").addClass("fixed-top");
         } else {
           $(".headers").removeClass("fixed-top");
@@ -1147,7 +1146,9 @@ export default {
     z-index: 1030;
 
     .container {
-      background: #f3f7fd;
+      background: white;
+      margin-left: 60px;
+      margin-right: 30px;
     }
   }
   @keyframes slide-down {

@@ -29,6 +29,7 @@
 <script>
 import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
 import _ from "underscore";
+import moment from 'moment'
 
 export default {
     components: {
@@ -41,15 +42,21 @@ export default {
         event(){
             return this.$store.state.proposalForNonMaryoku.eventData;
         },
-        taxes(){
-            return this.$store.state.common.taxes;
-        },
         costServiceItems() {
             return this.$store.state.proposalForNonMaryoku.costServices[this.vendor.eventCategory.key];
         },
         includedServiceItems() {
             return this.$store.state.proposalForNonMaryoku.includedServices[this.vendor.eventCategory.key];
         },
+        discounts() {
+          return this.$store.state.proposalForNonMaryoku.discounts;
+        },
+        taxes() {
+          return this.$store.state.proposalForNonMaryoku.taxes;
+        },
+        defaultTaxes(){
+          return this.$store.state.common.taxes;
+        }
     },
     watch: {
         // remove costServiceItem already in included section
@@ -72,26 +79,14 @@ export default {
         },
     },
     created() {
-        let taxRate = 0;
-        let discountRate = 0;
-        if (this.vendor.pricingPolicies) {
-            this.vendor.pricingPolicies.forEach((item) => {
-                if (item.name === "Tax rate" && item.value) {
-                    taxRate = Number(item.value);
-                }
-            });
+        // calculate default discount
+        if (!this.discounts.total && this.vendor.discountPolicies) {
+          this.setDefaultDiscount();
         }
 
-        if (!taxRate) taxRate = this.getTaxFromState();
-        if (Object.keys(this.$store.state.vendorProposal.taxes).length === 0) {
-            this.$store.commit("proposalForNonMaryoku/setValue", {
-                key: "taxes",
-                value: { [this.vendor.eventCategory.key]: { percentage: taxRate, price: 0 } },
-            });
-            this.$store.commit("proposalForNonMaryoku/setValue", {
-                key: "taxes",
-                value: { total: { percentage: taxRate, price: 0 } },
-            });
+        // calculate default tax
+        if (!this.taxes.total) {
+          this.setDefaultTax();
         }
 
         if (!this.$store.state.proposalForNonMaryoku.initialized) {
@@ -115,21 +110,76 @@ export default {
         }
     },
     methods: {
-        getTaxFromState() {
-            if (!this.event.location) return 0;
+      setDefaultDiscount() {
+        console.log("step2", this.discounts);
+        const policies = this.vendor.discountPolicies;
+        let discountRate = 0;
 
-            let tax = 0;
-            const arr = this.event.location.split(", ");
-            const withoutCity = arr.length === 2;
-            this.taxes.map(it => {
-              const state = withoutCity ? it.state : it.code;
-              if (arr[arr.length - 1] === "USA" && arr[arr.length - 2] === state && it.tax) {
-                tax = it.tax;
-              }
-            });
-          return tax;
-        },
-        setInitServices(serviceName, services, pricingPolicies) {
+        const evtDay = moment(this.event.startTime * 1000);
+
+        if (policies.hasOwnProperty("number_of_guests") && (
+          policies.number_of_guests[0].rule === 1 && Number(this.event.numberOfParticipants) >= Number(policies.number_of_guests[0].qty) ||
+          policies.number_of_guests[0].rule === 2 && Number(this.event.numberOfParticipants) <= Number(policies.number_of_guests[0].qty))){
+
+          discountRate = policies.double ? discountRate + Number(policies.number_of_guests[0].value) :
+            Number(policies.number_of_guests[0].value);
+
+        }
+
+        const returning = this.event.customer.proposals.length ? 1 : 0;
+        if (policies.hasOwnProperty("customer_type") && returning === Number(policies.customer_type[0].type)) {
+
+          discountRate = policies.double ? discountRate + Number(policies.customer_type[0].value) : Number(policies.customer_type[0].value);
+
+        }
+        if (policies.hasOwnProperty("seasonal") &&
+          evtDay.isBetween(`${policies.seasonal[0].from.year}-${policies.seasonal[0].from.months[0]}`,
+            `${policies.seasonal[0].to.year}-${policies.seasonal[0].to.months[0]}`)) {
+
+          discountRate = policies.double ? discountRate + Number(policies.seasonal[0].value) : Number(policies.seasonal[0].value);
+        }
+
+        console.log('discounts', discountRate);
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+          key: "discounts",
+          value: {total: {percentage: discountRate, price: 0}} });
+      },
+
+      setDefaultTax() {
+        let taxRate = 0;
+        if (this.vendor.pricingPolicies) {
+          this.vendor.pricingPolicies.forEach((item) => {
+            if (item.name === "Tax rate" && item.value) {
+              taxRate = Number(item.value);
+            }
+          });
+        }
+
+        if (!taxRate) taxRate = this.getTaxFromState();
+
+        console.log('setTax', taxRate);
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+          key: "taxes",
+          value: { total: { percentage: taxRate, price: 0 } },
+        });
+
+      },
+
+      getTaxFromState() {
+        if (!this.event.location) return 0;
+
+        let tax = 0;
+        const arr = this.event.location.split(", ");
+        const withoutCity = arr.length === 2;
+        this.defaultTaxes.map(it => {
+          const state = withoutCity ? it.state : it.code;
+          if (arr[arr.length - 1] === "USA" && arr[arr.length - 2] === state && it.tax) {
+            tax = it.tax;
+          }
+        });
+        return tax;
+      },
+      setInitServices(serviceName, services, pricingPolicies) {
             let includedVendorServices = [];
             let costVendorServices = [];
             const includedSevices = [];
