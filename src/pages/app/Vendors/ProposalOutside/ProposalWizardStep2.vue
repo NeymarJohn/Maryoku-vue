@@ -29,7 +29,7 @@
 <script>
 import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
 import _ from "underscore";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
     components: {
@@ -139,7 +139,7 @@ export default {
           discountRate = policies.double ? discountRate + Number(policies.seasonal[0].value) : Number(policies.seasonal[0].value);
         }
 
-        console.log('discounts', discountRate);
+        console.log("discounts", discountRate);
         this.$store.commit("proposalForNonMaryoku/setValue", {
           key: "discounts",
           value: {total: {percentage: discountRate, price: 0}} });
@@ -157,7 +157,7 @@ export default {
 
         if (!taxRate) taxRate = this.getTaxFromState();
 
-        console.log('setTax', taxRate);
+        console.log("setTax", taxRate);
         this.$store.commit("proposalForNonMaryoku/setValue", {
           key: "taxes",
           value: { total: { percentage: taxRate, price: 0 } },

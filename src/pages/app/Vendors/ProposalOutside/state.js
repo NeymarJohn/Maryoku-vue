@@ -78,7 +78,7 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.originalPriceOfMainCategory;
-    console.log('totalPriceByCategory', prices);
+
     return prices;
   },
 
