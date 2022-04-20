@@ -554,6 +554,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 // dependencies
 import { CommentMixins, ShareMixins } from "@/mixins";
 import S3Service from "@/services/s3.service";
+import defaultSettings from "./defaultSettings";
 
 export default {
   components: {
@@ -587,7 +588,7 @@ export default {
         conceptName: "",
         logo: "",
       },
-      deliverySettings: this.defaultSettings,
+      deliverySettings: defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
       showChangeCoverModal: false,
@@ -626,7 +627,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),
+    ...mapGetters("campaign", ["campaignIssued"]),
     event() {
       return this.$store.state.event.eventData;
     },
@@ -679,6 +680,9 @@ export default {
   methods: {
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     ...mapMutations("campaign", ["setAttribute"]),
+    setDeliverySettings (value) {
+      this.deliverySettings = value;
+    },
     showChangeCoverImageModal() {
       this.showChangeCoverModal = !this.showChangeCoverModal;
     },
@@ -687,6 +691,7 @@ export default {
     },
     chooseImage(url) {
       this.showChangeCoverModal = false;
+      //
       this.setAttribute({
         name: this.currentCampaignType,
         key: "coverImage",
@@ -701,12 +706,12 @@ export default {
       this.setDefaultSettings();
     },
     setDefaultSettings() {
-      if (this.currentCampaign && this.currentCampaign.settings) {
+      if (this.currentCampaign && this.currentCampaign.settings && Object.keys(this.currentCampaign.settings).length > 0) {
         this.deliverySettings = {
           ...this.currentCampaign.settings,
         };
       } else {
-        this.deliverySettings = { ...this.defaultSettings };
+        this.deliverySettings = { ...defaultSettings };
       }
     },
     exportToPdf() {
@@ -756,6 +761,7 @@ export default {
       );
     },
     saveDraftCampaign() {
+      console.dir({ campaignType: this.currentCampaignType });
       this.callSaveCampaign(this.currentCampaignType, "SAVED");
     },
     cancelSchedule() {
@@ -782,6 +788,7 @@ export default {
       this.isLoading = true;
       const campaignData = this.$store.state.campaign[campaignType];
       let coverImage = campaignData.coverImage;
+
       if (coverImage && coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(
           coverImage,
@@ -794,20 +801,30 @@ export default {
         );
         coverImage = fileUpload;
       }
+
+      console.log("-------------", this.deliverySettings);
+
       let referenceUrl = "";
       if (campaignType === "RSVP") {
         referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
       }
+
       if (campaignType === "FEEDBACK") {
         referenceUrl = `${document.location.origin}/#/feedback/${this.event.id}`;
       }
+      const { deliverySettings } = this;
+      console.dir({ deliverySettings : { ...deliverySettings } });
 
       if (this.deliverySettings.email.selected) {
         this.deliverySettings.email.status = "sent";
       }
+      console.log(6);
+
       if (this.deliverySettings.phone.selected) {
         this.deliverySettings.phone.status = "sent";
       }
+
+      console.dir({ campaignType, campaignStatus });
       const newCampaign = new Campaign({
         campaignType,
         ...campaignData,
@@ -819,18 +836,24 @@ export default {
         coverImage,
         isPreview,
       });
-      return new Promise((resolve, reject) => {
+      console.dir({ campaignType, campaignStatus });
+
+      const result = new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
           .then((res) => {
             this.$store.commit("event/setEventData", res.item.event);
             this.isLoading = false;
-            resolve();
+            resolve(res);
           })
           .catch(() => {
             this.isLoading = false;
             reject();
           });
       });
+
+      console.dir({ campaignType, campaignStatus, result });
+
+      return result;
     },
     saveScheduleTime(data) {
       const {
@@ -853,7 +876,7 @@ export default {
       this.scheduleCampaign();
     },
     revertSetting() {
-      this.deliverySettings = Object.assign({}, this.defaultSettings);
+      this.deliverySettings = Object.assign({}, defaultSettings);
       if (this.selectedTab == 1) {
         this.$refs.savedateCampaign.setDefault();
       } else if (this.selectedTab == 2) {
@@ -867,7 +890,7 @@ export default {
     sendPreviewEmail() {
       this.callSaveCampaign(
         this.currentCampaignType,
-        this.campaignData.campaignStatus || "TESTING",
+        this.currentCampaign.campaignStatus || "TESTING",
         true
       ).then((res) => {});
 
@@ -910,24 +933,21 @@ export default {
         "STARTED"
       );
     },
-    changeCampaignLogo(file) {
+    async changeCampaignLogo(file) {
       const changeLogo = (logoUrl) => {
         this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
         this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
         this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
         this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-        this.saveCampaign({ id: this.campaignData.id, logoUrl });
+        this.saveCampaign({ id: this.currentCampaign.id, logoUrl });
       };
       if (!file) {
         changeLogo(file);
       }
       const extension = file.type.split("/")[1];
       const fileName = uuidv4();
-      new Promise(() => {
-        S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-          changeLogo(logoUrl);
-        });
-      });
+      const logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+      changeLogo(logoUrl);
     }
   },
 };

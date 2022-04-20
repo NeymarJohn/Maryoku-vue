@@ -4062,15 +4062,15 @@ export const VendorPricingPolicy = [
           label: "Late Night Fee"
         }
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   hideOnProposal: true,
-      //   type: "Number",
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        hideOnProposal: true,
+        type: "Number",
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4129,15 +4129,15 @@ export const VendorPricingPolicy = [
           label: "Breakdown"
         }
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "Number",
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "Number",
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4165,18 +4165,18 @@ export const VendorPricingPolicy = [
         type: "Number",
         hasComment: true
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "DiscountForLarge",
-      //   labelForAttendees: "How many",
-      //   labelForValue: "Rate",
-      //   isSelected: false,
-      //   value: 0,
-      //   attendees: null,
-      //   hasComment: true,
-      //   hideOnProposal: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "DiscountForLarge",
+        labelForAttendees: "How many",
+        labelForValue: "Rate",
+        isSelected: false,
+        value: 0,
+        attendees: null,
+        hasComment: true,
+        hideOnProposal: true,
+        unit: "%"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4216,15 +4216,15 @@ export const VendorPricingPolicy = [
         type: "Number",
         hasComment: true
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "Number",
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "Number",
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4252,15 +4252,15 @@ export const VendorPricingPolicy = [
         type: "Number",
         hasComment: true
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "Number",
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "Number",
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4333,18 +4333,18 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4376,13 +4376,13 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Discounts",
-      //   type: "Number",
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   hideOnProposal: true
-      // },
+      {
+        name: "Discounts",
+        type: "Number",
+        isPercentage: true,
+        hasComment: true,
+        hideOnProposal: true
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4454,18 +4454,18 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Road tolls",
         hasComment: true,
@@ -4573,18 +4573,18 @@ export const VendorPricingPolicy = [
         hideOnProposal: true,
         isPercentage: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4606,18 +4606,18 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",

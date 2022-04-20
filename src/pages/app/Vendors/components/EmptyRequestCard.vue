@@ -11,7 +11,7 @@
         We couldn't find any more opportunities for you at this point. Increase your exposure by improving your
         profile
       </p>
-      <md-button class="card-button md-simple ml-auto md-vendor md-outlined" @click="redirect">
+      <md-button class="card-button md-simple ml-auto md-vendor md-outlined">
         Optimize Profile
       </md-button>
     </div>
@@ -28,13 +28,7 @@ export default {
     };
   },
   mounted() {},
-  methods: {
-    redirect(){
-      this.$router.push({
-        path: "/vendor/profile/services",
-      });
-    },
-  },
+  methods: { },
 };
 </script>
 

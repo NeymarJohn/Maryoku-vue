@@ -1,8 +1,8 @@
 export const CUSTOMER_PAGE_TABS = [
-  { key: "all", value: -1, title: "All customers", icon: "Group 19735.svg", class: "color-purple" },
-  { key: "new", value: 0, title: "Returning", icon: "Path 3984.svg", class: "color-black-middle" },
-  { key: "returning", value: 1, title: "New", icon: "Group 19776.svg", class: "color-black-middle" },
-  { key: "potential", value: 2, title: "Potential", icon: "Group 19780.svg", class: "color-blue" }
+  { key: "all", value: 0, title: "All customers", icon: "Group 19735.svg", class: "color-purple" },
+  { key: "returning", value: 1, title: "Returning", icon: "Path 3984.svg", class: "color-black-middle" },
+  { key: "new", value: 2, title: "New", icon: "Group 19776.svg", class: "color-black-middle" },
+  { key: "potential", value: 3, title: "Potential", icon: "Group 19780.svg", class: "color-blue" }
 ];
 
 export const CUSTOMER_TABLE_HEADERS = [

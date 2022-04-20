@@ -510,7 +510,7 @@ export default {
       default: ""
     },
     eventData: {
-      type: Object,
+      type: Object, 
       default: () => {}
     },
     isEdit: {
@@ -525,7 +525,7 @@ export default {
       type: String,
       default: ""
     },
-    services: {
+    services: { 
       type: Array,
       default: () => []
     },

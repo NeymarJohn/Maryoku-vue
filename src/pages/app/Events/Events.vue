@@ -137,23 +137,28 @@
 </template>
 
 <script>
+// core
 import Vue from "vue";
+import { mapMutations } from "vuex";
+import moment from "moment";
+import Swal from "sweetalert2";
+
+// components
 import { ProductCard } from "@/components";
+import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
+import Loader from "../../../components/loader/Loader";
 
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
 
 import EventModal from "./EventModal/";
-import { mapMutations } from "vuex";
-import moment from "moment";
-import Swal from "sweetalert2";
 import TeamMember from "@/models/TeamMember";
-import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
 import eventService from "@/services/event.service";
-import Loader from "../../../components/loader/Loader";
 
-const imageIndex = new Date().getTime() % backgroundImages.length;
-const quoteIndex = new Date().getTime() % quotes.length;
-const quote = quotes[quoteIndex];
+const DATE       = new Date();
+const TIME       = DATE.getTime();
+const imageIndex = TIME % backgroundImages.length;
+const quoteIndex = TIME % quotes.length;
+const quote      = quotes[quoteIndex];
 
 export default {
   components: {
@@ -161,9 +166,7 @@ export default {
     ProductCard,
   },
   filters: {
-    moment: function (date) {
-      return moment(date).format("MMMM Do, GGGG");
-    },
+    moment: (date) => moment(date).format("MMMM Do, GGGG"),
   },
   data() {
     return {
