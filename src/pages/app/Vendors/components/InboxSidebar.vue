@@ -160,8 +160,7 @@
         v-for="(proposal, pindex) in commentsProposals"
         :key="pindex"
         class="sidebar__item_main cursor-pointer"
-        :class="{'active':(selectedProposal && selectedProposal.id == proposal.id)}"
-        @click="showhide = !showhide"
+        :class="[(selectedProposal && selectedProposal.id == proposal.id) ? 'active' : '', 'main_content_' + proposal.id]"
       >
         <div class="d-flex justify-content-between">
           <div class="d-flex align-items-center justify-content-between">
@@ -181,32 +180,34 @@
             </div>
           </div>
           <div style="margin-top: 15px;">
-            <i v-if="!showhide" class="fas fa-chevron-right my-chevron" @click="showhide = !showhide" />
-            <i v-else class="fas fa-chevron-down my-chevron" @click="showhide = !showhide" />
+            <i class="fas fa-chevron-right my-chevron" :class="proposal.id" @click="openclose(proposal.id)" />
+            <!-- <i v-else class="fas fa-chevron-down my-chevron" @click="openclose('show', proposal.id)" /> -->
           </div>
         </div>
         <div v-if="proposal.subProposals.length > 0">
-          <div
-            v-for="(subProposal, subIndex) in proposal.subProposals"
-            :key="subIndex"
-            @click="changeProposal(subProposal)"
-            class="cursor-pointer">
-            <div class="d-flex" :class="{'hide_sub_item': (!showhide)}">
-              <div class="sidebar__bar"></div>
-              <div class="sidebar__item__details d-flex flex-column sub_item_box" :class="{'active':(selectedProposal && selectedProposal.id == subProposal.id)}">
-                <span v-if="subProposal.nonMaryoku && proposal.eventData && subProposal.eventData.customer" class="productLaunchParty">
-                  {{ subProposal.eventData.customer.companyName }}
-                </span>
-                <span v-else-if="subProposal.vendor && subProposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
-                  {{ subProposal.vendor.eventCategory.fullTitle }}
-                </span>
-                <span>{{ subProposal.dateCreated | date("DD") }} / {{ subProposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ subProposal.cost | withComma }}</span>
+          <div :class="'content_' + proposal.id" style="display:none;">
+            <div
+              v-for="(subProposal, subIndex) in proposal.subProposals"
+              :key="subIndex"
+              @click="changeProposal(subProposal)"
+              class="cursor-pointer" >
+              <div class="d-flex">
+                <div class="sidebar__bar"></div>
+                <div class="sidebar__item__details d-flex flex-column sub_item_box" :class="{'active':(selectedProposal && selectedProposal.id == subProposal.id)}">
+                  <span v-if="subProposal.nonMaryoku && proposal.eventData && subProposal.eventData.customer" class="productLaunchParty">
+                    {{ subProposal.eventData.customer.companyName }}
+                  </span>
+                  <span v-else-if="subProposal.vendor && subProposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
+                    {{ subProposal.vendor.eventCategory.fullTitle }}
+                  </span>
+                  <span>{{ subProposal.dateCreated | date("DD") }} / {{ subProposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ subProposal.cost | withComma }}</span>
+                </div>
               </div>
+              <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
+                Full Discussion
+              </button>
+              <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span>
             </div>
-            <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
-              Full Discussion
-            </button>
-            <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span>
           </div>
         </div>
         <!-- <span class="sidebar__item__badge mx-auto">1</span> -->
@@ -489,6 +490,20 @@ export default {
     },
     daysDiff(date){
         return moment(moment()).diff(moment(date), "days");
+    },
+    openclose(id) {
+      var arrowObj = document.getElementsByClassName(id);
+      var contentObj = document.getElementsByClassName("content_" + id);
+      var mainObj = document.getElementsByClassName("main_content_" + id);
+      if(arrowObj[0].className == ("fas fa-chevron-down my-chevron " + id)) {
+        arrowObj[0].className = "fas fa-chevron-right my-chevron " + id;
+        contentObj[0].style.display = "none";
+        mainObj[0].style.backgroundColor = "#ffffff";
+      } else {
+        arrowObj[0].className = "fas fa-chevron-down my-chevron " + id;
+        contentObj[0].style.display = "block";
+        mainObj[0].style.backgroundColor = "#f5f5f5";
+      }
     }
   }
 };
@@ -536,8 +551,9 @@ export default {
     align-items: center;
     padding: 20px;
     transition: 0.3s ease-in-out all;
-    height: 100px;
     position: relative;
+    // height: 100px;
+    border-bottom: 1px solid #bfbfbf;
 }
 
 .sidebar__item:hover,
@@ -546,8 +562,9 @@ export default {
 }
 .sub_item_box:hover,
 .sub_item_box.active {
-  background-color: #f6eef6;
-  box-shadow: 0px 0px 9px 1px #444343;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0px 0px 9px 1px #444343;
+  box-shadow: 0px 0px 9px 1px #a3a3a3;
 }
 
 .sidebar__item__details {
@@ -749,12 +766,12 @@ export default {
 }
 
 .sub_item_box {
-  padding-top: 10px;
+  padding-top: 5px;
   padding-left: 13px;
   padding-right: 13px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   width: 100%;
-  margin-top: 5px;
+  margin-top: 20px;
 }
 
 .hide_sub_item { 
