@@ -162,7 +162,7 @@
         class="sidebar__item_main cursor-pointer"
         :class="[(selectedProposal && selectedProposal.id == proposal.id) ? 'active' : '', 'main_content_' + proposal.id]"
       >
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between" style="z-index: 100;">
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-item-center sidebar__item__content">
               <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
@@ -201,12 +201,12 @@
                     {{ subProposal.vendor.eventCategory.fullTitle }}
                   </span>
                   <span>{{ subProposal.dateCreated | date("DD") }} / {{ subProposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ subProposal.cost | withComma }}</span>
+                  <!-- <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
+                    Full Discussion
+                  </button>
+                  <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span> -->
                 </div>
               </div>
-              <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
-                Full Discussion
-              </button>
-              <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span>
             </div>
           </div>
         </div>
