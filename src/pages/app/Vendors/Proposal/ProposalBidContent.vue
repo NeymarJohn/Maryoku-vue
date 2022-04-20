@@ -124,31 +124,30 @@ export default {
       }
     }
     if (this.vendor.pricingPolicies) {
-      // todo move calculating default discounts to proposalLayout page
-      // this.vendor.pricingPolicies.forEach((item) => {
-      //   if (item.name === "Tax rate" && item.value) {
-      //     taxRate = Number(item.value);
-      //   }
-      //   if (
-      //     item.name === "Discount for large quantities" &&
-      //     Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
-      //     item.attendees &&
-      //     item.value
-      //   ) {
-      //     discountRate = Number(item.value);
-      //   }
-      //   if (item.name === "Discounts" && item.value) {
-      //     discountRate = Number(item.value);
-      //   }
-      //   if (
-      //     item.name === "Large group discounts" &&
-      //     Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
-      //     item.attendees &&
-      //     item.value
-      //   ) {
-      //     discountRate = Number(item.value);
-      //   }
-      // });
+      this.vendor.pricingPolicies.forEach((item) => {
+        if (item.name === "Tax rate" && item.value) {
+          taxRate = Number(item.value);
+        }
+        if (
+          item.name === "Discount for large quantities" &&
+          Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+          item.attendees &&
+          item.value
+        ) {
+          discountRate = Number(item.value);
+        }
+        if (item.name === "Discounts" && item.value) {
+          discountRate = Number(item.value);
+        }
+        if (
+          item.name === "Large group discounts" &&
+          Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+          item.attendees &&
+          item.value
+        ) {
+          discountRate = Number(item.value);
+        }
+      });
     }
 
     if (!taxRate) taxRate = this.getTaxFromState();
