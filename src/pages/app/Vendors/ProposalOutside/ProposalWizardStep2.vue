@@ -29,7 +29,7 @@
 <script>
 import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
 import _ from "underscore";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
     components: {
@@ -52,8 +52,11 @@ export default {
           return this.$store.state.proposalForNonMaryoku.discounts;
         },
         taxes() {
-          return this.$store.state.proposalForNonMaryoku.discounts;
+          return this.$store.state.proposalForNonMaryoku.taxes;
         },
+        defaultTaxes(){
+          return this.$store.state.common.taxes;
+        }
     },
     watch: {
         // remove costServiceItem already in included section
@@ -77,12 +80,12 @@ export default {
     },
     created() {
         // calculate default discount
-        if (!this.discounts.hasOwnProperty('total') && this.vendor.discountPolicies) {
+        if (!this.discounts.total && this.vendor.discountPolicies) {
           this.setDefaultDiscount();
         }
 
         // calculate default tax
-        if (!this.taxes.hasOwnProperty('total')) {
+        if (!this.taxes.total) {
           this.setDefaultTax();
         }
 
@@ -108,30 +111,38 @@ export default {
     },
     methods: {
       setDefaultDiscount() {
+        console.log("step2", this.discounts);
+        const policies = this.vendor.discountPolicies;
         let discountRate = 0;
 
         const evtDay = moment(this.event.startTime * 1000);
 
-        if (this.discounts.hasOwnProperty("number_of_guests") && (
-          this.discounts.number_of_guests[0].rule === 1 && Number(this.event.numberOfParticipants) >= Number(this.discounts.number_of_guests[0].qty) ||
-          this.discounts.number_of_guests[0].rule === 2 && Number(this.event.numberOfParticipants) <= Number(this.discounts.number_of_guests[0].qty))){
+        if (policies.hasOwnProperty("number_of_guests") && (
+          policies.number_of_guests[0].rule === 1 && Number(this.event.numberOfParticipants) >= Number(policies.number_of_guests[0].qty) ||
+          policies.number_of_guests[0].rule === 2 && Number(this.event.numberOfParticipants) <= Number(policies.number_of_guests[0].qty))){
 
-          discountRate = Number(this.discounts.number_of_guests[0].value);
+          discountRate = policies.double ? discountRate + Number(policies.number_of_guests[0].value) :
+            Number(policies.number_of_guests[0].value);
 
         }
 
         const returning = this.event.customer.proposals.length ? 1 : 0;
-        if (this.discounts.hasOwnProperty("customer_type") && returning === Number(this.discounts.customer_type[0].type)) {
+        if (policies.hasOwnProperty("customer_type") && returning === Number(policies.customer_type[0].type)) {
 
-          discountRate = Number(this.discounts.customer_type[0].value);
+          discountRate = policies.double ? discountRate + Number(policies.customer_type[0].value) : Number(policies.customer_type[0].value);
 
         }
-        if (this.discounts.hasOwnProperty("seasonal") &&
-          evtDay.isBetween(`${this.discounts.seasonal[0].from.year}-${this.discounts.seasonal[0].from.months[0]}`,
-            `${this.discounts.seasonal[0].to.year}-${this.discounts.seasonal[0].to.months[0]}`)) {
+        if (policies.hasOwnProperty("seasonal") &&
+          evtDay.isBetween(`${policies.seasonal[0].from.year}-${policies.seasonal[0].from.months[0]}`,
+            `${policies.seasonal[0].to.year}-${policies.seasonal[0].to.months[0]}`)) {
 
-          discountRate = Number(this.discounts.seasonal[0].value);
+          discountRate = policies.double ? discountRate + Number(policies.seasonal[0].value) : Number(policies.seasonal[0].value);
         }
+
+        console.log("discounts", discountRate);
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+          key: "discounts",
+          value: {total: {percentage: discountRate, price: 0}} });
       },
 
       setDefaultTax() {
@@ -145,12 +156,13 @@ export default {
         }
 
         if (!taxRate) taxRate = this.getTaxFromState();
-        if (Object.keys(this.$store.state.vendorProposal.taxes).length === 0) {
-          this.$store.commit("proposalForNonMaryoku/setValue", {
-            key: "taxes",
-            value: { total: { percentage: taxRate, price: 0 } },
-          });
-        }
+
+        console.log("setTax", taxRate);
+        this.$store.commit("proposalForNonMaryoku/setValue", {
+          key: "taxes",
+          value: { total: { percentage: taxRate, price: 0 } },
+        });
+
       },
 
       getTaxFromState() {
@@ -159,7 +171,7 @@ export default {
         let tax = 0;
         const arr = this.event.location.split(", ");
         const withoutCity = arr.length === 2;
-        this.taxes.map(it => {
+        this.defaultTaxes.map(it => {
           const state = withoutCity ? it.state : it.code;
           if (arr[arr.length - 1] === "USA" && arr[arr.length - 2] === state && it.tax) {
             tax = it.tax;

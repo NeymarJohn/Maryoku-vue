@@ -226,7 +226,7 @@ export default {
 
     await this.getVendor(this.$route.params.vendorId);
     if (this.$route.params.id) await this.getProposal(this.$route.params.id);
-    if (!this.$store.state.vendorProposal.coverImage.length) {
+    if (!this.$store.state.proposalForNonMaryoku.coverImage.length) {
       this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "coverImage",
         value: this.vendor.images,
@@ -244,7 +244,6 @@ export default {
     if (this.step === 3 && this.$route.query.negotiation) {
         this.$store.commit("proposalForNonMaryoku/setNegotiation", true);
     }
-
     setTimeout(_ => {}, 10000);
     this.isLoading = false;
   },
