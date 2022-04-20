@@ -1,124 +1,117 @@
-// core
-import Vue           from "vue";
-
-// models
-import Campaign      from "@/models/Campaign";
+import Vue from "vue";
+import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
-
-// Create constants
-const DATE           = new Date();
-const TIME           = DATE.getTime();
-const STATIC_URL     = "https://static-maryoku.s3.amazonaws.com/";
-const STORAGE_PATH   = "storage/";
-const STORAGE_URL    = STATIC_URL + STORAGE_PATH;
-const CAMPAIGN_TYPES = ["SAVING_DATE", "RSVP", "COMING_SOON", "FEEDBACK"];
-
-const defaultSettingPart = {
-  selected      : false,
-  excelFileName : "",
-  excelFilePath : "",
-  sentTime      : TIME
-};
-
 const defaultSettings = {
   phone: {
-    ...defaultSettingPart,
+    selected: false,
     numberString: "",
     numberArray: [],
+    excelFileName: "",
+    excelFilePath: "",
     smsOrWhatsapp: "sms",
+    sentTime: new Date().getTime()
   },
   email: {
-    ...defaultSettingPart,
+    selected: false,
     subject: "",
     from: "",
     addressString: "",
     addressArray: [],
+    excelFileName: "",
+    excelFilePath: "",
+    sentTime: new Date().getTime()
   }
 };
-
-const coverImgPrefix = (TIME % 2) + 1;
-const defaultCampaignDataPartType = {
-  title          : "Event Name",
-  logoUrl        : "",
-  campaignStatus : "EDITING",
-};
-
 const defaultCampaignData = {
   initialized: false,
   SAVING_DATE: {
-    ...defaultCampaignDataPartType,
+    title: "Event Name",
     description:
       "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon",
-    coverImage: `${STORAGE_URL}Campaign+Headers/save-the-date${coverImgPrefix}.png`,
+    coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/save-the-date${
+      (new Date().getDate() % 2) + 1
+    }.png`,
+    logoUrl: "",
+    campaignStatus: "EDITING",
     visibleSettings: {
       showLogo: true
     }
   },
   RSVP: {
-    ...defaultCampaignDataPartType,
+    title: "Event Name",
     description: "",
     coverImage: "",
-    defaultCoverImage: `${STORAGE_URL}Campaign+Headers/rsvp${coverImgPrefix}.png`,
+    defaultCoverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/rsvp${
+      (new Date().getDate() % 2) + 1
+    }.png`,
+    campaignStatus: "EDITING",
     allowOnline: false,
+    logoUrl: "",
     visibleSettings: {
-      showWearingGuide : true,
-      showKnowledge    : true,
-      showTimeline     : true
+      showWearingGuide: true,
+      showKnowledge: true,
+      showTimeline: true
     },
     additionalData: {
-      greetingWords     : "",
-      wearingGuide      : "",
-      wearingGuideTitle : "WHAT SHOULD I WEAR?",
-      knowledge         : "",
-      knowledgeTitle    : "WHAT SHOULD I KNOW?",
-      zoomlink          : "",
-      prefixEvent       : "YOU ARE INVITED TO",
-      carouselTitle     : "ADD YOUR TITLE HERE"
+      greetingWords: "",
+      wearingGuide: "",
+      wearingGuideTitle: "WHAT SHOULD I WEAR?",
+      knowledge: "",
+      knowledgeTitle: "WHAT SHOULD I KNOW?",
+      zoomlink: "",
+      prefixEvent: "YOU ARE INVITED TO",
+      carouselTitle: "ADD YOUR TITLE HERE"
     },
     images: [
       {
-        src: `${STORAGE_URL}icons/RSVP/Image+81.jpg`,
+        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg",
         default: true
       },
       {
-        src: `${STORAGE_URL}icons/RSVP/shutterstock_444402799_thumb.jpg`,
+        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg",
         default: true
       },
       {
-        src: `${STORAGE_URL}icons/RSVP/Image+83.jpg`,
+        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg",
         default: true
       },
       {
-        src: `${STORAGE_URL}icons/RSVP/Image+84.jpg`,
+        src: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg",
         default: true
       }
     ]
   },
   COMING_SOON: {
-    ...defaultCampaignDataPartType,
-    description    : "",
-    coverImage     : `${STORAGE_URL}Campaign+Headers/coming-soon${(TIME % 4) + 1}.png`,
-    showLogo       : true,
-    showComing     : true,
-    showCountdown  : true,
+    title: "Event Name",
+    description: "",
+    logoUrl: "",
+    coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
+      (new Date().getDate() % 4) + 1
+    }.png`,
+    campaignStatus: "EDITING",
+    showLogo: true,
+    showComing: true,
+    showCountdown: true,
     visibleSettings: {
-      showLogo      : true,
-      showComing    : true,
-      showCountdown : true
+      showLogo: true,
+      showComing: true,
+      showCountdown: true
     }
   },
   FEEDBACK: {
-    ...defaultCampaignDataPartType,
-    description    : "",
+    name: "Event Name",
+    description: "",
+    logoUrl: "",
+    campaignStatus: "EDITING",
     visibleSettings: {
-      showImages        : true,
-      showSharingOption : true,
-      showFeedback      : true,
-      allowUploadPhoto  : true,
-      downloadFiles     : true
+      showImages: true,
+      showSharingOption: true,
+      showFeedback: true,
+      allowUploadPhoto: true,
+      downloadFiles: true
     },
-    images : [],
-    files  : [],
+    images: [],
+    files: [],
     feedbackQuestions: [
       {
         question: "What did you like or dislike about this event?",
@@ -147,20 +140,19 @@ const defaultCampaignData = {
     ]
   }
 };
-
 const state = {
   baseInfo: {
     title: "",
     logoUrl: ""
   },
-  SAVING_DATE        : null,
-  RSVP               : null,
-  COMING_SOON        : null,
-  FEEDBACK           : null,
-  SAVING_DATE_BACKUP : null,
-  RSVP_BACKUP        : null,
-  COMING_SOON_BACKUP : null,
-  FEEDBACK_BACKUP    : null
+  SAVING_DATE: null,
+  RSVP: null,
+  COMING_SOON: null,
+  FEEDBACK: null,
+  SAVING_DATE_BACKUP: null,
+  RSVP_BACKUP: null,
+  COMING_SOON_BACKUP: null,
+  FEEDBACK_BACKUP: null
 };
 
 const mutations = {
@@ -174,7 +166,10 @@ const mutations = {
     Vue.set(state[name], key, value);
   },
   initCampaign(state) {
-    CAMPAIGN_TYPES.forEach((campaignType) => Vue.set(state, campaignType, null));
+    Vue.set(state, "SAVING_DATE", null);
+    Vue.set(state, "RSVP", null);
+    Vue.set(state, "COMING_SOON", null);
+    Vue.set(state, "FEEDBACK", null);
   },
   setInitialized(state, value) {
     Vue.set(state, "initialized", value);
@@ -186,25 +181,34 @@ const mutations = {
     Vue.set(state[name].additionalData, key, value);
   }
 };
-
 const getters = {
   campaignIssued(state) {
-    const checkStartedByKey = key => state[key] && state[key].campaignStatus === "STARTED";
     return {
-      SAVING_DATE : checkStartedByKey("SAVING_DATE"),
-      RSVP        : checkStartedByKey("RSVP"),
-      COMING_SOON : checkStartedByKey("COMING_SOON"),
-      FEEDBACK    : checkStartedByKey("FEEDBACK"),
+      SAVING_DATE: state["SAVING_DATE"] && state["SAVING_DATE"].campaignStatus === "STARTED",
+      RSVP: state["RSVP"] && state["RSVP"].campaignStatus === "STARTED",
+      COMING_SOON: state["COMING_SOON"] && state["COMING_SOON"].campaignStatus === "STARTED",
+      FEEDBACK: state["FEEDBACK"] && state["FEEDBACK"].campaignStatus === "STARTED"
     };
   },
   defaultSettings(state) {
-    const campaignFound = CAMPAIGN_TYPES.find((campaignType) => state[campaignType] && state[campaignType].settings);
-    return campaignFound ? campaignFound.settings : defaultSettings;
+    if (state["SAVING_DATE"] && state["SAVING_DATE"].settings) {
+      return state["SAVING_DATE"].settings;
+    }
+    if (state["RSVP"] && state["RSVP"].settings) {
+      return state["RSVP"].settings;
+    }
+    if (state["COMING_SOON"] && state["COMING_SOON"].settings) {
+      return state["COMING_SOON"].settings;
+    }
+    if (state["FEEDBACK"] && state["FEEDBACK"].settings) {
+      return state["FEEDBACK"].settings;
+    }
+    return defaultSettings;
   }
 };
 const actions = {
   getCampaigns({ commit, state }, { event }) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (state.initialized) {
         resolve(state);
         return;
@@ -217,10 +221,12 @@ const actions = {
           let logoUrl = "";
           if (res.length > 0) {
             res.forEach((campaign) => {
-              const name = campaign.campaignType;
-              commit("setCampaign", { name, data: campaign });
+              commit("setCampaign", {
+                name: campaign.campaignType,
+                data: campaign
+              });
               if (campaign.logoUrl) logoUrl = campaign.logoUrl;
-              campaigns[name] = campaign;
+              campaigns[campaign.campaignType] = campaign;
             });
           }
           const eventName = event.concept ? event.concept.name : "Event Name";
@@ -229,27 +235,51 @@ const actions = {
             // description: "",
             logoUrl
           };
-
-          const commitCampaign = (name, data) => {
-            commit("setCampaign",       { name, data });
-            commit("setBackupCampaign", { name, data });
-          };
-          const createDefaultData = (key) => ({ ...defaultCampaignData[key], ...defaultData });
           if (!campaigns["SAVING_DATE"]) {
-            commitCampaign("SAVING_DATE", createDefaultData("SAVING_DATE"));
+            commit("setCampaign", {
+              name: "SAVING_DATE",
+              data: { ...defaultCampaignData["SAVING_DATE"], ...defaultData }
+            });
+            commit("setBackupCampaign", {
+              name: "SAVING_DATE",
+              data: { ...defaultCampaignData["SAVING_DATE"], ...defaultData }
+            });
           } else {
             defaultData.title = campaigns["SAVING_DATE"].title;
           }
           if (!campaigns["RSVP"]) {
-            const rsvpData = createDefaultData("RSVP");
-            if (event.places && event.places.includes("VIRTUAL")) rsvpData.allowOnline = true;
-            commitCampaign("RSVP", rsvpData);
+            const rsvpData = { ...defaultCampaignData["RSVP"], ...defaultData };
+            if (event.places && event.places.includes("VIRTUAL")) {
+              rsvpData.allowOnline = true;
+            }
+            commit("setCampaign", {
+              name: "RSVP",
+              data: rsvpData
+            });
+            commit("setBackupCampaign", {
+              name: "RSVP",
+              data: rsvpData
+            });
           }
           if (!campaigns["COMING_SOON"]) {
-            commitCampaign("COMING_SOON", createDefaultData("COMING_SOON"));
+            commit("setCampaign", {
+              name: "COMING_SOON",
+              data: { ...defaultCampaignData["COMING_SOON"], ...defaultData }
+            });
+            commit("setBackupCampaign", {
+              name: "COMING_SOON",
+              data: { ...defaultCampaignData["COMING_SOON"], ...defaultData }
+            });
           }
           if (!campaigns["FEEDBACK"]) {
-            commitCampaign("FEEDBACK", createDefaultData("FEEDBACK"));
+            commit("setCampaign", {
+              name: "FEEDBACK",
+              data: { ...defaultCampaignData["FEEDBACK"], ...defaultData }
+            });
+            commit("setBackupCampaign", {
+              name: "FEEDBACK",
+              data: { ...defaultCampaignData["FEEDBACK"], ...defaultData }
+            });
           }
           commit("setInitialized", true);
           resolve(campaigns);
@@ -258,7 +288,6 @@ const actions = {
   },
   saveCampaign({ commit, state }, data) {
     return new Promise((resolve, reject) => {
-      console.dir({ data });
       const campaign = new Campaign(data);
       campaign.save().then((res) => {
         commit("setCampaign", {
@@ -270,15 +299,33 @@ const actions = {
     });
   },
   revertCampaign({ commit, state }, name) {
-    const backupData = state[`${name}_BACKUP`];
+    const backupdata = state[`${name}_BACKUP`];
     commit("setCampaign", {
       name: name,
-      data: Object.assign({}, backupData)
+      data: Object.assign({}, backupdata)
     });
   },
   setLogo({ commit, state }, { logoUrl, campaign }) {
-    const commitLogoByName = name => commit("setAttribute", { key: "logoUrl", value: logoUrl, name });
-    CAMPAIGN_TYPES.forEach(commitLogoByName);
+    commit("setAttribute", {
+      name: "SAVING_DATE",
+      key: "logoUrl",
+      value: logoUrl
+    });
+    commit("setAttribute", {
+      name: "RSVP",
+      key: "logoUrl",
+      value: logoUrl
+    });
+    commit("setAttribute", {
+      name: "COMING_SOON",
+      key: "logoUrl",
+      value: logoUrl
+    });
+    commit("setAttribute", {
+      name: "FEEDBACK",
+      key: "logoUrl",
+      value: logoUrl
+    });
   }
 };
 export default {
