@@ -485,6 +485,7 @@ export default {
   top: 0;
   height: 100vh;
   position: fixed;
+  margin-left: -65px;
   background-color: rgba(0, 0, 0, 0.08);
 }
 

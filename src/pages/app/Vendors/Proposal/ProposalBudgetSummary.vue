@@ -1,265 +1,279 @@
 <template>
-	<div class="proposal-budget-summary-wrapper" :style="{ top: `${panelTopPos}px` }">
-		<template>
-			<div class="proposal-budget-summary-header">
-				<div v-if="!expanded" class="d-flex justify-content-between flex-1">
-					<div class="title">
-						<span class="font-bold font-size-22">Total</span>
-						<br />
-						<span class="font-size-14"> Before discount </span>
-					</div>
-					<div class="pricet text-right">
-						<span class="font-bold font-size-22">${{ (totalPrice - bundleDiscountAmount) | withComma }}</span>
-						<br />
-						<span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
-						<span class="font-size-14"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
-					</div>
-				</div>
-				<div v-else class="d-flex justify-content-between flex-1 font-size-22 font-bold">Summary</div>
-				<md-button class="md-icon-button md-simple collapse-button" @click="expanded = !expanded">
-					<md-icon v-if="expanded" class="icon font-size-36"> keyboard_arrow_down </md-icon>
-					<md-icon v-if="!expanded" class="icon font-size-36"> keyboard_arrow_right </md-icon>
-				</md-button>
-			</div>
-		</template>
-		<template v-if="expanded">
-			<div class="summary-cont">
-				<div
-					v-if="additionalServices.length > 0 && step === 2"
-					class="bundle-discount mt-20"
-					@click="isBundleDiscount = !isBundleDiscount"
-				>
-					<img class="black" :src="`${iconUrl}Asset 579.svg`" />
-					<span>
-						Add Bundle Discount
-						<md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
-						<md-icon v-else>keyboard_arrow_down</md-icon>
-					</span>
-					<p v-if="isBundleDiscount">What services would you like to include in your bundle?</p>
-				</div>
-			</div>
-			<div class="items-cont">
-				<div class="item">
-					<div class="service-item" :class="{ 'with-check': isBundleDiscount }">
-						<div class="d-flex align-center mb-20">
-							<md-checkbox
-								v-if="isBundleDiscount"
-								v-model="bundleDiscountServices"
-								class="no-margin md-vendor"
-								:value="vendor.eventCategory.key"
-							/>
+  <div class="proposal-budget-summary-wrapper" :style="{ top: `${panelTopPos}px` }">
+    <template>
+      <div class="proposal-budget-summary-header">
+        <div v-if="!expanded" class="d-flex justify-content-between flex-1">
+          <div class="title">
+            <span class="font-bold font-size-22">Total</span>
+            <br>
+            <span class="font-size-14"> Before discount </span>
+          </div>
+          <div class="pricet text-right">
+            <span class="font-bold font-size-22">${{ (totalPrice - bundleDiscountAmount) | withComma }}</span>
+            <br>
+            <span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
+            <span class="font-size-14"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
+          </div>
+        </div>
+        <div v-else class="d-flex justify-content-between flex-1 font-size-22 font-bold">
+          Summary
+        </div>
+        <md-button class="md-icon-button md-simple collapse-button" @click="expanded = !expanded">
+          <md-icon v-if="expanded" class="icon font-size-36">
+            keyboard_arrow_down
+          </md-icon>
+          <md-icon v-if="!expanded" class="icon font-size-36">
+            keyboard_arrow_right
+          </md-icon>
+        </md-button>
+      </div>
+    </template>
+    <template v-if="expanded">
+      <div class="summary-cont">
+        <div
+          v-if="additionalServices.length > 0 && step === 2"
+          class="bundle-discount mt-20"
+          @click="isBundleDiscount = !isBundleDiscount"
+        >
+          <img class="black" :src="`${iconUrl}Asset 579.svg`">
+          <span>
+            Add Bundle Discount
+            <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
+            <md-icon v-else>keyboard_arrow_down</md-icon>
+          </span>
+          <p v-if="isBundleDiscount">
+            What services would you like to include in your bundle?
+          </p>
+        </div>
+      </div>
+      <div class="items-cont">
+        <div class="item">
+          <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
+            <div class="d-flex align-center mb-20">
+              <md-checkbox
+                v-if="isBundleDiscount"
+                v-model="bundleDiscountServices"
+                class="no-margin md-vendor"
+                :value="vendor.eventCategory.key"
+              />
 
-							<img :src="`${iconUrl}Asset 614.svg`" width="30px" class="mr-10" />
-							<div style="font-size: 16px; font-weight: 800">{{ vendor.eventCategory.title }}</div>
-						</div>
-						<ul class="flex-1">
-							<li>
-								<a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
-							</li>
-							<li>
-								<span>Your proposal</span>
-								<span>${{ originalPriceOfMainCategory | withComma }}</span>
-							</li>
-							<li>
-								<template v-if="getAllocatedBudget(vendor.eventCategory.key)">
-									<span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-									<span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
-								</template>
-								<template v-else-if="getAverageBudget(vendor.eventCategory.key)">
-									<span>Average Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-									<span> ${{ getAverageBudget(vendor.eventCategory.key) | withComma }}</span>
-								</template>
-							</li>
-							<li
-								v-if="
-									(getAllocatedBudget(vendor.eventCategory.key) &&
-										pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0) ||
-									(getAverageBudget(vendor.eventCategory.key) &&
-										pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key) > 0)
-								"
-							>
-								<div>
-									<img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
+              <img :src="`${iconUrl}Asset 614.svg`" width="30px" class="mr-10">
+              <div style="font-size: 16px; font-weight: 800">
+                {{ vendor.eventCategory.title }}
+              </div>
+            </div>
+            <ul class="flex-1">
+              <li>
+                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+              </li>
+              <li>
+                <span>Your proposal</span>
+                <span>${{ originalPriceOfMainCategory | withComma }}</span>
+              </li>
+              <li>
+                <template v-if="getAllocatedBudget(vendor.eventCategory.key)">
+                  <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
+                  <span> ${{ getAllocatedBudget(vendor.eventCategory.key) | withComma }}</span>
+                </template>
+                <template v-else-if="getAverageBudget(vendor.eventCategory.key)">
+                  <span>Average Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
+                  <span> ${{ getAverageBudget(vendor.eventCategory.key) | withComma }}</span>
+                </template>
+              </li>
+              <li
+                v-if="
+                  (getAllocatedBudget(vendor.eventCategory.key) &&
+                    pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0) ||
+                    (getAverageBudget(vendor.eventCategory.key) &&
+                    pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key) > 0)
+                "
+              >
+                <div>
+                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10">
 
-									<span
-										v-if="
-											getAllocatedBudget(vendor.eventCategory.key) &&
-											pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0
-										"
-										style="font-size: 14px"
-									>
-										Your proposal is ${{
-											(pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key))
-												| withComma
-										}}
-										more than the budget
-									</span>
-								</div>
-							</li>
-							<li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
-								<template v-if="discountBlock[vendor.eventCategory.key]">
-									<div class="left">
-										<span>After discount</span>
-									</div>
-									<div class="right">
-										<span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
-										<span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
-									</div>
-								</template>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div v-if="step > 1 && additionalServices.length > 0" class="item additional">
-					<div
-						v-for="(a, aIndex) in additionalServices"
-						:key="aIndex"
-						class="service-item"
-						:class="{ 'with-check': isBundleDiscount }"
-					>
-						<h3 v-if="aIndex === 0" class="width-100">Additional Services</h3>
-						<div class="d-flex align-center mb-20">
-							<md-checkbox v-if="isBundleDiscount" v-model="bundleDiscountServices" class="md-vendor" :value="a" />
-							<img :src="getIconUrlByCategory(a)" width="40px" class="mr-5" />
-							<div style="font-size: 16px; font-weight: 800">{{ getServiceCategory(a).title }}</div>
-						</div>
-						<ul>
-							<li>
-								<a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
-							</li>
-							<li>
-								<span>Your proposal</span>
-								<span>${{ pricesByCategory[a] | withComma }}</span>
-							</li>
-							<li>
-								<template v-if="getAllocatedBudget(a)">
-									<span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-									<span> ${{ getAllocatedBudget(a) | withComma }}</span>
-								</template>
-								<template v-else-if="getAverageBudget(a)">
-									<span>Average Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
-									<span> ${{ getAverageBudget(a) | withComma }}</span>
-								</template>
-							</li>
-							<li
-								v-if="
-									(getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0) ||
-									(getAverageBudget(a) && pricesByCategory[a] - getAverageBudget(a) > 0)
-								"
-							>
-								<img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
+                  <span
+                    v-if="
+                      getAllocatedBudget(vendor.eventCategory.key) &&
+                        pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0
+                    "
+                    style="font-size: 14px"
+                  >
+                    Your proposal is ${{
+                      (pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key))
+                        | withComma
+                    }}
+                    more than the budget
+                  </span>
+                </div>
+              </li>
+              <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
+                <template v-if="discountBlock[vendor.eventCategory.key]">
+                  <div class="left">
+                    <span>After discount</span>
+                  </div>
+                  <div class="right">
+                    <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
+                    <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
+                  </div>
+                </template>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div v-if="step > 1 && additionalServices.length > 0" class="item additional">
+          <div
+            v-for="(a, aIndex) in additionalServices"
+            :key="aIndex"
+            class="service-item"
+            :class="{ 'with-check': isBundleDiscount }"
+          >
+            <h3 v-if="aIndex === 0" class="width-100">
+              Additional Services
+            </h3>
+            <div class="d-flex align-center mb-20">
+              <md-checkbox v-if="isBundleDiscount" v-model="bundleDiscountServices" class="md-vendor" :value="a" />
+              <img :src="getIconUrlByCategory(a)" width="40px" class="mr-5">
+              <div style="font-size: 16px; font-weight: 800">
+                {{ getServiceCategory(a).title }}
+              </div>
+            </div>
+            <ul>
+              <li>
+                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+              </li>
+              <li>
+                <span>Your proposal</span>
+                <span>${{ pricesByCategory[a] | withComma }}</span>
+              </li>
+              <li>
+                <template v-if="getAllocatedBudget(a)">
+                  <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
+                  <span> ${{ getAllocatedBudget(a) | withComma }}</span>
+                </template>
+                <template v-else-if="getAverageBudget(a)">
+                  <span>Average Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
+                  <span> ${{ getAverageBudget(a) | withComma }}</span>
+                </template>
+              </li>
+              <li
+                v-if="
+                  (getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0) ||
+                    (getAverageBudget(a) && pricesByCategory[a] - getAverageBudget(a) > 0)
+                "
+              >
+                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10">
 
-								<span v-if="getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0">
-									Your proposal is ${{ (pricesByCategory[a] - getAllocatedBudget(a)) | withComma }}
-									more than the budget
-								</span>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<ItemForm
-					:default-discount="defaultDiscount"
-					:default-negotiation="negotiationDiscount"
-					:default-tax="defaultTax"
-					field="discount"
-					:non-maryoku="false"
-					@saveDiscount="saveDiscount('discount', $event)"
-				/>
-				<ItemForm
-					v-if="negotiationDiscount && negotiationDiscount.isApplied"
-					:default-discount="defaultDiscount"
-					:default-negotiation="negotiationDiscount"
-					:default-tax="defaultTax"
-					field="negotiation"
-					:non-maryoku="false"
-					@saveDiscount="saveDiscount('negotiation', $event)"
-				/>
+                <span v-if="getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0">
+                  Your proposal is ${{ (pricesByCategory[a] - getAllocatedBudget(a)) | withComma }}
+                  more than the budget
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <ItemForm
+          :default-discount="defaultDiscount"
+          :default-negotiation="negotiationDiscount"
+          :default-tax="defaultTax"
+          field="discount"
+          :non-maryoku="false"
+          @saveDiscount="saveDiscount('discount', $event)"
+        />
+        <ItemForm
+          v-if="negotiationDiscount && negotiationDiscount.isApplied"
+          :default-discount="defaultDiscount"
+          :default-negotiation="negotiationDiscount"
+          :default-tax="defaultTax"
+          field="negotiation"
+          :non-maryoku="false"
+          @saveDiscount="saveDiscount('negotiation', $event)"
+        />
 
-				<ItemForm
-					:default-discount="defaultDiscount"
-					:default-negotiation="negotiationDiscount"
-					:default-tax="defaultTax"
-					field="tax"
-					:non-maryoku="false"
-					@saveDiscount="saveTax('tax', $event)"
-				/>
-				<div v-if="isBundleDiscount" class="item bundle">
-					<div class="element">
-						<label class="">
-							<span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
-						</label>
-						<money
-							v-model="bundleDiscountAmount"
-							v-bind="{
-								decimal: '.',
-								thousands: ',',
-								prefix: '$ ',
-								suffix: '',
-								precision: 2,
-								masked: false,
-							}"
-							class="bundle-discount-input"
-							@keyup.native="setPercentage"
-							@click.native="discoutOption = 'amount'"
-						/>
-					</div>
-					<div class="element">
-						<label class="font-bold">Or by percentage </label>
-						<money
-							v-model="bundleDiscountPercentage"
-							v-bind="{
-								decimal: '.',
-								thousands: ',',
-								prefix: '',
-								suffix: ' %',
-								precision: 2,
-								masked: false,
-							}"
-							class="bundle-discount-input"
-							@keyup.native="setRange"
-							@click.native="discoutOption = 'percentage'"
-						/>
-					</div>
-					<div class="element dis-value">
-						<span v-if="discoutOption == 'percentage'"> {{ bundleDiscountPercentage }}% </span>
-						<span v-else> ${{ bundleDiscountAmount }} </span>
-					</div>
-					<div class="action-cont">
-						<a class="clear" @click="cancelBundle">Cancel</a>
-						<a class="add" @click="addBunldDiscount">Add bundle</a>
-					</div>
-				</div>
-			</div>
-			<div v-if="bundleDiscount && bundleDiscount.percentage" class="bundle-information">
-				<div>
-					<span>{{ bundledServicesString }}</span>
-				</div>
-				<div class="font-bold d-flex justify-content-between">
-					<span>Total Bundle</span><span class="font-bold font-size-22">-${{ bundleDiscount.price | withComma }}</span>
-				</div>
-			</div>
-			<div class="total-cont">
-				<div class="price-row">
-					<span class="title">Total</span>
-					<strong>${{ Number(totalPriceOfProposal) | withComma }}</strong>
-				</div>
-				<div v-if="bundleDiscount.isApplied" class="price-row">
-					<span>Before bundle discount</span>
-					<div>
-						<span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-						<span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
-					</div>
-				</div>
-				<div v-if="defaultDiscount.percentage" class="price-row">
-					<span>Before discount</span>
-					<div>
-						<span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
-						<span class="crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</span>
-					</div>
-				</div>
-			</div>
-		</template>
-	</div>
+        <ItemForm
+          :default-discount="defaultDiscount"
+          :default-negotiation="negotiationDiscount"
+          :default-tax="defaultTax"
+          field="tax"
+          :non-maryoku="false"
+          @saveDiscount="saveTax('tax', $event)"
+        />
+        <div v-if="isBundleDiscount" class="item bundle">
+          <div class="element">
+            <label class="">
+              <span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
+            </label>
+            <money
+              v-model="bundleDiscountAmount"
+              v-bind="{
+                decimal: '.',
+                thousands: ',',
+                prefix: '$ ',
+                suffix: '',
+                precision: 2,
+                masked: false,
+              }"
+              class="bundle-discount-input"
+              @keyup.native="setPercentage"
+              @click.native="discoutOption = 'amount'"
+            />
+          </div>
+          <div class="element">
+            <label class="font-bold">Or by percentage </label>
+            <money
+              v-model="bundleDiscountPercentage"
+              v-bind="{
+                decimal: '.',
+                thousands: ',',
+                prefix: '',
+                suffix: ' %',
+                precision: 2,
+                masked: false,
+              }"
+              class="bundle-discount-input"
+              @keyup.native="setRange"
+              @click.native="discoutOption = 'percentage'"
+            />
+          </div>
+          <div class="element dis-value">
+            <span v-if="discoutOption == 'percentage'"> {{ bundleDiscountPercentage }}% </span>
+            <span v-else> ${{ bundleDiscountAmount }} </span>
+          </div>
+          <div class="action-cont">
+            <a class="clear" @click="cancelBundle">Cancel</a>
+            <a class="add" @click="addBunldDiscount">Add bundle</a>
+          </div>
+        </div>
+      </div>
+      <div v-if="bundleDiscount && bundleDiscount.percentage" class="bundle-information">
+        <div>
+          <span>{{ bundledServicesString }}</span>
+        </div>
+        <div class="font-bold d-flex justify-content-between">
+          <span>Total Bundle</span><span class="font-bold font-size-22">-${{ bundleDiscount.price | withComma }}</span>
+        </div>
+      </div>
+      <div class="total-cont">
+        <div class="price-row">
+          <span class="title">Total</span>
+          <strong>${{ Number(totalPriceOfProposal) | withComma }}</strong>
+        </div>
+        <div v-if="bundleDiscount.isApplied" class="price-row">
+          <span>Before bundle discount</span>
+          <div>
+            <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
+            <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
+          </div>
+        </div>
+        <div v-if="defaultDiscount.percentage" class="price-row">
+          <span>Before discount</span>
+          <div>
+            <span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
+            <span class="crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</span>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
 </template>
 <script>
 import { categoryNameWithIcons } from "@/constants/vendor";

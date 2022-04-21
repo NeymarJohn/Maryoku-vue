@@ -82,7 +82,7 @@
                   </p>
                 </div>
               </div>
-              <md-divider/>
+              <md-divider />
               <p class="font-size-14 px-30 py-20 m-0" style="max-height: 200px">
                 Dear Rachel, Relish caterers & venues is pleased to provide you with the attached catering proposal for
                 your, which is currently scheduled to be held on  at. We understand that this is a very important
@@ -263,9 +263,9 @@
         />
         <EventProposalPrice
           v-for="(service, index) in proposal.additionalServices"
+          :key="index"
           :proposal-data="proposal"
           :service-category="service"
-          :key="index"
           :class-name="`${isMobile ? 'p-0' : 'p-20 mb-20'} ${index % 2 === 0 ? 'bg-white' : 'bg-light-gray'}`"
           @changeBookedServices="changeBookedServices"
           @updateProposalCost="updateProposalCost"
@@ -277,13 +277,13 @@
           <div class="font-size-22 bundle-description">
             <img :src="`${iconUrl}Asset 577.svg`" style="width: 30px">
             <span class="font-size-22 font-bold bundle-title">Bundle offer</span>
-            <span style="font-size: 30px; margin-left: 20px">{{ proposal.bundleDiscount.percentage }}%</span>
-            <span  class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
+            <span class="bundle-percentage">{{ proposal.bundleDiscount.percentage }}%</span>
+            <span class="bundle-services">{{ getBundleServices(proposal.bookedServices) }}</span>
           </div>
           <div class="font-size-22 font-bold" style="text-align: end;">
             -${{ bundledDiscountPrice| withComma(Number) }}
-            <br/>
-            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal" >${{ bundledServicePrice| withComma(Number) }}</span>
+            <br>
+            <span style="text-decoration: line-through; font-size: 14px; font-weight: normal">${{ bundledServicePrice| withComma(Number) }}</span>
           </div>
         </div>
         <div class="element-pricing-table total-list md-small-hide">
@@ -359,7 +359,7 @@
 
                 <img src="/static/img/nn1.webp" alt="">
               </div>
-              <div class="md-layout-item pl-0 md-size-5"/>
+              <div class="md-layout-item pl-0 md-size-5" />
               <div class="md-layout-item pl-0 md-size-40">
                 <div class="ml-10">
                   <h2 class="font-bold font-size-16">
@@ -716,7 +716,8 @@ const components = {
   CancellationPolicy: () => import("@/components/CancellationPolicy.vue"),
   EventProposalPrice: () => import("./EventProposalPrice.vue"),
   ProposalContentTabs: () => import("@/components/Proposal/ProposalContentTabs.vue"),
-  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel")
+  CommentEditorPanel: () => import("@/pages/app/Events/components/CommentEditorPanel"),
+  EventProposalPolicy: ()=> import("./EventProposalPolicy.vue")
 };
 
 export default {
@@ -924,6 +925,7 @@ export default {
         this.$router.push({
           name: "CheckoutWithVendor",
           params: {
+            eventId: this.event.id,
             proposalId: this.proposal.id,
             proposalType: "planner",
           },
@@ -1645,6 +1647,10 @@ export default {
             margin: 10px;
             min-width: max-content;
           }
+          bundle-percentage{
+            font-size: 30px;
+            margin-left: 20px
+          }
           .bundle-services{
             font-size: 16px;
             padding: 0 20px;
@@ -1896,5 +1902,27 @@ export default {
 
 .click-capture{
   top: 0px !important;
+}
+@media screen and (max-width: 600px) {
+  .proposal-page_details .proposal-content {
+    .total-section{
+      padding: 30px 10px !important;
+      border-radius: 0;
+    }
+    .bundle-section {
+      padding: 28px 10px;
+      border-radius: 0;
+
+      .bundle-description {
+        .bundle-services {
+          display: none;
+        }
+
+        .bundle-percentage {
+          display: none;
+        }
+      }
+    }
+  }
 }
 </style>

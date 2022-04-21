@@ -115,12 +115,7 @@
       <div v-if="visibleSettings.allowUploadPhoto" class="green-block-wrapper">
         <div class="p-50 d-flex">
           <div class="margin-left-style-first-block position-relative">
-            <div class="icon-and-text">
-              <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
-              <div class="right-text-style">
-                share with us photos you took from the event
-              </div>
-            </div>
+            <title-share-photo-event />
             <vue-dropzone
               id="dropzone"
               ref="myVueDropzone"
@@ -161,21 +156,8 @@
       <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
       <!-- <span class="mb-10">&#169</span> -->
     </div>
-    <div class="landing-footer">
-      <div class="landing-footer-item">
-        <md-button
-          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default mt-40"
-          @click="scrollToTop()"
-        >
-          <span>
-            <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Requirements/Asset+49.svg"
-              class="upward-button"
-            >
-          </span>
-        </md-button>
-      </div>
-    </div>
+    111
+    <Footer />
     <fullscreen v-model="fullScreen">
       <div v-if="fullScreen" class="wrapper-full-screen-carousel">
         <md-button
@@ -198,21 +180,37 @@
   </div>
 </template>
 <script>
-import CalendarEvent from "@/models/CalendarEvent";
-import Feedback from "@/models/Feedback";
-import Campaign from "@/models/Campaign";
-import ViewPresentation from "@/pages/app/Campaign/components/ViewPresentation";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
-import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
-import FeedbackUploadImagesCarousel from "./FeedbackUploadImagesCarousel";
-import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
-import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
-import vue2Dropzone from "vue2-dropzone";
-import Swal from "sweetalert2";
-import { mapActions } from "vuex";
-import S3Service from "@/services/s3.service";
-import video_extension from "video-extensions";
+// core
 import { v4 as uuidv4 } from "uuid";
+import video_extension  from "video-extensions";
+import vue2Dropzone     from "vue2-dropzone";
+import Swal             from "sweetalert2";
+import { mapActions }   from "vuex";
+
+// models
+import CalendarEvent from "@/models/CalendarEvent";
+import Feedback      from "@/models/Feedback";
+import Campaign      from "@/models/Campaign";
+
+// components
+import TitleSharePhotoEvent         from "@/components/Title/SharePhotoEvent";
+import FeedbackUploadImagesCarousel from "../FeedbackUploadImagesCarousel";
+import Footer                       from "./Footer";
+
+// pages
+import ViewPresentation      from "@/pages/app/Campaign/components/ViewPresentation";
+import CampaignLogo          from "@/pages/app/Campaign/components/CampaignLogo";
+import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
+import SharingButtonGroup    from "@/pages/app/Campaign/components/SharingButtonGroup";
+import FeedbackQuestion      from "@/pages/app/Campaign/components/FeedbackQuestion";
+
+// dependencies
+import S3Service   from "@/services/s3.service";
+import lastElement from "@/helpers/array/last/element";
+import map         from "@/helpers/array/map";
+
+const toExtention  = (extension) => "." + extension;
+const toExtentions = map(toExtention);
 
 export default {
   components: {
@@ -223,22 +221,24 @@ export default {
     CampaignLogo,
     ViewPresentation,
     vueDropzone: vue2Dropzone,
+    TitleSharePhotoEvent,
+    Footer,
   },
   data() {
     return {
-      isLoading: true,
-      fullScreen: false,
-      campaign: null,
-      event: null,
-      coverImage: null,
-      logoUrl: null,
-      description: "",
-      originalContent: {},
-      images: [],
-      attachmentsImages: [],
-      attachments: [],
-      feedbackQuestions: [],
-      selectedAttachments: [],
+      isLoading           : true,
+      fullScreen          : false,
+      campaign            : null,
+      event               : null,
+      coverImage          : null,
+      logoUrl             : null,
+      description         : "",
+      originalContent     : Object.create(null),
+      images              : [],
+      attachmentsImages   : [],
+      attachments         : [],
+      feedbackQuestions   : [],
+      selectedAttachments : [],
       additionalData: {
         sectionReview: {
           title: "",
@@ -250,26 +250,26 @@ export default {
         }
       },
       visibleSettings: {
-        showImages: false,
-        showSharingOption: false,
-        allowUploadPhoto: false,
-        downloadFiles: false,
-        showFeedback: false
+        showImages        : false,
+        showSharingOption : false,
+        allowUploadPhoto  : false,
+        downloadFiles     : false,
+        showFeedback      : false
       },
       extensionsFiles: {
-        image: [".jpeg", ".jpg", ".gif", ".png"],
-        document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
-        video: video_extension.map(ext => `.${ext}`),
+        image    : [".jpeg", ".jpg", ".gif", ".png"],
+        document : [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
+        video    : toExtentions(video_extension),
       },
       dropzoneOptions: {
         url: "https://httpbin.org/post",
-        createImageThumbnails: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*, video/*",
+        createImageThumbnails : false,
+        uploadMultiple        : true,
+        acceptedFiles         : "image/*, video/*",
       },
-      selectedAttachmentsTypes: false,
-      invalidSelectedFilesTypes: false,
-      showFeedbackMessageSuccessful: false,
+      selectedAttachmentsTypes      : false,
+      invalidSelectedFilesTypes     : false,
+      showFeedbackMessageSuccessful : false,
     };
   },
   computed: {
@@ -285,13 +285,13 @@ export default {
     const calendarEvent = new CalendarEvent({ id: eventId });
 
     this.getCampaigns({ event: calendarEvent }).then((campaigns) => {
-      this.isLoading = false;
-      this.campaign = campaigns["FEEDBACK"];
-      this.event = this.campaign.event;
-      this.description = this.campaign.description;
-      this.images = this.campaign.images;
-      this.coverImage = this.campaign.coverImage;
-      this.logoUrl = this.campaign.logoUrl;
+      this.isLoading       = false;
+      this.campaign        = campaigns["FEEDBACK"];
+      this.event           = this.campaign.event;
+      this.description     = this.campaign.description;
+      this.images          = this.campaign.images;
+      this.coverImage      = this.campaign.coverImage;
+      this.logoUrl         = this.campaign.logoUrl;
       this.visibleSettings = this.campaign.visibleSettings;
       if (this.campaign.additionalData) {
         this.additionalData = this.campaign.additionalData;
@@ -308,50 +308,40 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
     gotoWeb() {
       window.open("https://www.maryoku.com", "_blank");
     },
-    setDefault() {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this feedback!",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, revert it!",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-          this.editingContent = Object.assign({}, this.originalContent);
-        }
+    async setDefault() {
+      const result = await Swal.fire({
+        title              : "Are you sure?",
+        text               : "You won't be able to revert this feedback!",
+        confirmButtonText  : "Yes, revert it!",
+        confirmButtonClass : "md-button md-success btn-fill",
+        cancelButtonClass  : "md-button md-danger btn-fill",
+        showCancelButton   : true,
+        buttonsStyling     : false,
       });
+
+      if (result.value) this.editingContent = Object.assign({}, this.originalContent);
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
     },
-    changeUploadFile(event) {
-      const fileName = event.target.files[0].name;
-      this.editingContent.push({
-        name: fileName,
-      });
+    changeUploadFile({ target }) {
+      const { name } = target.files[0];
+      this.editingContent.push({ name });
     },
-    sendFeedback() {
-      let email = this.$route.query.email;
-      if (!email) {
-        email = "test@gmail.com";
-      }
+    async sendFeedback() {
+      let email = this.$route.query.email || "test@gmail.com";
       const feedbackQuestions = [];
       this.feedbackQuestions.forEach((item) => {
         if (!item.showQuestion) return;
         feedbackQuestions.push({
-          question: item.question,
-          comment: item.comment,
-          rate: item.rank,
-          label: item.label || "General",
-          event: new CalendarEvent({ id: this.event.id }),
+          question : item.question,
+          comment  : item.comment,
+          rate     : item.rank,
+          label    : item.label || "General",
+          event    : new CalendarEvent({ id: this.event.id }),
         });
       });
       // validate questions
@@ -369,37 +359,37 @@ export default {
           this.feedbackQuestions[index].errors.comment = null;
         }
       });
-      const someQuestionHasError = this.feedbackQuestions
-        .some((question) => question.errors.rank || question.errors.comment);
+      const isHasErrorQuestion   = (question) => question.errors.rank || question.errors.comment;
+      const someQuestionHasError = this.feedbackQuestions.some(isHasErrorQuestion);
       if (someQuestionHasError) return;
-      new Feedback({
-        guestName: email,
-        guestEmail: email,
-        guestComment: "",
-        feedbackCampaign: new Campaign({ id: this.campaign.id }),
-        feedbackQuestions: feedbackQuestions,
-        images: this.images,
-      })
-        .save()
-        .then((res) => {
-          Swal.fire({
-            title: "",
-            text: "Thank you for your feedback!",
-            type: "success",
-            confirmButtonClass: "md-button md-red maryoku-btn",
-            buttonsStyling: false,
-          });
-          this.openFeedbackMessageSuccessful();
-        })
-        .catch((e) => {
-          Swal.fire({
-            title: "Invalid information",
-            text: "Could you please check if you input all information on given form?",
-            type: "error",
-            confirmButtonClass: "md-button md-red maryoku-btn",
-            buttonsStyling: false,
-          });
+      try {
+        await new Feedback({
+          guestName         : email,
+          guestEmail        : email,
+          guestComment      : "",
+          feedbackCampaign  : new Campaign({ id: this.campaign.id }),
+          feedbackQuestions : feedbackQuestions,
+          images            : this.images,
+        }).save();
+
+        Swal.fire({
+          title              : "",
+          text               : "Thank you for your feedback!",
+          type               : "success",
+          confirmButtonClass : "md-button md-red maryoku-btn",
+          buttonsStyling     : false,
         });
+
+        this.openFeedbackMessageSuccessful();
+      } catch (error) {
+        Swal.fire({
+          title              : "Invalid information",
+          text               : "Could you please check if you input all information on given form?",
+          type               : "error",
+          confirmButtonClass : "md-button md-red maryoku-btn",
+          buttonsStyling     : false,
+        });
+      }
     },
     closeFeedbackMessageSuccessful() {
       this.showFeedbackMessageSuccessful = false;
@@ -407,28 +397,18 @@ export default {
     openFeedbackMessageSuccessful() {
       this.showFeedbackMessageSuccessful = true;
     },
-    handleDrop(data, event) {
-      event.preventDefault();
-      const files = event.dataTransfer.files;
-      const filenames = [];
-      for (let i = 0; i < files.length; i++) {
-        filenames.push(files.item(i).name);
-      }
-      alert(`You dropped files: ${JSON.stringify(filenames)}`);
-    },
-    downloadFiles() {
+    async downloadFiles() {
       if (this.invalidSelectedFilesTypes) return;
       if (!this.selectedAttachmentsTypes) {
         const typeFiles = Object.keys(this.extensionsFiles);
         this.selectedAttachments = this.filterFilesByType(typeFiles, this.attachments);
       }
       const attachments = this.selectedAttachments.map(({ url }) => url);
-      S3Service.downloadFiles(attachments).then((result) => {
-        const tagA = document.createElement("a");
-        tagA.setAttribute("href", `data:application/zip,${result.data}`);
-        tagA.setAttribute("target", "_blank");
-        tagA.click();
-      });
+      const result = await S3Service.downloadFiles(attachments);
+      const tagA = document.createElement("a");
+      tagA.setAttribute("href", `data:application/zip,${result.data}`);
+      tagA.setAttribute("target", "_blank");
+      tagA.click();
     },
     filterFilesByType(selectedTypeFiles, files) {
       const extensions = [];
@@ -436,22 +416,18 @@ export default {
         const extensionsOfType = this.extensionsFiles[type];
         extensions.push(...extensionsOfType);
       }
-      return files.filter((file) => {
-        const slittedURL = file.url.split(".");
-        const extension = slittedURL[slittedURL.length - 1];
-        return extensions.includes(`.${extension}`);
-      });
+      return files.filter((file) => extensions.includes(`.${lastElement(file.url.split("."))}`));
     },
     selectedDownloadFiles(selectedTypeFiles) {
       this.selectedAttachmentsTypes = true;
       if (!selectedTypeFiles.length) {
         this.invalidSelectedFilesTypes = true;
         return Swal.fire({
-          title: "Invalid selected files types",
-          text: "Please select type files for download",
-          type: "error",
-          confirmButtonClass: "md-button md-red maryoku-btn",
-          buttonsStyling: false,
+          title              : "Invalid selected files types",
+          text               : "Please select type files for download",
+          type               : "error",
+          confirmButtonClass : "md-button md-red maryoku-btn",
+          buttonsStyling     : false,
         });
       }
       this.invalidSelectedFilesTypes = false;
@@ -463,13 +439,11 @@ export default {
     closeFullScreen() {
       this.fullScreen = false;
     },
-    fileAdded(file) {
+    async fileAdded(file) {
       const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`, true).then((response) => {
-        const file = response.data.upload;
-        this.images.unshift({ src: file.url });
-      });
+      const fileName  = uuidv4();
+      const { data }  = await S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`, true);
+      this.images.unshift({ src: data.upload.url });
     },
   }
 };
@@ -528,21 +502,6 @@ export default {
   }
 }
 
-.landing-footer {
-  width: 100%;
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-  background-color: #fff;
-  height: 126.3px;
-}
-.landing-footer-item {
-  width: 1520px;
-  margin: 40px auto;
-}
-.upward-button {
-  width: 20px;
-  height: 15px;
-  margin-bottom: 5px;
-}
 .maryoku_provided_by {
   margin: 102px 0 92px 0;
 }
@@ -565,25 +524,6 @@ export default {
   background-color: rgba(87, 242, 195, 0.23);
   height: 312px;
   margin-bottom: 273px;
-}
-.icon-and-text {
-  display: flex;
-  align-items: start;
-}
-.left-icon {
-  margin-right: 20px;
-  width: 36px;
-}
-.right-text-style {
-  text-transform: uppercase;
-  font-size: 22px;
-  font-weight: 800;
-  height: 82px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
 }
 .white-cube {
   width: 1200px;

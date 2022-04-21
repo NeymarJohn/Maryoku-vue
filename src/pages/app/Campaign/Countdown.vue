@@ -7,13 +7,15 @@
       <div />
       <div class="countdown-cover-image mt-50">
         <img v-if="coverImage" :src="coverImage">
-        <concept-image-block
-          v-else
-          class="hidden"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
-        />
+        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
+          <concept-image-block
+            class="change-cover-concept"
+            :images="concept.images"
+            :colors="concept.colors"
+            border="no-border"
+          />
+        </div>
+        <img v-else :src="defaultCoverImage" alt="default cover image">
         <div class="countdown-guests d-flex align-center p-20">
           <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
           <span v-if="isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
@@ -26,7 +28,7 @@
           />
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
-          <countdown-time :event="event" />
+          <countdown-time class="countdown-time" :event="event" />
           <hide-switch
             :value="campaignVisibleSettings.showCountdown"
             class="ml-20"
@@ -35,7 +37,7 @@
           />
         </div>
         <div class="cover-image-button">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">Change Cover
           </md-button>
         </div>
@@ -69,15 +71,23 @@
   </div>
 </template>
 <script>
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import CountdownTime from "./components/CountdownTime";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
-import TitleEditor from "./components/TitleEditor";
-import HideSwitch from "@/components/HideSwitch";
-import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
+
+// components
+// global
+import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+import HideSwitch        from "@/components/HideSwitch";
+// local
+import CountdownTime from "./components/CountdownTime";
+import TitleEditor   from "./components/TitleEditor";
+
+// pages
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
+import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
+
+// dependencies
+import { getBase64 } from "@/utils/file.util";
 
 export default {
   components: {
@@ -97,12 +107,13 @@ export default {
   },
   data() {
     return {
-      isLaunched: false,
-      placeholder: "It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect? out of this world live shows amazing food refreshing cocktail bar best employee award see u soon",
-      originContent: {},
-      editingContent: {
+      isLaunched     : false,
+      placeholder    : "It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect? out of this world live shows amazing food refreshing cocktail bar best employee award see u soon",
+      originContent  : {},
+      editingContent : {
         coverImage: "",
       },
+      defaultCoverImage: null,
     };
   },
   computed: {
@@ -141,6 +152,7 @@ export default {
     const defaultCoverImage = `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
       (new Date().getDate() % 4) + 1
     }.png`;
+    this.defaultCoverImage = defaultCoverImage;
     if (this.$store.state.campaign.COMING_SOON) {
       this.editingContent = this.$store.state.campaign.COMING_SOON;
       this.editingContent.coverImage = this.event.concept ? this.event.concept.images[1].url : defaultCoverImage;
@@ -195,7 +207,7 @@ export default {
     handleChangeCoverImage(event) {
       this.$emit("change-cover-image", event);
     },
-    handleChangeCampaignLogo() {
+    handleChangeCampaignLogo(event) {
       this.$emit("change-logo", event);
     },
     async onFileChange(event) {
@@ -209,7 +221,7 @@ export default {
 .coundown-campaign {
   .countdown-cover-image {
     position: relative;
-    overflow: hidden;
+    margin-bottom: 110px;
 
     img {
       max-height: 500px;
@@ -218,9 +230,17 @@ export default {
       object-fit: cover;
     }
 
+    .change-cover-concept {
+      width: 1000px;
+      height: 350px;
+    }
+
     .countdown-time-panel {
-      margin: auto;
-      transform: translate(70px, -50%);
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -80px;
+      z-index: 15;
     }
 
     .cover-image-button {
@@ -228,6 +248,15 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      z-index: 14;
+    }
+
+    .concept-button {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, 10%);
+      z-index: 14;
     }
   }
 
@@ -237,6 +266,7 @@ export default {
     top: 50px;
     background-color: #fff;
     border-radius: 3px;
+    z-index: 15;
   }
 
   .logo-section {

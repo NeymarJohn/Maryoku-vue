@@ -68,6 +68,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    bundleDiscount: {
+      type: Object,
+      default: () => {},
+    },
     defaultNegotiation: {
       type: Object,
       default: () => {},
@@ -97,7 +101,6 @@ export default {
           negotiation: "NewSubmitPorposal/Asset 612.svg",
           bundle: "",
         },
-        // discount: this.defaultDiscount,
         discount: {
           percentage: 0,
           price: 0,
@@ -114,16 +117,17 @@ export default {
         if ( this.field === "discount" ) {
           this.discount.price = ((this.sumOfPrices * this.discount.percentage) / 100);
         } else if ( this.field === "negotiation" ) {
-          const discountedTotal = this.sumOfPrices * (1 - this.defaultDiscount.percent / 100);
-          this.discount.price =  Math.round(discountedTotal * this.discount.percent / 100);
+          const discountedTotal = this.sumOfPrices * (1 - Number(this.defaultDiscount.percentage) / 100);
+
+          this.discount.price =  Math.round(discountedTotal * Number(this.discount.percentage) / 100);
         } else if ( this.field === "tax" ) {
-          const discountedTotal = this.sumOfPrices * (this.defaultDiscount.percentage / 100);
-          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ? discountedTotal * (1 - this.defaultNegotiation.percent / 100) : discountedTotal;
-          console.log({
-            discountedTotal,
-            negotiatedTotal
-          });
-          this.discount.price = (this.sumOfPrices - negotiatedTotal) * (this.editingDiscount.percentage / 100);
+          let discountedTotal = this.sumOfPrices * (Number(this.defaultDiscount.percentage) / 100);
+          discountedTotal = this.bundleDiscount && this.bundleDiscount.isApplied ? discountedTotal - this.bundleDiscount.price : discountedTotal;
+
+          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ? discountedTotal * (1 - Number(this.defaultNegotiation.percentage) / 100)
+            : discountedTotal;
+          console.log('negotiatedTotal', discountedTotal, negotiatedTotal);
+          this.discount.price = (this.sumOfPrices - negotiatedTotal) * (Number(this.editingDiscount.percentage) / 100);
         }
         return this.discount.price;
       },
@@ -137,23 +141,35 @@ export default {
         // console.log({ newValue, oldValue });
         if (newValue !== oldValue) {
           this.discount.price = (newValue * this.discount.percentage) / 100;
-          // this.tax.price = ((newValue - this.discount.price) * this.tax.percentage) / 100;
         }
       },
-    },
-    created() {
-      if ( this.field === "discount" ) {
-        this.discount = JSON.parse(JSON.stringify(this.defaultDiscount));
-        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount));
-      } else if ( this.field === "negotiation" ) {
-        this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation));
-        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation));
-      } else if ( this.field === "tax" ) {
-        this.discount = JSON.parse(JSON.stringify(this.defaultTax));
-        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax));
+      defaultDiscount(newVal) {
+        this.init();
+      },
+      defaultTax(newVal) {
+        this.init();
+      },
+      bundleDiscount(newVal) {
+        this.init();
       }
     },
+    created() {
+      this.init();
+    },
     methods: {
+      init() {
+        if ( this.field === "discount" ) {
+          this.discount = JSON.parse(JSON.stringify(this.defaultDiscount));
+          this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount));
+        } else if ( this.field === "negotiation" ) {
+          this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation));
+          this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation));
+        } else if ( this.field === "tax" ) {
+          this.discount = JSON.parse(JSON.stringify(this.defaultTax));
+          this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax));
+        }
+        console.log('item.form', this.field, this.defaultDiscount, this.defaultNegotiation, this.bundleDiscount);
+      },
       toggleEditMode() {
         this.isEditing = !this.isEditing;
       },

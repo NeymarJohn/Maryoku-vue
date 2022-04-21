@@ -28,7 +28,10 @@
         </div>
         <div class="change-cover-image-modal-body-carousel-image">
           <change-cover-image-carousel
+            v-if="!loading"
             :images="conceptImages"
+            :selected-index="selectedIndex"
+            @changed="changedCarouselCurrentItem"
             @select-image="selectImage"
           />
         </div>
@@ -37,10 +40,13 @@
     <template slot="footer">
       <div class="change-cover-image-modal-footer">
         <div class="sections-for-upload-cover-image">
-          <div class="section-upload-cover-image d-flex justify-content-center">
+          <div
+            class="section-upload-cover-image d-flex justify-content-center cursor-pointer"
+            @click="selectConceptImages"
+          >
             <div class="width-80">
               <concept-image-block
-                v-if="eventConcept"
+                v-if="showConcept"
                 class="hidden"
                 :images="conceptImages"
                 :colors="conceptColors"
@@ -75,7 +81,7 @@
             </vue-dropzone>
           </div>
         </div>
-        <div class="change-cover-image-modal-footer-actions" >
+        <div class="change-cover-image-modal-footer-actions">
           <md-button
             class="md-white btn-cancel"
             @click="close"
@@ -95,15 +101,25 @@
 </template>
 
 <script>
-import { Modal } from "@/components";
-import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
+// core
+import { mapMutations } from "vuex";
 import vue2Dropzone from "vue2-dropzone";
+import { v4 as uuidv4 } from "uuid";
+
+// components
+// gloabl
+import { Modal } from "@/components";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+//local
+import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
+
+// models
 import CalendarEvent from "@/models/CalendarEvent";
 import EventConcept from "@/models/EventConcept";
-import { mapMutations } from "vuex";
+
+// dependencies
 import S3Service from "@/services/s3.service";
-import { v4 as uuidv4 } from "uuid";
+import loop      from "@/helpers/number/loop";
 
 export default {
   name: "ChangeCoverImageModal",
@@ -113,11 +129,24 @@ export default {
     ConceptImageBlock,
     Modal,
   },
+  props: {
+    coverImage: {
+      type    : String,
+      default : "",
+    },
+    defaultCoverImage: {
+      type    : String,
+      default : "",
+    },
+  },
   data() {
     return {
+      loading: false,
       selectedImage: null,
+      selectedIndex: 0,
       canvaApi: null,
       destroyDropzone: false,
+      carouselCurrentItem: 0,
       dropzoneOptions: {
         url: "https://httpbin.org/post",
         thumbnailWidth: 60,
@@ -143,10 +172,17 @@ export default {
     conceptColors() {
       return this.eventConcept.colors || [];
     },
+    showConcept() {
+      return this.eventConcept && this.conceptImages && this.conceptImages.length && this.conceptColors && this.conceptColors.length;
+    }
   },
   created() {
-    if (this.conceptImages.length) {
-      this.selectedImage = this.conceptImages[0].url;
+    if (this.coverImage) {
+      this.selectedImage = this.coverImage;
+      this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
+    } else {
+      this.selectedImage = (this.conceptImages && this.conceptImages.length)
+        ? this.conceptImages[0].url : this.defaultCoverImage;
     }
 
     (async () => {
@@ -168,7 +204,25 @@ export default {
       this.$emit("choose-image", this.selectedImage);
     },
     selectImage(index) {
+      this.selectedIndex = index;
       this.selectedImage = this.conceptImages[index].url;
+    },
+    changedCarouselCurrentItem({ item }) {
+      this.carouselCurrentItem = item.index;
+    },
+    selectConceptImages() {
+      this.$emit("choose-image", null);
+    },
+    carouselScrollingToIndex() {
+      const countImages = this.conceptImages.length;
+        // number 5 get from prop items carousel
+      if (countImages > 6) {
+        const btnNext = document.getElementById("carousel-btn-next");
+        if (btnNext) {
+          const countScroll = countImages - 5;
+          loop(countScroll, () => btnNext.click());
+        }
+      }
     },
     handleClickDesignOnCanva() {
       if (this.canvaApi) {
@@ -192,9 +246,10 @@ export default {
         dropZone[0].style.display = "block";
       }
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      if (preview && preview[preview.length - 1]) {
-        preview[preview.length - 1].style.display = "none";
-        preview[preview.length - 1].style.opacity = "0";
+      const lastIndexPreview = preview.length - 1;
+      if (preview && preview[lastIndexPreview]) {
+        preview[lastIndexPreview].style.display = "none";
+        preview[lastIndexPreview].style.opacity = "0";
       }
       const extension = file.type.split("/")[1];
       const fileName = uuidv4();
@@ -205,11 +260,15 @@ export default {
     async addNewImageConcept(newImage) {
       const event = new CalendarEvent({ id: this.event.id });
       const images = [...this.conceptImages, newImage];
+      this.loading = true;
       await new EventConcept({ ...this.eventConcept, event, images }).save().then(() => {
         this.setEventData({
           ...this.event,
           concept: { ...this.eventConcept, images }
         });
+        this.selectImage(images.length - 1);
+        this.loading = false;
+        setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
       });
     }
   }
@@ -254,6 +313,11 @@ export default {
     height: 430px;
     object-fit: cover;
   }
+}
+
+.change-cover-image-modal-body-carousel-image {
+  width: 950px;
+  height: 85px;
 }
 
 .change-cover-image-modal-footer {

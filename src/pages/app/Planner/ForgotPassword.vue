@@ -9,8 +9,10 @@
         </div>
       </div>
       <signup-card>
-        <div slot="content-right"
-             class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain w-max-600">
+        <div
+          slot="content-right"
+          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain w-max-600"
+        >
           <p v-if="!submitted" class="font-size-16 text-center font-bold">
             Please enter the email address you used to create your Maryoku account:
           </p>
@@ -113,13 +115,12 @@ export default {
   methods: {
     forgotPassword() {
       this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email: this.email }, { "ContentType": "application/json" })
-        .then((resp) => {
-          console.log(resp);
+        .then((res) => {
           this.loading = false;
-          if (resp.data.status) {
+          if (res.data.status) {
             this.submitted = true;
           } else {
-            this.error = resp.data.message;
+            this.error = res.data.message;
           }
         })
         .catch((error) => {
