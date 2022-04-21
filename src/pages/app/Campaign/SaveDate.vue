@@ -25,7 +25,6 @@
           />
         </div>
       </div>
-
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
         <span class="font-size-22 ml-10">{{
@@ -67,16 +66,15 @@
 import Swal from "sweetalert2";
 
 // components
-import { Loader }        from "@/components";
+import { Loader } from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
-import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
-import TitleEditor       from "./components/TitleEditor";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import TitleEditor from "./components/TitleEditor";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
-import CampaignLogo  from "@/pages/app/Campaign/components/CampaignLogo";
-
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
 const placeHolder =
@@ -91,23 +89,22 @@ export default {
   },
   props: {
     info: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => {},
     },
-    showChangeCover: {
-      type    : Boolean,
-      default : () => false
-    },
+    showChangeCover: Boolean,
     defaultData: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => {},
     },
   },
-  data: () => ({
-    logo          : null,
-    logoImageData : "",
-    placeHolder   : placeHolder,
-  }),
+  data: function () {
+    return {
+      logo: null,
+      logoImageData: "",
+      placeHolder: placeHolder,
+    };
+  },
   computed: {
     event() {
       return this.$store.state.event.eventData;

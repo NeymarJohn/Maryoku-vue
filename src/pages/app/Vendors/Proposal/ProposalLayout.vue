@@ -226,6 +226,7 @@ export default {
     },
   },
   async created() {
+    console.log('proposal.layout');
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
