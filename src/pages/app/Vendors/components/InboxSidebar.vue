@@ -166,7 +166,7 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-item-center sidebar__item__content">
               <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
-              <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px">
+              <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px" style="z-index: 100;">
               <div class="sidebar__item__details d-flex flex-column">
                 <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
                   {{ proposal.eventData.customer.companyName }}
