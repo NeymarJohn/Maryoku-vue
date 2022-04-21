@@ -3,7 +3,7 @@
     <template slot="header">
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra mt-20 mr-40">
-          <img :src="`${$iconURL}Services /${serviceCategory.icon}`" width="30px" class="mr-1">
+          <img :src="`${$iconURL}Budget+Elements/${serviceCategory.icon}`" width="30px" class="mr-1">
           Add Budget To {{ serviceCategory.fullTitle }}
         </h2>
       </div>

@@ -91,9 +91,9 @@
                 {{ proposal.vendor.vendorCity }}
               </li>
             </ul>
-<!--            <div class="probability">-->
-<!--              Complies with requirements {{ probability }}%-->
-<!--            </div>-->
+            <div class="probability">
+              Complies with requirements {{ probability }}%
+            </div>
           </template>
           <!-- <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p> -->
           <div class="item-actions text-right mt-30">

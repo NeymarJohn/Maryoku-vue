@@ -48,9 +48,6 @@ export default {
     }
   },
   computed: {
-    filteredCommentComponent() {
-      return this.commentComponent.comments && this.commentComponent.comments.length;
-    },
     commentError() {
       return this.$store.state.comment.error;
     }

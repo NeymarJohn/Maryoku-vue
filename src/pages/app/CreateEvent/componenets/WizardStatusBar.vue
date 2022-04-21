@@ -52,12 +52,9 @@
         </md-button>
       </div>
       <transition name="fade">
-        <div v-if="skipToolTip"
-             @mouseover="skipToolTip = true"
-             @mouseleave="skipToolTip = false"
-             class="tool-tip">
+        <div v-if="skipToolTip" class="tool-tip">
           <div class="flex-1">
-            <img :src="`${$iconURL}Onboarding/tip-gray.svg`" style="margin-right: 10px">
+            <img :src="`${$iconURL}Onboarding/tip-gray.svg`">
           </div>
           <div>
             We encourage you to answer this question!
@@ -115,12 +112,9 @@
           >
             Skip
             <md-icon>keyboard_arrow_right</md-icon>
-            <md-tooltip v-if="skipToolTip"
-                        @mouseover="skipToolTip = true"
-                        @mouseleave="skipToolTip = false"
-                        class="tool-tip">
+            <md-tooltip v-if="skipToolTip" class="tool-tip">
               <div class="flex-1">
-                <img :src="`${$iconURL}Onboarding/tip-gray.svg`" style="margin-right: 10px">
+                <img :src="`${$iconURL}Onboarding/tip-gray.svg`">
               </div>
               <div>
                 We encourage you to answer this question!

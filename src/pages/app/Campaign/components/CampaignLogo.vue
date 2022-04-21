@@ -46,15 +46,9 @@
       </vue-dropzone>
       <hide-switch v-if="!review" :value="showLogo" label="Logo" @input="$emit('change-show-logo', $event)" />
     </div>
-    <div v-if="logoTitle" class="font-size-30 d-flex align-center">
-      <custom-title-editor
-        v-if="!review"
-        :default-value="logoTitle"
-        class="mt-20 mb-10"
-        @change="$emit('change-logo-title', $event)"
-      />
-      <span v-else>{{ logoTitle }}</span>
-    </div>
+    <span v-if="logoTitle" class="logo-title">
+      {{ logoTitle }}
+    </span>
   </div>
 </template>
 
@@ -62,13 +56,11 @@
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import HideSwitch from "@/components/HideSwitch";
-import CustomTitleEditor from "./CustomTitleEditor";
 
 export default {
   name: "CampaignLogo",
   components: {
     HideSwitch,
-    CustomTitleEditor,
     vueDropzone: vue2Dropzone,
   },
   props: {

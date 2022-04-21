@@ -37,7 +37,7 @@ const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeli
 const EventConceptChoose = () => import("@/pages/app/Events/components/EventConceptChoose");
 const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
 const EventBudgetRequirement = () => import("@/pages/app/Events/components/EventBudgetRequirement.vue");
-const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout");
+const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 const PlanningBoard = () => import("@/pages/app/Events/PlanningBoard/index.vue");
 const GuestPlanningBoard = () => import("@/pages/app/Guest/PlanningBoard");
 const ChooseVendor = () => import("@/pages/app/Events/ChooseVendor");
@@ -60,10 +60,10 @@ const EventWizardReligion = () => import("@/pages/app/CreateEvent/EventWizardRel
 
 // RSVP
 
-const RSVPEvent = () => import("@/pages/app/RSVP/RSVPEvent.vue");
+const RSVPEvent       = () => import("@/pages/app/RSVP/RSVPEvent.vue");
 const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.vue");
 
-const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
+const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage");
 // User authentication pages
 const SignInSignUp = () => import("@/pages/app/Planner/SignInSignUp.vue");
 const SignUp = () => import("@/pages/app/Planner/SignUp.vue");
@@ -81,12 +81,11 @@ const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout");
 
 const InvoicePage = () => import("@/pages/app/Invoices/InvoicePage.vue");
-const FeedbackNewsletter = () => import("@/pages/app/Guest/FeedbackNewsletter.vue");
 
 let testUI = {
   path: "/testui",
-  component: FeedbackNewsletter,
-  name: "FeedbackNewsletter"
+  component: TestUI,
+  name: "TestUI"
 };
 
 let authPages = {
@@ -431,30 +430,6 @@ let EventPages = {
           }
         }
       ]
-    },
-
-    {
-      path: "/events/:eventId/checkout/proposal/:proposalId/:proposalType",
-      name: "CheckoutWithVendor",
-      component: Checkout,
-      meta: {
-        title: "Plan Event",
-        gtm: "Plan Event",
-        opaque: false,
-        requiresAuth: false
-      }
-    },
-
-    {
-      path: "/events/:eventId/checkout",
-      name: "CheckoutWithCart",
-      component: Checkout,
-      meta: {
-        title: "Plan Event",
-        gtm: "Plan Event",
-        opaque: false,
-        requiresAuth: true
-      }
     }
   ]
 };
@@ -783,6 +758,29 @@ let vendorListPage = {
     gtm: "Vendors"
   }
 };
+let checkoutPageWithVendor = {
+  path: "/checkout/proposal/:proposalId/:proposalType",
+  name: "CheckoutWithVendor",
+  component: Checkout,
+  meta: {
+    title: "Plan Event",
+    gtm: "Plan Event",
+    opaque: false,
+    requiresAuth: false
+  }
+};
+
+let checkoutPageWithCart = {
+  path: "/checkout/event/:eventId",
+  name: "CheckoutWithCart",
+  component: Checkout,
+  meta: {
+    title: "Plan Event",
+    gtm: "Plan Event",
+    opaque: false,
+    requiresAuth: true
+  }
+};
 
 let calendarSyncPage = {
   path: "/calendar/sync/:calendarName",
@@ -851,6 +849,8 @@ const routes = [
   welcomeEventPage,
   others,
   calendarSyncPage,
+  checkoutPageWithVendor,
+  checkoutPageWithCart,
   proposalForUnregisterPlanner,
   ...vendorRoutes,
   {
