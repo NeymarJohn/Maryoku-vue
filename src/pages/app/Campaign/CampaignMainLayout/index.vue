@@ -324,10 +324,6 @@
         @cancel="showScheduleModal = false"
       />
     </div>
-    <!-- <button @click="saveDraftCampaign">
-      test save data
-    </button> -->
-
     <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
         <scroll-to-top-btn />
@@ -431,6 +427,26 @@
           v-else
           class="d-flex align-center"
         >
+          <!-- <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendToAddtionalGuests"
+          >
+            <Icon src="Campaign/Campaign/Group 8871.svg">
+              Send To Additional Guests
+            </Icon>
+          </md-button>
+          <span
+            class="seperator"
+            style="margin-top: 0"
+          />
+          <md-button
+            class="md-simple md-button md-black maryoku-btn"
+            @click="sendPreviewEmail"
+          >
+            <Icon src="Campaign/Group 1855.svg">
+              Send Me A Preview
+            </Icon>
+          </md-button> -->
           <template v-if="!canSchedule">
             <Scheduled :time="event.eventStartMillis" />
             <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
@@ -508,6 +524,7 @@ import Swal from "sweetalert2";
 import { Loader }            from "@/components";
 import HeaderActions         from "@/components/HeaderActions";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
+const VueHtml2pdf = () => import("vue-html2pdf");
 
 // local
 import DeliverySettings    from "../DeliverySettings";
@@ -521,10 +538,14 @@ import Icon                from "./Footer/Icon";
 import Schedule            from "./Footer/Schedule";
 import Scheduled           from "./Footer/Scheduled";
 import SendAgainBtn        from "./Footer/SendAgainBtn";
-import SaveDate            from "../SaveDate";
+const SaveDate  = () => import("../SaveDate");
+const Rsvp      = () => import("../Rsvp");
+const Countdown = () => import("../Countdown");
+const Feedback  = () => import("../Feedback");
 
 // pages
 import CommentEditorPanel    from "@/pages/app/Events/components/CommentEditorPanel";
+import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
 
 // models
 import Campaign      from "@/models/Campaign";
@@ -532,20 +553,18 @@ import CalendarEvent from "@/models/CalendarEvent";
 
 // dependencies
 import { CommentMixins, ShareMixins } from "@/mixins";
-import S3Service                      from "@/services/s3.service";
-import defaultSettings                from "./defaultSettings";
+import S3Service from "@/services/s3.service";
+import defaultSettings from "./defaultSettings";
 
 export default {
   components: {
-    ChangeCoverImageModal: () => import("@/pages/app/Campaign/components/ChangeCoverImageModal"),
-    SaveDate,
-    Rsvp        : () => import("../Rsvp"),
-    Countdown   : () => import("../Countdown"),
-    Feedback    : () => import("../Feedback"),
-    VueHtml2pdf : () => import("vue-html2pdf"),
     Loader,
     HeaderActions,
     CommentEditorPanel,
+    SaveDate,
+    Rsvp,
+    Countdown,
+    Feedback,
     DeliverySettings,
     CampaignScheduleModal,
     SavedateAnalytics,
@@ -553,6 +572,8 @@ export default {
     CollapsePanel,
     ComingsoonAnalytics,
     FeedbackAnalytics,
+    VueHtml2pdf,
+    ChangeCoverImageModal,
     ScrollToTopBtn,
     Icon,
     Schedule,
@@ -636,15 +657,6 @@ export default {
           || this.currentCampaign.campaignStatus === "SCHEDULED"
           || (scheduleTime < Date.now() && scheduleTime > 0);
     },
-    tabName () {
-      switch (this.selectedTab) {
-        case 1  : return "Save The Date";
-        case 2  : return "RSVP";
-        case 3  : return "Coming Soon";
-        case 4  : return "Feedback";
-        default : return "";
-      }
-    },
   },
   watch: {
     currentCampaign(newValue, oldValue) {
@@ -709,24 +721,38 @@ export default {
       window.scrollTo(0, 0);
     },
     startCampaign() {
-      const swapTitle = (title) => Swal.fire({
-        buttonsStyling     : false,
-        icon               : "warning",
-        confirmButtonClass : "md-button md-success",
-        title,
-      });
-
-      if (this.deliverySettings) {
-        const { email = {}, phone = {} } = this.deliverySettings;
-        if (!this.currentCampaign || (!email.selected && !phone.selected))
-          return swapTitle("Please select email or phone or both.");
+      if (
+        !this.currentCampaign ||
+        (!this.deliverySettings.email.selected &&
+          !this.deliverySettings.phone.selected)
+      ) {
+        Swal.fire({
+          title: "Please select email or phone or both.",
+          buttonsStyling: false,
+          icon: "warning",
+          confirmButtonClass: "md-button md-success",
+        });
+        return;
       }
 
-      if (this.selectedTab === 4) {
-        if (!this.currentCampaign.description)
-          return swapTitle("Please write description for Feedback page");
-        if (!this.currentCampaign.images || !this.currentCampaign.images.length)
-          return swapTitle("Please select images for event");
+      if (this.selectedTab === 4 && !this.currentCampaign.description) {
+        Swal.fire({
+          title: "Please write description for Feedback page",
+          buttonsStyling: false,
+          icon: "warning",
+          confirmButtonClass: "md-button md-success",
+        });
+        return;
+      }
+
+      if (this.selectedTab === 4 && (!this.currentCampaign.images || !this.currentCampaign.images.length)) {
+        Swal.fire({
+          title: "Please select images for event",
+          buttonsStyling: false,
+          icon: "warning",
+          confirmButtonClass: "md-button md-success",
+        });
+        return;
       }
 
       this.callSaveCampaign(
@@ -739,9 +765,9 @@ export default {
     },
     cancelSchedule() {
       this.$store.commit("campaign/setAttribute", {
-        name  : this.currentCampaignType,
-        key   : "scheduleSettings",
-        value : null,
+        name: this.currentCampaignType,
+        key: "scheduleSettings",
+        value: null,
       });
       this.callSaveCampaign(this.currentCampaignType, "SAVED");
     },
@@ -763,19 +789,28 @@ export default {
       let coverImage = campaignData.coverImage;
 
       if (coverImage && coverImage.indexOf("base64") >= 0) {
-        const fileName = `${this.event.id}-${campaignType}`;
-        const fileObject = S3Service.dataURLtoFile(coverImage, fileName);
-        coverImage = await S3Service.fileUpload(fileObject, fileName, "campaigns/cover-images");
+        const fileObject = S3Service.dataURLtoFile(
+          coverImage,
+          `${this.event.id}-${campaignType}`
+        );
+        let fileUpload = await S3Service.fileUpload(
+          fileObject,
+          `${this.event.id}-${campaignType}`,
+          "campaigns/cover-images"
+        );
+        coverImage = fileUpload;
       }
+
 
       let referenceUrl = "";
       if (campaignType === "RSVP") {
         referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
       }
 
-      else if (campaignType === "FEEDBACK") {
+      if (campaignType === "FEEDBACK") {
         referenceUrl = `${document.location.origin}/#/feedback/${this.event.id}`;
       }
+      const { deliverySettings } = this;
 
       if (this.deliverySettings.email.selected) {
         this.deliverySettings.email.status = "sent";
@@ -790,20 +825,28 @@ export default {
         ...campaignData,
         campaignStatus,
         referenceUrl,
+        event: new CalendarEvent({ id: this.event.id }),
+        scheduleTime: new Date().getTime(),
+        settings: this.deliverySettings,
         coverImage,
         isPreview,
-        event        : new CalendarEvent({ id: this.event.id }),
-        scheduleTime : new Date().getTime(),
-        settings     : this.deliverySettings,
       });
 
-      try {
-        const result = await this.saveCampaign(newCampaign);
-        this.$store.commit("event/setEventData", result.item.event);
-        return result;
-      } finally {
-        this.isLoading = false;
-      }
+      const result = new Promise((resolve, reject) => {
+        this.saveCampaign(newCampaign)
+          .then((res) => {
+            this.$store.commit("event/setEventData", res.item.event);
+            this.isLoading = false;
+            resolve(res);
+          })
+          .catch(() => {
+            this.isLoading = false;
+            reject();
+          });
+      });
+
+
+      return result;
     },
     saveScheduleTime(data) {
       const {
@@ -812,42 +855,52 @@ export default {
         scheduleSettings,
         selectedOption,
       } = data;
-
       const scheduleSettingsData = {
-        timeZone            : "EST",
-        scheduleTime        : scheduleTime,
-        scheduleOption      : selectedOption,
-        scheduleOptionValue : scheduleSettings[selectedOption].value,
+        timeZone: "EST",
+        scheduleTime: scheduleTime,
+        scheduleOption: selectedOption,
+        scheduleOptionValue: scheduleSettings[selectedOption].value,
       };
-
       this.$store.commit("campaign/setAttribute", {
         name: this.campaignTabs[currentCampaignIndex].name,
         key: "scheduleSettings",
         value: scheduleSettingsData,
       });
-
       this.scheduleCampaign();
     },
     revertSetting() {
-      this.deliverySettings = Object.assign(Object.create(null), defaultSettings);
-      switch (this.selectedTab) {
-        case 1: return this.$refs.savedateCampaign.setDefault();
-        case 2: return this.$refs.rsvp.setDefault();
-        case 3: return this.$refs.countdown.setDefault();
-        case 4: return this.$refs.feedback.setDefault();
+      this.deliverySettings = Object.assign({}, defaultSettings);
+      if (this.selectedTab == 1) {
+        this.$refs.savedateCampaign.setDefault();
+      } else if (this.selectedTab == 2) {
+        this.$refs.rsvp.setDefault();
+      } else if (this.selectedTab == 3) {
+        this.$refs.countdown.setDefault();
+      } else if (this.selectedTab == 4) {
+        this.$refs.feedback.setDefault();
       }
     },
-
     sendPreviewEmail() {
       this.callSaveCampaign(
         this.currentCampaignType,
         this.currentCampaign.campaignStatus || "TESTING",
         true
       ).then((res) => {});
+
+        let tabName = null;
+        if (this.selectedTab === 1) {
+            tabName = "Save The Date";
+        } else if (this.selectedTab === 2) {
+            tabName = "RSVP";
+        } else if (this.selectedTab === 3) {
+            tabName = "Coming Soon";
+        } else if (this.selectedTab === 4) {
+            tabName = "Feedback";
+        }
         this.$notify({
         message: {
           title: "Your preview email is on the way!",
-          content: `The preview email for ${ this.tabName }
+          content: `The preview email for ${ tabName }
             has been sent to ${ this.event.owner ? this.event.owner.name : ""}.You should receive it shortly.`,
         },
         icon: `${this.$iconURL}messages/info.svg`,
@@ -885,8 +938,8 @@ export default {
         changeLogo(file);
       }
       const extension = file.type.split("/")[1];
-      const fileName  = uuidv4();
-      const logoUrl   = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+      const fileName = uuidv4();
+      const logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
       changeLogo(logoUrl);
     }
   },
