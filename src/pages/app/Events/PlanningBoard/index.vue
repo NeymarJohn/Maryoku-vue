@@ -13,8 +13,8 @@
                 :key="index"
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
-                :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+                :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
+                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -26,6 +26,8 @@
                   class="mr-20 mb-10"
                   label="More categories"
                   data-toggle="dropdown"
+                  :icon="`${$iconURL}Services /more.svg`"
+                  :selected-icon="`${$iconURL}Services /more-white.svg`"
                   :default-status="showMoreCats === true"
                   :proposalCategory="false"
                   @click="showMoreCategories"
@@ -57,7 +59,7 @@
                   >
                     <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
                       <div class="category-name">
-                        <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
+                        <img :src="`${$iconURL}Services /${additionalCategory.icon}`">
                         &nbsp;&nbsp;
                         {{ additionalCategory.title }}
                       </div>
@@ -239,7 +241,7 @@
             </template>
             <div v-else class="proposal-card-items">
               <ProposalCard
-                v-for="(p, index) in categoryProposals.slice(0, 3).slice(0, 3)"
+                v-for="(p, index) in categoryProposals.slice(0, 3)"
                 :key="index"
                 :proposal="p"
                 :component="selectedCategory"
@@ -365,7 +367,7 @@
               <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
             </md-button>
             <drop-down class="d-inline-block">
-              <button class="more-button cursor-pointer" data-toggle="dropdown">
+              <button class="more-button cursor-pointer" data-toggle="dropdown" :disabled="proposal === null">
               <span class="more-actions font-size-16 ml-20">
                 {{ "More actions" }}
               </span>
@@ -386,27 +388,27 @@
             </drop-down>
           </div>
           <div class="d-flex justify-content-end">
-            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
+            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="proposal === null" @click="bookVendor">
               Book This Vendor
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
 
-            <md-button class="md-red maryoku-btn w-min-250" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
+            <md-button class="md-red maryoku-btn w-min-250" :disabled="(proposal === null ) || isInCart" @click="addToCart">
               Add To Cart
             </md-button>
           </div>
         </div>
         <div v-else class="proposal-footer white-card d-flex align-center">
-          <md-button class="md-simple ml-auto md-black maryoku-btn" @click="getSpecification({
+          <md-button class="md-simple ml-auto md-black maryoku-btn py-0 border-right" @click="getSpecification({
                         category: selectedCategory,
                         services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
                       })">
             Change Requirements
           </md-button>
-          <md-button class="md-simple md-black ml-0 maryoku-btn" @click="updateExpiredTime">
+
+          <md-button class="md-simple md-black ml-0 py-0 maryoku-btn" @click="updateExpiredTime">
             I need those proposals urgent
           </md-button>
-
         </div>
       </template>
       <template v-else>
@@ -470,7 +472,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { postReq, getReq } from "@/utils/token";
+import { postReq, updateReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 import ProposalEngagement from '@/models/ProposalEngagement'
@@ -612,11 +614,9 @@ export default {
       return this.$store.state.planningBoard.proposal;
     },
     categoryProposals() {
-      let categoryProposals = this.$store.state.event.proposals;
-      if (this.selectedCategory) {
-        return categoryProposals[this.selectedCategory.componentId] || [];
-      }
-      return [];
+      if (!this.proposals || !this.proposals[this.selectedCategory.componentId] || !this.proposals[this.selectedCategory.componentId].length) return []
+
+      return this.proposals[this.selectedCategory.componentId];
     },
     cart() {
       return this.$store.state.planningBoard.cart;
@@ -727,7 +727,7 @@ export default {
 
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
-        if (scroll >= 300) {
+        if (scroll >= 200) {
           $(".headers").addClass("fixed-top");
         } else {
           $(".headers").removeClass("fixed-top");
@@ -948,11 +948,13 @@ export default {
       return null;
     },
     async updateExpiredTime() {
-      let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
+
+      let res = await updateReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
         id: this.currentRequirement.id,
         expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
       })
-      this.currentRequirement = res.data.item;
+      console.log('update.expiredtime', res);
+      this.currentRequirement = res.data;
     },
     async goDetailPage(proposal) {
 
@@ -1142,12 +1144,10 @@ export default {
     padding-left: 480px;
     animation: slide-down 0.7s;
     opacity: 1;
-    z-index: 1030;
+    z-index: 10;
 
     .container {
-      background: white;
-      margin-left: 60px;
-      margin-right: 30px;
+      background: #f3f7fd;
     }
   }
   @keyframes slide-down {
@@ -1439,6 +1439,10 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+  }
+
+  .border-right {
+    border-right: 1px solid #050505;
   }
 }
 </style>
