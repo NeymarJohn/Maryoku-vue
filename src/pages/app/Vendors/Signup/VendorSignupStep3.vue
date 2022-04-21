@@ -3,6 +3,7 @@
     <div class="inside-container md-layout">
       <div class="left-side md-layout-item md-size-25">
         <img :src="`${iconPurple}Purple Icons/Icon_Disclamer(Vendpr).svg`">
+
         <h2>
           DISCLAMER &
           <br>POLICY
@@ -68,16 +69,13 @@
             </div>
           </div>
           <div class="card">
-            <vendor-discount-section
-              :data="vendorDiscountPolicies"
-              @change="changeDiscountPolicy"
-            />
+            <vendor-discount-section :data="vendorDiscountPolicies" @change="changeDiscountPolicy"/>
             <div class="title-cont">
               <div class="top mt-30 mb-2">
                 <h5>Does this include double discounts?</h5>
               </div>
             </div>
-            <check-box :checked="vendorDiscountPolicies.double" @changed="changedCheckBox('double', $event)" />
+            <check-box v-model="vendorDiscountPolicies.double" @changed="changedCheckBox" />
             <div class="title-cont mt-3">
               <div class="top">
                 <h5>What a valid discount?</h5>
@@ -85,7 +83,7 @@
             </div>
             <div class="md-layout my-2">
               <div v-for="option in discountOptions" :key="option.value" class="md-layout-item md-size-33 ">
-                <md-checkbox v-model="vendorDiscountPolicies.valid" :value="option.value" class="md-vendor" @change="changedCheckBox('valid', $event)">
+                <md-checkbox v-model="vendorDiscountPolicies.valid" :value="option.value" class="md-vendor" @change="changedCheckBox">
                   {{
                     option.label
                   }}
@@ -111,17 +109,17 @@
             </div>
             <div class="checks-cont">
               <div class="check-item" @click="setDontAllowThirdParty(0)">
-                <img v-if="currentVendorData.notAllowedThirdParty == 0" :src="`${iconUrl}Group 5479 (2).svg`" />
+                <img v-if="currentVendorData.notAllowedThirdParty == 0" :src="`${iconUrl}Group 5479 (2).svg`">
                 <span v-else class="unchecked" />
                 <span>Yes</span>
               </div>
               <div class="check-item" @click="setDontAllowThirdParty(1)">
-                <img v-if="currentVendorData.notAllowedThirdParty == 1" :src="`${iconUrl}Group 5479 (2).svg`" />
+                <img v-if="currentVendorData.notAllowedThirdParty == 1" :src="`${iconUrl}Group 5479 (2).svg`">
                 <span v-else class="unchecked" />
                 <span>No</span>
               </div>
               <div class="check-item" @click="setDontAllowThirdParty(2)">
-                <img v-if="currentVendorData.notAllowedThirdParty == 2" :src="`${iconUrl}Group 5479 (2).svg`" />
+                <img v-if="currentVendorData.notAllowedThirdParty == 2" :src="`${iconUrl}Group 5479 (2).svg`">
                 <span v-else class="unchecked" />
                 <span>Some</span>
               </div>
@@ -666,13 +664,11 @@ export default {
         this.vendorDiscountPolicies = {...this.vendorDiscountPolicies, ...e};
         this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
     },
-    changedCheckBox(type, value) {
-      if (type === 'double') this.vendorDiscountPolicies.double = value;
-      console.log('change', this.vendorDiscountPolicies);
-      this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
+    changedCheckBox() {
+        this.$root.$emit("update-vendor-value", "discountPolicies", this.vendorDiscountPolicies);
     },
     init: async function() {
-      console.log("step3", this.vendor);
+      console.log('step3', this.vendor);
       let vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPricingPolicies with saved vendor

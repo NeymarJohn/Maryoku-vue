@@ -29,7 +29,7 @@
       </template>
     </carousel>
     <div v-if="showUploadFile" class="upload-button-wrapper">
-      <md-button id="UploadImage" class="md-red maryoku-btn" @click="uploadImage">
+      <md-button class="md-red maryoku-btn" @click="uploadImage">
         <img :src="`${$iconURL}Campaign/arrow-circle-white.svg`" class="mr-10">
         Upload photos from the event
       </md-button>

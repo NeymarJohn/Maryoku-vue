@@ -25,7 +25,7 @@
             :key="csIndex"
             :tab="option.value"
             :item="cs"
-            @change="changeDiscountItem(csIndex, option.value, $event)"
+            @change="changeDiscountItem(csIndex, $event)"
           />
         </div>
       </div>
@@ -78,11 +78,11 @@ export default {
           this.discountData[this.tab].push(value);
           this.$emit("change", this.discountData);
       },
-      changeDiscountItem(index, tab, {type, value}) {
+      changeDiscountItem(index, {type, value}) {
         if (type === "update") {
-            this.discountData[tab][index] = value;
+            this.discountData[this.tab][index] = value;
         } else if (type === "remove") {
-            this.discountData[tab].splice(index, 1);
+            this.discountData[this.tab].splice(index, 1);
         }
         this.$emit("change", this.discountData);
       }

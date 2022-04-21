@@ -50,7 +50,6 @@ const state = {
   seatingData: null,
   currentVersion: -1,
   expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate(),
-  issuedDate: null,
   isNegotiation: false
 };
 const getters = {
@@ -78,7 +77,6 @@ const getters = {
       }
     });
     prices[state.vendor.eventCategory.key] = getters.originalPriceOfMainCategory;
-
     return prices;
   },
 
@@ -131,7 +129,6 @@ const getters = {
     Object.keys(getter.totalPriceByCategory).forEach((category) => {
       sum += Number(getter.totalPriceByCategory[category]);
     });
-
     // check tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
@@ -147,6 +144,9 @@ const getters = {
     const discount = state.discounts["total"] || { price: 0, percentage: 0 };
     sum = sum - (sum * discount.percentage) / 100;
 
+    const negotiation = state.negotiationDiscount || { price: 0, percentage: 0 };
+    sum = sum - (sum * (negotiation.percentage || 0)) / 100;
+
     // check tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
@@ -159,24 +159,24 @@ const getters = {
       sum += Number(getter.totalPriceByCategory[category]);
     });
 
-    // minus default discount
+    // check discount
     const discount = state.discounts["total"] || { price: 0, percentage: 0 };
     sum = sum - (sum * discount.percentage) / 100;
 
-    // minus bundle discount
-    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
-      sum -= state.bundleDiscount.price;
-    }
-
-    // minus negotiation discount
+    // check negotiation discount
     if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
       sum -= state.negotiationDiscount.price;
     }
 
-    // add tax
+    // check tax
     const tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = sum + (sum * tax.percentage) / 100;
+    // check bundle discount
 
+    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
+      sum -= state.bundleDiscount.price;
+    }
+    console.log("totalPrice", sum);
     return sum;
   }
 };
@@ -213,7 +213,7 @@ const mutations = {
     state.extraServices = proposal.extraServices;
     state.images = proposal.images;
     state.personalMessage = proposal.personalMessage;
-    state.taxes = proposal.taxes;
+    state.taxs = proposal.taxs;
     state.discounts = proposal.discounts;
     (state.negotiationDiscount = proposal.negotiationDiscount),
       (state.suggestedNewSeatings = proposal.suggestedNewSeatings);
@@ -224,7 +224,6 @@ const mutations = {
     state.bookedServices = proposal.bookedServices;
     state.initialized = true;
     state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate();
-    state.issuedDate = proposal.issuedDate;
     state.versions = proposal.versions || [];
     (state.currentVersion = proposal.selectedVersion || -1),
       // state.wizardStep = proposal.step
@@ -434,7 +433,6 @@ const actions = {
         customerId: state.eventData.customer.id,
         suggestionDate: state.suggestionDate,
         expiredDate: state.expiredDate,
-        issuedDate: state.issuedDate,
         nonMaryoku: true,
         bookedServices: state.bookedServices.length ? state.bookedServices : Object.keys(state.costServices), // Set all secondary services as booked services
         seatingData: state.original ? state.original.seatingData : state.seatingData,

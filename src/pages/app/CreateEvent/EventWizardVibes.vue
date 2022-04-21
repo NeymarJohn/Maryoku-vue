@@ -7,7 +7,7 @@
       <div class="event-basic-info">
       
         <div class="setting-title mt-2">
-          Try describing your guest’s vibe using a song
+          Try describing your guest’s vibes using a song
         </div>
         <div class="mt-3 types">
           <music-card

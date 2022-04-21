@@ -266,7 +266,7 @@ export default {
       } else if (subCategory === "Around the space" && name === "Dining options within walking distance") {
         return `${this.$iconURL}Requirements/${icon}.svg`;
       } else if (icon) {
-        return `${this.$secondIconURL}Requirements/Accessibility Sustainability and Inclusion/${icon}.svg`;
+        return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
       }
       return null;
     },

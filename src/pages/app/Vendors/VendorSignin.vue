@@ -57,9 +57,9 @@
           <!--              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>-->
           <!--          </div>-->
           <div class="d-flex justify-content-end">
-            <a class="color-black font-size-16 font-bold" style="cursor: pointer" @click="toForgotPassword">Forgot password?</a>
+            <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
           </div>
-          <div id="vendorLoginButtonsBlock" class="form-buttons">
+          <div class="form-buttons" id="vendorLoginButtonsBlock">
             <md-button
               class="md-default md-red md-maryoku mt-30 md-vendor"
               :disabled="!user.password || !user.email"
@@ -93,32 +93,32 @@ export default {
     MaryokuInput,
   },
   data() {
-    return {
-      error: "",
-      loading: false,
-      user: new TenantUser("", ""),
-      keepMe: false,
-      accepted: false,
-      serverURL: process.env.SERVER_URL,
-      modelValidations: {
-        email: {
-          required: true,
-          email: true,
-        },
-        password: {
-          required: true,
-          min: 6,
-        },
-      },
-      forgotPasswordValidations: {
-        email: {
-          required: true,
-          email: true,
-        },
-      },
-      notFoundUser: false,
-    };
-  },
+        return {
+            error: "",
+            loading: false,
+            user: new TenantUser("", ""),
+            keepMe: false,
+            accepted: false,
+            serverURL: process.env.SERVER_URL,
+            modelValidations: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: true,
+                    min: 6,
+                },
+            },
+            forgotPasswordValidations: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+            },
+            notFoundUser: false,
+        };
+    },
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
@@ -127,8 +127,8 @@ export default {
       return this.$store.state.auth.user;
     },
   },
-  async created() {
-    if (this.loggedIn) {
+  async created(){
+    if ( this.loggedIn  ) {
       let res = await this.$store.dispatch("auth/checkToken", this.currentUser.access_token);
       if (res.currentUserType === "vendor") this.$router.push("/vendor/proposals");
     }
@@ -148,6 +148,7 @@ export default {
           `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?action=${action}&token=`,
         );
       }
+      console.log("callback", callback);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     signIn() {
@@ -196,12 +197,10 @@ export default {
   margin: 0px auto;
   padding: 40px;
   overflow: hidden;
-
   .left-section {
     background-color: #64185608;
     flex-direction: column;
     display: flex;
-
     .description-content {
       display: flex;
       flex-direction: column;
@@ -209,17 +208,14 @@ export default {
       justify-content: center;
     }
   }
-
   .right-section {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-
     .form-input {
       margin-top: 30px;
     }
-
     .form-buttons {
       padding: 20px 60px;
       display: flex;

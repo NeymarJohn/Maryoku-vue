@@ -91,7 +91,7 @@
 }
 .wizard-footer{
   z-index: 1;
-  position: sticky;
+  position: relative;
 }
 .x-mouse{
   cursor: url("/static/icons/comments-cursor.svg"), auto;

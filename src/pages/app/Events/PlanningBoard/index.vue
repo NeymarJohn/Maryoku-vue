@@ -4,157 +4,144 @@
     <loader :active="isLoading" />
 
     <template v-if="!isLoading">
-      <div class="ml-60 mt-40 mr-30 mb-200 position-relative">
-        <div class="headers">
-          <div class="container d-flex justify-content-between align-center">
-            <div>
+      <div class="ml-60 mt-40 mr-30 mb-200">
+        <div class="headers d-flex justify-content-between align-center">
+          <div>
+            <ResizableToggleButton
+              v-for="(component, index) in topCategories"
+              :key="index"
+              class="mr-20 mb-10"
+              :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
+              :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
+              :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+              :default-status="selectedCategory && component.id === selectedCategory.id"
+              :has-badge="hasBadge(component)"
+              icon-style="opacity:0.8"
+              :proposalCategory="true"
+              @click="selectCategory(component)"
+            />
+            <drop-down class="d-inline-block"  @close="closeMoreCategories">
               <ResizableToggleButton
-                v-for="(component, index) in topCategories"
-                :key="index"
                 class="mr-20 mb-10"
-                :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
-                :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
-                :default-status="selectedCategory && component.id === selectedCategory.id"
-                :has-badge="hasBadge(component)"
-                icon-style="opacity:0.8"
-                :proposalCategory="true"
-                @click="selectCategory(component)"
-              />
-              <drop-down class="d-inline-block"  @close="closeMoreCategories">
-                <ResizableToggleButton
-                  class="mr-20 mb-10"
-                  label="More categories"
-                  data-toggle="dropdown"
-                  :icon="`${$iconURL}Services /more.svg`"
-                  :selected-icon="`${$iconURL}Services /more-white.svg`"
-                  :default-status="showMoreCats === true"
-                  :proposalCategory="false"
-                  @click="showMoreCategories"
+                label="More categories"
+                data-toggle="dropdown"
+                :icon="`${$iconURL}Budget+Elements/foodandbeverage.svg`"
+                :selected-icon="`${$iconURL}Budget+Elements/foodandbeverage-white.svg`"
+                :default-status="showMoreCats === true"
+                :proposalCategory="false"
+                @click="showMoreCategories"
+              >
+              </ResizableToggleButton>
+              <ul class="dropdown-width dropdown-menu dropdown-color">
+                <li
+                  v-for="(remainingCategory, i) in remainingCategories"
+                  :key="remainingCategory.title + i"
+                  class="remaining-list"
                 >
-                </ResizableToggleButton>
-                <ul class="dropdown-width dropdown-menu dropdown-color">
-                  <li
-                    v-for="(remainingCategory, i) in remainingCategories"
-                    :key="remainingCategory.title + i"
-                    class="remaining-list"
-                  >
-                    <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory, 'select')">
-                      <div class="remaining-name">
-                        <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`">
-                        &nbsp;&nbsp;
-                        {{ remainingCategory.title }}
-                      </div>
-                    </a>
-                  </li>
-                  <div class="category-list">
-                    <div class="category-heading font-size-16 font-bold">
-                      {{ "Additional Categories" }}
+                  <a class="remaining-item font-size-16" @click="selectRemainingCategory(remainingCategory, 'select')">
+                    <div class="remaining-name">
+                      <img :src="`${$iconURL}Budget+Elements/${remainingCategory.icon}`">
+                                        &nbsp;&nbsp;
+                      {{ remainingCategory.title }}
                     </div>
+                  </a>
+                </li>
+                <div class="category-list">
+                  <div class="category-heading font-size-16 font-bold">
+                    {{ "Additional Categories" }}
                   </div>
-                  <li
-                    v-for="(additionalCategory, i) in additionalCategories"
-                    :key="additionalCategory.title + i"
-                    class="category-list"
-                  >
-                    <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
-                      <div class="category-name">
-                        <img :src="`${$iconURL}Services /${additionalCategory.icon}`">
-                        &nbsp;&nbsp;
-                        {{ additionalCategory.title }}
-                      </div>
-                      &nbsp;&nbsp;
-                      <div class="category-plus">
-                        <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10">
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </drop-down>
+                </div>
+                <li
+                  v-for="(additionalCategory, i) in additionalCategories"
+                  :key="additionalCategory.title + i"
+                  class="category-list"
+                >
+                  <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
+                    <div class="category-name">
+                      <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
+                                            &nbsp;&nbsp;
+                      {{ additionalCategory.title }}
+                    </div>
+                                        &nbsp;&nbsp;
+                    <div class="category-plus">
+                      <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10">
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </drop-down>
+          </div>
+          <div class="functional-bar">
+            <div class="header-actions">
+              <ul class="d-flex list-style-none">
+                <li>
+                  <div class="md-simple md-just-icon adaptive-button">
+                    <img
+                      v-if="isAnyLiked"
+                      class="svg-icon-header cursor-pointer"
+                      :src="`${$iconURL}Booking-New/Path+6363.svg`"
+                      @click="openChoice"
+                    >
+                    <img
+                      v-else
+                      class="svg-icon-header cursor-pointer"
+                      :src="`${$iconURL}Booking-New/Group+28553.svg`"
+                      @click="openChoice"
+                    >
+                    <span :class="{ 'like-dot': proposalUnviewed == true }" />
+                  </div>
+                </li>
+                <li class="md-small-hide">
+                  <div class="md-simple md-just-icon adaptive-button">
+                    <img
+                      class="svg-icon-header cursor-pointer"
+                      :src="`${$iconURL}Booking-New/Path+13791.svg`"
+                      @click="openCart"
+                    >
+                    <span v-if="countInCart" class="cart-dot">{{ countInCart }}</span>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <div class="functional-bar">
-              <div class="header-actions">
-                <ul class="d-flex list-style-none">
-                  <li>
-                    <div class="md-simple md-just-icon adaptive-button">
-                      <img
-                        v-if="isAnyLiked"
-                        class="svg-icon-header cursor-pointer"
-                        :src="`${$iconURL}Booking-New/Path+6363.svg`"
-                        @click="openChoice"
-                      >
-                      <img
-                        v-else
-                        class="svg-icon-header cursor-pointer"
-                        :src="`${$iconURL}Booking-New/Group+28553.svg`"
-                        @click="openChoice"
-                      >
-                      <span :class="{ 'like-dot': proposalUnviewed == true }" />
-                    </div>
-                  </li>
-                  <li class="md-small-hide">
-                    <div class="md-simple md-just-icon adaptive-button">
-                      <img
-                        class="svg-icon-header cursor-pointer"
-                        :src="`${$iconURL}Booking-New/Path+13791.svg`"
-                        @click="openCart"
-                      >
-                      <span v-if="countInCart" class="cart-dot">{{ countInCart }}</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <HeaderActions
-                :any-liked="isAnyLiked"
-                :requirement="false"
-                :hide-download="true"
-                :hide-share="true"
-                :proposal-unviewed="proposalUnviewed"
-                :show-menu="false"
-                :cart-count="countInCart"
-                :custom-styles="{showCommentsText: {paddingLeft: '2px'}}"
-                @toggleCommentMode="toggleCommentMode"
-              />
-              <drop-down class="d-inline-block">
-                <button class="more-button" data-toggle="dropdown">
-                  <md-icon class="font-size-40">
-                    more_vert
-                  </md-icon>
-                </button>
-                <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-                  <li v-for="action in functionActions" class="other-list" :key="action.label">
-                    <a class="other-item font-size-16" @click="handleAction(action.value)">
-                      <div class="other-name">
-                        <md-icon>{{ action.icon }}</md-icon>  &nbsp;&nbsp;
-                        <span>
+            <HeaderActions
+              :any-liked="isAnyLiked"
+              :requirement="false"
+              :hide-download="true"
+              :hide-share="true"
+              :proposal-unviewed="proposalUnviewed"
+              :show-menu="false"
+              :cart-count="countInCart"
+              :custom-styles="{showCommentsText: {paddingLeft: '2px'}}"
+              @toggleCommentMode="toggleCommentMode"
+            />
+            <drop-down class="d-inline-block">
+              <button class="more-button" data-toggle="dropdown">
+                <md-icon class="font-size-40">
+                  more_vert
+                </md-icon>
+              </button>
+              <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
+                <li v-for="action in functionActions" class="other-list" :key="action.label">
+                  <a class="other-item font-size-16" @click="handleAction(action.value)">
+                    <div class="other-name">
+                      <md-icon>{{ action.icon }}</md-icon>  &nbsp;&nbsp;
+                      <span>
                         {{ action.label }}
                       </span>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </drop-down>
-            </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </drop-down>
           </div>
         </div>
 
         <template v-if="requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued">
           <div v-if="proposals[selectedCategory.componentId].length > 0">
             <div>
-              <div class="font-size-30 font-bold-extra d-flex align-center category-title mt-30 mb-30">
+              <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
                 <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
-                <md-button
-                  class="md-simple md-red maryoku-btn"
-                  @click="
-                      getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })
-                    "
-                >
-                  Update Specific
-                </md-button>
               </div>
             </div>
             <div>
@@ -262,18 +249,52 @@
                 </md-tooltip>
                 <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
-
-                <md-button
-                  class="md-simple md-red maryoku-btn"
-                  @click="
-                      getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })
-                    "
+                <template
+                  v-if="
+                    !booked &&
+                      (!(
+                        requirements[selectedCategory.componentId] &&
+                        requirements[selectedCategory.componentId].isIssued
+                      ) ||
+                      !(getDefaultTypes(selectedCategory.componentId, selectedCategory.title) || []).length)
+                  "
                 >
-                  Get Specific
-                </md-button>
+                  <template v-if="hasBudget(selectedCategory.componentId)">
+                    <md-button
+                      class="md-simple md-red maryoku-btn"
+                      :disabled="!getRequirements(selectedCategory.componentId)"
+                      @click="
+                        getSpecification({
+                          category: selectedCategory,
+                          services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                        })
+                      "
+                    >
+                      Get Specific
+                    </md-button>
+                  </template>
+                  <template v-else>
+                    <a class="font-size-18 md-red maryoku-btn" @click="showAddBudgetConfirm = true"> Add To Budget </a>
+                  </template>
+                </template>
+                <template v-else>
+                  <div class="d-flex align-center justify-content-center">
+                    <div v-if="booked" class="color-red">
+                      Already booked
+                    </div>
+                    <a
+                      class="font-size-18 md-red maryoku-btn cursor-pointer"
+                      @click="
+                        getSpecification({
+                          category: selectedCategory,
+                          services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                        })
+                      "
+                    >
+                      Change specifications
+                    </a>
+                  </div>
+                </template>
               </div>
             </template>
           </div>
@@ -355,69 +376,60 @@
         </template>
       </div>
 
-      <template v-if="requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued">
-        <div v-if="categoryProposals.length"
-             class="proposal-footer white-card d-flex justify-content-between"
-        >
-          <div class="d-flex justify-content-start">
-            <md-button
-              class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
-              @click="scrollToTop"
-            >
-              <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
-            </md-button>
-            <drop-down class="d-inline-block">
-              <button class="more-button cursor-pointer" data-toggle="dropdown" :disabled="proposal === null">
-              <span class="more-actions font-size-16 ml-20">
+
+      <div v-if="categoryProposals.length"
+           class="proposal-footer white-card d-flex justify-content-between"
+      >
+        <div class="d-flex justify-content-start">
+          <md-button
+            class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
+            @click="scrollToTop"
+          >
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+          </md-button>
+          <drop-down class="d-inline-block">
+            <button class="more-button cursor-pointer" data-toggle="dropdown">
+              <span class="more-actions font-size-16">
                 {{ "More actions" }}
               </span>
               <md-icon class="more-actions font-size-22">
                 keyboard_arrow_up
               </md-icon>
-              </button>
-              <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
-                <li v-for="action in moreActions" class="other-list" :key="action.label">
-                  <a class="other-item font-size-16" @click="handleAction(action.value)">
-                    <div class="other-name">
-                      <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
-                      {{ action.label }}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </drop-down>
-          </div>
-          <div class="d-flex justify-content-end">
-            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="proposal === null" @click="bookVendor">
-              Book This Vendor
-              <md-icon>keyboard_arrow_right</md-icon>
-            </md-button>
-
-            <md-button class="md-red maryoku-btn w-min-250" :disabled="(proposal === null ) || isInCart" @click="addToCart">
-              Add To Cart
-            </md-button>
-          </div>
+            </button>
+            <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
+              <li v-for="action in moreActions" class="other-list" :key="action.label">
+                <a class="other-item font-size-16" @click="handleAction(action.value)">
+                  <div class="other-name">
+                    <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
+                    {{ action.label }}
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </drop-down>
         </div>
-        <div v-else class="proposal-footer white-card d-flex align-center">
-          <md-button class="md-simple ml-auto md-black maryoku-btn" @click="getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })">
-            Change Requirements
-          </md-button>
-          <md-button class="md-simple md-black ml-0 maryoku-btn" @click="updateExpiredTime">
-            I need those proposals urgent
+        <div class="d-flex justify-content-end">
+          <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
+            Book This Vendor
+            <md-icon>keyboard_arrow_right</md-icon>
           </md-button>
 
-        </div>
-      </template>
-      <template v-else>
-        <div class="proposal-footer white-card d-flex justify-content-end">
-          <md-button class="md-red maryoku-btn" @click="findVendors">
-            Find Vendors for this category
+          <md-button class="md-red maryoku-btn" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
+            Add To Cart
           </md-button>
         </div>
-      </template>
+      </div>
+      <div v-else class="proposal-footer white-card d-flex justify-content-end">
+        <div>
+          <md-button class="md-simple md-outlined md-red maryoku-btn" @click="addToCart">
+            <md-icon>shopping_cart</md-icon>
+            &nbsp;&nbsp; Add To Cart
+          </md-button>
+          <md-button v-if="step === 1" class="md-red maryoku-btn" @click="findVendors">
+            Find Me Vendors
+          </md-button>
+        </div>
+      </div>
     </template>
 
     <AdditionalRequestModal
@@ -472,10 +484,9 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { postReq, getReq } from "@/utils/token";
+import { postReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
-import ProposalEngagement from '@/models/ProposalEngagement'
 
 const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
@@ -727,14 +738,6 @@ export default {
 
     this.selectCategory(this.categories[0]);
 
-    $(window).scroll(function() {
-        var scroll = $(window).scrollTop();
-        if (scroll >= 200) {
-          $(".headers").addClass("fixed-top");
-        } else {
-          $(".headers").removeClass("fixed-top");
-        }
-    });
 
     this.isLoading = false;
   },
@@ -949,39 +952,12 @@ export default {
       }
       return null;
     },
-    async updateExpiredTime() {
-      let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
-        id: this.currentRequirement.id,
-        expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
-      })
-      this.currentRequirement = res.data.item;
-    },
-    async goDetailPage(proposal) {
+    goDetailPage(proposal) {
+      this.showDetails = true;
 
       if (proposal.selectedVersion > -1)
         this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
       else this.proposal = proposal;
-
-      const engagement = await getReq(`/1/proposal/${this.proposal.id}/engagement/proposal`);
-      console.log("engagement", engagement);
-
-      if (engagement) {
-        new ProposalEngagement({
-          ...engagement.data,
-          open: [moment().format("MM/dd/yyyy")],
-        })
-          .for(new Proposal({id: this.proposal.id}))
-          .save();
-      } else {
-        new ProposalEngagement({
-          open: [moment().format("MM/dd/yyyy")],
-          proposalId: this.proposal.id
-        })
-          .for(new Proposal({id: this.proposal.id}))
-          .save();
-      }
-
-      this.showDetails = true;
     },
     async bookVendor() {
       if (!this.proposal) return;
@@ -989,7 +965,6 @@ export default {
       this.$router.push({
         name: "CheckoutWithVendor",
         params: {
-          eventId: this.event.id,
           proposalId: this.proposal.id,
           proposalType: "planner",
         },
@@ -1131,35 +1106,9 @@ export default {
 .planning-board-layout {
 
   .headers {
-    .container {
-      background-color: transparent;
-    }
+    background-color: transparent;
   }
-
-  .fixed-top {
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 0;
-    padding-left: 480px;
-    animation: slide-down 0.7s;
-    opacity: 1;
-    z-index: 10;
-
-    .container {
-      background: #f3f7fd;
-    }
-  }
-  @keyframes slide-down {
-    0% {
-      opacity:5;
-      transform: translateY(-100%);
-    }
-    100% {
-      opacity:1;
-      transform: translateY(0);
-    }
-  }
+  .fixed-top { box-shadow: 1px 1px 10px rgba(0,0,0,0.12); padding: 7px;}
 
   .proposalTitle {
     font-size: 30px;
@@ -1223,6 +1172,8 @@ export default {
     width: 100%;
 
     button {
+      width: 250px;
+      margin-left: 20px;
       img {
         width: 22px;
         margin-right: 10px;

@@ -69,7 +69,6 @@ export default {
   .btn-next, .btn-prev {
     width: 31px;
     height: 31px;
-    cursor: pointer;
 
     .icon-arrow-right, .icon-arrow-left {
       font-size: 31px !important;

@@ -29,7 +29,7 @@
         src="static/icons/arrow-up-red.svg"
       >
       <div class="view-presentation-footer-action-download">
-        <span class="view-presentation-footer-action-download-text" @click="downloadFiles">
+        <span @click="downloadFiles" class="view-presentation-footer-action-download-text">
           Download the presentation
         </span>
         <button
@@ -78,10 +78,7 @@ export default {
     HideSwitch,
   },
   props: {
-    coverImage: {
-      type: String,
-      default: "",
-    },
+    coverImage: String,
     isEdit: {
       type: Boolean,
       default: false

@@ -1,6 +1,6 @@
 <template>
   <modal class="proposal-graph-modal">
-    <loader :active="loading" />
+    <loader :active="loading"></loader>
     <template slot="header">
       <div class="graph-close-button">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -13,15 +13,7 @@
             Overview Hot Activity
           </div>
           <div class="info_proposal">
-            <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-              {{ proposal.eventData.customer.companyName }}
-            </span>
-            <span v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
-              {{ proposal.proposalRequest.eventData.title }}
-            </span>
-            <span v-else>
-              New Event
-            </span>
+            <span>{{ proposal.eventData.customer.companyName }}</span>
             <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
             <span>{{ proposal.dateCreated | date("DD/MM/YYYY") }}</span>
             <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
@@ -62,7 +54,7 @@
 </template>
 
 <script>
-import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
+import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue"
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 const components = {
   Modal: () => import("@/components/Modal.vue"),
@@ -74,12 +66,12 @@ export default {
   components: {...components, ProposalChart, ProposalPieChart},
   props: {
     proposal: {
-      type    : Object,
-      default : () => {}
+      type: Object,
+      default: () => {}
     },
     required: {
-      type    : Boolean,
-      default : true
+      type: Boolean,
+      default: true
     },
   },
   data() {
@@ -91,9 +83,10 @@ export default {
   mounted () {
     console.log("mounted", this.proposal);
 
-    getReq(`/1/proposals/${this.proposal.id}/engagement/summary`)
+    getReq(`/1/proposals/${this.proposal.id}/engagement/1`)
       .then(res => {
         if (res.data && res.data.success) {
+          console.log("data", res.data.data);
 
           const {dates, proposal, vendor, system} = res.data.data;
           this.engageChartData = dates.map((it, idx) => {
@@ -108,6 +101,7 @@ export default {
       this.$emit("close");
     },
   },
+
 };
 </script>
 

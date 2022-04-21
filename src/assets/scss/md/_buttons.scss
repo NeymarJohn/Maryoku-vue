@@ -3,14 +3,6 @@
     width: 100%;
   }
 }
-
-#ChangeCoverImage, #TitleEditorBtnSave, #UploadImage, #CopyLink {
-  .md-ripple {
-    width: auto;
-    height: auto;
-  }
-}
-
 .md-button{
   border: none;
   border-radius: $border-radius-base;
@@ -36,6 +28,8 @@
     }
 
   &:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle):not(.choose-file-button) .md-ripple{
+    width: fit-content;
+    height: fit-content;
     padding: 12px 30px;
   }
 

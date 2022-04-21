@@ -18,7 +18,7 @@
     <md-button class="md-simple maryoku-btn md-black" @click="cancel">
       Cancel
     </md-button>
-    <md-button id="TitleEditorBtnSave" class="maryoku-btn md-red" @click="changeText">
+    <md-button class="maryoku-btn md-red" @click="changeText">
       Save
     </md-button>
   </div>
@@ -71,12 +71,6 @@ export default {
     font-size: inherit;
     &.isEditing {
       border: solid 1px #a0a0a0;
-    }
-  }
-  .btn-save {
-    .md-ripple {
-      width: auto;
-      height: auto;
     }
   }
 }

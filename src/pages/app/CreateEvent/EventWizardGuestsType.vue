@@ -17,6 +17,7 @@
             class="type-card"
             :class="{ selected: isSelected(type.value) }"
             @click="addType(type.value)"
+          
           >
             <div>
               <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
@@ -40,63 +41,18 @@
 </template>
 
 <script>
+import GoBack from "./componenets/GoBack";
 import SelectedValue from "./componenets/SelectedValue";
 import WizardStatusBar from "./componenets/WizardStatusBar";
-import { mapState, mapMutations } from "vuex";
+import { MaryokuInput } from "@/components";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
+    GoBack,
     SelectedValue,
     WizardStatusBar,
-  },
-  data() {
-    return {
-      selectedType: "",
-      selectedTypes: [],
-      groupName: "",
-      guestsTypes: [
-        {
-          value: "employees",
-          name: "Employees",
-          selected: false,
-        },
-        {
-          value: "employees-spouses",
-          name: " Employees Plus 1",
-          selected: false,
-        },
-        {
-          value: "families",
-          name: "Familes",
-          selected: false,
-        },
-        {
-          value: "business-associates",
-          name: "Business Associates",
-          selected: false,
-        },
-        {
-          value: "customers",
-          name: "Clients or Customers",
-          selected: false,
-        },
-        {
-          value: "board-members",
-          name: "Board Members",
-          selected: false,
-        },
-        // {
-        //   value: "other", name: "Other", selected:false
-        // }
-      ],
-    };
-  },
-  computed: {
-    ...mapState("PublicEventPlanner", ["publicEventData"]),
-    formattedString() {
-      if (!this.publicEventData.numberOfParticipants) return "Not Sure";
-      return `${this.publicEventData.numberOfParticipants}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
+    MaryokuInput,
   },
   created() {
     if (this.publicEventData.guestType) {
@@ -167,6 +123,55 @@ export default {
     },
       isSelected(value) {
       return this.selectedTypes.indexOf(value) > -1;
+    },
+  },
+  data() {
+    return {
+      selectedType: "",
+      selectedTypes: [],
+      groupName: "",
+      guestsTypes: [
+        {
+          value: "employees",
+          name: "Employees",
+          selected: false,
+        },
+        {
+          value: "employees-spouses",
+          name: " Employees Plus 1",
+          selected: false,
+        },
+        {
+          value: "families",
+          name: "Familes",
+          selected: false,
+        },
+        {
+          value: "business-associates",
+          name: "Business Associates",
+          selected: false,
+        },
+        {
+          value: "customers",
+          name: "Clients or Customers",
+          selected: false,
+        },
+        {
+          value: "board-members",
+          name: "Board Members",
+          selected: false,
+        },
+        // {
+        //   value: "other", name: "Other", selected:false
+        // }
+      ],
+    };
+  },
+  computed: {
+    ...mapState("PublicEventPlanner", ["publicEventData"]),
+    formattedString() {
+      if (!this.publicEventData.numberOfParticipants) return "Not Sure";
+      return `${this.publicEventData.numberOfParticipants}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 };

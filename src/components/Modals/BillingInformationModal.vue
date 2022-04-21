@@ -34,13 +34,9 @@
             <span style="font-weight: bold">Edit</span>
           </md-button>
         </div>
-        <div
-          v-show="step === 0"
-          id="signatureEditor"
-          class="signature-editor"
-          @mousedown="signatureAdded = true"
-        >
-          <business-profile />
+        <div class="signature-editor" id="signatureEditor" v-show="step === 0"
+             @mousedown="signatureAdded = true">
+          <business-profile/>
         </div>
         <div v-show="step === 1" class="body-header" style="flex-direction: column; align-items: start; margin: 20px 0">
           <span style="font-weight: bold; margin-bottom: 20px">Bank Details</span>
@@ -51,8 +47,8 @@
             </p>
           </div>
         </div>
-        <div v-show="step === 1" class="signature-editor type">
-          <billing-info ref="billingInfo" />
+        <div class="signature-editor type" v-show="step === 1">
+          <billing-info ref="billingInfo"/>
         </div>
         <div v-show="step === 2" class="md-layout-item md-size-100 body-header mb-1">
           <div>
@@ -60,11 +56,11 @@
             <span class="authentication-header">User Authentication</span>
           </div>
         </div>
-        <div v-show="step === 2" class="signature-editor type">
-          <auth-info ref="authInfo1" part="1" />
+        <div class="signature-editor type" v-show="step === 2">
+          <auth-info ref="authInfo1" part="1"/>
         </div>
-        <div v-show="step === 2" class="signature-editor type" style="margin-top: 20px; min-height: unset">
-          <auth-info ref="authInfo2" part="2" />
+        <div class="signature-editor type" style="margin-top: 20px; min-height: unset" v-show="step === 2">
+          <auth-info ref="authInfo2" part="2"/>
         </div>
       </div>
     </template>
@@ -89,7 +85,6 @@ import {Modal} from "../index";
 import BusinessProfile from "./ModalComponents/BusinessProfile";
 import BillingInfo from "./ModalComponents/BillingInfo";
 import AuthInfo from "./ModalComponents/AuthInfo";
-
 export default {
   name: "AddSignatureModal",
   components: {
@@ -98,6 +93,7 @@ export default {
     AuthInfo,
     Modal,
   },
+  props: {},
   data() {
     return {
       step: 0,

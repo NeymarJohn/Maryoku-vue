@@ -404,7 +404,6 @@ export default {
       this.$router.push({
         name: "CheckoutWithVendor",
         params: {
-          eventId: this.event.id,
           proposalId: this.selectedProposal.id,
         },
       });

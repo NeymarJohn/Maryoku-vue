@@ -26,14 +26,9 @@
         </div>
 
         <div class="next-cont">
+          <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"> Discard </a>
-          <a class="save" v-tooltip="{
-             content: 'You can return to it till the deadline!',
-             delay: { show: 200, hide: 100 },
-             trigger: 'hover',
-             placement: 'top',
-             classes: 'vendor-tooltip-theme',}"
-             @click="calculateStage(proposalStatus.DRAFT)">
+          <a class="save" @click="calculateStage(proposalStatus.DRAFT)">
             <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
           </a>
           <a v-if="step < 3" class="next active" :class="[{ active: selectedServices.length > 0 }]" @click="gotoNext">
@@ -146,7 +141,6 @@ import Swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
 import { PROPOSAL_STATUS } from "@/constants/status";
 import { MISSING_DETAILS } from "@/constants/proposal";
-import moment from "moment";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
@@ -379,8 +373,6 @@ export default {
         );
         coverImageUrl = await S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
       }
-
-      moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate()
 
       if (!this.isLoading) {
         this.isLoading = true;

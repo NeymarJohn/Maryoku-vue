@@ -1,5 +1,4 @@
 <template>
-
   <div class="event-vendor-checkout">
     <loader :active="loading" is-full-screen :page="proposalType ? 'planner' : 'vendor'" />
     <div v-if="!loading" class="checkout-content md-layout">
@@ -8,7 +7,7 @@
           class="background-section"
           :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg) `"
         />
-        <div class="content p-20" :class="{ 'p-50' : windowWidth > 350}">
+        <div class="content p-50">
           <div class="font-size-30">
             <span v-if="pageType === 0" class="font-bold">
               <img
@@ -51,7 +50,7 @@
               :service-category="proposal.vendor.vendorCategory"
             />
 
-            <div v-if="proposal.extraServices[vendor.eventCategory.key]" class="p-10 description-block" :class="{'p-30': windowWidth > 350}">
+            <div v-if="proposal.extraServices[vendor.eventCategory.key]" class="p-30">
               <div>Would you like to upgrade & add one of those?</div>
               <div v-if="proposal.serviceCategory" class="mb-30">
                 You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
@@ -199,7 +198,7 @@
             <div class="discount-row">
               <span class="font-bold">Discount </span>
               <span class="font-bold">-{{ discount(proposal).percentage }}%</span>
-              <span class="text-right">-${{ totalPriceOfProposal(proposal) - discountedPrice(proposal)| withComma }}</span>
+              <span class="text-right">-${{ discountedPrice(proposal) - totalPriceOfProposal(proposal) | withComma }}</span>
             </div>
             <hr>
           </template>
@@ -230,8 +229,9 @@
           </div>
         </div>
         <div class="mt-40 policy-confirmation-block d-flex align-center">
-          <span class="font-regular">I agree to the  </span>
-          <a href="#" class="font-bold color-black text-underline"> Cancellation policy </a>
+          <md-checkbox v-model="agreedCancellationPolicy" class="m-0 mr-10" />
+          <span class="font-regular">I agree to the</span>
+          <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
           <stripe-checkout
             v-if="showStripeCheckout"
             :items="stripePriceData"
@@ -259,17 +259,16 @@
         </div>
       </div>
     </div>
-    <div class="checkout-footer white-card  mt-30 d-flex justify-content-between" :class="{'p-30': windowWidth>350}">
+    <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black" @click="back">
         Back
       </md-button>
-      <md-button class="maryoku-btn footer-submit"  :class="{'md-red': handleSubmitDisabled}" :disabled="!handleSubmitDisabled" @click="pay">
+      <md-button class="maryoku-btn" :class="{'md-red': handleSubmitDisabled}" :disabled="!handleSubmitDisabled" @click="pay">
         Submit Payment
       </md-button>
     </div>
     <success-modal v-if="showSuccessModal" />
     <add-signature-modal
-      v-if="proposal"
       :signature="proposal.signature"
       :proposalId="proposal.id"
       :show-modal="showSignatureModal"
@@ -342,10 +341,11 @@
     },
     computed: {
       handleSubmitDisabled(){
-        if( this.proposal && this.proposal.signature &&
+        if(this.agreedCancellationPolicy && this.proposal && this.proposal.signature &&
           this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
            return true;
         }
+        console.log("disabled");
         return false;
       },
       event() {
@@ -745,9 +745,6 @@
       padding: unset;
     }
     .event-vendor-checkout {
-      .signature-wrapper{
-        margin: 30px 20px;
-      }
       .checkout-content {
         .left-panel {
           min-width: unset;
@@ -763,46 +760,4 @@
       flex: unset;
     }
   }
-@media (max-width: 350px) {
-  .align-center {
-    max-width: unset;
-    a{
-      margin-left: 5px;
-    }
-  }
-  .description-block{
-   width: 99vw;
-  }
-  .event-vendor-checkout {
-    margin-top: -50px;
-    .signature-wrapper{
-     margin: 30px 20px;
-    }
-    .checkout-content {
-      .left-panel {
-        height: 400px;
-      }
-      .right-panel {
-        .total-price-panel {
-          .discount-row {
-            margin: 0 10px;
-          }
-          .total-price-row {
-            padding: 30px 10px;
-          }
-        }
-        .total-price-panel hr {
-          margin: 0;
-        }
-        .checkout-additional {
-          padding: 30px 10px;
-        }
-      }
-    }
-  }
-  .footer-submit{
-    border-radius: 0;
-  }
-}
-
 </style>

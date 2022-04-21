@@ -9,7 +9,9 @@
           <img width="88" height="88" src="static/icons/vendor/proposalBoard/filter-won.svg">
         </div>
         <h1 class="header-content-title">
-          Thank you for your business! Now that Time to pour  yourself a drink
+          <b>Thank you for your business! </b>
+          <br>
+          Now that Time to pour  yourself a drink
           & relax - <snap>Catering Booked!</snap>
         </h1>
       </div>
