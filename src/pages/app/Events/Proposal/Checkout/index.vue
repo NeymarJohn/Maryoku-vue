@@ -346,6 +346,7 @@
           this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
            return true;
         }
+        console.log("disabled");
         return false;
       },
       event() {
