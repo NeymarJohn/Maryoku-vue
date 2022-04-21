@@ -6,17 +6,23 @@
       </div>
       <div class="wrapper-change-cover">
         <img v-if="campaignCoverImage" :src="campaignCoverImage" class="change-cover mr-10">
-        <concept-image-block
-          v-else-if="concept"
-          class="ml-50 hidden"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
-        />
-        <div v-if="concept" class="change-cover-feedback">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
+          <concept-image-block
+            class="change-cover-concept"
+            :images="concept.images"
+            :colors="concept.colors"
+            border="no-border"
+          />
+        </div>
+        <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
+        <div class="change-cover-feedback">
+          <md-button
+            id="ChangeCoverImage"
+            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
+            @click="handleChangeCoverImage"
+          >
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
-            Change Campaign Cover
+            Change Cover
           </md-button>
         </div>
         <div class="view-event-photos">
@@ -28,7 +34,7 @@
               class="btn-switch"
               label="View event photo presentation"
               :value="campaignVisibleSettings.showImages"
-              @input="handleChangeCampaignVisibleSettings('showFeedback', $event)"
+              @input="handleChangeCampaignVisibleSettings('showImages', $event)"
             />
           </div>
           <div v-if="isUploadedFiles" class="view-presentation-footer">
@@ -44,12 +50,6 @@
               Add attachments to the event
             </div>
           </div>
-          <feedback-upload-files-modal
-            v-if="showModalWindowOpen"
-            :folder-name-for-upload="`events/${event.id}`"
-            @close="closeModalWindow"
-            @upload-files="uploadFiles"
-          />
         </div>
         <div class="footer-change-cover">
           <campaign-logo
@@ -57,6 +57,7 @@
             :logo-title="campaignTitle"
             :show-logo="campaignVisibleSettings.showLogo"
             @change-logo="handleChangeCampaignLogo"
+            @change-logo-title="handleChangeCampaignTitle"
             @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
           />
         </div>
@@ -194,8 +195,7 @@
               class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style"
               @input="handleChangeCampaignVisibleSettings('allowUploadPhoto', $event)"
             >
-              <span v-if="campaignVisibleSettings.allowUploadPhoto">Hide</span>
-              <span v-if="!campaignVisibleSettings.allowUploadPhoto">Show</span>
+              <span>{{ campaignVisibleSettings.allowUploadPhoto ? "Hide" : "Show" }}</span>
             </md-switch>
           </div>
         </div>
@@ -222,24 +222,39 @@
         />
       </div>
     </div>
+    <feedback-upload-files-modal
+      v-if="showModalWindowOpen"
+      :attachments="campaignAttachments"
+      :folder-name-for-upload="`events/${event.id}`"
+      @close="closeModalWindow"
+      @upload-files="uploadFiles"
+    />
   </div>
 </template>
 <script>
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
-import SharingButtonGroup from "./components/SharingButtonGroup";
-import FeedbackQuestion from "./components/FeedbackQuestion";
-import HideSwitch from "@/components/HideSwitch";
-import TitleSharePhotoEvent from "@/components/Title/SharePhotoEvent";
-import Swal from "sweetalert2";
-import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
-import CustomTitleEditor from "@/pages/app/Campaign/components/CustomTitleEditor";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-import { mapActions } from "vuex";
-import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
-import vue2Dropzone from "vue2-dropzone";
-import S3Service from "@/services/s3.service";
+// core
+import { mapActions }   from "vuex";
+import vue2Dropzone     from "vue2-dropzone";
 import { v4 as uuidv4 } from "uuid";
+
+// componets
+// global
+import MaryokuTextarea       from "@/components/Inputs/MaryokuTextarea";
+import HideSwitch            from "@/components/HideSwitch";
+import ConceptImageBlock     from "@/components/ConceptImageBlock";
+import TitleSharePhotoEvent         from "@/components/Title/SharePhotoEvent";
+// local
+import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
+import SharingButtonGroup    from "./components/SharingButtonGroup";
+import FeedbackQuestion      from "./components/FeedbackQuestion";
+import CustomTitleEditor     from "./components/CustomTitleEditor";
+
+// pages
+import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
+import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
+
+// dependencies
+import S3Service from "@/services/s3.service";
 
 export default {
   components: {
@@ -257,38 +272,31 @@ export default {
   },
   props: {
     info: {
-      type: Object,
-      default: () => ({}),
+      type    : Object,
+      default : () => ({}),
     },
   },
-  data() {
-    return {
-      placeHolder: "",
-      originalContent: {},
-      concept: {},
-      feedbackQuestions: [],
-      isEditingNewQuestion: false,
-      newQuestion: "",
-      newQuestionLabel : "",
-      editingContent: [],
-      isUploadedFiles: false,
-      showModalWindowOpen : false,
-      feedbackTitle : "",
-      feedbackSubTitle : "",
-      feedbackSliderTitle : "",
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        maxFilesize: 25,
-        createImageThumbnails: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*",
-        headers: { "My-Awesome-Header": "header value" },
-      },
-    };
-  },
+  data: () => ({
+    concept              : {},
+    feedbackQuestions    : [],
+    placeHolder          : "",
+    newQuestion          : "",
+    newQuestionLabel     : "",
+    isEditingNewQuestion : false,
+    isUploadedFiles      : false,
+    showModalWindowOpen  : false,
+    dropzoneOptions: {
+      url: "https://httpbin.org/post",
+      maxFilesize: 25,
+      createImageThumbnails: false,
+      uploadMultiple: true,
+      acceptedFiles: "image/*",
+      headers: { "My-Awesome-Header": "header value" },
+    },
+  }),
   computed: {
     event() {
-      return this.$store.state.event.eventData;
+      return this.$store.state.event.eventData || {};
     },
     campaignData() {
       return this.$store.state.campaign.FEEDBACK || {};
@@ -303,18 +311,25 @@ export default {
       return this.campaignData.logoUrl || "";
     },
     campaignTitle() {
-      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
+      return this.campaignData.title || (this.event.title || "");
     },
     campaignVisibleSettings() {
-      return this.campaignData.visibleSettings || {};
+      return {
+        showImages        : true,
+        showLogo          : true,
+        showFeedback      : true,
+        allowUploadPhoto  : true,
+        showSharingOption : true,
+        ...(this.campaignData.visibleSettings || {}),
+      };
     },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.FEEDBACK.description || "";
-      },
-      set(newDescription) {
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "description", value: newDescription });
-      }
+    campaignDescription() {
+      return this.campaignData.description || "Just a short note to thank you for participating in our recent event. " +
+        "We appreciate your attendance and hope you had an enjoyable, productive time. " +
+        "Your feedback will be very helpful and we look forward to welcoming you to more events in the future.";
+    },
+    campaignAttachments() {
+      return this.campaignData.attachments || [];
     },
     additionalData() {
       const campaignAdditionalData = this.campaignData.additionalData || {};
@@ -332,162 +347,121 @@ export default {
     },
   },
   created() {
-    this.placeHolder = `
+    this.placeHolder = (`
       Thanks for attending this recent event – we hope you had a wonderful, productive experience!
       Your feedback is important to help us understand what worked especially well, on top of
       anything you feel could be improved in the future.
-    `;
+    `).trim().replace(/  /g, "");
+
     this.concept = this.event.concept;
-    this.placeHolder = this.placeHolder.trim();
-    // this.comment = this.placeHolder.trim().replace(/  /g, '');
-    this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
     this.feedbackQuestions = [
       {
-        label: "Rate your overall experience",
-        question: "How was the event?",
-        showQuestion: true,
-        rank: 0,
-        icon: "",
+        label        : "Rate your overall experience",
+        question     : "How was the event?",
+        showQuestion : true,
+        rank         : 0,
+        icon         : "",
       },
     ];
     this.event.components
-      .sort((a, b) => {
-        return a.order - b.order;
-      })
+      .sort((a, b) => a.order - b.order)
       .forEach((service) => {
         if (service.eventCategory.type == "service") {
+          const { fullTitle, icon } = service.eventCategory;
           this.feedbackQuestions.push({
-            question: `How Was The ${service.eventCategory.fullTitle}?`,
+            question: `How Was The ${fullTitle}?`,
             showQuestion: true,
             rank: 0,
-            icon: service.eventCategory.icon,
-            label: service.eventCategory.fullTitle,
+            icon,
+            label,
           });
         }
       });
-    this.$store.commit("campaign/setAttribute", {
-      name: "FEEDBACK",
-      key: "feedbackQuestions",
-      value: this.feedbackQuestions,
-    });
-    if (!this.campaignData.additionalData) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "additionalData",
-        value: this.additionalData,
-      });
-    }
+
+    this.setFeedbackAttribute("feedbackQuestions", this.feedbackQuestions);
+    if (!this.campaignData.additionalData) this.setFeedbackAttribute("additionalData", this.additionalData);
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
-    setDefault() {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this feedback!",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, revert it!",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-          this.editingContent = Object.assign({}, this.originalContent);
-        }
-      });
+    setFeedbackAttribute (key, value) {
+      return this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key, value });
     },
     addNewImage(image) {
       const images = this.campaignData.images;
       images.unshift({ src: image.imageString });
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
-    },
-    async uploadFileDropZone(file) {
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((src) => {
-        const images = this.campaignImages;
-        images.unshift({ src });
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
-      });
+      return this.setFeedbackAttribute("images", images);
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
-    },
-    changeUploadFile(event) {
-      const fileName = event.target.files[0].name;
-      this.editingContent.push({
-        name: fileName,
-      });
     },
     editNewQuestion() {
       this.isEditingNewQuestion = true;
     },
     addNewQuestion() {
       const newQuestion = {
-        icon: "",
-        label: this.newQuestionLabel,
-        question: this.newQuestion,
-        rank: 0,
-        showQuestion: true,
+        icon         : "",
+        label        : this.newQuestionLabel,
+        question     : this.newQuestion,
+        rank         : 0,
+        showQuestion : true,
       };
       this.feedbackQuestions.push(newQuestion);
       this.newQuestion = "";
       this.isEditingNewQuestion = false;
     },
     openModalWindow(){
-        this.showModalWindowOpen = true;
+      this.showModalWindowOpen = true;
     },
     closeModalWindow(){
-        this.showModalWindowOpen = false;
+      this.showModalWindowOpen = false;
     },
     handleChangeAdditionalData(sectionName, key, value) {
       this.additionalData[sectionName][key] = value;
       this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "additionalData",
-        value: this.additionalData
+        name  : "FEEDBACK",
+        key   : "additionalData",
+        value : this.additionalData
       });
     },
-    uploadFiles(files) {
-      const attachments = files.map(({ status, ...file }) => file);
-      this.saveCampaign({ id: this.campaignData.id, attachments });
-      this.$store.commit("campaign/setAttribute", {
-        name: "FEEDBACK",
-        key: "attachments",
-        value: files
-      });
-    },
-    handleChangeCoverImage() {
+    handleChangeCoverImage(event) {
       this.$emit("change-cover-image", event);
     },
+    handleChangeCampaignTitle(value) {
+      return this.setFeedbackAttribute("title", value);
+    },
     handleChangeCampaignDescription(value) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "RSVP",
-        key: "description",
-        value,
-      });
+      return this.setFeedbackAttribute("description", value);
     },
     handleChangeCampaignVisibleSettings(key, value) {
-      this.$store.commit("campaign/setAttribute", {
-        name: "RSVP",
-        key: "visibleSettings",
-        value: { ...this.campaignVisibleSettings, [key]: value },
-      });
+      return this.setFeedbackAttribute("visibleSettings", { ...this.campaignVisibleSettings, [key]: value });
     },
     handleChangeCampaignLogo(file) {
       this.$emit("change-logo", file);
     },
-    onFileChangeCoverImage(event) {
-      const file = event.target.files[0];
+    async uploadFiles(files) {
+      const attachments = files.map(({ status, ...file }) => file);
+      await this.saveCampaign({ id: this.campaignData.id, attachments });
+      return this.setFeedbackAttribute("attachments", files);
+    },
+
+    makeFileSrc (file) {
       const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((coverImage) => {
-        this.$store.commit("campaign/setAttribute", {
-          name: "FEEDBACK",
-          key: "coverImage",
-          value: coverImage,
-        });
-        this.saveCampaign({ id: this.campaignData.id, coverImage });
-      });
+      const fileName  = uuidv4();
+      return `${fileName}.${extension}`;
+    },
+    fileUpload (file) {
+      return S3Service.fileUpload(file, this.makeFileSrc(file), `event/${this.event.id}`);
+    },
+    async uploadFileDropZone(file) {
+      const src       = await this.fileUpload(file);
+      const images    = this.campaignImages;
+      images.unshift({ src });
+      return this.setFeedbackAttribute("images", images);
+    },
+    async onFileChangeCoverImage(event) {
+      const coverImage = await this.fileUpload(event.target.files[0]);
+      this.setFeedbackAttribute("coverImage", coverImage);
+      return this.saveCampaign({ id: this.campaignData.id, coverImage });
     },
   },
 };
@@ -507,6 +481,11 @@ export default {
     height: 350px;
     object-fit: cover;
     border-radius: 20px;
+  }
+
+  .change-cover-concept {
+    width: 1000px;
+    height: 350px;
   }
 
   .view-event-photos {

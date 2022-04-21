@@ -1,5 +1,6 @@
 <template>
   <modal class="proposal-graph-modal">
+    <loader :active="loading" />
     <template slot="header">
       <div class="graph-close-button">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -12,7 +13,15 @@
             Overview Hot Activity
           </div>
           <div class="info_proposal">
-            <span>{{ proposal.eventData.customer.companyName }}</span>
+            <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
+              {{ proposal.eventData.customer.companyName }}
+            </span>
+            <span v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
+              {{ proposal.proposalRequest.eventData.title }}
+            </span>
+            <span v-else>
+              New Event
+            </span>
             <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
             <span>{{ proposal.dateCreated | date("DD/MM/YYYY") }}</span>
             <span class="info-proposal-divider"><span class="info-proposal-divider-item" /></span>
@@ -23,7 +32,7 @@
           <div class="proposal-pointer-wrapper">
             <img src="/static/icons/vendor/proposalBoard/proposal-pointer.svg" class="proposal-pointer">
           </div>
-          <proposal-pie-chart
+          <ProposalPieChart
             :completed="86.2"
             class="proposal-pie-chart"
           />
@@ -39,7 +48,7 @@
     <template slot="body">
       <div class="graph-block">
         <div />
-        <proposal-chart :chart-data="incomeChartData" class="" />
+        <ProposalChart :chart-data="engageChartData" class="" />
       </div>
       <div class="send-message-block">
         <img :src="`${$iconURL}common/hint.svg`" class="mr-10 send-message-img">
@@ -53,51 +62,52 @@
 </template>
 
 <script>
-import { Modal } from "@/components";
-import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart";
-import ProposalPieChart from "@/components/Chart/ProposalPieChart";
-
+import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
+import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
+const components = {
+  Modal: () => import("@/components/Modal.vue"),
+  Loader: () => import("@/components/loader/Loader.vue"),
+};
+import { getReq } from "@/utils/token";
 export default {
   name: "ProposalGraphModal",
-  components: {
-    Modal,
-    ProposalChart,
-    ProposalPieChart,
-  },
+  components: {...components, ProposalChart, ProposalPieChart},
   props: {
     proposal: {
-      type: Object,
-      default: () => {}
+      type    : Object,
+      default : () => {}
     },
     required: {
-      type: Boolean,
-      default: true
+      type    : Boolean,
+      default : true
     },
   },
   data() {
     return {
-      incomeChartData: [
-        { label: "28 Jan", value: 60, future: true },
-        { label: "29 Jan", value: 30, future: true },
-        { label: "30 Jan", value: 40, future: true },
-        { label: "31 Jan", value: 0, future: true },
-        { label: "1 Feb", value: 0, future: true },
-        { label: "2 Feb", value: 0, future: true },
-        { label: "3 Feb", value: 10, future: true },
-        { label: "4 Feb", value: 20, future: true },
-        { label: "5 Feb", value: 100, future: true },
-        { label: "6 Feb", value: 60, future: true },
-        { label: "7 Feb", value: 90, future: true },
-        { label: "8 Feb", value: 0, future: true },
-      ],
+      loading: true,
+      engageChartData: [],
     };
+  },
+  mounted () {
+    console.log("mounted", this.proposal);
+
+    getReq(`/1/proposals/${this.proposal.id}/engagement/summary`)
+      .then(res => {
+        if (res.data && res.data.success) {
+
+          const {dates, proposal, vendor, system} = res.data.data;
+          this.engageChartData = dates.map((it, idx) => {
+            return {label: it, value: proposal[idx], future: true};
+          });
+        }
+        this.loading = false;
+      });
   },
   methods: {
     close() {
       this.$emit("close");
     },
   },
-
 };
 </script>
 

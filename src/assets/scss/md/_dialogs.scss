@@ -469,7 +469,7 @@
     .modal-container{
         width: 1070px;
         max-width: 1070px;
-        height: 840px;
+        min-height: 840px;
         border-radius: 0;
     }
     .modal-header {
@@ -489,8 +489,7 @@
   .modal-container{
     width: 1070px;
     max-width: 1070px;
-    height: 925px;
-    overflow: hidden;
+    min-height: 925px;
     border-radius: 0;
   }
 }

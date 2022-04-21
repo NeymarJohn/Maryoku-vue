@@ -35,7 +35,7 @@
           class="concepts-list__item d-flex justify-content-start"
           :class="{ expanded: item.expand }"
         >
-          <div v-if="item.expand" class="d-flex justify-content-between align-center">
+          <div v-if="item && item.expand" class="d-flex justify-content-between align-center">
             <label>24 have tried this!</label>
             <md-button
               v-if="item.name != selectedConcept.name && canEdit"
@@ -48,7 +48,7 @@
           </div>
 
           <div :class="`images-list option-${index + 1}`">
-            <div class="image-backgrounds">
+            <div class="image-backgrounds" v-if="item">
               <div
                 v-for="(bg, bgIndex) in item.colors"
                 :key="bgIndex"
@@ -69,7 +69,7 @@
           </div>
           <div class="concept-details">
             <small>Option 0{{ index + 1 }}</small>
-            <div class="concept-name">
+            <div class="concept-name" v-if="item">
               <h3 class="mb-5" :style="`font-family:${item.fontFamily}`" v-html="item.name" />
               <ul v-if="item.tags" class="features-list">
                 <li v-for="(tag, featureIndex) in item.tags" :key="featureIndex" class="features-list__item">
@@ -195,6 +195,7 @@
           pdf-format="a4"
           pdf-orientation="portrait"
           pdf-content-width="800px"
+          :html-to-pdf-options="html2canvasOptions"
         >
           <section slot="pdf-content">
             <!-- PDF Content Here -->
@@ -382,6 +383,12 @@ export default {
       5: "",
     },
     uploadImage: "",
+    html2canvasOptions:{
+      html2canvas:{
+        allowTaint:true,
+        useCORS: true,
+      }
+    },
   }),
   computed: {
     ...mapState("event", ["eventData"]),

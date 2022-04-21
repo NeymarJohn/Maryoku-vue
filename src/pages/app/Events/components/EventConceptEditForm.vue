@@ -120,6 +120,7 @@
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
               <img
+                v-if="`${uploadImageData[indx - 1]}`|| ( defaultConcept && defaultConcept.images[indx - 1] ) "
                 class="concept-image"
                 :src="`${uploadImageData[indx - 1]}` || defaultConcept.images[indx - 1].url"
                 @click="uploadPhoto(indx)"
@@ -272,25 +273,13 @@ export default {
     },
   },
   created() {
-    const defaultConcept = this.defaultConcept;
-    if (defaultConcept.name && defaultConcept.name.length) {
-      this.editConcept.name = defaultConcept.name;
+    if (this.defaultConcept) {
+      this.editConcept = {...this.defaultConcept};
+        this.editConcept.images.forEach((image, i) => {
+          this.uploadImageData[i] = image.url || "";
+        });
     }
-    if (defaultConcept.description && defaultConcept.description.length) {
-      this.editConcept.description = defaultConcept.description;
-    }
-    if (defaultConcept.tags && defaultConcept.tags.length) {
-      this.editConcept.tags = defaultConcept.tags;
-    }
-    if (defaultConcept.colors && defaultConcept.colors.length) {
-      this.editConcept.colors = defaultConcept.colors;
-    }
-    if (defaultConcept.images && defaultConcept.images.length) {
-      this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = image.url ? image.url : "";
-      });
-    }
-
+    localStorage.setItem("lastColors", JSON.stringify(this.editConcept.colors));
     (async () => {
       if (!window.Canva || !window.Canva.DesignButton) {
         return;
@@ -410,9 +399,6 @@ export default {
       }
     },
     async saveConcept() {
-      let calendar = new Calendar({
-        id: this.$store.state.auth.user.profile.defaultCalendarId,
-      });
       this.isLoading = true;
 
       this.editConcept.event = new CalendarEvent({ id: this.$store.state.event.eventData.id });

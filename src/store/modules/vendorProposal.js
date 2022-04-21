@@ -9,7 +9,6 @@ import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
-import Customer from "@/models/Customer";
 import ProposalVersion from "@/models/ProposalVersion";
 import { costByService, extraCost, discounting, addingTax } from "@/utils/price";
 
@@ -66,13 +65,13 @@ const state = {
   personalMessage: "",
   suggestedNewSeatings: null,
   bookedServices: [],
-  customer: null,
   versions: [],
   requirements: [],
   original: null,
   currentVersion: -1,
   tenantId: authService.resolveTenantId(),
-  expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate()
+  expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate(),
+  issuedDate: null,
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -220,7 +219,7 @@ const mutations = {
     state.bookedServices = proposal.bookedServices;
     state.currentVersion = proposal.selectedVersion || -1;
     state.expiredDate = proposal.expiredDate || moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate();
-    // state.expiredDate = moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate();
+    state.issuedDate = proposal.issuedDate;
 
     delete proposal.versions;
     Vue.set(state, "original", proposal);
@@ -353,33 +352,6 @@ const actions = {
         });
     });
   },
-  getCustomer: ({ commit, state }, email) => {
-    return new Promise(async (resolve, reject) => {
-      new Customer()
-        .params({ email })
-        .get()
-        .then((customer) => {
-          if (customer) {
-            commit("setCustomer", customer[0]);
-            resolve(customer[0]);
-          }
-        });
-    });
-  },
-  getCustomers: ({ commit }, vendorId) => {
-    return new Promise(async (resolve, reject) => {
-      new Customer()
-        .for(new Vendors({ id: vendorId }))
-        .params({ customerType: 1 })
-        .get()
-        .then((customer) => {
-          if (customer) {
-            commit("setCustomer", customer[0]);
-            resolve(customer[0]);
-          }
-        });
-    });
-  },
   getVendor: ({ commit, state }, vendorId) => {
     return new Promise((resolve, reject) => {
       Vendors.find(vendorId)
@@ -416,14 +388,6 @@ const actions = {
         });
     });
   },
-  saveCustomer: ({ commit, state, dispatch }, customer) => {
-    return new Promise(async (resolve, reject) => {
-      new Customer(customer).save().then((customer) => {
-        commit("setCustomer", customer);
-        resolve(customer);
-      });
-    });
-  },
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
       const proposal = new Proposal({
@@ -453,10 +417,12 @@ const actions = {
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
         expiredDate: state.expiredDate,
+        issuedDate: state.issuedDate,
         bookedServices: state.bookedServices.length ? state.bookedServices : [state.vendor.eventCategory.key],
         seatingData: state.original ? state.original.seatingData : state.seatingData,
         versions: state.versions,
-        selectedVersion: state.currentVersion
+        selectedVersion: state.currentVersion,
+        plannerId: state.proposalRequest.eventData.owner.id,
       });
       proposal
         .save()

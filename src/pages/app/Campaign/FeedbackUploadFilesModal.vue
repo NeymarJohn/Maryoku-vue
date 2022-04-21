@@ -2,7 +2,7 @@
   <modal
     :class="{
       'upload-files-modal': true,
-      'upload-files-modal-with-carousel': !!files.length
+      'upload-files-modal-with-carousel': !!attachments.length
     }"
   >
     <template slot="header">
@@ -12,8 +12,8 @@
             Upload Files
           </div>
           <div class="upload-files-text">
-            Drag and drop your files, you can upload several files together,
-            click here to upload files from your computer
+            Drag and drop your files below. You can upload several files at a time.
+            Click here to browse for files on your computer.
           </div>
         </div>
         <div class="graph-close-button">
@@ -24,7 +24,7 @@
       </div>
     </template>
     <template slot="body">
-      <div v-if="!files.length" class="upload-files-modal-body-content">
+      <div v-if="!attachments.length" class="upload-files-modal-body-content">
         <div class="upload-files-white-cube">
           <vue-dropzone
             id="dropzone"
@@ -32,7 +32,7 @@
             :options="dropzoneOptions"
             :use-custom-slot="true"
             class="file-drop-zone upload-section text-center drop feedback-drop-zone"
-            @vdropzone-file-added="fileAdded"
+            @vdropzone-files-added="filesAdded"
           >
             <md-button class="choose-file-button">
               <img src="/static/icons/red-clip.svg">
@@ -50,10 +50,10 @@
         </div>
       </div>
       <div v-else class="upload-files-modal-body-content-with-carousel">
-        <div v-if="files.length" class="upload-files-list">
+        <div v-if="attachments.length" class="upload-files-list">
           <div
-            v-for="(file, index) in files"
-            :key="index"
+            v-for="(file, index) in attachments"
+            :key="file.name"
             :class="{
               'upload-files-list-item': true,
               'upload-files-list-item-active': carouselItemIndex === index,
@@ -62,7 +62,7 @@
             <span class="upload-files-list-item-text">
               {{ file.name }}
             </span>
-            <span class="upload-files-list-item-button-delete" @click="deleteFile(index)">
+            <span class="upload-files-list-item-button-delete" @click="deleteFile(file.name)">
               <md-icon class="icon-close">close</md-icon>
             </span>
           </div>
@@ -70,14 +70,14 @@
         <feedback-upload-images-carousel
           class="carousel-upload-images"
           class-image="carousel-upload-image"
-          :images="images"
+          :images="attachments"
           @change-item-index="changeCarouselItemIndex"
         />
       </div>
     </template>
     <template slot="footer">
       <div class="upload-files-modal-footer-content">
-        <div v-if="!files.length" class="d-flex">
+        <div v-if="!attachments.length" class="d-flex">
           <img src="/static/icons/red-delete-icon.svg">
           <div class="bottom-block-delete-text">
             Delete the images marked with V
@@ -86,7 +86,7 @@
         <div v-else class="d-flex">
           <img src="/static/icons/red-delete-icon.svg">
           <div class="bottom-block-presentation-text">
-            Mark in V the presentation you want to appear in the main view
+            Put a check next to the file you want to appear in the main view.
           </div>
         </div>
         <div class="footer-content-actions">
@@ -125,7 +125,11 @@ export default {
     folderNameForUpload: {
       type: String,
       required: true,
-    }
+    },
+    attachments: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -138,8 +142,6 @@ export default {
         acceptedFiles: "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
         headers: { "My-Awesome-Header": "header value" },
       },
-      files: [],
-      images: [],
       carouselItemIndex: 0,
     };
   },
@@ -147,61 +149,48 @@ export default {
     close() {
       this.$emit("close");
     },
-    chooseFiles() {
-      document.getElementById("coverImage").click();
+    clickUploadFiles() {
+      document.getElementById("upload-files").click();
     },
-    fileAdded(file) {
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true).then((response) => {
-        const file = response.data.upload;
-        this.images.push({ ...file, src: file.url });
-        this.files.push(file);
-        this.$emit("upload-files", this.images);
+    filesAdded(files) {
+      const functionsUploadFiles = [];
+      for (const file of files) {
+        const extension = file.type.split("/")[1];
+        const fileName = uuidv4();
+        functionsUploadFiles.push(
+          S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true)
+        );
+      }
+      Promise.all(functionsUploadFiles).then((responses) => {
+        this.isLoading = false;
+        const files = responses.map(({ data }) => data.upload);
+        this.$emit("upload-files", [...this.attachments, ...files]);
       });
     },
-    deleteFile(deleteItemIndex) {
+    deleteFile(fileName) {
+      const deleteItemIndex = this.attachments.findIndex((file) => file.name === fileName);
       const currentItemIndex = this.carouselItemIndex;
       const deleteCurrentItem = (deleteItemIndex === currentItemIndex);
       if (deleteCurrentItem && this.carouselItemIndex === 0) {
         this.carouselItemIndex = 0;
       }
       if (deleteCurrentItem && currentItemIndex > 0) {
-        this.carouselItemIndex = currentItemIndex - 1;
+        // this.carouselItemIndex = currentItemIndex - 1;
+        this.carouselItemIndex = 0;
       }
       if (!deleteCurrentItem && deleteItemIndex < currentItemIndex) {
-        this.carouselItemIndex = currentItemIndex - 1;
+        // this.carouselItemIndex = currentItemIndex - 1;
+        this.carouselItemIndex = 0;
       }
-      this.images = this.images.filter((file, index) => index !== deleteItemIndex);
-      this.files = this.files.filter((file, index) => index !== deleteItemIndex);
-      this.images = this.images.filter((file, index) => index !== deleteItemIndex);
-      this.$emit("upload-files", this.images);
+      const images = this.attachments.filter((file, index) => index !== deleteItemIndex);
+      this.$emit("upload-files", images);
     },
     changeCarouselItemIndex(itemIndex) {
       this.carouselItemIndex = itemIndex;
     },
     uploadFiles(event) {
-      event.target.files.forEach((file) => {
-        this.fileAdded(file);
-      });
+      this.filesAdded(event.target.files);
     },
-    clickUploadFiles() {
-      console.log({ input: document.getElementById("upload-files") });
-      document.getElementById("upload-files").click();
-    },
-    uploadAllFiles() {
-      const functionsUploadFiles = this.files
-        .map((file) => {
-          const extension = file.type.split("/")[1];
-          const fileName = uuidv4();
-          return S3Service.fileUpload(file, `${fileName}.${extension}`, this.folderNameForUpload, true);
-        });
-      Promise.all(functionsUploadFiles).then((responses) => {
-        this.isLoading = false;
-        const files = responses.map(({ data }) => data.upload);
-        this.$emit("upload-files", files);
-      });
-    }
   },
 };
 </script>
@@ -235,7 +224,7 @@ export default {
 
 .upload-files-modal-body-content {
   width: 942px;
-  height: 530px;
+  min-height: 530px;
   margin: 0 auto;
   background-color: #f3f7fd;
   display: flex;
@@ -279,9 +268,8 @@ export default {
 
 .upload-files-modal-body-content-with-carousel {
   width: 949px;
-  height: 610px;
+  min-height: 610px;
   margin: 0 auto;
-  overflow-y: scroll;
 
   .carousel-upload-images {
     max-width: 942px;
@@ -303,9 +291,8 @@ export default {
       height: 50px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-around;
       margin: 5px 15px 5px 0;
-      padding: 0 20px;
       border-radius: 26px;
       background-color: #fff;
       box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
@@ -313,7 +300,6 @@ export default {
       .upload-files-list-item-text {
         width: 138px;
         height: 19px;
-        margin: 0 13.8px 0 0;
         white-space: nowrap;
         overflow: hidden;
         font-size: 14px;

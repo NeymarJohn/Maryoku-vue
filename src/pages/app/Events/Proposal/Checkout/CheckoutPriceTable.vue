@@ -1,6 +1,6 @@
 <template>
   <collapse-panel :default-status="false" class="checkout-price-table"
-                  :spacing="windowWidth>960?50:20"
+                  :spacing="windowWidth>960?50:windowWidth>350?20:0"
   >
     <template slot="header">
       <div class="price-header">
@@ -8,7 +8,7 @@
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" class="mr-10">
           {{ vendorCategory.fullTitle }}
         </div>
-        <div class="ml-auto">
+        <div class="ml-auto price-block">
           <div class="element-price">
             ${{ totalPrice | withComma }}
           </div>
@@ -127,6 +127,26 @@ export default {
   .checkout-price-table {
     .price-header {
       padding-right:50px;
+    }
+  }
+}
+@media (max-width: 350px) {
+  .checkout-price-table {
+    .price-header {
+      padding: 30px 15px 30px 0;
+      .price-block{
+        max-width: 120px;
+        .element-price {
+          margin: 0;
+        }
+      }
+
+    }
+    .price-table-content{
+      padding: 0 10px;
+      .price-item{
+        padding: 30px 0;
+      }
     }
   }
 }

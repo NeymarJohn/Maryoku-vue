@@ -160,7 +160,9 @@
         <savedate-analytics
           v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"
         />
-        <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']" />
+        <rsvp-analytics
+          v-if="selectedTab == 2 && campaignIssued['RSVP']"
+        />
         <comingsoon-analytics
           v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"
         />
@@ -322,184 +324,120 @@
         @cancel="showScheduleModal = false"
       />
     </div>
+    <button @click="saveDraftCampaign">
+      test save data
+    </button>
+
     <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
-        <div>
-          <md-button
-            class="
-              md-button md-simple md-just-icon md-theme-default
-              scroll-top-button
-            "
-            @click="scrollToTop"
-          >
-            <img
-              :src="`${$iconURL}Budget+Requirements/Asset+49.svg`"
-              width="17"
-            >
-          </md-button>
-        </div>
+        <scroll-to-top-btn />
         <div
           v-if="!campaignIssued[campaignTabs[selectedTab].name]"
           class="d-flex align-center"
         >
-          <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendPreviewEmail"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                class="mr-20"
-                :src="`${$iconURL}Campaign/Group 1855.svg`"
+          <template v-if="isScheduled">
+            <template v-if="canSchedule">
+              <span class="seperator" />
+              <Schedule :time="currentCampaign.scheduleSettings.scheduleTime" />
+              <md-button
+                class="maryoku-btn md-simple md-red"
+                @click="cancelSchedule"
               >
-              Send Me A Preview
-            </span>
-          </md-button>
-          <span class="seperator" />
-          <md-button
-            v-if="!isScheduled"
-            class="md-simple md-button md-black maryoku-btn"
-            @click="revertSetting"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                class="mr-20"
-                :src="`${$iconURL}Campaign/Group 8871.svg`"
-              >Revert to original
-            </span>
-          </md-button>
-          <md-button
-            v-else
-            class="md-simple md-button md-black maryoku-btn"
-            @click="startCampaign"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                :src="`${$iconURL}Campaign/group-2428.svg`"
-                class="mr-10"
-                style="width: 20px; height: 20px"
-              >
-              Send Now
-            </span>
-          </md-button>
-          <div
-            v-if="!isScheduled"
-            class="schedule-btn d-flex"
-          >
+                Cancel
+              </md-button>
+            </template>
+            <template v-else>
+              <Scheduled :time="event.eventStartMillis" />
+              <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
+              <SendAgainBtn v-else @click="showScheduleModal = true">
+                Change Schdeule
+              </SendAgainBtn>
+            </template>
+          </template>
+          <template v-else>
             <md-button
-              class="md-button md-red maryoku-btn schedule-campaign-btn"
-              @click="showScheduleModal = true"
+              class="md-simple md-button md-black maryoku-btn"
+              @click="sendPreviewEmail"
             >
-              <span class="font-size-16 text-transform-capitalize">
-                <img
-                  class="mr-20"
-                  :src="`${$iconURL}Campaign/Path 4377.svg`"
-                >
-                Schedule Campaign
-              </span>
+              <Icon src="Campaign/Group 1855.svg">
+                Send Me A Preview
+              </Icon>
             </md-button>
-            <md-menu
-              md-size="medium"
-              md-align-trigger
-              md-direction="top-end"
-              class="schedule-menu"
+            <span class="seperator" />
+            <md-button
+              class="md-simple md-button md-black maryoku-btn"
+              @click="startCampaign"
+            >
+              <Icon src="Campaign/group-2428.svg">
+                Send Now
+              </Icon>
+            </md-button>
+            <md-button
+              class="md-simple md-button md-black maryoku-btn"
+              @click="revertSetting"
+            >
+              <Icon src="Campaign/Group 8871.svg">
+                Revert to original
+              </Icon>
+            </md-button>
+            <div
+              class="schedule-btn d-flex"
             >
               <md-button
-                md-menu-trigger
-                class="md-icon-button schedule-menu-btn"
+                class="md-button md-red maryoku-btn schedule-campaign-btn"
+                @click="showScheduleModal = true"
               >
-                <md-icon class="schedule-menu-btn-icon">
-                  keyboard_arrow_down
-                </md-icon>
+                <Icon src="Campaign/Path 4377.svg">
+                  Schedule Campaign
+                </Icon>
               </md-button>
-              <md-menu-content>
-                <md-menu-item
-                  class="text-center"
-                  @click="saveDraftCampaign"
+              <md-menu
+                md-size="medium"
+                md-align-trigger
+                md-direction="top-end"
+                class="schedule-menu"
+              >
+                <md-button
+                  md-menu-trigger
+                  class="md-icon-button schedule-menu-btn"
                 >
-                  <span class="font-size-16 font-bold-extra">
-                    <img
-                      :src="`${$iconURL}Campaign/Group 1908.svg`"
-                      class="mr-10"
-                      style="width: 20px; height: 20px"
-                    >Save Draft
-                  </span>
-                </md-menu-item>
-                <md-menu-item
-                  class="text-center"
-                  @click="startCampaign"
-                >
-                  <span class="font-size-16 font-bold-extra">
-                    <img
-                      :src="`${$iconURL}Campaign/group-2428.svg`"
-                      class="mr-10"
-                      style="width: 20px; height: 20px"
-                    >Send Now
-                  </span>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
-          </div>
-          <template v-else>
-            <span class="seperator" />
-            <img
-              class="mr-20 label-icon-25 ml-30"
-              :src="`${$iconURL}Campaign/clock-gray.svg`"
-            >
-            Scheduled Send:
-            {{
-              $dateUtil.formatScheduleDay(
-                currentCampaign.scheduleSettings.scheduleTime,
-                "DD.MM.YY  |  hh:mm A"
-              )
-            }}
-            <md-button
-              class="maryoku-btn md-simple md-red"
-              @click="cancelSchedule"
-            >
-              Cancel
-            </md-button>
+                  <md-icon class="schedule-menu-btn-icon">
+                    keyboard_arrow_down
+                  </md-icon>
+                </md-button>
+                <md-menu-content>
+                  <md-menu-item
+                    class="text-center"
+                    @click="saveDraftCampaign"
+                  >
+                    <Icon src="Campaign/Group 1908.svg">
+                      Save Draft
+                    </Icon>
+                  </md-menu-item>
+                  <md-menu-item
+                    class="text-center"
+                    @click="startCampaign"
+                  >
+                    <Icon src="Campaign/group-2428.svg">
+                      Send Now
+                    </Icon>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
+            </div>
           </template>
         </div>
         <div
           v-else
           class="d-flex align-center"
         >
-          <!-- <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendToAddtionalGuests"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                class="mr-20"
-                :src="`${$iconURL}Campaign/Group 8871.svg`"
-              >Send To Additional Guests
-            </span>
-          </md-button>
-          <span
-            class="seperator"
-            style="margin-top: 0"
-          />
-          <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendPreviewEmail"
-          >
-            <span class="font-size-16 text-transform-capitalize">
-              <img
-                class="mr-20"
-                :src="`${$iconURL}Campaign/Group 1855.svg`"
-              >
-              Send Me A Preview
-            </span>
-          </md-button> -->
-          <div v-if="!canSchedule" class="ml-40 d-flex flex-centered align-center">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`">
-            <span class="ml-10">Scheduled To {{ ' '+ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY ") }} </span>
-          </div>
-          <div v-if="!canSchedule" @click="startCampaign" class="ml-40 d-flex flex-centered align-center cursor-pointer">
-            <span class="seperator small" style="margin-top: 0; margin-right: 30px"/>
-            <i class="far fa-clock"></i>
-            <span class="ml-10" style="font-weight: bold"> Send again </span>
-          </div>
+          <template v-if="!canSchedule">
+            <Scheduled :time="event.eventStartMillis" />
+            <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
+            <SendAgainBtn v-else @click="showScheduleModal = true">
+              Change Schdeule
+            </SendAgainBtn>
+          </template>
           <div
             v-else
             class="schedule-btn d-flex"
@@ -508,13 +446,9 @@
               class="md-button md-red maryoku-btn schedule-campaign-btn"
               @click="showScheduleModal = true"
             >
-              <span class="font-size-16 text-transform-capitalize">
-                <img
-                  class="mr-20"
-                  :src="`${$iconURL}Campaign/Path 4377.svg`"
-                >
+              <Icon src="Campaign/Path 4377.svg">
                 Schedule Campaign
-              </span>
+              </Icon>
             </md-button>
             <md-menu
               md-size="medium"
@@ -535,26 +469,17 @@
                   class="text-center"
                   @click="saveDraftCampaign"
                 >
-                  <span class="font-size-16 font-bold-extra">
-                    <img
-                      :src="`${$iconURL}Campaign/Group 1908.svg`"
-                      class="mr-10"
-                      style="width: 20px; height: 20px"
-                    >Save Draft
-                  </span>
+                  <Icon src="Campaign/Group 1908.svg">
+                    Save Draft
+                  </Icon>
                 </md-menu-item>
                 <md-menu-item
                   class="text-center"
                   @click="startCampaign"
                 >
-                  <span class="font-size-16 font-bold-extra">
-                    <img
-                      :src="`${$iconURL}Campaign/group-2428.svg`"
-                      class="mr-10"
-                      style="width: 20px; height: 20px"
-                    >
+                  <Icon src="Campaign/group-2428.svg">
                     Send Now
-                  </span>
+                  </Icon>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
@@ -564,6 +489,8 @@
     </div>
     <change-cover-image-modal
       v-if="showChangeCoverModal"
+      :cover-image="currentCampaign.coverImage"
+      :default-cover-image="campaignTabs[selectedTab].defaultCoverImage"
       @close="close"
       @choose-image="chooseImage"
     />
@@ -571,61 +498,54 @@
 </template>
 
 <script>
+// core
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
-import { CommentMixins, ShareMixins } from "@/mixins";
-const SaveDate = () => import("./SaveDate");
-const Rsvp = () => import("./Rsvp");
-const Countdown = () => import("./Countdown");
-const Feedback = () => import("./Feedback");
-import DeliverySettings from "./DeliverySettings";
-import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
-import Campaign from "@/models/Campaign";
-import CalendarEvent from "@/models/CalendarEvent";
-import Swal from "sweetalert2";
-import S3Service from "@/services/s3.service";
-import CollapsePanel from "./CollapsePanel";
-import ChangeCoverImageModal from "@/pages/app/Campaign/components/ChangeCoverImageModal";
-
-import RsvpAnalytics from "./components/RSVPAnalytics";
-import SavedateAnalytics from "./components/SavedateAnalytics";
-import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
-import FeedbackAnalytics from "./components/FeedbackAnalytics";
-import { Loader } from "@/components";
 import { v4 as uuidv4 } from "uuid";
-const VueHtml2pdf = () => import("vue-html2pdf");
+import Swal from "sweetalert2";
 
-const defaultSettings = {
-  phone: {
-    selected: false,
-    numberString: "",
-    numberArray: [],
-    excelFileName: "",
-    excelFilePath: "",
-    smsOrWhatsapp: "",
-    sentTime: new Date().getTime(),
-  },
-  email: {
-    selected: false,
-    subject: "",
-    from: "",
-    addressString: "",
-    addressArray: [],
-    excelFileName: "",
-    excelFilePath: "",
-    sentTime: new Date().getTime(),
-  },
-};
+// components
+// global
+import { Loader }            from "@/components";
+import HeaderActions         from "@/components/HeaderActions";
+import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
+
+// local
+import DeliverySettings    from "../DeliverySettings";
+import CollapsePanel       from "../CollapsePanel";
+import RsvpAnalytics       from "../components/RSVPAnalytics";
+import SavedateAnalytics   from "../components/SavedateAnalytics";
+import ComingsoonAnalytics from "../components/ComingSoonAnalytics";
+import FeedbackAnalytics   from "../components/FeedbackAnalytics";
+import ScrollToTopBtn      from "./Footer/ScrollToTopBtn";
+import Icon                from "./Footer/Icon";
+import Schedule            from "./Footer/Schedule";
+import Scheduled           from "./Footer/Scheduled";
+import SendAgainBtn        from "./Footer/SendAgainBtn";
+import SaveDate            from "../SaveDate";
+
+// pages
+import CommentEditorPanel    from "@/pages/app/Events/components/CommentEditorPanel";
+
+// models
+import Campaign      from "@/models/Campaign";
+import CalendarEvent from "@/models/CalendarEvent";
+
+// dependencies
+import { CommentMixins, ShareMixins } from "@/mixins";
+import S3Service                      from "@/services/s3.service";
+import defaultSettings                from "./defaultSettings";
+
 export default {
   components: {
+    ChangeCoverImageModal: () => import("@/pages/app/Campaign/components/ChangeCoverImageModal"),
+    SaveDate,
+    Rsvp        : () => import("../Rsvp"),
+    Countdown   : () => import("../Countdown"),
+    Feedback    : () => import("../Feedback"),
+    VueHtml2pdf : () => import("vue-html2pdf"),
     Loader,
     HeaderActions,
     CommentEditorPanel,
-    SaveDate,
-    Rsvp,
-    Countdown,
-    Feedback,
     DeliverySettings,
     CampaignScheduleModal,
     SavedateAnalytics,
@@ -633,8 +553,11 @@ export default {
     CollapsePanel,
     ComingsoonAnalytics,
     FeedbackAnalytics,
-    VueHtml2pdf,
-    ChangeCoverImageModal,
+    ScrollToTopBtn,
+    Icon,
+    Schedule,
+    Scheduled,
+    SendAgainBtn,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -644,7 +567,7 @@ export default {
         conceptName: "",
         logo: "",
       },
-      deliverySettings: this.defaultSettings,
+      deliverySettings: defaultSettings,
       showCommentEditorPanel: false,
       selectedTab: 1,
       showChangeCoverModal: false,
@@ -653,24 +576,28 @@ export default {
         1: {
           completed: false,
           name: "SAVING_DATE",
+          defaultCoverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/save-the-date${(new Date().getDate() % 2) + 1}.png`,
           tooltip:
             "Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding",
         },
         2: {
           completed: false,
           name: "RSVP",
+          defaultCoverImage: "static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png",
           tooltip:
             "Try sending your RSVP's a month in advance,  so you'll get the most accurate results",
         },
         3: {
           completed: false,
           name: "COMING_SOON",
+          defaultCoverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${(new Date().getDate() % 4) + 1}.png`,
           tooltip:
             "A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions",
         },
         4: {
           completed: false,
           name: "FEEDBACK",
+          defaultCoverImage: "static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png",
           tooltip:
             "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take.",
         },
@@ -678,312 +605,45 @@ export default {
       campaigns: {},
     };
   },
-  methods: {
-    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
-    ...mapMutations("campaign", ["setAttribute"]),
-    showChangeCoverImageModal() {
-      this.showChangeCoverModal = !this.showChangeCoverModal;
-    },
-    close() {
-      this.showChangeCoverModal = false;
-    },
-    chooseImage(url) {
-      this.showChangeCoverModal = false;
-      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
-      this.setAttribute({
-        name: currentCampaignType,
-        key: "coverImage",
-        value: url
-      });
-    },
-    toggleCommentMode(mode) {
-      this.showCommentEditorPanel = mode;
-    },
-    selectTab(tabIndex) {
-      this.selectedTab = tabIndex;
-      this.setDefaultSettings();
-    },
-    setDefaultSettings() {
-      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
-      const currentCampaign = this.$store.state.campaign[currentCampaignType];
-      if (currentCampaign && currentCampaign.settings) {
-        this.deliverySettings = {
-          ...currentCampaign.settings,
-        };
-      } else {
-        this.deliverySettings = { ...this.defaultSettings };
-      }
-    },
-    exportToPdf() {
-      this.$refs.html2Pdf.generatePdf();
-    },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    startCampaign() {
-      const campaignData =
-        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      if (
-        !campaignData ||
-        (!this.deliverySettings.email.selected &&
-          !this.deliverySettings.phone.selected)
-      ) {
-        Swal.fire({
-          title: "Please select email or phone or both.",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      if (this.selectedTab === 4 && !campaignData.coverImage) {
-        Swal.fire({
-          title: "Please select image for cover",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      if (this.selectedTab === 4 && !campaignData.description) {
-        Swal.fire({
-          title: "Please write description for Feedback page",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      if (this.selectedTab === 4 && !campaignData.images || !campaignData.images.length) {
-        Swal.fire({
-          title: "Please select images for event",
-          buttonsStyling: false,
-          icon: "warning",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "STARTED"
-      );
-    },
-    saveDraftCampaign() {
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
-    },
-    cancelSchedule() {
-      this.$store.commit("campaign/setAttribute", {
-        name: this.campaignTabs[this.selectedTab].name,
-        key: "scheduleSettings",
-        value: null,
-      });
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
-    },
-    scheduleCampaign() {
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "SCHEDULED"
-      );
-    },
-    changeInfo(data) {
-      this.campaignInfo[data.field] = data.value;
-    },
-    changeSettings(data) {
-      this.deliverySettings = data;
-    },
-    async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
-      this.isLoading = true;
-      const campaignData = this.$store.state.campaign[campaignType];
-      let coverImage = campaignData.coverImage;
-      if (coverImage && coverImage.indexOf("base64") >= 0) {
-        const fileObject = S3Service.dataURLtoFile(
-          coverImage,
-          `${this.event.id}-${campaignType}`
-        );
-        let fileUpload = await S3Service.fileUpload(
-          fileObject,
-          `${this.event.id}-${campaignType}`,
-          "campaigns/cover-images"
-        );
-        coverImage = fileUpload;
-      }
-      let referenceUrl = "";
-      if (campaignType === "RSVP") {
-        referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
-      }
-      if (campaignType === "FEEDBACK") {
-        referenceUrl = `${document.location.origin}/#/feedback/${this.event.id}`;
-      }
-
-      if (this.deliverySettings.email.selected) {
-        this.deliverySettings.email.status = "sent";
-      }
-      if (this.deliverySettings.phone.selected) {
-        this.deliverySettings.phone.status = "sent";
-      }
-      const newCampaign = new Campaign({
-        campaignType,
-        ...campaignData,
-        campaignStatus,
-        referenceUrl,
-        event: new CalendarEvent({ id: this.event.id }),
-        scheduleTime: new Date().getTime(),
-        settings: this.deliverySettings,
-        coverImage,
-        isPreview,
-      });
-      return new Promise((resolve, reject) => {
-        this.saveCampaign(newCampaign)
-          .then((res) => {
-            this.$store.commit("event/setEventData", res.item.event);
-            this.isLoading = false;
-            resolve();
-          })
-          .catch(() => {
-            this.isLoading = false;
-            reject();
-          });
-      });
-    },
-    saveScheduleTime(data) {
-      const {
-        currentCampaignIndex,
-        scheduleTime,
-        scheduleSettings,
-        selectedOption,
-      } = data;
-      const scheduleSettingsData = {
-        timeZone: "EST",
-        scheduleTime: scheduleTime,
-        scheduleOption: selectedOption,
-        scheduleOptionValue: scheduleSettings[selectedOption].value,
-      };
-      this.$store.commit("campaign/setAttribute", {
-        name: this.campaignTabs[currentCampaignIndex].name,
-        key: "scheduleSettings",
-        value: scheduleSettingsData,
-      });
-
-      const campaign =
-        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      this.scheduleCampaign();
-    },
-    revertSetting() {
-      this.deliverySettings = Object.assign({}, this.defaultSettings);
-      if (this.selectedTab == 1) {
-        this.$refs.savedateCampaign.setDefault();
-      } else if (this.selectedTab == 2) {
-        this.$refs.rsvp.setDefault();
-      } else if (this.selectedTab == 3) {
-        this.$refs.countdown.setDefault();
-      } else if (this.selectedTab == 4) {
-        this.$refs.feedback.setDefault();
-      }
-    },
-    sendPreviewEmail() {
-      const campaignData =
-        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        campaignData.campaignStatus || "TESTING",
-        true
-      ).then((res) => {});
-
-        let tabName = null;
-        if (this.selectedTab === 1) {
-            tabName = "Save The Date";
-        } else if (this.selectedTab === 2) {
-            tabName = "RSVP";
-        } else if (this.selectedTab === 3) {
-            tabName = "Coming Soon";
-        } else if (this.selectedTab === 4) {
-            tabName = "Feedback";
-        }
-        this.$notify({
-        message: {
-          title: "Your preview email is on the way!",
-          content: `The preview email for ${ tabName }
-            has been sent to ${ this.event.owner ? this.event.owner.name : ""}.You should receive it shortly.`,
-        },
-        icon: `${this.$iconURL}messages/info.svg`,
-        horizontalAlign: "right",
-        verticalAlign: "top",
-        type: "info",
-        cancelBtn: false,
-        sendBtn: false,
-        closeBtn: true,
-        timeout: 5000,
-      });
-    },
-    sendToAddtionalGuests() {
-      this.$store.commit("campaign/setAttribute", {
-        name: this.campaignTabs[this.selectedTab].name,
-        key: "campaignStatus",
-        value: "EDITING",
-      });
-    },
-    sendAgain() {
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "STARTED"
-      );
-    },
-    changeCampaignLogo(file) {
-      const changeLogo = (logoUrl) => {
-        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
-        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
-        this.saveCampaign({ id: this.campaignData.id, logoUrl });
-      };
-      if (!file) {
-        changeLogo(file);
-      }
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      new Promise(() => {
-        S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`).then((logoUrl) => {
-          changeLogo(logoUrl);
-        });
-      });
-    }
-  },
   computed: {
-    ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),
+    ...mapGetters("campaign", ["campaignIssued"]),
     event() {
       return this.$store.state.event.eventData;
     },
     user() {
       return this.$store.state.auth.user;
     },
+    currentCampaignType () {
+      return this.campaignTabs[this.selectedTab].name;
+    },
     currentCampaign() {
-      return this.$store.state.campaign[
-        this.campaignTabs[this.selectedTab].name
-      ];
+      return this.$store.state.campaign[this.currentCampaignType];
     },
     canSchedule() {
-      if (
+      return (
         this.currentCampaign.settings.email.selected &&
         this.currentCampaign.settings.email.status !== "sent"
-      ) {
-        return true;
-      }
-      if (
+      ) || (
         this.currentCampaign.settings.phone.selected &&
         this.currentCampaign.settings.phone.status !== "sent"
-      ) {
-        return true;
-      }
-      return false;
+      );
     },
     isScheduled() {
       if (!this.currentCampaign) return false;
-      return this.currentCampaign.campaignStatus === "SCHEDULED";
+
+      const { scheduleTime = 0 } = (this.currentCampaign.scheduleSettings || { scheduleTime: 0});
+      return false
+          || this.currentCampaign.campaignStatus === "SCHEDULED"
+          || (scheduleTime < Date.now() && scheduleTime > 0);
+    },
+    tabName () {
+      switch (this.selectedTab) {
+        case 1  : return "Save The Date";
+        case 2  : return "RSVP";
+        case 3  : return "Coming Soon";
+        case 4  : return "Feedback";
+        default : return "";
+      }
     },
   },
   watch: {
@@ -1004,6 +664,231 @@ export default {
       this.campaigns = campaigns;
       this.setDefaultSettings();
     });
+  },
+  methods: {
+    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
+    ...mapMutations("campaign", ["setAttribute"]),
+    setDeliverySettings (value) {
+      this.deliverySettings = value;
+    },
+    showChangeCoverImageModal() {
+      this.showChangeCoverModal = !this.showChangeCoverModal;
+    },
+    close() {
+      this.showChangeCoverModal = false;
+    },
+    chooseImage(url) {
+      this.showChangeCoverModal = false;
+      //
+      this.setAttribute({
+        name: this.currentCampaignType,
+        key: "coverImage",
+        value: url
+      });
+    },
+    toggleCommentMode(mode) {
+      this.showCommentEditorPanel = mode;
+    },
+    selectTab(tabIndex) {
+      this.selectedTab = tabIndex;
+      this.setDefaultSettings();
+    },
+    setDefaultSettings() {
+      if (this.currentCampaign && this.currentCampaign.settings && Object.keys(this.currentCampaign.settings).length > 0) {
+        this.deliverySettings = {
+          ...this.currentCampaign.settings,
+        };
+      } else {
+        this.deliverySettings = { ...defaultSettings };
+      }
+    },
+    exportToPdf() {
+      this.$refs.html2Pdf.generatePdf();
+    },
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+    startCampaign() {
+      const swapTitle = (title) => Swal.fire({
+        buttonsStyling     : false,
+        icon               : "warning",
+        confirmButtonClass : "md-button md-success",
+        title,
+      });
+
+      if (this.deliverySettings) {
+        const { email = {}, phone = {} } = this.deliverySettings;
+        if (!this.currentCampaign || (!email.selected && !phone.selected))
+          return swapTitle("Please select email or phone or both.");
+      }
+
+      if (this.selectedTab === 4) {
+        if (!this.currentCampaign.description)
+          return swapTitle("Please write description for Feedback page");
+        if (!this.currentCampaign.images || !this.currentCampaign.images.length)
+          return swapTitle("Please select images for event");
+      }
+
+      this.callSaveCampaign(
+        this.currentCampaignType,
+        "STARTED"
+      );
+    },
+    saveDraftCampaign() {
+      this.callSaveCampaign(this.currentCampaignType, "SAVED");
+    },
+    cancelSchedule() {
+      this.$store.commit("campaign/setAttribute", {
+        name  : this.currentCampaignType,
+        key   : "scheduleSettings",
+        value : null,
+      });
+      this.callSaveCampaign(this.currentCampaignType, "SAVED");
+    },
+    scheduleCampaign() {
+      this.callSaveCampaign(
+        this.currentCampaignType,
+        "SCHEDULED"
+      );
+    },
+    changeInfo(data) {
+      this.campaignInfo[data.field] = data.value;
+    },
+    changeSettings(data) {
+      this.deliverySettings = data;
+    },
+    async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
+      this.isLoading = true;
+      const campaignData = this.$store.state.campaign[campaignType];
+      let coverImage = campaignData.coverImage;
+
+      if (coverImage && coverImage.indexOf("base64") >= 0) {
+        const fileName = `${this.event.id}-${campaignType}`;
+        const fileObject = S3Service.dataURLtoFile(coverImage, fileName);
+        coverImage = await S3Service.fileUpload(fileObject, fileName, "campaigns/cover-images");
+      }
+
+      let referenceUrl = "";
+      if (campaignType === "RSVP") {
+        referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
+      }
+
+      else if (campaignType === "FEEDBACK") {
+        referenceUrl = `${document.location.origin}/#/feedback/${this.event.id}`;
+      }
+
+      if (this.deliverySettings.email.selected) {
+        this.deliverySettings.email.status = "sent";
+      }
+
+      if (this.deliverySettings.phone.selected) {
+        this.deliverySettings.phone.status = "sent";
+      }
+
+      const newCampaign = new Campaign({
+        campaignType,
+        ...campaignData,
+        campaignStatus,
+        referenceUrl,
+        coverImage,
+        isPreview,
+        event        : new CalendarEvent({ id: this.event.id }),
+        scheduleTime : new Date().getTime(),
+        settings     : this.deliverySettings,
+      });
+
+      try {
+        const result = await this.saveCampaign(newCampaign);
+        this.$store.commit("event/setEventData", result.item.event);
+        return result;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    saveScheduleTime(data) {
+      const {
+        currentCampaignIndex,
+        scheduleTime,
+        scheduleSettings,
+        selectedOption,
+      } = data;
+
+      const scheduleSettingsData = {
+        timeZone            : "EST",
+        scheduleTime        : scheduleTime,
+        scheduleOption      : selectedOption,
+        scheduleOptionValue : scheduleSettings[selectedOption].value,
+      };
+
+      this.$store.commit("campaign/setAttribute", {
+        name: this.campaignTabs[currentCampaignIndex].name,
+        key: "scheduleSettings",
+        value: scheduleSettingsData,
+      });
+
+      this.scheduleCampaign();
+    },
+    revertSetting() {
+      this.deliverySettings = Object.assign(Object.create(null), defaultSettings);
+      switch (this.selectedTab) {
+        case 1: return this.$refs.savedateCampaign.setDefault();
+        case 2: return this.$refs.rsvp.setDefault();
+        case 3: return this.$refs.countdown.setDefault();
+        case 4: return this.$refs.feedback.setDefault();
+      }
+    },
+
+    sendPreviewEmail() {
+      this.callSaveCampaign(
+        this.currentCampaignType,
+        this.currentCampaign.campaignStatus || "TESTING",
+        true
+      ).then((res) => {});
+        this.$notify({
+        message: {
+          title: "Your preview email is on the way!",
+          content: `The preview email for ${ this.tabName }
+            has been sent to ${ this.event.owner ? this.event.owner.name : ""}.You should receive it shortly.`,
+        },
+        icon: `${this.$iconURL}messages/info.svg`,
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "info",
+        cancelBtn: false,
+        sendBtn: false,
+        closeBtn: true,
+        timeout: 5000,
+      });
+    },
+    sendToAddtionalGuests() {
+      this.$store.commit("campaign/setAttribute", {
+        name: this.currentCampaignType,
+        key: "campaignStatus",
+        value: "EDITING",
+      });
+    },
+    sendAgain() {
+      this.callSaveCampaign(
+        this.currentCampaignType,
+        "STARTED"
+      );
+    },
+    async changeCampaignLogo(file) {
+      const changeLogo = (logoUrl) => {
+        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "logoUrl", value: logoUrl });
+        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "logoUrl", value: logoUrl });
+        this.saveCampaign({ id: this.currentCampaign.id, logoUrl });
+      };
+      if (!file) {
+        changeLogo(file);
+      }
+      const extension = file.type.split("/")[1];
+      const fileName  = uuidv4();
+      const logoUrl   = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+      changeLogo(logoUrl);
+    }
   },
 };
 </script>

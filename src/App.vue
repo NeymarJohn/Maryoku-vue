@@ -4,6 +4,7 @@
     <router-view />
     <NotificationModal v-if="isNotificationModal" :name="name" @click="() => {}" />
     <ActionModal v-if="isActionModal" :name="name" />
+    <ChangeZoomModal />
   </div>
 </template>
 
@@ -13,6 +14,7 @@ import { NOTIFICATION, ACTION } from "./constants/modal";
 const components = {
   NotificationModal: () => import("@/components/Modals/NotificationModal.vue"),
   ActionModal: () => import("@/components/Modals/ActionModal.vue"),
+  ChangeZoomModal: ()=> import("./components/Modals/ChangeZoomModal"),
 };
 
 export default {

@@ -23,8 +23,13 @@ export default {
     },
     methods: {
         handleCheck(value) {
-            this.$emit('changed', value);
+            this.$emit("changed", value);
         }
+    },
+    watch: {
+      checked(newVal){
+        console.log('checked.watch', newVal);
+      }
     }
 };
 </script>

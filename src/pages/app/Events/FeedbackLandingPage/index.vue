@@ -156,6 +156,7 @@
       <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
       <!-- <span class="mb-10">&#169</span> -->
     </div>
+    111
     <Footer />
     <fullscreen v-model="fullScreen">
       <div v-if="fullScreen" class="wrapper-full-screen-carousel">
@@ -181,10 +182,10 @@
 <script>
 // core
 import { v4 as uuidv4 } from "uuid";
-import video_extension from "video-extensions";
-import vue2Dropzone from "vue2-dropzone";
-import Swal from "sweetalert2";
-import { mapActions } from "vuex";
+import video_extension  from "video-extensions";
+import vue2Dropzone     from "vue2-dropzone";
+import Swal             from "sweetalert2";
+import { mapActions }   from "vuex";
 
 // models
 import CalendarEvent from "@/models/CalendarEvent";
@@ -204,7 +205,12 @@ import SharingButtonGroup    from "@/pages/app/Campaign/components/SharingButton
 import FeedbackQuestion      from "@/pages/app/Campaign/components/FeedbackQuestion";
 
 // dependencies
-import S3Service from "@/services/s3.service";
+import S3Service   from "@/services/s3.service";
+import lastElement from "@/helpers/array/last/element";
+import map         from "@/helpers/array/map";
+
+const toExtention  = (extension) => "." + extension;
+const toExtentions = map(toExtention);
 
 export default {
   components: {
@@ -220,19 +226,19 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
-      fullScreen: false,
-      campaign: null,
-      event: null,
-      coverImage: null,
-      logoUrl: null,
-      description: "",
-      originalContent: {},
-      images: [],
-      attachmentsImages: [],
-      attachments: [],
-      feedbackQuestions: [],
-      selectedAttachments: [],
+      isLoading           : true,
+      fullScreen          : false,
+      campaign            : null,
+      event               : null,
+      coverImage          : null,
+      logoUrl             : null,
+      description         : "",
+      originalContent     : Object.create(null),
+      images              : [],
+      attachmentsImages   : [],
+      attachments         : [],
+      feedbackQuestions   : [],
+      selectedAttachments : [],
       additionalData: {
         sectionReview: {
           title: "",
@@ -244,26 +250,26 @@ export default {
         }
       },
       visibleSettings: {
-        showImages: false,
-        showSharingOption: false,
-        allowUploadPhoto: false,
-        downloadFiles: false,
-        showFeedback: false
+        showImages        : false,
+        showSharingOption : false,
+        allowUploadPhoto  : false,
+        downloadFiles     : false,
+        showFeedback      : false
       },
       extensionsFiles: {
-        image: [".jpeg", ".jpg", ".gif", ".png"],
-        document: [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
-        video: video_extension.map(ext => `.${ext}`),
+        image    : [".jpeg", ".jpg", ".gif", ".png"],
+        document : [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
+        video    : toExtentions(video_extension),
       },
       dropzoneOptions: {
         url: "https://httpbin.org/post",
-        createImageThumbnails: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*, video/*",
+        createImageThumbnails : false,
+        uploadMultiple        : true,
+        acceptedFiles         : "image/*, video/*",
       },
-      selectedAttachmentsTypes: false,
-      invalidSelectedFilesTypes: false,
-      showFeedbackMessageSuccessful: false,
+      selectedAttachmentsTypes      : false,
+      invalidSelectedFilesTypes     : false,
+      showFeedbackMessageSuccessful : false,
     };
   },
   computed: {
@@ -395,24 +401,21 @@ export default {
       event.preventDefault();
       const files = event.dataTransfer.files;
       const filenames = [];
-      for (let i = 0; i < files.length; i++) {
-        filenames.push(files.item(i).name);
-      }
+      for (let i = 0; i < files.length; i++) filenames.push(files.item(i).name);
       alert(`You dropped files: ${JSON.stringify(filenames)}`);
     },
-    downloadFiles() {
+    async downloadFiles() {
       if (this.invalidSelectedFilesTypes) return;
       if (!this.selectedAttachmentsTypes) {
         const typeFiles = Object.keys(this.extensionsFiles);
         this.selectedAttachments = this.filterFilesByType(typeFiles, this.attachments);
       }
       const attachments = this.selectedAttachments.map(({ url }) => url);
-      S3Service.downloadFiles(attachments).then((result) => {
-        const tagA = document.createElement("a");
-        tagA.setAttribute("href", `data:application/zip,${result.data}`);
-        tagA.setAttribute("target", "_blank");
-        tagA.click();
-      });
+      const result = await S3Service.downloadFiles(attachments);
+      const tagA = document.createElement("a");
+      tagA.setAttribute("href", `data:application/zip,${result.data}`);
+      tagA.setAttribute("target", "_blank");
+      tagA.click();
     },
     filterFilesByType(selectedTypeFiles, files) {
       const extensions = [];
@@ -420,11 +423,7 @@ export default {
         const extensionsOfType = this.extensionsFiles[type];
         extensions.push(...extensionsOfType);
       }
-      return files.filter((file) => {
-        const slittedURL = file.url.split(".");
-        const extension = slittedURL[slittedURL.length - 1];
-        return extensions.includes(`.${extension}`);
-      });
+      return files.filter((file) => extensions.includes(`.${lastElement(file.url.split("."))}`));
     },
     selectedDownloadFiles(selectedTypeFiles) {
       this.selectedAttachmentsTypes = true;

@@ -2,7 +2,7 @@
   <div class="event-plan" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
     <budget-notifications />
     <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan" :event="event" @change="changeCheckList" />
+    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList" />
     <div class="edit-event-details event-details-budget position-relative">
       <comment-editor-panel
         v-if="showCommentEditorPanel"
@@ -317,26 +317,30 @@
         @save="addNewCategory"
       />
       <BudgetHandleMinusModal v-if="showHandleMinus" value="50" />
-    </div>
-    <div class="wizard-footer d-flex">
-      <div>
-        <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
-          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
-        </md-button>
-      </div>
-      <div class="footer-actions">
-        <span style="line-height: 56px; padding-right: 30px">
-          <img
-            v-if="event.budgetProgress === 100"
-            :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
-            width="25"
-            style="margin-right: 10px"
-          >
-          {{ event.budgetProgress === 100 ? "Budget Was Divided":"You can edit this anytime" }}
-        </span>
-        <md-button v-if="event.budgetProgress !== 100" class="md-default md-red md-maryoku" @click="next">
-          Approve Budget Breakdown
-        </md-button>
+      <div class="wizard-footer d-flex">
+        <div>
+          <md-button class="md-black md-maryoku md-simple" @click="back">
+            <md-icon>keyboard_backspace</md-icon>
+            Back
+          </md-button>
+          <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+          </md-button>
+        </div>
+        <div class="footer-actions">
+          <span style="line-height: 56px; padding-right: 30px">
+            <img
+              v-if="event.budgetProgress === 100"
+              :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
+              width="25"
+              style="margin-right: 10px"
+            >
+            {{ event.budgetProgress === 100 ? "Budget Allocated and Approved" : "You can edit this anytime" }}
+          </span>
+          <md-button v-if="event.budgetProgress !== 100" class="md-default md-red md-maryoku" @click="next">
+            Approve Budget Breakdown
+          </md-button>
+        </div>
       </div>
     </div>
   </div>
