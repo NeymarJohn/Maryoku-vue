@@ -22,10 +22,11 @@
       </div>
     </template>
   </modal-as-header>
+
 </template>
 
 <script>
-import ModalAsHeader from "../../ModalAsHeader";
+import ModalAsHeader from "../ModalAsHeader";
 export default {
   name: "FirstTransaction",
   components:{

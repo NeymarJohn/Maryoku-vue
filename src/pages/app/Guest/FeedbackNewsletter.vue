@@ -11,7 +11,7 @@
           <h1 class="congrats">
             Congratulations!
           </h1>
-          <span class="booked">The Catering Vendor is booked.</span>
+          <span class="booked">The {{ VendorName }} Vendor is booked.</span>
           <br/>
           <span>Need more vendors? We can find the
             right service provider for any need!</span>
@@ -33,7 +33,7 @@
             <br/>
             Thanks for your feedback!
           </span>
-          <span class="ratings-message">Ratings help vendors to evaluate and improve their service standard, ensuring the
+          <span class="ratings-message">Ratings helps us to evaluate and improve our services, ensuring the
             optimal experience every time. We hope to see you at the next event!</span>
           <button class="md-button md-simple md-vendor rate-button" @click="rateAgain">
             <img src="static/img/Path%2015101.svg" style="margin-right: 10px"/>
@@ -82,6 +82,12 @@ export default {
   components: {
     Slider,
   },
+  props:{
+    VendorName:{
+      type: String,
+      default: "Incognito"
+    }
+  },
   data(){
     return {
       rated: false,
@@ -121,7 +127,7 @@ html{
 }
 .feedback-wrapper {
   position: relative;
-  width: 100vw;
+  width: 100%;
   margin-top: -150px;
   .smaller-wrapper {
     position: relative;

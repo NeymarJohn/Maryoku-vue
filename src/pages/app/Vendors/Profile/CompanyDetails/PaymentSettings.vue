@@ -351,6 +351,7 @@ export default {
           this.bankDetailsEditing = true;
           this.isLoading = false;
         });
+        ;
     },
   },
 };
