@@ -1,11 +1,11 @@
 <template>
   <div class="card-header-invoice">
     <span class="card-header-invoice-subtitle">
-      Invoice form
+      Invoice for
     </span>
     <div class="card-header-invoice-details">
       <div class="card-header-invoice-details-logo">
-        <img width="90" height="90" src="../../../../../static/icons/shmoozz_white_back.svg">
+        <img width="90" height="90" src="../../../../../static/icons/maryoku_icon_yellow.png">
       </div>
       <div class="card-header-invoice-details-campaign">
         <h2 class="card-header-invoice-details-campaign-title">
@@ -22,7 +22,7 @@
             P.O. Box:
           </span>
           <span class="value">
-            7360 Curry Ford Rd. PO box 720402. Orlando, Fl 32872
+            51 Ellcott St. Batavia | Trump World Tower # 14-02 NY, USA 74812
           </span>
         </div>
       </div>

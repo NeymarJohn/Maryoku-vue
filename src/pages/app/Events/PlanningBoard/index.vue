@@ -241,7 +241,7 @@
             </template>
             <div v-else class="proposal-card-items">
               <ProposalCard
-                v-for="(p, index) in categoryProposals.slice(0, 3)"
+                v-for="(p, index) in categoryProposals.slice(0, 3).slice(0, 3)"
                 :key="index"
                 :proposal="p"
                 :component="selectedCategory"
@@ -399,16 +399,16 @@
           </div>
         </div>
         <div v-else class="proposal-footer white-card d-flex align-center">
-          <md-button class="md-simple ml-auto md-black maryoku-btn py-0 border-right" @click="getSpecification({
+          <md-button class="md-simple ml-auto md-black maryoku-btn" @click="getSpecification({
                         category: selectedCategory,
                         services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
                       })">
             Change Requirements
           </md-button>
-
-          <md-button class="md-simple md-black ml-0 py-0 maryoku-btn" @click="updateExpiredTime">
+          <md-button class="md-simple md-black ml-0 maryoku-btn" @click="updateExpiredTime">
             I need those proposals urgent
           </md-button>
+
         </div>
       </template>
       <template v-else>
@@ -472,7 +472,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { postReq, updateReq, getReq } from "@/utils/token";
+import { postReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 import ProposalEngagement from '@/models/ProposalEngagement'
@@ -614,9 +614,11 @@ export default {
       return this.$store.state.planningBoard.proposal;
     },
     categoryProposals() {
-      if (!this.proposals || !this.proposals[this.selectedCategory.componentId] || !this.proposals[this.selectedCategory.componentId].length) return []
-
-      return this.proposals[this.selectedCategory.componentId];
+      let categoryProposals = this.$store.state.event.proposals;
+      if (this.selectedCategory) {
+        return categoryProposals[this.selectedCategory.componentId] || [];
+      }
+      return [];
     },
     cart() {
       return this.$store.state.planningBoard.cart;
@@ -948,13 +950,11 @@ export default {
       return null;
     },
     async updateExpiredTime() {
-
-      let res = await updateReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
+      let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
         id: this.currentRequirement.id,
         expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
       })
-      console.log('update.expiredtime', res);
-      this.currentRequirement = res.data;
+      this.currentRequirement = res.data.item;
     },
     async goDetailPage(proposal) {
 
@@ -1439,10 +1439,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
-  }
-
-  .border-right {
-    border-right: 1px solid #050505;
   }
 }
 </style>
