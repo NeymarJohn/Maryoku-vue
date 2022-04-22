@@ -476,7 +476,7 @@ export default {
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
     },
     getIconUrlByCategory(category) {
-      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${
+      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Services /${
         this.iconsWithCategory.filter((c) => c.value == category)[0].icon
       }`;
     },

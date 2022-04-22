@@ -2,12 +2,33 @@
   <div class="main-layout">
     <div class="paper-layout">
       <div class="position-relative">
-        <Message :show="showFeedbackMessageSuccessful" @onClose="closeFeedbackMessageSuccessful" />
+        <div v-if="showFeedbackMessageSuccessful" class="feedback-message-successful">
+          <div class="feedback-message-successful-logo">
+            <img width="75" height="78" :src="`${$iconURL}FeedbackForm/Group 28058.svg`">
+            <h3>The feedback was sent successfully!</h3>
+          </div>
+          <div class="feedback-message-successful-text">
+            <h2>Thank you for your cooperation!</h2>
+            <div>
+              <span class="font-size-18"> You make us better, for you and for future customers. </span>
+              <span class="font-size-18 font-bold"> See you at the next event :) </span>
+            </div>
+          </div>
+          <button class="feedback-message-successful-btn-close bg-white" @click="closeFeedbackMessageSuccessful">
+            <img width="34" height="34" src="static/icons/vendor/proposalBoard/filter-inactive.svg">
+          </button>
+        </div>
       </div>
       <div class="header-cover-image">
         <img :src="coverImage">
       </div>
       <div class="content">
+        <div class="decoration-line">
+          <div class="decoration-item-line item-line-1" />
+          <div class="decoration-item-line item-line-2" />
+          <div class="decoration-item-line item-line-3" />
+          <div class="decoration-item-line item-line-4" />
+        </div>
         <div class="content-article">
           <div class="content-article-header">
             <div v-if="showLogo || showImages" class="sub-cover">
@@ -135,6 +156,7 @@
       <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
       <!-- <span class="mb-10">&#169</span> -->
     </div>
+    111
     <Footer />
     <fullscreen v-model="fullScreen">
       <div v-if="fullScreen" class="wrapper-full-screen-carousel">
@@ -174,7 +196,6 @@ import Campaign      from "@/models/Campaign";
 import TitleSharePhotoEvent         from "@/components/Title/SharePhotoEvent";
 import FeedbackUploadImagesCarousel from "../FeedbackUploadImagesCarousel";
 import Footer                       from "./Footer";
-import Message                      from "./Message";
 
 // pages
 import ViewPresentation      from "@/pages/app/Campaign/components/ViewPresentation";
@@ -187,13 +208,7 @@ import FeedbackQuestion      from "@/pages/app/Campaign/components/FeedbackQuest
 import S3Service   from "@/services/s3.service";
 import lastElement from "@/helpers/array/last/element";
 import map         from "@/helpers/array/map";
-import blankOpen   from "@/helpers/window/blankOpen";
 
-/**
-* @param {Extension} extension
-* @template {string} Extension
-* @return {`.${Extension}`}
-*/
 const toExtention  = (extension) => "." + extension;
 const toExtentions = map(toExtention);
 
@@ -208,54 +223,55 @@ export default {
     vueDropzone: vue2Dropzone,
     TitleSharePhotoEvent,
     Footer,
-    Message,
   },
-  data: () => ({
-    isLoading           : true,
-    fullScreen          : false,
-    campaign            : null,
-    event               : null,
-    coverImage          : null,
-    logoUrl             : null,
-    description         : "",
-    originalContent     : Object.create(null),
-    images              : [],
-    attachmentsImages   : [],
-    attachments         : [],
-    feedbackQuestions   : [],
-    selectedAttachments : [],
-    additionalData: {
-      sectionReview: {
-        title       : "",
-        description : "",
+  data() {
+    return {
+      isLoading           : true,
+      fullScreen          : false,
+      campaign            : null,
+      event               : null,
+      coverImage          : null,
+      logoUrl             : null,
+      description         : "",
+      originalContent     : Object.create(null),
+      images              : [],
+      attachmentsImages   : [],
+      attachments         : [],
+      feedbackQuestions   : [],
+      selectedAttachments : [],
+      additionalData: {
+        sectionReview: {
+          title: "",
+          description: "",
+        },
+        sectionEventPhotos: {
+          title: "",
+          description: "",
+        }
       },
-      sectionEventPhotos: {
-        title       : "",
-        description : "",
-      }
-    },
-    visibleSettings: {
-      showImages        : false,
-      showSharingOption : false,
-      allowUploadPhoto  : false,
-      downloadFiles     : false,
-      showFeedback      : false
-    },
-    extensionsFiles: {
-      image    : [".jpeg", ".jpg", ".gif", ".png"],
-      document : [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
-      video    : toExtentions(video_extension),
-    },
-    dropzoneOptions: {
-      url                   : "https://httpbin.org/post",
-      createImageThumbnails : false,
-      uploadMultiple        : true,
-      acceptedFiles         : "image/*, video/*",
-    },
-    selectedAttachmentsTypes      : false,
-    invalidSelectedFilesTypes     : false,
-    showFeedbackMessageSuccessful : false,
-  }),
+      visibleSettings: {
+        showImages        : false,
+        showSharingOption : false,
+        allowUploadPhoto  : false,
+        downloadFiles     : false,
+        showFeedback      : false
+      },
+      extensionsFiles: {
+        image    : [".jpeg", ".jpg", ".gif", ".png"],
+        document : [".xlsx", ".xls", ".doc", ".docx", ".ppt", ".pptx", ".txt", ".pdf"],
+        video    : toExtentions(video_extension),
+      },
+      dropzoneOptions: {
+        url: "https://httpbin.org/post",
+        createImageThumbnails : false,
+        uploadMultiple        : true,
+        acceptedFiles         : "image/*, video/*",
+      },
+      selectedAttachmentsTypes      : false,
+      invalidSelectedFilesTypes     : false,
+      showFeedbackMessageSuccessful : false,
+    };
+  },
   computed: {
     showLogo() {
       return this.campaign && this.campaign.logoUrl && this.visibleSettings.showLogo;
@@ -264,11 +280,12 @@ export default {
       return this.campaign && this.campaign.visibleSettings.showImages && this.attachmentsImages.length;
     }
   },
-  async created() {
-    try {
-      const eventId        = this.$route.params.eventId;
-      const calendarEvent  = new CalendarEvent({ id: eventId });
-      const campaigns      = await this.getCampaigns({ event: calendarEvent });
+  created() {
+    const eventId = this.$route.params.eventId;
+    const calendarEvent = new CalendarEvent({ id: eventId });
+
+    this.getCampaigns({ event: calendarEvent }).then((campaigns) => {
+      this.isLoading       = false;
       this.campaign        = campaigns["FEEDBACK"];
       this.event           = this.campaign.event;
       this.description     = this.campaign.description;
@@ -276,47 +293,43 @@ export default {
       this.coverImage      = this.campaign.coverImage;
       this.logoUrl         = this.campaign.logoUrl;
       this.visibleSettings = this.campaign.visibleSettings;
-      if (this.campaign.additionalData) this.additionalData = this.campaign.additionalData;
+      if (this.campaign.additionalData) {
+        this.additionalData = this.campaign.additionalData;
+      }
       if (this.campaign.attachments) {
-        this.attachments       = this.campaign.attachments;
+        this.attachments = this.campaign.attachments;
         this.attachmentsImages = this.filterFilesByType(["image"], this.attachments)
           .map(({ url }) => ({ src: url }));
       }
       this.feedbackQuestions = this.campaign.feedbackQuestions
-        .filter(({ showQuestion }) => showQuestion)
+        .filter((question) => question.showQuestion)
         .map((question) => ({ ...question, errors: { rank: null, comment: null }}));
-    } finally {
-      this.isLoading = false;
-    }
+    });
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     gotoWeb() {
-      return window.open("https://www.maryoku.com", "_blank");
+      window.open("https://www.maryoku.com", "_blank");
     },
     async setDefault() {
-      const classBtn = "md-button btn-fill";
       const result = await Swal.fire({
         title              : "Are you sure?",
         text               : "You won't be able to revert this feedback!",
         confirmButtonText  : "Yes, revert it!",
-        confirmButtonClass : `${classBtn} md-success`,
-        cancelButtonClass  : `${classBtn} md-danger`,
+        confirmButtonClass : "md-button md-success btn-fill",
+        cancelButtonClass  : "md-button md-danger btn-fill",
         showCancelButton   : true,
         buttonsStyling     : false,
       });
 
-      if (result.value) this.editingContent = Object.create(this.originalContent);
+      if (result.value) this.editingContent = Object.assign({}, this.originalContent);
     },
     uploadFile() {
-      const fileUploader = document.getElementById("file-uploader");
-      if (fileUploader) fileUploader.click();
+      document.getElementById("file-uploader").click();
     },
     changeUploadFile({ target }) {
-      if (target.files && target.files.length > 0) {
-        const { name } = target.files[0];
-        this.editingContent.push({ name });
-      } else console.error("Files not found");
+      const { name } = target.files[0];
+      this.editingContent.push({ name });
     },
     async sendFeedback() {
       let email = this.$route.query.email || "test@gmail.com";
@@ -335,20 +348,20 @@ export default {
       this.feedbackQuestions.forEach((item, index) => {
         if (!item.rank) {
           this.feedbackQuestions[index].errors.rank = `Please selected rank for the ${item.label}`;
-        } else if (item.errors.rank) {
+        }
+        else if (item.errors.rank) {
           this.feedbackQuestions[index].errors.rank = null;
         }
-
         if (!item.comment) {
           this.feedbackQuestions[index].errors.comment = `Please write comment for the question ${item.question}`;
-        } else if (item.errors.comment) {
+        }
+        else if (item.errors.comment) {
           this.feedbackQuestions[index].errors.comment = null;
         }
       });
       const isHasErrorQuestion   = (question) => question.errors.rank || question.errors.comment;
       const someQuestionHasError = this.feedbackQuestions.some(isHasErrorQuestion);
       if (someQuestionHasError) return;
-      const confirmButtonClass = "md-button md-red maryoku-btn";
       try {
         await new Feedback({
           guestName         : email,
@@ -363,8 +376,8 @@ export default {
           title              : "",
           text               : "Thank you for your feedback!",
           type               : "success",
+          confirmButtonClass : "md-button md-red maryoku-btn",
           buttonsStyling     : false,
-          confirmButtonClass,
         });
 
         this.openFeedbackMessageSuccessful();
@@ -373,8 +386,8 @@ export default {
           title              : "Invalid information",
           text               : "Could you please check if you input all information on given form?",
           type               : "error",
+          confirmButtonClass : "md-button md-red maryoku-btn",
           buttonsStyling     : false,
-          confirmButtonClass,
         });
       }
     },
@@ -392,7 +405,10 @@ export default {
       }
       const attachments = this.selectedAttachments.map(({ url }) => url);
       const result = await S3Service.downloadFiles(attachments);
-      blankOpen(`data:application/zip,${result.data}`);
+      const tagA = document.createElement("a");
+      tagA.setAttribute("href", `data:application/zip,${result.data}`);
+      tagA.setAttribute("target", "_blank");
+      tagA.click();
     },
     filterFilesByType(selectedTypeFiles, files) {
       const extensions = [];
@@ -400,7 +416,7 @@ export default {
         const extensionsOfType = this.extensionsFiles[type];
         extensions.push(...extensionsOfType);
       }
-      return files.filter((file) => extensions.includes(toExtention(lastElement(file.url.split(".")))));
+      return files.filter((file) => extensions.includes(`.${lastElement(file.url.split("."))}`));
     },
     selectedDownloadFiles(selectedTypeFiles) {
       this.selectedAttachmentsTypes = true;
@@ -418,28 +434,16 @@ export default {
       this.selectedAttachments = this.filterFilesByType(selectedTypeFiles, this.attachments);
     },
     onPlay() {
-      return this.fullScreen = true;
+      this.fullScreen = true;
     },
     closeFullScreen() {
-      return this.fullScreen = false;
+      this.fullScreen = false;
     },
     async fileAdded(file) {
       const extension = file.type.split("/")[1];
       const fileName  = uuidv4();
       const { data }  = await S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`, true);
       this.images.unshift({ src: data.upload.url });
-      await this.callSaveCampaign();
-    },
-
-    async callSaveCampaign () {
-      const campaignType = "FEEDBACK";
-      const campaignData = this.$store.state.campaign[campaignType];
-      const newCampaign = new Campaign({
-        campaignType,
-        ...campaignData,
-      });
-      const result = await this.saveCampaign(newCampaign);
-      console.dir({ result });
     },
   }
 };
@@ -453,6 +457,49 @@ export default {
   border-radius: 30px;
   background-color: #ffffff;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+
+  .feedback-message-successful {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    padding: 50px;
+    border-radius: 30px 30px 0 0;
+    background: #fff;
+
+    .feedback-message-successful-logo {
+      display: flex;
+      align-items: center;
+      margin-left: 100px;
+
+      h3 {
+        width: 200px;
+        margin-left: 40px;
+        line-height: 1.55;
+        font-size: 22px;
+        font-weight: bold;
+        color: #f51355;
+      }
+    }
+
+    .feedback-message-successful-text {
+      h2 {
+        font-size: 30px;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin: 0;
+      }
+    }
+
+    .feedback-message-successful-btn-close {
+      padding: 20px;
+      border: none;
+      outline: none;
+      background: #ffffff !important;
+      box-shadow: none;
+    }
+  }
 }
 
 .maryoku_provided_by {
@@ -539,32 +586,44 @@ export default {
   img {
     width: 1520px;
     height: 437px;
-    border-top-left-radius  : 30px;
-    border-top-right-radius : 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
     object-fit: cover;
   }
 }
 
 .content {
-  width    : 100%;
-  display  : flex;
-  position : relative;
-  &::before {
-    content    : '';
-    width      : 27px;
-    position   : absolute;
-    top        : 0;
-    height     : 1112px;
-    background : linear-gradient(
-      rgba(255,72,178,1)  0,
-      rgba(255,72,178,1)  278px,
-      rgba(113,236,248,1) 278px,
-      rgba(113,236,248,1) 556px,
-      rgba(255,245,0,1)   556px,
-      rgba(255,245,0,1)   834px,
-      rgba(87,242,195,1)  834px,
-      rgba(87,242,195,1)  1112px
-    );
+  width: 100%;
+  display: flex;
+  position: relative;
+
+  .decoration-line {
+    width: 27px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+
+    .decoration-item-line {
+      width: 100%;
+      height: 283px;
+    }
+
+    .item-line-1 {
+      background: #ff48b2;
+    }
+
+    .item-line-2 {
+      background: #71ecf8;
+    }
+
+    .item-line-3 {
+      background: #fff500;
+    }
+
+    .item-line-4 {
+      background: #57f2c3;
+    }
   }
 
   .content-article {

@@ -526,7 +526,11 @@
     height: 100%;
   }
 }
-
+#afterFirstTransactionModalWrapper{
+  .modal-mask{
+    position: absolute;
+  }
+}
 @media (max-width: 960px) {
   .proposal-images-carousel{
     .owl-carousel.owl-theme.owl-loaded.owl-drag{

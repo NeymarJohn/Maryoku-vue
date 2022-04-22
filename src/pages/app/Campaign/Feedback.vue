@@ -364,19 +364,19 @@ export default {
       },
     ];
     this.event.components
-    .sort((a, b) => a.order - b.order)
-    .forEach(({ eventCategory }) => {
-      if (eventCategory.type == "service") {
-        const { fullTitle, icon } = eventCategory;
-        this.feedbackQuestions.push({
-          question     : `How Was The ${fullTitle}?`,
-          showQuestion : true,
-          rank         : 0,
-          icon,
-          label,
-        });
-      }
-    });
+      .sort((a, b) => a.order - b.order)
+      .forEach((service) => {
+        if (service.eventCategory.type == "service") {
+          const { fullTitle, icon } = service.eventCategory;
+          this.feedbackQuestions.push({
+            question: `How Was The ${fullTitle}?`,
+            showQuestion: true,
+            rank: 0,
+            icon,
+            label,
+          });
+        }
+      });
 
     this.setFeedbackAttribute("feedbackQuestions", this.feedbackQuestions);
     if (!this.campaignData.additionalData) this.setFeedbackAttribute("additionalData", this.additionalData);

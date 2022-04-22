@@ -28,21 +28,20 @@
     </template>
     <template slot="body">
       <div class="body">
-        <div v-show="step === 0" class="body-header">
+        <div v-if="step === 0" class="body-header">
           <span style="font-weight: bold;">Business Profile</span>
           <md-button class="md-simple md-vendor">
             <span style="font-weight: bold">Edit</span>
           </md-button>
         </div>
         <div
-          v-show="step === 0"
+          v-if="step === 0"
           id="signatureEditor"
           class="signature-editor"
-          @mousedown="signatureAdded = true"
         >
           <business-profile />
         </div>
-        <div v-show="step === 1" class="body-header" style="flex-direction: column; align-items: start; margin: 20px 0">
+        <div v-if="step === 1" class="body-header" style="flex-direction: column; align-items: start; margin: 20px 0">
           <span style="font-weight: bold; margin-bottom: 20px">Bank Details</span>
           <div class="info-block md-layout-item md-size-100">
             <p style="padding: 20px 10px; text-align: start">
@@ -51,19 +50,19 @@
             </p>
           </div>
         </div>
-        <div v-show="step === 1" class="signature-editor type">
+        <div v-if="step === 1" class="signature-editor type">
           <billing-info ref="billingInfo" />
         </div>
-        <div v-show="step === 2" class="md-layout-item md-size-100 body-header mb-1">
+        <div v-if="step === 2" class="md-layout-item md-size-100 body-header mb-1">
           <div>
             <img class="shield-icon" :src="`/static/icons/shield.svg`">
             <span class="authentication-header">User Authentication</span>
           </div>
         </div>
-        <div v-show="step === 2" class="signature-editor type">
+        <div v-if="step === 2" class="signature-editor type">
           <auth-info ref="authInfo1" part="1" />
         </div>
-        <div v-show="step === 2" class="signature-editor type" style="margin-top: 20px; min-height: unset">
+        <div v-if="step === 2" class="signature-editor type" style="margin-top: 20px; min-height: unset">
           <auth-info ref="authInfo2" part="2" />
         </div>
       </div>
@@ -85,10 +84,10 @@
 </template>
 
 <script>
-import {Modal} from "../index";
-import BusinessProfile from "./ModalComponents/BusinessProfile";
-import BillingInfo from "./ModalComponents/BillingInfo";
-import AuthInfo from "./ModalComponents/AuthInfo";
+import {Modal} from "../../index";
+import BusinessProfile from "../ModalComponents/BusinessProfile";
+import BillingInfo from "../ModalComponents/BillingInfo";
+import AuthInfo from "../ModalComponents/AuthInfo";
 
 export default {
   name: "AddSignatureModal",
@@ -101,15 +100,6 @@ export default {
   data() {
     return {
       step: 0,
-      signatureName: "",
-      signatureAdded: false,
-      signatureType: "draw",
-      signatureData: "",
-      uploadedSignature: "",
-      option: {
-        penColor: "rgb(0, 0, 0)",
-        backgroundColor: "rgb(255,255,255)",
-      },
     };
   },
   computed: {
@@ -154,27 +144,16 @@ export default {
           break;
         }
         case 2: {
-          this.$refs.authInfo1.saveBillingInfo();
-          this.$refs.authInfo2.saveBillingInfo();
+          const oldBillingInfo = JSON.parse(localStorage.bankDetails);
+          const updatedBillingInfo = {
+            ...oldBillingInfo,
+          ...this.$refs.authInfo1.saveBillingInfo(),
+          ...this.$refs.authInfo2.saveBillingInfo()
+        };
+          localStorage.bankDetails = JSON.stringify(updatedBillingInfo);
           this.$emit("close-modal");
           break;
         }
-      }
-    },
-    clear() {
-      switch (this.signatureType) {
-        case "draw":
-          this.signatureData = "";
-          this.$refs.signature.clear();
-          this.signatureAdded = false;
-          break;
-        case "type":
-          this.signatureName = "";
-          break;
-        case "upload":
-          this.$refs.myVueDropzone.removeAllFiles(true);
-          this.uploadedSignature = "";
-          break;
       }
     },
   },

@@ -4,6 +4,7 @@
     <router-view />
     <NotificationModal v-if="isNotificationModal" :name="name" @click="() => {}" />
     <ActionModal v-if="isActionModal" :name="name" />
+    <AfterFirstTransaction />
     <ChangeZoomModal />
   </div>
 </template>
@@ -15,6 +16,7 @@ const components = {
   NotificationModal: () => import("@/components/Modals/NotificationModal.vue"),
   ActionModal: () => import("@/components/Modals/ActionModal.vue"),
   ChangeZoomModal: ()=> import("./components/Modals/ChangeZoomModal"),
+  AfterFirstTransaction: ()=> import("./components/Modals/AfterFirstTransaction/index")
 };
 
 export default {
