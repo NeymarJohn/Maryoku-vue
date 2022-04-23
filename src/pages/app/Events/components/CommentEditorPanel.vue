@@ -408,6 +408,7 @@ export default {
     },
     async getMessage(e){
       if(e.target.value.includes("@")){
+      // if(e.data === "@"){
         let queryArray = e.target.value.split("@");
 
         let res = await getReq(`/1/customers?name=${queryArray[1]}`);
