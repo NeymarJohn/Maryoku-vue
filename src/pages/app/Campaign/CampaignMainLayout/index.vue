@@ -618,7 +618,6 @@ export default {
       return this.campaignTabs[this.selectedTab].name || "";
     },
     currentCampaign() {
-      console.log(this.currentCampaignType, this.$store.state.campaign);
       return this.$store.state.campaign[this.currentCampaignType] || {};
     },
     canSchedule() {
