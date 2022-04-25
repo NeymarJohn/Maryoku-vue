@@ -6,13 +6,12 @@ import Campaign      from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 
 // Create constants
-const DATE               = new Date();
-const TIME               = DATE.getTime();
-const STATIC_URL         = "https://static-maryoku.s3.amazonaws.com/";
-const STORAGE_PATH       = "storage/";
-const STORAGE_URL        = STATIC_URL + STORAGE_PATH;
-const CAMPAIGN_TYPES     = ["SAVING_DATE", "RSVP", "COMING_SOON", "FEEDBACK"];
-const DEFAULT_EVENT_NAME = "Event Name";
+const DATE           = new Date();
+const TIME           = DATE.getTime();
+const STATIC_URL     = "https://static-maryoku.s3.amazonaws.com/";
+const STORAGE_PATH   = "storage/";
+const STORAGE_URL    = STATIC_URL + STORAGE_PATH;
+const CAMPAIGN_TYPES = ["SAVING_DATE", "RSVP", "COMING_SOON", "FEEDBACK"];
 
 const defaultSettingPart = {
   selected      : false,
@@ -24,49 +23,49 @@ const defaultSettingPart = {
 const defaultSettings = {
   phone: {
     ...defaultSettingPart,
-    numberString  : "",
-    smsOrWhatsapp : "sms",
-    numberArray   : [],
+    numberString: "",
+    numberArray: [],
+    smsOrWhatsapp: "sms",
   },
   email: {
     ...defaultSettingPart,
-    subject       : "",
-    from          : "",
-    addressString : "",
-    addressArray  : [],
+    subject: "",
+    from: "",
+    addressString: "",
+    addressArray: [],
   }
 };
 
 const coverImgPrefix = (TIME % 2) + 1;
 const defaultCampaignDataPartType = {
-  title          : DEFAULT_EVENT_NAME,
+  title          : "Event Name",
   logoUrl        : "",
   campaignStatus : "EDITING",
 };
 
 const defaultCampaignData = {
-  initialized : false,
-  SAVING_DATE : {
+  initialized: false,
+  SAVING_DATE: {
     ...defaultCampaignDataPartType,
-    description :
+    description:
       "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon",
-    coverImage : `${STORAGE_URL}Campaign+Headers/save-the-date${coverImgPrefix}.png`,
+    coverImage: `${STORAGE_URL}Campaign+Headers/save-the-date${coverImgPrefix}.png`,
     visibleSettings: {
-      showLogo : true
+      showLogo: true
     }
   },
   RSVP: {
     ...defaultCampaignDataPartType,
-    description       : "",
-    coverImage        : "",
-    defaultCoverImage : `${STORAGE_URL}Campaign+Headers/rsvp${coverImgPrefix}.png`,
-    allowOnline       : false,
-    visibleSettings   : {
+    description: "",
+    coverImage: "",
+    defaultCoverImage: `${STORAGE_URL}Campaign+Headers/rsvp${coverImgPrefix}.png`,
+    allowOnline: false,
+    visibleSettings: {
       showWearingGuide : true,
       showKnowledge    : true,
       showTimeline     : true
     },
-    additionalData : {
+    additionalData: {
       greetingWords     : "",
       wearingGuide      : "",
       wearingGuideTitle : "WHAT SHOULD I WEAR?",
@@ -181,9 +180,10 @@ const mutations = {
     Vue.set(state, "initialized", value);
   },
   setAddtionalData(state, { name, key, value }) {
-    const root = state[name];
-    if (!root.additionalData) Vue.set(root, "additionalData", {});
-    Vue.set(root.additionalData, key, value);
+    if (!state[name].additionalData) {
+      Vue.set(state[name], "additionalData", {});
+    }
+    Vue.set(state[name].additionalData, key, value);
   }
 };
 
@@ -203,68 +203,84 @@ const getters = {
   }
 };
 const actions = {
-  async getCampaigns({ commit, state }, { event }) {
-    if (state.initialized) return state;
-    const result = await new Campaign().for(new CalendarEvent({ id: event.id })).get();
-    const campaigns = {};
-    let logoUrl = "";
-    if (result.length > 0) result.forEach((campaign) => {
-      const name = campaign.campaignType;
-      commit("setCampaign", { name, data: campaign });
-      if (campaign.logoUrl) logoUrl = campaign.logoUrl;
-      campaigns[name] = campaign;
+  getCampaigns({ commit, state }, { event }) {
+    return new Promise((resolve) => {
+      if (state.initialized) {
+        resolve(state);
+        return;
+      }
+      new Campaign()
+        .for(new CalendarEvent({ id: event.id }))
+        .get()
+        .then((res) => {
+          const campaigns = {};
+          let logoUrl = "";
+          if (res.length > 0) {
+            res.forEach((campaign) => {
+              const name = campaign.campaignType;
+              commit("setCampaign", { name, data: campaign });
+              if (campaign.logoUrl) logoUrl = campaign.logoUrl;
+              campaigns[name] = campaign;
+            });
+          }
+          const eventName = event.concept ? event.concept.name : "Event Name";
+          const defaultData = {
+            title: eventName,
+            // description: "",
+            logoUrl
+          };
+
+          const commitCampaign = (name, data) => {
+            commit("setCampaign",       { name, data });
+            commit("setBackupCampaign", { name, data });
+          };
+          const createDefaultData = (key) => ({ ...defaultCampaignData[key], ...defaultData });
+          if (!campaigns["SAVING_DATE"]) {
+            commitCampaign("SAVING_DATE", createDefaultData("SAVING_DATE"));
+          } else {
+            defaultData.title = campaigns["SAVING_DATE"].title;
+          }
+          if (!campaigns["RSVP"]) {
+            const rsvpData = createDefaultData("RSVP");
+            if (event.places && event.places.includes("VIRTUAL")) rsvpData.allowOnline = true;
+            commitCampaign("RSVP", rsvpData);
+          }
+          if (!campaigns["COMING_SOON"]) {
+            commitCampaign("COMING_SOON", createDefaultData("COMING_SOON"));
+          }
+          if (!campaigns["FEEDBACK"]) {
+            commitCampaign("FEEDBACK", createDefaultData("FEEDBACK"));
+          }
+          commit("setInitialized", true);
+          resolve(campaigns);
+        });
     });
-    const eventName = event.concept ? event.concept.name : DEFAULT_EVENT_NAME;
-    const defaultData = {
-      title: eventName,
-      // description: "",
-      logoUrl
-    };
-
-    const commitCampaign = (name, data) => {
-      commit("setCampaign",       { name, data });
-      commit("setBackupCampaign", { name, data });
-    };
-
-    const setDefault = (name) => commitCampaign(name, createDefaultData(name));
-
-    const createDefaultData = (key) => ({ ...defaultCampaignData[key], ...defaultData });
-    if (!campaigns["SAVING_DATE"]) setDefault("SAVING_DATE");
-    else defaultData.title = campaigns["SAVING_DATE"].title;
-
-    if (!campaigns["RSVP"]) {
-      const rsvpData = createDefaultData("RSVP");
-      if (event.places && event.places.includes("VIRTUAL")) rsvpData.allowOnline = true;
-      commitCampaign("RSVP", rsvpData);
-    }
-    if (!campaigns["COMING_SOON"]) setDefault("COMING_SOON");
-    if (!campaigns["FEEDBACK"])    setDefault("FEEDBACK");
-    commit("setInitialized", true);
-    return campaigns;
   },
-  async saveCampaign({ commit }, data) {
-    const campaign           = new Campaign(data);
-    const saveCampaignResult = await campaign.save();
-    const { item }           = saveCampaignResult;
-    commit("setCampaign", {
-      name: item.campaignType,
-      data: item
+  saveCampaign({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      console.dir({ data });
+      const campaign = new Campaign(data);
+      campaign.save().then((res) => {
+        commit("setCampaign", {
+          name: res.item.campaignType,
+          data: res.item
+        });
+        resolve(res);
+      });
     });
-    return saveCampaignResult;
   },
   revertCampaign({ commit, state }, name) {
     const backupData = state[`${name}_BACKUP`];
     commit("setCampaign", {
       name: name,
-      data: { ...backupData },
+      data: Object.assign({}, backupData)
     });
   },
-  setLogo({ commit }, { logoUrl, campaign }) {
+  setLogo({ commit, state }, { logoUrl, campaign }) {
     const commitLogoByName = name => commit("setAttribute", { key: "logoUrl", value: logoUrl, name });
     CAMPAIGN_TYPES.forEach(commitLogoByName);
   }
 };
-
 export default {
   namespaced: true,
   state,

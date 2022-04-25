@@ -14,10 +14,12 @@
             :colors="concept.colors"
             border="no-border"
           />
-          <img v-else :src="campaignData.defaultCoverImage || defaultCoverImage" alt="default cover image">
-          <change-cover-button @click="handleChangeCoverImage">
+          <img v-else-if="campaignData.defaultCoverImage" :src="campaignData.defaultCoverImage" alt="">
+          <img v-else :src="defaultCoverImage" alt="default cover image">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
             Change Cover(Size 1200 * 400)
-          </change-cover-button>
+          </md-button>
         </div>
         <campaign-logo
           :logo-url="campaignLogoUrl"
@@ -226,8 +228,6 @@ import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
 import { MaryokuInput }  from "@/components";
 import HideSwitch        from "@/components/HideSwitch";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
-import ChangeCoverButton from "@/components/Button/ChangeCover";
-
 // local
 import TitleEditor       from "./components/TitleEditor";
 
@@ -255,7 +255,6 @@ export default {
     TitleEditor,
     HideSwitch,
     ConceptImageBlock,
-    ChangeCoverButton,
   },
   props: {
     info: {
@@ -521,6 +520,13 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .change-cover-btn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 
