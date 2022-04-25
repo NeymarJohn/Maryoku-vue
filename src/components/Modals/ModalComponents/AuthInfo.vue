@@ -120,22 +120,25 @@ export default {
       return this.$store.state.vendor.profile;
     },
   },
+  created() {
+    this.link = this.vendorData.social[0].name;
+  },
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
     this.bankDetails = {
       ...this.bankDetails,
       ...JSON.parse(localStorage.bankDetails),
     };
+    this.vendorId = this.$store.state.vendor.profile.id;
+    this.profileId = this.$store.state.auth.user.id;
+
   },
   methods: {
+    sendBankInfo(){
+      console.log("\x1b[32m ##-141, AuthInfo.vue",);
+    },
     saveBillingInfo() {
-      if(this.part === "2"){
-        return {date: this.bankDetails.date};
-      } else if (this.part === "1"){
-        return {ein: this.bankDetails.ein, mcc: this.bankDetails.mcc};
-      }else {
-        localStorage.bankDetails = JSON.stringify(this.bankDetails);
-      }
+      localStorage.bankDetails = JSON.stringify(this.bankDetails);
     },
     setLink(link) {
       this.link = link;

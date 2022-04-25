@@ -178,7 +178,6 @@ export default {
   },
   watch: {
     expiredTime(newValue, oldValue) {
-      console.log('expiredTime');
       this.setCounter(newValue);
     },
   },

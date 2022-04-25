@@ -44,11 +44,15 @@
         </div>
       </div>
     </div>
+    <first-transaction v-show="showModal" >
+    </first-transaction>
   </div>
 </template>
 <script>
+import FirstTransaction from "../../../../components/Modals/FirstTransaction";
 export default {
   components:{
+    FirstTransaction
   },
     filters: {},
     props: {

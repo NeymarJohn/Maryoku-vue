@@ -609,25 +609,21 @@ export default {
   computed: {
     ...mapGetters("campaign", ["campaignIssued"]),
     event() {
-      return this.$store.state.event.eventData;
+      return this.$store.state.event.eventData || {};
     },
     user() {
       return this.$store.state.auth.user;
     },
     currentCampaignType () {
-      return this.campaignTabs[this.selectedTab].name;
+      return this.campaignTabs[this.selectedTab].name || "";
     },
     currentCampaign() {
-      return this.$store.state.campaign[this.currentCampaignType];
+      console.log(this.currentCampaignType, this.$store.state.campaign);
+      return this.$store.state.campaign[this.currentCampaignType] || {};
     },
     canSchedule() {
-      return (
-        this.currentCampaign.settings.email.selected &&
-        this.currentCampaign.settings.email.status !== "sent"
-      ) || (
-        this.currentCampaign.settings.phone.selected &&
-        this.currentCampaign.settings.phone.status !== "sent"
-      );
+      const { email = {}, phone = {}} = this.currentCampaign.settings;
+      return (email.selected && email.status !== "sent") || (phone.selected && phone.status !== "sent");
     },
     isScheduled() {
       if (!this.currentCampaign) return false;
@@ -671,9 +667,6 @@ export default {
     },
     setConceptName () {
       return this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
-    },
-    setDeliverySettings (value) {
-      return this.deliverySettings = value;
     },
     showChangeCoverImageModal() {
       return this.showChangeCoverModal = !this.showChangeCoverModal;
@@ -742,7 +735,8 @@ export default {
       this.campaignInfo[data.field] = data.value;
     },
     changeSettings(data) {
-      this.deliverySettings = data;
+      if (data && objectIsNoEmpty(data)) this.deliverySettings = Object.assign(defaultSettings, data);
+      else this.deliverySettings = defaultSettings;
     },
     saveDraftCampaign(campaignStatus = "SAVED") {
       return this.callSaveCampaign(this.currentCampaignType, campaignStatus);
@@ -805,7 +799,7 @@ export default {
       this.scheduleCampaign();
     },
     revertSetting() {
-      this.deliverySettings = Object.assign(Object.create(null), defaultSettings);
+      this.deliverySettings = Object.create(defaultSettings);
       switch (this.selectedTab) {
         case 1: return this.$refs.savedateCampaign.setDefault();
         case 2: return this.$refs.rsvp.setDefault();

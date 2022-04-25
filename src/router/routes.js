@@ -717,13 +717,7 @@ let landingPages = {
 const invoicesPage = {
   path: "/invoices/:invoiceId",
   name: "Invoice",
-  component: InvoicePage,
-  meta: {
-    title: "Invoice",
-    gtm: "Invoice",
-    opaque: false,
-    requiresAuth: false
-  }
+  component: InvoicePage
 };
 
 let feedbackPages = {
