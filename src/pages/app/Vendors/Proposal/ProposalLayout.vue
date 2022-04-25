@@ -27,14 +27,12 @@
 
         <div class="next-cont">
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"> Discard </a>
-          <a class="save"
-             v-tooltip="{
-             html: true,
-             content: '<p>You can return to it till the deadline!</p>',
+          <a class="save" v-tooltip="{
+             content: 'You can return to it till the deadline!',
              delay: { show: 200, hide: 100 },
              trigger: 'hover',
              placement: 'top',
-             classes: 'vendor-tooltip-theme'}"
+             classes: 'vendor-tooltip-theme',}"
              @click="calculateStage(proposalStatus.DRAFT)">
             <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
           </a>

@@ -187,12 +187,7 @@
     <div class="green-block-wrapper">
       <div class="p-50 d-flex">
         <div>
-          <div class="icon-and-text">
-            <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
-            <div class="right-text-style">
-              share with us photos you took from the event
-            </div>
-          </div>
+          <title-share-photo-event />
           <div class="d-flex align-center font-bold ml-60">
             Allow guests to upload photos from the event
             <md-switch
@@ -247,6 +242,7 @@ import { v4 as uuidv4 } from "uuid";
 import MaryokuTextarea       from "@/components/Inputs/MaryokuTextarea";
 import HideSwitch            from "@/components/HideSwitch";
 import ConceptImageBlock     from "@/components/ConceptImageBlock";
+import TitleSharePhotoEvent  from "@/components/Title/SharePhotoEvent";
 // local
 import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
 import SharingButtonGroup    from "./components/SharingButtonGroup";
@@ -272,6 +268,7 @@ export default {
     CustomTitleEditor,
     vueDropzone: vue2Dropzone,
     ConceptImageBlock,
+    TitleSharePhotoEvent,
   },
   props: {
     info: {
@@ -356,7 +353,6 @@ export default {
       anything you feel could be improved in the future.
     `).trim().replace(/  /g, "");
 
-    console.log({ event: this.event });
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {
@@ -368,19 +364,19 @@ export default {
       },
     ];
     this.event.components
-      .sort((a, b) => a.order - b.order)
-      .forEach((service) => {
-        if (service.eventCategory.type == "service") {
-          const { fullTitle, icon } = service.eventCategory;
-          this.feedbackQuestions.push({
-            question: `How Was The ${fullTitle}?`,
-            showQuestion: true,
-            rank: 0,
-            icon,
-            label,
-          });
-        }
-      });
+    .sort((a, b) => a.order - b.order)
+    .forEach(({ eventCategory }) => {
+      if (eventCategory.type == "service") {
+        const { fullTitle, icon } = eventCategory;
+        this.feedbackQuestions.push({
+          question     : `How Was The ${fullTitle}?`,
+          showQuestion : true,
+          rank         : 0,
+          icon,
+          label,
+        });
+      }
+    });
 
     this.setFeedbackAttribute("feedbackQuestions", this.feedbackQuestions);
     if (!this.campaignData.additionalData) this.setFeedbackAttribute("additionalData", this.additionalData);
@@ -427,9 +423,6 @@ export default {
         value : this.additionalData
       });
     },
-    log (...values) {
-      console.dir({ values });
-    },
     handleChangeCoverImage(event) {
       this.$emit("change-cover-image", event);
     },
@@ -443,7 +436,6 @@ export default {
       return this.setFeedbackAttribute("visibleSettings", { ...this.campaignVisibleSettings, [key]: value });
     },
     handleChangeCampaignLogo(file) {
-      console.dir({ file });
       this.$emit("change-logo", file);
     },
     async uploadFiles(files) {
@@ -475,6 +467,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@mixin box ($size) {
+  height : $size;
+  width  : $size;
+}
+
 .feedback-campaign {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 }
@@ -516,8 +513,7 @@ export default {
       justify-content: flex-end;
 
       img.icon-play {
-        width: 77px;
-        height: 77px;
+        @include box(77px);
       }
     }
 
@@ -542,31 +538,28 @@ export default {
         align-items: center;
 
         .icon-microsoft {
-          width: 45px;
-          height: 45px;
+          @include box(45px);
           display: flex;
           justify-content: space-around;
           flex-wrap: wrap;
 
           .block {
-            width: 20px;
-            height: 20px;
-          }
+            @include box(20px);
+            &1 {
+              background: #f25022;
+            }
 
-          .block1 {
-            background: #f25022;
-          }
+            &2 {
+              background: #7fba00;
+            }
 
-          .block2 {
-            background: #7fba00;
-          }
+            &3 {
+              background: #00a4ef;
+            }
 
-          .block3 {
-            background: #00a4ef;
-          }
-
-          .block4 {
-            background: #ffb600;
+            &4 {
+              background: #ffb600;
+            }
           }
         }
 
@@ -606,24 +599,6 @@ export default {
 .green-block-wrapper{
   background-color: rgba(87, 242, 195, 0.23);
 }
-.right-text-style{
-  text-transform: uppercase;
-  font-size: 22px;
-  font-weight: 800;
-  height: 82px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-}
-.icon-and-text{
-  display: flex;
-  align-items: start;
-}
-.left-icon{
-  margin-right: 20px;
-}
 .switch-button-style{
   margin-top: 25px;
   margin-left: 15px;
@@ -641,8 +616,7 @@ export default {
     justify-content: flex-end;
 
     .icon-edit-dark {
-      width: 24px;
-      height: 24px;
+      @include box(24px);
       align-self: flex-end;
       margin-left: 15px;
     }
@@ -654,12 +628,10 @@ export default {
 .feedback-campaign-carousel {
 
   .icon-pictures {
-    width: 57px;
-    height: 57px;
+    @include box(57px);
     position: relative;
     border-radius: 50%;
     background: #ffc001;
-
     .icon-book {
       width: 43px;
       height: 48px;
@@ -687,8 +659,7 @@ export default {
   align-items: center;
 
   .wrapper-drop-zone {
-    width: 100%;
-    height: 100%;
+    @include box(100%);
     background-color: white;
     border: 1px dashed #818080;
 
@@ -709,12 +680,12 @@ export default {
 
       .drag-your-file-text{
         font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        text-align: center;
+        font-weight    : normal;
+        font-stretch   : normal;
+        font-style     : normal;
+        line-height    : normal;
+        letter-spacing : normal;
+        text-align     : center;
         color: #818080;
       }
     }
@@ -724,7 +695,6 @@ export default {
     height: 172px;
     border-top: dashed 1px #818080;
     border-bottom: dashed 2px #818080;
-
 }
 .add-button-style{
     width: 87.6px;
@@ -773,8 +743,7 @@ export default {
     margin-left: 10px;
 }
 .icon-edit-dark {
-    width: 24px;
-    height: 24px;
+    @include box(24px);
     align-self: flex-end;
     margin-left: 20px;
     &:hover{
@@ -785,8 +754,7 @@ export default {
 .wrapper-thanks-for-participating{
     display: flex;
     .icon-edit-dark {
-        width: 24px;
-        height: 24px;
+        @include box(24px);
         align-self: center;
         margin-left: 20px;
     }

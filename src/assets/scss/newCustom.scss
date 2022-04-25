@@ -2788,9 +2788,9 @@
 }
 
 .vendor-tooltip-theme{
+    top: 10px !important;
     z-index: 100;
     &[x-placement^="bottom"] {
-        top: 10px !important;
         margin-bottom: 5px;
 
         .tooltip-arrow {
@@ -2798,7 +2798,7 @@
             border-right-color: transparent !important;
             border-top-color: transparent !important;
             border-left-color: transparent !important;
-            top: -5px;
+            bottom: -5px;
             left: calc(50% - 5px);
             margin-top: 0;
             margin-bottom: 0;
@@ -2807,14 +2807,13 @@
 
     &[x-placement^="top"] {
         margin-bottom: 5px;
-        top: -10px !important;
 
         .tooltip-arrow {
             border-width: 10px 10px 0 10px !important;
             border-right-color: transparent !important;
+            border-top-color: transparent !important;
             border-left-color: transparent !important;
-            border-bottom-color: transparent;
-            bottom: -10px;
+            bottom: -5px;
             left: calc(50% - 5px);
             margin-top: 0;
             margin-bottom: 0;
@@ -2826,6 +2825,7 @@
         height: 0;
         border-style: solid;
         position: absolute;
+        top: -5px !important;
         margin: 5px;
         border-color: #ffedb7;
         z-index: 1;
