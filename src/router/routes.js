@@ -60,10 +60,10 @@ const EventWizardReligion = () => import("@/pages/app/CreateEvent/EventWizardRel
 
 // RSVP
 
-const RSVPEvent = () => import("@/pages/app/RSVP/RSVPEvent.vue");
+const RSVPEvent       = () => import("@/pages/app/RSVP/RSVPEvent.vue");
 const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.vue");
 
-const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
+const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage");
 // User authentication pages
 const SignInSignUp = () => import("@/pages/app/Planner/SignInSignUp.vue");
 const SignUp = () => import("@/pages/app/Planner/SignUp.vue");
@@ -717,7 +717,13 @@ let landingPages = {
 const invoicesPage = {
   path: "/invoices/:invoiceId",
   name: "Invoice",
-  component: InvoicePage
+  component: InvoicePage,
+  meta: {
+    title: "Invoice",
+    gtm: "Invoice",
+    opaque: false,
+    requiresAuth: false
+  }
 };
 
 let feedbackPages = {

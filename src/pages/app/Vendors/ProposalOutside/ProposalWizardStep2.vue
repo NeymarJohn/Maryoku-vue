@@ -3,7 +3,7 @@
     <proposal-item-secondary-service
       :category="vendor.eventCategory.title"
       :services="[]"
-      :is-collapsed="true"
+      :is-collapsed="false"
       :is-dropdown="true"
       :proposal-range="true"
       :img="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`"

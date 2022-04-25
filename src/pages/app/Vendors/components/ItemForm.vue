@@ -117,19 +117,25 @@ export default {
         if ( this.field === "discount" ) {
           this.discount.price = ((this.sumOfPrices * this.discount.percentage) / 100);
         } else if ( this.field === "negotiation" ) {
-          const discountedTotal = this.sumOfPrices * (1 - Number(this.defaultDiscount.percentage) / 100);
 
-          this.discount.price =  Math.round(discountedTotal * Number(this.discount.percentage) / 100);
+          this.discount.price =  Math.round(this.bundleDiscounted * Number(this.discount.percentage) / 100);
         } else if ( this.field === "tax" ) {
-          let discountedTotal = this.sumOfPrices * (Number(this.defaultDiscount.percentage) / 100);
-          discountedTotal = this.bundleDiscount && this.bundleDiscount.isApplied ? discountedTotal - this.bundleDiscount.price : discountedTotal;
-
-          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ? discountedTotal * (1 - Number(this.defaultNegotiation.percentage) / 100)
-            : discountedTotal;
-          console.log('negotiatedTotal', discountedTotal, negotiatedTotal);
-          this.discount.price = (this.sumOfPrices - negotiatedTotal) * (Number(this.editingDiscount.percentage) / 100);
+          console.log('val', this.editingDiscount.percentage);
+          this.discount.price = this.negotiated * (Number(this.editingDiscount.percentage) / 100);
         }
         return this.discount.price;
+      },
+      defaultDiscounted() {
+        return this.sumOfPrices * (1 - Number(this.defaultDiscount.percentage) / 100);
+      },
+      bundleDiscounted() {
+        console.log('defaultDisocunted', this.defaultDiscounted);
+        return this.bundleDiscount.isApplied ? this.defaultDiscounted - this.bundleDiscount.price : this.defaultDiscounted;
+      },
+      negotiated() {
+        console.log('bundleDisocunted', this.bundleDiscounted);
+        return this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.bundleDiscounted * (1 - Number(this.defaultNegotiation.percentage) / 100)
+          : this.bundleDiscounted;
       },
       sumOfPrices() {
         return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"] :
@@ -168,7 +174,6 @@ export default {
           this.discount = JSON.parse(JSON.stringify(this.defaultTax));
           this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax));
         }
-        console.log('item.form', this.field, this.defaultDiscount, this.defaultNegotiation, this.bundleDiscount);
       },
       toggleEditMode() {
         this.isEditing = !this.isEditing;
@@ -191,25 +196,19 @@ export default {
         }
         if (this.field === "negotiation") {
           this.editingDiscount.percentage = value;
-          this.editingDiscount.price = ((this.sumOfPrices - this.defaultDiscount.price)  * (value / 100)).toFixed(2);
+          this.editingDiscount.price = ((this.sumOfPrices - this.bundleDiscounted)  * (value / 100)).toFixed(2);
         } else if (this.field === "tax") {
           this.editingDiscount.percentage = value;
-          this.editingDiscount.price = (
-            (
-              this.sumOfPrices -
-              this.defaultDiscount.price -
-              (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0)
-          ) * (value / 100)).toFixed(2);
+          this.editingDiscount.price = (this.negotiated * (value / 100)).toFixed(2);
         }
       },
       setPriceRange(val) {
         if (this.field === "discount") {
           this.editingDiscount.percentage = ((val / this.sumOfPrices) * 100).toFixed(2);
         } else if (this.field === "negotiation") {
-          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price)) * 100).toFixed(2);
+          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.bundleDiscounted)) * 100).toFixed(2);
         } else if (this.field === "tax") {
-          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price -
-            (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0))) * 100).toFixed(2);
+          this.editingDiscount.percentage = (val / this.negotiated * 100).toFixed(2);
         }
       },
     },

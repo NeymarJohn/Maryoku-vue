@@ -129,7 +129,7 @@ export default {
 				setTimeout((_) => {
 					$(".md-list-item-button").hover(
 						function (el) {
-							$(this).attr("style", "background-color:#f51355 !important;color: #fff!important");
+							$(this).attr("style", "background-color:#641856 !important;color: #fff!important");
 						},
 						function () {
 							$(this).attr("style", "background-color:#fff;color:#000");

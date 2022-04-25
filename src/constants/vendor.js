@@ -2,62 +2,62 @@ export const VendorCategories = [
   {
     name: "Venue Rental",
     value: "venuerental",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Path 11323.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /venuerental.svg"
   },
   {
     name: "Food & Beverage",
     value: "foodandbeverage",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 19221.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /foodandbeverage.svg"
   },
   {
     name: "Design and Decor",
     value: "decor",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Path 15037.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /decor.svg"
   },
   {
     name: "Guest Services & Staffing",
     value: "administration",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Guest services & Staffing (White).svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /administration.svg"
   },
   {
     name: "Signage / Printing",
     value: "signageprinting",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29313.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /signageprinting.svg"
   },
   {
     name: "AV / Staging",
     value: "audiovisualstagingservices",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29316.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /audiovisualstagingservices.svg"
   },
   {
     name: "Giveaways",
     value: "giveaways",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 1734.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /giveaways.svg"
   },
   {
     name: "Transportation & Tour operator",
     value: "transportation",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29304.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /transportation.svg"
   },
   {
     name: "Entertainment",
     value: "entertainment",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29303.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /entertainment.svg"
   },
   {
     name: "Security",
     value: "securityservices",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29238.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /security.svg"
   },
   {
     name: "Videography and Photography",
     value: "videographyandphotography",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Videography and Photography (White).svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /videographyandphotography.svg"
   },
   {
     name: "Equipment Rentals",
     value: "equipmentrentals",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29314.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /equipmentrentals.svg"
   }
 ];
 export const businessCategories = [
@@ -4718,7 +4718,7 @@ export const categoryNameWithIcons = [
   {
     name: "giveaways",
     value: "giveaways",
-    icon: "swags.svg"
+    icon: "giveaways.svg"
   },
   // {
   //   name: 'Shipping',
@@ -4738,7 +4738,7 @@ export const categoryNameWithIcons = [
   {
     name: "Security",
     value: "securityservices",
-    icon: "securityservices.svg"
+    icon: "security.svg"
   },
   {
     name: "Videography and Photography",

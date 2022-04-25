@@ -161,18 +161,25 @@ const getters = {
       sum += Number(getter.totalPriceByCategory[category]);
     });
 
-    // check discount
+    // minus default discount
     let discount = state.discounts["total"] || { price: 0, percentage: 0 };
     sum = discounting(sum, discount);
 
-    // check tax
+    // minus bundle discount
+    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
+      sum -= state.bundleDiscount.price;
+    }
+
+    // minus negotiation discount
+    if (state.negotiationDiscount && state.negotiationDiscount.isApplied) {
+      sum -= state.negotiationDiscount.price;
+    }
+
+    // add tax
     let tax = state.taxes["total"] || { price: 0, percentage: 0 };
     sum = addingTax(sum, tax);
-    // check bundle discount
 
-    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
-      sum -= discounting(sum, state.bundleDiscount);
-    }
+    console.log('total', sum);
 
     return sum;
   }
