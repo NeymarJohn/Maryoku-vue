@@ -88,11 +88,16 @@
                     pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key) > 0)
                 "
               >
-                <div v-if=" getAllocatedBudget(vendor.eventCategory.key) &&
-                  pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0 ">
+                <div>
                   <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10">
 
-                  <span style="font-size: 14px; justify-content: flex-start;">
+                  <span
+                    v-if="
+                      getAllocatedBudget(vendor.eventCategory.key) &&
+                        pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0
+                    "
+                    style="font-size: 14px; justify-content: flex-start;"
+                  >
                     Your proposal is ${{
                       (pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key))
                         | withComma
@@ -423,6 +428,9 @@ export default {
 				this.expanded = true;
 			}
 		},
+		totalPriceByCategory(newVal, oldVal) {
+			console.log("totalPriceByCategory", newVal);
+		},
 	},
 	created() {
 		window.addEventListener("scroll", this.handleScroll);
@@ -703,6 +711,7 @@ export default {
 							span {
 								&:last-child {
 									font-size: 14px;
+                  text-decoration: line-through;
                   color: #707070;
 								}
 							}

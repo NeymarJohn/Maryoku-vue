@@ -253,7 +253,7 @@ export default {
         font-weight: 600;
         text-transform: capitalize;
         cursor: pointer;
-        text-decoration: none;
+
         i {
           color: #641856;
         }

@@ -78,15 +78,8 @@
                   <li>
                     <div class="md-simple md-just-icon adaptive-button">
                       <img
-                        v-if="isAnyLiked"
                         class="svg-icon-header cursor-pointer"
-                        :src="`${$iconURL}Booking-New/Path+6363.svg`"
-                        @click="openChoice"
-                      >
-                      <img
-                        v-else
-                        class="svg-icon-header cursor-pointer"
-                        :src="`${$iconURL}Booking-New/Group+28553.svg`"
+                        :src="`${$iconURL}Booking-New/${isAnyLiked ? 'Path+6363.svg': 'Group+28553.svg'}`"
                         @click="openChoice"
                       >
                       <span :class="{ 'like-dot': proposalUnviewed == true }" />
@@ -444,6 +437,7 @@
         :requirements="requirements"
         :service-categories="serviceCategories"
         :total="event.components.length"
+        :ask="findVendors"
         @close="showChoice = false"
       />
     </transition>
@@ -522,6 +516,7 @@ export default {
       expiredTime: 0,
       currentRequirement: null,
 
+      findAllCategory: false,
       requirementSection: true,
       proposalsByCategory: {},
       showAddNewCategory: false,
@@ -727,7 +722,7 @@ export default {
 
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
-        if (scroll >= 200) {
+        if (scroll >= 100) {
           $(".headers").addClass("fixed-top");
         } else {
           $(".headers").removeClass("fixed-top");
@@ -747,7 +742,8 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
-    findVendors() {
+    findVendors(type = false) {
+      this.findAllCategory = type
       this.isOpenedFinalModal = true;
     },
     async saveSpecialRequirements(data) {
@@ -758,22 +754,28 @@ export default {
         .add(3, "days")
         .valueOf();
 
-      postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
-        issuedTime: new Date().getTime(),
-        expiredBusinessTime: this.expiredTime,
-      }).then(async res => {
-        await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
-        this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
+      if (this.findAllCategory) {
+
+        const res = await postReq(`/1/events/${this.event.id}/find-vendors`, {
+          issuedTime: new Date().getTime(),
+          expiredBusinessTime: this.expiredTime,
+        })
 
         await this.$store.dispatch(
-        "event/saveEventAction",
-        new CalendarEvent({
-          id: this.event.id,
-          vendorCategory: this.selectedCategory,
-          processingStatus: "accept-proposal",
-        }),
+          "event/saveEventAction",
+          new CalendarEvent({
+            id: this.event.id,
+            processingStatus: "accept-proposal",
+          }),
         );
-    });
+      } else {
+        const res = await postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
+          issuedTime: new Date().getTime(),
+          expiredBusinessTime: this.expiredTime,
+        })
+        await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
+        this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
+      }
 
     },
     hasBudget(categoryKey) {

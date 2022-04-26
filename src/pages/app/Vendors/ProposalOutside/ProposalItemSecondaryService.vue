@@ -105,6 +105,7 @@ export default {
     return {
       isAllFilledInfo: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      isVCollapsed: false,
       isChecked: false,
       isEditDiscount: false,
       isEditTax: false,
@@ -125,7 +126,7 @@ export default {
       docTag: null,
       serviceSlidePos: 0,
       servicesWidth: 0,
-      isExpanded: false,
+      isExpanded: true,
       currencyFormat: {
         decimal: ".",
         thousands: ",",
@@ -181,7 +182,7 @@ export default {
   },
   watch: {},
   created() {
-    this.isExpanded = !this.isCollapsed;
+    this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
       this.newProposalRequest.requirements.push({
