@@ -294,30 +294,23 @@ export default {
       });
   },
   methods: {
-    sendMail(message){
-        if(!message) return;
-        this.showQuestionModal = false;
+    async sendMail(message = ""){
+      if(!message) return;
+      this.showQuestionModal = false;
+      const { eventData } = this.proposalRequest;
+      if(this.vendor.vendorMainEmail && eventData && eventData.owner && eventData.owner.emailAddress) {
+        const { data } = await this.$http.post(`${process.env.SERVER_URL}/1/sendMail`, {
+          from    : this.vendor.vendorMainEmail,
+          to      : eventData.owner.emailAddress,
+          subject : "Questions",
+          message,
+          }, { headers: this.$auth.getAuthHeader() },
+        );
 
-        if(this.vendor.vendorMainEmail && this.proposalRequest.eventData && this.proposalRequest.eventData.owner
-            && this.proposalRequest.eventData.owner.emailAddress)
-          this.$http
-          .post(
-            `${process.env.SERVER_URL}/1/sendMail`,
-            {
-              from: this.vendor.vendorMainEmail,
-              to: this.proposalRequest.eventData.owner.emailAddress,
-              subject: "Questions",
-              message,
-            },
-            { headers: this.$auth.getAuthHeader() },
-          )
-          .then((res) => {
-            if (res.data.status) {
-              this.statusMessage = "We have sent an email to the invited users.";
-            } else {
-              this.statusMessage = "Something is wrong. Please try again later.";
-            }
-          });
+        this.statusMessage = data.status
+          ? "We have sent an email to the invited users."
+          : "Something is wrong. Please try again later.";
+      }
     },
     selectedOptions(specialRequirements) {
       if (!specialRequirements) return [];

@@ -16,7 +16,7 @@ const getters = {
 
 const actions = {
   createDestinationAccount: ({commit, state}, data) => {
-    return postReq("/stripe/v1/customer/destinations/account", data).then((res) => {
+    return postReq("/1/billing-information", data).then((res) => {
       commit("setBankToken", res.data.token);
       return res.data.token;
     });

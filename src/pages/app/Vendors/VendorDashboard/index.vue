@@ -123,11 +123,13 @@
   </div>
 </template>
 <script>
+// core
+import moment      from "moment";
+import _           from "underscore";
+
 import selectIcons from "./Modals/SelectIcon.vue";
 import PieChart from "@/components/Chart/PieChart.vue";
 import IncomeBarChart from "./IncomeBarChart.vue";
-import moment from "moment";
-import _ from "underscore";
 import VendorCreateEventModal from "./Modals/VendorCreateEvent";
 import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
@@ -189,7 +191,7 @@ export default {
         date,
         date + 1
       ],
-      selectedYear: new Date().getFullYear(),
+      selectedYear: date,
     };
   },
   computed: {

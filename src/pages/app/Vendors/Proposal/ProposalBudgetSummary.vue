@@ -35,7 +35,7 @@
           class="bundle-discount mt-20"
           @click="isBundleDiscount = !isBundleDiscount"
         >
-          <img class="black" :src="`${iconUrl}Asset 579.svg`">
+          <img class="black" :src="`${iconUrl}giveaways.svg`">
           <span>
             Add Bundle Discount
             <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
@@ -57,7 +57,7 @@
                 :value="vendor.eventCategory.key"
               />
 
-              <img :src="`${iconUrl}Asset 614.svg`" width="30px" class="mr-10">
+              <img :src="`${iconUrl}venuerental.svg`" width="30px" class="mr-10">
               <div style="font-size: 16px; font-weight: 800">
                 {{ vendor.eventCategory.title }}
               </div>
@@ -88,16 +88,11 @@
                     pricesByCategory[vendor.eventCategory.key] - getAverageBudget(vendor.eventCategory.key) > 0)
                 "
               >
-                <div>
+                <div v-if=" getAllocatedBudget(vendor.eventCategory.key) &&
+                  pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0 ">
                   <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10">
 
-                  <span
-                    v-if="
-                      getAllocatedBudget(vendor.eventCategory.key) &&
-                        pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key) > 0
-                    "
-                    style="font-size: 14px"
-                  >
+                  <span style="font-size: 14px; justify-content: flex-start;">
                     Your proposal is ${{
                       (pricesByCategory[vendor.eventCategory.key] - getAllocatedBudget(vendor.eventCategory.key))
                         | withComma
@@ -132,7 +127,7 @@
             </h3>
             <div class="d-flex align-center mb-20">
               <md-checkbox v-if="isBundleDiscount" v-model="bundleDiscountServices" class="md-vendor" :value="a" />
-              <img :src="getIconUrlByCategory(a)" width="40px" class="mr-5">
+              <img :src="getIconUrlByCategory(a)" class="mr-5">
               <div style="font-size: 16px; font-weight: 800">
                 {{ getServiceCategory(a).title }}
               </div>
@@ -160,6 +155,7 @@
                   (getAllocatedBudget(a) && pricesByCategory[a] - getAllocatedBudget(a) > 0) ||
                     (getAverageBudget(a) && pricesByCategory[a] - getAverageBudget(a) > 0)
                 "
+                style="justify-content: left"
               >
                 <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10">
 
@@ -175,6 +171,7 @@
           :default-discount="defaultDiscount"
           :default-negotiation="negotiationDiscount"
           :default-tax="defaultTax"
+          :bundle-discount="bundleDiscount"
           field="discount"
           :non-maryoku="false"
           @saveDiscount="saveDiscount('discount', $event)"
@@ -184,6 +181,7 @@
           :default-discount="defaultDiscount"
           :default-negotiation="negotiationDiscount"
           :default-tax="defaultTax"
+          :bundle-discount="bundleDiscount"
           field="negotiation"
           :non-maryoku="false"
           @saveDiscount="saveDiscount('negotiation', $event)"
@@ -193,6 +191,7 @@
           :default-discount="defaultDiscount"
           :default-negotiation="negotiationDiscount"
           :default-tax="defaultTax"
+          :bundle-discount="bundleDiscount"
           field="tax"
           :non-maryoku="false"
           @saveDiscount="saveTax('tax', $event)"
@@ -303,7 +302,7 @@ export default {
 			isEdit: false,
 			isTaxEditing: false,
 			warning: false,
-			iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+			iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /",
 			newProposalRequest: {
 				eventData: {},
 			},
@@ -424,9 +423,6 @@ export default {
 				this.expanded = true;
 			}
 		},
-		totalPriceByCategory(newVal, oldVal) {
-			console.log("totalPriceByCategory", newVal);
-		},
 	},
 	created() {
 		window.addEventListener("scroll", this.handleScroll);
@@ -463,7 +459,7 @@ export default {
 			return this.$store.state.vendorProposal.proposalServices[category] || [];
 		},
 		getIconUrlByCategory(category) {
-			return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${
+			return `https://static-maryoku.s3.amazonaws.com/storage/icons/Services /${
 				this.iconsWithCategory.filter((c) => c.value == category)[0].icon
 			}`;
 		},
@@ -698,17 +694,16 @@ export default {
 							}
 						}
 						&:nth-child(2) {
-							font-size: 14px;
+							font-size: 22px;
 							font-weight: 800;
-							text-decoration: underline;
 						}
 						&:nth-child(3) {
 							font-size: 14px;
-							color: #050505;
+							color: #707070;
 							span {
 								&:last-child {
-									font-size: 20px;
-									font-weight: 800;
+									font-size: 14px;
+                  color: #707070;
 								}
 							}
 						}
@@ -735,7 +730,6 @@ export default {
 							}
 						}
 						&:last-child {
-							justify-content: flex-start;
 							text-align: left;
 							margin-bottom: 0;
 

@@ -123,28 +123,28 @@
                   </span>
                 </div>
                 <div
-                  class="input-wrapper mcc-wrapper"
+                  class="input-wrapper ssnLast4-wrapper"
                   :class="{
-                    error: v$.bankDetails.mcc.$errors.length,
-                    valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty
+                    error: v$.bankDetails.ssnLast4.$errors.length,
+                    valid: !v$.bankDetails.ssnLast4.$errors.length && v$.bankDetails.ssnLast4.$dirty
                   }"
-                  @click="v$.bankDetails.mcc.$touch"
+                  @click="v$.bankDetails.ssnLast4.$touch"
                 >
-                  <PincodeInput v-model="bankDetails.mcc" :secure="true" @blur="v$.bankDetails.mcc.$touch" />
+                  <PincodeInput v-model="bankDetails.ssnLast4" :secure="true" @blur="v$.bankDetails.ssnLast4.$touch" />
                   <div class="valid-msg auth"></div>
                 </div>
                 <div
-                  class="input-wrapper mcc-wrapper"
+                  class="input-wrapper ssnLast4-wrapper"
                   :class="{
-                    error: v$.bankDetails.mcc.$errors.length,
-                    valid: !v$.bankDetails.mcc.$errors.length && v$.bankDetails.mcc.$dirty
+                    error: v$.bankDetails.idNumber.$errors.length,
+                    valid: !v$.bankDetails.idNumber.$errors.length && v$.bankDetails.idNumber.$dirty
                   }"
-                  @click="v$.bankDetails.mcc.$touch"
+                  @click="v$.bankDetails.idNumber.$touch"
                 >
                   <div>
                     <span class="name">EIN</span>
                   </div>
-                  <PincodeInput v-model="bankDetails.ein" :length="9" />
+                  <PincodeInput v-model="bankDetails.idNumber" :length="9" />
                 </div>
               </div>
               <div class="md-layout-item md-size-60 authentication-block">
@@ -189,7 +189,7 @@
               <span>037</span>
               <br />
               <i class="material-icons-outlined location-icon">location_on</i>
-              <span style="color: #641856">{{ bankDetails.address }}</span>
+              <span style="color: #641856">{{ formattedAddress }}</span>
             </div>
             <span class="block-separator" style="margin: 28px 0; border-color: #a9a9a9"></span>
             <div class="account-details">
@@ -235,6 +235,7 @@ export default {
     user: {},
     googleAddress: {},
     vendorId: "",
+    formattedAddress: "",
     profileId: "",
     bankDetailsEditing: true,
     bankDetails: {
@@ -243,8 +244,8 @@ export default {
       holderName: "",
       branch: "",
       routingNumber: "",
-      mcc: "",
-      ein: "",
+      ssnLast4: "",
+      idNumber: "",
     },
   }),
   setup() {
@@ -258,12 +259,12 @@ export default {
           minLength: minLength(9),
         },
         address: { required },
-        mcc: {
+        ssnLast4: {
           numeric,
           required,
           minLength: minLength(4),
         },
-        ein: {
+        idNumber: {
           numeric,
           required,
           minLength: minLength(9),
@@ -276,8 +277,8 @@ export default {
   },
   computed: {
     hiddenId() {
-      if (!this.bankDetails.ein) return;
-      const hiddenId = this.bankDetails.ein.split("");
+      if (!this.bankDetails.idNumber) return;
+      const hiddenId = this.bankDetails.idNumber.split("");
       hiddenId.fill("X", 0, hiddenId.length - 1);
       hiddenId[hiddenId.length] = hiddenId[hiddenId.length - 1];
       hiddenId[hiddenId.length - 2] = "-";
@@ -292,66 +293,40 @@ export default {
   },
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
-    this.bankDetails = {
-      ...this.bankDetails,
-      ...JSON.parse(localStorage.bankDetails),
-    };
-    this.vendorId = this.$store.state.vendor.profile.id;
-    this.profileId = this.$store.state.auth.user.id;
-    this.user = this.$store.state.vendor.profile.tenantUser;
+    const billingInformation = this.$store.state.vendor.profile.billingInformation[0];
+    if(billingInformation) {
+      this.bankDetails = {
+        ...this.bankDetails,
+        ...billingInformation,
+        ...billingInformation.representative,
+      };
+      this.formattedAddress = Object.values(billingInformation.representative.address).toString();
+      this.bankDetailsEditing = false;
+      const dob = billingInformation.representative.dob;
+      if (dob) {
+        this.bankDetails.date = dob.month + "." + dob.day + "." + dob.year;
+      }
+    }
   },
   methods: {
+    ...mapActions("vendor", ["getProfile"]),
     ...mapActions("stripe", ["createDestinationAccount", "createStripeAccount"]),
     setEditing() {
       this.bankDetailsEditing = true;
     },
-    getAddressData(addressData) {
+    getAddressData(addressData,placeResultData) {
+      this.formattedAddress = placeResultData.formatted_address;
       this.googleAddress = addressData;
-    },
-    sendTest() {
-      var stripe = Stripe("pk_test_51In2qMBvFPeKz0zXs5ShSv1qjb6YAnonaqamWN4e9f4cTygxBMkMbYXcUAGp7deorwFS5ohy4vuQZFfeIVgxPPMF00nSOnDeQy");
-      stripe.verifyIdentity("vs_1KcCl2BvFPeKz0zX7nYGzaRS_secret_CJ3fAnRmp8raDXHQEBYFLhow9Tdtg")
-        .then(function(result) {
-        });
-      fetch("https://api.stripe.com/v1/identity/verification_sessions ", {
-        method: "POST",
-        data: {
-          vendorId: this.$store.state.auth.user.id,
-        },
-      })
-        .then(function(response) {
-          return stripe.verifyIdentity(response.secret);
-        })
-        .then(function(session) {
-          return stripe.verifyIdentity("");
-        })
-        .then(function(result) {
-          if (result.error) {
-            alert(result.error.message);
-          }
-        })
-        .catch(function(error) {
-          console.error("Error:", error);
-        });
     },
     sendBankInfo() {
       this.isLoading = true;
-      localStorage.bankDetails = JSON.stringify(this.bankDetails);
       this.createDestinationAccount({
         "holderName": this.bankDetails.holderName,
         "routingNumber": this.bankDetails.routingNumber,
         "accountNumber": this.bankDetails.accountNumber,
-      }).then(res => {
-        this.createStripeAccount({
-          "vendorId": this.vendorId,
-          "personId": this.profileId,
-          "bankAccountToken": res,
           "representative": {
-            "taxId": "",
-            "ssnLast4": this.bankDetails.mcc || "0000",
-            "phoneNumber": this.user.phoneNumber || "000 000 0000",
-            "idNumber": this.bankDetails.ein || "000000000",
-            "email": this.user.email || "email@email.email",
+            "ssnLast4": this.bankDetails.ssnLast4 || "0000",
+            "idNumber": this.bankDetails.idNumber || "000000000",
             "dob": {
               "year": this.bankDetails.date.getFullYear(),
               "month": this.bankDetails.date.getMonth() + 1,
@@ -364,18 +339,18 @@ export default {
               "city": this.googleAddress.locality,
               "state": this.googleAddress.administrative_area_level_1,
             },
-          },
+          }
         }).then(res => {
-          this.bankDetailsEditing = false;
-          this.isLoading = false;
-        }).catch(error => {
-          this.bankDetailsEditing = false;
+        this.getProfile().then( (res) => {
+          if(res.billingInformation[0] && res.billingInformation[0].representative) {
+            this.bankDetailsEditing = false;
+          }
           this.isLoading = false;
         });
-        ;
-      }).catch(error => {
-        this.isLoading = false;
-      });
+        }).catch(error => {
+          this.bankDetailsEditing = true;
+          this.isLoading = false;
+        });
     },
   },
 };
@@ -490,7 +465,7 @@ label {
 }
 
 .authentication-block {
-  .add-mcc {
+  .add-ssnLast4 {
     display: block;
     color: #641856;
     padding: 20px 0;
@@ -594,7 +569,7 @@ label {
     filter: invert(10%) sepia(33%) saturate(4724%) hue-rotate(289deg) brightness(94%) contrast(96%);
   }
 
-  &.mcc-wrapper {
+  &.ssnLast4-wrapper {
     width: 200px;
   }
 

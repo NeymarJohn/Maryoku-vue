@@ -1,7 +1,6 @@
 "use strict";
 const merge = require('webpack-merge')
 const devEnv = require('./dev.env')
-const webpack = require("webpack")
 require('dotenv').config({ path: './.env' });
 
 module.exports = merge(devEnv, {

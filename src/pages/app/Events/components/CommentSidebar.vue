@@ -5,12 +5,12 @@
         <span class="title-label">
           All Comments
         </span>
-        <div class="dropdown">
+        <!-- <div class="dropdown">
           <span class="subText">
             Last Update
           </span>
           <i class="fas fa-chevron-down my-chevron" />
-        </div>
+        </div> -->
       </div>
       <div class="header-tabs d-flex justify-content-around ">
         <div v-for="tab in commentsTab"
