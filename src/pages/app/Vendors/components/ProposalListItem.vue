@@ -24,12 +24,7 @@
     <div class="font-size-14 color-black-middle">
       {{ proposal.lastUpdated | date("DD/MM/YYYY") }}
     </div>
-    <div>
-      <status-icon
-        :last-updated="proposal.lastUpdated"
-        :status="proposal.status"
-      />
-    </div>
+    <div><img class="ml-15" :src="getStatusIcon(proposal.status)"></div>
     <div class="font-size-14 color-black-middle text-capitalize">
       <span
         v-if="
@@ -126,12 +121,7 @@
         New Event
       </div>
     </div>
-    <div>
-      <status-icon
-        :last-updated="proposal.lastUpdated"
-        :status="proposal.status"
-      />
-    </div>
+    <div><img class="ml-15" :src="getStatusIcon(proposal.status)"></div>
     <div class="font-size-14 color-black-middle">
       ${{ proposal.cost | withComma }}
     </div>
@@ -173,51 +163,47 @@
   </div>
 </template>
 <script>
-// components
 import Avartar from "@/components/Avartar.vue";
-import StatusIcon from "./StatusIcon";
+import { PROPOSAL_STATUS } from "@/constants/status";
 
 export default {
-  components: {
-    Avartar,
-    StatusIcon,
-  },
+  components: { Avartar },
   props: {
     proposal: {
-      type     : Object,
-      required : true,
+      type: Object,
+      required: true,
     },
     page: {
-      type     : String,
-      default  : "proposal",
+      type: String,
+      default: "proposal",
     },
     hasNegotiation: {
-      type     : Boolean,
-      default  : false,
+      type: Boolean,
+      default: false,
     },
     color: {
-      type     : String,
-      default  : "#ff0066",
+      type: String,
+      default: "#ff0066",
     },
   },
   data() {
     return {
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
       proposalStatus: {
-        show        : 0,
-        edit        : 1,
-        download    : 2,
-        delete      : 3,
-        share       : 4,
-        negotiation : 5,
-        duplicate   : 6,
-        resend      : 7,
-        cancel      : 8,
-        engagement  : 9,
+        show: 0,
+        edit: 1,
+        download: 2,
+        delete: 3,
+        share: 4,
+        negotiation: 5,
+        duplicate: 6,
+        resend: 7,
+        cancel: 8,
+        engagement: 9,
       },
       requestType: {
-        ADD_MORE_TIME : 0,
-        NEGOTIATION   : 1,
+        ADD_MORE_TIME: 0,
+        NEGOTIATION: 1,
       },
     };
   },
@@ -228,6 +214,24 @@ export default {
     // console.log("mounted", this.proposal);
   },
   methods: {
+    getStatusIcon(status) {
+      let path = "/static/icons/vendor/proposalBoard/";
+      if (status === PROPOSAL_STATUS.DRAFT) {
+        return `${this.$iconURL}VendorsProposalPage/path-14945.svg`;
+      } else if (status === PROPOSAL_STATUS.PENDING) {
+        return `${path}filter-pending.svg`;
+      } else if (status === PROPOSAL_STATUS.TOP3) {
+        return `${path}filter-top3.svg`;
+      } else if (status === PROPOSAL_STATUS.LOST) {
+        return `${path}filter-reject.svg`;
+      } else if (status === PROPOSAL_STATUS.WON) {
+        return `${path}filter-won.svg`;
+      } else if (status === PROPOSAL_STATUS.CANCEL) {
+        return `${path}filter-reject.svg`;
+      } else {
+        return `${path}filter-${status}.svg`;
+      }
+    },
     edit(action) {
       if (this.proposal.accepted && action === this.proposalStatus.edit) return;
       this.$emit("action", action, this.proposal.id);

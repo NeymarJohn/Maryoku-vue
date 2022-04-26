@@ -689,13 +689,9 @@ export default {
       this.setDefaultSettings();
     },
     setDefaultSettings() {
-      return this.deliverySettings = {
-        ...(
-          this.currentCampaign && objectIsNoEmpty(this.currentCampaign.settings)
-            ? this.currentCampaign.settings
-            : defaultSettings
-          )
-        };
+        this.deliverySettings = this.currentCampaign && this.currentCampaign.settings && Object.keys(this.currentCampaign.settings).length > 0
+          ? { ...this.currentCampaign.settings }
+          : { ...defaultSettings } ;
     },
     exportToPdf() {
       this.$refs.html2Pdf.generatePdf();
