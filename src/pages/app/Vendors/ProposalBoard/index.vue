@@ -1,12 +1,7 @@
 <template>
   <div class="vendor-proposal-board p-40">
     <loader :active="loading" :is-full-screen="true" page="vendor" />
-    <div class="font-size-22 font-bold d-flex align-center">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" alt=""> Proposals Board
-      <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">
-        Create New Proposal
-      </md-button>
-    </div>
+    <Header @onCreate="createNewProposal" />
     <div class="font-bold text-uppercase mt-30 mb-15">
       Opportunities
     </div>
@@ -305,83 +300,98 @@
   </div>
 </template>
 <script>
+// core
 import moment from "moment";
 import NoInsight from "./NoInsight.vue";
 import _ from "underscore";
-import {avatarColors} from "@/constants/color";
+
+import ProposalRequest from "@/models/ProposalRequest";
+
+// pages
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
 import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
-import ProposalRequest from "@/models/ProposalRequest";
-import { socialMediaBlocks } from "@/constants/vendor";
-import { NEGOTIATION_REQUEST_STATUS, NEGOTIATION_REQUEST_TYPE, PROPOSAL_STATUS } from "@/constants/status";
-import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
-import { PROPOSAL_VERSION_FIELDS } from "@/constants/proposal";
-import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
 
-const components = {
-  Loader: () => import("@/components/loader/Loader.vue"),
-  Modal: () => import("@/components/Modal.vue"),
-  CentredModal: () => import("@/components/CentredModal.vue"),
-  carousel: () => import("vue-owl-carousel"),
-  NegotiationRequest: () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
-  ProposalContent: () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
-  ProposalListItem: () => import("@/pages/app/Vendors/components/ProposalListItem.vue"),
-  InsightDetail: () => import("@/pages/app/Vendors/components/InsightDetail.vue"),
-  TablePagination: () => import("@/components/TablePagination.vue"),
-  Insight: () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
-  ShareProposal: () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
-  ResendProposalResult: () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
-  ProposalGraphModal: () => import("@/pages/app/Vendors/ProposalBoard/ProposalGraphModal.vue"),
-};
+// components
+import Header from "./Header";
+
+// utils
+import { avatarColors }                               from "@/constants/color";
+import { socialMediaBlocks }                          from "@/constants/vendor";
+import { PROPOSAL_PAGE_TABS, PROPOSAL_TABLE_HEADERS } from "@/constants/list";
+import { PROPOSAL_VERSION_FIELDS }                    from "@/constants/proposal";
+import { PROPOSAL_PAGE_PAGINATION }                   from "@/constants/pagination";
+import {
+  NEGOTIATION_REQUEST_STATUS,
+  NEGOTIATION_REQUEST_TYPE,
+  PROPOSAL_STATUS
+} from "@/constants/status";
 
 export default {
-  components: { ...components, ProposalRequestCard, EmptyRequestCard, NoInsight },
+  components: {
+    carousel             : () => import("vue-owl-carousel"),
+    Loader               : () => import("@/components/loader/Loader.vue"),
+    Modal                : () => import("@/components/Modal.vue"),
+    CentredModal         : () => import("@/components/CentredModal.vue"),
+    NegotiationRequest   : () => import("@/pages/app/Vendors/components/NegotiationRequest.vue"),
+    ProposalContent      : () => import("@/pages/app/Vendors/components/ProposalDetail.vue"),
+    ProposalListItem     : () => import("@/pages/app/Vendors/components/ProposalListItem"),
+    InsightDetail        : () => import("@/pages/app/Vendors/components/InsightDetail.vue"),
+    TablePagination      : () => import("@/components/TablePagination.vue"),
+    Insight              : () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
+    ShareProposal        : () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
+    ResendProposalResult : () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
+    ProposalGraphModal   : () => import("@/pages/app/Vendors/ProposalBoard/ProposalGraphModal.vue"),
+    ProposalRequestCard,
+    EmptyRequestCard,
+    NoInsight,
+    Header,
+  },
   data() {
     return {
-      showLessInsightModal: false,
-      loading: true,
-      iconUrl: `${this.$iconURL}`,
-      proposalTabs: PROPOSAL_PAGE_TABS,
-      proposalHeaders: PROPOSAL_TABLE_HEADERS,
-      tab: "all",
-      showProposalDetail: false,
-      showShareProposalModal: false,
-      showProposalGraph : false,
-      selectedProposal: null,
-      selectedEventData: null,
-      selectedProposalRequest: null,
-      selectedProposalForGraph : null,
-      showRequestNegotiationModal: false,
-      showResendProposalModal: false,
-      showInsightModal: false,
+      showLessInsightModal        : false,
+      loading                     : true,
+      iconUrl                     : `${this.$iconURL}`,
+      proposalTabs                : PROPOSAL_PAGE_TABS,
+      proposalHeaders             : PROPOSAL_TABLE_HEADERS,
+      tab                         : "all",
+      showProposalDetail          : false,
+      showShareProposalModal      : false,
+      showProposalGraph           : false,
+      selectedProposal            : null,
+      selectedEventData           : null,
+      selectedProposalRequest     : null,
+      selectedProposalForGraph    : null,
+      showRequestNegotiationModal : false,
+      showResendProposalModal     : false,
+      showInsightModal            : false,
       negotiationRequestStatus: {
-        review: 0,
-        approve: 1,
-        decline: 2,
-        done: 3,
-        cancel_proposal: 4,
-        update_proposal: 5,
-        acknowledge: 6,
+        review          : 0,
+        approve         : 1,
+        decline         : 2,
+        done            : 3,
+        cancel_proposal : 4,
+        update_proposal : 5,
+        acknowledge     : 6,
       },
       proposalStatus: {
-        show: 0,
-        edit: 1,
-        download: 2,
-        delete: 3,
-        share: 4,
-        negotiation: 5,
-        resend: 7,
-        cancel: 8,
-        engagement: 9,
+        show        : 0,
+        edit        : 1,
+        download    : 2,
+        delete      : 3,
+        share       : 4,
+        negotiation : 5,
+        resend      : 7,
+        cancel      : 8,
+        engagement  : 9,
       },
-      negotiationProcessed: NEGOTIATION_REQUEST_STATUS.NONE,
-      negotiationType: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
-      negotiationTypes: NEGOTIATION_REQUEST_TYPE,
+      negotiationProcessed : NEGOTIATION_REQUEST_STATUS.NONE,
+      negotiationType      : NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
+      negotiationTypes     : NEGOTIATION_REQUEST_TYPE,
+      pagination           : PROPOSAL_PAGE_PAGINATION,
+      versionFields        : PROPOSAL_VERSION_FIELDS,
+      sortFields           : { sort: "cost", order: "desc" },
+      colors               : avatarColors,
       socialMediaBlocks,
-      pagination: PROPOSAL_PAGE_PAGINATION,
-      sortFields: { sort: "cost", order: "desc" },
-      versionFields: PROPOSAL_VERSION_FIELDS,
-      colors: avatarColors
     };
   },
   computed: {
@@ -391,8 +401,8 @@ export default {
     proposalLink() {
       if (!this.selectedProposal) return null;
       return this.selectedProposal.nonMaryoku
-        ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
-        : `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${
+        ? `${location.origin}/#/unregistered/proposals/${this.selectedProposal.id}`
+        : `${location.origin}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${
             this.selectedProposal.proposalRequestId
           }/form/edit`;
     },
@@ -420,38 +430,36 @@ export default {
         return new Date(negotiations[0].expiredTime).getTime();
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.EVENT_CHANGE) {
         const { nonMaryoku } = this.selectedProposal;
-        let eventData;
-        if (this.selectedProposal.nonMaryoku) {
-           eventData = this.selectedProposal.eventData;
-        } else {
-           eventData = this.selectedProposalRequest.eventData;
-        }
+        const eventData = this.selectedProposal.nonMaryoku
+          ? this.selectedProposal.eventData
+          : this.selectedProposalRequest.eventData;
 
-        let { event } = negotiations[0];
+        const { event } = negotiations[0];
+        const timeFormat = (date) => moment(date).format("hh:mm a");
         return {
-          originalDate: moment( nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("DD-MM-YY"),
-          date: moment(event.startTime * 1000).format("DD-MM-YY"),
-          originalStartTime: moment(nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("hh:mm a"),
-          originalEndTime: moment(nonMaryoku ? eventData.endTime * 1000 : eventData.eventEndMillis).format("hh:mm a"),
-          startTime: moment(event.startTime * 1000).format("hh:mm a"),
-          endTime: moment(event.endTime * 1000).format("hh:mm a"),
-          originalNumberOfParticipants: eventData.numberOfParticipants,
-          numberOfParticipants: event.numberOfParticipants,
-          originalLocation: eventData.location,
-          location: event.location,
-          originalEventType: eventData.eventType,
-          eventType: event.eventType,
+          originalDate      : moment( nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis).format("DD-MM-YY"),
+          date              : moment(event.startTime * 1000).format("DD-MM-YY"),
+          originalStartTime : timeFormat(nonMaryoku ? eventData.startTime * 1000 : eventData.eventStartMillis),
+          originalEndTime   : timeFormat(nonMaryoku ? eventData.endTime   * 1000 : eventData.eventEndMillis),
+          startTime         : timeFormat(event.startTime * 1000),
+          endTime           : timeFormat(event.endTime * 1000),
+          originalNumberOfParticipants : eventData.numberOfParticipants,
+          numberOfParticipants         : event.numberOfParticipants,
+          originalLocation             : eventData.location,
+          location                     : event.location,
+          originalEventType            : eventData.eventType,
+          eventType                    : event.eventType,
         };
       } else if (negotiations[0].type === NEGOTIATION_REQUEST_TYPE.PRICE_NEGOTIATION) {
         let { numberOfParticipants } = this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData : this.selectedProposalRequest.eventData;
         let data = negotiations[0].price;
         let budget = data.rate === "%" ? this.selectedProposal.cost * (1 - data.value / 100) : this.selectedProposal.cost - data.value;
-
+        const calcBudget = (budget, numberOfParticipants) => (budget / numberOfParticipants).toFixed(2);
         return {
-          originalBudget: this.selectedProposal.cost,
           budget,
-          originalBudgetPerGuest: (this.selectedProposal.cost / numberOfParticipants).toFixed(2),
-          budgetPerGuest: (budget / numberOfParticipants).toFixed(2),
+          originalBudget         : this.selectedProposal.cost,
+          originalBudgetPerGuest : calcBudget(this.selectedProposal.cost, numberOfParticipants),
+          budgetPerGuest         : calcBudget(budget, numberOfParticipants),
         };
       }
       return null;
@@ -521,61 +529,57 @@ export default {
     async handleProposal(action, id) {
       this.selectedProposal = this.proposals.find(it => it.id === id);
       const negotiations = this.getNegotiations(this.selectedProposal);
+      switch (action) {
+        case this.proposalStatus.show        : return this.showProposalDetail = true;
+        case this.proposalStatus.edit        : return this.editProposal();
+        case this.proposalStatus.download    : return this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.selectedProposal.id}/download`);
+        case this.proposalStatus.share       : return this.showShareProposalModal = true;
+        case this.proposalStatus.engagement  : return this.showProposalGraph = true;
+        case this.proposalStatus.delete      : {
+          this.loading = true;
+          await this.$store.dispatch("vendorDashboard/removeProposal", id);
+          await this.getProposal();
+          this.loading = false;
+          break;
+        }
+        case this.proposalStatus.negotiation : {
+          this.showRequestNegotiationModal = true;
+          this.selectedProposalRequest = this.selectedProposal.proposalRequest;
+          this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
+          this.negotiationType = negotiations[0].type;
+          break;
+        }
+        case this.proposalStatus.resend: {
+          const origin = `${location.protocol}//${location.host}`;
+          const url = this.selectedProposal.nonMaryoku
+            ? `${origin}/#/unregistered/proposals/${this.selectedProposal.id}`
+            : `${origin}/#/signin`;
 
-      if (action === this.proposalStatus.show) {
-        this.showProposalDetail = true;
-      } else if (action === this.proposalStatus.edit) {
-        this.editProposal();
-      } else if (action === this.proposalStatus.delete) {
-        this.loading = true;
+          const eventName = this.selectedProposal.nonMaryoku
+            ? this.selectedProposal.eventData.customer.company
+            : this.selectedProposal.proposalRequest.eventData.title || "New event";
 
-        await this.$store.dispatch("vendorDashboard/removeProposal", id);
-        await this.getProposal();
-
-        this.loading = false;
-      } else if (action === this.proposalStatus.download) {
-        this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.selectedProposal.id}/download`);
-      } else if (action === this.proposalStatus.share) {
-        this.showShareProposalModal = true;
-      } else if (action === this.proposalStatus.negotiation) {
-        this.showRequestNegotiationModal = true;
-        this.selectedProposalRequest = this.selectedProposal.proposalRequest;
-        this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
-        this.negotiationType = negotiations[0].type;
-      } else if (action === this.proposalStatus.resend) {
-        let url = this.selectedProposal.nonMaryoku
-          ? `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}`
-          : `${location.protocol}//${location.host}/#/signin`;
-
-        let eventName = this.selectedProposal.nonMaryoku
-          ? this.selectedProposal.eventData.customer.company
-          : this.selectedProposal.proposalRequest.eventData.title
-          ? this.selectedProposal.proposalRequest.eventData.title
-          : "New event";
-
-        await this.sendEmail({ type: "again", proposalId: this.selectedProposal.id, url, eventName });
-        this.showResendProposalModal = true;
-      } else if (action === this.proposalStatus.cancel) {
-        this.loading = true;
-        let url = `${location.protocol}//${location.host}/#/signin`;
-        await this.$store.dispatch("vendorDashboard/updateProposal", {
-          data: { ...this.selectedProposal, status: PROPOSAL_STATUS.CANCEL },
-          vendorId: this.selectedProposal.vendor.id,
-        });
-
-        await this.sendEmail({ type: "inactive", url, proposalId: this.selectedProposal.id });
-        this.loading = false;
-      } else if (action === this.proposalStatus.engagement) {
-        this.showProposalGraph = true;
+          await this.sendEmail({ type: "again", proposalId: this.selectedProposal.id, url, eventName });
+          this.showResendProposalModal = true;
+          break;
+        }
+        case this.proposalStatus.cancel: {
+          this.loading = true;
+          await this.$store.dispatch("vendorDashboard/updateProposal", {
+            data: { ...this.selectedProposal, status: PROPOSAL_STATUS.CANCEL },
+            vendorId: this.selectedProposal.vendor.id,
+          });
+          const url = `${location.protocol}//${location.host}/#/signin`;
+          await this.sendEmail({ type: "inactive", url, proposalId: this.selectedProposal.id });
+          this.loading = false;
+          break;
+        }
       }
     },
 
     count() {
-      if (this.proposalRequests < 10) {
-        this.showLessInsightModal = true;
-      } else {
-        this.showInsightModal = true;
-      }
+      if (this.proposalRequests < 10) return this.showLessInsightModal = true;
+      return this.showInsightModal = true;
     },
     handleRequestCard(idx) {
       let proposalRequest = this.proposalRequests[idx];

@@ -1,31 +1,31 @@
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 
 const VendorSignupLayout = () => import("@/pages/app/Vendors/Signup/Layout.vue");
-const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue");
+const VendorMainLayout   = () => import("@/pages/app/Vendors/VendorMainLayout.vue");
 
 const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile");
-const VendorProposalBoard = () => import("@/pages/app/Vendors/ProposalBoard");
-const VendorCustomers = () => import("@/pages/app/Vendors/Customers");
-const VendorInbox = () => import("@/pages/app/Vendors/Inbox");
-const VendorInboxProposal = () => import("@/pages/app/Vendors/Inbox/proposal.vue");
-const VendorDashboard = () => import("@/pages/app/Vendors/VendorDashboard");
-const VendorSignup = () => import("@/pages/app/Vendors/Signup");
-const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue");
-const ForgotPassword = () => import("@/pages/app/Vendors/VendorForgotPassword.vue");
-const ResetPassword = () => import("@/pages/app/Vendors/VendorResetPassword.vue");
-const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue");
+const VendorProposalBoard   = () => import("@/pages/app/Vendors/ProposalBoard");
+const VendorCustomers       = () => import("@/pages/app/Vendors/Customers");
+const VendorInbox           = () => import("@/pages/app/Vendors/Inbox");
+const VendorInboxProposal   = () => import("@/pages/app/Vendors/Inbox/proposal.vue");
+const VendorDashboard       = () => import("@/pages/app/Vendors/VendorDashboard");
+const VendorSignup          = () => import("@/pages/app/Vendors/Signup");
+const VendorSignin          = () => import("@/pages/app/Vendors/VendorSignin.vue");
+const ForgotPassword        = () => import("@/pages/app/Vendors/VendorForgotPassword.vue");
+const ResetPassword         = () => import("@/pages/app/Vendors/VendorResetPassword.vue");
+const VendorSignedin        = () => import("@/pages/app/Vendors/VendorSignedin.vue");
 
 // New Vendor Pages
-const ForVendorLayout = () => import("@/pages/Dashboard/Layout/ForVendorLayout.vue");
-const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
-const ProposalLayout = () => import("@/pages/app/Vendors/Proposal/ProposalLayout.vue");
-const ProposalContent = () => import("@/pages/app/Vendors/Proposal");
-const ProposalForOutsideClientLayout = () => import("@/pages/app/Vendors/ProposalOutside/ProposalLayout.vue");
+const ForVendorLayout                 = () => import("@/pages/Dashboard/Layout/ForVendorLayout.vue");
+const ForVendors                      = () => import("@/pages/app/Vendors/ForVendors.vue");
+const ProposalLayout                  = () => import("@/pages/app/Vendors/Proposal/ProposalLayout.vue");
+const ProposalContent                 = () => import("@/pages/app/Vendors/Proposal");
+const ProposalForOutsideClientLayout  = () => import("@/pages/app/Vendors/ProposalOutside/ProposalLayout.vue");
 const ProposalForOutsideClientContent = () => import("@/pages/app/Vendors/ProposalOutside");
 
 const ServiceWizardLayout = () => import("@/pages/app/Vendors/ServiceWizard/Layout.vue");
-const ServiceWizard = () => import("@/pages/app/Vendors/ServiceWizard");
-const OfferVendors = () => import("@/pages/app/OfferVendors");
+const ServiceWizard       = () => import("@/pages/app/Vendors/ServiceWizard");
+const OfferVendors        = () => import("@/pages/app/OfferVendors");
 
 export default [
   {

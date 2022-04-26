@@ -690,7 +690,7 @@ export default {
 
     },
     back() {
-      this.$router.go(-1);
+
     },
     scrollToTop() {
       window.scrollTo(0, 0);

@@ -91,16 +91,16 @@ import { VENDOR_PAGE_PAGINATION } from "@/constants/pagination";
 import { PROPOSAL_STATUS } from "@/constants/status";
 
 const components = {
-    Loader: () => import("@/components/loader/Loader.vue"),
-    Modal: () => import("@/components/Modal.vue"),
-    EventsTable: () => import("./components/EventsTable.vue"),
-    FadeTransition: () => import("vue2-transitions"),
-    ProposalListItem: () => import("@/pages/app/Vendors/components/ProposalListItem"),
+    FadeTransition   : () => import("vue2-transitions"),
+    Loader           : () => import("@/components/loader/Loader.vue"),
+    Modal            : () => import("@/components/Modal.vue"),
+    EventsTable      : () => import("./components/EventsTable.vue"),
+    ProposalListItem : () => import("@/pages/app/Vendors/components/ProposalListItem"),
 };
 
 
 export default {
-  components : {...components},
+  components : { ...components },
   data() {
     return {
       planners: [],
@@ -118,7 +118,7 @@ export default {
   computed: {
     pageNumber() {
       return `${this.pagination.limit * (this.pagination.page - 1) + 1} - ${this.pagination.limit * this.pagination.page < this.pagination.total ?
-          this.pagination.limit * this.pagination.page : this.pagination.total} of ${this.pagination.total}`; 
+          this.pagination.limit * this.pagination.page : this.pagination.total} of ${this.pagination.total}`;
     }
   },
   async created() {
