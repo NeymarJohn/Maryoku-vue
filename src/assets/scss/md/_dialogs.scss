@@ -11,11 +11,6 @@
   align-items: center;
   transition: opacity .15s ease;
 }
-.customer-form-vendor-proposal{
-  .modal-mask{
-    height: 100%;
-  }
-}
 .non-vendor-add-more-time-popup-modal {
   .swal2-popup{
     .swal2-header {
@@ -531,11 +526,7 @@
     height: 100%;
   }
 }
-#afterFirstTransactionModalWrapper{
-  .modal-mask{
-    position: absolute;
-  }
-}
+
 @media (max-width: 960px) {
   .proposal-images-carousel{
     .owl-carousel.owl-theme.owl-loaded.owl-drag{

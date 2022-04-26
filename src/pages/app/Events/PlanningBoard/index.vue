@@ -13,8 +13,8 @@
                 :key="index"
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
-                :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
+                :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
+                :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -26,8 +26,6 @@
                   class="mr-20 mb-10"
                   label="More categories"
                   data-toggle="dropdown"
-                  :icon="`${$iconURL}Services /more.svg`"
-                  :selected-icon="`${$iconURL}Services /more-white.svg`"
                   :default-status="showMoreCats === true"
                   :proposalCategory="false"
                   @click="showMoreCategories"
@@ -59,7 +57,7 @@
                   >
                     <a class="category-item font-size-16" @click="selectRemainingCategory(additionalCategory, 'add')">
                       <div class="category-name">
-                        <img :src="`${$iconURL}Services /${additionalCategory.icon}`">
+                        <img :src="`${$iconURL}Budget+Elements/${additionalCategory.icon}`">
                         &nbsp;&nbsp;
                         {{ additionalCategory.title }}
                       </div>
@@ -78,8 +76,15 @@
                   <li>
                     <div class="md-simple md-just-icon adaptive-button">
                       <img
+                        v-if="isAnyLiked"
                         class="svg-icon-header cursor-pointer"
-                        :src="`${$iconURL}Booking-New/${isAnyLiked ? 'Path+6363.svg': 'Group+28553.svg'}`"
+                        :src="`${$iconURL}Booking-New/Path+6363.svg`"
+                        @click="openChoice"
+                      >
+                      <img
+                        v-else
+                        class="svg-icon-header cursor-pointer"
+                        :src="`${$iconURL}Booking-New/Group+28553.svg`"
                         @click="openChoice"
                       >
                       <span :class="{ 'like-dot': proposalUnviewed == true }" />
@@ -234,7 +239,7 @@
             </template>
             <div v-else class="proposal-card-items">
               <ProposalCard
-                v-for="(p, index) in categoryProposals.slice(0, 3)"
+                v-for="(p, index) in categoryProposals.slice(0, 3).slice(0, 3)"
                 :key="index"
                 :proposal="p"
                 :component="selectedCategory"
@@ -258,6 +263,7 @@
 
                 <md-button
                   class="md-simple md-red maryoku-btn"
+                  :disabled="!getRequirements(selectedCategory.componentId)"
                   @click="
                       getSpecification({
                         category: selectedCategory,
@@ -360,7 +366,7 @@
               <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
             </md-button>
             <drop-down class="d-inline-block">
-              <button class="more-button cursor-pointer" data-toggle="dropdown" :disabled="proposal === null">
+              <button class="more-button cursor-pointer" data-toggle="dropdown">
               <span class="more-actions font-size-16 ml-20">
                 {{ "More actions" }}
               </span>
@@ -381,27 +387,27 @@
             </drop-down>
           </div>
           <div class="d-flex justify-content-end">
-            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="proposal === null" @click="bookVendor">
+            <md-button class="book-this-vendor md-simple maryoku-btn" :disabled="this.proposal === null" @click="bookVendor">
               Book This Vendor
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
 
-            <md-button class="md-red maryoku-btn w-min-250" :disabled="(proposal === null ) || isInCart" @click="addToCart">
+            <md-button class="md-red maryoku-btn w-min-250" :disabled="(this.proposal === null ) || isInCart" @click="addToCart">
               Add To Cart
             </md-button>
           </div>
         </div>
         <div v-else class="proposal-footer white-card d-flex align-center">
-          <md-button class="md-simple ml-auto md-black maryoku-btn py-0 border-right" @click="getSpecification({
+          <md-button class="md-simple ml-auto md-black maryoku-btn" @click="getSpecification({
                         category: selectedCategory,
                         services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
                       })">
             Change Requirements
           </md-button>
-
-          <md-button class="md-simple md-black ml-0 py-0 maryoku-btn" @click="updateExpiredTime">
+          <md-button class="md-simple md-black ml-0 maryoku-btn" @click="updateExpiredTime">
             I need those proposals urgent
           </md-button>
+
         </div>
       </template>
       <template v-else>
@@ -437,7 +443,6 @@
         :requirements="requirements"
         :service-categories="serviceCategories"
         :total="event.components.length"
-        :ask="findVendors"
         @close="showChoice = false"
       />
     </transition>
@@ -466,7 +471,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
-import { postReq, updateReq, getReq } from "@/utils/token";
+import { postReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 import ProposalEngagement from '@/models/ProposalEngagement'
@@ -516,7 +521,6 @@ export default {
       expiredTime: 0,
       currentRequirement: null,
 
-      findAllCategory: false,
       requirementSection: true,
       proposalsByCategory: {},
       showAddNewCategory: false,
@@ -609,9 +613,11 @@ export default {
       return this.$store.state.planningBoard.proposal;
     },
     categoryProposals() {
-      if (!this.proposals || !this.proposals[this.selectedCategory.componentId] || !this.proposals[this.selectedCategory.componentId].length) return []
-
-      return this.proposals[this.selectedCategory.componentId];
+      let categoryProposals = this.$store.state.event.proposals;
+      if (this.selectedCategory) {
+        return categoryProposals[this.selectedCategory.componentId] || [];
+      }
+      return [];
     },
     cart() {
       return this.$store.state.planningBoard.cart;
@@ -722,7 +728,7 @@ export default {
 
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
-        if (scroll >= 100) {
+        if (scroll >= 300) {
           $(".headers").addClass("fixed-top");
         } else {
           $(".headers").removeClass("fixed-top");
@@ -742,8 +748,7 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
-    findVendors(type = false) {
-      this.findAllCategory = type
+    findVendors() {
       this.isOpenedFinalModal = true;
     },
     async saveSpecialRequirements(data) {
@@ -754,28 +759,22 @@ export default {
         .add(3, "days")
         .valueOf();
 
-      if (this.findAllCategory) {
-
-        const res = await postReq(`/1/events/${this.event.id}/find-vendors`, {
-          issuedTime: new Date().getTime(),
-          expiredBusinessTime: this.expiredTime,
-        })
-
-        await this.$store.dispatch(
-          "event/saveEventAction",
-          new CalendarEvent({
-            id: this.event.id,
-            processingStatus: "accept-proposal",
-          }),
-        );
-      } else {
-        const res = await postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
-          issuedTime: new Date().getTime(),
-          expiredBusinessTime: this.expiredTime,
-        })
+      postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
+        issuedTime: new Date().getTime(),
+        expiredBusinessTime: this.expiredTime,
+      }).then(async res => {
         await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
         this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
-      }
+
+        await this.$store.dispatch(
+        "event/saveEventAction",
+        new CalendarEvent({
+          id: this.event.id,
+          vendorCategory: this.selectedCategory,
+          processingStatus: "accept-proposal",
+        }),
+        );
+    });
 
     },
     hasBudget(categoryKey) {
@@ -950,13 +949,11 @@ export default {
       return null;
     },
     async updateExpiredTime() {
-
-      let res = await updateReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
+      let res = await postReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
         id: this.currentRequirement.id,
         expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
       })
-      console.log('update.expiredtime', res);
-      this.currentRequirement = res.data;
+      this.currentRequirement = res.data.item;
     },
     async goDetailPage(proposal) {
 
@@ -1146,10 +1143,12 @@ export default {
     padding-left: 480px;
     animation: slide-down 0.7s;
     opacity: 1;
-    z-index: 10;
+    z-index: 1030;
 
     .container {
-      background: #f3f7fd;
+      background: white;
+      margin-left: 60px;
+      margin-right: 30px;
     }
   }
   @keyframes slide-down {
@@ -1441,10 +1440,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
-  }
-
-  .border-right {
-    border-right: 1px solid #050505;
   }
 }
 </style>

@@ -68,10 +68,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    bundleDiscount: {
-      type: Object,
-      default: () => {},
-    },
     defaultNegotiation: {
       type: Object,
       default: () => {},
@@ -101,6 +97,7 @@ export default {
           negotiation: "NewSubmitPorposal/Asset 612.svg",
           bundle: "",
         },
+        // discount: this.defaultDiscount,
         discount: {
           percentage: 0,
           price: 0,
@@ -117,25 +114,18 @@ export default {
         if ( this.field === "discount" ) {
           this.discount.price = ((this.sumOfPrices * this.discount.percentage) / 100);
         } else if ( this.field === "negotiation" ) {
-
-          this.discount.price =  Math.round(this.bundleDiscounted * Number(this.discount.percentage) / 100);
+          const discountedTotal = this.sumOfPrices * (1 - this.defaultDiscount.percent / 100);
+          this.discount.price =  Math.round(discountedTotal * this.discount.percent / 100);
         } else if ( this.field === "tax" ) {
-          console.log('val', this.editingDiscount.percentage);
-          this.discount.price = this.negotiated * (Number(this.editingDiscount.percentage) / 100);
+          const discountedTotal = this.sumOfPrices * (this.defaultDiscount.percentage / 100);
+          const negotiatedTotal = this.defaultNegotiation && this.defaultNegotiation.isApplied ? discountedTotal * (1 - this.defaultNegotiation.percent / 100) : discountedTotal;
+          console.log({
+            discountedTotal,
+            negotiatedTotal
+          });
+          this.discount.price = (this.sumOfPrices - negotiatedTotal) * (this.editingDiscount.percentage / 100);
         }
         return this.discount.price;
-      },
-      defaultDiscounted() {
-        return this.sumOfPrices * (1 - Number(this.defaultDiscount.percentage) / 100);
-      },
-      bundleDiscounted() {
-        console.log('defaultDisocunted', this.defaultDiscounted);
-        return this.bundleDiscount.isApplied ? this.defaultDiscounted - this.bundleDiscount.price : this.defaultDiscounted;
-      },
-      negotiated() {
-        console.log('bundleDisocunted', this.bundleDiscounted);
-        return this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.bundleDiscounted * (1 - Number(this.defaultNegotiation.percentage) / 100)
-          : this.bundleDiscounted;
       },
       sumOfPrices() {
         return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"] :
@@ -147,34 +137,23 @@ export default {
         // console.log({ newValue, oldValue });
         if (newValue !== oldValue) {
           this.discount.price = (newValue * this.discount.percentage) / 100;
+          // this.tax.price = ((newValue - this.discount.price) * this.tax.percentage) / 100;
         }
       },
-      defaultDiscount(newVal) {
-        this.init();
-      },
-      defaultTax(newVal) {
-        this.init();
-      },
-      bundleDiscount(newVal) {
-        this.init();
-      }
     },
     created() {
-      this.init();
+      if ( this.field === "discount" ) {
+        this.discount = JSON.parse(JSON.stringify(this.defaultDiscount));
+        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount));
+      } else if ( this.field === "negotiation" ) {
+        this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation));
+        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation));
+      } else if ( this.field === "tax" ) {
+        this.discount = JSON.parse(JSON.stringify(this.defaultTax));
+        this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax));
+      }
     },
     methods: {
-      init() {
-        if ( this.field === "discount" ) {
-          this.discount = JSON.parse(JSON.stringify(this.defaultDiscount));
-          this.editingDiscount = JSON.parse(JSON.stringify(this.defaultDiscount));
-        } else if ( this.field === "negotiation" ) {
-          this.discount = JSON.parse(JSON.stringify(this.defaultNegotiation));
-          this.editingDiscount = JSON.parse(JSON.stringify(this.defaultNegotiation));
-        } else if ( this.field === "tax" ) {
-          this.discount = JSON.parse(JSON.stringify(this.defaultTax));
-          this.editingDiscount = JSON.parse(JSON.stringify(this.defaultTax));
-        }
-      },
       toggleEditMode() {
         this.isEditing = !this.isEditing;
       },
@@ -196,19 +175,25 @@ export default {
         }
         if (this.field === "negotiation") {
           this.editingDiscount.percentage = value;
-          this.editingDiscount.price = ((this.sumOfPrices - this.bundleDiscounted)  * (value / 100)).toFixed(2);
+          this.editingDiscount.price = ((this.sumOfPrices - this.defaultDiscount.price)  * (value / 100)).toFixed(2);
         } else if (this.field === "tax") {
           this.editingDiscount.percentage = value;
-          this.editingDiscount.price = (this.negotiated * (value / 100)).toFixed(2);
+          this.editingDiscount.price = (
+            (
+              this.sumOfPrices -
+              this.defaultDiscount.price -
+              (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0)
+          ) * (value / 100)).toFixed(2);
         }
       },
       setPriceRange(val) {
         if (this.field === "discount") {
           this.editingDiscount.percentage = ((val / this.sumOfPrices) * 100).toFixed(2);
         } else if (this.field === "negotiation") {
-          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.bundleDiscounted)) * 100).toFixed(2);
+          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price)) * 100).toFixed(2);
         } else if (this.field === "tax") {
-          this.editingDiscount.percentage = (val / this.negotiated * 100).toFixed(2);
+          this.editingDiscount.percentage = ((val / (this.sumOfPrices - this.defaultDiscount.price -
+            (this.defaultNegotiation && this.defaultNegotiation.isApplied ? this.defaultNegotiation.price : 0))) * 100).toFixed(2);
         }
       },
     },

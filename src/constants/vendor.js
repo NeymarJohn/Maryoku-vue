@@ -2,62 +2,62 @@ export const VendorCategories = [
   {
     name: "Venue Rental",
     value: "venuerental",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /venuerental.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Path 11323.svg"
   },
   {
     name: "Food & Beverage",
     value: "foodandbeverage",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /foodandbeverage.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 19221.svg"
   },
   {
     name: "Design and Decor",
     value: "decor",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /decor.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Path 15037.svg"
   },
   {
     name: "Guest Services & Staffing",
     value: "administration",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /administration.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Guest services & Staffing (White).svg"
   },
   {
     name: "Signage / Printing",
     value: "signageprinting",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /signageprinting.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29313.svg"
   },
   {
     name: "AV / Staging",
     value: "audiovisualstagingservices",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /audiovisualstagingservices.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29316.svg"
   },
   {
     name: "Giveaways",
     value: "giveaways",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /giveaways.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 1734.svg"
   },
   {
     name: "Transportation & Tour operator",
     value: "transportation",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /transportation.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29304.svg"
   },
   {
     name: "Entertainment",
     value: "entertainment",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /entertainment.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29303.svg"
   },
   {
     name: "Security",
     value: "securityservices",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /security.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29238.svg"
   },
   {
     name: "Videography and Photography",
     value: "videographyandphotography",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /videographyandphotography.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Videography and Photography (White).svg"
   },
   {
     name: "Equipment Rentals",
     value: "equipmentrentals",
-    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /equipmentrentals.svg"
+    icon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Services /Group 29314.svg"
   }
 ];
 export const businessCategories = [
@@ -4062,15 +4062,15 @@ export const VendorPricingPolicy = [
           label: "Late Night Fee"
         }
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   hideOnProposal: true,
-      //   type: "Number",
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        hideOnProposal: true,
+        type: "Number",
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4129,15 +4129,15 @@ export const VendorPricingPolicy = [
           label: "Breakdown"
         }
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "Number",
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "Number",
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4165,18 +4165,18 @@ export const VendorPricingPolicy = [
         type: "Number",
         hasComment: true
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "DiscountForLarge",
-      //   labelForAttendees: "How many",
-      //   labelForValue: "Rate",
-      //   isSelected: false,
-      //   value: 0,
-      //   attendees: null,
-      //   hasComment: true,
-      //   hideOnProposal: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "DiscountForLarge",
+        labelForAttendees: "How many",
+        labelForValue: "Rate",
+        isSelected: false,
+        value: 0,
+        attendees: null,
+        hasComment: true,
+        hideOnProposal: true,
+        unit: "%"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4216,15 +4216,15 @@ export const VendorPricingPolicy = [
         type: "Number",
         hasComment: true
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "Number",
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "Number",
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4252,15 +4252,15 @@ export const VendorPricingPolicy = [
         type: "Number",
         hasComment: true
       },
-      // {
-      //   name: "Discount for large quantities",
-      //   type: "Number",
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   attendees: null,
-      //   labelForValue: "How much"
-      // },
+      {
+        name: "Discount for large quantities",
+        type: "Number",
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+        labelForValue: "How much"
+      },
       {
         name: "Tax rate",
         type: "Number",
@@ -4333,18 +4333,18 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4376,13 +4376,13 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Discounts",
-      //   type: "Number",
-      //   isPercentage: true,
-      //   hasComment: true,
-      //   hideOnProposal: true
-      // },
+      {
+        name: "Discounts",
+        type: "Number",
+        isPercentage: true,
+        hasComment: true,
+        hideOnProposal: true
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4454,18 +4454,18 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Road tolls",
         hasComment: true,
@@ -4573,18 +4573,18 @@ export const VendorPricingPolicy = [
         hideOnProposal: true,
         isPercentage: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4606,18 +4606,18 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true
       },
-      // {
-      //   name: "Large group discounts",
-      //   type: "GroupDiscount",
-      //   labelForGroupSize: "How many",
-      //   labelForValue: "Discount",
-      //   isSelected: false,
-      //   value: 0,
-      //   groupSize: null,
-      //   hideOnProposal: true,
-      //   isPercentage: true,
-      //   unit: "%"
-      // },
+      {
+        name: "Large group discounts",
+        type: "GroupDiscount",
+        labelForGroupSize: "How many",
+        labelForValue: "Discount",
+        isSelected: false,
+        value: 0,
+        groupSize: null,
+        hideOnProposal: true,
+        isPercentage: true,
+        unit: "%"
+      },
       {
         name: "Suggested Gratuity",
         type: "Number",
@@ -4718,7 +4718,7 @@ export const categoryNameWithIcons = [
   {
     name: "giveaways",
     value: "giveaways",
-    icon: "giveaways.svg"
+    icon: "swags.svg"
   },
   // {
   //   name: 'Shipping',
@@ -4738,7 +4738,7 @@ export const categoryNameWithIcons = [
   {
     name: "Security",
     value: "securityservices",
-    icon: "security.svg"
+    icon: "securityservices.svg"
   },
   {
     name: "Videography and Photography",

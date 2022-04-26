@@ -1,76 +1,80 @@
 <template>
-  <div v-if="campaignData" class="campaign-save-date">
-    <div
-      v-if="campaignData.campaignStatus != 'STARTED'"
-      class="font-size-30 font-bold-extra text-transform-capitalize p-50"
-    >
-      let's start with a "save the date"
-    </div>
-    <div class="concept-image-block-wrapper">
-      <change-cover-button v-show="showChangeCover" @click="handleChangeCoverImage" />
-      <img v-if="coverImage" :src="coverImage" class="cover-image">
-      <div v-else class="d-flex justify-content-center align-center">
-        <concept-image-block
-          class="change-cover-concept"
-          :images="concept.images"
-          :colors="concept.colors"
-          border="no-border"
+  <div class="campaign-save-date">
+    <loader :active="!campaignData" />
+    <div v-if="campaignData" class>
+      <div
+        v-if="campaignData.campaignStatus != 'STARTED'"
+        class="font-size-30 font-bold-extra text-transform-capitalize p-50"
+      >
+        let's start with a "save the date"
+      </div>
+      <div class="concept-image-block-wrapper">
+        <div v-show="showChangeCover" class="change-cover-feedback" @click="handleChangeCoverImage">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn">
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
+            Change Cover
+          </md-button>
+        </div>
+        <img v-if="coverImage" :src="coverImage" class="cover-image">
+        <div v-else class="d-flex justify-content-center align-center">
+          <concept-image-block
+            class="change-cover-concept"
+            :images="concept.images"
+            :colors="concept.colors"
+            border="no-border"
+          />
+        </div>
+      </div>
+      <div class="concept p-50">
+        <span class="font-size-30 font-bold">Save The Date</span>
+        <span class="font-size-22 ml-10">{{
+          $dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")
+        }}</span>
+        <title-editor
+          :key="campaignTitle"
+          class="mt-40 font-size-60"
+          :default-value="campaignTitle"
+          @change="handleChangeCampaignTitle"
         />
       </div>
-    </div>
-
-    <div class="concept p-50">
-      <span class="font-size-30 font-bold">Save The Date</span>
-      <span class="font-size-22 ml-10">{{
-        $dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")
-      }}</span>
-      <title-editor
-        :key="campaignTitle"
-        class="mt-40 font-size-60"
-        :default-value="campaignTitle"
-        @change="handleChangeCampaignTitle"
-      />
-    </div>
-    <div class="p-50 comment">
-      <maryoku-textarea
-        :value="campaignDescription"
-        :placeholder="placeHolder"
-        @input="handleChangeCampaignDescription"
-      />
-    </div>
-    <div class="p-50 text-center">
-      <div class="font-size-22 mb-50">
-        MORE DETAILS COMING SOON
-      </div>
-      <div class="d-flex align-center justify-content-center">
-        <campaign-logo
-          class="d-flex justify-content-center"
-          :logo-url="campaignLogoUrl"
-          :show-logo="campaignVisibleSettings.showLogo"
-          @change-logo="handleChangeCampaignLogo"
-          @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
+      <div class="p-50 comment">
+        <maryoku-textarea
+          :value="campaignDescription"
+          :placeholder="placeHolder"
+          @input="handleChangeCampaignDescription"
         />
+      </div>
+      <div class="p-50 text-center">
+        <div class="font-size-22 mb-50">
+          MORE DETAILS COMING SOON
+        </div>
+        <div class="d-flex align-center justify-content-center">
+          <campaign-logo
+            class="d-flex justify-content-center"
+            :logo-url="campaignLogoUrl"
+            :show-logo="campaignVisibleSettings.showLogo"
+            @change-logo="handleChangeCampaignLogo"
+            @change-show-logo="handleChangeCampaignVisibleSettings('showLogo', $event)"
+          />
+        </div>
       </div>
     </div>
   </div>
-  <loader v-else :active="!campaignData" />
 </template>
 <script>
 // core
 import Swal from "sweetalert2";
 
 // components
-import { Loader }        from "@/components";
+import { Loader } from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
-import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
-import ChangeCoverButton from "@/components/Button/ChangeCover";
-import TitleEditor       from "./components/TitleEditor";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import TitleEditor from "./components/TitleEditor";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
-import CampaignLogo  from "@/pages/app/Campaign/components/CampaignLogo";
-
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
 const placeHolder =
@@ -82,27 +86,25 @@ export default {
     MaryokuTextarea,
     TitleEditor,
     Loader,
-    ChangeCoverButton,
   },
   props: {
     info: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => {},
     },
-    showChangeCover: {
-      type    : Boolean,
-      default : () => false
-    },
+    showChangeCover: Boolean,
     defaultData: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => {},
     },
   },
-  data: () => ({
-    logo          : null,
-    logoImageData : "",
-    placeHolder   : placeHolder,
-  }),
+  data: function () {
+    return {
+      logo: null,
+      logoImageData: "",
+      placeHolder: placeHolder,
+    };
+  },
   computed: {
     event() {
       return this.$store.state.event.eventData;

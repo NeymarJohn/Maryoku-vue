@@ -163,7 +163,6 @@ export default {
         if (!this.services) this.services = [];
         this.services.push(serviceItem);
         this.services = Object.assign([], this.services);
-      this.$emit("checkIfUnchecked");
     },
   }
 };

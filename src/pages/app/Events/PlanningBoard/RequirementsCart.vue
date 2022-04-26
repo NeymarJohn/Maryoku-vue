@@ -65,10 +65,6 @@
           </vsa-content>
         </vsa-item>
       </vsa-list>
-
-      <div class="d-flex justify-content-end">
-        <md-button class="md-red maryoku-btn mt-30 mr-30 ml-auto" @click="askProposals">Ask Proposals Now</md-button>
-      </div>
     </div>
   </div>
 </template>
@@ -131,14 +127,10 @@ export default {
     },
   },
   created() {
-    console.log('requirement.cart', this.requirements);
   },
   methods: {
     close() {
       this.$emit("close");
-    },
-    askProposals(){
-      this.$emit('ask');
     },
     removeSelectedType(type) {
       console.log(type);

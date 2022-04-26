@@ -142,7 +142,7 @@ export default {
       bankDetails: {
         date: "",
         accountNumber: "",
-        address: {},
+        address: "",
         holderName: "",
         branch: "",
         routingNumber: "",
@@ -161,6 +161,8 @@ export default {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
     this.bankDetails = {...this.bankDetails, date: new Date("01/01/1990"),
       ...JSON.parse(localStorage.bankDetails)};
+    this.vendorId = this.$store.state.vendor.profile.id;
+    this.profileId = this.$store.state.auth.user.id;
 
   },
   methods: {

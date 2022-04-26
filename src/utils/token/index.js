@@ -36,17 +36,3 @@ export const postReq = (endpoint, data) => {
   }
   return axios(postRequest);
 };
-export const updateReq = (endpoint, data) => {
-  const updateRequest = {
-    method: "put",
-    url: `${process.env.SERVER_URL}${endpoint}`,
-    data
-  };
-  if (
-    window.localStorage.getItem("manage_id_token") &&
-    window.localStorage.getItem("manage_id_token") !== "undefined"
-  ) {
-    updateRequest["headers"] = { Authorization: `Bearer ${window.localStorage.getItem("manage_id_token")}` };
-  }
-  return axios(updateRequest);
-};

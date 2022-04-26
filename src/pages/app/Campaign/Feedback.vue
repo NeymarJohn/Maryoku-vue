@@ -14,15 +14,11 @@
             border="no-border"
           />
         </div>
-        <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
-        <div class="change-cover-feedback">
-          <md-button
-            id="ChangeCoverImage"
-            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
-            @click="handleChangeCoverImage"
-          >
+        <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10" />
+        <div v-if="concept" class="change-cover-feedback">
+          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
-            Change Cover
+            Change Campaign Cover
           </md-button>
         </div>
         <div class="view-event-photos">
@@ -158,7 +154,7 @@
         :show-images-details="true"
         @addImage="addNewImage"
       />
-      <div v-else class="feedback-campaign-drop-zone-upload-images">
+      <div v-else class="feedback-campaign-drop-zone-upload-images" >
         <div class="wrapper-drop-zone">
           <vue-dropzone
             id="dropzone"
@@ -187,7 +183,12 @@
     <div class="green-block-wrapper">
       <div class="p-50 d-flex">
         <div>
-          <title-share-photo-event />
+          <div class="icon-and-text">
+            <img class="left-icon" src="/static/icons/green-block-icon-1.svg">
+            <div class="right-text-style">
+              share with us photos you took from the event
+            </div>
+          </div>
           <div class="d-flex align-center font-bold ml-60">
             Allow guests to upload photos from the event
             <md-switch
@@ -195,7 +196,8 @@
               class="feedback-btn-switch section below-label large-switch md-switch-rose switch-button-style"
               @input="handleChangeCampaignVisibleSettings('allowUploadPhoto', $event)"
             >
-              <span>{{ campaignVisibleSettings.allowUploadPhoto ? "Hide" : "Show" }}</span>
+              <span v-if="campaignVisibleSettings.allowUploadPhoto">Hide</span>
+              <span v-if="!campaignVisibleSettings.allowUploadPhoto">Show</span>
             </md-switch>
           </div>
         </div>
@@ -232,29 +234,20 @@
   </div>
 </template>
 <script>
-// core
-import { mapActions }   from "vuex";
-import vue2Dropzone     from "vue2-dropzone";
-import { v4 as uuidv4 } from "uuid";
-
-// componets
-// global
-import MaryokuTextarea       from "@/components/Inputs/MaryokuTextarea";
-import HideSwitch            from "@/components/HideSwitch";
-import ConceptImageBlock     from "@/components/ConceptImageBlock";
-import TitleSharePhotoEvent  from "@/components/Title/SharePhotoEvent";
-// local
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
-import SharingButtonGroup    from "./components/SharingButtonGroup";
-import FeedbackQuestion      from "./components/FeedbackQuestion";
-import CustomTitleEditor     from "./components/CustomTitleEditor";
-
-// pages
-import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
+import SharingButtonGroup from "./components/SharingButtonGroup";
+import FeedbackQuestion from "./components/FeedbackQuestion";
+import HideSwitch from "@/components/HideSwitch";
+import Swal from "sweetalert2";
 import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
-
-// dependencies
+import CustomTitleEditor from "./components/CustomTitleEditor";
+import ConceptImageBlock from "@/components/ConceptImageBlock";
+import { mapActions } from "vuex";
+import CampaignLogo from "@/pages/app/Campaign/components/CampaignLogo";
+import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: {
@@ -268,32 +261,33 @@ export default {
     CustomTitleEditor,
     vueDropzone: vue2Dropzone,
     ConceptImageBlock,
-    TitleSharePhotoEvent,
   },
   props: {
     info: {
-      type    : Object,
-      default : () => ({}),
+      type: Object,
+      default: () => ({}),
     },
   },
-  data: () => ({
-    concept              : {},
-    feedbackQuestions    : [],
-    placeHolder          : "",
-    newQuestion          : "",
-    newQuestionLabel     : "",
-    isEditingNewQuestion : false,
-    isUploadedFiles      : false,
-    showModalWindowOpen  : false,
-    dropzoneOptions: {
-      url: "https://httpbin.org/post",
-      maxFilesize: 25,
-      createImageThumbnails: false,
-      uploadMultiple: true,
-      acceptedFiles: "image/*",
-      headers: { "My-Awesome-Header": "header value" },
-    },
-  }),
+  data() {
+    return {
+      placeHolder: "",
+      concept: {},
+      feedbackQuestions: [],
+      isEditingNewQuestion: false,
+      newQuestion: "",
+      newQuestionLabel : "",
+      isUploadedFiles: false,
+      showModalWindowOpen : false,
+      dropzoneOptions: {
+        url: "https://httpbin.org/post",
+        maxFilesize: 25,
+        createImageThumbnails: false,
+        uploadMultiple: true,
+        acceptedFiles: "image/*",
+        headers: { "My-Awesome-Header": "header value" },
+      },
+    };
+  },
   computed: {
     event() {
       return this.$store.state.event.eventData || {};
@@ -314,13 +308,14 @@ export default {
       return this.campaignData.title || (this.event.title || "");
     },
     campaignVisibleSettings() {
+      const visibleSettings = this.campaignData.visibleSettings || {};
       return {
-        showImages        : true,
-        showLogo          : true,
-        showFeedback      : true,
-        allowUploadPhoto  : true,
-        showSharingOption : true,
-        ...(this.campaignData.visibleSettings || {}),
+        showImages: true,
+        showLogo: true,
+        showFeedback: true,
+        allowUploadPhoto: true,
+        showSharingOption: true,
+        ...visibleSettings,
       };
     },
     campaignDescription() {
@@ -347,49 +342,67 @@ export default {
     },
   },
   created() {
-    this.placeHolder = (`
+    this.placeHolder = `
       Thanks for attending this recent event – we hope you had a wonderful, productive experience!
       Your feedback is important to help us understand what worked especially well, on top of
       anything you feel could be improved in the future.
-    `).trim().replace(/  /g, "");
-
+    `;
     this.concept = this.event.concept;
+    this.placeHolder = this.placeHolder.trim();
+    // this.comment = this.placeHolder.trim().replace(/  /g, '');
+    this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
     this.feedbackQuestions = [
       {
-        label        : "Rate your overall experience",
-        question     : "How was the event?",
-        showQuestion : true,
-        rank         : 0,
-        icon         : "",
+        label: "Rate your overall experience",
+        question: "How was the event?",
+        showQuestion: true,
+        rank: 0,
+        icon: "",
       },
     ];
     this.event.components
-    .sort((a, b) => a.order - b.order)
-    .forEach(({ eventCategory }) => {
-      if (eventCategory.type == "service") {
-        const { fullTitle, icon } = eventCategory;
-        this.feedbackQuestions.push({
-          question     : `How Was The ${fullTitle}?`,
-          showQuestion : true,
-          rank         : 0,
-          icon,
-          label,
-        });
-      }
+      .sort((a, b) => {
+        return a.order - b.order;
+      })
+      .forEach((service) => {
+        if (service.eventCategory.type == "service") {
+          this.feedbackQuestions.push({
+            question: `How Was The ${service.eventCategory.fullTitle}?`,
+            showQuestion: true,
+            rank: 0,
+            icon: service.eventCategory.icon,
+            label: service.eventCategory.fullTitle,
+          });
+        }
+      });
+    this.$store.commit("campaign/setAttribute", {
+      name: "FEEDBACK",
+      key: "feedbackQuestions",
+      value: this.feedbackQuestions,
     });
-
-    this.setFeedbackAttribute("feedbackQuestions", this.feedbackQuestions);
-    if (!this.campaignData.additionalData) this.setFeedbackAttribute("additionalData", this.additionalData);
+    if (!this.campaignData.additionalData) {
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "additionalData",
+        value: this.additionalData,
+      });
+    }
   },
   methods: {
     ...mapActions("campaign", ["saveCampaign"]),
-    setFeedbackAttribute (key, value) {
-      return this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key, value });
-    },
     addNewImage(image) {
       const images = this.campaignData.images;
       images.unshift({ src: image.imageString });
-      return this.setFeedbackAttribute("images", images);
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
+    },
+    async uploadFileDropZone(file) {
+      const extension = file.type.split("/")[1];
+      const fileName = uuidv4();
+      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((src) => {
+        const images = this.campaignImages;
+        images.unshift({ src });
+        this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
+      });
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
@@ -399,79 +412,84 @@ export default {
     },
     addNewQuestion() {
       const newQuestion = {
-        icon         : "",
-        label        : this.newQuestionLabel,
-        question     : this.newQuestion,
-        rank         : 0,
-        showQuestion : true,
+        icon: "",
+        label: this.newQuestionLabel,
+        question: this.newQuestion,
+        rank: 0,
+        showQuestion: true,
       };
       this.feedbackQuestions.push(newQuestion);
       this.newQuestion = "";
       this.isEditingNewQuestion = false;
     },
     openModalWindow(){
-      this.showModalWindowOpen = true;
+        this.showModalWindowOpen = true;
     },
     closeModalWindow(){
-      this.showModalWindowOpen = false;
+        this.showModalWindowOpen = false;
     },
     handleChangeAdditionalData(sectionName, key, value) {
       this.additionalData[sectionName][key] = value;
       this.$store.commit("campaign/setAttribute", {
-        name  : "FEEDBACK",
-        key   : "additionalData",
-        value : this.additionalData
+        name: "FEEDBACK",
+        key: "additionalData",
+        value: this.additionalData
       });
     },
-    handleChangeCoverImage(event) {
+    uploadFiles(files) {
+      const attachments = files.map(({ status, ...file }) => file);
+      this.saveCampaign({ id: this.campaignData.id, attachments }).then(() => {
+        this.$store.commit("campaign/setAttribute", {
+          name: "FEEDBACK",
+          key: "attachments",
+          value: files
+        });
+      });
+    },
+    handleChangeCoverImage() {
       this.$emit("change-cover-image", event);
     },
     handleChangeCampaignTitle(value) {
-      return this.setFeedbackAttribute("title", value);
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "title",
+        value,
+      });
     },
     handleChangeCampaignDescription(value) {
-      return this.setFeedbackAttribute("description", value);
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "description",
+        value,
+      });
     },
     handleChangeCampaignVisibleSettings(key, value) {
-      return this.setFeedbackAttribute("visibleSettings", { ...this.campaignVisibleSettings, [key]: value });
+      this.$store.commit("campaign/setAttribute", {
+        name: "FEEDBACK",
+        key: "visibleSettings",
+        value: { ...this.campaignVisibleSettings, [key]: value },
+      });
     },
     handleChangeCampaignLogo(file) {
       this.$emit("change-logo", file);
     },
-    async uploadFiles(files) {
-      const attachments = files.map(({ status, ...file }) => file);
-      await this.saveCampaign({ id: this.campaignData.id, attachments });
-      return this.setFeedbackAttribute("attachments", files);
-    },
-
-    makeFileSrc (file) {
+    onFileChangeCoverImage(event) {
+      const file = event.target.files[0];
       const extension = file.type.split("/")[1];
-      const fileName  = uuidv4();
-      return `${fileName}.${extension}`;
-    },
-    fileUpload (file) {
-      return S3Service.fileUpload(file, this.makeFileSrc(file), `event/${this.event.id}`);
-    },
-    async uploadFileDropZone(file) {
-      const src       = await this.fileUpload(file);
-      const images    = this.campaignImages;
-      images.unshift({ src });
-      return this.setFeedbackAttribute("images", images);
-    },
-    async onFileChangeCoverImage(event) {
-      const coverImage = await this.fileUpload(event.target.files[0]);
-      this.setFeedbackAttribute("coverImage", coverImage);
-      return this.saveCampaign({ id: this.campaignData.id, coverImage });
+      const fileName = uuidv4();
+      S3Service.fileUpload(file, `${fileName}.${extension}`, `event/${this.event.id}`).then((coverImage) => {
+        this.$store.commit("campaign/setAttribute", {
+          name: "FEEDBACK",
+          key: "coverImage",
+          value: coverImage,
+        });
+        this.saveCampaign({ id: this.campaignData.id, coverImage });
+      });
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-@mixin box ($size) {
-  height : $size;
-  width  : $size;
-}
-
 .feedback-campaign {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 }
@@ -513,7 +531,8 @@ export default {
       justify-content: flex-end;
 
       img.icon-play {
-        @include box(77px);
+        width: 77px;
+        height: 77px;
       }
     }
 
@@ -538,28 +557,31 @@ export default {
         align-items: center;
 
         .icon-microsoft {
-          @include box(45px);
+          width: 45px;
+          height: 45px;
           display: flex;
           justify-content: space-around;
           flex-wrap: wrap;
 
           .block {
-            @include box(20px);
-            &1 {
-              background: #f25022;
-            }
+            width: 20px;
+            height: 20px;
+          }
 
-            &2 {
-              background: #7fba00;
-            }
+          .block1 {
+            background: #f25022;
+          }
 
-            &3 {
-              background: #00a4ef;
-            }
+          .block2 {
+            background: #7fba00;
+          }
 
-            &4 {
-              background: #ffb600;
-            }
+          .block3 {
+            background: #00a4ef;
+          }
+
+          .block4 {
+            background: #ffb600;
           }
         }
 
@@ -599,6 +621,24 @@ export default {
 .green-block-wrapper{
   background-color: rgba(87, 242, 195, 0.23);
 }
+.right-text-style{
+  text-transform: uppercase;
+  font-size: 22px;
+  font-weight: 800;
+  height: 82px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+}
+.icon-and-text{
+  display: flex;
+  align-items: start;
+}
+.left-icon{
+  margin-right: 20px;
+}
 .switch-button-style{
   margin-top: 25px;
   margin-left: 15px;
@@ -616,7 +656,8 @@ export default {
     justify-content: flex-end;
 
     .icon-edit-dark {
-      @include box(24px);
+      width: 24px;
+      height: 24px;
       align-self: flex-end;
       margin-left: 15px;
     }
@@ -628,10 +669,12 @@ export default {
 .feedback-campaign-carousel {
 
   .icon-pictures {
-    @include box(57px);
+    width: 57px;
+    height: 57px;
     position: relative;
     border-radius: 50%;
     background: #ffc001;
+
     .icon-book {
       width: 43px;
       height: 48px;
@@ -659,7 +702,8 @@ export default {
   align-items: center;
 
   .wrapper-drop-zone {
-    @include box(100%);
+    width: 100%;
+    height: 100%;
     background-color: white;
     border: 1px dashed #818080;
 
@@ -680,12 +724,12 @@ export default {
 
       .drag-your-file-text{
         font-size: 16px;
-        font-weight    : normal;
-        font-stretch   : normal;
-        font-style     : normal;
-        line-height    : normal;
-        letter-spacing : normal;
-        text-align     : center;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
         color: #818080;
       }
     }
@@ -695,6 +739,7 @@ export default {
     height: 172px;
     border-top: dashed 1px #818080;
     border-bottom: dashed 2px #818080;
+
 }
 .add-button-style{
     width: 87.6px;
@@ -743,7 +788,8 @@ export default {
     margin-left: 10px;
 }
 .icon-edit-dark {
-    @include box(24px);
+    width: 24px;
+    height: 24px;
     align-self: flex-end;
     margin-left: 20px;
     &:hover{
@@ -754,7 +800,8 @@ export default {
 .wrapper-thanks-for-participating{
     display: flex;
     .icon-edit-dark {
-        @include box(24px);
+        width: 24px;
+        height: 24px;
         align-self: center;
         margin-left: 20px;
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card p-40 customer-form-vendor-proposal">
+  <div class="white-card p-40">
     <Loader :active="isLoading" is-full-screen page="vendor" />
     <div class="font-size-30 font-bold">
       Tell us a little bit about the event
@@ -150,7 +150,6 @@ import Customer from "@/models/Customer";
 import UserEvent from "@/models/UserEvent";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
-import state from "../VendorDashboard/state";
 
 const components = {
     Loader: () => import("@/components/loader/Loader.vue"),
@@ -234,7 +233,7 @@ export default {
     },
     numberOfParticipants: {
       get() {
-        return this.$store.state.proposalForNonMaryoku.eventData.numberOfParticipants || "";
+        return this.$store.state.proposalForNonMaryoku.eventData.numberOfParticipants;
       },
       set(value) {
         this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "numberOfParticipants", value });
@@ -257,7 +256,7 @@ export default {
         else return { start: "am", end: "am" };
     },
     customers() {
-        return this.$store.state.vendorDashboard.customers;
+        return this.$store.state.customer.customers;
     },
   },
   watch: {
@@ -269,21 +268,15 @@ export default {
     eventData(newVal){this.setEventTime();}
   },
   async created() {
-    if (!this.$store.state.vendorDashboard) {
-      this.$store.registerModule("vendorDashboard", state);
-    }
     const vendorId = this.$route.params.vendorId;
 
     const payload = {
-      vendorId: vendorId,
-      params: {
-        "status": -1,
-        "sort": "",
-        "order": "",
-        "customerType": 0
-      }
+        vendorId: vendorId,
+        params: {
+            status: 0,
+        }
     };
-    await this.$store.dispatch("vendorDashboard/getCustomers", payload);
+    await this.$store.dispatch("customer/getCustomers", payload);
     await this.$store.dispatch("common/getEventTypes");
 
     this.setEventTime();
