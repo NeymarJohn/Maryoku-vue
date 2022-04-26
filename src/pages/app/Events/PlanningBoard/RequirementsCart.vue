@@ -131,6 +131,7 @@ export default {
     },
   },
   created() {
+    console.log('requirement.cart', this.requirements);
   },
   methods: {
     close() {
@@ -140,6 +141,7 @@ export default {
       this.$emit('ask');
     },
     removeSelectedType(type) {
+      console.log(type);
     },
   },
 };
