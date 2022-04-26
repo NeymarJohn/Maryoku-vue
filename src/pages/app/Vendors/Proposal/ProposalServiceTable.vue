@@ -3,7 +3,7 @@
     <div class="editable-sub-items-cont">
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
-        :key="req.requirementTitle"
+        :key="req.requirementTitle + rIndex"
         :service-type="tableCategory"
         :index="rIndex"
         :default-item="req"

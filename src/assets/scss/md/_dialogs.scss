@@ -11,6 +11,11 @@
   align-items: center;
   transition: opacity .15s ease;
 }
+.customer-form-vendor-proposal{
+  .modal-mask{
+    height: 100%;
+  }
+}
 .non-vendor-add-more-time-popup-modal {
   .swal2-popup{
     .swal2-header {

@@ -655,7 +655,6 @@
         font-family: 'Manrope-bold';
         font-size: 16px;
         font-weight: 800;
-        cursor: pointer;
       }
     }
     .disabled {

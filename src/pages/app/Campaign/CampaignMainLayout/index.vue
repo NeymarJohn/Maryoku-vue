@@ -478,7 +478,7 @@
                   @click="startCampaign"
                 >
                   <Icon src="Campaign/group-2428.svg">
-                    Send Now
+                    Send Now 1111
                   </Icon>
                 </md-menu-item>
               </md-menu-content>
@@ -609,25 +609,20 @@ export default {
   computed: {
     ...mapGetters("campaign", ["campaignIssued"]),
     event() {
-      return this.$store.state.event.eventData;
+      return this.$store.state.event.eventData || {};
     },
     user() {
       return this.$store.state.auth.user;
     },
     currentCampaignType () {
-      return this.campaignTabs[this.selectedTab].name;
+      return this.campaignTabs[this.selectedTab].name || "";
     },
     currentCampaign() {
-      return this.$store.state.campaign[this.currentCampaignType];
+      return this.$store.state.campaign[this.currentCampaignType] || {};
     },
     canSchedule() {
-      return (
-        this.currentCampaign.settings.email.selected &&
-        this.currentCampaign.settings.email.status !== "sent"
-      ) || (
-        this.currentCampaign.settings.phone.selected &&
-        this.currentCampaign.settings.phone.status !== "sent"
-      );
+      const { email = {}, phone = {}} = this.currentCampaign.settings;
+      return (email.selected && email.status !== "sent") || (phone.selected && phone.status !== "sent");
     },
     isScheduled() {
       if (!this.currentCampaign) return false;
@@ -672,9 +667,6 @@ export default {
     setConceptName () {
       return this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
     },
-    setDeliverySettings (value) {
-      return this.deliverySettings = value;
-    },
     showChangeCoverImageModal() {
       return this.showChangeCoverModal = !this.showChangeCoverModal;
     },
@@ -683,9 +675,9 @@ export default {
     },
     chooseImage(url) {
       this.setAttribute({
-        name: this.currentCampaignType,
-        key: "coverImage",
-        value: url
+        name  : this.currentCampaignType,
+        key   : "coverImage",
+        value : url
       });
       this.close();
     },
@@ -697,10 +689,9 @@ export default {
       this.setDefaultSettings();
     },
     setDefaultSettings() {
-      return this.deliverySettings = Object.create(
-        this.currentCampaign && objectIsNoEmpty(this.currentCampaign.settings)
-          ? this.currentCampaign.settings : defaultSettings
-      );
+        this.deliverySettings = this.currentCampaign && this.currentCampaign.settings && Object.keys(this.currentCampaign.settings).length > 0
+          ? { ...this.currentCampaign.settings }
+          : { ...defaultSettings } ;
     },
     exportToPdf() {
       this.$refs.html2Pdf.generatePdf();
@@ -715,6 +706,8 @@ export default {
         confirmButtonClass : "md-button md-success",
         title,
       });
+
+      console.log("deliverySettings", { ...this.deliverySettings });
 
       if (this.deliverySettings) {
         const { email = {}, phone = {} } = this.deliverySettings;
@@ -742,7 +735,8 @@ export default {
       this.campaignInfo[data.field] = data.value;
     },
     changeSettings(data) {
-      this.deliverySettings = data;
+      if (data && objectIsNoEmpty(data)) this.deliverySettings = Object.assign(defaultSettings, data);
+      else this.deliverySettings = { ...defaultSettings };
     },
     saveDraftCampaign(campaignStatus = "SAVED") {
       return this.callSaveCampaign(this.currentCampaignType, campaignStatus);
@@ -805,7 +799,7 @@ export default {
       this.scheduleCampaign();
     },
     revertSetting() {
-      this.deliverySettings = Object.assign(Object.create(null), defaultSettings);
+      this.deliverySettings = { ...defaultSettings };
       switch (this.selectedTab) {
         case 1: return this.$refs.savedateCampaign.setDefault();
         case 2: return this.$refs.rsvp.setDefault();

@@ -305,11 +305,13 @@ export default {
         if (category.name !== "accessibility") {
           category.subCategories.forEach(subCat => {
             if (
+              subCat.name && (
               subCat.name.toLowerCase() === "inclusion" ||
               subCat.name.toLowerCase() === "sustainability" ||
-              subCat.name.toLowerCase() === "diversity"
+              subCat.name.toLowerCase() === "diversity")
             )
               return;
+            if (!subCat.items) return;
             subCat.items.forEach(item => {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);

@@ -407,10 +407,18 @@ export default {
       }
     },
     async getMessage(e){
-      if(e.target.value.includes("@")){
-        let queryArray = e.target.value.split("@");
+      // if(e.data == "@") {
+      //   console.log("I am @");
+      // }else {
+      //   console.log("Not");
+      // }
+      if(e.data === "@"){
+      // if(e.target.value.includes("@")){
+        let userId = this.$store.state.auth.user.id;
+        let proposalId = this.$route.params.proposalId;
+        // let queryArray = e.target.value.split("@");
 
-        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
+        let res = await getReq(`/1/searchCustomer?proposalId=${proposalId}&userId=${userId}`);
         this.customers = res.data;
 
         this.showAddress = true;
