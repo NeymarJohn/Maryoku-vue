@@ -2,12 +2,14 @@
   <div class="resizable-toggle-wrapper">
     <button class="resizable-toggle-button" :class="{ clicked: clicked, disabled }" @click="handleClick">
       <template v-if="clicked">
-        <img v-if="selectedIcon" :src="selectedIcon" width="28px">
-        <span class="label-text">{{ label }}</span>
+        <img v-if="selectedIcon" :src="selectedIcon">
+        <md-icon v-else style="color: white">more_horiz</md-icon>
       </template>
       <template v-else>
         <img v-if="icon" :src="icon" :style="iconStyle">
+        <md-icon v-else >more_horiz</md-icon>
       </template>
+      <span class="label-text">{{ label }}</span>
       <span v-if="hasBadge && !clicked" class="badge-mark" />
     </button>
   </div>
@@ -77,7 +79,6 @@ export default {
 .resizable-toggle-wrapper {
   display: inline-block;
   position: relative;
-
   .resizable-toggle-button {
     max-width: 60px;
     height: 60px;

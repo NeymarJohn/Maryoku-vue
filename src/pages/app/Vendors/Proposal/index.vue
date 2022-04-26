@@ -43,7 +43,7 @@
             :is-collapsed="true"
             :is-dropdown="true"
             :proposal-range="true"
-            :img="`${$iconURL}Services /${service.icon}`"
+            :img="`${$iconURL}Budget Elements/${service.icon}`"
             :proposal-request="proposalRequest"
             :service="service"
             @click="selectSecondCategory(service.componentId)"

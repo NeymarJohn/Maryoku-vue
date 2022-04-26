@@ -122,7 +122,6 @@ import S3Service from "@/services/s3.service";
 import state from "./state";
 import { PROPOSAL_STATUS } from "@/constants/status";
 import { MISSING_DETAILS } from "@/constants/proposal";
-import moment from 'moment'
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
@@ -202,9 +201,6 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setWizardStep", newValue);
       },
     },
-    taxes(){
-      return this.$store.state.common.taxes;
-    },
   },
   async mounted() {
     if (this.$store.state.auth.user) {
@@ -226,7 +222,7 @@ export default {
 
     await this.getVendor(this.$route.params.vendorId);
     if (this.$route.params.id) await this.getProposal(this.$route.params.id);
-    if (!this.$store.state.proposalForNonMaryoku.coverImage.length) {
+    if (!this.$store.state.vendorProposal.coverImage.length) {
       this.$store.commit("proposalForNonMaryoku/setValue", {
         key: "coverImage",
         value: this.vendor.images,

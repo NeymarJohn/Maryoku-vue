@@ -38,7 +38,7 @@
         
         <div class="md-layout-item pl-0 md-size-10">
            <md-button
-              class=" md-simple text-decoration-none cursor-pointer close-btn"
+              class=" md-simple text-decoration-none cursor-pointer "
               style=""
 
               @click="hideModal()"
@@ -141,11 +141,8 @@ export default {
   computed: {
     referringServices() {
       return this.event.components.filter(
-        (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected" && !this.additionalServices.includes(item.componentId),
+        (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
       );
-    },
-    additionalServices() {
-      return this.$store.state.vendorProposal.additionalServices;
     },
   },
   watch: {},
@@ -253,7 +250,7 @@ export default {
         font-weight: 600;
         text-transform: capitalize;
         cursor: pointer;
-        text-decoration: none;
+
         i {
           color: #641856;
         }
@@ -262,12 +259,7 @@ export default {
   }
 
   .refer-vendor-modal {
-    .close-btn{
-      top: 20px;
-      right: 0;
-    }
     &__header {
-      min-width: 800px;
       width: 100%;
       padding: 1rem;
       .title-cont {

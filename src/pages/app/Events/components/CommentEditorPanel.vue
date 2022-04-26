@@ -101,8 +101,7 @@
         </div>
       </div>
     </transition>
-    <!-- <div v-if="isOpenCommentListsPane" :class="{mask:isOpenCommentListsPane}" /> -->
-    <div v-if="isOpenCommentListsPane" :class="[isOpenCommentListsPane ? 'mask' : '', stringRoute.includes('vendor/inbox/proposal') ? 'vendorMask' : '']" />
+    <div v-if="isOpenCommentListsPane" :class="{mask:isOpenCommentListsPane}" />
   </div>
   <!-- End Comments List -->
 </template>
@@ -165,8 +164,7 @@ export default {
       showAddress: false,
       customers: [],
       selectedCustomer: null,
-      updatedCommentComponents: updatedCommentComponents,
-      stringRoute: this.$route.path,
+      updatedCommentComponents: updatedCommentComponents
     };
   },
   computed: {
@@ -207,7 +205,6 @@ export default {
       "markAsRead"
     ]),
     selectItem(event, item) {
-      
       item.isEditing = !item.isEditing;
       event.stopPropagation();
     },
@@ -407,18 +404,10 @@ export default {
       }
     },
     async getMessage(e){
-      // if(e.data == "@") {
-      //   console.log("I am @");
-      // }else {
-      //   console.log("Not");
-      // }
-      if(e.data === "@"){
-      // if(e.target.value.includes("@")){
-        let userId = this.$store.state.auth.user.id;
-        let proposalId = this.$route.params.proposalId;
-        // let queryArray = e.target.value.split("@");
+      if(e.target.value.includes("@")){
+        let queryArray = e.target.value.split("@");
 
-        let res = await getReq(`/1/searchCustomer?proposalId=${proposalId}&userId=${userId}`);
+        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
         this.customers = res.data;
 
         this.showAddress = true;
@@ -496,16 +485,6 @@ export default {
   top: 0;
   height: 100vh;
   position: fixed;
-  margin-left: -65px;
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.vendorMask {
-  width: 100vw;
-  top: 0;
-  height: 100vh;
-  position: fixed;
-  margin-left: 0px;
   background-color: rgba(0, 0, 0, 0.08);
 }
 
@@ -594,7 +573,6 @@ export default {
     outline: none;
     border-radius: 2px;
     background: #641856;
-    cursor: pointer;
 
     .md-button-submit-text {
       align-self: center;
@@ -607,6 +585,7 @@ export default {
       letter-spacing: normal;
       text-align: center;
       color: #fff;
+      cursor: pointer;
     }
 
     .md-button-submit-icon {

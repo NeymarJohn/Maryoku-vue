@@ -35,7 +35,6 @@
         icon="Group+10662.svg"
         description="Mandatory elements to involve in proposals are in the table, you can add more here:"
         :vendor-category="service.componentId"
-        @checkIfUnchecked="includeItem(service.componentId, isChecked)"
       />
       <proposal-requirements
         key="included"
@@ -45,7 +44,6 @@
         icon="includedPrice.png"
         description="(from your “included in price” items)"
         :vendor-category="service.componentId"
-        @checkIfUnchecked="includeItem(service.componentId, isChecked)"
       />
       <proposal-requirements
         key="extra"
@@ -55,7 +53,6 @@
         icon="cost-requirements.png"
         description="What elements would you like to suggest to the client with extra pay? "
         :vendor-category="service.componentId"
-        @checkIfUnchecked="includeItem(service.componentId, isChecked)"
       />
       <!-- <proposal-upload-legal></proposal-upload-legal> -->
     </template>
@@ -173,7 +170,12 @@ export default {
         return this.$store.state.vendorProposal.additionalServices;
     },
   },
+  watch: {
+    service(newValue){console.log("proposal.item.secondary.service", newValue);},
+    additionalServices(newVal){console.log("proposal.additional", newVal);}
+  },
   created() {
+    console.log("secondaryService", this.$store.state.vendorProposal);
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
       // if (
@@ -247,10 +249,6 @@ export default {
     },
     clickItem(event, category) {
       event.stopPropagation();
-      this.includeItem(category);
-    },
-    includeItem(category, skip){
-      if (skip) return;
 
       let services = this.additionalServices;
       if (!this.isChecked) {

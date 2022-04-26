@@ -16,12 +16,16 @@
         </md-button>
       </div>
     </section>
+    <FirstTransaction v-show="showFirstModal" @start="goNext" @close-modal="showFirstModal = false" />
+    <BillingInformationModal v-show="showBillingModal" @close-modal="showBillingModal = false" />
   </div>
 </template>
 <script>
+import BillingInformationModal from "../../../../components/Modals/BillingInformationModal";
 const components = {
     InboxSidebar: () => import("../components/InboxSidebar.vue"),
     Loader: () => import("@/components/loader/Loader.vue"),
+    FirstTransaction: () => import("../../../../components/Modals/FirstTransaction"),
 };
 import state from "./state";
 import { CommentMixins } from "@/mixins";
@@ -29,10 +33,13 @@ import { CommentMixins } from "@/mixins";
 export default {
     components:{
       ...components,
+      BillingInformationModal,
     },
     mixins: [CommentMixins],
     data() {
         return {
+          showBillingModal: false,
+          showFirstModal: false,
             loading: false,
             proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
         };
@@ -55,6 +62,10 @@ export default {
         this.loading = false;
     },
     methods: {
+      goNext() {
+        this.showFirstModal = false;
+        this.showBillingModal = true;
+      },
         scrollToTop() {
             setTimeout(() => {
                 window.scrollTo(0, 0);
