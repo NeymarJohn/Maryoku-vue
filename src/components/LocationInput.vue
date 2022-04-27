@@ -58,7 +58,7 @@ export default {
 		},
 		theme: {
 			type: String,
-			default: "purple",
+			default: "roze",
 		},
 	},
 	data() {
