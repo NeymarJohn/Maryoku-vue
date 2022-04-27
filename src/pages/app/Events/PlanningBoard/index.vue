@@ -1217,7 +1217,7 @@ export default {
     height: 100vh;
   }
   .proposal-footer {
-    padding: 40px 50px 40px 480px;
+    padding: 22px 50px 22px 480px;
     position: fixed;
     bottom: 0;
     left: 0;
