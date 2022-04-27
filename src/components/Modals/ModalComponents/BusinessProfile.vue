@@ -84,7 +84,7 @@ export default {
     },
   },
   created() {
-    this.link = this.vendorData.social[0].name;
+    this.link = this.vendorData.social["facebook"];
   },
   methods: {
     setLink(link) {

@@ -8,16 +8,16 @@
         <div class="cover-preview">
           <img v-if="campaignData.coverImage" :src="campaignData.coverImage" class="mr-10">
           <concept-image-block
-            v-else
+            v-else-if="concept && concept.images && concept.images.length"
             class="hidden"
             :images="concept.images"
             :colors="concept.colors"
             border="no-border"
           />
-          <md-button id="ChangeCoverImage" class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="handleChangeCoverImage">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px">
+          <img v-else :src="campaignData.defaultCoverImage || defaultCoverImage" alt="default cover image">
+          <change-cover-button @click="handleChangeCoverImage">
             Change Cover(Size 1200 * 400)
-          </md-button>
+          </change-cover-button>
         </div>
         <campaign-logo
           :logo-url="campaignLogoUrl"
@@ -226,6 +226,8 @@ import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
 import { MaryokuInput }  from "@/components";
 import HideSwitch        from "@/components/HideSwitch";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
+import ChangeCoverButton from "@/components/Button/ChangeCover";
+
 // local
 import TitleEditor       from "./components/TitleEditor";
 
@@ -241,15 +243,19 @@ import CalendarEvent from "@/models/CalendarEvent";
 
 export default {
   components: {
-    CampaignLogo,
-    MaryokuTextarea,
-    MaryokuInput,
+    // pages
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
-    TitleEditor,
     RsvpTimelinePanel,
+    CampaignLogo,
+
+    // components
+    MaryokuTextarea,
+    MaryokuInput,
+    TitleEditor,
     HideSwitch,
     ConceptImageBlock,
+    ChangeCoverButton,
   },
   props: {
     info: {
@@ -263,6 +269,7 @@ export default {
   },
   data() {
     return {
+      defaultCoverImage  : "https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/rsvp2.png",
       coverImage         : "",
       logoImage          : "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
       content            : "",
@@ -514,13 +521,6 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-
-    .change-cover-btn {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
     }
   }
 

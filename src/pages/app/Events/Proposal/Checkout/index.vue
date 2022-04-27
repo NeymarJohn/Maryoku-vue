@@ -230,7 +230,7 @@
           </div>
         </div>
         <div class="mt-40 policy-confirmation-block d-flex align-center">
-          <span class="font-regular">I agree to the </span>
+          <span class="font-regular">I agree to the  </span>
           <a href="#" class="font-bold color-black text-underline"> Cancellation policy </a>
           <stripe-checkout
             v-if="showStripeCheckout"
@@ -342,7 +342,7 @@
     },
     computed: {
       handleSubmitDisabled(){
-        if(this.agreedCancellationPolicy && this.proposal && this.proposal.signature &&
+        if( this.proposal && this.proposal.signature &&
           this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
            return true;
         }

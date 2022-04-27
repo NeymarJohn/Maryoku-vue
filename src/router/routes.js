@@ -60,10 +60,10 @@ const EventWizardReligion = () => import("@/pages/app/CreateEvent/EventWizardRel
 
 // RSVP
 
-const RSVPEvent = () => import("@/pages/app/RSVP/RSVPEvent.vue");
+const RSVPEvent       = () => import("@/pages/app/RSVP/RSVPEvent.vue");
 const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.vue");
 
-const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
+const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage");
 // User authentication pages
 const SignInSignUp = () => import("@/pages/app/Planner/SignInSignUp.vue");
 const SignUp = () => import("@/pages/app/Planner/SignUp.vue");
@@ -81,11 +81,12 @@ const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout");
 
 const InvoicePage = () => import("@/pages/app/Invoices/InvoicePage.vue");
+const FeedbackNewsletter = () => import("@/pages/app/Guest/FeedbackNewsletter.vue");
 
 let testUI = {
   path: "/testui",
-  component: TestUI,
-  name: "TestUI"
+  component: FeedbackNewsletter,
+  name: "FeedbackNewsletter"
 };
 
 let authPages = {

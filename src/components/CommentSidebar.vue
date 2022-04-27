@@ -49,7 +49,7 @@
     </div>
     <div class="sidebar__items d-flex flex-column fullDiscussion">
       <div
-        v-for="(commentComponent, commentIndex) in filteredCommentComponent"
+        v-for="(commentComponent, commentIndex) in commentComponents"
         :key="commentIndex"
         class="comment_item align-items-center justify-content-between cursor-pointer"
       >
@@ -195,6 +195,8 @@ export default {
   }),
   mounted() {
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
+    // this.commentComponents = this.$store.state.comment.commentComponents;
+    console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", this.commentComponents);
   },
   methods: {
     changeCommentSortType(sortByType) {

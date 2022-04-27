@@ -74,3 +74,13 @@
     }
   }
 }
+#rateFeedbackSlider {
+  .noUi-handle-lower {
+    border-radius: 0;
+    background-color: $vendorColor;
+    border-color: $vendorColor;
+  }
+  .noUi-connect{
+    background-color: black;
+  }
+}

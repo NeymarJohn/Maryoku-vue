@@ -162,12 +162,11 @@ export default {
         this.loading = false;
         if(proposal) {
           this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.proposalId}`).then(res => {
-            console.log("------------------------------------------------res", res);
             this.commentComponents = res;
             if(this.commentComponents.length > 0) {
               this.showProposal = true;
             } else {
-              if( this.proposalId == this.$$route.params.proposalId ) {
+              if( this.proposalId == this.$route.params.proposalId ) {
                 this.showProposal = true;
               } else {
                 this.showProposal = false;
