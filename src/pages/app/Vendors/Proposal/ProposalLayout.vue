@@ -27,16 +27,15 @@
 
         <div class="next-cont">
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`"> Discard </a>
-          <a v-tooltip="{
-               html: true,
-               content: '<p>You can return to it till the deadline!</p>',
-               delay: { show: 200, hide: 100 },
-               trigger: 'hover',
-               placement: 'top',
-               classes: 'vendor-tooltip-theme'}"
-             class="save"
-             @click="calculateStage(proposalStatus.DRAFT)"
-          >
+          <a class="save"
+             v-tooltip="{
+             html: true,
+             content: '<p>You can return to it till the deadline!</p>',
+             delay: { show: 200, hide: 100 },
+             trigger: 'hover',
+             placement: 'top',
+             classes: 'vendor-tooltip-theme'}"
+             @click="calculateStage(proposalStatus.DRAFT)">
             <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`"> Save for later
           </a>
           <a v-if="step < 3" class="next active" :class="[{ active: selectedServices.length > 0 }]" @click="gotoNext">
@@ -229,7 +228,7 @@ export default {
     },
   },
   async created() {
-    console.log("proposal.layout");
+    console.log('proposal.layout');
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -280,7 +279,7 @@ export default {
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "getRequirements", "saveProposal", "saveVendor", "setWizardStep"]),
     gotoNext() {
-      console.log("step", this.step, this.event.components.length);
+      console.log('step', this.step, this.event.components.length)
       this.step = this.step + 1;
 
       // skip additional page if event doesn't have components
@@ -366,23 +365,6 @@ export default {
           await this.uploadProposal(type);
     },
 
-    async showComeBack () {
-      return Swal.fire({
-              title: "You’ve saved this current proposal. Come back and edit it at any time!",
-              buttonsStyling: false,
-              showCancelButton: true,
-              type: "success",
-              confirmButtonClass: "md-button md-vendor text-capitalize",
-              confirmButtonText: "Back to Dashboard continue",
-              cancelButtonClass: "md-button md-black md-simple text-capitalize text-black",
-              cancelButtonText: "Continue",
-          }).then(res => {
-              if(res.isConfirmed) {
-                  this.$router.push({path: "/vendor/dashboard"});
-              }
-        });
-    },
-
     async uploadProposal(type) {
       this.$root.$emit("clear-slide-pos");
       this.scrollToTop();
@@ -401,7 +383,7 @@ export default {
         coverImageUrl = await S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
       }
 
-      moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate();
+      moment(new Date(), "YYYY-MM-DD").add(7, "days").toDate()
 
       if (!this.isLoading) {
         this.isLoading = true;
@@ -411,7 +393,22 @@ export default {
         this.isUpdating = false;
         this.isLoading = false;
         if (type === PROPOSAL_STATUS.PENDING) this.submittedModal = true;
-        else this.showComeBack();
+        else {
+          Swal.fire({
+              title: "You’ve saved this current proposal. Come back and edit it at any time!",
+              buttonsStyling: false,
+              showCancelButton: true,
+              type: "success",
+              confirmButtonClass: "md-button md-vendor",
+              confirmButtonText: "Back to Dashboard continue",
+              cancelButtonClass: "md-button md-purple md-simple",
+              cancelButtonText: "Continue",
+          }).then(res => {
+              if(res.isConfirmed) {
+                  this.$router.push({path: "/vendor/dashboard"});
+              }
+          });
+        }
       }
     },
 
@@ -463,9 +460,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.capitalize {
-  text-transform: capitalize;
-}
 .for-proposals-layout-wrapper {
   font-family: "Manrope-Regular", sans-serif;
   overflow: hidden;

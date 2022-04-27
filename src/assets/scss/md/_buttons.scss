@@ -126,9 +126,6 @@
   &.md-white {
     @include btn-styles($white);
   }
-  &.md-black{
-    @include btn-styles(black);
-  }
 
   &.md-maryoku {
     font-size: 16px;
