@@ -193,23 +193,18 @@
               class="cursor-pointer" >
               <div class="d-flex">
                 <div class="sidebar__bar"></div>
-                <div class="sidebar__item__details d-flex sub_item_box" :class="{'active':(selectedProposal && selectedProposal.id == subProposal.id)}" style="justify-content: space-between;">
-                  <div>
-                    <span v-if="subProposal.nonMaryoku && proposal.eventData && subProposal.eventData.customer" class="productLaunchParty">
-                      {{ subProposal.eventData.customer.companyName }}
-                    </span>
-                    <span v-else-if="subProposal.vendor && subProposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
-                      {{ subProposal.vendor.eventCategory.fullTitle }}
-                    </span>
-                    <span>{{ subProposal.dateCreated | date("DD") }} / {{ subProposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ subProposal.cost | withComma }}</span>
-                  </div>
+                <div class="sidebar__item__details d-flex flex-column sub_item_box" :class="{'active':(selectedProposal && selectedProposal.id == subProposal.id)}">
+                  <span v-if="subProposal.nonMaryoku && proposal.eventData && subProposal.eventData.customer" class="productLaunchParty">
+                    {{ subProposal.eventData.customer.companyName }}
+                  </span>
+                  <span v-else-if="subProposal.vendor && subProposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
+                    {{ subProposal.vendor.eventCategory.fullTitle }}
+                  </span>
+                  <span>{{ subProposal.dateCreated | date("DD") }} / {{ subProposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ subProposal.cost | withComma }}</span>
                   <!-- <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
                     Full Discussion
-                  </button> -->
-                  <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span>
-                  <div>
-                    <span v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(subProposal,true)" /> </span>
-                  </div>
+                  </button>
+                  <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span> -->
                 </div>
               </div>
             </div>
@@ -344,7 +339,7 @@ export default {
       return this.$store.state.comment.commentsProposals;
     },
     selectedProposal() {
-      if (this.$store.state.commentProposal.proposal.commentComponent){
+      if (this.$store.state.commentProposal.proposal){
         this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
       }
       console.log("comput this.commentComponents",this.commentComponents);
@@ -374,11 +369,7 @@ export default {
       window.open(routeData.href, "_blank");
     },
     changeProposal(proposal,fullDiscussion = false) {
-      console.log("------------------", proposal);
       this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
-      this.$store.dispatch("comment/getCommentComponents", `/proposals/${proposal.id}`).then(res => {
-        this.commentComponents = res;
-      });
       setTimeout(() => {
         this.fullDiscussion = fullDiscussion;
       },100);
@@ -460,7 +451,7 @@ export default {
     },
     toggleshowReply(commentIndex) {
       this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
-      this.selectedComponent = this.commentComponents[commentIndex];
+      this.selectedComponent = this.selectedProposal.commentComponent[commentIndex];
     },
     async getMessage(e) {
       if (e.target.value.includes("@")) {
@@ -769,9 +760,9 @@ export default {
   border-bottom-left-radius: 10px;
   border-top: 0px;
   border-right: 0px;
-  margin-top: -34px;
-  height: 40px;
-  padding-top: 70px;
+  margin-top: -47px;
+  height: 60px;
+  padding-top: 90px;
 }
 
 .sub_item_box {
@@ -790,9 +781,9 @@ export default {
 .unread-count {
     width: 28px;
     height: 28px;
-    margin: -1px 34px 57px 13px;
-    padding: 4px 11px 3px 10px;
-    background-color: #641856;
+    margin: 37px 34px 57px 13px;
+    padding: 3px 11px 3px 10px;
+    background-color: #f51355;
     font-size: 16px;
     font-weight: bold;
     font-stretch: normal;
