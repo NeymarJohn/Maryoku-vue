@@ -878,7 +878,7 @@ export default {
 
 .event-campaign-section {
   .campaign-footer {
-    height: 100px;
+    height: 128px;
     background-color: white;
     padding: 0px 50px;
     min-width: calc(100%);

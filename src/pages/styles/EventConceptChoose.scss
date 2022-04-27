@@ -4,7 +4,12 @@
         overflow: hidden;
         .selected-concept-footer {
             background: #fff;
-            padding: 30px 60px;
+            padding: 35px 60px;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            height: 128px;
+            width: 100%;
             .concept-saved {
                 color: #3c4858;
                 padding: 12px 30px;

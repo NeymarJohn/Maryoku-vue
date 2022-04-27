@@ -407,11 +407,11 @@ export default {
       }
     },
     async getMessage(e){
-      if(e.target.value.includes("@")){
-      // if(e.data === "@"){
-        let queryArray = e.target.value.split("@");
+      if(e.data === "@"){
+        let userId = this.$store.state.auth.user.id;
+        let proposalId = this.$route.params.proposalId;
 
-        let res = await getReq(`/1/customers?name=${queryArray[1]}`);
+        let res = await getReq(`/1/searchCustomer?proposalId=${proposalId}&userId=${userId}`);
         this.customers = res.data;
 
         this.showAddress = true;
