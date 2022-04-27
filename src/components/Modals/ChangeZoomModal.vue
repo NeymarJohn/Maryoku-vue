@@ -49,10 +49,6 @@ export default {
   beforeMount() {
    setTimeout( ()=> {
      this.isVendor = this.$router.currentRoute.path.startsWith("/vendor");
-     this.showModal = !(
-       this.$router.currentRoute.path.includes("signup") ||
-       this.$router.currentRoute.path.includes("signin")
-     );
    }, 1);
     this.zoomScale = 1 / (1770 / this.windowWidth);
     const savedZoom = localStorage.zoomParams ? JSON.parse(localStorage.zoomParams) : {};

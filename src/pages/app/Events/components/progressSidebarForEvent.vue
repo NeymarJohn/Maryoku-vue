@@ -74,17 +74,6 @@
         </md-button>
       </div>
     </div>
-    <div class="zoom-block">
-      <md-button @click="changeZoom('-')">
-        -
-      </md-button>
-      <span>
-        {{ zoomLevel }}
-      </span>
-      <md-button @click="changeZoom('+')">
-        +
-      </md-button>
-    </div>
   </div>
 </template>
 <script>
@@ -112,7 +101,6 @@ export default {
 		currentUrl: "",
 		event: {},
 		localElements: [],
-    zoomLevel: 100,
 	}),
 	computed: {
 		warming() {
@@ -132,23 +120,13 @@ export default {
 		setTimeout((_) => {
 			this.renderProgress();
 		}, 50);
-    this.zoomLevel = Math.round( JSON.parse(localStorage.getItem("zoomParams")).zoomScale * 100);
-  },
+	},
 	updated() {
 		this.localElements = this.elements;
 		this.renderProgress();
 	},
 	methods: {
 		...mapActions("event", ["getEventAction"]),
-    changeZoom(sign){
-      if(sign === "-"){
-        this.zoomLevel = this.zoomLevel - 10;
-      }else {
-        this.zoomLevel = this.zoomLevel + 10;
-      }
-        document.body.style.zoom = this.zoomLevel / 100 ;
-        localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomLevel, windowWidth: this.windowWidth}));
-    },
 		goToRoute(item, index) {
 			let vm = this;
 			this.$router.push(`/events/${this.event.id}/${item.route}`);
@@ -178,16 +156,4 @@ export default {
 
 };
 </script>
-<style lang="scss">
-.zoom-block {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  span{
-    margin: 0 10px;
-  }
-}
-</style>
+<style lang="scss"></style>
