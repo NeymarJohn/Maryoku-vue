@@ -111,7 +111,6 @@ const defaultCampaignData = {
   FEEDBACK: {
     ...defaultCampaignDataPartType,
     description    : "",
-    coverImage     : `${STORAGE_URL}Campaign+Headers/feedback${coverImgPrefix}.png`,
     visibleSettings: {
       showImages        : true,
       showSharingOption : true,

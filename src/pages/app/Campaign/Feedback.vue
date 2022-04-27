@@ -14,6 +14,7 @@
             border="no-border"
           />
         </div>
+        <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
         <div class="change-cover-feedback">
           <md-button
             id="ChangeCoverImage"
@@ -346,7 +347,6 @@ export default {
     },
   },
   created() {
-    console.log('feedback.created', this.campaignData);
     this.placeHolder = (`
       Thanks for attending this recent event – we hope you had a wonderful, productive experience!
       Your feedback is important to help us understand what worked especially well, on top of
@@ -435,16 +435,13 @@ export default {
     handleChangeCampaignVisibleSettings(key, value) {
       return this.setFeedbackAttribute("visibleSettings", { ...this.campaignVisibleSettings, [key]: value });
     },
-    async handleChangeCampaignLogo(file) {
-      this.$emit("change-logo");
+    handleChangeCampaignLogo(file) {
+      this.$emit("change-logo", file);
     },
     async uploadFiles(files) {
-      console.log('files', files);
       const attachments = files.map(({ status, ...file }) => file);
-      this.setFeedbackAttribute("attachments", files);
       await this.saveCampaign({ id: this.campaignData.id, attachments });
-
-      this.showModalWindowOpen = false;
+      return this.setFeedbackAttribute("attachments", files);
     },
 
     makeFileSrc (file) {

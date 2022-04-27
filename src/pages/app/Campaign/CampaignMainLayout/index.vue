@@ -366,6 +366,14 @@
             <span class="seperator" />
             <md-button
               class="md-simple md-button md-black maryoku-btn"
+              @click="startCampaign"
+            >
+              <Icon src="Campaign/group-2428.svg">
+                Send Now
+              </Icon>
+            </md-button>
+            <md-button
+              class="md-simple md-button md-black maryoku-btn"
               @click="revertSetting"
             >
               <Icon src="Campaign/Group 8871.svg">
@@ -825,17 +833,16 @@ export default {
       this.saveDraftCampaign("STARTED");
     },
     async changeCampaignLogo(file) {
-
-      if (file) {
-        const extension = file.type.split("/")[1];
-        const fileName  = uuidv4();
-        const logoUrl   = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
-        this.setAttribute({name: this.currentCampaignType, key: "logoUrl", value: logoUrl});
-      } else {
-
-        await S3Service.deleteFile(this.currentCampaign.logoUrl);
-        this.setAttribute({name: this.currentCampaignType, key: "logoUrl", value: null});
-      }
+      const changeLogo = (logoUrl) => {
+        const setLogoByName = name => this.setCampaignAttribute({ key: "logoUrl", value: logoUrl, name });
+        ["SAVING_DATE", "RSVP", "COMING_SOON", "FEEDBACK"].forEach(setLogoByName);
+        this.saveCampaign({ id: this.currentCampaign.id, logoUrl });
+      };
+      if (!file) changeLogo(file);
+      const extension = file.type.split("/")[1];
+      const fileName  = uuidv4();
+      const logoUrl   = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+      changeLogo(logoUrl);
     }
   },
 };
