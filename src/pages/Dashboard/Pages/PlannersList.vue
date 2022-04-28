@@ -95,7 +95,7 @@ const components = {
     Loader           : () => import("@/components/loader/Loader.vue"),
     Modal            : () => import("@/components/Modal.vue"),
     EventsTable      : () => import("./components/EventsTable.vue"),
-    ProposalListItem : () => import("@/pages/app/Vendors/components/ProposalListItem"),
+    ProposalListItem : () => import("@/pages/app/Vendors/components/ProposalListItem/index.vue"),
 };
 
 

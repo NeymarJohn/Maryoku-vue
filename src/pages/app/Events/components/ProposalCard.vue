@@ -226,38 +226,41 @@ export default {
       }
       return 0;
     },
-    async updateExpireDate(){
-      let expiredTime = 0;
-      if (this.proposal.expiredDate) {
-          expiredTime = new Date().getTime() + 2 * 3600 * 24 * 1000;
-      } else {
-          expiredTime = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
-      }
+    updateExpireDate(){
+        let expiredTime = 0;
+        if (this.proposal.expiredDate) {
+            expiredTime = new Date().getTime() + 2 * 3600 * 24 * 1000;
+        } else {
+            expiredTime = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
+        }
 
-      let query = new ProposalNegotiationRequest({
-          eventId: this.eventData.id,
-          proposalId: this.proposal.id,
-          proposal: new Proposal({ id: this.proposal.id }),
-          proposalRequestId: this.proposal.proposalRequestId,
-          expiredTime,
-          type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
-      }).for(new Proposal({ id: this.proposal.id }))
+        new ProposalNegotiationRequest({
+            eventId: this.eventData.id,
+            proposalId: this.proposal.id,
+            proposal: new Proposal({ id: this.proposal.id }),
+            proposalRequestId: this.proposal.proposalRequestId,
+            expiredTime,
+            type: NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME,
+        })
+            .for(new Proposal({ id: this.proposal.id }))
+            .save()
+            .then((res) => {
+                Swal.fire({
+                    title: "Thanks, we sent your request to the vendor!",
+                    html: "You’ll receive a notification as soon as the vendor makes a decision"+
+                   " <br/>" +
+                        "Don’t worry – if the vendor isn’t able to give you more time,"+
+                       " we’ll provide you with alternative options",
+                    showCancelButton: false,
+                    confirmButtonClass: "md-button md-success btn-fill",
+                    cancelButtonClass: "md-button md-danger btn-fill",
+                    confirmButtonText: "OK",
+                    buttonsStyling: false,
+                    customClass:{container:"non-vendor-add-more-time-popup-modal"}
+                }).then((result) => {});
+            });
 
-      await query.save()
-
-      this.$notify({
-        message: {
-          title: "Thanks, we sent your request to the vendor!",
-          content: "Don’t worry – if the vendor isn’t able to give you more time, we’ll provide you with alternative options",
-          close: this.close,
-        },
-        icon: `${this.$iconURL}messages/info.svg`,
-        horizontalAlign: "right",
-        verticalAlign: "top",
-        timeout: 5000,
-      });
-    },
-    close() {}
+    }
   },
 };
 </script>

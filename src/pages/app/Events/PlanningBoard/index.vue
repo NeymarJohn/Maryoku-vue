@@ -24,6 +24,7 @@
               <drop-down class="d-inline-block"  @close="closeMoreCategories">
                 <ResizableToggleButton
                   class="mr-20 mb-10"
+                  label="More categories"
                   data-toggle="dropdown"
                   :icon="`${$iconURL}Services /more.svg`"
                   :selected-icon="`${$iconURL}Services /more-white.svg`"
@@ -981,7 +982,7 @@ export default {
         id: this.currentRequirement.id,
         expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
       })
-
+      console.log('update.expiredtime', res);
       this.currentRequirement = res.data;
     },
     async goDetailPage(proposal) {
@@ -1114,6 +1115,7 @@ export default {
     async processNotification(){
 
       let proposals = this.negotiationProposals;
+      this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
           this.negotiationProposals[key].map(proposal => {
               let { negotiations } = proposal;
@@ -1241,7 +1243,7 @@ export default {
     height: 100vh;
   }
   .proposal-footer {
-    padding: 40px 50px 40px 480px;
+    padding: 22px 50px 22px 480px;
     position: fixed;
     bottom: 0;
     left: 0;

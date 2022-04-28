@@ -75,15 +75,15 @@
       </div>
     </div>
     <div class="zoom-block">
-      <md-button @click="changeZoom('-')">
-        -
-      </md-button>
-      <span>
-        {{ zoomLevel }}
-      </span>
-      <md-button @click="changeZoom('+')">
-        +
-      </md-button>
+      <div class="zoom-wrapper">
+        <button class="md-button zoom-button" @click="changeZoom('-')">
+          -
+        </button>
+        <span>{{ zoomLevel }}%</span>
+        <button class="md-button zoom-button" @click="changeZoom('+')">
+          +
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -147,7 +147,7 @@ export default {
         this.zoomLevel = this.zoomLevel + 10;
       }
         document.body.style.zoom = this.zoomLevel / 100 ;
-        localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomLevel, windowWidth: this.windowWidth}));
+        localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomLevel / 100, windowWidth: this.windowWidth}));
     },
 		goToRoute(item, index) {
 			let vm = this;
@@ -186,8 +186,26 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
-  span{
-    margin: 0 10px;
+  .zoom-wrapper {
+    background-color: #e7e6e6;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    border-radius: 3px;
+    span {
+      margin: 0 10px;
+      color: #464646;
+    }
+    .zoom-button{
+      background-color: #e7e6e6 !important;
+      box-shadow: none;
+      color: #464646 !important;
+      font-size: 40px;
+      margin: 3px;
+      line-height: 29px;
+      min-width: 65px;
+    }
   }
 }
 </style>
