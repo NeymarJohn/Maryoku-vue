@@ -504,7 +504,7 @@ export default {
 
 .click-capture {
   bottom: 0px;
-  left: 400px;
+  left: 0px;
   position: absolute;
   right: 0;
   top: 100px;
