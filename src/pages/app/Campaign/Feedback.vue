@@ -250,7 +250,7 @@ import CustomTitleEditor     from "./components/CustomTitleEditor";
 
 // pages
 import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
-import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal";
+import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 
 // dependencies
 import S3Service from "@/services/s3.service";

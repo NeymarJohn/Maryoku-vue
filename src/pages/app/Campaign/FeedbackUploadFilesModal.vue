@@ -24,16 +24,8 @@
       </div>
     </template>
     <template slot="body">
-      <Uploader />
       <div v-if="!attachments.length" class="upload-files-modal-body-content">
         <div class="upload-files-white-cube">
-          <proposal-inspirational-photos-item
-            v-for="(photo, index) in inspirationalPhotos"
-            :key="`photo-${index}`"
-            class="photo-item"
-            :default-photo="photo"
-            @change="filesAdded"
-          />
           <vue-dropzone
             id="dropzone"
             ref="myVueDropzone"
@@ -98,7 +90,7 @@
           </div>
         </div>
         <div class="ml-auto d-flex align-center">
-          <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles">
+          <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles" />
           <md-button class="md-simple maryoku-btn" @click="close">
             Cancel
           </md-button>
@@ -115,24 +107,19 @@
 </template>
 
 <script>
+import { Modal } from "@/components";
 import { v4 as uuidv4 } from "uuid";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
-
 import S3Service from "@/services/s3.service";
-
-import { Modal } from "@/components";
-import Uploader  from "./Uploader.vue";
-
+import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
 
 export default {
   name: "FeedbackUploadImagesModal",
   components: {
     Modal,
     vueDropzone: vue2Dropzone,
-    // FeedbackUploadImagesCarousel,
-    // ProposalInspirationalPhotosItem,
-    Uploader,
+    FeedbackUploadImagesCarousel,
   },
   props: {
     folderNameForUpload: {
@@ -140,20 +127,20 @@ export default {
       required: true,
     },
     attachments: {
-      type    : Array,
-      default : () => new Array(10),
+      type: Array,
+      default: () => [],
     },
   },
   data() {
     return {
       dropzoneOptions: {
-        url                   : "https://httpbin.org/post",
-        maxFilesize           : 25,
-        maxFiles              : 10,
-        createImageThumbnails : false,
-        uploadMultiple        : true,
-        acceptedFiles         : "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
-        headers               : { "My-Awesome-Header": "header value" },
+        url: "https://httpbin.org/post",
+        maxFilesize: 25,
+        maxFiles: 10,
+        createImageThumbnails: false,
+        uploadMultiple: true,
+        acceptedFiles: "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
+        headers: { "My-Awesome-Header": "header value" },
       },
       carouselItemIndex: 0,
     };
