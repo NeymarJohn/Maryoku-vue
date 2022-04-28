@@ -82,11 +82,10 @@ const Checkout = () => import("@/pages/app/Events/Proposal/Checkout");
 
 const InvoicePage = () => import("@/pages/app/Invoices/InvoicePage.vue");
 const FeedbackNewsletter = () => import("@/pages/app/Guest/FeedbackNewsletter.vue");
-const ProposalLayout                  = () => import("@/pages/app/Vendors/Proposal/ProposalLayout.vue");
 
 let testUI = {
   path: "/testui",
-  component: ProposalLayout,
+  component: FeedbackNewsletter,
   name: "FeedbackNewsletter"
 };
 

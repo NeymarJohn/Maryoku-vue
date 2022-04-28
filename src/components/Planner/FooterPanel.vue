@@ -22,7 +22,7 @@ export default {
   position: fixed;
   bottom: 0;
   z-index: 10;
-  height: 90px;
+  height: 128px;
   background-color: white;
   width: calc(100% - 480px);
   margin-top: 100px;

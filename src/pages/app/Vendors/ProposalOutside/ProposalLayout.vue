@@ -32,6 +32,7 @@
         </a>
         <a v-if="step < 3" class="next active" :class="[{ active: selectedServices.length > 0 }]" @click="gotoNext">
           <loader :active="isLoading" page="vendor" height="70px" :width="100" />
+
           Next
         </a>
         <a v-else class="next active" :disabled="isUpdating" @click="calculateStage(proposalStatus.PENDING)">Submit Proposal</a>
@@ -114,27 +115,25 @@
   </div>
 </template>
 <script>
-import { mapActions }      from "vuex";
-import Swal                from "sweetalert2";
-import Vendor              from "@/models/Vendors";
-import S3Service           from "@/services/s3.service";
-import state               from "./state";
+import { mapActions } from "vuex";
+import Vendor from "@/models/Vendors";
+import Swal from "sweetalert2";
+import S3Service from "@/services/s3.service";
+import state from "./state";
 import { PROPOSAL_STATUS } from "@/constants/status";
 import { MISSING_DETAILS } from "@/constants/proposal";
-import arrayIsNoEmpty      from "@/helpers/array/is/noEmpty";
+import moment from 'moment'
 
 const components = {
-  Loader               : () => import("@/components/loader/Loader.vue"),
-  Modal                : () => import("@/components/Modal.vue"),
-  VendorBidTimeCounter : () => import("@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue"),
-  MissingDetail        : () => import("./Modals/MissingDetail.vue"),
-  SendProposalModal    : () => import("./Modals/SendProposal.vue"),
-  ProposalHeader       : () => import("./ProposalHeader.vue"),
-  ProposalVersionsBar  : () => import("../components/ProposalVersionsBar.vue"),
-  ProposalSubmitted    : () => import("../Proposal/Modals/ProposalSubmitted.vue"),
+  Loader: () => import("@/components/loader/Loader.vue"),
+  Modal: () => import("@/components/Modal.vue"),
+  MissingDetail: () => import("./Modals/MissingDetail.vue"),
+  ProposalVersionsBar: () => import("../components/ProposalVersionsBar.vue"),
+  ProposalSubmitted: () => import("../Proposal/Modals/ProposalSubmitted.vue"),
+  SendProposalModal: () => import("./Modals/SendProposal.vue"),
+  ProposalHeader: () => import("./ProposalHeader.vue"),
+  VendorBidTimeCounter: () => import("@/components/VendorBidTimeCounter/VendorBidTimeCounter.vue"),
 };
-
-const STORAGE_ICON_URL = "https://static-maryoku.s3.amazonaws.com/storage/icons/";
 
 export default {
   components,
@@ -151,25 +150,25 @@ export default {
   },
   data() {
     return {
-      proposalIconsUrl            : `${STORAGE_ICON_URL}NewSubmitPorposal/`,
-      landingIconsUrl             : `${STORAGE_ICON_URL}NewLandingPage/`,
-      selectedServices            : [],
-      proposalRequestRequirements : [],
-      proposals                   : [],
-      missingDetail               : [],
-      proposalRequest             : null,
-      openedModal                 : "",
-      proposalLink                : "",
-      isLoading                   : true,
-      showCloseProposalModal      : false,
-      fullDetailsModal            : false,
-      isTimeUp                    : false,
-      isUpdating                  : false,
-      showSendProposalModal       : false,
-      showSubmittedProposalModal  : false,
-      showMissingModal            : false,
-      proposalStatus              : PROPOSAL_STATUS,
-      option                      : PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
+      isLoading: true,
+      fullDetailsModal: false,
+      proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
+      selectedServices: [],
+      isTimeUp: false,
+      proposalRequestRequirements: [],
+      proposals: [],
+      proposalRequest: null,
+      openedModal: "",
+      showCloseProposalModal: false,
+      isUpdating: false,
+      missingDetail: [],
+      proposalStatus: PROPOSAL_STATUS,
+      option: PROPOSAL_STATUS.PENDING, // 'submit', 'duplicate'
+      showSendProposalModal: false,
+      showSubmittedProposalModal: false,
+      showMissingModal: false,
+      proposalLink: "",
     };
   },
 
@@ -193,7 +192,7 @@ export default {
       return this.$store.state.proposalForNonMaryoku.versions;
     },
     isNegotiation() {
-      return this.$store.state.proposalForNonMaryoku.isNegotiation;
+        return this.$store.state.proposalForNonMaryoku.isNegotiation;
     },
     step: {
       get: function() {
@@ -239,11 +238,11 @@ export default {
     }
 
     if (this.$route.query.step) {
-      this.$store.commit("proposalForNonMaryoku/setWizardStep", parseInt(this.$route.query.step));
+       this.$store.commit("proposalForNonMaryoku/setWizardStep", parseInt(this.$route.query.step));
     }
 
     if (this.step === 3 && this.$route.query.negotiation) {
-      this.$store.commit("proposalForNonMaryoku/setNegotiation", true);
+        this.$store.commit("proposalForNonMaryoku/setNegotiation", true);
     }
     setTimeout(_ => {}, 10000);
     this.isLoading = false;
@@ -265,15 +264,16 @@ export default {
         await this.createEvent();
         this.step = this.step + 1;
         this.scrollToTop();
+
         this.isLoading = false;
       } else {
         this.step = this.step + 1;
       }
     },
     hideModal() {
-      this.fullDetailsModal           = false;
+      this.fullDetailsModal = false;
       this.showSubmittedProposalModal = false;
-      this.openedModal                = "";
+      this.openedModal = "";
     },
 
     getMissingDetail(field) {
@@ -290,19 +290,43 @@ export default {
       } else {
         this.missingDetail.push(this.getMissingDetail("vision"));
       }
+      if (
+        proposalForNonMaryoku.costServices[this.vendor.vendorCategory] &&
+        proposalForNonMaryoku.costServices[this.vendor.vendorCategory].length
+      ) {
+        progress += 30;
+      } else {
+        this.missingDetail.push(this.getMissingDetail("cost"));
+      }
 
-      const { vendorCategory } = this.vendor;
-      if (arrayIsNoEmpty(proposalForNonMaryoku.costServices[vendorCategory])) progress += 30;
-      else this.missingDetail.push(this.getMissingDetail("cost"));
+      if (
+        proposalForNonMaryoku.includedServices[this.vendor.vendorCategory] &&
+        proposalForNonMaryoku.includedServices[this.vendor.vendorCategory].length
+      ) {
+        progress += 20;
+      } else {
+        this.missingDetail.push(this.getMissingDetail("include"));
+      }
+      if (
+        proposalForNonMaryoku.extraServices[this.vendor.vendorCategory] &&
+        proposalForNonMaryoku.extraServices[this.vendor.vendorCategory].length
+      ) {
+        progress += 20;
+      } else {
+        this.missingDetail.push(this.getMissingDetail("extra"));
+      }
 
-      if (arrayIsNoEmpty(proposalForNonMaryoku.includedServices[vendorCategory])) progress += 20;
-      else this.missingDetail.push(this.getMissingDetail("include"));
+      if (proposalForNonMaryoku.inspirationalPhotos.some(p => !!p)) {
+        progress += 20;
+      } else {
+        this.missingDetail.push(this.getMissingDetail("image"));
+      }
 
-      if (arrayIsNoEmpty(proposalForNonMaryoku.extraServices[vendorCategory])) progress += 20;
-      else this.missingDetail.push(this.getMissingDetail("extra"));
-
-      if (proposalForNonMaryoku.inspirationalPhotos.some(p => !!p)) progress += 20;
-      else this.missingDetail.push(this.getMissingDetail("image"));
+      // check missing when submit the proposal
+      if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
+        this.showMissingModal = true;
+        return;
+      }
 
       // check missing when submit the proposal
       if (progress !== 100 && type === PROPOSAL_STATUS.PENDING) {
@@ -350,32 +374,30 @@ export default {
       await this.uploadCoverImage();
 
       this.isUpdating = true;
-      this.isLoading  = true;
+      this.isLoading = true;
       await this.saveVendor(this.vendor);
       const proposal = await this.saveProposal(type);
 
       this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
 
       this.isUpdating = false;
-      this.isLoading  = false;
+      this.isLoading = false;
     },
 
     async createEvent() {
-      const ISOFormat = date => new Date(date).toISOString();
-      const startISO  = ISOFormat(this.event.startTime * 1000);
       const userEvent = {
-        company     : this.event.company,
-        date        : startISO,
-        startTime   : startISO,
-        endTime     : ISOFormat(this.event.endTime * 1000),
-        eventType   : { id: this.event.eventType.id },
-        companyName : this.event.customer.companyName,
-        location    : this.event.location,
-        field       : "",
-        icon        : "",
-        guests      : this.event.numberOfParticipants,
-        vendor      : new Vendor({ id: this.vendor.id }),
-        customer    : { id: this.event.customer.id },
+        company: this.event.company,
+        date: new Date(this.event.startTime * 1000).toISOString(),
+        startTime: new Date(this.event.startTime * 1000).toISOString(),
+        endTime: new Date(this.event.endTime * 1000).toISOString(),
+        eventType: { id: this.event.eventType.id },
+        companyName: this.event.customer.companyName,
+        location: this.event.location,
+        field: "",
+        icon: "",
+        guests: this.event.numberOfParticipants,
+        vendor: new Vendor({ id: this.vendor.id }),
+        customer: { id: this.event.customer.id },
       };
       if (this.event.customer) {
         userEvent.customer = { id: this.event.customer.id };
@@ -405,13 +427,13 @@ export default {
     },
     discard() {
       Swal.fire({
-        title              : "Are you sure?",
-        text               : "You won't be able to revert this!",
-        showCancelButton   : true,
-        confirmButtonClass : "md-button md-success md-vendor btn-fill",
-        cancelButtonClass  : "md-button maryoku-btn md-danger btn-fill",
-        confirmButtonText  : "Yes, discard it!",
-        buttonsStyling     : false,
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success md-vendor btn-fill",
+        cancelButtonClass: "md-button maryoku-btn md-danger btn-fill",
+        confirmButtonText: "Yes, discard it!",
+        buttonsStyling: false,
       }).then(result => {
         if (result.value) {
           this.$store.commit("proposalForNonMaryoku/initState");

@@ -103,9 +103,6 @@ export default {
     logoImageData : "",
     placeHolder   : placeHolder,
   }),
-  created () {
-    console.log('save.data.created', this.campaignData);
-  },
   computed: {
     event() {
       return this.$store.state.event.eventData;

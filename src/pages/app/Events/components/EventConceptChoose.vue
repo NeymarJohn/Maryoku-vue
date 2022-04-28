@@ -453,6 +453,9 @@ export default {
       // this.showConceptList = false
     },
     onSaveConcept(eventConcept) {
+      let calendar = new Calendar({
+        id: this.currentUser.profile.defaultCalendarId,
+      });
       let event = this.$store.state.event.eventData;
       event.concept = eventConcept;
       event.conceptProgress = 100;
@@ -465,12 +468,13 @@ export default {
             concept: { id: eventConcept.id },
             title: eventConcept.name,
             conceptProgress: 100,
+            calendar: calendar,
           }),
         )
         .then((result) => {
           this.showConceptList = false;
           this.showEditForm = false;
-          this.selectedConcept = result.concept;
+          this.selectedConcept = eventConcept;
           this.isLoading = false;
         });
     },
@@ -519,17 +523,6 @@ export default {
             suggestions = res.data;
             localStorage.setItem("concept.suggestions", JSON.stringify(suggestions));
           }
-          // filter suggestions with empty colours and images
-          suggestions = suggestions.filter(concept => {
-            let suggestionIsFull = true;
-            concept.colors.forEach( color =>  {
-              if (!color.color || !concept.images || concept.images.length < 5 ){
-                suggestionIsFull = false;
-                return;
-              }
-            });
-            return suggestionIsFull;
-          });
 
           suggestions.map((concept) => {
             let weight = "";

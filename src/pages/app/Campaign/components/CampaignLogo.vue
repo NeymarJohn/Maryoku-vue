@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper-logo">
     <div class="wrapper-change-logo">
-      <div v-if="imgURL" class="change-logo">
+      <div v-if="logoUrl" class="change-logo">
         <div v-if="!review" class="over-logo-campaign">
           <input
             id="replace-logo"
@@ -26,7 +26,7 @@
             <span>Delete</span>
           </div>
         </div>
-        <img class="logo" :src="imgURL">
+        <img class="logo" :src="logoUrl">
       </div>
       <vue-dropzone
         v-else
@@ -63,7 +63,6 @@
 import vue2Dropzone from "vue2-dropzone";
 import HideSwitch from "@/components/HideSwitch";
 import CustomTitleEditor from "./CustomTitleEditor";
-import { getBase64 } from "@/utils/file.util";
 
 export default {
   name: "CampaignLogo",
@@ -98,23 +97,16 @@ export default {
         maxFilesize: 0.5,
         headers: { "My-Awesome-Header": "header value" },
       },
-      imgURL: this.logoUrl,
     };
   },
   methods: {
-    async onFileChangeLogo(event) {
-      const photoData = await getBase64(event.target.files[0]);
-      this.imgURL = photoData;
+    onFileChangeLogo(event) {
       this.$emit("change-logo", event.target.files[0]);
     },
-    async selectLogoDropZone(file) {
-      const photoData = await getBase64(file);
-      this.imgURL = photoData;
-
+    selectLogoDropZone(file) {
       this.$emit("change-logo", file);
     },
     removeLogo() {
-      this.imgURL = null;
       this.$emit("change-logo", null);
     },
     replaceLogo() {

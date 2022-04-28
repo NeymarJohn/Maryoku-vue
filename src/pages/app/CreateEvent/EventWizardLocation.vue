@@ -12,11 +12,7 @@
       </div>
       <div class="location event-basic-info">
         <div class="mt-4rem">
-          <location-input v-model="location"
-                          placeholder="Type city / region or specific address here…"
-                          theme="roze"
-                          @change="changeLocation"
-          />
+          <location-input v-model="location" placeholder="Type city / region or specific address here…" @change="changeLocation" />
         </div>
       </div>
     </div>

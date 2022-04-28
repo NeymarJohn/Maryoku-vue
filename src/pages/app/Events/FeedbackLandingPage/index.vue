@@ -391,7 +391,8 @@ export default {
         this.selectedAttachments = this.filterFilesByType(typeFiles, this.attachments);
       }
       const attachments = this.selectedAttachments.map(({ url }) => url);
-      blankOpen(`${process.env.SERVER_URL}/downloadFiles?files=${attachments}`);
+      const result = await S3Service.downloadFiles(attachments);
+      blankOpen(`data:application/zip,${result.data}`);
     },
     filterFilesByType(selectedTypeFiles, files) {
       const extensions = [];

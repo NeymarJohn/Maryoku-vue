@@ -324,6 +324,9 @@
         @cancel="showScheduleModal = false"
       />
     </div>
+    <!-- <button @click="saveDraftCampaign">
+      test save data
+    </button> -->
 
     <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
@@ -347,7 +350,7 @@
               <Scheduled :time="event.eventStartMillis" />
               <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
               <SendAgainBtn v-else @click="showScheduleModal = true">
-                Change Schedule
+                Change Schdeule
               </SendAgainBtn>
             </template>
           </template>
@@ -361,6 +364,14 @@
               </Icon>
             </md-button>
             <span class="seperator" />
+            <md-button
+              class="md-simple md-button md-black maryoku-btn"
+              @click="startCampaign"
+            >
+              <Icon src="Campaign/group-2428.svg">
+                Send Now
+              </Icon>
+            </md-button>
             <md-button
               class="md-simple md-button md-black maryoku-btn"
               @click="revertSetting"
@@ -643,7 +654,6 @@ export default {
     this.setConceptName();
     this.campaigns = await this.getCampaigns({ event: this.event });
     this.setDefaultSettings();
-
   },
   methods: {
     ...mapActions  ("campaign", ["getCampaigns", "saveCampaign"]),
@@ -662,6 +672,14 @@ export default {
     },
     close() {
       return this.showChangeCoverModal = false;
+    },
+    chooseImage(url) {
+      this.setAttribute({
+        name  : this.currentCampaignType,
+        key   : "coverImage",
+        value : url
+      });
+      this.close();
     },
     toggleCommentMode(mode) {
       return this.showCommentEditorPanel = mode;
@@ -688,6 +706,8 @@ export default {
         confirmButtonClass : "md-button md-success",
         title,
       });
+
+      console.log("deliverySettings", { ...this.deliverySettings });
 
       if (this.deliverySettings) {
         const { email = {}, phone = {} } = this.deliverySettings;
@@ -724,6 +744,13 @@ export default {
     async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
       this.isLoading = true;
       const campaignData = this.$store.state.campaign[campaignType];
+      let coverImage = campaignData.coverImage;
+
+      if (coverImage && coverImage.indexOf("base64") >= 0) {
+        const fileName   = `${this.event.id}-${campaignType}`;
+        const fileObject = S3Service.dataURLtoFile(coverImage, fileName);
+        coverImage = await S3Service.fileUpload(fileObject, fileName, "campaigns/cover-images");
+      }
 
       let referenceUrl = "";
       const makeUrl = path => `${document.location.origin}/#/${path}/${this.event.id}`;
@@ -739,6 +766,7 @@ export default {
         ...campaignData,
         campaignStatus,
         referenceUrl,
+        coverImage,
         isPreview,
         event        : new CalendarEvent({ id: this.event.id }),
         scheduleTime : Date.now(),
@@ -798,33 +826,23 @@ export default {
         timeout         : 5000,
       });
     },
-    chooseImage(url) {
-      console.log('choose.image', url);
-      this.setAttribute({
-        name  : this.currentCampaignType,
-        key   : "coverImage",
-        value : url
-      });
-      this.close();
-      this.saveDraftCampaign();
+    sendToAddtionalGuests() {
+      return this.setCurrentAttribute("campaignStatus", "EDITING");
+    },
+    sendAgain() {
+      this.saveDraftCampaign("STARTED");
     },
     async changeCampaignLogo(file) {
-
-      let logoUrl = null;
-      if (file) {
-        const extension = file.type.split("/")[1];
-        const fileName  = uuidv4();
-        logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
-
-      } else {
-        await S3Service.deleteFile(this.currentCampaign.logoUrl);
-      }
-      Object.keys(this.campaignTabs).forEach(key => {
-        this.setAttribute({name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl});
-        this.callSaveCampaign(
-          this.campaignTabs[key].name,
-          this.campaigns[this.campaignTabs[key].name].campaignStatus);
-      });
+      const changeLogo = (logoUrl) => {
+        const setLogoByName = name => this.setCampaignAttribute({ key: "logoUrl", value: logoUrl, name });
+        ["SAVING_DATE", "RSVP", "COMING_SOON", "FEEDBACK"].forEach(setLogoByName);
+        this.saveCampaign({ id: this.currentCampaign.id, logoUrl });
+      };
+      if (!file) changeLogo(file);
+      const extension = file.type.split("/")[1];
+      const fileName  = uuidv4();
+      const logoUrl   = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+      changeLogo(logoUrl);
     }
   },
 };
@@ -860,7 +878,7 @@ export default {
 
 .event-campaign-section {
   .campaign-footer {
-    height: 90px;
+    height: 128px;
     background-color: white;
     padding: 0px 50px;
     min-width: calc(100%);
