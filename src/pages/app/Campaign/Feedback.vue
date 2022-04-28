@@ -14,6 +14,7 @@
             border="no-border"
           />
         </div>
+        <img v-else src="static/img/b7f79f04-be35-428e-be75-e59ffa4dc187.png" class="change-cover mr-10">
         <div class="change-cover-feedback">
           <md-button
             id="ChangeCoverImage"
@@ -322,6 +323,11 @@ export default {
         ...(this.campaignData.visibleSettings || {}),
       };
     },
+    campaignDescription() {
+      return this.campaignData.description || "Just a short note to thank you for participating in our recent event. " +
+        "We appreciate your attendance and hope you had an enjoyable, productive time. " +
+        "Your feedback will be very helpful and we look forward to welcoming you to more events in the future.";
+    },
     campaignAttachments() {
       return this.campaignData.attachments || [];
     },
@@ -429,15 +435,13 @@ export default {
     handleChangeCampaignVisibleSettings(key, value) {
       return this.setFeedbackAttribute("visibleSettings", { ...this.campaignVisibleSettings, [key]: value });
     },
-    async handleChangeCampaignLogo(file) {
+    handleChangeCampaignLogo(file) {
       this.$emit("change-logo", file);
     },
     async uploadFiles(files) {
       const attachments = files.map(({ status, ...file }) => file);
-      this.setFeedbackAttribute("attachments", files);
       await this.saveCampaign({ id: this.campaignData.id, attachments });
-
-      this.showModalWindowOpen = false;
+      return this.setFeedbackAttribute("attachments", files);
     },
 
     makeFileSrc (file) {

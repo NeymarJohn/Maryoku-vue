@@ -105,6 +105,8 @@
         <DoneModal @cancel="DoneModal = false" />
       </template>
     </modal>
+
+    <!-- <CustomerListModal v-if="importCustomersModal" :events="upcomingEvents" @cancel="importCustomersModal = false" /> -->
   </div>
 </template>
 <script>

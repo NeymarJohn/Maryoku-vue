@@ -89,13 +89,13 @@
             Put a check next to the file you want to appear in the main view.
           </div>
         </div>
-        <div class="ml-auto d-flex align-center">
+        <div class="footer-content-actions">
           <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles" />
-          <md-button class="md-simple maryoku-btn" @click="close">
+          <div class="cancel-text-bottom-block" @click="close">
             Cancel
-          </md-button>
+          </div>
           <md-button
-            class="md-red maryoku-btn ml-10"
+            class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default"
             @click="clickUploadFiles"
           >
             Upload files
@@ -367,5 +367,25 @@ export default {
     color: #050505;
   }
 
+  .footer-content-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+
+    .cancel-text-bottom-block {
+      width: 56px;
+      height: 22px;
+      margin: 14px 38px 14px 0;
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.34px;
+      text-align: center;
+      color: #000;
+      cursor: pointer;
+    }
+  }
 }
 </style>
