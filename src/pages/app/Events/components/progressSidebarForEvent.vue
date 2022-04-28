@@ -74,6 +74,17 @@
         </md-button>
       </div>
     </div>
+    <div class="zoom-block">
+      <div class="zoom-wrapper">
+        <button class="md-button zoom-button" @click="changeZoom('-')">
+          -
+        </button>
+        <span>{{ zoomLevel }}%</span>
+        <button class="md-button zoom-button" @click="changeZoom('+')">
+          +
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -101,6 +112,7 @@ export default {
 		currentUrl: "",
 		event: {},
 		localElements: [],
+    zoomLevel: 100,
 	}),
 	computed: {
 		warming() {
@@ -120,6 +132,7 @@ export default {
 		setTimeout((_) => {
 			this.renderProgress();
 		}, 50);
+    this.zoomLevel = Math.round( JSON.parse(localStorage.getItem("zoomParams")).zoomScale * 100);
   },
 	updated() {
 		this.localElements = this.elements;
@@ -127,6 +140,15 @@ export default {
 	},
 	methods: {
 		...mapActions("event", ["getEventAction"]),
+    changeZoom(sign){
+      if(sign === "-"){
+        this.zoomLevel = this.zoomLevel - 10;
+      }else {
+        this.zoomLevel = this.zoomLevel + 10;
+      }
+        document.body.style.zoom = this.zoomLevel / 100 ;
+        localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomLevel / 100, windowWidth: this.windowWidth}));
+    },
 		goToRoute(item, index) {
 			let vm = this;
 			this.$router.push(`/events/${this.event.id}/${item.route}`);
@@ -156,4 +178,34 @@ export default {
 
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.zoom-block {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  .zoom-wrapper {
+    background-color: #e7e6e6;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    border-radius: 3px;
+    span {
+      margin: 0 10px;
+      color: #464646;
+    }
+    .zoom-button{
+      background-color: #e7e6e6 !important;
+      box-shadow: none;
+      color: #464646 !important;
+      font-size: 40px;
+      margin: 3px;
+      line-height: 29px;
+      min-width: 65px;
+    }
+  }
+}
+</style>
