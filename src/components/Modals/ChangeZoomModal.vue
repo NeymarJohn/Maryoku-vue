@@ -1,5 +1,5 @@
 <template>
-  <Modal v-if="showModal && !isMobile" :styles="modalCustomStyles">
+  <Modal v-if="showModal" :styles="modalCustomStyles">
     <template slot="header">
       <div class="header">
       </div>
@@ -44,22 +44,27 @@ export default {
       zoomScale: 1,
       showModal: true,
       isVendor: false,
+      isLoginPage: false,
+      windowWidthChanged: true,
     };
   },
   beforeMount() {
    setTimeout( ()=> {
      this.isVendor = this.$router.currentRoute.path.startsWith("/vendor");
-     this.showModal = !(
+     this.isLoginPage = !(
        this.$router.currentRoute.path.includes("signup") ||
        this.$router.currentRoute.path.includes("signin")
      );
    }, 1);
     this.zoomScale = 1 / (1770 / this.windowWidth);
     const savedZoom = localStorage.zoomParams ? JSON.parse(localStorage.zoomParams) : {};
-    if (this.zoomScale === savedZoom.zoomScale && this.windowWidth === savedZoom.windowWidth) {
+    if (this.windowWidth === savedZoom.windowWidth) {
       document.body.style.zoom = this.zoomScale;
-      this.showModal = false;
+      this.windowWidthChanged = false;
     }
+  },
+  created() {
+    this.showModal = (this.windowWidthChanged && !this.isMobile && this.isLoginPage);
   },
   computed: {
     modalCustomStyles() {
@@ -74,7 +79,7 @@ export default {
     applyScreenZoom(){
       document.body.style.zoom = this.zoomScale;
       localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomScale, windowWidth: this.windowWidth}));
-      this.showModal = false;
+      this.windowWidthChanged = false;
     },
   },
 };

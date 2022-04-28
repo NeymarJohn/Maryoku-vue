@@ -1,5 +1,5 @@
 <template>
-  <div :class="stringRoute.includes('vendor/inbox/proposal') ? 'click-capture1' : 'click-capture'" @click="addFromEvent( $event )">
+  <div class="click-capture" @click="addFromEvent( $event )">
     <comment-circle-button
       v-for="(item, index) in unresolvedComponents"
       :key="index"
@@ -220,11 +220,7 @@ export default {
     },
 
     setEditPanePosition(x, y) {
-      var captureString = ".click-capture";
-      if(this.stringRoute.includes("vendor/inbox/proposal")) {
-        captureString = ".click-capture1";
-      }
-      const deviceWidth = $(captureString).width();
+      const deviceWidth = $(".click-capture").width();
 
       if(x > deviceWidth){
         x = deviceWidth - 20;
@@ -272,11 +268,7 @@ export default {
         this.clearStatus();
         return;
       }
-      var captureString = ".click-capture";
-      if(this.stringRoute.includes("vendor/inbox/proposal")) {
-        captureString = ".click-capture1";
-      }
-      var element = document.querySelector(captureString);
+      var element = document.querySelector(".click-capture");
       var top = element.offsetTop;
       const maxIndex = this.updatedCommentComponents
         ? this.updatedCommentComponents.reduce((index, item) => {
@@ -284,8 +276,8 @@ export default {
             return index;
           }, 0)
         : 0;
-        let letfOffset = $(captureString).offset().left;
-        let topOffset = $(captureString).offset().top;
+        let letfOffset = $(".click-capture").offset().left;
+        let topOffset = $(".click-capture").offset().top;
       const newComentComponent = {
         dateTime: Date.now(),
         positionX: event.clientX - letfOffset,
@@ -435,13 +427,9 @@ export default {
       this.showAddress = false;
     },
     getCirclePosition(item){
-      var captureString = ".click-capture";
-      if(this.stringRoute.includes("vendor/inbox/proposal")) {
-        captureString = ".click-capture1";
-      }
 
-      if(item.positionX > $(captureString).width()){
-        item.positionX = $(captureString).width() - 20;
+      if(item.positionX > $(".click-capture").width()){
+        item.positionX = $(".click-capture").width() - 20;
       }
       return {left: `${item.positionX}px`, top: `${item.positionY}px`};
     }
@@ -527,19 +515,6 @@ export default {
   -webkit-user-select: none;
   z-index: 4999;
 }
-
-.click-capture1 {
-  bottom: 0px;
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 100px;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  z-index: 4999;
-}
-
 .event-plan .click-capture {
   //left: 400px;
 }

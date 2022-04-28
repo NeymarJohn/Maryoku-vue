@@ -406,9 +406,36 @@
       </template>
       <template v-else>
         <div class="proposal-footer white-card d-flex justify-content-end">
-          <md-button class="md-red maryoku-btn" @click="findVendors">
+          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors">
             Find Vendors for this category
           </md-button>
+          <md-menu
+            md-size="auto"
+            md-align-trigger
+            md-direction="top-end"
+            :md-offset-y="20"
+          >
+            <md-button
+              md-menu-trigger
+              class="md-icon-button find-vendor-menu-btn"
+            >
+              <md-icon class="find-vendor-menu-btn-icon">
+                keyboard_arrow_up
+              </md-icon>
+            </md-button>
+            <md-menu-content>
+              <md-menu-item
+                class="text-center"
+                @click="findVendors()"
+                style="min-width: 400px"
+              >
+                <span class="font-size-16 font-bold-extra">
+                  <img :src="`${$iconURL}Requirements/search.svg`" class="mr-10">
+                  Find Vendors For All Categories
+                </span>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
         </div>
       </template>
     </template>
@@ -1131,7 +1158,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
-
   .headers {
     .container {
       background-color: transparent;
@@ -1217,7 +1243,7 @@ export default {
     height: 100vh;
   }
   .proposal-footer {
-    padding: 40px 50px 40px 480px;
+    padding: 22px 50px 22px 480px;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -1445,6 +1471,14 @@ export default {
 
   .border-right {
     border-right: 1px solid #050505;
+  }
+
+  .find-vendor-menu-btn {
+    height: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: #f74374 !important;
+    border-left: solid #f97d9f 1px;
   }
 }
 </style>

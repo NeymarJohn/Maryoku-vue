@@ -17,7 +17,7 @@
         </div>
         <img v-else :src="defaultCoverImage" alt="default cover image">
         <div class="countdown-guests d-flex align-center p-20">
-          <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
+          <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma(Number) }}</span>
           <span v-if="isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
           <span v-if="!isLaunched" class="font-size-22 font-bold color-dark-gray">Guests are Invited</span>
           <hide-switch

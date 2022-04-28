@@ -24,8 +24,16 @@
       </div>
     </template>
     <template slot="body">
+      <Uploader />
       <div v-if="!attachments.length" class="upload-files-modal-body-content">
         <div class="upload-files-white-cube">
+          <proposal-inspirational-photos-item
+            v-for="(photo, index) in inspirationalPhotos"
+            :key="`photo-${index}`"
+            class="photo-item"
+            :default-photo="photo"
+            @change="filesAdded"
+          />
           <vue-dropzone
             id="dropzone"
             ref="myVueDropzone"
@@ -89,13 +97,13 @@
             Put a check next to the file you want to appear in the main view.
           </div>
         </div>
-        <div class="footer-content-actions">
-          <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles" />
-          <div class="cancel-text-bottom-block" @click="close">
+        <div class="ml-auto d-flex align-center">
+          <input id="upload-files" type="file" style="display: none;" multiple="multiple" @change="uploadFiles">
+          <md-button class="md-simple maryoku-btn" @click="close">
             Cancel
-          </div>
+          </md-button>
           <md-button
-            class="md-button md-button md-red maryoku-btn md-theme-default change-cover-btn md-theme-default"
+            class="md-red maryoku-btn ml-10"
             @click="clickUploadFiles"
           >
             Upload files
@@ -107,19 +115,24 @@
 </template>
 
 <script>
-import { Modal } from "@/components";
 import { v4 as uuidv4 } from "uuid";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+
 import S3Service from "@/services/s3.service";
-import FeedbackUploadImagesCarousel from "@/pages/app/Campaign/FeedbackUploadImagesCarousel";
+
+import { Modal } from "@/components";
+import Uploader  from "./Uploader.vue";
+
 
 export default {
   name: "FeedbackUploadImagesModal",
   components: {
     Modal,
     vueDropzone: vue2Dropzone,
-    FeedbackUploadImagesCarousel,
+    // FeedbackUploadImagesCarousel,
+    // ProposalInspirationalPhotosItem,
+    Uploader,
   },
   props: {
     folderNameForUpload: {
@@ -127,20 +140,20 @@ export default {
       required: true,
     },
     attachments: {
-      type: Array,
-      default: () => [],
+      type    : Array,
+      default : () => new Array(10),
     },
   },
   data() {
     return {
       dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        maxFilesize: 25,
-        maxFiles: 10,
-        createImageThumbnails: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
-        headers: { "My-Awesome-Header": "header value" },
+        url                   : "https://httpbin.org/post",
+        maxFilesize           : 25,
+        maxFiles              : 10,
+        createImageThumbnails : false,
+        uploadMultiple        : true,
+        acceptedFiles         : "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
+        headers               : { "My-Awesome-Header": "header value" },
       },
       carouselItemIndex: 0,
     };
@@ -367,25 +380,5 @@ export default {
     color: #050505;
   }
 
-  .footer-content-actions {
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 1;
-
-    .cancel-text-bottom-block {
-      width: 56px;
-      height: 22px;
-      margin: 14px 38px 14px 0;
-      font-size: 16px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.34px;
-      text-align: center;
-      color: #000;
-      cursor: pointer;
-    }
-  }
 }
 </style>

@@ -24,14 +24,14 @@ export default {
 			pageId: "",
 			resevedPages: [],
 			xCursor: false,
-            sections: [
-                {title: "Create an event to remember", status: "completed", route: "overview", icon: null, progress: 100, componentId: "overview", id: "overview-item"},
-                {title: "Get Inspired", status: "not-complete", route: "booking/concept", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "concept", id: "concept-item"},
-                {title: "Craft Event Budget", status: "not-complete", route: "booking/budget", icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`, progress: 0, componentId: "budget", id: "budget-item"},
-                {title: "Booking Vendors", status: "not-complete", route: "booking/planningboard", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "planningboard", id: "planningboard-item"},
-                {title: "Set The Schedule", status: "not-complete", route: "booking/timeline", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "timeline", id: "timeline-item"},
-                {title: "Communicate With Guests", status: "not-complete", route: "booking/campaign", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "campaign", id: "campaign-item"},
-            ]
+      sections: [
+          {title: "Create an event to remember", status: "completed", route: "overview", icon: null, progress: 100, componentId: "overview", id: "overview-item"},
+          {title: "Get Inspired", status: "not-complete", route: "booking/concept", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "concept", id: "concept-item"},
+          {title: "Craft Event Budget", status: "not-complete", route: "booking/budget", icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`, progress: 0, componentId: "budget", id: "budget-item"},
+          {title: "Booking Vendors", status: "not-complete", route: "booking/planningboard", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "planningboard", id: "planningboard-item"},
+          {title: "Set The Schedule", status: "not-complete", route: "booking/timeline", icon: `${this.$iconURL}Timeline-New/timeline-title.svg`, progress: 0, componentId: "timeline", id: "timeline-item"},
+          {title: "Communicate With Guests", status: "not-complete", route: "booking/campaign", icon: `${this.$iconURL}Campaign/Group 8857.svg`, progress: 0, componentId: "campaign", id: "campaign-item"},
+      ]
 		};
 	},
 	computed: {
@@ -48,39 +48,35 @@ export default {
 			return this.$store.state.eventPlan.showCommentPanel;
 		},
 		barItems() {
+      const sections = this.updateSection();
 
-            const sections = this.updateSection();
+      console.log('bar.items', sections);
+      let elements = [];
 
-            let elements = [];
+      if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
 
-            if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
-                if (this.event.checkList && this.event.checkList.length) {
+        const bookingIndex = sections.findIndex(it => it.componentId === "planningboard");
+        if(this.event.budgetProgress !== 100) sections.splice(bookingIndex, 1);
 
-                    const bookingIndex = this.event.checkList.findIndex(it => it.componentId === "planningboard");
+        if (this.event.checkList && this.event.checkList.length) {
+          this.event.checkList.forEach(it => {
 
-                    this.event.checkList.forEach(it => {
-                        const section = sections.find(s => s.componentId === it.componentId);
-                        elements.push(section);
+            const section = sections.find(s => s.componentId === it.componentId);
+            if (section) elements.push(section);
+          });
 
+        } else {
+          elements = sections;
+        }
+      } else if (this.user.currentUserType === "guest") {
+          this.sections.forEach(it => {
+              if (it.componentId === "overview" || it.componentId === "planningboard") {
+                  elements.push(it);
+              }
+          });
+      }
 
-                        if (it.componentId === "budget" && this.event.budgetProgress === 100 && bookingIndex === -1) {
-
-                            elements.push(sections[3]);
-                        }
-                    });
-
-                } else {
-                    elements = sections;
-                }
-            } else if (this.user.currentUserType === "guest") {
-                this.sections.forEach(it => {
-                    if (it.componentId === "overview" || it.componentId === "planningboard") {
-                        elements.push(it);
-                    }
-                });
-            }
-
-            return elements;
+      return elements;
 		},
 	},
 	watch: {
@@ -95,7 +91,7 @@ export default {
 	beforeCreate() {
 		this.$store.registerModule("eventPlan", state);
 	},
-	
+
 	mounted() {
 		this.fetchData();
 	},

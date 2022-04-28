@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import ProposalListItem from "./ProposalListItem";
+import ProposalListItem from "./ProposalListItem/index";
 import { FadeTransition } from "vue2-transitions";
 import {PROPOSAL_STATUS} from "@/constants/status";
 
