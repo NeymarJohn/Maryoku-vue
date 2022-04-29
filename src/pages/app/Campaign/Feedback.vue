@@ -78,7 +78,7 @@
       </div>
       <maryoku-textarea
         :placeholder="placeHolder"
-        :value="campaignData.description"
+        :value="campaignDescription"
         @input="handleChangeCampaignDescription"
       />
     </div>
@@ -278,6 +278,7 @@ export default {
   data: () => ({
     concept              : {},
     feedbackQuestions    : [],
+    placeHolder          : "",
     newQuestion          : "",
     newQuestionLabel     : "",
     isEditingNewQuestion : false,
@@ -340,6 +341,12 @@ export default {
     },
   },
   created() {
+    this.placeHolder = (`
+      Thanks for attending this recent event – we hope you had a wonderful, productive experience!
+      Your feedback is important to help us understand what worked especially well, on top of
+      anything you feel could be improved in the future.
+    `).trim().replace(/  /g, "");
+
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {
@@ -354,7 +361,7 @@ export default {
     .sort((a, b) => a.order - b.order)
     .forEach(({ eventCategory }) => {
       if (eventCategory.type == "service") {
-        const { fullTitle, icon, label } = eventCategory;
+        const { fullTitle, icon } = eventCategory;
         this.feedbackQuestions.push({
           question     : `How Was The ${fullTitle}?`,
           showQuestion : true,

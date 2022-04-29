@@ -24,7 +24,6 @@
               <drop-down class="d-inline-block"  @close="closeMoreCategories">
                 <ResizableToggleButton
                   class="mr-20 mb-10"
-                  label="More categories"
                   data-toggle="dropdown"
                   :icon="`${$iconURL}Services /more.svg`"
                   :selected-icon="`${$iconURL}Services /more-white.svg`"
@@ -406,7 +405,7 @@
       </template>
       <template v-else>
         <div class="proposal-footer white-card d-flex justify-content-end">
-          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors">
+          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors()">
             Find Vendors for this category
           </md-button>
           <md-menu
@@ -426,7 +425,7 @@
             <md-menu-content>
               <md-menu-item
                 class="text-center"
-                @click="findVendors()"
+                @click="findVendors(true)"
                 style="min-width: 400px"
               >
                 <span class="font-size-16 font-bold-extra">
@@ -481,6 +480,12 @@
       @cancel="showAddBudgetConfirm = false"
       @addNewBudget="addBudget"
     />
+    <DifferentProposalsModal
+      v-if="showDifferentProposals"
+      :proposals="categoryProposals.slice(0, 3)"
+      @cancel="showDifferentProposals=false"
+    >
+    </DifferentProposalsModal>
   </div>
 </template>
 <script>
@@ -510,6 +515,7 @@ const components = {
 
   ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
   AddBudgetModal: () => import("./components/modals/AddBudget.vue"),
+  DifferentProposalsModal: () => import("./components/modals/DifferentProposals"),
   AddBudgetConfirmModal: () => import("./components/modals/AddBudgetConfirm.vue"),
 
   ProposalCard: () => import("../components/ProposalCard"),
@@ -520,7 +526,7 @@ const components = {
   ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
   CommentSidebar: () => import("../components/CommentSidebar.vue"),
   TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
-  ClickOutside: () => import("vue-click-outside")
+  ClickOutside: () => import("vue-click-outside"),
 };
 
 export default {
@@ -770,6 +776,7 @@ export default {
       window.scrollTo(0, 0);
     },
     findVendors(type = false) {
+      console.log('find.vendors', type);
       this.findAllCategory = type
       this.isOpenedFinalModal = true;
     },
@@ -788,20 +795,28 @@ export default {
           expiredBusinessTime: this.expiredTime,
         })
 
-        await this.$store.dispatch(
-          "event/saveEventAction",
-          new CalendarEvent({
-            id: this.event.id,
-            processingStatus: "accept-proposal",
-          }),
-        );
+        if (res.data.success && res.data.data.length) {
+          for (let i = 0; i < res.data.data.length; i ++) {
+            await this.$store.commit("planningBoard/setCategoryRequirements", {
+              category: res.data.data[i].category,
+              requirement: res.data.data[i]
+            });
+            if (this.currentRequirement.category === res.data.data[i].category) {
+              this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
+            }
+          }
+        }
       } else {
         const res = await postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
           issuedTime: new Date().getTime(),
           expiredBusinessTime: this.expiredTime,
         })
-        await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
-        this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
+        if (res.data.success) {
+          await this.$store.commit("planningBoard/setCategoryRequirements", {
+            category: res.data.data.category,
+            requirement: res.data.data});
+          this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
+        }
       }
 
     },
@@ -982,7 +997,7 @@ export default {
         id: this.currentRequirement.id,
         expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
       })
-      console.log('update.expiredtime', res);
+
       this.currentRequirement = res.data;
     },
     async goDetailPage(proposal) {
@@ -1099,14 +1114,16 @@ export default {
     },
     handleAction(action) {
         if (action === "download") {
-            this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
+          this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
 
         } else if (action === "negotiate" || action === "share") {
-            this.setProposal(this.proposal);
-            if (action === "negotiate") this.setOpen("NEGOTIATION");
-            else this.setOpen("SHARE");
+          this.setProposal(this.proposal);
+          if (action === "negotiate") this.setOpen("NEGOTIATION");
+          else this.setOpen("SHARE");
         } else if (action === "compare") {
-            this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
+          this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
+        } else if (action === "something_different") {
+          this.showDifferentProposals = true;
         }
     },
     openNewTab(link) {
@@ -1115,7 +1132,6 @@ export default {
     async processNotification(){
 
       let proposals = this.negotiationProposals;
-      this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
           this.negotiationProposals[key].map(proposal => {
               let { negotiations } = proposal;

@@ -38,7 +38,8 @@
               </template>
             </div>
             <div v-for="(requirement, subCategory) in requirements[item.key].mainRequirements" :key="subCategory">
-              <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0">
+              <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0 &&
+              (requirement.filter(it => it.selected) && requirement.filter(it => it.selected).length)">
                 <div class="color-gray">
                   {{ subCategory }}
                 </div>
