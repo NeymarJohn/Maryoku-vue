@@ -59,12 +59,14 @@ export default {
     this.zoomScale = 1 / (1770 / this.windowWidth);
     const savedZoom = localStorage.zoomParams ? JSON.parse(localStorage.zoomParams) : {};
     if (this.windowWidth === savedZoom.windowWidth) {
-      document.body.style.zoom = this.zoomScale;
+      document.body.style.zoom = savedZoom.zoomScale || this.zoomScale;
       this.windowWidthChanged = false;
     }
   },
   created() {
-    this.showModal = (this.windowWidthChanged && !this.isMobile && this.isLoginPage);
+    setTimeout( ()=> {
+      this.showModal = (this.windowWidthChanged && !this.isMobile && this.isLoginPage);
+    },10);
   },
   computed: {
     modalCustomStyles() {
@@ -79,7 +81,7 @@ export default {
     applyScreenZoom(){
       document.body.style.zoom = this.zoomScale;
       localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomScale, windowWidth: this.windowWidth}));
-      this.windowWidthChanged = false;
+      this.showModal = false;
     },
   },
 };

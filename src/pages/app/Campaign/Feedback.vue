@@ -78,7 +78,7 @@
       </div>
       <maryoku-textarea
         :placeholder="placeHolder"
-        :value="campaignDescription"
+        :value="campaignData.description"
         @input="handleChangeCampaignDescription"
       />
     </div>
@@ -223,7 +223,7 @@
     </div>
     <feedback-upload-files-modal
       v-if="showModalWindowOpen"
-      :attachments="campaignAttachments"
+      :files="campaignAttachments"
       :folder-name-for-upload="`events/${event.id}`"
       @close="closeModalWindow"
       @upload-files="uploadFiles"
@@ -250,7 +250,7 @@ import CustomTitleEditor     from "./components/CustomTitleEditor";
 
 // pages
 import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
-import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
+import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal";
 
 // dependencies
 import S3Service from "@/services/s3.service";
@@ -278,7 +278,6 @@ export default {
   data: () => ({
     concept              : {},
     feedbackQuestions    : [],
-    placeHolder          : "",
     newQuestion          : "",
     newQuestionLabel     : "",
     isEditingNewQuestion : false,
@@ -341,12 +340,6 @@ export default {
     },
   },
   created() {
-    this.placeHolder = (`
-      Thanks for attending this recent event – we hope you had a wonderful, productive experience!
-      Your feedback is important to help us understand what worked especially well, on top of
-      anything you feel could be improved in the future.
-    `).trim().replace(/  /g, "");
-
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {
@@ -361,7 +354,7 @@ export default {
     .sort((a, b) => a.order - b.order)
     .forEach(({ eventCategory }) => {
       if (eventCategory.type == "service") {
-        const { fullTitle, icon } = eventCategory;
+        const { fullTitle, icon, label } = eventCategory;
         this.feedbackQuestions.push({
           question     : `How Was The ${fullTitle}?`,
           showQuestion : true,
