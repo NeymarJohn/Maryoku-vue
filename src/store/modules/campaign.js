@@ -110,7 +110,7 @@ const defaultCampaignData = {
   },
   FEEDBACK: {
     ...defaultCampaignDataPartType,
-    description    : "Just a short note to thank you for participating in our recent event. We appreciate your attendance and hope you had an enjoyable, productive time. Your feedback will be very helpful and we look forward to welcoming you to more events in the future.",
+    description    : "Thanks for attending this recent event – we hope you had a wonderful, productive experience! Your feedback is important to help us understand what worked especially well, on top of anything you feel could be improved in the future.",
     coverImage     : `${STORAGE_URL}Campaign+Headers/feedback${coverImgPrefix}.png`,
     visibleSettings: {
       showImages        : true,

@@ -72,7 +72,7 @@ const dataURLtoFIle = async (dataurl, filename) => {
     }
 
     return new File([u8arr], filename, {type:mime});
-}
+};
 
 const isToday = (someDate) => {
   const today = new Date();
