@@ -343,7 +343,7 @@ const actions = {
     const includedIndex = includedServices.findIndex((item) => item.requirementTitle == selectedItem.requirementTitle);
     includedServices.splice(includedIndex, 1);
     commit("setIncludedServices", { category, services: [...includedServices] });
-    const costServices = state.costServices[category];
+    const costServices = state.costServices[category] || [];
     costServices.push(selectedItem);
     commit("setCostServices", { category, services: costServices });
   },

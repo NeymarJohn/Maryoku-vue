@@ -258,7 +258,7 @@ export default {
     serviceTime() {
       const proposalRequest = this.$store.state.vendorProposal.proposalRequest;
       const timelineDates = proposalRequest.eventData.timelineDates;
-      let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
+      let serviceTimeString = this.category === "venuerental" ? "All Day" : "";
       let serviceDate = "";
       timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {

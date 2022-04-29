@@ -223,7 +223,7 @@
     </div>
     <feedback-upload-files-modal
       v-if="showModalWindowOpen"
-      :files="campaignAttachments"
+      :attachments="campaignAttachments"
       :folder-name-for-upload="`events/${event.id}`"
       @close="closeModalWindow"
       @upload-files="uploadFiles"
@@ -250,7 +250,7 @@ import CustomTitleEditor     from "./components/CustomTitleEditor";
 
 // pages
 import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
-import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal";
+import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
 
 // dependencies
 import S3Service from "@/services/s3.service";
