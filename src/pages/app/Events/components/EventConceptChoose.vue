@@ -61,7 +61,7 @@
                 <div
                   class="image-section"
                   :style="`background-image: url(${
-                   encodeURI( image.thumb_url || image.url)
+                    image.thumb_url || image.url
                   });background-size: cover;background-position: center;`"
                 />
               </div>
