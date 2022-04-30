@@ -102,7 +102,7 @@
               :use-custom-slot="true"
               @vdropzone-file-added="fileAdded"
             >
-              <div class="white-cube drop">
+              <div class="white-cube drop d-flex align-center justify-content-center flex-direction-column">
                 <div class="border-cube">
                   <div class="title-text-drag-and-drop">
                     Drag & Drop
@@ -436,6 +436,7 @@ export default {
       const newCampaign = new Campaign({
         campaignType,
         ...campaignData,
+        images: this.images,
       });
       const result = await this.saveCampaign(newCampaign);
       console.dir({ result });
@@ -497,7 +498,6 @@ export default {
   line-height: 2.56;
   letter-spacing: normal;
   text-align: center;
-  margin-top: 50px;
   color: #707070;
 }
 .or-section {
@@ -511,7 +511,6 @@ export default {
   color: #707070;
 }
 .upload-text-area {
-  width: 136px;
   font-size: 16px;
   font-weight: 800;
   color: #f51355 !important;

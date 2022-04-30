@@ -14,7 +14,13 @@
 					<tr>
 						<td width="43%" class="event-block-element">
 							<div class="d-flex align-center">
-								<img :src=" `${$iconURL}Services /${eventCategoryItem.icon}`" />
+								<img
+									:src="
+										editingMode
+											? `${$iconURL}Budget Elements/${eventCategoryItem.icon}`
+											: `/static/icons/budget/${eventCategoryItem.icon.replace('svg', 'png')}`
+									"
+								/>
 								<div style="width: 250px">
 									<span>{{ eventCategoryItem.title }}</span>
 									<span v-if="eventCategoryItem.eventCategory">
