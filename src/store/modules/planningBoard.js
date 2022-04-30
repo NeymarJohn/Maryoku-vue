@@ -215,8 +215,6 @@ const mutations = {
   },
   setProposal: (state, proposal) => {
     state.proposal = proposal;
-    state.proposal.versions = proposal.versions || [];
-    state.currentVersion = -1;
     Vue.set(state, "original", proposal);
   }
 };

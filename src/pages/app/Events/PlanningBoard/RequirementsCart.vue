@@ -4,9 +4,7 @@
       <div>
         <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
         <div>
-          Our vendors will create proposals based on your choices below, so be sure to select everything you really
-          want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can
-          lead to more back-and-forth later on).
+          Our vendors will create proposals based on your choices below.
         </div>
       </div>
       <progress-radial-bar :value="percentOfBudgetCategories" :total="total" />
@@ -38,7 +36,8 @@
               </template>
             </div>
             <div v-for="(requirement, subCategory) in requirements[item.key].mainRequirements" :key="subCategory">
-              <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0">
+              <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0 &&
+              (requirement.filter(it => it.selected) && requirement.filter(it => it.selected).length)">
                 <div class="color-gray">
                   {{ subCategory }}
                 </div>

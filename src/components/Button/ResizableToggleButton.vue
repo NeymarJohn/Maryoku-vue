@@ -3,7 +3,7 @@
     <button class="resizable-toggle-button" :class="{ clicked: clicked, disabled }" @click="handleClick">
       <template v-if="clicked">
         <img v-if="selectedIcon" :src="selectedIcon" width="28px">
-        <span class="label-text">{{ label }}</span>
+        <span class="label-text" v-if="label">{{ label }}</span>
       </template>
       <template v-else>
         <img v-if="icon" :src="icon" :style="iconStyle">
@@ -17,7 +17,6 @@ export default {
   props: {
     label: {
       type: String,
-      default: "Default",
     },
     icon: {
       type: String,
