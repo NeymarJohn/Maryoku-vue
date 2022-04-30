@@ -1,6 +1,6 @@
 <template>
   <div class="rsvp-event-timeline md-layout">
-    <div class="md-layout-item md-size-100 md-small-size-100 mb-20 d-flex align-center">
+    <div class="md-layout-item md-size-100 md-small-size-100 mb-50 d-flex align-center">
       <span class="text-transform-uppercase font-size-30 font-bold-extra" :class="{ 'color-gray': !isDisplayed }">
         A glimpse at the agenda
       </span>
@@ -26,9 +26,6 @@
           />
         </div>
       </div>
-    </template>
-    <template v-else>
-      <p class="px-15 font-size-18 color-black-middle">Schedule is not yet set</p>
     </template>
   </div>
 </template>
@@ -57,14 +54,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    visible: {
-      type: Boolean,
-      default: false,
-    }
   },
   data() {
     return {
-      isDisplayed: this.visible,
+      isDisplayed: true,
     };
   },
   computed: {
@@ -72,11 +65,12 @@ export default {
       return this.$store.state.event.eventData;
     },
     scheduledDays() {
+      var timelines = {};
       return this.event.timelineDates;
     },
   },
   watch: {
-    isDisplayed(newValue) {
+    isDisplayed(newValue, oldValue) {
       this.$emit("changeVisibility", newValue);
     },
   },

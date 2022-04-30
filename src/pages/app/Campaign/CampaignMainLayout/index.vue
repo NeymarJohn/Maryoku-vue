@@ -421,7 +421,7 @@
           class="d-flex align-center"
         >
           <template v-if="!canSchedule">
-            <Scheduled :time="currentCampaign.scheduleTime" />
+            <Scheduled :time="event.eventStartMillis" />
             <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
             <SendAgainBtn v-else @click="showScheduleModal = true">
               Change Schdeule
@@ -695,6 +695,13 @@ export default {
           return swapTitle("Please select email or phone or both.");
       }
 
+      if (this.selectedTab === 4) {
+        if (!this.currentCampaign.description)
+          return swapTitle("Please write description for Feedback page");
+        if (!this.currentCampaign.images || !this.currentCampaign.images.length)
+          return swapTitle("Please select images for event");
+      }
+
       this.saveDraftCampaign("STARTED");
     },
     cancelSchedule() {
@@ -792,6 +799,7 @@ export default {
       });
     },
     chooseImage(url) {
+      console.log('choose.image', url);
       this.setAttribute({
         name  : this.currentCampaignType,
         key   : "coverImage",
@@ -809,7 +817,7 @@ export default {
         logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
 
       } else {
-        // await S3Service.deleteFile(this.currentCampaign.logoUrl);
+        await S3Service.deleteFile(this.currentCampaign.logoUrl);
       }
       Object.keys(this.campaignTabs).forEach(key => {
         this.setAttribute({name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl});

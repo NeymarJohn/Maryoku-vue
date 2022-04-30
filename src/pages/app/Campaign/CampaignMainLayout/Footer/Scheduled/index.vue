@@ -1,7 +1,7 @@
 <template>
   <div class="ml-40 d-flex flex-centered align-center">
     <img :src="`${$iconURL}Campaign/Group 9222.svg`">
-    <span class="ml-10">Scheduled To {{ ' ' + $dateUtil.formatScheduleDay(time, format) }} </span>
+    <span class="ml-10">Scheduled To {{ ' ' + $dateUtil.formatScheduleDay(+time, format) }} </span>
   </div>
 </template>
 <script>
@@ -12,7 +12,7 @@ export default {
       default : () => "MMM DD, YYYY ",
     },
     time: {
-      type    : String,
+      type    : Number,
       default : () => 0,
     }
   }

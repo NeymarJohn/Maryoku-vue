@@ -1,5 +1,5 @@
 <template>
-  <div class="click-capture" @click="addFromEvent( $event )">
+  <div :class="clickCaptureStatus ? 'click-capture1' : 'click-capture'" @click="addFromEvent( $event )">
     <comment-circle-button
       v-for="(item, index) in unresolvedComponents"
       :key="index"
@@ -81,6 +81,11 @@
               @input="getMessage"
             />
             <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon icon-mention">
+            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
+            <div class="row">
+              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
+            </div>
             <div class="footer">
               <md-button class="md-simple normal-btn md-button-cancel" @click="closeCommentListPane">
                 Cancel
@@ -102,7 +107,7 @@
       </div>
     </transition>
     <!-- <div v-if="isOpenCommentListsPane" :class="{mask:isOpenCommentListsPane}" /> -->
-    <div v-if="isOpenCommentListsPane" :class="[isOpenCommentListsPane ? 'mask' : '', stringRoute.includes('vendor/inbox/proposal') ? 'vendorMask' : '']" />
+    <div v-if="isOpenCommentListsPane" :class="[isOpenCommentListsPane ? 'mask' : '', clickCaptureStatus ? 'vendorMask' : '']" />
   </div>
   <!-- End Comments List -->
 </template>
@@ -113,12 +118,18 @@ import EventCommentComponent from "@/models/EventCommentComponent";
 import { getReq } from "@/utils/token";
 import { FadeTransition } from "vue2-transitions";
 import CommentItem from "./CommentItem";
+import data from "emoji-mart-vue-fast/data/all.json";
+import "emoji-mart-vue-fast/css/emoji-mart.css";
+import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
+
+let emojiIndex = new EmojiIndex(data);
 
 export default {
   components: {
     CommentCircleButton,
     FadeTransition,
     CommentItem,
+    Picker,
   },
   props:{
     commentComponents:{
@@ -167,6 +178,9 @@ export default {
       selectedCustomer: null,
       updatedCommentComponents: updatedCommentComponents,
       stringRoute: this.$route.path,
+      emojiIndex: emojiIndex,
+      emojisOutput: "",
+      showEmojiPanel: false,
     };
   },
   computed: {
@@ -187,6 +201,12 @@ export default {
     },
     unresolvedComponents() {
       return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
+    },
+    clickCaptureStatus() {
+      if(this.stringRoute.includes("vendor/inbox/proposal") || this.stringRoute.includes("unregistered/proposals")) {
+        return true;
+      }
+      return false;
     }
   },
   watch:{
@@ -217,10 +237,17 @@ export default {
       this.selectedComponentIndex = this.updatedCommentComponents.findIndex(item=>item.index === commentComponent.index);
       this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY );
       this.isOpenCommentListsPane = true;
+      this.editingComment = "";
     },
-
+    showEmoji(emoji) {
+      this.editingComment = this.editingComment + emoji.native;
+    },
     setEditPanePosition(x, y) {
-      const deviceWidth = $(".click-capture").width();
+      var captureString = ".click-capture";
+      if(this.clickCaptureStatus) {
+        captureString = ".click-capture1";
+      }
+      const deviceWidth = $(captureString).width();
 
       if(x > deviceWidth){
         x = deviceWidth - 20;
@@ -268,7 +295,11 @@ export default {
         this.clearStatus();
         return;
       }
-      var element = document.querySelector(".click-capture");
+      var captureString = ".click-capture";
+      if(this.clickCaptureStatus) {
+        captureString = ".click-capture1";
+      }
+      var element = document.querySelector(captureString);
       var top = element.offsetTop;
       const maxIndex = this.updatedCommentComponents
         ? this.updatedCommentComponents.reduce((index, item) => {
@@ -276,8 +307,8 @@ export default {
             return index;
           }, 0)
         : 0;
-        let letfOffset = $(".click-capture").offset().left;
-        let topOffset = $(".click-capture").offset().top;
+        let letfOffset = $(captureString).offset().left;
+        let topOffset = $(captureString).offset().top;
       const newComentComponent = {
         dateTime: Date.now(),
         positionX: event.clientX - letfOffset,
@@ -427,9 +458,13 @@ export default {
       this.showAddress = false;
     },
     getCirclePosition(item){
+      var captureString = ".click-capture";
+      if(this.clickCaptureStatus) {
+        captureString = ".click-capture1";
+      }
 
-      if(item.positionX > $(".click-capture").width()){
-        item.positionX = $(".click-capture").width() - 20;
+      if(item.positionX > $(captureString).width()){
+        item.positionX = $(captureString).width() - 20;
       }
       return {left: `${item.positionX}px`, top: `${item.positionY}px`};
     }
@@ -515,6 +550,19 @@ export default {
   -webkit-user-select: none;
   z-index: 4999;
 }
+
+.click-capture1 {
+  bottom: 0px;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 100px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  z-index: 4999;
+}
+
 .event-plan .click-capture {
   //left: 400px;
 }
@@ -570,6 +618,13 @@ export default {
     top: 35px;
     width: 20px;
   }
+  .emoji-icon {
+    position: absolute;
+    right: 65px;
+    top: 35px;
+    width: 20px;
+    cursor: pointer;
+  }
   .md-button-cancel {
     font-size: 16px;
     font-weight: bold;
@@ -618,4 +673,16 @@ export default {
     font-size: 30px !important;
   }
 }
+
+.show-emoji {
+  display: flex;
+}
+
+.hide-emoji {
+  display: none;
+}
+
+.row { display: flex; }
+.row > * { margin: auto; }
+
 </style>

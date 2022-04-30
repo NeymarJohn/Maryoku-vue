@@ -50,9 +50,13 @@ export default {
 		barItems() {
       const sections = this.updateSection();
 
+      console.log('bar.items', sections);
       let elements = [];
 
       if (this.user.currentUserType === "planner" || this.user.currentUserType === "vendor") {
+
+        const bookingIndex = sections.findIndex(it => it.componentId === "planningboard");
+        if(this.event.budgetProgress !== 100) sections.splice(bookingIndex, 1);
 
         if (this.event.checkList && this.event.checkList.length) {
           this.event.checkList.forEach(it => {
@@ -121,7 +125,7 @@ export default {
                 }
 
                 if (it.componentId === "planningboard" ) {
-                    if (this.event.budgetProgress === 100) elements.push(it);
+                    if (this.event.budgetProgress > 0) elements.push(it);
                 } else {
                     elements.push(it);
                 }

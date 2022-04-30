@@ -80,9 +80,7 @@
         </div>
         <div class="sidebar__item__content w-90">
           <div class="dot" />
-          <span
-            class="comment">{{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ""
-            }} </span>
+          <span class="comment"> {{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : "" }} </span>
         </div>
         <div class="d-flex sidebar__item__content_2 justify-content-between mt-1 mb-1">
           <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length - 1 }} Reply
@@ -95,7 +93,7 @@
         </div>
         <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4"
              :class="{'commentsNoReply':(commentComponent.comments.length <= 1)}">
-          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem"
+          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex > 0" :key="cindex" class="commentItem"
                :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
             <div class="d-flex sidebar__item__content2 justify-content-between">
               <div class="sidebar__item__details d-flex">
@@ -270,7 +268,7 @@ export default {
     },
     toggleshowReply(commentIndex) {
       this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
-      this.selectedComponent = this.commentComponents[commentIndex];
+      this.selectedComponent = this.sortedComponents[commentIndex];
     },
     async saveNewComment(event, type) {
       let selectedComponent = this.selectedComponent;

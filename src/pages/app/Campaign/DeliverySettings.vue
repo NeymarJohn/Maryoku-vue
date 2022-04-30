@@ -25,18 +25,18 @@
                 <span class="font-size-22 font-bold-extra mr-30">By text message</span>
                 <span>WhatsApp or sms </span>
               </div>
-              <md-button class="md-icon-button md-simple collapse-button" @click="phoneCollapsed = !phoneCollapsed">
-                <md-icon v-if="phoneCollapsed" class="icon">
+              <md-button class="md-icon-button md-simple collapse-button">
+                <md-icon v-if="settingData.phone.selected" class="icon">
                   keyboard_arrow_down
                 </md-icon>
-                <md-icon v-if="!phoneCollapsed" class="icon">
+                <md-icon v-if="!settingData.phone.selected" class="icon">
                   keyboard_arrow_right
                 </md-icon>
               </md-button>
             </div>
             <div
               v-if="
-                phoneCollapsed &&
+                settingData.phone.selected &&
                   (currentCampaign.campaignStatus == 'EDITING' ||
                   currentCampaign.campaignStatus == 'TESTING' ||
                   currentCampaign.campaignStatus == 'SAVED')
@@ -131,7 +131,7 @@
             </div>
             <div
               v-if="
-                (phoneCollapsed && currentCampaign.campaignStatus == 'STARTED') ||
+                (settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED') ||
                   currentCampaign.campaignStatus == 'SCHEDULED'
               "
               class="mt-50"
@@ -163,18 +163,18 @@
                 <span class="font-size-22 font-bold-extra mr-30">By email</span>
                 <span>Enter recipients emails or upload Microsoft excel or Google sheets with guests list</span>
               </div>
-              <md-button class="md-icon-button md-simple collapse-button" @click="emailCollapsed = !emailCollapsed">
-                <md-icon v-if="emailCollapsed" class="icon">
+              <md-button class="md-icon-button md-simple collapse-button">
+                <md-icon v-if="settingData.email.selected" class="icon">
                   keyboard_arrow_down
                 </md-icon>
-                <md-icon v-if="!emailCollapsed" class="icon">
+                <md-icon v-if="!settingData.email.selected" class="icon">
                   keyboard_arrow_right
                 </md-icon>
               </md-button>
             </div>
             <div
               v-if="
-                emailCollapsed &&
+                settingData.email.selected &&
                   (currentCampaign.campaignStatus == 'EDITING' ||
                   currentCampaign.campaignStatus == 'TESTING' ||
                   currentCampaign.campaignStatus == 'SAVED')
@@ -272,7 +272,7 @@
             </div>
             <div
               v-if="
-                emailCollapsed &&
+                settingData.email.selected &&
                   (currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED')
               "
             >
@@ -379,8 +379,6 @@ export default {
       },
       invalidPastedEmails: null,
       invalidPastedPhones: null,
-      phoneCollapsed: false,
-      emailCollapsed: false,
       tooltips: {
         phoneExcel: "Please upload a csv file containing only phone numbers in a valid format.",
         emailExcel: "Please upload a csv file containing only email addresses in a valid format.",
