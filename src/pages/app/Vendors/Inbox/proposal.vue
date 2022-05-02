@@ -40,7 +40,7 @@
             page="proposal"
             hide-download
             hide-share
-            @toggleCommentMode="toggleCommentMode1"
+            @toggleCommentMode="toggleCommentMode"
           />
         </div>
       </div>
@@ -105,7 +105,7 @@ export default {
     this.loading = false;
   },
   methods: {
-    ...mapActions("commentProposal", ["saveVersion", "toggleCommentMode"]),
+    ...mapActions("commentProposal", ["saveVersion"]),
     ...mapActions("comment", ["getProposalById", "updateProposal"]),
     ...mapMutations("commentProposal", ["updateCommentComponents"]),
     ...mapMutations("comment", ["setGuestName","setSelectedProposal"]),
@@ -116,9 +116,8 @@ export default {
     downProposal() {
       this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
     },
-    toggleCommentMode1(mode) {
+    toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
-      this.toggleCommentMode(mode);
     },
     showModal(name) {
       this.setProposal(this.proposal);
@@ -147,7 +146,6 @@ export default {
       }
       this.updateCommentComponents(this.commentComponents);
       this.showCommentEditorPanel = true;
-      this.toggleCommentMode(mode);
     },
     async getProposal(proposalId) {
       this.loading = true;
@@ -163,23 +161,26 @@ export default {
       this.getProposalById(this.$route.params.proposalId).then((proposal) => {
         this.loading = false;
         if(proposal) {
-          this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.$route.params.proposalId}`).then(res => {
-            console.log("----------------------------------", res);
+          this.$store.dispatch("comment/getCommentComponents", `/proposals/${this.proposalId}`).then(res => {
             this.commentComponents = res;
             if(this.commentComponents.length > 0) {
               this.showProposal = true;
             } else {
-              this.showProposal = false;
+              if( this.proposalId == this.$route.params.proposalId ) {
+                this.showProposal = true;
+              } else {
+                this.showProposal = false;
+              }
             }
             // this.showProposal = !!this.commentComponents.length;
           });
+          
+          
           proposal.versions = !proposal.versions ? [] : proposal.versions;
           this.$store.dispatch("vendorProposal/setProposal", { ...proposal });
           this.$store.dispatch("commentProposal/setProposal", { ...proposal });
 
           //this.commentComponents = proposal.commentComponent;
-        }else {
-          this.showProposal = false;
         }
       });
     },
@@ -188,6 +189,7 @@ export default {
       if(this.proposal.versions[index]) {
         this.proposalId = this.proposal.versions[index].id;
       }
+      console.log("version---------------------------------", this.proposal.versions[index]);
       this.selectProposal();
       this.$store.commit("commentProposal/selectVersion", index);
     },
@@ -233,10 +235,8 @@ export default {
       this.selectProposal();
       if(this.showCommentEditorPanel){
         this.showCommentEditorPanel = false;
-        this.toggleCommentMode(false);
         setTimeout(() => {
           this.showCommentEditorPanel = true;
-          this.toggleCommentMode(false);
         },100);
       }
     },

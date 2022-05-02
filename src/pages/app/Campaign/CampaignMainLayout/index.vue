@@ -424,7 +424,7 @@
             <Scheduled :time="currentCampaign.scheduleTime" />
             <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
             <SendAgainBtn v-else @click="showScheduleModal = true">
-              Change Schedule
+              Change Schdeule
             </SendAgainBtn>
           </template>
           <div

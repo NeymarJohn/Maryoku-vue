@@ -12,6 +12,7 @@
       class="carousel-upload-images"
       class-image="carousel-upload-image"
       :images="files"
+      :selected="selected"
       @change-item-index="select"
     />
   </div>
