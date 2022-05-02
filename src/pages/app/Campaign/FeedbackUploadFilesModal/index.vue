@@ -9,7 +9,7 @@
       <ModalHeader @close="close" />
     </template>
     <template slot="body">
-      <ModalBody :files="fullFiles" @load="uploadFiles" @dropFile="dropFile" :isLoading="isLoading" />
+      <ModalBody :files="fullFiles" :is-loading="isLoading" @load="uploadFiles" @dropFile="dropFile" />
     </template>
     <template slot="footer">
       <div class="upload-files-modal-footer-content">
@@ -31,6 +31,7 @@
           </md-button>
           <md-button
             class="md-red maryoku-btn ml-10"
+            :disabled="!acceptUpload || isLoading"
             @click="uploadFiles"
           >
             Upload files
@@ -55,6 +56,7 @@ import ModalBody   from "./ModalBody";
 import { uploadFiles } from "@/helpers/window/upload";
 import { getBase64 }   from "@/utils/file.util";
 import map             from "@/helpers/array/map";
+import arrayLimit      from "@/helpers/array/limit";
 
 const MAX_SIZE  = 1024 * 1024 * 25;
 const MAX_COUNT = 10;
@@ -86,9 +88,6 @@ export default {
     isDeleted       : false,
     isUploaded      : false,
   }),
-  created () {
-    this.uploadedFiles = Array.from(this.files);
-  },
   computed: {
     fullFiles () {
       if (this.uploadedFiles.length) {
@@ -112,11 +111,19 @@ export default {
         this.isDeleted  = value;
       },
     },
+    acceptUpload () {
+      const { length = 0 } = (this.fullFiles || []);
+      console.dir({ length, MAX_COUNT });
+      return length < MAX_COUNT;
+    }
   },
   watch: {
     files() {
       this.uploadedFiles = Array.from(this.files);
     }
+  },
+  created () {
+    this.uploadedFiles = Array.from(this.files);
   },
   methods: {
     updateFile (index, data) {
@@ -166,18 +173,30 @@ export default {
     },
 
     uploadFiles () {
-      const { length = 0 } = (this.uploadedFiles || []);
-      const max = MAX_COUNT - length;
-      if (max > 0) {
+      const { length = 0 } = (this.fullFiles || []);
+      const maxLength = MAX_COUNT - length;
+      const accept = "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf";
+      if (maxLength === 1) {
         return uploadFiles(async (files) => {
           this.waitUploadFiles = this.waitUploadFiles.concat(await Promise.all(Array.from(files, async (file) => {
             const base64 = await getBase64(file);
             return Object.assign(file, { base64, rename: this.generateName(file) });
           })));
         }, {
-          max,
+          multiple : false,
+          accept,
+        });
+      } else if (maxLength > 1) {
+        return uploadFiles(async (files) => {
+          const filesLimited = arrayLimit(maxLength, files);
+          this.waitUploadFiles = this.waitUploadFiles.concat(await Promise.all(Array.from(filesLimited, async (file) => {
+            const base64 = await getBase64(file);
+            return Object.assign(file, { base64, rename: this.generateName(file) });
+          })));
+        }, {
+          maxLength,
           multiple : true,
-          accept   : "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
+          accept,
         });
       }
     },
