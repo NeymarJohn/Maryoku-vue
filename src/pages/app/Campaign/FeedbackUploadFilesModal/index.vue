@@ -9,7 +9,7 @@
       <ModalHeader @close="close" />
     </template>
     <template slot="body">
-      <ModalBody :files="fullFiles" :is-loading="isLoading" @load="uploadFiles" @dropFile="dropFile" />
+      <ModalBody :files="files" @load="uploadFiles" @dropFile="dropFile" :isLoading="isLoading" />
     </template>
     <template slot="footer">
       <div class="upload-files-modal-footer-content">
@@ -31,7 +31,6 @@
           </md-button>
           <md-button
             class="md-red maryoku-btn ml-10"
-            :disabled="!acceptUpload || isLoading"
             @click="uploadFiles"
           >
             Upload files
@@ -56,7 +55,6 @@ import ModalBody   from "./ModalBody";
 import { uploadFiles } from "@/helpers/window/upload";
 import { getBase64 }   from "@/utils/file.util";
 import map             from "@/helpers/array/map";
-import arrayLimit      from "@/helpers/array/limit";
 
 const MAX_SIZE  = 1024 * 1024 * 25;
 const MAX_COUNT = 10;
@@ -82,155 +80,89 @@ export default {
     },
   },
   data: () => ({
-    uploadedFiles   : [],
-    waitUploadFiles : [],
-    isLoading       : false,
-    isDeleted       : false,
-    isUploaded      : false,
+    dropzoneOptions: {
+      url                   : "https://httpbin.org/post",
+      maxFilesize           : 25,
+      maxFiles              : MAX_COUNT,
+      createImageThumbnails : false,
+      uploadMultiple        : true,
+      acceptedFiles         : "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
+      headers               : { "My-Awesome-Header": "header value" },
+    },
+    carouselItemIndex: 0,
+    files: [],
+    isLoading: false,
   }),
-  computed: {
-    fullFiles () {
-      if (this.uploadedFiles.length) {
-        if (this.waitUploadFiles.length) return this.uploadedFiles.concat(this.waitUploadFiles);
-        return this.uploadedFiles;
-      }
-      return this.waitUploadFiles;
-    },
-    isUpload () {
-      return this.waitUploadFiles.length > 0;
-    },
-    isDelet () {
-      return this.files.length > this.uploadedFiles.length;
-    },
-    isUpdate: {
-      get () {
-        return this.isUploaded || this.isDeleted;
-      },
-      set (value) {
-        this.isUploaded = value;
-        this.isDeleted  = value;
-      },
-    },
-    acceptUpload () {
-      const { length = 0 } = (this.fullFiles || []);
-      return length < MAX_COUNT;
-    }
-  },
-  watch: {
-    files() {
-      // upload only no loaded prevent
-      if (this.uploadedFiles.length <= 0) this.resetDefaultFiles();
-    }
-  },
-  created () {
-    this.resetDefaultFiles();
-  },
   methods: {
-    resetDefaultFiles () {
-      this.uploadedFiles = Array.from(this.files);
-    },
     updateFile (index, data) {
       const file = this.files[index];
       if (file) this.files[index] = Object.assign(file, data);
       return file;
     },
 
-    getExtansionsFile (file) {
-      return file.type.split("/")[1];
-    },
-
     generateFileName (file) {
-      return `${uuidv4()}.${getExtansionsFile()}`;
+      const extension = file.type.split("/")[1];
+      const fileName  = uuidv4();
+      return `${fileName}.${extension}`;
     },
 
     saveFile (file) {
       return S3Service.fileUpload(file, this.generateFileName(file), this.folderNameForUpload, true);
     },
 
-    async saveNewFiles () {
-      if (this.isUpload) {
-        this.isLoading = true;
-        const queueUpload = this.waitUploadFiles.reduce((queueUpload, file) => {
-          queueUpload.push(S3Service.fileUpload(file, file.rename || file.name, this.folderNameForUpload, true));
-          return queueUpload;
-        }, []);
-        const uploadResult = await Promise.all(queueUpload);
-        this.waitUploadFiles = [];
-        const uploadedFiles  = uploadResult.map(({ data }) => data.upload);
-        this.uploadedFiles   = this.uploadedFiles.concat(uploadedFiles);
-        this.isLoading       = false;
-        this.isUploaded      = true;
+    async saveFiles (files) {
+      this.isLoading = true;
+      const functionsUploadFiles = [];
+      for (const file of files) {
+        functionsUploadFiles.push(
+          S3Service.fileUpload(file, file.rename || file.name, this.folderNameForUpload, true)
+        );
       }
-    },
-
-    saveResult () {
-      return this.$emit("upload-files", this.uploadedFiles);
-    },
-
-    getExtension (file) {
-      return file.type.split("/")[1];
+      Promise.all(functionsUploadFiles).then((responses) => {
+        this.isLoading = false;
+        const files = responses.map(({ data }) => data.upload);
+        this.$emit("upload-files", this.files.map((file) => {
+          const found = files.find((responseFile) => responseFile.name === (file.rename || file.name));
+          if (found) return {
+            ...found,
+            base64: file.base64,
+          };
+          return file;
+        }));
+      });
     },
 
     generateName (file) {
-      return `${uuidv4()}.${this.getExtension(file)}`;
+      const extension = file.type.split("/")[1];
+      const fileName = uuidv4();
+      return `${fileName}.${extension}`;
     },
 
     uploadFiles () {
-      const { length = 0 } = (this.fullFiles || []);
-      const maxLength = MAX_COUNT - length;
-      const accept = "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf";
-      if (maxLength === 1) {
+      const { length = 0 } = (this.files || {});
+      const max = MAX_COUNT - length;
+      if (max > 0) {
         return uploadFiles(async (files) => {
-          this.waitUploadFiles = this.waitUploadFiles.concat(await Promise.all(Array.from(files, async (file) => {
+          this.files = [...this.files, ...await Promise.all(Array.from(files, async (file) => {
             const base64 = await getBase64(file);
             return Object.assign(file, { base64, rename: this.generateName(file) });
-          })));
+          }))];
+          this.saveFiles(this.files);
         }, {
-          multiple : false,
-          accept,
-        });
-      } else if (maxLength > 1) {
-        return uploadFiles(async (files) => {
-          const filesLimited = arrayLimit(maxLength, files);
-          this.waitUploadFiles = this.waitUploadFiles.concat(await Promise.all(Array.from(filesLimited, async (file) => {
-            const base64 = await getBase64(file);
-            return Object.assign(file, { base64, rename: this.generateName(file) });
-          })));
-        }, {
-          maxLength,
+          max,
           multiple : true,
-          accept,
+          accept   : "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
         });
       }
     },
 
-    async close() {
-      if (this.isUpload) await this.saveNewFiles();
-      if (this.isUpdate) {
-        this.isUpdate = false;
-        await this.saveResult();
-      }
+    close() {
       this.$emit("close");
     },
 
-    tryDropWaitFile (byIndex) {
-      if (this.waitUploadFiles.length > 0) {
-        if (byIndex < this.waitUploadFiles.length) this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex !== index);
-        else this.waitUploadFiles = arrayLimit(this.waitUploadFiles.length - 1, this.waitUploadFiles);
-      }
-    },
-
     dropFile (byIndex) {
-      const { length } = this.uploadedFiles;
-      if (length > 0) {
-        if (byIndex < length) {
-          this.isDeleted = true;
-          this.uploadedFiles = this.uploadedFiles.filter((file, index) => byIndex !== index);
-        }
-        else this.tryDropWaitFile(byIndex - length);
-      }
-
-      else this.tryDropWaitFile(byIndex);
+      this.files = this.files.filter((file, index) => byIndex !== index);
+      this.saveFiles(this.files);
     },
   }
 };

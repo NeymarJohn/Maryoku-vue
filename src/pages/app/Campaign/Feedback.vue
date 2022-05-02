@@ -77,7 +77,6 @@
         </div>
       </div>
       <maryoku-textarea
-        :placeholder="placeHolder"
         :value="campaignData.description"
         @input="handleChangeCampaignDescription"
       />
@@ -426,10 +425,11 @@ export default {
       this.$emit("change-logo", file);
     },
     async uploadFiles(files) {
-      console.log({ files });
       const attachments = files.map(({ status, ...file }) => file);
       this.setFeedbackAttribute("attachments", files);
       await this.saveCampaign({ id: this.campaignData.id, attachments });
+
+      this.showModalWindowOpen = false;
     },
 
     makeFileSrc (file) {
@@ -437,7 +437,6 @@ export default {
       const fileName  = uuidv4();
       return `${fileName}.${extension}`;
     },
-
     fileUpload (file) {
       return S3Service.fileUpload(file, this.makeFileSrc(file), `event/${this.event.id}`);
     },

@@ -6,7 +6,8 @@ const state = {
   proposal: null,
   selectedVersion: null,
   original: null,
-  currentVersion: -1
+  currentVersion: -1,
+  showCommentPanel: false,
 };
 
 const setStateFromData = (proposal, data) => {
@@ -35,6 +36,10 @@ const mutations = {
   },
   updateCommentComponents: (state, commentComponents) => {
       state.proposal.commentComponent = commentComponents;
+  },
+  toggleCommentMode: (state, mode) => {
+    // console.trace("toggleCommentMode", showCommentPanel,state.showCommentPanel)
+    state.showCommentPanel = mode !== null ? mode : !state.showCommentPanel;
   },
 };
 
@@ -69,6 +74,9 @@ const actions = {
       commit("setVersions", versions);
       resolve();
     });
+  },
+  toggleCommentMode: ({ commit, state }, mode = null) => {
+    commit("toggleCommentMode", mode);
   }
 };
 
