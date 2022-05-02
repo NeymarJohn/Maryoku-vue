@@ -97,6 +97,7 @@
         </div>
       </a>
     </div>
+    <ChangeZoom/>
   </div>
 </template>
 <script>
@@ -104,11 +105,13 @@ import SidebarItem from "./NewSidebarItem";
 import eventService from "@/services/event.service";
 import Vendor from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
+import ChangeZoom from "./ChangeZoom";
 
 export default {
   name: "Sidebar",
   components: {
     SidebarItem,
+    ChangeZoom
   },
   props: {
     title: {
