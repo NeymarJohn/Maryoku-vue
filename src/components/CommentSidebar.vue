@@ -83,7 +83,7 @@
           <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length - 1 }} Reply
             <i class="fas fa-chevron-down" />
           </span>
-          <span class="unread-count2">{{ commentComponent.comments.length - 1 }}</span>
+          <span class="unread-count2">02</span>
         </div>
         <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4">
           <div
@@ -139,10 +139,6 @@
               @input="getMessage"
             />
             <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
-            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
-            <div class="row">
-              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
-            </div>
             <div class="footer text-right my-top my-bottom">
               <md-button class="md-simple normal-btn md-black">
                 Cancel
@@ -165,17 +161,11 @@ import { FadeTransition } from "vue2-transitions";
 import { CommentMixins } from "@/mixins";
 import moment from "moment";
 import { getReq } from "@/utils/token";
-import data from "emoji-mart-vue-fast/data/all.json";
-import "emoji-mart-vue-fast/css/emoji-mart.css";
-import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
-
-let emojiIndex = new EmojiIndex(data);
 
 const components = {
   Loader: () => import("@/components/loader/Loader.vue"),
   Avartar: () => import("@/components/Avartar.vue"),
   FadeTransition,
-  Picker,
 };
 
 export default {
@@ -202,18 +192,13 @@ export default {
     showAddress: false,
     selectedComponent: null,
     customers: [],
-    emojiIndex: emojiIndex,
-    emojisOutput: "",
-    showEmojiPanel: false,
   }),
-  created() {
+  mounted() {
     this.commentComponents = this.$store.state.comment.commentComponents.filter(component => component.comments && component.comments.length);
     // this.commentComponents = this.$store.state.comment.commentComponents;
+    console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", this.commentComponents);
   },
   methods: {
-    showEmoji(emoji) {
-      this.editingComment = this.editingComment + emoji.native;
-    },
     changeCommentSortType(sortByType) {
       if (sortByType == "name") {
         this.commentSortType = this.commentSortType == "asc" ? "desc" : "asc";
@@ -271,8 +256,6 @@ export default {
       }
     },
     toggleshowReply(commentIndex) {
-      this.showEmojiPanel = false;
-      this.commentComponents = this.commentComponents.filter(component => component.comments && component.comments.length);
       this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
       this.selectedComponent = this.commentComponents[commentIndex];
     },
@@ -286,7 +269,6 @@ export default {
       };
       this.saveComment({ component: selectedComponent, comment, index: this.showReplyComment });
       this.editingComment = "";
-      this.showEmojiPanel = false;
       event.stopPropagation();
     },
     daysDiff(date) {
@@ -523,14 +505,6 @@ img.header-img {
     top: 10px;
     width: 20px;
   }
-
-  .emoji-icon {
-    position: absolute;
-    right: 35px;
-    top: 10px;
-    width: 20px;
-    cursor: pointer;
-  }
 }
 
 .md-button.md-simple i.my-chevron {
@@ -556,16 +530,5 @@ img.header-img {
 .background-red {
   background-color: #f51355 !important;
 }
-
-.show-emoji {
-  display: flex;
-}
-
-.hide-emoji {
-  display: none;
-}
-
-.row { display: flex; }
-.row > * { margin: auto; }
 
 </style>

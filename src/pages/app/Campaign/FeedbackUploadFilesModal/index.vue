@@ -9,7 +9,7 @@
       <ModalHeader @close="close" />
     </template>
     <template slot="body">
-      <ModalBody :files="files" @load="uploadFiles" @dropFile="dropFile" :isLoading="isLoading" />
+      <ModalBody :files="fullFiles" @load="uploadFiles" @dropFile="dropFile" :isLoading="isLoading" />
     </template>
     <template slot="footer">
       <div class="upload-files-modal-footer-content">
@@ -80,19 +80,44 @@ export default {
     },
   },
   data: () => ({
-    dropzoneOptions: {
-      url                   : "https://httpbin.org/post",
-      maxFilesize           : 25,
-      maxFiles              : MAX_COUNT,
-      createImageThumbnails : false,
-      uploadMultiple        : true,
-      acceptedFiles         : "image/*, video/*, .xlsx, .xls, .doc, .docx, .ppt, .pptx, .txt, .pdf",
-      headers               : { "My-Awesome-Header": "header value" },
-    },
-    carouselItemIndex: 0,
-    files: [],
-    isLoading: false,
+    uploadedFiles   : [],
+    waitUploadFiles : [],
+    isLoading       : false,
+    isDeleted       : false,
+    isUploaded      : false,
   }),
+  created () {
+    this.uploadedFiles = Array.from(this.files);
+  },
+  computed: {
+    fullFiles () {
+      if (this.uploadedFiles.length) {
+        if (this.waitUploadFiles.length) return this.uploadedFiles.concat(this.waitUploadFiles);
+        return this.uploadedFiles;
+      }
+      return this.waitUploadFiles;
+    },
+    isUpload () {
+      return this.waitUploadFiles.length > 0;
+    },
+    isDelet () {
+      return this.files.length > this.uploadedFiles.length;
+    },
+    isUpdate: {
+      get () {
+        return this.isUploaded || this.isDeleted;
+      },
+      set (value) {
+        this.isUploaded = value;
+        this.isDeleted  = value;
+      },
+    },
+  },
+  watch: {
+    files() {
+      this.uploadedFiles = Array.from(this.files);
+    }
+  },
   methods: {
     updateFile (index, data) {
       const file = this.files[index];
@@ -100,54 +125,55 @@ export default {
       return file;
     },
 
+    getExtansionsFile (file) {
+      return file.type.split("/")[1];
+    },
+
     generateFileName (file) {
-      const extension = file.type.split("/")[1];
-      const fileName  = uuidv4();
-      return `${fileName}.${extension}`;
+      return `${uuidv4()}.${getExtansionsFile()}`;
     },
 
     saveFile (file) {
       return S3Service.fileUpload(file, this.generateFileName(file), this.folderNameForUpload, true);
     },
 
-    async saveFiles (files) {
-      this.isLoading = true;
-      const functionsUploadFiles = [];
-      for (const file of files) {
-        functionsUploadFiles.push(
-          S3Service.fileUpload(file, file.rename || file.name, this.folderNameForUpload, true)
-        );
+    async saveNewFiles () {
+      if (this.isUpload) {
+        this.isLoading = true;
+        const queueUpload = this.waitUploadFiles.reduce((queueUpload, file) => {
+          queueUpload.push(S3Service.fileUpload(file, file.rename || file.name, this.folderNameForUpload, true));
+          return queueUpload;
+        }, []);
+        const uploadResult = await Promise.all(queueUpload);
+        this.waitUploadFiles = [];
+        const uploadedFiles  = uploadResult.map(({ data }) => data.upload);
+        this.uploadedFiles   = this.uploadedFiles.concat(uploadedFiles);
+        this.isLoading       = false;
+        this.isUploaded      = true;
       }
-      Promise.all(functionsUploadFiles).then((responses) => {
-        this.isLoading = false;
-        const files = responses.map(({ data }) => data.upload);
-        this.$emit("upload-files", this.files.map((file) => {
-          const found = files.find((responseFile) => responseFile.name === (file.rename || file.name));
-          if (found) return {
-            ...found,
-            base64: file.base64,
-          };
-          return file;
-        }));
-      });
+    },
+
+    saveResult () {
+      return this.$emit("upload-files", this.uploadedFiles);
+    },
+
+    getExtension (file) {
+      return file.type.split("/")[1];
     },
 
     generateName (file) {
-      const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      return `${fileName}.${extension}`;
+      return `${uuidv4()}.${this.getExtension(file)}`;
     },
 
     uploadFiles () {
-      const { length = 0 } = (this.files || {});
+      const { length = 0 } = (this.uploadedFiles || []);
       const max = MAX_COUNT - length;
       if (max > 0) {
         return uploadFiles(async (files) => {
-          this.files = [...this.files, ...await Promise.all(Array.from(files, async (file) => {
+          this.waitUploadFiles = this.waitUploadFiles.concat(await Promise.all(Array.from(files, async (file) => {
             const base64 = await getBase64(file);
             return Object.assign(file, { base64, rename: this.generateName(file) });
-          }))];
-          this.saveFiles(this.files);
+          })));
         }, {
           max,
           multiple : true,
@@ -156,13 +182,26 @@ export default {
       }
     },
 
-    close() {
+    async close() {
+      if (this.isUpload) await this.saveNewFiles();
+      if (this.isUpdate) {
+        this.isUpdate = false;
+        await this.saveResult();
+      }
       this.$emit("close");
     },
 
     dropFile (byIndex) {
-      this.files = this.files.filter((file, index) => byIndex !== index);
-      this.saveFiles(this.files);
+      if (this.uploadedFiles.length > 0) {
+        const uploadLastIndex = this.uploadedFiles.length - 1;
+        if (byIndex < uploadLastIndex) {
+          this.isDeleted = true;
+          this.uploadedFiles = this.uploadedFiles.filter((file, index) => byIndex !== index);
+        }
+        else this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex - this.uploadedFiles.length !== index);
+      }
+
+      else this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex !== index);
     },
   }
 };
