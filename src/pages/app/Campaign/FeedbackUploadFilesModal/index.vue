@@ -118,7 +118,7 @@ export default {
   },
   watch: {
     files() {
-      this.resetDefaultFiles();
+      if (this.uploadedFiles.length <= 0) this.resetDefaultFiles();
     }
   },
   created () {
