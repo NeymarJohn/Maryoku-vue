@@ -1,5 +1,5 @@
 <template>
-  <div class="event-plan d-flex">
+  <div class="event-plan d-flex" :class="{ 'x-mouse': xCursor }" @mousemove="handleMouseMove">
     <loader :active="loading" :is-full-screen="true" page="vendor" />
     <div class="inboxSidebar" style="position: fixed;">
       <InboxSidebar />
@@ -35,6 +35,7 @@ export default {
         return {
             loading: false,
             proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+            xCursor: false,
         };
     },
     computed: {
@@ -42,8 +43,16 @@ export default {
             return this.$store.state.vendor.profile;
         },
         selectedProposal() {
-            return this.$store.state.comment.selectedProposal;
+            var route = this.$route.path;
+            if(route.includes("/proposal/")) {
+                return this.$store.state.comment.selectedProposal;
+            }else {
+                return false;
+            }
         },
+        showCommentPanel() {
+			return this.$store.state.commentProposal.showCommentPanel;
+		},
     },
     beforeCreate() {
         this.$store.registerModule("commentProposal", state);
@@ -60,6 +69,10 @@ export default {
                 window.scrollTo(0, 0);
             }, 100);
         },
+        handleMouseMove(event) {
+			if (!this.showCommentPanel) return;
+			this.xCursor = event.target.className === "click-capture1";
+		},
     }
 };
 
@@ -169,10 +182,12 @@ section.footer-wrapper {
     z-index: 10;
 }
 
-.event-plan {}
-
 .inboxSidebar {
     z-index: 10;
 }
 
+</style>
+
+<style lang="scss">
+@import "../../../styles/VendorInbox.scss";
 </style>

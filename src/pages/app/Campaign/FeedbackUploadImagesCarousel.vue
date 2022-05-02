@@ -1,12 +1,12 @@
 <template>
-  <div class="feedback-images">
+  <div class="feedback-images" :key="images.length">
     <carousel
       v-if="images.length"
       :key="Math.random()"
       :items="1"
       :dots="false"
       :nav="false"
-      :number="2"
+      :number="selected"
       class="feedback-carousel"
       @changed="change"
     >
@@ -18,7 +18,7 @@
         </button>
       </template>
       <div v-for="(item, index) in images" :key="index" class="carousel-item">
-        <img :src="item.url" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
+        <img :src="getItem(item)" :class="`carousel-image ${classImage}`" @error="setAltImg($event, item)">
       </div>
       <template slot="next">
         <button class="btn-next nav-right nav-btn">
@@ -47,10 +47,23 @@ export default {
       type: String,
       default: "",
     },
+    selected: {
+      type: Number,
+      default: 0,
+    }
   },
   methods: {
+    getItem (item) {
+      if (item) {
+        if      (typeof item === "string") return item;
+        else if (item.url)                 return item.url;
+        else if (item.base64)              return item.base64;
+      }
+
+      return "";
+    },
     change(event) {
-      const itemIndex = event.item.index;
+      const itemIndex = +event.item.index || 0;
       this.$emit("change-item-index", itemIndex);
     },
     setAltImg(event, item) {
@@ -63,9 +76,10 @@ export default {
 <style lang="scss" scoped>
 .feedback-images {
   width: 942px;
-  height: 530px;
+  height: 532px;
   position: relative;
-
+  margin-top: -2px;
+  margin-bottom: -2px;
   .btn-next, .btn-prev {
     width: 31px;
     height: 31px;
@@ -97,18 +111,18 @@ export default {
 }
 .feedback-carousel {
   width: 942px;
-  height: 530px;
+  height: 532px;
 
   .carousel-item {
     width: 942px;
-    height: 530px;
+    height: 532px;
     border-radius: 3px;
     overflow: hidden;
     position: relative;
 
     .carousel-image {
       width: 942px;
-      height: 530px;
+      height: 532px;
       object-fit: cover;
       position: absolute;
       top: 0;

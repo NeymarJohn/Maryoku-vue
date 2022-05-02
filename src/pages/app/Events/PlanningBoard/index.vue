@@ -117,7 +117,7 @@
                   <li v-for="action in functionActions" class="other-list" :key="action.label">
                     <a class="other-item font-size-16" @click="handleAction(action.value)">
                       <div class="other-name">
-                        <md-icon>{{ action.icon }}</md-icon>
+                        <md-icon>{{ action.icon }}</md-icon>  &nbsp;&nbsp;
                         <span>
                         {{ action.label }}
                       </span>
@@ -558,6 +558,7 @@ export default {
 
       showDifferentProposals: false,
       showDetails: false,
+      proposal: null,
       proposalRequest: null,
       originalProposal: {},
 
@@ -633,9 +634,7 @@ export default {
     percentOfBudgetCategories() {
       return Object.keys(this.requirements).length;
     },
-    proposal() {
-      return this.$store.state.planningBoard.proposal;
-    },
+
     proposals() {
       return this.$store.state.event.proposals;
     },
@@ -651,9 +650,14 @@ export default {
       return this.$store.state.planningBoard.cart;
     },
     proposalUnviewed() {
-      if (this.proposals || !this.proposals.length) return false;
-      const proposals = this.proposals.filter(p => !p.viewed);
-      return proposals && proposals.length;
+      let count = 0;
+      for (let proposal in this.proposals) {
+        if (proposal.viewed == false) {
+          count++;
+          return true;
+        }
+      }
+      return false;
     },
     isAnyLiked() {
       let category = this.selectedCategory;
@@ -998,14 +1002,12 @@ export default {
     },
     async goDetailPage(proposal) {
 
-      await this.$store.dispatch('planningBoard/setProposal', proposal);
-      await this.$store.dispatch('planningBoard/selectVersion', proposal.selectedVersion);
+      if (proposal.selectedVersion > -1)
+        this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
+      else this.proposal = proposal;
 
-      this.showDetails = true;
-      await this.updateProposalEngagement();
-    },
-    async updateProposalEngagement() {
-      const engagement = await getReq(`/1/proposals/${this.proposal.id}/engagement/proposal`);
+      const engagement = await getReq(`/1/proposal/${this.proposal.id}/engagement/proposal`);
+      console.log("engagement", engagement);
 
       if (engagement) {
         new ProposalEngagement({
@@ -1022,6 +1024,8 @@ export default {
           .for(new Proposal({id: this.proposal.id}))
           .save();
       }
+
+      this.showDetails = true;
     },
     async bookVendor() {
       if (!this.proposal) return;
@@ -1107,12 +1111,6 @@ export default {
       if (index >= 0 && this.versionProposal.versions) {
         this.proposal = this.versionProposal;
       }
-    },
-    getUpdatedProposal(proposal, data) {
-      Object.keys(data).map(key => {
-        this.$set(proposal, key, data[key]);
-      });
-      return proposal;
     },
     handleAction(action) {
         if (action === "download") {

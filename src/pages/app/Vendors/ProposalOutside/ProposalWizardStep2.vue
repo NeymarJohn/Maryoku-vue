@@ -126,7 +126,7 @@ export default {
 
         }
 
-        const returning = this.event.customer.proposals.length ? 1 : 0;
+        const returning = (this.event.customer && this.event.customer.proposals.length) ? 1 : 0;
         if (policies.hasOwnProperty("customer_type") && returning === Number(policies.customer_type[0].type)) {
 
           discountRate = policies.double ? discountRate + Number(policies.customer_type[0].value) : Number(policies.customer_type[0].value);

@@ -77,7 +77,6 @@
         </div>
       </div>
       <maryoku-textarea
-        :placeholder="placeHolder"
         :value="campaignData.description"
         @input="handleChangeCampaignDescription"
       />
@@ -223,7 +222,7 @@
     </div>
     <feedback-upload-files-modal
       v-if="showModalWindowOpen"
-      :attachments="campaignAttachments"
+      :files="campaignAttachments"
       :folder-name-for-upload="`events/${event.id}`"
       @close="closeModalWindow"
       @upload-files="uploadFiles"
@@ -250,7 +249,7 @@ import CustomTitleEditor     from "./components/CustomTitleEditor";
 
 // pages
 import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
-import FeedbackUploadFilesModal from "@/pages/app/Campaign/FeedbackUploadFilesModal";
+import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal";
 
 // dependencies
 import S3Service from "@/services/s3.service";

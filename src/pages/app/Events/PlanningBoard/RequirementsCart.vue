@@ -4,7 +4,9 @@
       <div>
         <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
         <div>
-          Our vendors will create proposals based on your choices below.
+          Our vendors will create proposals based on your choices below, so be sure to select everything you really
+          want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can
+          lead to more back-and-forth later on).
         </div>
       </div>
       <progress-radial-bar :value="percentOfBudgetCategories" :total="total" />

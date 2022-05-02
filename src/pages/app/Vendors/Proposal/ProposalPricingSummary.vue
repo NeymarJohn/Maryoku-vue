@@ -239,8 +239,12 @@ export default {
     });
 
     this.$root.$on("save-proposal-requirement", ({ index, item }) => {
-      this.proposalRequest.requirements[index] = item;
-      this.newProposalRequest.requirements[index] = item;
+      if (this.proposalRequest) {
+        this.proposalRequest.requirements[index] = item;
+      }
+      if (this.newProposalRequest) {
+        this.newProposalRequest.requirements[index] = item;
+      }
       this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
       this.$forceUpdate();
     });

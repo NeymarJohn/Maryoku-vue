@@ -77,13 +77,13 @@ export default {
   },
   data() {
     return {
-      photos: new Array(15),
-      currentPhotoIndex: -1,
-      captionModal: {
-        isOpen: false,
-        photoUrl: "",
-        caption: "",
-        currentIndex: -1,
+      photos            : new Array(15),
+      currentPhotoIndex : -1,
+      captionModal      : {
+        isOpen       : false,
+        photoUrl     : "",
+        caption      : "",
+        currentIndex : -1,
       },
     };
   },
@@ -109,9 +109,9 @@ export default {
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: photoData });
     },
     addCaption(index, photoData) {
-      this.captionModal.isOpen = true;
-      this.captionModal.photoUrl = photoData.url;
-      this.captionModal.caption = photoData.caption;
+      this.captionModal.isOpen       = true;
+      this.captionModal.photoUrl     = photoData.url;
+      this.captionModal.caption      = photoData.caption;
       this.captionModal.currentIndex = index;
     },
     saveCaption() {
@@ -119,8 +119,8 @@ export default {
       this.$store.commit("vendorProposal/setInspirationalPhoto", {
         index: this.captionModal.currentIndex,
         photo: {
-          url: this.captionModal.photoUrl,
-          caption: this.captionModal.caption,
+          url     : this.captionModal.photoUrl,
+          caption : this.captionModal.caption,
         },
       });
       this.captionModal.isOpen = false;
