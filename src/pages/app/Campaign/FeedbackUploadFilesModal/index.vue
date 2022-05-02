@@ -113,19 +113,21 @@ export default {
     },
     acceptUpload () {
       const { length = 0 } = (this.fullFiles || []);
-      console.dir({ length, MAX_COUNT });
       return length < MAX_COUNT;
     }
   },
   watch: {
     files() {
-      this.uploadedFiles = Array.from(this.files);
+      this.resetDefaultFiles();
     }
   },
   created () {
-    this.uploadedFiles = Array.from(this.files);
+    this.resetDefaultFiles();
   },
   methods: {
+    resetDefaultFiles () {
+      this.uploadedFiles = Array.from(this.files);
+    },
     updateFile (index, data) {
       const file = this.files[index];
       if (file) this.files[index] = Object.assign(file, data);
@@ -212,15 +214,18 @@ export default {
 
     dropFile (byIndex) {
       if (this.uploadedFiles.length > 0) {
-        const uploadLastIndex = this.uploadedFiles.length - 1;
-        if (byIndex < uploadLastIndex) {
+        const { length } = this.uploadedFiles;
+        if (byIndex < length) {
           this.isDeleted = true;
           this.uploadedFiles = this.uploadedFiles.filter((file, index) => byIndex !== index);
         }
-        else this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex - this.uploadedFiles.length !== index);
+        else if (this.waitUploadFiles.length > 0) this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex - this.uploadedFiles.length !== index);
       }
 
-      else this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex !== index);
+      else {
+        if (byIndex < this.waitUploadFiles.length) this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex !== index);
+        else if (this.waitUploadFiles.length > 0) this.waitUploadFiles = arrayLimit(this.waitUploadFiles.length - 1, this.waitUploadFiles)
+      }
     },
   }
 };
