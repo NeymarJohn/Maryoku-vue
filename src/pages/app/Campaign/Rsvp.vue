@@ -185,7 +185,8 @@
       <rsvp-timeline-panel
         class="p-50"
         :can-hide="true"
-        :visible="campaignVisibleSettings.showTimeline"
+        :visible="campaignVisibleSettings.showTimeline &&
+          (campaignData.campaignStatus === 'SCHEDULED' || campaignData.campaignStatus === 'ISSUED' || campaignData.campaignStatus === 'STARTED')"
         @changeVisibility="setVisibleTimeline"
       />
     </div>

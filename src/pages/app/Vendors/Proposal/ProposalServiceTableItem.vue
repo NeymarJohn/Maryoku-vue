@@ -132,7 +132,7 @@
         Save
       </md-button>
     </div>
-    <div v-if="item.plannerOptions.length > 0" class="planner-options">
+    <div v-if="item.plannerOptions && item.plannerOptions.length > 0" class="planner-options">
       <img
         :src="`${$iconURL}Onboarding/enter-gray.svg`"
         style="margin-right: 10px; position: absolute; margin-top: 30px"
@@ -283,19 +283,19 @@
             <md-menu-item class="md-purple" @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10">Delete</span>
             </md-menu-item>
-            <md-menu-item class="md-purple" @click="addPriceToIncludeItem">
-              <span>
+            <md-menu-item class="md-purple menu-item-icon add-price-item-wrapper" @click="addPriceToIncludeItem">
+              <span style="overflow: unset">
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
                   class="label-icon mr-10"
                   style="height: 30px"
                 >
                 Add price
-                <span>
-                  <md-icon class="color-gray" style="font-size: 40px; margin-left: 10px">help_outline</md-icon>
-                  <md-tooltip md-direction="top" class="bg-gray">
+                <span style="display: inline-block; position: relative" class="add-price-tooltip-wrapper">
+                  <md-icon class="color-gray tool-tip-icon"  style=" margin-left: 10px; ">help_outline</md-icon>
+                  <div class="add-price-tooltip" >
                     Clicking ‘Add price’ will move this item to <br>the “Paid elements” table above
-                  </md-tooltip>
+                  </div>
                 </span>
               </span>
             </md-menu-item>
@@ -478,7 +478,9 @@ export default {
   },
 
   watch:{
-      defaultItem(newVal){console.log("newVAl", newVal); this.item = Object.assign({}, newVal);}
+    defaultItem(newVal) {
+      this.item = Object.assign({}, newVal);
+    }
   },
   created() {
     this.item = Object.assign({}, this.defaultItem);
@@ -516,12 +518,12 @@ export default {
       this.item.plannerOptions.push({ description: "", price: this.item.price, isEdit: true });
 
       // add item to alternatives
-      if (this.item.plannerOptions.length === 1)
+      if (this.item.plannerOptions && this.item.plannerOptions.length === 1)
         this.item.plannerOptions.push({description: this.item.requirementTitle, price: this.item.price, qty: this.item.requirementValue, isEdit: false});
     },
     removeAlternative(index) {
       this.item.plannerOptions.splice(index, 1);
-      if(this.item.plannerOptions.length === 1) this.item.plannerOptions = [];
+      if(this.item.plannerOptions && this.item.plannerOptions.length === 1) this.item.plannerOptions = [];
       this.$root.$emit("save-proposal-requirement", { index: this.index, item: this.item });
       this.$emit("save", { index: this.index, item: this.item });
     },
@@ -775,5 +777,40 @@ export default {
 .md-menu-content {
   max-height: max-content !important;
 }
+.menu-item-icon:hover .tool-tip-icon{
+  color: #FFFFFF !important;
+}
+.add-price-tooltip {
+  display: none;
+  position: absolute;
+  padding: 10px 15px;
+  top: -72px;
+  left: -145px;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #FFEDBC !important;
+  color: #555555 !important;
+  font-size: 0.875rem;
+  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+  transition: .15s cubic-bezier(0, 0, .2, 1);
+  line-height: 22px;
+  &:after {
+    position: absolute;
+    bottom: -5px;
+    height: 0;
+    left: 67px;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 5px;
+    content: "";
+    border-top: 5px solid #FFEDBC;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+}
 
+.add-price-tooltip-wrapper:hover .add-price-tooltip{
+  display: block;
+}
 </style>

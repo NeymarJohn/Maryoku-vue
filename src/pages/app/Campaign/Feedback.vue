@@ -77,7 +77,6 @@
         </div>
       </div>
       <maryoku-textarea
-        :placeholder="placeHolder"
         :value="campaignData.description"
         @input="handleChangeCampaignDescription"
       />

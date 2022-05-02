@@ -81,6 +81,11 @@
               @input="getMessage"
             />
             <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon icon-mention">
+            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
+            <div class="row">
+              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
+            </div>
             <div class="footer">
               <md-button class="md-simple normal-btn md-button-cancel" @click="closeCommentListPane">
                 Cancel
@@ -102,7 +107,7 @@
       </div>
     </transition>
     <!-- <div v-if="isOpenCommentListsPane" :class="{mask:isOpenCommentListsPane}" /> -->
-    <div v-if="isOpenCommentListsPane" :class="[isOpenCommentListsPane ? 'mask' : '', clickCaptureStatus ? 'vendorMask' : '']" />
+    <div v-if="isOpenCommentListsPane" :class="[isOpenCommentListsPane ? 'mask' : '', clickCaptureStatus1 ? 'vendorMask' : '']" />
   </div>
   <!-- End Comments List -->
 </template>
@@ -113,12 +118,18 @@ import EventCommentComponent from "@/models/EventCommentComponent";
 import { getReq } from "@/utils/token";
 import { FadeTransition } from "vue2-transitions";
 import CommentItem from "./CommentItem";
+import data from "emoji-mart-vue-fast/data/all.json";
+import "emoji-mart-vue-fast/css/emoji-mart.css";
+import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
+
+let emojiIndex = new EmojiIndex(data);
 
 export default {
   components: {
     CommentCircleButton,
     FadeTransition,
     CommentItem,
+    Picker,
   },
   props:{
     commentComponents:{
@@ -167,6 +178,9 @@ export default {
       selectedCustomer: null,
       updatedCommentComponents: updatedCommentComponents,
       stringRoute: this.$route.path,
+      emojiIndex: emojiIndex,
+      emojisOutput: "",
+      showEmojiPanel: false,
     };
   },
   computed: {
@@ -186,10 +200,18 @@ export default {
       return [];
     },
     unresolvedComponents() {
+      console.log("---------------------------------UpdateResolve", this.updatedCommentComponents);
+      console.log("___________________________________CommentComponents", this.commentComponents);
       return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
     },
     clickCaptureStatus() {
-      if(this.stringRoute.includes("vendor/inbox/proposal") || this.stringRoute.includes("unregistered/proposals")) {
+      if(this.stringRoute.includes("vendor/inbox/proposal") || this.stringRoute.includes("unregistered/proposals") || this.stringRoute.includes("/booking/planningboard")) {
+        return true;
+      }
+      return false;
+    },
+    clickCaptureStatus1() {
+      if(this.stringRoute.includes("vendor/inbox/proposal") || this.stringRoute.includes("unregistered/proposals") || this.stringRoute.includes("events/")) {
         return true;
       }
       return false;
@@ -223,8 +245,11 @@ export default {
       this.selectedComponentIndex = this.updatedCommentComponents.findIndex(item=>item.index === commentComponent.index);
       this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY );
       this.isOpenCommentListsPane = true;
+      this.editingComment = "";
     },
-
+    showEmoji(emoji) {
+      this.editingComment = this.editingComment + emoji.native;
+    },
     setEditPanePosition(x, y) {
       var captureString = ".click-capture";
       if(this.clickCaptureStatus) {
@@ -335,6 +360,7 @@ export default {
     },
     async saveComment(event, type) {
       let selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
+      console.log(selectedComponent, "----------------------------------" + this.updatedCommentComponents);
       const comment = {
         eventCommentComponent: { id: selectedComponent.id },
         description: this.editingComment,
@@ -601,6 +627,13 @@ export default {
     top: 35px;
     width: 20px;
   }
+  .emoji-icon {
+    position: absolute;
+    right: 65px;
+    top: 35px;
+    width: 20px;
+    cursor: pointer;
+  }
   .md-button-cancel {
     font-size: 16px;
     font-weight: bold;
@@ -649,4 +682,16 @@ export default {
     font-size: 30px !important;
   }
 }
+
+.show-emoji {
+  display: flex;
+}
+
+.hide-emoji {
+  display: none;
+}
+
+.row { display: flex; }
+.row > * { margin: auto; }
+
 </style>
