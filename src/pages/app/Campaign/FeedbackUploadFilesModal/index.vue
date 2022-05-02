@@ -118,6 +118,7 @@ export default {
   },
   watch: {
     files() {
+      // upload only no loaded prevent
       if (this.uploadedFiles.length <= 0) this.resetDefaultFiles();
     }
   },
@@ -212,20 +213,24 @@ export default {
       this.$emit("close");
     },
 
+    tryDropWaitFile (byIndex) {
+      if (this.waitUploadFiles.length > 0) {
+        if (byIndex < this.waitUploadFiles.length) this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex !== index);
+        else this.waitUploadFiles = arrayLimit(this.waitUploadFiles.length - 1, this.waitUploadFiles);
+      }
+    },
+
     dropFile (byIndex) {
-      if (this.uploadedFiles.length > 0) {
-        const { length } = this.uploadedFiles;
+      const { length } = this.uploadedFiles;
+      if (length > 0) {
         if (byIndex < length) {
           this.isDeleted = true;
           this.uploadedFiles = this.uploadedFiles.filter((file, index) => byIndex !== index);
         }
-        else if (this.waitUploadFiles.length > 0) this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex - this.uploadedFiles.length !== index);
+        else this.tryDropWaitFile(byIndex - length);
       }
 
-      else {
-        if (byIndex < this.waitUploadFiles.length) this.waitUploadFiles = this.waitUploadFiles.filter((file, index) => byIndex !== index);
-        else if (this.waitUploadFiles.length > 0) this.waitUploadFiles = arrayLimit(this.waitUploadFiles.length - 1, this.waitUploadFiles)
-      }
+      else this.tryDropWaitFile(byIndex);
     },
   }
 };
