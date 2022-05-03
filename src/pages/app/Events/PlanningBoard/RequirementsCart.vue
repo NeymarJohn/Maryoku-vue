@@ -4,9 +4,7 @@
       <div>
         <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
         <div>
-          Our vendors will create proposals based on your choices below, so be sure to select everything you really
-          want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can
-          lead to more back-and-forth later on).
+          Our vendors will create proposals based on your choices below.
         </div>
       </div>
       <progress-radial-bar :value="percentOfBudgetCategories" :total="total" />
@@ -57,7 +55,7 @@
                 </div>
               </template>
             </div>
-            <div class="mt-20 color-gray">
+            <div v-if="requirements[item.key] && requirements[item.key].additionalDescription" class="mt-20 color-gray">
               Additional Requests
             </div>
             <p>

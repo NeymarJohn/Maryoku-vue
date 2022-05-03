@@ -198,6 +198,10 @@ const getters = {
       FEEDBACK    : checkStartedByKey("FEEDBACK"),
     };
   },
+  defaultSettings(state) {
+    const campaignFound = CAMPAIGN_TYPES.find((campaignType) => state[campaignType] && state[campaignType].settings);
+    return campaignFound ? campaignFound.settings : defaultSettings;
+  }
 };
 const actions = {
   async getCampaigns({ commit, state }, { event }) {
@@ -256,6 +260,10 @@ const actions = {
       data: { ...backupData },
     });
   },
+  setLogo({ commit }, { logoUrl, campaign }) {
+    const commitLogoByName = name => commit("setAttribute", { key: "logoUrl", value: logoUrl, name });
+    CAMPAIGN_TYPES.forEach(commitLogoByName);
+  }
 };
 
 export default {
