@@ -164,6 +164,10 @@
             <textarea ref="commentEditor" v-model="editingCommentReply" rows="4" class="form-control reply-text-area"
                       placeholder="Write reply here" @input="getMessage" />
             <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
+            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
+            <div class="row">
+              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
+            </div>
             <div class="footer text-right my-top my-bottom d-flex">
               <md-icon class="">
                 attach_file
@@ -201,9 +205,15 @@ import { CommentMixins } from "@/mixins";
 import moment from "moment";
 import { FadeTransition } from "vue2-transitions";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
+import data from "emoji-mart-vue-fast/data/all.json";
+import "emoji-mart-vue-fast/css/emoji-mart.css";
+import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
+
+let emojiIndex = new EmojiIndex(data);
 
 const components = {
   FadeTransition,
+  Picker,
 };
 
 export default {
@@ -229,6 +239,9 @@ export default {
         { label: "@ Mentions", value: "mentions" },
       ],
       activeTab: "all",
+      emojiIndex: emojiIndex,
+      emojisOutput: "",
+      showEmojiPanel: false,
     };
   },
   computed: {
@@ -258,6 +271,9 @@ export default {
     },
   },
   methods: {
+    showEmoji(emoji) {
+      this.editingComment = this.editingComment + emoji.native;
+    },
     async getMessage(e) {
       if (e.target.value.includes("@")) {
         let queryArray = e.target.value.split("@");
@@ -482,6 +498,14 @@ export default {
       top: 10px;
       width: 20px;
     }
+
+    .emoji-icon {
+      position: absolute;
+      right: 35px;
+      top: 10px;
+      width: 20px;
+      cursor: pointer;
+    }
   }
 
 
@@ -628,5 +652,16 @@ export default {
   }
 
 }
+
+.show-emoji {
+  display: flex;
+}
+
+.hide-emoji {
+  display: none;
+}
+
+.row { display: flex; }
+.row > * { margin: auto; }
 
 </style>
