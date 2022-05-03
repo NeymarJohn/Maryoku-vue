@@ -42,8 +42,9 @@ export default {
   display       : flex;
   flex-wrap     : wrap;
   margin-Bottom : 15px;
-  padding: 0;
+  padding       : 0;
   &__item {
+    cursor        : pointer;
     width            : 200px;
     height           : 50px;
     display          : flex;
@@ -58,8 +59,11 @@ export default {
     }
   }
   &__text {
-    width           : 138px;
-    height          : 19px;
+    padding         : 1em;
+    display         : flex;
+    align-items     : center;
+    width           : 100%;
+    height          : 100%;
     white-space     : nowrap;
     overflow        : hidden;
     font-size       : 14px;

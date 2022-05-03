@@ -1,5 +1,5 @@
 <template>
-  <div class="feedback-images" :key="images.length">
+  <div :key="images.length" class="feedback-images">
     <carousel
       v-if="images.length"
       :key="Math.random()"
@@ -7,6 +7,7 @@
       :dots="false"
       :nav="false"
       :number="selected"
+      :start-position="selected"
       class="feedback-carousel"
       @changed="change"
     >

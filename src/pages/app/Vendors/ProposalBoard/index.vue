@@ -588,7 +588,7 @@ export default {
       if ( negotiations.length ) {
 
         this.selectedProposalRequest = proposalRequest;
-        this.selectedProposal = this.proposals.find(p => p.id === proposalRequest.proposal.id);
+        this.selectedProposal = proposalRequest.proposal;
         this.showRequestNegotiationModal = true;
         this.negotiationProcessed = NEGOTIATION_REQUEST_STATUS.NONE;
         this.negotiationType = negotiations[0].type;
@@ -622,7 +622,6 @@ export default {
           status,
           url,
         };
-        console.log('proposal', this.selectedProposal)
         if (
           status === this.negotiationRequestStatus.approve &&
           this.selectedProposal.negotiations[0].type === NEGOTIATION_REQUEST_TYPE.ADD_MORE_TIME
@@ -646,16 +645,13 @@ export default {
                 const version = await this.saveVersion(this.selectedProposal);
                 this.selectedProposal.versions.push(version);
 
-                const params = {
-                  vendorId: this.selectedProposal.vendor.id,
-                  type: "edit",
-                  id: this.selectedProposal.nonMaryoku ? this.selectedProposal.id : this.selectedProposalRequest.id
-                };
-                const name = this.selectedProposal.nonMaryoku ? "outsideProposalEdit" : "proposalEdit";
-
-                const routeData = this.$router.resolve({
-                    name,
-                    params,
+                let routeData = this.$router.resolve({
+                    name: "outsideProposalEdit",
+                    params: {
+                        vendorId: this.selectedProposal.vendor.id,
+                        id: this.selectedProposal.id,
+                        type: "edit",
+                    },
                     query: {
                         version: version.id,
                         step: 3,
@@ -733,8 +729,6 @@ export default {
     },
     async saveVersion(proposal) {
       let data = {};
-
-      console.log('version', proposal);
       this.versionFields.map(key => {
         if (key === "eventData") {
           data[key] = { ...proposal.eventData, ...proposal.negotiations[0].event };

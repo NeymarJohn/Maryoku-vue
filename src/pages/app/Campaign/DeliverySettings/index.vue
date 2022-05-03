@@ -2,18 +2,7 @@
   <div class="white-card mt-40 delivery-setting">
     <collapse-panel>
       <template slot="header">
-        <div class="d-flex align-center p-50">
-          <img class="mr-30" :src="`${$iconURL}Campaign/Group 9136.svg`">
-          <div>
-            <div class="font-size-30 font-bold-extra color-red">
-              Message Settings
-            </div>
-            <div class="mt-2 d-flex align-center">
-              <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
-              <span>in your current invitee list</span>
-            </div>
-          </div>
-        </div>
+        <DeliveryHeader :invitees-count="inviteesCount" />
       </template>
       <template slot="content">
         <div class="delivery-setting-content pb-50">
@@ -26,21 +15,11 @@
                 <span>WhatsApp or sms </span>
               </div>
               <md-button class="md-icon-button md-simple collapse-button" @click="phoneCollapsed = !phoneCollapsed">
-                <md-icon v-if="phoneCollapsed" class="icon">
-                  keyboard_arrow_down
-                </md-icon>
-                <md-icon v-if="!phoneCollapsed" class="icon">
-                  keyboard_arrow_right
-                </md-icon>
+                <colaps-icon :is-selected="phoneCollapsed" />
               </md-button>
             </div>
             <div
-              v-if="
-                phoneCollapsed &&
-                  (currentCampaign.campaignStatus == 'EDITING' ||
-                  currentCampaign.campaignStatus == 'TESTING' ||
-                  currentCampaign.campaignStatus == 'SAVED')
-              "
+              v-if="phoneCollapsed && selectedCampaignStatusIs('EDITING', 'TESTING', 'SAVED')"
               class="mt-50"
             >
               <div class="font-bold">
@@ -130,18 +109,15 @@
               </div>
             </div>
             <div
-              v-if="
-                (phoneCollapsed && currentCampaign.campaignStatus == 'STARTED') ||
-                  currentCampaign.campaignStatus == 'SCHEDULED'
-              "
+              v-if="phoneCollapsed && selectedCampaignStatusIs('STARTED', 'SCHEDULED')"
               class="mt-50"
             >
               <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ currentCampaign.guestSMS ? currentCampaign.guestSMS.length : 0 }})
+                  Sent to ({{ selectedCampaign.guestSMS ? selectedCampaign.guestSMS.length : 0 }})
                 </div>
                 <div class="d-flex align-start width-100">
-                  {{ currentCampaign.settings.phone.numberString }}
+                  {{ selectedCampaign.settings.phone.numberString }}
                 </div>
                 <div v-if="settingData.phone.smsOrWhatsapp" class="font-bold mb-10 line-height-2 mt-50">
                   By {{ settingData.phone.smsOrWhatsapp }}
@@ -163,22 +139,13 @@
                 <span class="font-size-22 font-bold-extra mr-30">By email</span>
                 <span>Enter recipients emails or upload Microsoft excel or Google sheets with guests list</span>
               </div>
+
               <md-button class="md-icon-button md-simple collapse-button" @click="emailCollapsed = !emailCollapsed">
-                <md-icon v-if="emailCollapsed" class="icon">
-                  keyboard_arrow_down
-                </md-icon>
-                <md-icon v-if="!emailCollapsed" class="icon">
-                  keyboard_arrow_right
-                </md-icon>
+                <colaps-icon :is-selected="emailCollapsed" />
               </md-button>
             </div>
             <div
-              v-if="
-                emailCollapsed &&
-                  (currentCampaign.campaignStatus == 'EDITING' ||
-                  currentCampaign.campaignStatus == 'TESTING' ||
-                  currentCampaign.campaignStatus == 'SAVED')
-              "
+              v-if="emailCollapsed && selectedCampaignStatusIs('EDITING', 'TESTING', 'SAVED')"
               class="d-flex"
             >
               <div class="setting-item-fields">
@@ -270,12 +237,7 @@
                 </div>
               </div>
             </div>
-            <div
-              v-if="
-                emailCollapsed &&
-                  (currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED')
-              "
-            >
+            <div v-if="emailCollapsed && selectedCampaignStatusIs('STARTED', 'SCHEDULED')">
               <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
                   Subject
@@ -294,10 +256,10 @@
               </div>
               <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ currentCampaign.guestEmails ? currentCampaign.guestEmails.length : 0 }})
+                  Sent to ({{ selectedCampaign.guestEmails ? selectedCampaign.guestEmails.length : 0 }})
                 </div>
                 <div class="d-flex align-start width-100">
-                  {{ currentCampaign.settings.email.addressString }}
+                  {{ selectedCampaign.settings.email.addressString }}
                 </div>
                 <div class="mt-20">
                   <md-button class="md-simple md-red edit-btn" @click="downloadUsersEmailList">
@@ -323,12 +285,20 @@
   </div>
 </template>
 <script>
-import { MaryokuInput, MaryokuTextarea } from "@/components";
-import CollapsePanel from "./CollapsePanel";
-import InvalidAddressPanel from "./components/InvalidAddressPanel";
-import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
-import XLSX from "xlsx";
+// core
+import XLSX      from "xlsx";
 import FileSaver from "file-saver";
+
+// components
+import { MaryokuInput, MaryokuTextarea } from "@/components";
+import CollapsePanel                     from "../CollapsePanel";
+import InvalidAddressPanel               from "../components/InvalidAddressPanel";
+import DeliveryHeader                    from "./Header";
+import ColapsIcon                        from "./ColapsIcon";
+
+// utils
+import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
+import defaultSettings                     from "../CampaignMainLayout/defaultSettings";
 
 export default {
   components: {
@@ -336,38 +306,21 @@ export default {
     CollapsePanel,
     MaryokuTextarea,
     InvalidAddressPanel,
+    DeliveryHeader,
+    ColapsIcon,
   },
   props: {
     defaultSettings: {
-      type: Object,
-      default: () => ({
-        phone: {
-          selected: false,
-          status: "ready",
-          numberString: "",
-          numberArray: [],
-          excelFileName: "",
-          excelFilePath: "",
-          smsOrWhatsapp: "",
-        },
-        email: {
-          selected: false,
-          status: "ready",
-          subject: "",
-          from: "",
-          addressString: "",
-          addressArray: [],
-          excelFileName: "",
-          excelFilePath: "",
-        },
-      }),
+      type    : Object,
+      default : () => defaultSettings,
     },
     campaign: {
-      type: Object,
-      default: () => ({}),
+      type    : Object,
+      default : () => ({}),
     },
   },
   data() {
+    const tooltip = (text) => `Please upload a csv file containing only ${text} in a valid format.`;
     return {
       settingData: {
         email: {
@@ -377,13 +330,13 @@ export default {
           numberString: "",
         },
       },
-      invalidPastedEmails: null,
-      invalidPastedPhones: null,
-      phoneCollapsed: false,
-      emailCollapsed: false,
+      invalidPastedEmails : null,
+      invalidPastedPhones : null,
+      phoneCollapsed      : false,
+      emailCollapsed      : false,
       tooltips: {
-        phoneExcel: "Please upload a csv file containing only phone numbers in a valid format.",
-        emailExcel: "Please upload a csv file containing only email addresses in a valid format.",
+        phoneExcel: tooltip("phone numbers"),
+        emailExcel: tooltip("email addresses"),
       },
       fileInputType: "",
     };
@@ -397,33 +350,37 @@ export default {
       switch (this.campaign.name) {
         case "SAVING_DATE":
           return `Save the date - ${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title}`;
-          break;
         case "RSVP":
           return `RSVP - ${campaignData.RSVP ? campaignData.RSVP.title : this.event.title}`;
-          break;
         case "COMING_SOON":
           return `Coming soon - ${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title}`;
-          break;
         case "FEEDBACK":
           return `Feedback - ${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title}`;
-          break;
         default:
           return "";
       }
     },
-    currentCampaign() {
-      const currentCampaign = this.$store.state.campaign[this.campaign.name];
-      if (!currentCampaign) return {};
-      return currentCampaign;
+    selectedCampaign() {
+      if (this.campaign.name) {
+        const selectedCampaign = this.$store.state.campaign[this.campaign.name];
+        if (selectedCampaign) return selectedCampaign;
+      }
+      return {};
+    },
+    selectedCampaignStatus () {
+      const { campaignStatus = "TESTING" } = this.selectedCampaign;
+      return campaignStatus;
+    },
+    emailInvitees() {
+      const { guestEmails = [] } = this.selectedCampaign;
+      return guestEmails.length;
+    },
+    phoneInvitees () {
+      const { guestSMS = [] } = this.selectedCampaign;
+      return guestSMS.length;
     },
     inviteesCount() {
-      if (this.currentCampaign) {
-        const emailInvitees = this.currentCampaign.guestEmails ? this.currentCampaign.guestEmails.length : 0;
-        const phoneInvitees = this.currentCampaign.guestSMS ? this.currentCampaign.guestSMS.length : 0;
-
-        return emailInvitees + phoneInvitees;
-      }
-      return "";
+      return this.emailInvitees + this.phoneInvitees;
     },
   },
   watch: {
@@ -435,10 +392,10 @@ export default {
     },
     defaultSettings: {
       handler(newValue) {
-        this.settingData = newValue;
+        this.settingData               = newValue;
         this.settingData.email.subject = this.emailSubject;
         if (!this.settingData.email.from)
-          this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
+          this.settingData.email.from  = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
       },
       deep: true,
     },
@@ -447,13 +404,16 @@ export default {
     },
   },
   created() {
-    this.settingData = this.defaultSettings;
     // set default subject for email
-    this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
-    this.settingData.email.subject = this.emailSubject;
+    this.settingData                     = this.defaultSettings;
+    this.settingData.email.from          = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
+    this.settingData.email.subject       = this.emailSubject;
     this.settingData.phone.smsOrWhatsapp = "sms";
   },
   methods: {
+    selectedCampaignStatusIs (...statuses) {
+      return statuses.some((status) => status === this.selectedCampaignStatus);
+    },
     handleInputEmails({ value, type }) {
       const addresses = value.split(/[\s,]+/);
       let invalidEmails = "";
@@ -487,11 +447,8 @@ export default {
       this.settingData[type].excelFileName = "";
       const input = document.getElementById("execelFileInput");
       input.value = "";
-      if (type === "email") {
-        this.settingData.email.addressString = "";
-      } else {
-        this.settingData.phone.numberString = "";
-      }
+      if (type === "email") this.settingData.email.addressString = "";
+      else                  this.settingData.phone.numberString  = "";
     },
     onFileChange(event) {
       this.settingData[this.fileInputType].excelFileName = event.target.files[0].name;
@@ -526,15 +483,15 @@ export default {
       reader.readAsArrayBuffer(file);
     },
     downloadUsersPhone() {
-      this.exportXls(this.currentCampaign.guestSMS, "phonenumbers");
+      this.exportXls(this.selectedCampaign.guestSMS, "phonenumbers");
     },
     downloadUsersEmailList() {
-      if (this.currentCampaign.guestEmails) {
+      if (this.selectedCampaign.guestEmails) {
         if (this.campaign.name === "RSVP") {
           this.$http.get(`${process.env.SERVER_URL}/1/rsvp/guests-excel/${this.event.id}`).then((res) => {
             const rsvpUsers = res.data;
             const guestData = [];
-            this.currentCampaign.guestEmails.forEach((guest) => {
+            this.selectedCampaign.guestEmails.forEach((guest) => {
               if (rsvpUsers.findIndex((it) => it.email === guest.email) < 0) {
                 guestData.push(guest);
               }
@@ -542,7 +499,7 @@ export default {
             this.exportXls(rsvpUsers.concat(guestData), "emails");
           });
         } else {
-          this.exportXls(this.currentCampaign.guestEmails, "emails");
+          this.exportXls(this.selectedCampaign.guestEmails, "emails");
         }
       }
     },
@@ -554,7 +511,7 @@ export default {
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
       const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const data = new Blob([excelBuffer], { type: fileType });
-      FileSaver.saveAs(data, this.currentCampaign.campaignType + "_" + fileName + fileExtension);
+      FileSaver.saveAs(data, this.selectedCampaign.campaignType + "_" + fileName + fileExtension);
     },
   },
 };

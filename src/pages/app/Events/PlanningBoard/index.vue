@@ -117,7 +117,7 @@
                   <li v-for="action in functionActions" class="other-list" :key="action.label">
                     <a class="other-item font-size-16" @click="handleAction(action.value)">
                       <div class="other-name">
-                        <md-icon>{{ action.icon }}</md-icon>
+                        <md-icon>{{ action.icon }}</md-icon>  &nbsp;&nbsp;
                         <span>
                         {{ action.label }}
                       </span>
@@ -405,7 +405,7 @@
       </template>
       <template v-else>
         <div class="proposal-footer white-card d-flex justify-content-end">
-          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors()">
+          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors">
             Find Vendors for this category
           </md-button>
           <md-menu
@@ -425,7 +425,7 @@
             <md-menu-content>
               <md-menu-item
                 class="text-center"
-                @click="findVendors(true)"
+                @click="findVendors()"
                 style="min-width: 400px"
               >
                 <span class="font-size-16 font-bold-extra">
@@ -480,12 +480,6 @@
       @cancel="showAddBudgetConfirm = false"
       @addNewBudget="addBudget"
     />
-    <DifferentProposalsModal
-      v-if="showDifferentProposals"
-      :proposals="categoryProposals.slice(0, 3)"
-      @cancel="showDifferentProposals=false"
-    >
-    </DifferentProposalsModal>
   </div>
 </template>
 <script>
@@ -515,7 +509,6 @@ const components = {
 
   ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
   AddBudgetModal: () => import("./components/modals/AddBudget.vue"),
-  DifferentProposalsModal: () => import("./components/modals/DifferentProposals"),
   AddBudgetConfirmModal: () => import("./components/modals/AddBudgetConfirm.vue"),
 
   ProposalCard: () => import("../components/ProposalCard"),
@@ -526,7 +519,7 @@ const components = {
   ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
   CommentSidebar: () => import("../components/CommentSidebar.vue"),
   TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
-  ClickOutside: () => import("vue-click-outside"),
+  ClickOutside: () => import("vue-click-outside")
 };
 
 export default {
@@ -558,6 +551,7 @@ export default {
 
       showDifferentProposals: false,
       showDetails: false,
+      proposal: null,
       proposalRequest: null,
       originalProposal: {},
 
@@ -633,11 +627,9 @@ export default {
     percentOfBudgetCategories() {
       return Object.keys(this.requirements).length;
     },
-    proposal() {
-      return this.$store.state.planningBoard.proposal;
-    },
+
     proposals() {
-      return this.$store.state.planningBoard.proposals;
+      return this.$store.state.event.proposals;
     },
     versionProposal() {
       return this.$store.state.planningBoard.proposal;
@@ -651,9 +643,14 @@ export default {
       return this.$store.state.planningBoard.cart;
     },
     proposalUnviewed() {
-      if (this.proposals || !this.proposals.length) return false;
-      const proposals = this.proposals.filter(p => !p.viewed);
-      return proposals && proposals.length;
+      let count = 0;
+      for (let proposal in this.proposals) {
+        if (proposal.viewed == false) {
+          count++;
+          return true;
+        }
+      }
+      return false;
     },
     isAnyLiked() {
       let category = this.selectedCategory;
@@ -715,16 +712,19 @@ export default {
       return this.$store.state.eventPlan.showCommentPanel;
     },
     negotiationProposals(){
-      if(!Object.keys(this.proposals).length) return {};
-      let negotiationProposals = [];
-      Object.keys(this.proposals).map(key => {
-          this.proposals[key].map(p => {
+      let proposals = this.$store.state.event.proposals;
+      if(!Object.keys(proposals).length) return {};
+      let negotiationProposals = {};
+      Object.keys(proposals).map(key => {
+          let subProposals = [];
+          proposals[key].map(p => {
               let negotiations = p.negotiations.filter(n =>
                   n.status === NEGOTIATION_REQUEST_STATUS.APPROVED || n.status === NEGOTIATION_REQUEST_STATUS.DECLINE);
               if(negotiations.length) {
-                  negotiationProposals.push(p);
+                  subProposals.push(p);
               }
           });
+          if(subProposals.length) negotiationProposals[key] = subProposals;
       });
       return negotiationProposals;
     },
@@ -741,7 +741,7 @@ export default {
 
     await this.$store.dispatch("planningBoard/getRequirements", this.event.id);
 
-    await this.getProposals({ event: this.event});
+    await this.getProposals({ eventId: this.event.id});
     await this.getCartItems(this.event.id);
 
     this.selectCategory(this.categories[0]);
@@ -758,16 +758,17 @@ export default {
     this.isLoading = false;
   },
   methods: {
+    ...mapMutations("event", ["setProposalsByCategory"]),
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
-    ...mapMutations("modal", ["setOpen", "setProposal"]),
+    ...mapActions("event", ["getProposals"]),
+    ...mapMutations("modal", ["setOpen", "setProposal", "setProposalRequest"]),
     ...mapMutations("eventPlan", ["toggleCommentMode"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements", "setCategoryCartItem"]),
-    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem", "getProposals", "updateProposal"]),
+    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem"]),
     scrollToTop() {
       window.scrollTo(0, 0);
     },
     findVendors(type = false) {
-      console.log('find.vendors', type);
       this.findAllCategory = type
       this.isOpenedFinalModal = true;
     },
@@ -786,28 +787,20 @@ export default {
           expiredBusinessTime: this.expiredTime,
         })
 
-        if (res.data.success && res.data.data.length) {
-          for (let i = 0; i < res.data.data.length; i ++) {
-            await this.$store.commit("planningBoard/setCategoryRequirements", {
-              category: res.data.data[i].category,
-              requirement: res.data.data[i]
-            });
-            if (this.currentRequirement.category === res.data.data[i].category) {
-              this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
-            }
-          }
-        }
+        await this.$store.dispatch(
+          "event/saveEventAction",
+          new CalendarEvent({
+            id: this.event.id,
+            processingStatus: "accept-proposal",
+          }),
+        );
       } else {
         const res = await postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
           issuedTime: new Date().getTime(),
           expiredBusinessTime: this.expiredTime,
         })
-        if (res.data.success) {
-          await this.$store.commit("planningBoard/setCategoryRequirements", {
-            category: res.data.data.category,
-            requirement: res.data.data});
-          this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
-        }
+        await this.$store.commit("planningBoard/setCategoryRequirements", {category: res.data.data.category, requirement: res.data.data});
+        this.$set(this.currentRequirement, "expiredBusinessTime", this.expireTime);
       }
 
     },
@@ -992,14 +985,13 @@ export default {
       this.currentRequirement = res.data;
     },
     async goDetailPage(proposal) {
-      await this.$store.commit('planningBoard/setProposal', proposal);
-      await this.$store.dispatch('planningBoard/selectVersion', proposal.selectedVersion);
 
-      this.showDetails = true;
-      await this.updateProposalEngagement();
-    },
-    async updateProposalEngagement() {
-      const engagement = await getReq(`/1/proposals/${this.proposal.id}/engagement/proposal`);
+      if (proposal.selectedVersion > -1)
+        this.proposal = this.getUpdatedProposal(proposal, proposal.versions[proposal.selectedVersion].data);
+      else this.proposal = proposal;
+
+      const engagement = await getReq(`/1/proposal/${this.proposal.id}/engagement/proposal`);
+      console.log("engagement", engagement);
 
       if (engagement) {
         new ProposalEngagement({
@@ -1016,6 +1008,8 @@ export default {
           .for(new Proposal({id: this.proposal.id}))
           .save();
       }
+
+      this.showDetails = true;
     },
     async bookVendor() {
       if (!this.proposal) return;
@@ -1045,7 +1039,7 @@ export default {
     },
     async favoriteProposal(isFavorite) {
 
-      await this.updateProposal({
+      this.proposal = await this.updateProposal({
           proposal: { ...this.proposal, isFavorite },
           category: this.selectedCategory.componentId,
       });
@@ -1054,6 +1048,9 @@ export default {
         category: this.selectedCategory.componentId,
         item: { ...this.cart[this.selectedCategory.componentId], proposal: { ...this.proposal, isFavorite } },
       });
+    },
+    async updateProposal(params) {
+        return await this.$store.dispatch("event/updateProposal", params);
     },
     async handleAsk(ask) {
       if (ask === "expiredDate") {
@@ -1077,13 +1074,16 @@ export default {
     },
     closeProposal() {
       this.showDetails = false;
-      this.$store.commit("planningBoard/setProposal", null);
+      this.proposal = null;
     },
     selectProposal(p){
-        if(p){
-
-            this.$store.commit("planningBoard/setProposal",p);
-            this.$store.dispatch("eventPlan/setProposal",p).then(res => { console.log("eventPlan/setProposal", p); });
+        this.proposal = p;
+        this.originalProposal = p;
+        let proposal = p;
+        if(proposal){
+            proposal.versions = !proposal.versions ? [] : proposal.versions;
+            this.$store.dispatch("planningBoard/setProposal",{...proposal});
+            this.$store.dispatch("eventPlan/setProposal",{...proposal}).then(res => { console.log("eventPlan/setProposal", {...proposal}); });
         }
         else{
             this.$store.dispatch("eventPlan/setProposal", null).then(res => { console.log("eventPlan/setProposal", null); });
@@ -1096,67 +1096,59 @@ export default {
         this.proposal = this.versionProposal;
       }
     },
-    getUpdatedProposal(proposal, data) {
-      Object.keys(data).map(key => {
-        this.$set(proposal, key, data[key]);
-      });
-      return proposal;
-    },
     handleAction(action) {
         if (action === "download") {
-          this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
+            this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
 
         } else if (action === "negotiate" || action === "share") {
-          this.setProposal(this.proposal);
-          if (action === "negotiate") this.setOpen("NEGOTIATION");
-          else this.setOpen("SHARE");
+            this.setProposal(this.proposal);
+            if (action === "negotiate") this.setOpen("NEGOTIATION");
+            else this.setOpen("SHARE");
         } else if (action === "compare") {
-          this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
-        } else if (action === "something_different") {
-          this.showDifferentProposals = true;
+            this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
         }
     },
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    async processNotification(id){
+    async processNotification(){
 
+      let proposals = this.negotiationProposals;
+      Object.keys(proposals).map(key => {
+          this.negotiationProposals[key].map(proposal => {
+              let { negotiations } = proposal;
+              negotiations.map(it => it.status = 3);
+              this.$store.dispatch("event/updateProposal", {
+                  category: key,
+                  proposal: {...proposal, negotiations}
+              });
+          });
+      });
     },
   },
   watch: {
     requirements: {
-        handler(newVal) {},
+        handler(newVal) {
+            console.log("rquireement.watch", newVal);
+        },
         deep: true,
     },
-    event(newVal) {},
+    event(newVal) {
+    },
     negotiationProposals(newVal){
 
-      const processFn = (id) => () => {
-        console.log('processFn', id)
-        const proposal = this.negotiationProposals.find(p => p.id === id);
-        let { negotiations } = proposal;
-        negotiations.map(it => it.status = 3);
-        this.updateProposal({
-          category: proposal.vendor.vendorCategory,
-          proposal: {...proposal, negotiations}
-        });
-      }
-
-      if(newVal.length) {
-        newVal.forEach(p => {
-
+      if(Object.keys(newVal).length) {
           this.$notify({
-            message: {
-              title: "Great News!",
-              content: `${p.vendor.companyName} has accepted your request to extend the validity of the offer. You have an extra 4 days to decide`,
-              close: processFn(p.id)
-            },
-            icon: `${this.$iconURL}messages/group-21013.svg`,
-            horizontalAlign: "right",
-            verticalAlign: "top",
-            timeout: 5000,
+              message: {
+                  title: "Great News!",
+                  content: "The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide",
+                  close: this.processNotification
+              },
+              icon: `${this.$iconURL}messages/group-21013.svg`,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              timeout: 5000,
           });
-        })
       }
     },
   },

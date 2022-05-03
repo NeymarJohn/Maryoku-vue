@@ -2,7 +2,6 @@ import Vue from "vue";
 import Cart from "@/models/Cart";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
-import Proposal from "@/models/Proposal";
 
 const getDefaultState = () => {
   return {
@@ -14,8 +13,7 @@ const getDefaultState = () => {
     types: {},
     proposal: null,
     original: null,
-    currentVersion: -1,
-    proposals: {}
+    currentVersion: -1
   };
 };
 const state = getDefaultState();
@@ -164,37 +162,9 @@ const actions = {
         });
     });
   },
-  getProposals({ commit, state }, payload) {
-    return new Promise((resolve, reject) => {
-      new Proposal()
-        .params({eventId: payload.event.id})
-        .get()
-        .then((result) => {
-          payload.event.components.map((c) => {
-            let proposals = result.filter((it) => it.eventComponentId == c.id) || [];
-            commit("setProposalsByCategory", { category: c.componentId, proposals });
-          });
-          resolve(result);
-        });
-    });
-  },
-  updateProposal({ commit, state }, payload) {
-
-    const proposals = state.proposals[payload.category];
-
-    return new Promise((resolve, reject) => {
-
-      new Proposal({ ...payload.proposal }).save().then((result) => {
-        if (proposals) {
-          let index = proposals.findIndex((p) => p.id == payload.proposal.id);
-
-          Vue.set(proposals, index, result);
-          commit("setProposalsByCategory", { category: payload.category, proposals });
-        }
-        resolve(result);
-      });
-    });
-  },
+  setProposal: ({ commit, state }, proposal) => {
+    commit("setProposal", proposal);
+  }
 };
 const mutations = {
   resetRequirements(state) {
@@ -243,12 +213,10 @@ const mutations = {
   setVersions: (state, versions) => {
     state.proposal.versions = versions;
   },
-  setProposalsByCategory(state, { category, proposals }) {
-    Vue.set(state.proposals, category, proposals);
-  },
-
   setProposal: (state, proposal) => {
     state.proposal = proposal;
+    state.proposal.versions = proposal.versions || [];
+    state.currentVersion = -1;
     Vue.set(state, "original", proposal);
   }
 };

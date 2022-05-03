@@ -199,7 +199,7 @@
                 </template>
                 <template slot="content">
                   <save-date
-                    :info="{ ...campaignTabs[1], ...campaignInfo }"
+                    :info="getCompaingInfo(1)"
                     :show-change-cover="true"
                     @changeInfo="changeInfo"
                     @change-logo="changeCampaignLogo"
@@ -210,8 +210,8 @@
               <save-date
                 v-else
                 ref="savedateCampaign"
-                :info="{ ...campaignTabs[1], ...campaignInfo }"
                 class="white-card"
+                :info="getCompaingInfo(1)"
                 :show-change-cover="true"
                 @changeInfo="changeInfo"
                 @change-logo="changeCampaignLogo"
@@ -233,7 +233,7 @@
                 <template slot="content">
                   <rsvp
                     ref="rsvp"
-                    :info="{ ...campaignTabs[2], ...campaignInfo }"
+                    :info="getCompaingInfo(2)"
                     @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
@@ -242,7 +242,7 @@
               <rsvp
                 v-else
                 ref="rsvp"
-                :info="{ ...campaignTabs[2], ...campaignInfo }"
+                :info="getCompaingInfo(2)"
                 @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
               />
@@ -262,7 +262,7 @@
                 <template slot="content">
                   <countdown
                     ref="countdown"
-                    :info="{ ...campaignTabs[3], ...campaignInfo }"
+                    :info="getCompaingInfo(3)"
                     @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
@@ -271,7 +271,7 @@
               <countdown
                 v-else
                 ref="countdown"
-                :info="{ ...campaignTabs[3], ...campaignInfo }"
+                :info="getCompaingInfo(3)"
                 class="white-card"
                 @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
@@ -292,7 +292,7 @@
                 <template slot="content">
                   <feedback
                     ref="feedback"
-                    :info="{ ...campaignTabs[4], ...campaignInfo }"
+                    :info="getCompaingInfo(4)"
                     @change-logo="changeCampaignLogo"
                     @change-cover-image="showChangeCoverImageModal"
                   />
@@ -301,7 +301,7 @@
               <feedback
                 v-else
                 ref="feedback"
-                :info="{ ...campaignTabs[4], ...campaignInfo }"
+                :info="getCompaingInfo(4)"
                 class="white-card"
                 @change-logo="changeCampaignLogo"
                 @change-cover-image="showChangeCoverImageModal"
@@ -335,7 +335,7 @@
           <template v-if="isScheduled">
             <template v-if="canSchedule">
               <span class="seperator" />
-              <Schedule :time="currentCampaign.scheduleSettings.scheduleTime" />
+              <Schedule :time="selectedCampaign.scheduleSettings.scheduleTime" />
               <md-button
                 class="maryoku-btn md-simple md-red"
                 @click="cancelSchedule"
@@ -421,10 +421,10 @@
           class="d-flex align-center"
         >
           <template v-if="!canSchedule">
-            <Scheduled :time="currentCampaign.scheduleTime" />
+            <Scheduled :time="selectedCampaign.scheduleTime" />
             <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
             <SendAgainBtn v-else @click="showScheduleModal = true">
-              Change Schedule
+              Change Schdeule
             </SendAgainBtn>
           </template>
           <div
@@ -467,7 +467,7 @@
                   @click="startCampaign"
                 >
                   <Icon src="Campaign/group-2428.svg">
-                    Send Now 1111
+                    Send Now
                   </Icon>
                 </md-menu-item>
               </md-menu-content>
@@ -478,7 +478,7 @@
     </div>
     <change-cover-image-modal
       v-if="showChangeCoverModal"
-      :cover-image="currentCampaign.coverImage"
+      :cover-image="selectedCampaign.coverImage"
       :default-cover-image="campaignTabs[selectedTab].defaultCoverImage"
       @close="close"
       @choose-image="chooseImage"
@@ -554,14 +554,14 @@ export default {
     return {
       isLoading: false,
       campaignInfo: {
-        conceptName: "",
-        logo: "",
+        conceptName : "",
+        logo        : "",
       },
-      deliverySettings: defaultSettings,
-      showCommentEditorPanel: false,
-      selectedTab: 1,
-      showChangeCoverModal: false,
-      showScheduleModal: false,
+      deliverySettings       : defaultSettings,
+      showCommentEditorPanel : false,
+      selectedTab            : 1,
+      showChangeCoverModal   : false,
+      showScheduleModal      : false,
       campaignTabs: {
         1: {
           completed: false,
@@ -603,22 +603,28 @@ export default {
     user() {
       return this.$store.state.auth.user;
     },
-    currentCampaignType () {
-      return this.campaignTabs[this.selectedTab].name || "";
+    selectedCampaign() {
+      if (this.selectedCampaignType) {
+        const campaign = this.$store.state.campaign[this.selectedCampaignType];
+        if (campaign) return campaign || {};
+      }
+      return {};
     },
-    currentCampaign() {
-      return this.$store.state.campaign[this.currentCampaignType] || {};
+    selectedCampaignType () {
+      const tab = this.campaignTabs[this.selectedTab];
+      if (tab) return tab.name || "";
+      return "";
     },
     canSchedule() {
-      const { email = {}, phone = {}} = this.currentCampaign.settings;
+      const { email = {}, phone = {}} = this.selectedCampaign.settings;
       return (email.selected && email.status !== "sent") || (phone.selected && phone.status !== "sent");
     },
     isScheduled() {
-      if (!this.currentCampaign) return false;
+      if (!this.selectedCampaign) return false;
 
-      const { scheduleTime = 0 } = (this.currentCampaign.scheduleSettings || { scheduleTime: 0});
+      const { scheduleTime = 0 } = (this.selectedCampaign.scheduleSettings || { scheduleTime: 0});
       return false
-          || this.currentCampaign.campaignStatus === "SCHEDULED"
+          || this.selectedCampaign.campaignStatus === "SCHEDULED"
           || (scheduleTime < Date.now() && scheduleTime > 0);
     },
     tabName () {
@@ -632,7 +638,7 @@ export default {
     },
   },
   watch: {
-    currentCampaign(newValue, oldValue) {
+    selectedCampaign(newValue, oldValue) {
       this.setDefaultSettings();
     },
     event(newValue, oldValue) {
@@ -643,16 +649,18 @@ export default {
     this.setConceptName();
     this.campaigns = await this.getCampaigns({ event: this.event });
     this.setDefaultSettings();
-
   },
   methods: {
     ...mapActions  ("campaign", ["getCampaigns", "saveCampaign"]),
     ...mapMutations("campaign", ["setAttribute"]),
+    getCompaingInfo (tabIndex) {
+      return { ...this.campaignTabs[tabIndex], ...this.campaignInfo };
+    },
     setCampaignAttribute (name, key, value) {
       return this.$store.commit("campaign/setAttribute", { name, key, value });
     },
     setCurrentAttribute (key, value) {
-      return this.setCampaignAttribute(this.currentCampaignType, key, value);
+      return this.setCampaignAttribute(this.selectedCampaignType, key, value);
     },
     setConceptName () {
       return this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
@@ -671,9 +679,19 @@ export default {
       this.setDefaultSettings();
     },
     setDefaultSettings() {
-        this.deliverySettings = this.currentCampaign && this.currentCampaign.settings && Object.keys(this.currentCampaign.settings).length > 0
-          ? { ...this.currentCampaign.settings }
-          : { ...defaultSettings } ;
+      if (this.selectedCampaign && objectIsNoEmpty(this.selectedCampaign.settings)) {
+        const { phone = defaultSettings.phone, email = defaultSettings.email} = this.selectedCampaign.settings;
+        this.deliverySettings = {
+          phone: {
+            ...defaultSettings.phone,
+            ...phone,
+          },
+          email: {
+            ...defaultSettings.email,
+            ...email,
+          },
+        };
+      } else this.deliverySettings = defaultSettings;
     },
     exportToPdf() {
       this.$refs.html2Pdf.generatePdf();
@@ -691,7 +709,7 @@ export default {
 
       if (this.deliverySettings) {
         const { email = {}, phone = {} } = this.deliverySettings;
-        if (!this.currentCampaign || (!email.selected && !phone.selected))
+        if (!this.selectedCampaign || (!email.selected && !phone.selected))
           return swapTitle("Please select email or phone or both.");
       }
 
@@ -708,11 +726,11 @@ export default {
       this.campaignInfo[data.field] = data.value;
     },
     changeSettings(data) {
-      if (data && objectIsNoEmpty(data)) this.deliverySettings = Object.assign(defaultSettings, data);
-      else this.deliverySettings = { ...defaultSettings };
+      if (data && objectIsNoEmpty(data)) this.deliverySettings = data;
+      else this.deliverySettings = defaultSettings;
     },
     saveDraftCampaign(campaignStatus = "SAVED") {
-      return this.callSaveCampaign(this.currentCampaignType, campaignStatus);
+      return this.callSaveCampaign(this.selectedCampaignType, campaignStatus);
     },
     async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
       this.isLoading = true;
@@ -724,8 +742,24 @@ export default {
       if      (campaignType === "RSVP")     referenceUrl = makeUrl("rsvp");
       else if (campaignType === "FEEDBACK") referenceUrl = makeUrl("feedback");
 
-      if (this.deliverySettings.email.selected) this.deliverySettings.email.status = "sent";
-      if (this.deliverySettings.phone.selected) this.deliverySettings.phone.status = "sent";
+      if (this.deliverySettings.email.selected) {
+        this.deliverySettings = {
+          ...this.deliverySettings,
+          email: {
+            ...(this.deliverySettings.email || {}),
+            status: "sent",
+          }
+        };
+      }
+      if (this.deliverySettings.phone.selected) {
+        this.deliverySettings = {
+          ...this.deliverySettings,
+          phone: {
+            ...(this.deliverySettings.phone || {}),
+            status: "sent",
+          }
+        };
+      };
 
       const newCampaign = new Campaign({
         campaignType,
@@ -748,7 +782,7 @@ export default {
     },
     saveScheduleTime(data) {
       const {
-        currentCampaignIndex,
+        selectedCampaignIndex,
         scheduleTime,
         scheduleSettings,
         selectedOption,
@@ -760,11 +794,11 @@ export default {
         scheduleOption      : selectedOption,
         scheduleOptionValue : scheduleSettings[selectedOption].value,
       };
-      this.setCampaignAttribute(this.campaignTabs[currentCampaignIndex].name, "scheduleSettings", scheduleSettingsData);
+      this.setCampaignAttribute(this.campaignTabs[selectedCampaignIndex].name, "scheduleSettings", scheduleSettingsData);
       this.scheduleCampaign();
     },
     revertSetting() {
-      this.deliverySettings = { ...defaultSettings };
+      this.deliverySettings = defaultSettings;
       switch (this.selectedTab) {
         case 1: return this.$refs.savedateCampaign.setDefault();
         case 2: return this.$refs.rsvp.setDefault();
@@ -774,7 +808,7 @@ export default {
     },
 
     sendPreviewEmail() {
-      this.callSaveCampaign(this.currentCampaignType, this.currentCampaign.campaignStatus || "TESTING", true).then((res) => {});
+      this.callSaveCampaign(this.selectedCampaignType, this.selectedCampaign.campaignStatus || "TESTING", true).then((res) => {});
       this.$notify({
         message: {
           title: "Your preview email is on the way!",
@@ -793,7 +827,7 @@ export default {
     },
     chooseImage(url) {
       this.setAttribute({
-        name  : this.currentCampaignType,
+        name  : this.selectedCampaignType,
         key   : "coverImage",
         value : url
       });
@@ -809,7 +843,7 @@ export default {
         logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
 
       } else {
-        // await S3Service.deleteFile(this.currentCampaign.logoUrl);
+        // await S3Service.deleteFile(this.selectedCampaign.logoUrl);
       }
       Object.keys(this.campaignTabs).forEach(key => {
         this.setAttribute({name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl});
