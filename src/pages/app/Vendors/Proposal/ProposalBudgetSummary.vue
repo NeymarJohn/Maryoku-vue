@@ -49,7 +49,7 @@
       <div class="items-cont">
         <div class="item">
           <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
-            <div class="d-flex align-center mb-20">
+            <div class="d-flex align-center">
               <md-checkbox
                 v-if="isBundleDiscount"
                 v-model="bundleDiscountServices"
@@ -62,6 +62,7 @@
                 {{ vendor.eventCategory.title }}
               </div>
             </div>
+            <br/>
             <ul class="flex-1">
               <li>
                 <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
@@ -125,13 +126,14 @@
             <h3 v-if="aIndex === 0" class="width-100">
               Additional Services
             </h3>
-            <div class="d-flex align-center mb-20">
+            <div class="d-flex align-center">
               <md-checkbox v-if="isBundleDiscount" v-model="bundleDiscountServices" class="md-vendor" :value="a" />
               <img :src="getIconUrlByCategory(a)" class="mr-5">
               <div style="font-size: 16px; font-weight: 800">
                 {{ getServiceCategory(a).title }}
               </div>
             </div>
+            <br/>
             <ul>
               <li>
                 <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>

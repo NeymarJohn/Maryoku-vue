@@ -110,29 +110,18 @@
         <event-note-panel />
       </div>
     </transition>
-    <div class="zoom-block">
-      <div class="zoom-wrapper">
-        <button class="md-button zoom-button"
-                @click="changeZoom('-')">
-          -
-        </button>
-        <span>{{ zoomLevel }}%</span>
-        <button
-          class="md-button zoom-button"
-          @click="changeZoom('+')">
-          +
-        </button>
-      </div>
-    </div>
+    <change-zoom/>
   </div>
 </template>
 <script>
 import SidebarItem from "./NewSidebarItem";
 import eventService from "@/services/event.service";
 import EventNotePanel from "../../pages/app/Events/components/EventNotePanel";
+import ChangeZoom from "./ChangeZoom";
 export default {
   name: "Sidebar",
   components: {
+    ChangeZoom,
     SidebarItem,
     EventNotePanel,
   },
@@ -183,7 +172,7 @@ export default {
     },
     event: {
       type: Object,
-      default: {},
+      default:()=> {},
     },
   },
   data: () => {
@@ -228,18 +217,8 @@ export default {
   created() {
     this.fetchUrl();
     this.taskUrl = eventService.getFirstTaskLink(this.event);
-    this.zoomLevel = Math.round( JSON.parse(localStorage.getItem("zoomParams")).zoomScale * 100);
   },
   methods: {
-    changeZoom(sign){
-      if(sign === "-"){
-        this.zoomLevel = this.zoomLevel - 10;
-      }else {
-        this.zoomLevel = this.zoomLevel + 10;
-      }
-      document.body.style.zoom = this.zoomLevel / 100 ;
-      localStorage.setItem("zoomParams", JSON.stringify({zoomScale: this.zoomLevel / 100, windowWidth: this.windowWidth}));
-    },
     minimizeSidebar() {
       if (this.$sidebar) {
         this.$sidebar.toggleMinimize();
@@ -377,38 +356,6 @@ export default {
       width: 40px;
     }
   }
-  .zoom-block {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    top: 50%;
-    .zoom-wrapper {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-      width: 35px;
-      box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12);
-      border-radius: 18px;
-      span {
-        color: #05050591;
-        width: 100%;
-        padding: 5px 0;
-        text-align: center;
-        border: solid #88868645;
-        border-width: 1px 0;
-      }
-      .zoom-button{
-        background-color: transparent !important;
-        color: #05050591 !important;
-        font-size: 25px;
-        box-shadow: none;
-        margin: 0;
-        line-height: 29px;
-        min-width: 100%;
-      }
-    }
-  }
+
 }
 </style>

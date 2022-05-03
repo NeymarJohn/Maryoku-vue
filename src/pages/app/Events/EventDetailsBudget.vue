@@ -232,24 +232,6 @@
           </section>
         </vue-html2pdf>
       </div>
-<!--      <div class="wizard-footer d-flex">-->
-<!--        <div>-->
-<!--          <md-button class="md-black md-maryoku md-simple" @click="back">-->
-<!--            <md-icon>keyboard_backspace</md-icon>-->
-<!--            Back-->
-<!--          </md-button>-->
-<!--          <md-button class="md-button md-simple md-just-icon md-theme-default scroll-top-button" @click="scrollToTop">-->
-<!--            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">-->
-<!--          </md-button>-->
-<!--        </div>-->
-<!--        <div class="color-black-middle font-bold-extra d-flex align-center">-->
-<!--          <img :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`" width="25">-->
-<!--          <span class="pl-10 pr-30 border-right">Budget was divided</span>-->
-<!--          <md-button class="md-simple md-black maryoku-btn" @click="editBudget">-->
-<!--            Edit Budget-->
-<!--          </md-button>-->
-<!--        </div>-->
-<!--      </div>-->
       <upload-vendors-modal ref="uploadModal" />
       <budget-edit-modal
         v-if="editBudgetModalStep === 1"
@@ -690,7 +672,7 @@ export default {
 
     },
     back() {
-      this.$router.go(-1);
+      this.$router.push(`/events/${this.event.id}/booking/budget`);
     },
     scrollToTop() {
       window.scrollTo(0, 0);

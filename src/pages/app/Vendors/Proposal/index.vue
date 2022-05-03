@@ -197,7 +197,7 @@ export default {
         //   services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
         //   Infinity,
         // );
-        return []
+        return [];
       } else {
         return [];
       }

@@ -380,6 +380,11 @@
     }
 }
 
+.no-body{
+    .modal-body{
+      padding: 0;
+    }
+}
 .no-footer{
     .modal-footer{
         padding: 0

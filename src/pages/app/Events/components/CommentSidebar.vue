@@ -80,9 +80,7 @@
         </div>
         <div class="sidebar__item__content w-90">
           <div class="dot" />
-          <span
-            class="comment">{{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : ""
-            }} </span>
+          <span class="comment"> {{ (commentComponent.comments && commentComponent.comments.length) ? commentComponent.comments[0].description : "" }} </span>
         </div>
         <div class="d-flex sidebar__item__content_2 justify-content-between mt-1 mb-1">
           <span class="replay" @click="toggleshowReply(commentIndex)">{{ commentComponent.comments.length - 1 }} Reply
@@ -95,7 +93,7 @@
         </div>
         <div v-if="showReplyComment == commentIndex" class="commentsReplies p-4"
              :class="{'commentsNoReply':(commentComponent.comments.length <= 1)}">
-          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex>0" :key="cindex" class="commentItem"
+          <div v-for="(comment, cindex) in commentComponent.comments" v-if="cindex > 0" :key="cindex" class="commentItem"
                :class="{'b-bottom':(commentComponent.comments.length-1 !== cindex)}">
             <div class="d-flex sidebar__item__content2 justify-content-between">
               <div class="sidebar__item__details d-flex">
@@ -166,13 +164,17 @@
             <textarea ref="commentEditor" v-model="editingCommentReply" rows="4" class="form-control reply-text-area"
                       placeholder="Write reply here" @input="getMessage" />
             <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon">
+            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
+            <div class="row">
+              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
+            </div>
             <div class="footer text-right my-top my-bottom d-flex">
               <md-icon class="">
                 attach_file
               </md-icon>
-              <md-icon class="">
+              <!-- <md-icon class="">
                 sentiment_satisfied_alt
-              </md-icon>
+              </md-icon> -->
               <md-button class="md-simple md-black normal-btn" @click="cancelCommentReply()">
                 Cancel
               </md-button>
@@ -203,9 +205,15 @@ import { CommentMixins } from "@/mixins";
 import moment from "moment";
 import { FadeTransition } from "vue2-transitions";
 import { PROPOSAL_PAGE_PAGINATION } from "@/constants/pagination";
+import data from "emoji-mart-vue-fast/data/all.json";
+import "emoji-mart-vue-fast/css/emoji-mart.css";
+import { EmojiIndex, Picker } from "emoji-mart-vue-fast/src";
+
+let emojiIndex = new EmojiIndex(data);
 
 const components = {
   FadeTransition,
+  Picker,
 };
 
 export default {
@@ -231,6 +239,9 @@ export default {
         { label: "@ Mentions", value: "mentions" },
       ],
       activeTab: "all",
+      emojiIndex: emojiIndex,
+      emojisOutput: "",
+      showEmojiPanel: false,
     };
   },
   computed: {
@@ -260,6 +271,9 @@ export default {
     },
   },
   methods: {
+    showEmoji(emoji) {
+      this.editingComment = this.editingComment + emoji.native;
+    },
     async getMessage(e) {
       if (e.target.value.includes("@")) {
         let queryArray = e.target.value.split("@");
@@ -270,7 +284,7 @@ export default {
     },
     toggleshowReply(commentIndex) {
       this.showReplyComment = this.showReplyComment == commentIndex ? null : commentIndex;
-      this.selectedComponent = this.commentComponents[commentIndex];
+      this.selectedComponent = this.sortedComponents[commentIndex];
     },
     async saveNewComment(event, type) {
       let selectedComponent = this.selectedComponent;
@@ -484,6 +498,14 @@ export default {
       top: 10px;
       width: 20px;
     }
+
+    .emoji-icon {
+      position: absolute;
+      right: 35px;
+      top: 10px;
+      width: 20px;
+      cursor: pointer;
+    }
   }
 
 
@@ -630,5 +652,16 @@ export default {
   }
 
 }
+
+.show-emoji {
+  display: flex;
+}
+
+.hide-emoji {
+  display: none;
+}
+
+.row { display: flex; }
+.row > * { margin: auto; }
 
 </style>

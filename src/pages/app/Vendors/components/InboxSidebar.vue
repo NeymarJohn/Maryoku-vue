@@ -162,29 +162,54 @@
         class="sidebar__item_main cursor-pointer"
         :class="[(selectedProposal && selectedProposal.id == proposal.id) ? 'active' : '', 'main_content_' + proposal.id]"
       >
-        <div class="d-flex justify-content-between" style="z-index: 100;">
-          <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex align-item-center sidebar__item__content">
-              <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
-              <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px" style="z-index: 100;">
-              <div class="sidebar__item__details d-flex flex-column">
-                <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
-                  {{ proposal.eventData.customer.companyName }}
-                </span>
-                <span v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
-                  {{ proposal.vendor.eventCategory.fullTitle }}
-                </span>
-                <span v-if="proposal.subProposals.length > 0">{{ proposal.subProposals.length }} events with this client</span>
-                <span v-else>No events with this client</span>
+        <div v-if="proposal.subProposals.length >= 2">
+          <div class="d-flex justify-content-between" style="z-index: 100;">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-item-center sidebar__item__content">
+                <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+                <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px" style="z-index: 100;">
+                <div class="sidebar__item__details d-flex flex-column">
+                  <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
+                    {{ proposal.eventData.customer.companyName }}
+                  </span>
+                  <span v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
+                    {{ proposal.vendor.eventCategory.fullTitle }}
+                  </span>
+                  <span v-if="proposal.subProposals.length > 0">{{ proposal.subProposals.length }} events with this client</span>
+                  <span v-else>No events with this client</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 15px;">
+              <i class="fas fa-chevron-right my-chevron" :class="proposal.id" @click="openclose(proposal.id)" />
+              <!-- <i v-else class="fas fa-chevron-down my-chevron" @click="openclose('show', proposal.id)" /> -->
+            </div>
+          </div>
+        </div>
+        <div v-else @click="changeProposal(proposal)">
+          <div class="d-flex justify-content-between" style="z-index: 100;">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-item-center sidebar__item__content">
+                <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+                <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px" style="z-index: 100;">
+                <div class="sidebar__item__details d-flex flex-column">
+                  <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
+                    {{ proposal.eventData.customer.companyName }}
+                  </span>
+                  <span v-else-if="proposal.vendor && proposal.vendor.eventCategory.fullTitle" class="productLaunchParty">
+                    {{ proposal.vendor.eventCategory.fullTitle }}
+                  </span>
+                  <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
+                </div>
+                <span v-if="!proposal.viewed && proposal.unread_count" class="unread-count">{{ proposal.unread_count }}</span>
+                <div>
+                  <span v-if="proposal.unread_count == 0 && proposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(proposal,true)" /> </span>
+                </div>
               </div>
             </div>
           </div>
-          <div style="margin-top: 15px;">
-            <i class="fas fa-chevron-right my-chevron" :class="proposal.id" @click="openclose(proposal.id)" />
-            <!-- <i v-else class="fas fa-chevron-down my-chevron" @click="openclose('show', proposal.id)" /> -->
-          </div>
         </div>
-        <div v-if="proposal.subProposals.length > 0">
+        <div v-if="proposal.subProposals.length >= 2">
           <div :class="'content_' + proposal.id" style="display:none;">
             <div
               v-for="(subProposal, subIndex) in proposal.subProposals"

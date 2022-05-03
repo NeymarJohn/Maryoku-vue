@@ -381,7 +381,7 @@
             <div class="half-side">
               <h6>{{ vendor.companyName }}</h6>
               <div class="signature-client">
-                <template v-if="vendor.signature == null && !signatureImage">
+                <template v-if="!signatureIsValid || (!vendor.signature && !signatureImage)">
                   <div class="card red-border">
                     <div class="upload-cont">
                       <a class @click="uploadVendorSignature">
@@ -489,6 +489,7 @@ export default {
   },
   data() {
     return {
+      signatureIsValid: false,
       currentTab: 1,
       savedItModal: false,
       isTimeUp: false,
@@ -589,9 +590,11 @@ export default {
   },
   watch: {},
   created() {
-    console.log(this.vendor);
     //Get attachments from vendor profile,
     this.$store.commit("vendorProposal/setValue", { key: "attachments", value: this.vendor.attachments });
+   fetch( this.vendor.signature || this.signatureImage).then((res)=>{
+      this.signatureIsValid = res.status === 200;
+    });
   },
   mounted() {
     this.savedItModal = false;
@@ -645,10 +648,8 @@ export default {
       this.signatureImage = await getBase64(event.target.files[0]);
     },
     save() {
-      let _this = this;
-      let jpeg = _this.$refs.signature.save("image/jpeg");
-      this.$root.$emit("update-proposal-value", "signature", jpeg);
-      console.log(this.vendor);
+      this.signatureImage = this.signatureImage || this.$refs.signature.save("image/jpeg");
+      this.$store.dispatch("vendor/updateProfile", { "signature": this.signatureImage, id: this.vendor.id});
     },
     clear() {
       let _this = this;
