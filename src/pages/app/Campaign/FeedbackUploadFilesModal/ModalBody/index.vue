@@ -36,8 +36,7 @@ export default {
     },
   },
   data: () => ({
-    selected : -1,
-    isSlected: false,
+    selected : -1
   }),
   computed: {
     lastFileIndex () {
@@ -49,8 +48,7 @@ export default {
   },
   watch:{
     files () {
-      if (!this.isSlected && this.lastFileIndex > this.selected) this.selected = this.lastFileIndex;
-      else if (this.selected > this.lastFileIndex) this.selected = this.lastFileIndex;
+      if (this.selected > this.lastFileIndex) this.selected = this.lastFileIndex;
       else if (this.selected === -1 && this.lastFileIndex > -1) this.selected = this.lastFileIndex;
     },
   },
@@ -59,11 +57,7 @@ export default {
       return numberClamp(this.firstFileIndex, this.lastFileIndex, +index);
     },
     setSelected (index) {
-      if (index !== this.selected) {
-        if (index === this.lastFileIndex) this.isSlected = false;
-        else this.isSlected = true;
-        return this.selected = index;
-      }
+      if (index !== this.selected) return this.selected = index;
       return this.selected;
     },
     select (index) {
