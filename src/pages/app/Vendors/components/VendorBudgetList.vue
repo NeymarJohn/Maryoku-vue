@@ -6,7 +6,7 @@
     </h4>
     <div class="total">
       <strong>Total Event Budget:</strong>
-      <span v-if="proposalRequest && eventBudget">${{ total || eventBudget | withComma }}</span>
+      <span v-if="proposalRequest && eventBudget">${{ eventBudget | withComma }}</span>
       <span v-else>Unknown</span>
     </div>
     <p>
@@ -51,10 +51,6 @@ export default {
     description: {
       type: String,
       default: ""
-    },
-    total: {
-      type: Number,
-      default: 0
     },
     proposalRequest: {
       type: Object,
