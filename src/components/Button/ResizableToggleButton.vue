@@ -54,7 +54,6 @@ export default {
   },
   watch: {
     defaultStatus(newValue, oldValue) {
-      console.log('default.status.watch', this.label, newValue)
       this.clicked = newValue;
     },
   },
@@ -66,7 +65,6 @@ export default {
       if (this.disabled) return;
 
       this.clicked = this.proposalCategory ? true : !this.clicked;
-      console.log('click', this.clicked)
       this.$emit("click", this.clicked);
     },
   },

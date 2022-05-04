@@ -230,8 +230,8 @@
           </div>
         </div>
         <div class="mt-40 policy-confirmation-block d-flex align-center">
-          <span class="font-regular">I agree to the  </span>
-          <a href="#" class="font-bold color-black text-underline"> Cancellation policy </a>
+          <span class="font-regular"> I agree to the{{ ' '}} </span>
+          <a href="#" class="font-bold color-black text-underline ml-10"> Cancellation policy </a>
           <stripe-checkout
             v-if="showStripeCheckout"
             :items="stripePriceData"
@@ -245,17 +245,20 @@
             Your signature
           </button>
         </div>
-        <div class="signatures-block" v-if="proposal.signature">
-          <div v-if="proposal.signature.jpeg">
-            <img class="signatures-image" :src="proposal.signature.jpeg">
-            <img class="trash" @click="removeSignature('jpeg')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+        <div class="signatures-block d-flex align-center" v-if="proposal.signature">
+          <div class="position-relative" v-if="proposal.signature.uploadedSignature">
+            <img class="signatures-image" :src="proposal.signature.uploadedSignature" style="max-height: 250px">
+            <img class="position-absolute trash" @click="removeSignature('uploadedSignature')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
           </div>
-          <div v-if="proposal.signature.uploadedSignature">
-            <img class="signatures-image" :src="proposal.signature.uploadedSignature">
-            <img class="trash" @click="removeSignature('uploadedSignature')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+          <div class="position-relative ml-20">
+            <div class="position-relative" v-if="proposal.signature.jpeg">
+              <img class="signatures-image" :src="proposal.signature.jpeg" style="max-height: 200px">
+              <img class="position-absolute trash" @click="removeSignature('jpeg')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+            </div>
+            <div v-if="proposal.signature.signatureName"
+                 class="font-size-14 mt-20"
+            >{{proposal.signature.signatureName}}</div>
           </div>
-          <br/>
-          <span v-if="proposal.signature.signatureName">{{proposal.signature.signatureName}}</span>
         </div>
       </div>
     </div>
@@ -616,25 +619,15 @@
 <style lang="scss" scoped>
 .signatures-block {
   div{
-    display: inline-block;
-    position: relative;
-    width: fit-content;
+    cursor: pointer;
     .trash {
       display: none;
-      cursor: pointer;
       border-radius: 0 3px;
       width: 20px;
-      position: absolute;
-      left: 229px;
       background-color: #f51355;
       padding: 3px;
       top: 0;
-    }
-    img {
-      border-radius: 3px;
-      width: 250px;
-      margin-left: 5px;
-      position: relative;
+      right: 0;
     }
     &:hover img {
       border: solid 1px #f51355;
