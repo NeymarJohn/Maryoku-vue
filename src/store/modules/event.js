@@ -7,6 +7,7 @@ import EventTheme from "@/models/EventTheme";
 import EventComponent from "@/models/EventComponent";
 import { postReq, getReq } from "@/utils/token";
 import EventTimelineDate from "@/models/EventTimelineDate";
+import Proposal from "@/models/Proposal";
 
 const state = {
   currentUser: {},
@@ -196,6 +197,14 @@ const actions = {
     const filters = data.filters || [];
     const res = await postReq(`/1/calendars/${calendarId}/events/${eventId}/notes/search`, { filters: filters });
     commit("setEventNotes", res.data);
+
+    // new EventNote()
+    //   .where("test","test")
+    //   .for(calendar, event)
+    //   .get()
+    //   .then(notes => {
+    //     commit('setEventNotes', notes)
+    //   });
   },
   async addEventNote({ commit, state }, note) {
     const calendarId = state.eventData.calendar.id;
@@ -261,6 +270,38 @@ const actions = {
       }
     });
   },
+
+  getProposals({ commit, state }, payload) {
+    return new Promise((resolve, reject) => {
+      new Proposal()
+        .params(payload)
+        .get()
+        .then((result) => {
+          state.eventData.components.map((c) => {
+            let proposals = result.filter((it) => it.eventComponentId == c.id) || [];
+            commit("setProposalsByCategory", { category: c.componentId, proposals });
+          });
+          resolve(result);
+        });
+    });
+  },
+  updateProposal({ commit, state }, payload) {
+
+    const proposals = state.proposals[payload.category];
+
+    return new Promise((resolve, reject) => {
+
+      new Proposal({ ...payload.proposal }).save().then((result) => {
+        if (proposals) {
+          let index = proposals.findIndex((p) => p.id == payload.proposal.id);
+
+          Vue.set(proposals, index, result);
+          commit("setProposalsByCategory", { category: payload.category, proposals });
+        }
+        resolve(result);
+      });
+    });
+  }
 };
 
 const mutations = {
@@ -329,6 +370,9 @@ const mutations = {
   setBudgetNotification(state, event_id) {
     state.budgetNotification.push(event_id);
   },
+  setProposalsByCategory(state, { category, proposals }) {
+    Vue.set(state.proposals, category, proposals);
+  }
 };
 
 export default {
