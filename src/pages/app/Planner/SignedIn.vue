@@ -38,7 +38,6 @@ export default {
   async created() {
     const givenToken = this.$route.query.token;
     let tenantUser = await this.$store.dispatch("auth/checkToken", givenToken);
-
     const tenantId = this.$authService.resolveTenantId();
     this.$authService.setTenant(tenantId);
 
@@ -96,7 +95,8 @@ export default {
         this.$router.push({path: `/user-events/${events[0].id}/booking/choose-vendor`});
       }
     }
-
+    let tenantIdExt = this.$authService.resolveStaging();
+    tenantIdExt = tenantIdExt ? `.${tenantIdExt}` : "";
     if (noTenant && !action) {
       // WHEN PLANNER STARTD BY SIGNIN
       this.$router.push({ path: `/create-event-wizard?action=${action}` });
@@ -109,8 +109,8 @@ export default {
       eventService
               .saveEvent(eventData)
               .then((event) => {
-                callback = btoa(`events/${event.id}/booking/concept`);
-                document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                const callback = btoa(`events/${event.id}/booking/concept`);
+                location.href = `${document.location.protocol}//${this.workspace || "preprod" }${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${givenToken}&redirectURL=${callback}`;
               })
               .catch((err) => {
                 console.error(err);
