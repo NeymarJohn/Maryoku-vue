@@ -103,6 +103,9 @@ export default {
     logoImageData : "",
     placeHolder   : placeHolder,
   }),
+  created () {
+    console.log('save.data.created', this.campaignData);
+  },
   computed: {
     event() {
       return this.$store.state.event.eventData;
@@ -133,45 +136,49 @@ export default {
       };
     },
   },
-  created () {
-    console.log("save.data.created", this.campaignData);
-  },
   methods: {
     handleChangeCoverImage(event) {
-      return this.$emit("change-cover-image", event);
+      this.$emit("change-cover-image", event);
     },
     handleChangeCampaignLogo(file) {
-      return this.$emit("change-logo", file);
+      this.$emit("change-logo", file);
     },
-    campaignSetAttribute(atribute) {
-      return this.$store.commit("campaign/setAttribute", atribute);
-    },
-    async setDefault() {
-      await Swal.fire({
-        title              : "Are you sure?",
-        text               : "You won't be able to revert this!",
-        showCancelButton   : true,
-        confirmButtonClass : "md-button md-success btn-fill",
-        cancelButtonClass  : "md-button md-danger btn-fill",
-        confirmButtonText  : "Yes, revert it!",
-        buttonsStyling     : false,
+    setDefault() {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
+        buttonsStyling: false,
+      }).then((result) => {
+        this.$store.dispatch("campaign/revertCampaign", "SAVING_DATE");
       });
-      this.$store.dispatch("campaign/revertCampaign", "SAVING_DATE");
     },
-    async handleChangeCampaignTitle(newTitle) {
-      const setAttributeByName = name => this.campaignSetAttribute({ key: "title", value: newTitle, name });
-      ["SAVING_DATE", "RSVP", "COMING_SOON", "FEEDBACK"].forEach(setAttributeByName);
-      const calendarEvent = new CalendarEvent({ id : this.event.id, title : newTitle });
-      await this.$store.dispatch("event/saveEventAction", calendarEvent);
+    handleChangeCampaignTitle(newTitle) {
+      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
+      this.$store
+        .dispatch(
+          "event/saveEventAction",
+          new CalendarEvent({
+            id: this.event.id,
+            title: newTitle,
+          }),
+        )
+        .then((result) => {});
     },
     handleChangeCampaignDescription(newDescription) {
-      this.campaignSetAttribute({ name: "SAVING_DATE", key: "description", value: newDescription });
+      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "description", value: newDescription });
     },
     handleChangeCampaignVisibleSettings(key, value) {
-      this.campaignSetAttribute({
-        name  : "RSVP",
-        key   : "visibleSettings",
-        value : { ...this.campaignVisibleSettings, [key]: value },
+      this.$store.commit("campaign/setAttribute", {
+        name: "RSVP",
+        key: "visibleSettings",
+        value: { ...this.campaignVisibleSettings, [key]: value },
       });
     },
     chooseFiles() {
