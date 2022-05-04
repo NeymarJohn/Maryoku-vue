@@ -228,6 +228,8 @@ export default {
         }
         return true;
       }
+
+      return false;
     },
     isValideDate() {
       if (this.selectedOption) {
