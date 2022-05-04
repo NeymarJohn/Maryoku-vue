@@ -87,7 +87,7 @@ export default {
   },
   watch: {
     logoUrl() {
-      if (this.logoUrl && this.logoUrl !== this.imgURL) this.imgURL = this.logoUrl;
+      if (this.logoUrl && !this.imgURL && this.logoUrl !== this.imgURL) this.imgURL = this.logoUrl;
     }
   },
   methods: {
