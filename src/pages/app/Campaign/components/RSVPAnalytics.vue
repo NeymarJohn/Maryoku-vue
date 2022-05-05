@@ -56,7 +56,7 @@
             <multistate-progressbar :data="analyticsData" class="mt-40" />
             <div class="text-center mb-50">
               <md-button class="md-simple maryoku-btn md-red md-outlined" @click="sendEmailsAgain">
-                <image-icon src="Campaign/Group 1908.svg" />Send reminder to invitees who haven’t RSVP’d yet
+                <image-icon src="Campaign/Group 1908.svg" />Send again to invitees who haven't replyed yet
               </md-button>
             </div>
           </div>

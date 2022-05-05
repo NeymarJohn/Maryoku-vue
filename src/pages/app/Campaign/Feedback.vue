@@ -6,7 +6,14 @@
       </div>
       <div class="wrapper-change-cover">
         <img v-if="campaignCoverImage" :src="campaignCoverImage" class="change-cover mr-10">
-        <div class="change-cover mr-10"></div>
+        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
+          <concept-image-block
+            class="change-cover-concept"
+            :images="concept.images"
+            :colors="concept.colors"
+            border="no-border"
+          />
+        </div>
         <div class="change-cover-feedback">
           <md-button
             id="ChangeCoverImage"

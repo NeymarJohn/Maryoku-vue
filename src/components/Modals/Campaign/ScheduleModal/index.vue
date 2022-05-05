@@ -42,13 +42,8 @@
           >
             <div class="d-flex align-center">
               <md-checkbox v-model="selectedOption" class="md-checkbox-circle" value="previousCampaign" />
-              <input
-                v-model="scheduleSettings.previousCampaign.value"
-                type="number"
-                min="0"
-                class="text-center mr-20"
-                style="width: 128px"
-              >Weeks after the previous campaign
+              <InputNumber v-model="scheduleSettings.previousCampaign.value" :max-length="3" />
+              Weeks after the previous campaign
             </div>
             <!-- <div v-if="scheduleSettings.previousCampaign.calcTime">
               {{ $dateUtil.formatScheduleDay(scheduleSettings.previousCampaign.calcTime, "MMM D, h:mm A") }}
@@ -76,13 +71,7 @@
           >
             <div class="d-flex align-center">
               <md-checkbox v-model="selectedOption" class="md-checkbox-circle" value="beforeEvent" />
-              <input
-                v-model="scheduleSettings.beforeEvent.value"
-                min="0"
-                class="text-center mr-20"
-                type="number"
-                style="width: 128px"
-              >Days before the event
+              <InputNumber v-model="scheduleSettings.beforeEvent.value" :max-length="3" />Days before the event
             </div>
             <div>
               <span :class="{ 'color-red': !isValideDate && selectedOption == 'beforeEvent' }">{{
@@ -161,16 +150,20 @@
   </modal>
 </template>
 <script>
-import { Modal } from "@/components";
-import { FunctionalCalendar } from "vue-functional-calendar";
-import TimePicker from "@/components/Inputs/TimePicker";
 import moment from "moment";
+import { FunctionalCalendar } from "vue-functional-calendar";
+
+// components
+import { Modal }  from "@/components";
+import TimePicker from "@/components/Inputs/TimePicker";
+import InputNumber from "./InputNumber";
 
 export default {
   components: {
     Modal,
     FunctionalCalendar,
     TimePicker,
+    InputNumber,
   },
   props: {
     currentCampaign: {
@@ -188,21 +181,21 @@ export default {
   },
   data() {
     return {
-      showCalendar: false,
-      dateData: {},
-      startTime: "",
-      daysBeforeEvent: 1,
-      calendarTime: "",
-      timezone: {},
-      selectedOption: "",
+      showCalendar    : false,
+      daysBeforeEvent : 1,
+      startTime       : "",
+      calendarTime    : "",
+      selectedOption  : "",
+      dateData        : {},
+      timezone        : {},
       scheduleSettings: {
         tomorrow: {
-          calcTime: moment(new Date()).add(1, "days").hours(9).minutes(0).valueOf(),
-          value: 0,
+          calcTime : moment(new Date()).add(1, "days").hours(9).minutes(0).valueOf(),
+          value    : 0,
         },
-        previousCampaign: { value: 1, calcTime: "" },
-        beforeEvent: { value: 1, calcTime: "" },
-        calendar: { value: 0, calcTime: 0 },
+        previousCampaign : { value: 1, calcTime: "" },
+        beforeEvent      : { value: 1, calcTime: "" },
+        calendar         : { value: 0, calcTime: 0 },
       },
     };
   },
@@ -213,8 +206,11 @@ export default {
     campaignData() {
       return this.$store.state.campaign;
     },
+    selectedCampaign () {
+      return this.campaignData[this.currentCampaign.name];
+    },
     remainingDate() {
-      return Math.round((this.event.eventStartMillis - new Date().getTime()) / 1000 / 24 / 3600);
+      return Math.round((this.event.eventStartMillis - Date.now()) / 1000 / 24 / 3600);
     },
     canSave() {
       if (this.showCalendar) {
@@ -223,15 +219,17 @@ export default {
         }
         return true;
       } else if (this.selectedOption) {
-        if (this.scheduleSettings[this.selectedOption].calcTime < new Date().getTime()) {
+        if (this.scheduleSettings[this.selectedOption].calcTime < Date.now()) {
           return false;
         }
         return true;
       }
+
+      return false;
     },
     isValideDate() {
       if (this.selectedOption) {
-        return this.scheduleSettings[this.selectedOption].calcTime > new Date().getTime();
+        return this.scheduleSettings[this.selectedOption].calcTime > Date.now();
       }
       return true;
     },
@@ -246,13 +244,16 @@ export default {
           .valueOf();
         const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
         if (previouseCampaignTime) {
-          newSettings.previousCampaign.calcTime = moment(
-            new Date(this.campaignData[previouseCampaignTime.name].scheduleTime),
-          )
-            .add(newSettings.previousCampaign.value, "weeks")
-            .hours(9)
-            .minutes(0)
-            .valueOf();
+          const previouseCampaign = this.campaignData[previouseCampaignTime.name];
+          if (previouseCampaign && previouseCampaign.scheduleTime) {
+            newSettings.previousCampaign.calcTime = moment(
+              new Date(this.campaignData[previouseCampaignTime.name].scheduleTime),
+            )
+              .add(newSettings.previousCampaign.value, "weeks")
+              .hours(9)
+              .minutes(0)
+              .valueOf();
+          }
         }
       },
       deep: true,
@@ -260,12 +261,12 @@ export default {
   },
   created() {
     //set previous settings
-    const currentCampaignData = this.$store.state.campaign[this.currentCampaign.name];
-    if (currentCampaignData.scheduleSettings) {
-      const scheduleSettings = currentCampaignData.scheduleSettings;
-      this.scheduleSettings[scheduleSettings.scheduleOption].value = scheduleSettings.scheduleOptionValue;
-      this.scheduleSettings[scheduleSettings.scheduleOption].calcTime = scheduleSettings.scheduleTime;
-      this.selectedOption = scheduleSettings.scheduleOption;
+    const { scheduleSettings } = this.selectedCampaign;
+    if (scheduleSettings) {
+      const { scheduleOption } = scheduleSettings;
+      this.scheduleSettings[scheduleOption].value    = scheduleSettings.scheduleOptionValue;
+      this.scheduleSettings[scheduleOption].calcTime = scheduleSettings.scheduleTime;
+      this.selectedOption = scheduleOption;
     } else {
       // set before event
       this.scheduleSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis)
@@ -303,14 +304,14 @@ export default {
           `${this.dateData.selectedDate} ${this.startTime}`,
           "YYYY-M-DD hh:mm A",
         ).valueOf();
-        this.showCalendar = false;
+        this.showCalendar   = false;
         this.selectedOption = "calendar";
       } else {
         this.$emit("changeTime", {
-          currentCampaignIndex: this.currentCampaignIndex,
-          scheduleTime: this.scheduleSettings[this.selectedOption].calcTime,
-          scheduleSettings: this.scheduleSettings,
-          selectedOption: this.selectedOption,
+          currentCampaignIndex : this.currentCampaignIndex,
+          scheduleTime         : this.scheduleSettings[this.selectedOption].calcTime,
+          scheduleSettings     : this.scheduleSettings,
+          selectedOption       : this.selectedOption,
         });
         this.close();
       }
@@ -345,14 +346,14 @@ export default {
     z-index: 1;
 
     &:before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      background: #ffe5ec;
-      transform: rotate(45deg);
-      position: absolute;
-      right: 24px;
-      top: -5px;
+      content    : "";
+      width      : 10px;
+      height     : 10px;
+      background : #ffe5ec;
+      transform  : rotate(45deg);
+      position   : absolute;
+      right      : 24px;
+      top        : -5px;
     }
   }
 }
