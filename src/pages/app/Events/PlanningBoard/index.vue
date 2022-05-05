@@ -14,7 +14,7 @@
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
                 :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
+                :selected-icon="`${$iconURL}Services /${component.componentId}.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -1110,8 +1110,14 @@ export default {
           this.setProposal(this.proposal);
           if (action === "negotiate") this.setOpen("NEGOTIATION");
           else this.setOpen("SHARE");
+
         } else if (action === "compare") {
           this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
+
+        } else if (action === "already_have_venue") {
+          const router = this.$router.resolve({ name: "VendorSignup" });
+          this.openNewTab(router.href)
+
         } else if (action === "something_different") {
           this.showDifferentProposals = true;
         }

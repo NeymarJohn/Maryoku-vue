@@ -34,7 +34,6 @@
       />
       <span v-else>{{ logoTitle }}</span>
     </div>
-    <small v-if="error">{{ error }}</small>
   </div>
 </template>
 
@@ -79,13 +78,11 @@ export default {
     return {
       dropzoneOptions: {
         url            : "https://httpbin.org/post",
-        // thumbnailWidth : 150,
-        maxFilesize    : 10,
+        thumbnailWidth : 150,
+        maxFilesize    : 0.5,
         headers        : { "My-Awesome-Header": "header value" },
-        acceptedFiles  : "image/*",
       },
       imgURL: this.logoUrl,
-      error : "",
     };
   },
   watch: {
@@ -95,13 +92,8 @@ export default {
   },
   methods: {
     async changeLogo (file) {
-      this.imgURL = "";
-      if (file && file.size > 10 * 1024 * 1024) {
-        this.error = "file size must not exceed 10mb";
-      } else {
-        this.imgURL = file ? file.dataURL || await getBase64(file) : file;
-        this.$emit("change-logo", file);
-      }
+      this.imgURL = file ? await getBase64(file) : file;
+      this.$emit("change-logo", file);
     },
     onFileChangeLogo({ target }) {
       const [file] = target.files;

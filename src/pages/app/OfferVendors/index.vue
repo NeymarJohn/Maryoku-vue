@@ -10,7 +10,7 @@
             class="mr-20 mb-10"
             :label="component ? component.fullTitle : ''"
             :icon="`${$iconURL}Budget+Elements/${component ? component.icon : ''}`"
-            :selected-icon="`${$iconURL}Budget+Elements/${component.key}-white.svg`"
+            :selected-icon="`${$iconURL}Budget+Elements/${component.key}.svg`"
             :default-status="selectedCategory && component.key === selectedCategory.key"
             :has-badge="hasBadge(component.key)"
             icon-style="opacity:0.8"

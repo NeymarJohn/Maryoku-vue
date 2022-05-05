@@ -85,7 +85,7 @@ export default {
     display: block;
     position: relative;
     top: 15%;
-    left: 650px;
+    left: 490px;
   }
 }
 section.footer-wrapper {

@@ -130,7 +130,6 @@ export default {
       let isGuest = this.$router.currentRoute.path.indexOf("guest") !== -1;
       let that = this;
       this.$validator.validateAll().then((isValid) => {
-        console.log(this.$validator);
         if (isValid) {
           if (this.user.email && this.user.password) {
             const userData = {
@@ -184,9 +183,12 @@ export default {
         } else {
           if (this.currentUser.currentTenant === "DEFAULT" && this.currentUser.tenants.length > 1) {
             this.$router.push({ path: "/choose-workspace" });
-          } else if (this.currentUser.tenants.length == 1) {
-            const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#/events`;
-            location.href = firstWorksapce;
+          } else if (this.currentUser.tenants.length === 1) {
+            CalendarEvent.get().then((events) => {
+              const gotoLink = eventService.getFirstTaskLink(events[0]);
+              const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#${gotoLink || "/events"}`;
+              location.href = firstWorksapce;
+            });
           } else if (this.currentUser.tenants.length === 0) {
             const callback = btoa("/create-event-wizard");
             this.$router.push({ path: `/create-workspace?callback=${callback}` });
