@@ -102,7 +102,7 @@
 
 <script>
 // core
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 import vue2Dropzone from "vue2-dropzone";
 import { v4 as uuidv4 } from "uuid";
 
@@ -197,6 +197,7 @@ export default {
   },
   methods: {
     ...mapMutations("event", ["setEventData"]),
+    ...mapActions("event", ["saveEventAction"]),
     close(event) {
       this.$emit("close", event);
     },
@@ -231,8 +232,10 @@ export default {
             type: "Poster",
           },
           onDesignPublish: (opts) => {
+
             this.addNewImageConcept({
-              thumb_url: opts.exportUrl,
+              name: opts.designId,
+              originName: opts.designTitle,
               url: opts.exportUrl
             });
           },
@@ -258,18 +261,29 @@ export default {
       });
     },
     async addNewImageConcept(newImage) {
-      const event = new CalendarEvent({ id: this.event.id });
+
       const images = [...this.conceptImages, newImage];
-      this.loading = true;
-      await new EventConcept({ ...this.eventConcept, event, images }).save().then(() => {
-        this.setEventData({
-          ...this.event,
-          concept: { ...this.eventConcept, images }
-        });
-        this.selectImage(images.length - 1);
-        this.loading = false;
-        setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
-      });
+      if (Object.keys(this.eventConcept).length) {
+
+      }
+      const data = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
+        event: new CalendarEvent({id: this.event.id}),
+        name: "March Madness",
+        description:
+          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
+        fontFamily: "Cooperative-Regular",
+        tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
+        images,
+        colors: [],
+      };
+
+      const query = new EventConcept(data);
+      const concept = await query.save();
+
+      this.saveEventAction(new CalendarEvent({...this.event, concept}));
+      this.selectImage(images.length - 1);
+      this.loading = false;
+      setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
     }
   }
 };
