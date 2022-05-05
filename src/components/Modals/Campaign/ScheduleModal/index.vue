@@ -45,24 +45,11 @@
               <InputNumber v-model="scheduleSettings.previousCampaign.value" :max-length="3" />
               Weeks after the previous campaign
             </div>
-            <!-- <div v-if="scheduleSettings.previousCampaign.calcTime">
-              {{ $dateUtil.formatScheduleDay(scheduleSettings.previousCampaign.calcTime, "MMM D, h:mm A") }}
-              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20" />
-            </div> -->
-            <div>
-              <span :class="{ 'color-red': !isValideDate && selectedOption == 'previousCampaign' }">{{
-                $dateUtil.formatScheduleDay(scheduleSettings.previousCampaign.calcTime, "MMM D, h:mm A")
-              }}</span>
-              <span v-if="!isValideDate && selectedOption == 'previousCampaign'" class="ml-20 mt-10">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`">
-                <div class="font-size-14 input-tooltip invalid-notification">
-                  Unless we're counting backwards, there are only {{ remainingDate }} days between now and the event...
-                </div>
-              </span>
-              <span v-if="isValideDate" class="ml-20 mt-10 transparent">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`">
-              </span>
-            </div>
+            <DateResult
+              :date="scheduleSettings.previousCampaign.calcTime"
+              :is-invalid="!isValideDate && selectedOption == 'previousCampaign' && scheduleSettings.previousCampaign.calcTime"
+              :remaining-date="remainingDate"
+            />
           </div>
           <div
             class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30 mb-40"
@@ -73,20 +60,11 @@
               <md-checkbox v-model="selectedOption" class="md-checkbox-circle" value="beforeEvent" />
               <InputNumber v-model="scheduleSettings.beforeEvent.value" :max-length="3" />Days before the event
             </div>
-            <div>
-              <span :class="{ 'color-red': !isValideDate && selectedOption == 'beforeEvent' }">{{
-                $dateUtil.formatScheduleDay(scheduleSettings.beforeEvent.calcTime, "MMM D, h:mm A")
-              }}</span>
-              <span v-if="!isValideDate && selectedOption == 'beforeEvent'" class="ml-20 mt-10">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`">
-                <div class="font-size-14 input-tooltip invalid-notification">
-                  Unless we're counting backwards, there are only {{ remainingDate }} days between now and the event...
-                </div>
-              </span>
-              <span v-if="isValideDate" class="ml-20 mt-10 transparent">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`">
-              </span>
-            </div>
+            <DateResult
+              :date="scheduleSettings.beforeEvent.calcTime"
+              :is-invalid="!isValideDate && selectedOption == 'beforeEvent'"
+              :remaining-date="remainingDate"
+            />
           </div>
         </div>
         <hr class="mr-15 ml-15">
@@ -157,6 +135,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import { Modal }  from "@/components";
 import TimePicker from "@/components/Inputs/TimePicker";
 import InputNumber from "./InputNumber";
+import DateResult  from "./DateResult";
 
 export default {
   components: {
@@ -164,6 +143,7 @@ export default {
     FunctionalCalendar,
     TimePicker,
     InputNumber,
+    DateResult,
   },
   props: {
     currentCampaign: {
@@ -235,6 +215,18 @@ export default {
     },
   },
   watch: {
+    selectedOption (value) {
+      switch (value) {
+        case "previousCampaign": {
+          if (!this.scheduleSettings.previousCampaign.value) this.scheduleSettings.previousCampaign.value = 1;
+          break;
+        }
+        case "beforeEvent": {
+          if (!this.scheduleSettings.beforeEvent.value) this.scheduleSettings.beforeEvent.value = 1;
+          break;
+        }
+      }
+    },
     scheduleSettings: {
       handler(newSettings) {
         newSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis)
