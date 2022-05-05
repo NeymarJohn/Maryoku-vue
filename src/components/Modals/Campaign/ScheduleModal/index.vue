@@ -190,6 +190,10 @@ export default {
       return this.campaignData[this.currentCampaign.name];
     },
     remainingDate() {
+      if (this.selectedOption) {
+        const selected = this.scheduleSettings[this.selectedOption];
+        if (selected) return Math.round((Date.now() - selected.calcTime) / 1000 / 24 / 3600);
+      }
       return Math.round((this.event.eventStartMillis - Date.now()) / 1000 / 24 / 3600);
     },
     canSave() {
@@ -229,11 +233,12 @@ export default {
     },
     scheduleSettings: {
       handler(newSettings) {
-        newSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis)
+        newSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis || Date.now())
           .subtract(newSettings.beforeEvent.value, "days")
           .hours(9)
           .minutes(0)
           .valueOf();
+
         const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
         if (previouseCampaignTime) {
           const previouseCampaign = this.campaignData[previouseCampaignTime.name];
