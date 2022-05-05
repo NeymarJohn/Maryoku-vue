@@ -678,6 +678,19 @@ export default {
     margin-top: 1em;
 
     .proposal-includes {
+      margin-top: 40px;
+      position: relative;
+      &:after {
+        content: " ";
+        position: absolute;
+        margin: 4px;
+        top: -2em;
+        left: -25px;
+        right: 0;
+        width: calc(100% + 42px);
+        background: #ccc;
+        height: 1px;
+      }
       &__title {
         font-size: 20px;
         font-weight: 800;
@@ -718,9 +731,10 @@ export default {
         content: " ";
         position: absolute;
         top: -2em;
+        margin: 0 4px;
         left: -25px;
         right: 0;
-        width: calc(100% + 50px);
+        width: calc(100% + 42px);
         background: #ccc;
         height: 1px;
       }

@@ -499,7 +499,7 @@ import HeaderActions         from "@/components/HeaderActions";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 
 // local
-import DeliverySettings    from "../DeliverySettings";
+import DeliverySettings    from "../DeliverySettings/index";
 import CollapsePanel       from "../CollapsePanel";
 import RsvpAnalytics       from "../components/RSVPAnalytics";
 import SavedateAnalytics   from "../components/SavedateAnalytics";

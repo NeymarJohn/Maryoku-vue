@@ -352,10 +352,10 @@ export default {
     handleYearChange(year) {
       this.selectedYear = year;
       this.getIncomingData();
-      this.getServiceReport();
+      // this.getServiceReport();
     },
     init() {
-      this.getServiceReport();
+      // this.getServiceReport();
       this.getIncomingData();
     },
     next() {

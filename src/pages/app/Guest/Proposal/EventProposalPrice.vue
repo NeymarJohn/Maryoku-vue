@@ -559,6 +559,19 @@ export default {
 
     .proposal-includes {
       padding-right: 20%;
+      margin-top: 40px;
+      position: relative;
+      &:after {
+        content: " ";
+        position: absolute;
+        margin: 4px;
+        top: -2em;
+        left: -25px;
+        right: 0;
+        width: calc(100% + 42px);
+        background: #ccc;
+        height: 1px;
+      }
       &__title {
         font-size: 20px;
         font-weight: 800;

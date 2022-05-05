@@ -82,6 +82,7 @@
         :description="`Usually budget is flexible and could change according to needs`"
         :proposal-request="proposalRequest"
         :requirements="requiredServices"
+        :total="proposalRequest.eventData.totalBudget"
       />
     </div>
     <div class="rank-cont">
