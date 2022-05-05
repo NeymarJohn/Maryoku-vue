@@ -35,7 +35,7 @@
             </div>
           </div>
           <div
-            v-if="currentCampaign.name != 'SAVING_DATE'"
+            v-if="currentCampaign.name != 'SAVING_DATE' && preventTime"
             class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30"
             :class="{ 'font-bold': selectedOption == 'previousCampaign' }"
             style="position: relative"
@@ -155,7 +155,7 @@ export default {
       default: () => ({}),
     },
     currentCampaignIndex: {
-      type: Number,
+      type   : Number,
       default: 1,
     },
   },
@@ -192,9 +192,11 @@ export default {
     remainingDate() {
       if (this.selectedOption) {
         const selected = this.scheduleSettings[this.selectedOption];
-        if (selected) return Math.round((Date.now() - selected.calcTime) / 1000 / 24 / 3600);
+        if (selected) return Math.round((selected.calcTime - Date.now()) / 1000 / 24 / 3600);
       }
-      return Math.round((this.event.eventStartMillis - Date.now()) / 1000 / 24 / 3600);
+
+      if (this.event.eventStartMillis) return Math.round((this.event.eventStartMillis - Date.now()) / 1000 / 24 / 3600);
+      return 0;
     },
     canSave() {
       if (this.showCalendar) {
@@ -217,6 +219,20 @@ export default {
       }
       return true;
     },
+    preventTime () {
+      const tryCampaignScheduleTime = (index) => {
+        if (index < 0) return;
+        const preventCampaignIndex = index - 1;
+        const preventCampaign = this.campaigns[preventCampaignIndex];
+        if (preventCampaign && preventCampaign.name) {
+          const preventCampaignData = this.campaignData[preventCampaign.name];
+          if (preventCampaignData && preventCampaignData.scheduleTime) return preventCampaignData.scheduleTime;
+        }
+        return tryCampaignScheduleTime(preventCampaignIndex);
+      };
+
+      return tryCampaignScheduleTime(this.currentCampaignIndex);
+    }
   },
   watch: {
     selectedOption (value) {
@@ -233,24 +249,20 @@ export default {
     },
     scheduleSettings: {
       handler(newSettings) {
-        newSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis || Date.now())
-          .subtract(newSettings.beforeEvent.value, "days")
+        newSettings.beforeEvent.calcTime = moment(Date.now())
+          .add(newSettings.beforeEvent.value, "days")
           .hours(9)
           .minutes(0)
           .valueOf();
 
-        const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
-        if (previouseCampaignTime) {
-          const previouseCampaign = this.campaignData[previouseCampaignTime.name];
-          if (previouseCampaign && previouseCampaign.scheduleTime) {
-            newSettings.previousCampaign.calcTime = moment(
-              new Date(this.campaignData[previouseCampaignTime.name].scheduleTime),
-            )
-              .add(newSettings.previousCampaign.value, "weeks")
-              .hours(9)
-              .minutes(0)
-              .valueOf();
-          }
+        if (this.preventTime) {
+          newSettings.previousCampaign.calcTime = moment(
+            new Date(this.preventTime),
+          )
+            .add(newSettings.previousCampaign.value, "weeks")
+            .hours(9)
+            .minutes(0)
+            .valueOf();
         }
       },
       deep: true,
