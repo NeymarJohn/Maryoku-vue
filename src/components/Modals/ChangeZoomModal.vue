@@ -1,5 +1,5 @@
 <template>
-  <Modal v-if="false" :styles="modalCustomStyles">
+  <Modal v-if="showModal" :styles="modalCustomStyles">
     <template slot="header">
       <div class="header">
       </div>

@@ -1110,14 +1110,8 @@ export default {
           this.setProposal(this.proposal);
           if (action === "negotiate") this.setOpen("NEGOTIATION");
           else this.setOpen("SHARE");
-
         } else if (action === "compare") {
           this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
-
-        } else if (action === "already_have_venue") {
-          const router = this.$router.resolve({ name: "VendorSignup" });
-          this.openNewTab(router.href)
-
         } else if (action === "something_different") {
           this.showDifferentProposals = true;
         }

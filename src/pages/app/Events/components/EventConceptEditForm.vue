@@ -415,7 +415,6 @@ export default {
           type: "Poster",
         },
         onDesignPublish: (opts) => {
-
           this.editConcept.images[imageIndex] = {
             name: opts.designId,
             originName: opts.designTitle,
