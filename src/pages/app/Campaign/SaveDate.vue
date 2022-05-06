@@ -185,16 +185,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .concept-image-block-wrapper{
-  width    : 1170px;
-  height   : 420px;
-  position : relative;
-  overflow : auto;
-  margin   : 0 auto;
+  width: 1170px;
+  height: 420px;
+  position: relative;
+  overflow: auto;
+  margin: 0 auto;
 
   .cover-image {
-    width      : 1170px;
-    height     : 420px;
-    object-fit : cover;
+    width: 1170px;
+    height: 420px;
+    object-fit: cover;
   }
 
   .change-cover-concept {
@@ -204,10 +204,10 @@ export default {
 }
 .change-cover-feedback{
   position: absolute;
-  width   : fit-content;
-  left    : 40%;
-  top     : 50%;
-  z-index : 15;
+  width: fit-content;
+  left: 40%;
+  top: 50%;
+  z-index: 15;
 }
 .campaign-save-date {
   .cover-preview {

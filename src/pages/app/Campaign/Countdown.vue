@@ -7,7 +7,7 @@
       <div />
       <div class="countdown-cover-image mt-50">
         <img v-if="coverImage" :src="coverImage">
-        <div v-else-if="concept.images && concept.images.length > 0" class="d-flex justify-content-center align-center">
+        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
           <concept-image-block
             class="change-cover-concept"
             :images="concept.images"
@@ -140,9 +140,9 @@ export default {
     campaignVisibleSettings() {
       const visibleSettings = this.campaignData.visibleSettings;
       return {
-        showComing    : false,
-        showCountdown : false,
-        showLogo      : false,
+        showComing: false,
+        showCountdown: false,
+        showLogo: false,
         ...visibleSettings,
       };
     }
@@ -173,13 +173,13 @@ export default {
     },
     setDefault() {
       Swal.fire({
-        title              : "Are you sure?",
-        text               : "You won't be able to revert this!",
-        showCancelButton   : true,
-        confirmButtonClass : "md-button md-success btn-fill",
-        cancelButtonClass  : "md-button md-danger btn-fill",
-        confirmButtonText  : "Yes, revert it!",
-        buttonsStyling     : false,
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
+        buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
           this.editingContent = Object.assign({}, this.originContent);
@@ -219,58 +219,58 @@ export default {
 <style lang="scss" scoped>
 .coundown-campaign {
   .countdown-cover-image {
-    position        : relative;
-    margin-bottom   : 110px;
+    position: relative;
+    margin-bottom: 110px;
 
     img {
-      max-height    : 500px;
-      width         : 100%;
-      border-radius : 30px;
-      object-fit    : cover;
+      max-height: 500px;
+      width: 100%;
+      border-radius: 30px;
+      object-fit: cover;
     }
 
     .change-cover-concept {
-      width    : 1000px;
-      height   : 350px;
+      width: 1000px;
+      height: 350px;
     }
 
     .countdown-time-panel {
-      position : absolute;
-      left     : 0;
-      right    : 0;
-      bottom   : -80px;
-      z-index  : 15;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -80px;
+      z-index: 15;
     }
 
     .cover-image-button {
-      position  : absolute;
-      left      : 50%;
-      top       : 50%;
-      transform : translate(-50%, -50%);
-      z-index   : 14;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 14;
     }
 
     .concept-button {
-      position  : absolute;
-      left      : 50%;
-      top       : 50%;
-      transform : translate(-50%, 10%);
-      z-index   : 14;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, 10%);
+      z-index: 14;
     }
   }
 
   .countdown-guests {
-    position         : absolute;
-    right            : 50px;
-    top              : 50px;
-    background-color : #fff;
-    border-radius    : 3px;
-    z-index          : 15;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    background-color: #fff;
+    border-radius: 3px;
+    z-index: 15;
   }
 
   .logo-section {
-    margin-left  : auto;
-    margin-right : auto;
+    margin-left: auto;
+    margin-right: auto;
 
     img {
       max-width: 200px;

@@ -99,7 +99,7 @@ export default {
       if (file && file.size > 10 * 1024 * 1024) {
         this.error = "file size must not exceed 10mb";
       } else {
-        this.imgURL = file ? (file.dataURL || await getBase64(file)) : file;
+        this.imgURL = file ? file.dataURL || await getBase64(file) : file;
         this.$emit("change-logo", file);
       }
     },
