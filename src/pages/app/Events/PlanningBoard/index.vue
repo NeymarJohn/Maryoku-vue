@@ -483,6 +483,7 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="categoryProposals.slice(0, 3)"
+      @replace="replaceProposal"
       @cancel="showDifferentProposals=false"
     >
     </DifferentProposalsModal>
@@ -1125,8 +1126,13 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    async processNotification(id){
-
+    async replaceProposal(proposals) {
+      console.log('replaceProposal', proposals)
+      this.showDifferentProposals = false;
+      // await postReq(`/1/proposals/replace`, {
+      //   proposals,
+      //   requirementId: this.currentRequirement.id,
+      // });
     },
   },
   watch: {

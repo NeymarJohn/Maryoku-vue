@@ -13,6 +13,8 @@
 import { uploadFiles } from "@/helpers/window/upload";
 import IconButton from "../../IconButton";
 
+const size = 10 * 1024 * 1024;
+
 export default {
   components: {
     IconButton,
@@ -24,6 +26,8 @@ export default {
     replace () {
       uploadFiles(([file]) => this.$emit("change", file), {
         multiple: false,
+        accept  : "image/*",
+        size,
       });
     },
   }
