@@ -14,7 +14,7 @@
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
                 :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}.svg`"
+                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"

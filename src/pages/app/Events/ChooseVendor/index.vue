@@ -11,7 +11,7 @@
             class="mr-20 mb-10"
             :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
             :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-            :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}.svg`"
+            :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
             :default-status="selectedCategory && component.componentId === selectedCategory.componentId"
             :disabled="!eventRequirements[component.componentId]"
             :has-badge="hasBadge(component)"

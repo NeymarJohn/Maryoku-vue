@@ -81,26 +81,31 @@
               @input="getMessage"
             />
             <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon icon-mention">
-            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
-            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
-            <div class="row">
-              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
+            <div style="display:flex; justify-content: space-between">
+              <div @click="showEmojiPanel = !showEmojiPanel">
+                <md-icon class="emoji-icon">
+                  sentiment_satisfied_alt
+                </md-icon>
+              </div>
+              <div class="footer">
+                <md-button class="md-simple normal-btn md-button-cancel" @click="closeCommentListPane">
+                  Cancel
+                </md-button>
+                <button
+                  class="md-simple md-black normal-btn md-button-submit"
+                  @click="saveComment($event, 'reply')"
+                >
+                  <span class="md-button-submit-text">
+                    Submit
+                  </span>
+                  <span class="md-button-submit-icon">
+                    <md-icon>keyboard_arrow_right</md-icon>
+                  </span>
+                </button>
+              </div>
             </div>
-            <div class="footer">
-              <md-button class="md-simple normal-btn md-button-cancel" @click="closeCommentListPane">
-                Cancel
-              </md-button>
-              <button
-                class="md-simple md-black normal-btn md-button-submit"
-                @click="saveComment($event, 'reply')"
-              >
-                <span class="md-button-submit-text">
-                  Submit
-                </span>
-                <span class="md-button-submit-icon">
-                  <md-icon>keyboard_arrow_right</md-icon>
-                </span>
-              </button>
+            <div class="row">
+              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " style="width: 100%"/>
             </div>
           </div>
         </div>
@@ -628,10 +633,7 @@ export default {
     width: 20px;
   }
   .emoji-icon {
-    position: absolute;
-    right: 65px;
-    top: 35px;
-    width: 20px;
+    margin-top: 25px;
     cursor: pointer;
   }
   .md-button-cancel {

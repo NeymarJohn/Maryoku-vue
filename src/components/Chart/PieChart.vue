@@ -89,7 +89,7 @@
         <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns} pr-0`">
           <div class="d-flex align-center">
             <span :style="`background-color: ${item.color};`" class="icon" />
-            <img v-if="item.image" class="pie_svg_img ml-5" :src="item.image" style="filter: brightness(0) invert(1)" width="24">
+            <img v-if="item.image" class="pie_svg_img ml-5" :src="item.image" width="24">
             <span class="ml-10 text-gray">{{ item.category }}</span>
           </div>
         </li>

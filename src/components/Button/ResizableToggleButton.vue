@@ -2,7 +2,7 @@
   <div class="resizable-toggle-wrapper">
     <button class="resizable-toggle-button" :class="{ clicked: clicked, disabled }" @click="handleClick">
       <template v-if="clicked">
-        <img v-if="icon" :src="icon" width="28px" style="filter: brightness(0) invert(1)">
+        <img v-if="selectedIcon" :src="selectedIcon" width="28px">
         <span class="label-text" v-if="label">{{ label }}</span>
       </template>
       <template v-else>

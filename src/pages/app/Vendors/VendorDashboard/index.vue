@@ -208,7 +208,7 @@ export default {
           title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
           value: 1,
           color: this.activeCategoryColors[idx],
-          image: `${this.$iconURL}Budget+Elements/${vc}.svg`,
+          image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
         if (this.serviceReportData) {
           const cat = this.serviceReportData.find(c => c._id == vc);

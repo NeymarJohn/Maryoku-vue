@@ -138,18 +138,29 @@
               placeholder="Write reply here"
               @input="getMessage"
             />
-            <img :src="`${$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
-            <img :src="`${$iconURL}Emojis/Group 29709.svg`" class="emoji-icon" @click="showEmojiPanel = !showEmojiPanel"/>
-            <div class="row">
-              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " />
+            <!-- <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon icon-mention"> -->
+            <div style="display:flex; justify-content: space-between;  margin-bottom: 10px;">
+              <div @click="showEmojiPanel = !showEmojiPanel">
+                <md-icon class="emoji-icon">
+                  sentiment_satisfied_alt
+                </md-icon>
+              </div>
+              <div class="footer">
+                <button
+                  class="md-simple md-black normal-btn md-button-submit"
+                  @click="saveCommentReply($event, 'reply')"
+                >
+                  <span class="md-button-submit-text">
+                    Reply
+                  </span>
+                  <span class="md-button-submit-icon">
+                    <md-icon>keyboard_arrow_right</md-icon>
+                  </span>
+                </button>
+              </div>
             </div>
-            <div class="footer text-right my-top my-bottom">
-              <md-button class="md-simple normal-btn md-black">
-                Cancel
-              </md-button>
-              <md-button class="normal-btn background-red" @click="saveCommentReply($event, 'reply')">
-                Submit
-              </md-button>
+            <div class="row">
+              <Picker :data="emojiIndex" @select="showEmoji" :class="showEmojiPanel ? 'show-emoji' : 'hide-emoji' " style="width: 100%"/>
             </div>
           </div>
         </div>
@@ -525,13 +536,46 @@ img.header-img {
   }
 
   .emoji-icon {
-    position: absolute;
-    right: 35px;
-    top: 10px;
-    width: 20px;
+    margin-top: 5px;
     cursor: pointer;
   }
 }
+
+.md-button-submit {
+    display: flex;
+    text-align: center;
+    padding: 0;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+    background: #641856;
+    cursor: pointer;
+
+    .md-button-submit-text {
+      align-self: center;
+      padding: 5px 10px;
+      font-size: 16px;
+      font-weight: 800;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #fff;
+    }
+
+    .md-button-submit-icon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 2px;
+      background-color: #741e64;
+      i {
+        color: #fff;
+      }
+    }
+  }
 
 .md-button.md-simple i.my-chevron {
   color: #050505 !important;

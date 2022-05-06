@@ -67,11 +67,11 @@
           <div class="sidebar__item__details2 d-flex">
             <img class="" src="/static/icons/Group 21554.png">
             <div class="productLaunchParty">
-              <div v-if="commentComponent.planner">
-                {{ commentComponent.planner.name }}
+              <div v-if="commentComponent.comments.length && commentComponent.planner">
+                {{ commentComponent.comments[0].planner.name }}
               </div>
-              <div v-if="commentComponent.customer">
-                {{ commentComponent.customer.name }}
+              <div v-if="commentComponent.comments.length && commentComponent.customer">
+                {{ commentComponent.comments[0].customer.name }}
               </div>
             </div>
           </div>
@@ -166,9 +166,8 @@
           <div class="d-flex justify-content-between" style="z-index: 100;">
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-item-center sidebar__item__content">
-                <!-- <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
-                <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px" style="z-index: 100;"> -->
-                <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+                <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+                <Avartar v-else :name="proposal.nonMaryokuName" :color="proposal.avatar_color" />
                 <div class="sidebar__item__details d-flex flex-column">
                   <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
                     {{ proposal.eventData.customer.companyName }}
@@ -191,9 +190,9 @@
           <div class="d-flex justify-content-between" style="z-index: 100;">
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-item-center sidebar__item__content">
-                <!-- <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
-                <img v-else class="sidebar__item__img" :src="`${$iconURL}group-22441.svg`" width="52px" style="z-index: 100;"> -->
-                <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+                <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
+                <Avartar v-else :name="proposal.nonMaryokuName" :color="proposal.avatar_color" />
+                <!-- <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" /> -->
                 <div class="sidebar__item__details d-flex flex-column">
                   <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
                     {{ proposal.eventData.customer.companyName }}
@@ -314,56 +313,63 @@ export default {
     commentsProposals() {
       let proposals = [];
       let exist = false;
-      for (let proposal of this.proposals) {
-        exist = false;
-        proposal.unread_count = this.getViewCount(proposal.commentComponent);
-        proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
-        if(proposals.length > 0) {
-          for(var i = 0; i < proposals.length; i++) {
-            if(proposals[i].customerId == proposal.customerId) {
-              exist = true;
-              proposals[i].subProposals.push(proposal);
-            }
+
+      if(this.proposals.length > 0) {
+        for (let proposal of this.proposals) {
+          exist = false;
+          proposal.unread_count = this.getViewCount(proposal.commentComponent);
+          proposal.avatar_color = this.colors[Math.floor(Math.random() * 5)];
+          if(!proposal.nonMaryoku) {
+            proposal.nonMaryokuName = "Non Maryoku";
           }
-          // if (proposal.commentComponent.length) {
-          if(!exist) {
+          if(proposals.length > 0) {
+            for(var i = 0; i < proposals.length; i++) {
+              if(proposals[i].customerId == proposal.customerId) {
+                exist = true;
+                proposals[i].subProposals.push(proposal);
+              }
+            }
+            // if (proposal.commentComponent.length) {
+            if(!exist) {
+              proposal.subProposals = [];
+              proposal.subProposals.push(proposal);
+              proposals.push(proposal);
+            }
+          }else {
             proposal.subProposals = [];
             proposal.subProposals.push(proposal);
             proposals.push(proposal);
           }
-        }else {
-          proposal.subProposals = [];
-          proposal.subProposals.push(proposal);
-          proposals.push(proposal);
+          // }
         }
-        // }
-      }
-      if (this.sortBy == "status") {
-        proposals.sort((a, b) => {
-          if (this.statusSortType == "asc") {
-            return b.unread_count - a.unread_count;
-          }
-          return a.unread_count - b.unread_count;
-        });
-      }
+        if (this.sortBy == "status") {
+          proposals.sort((a, b) => {
+            if (this.statusSortType == "asc") {
+              return b.unread_count - a.unread_count;
+            }
+            return a.unread_count - b.unread_count;
+          });
+        }
 
-      if (this.sortBy == "date") {
-        proposals.sort((a, b) => {
+        if (this.sortBy == "date") {
+          proposals.sort((a, b) => {
+              if (this.sortType == "asc") {
+              return a.dateCreated - b.dateCreated;
+            }
+            return b.dateCreated - a.dateCreated;
+          });
+        }
+
+        if (this.sortBy == "name") {
+          proposals.sort((a, b) => {
             if (this.sortType == "asc") {
-            return a.dateCreated - b.dateCreated;
-          }
-          return b.dateCreated - a.dateCreated;
-        });
+              return a.eventData.customer.name > b.eventData.customer.name ? 1 : -1;
+            }
+            return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
+          });
+        }
       }
-
-      if (this.sortBy == "name") {
-        proposals.sort((a, b) => {
-          if (this.sortType == "asc") {
-            return a.eventData.customer.name > b.eventData.customer.name ? 1 : -1;
-          }
-          return a.eventData.customer.name < b.eventData.customer.name ? 1 : -1;
-        });
-      }
+      
       return proposals;
     },
     proposals() {
@@ -380,7 +386,7 @@ export default {
   },
   watch: {
     proposals() {
-      console.log("this.commentsProposals", this.commentsProposals.length);
+      console.log("this.commentsProposals", this.commentsProposals);
       if (this.commentsProposals.length && this.selectedProposal == null) {
         this.changeProposal(this.commentsProposals[0]);
       }
