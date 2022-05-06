@@ -50,6 +50,8 @@
 import { duration } from "moment";
 import { oppositeColor } from "@/utils/helperFunction";
 
+const DEFAULT_COLOR = "#d9fcf2";
+
 export default {
   props: {
     event: {
@@ -69,18 +71,19 @@ export default {
     getCountDuration() {
       const timeDuration = duration(this.period, "milliseconds");
       return {
-        days: ("0" + Math.abs(timeDuration.days())).slice(-2),
-        hours: ("0" + Math.abs(timeDuration.hours())).slice(-2),
-        mins: ("0" + Math.abs(timeDuration.minutes())).slice(-2),
-        seconds: ("0" + Math.abs(timeDuration.seconds())).slice(-2),
+        days    : ("0" + Math.abs(timeDuration.days())).slice(-2),
+        hours   : ("0" + Math.abs(timeDuration.hours())).slice(-2),
+        mins    : ("0" + Math.abs(timeDuration.minutes())).slice(-2),
+        seconds : ("0" + Math.abs(timeDuration.seconds())).slice(-2),
       };
     },
 
     getBackColor() {
-      if (this.event.concept) return this.event.concept.colors[0].color;
-      else {
-        return "#d9fcf2";
+      if (this.event && this.event.concept && this.event.concept.colors.length) {
+        const [color] = this.event.concept.colors;
+        if (color.color) return color.color;
       }
+      return DEFAULT_COLOR;
     },
     fontColor() {
       return oppositeColor(this.getBackColor);
