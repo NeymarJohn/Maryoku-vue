@@ -7,7 +7,7 @@
       <div />
       <div class="countdown-cover-image mt-50">
         <img v-if="coverImage" :src="coverImage">
-        <div v-else-if="concept && concept.images && concept.images.length" class="d-flex justify-content-center align-center">
+        <div v-else-if="concept.images && concept.images.length > 0" class="d-flex justify-content-center align-center">
           <concept-image-block
             class="change-cover-concept"
             :images="concept.images"
