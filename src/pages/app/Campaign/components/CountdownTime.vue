@@ -55,8 +55,8 @@ const DEFAULT_COLOR = "#d9fcf2";
 export default {
   props: {
     event: {
-      type: Object,
-      default: () => ({}),
+      type    : Object,
+      default : () => ({}),
     },
   },
   data() {
@@ -69,7 +69,9 @@ export default {
   },
   computed: {
     getCountDuration() {
+      ;
       const timeDuration = duration(this.period, "milliseconds");
+      console.log(this.event.eventStartMillis);
       return {
         days    : ("0" + Math.abs(timeDuration.days())).slice(-2),
         hours   : ("0" + Math.abs(timeDuration.hours())).slice(-2),
@@ -79,8 +81,9 @@ export default {
     },
 
     getBackColor() {
-      if (this.event && this.event.concept && this.event.concept.colors.length) {
-        const [color] = this.event.concept.colors;
+      const { concept } = this.event;
+      if (concept && concept.colors.length > 0) {
+        const [color] = concept.colors;
         if (color.color) return color.color;
       }
       return DEFAULT_COLOR;

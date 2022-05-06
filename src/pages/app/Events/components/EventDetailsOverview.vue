@@ -59,17 +59,23 @@
   </div>
 </template>
 <script>
+// core
 import { mapGetters } from "vuex";
-import CalendarEvent from "@/models/CalendarEvent";
+import moment         from "moment";
+import Swal           from "sweetalert2";
 
-import moment from "moment";
-import Swal from "sweetalert2";
-import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "./CommentEditorPanel";
+// helpers
 import {CommentMixins, ShareMixins} from "@/mixins";
-import EventOverviewSection from "./EventOverviewSection";
-import EventOverviewDate from "./EventOverviewDate";
-import Calendar from "@/models/Calendar";
+
+// components
+import HeaderActions                from "@/components/HeaderActions";
+import CommentEditorPanel           from "./CommentEditorPanel";
+import EventOverviewSection         from "./EventOverviewSection";
+import EventOverviewDate            from "./EventOverviewDate";
+
+// models
+import Calendar                     from "@/models/Calendar";
+import CalendarEvent                from "@/models/CalendarEvent";
 
 export default {
   name: "EventOverview",
@@ -97,22 +103,22 @@ export default {
   data() {
     return {
       // auth: auth,
-      calendar: null,
-      event: null,
-      editEvent: null,
-      eventId: null,
-      percentage: 0,
-      isLoading: true,
-      iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
-      timlineIconsURL: `${this.$iconURL}Timeline-New/`,
-      menuIconsURL: `${this.$iconURL}menu%20_%20checklist/SVG/`,
-      isEdit: false,
-      showEditDetailModal: false,
-      showCommentEditorPanel: false,
-      reCalculate: false,
-      reSchedule: false,
-      eventDateSection: null,
-      sections: [],
+      calendar               : null,
+      event                  : null,
+      editEvent              : null,
+      eventId                : null,
+      eventDateSection       : null,
+      percentage             : 0,
+      iconsUrl               : "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
+      timlineIconsURL        : `${this.$iconURL}Timeline-New/`,
+      menuIconsURL           : `${this.$iconURL}menu%20_%20checklist/SVG/`,
+      isLoading              : true,
+      isEdit                 : false,
+      showEditDetailModal    : false,
+      showCommentEditorPanel : false,
+      reCalculate            : false,
+      reSchedule             : false,
+      sections               : [],
     };
   },
   computed: {
@@ -132,7 +138,7 @@ export default {
       }
     },
     canComment() {
-      return this.permission === "edit" || this.permission === "comment";
+      return this.canEdit || this.permission === "comment";
     },
     canEdit() {
       return this.permission === "edit";
@@ -149,12 +155,12 @@ export default {
   mounted() {
     if (!this.eventTypeList.length) {
       this.$store.dispatch("event/getEventTypes", {
-        data: this.$store.state.auth.user.profile.defaultCalendarId,
-        ctx: this,
+        data : this.$store.state.auth.user.profile.defaultCalendarId,
+        ctx  : this,
       });
     }
 
-    let event = this.$store.state.event.eventData; // Fetch event from store
+    const event = this.$store.state.event.eventData; // Fetch event from store
     this.event = JSON.parse(JSON.stringify(event));
     this.init();
   },
@@ -163,57 +169,55 @@ export default {
       let places = this.event.places.map((p) => p.toUpperCase());
 
       const updatedEvent = new CalendarEvent({
-        id: this.event.id,
-        calendar: new Calendar({
-          id: this.event.calendar.id,
-        }),
-        location: this.event.location,
-        locationId: this.event.locationId,
-        places: places,
-        numberOfParticipants: this.event.numberOfParticipants,
-        eventType: this.event.eventType,
-        occasion: this.event.occasion,
-        eventStartMillis: this.event.eventStartMillis,
-        eventEndMillis: this.event.eventEndMillis,
-        guestType: this.event.guestType,
-        timeline: this.event.timeline,
-        timelineDates: this.event.timelineDates,
-        reSchedule: this.reSchedule,
-        reCalculate: this.reCalculate,
+        id                   : this.event.id,
+        calendar             : new Calendar({ id : this.event.calendar.id }),
+        location             : this.event.location,
+        locationId           : this.event.locationId,
+        numberOfParticipants : this.event.numberOfParticipants,
+        eventType            : this.event.eventType,
+        occasion             : this.event.occasion,
+        eventStartMillis     : this.event.eventStartMillis,
+        eventEndMillis       : this.event.eventEndMillis,
+        guestType            : this.event.guestType,
+        timeline             : this.event.timeline,
+        timelineDates        : this.event.timelineDates,
+        reSchedule           : this.reSchedule,
+        reCalculate          : this.reCalculate,
+        places,
       });
 
-      const arrow = "<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
+      const arrow       = "<i data-v-a76b6a56=\"\" style=\"color:#050505\" class=\"md-icon md-icon-font md-theme-default\">arrow_back</i>";
       const description = "<div class=\"description\">Your edits changed the event, do you want to change it?</div>";
 
       Swal.fire({
         title: "Are Your Sure?",
-        text: "You’re changing significant details about the event.\n" +
+        text : "You’re changing significant details about the event.\n" +
             "\n" +
             "This will nullify any agreements you already have with vendors, who will be notified and may need to alter/withdraw their proposals and pricing.\n" +
             "\n" +
             "Haven’t booked vendors yet? No problem. The event details will simply be updated.",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        cancelButtonClass: "md-button md-danger",
-        confirmButtonText: "Yes I'm sure",
-        cancelButtonText: "No, take me back",
-        buttonsStyling: false,
-          customClass: {
-              popup:"swal-alert-container",
-              header: "swal-alert-header",
-              htmlContainer: "swal-alert-html",
+        showCancelButton   : true,
+        confirmButtonClass : "md-button md-success",
+        cancelButtonClass  : "md-button md-danger",
+        confirmButtonText  : "Yes I'm sure",
+        cancelButtonText   : "No, take me back",
+        buttonsStyling     : false,
+          customClass      : {
+              popup         : "swal-alert-container",
+              header        : "swal-alert-header",
+              htmlContainer : "swal-alert-html",
           }
       }).then((result) => {
         if (result.dismiss != "cancel") {
           this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
             Swal.fire({
-              title: "Success to save your changes!",
-              confirmButtonClass: "md-button md-success confirm-btn-bg ",
-              cancelButtonClass: "md-button md-danger cancel-btn-bg",
-              buttonsStyling: false,
-              timer: 3000,
+              title              : "Success to save your changes!",
+              confirmButtonClass : "md-button md-success confirm-btn-bg ",
+              cancelButtonClass  : "md-button md-danger cancel-btn-bg",
+              buttonsStyling     : false,
+              timer              : 3000,
             });
-            this.reSchedule = false;
+            this.reSchedule  = false;
             this.reCalculate = false;
           });
         }
@@ -258,43 +262,43 @@ export default {
     cancelEvent() {
     },
     setSection() {
-      let places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];
+      const places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];
 
       this.eventDateSection = {
-        title: "Date",
-        key: "date",
-        img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
-        warning: "Changing the time on your status might cause price changes",
-        started_at: this.event.eventStartMillis,
-        ended_at: this.event.eventEndMillis,
-        timelineDates: this.$store.state.event.timelineDates,
-        more_one_day: null,
+        title         : "Date",
+        key           : "date",
+        img_src       : `${this.$secondIconURL}Event Page/Group 8708.svg`,
+        warning       : "Changing the time on your status might cause price changes",
+        started_at    : this.event.eventStartMillis,
+        ended_at      : this.event.eventEndMillis,
+        timelineDates : this.$store.state.event.timelineDates,
+        more_one_day  : null,
       };
       this.sections = [
         {
-          title: "Location",
-          key: "location",
-          img_src: `${this.$secondIconURL}Event Page/Group 10492.svg`,
-          warning: "Changing the address on your status might cause price changes",
-          location: this.event.location,
-          inOutDoor: places,
+          title                : "Location",
+          key                  : "location",
+          img_src              : `${this.$secondIconURL}Event Page/Group 10492.svg`,
+          warning              : "Changing the address on your status might cause price changes",
+          location             : this.event.location,
+          inOutDoor            : places,
         },
         {
-          title: "Number OF Guests",
-          key: "number_of_guest",
-          img_src: `${this.$secondIconURL}Event Page/Group 10482.svg`,
-          warning: "Changing the number of guests on your status might cause price changes",
-          numberOfParticipants: this.event.numberOfParticipants,
-          guestType: this.event.guestType ? this.event.guestType : "",
+          title                : "Number OF Guests",
+          key                  : "number_of_guest",
+          img_src              : `${this.$secondIconURL}Event Page/Group 10482.svg`,
+          warning              : "Changing the number of guests on your status might cause price changes",
+          numberOfParticipants : this.event.numberOfParticipants,
+          guestType            : this.event.guestType ? this.event.guestType : "",
         },
         {
-          title: "Event type",
-          key: "event_type",
-          img_src: `${this.$secondIconURL}Event Page/Group 10495.svg`,
-          warning: null,
-          eventType: this.event.eventType ? this.event.eventType.name : "",
-          occasion: this.event.occasion ? this.event.occasion : "",
-          holiday: this.event.holiday ? this.event.holiday : "",
+          title                : "Event type",
+          key                  : "event_type",
+          img_src              : `${this.$secondIconURL}Event Page/Group 10495.svg`,
+          warning              : null,
+          eventType            : this.event.eventType ? this.event.eventType.name : "",
+          occasion             : this.event.occasion  ? this.event.occasion       : "",
+          holiday              : this.event.holiday   ? this.event.holiday        : "",
         },
       ];
     },
