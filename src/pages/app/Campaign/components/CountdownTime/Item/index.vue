@@ -64,10 +64,12 @@ export default {
   }
 
   .countdown-time-label {
-    width: 100%;
-    text-align: center;
-    line-height: 40px;
-    font-size: 20px;
-    flex-grow: 1;
+    box-sizing  : border-box;
+    width       : 100%;
+    text-align  : center;
+    line-height : 23px;
+    font-size   : 20px;
+    flex-grow   : 1;
+    padding     : 0.6em;
   }
 </style>
