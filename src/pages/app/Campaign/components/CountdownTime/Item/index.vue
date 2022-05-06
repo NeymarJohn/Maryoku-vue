@@ -1,7 +1,7 @@
 <template>
   <div class="countdown-time-item">
     <div class="countdown-time-value">
-      {{ ("00" + value).slice(-2) }}
+      {{ ("0" + Math.abs(+(value) || 0)).slice(-2) }}
     </div>
     <div
       v-if="label"
