@@ -6,7 +6,7 @@
         v-if="showCommentEditorPanel"
         :comment-components="commentComponents"
         :proposal="proposal"
-        :url="`/proposals/${proposalId}`"
+        :url="`/proposals/${this.$route.params.proposalId}`"
         :ignore-x-offset="400"
         :is-vendor="true"
         @saveComment="saveCommentComponent"
@@ -201,6 +201,7 @@ export default {
       this.$store.dispatch("commentProposal/removeVersion", id);
     },
     async saveCommentComponent(data){
+      console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", data);
       await this.saveComment(data);
       this.updateCommentComponents(this.commentComponents);
     }

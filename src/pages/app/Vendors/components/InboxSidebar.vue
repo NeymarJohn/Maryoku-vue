@@ -203,10 +203,10 @@
                   <span>{{ proposal.dateCreated | date("DD") }} / {{ proposal.dateCreated | date("MM") }} &nbsp; | &nbsp; ${{ proposal.cost | withComma }}</span>
                 </div>
                 <span v-if="!proposal.viewed && proposal.unread_count" class="unread-count">{{ proposal.unread_count }}</span>
-                <div>
-                  <span v-if="proposal.unread_count == 0 && proposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(proposal,true)" /> </span>
-                </div>
               </div>
+            </div>
+            <div style="margin-top: 15px;">
+              <span v-if="proposal.unread_count == 0 && proposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(proposal,true)" /> </span>
             </div>
           </div>
         </div>
@@ -313,7 +313,7 @@ export default {
     commentsProposals() {
       let proposals = [];
       let exist = false;
-
+      console.log("-------------------------------------!!!!!!", this.proposals);
       if(this.proposals.length > 0) {
         for (let proposal of this.proposals) {
           exist = false;
@@ -342,6 +342,7 @@ export default {
           }
           // }
         }
+        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",proposals);
         if (this.sortBy == "status") {
           proposals.sort((a, b) => {
             if (this.statusSortType == "asc") {
@@ -373,20 +374,17 @@ export default {
       return proposals;
     },
     proposals() {
-      console.log("checkpoint", this.$store.state.comment.commentsProposals);
       return this.$store.state.comment.commentsProposals;
     },
     selectedProposal() {
       if (this.$store.state.commentProposal.proposal){
         this.commentComponents = this.$store.state.commentProposal.proposal.commentComponent;
       }
-      console.log("comput this.commentComponents",this.commentComponents);
       return this.$store.state.commentProposal.proposal;
     },
   },
   watch: {
     proposals() {
-      console.log("this.commentsProposals", this.commentsProposals);
       if (this.commentsProposals.length && this.selectedProposal == null) {
         this.changeProposal(this.commentsProposals[0]);
       }
@@ -407,7 +405,6 @@ export default {
       window.open(routeData.href, "_blank");
     },
     changeProposal(proposal,fullDiscussion = false) {
-      console.log("------------------", proposal);
       this.$router.push(`/vendor/inbox/proposal/${proposal.id}`);
       this.$store.dispatch("comment/getCommentComponents", `/proposals/${proposal.id}`).then(res => {
         this.commentComponents = res;

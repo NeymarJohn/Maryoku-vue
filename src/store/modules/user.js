@@ -36,18 +36,11 @@ const state = {
   upcomingEvents: [],
   company: {
     branches: []
-  },
-  colours: {
-    savedColours: [],
-    pickedColours: [],
   }
 };
 
 // getters
 const getters = {
-  getColours:(state)=>{
-    return state.colours;
-  },
   getUser: (state, user, rootState) => {
     return state.user;
   },
@@ -253,12 +246,6 @@ const getters = {
 };
 // actions
 const actions = {
-  saveColors: ({commit, state}, data) => {
-    return postReq("/colours", data).then((res) => {
-      commit("setColours", res.data);
-      return res.data;
-    });
-  },
   getUserFromApi({ commit, state }, data) {
     Me.get()
       .then((res) => {
@@ -387,12 +374,6 @@ const actions = {
 
 // mutations
 const mutations = {
-  setColours(state, colours) {
-    state.colours = colours;
-  },
-  setSavedColours(state, colours) {
-    state.colours.savedColours = colours;
-  },
   setUser(state, data) {
     state.user = data;
   },
