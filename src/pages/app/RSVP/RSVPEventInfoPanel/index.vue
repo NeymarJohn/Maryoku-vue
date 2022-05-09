@@ -17,9 +17,7 @@
         </span>
         <div v-if="!editingTimezone" class="timezone-wrapper">
           <span>({{ timezone }})</span>
-          <md-button v-if="editable" class="edit-btn md-simple md-red" @click="editingTimezone = true">
-            Edit
-          </md-button>
+          <EditBtn v-if="editable" v-model="editingTimezone" />
         </div>
         <div v-if="editingTimezone" class="timezone-wrapper">
           <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
@@ -27,6 +25,7 @@
         </div>
       </div>
     </div>
+
     <div v-if="!isVirtualEvent" class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -42,6 +41,7 @@
         <span>{{ event.location }}</span>
       </div>
     </div>
+
     <div v-else class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -57,6 +57,7 @@
         <span>Zoom</span>
       </div>
     </div>
+
     <div v-if="!isVirtualEvent" class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -70,9 +71,7 @@
       </div>
       <div v-if="!editingPlusOne" class="event-info-item-content d-flex align-center">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
-        <md-button v-if="editable" class="md-simple edit-btn md-red" @click="editingPlusOne = !editingPlusOne">
-          Edit
-        </md-button>
+        <EditBtn v-if="editable" v-model="editingPlusOne" />
       </div>
       <div v-else class="event-info-item-content d-flex align-center">
         <md-checkbox v-model="isPluseOne" :value="false">
@@ -84,6 +83,7 @@
         <Controls @save="updateEvent" @cancel="editingPlusOne = false" />
       </div>
     </div>
+
     <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -99,9 +99,8 @@
       <div v-if="!editingArrival" class="event-info-item-content">
         <span>
           {{ event.arrival || "-" }}&emsp;
-          <md-button v-if="editable" class="md-simple edit-btn md-red" @click="editingArrival = !editingArrival">
-            Edit</md-button>
         </span>
+        <EditBtn v-if="editable" v-model="editingArrival" />
       </div>
       <div v-else class="event-info-item-content d-flex align-center font-size-20">
         <input v-model="eventArrival" type="text">
@@ -118,11 +117,13 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Calendar      from "@/models/Calendar";
 import ColorButton   from "@/components/ColorButton";
 import Controls      from "./Controls";
+import EditBtn       from "./EditBtn";
 
 export default {
   components: {
     vSelect,
     ColorButton,
+    EditBtn,
     Controls,
   },
   props: {
