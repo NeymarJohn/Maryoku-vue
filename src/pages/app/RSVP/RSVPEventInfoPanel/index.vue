@@ -158,14 +158,14 @@ export default {
   },
   data() {
     return {
-      isPluseOne: this.isPlusOne,
-      eventArrival: this.event.arrival || "-",
-      timezone: "",
-      editingPlusOne: false,
-      editingArrival: false,
-      editingTimezone: false,
-      timezoneList: ["EST", "PST", "CST", "MST", "EDT", "HST"],
-      iconColors: {},
+      isPluseOne      : this.isPlusOne,
+      eventArrival    : this.event.arrival || "-",
+      timezone        : "",
+      editingPlusOne  : false,
+      editingArrival  : false,
+      editingTimezone : false,
+      timezoneList    : ["EST", "PST", "CST", "MST", "EDT", "HST"],
+      iconColors      : {},
     };
   },
   computed: {
