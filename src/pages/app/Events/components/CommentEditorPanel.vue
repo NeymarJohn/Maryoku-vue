@@ -205,8 +205,6 @@ export default {
       return [];
     },
     unresolvedComponents() {
-      console.log("---------------------------------UpdateResolve", this.updatedCommentComponents);
-      console.log("___________________________________CommentComponents", this.commentComponents);
       return this.updatedCommentComponents.filter(item => !item.isResolved && item.comments && item.comments.length);
     },
     clickCaptureStatus() {
@@ -365,7 +363,6 @@ export default {
     },
     async saveComment(event, type) {
       let selectedComponent = this.updatedCommentComponents[this.selectedComponentIndex];
-      console.log(selectedComponent, "----------------------------------" + this.updatedCommentComponents);
       const comment = {
         eventCommentComponent: { id: selectedComponent.id },
         description: this.editingComment,
@@ -452,15 +449,39 @@ export default {
       }
     },
     async getMessage(e){
-      if(e.data === "@"){
-        let userId = this.$store.state.auth.user.id;
-        let proposalId = this.$route.params.proposalId;
-
-        let res = await getReq(`/1/searchCustomer?proposalId=${proposalId}&userId=${userId}`);
-        this.customers = res.data;
-
-        this.showAddress = true;
+      let currentUserType = this.$store.state.auth.user.currentUserType;
+      if(currentUserType !== "vendor") {
+        if (e.target.value.includes("@")) {
+          let queryArray = e.target.value.split("@");
+          let userId = this.$store.state.auth.user.id;
+          
+          console.log("user-----------------", this.$store.state.auth.user);
+          let res = await getReq(`/1/searchCustomer?userId=${userId}&name=${queryArray[1]}`);
+          if(res.data.length > 0) {
+            this.showAddress = true;
+            this.customers = res.data;
+          }else {
+            this.showAddress = false;
+          }
+        }
+      }else {
+        if(e.data === "@"){
+          let userId = this.$store.state.auth.user.id;
+          let res = await getReq(`/1/searchCustomer?userId=${userId}&name=`);
+          this.customers = res.data;
+          this.showAddress = true;
+        }
       }
+      
+
+      // if(e.data === "@"){
+      //   let userId = this.$store.state.auth.user.id;
+
+      //   let res = await getReq(`/1/searchCustomer?userId=${userId}`);
+      //   this.customers = res.data;
+
+      //   this.showAddress = true;
+      // }
     },
     toAddress(customer){
 

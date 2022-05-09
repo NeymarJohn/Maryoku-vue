@@ -25,7 +25,7 @@
               <div class="font-size-22 text-left font-bold-extra">${{ proposal.cost | withComma }}</div>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button v-if="!replace[idx]" class="md-simple md-outlined md-red maryoku-btn">Replace with alternative proposal</md-button>
+              <md-button v-if="!options[idx]" class="md-simple md-outlined md-red maryoku-btn" @click="replace">Replace with alternative proposal</md-button>
               <div v-else class="d-flex align-center bg-light-green p-20" style="width: 330px">
                 <img :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`" width="28px"/>
                 <p class="font-size-14 mb-0 mx-1">We will start looking for something better instead</p>
@@ -91,7 +91,7 @@ export default {
       step: 1,
       checked_proposals: [],
       checked_better_options: [],
-      replace: [0,1,1],
+      options: [0,1,1],
       essential: null,
       better_options : [
         {label: "Prices are higher than my expectations", value: 'price_higher'},
@@ -127,6 +127,10 @@ export default {
 
       return "";
     },
+    replace() {
+      if (!this.checked_proposals.length) return;
+      this.$emit('replace', this.checked_proposals)
+    }
   }
 };
 </script>

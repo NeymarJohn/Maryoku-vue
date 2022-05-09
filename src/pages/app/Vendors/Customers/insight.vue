@@ -32,7 +32,7 @@
             class="d-flex align-center"
             :class="idx > 0 ? 'mt-20' : ''"
           >
-            <img :src="`${$iconURL}${it.icon}`" width="23px">
+            <img :src="`${$iconURL}${it.icon}`" style="filter: brightness(0) invert(1)" width="23px">
             <template v-if="customer || serviceReportData">
               <span class="ml-10 font-size-13" :style="{ color: it.color }">{{ it.value }}%</span>
               <span class="ml-10 font-size-13" :style="{ color: it.color }">${{ it.price | withComma(Number) }}</span>
@@ -211,7 +211,7 @@ export default {
             label: "",
             value: Math.round((this.sumPricesByCategory[category] / this.totalPrice) * 100),
             color: this.activeCategoryColors[colorIndex++], //this.$store.state.common.serviceCategoriesMap[category].color,
-            icon: `Budget+Elements/${category}-white.svg`,
+            icon: `Budget+Elements/${category}.svg`,
             price: Math.round(this.sumPricesByCategory[category]),
           });
         }
@@ -236,25 +236,25 @@ export default {
             value: Math.round((categoryData.amount / 100 / this.adaptiveTotalPrice) * 100),
             // color: this.$store.state.common.serviceCategoriesMap[categoryData._id].color,
             color: this.activeCategoryColors[colorIndex++],
-            icon: `Budget+Elements/${categoryData._id}-white.svg`,
+            icon: `Budget+Elements/${categoryData._id}.svg`,
             price: Math.round(categoryData.amount / 100),
           });
         }
       } else {
         chartData = [
-          { label: "Venue", value: 44, color: "#a3809d", icon: "Budget+Elements/venuerental-white.svg", price: 0 },
+          { label: "Venue", value: 44, color: "#a3809d", icon: "Budget+Elements/venuerental.svg", price: 0 },
           {
             label: "Catering",
             value: 35,
             color: "#915a87",
-            icon: "Budget+Elements/foodandbeverage-white.svg",
+            icon: "Budget+Elements/foodandbeverage.svg",
             price: 0,
           },
           {
             label: "Signage & Printing",
             value: 20,
             color: "#4e0841",
-            icon: "Budget+Elements/entertainment-white.svg",
+            icon: "Budget+Elements/entertainment.svg",
             price: 0,
           },
         ];
@@ -352,10 +352,10 @@ export default {
     handleYearChange(year) {
       this.selectedYear = year;
       this.getIncomingData();
-      this.getServiceReport();
+      // this.getServiceReport();
     },
     init() {
-      this.getServiceReport();
+      // this.getServiceReport();
       this.getIncomingData();
     },
     next() {

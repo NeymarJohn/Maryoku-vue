@@ -32,27 +32,29 @@
       <div>
         <div class="chosen-color-block">
           <input :value="bgc" style="width: 45%" @change="inputUpdateValue">
-          <md-button class="md-rose md-simple save-color-button"  @click="saveColor"> Save </md-button>
+          <md-button class="md-rose md-simple save-color-button" @click="saveColor">
+            Save
+          </md-button>
         </div>
         <div class="select-colors">
           <span>My Saved Colors</span>
-          <div v-if="savedColors" class="colors-wrapper">
-            <span v-for="(colorItem, i) in savedColors"
+          <div v-if="colours.savedColours.length" class="colors-wrapper">
+            <span v-for="(colorItem, i) in colours.savedColours"
                   :key="colorItem.hex + i"
                   v-bind:style="'background-color: ' + colorItem.hex"
                   class="picked-color"
-                  @click="updateValue(colorItem)"></span>
+                  @click="updateValue(colorItem)"/>
           </div>
           <span v-else style="font-weight: normal; font-size: 12px; color: black">No saved colors</span>
         </div>
         <div class="select-colors">
           <span>Last Piked Colors</span>
           <div class="colors-wrapper">
-            <span v-for="(colorItem, i) in lastPickedColors"
+            <span v-for="(colorItem, i) in colours.pickedColours"
                   :key="i"
                   v-bind:style="'background-color: ' + colorItem.color"
                   class="picked-color"
-                  @click="updateValue({hex: colorItem.color, a:colorItem.opacity})"></span>
+                  @click="updateValue({hex: colorItem.color, a:colorItem.opacity})"/>
           </div>
         </div>
       </div>
@@ -63,6 +65,7 @@
 <script>
 import { Chrome } from "vue-color";
 import { rgba2hex } from "@/utils/helperFunction";
+import {mapMutations, mapGetters} from "vuex";
 
 let defaultValue = {
   hex: "#194d33e6",
@@ -114,14 +117,22 @@ export default {
       type: String,
       default: "",
     },
+    colours: {
+      type: Object,
+      default: () => {
+        return {
+          savedColours: [],
+          pickedColours: [],
+        };
+      },
+    },
   },
   data: () => ({
     showColorPane: false,
     selectedColour: {
       hex: this.value ? this.value.color : "",
-      a: this.value ? this.value.opacity : 1,
+      a: (this.value && this.value.opacity) ? this.value.opacity : 1,
     },
-    savedColors: null ,
   }),
   computed: {
     bgc() {
@@ -134,30 +145,25 @@ export default {
       return "";
     },
     alpha() {
-      if (this.selectedColour) return this.selectedColour.a;
+      if (this.selectedColour && this.selectedColour.a) return this.selectedColour.a;
       return 1;
     },
-    lastPickedColors() {
-      return JSON.parse(localStorage.lastColors);
-    }
   },
   watch: {
     value: function () {
       this.selectedColour.hex = this.value.color;
-      this.selectedColour.a = this.value.opacity;
+      this.selectedColour.a = this.value.opacity || 1;
     },
   },
   created() {
-    if (localStorage.savedColors) {
-      this.savedColors = JSON.parse(localStorage.savedColors);
-    }
     this.selectedColour.hex = this.value.color;
-    this.selectedColour.a = this.value.alpha;
+    this.selectedColour.a = this.value.alpha || 1;
   },
   methods: {
+    ...mapMutations("user", ["setSavedColours"]),
     saveColor(){
       let colors = [];
-      if(!this.savedColors) {
+      if (!this.colours.savedColours) {
         colors = [this.selectedColour];
       } else {
         colors = [
@@ -165,11 +171,12 @@ export default {
             hex: this.selectedColour.hex,
             a: this.selectedColour.a
           },
-          ...this.savedColors.slice(0, 5)
+          ...this.colours.savedColours.filter(color => color.a + color.hex !== this.selectedColour.a + this.selectedColour.hex)
         ];
       }
-      localStorage.setItem("savedColors", JSON.stringify(colors));
-      this.savedColors = JSON.parse(localStorage.savedColors);
+      this.setSavedColours(colors);
+      localStorage.setItem("savedColours", JSON.stringify(colors));
+      this.colours.savedColours = JSON.parse(localStorage.savedColours);
     },
     inputUpdateValue(e){
       this.updateValue({hex:e.target.value});
@@ -189,7 +196,7 @@ export default {
       document.getElementsByClassName("vc-chrome");
       this.showColorPane = !this.showColorPane;
       if (!this.showColorPane) {
-        this.$emit("closed");
+        this.$emit("closed", this.selectedColour, this.colours.savedColours);
       }
     },
   },

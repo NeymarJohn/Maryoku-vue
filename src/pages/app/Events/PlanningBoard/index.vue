@@ -14,7 +14,7 @@
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
                 :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
+                :selected-icon="`${$iconURL}Services /${component.componentId}.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -483,6 +483,7 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="categoryProposals.slice(0, 3)"
+      @replace="replaceProposal"
       @cancel="showDifferentProposals=false"
     >
     </DifferentProposalsModal>
@@ -1125,8 +1126,13 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    async processNotification(id){
-
+    async replaceProposal(proposals) {
+      console.log('replaceProposal', proposals)
+      this.showDifferentProposals = false;
+      // await postReq(`/1/proposals/replace`, {
+      //   proposals,
+      //   requirementId: this.currentRequirement.id,
+      // });
     },
   },
   watch: {

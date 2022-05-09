@@ -407,7 +407,6 @@ const actions = {
       const availableAdditionalSerivces = additionalServices.filter(
         (category) => getters.pricesByCategory[category] > 0
       );
-      console.log("saveProposal", state.id);
       const proposal = new Proposal({
         id: status == "duplicate" ? undefined : state.id ? state.id : undefined,
         eventData: state.eventData,
@@ -431,7 +430,7 @@ const actions = {
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
-        customerId: state.eventData.customer.id,
+        customerId: state.eventData.customer? state.eventData.customer.id: undefined,
         suggestionDate: state.suggestionDate,
         expiredDate: state.expiredDate,
         issuedDate: state.issuedDate,

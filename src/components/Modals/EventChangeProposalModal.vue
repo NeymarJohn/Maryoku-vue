@@ -35,7 +35,7 @@
                   $ {{ proposal.cost | withComma }}
                 </div>
               </div>
-              <md-button class="md-rose md-simple md-outlined">
+              <md-button class="md-rose md-simple md-outlined" @click="replace">
                 Replace with alternative proposal
               </md-button>
             </div>
