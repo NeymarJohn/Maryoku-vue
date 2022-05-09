@@ -72,7 +72,7 @@ export default {
       this.$emit("show", event);
     },
     getProposalUrl(eventId) {
-      let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id.toString() === eventId.toString());
+      let proposal = this.proposals.find(p => p.nonMaryoku && p.eventData.id && p.eventData.id.toString() === eventId);
       return proposal ? `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}` : null;
     },
   },

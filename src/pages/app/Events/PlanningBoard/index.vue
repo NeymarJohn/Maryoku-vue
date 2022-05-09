@@ -14,7 +14,7 @@
                 class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
                 :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
-                :selected-icon="`${$iconURL}Services /${component.componentId}-white.svg`"
+                :selected-icon="`${$iconURL}Services /${component.componentId}.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
@@ -252,7 +252,7 @@
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
-                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                <img class="mr-10" :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
 
                 <md-button
@@ -483,6 +483,7 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="categoryProposals.slice(0, 3)"
+      @replace="replaceProposal"
       @cancel="showDifferentProposals=false"
     >
     </DifferentProposalsModal>
@@ -494,7 +495,6 @@ import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import { camelize } from "@/utils/string.util";
-import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
@@ -1125,8 +1125,13 @@ export default {
     openNewTab(link) {
       window.open(link, "_blank");
     },
-    async processNotification(id){
-
+    async replaceProposal(proposals) {
+      console.log('replaceProposal', proposals)
+      this.showDifferentProposals = false;
+      // await postReq(`/1/proposals/replace`, {
+      //   proposals,
+      //   requirementId: this.currentRequirement.id,
+      // });
     },
   },
   watch: {

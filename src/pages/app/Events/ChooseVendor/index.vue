@@ -11,7 +11,7 @@
             class="mr-20 mb-10"
             :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
             :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-            :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+            :selected-icon="`${$iconURL}Budget+Elements/${component.componentId}.svg`"
             :default-status="selectedCategory && component.componentId === selectedCategory.componentId"
             :disabled="!eventRequirements[component.componentId]"
             :has-badge="hasBadge(component)"
@@ -145,8 +145,8 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import moment from "moment";
-import { getReq } from "@/utils/token";
 import Proposal from "@/models/Proposal";
+import { postReq, getReq } from "@/utils/token";
 import EventComponent from "@/models/EventComponent";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
@@ -386,7 +386,6 @@ export default {
           if (result.length > 0) this.showProposals = true;
         });
     },
-
     saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
       requirements.id = this.currentRequirement.id;

@@ -11,7 +11,7 @@
             class="mr-20 mb-10"
             :label="getServiceCategoryByKey(tab).title"
             :icon="`${$iconURL}Budget+Elements/${tab}.svg`"
-            :selected-icon="`${$iconURL}Budget+Elements/${tab}-white.svg`"
+            :selected-icon="`${$iconURL}Budget+Elements/${tab}.svg`"
             :default-status="tab === selectedCategory"
             :disabled="!eventRequirements[tab]"
             :has-badge="hasBadge(tab)"
