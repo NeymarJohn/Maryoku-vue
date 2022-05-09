@@ -23,12 +23,7 @@
         </div>
         <div v-if="editingTimezone" class="timezone-wrapper">
           <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
-          <md-button class="maryoku-btn md-simple md-red" @click="editingTimezone = false">
-            Cancel
-          </md-button>
-          <md-button class="maryoku-btn md-red" @click="updateEvent">
-            Save
-          </md-button>
+          <Controls @save="updateEvent" @cancel="editingTimezone = false" />
         </div>
       </div>
     </div>
@@ -132,11 +127,13 @@ import "vue-select/dist/vue-select.css";
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar      from "@/models/Calendar";
 import ColorButton   from "@/components/ColorButton";
+import Controls      from "./Controls";
 
 export default {
   components: {
     vSelect,
     ColorButton,
+    Controls,
   },
   props: {
     event: {
