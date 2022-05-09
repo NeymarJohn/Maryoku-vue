@@ -234,7 +234,7 @@ import TitleEditor       from "./components/TitleEditor";
 
 // pages
 import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
 
