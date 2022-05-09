@@ -17,15 +17,21 @@
         </span>
         <div v-if="!editingTimezone" class="timezone-wrapper">
           <span>({{ timezone }})</span>
-          <EditBtn v-if="editable" v-model="editingTimezone" />
+          <md-button v-if="editable" class="edit-btn md-simple md-red" @click="editingTimezone = true">
+            Edit
+          </md-button>
         </div>
         <div v-if="editingTimezone" class="timezone-wrapper">
           <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
-          <Controls @save="updateEvent" @cancel="editingTimezone = false" />
+          <md-button class="maryoku-btn md-simple md-red" @click="editingTimezone = false">
+            Cancel
+          </md-button>
+          <md-button class="maryoku-btn md-red" @click="updateEvent">
+            Save
+          </md-button>
         </div>
       </div>
     </div>
-
     <div v-if="!isVirtualEvent" class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -41,7 +47,6 @@
         <span>{{ event.location }}</span>
       </div>
     </div>
-
     <div v-else class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -57,7 +62,6 @@
         <span>Zoom</span>
       </div>
     </div>
-
     <div v-if="!isVirtualEvent" class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -71,7 +75,9 @@
       </div>
       <div v-if="!editingPlusOne" class="event-info-item-content d-flex align-center">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
-        <EditBtn v-if="editable" v-model="editingPlusOne" />
+        <md-button v-if="editable" class="md-simple edit-btn md-red" @click="editingPlusOne = !editingPlusOne">
+          Edit
+        </md-button>
       </div>
       <div v-else class="event-info-item-content d-flex align-center">
         <md-checkbox v-model="isPluseOne" :value="false">
@@ -80,10 +86,14 @@
         <md-checkbox v-model="isPluseOne" :value="true">
           +1
         </md-checkbox>
-        <Controls @save="updateEvent" @cancel="editingPlusOne = false" />
+        <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">
+          Cancel
+        </md-button>
+        <md-button class="md-red maryoku-btn" @click="updateEvent">
+          Save
+        </md-button>
       </div>
     </div>
-
     <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
@@ -99,32 +109,33 @@
       <div v-if="!editingArrival" class="event-info-item-content">
         <span>
           {{ event.arrival || "-" }}&emsp;
+          <md-button v-if="editable" class="md-simple edit-btn md-red" @click="editingArrival = !editingArrival">
+            Edit</md-button>
         </span>
-        <EditBtn v-if="editable" v-model="editingArrival" />
       </div>
       <div v-else class="event-info-item-content d-flex align-center font-size-20">
         <input v-model="eventArrival" type="text">
-        <Controls @save="updateEvent" @cancel="editingArrival = false" />
+        <md-button class="md-simple md-black maryoku-btn" @click="editingArrival = !editingArrival">
+          Cancel
+        </md-button>
+        <md-button class="md-red maryoku-btn" @click="updateEvent">
+          Save
+        </md-button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import vSelect       from "vue-select";
-import "vue-select/dist/vue-select.css";
-
 import CalendarEvent from "@/models/CalendarEvent";
-import Calendar      from "@/models/Calendar";
-import ColorButton   from "@/components/ColorButton";
-import Controls      from "./Controls";
-import EditBtn       from "./EditBtn";
+import Calendar from "@/models/Calendar";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import ColorButton from "@/components/ColorButton";
 
 export default {
   components: {
     vSelect,
     ColorButton,
-    EditBtn,
-    Controls,
   },
   props: {
     event: {
@@ -146,14 +157,14 @@ export default {
   },
   data() {
     return {
-      isPluseOne      : this.isPlusOne,
-      eventArrival    : this.event.arrival || "-",
-      timezone        : "",
-      editingPlusOne  : false,
-      editingArrival  : false,
-      editingTimezone : false,
-      timezoneList    : ["EST", "PST", "CST", "MST", "EDT", "HST"],
-      iconColors      : {},
+      isPluseOne: this.isPlusOne,
+      eventArrival: this.event.arrival || "-",
+      timezone: "",
+      editingPlusOne: false,
+      editingArrival: false,
+      editingTimezone: false,
+      timezoneList: ["EST", "PST", "CST", "MST", "EDT", "HST"],
+      iconColors: {},
     };
   },
   computed: {
@@ -161,7 +172,7 @@ export default {
       return this.event.concept ? this.event.concept : {};
     },
     backgroundColor() {
-      return this.concept.colors ? this.event.concept.colors[0].color : "#d9fcf2";
+      return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
     },
     isPlusOne() {
       if ("isPlusOne" in this.event) {
@@ -202,31 +213,33 @@ export default {
     if (this.event.additionalData && this.event.additionalData.iconColors) {
       this.iconColors = this.event.additionalData.iconColors;
     } else {
-      const color = this.event.concept ? this.event.concept.colors[0] : {};
-      this.$set(this.iconColors, "timeColor",     color);
-      this.$set(this.iconColors, "locationColor", color);
-      this.$set(this.iconColors, "soloColor",     color);
-      this.$set(this.iconColors, "arrivalColor",  color);
+      this.$set(this.iconColors, "timeColor", this.event.concept ? this.event.concept.colors[0] : {});
+      this.$set(this.iconColors, "locationColor", this.event.concept ? this.event.concept.colors[0] : {});
+      this.$set(this.iconColors, "soloColor", this.event.concept ? this.event.concept.colors[0] : {});
+      this.$set(this.iconColors, "arrivalColor", this.event.concept ? this.event.concept.colors[0] : {});
     }
     console.log("iconColors", this.iconColors);
   },
   methods: {
     updateEvent() {
-      const { additionalData = {} } = this.event;
+      let additionalData = this.event.additionalData;
+      if (!additionalData) {
+        additionalData = {};
+      }
       additionalData.iconColors = this.iconColors;
       this.$store.dispatch(
         "event/saveEventAction",
         new CalendarEvent({
-          id         : this.event.id,
-          calendar   : new Calendar({ id: this.event.calendar.id }),
-          isPluseOne : this.isPluseOne,
-          arrival    : this.eventArrival,
-          timezone   : this.timezone,
+          id: this.event.id,
+          calendar: new Calendar({ id: this.event.calendar.id }),
+          isPluseOne: this.isPluseOne,
+          arrival: this.eventArrival,
+          timezone: this.timezone,
           additionalData,
         }),
       );
-      this.editingPlusOne  = false;
-      this.editingArrival  = false;
+      this.editingPlusOne = false;
+      this.editingArrival = false;
       this.editingTimezone = false;
     },
   },

@@ -324,24 +324,26 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { Model } from "vue-api-query";
-import _ from "underscore";
 import RsvpTimelineItem from "./RSVPTimelineItem";
+import Calendar from "@/models/Calendar";
 import Rsvp from "@/models/Rsvp";
 import RsvpRequest from "@/models/RsvpRequest";
+import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventTimelineDate from "@/models/EventTimelineDate";
+import _ from "underscore";
 import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal";
 import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal";
 import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import SyncCalendarEventModal from "@/components/Modals/RSVP/SyncCalendarEventModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import SocialSharingModal from "@/components/Modals/SocialSharingModal";
+import { mapActions, mapGetters } from "vuex";
 import Modal from "../../../components/Modal.vue";
 import MoreInfoItem from "./mobile/MoreInfoItem.vue";
+import { Model } from "vue-api-query";
 import dateUtil from "@/utils/date.util";
 
 export default {

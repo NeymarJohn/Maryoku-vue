@@ -1,12 +1,12 @@
 <template>
-  <div class="icon">
+  <span class="font-size-16 font-bold-extra">
     <img
       :src="`${$iconURL}${src}`"
       class="mr-10"
       style="width: 20px; height: 20px"
     >
     <slot />
-  </div>
+  </span>
 </template>
 <script>
 export default {
@@ -18,10 +18,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  .icon {
-    display     : inline-flex;
-    font-weight : 900;
-    color       : inherit;
-  }
-</style>
