@@ -81,12 +81,7 @@
         <md-checkbox v-model="isPluseOne" :value="true">
           +1
         </md-checkbox>
-        <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">
-          Cancel
-        </md-button>
-        <md-button class="md-red maryoku-btn" @click="updateEvent">
-          Save
-        </md-button>
+        <Controls @save="updateEvent" @cancel="editingPlusOne = false" />
       </div>
     </div>
     <div class="event-info-item">
@@ -110,12 +105,7 @@
       </div>
       <div v-else class="event-info-item-content d-flex align-center font-size-20">
         <input v-model="eventArrival" type="text">
-        <md-button class="md-simple md-black maryoku-btn" @click="editingArrival = !editingArrival">
-          Cancel
-        </md-button>
-        <md-button class="md-red maryoku-btn" @click="updateEvent">
-          Save
-        </md-button>
+        <Controls @save="updateEvent" @cancel="editingArrival = false" />
       </div>
     </div>
   </div>
