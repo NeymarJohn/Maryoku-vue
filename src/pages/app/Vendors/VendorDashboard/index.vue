@@ -208,7 +208,7 @@ export default {
           title: this.$store.state.common.serviceCategoriesMap[vc].fullTitle,
           value: 1,
           color: this.activeCategoryColors[idx],
-          image: `${this.$iconURL}Budget+Elements/${vc}.svg`,
+          image: `${this.$iconURL}Budget+Elements/${vc}-white.svg`,
         };
         if (this.serviceReportData) {
           const cat = this.serviceReportData.find(c => c._id == vc);
@@ -243,14 +243,13 @@ export default {
     //get data
     this.getIncomingData();
     this.getComingEvents();
-    // this.getServiceReport();
+    this.getServiceReport();
     this.getMarkedDates();
     await this.$store.dispatch("vendorDashboard/getProposals", { vendorId: this.vendorData.id });
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
     getIncomingData() {
-      let customerQuery = "";
       if (this.customer) {
         customerQuery = `&customerId=${this.customer.id}`;
       }
@@ -264,7 +263,7 @@ export default {
         .get(
           `${process.env.SERVER_URL}/1/userEvent/monthlyIncome/${this.vendorData.id}?start=${new Date(
             this.selectedYear + "-01-01",
-          ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}${customerQuery}`,
+          ).toISOString()}&end=${new Date(this.selectedYear + "-12-31").toISOString()}`,
         )
         .then(res => {
           if (res.data.length) {
@@ -287,7 +286,7 @@ export default {
     handleYearChange(year) {
       this.selectedYear = year;
       this.getIncomingData();
-      // this.getServiceReport();
+      this.getServiceReport();
     },
     cancelIcon() {
       this.iconsModal = false;

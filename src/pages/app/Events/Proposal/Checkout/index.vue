@@ -229,39 +229,35 @@
             </div>
           </div>
         </div>
-        <div v-if="pageType === 0">
-          <div class="mt-40 policy-confirmation-block d-flex align-center">
-            <md-checkbox v-model="agreedCancellationPolicy" class="m-0">
-              <span class="font-regular"> I agree to the{{ ' '}} </span>
-              <a href="#" class="font-bold color-black text-underline ml-10"> Cancellation policy </a>
-            </md-checkbox>
-            <stripe-checkout
-              v-if="showStripeCheckout"
-              :items="stripePriceData"
-              :proposal="proposal"
-              :success-u-r-l="successURL"
-            />
+        <div class="mt-40 policy-confirmation-block d-flex align-center">
+          <span class="font-regular"> I agree to the{{ ' '}} </span>
+          <a href="#" class="font-bold color-black text-underline ml-10"> Cancellation policy </a>
+          <stripe-checkout
+            v-if="showStripeCheckout"
+            :items="stripePriceData"
+            :proposal="proposal"
+            :success-u-r-l="successURL"
+          />
+        </div>
+        <div class="signature-wrapper">
+          <button class="signature-button" @click="toggleShowSignatureModal">
+            <i class="fas fa-pencil-alt" />
+            Your signature
+          </button>
+        </div>
+        <div class="signatures-block d-flex align-center" v-if="proposal.signature">
+          <div class="position-relative" v-if="proposal.signature.uploadedSignature">
+            <img class="signatures-image" :src="proposal.signature.uploadedSignature" style="max-height: 250px">
+            <img class="position-absolute trash" @click="removeSignature('uploadedSignature')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
           </div>
-          <div class="signature-wrapper">
-            <button class="signature-button" @click="toggleShowSignatureModal">
-              <i class="fas fa-pencil-alt" />
-              Your signature
-            </button>
-          </div>
-          <div class="signatures-block d-flex align-center" v-if="proposal.signature">
-            <div class="position-relative" v-if="proposal.signature.uploadedSignature">
-              <img class="signatures-image" :src="proposal.signature.uploadedSignature" style="max-height: 250px">
-              <img class="position-absolute trash" @click="removeSignature('uploadedSignature')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
+          <div class="position-relative ml-20">
+            <div class="position-relative" v-if="proposal.signature.jpeg">
+              <img class="signatures-image" :src="proposal.signature.jpeg" style="max-height: 200px">
+              <img class="position-absolute trash" @click="removeSignature('jpeg')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
             </div>
-            <div class="position-relative ml-20">
-              <div class="position-relative" v-if="proposal.signature.jpeg">
-                <img class="signatures-image" :src="proposal.signature.jpeg" style="max-height: 200px">
-                <img class="position-absolute trash" @click="removeSignature('jpeg')" :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px">
-              </div>
-              <div v-if="proposal.signature.signatureName"
-                   class="font-size-14 mt-20"
-              >{{proposal.signature.signatureName}}</div>
-            </div>
+            <div v-if="proposal.signature.signatureName"
+                 class="font-size-14 mt-20"
+            >{{proposal.signature.signatureName}}</div>
           </div>
         </div>
       </div>
@@ -349,7 +345,8 @@
     },
     computed: {
       handleSubmitDisabled(){
-        if(this.agreedCancellationPolicy && this.proposal && this.proposal.signature && this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
+        if( this.proposal && this.proposal.signature &&
+          this.proposal.signature.jpeg && this.proposal.signature.signatureName && this.proposal.signature.uploadedSignature){
            return true;
         }
         console.log("disabled");

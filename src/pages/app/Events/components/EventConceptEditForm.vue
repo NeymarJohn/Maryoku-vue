@@ -79,9 +79,9 @@
         <label>Add Colors</label>
         <div class="colors-list d-flex justify-content-start">
           <div v-for="(colorItem, index) in editConcept.colors" :key="index" style="margin-right: 30px">
-            <color-button v-model="editConcept.colors[index]"
-                          :colours="colours"
-                          @closed="addPikedColor" />
+            <color-button v-model="editConcept.colors[index]" />
+            <!-- <md-button class="colors-list__item md-just-icon" :style="`background: ${color.value} !important`" @click="addColor(index)" v-if="color.value"></md-button> -->
+            <!-- <md-button class="colors-list__item colors-list__add md-just-icon" @click="addColor(index)" v-else><img :src="`${conceptIconsURL}Asset 488.svg`"></md-button> -->
           </div>
         </div>
       </div>
@@ -266,11 +266,7 @@ export default {
       4: false,
     },
     canvaTooltip: "Access high quality images to convey your inspiration using our integration to Canva",
-    canvaApi: null,
-    colours:{
-      savedColours:[],
-      pickedColours: [],
-    }
+    canvaApi: null
   }),
   computed: {
     canSave() {
@@ -284,9 +280,7 @@ export default {
           this.uploadImageData[i] = image.url || "";
         });
     }
-    localStorage.setItem("pickedColours", JSON.stringify(this.editConcept.colors));
-    this.colours.pickedColours = JSON.parse(localStorage.getItem("pickedColours") || "[]");
-    this.colours.savedColours = JSON.parse(localStorage.getItem("savedColours") || "[]");
+    localStorage.setItem("lastColors", JSON.stringify(this.editConcept.colors));
     (async () => {
       if (!window.Canva || !window.Canva.DesignButton) {
         return;
@@ -305,14 +299,6 @@ export default {
     });
   },
   methods: {
-    addPikedColor(colour, savedColours) {
-      const filteredColors = this.colours.pickedColours.filter(picked => picked.color + (picked.opacity || "1") !== colour.hex + (colour.a || "1"));
-      filteredColors.push({color: colour.hex, opacity: colour.a});
-      this.colours.pickedColours = filteredColors;
-      this.colours.savedColours = savedColours;
-      localStorage.setItem("pickedColours", JSON.stringify(this.colours.pickedColours));
-      localStorage.setItem("savedColours", JSON.stringify(savedColours));
-    },
     addTag(newTag, tagIndex) {
       this.editConcept.tags.push(newTag);
       this.taggingOptions[tagIndex].selected = true;
@@ -331,6 +317,7 @@ export default {
           Swal.fire({
             title: "File is too big",
             text: "Sorry, this miximum file size is 5M",
+            showCancelButton: false,
             icon: "warning",
             showCancelButton: true,
             confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -350,6 +337,7 @@ export default {
           const extension = files[0].type.split("/")[1];
           const fileName = new Date().getTime() + "";
           const dirName = "concepts";
+
 
           const imageData = await getBase64(files[0]); ///URL.createObjectURL(files[0]);
           this.$set(this.uploadImageData, itemIndex, imageData);
@@ -377,6 +365,7 @@ export default {
         Swal.fire({
           title: "File is too big",
           text: "Sorry, this miximum file size is 5M",
+          showCancelButton: false,
           icon: "warning",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
@@ -416,7 +405,7 @@ export default {
       this.editConcept.event = new CalendarEvent({ id: this.$store.state.event.eventData.id });
       const eventConcept = await new EventConcept(this.editConcept).save();
       eventConcept.imageData = this.uploadImageData;
-      // await this.$store.dispatch("saveColors", this.colours);
+
       this.isLoading = false;
       this.$emit("saved", eventConcept);
     },

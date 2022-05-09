@@ -398,7 +398,7 @@ const actions = {
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
       const proposal = new Proposal({
-        id: status === "duplicate" ? undefined : state.id,
+        id: status == "duplicate" ? undefined : state.id,
         personalMessage: state.original ? state.original.personalMessage : state.personalMessage,
         additionalServices: state.original ? state.original.additionalServices : state.additionalServices,
         inspirationalPhotos: state.original ? state.original.inspirationalPhotos : state.inspirationalPhotos,
