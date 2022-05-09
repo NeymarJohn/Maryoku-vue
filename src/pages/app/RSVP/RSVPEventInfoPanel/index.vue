@@ -161,7 +161,7 @@ export default {
       return this.event.concept ? this.event.concept : {};
     },
     backgroundColor() {
-      return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
+      return this.concept.colors ? this.event.concept.colors[0].color : "#d9fcf2";
     },
     isPlusOne() {
       if ("isPlusOne" in this.event) {
@@ -202,33 +202,31 @@ export default {
     if (this.event.additionalData && this.event.additionalData.iconColors) {
       this.iconColors = this.event.additionalData.iconColors;
     } else {
-      this.$set(this.iconColors, "timeColor", this.event.concept ? this.event.concept.colors[0] : {});
-      this.$set(this.iconColors, "locationColor", this.event.concept ? this.event.concept.colors[0] : {});
-      this.$set(this.iconColors, "soloColor", this.event.concept ? this.event.concept.colors[0] : {});
-      this.$set(this.iconColors, "arrivalColor", this.event.concept ? this.event.concept.colors[0] : {});
+      const color = this.event.concept ? this.event.concept.colors[0] : {};
+      this.$set(this.iconColors, "timeColor",     color);
+      this.$set(this.iconColors, "locationColor", color);
+      this.$set(this.iconColors, "soloColor",     color);
+      this.$set(this.iconColors, "arrivalColor",  color);
     }
     console.log("iconColors", this.iconColors);
   },
   methods: {
     updateEvent() {
-      let additionalData = this.event.additionalData;
-      if (!additionalData) {
-        additionalData = {};
-      }
+      const { additionalData = {} } = this.event;
       additionalData.iconColors = this.iconColors;
       this.$store.dispatch(
         "event/saveEventAction",
         new CalendarEvent({
-          id: this.event.id,
-          calendar: new Calendar({ id: this.event.calendar.id }),
-          isPluseOne: this.isPluseOne,
-          arrival: this.eventArrival,
-          timezone: this.timezone,
+          id         : this.event.id,
+          calendar   : new Calendar({ id: this.event.calendar.id }),
+          isPluseOne : this.isPluseOne,
+          arrival    : this.eventArrival,
+          timezone   : this.timezone,
           additionalData,
         }),
       );
-      this.editingPlusOne = false;
-      this.editingArrival = false;
+      this.editingPlusOne  = false;
+      this.editingArrival  = false;
       this.editingTimezone = false;
     },
   },
