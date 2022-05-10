@@ -462,4 +462,18 @@ export default {
     border: none;
   }
 }
+//@media (max-width: 992px) {
+//  section.footer-wrapper {
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//  }
+//}
+//@media (max-width: 650px) {
+//  .vendor-signup-layout-wrapper {
+//    section.footer-wrapper {
+//      padding: 33px 0;
+//    }
+//  }
+//}
 </style>

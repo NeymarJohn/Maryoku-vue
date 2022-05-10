@@ -85,7 +85,7 @@
         <ProposalContent :vendor-proposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
-    <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
+    <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white" :styles="CustomerListStyles">
       <template slot="body">
         <CustomerForm
           :customer="selectedCustomer"
@@ -163,6 +163,9 @@ export default {
     };
   },
   computed: {
+    CustomerListStyles() {
+      return {styles: {modalMask: "z-index: 99;"}};
+    },
     vendorData() {
       return this.$store.state.vendor.profile;
     },

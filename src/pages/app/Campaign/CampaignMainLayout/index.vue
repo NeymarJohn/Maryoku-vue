@@ -380,39 +380,7 @@
                   Schedule Campaign
                 </Icon>
               </md-button>
-              <md-menu
-                md-size="medium"
-                md-align-trigger
-                md-direction="top-end"
-                class="schedule-menu"
-              >
-                <md-button
-                  md-menu-trigger
-                  class="md-icon-button schedule-menu-btn"
-                >
-                  <md-icon class="schedule-menu-btn-icon">
-                    keyboard_arrow_down
-                  </md-icon>
-                </md-button>
-                <md-menu-content>
-                  <md-menu-item
-                    class="text-center"
-                    @click="saveDraftCampaign"
-                  >
-                    <Icon src="Campaign/Group 1908.svg">
-                      Save Draft
-                    </Icon>
-                  </md-menu-item>
-                  <md-menu-item
-                    class="text-center"
-                    @click="startCampaign"
-                  >
-                    <Icon src="Campaign/group-2428.svg">
-                      Send Now
-                    </Icon>
-                  </md-menu-item>
-                </md-menu-content>
-              </md-menu>
+              <ContextMenu @start="startCampaign" @save="saveDraftCampaign" />
             </div>
           </template>
         </div>
@@ -439,39 +407,7 @@
                 Schedule Campaign
               </Icon>
             </md-button>
-            <md-menu
-              md-size="medium"
-              md-align-trigger
-              md-direction="top-end"
-              class="schedule-menu"
-            >
-              <md-button
-                md-menu-trigger
-                class="md-icon-button schedule-menu-btn"
-              >
-                <md-icon class="schedule-menu-btn-icon">
-                  keyboard_arrow_down
-                </md-icon>
-              </md-button>
-              <md-menu-content>
-                <md-menu-item
-                  class="text-center"
-                  @click="saveDraftCampaign"
-                >
-                  <Icon src="Campaign/Group 1908.svg">
-                    Save Draft
-                  </Icon>
-                </md-menu-item>
-                <md-menu-item
-                  class="text-center"
-                  @click="startCampaign"
-                >
-                  <Icon src="Campaign/group-2428.svg">
-                    Send Now
-                  </Icon>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
+            <ContextMenu @start="startCampaign" @save="saveDraftCampaign" />
           </div>
         </div>
       </div>
@@ -510,6 +446,7 @@ import Icon                from "./Footer/Icon";
 import Schedule            from "./Footer/Schedule";
 import Scheduled           from "./Footer/Scheduled";
 import SendAgainBtn        from "./Footer/SendAgainBtn";
+import ContextMenu         from "./Footer/Menu";
 import SaveDate            from "../SaveDate";
 
 // pages
@@ -548,6 +485,7 @@ export default {
     Schedule,
     Scheduled,
     SendAgainBtn,
+    ContextMenu,
   },
   mixins: [CommentMixins, ShareMixins],
   data() {
@@ -946,10 +884,6 @@ export default {
   }
   .schedule-btn {
     height: 50px;
-    button,
-    .schedule-menu {
-      height: 100%;
-    }
   }
 }
 .event-campaign-width {
