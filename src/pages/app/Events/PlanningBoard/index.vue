@@ -252,7 +252,7 @@
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
-                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                <img class="mr-10" :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
 
                 <md-button
@@ -262,8 +262,7 @@
                         category: selectedCategory,
                         services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
                       })
-                    "
-                >
+                    ">
                   Get Specific
                 </md-button>
               </div>
@@ -404,8 +403,14 @@
         </div>
       </template>
       <template v-else>
-        <div class="proposal-footer white-card d-flex justify-content-end">
-          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors()">
+        <div class="proposal-footer white-card d-flex">
+          <md-button
+            class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
+            @click="scrollToTop"
+          >
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+          </md-button>
+          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn ml-auto" @click="findVendors()">
             Find Vendors for this category
           </md-button>
           <md-menu
@@ -483,6 +488,7 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="categoryProposals.slice(0, 3)"
+      @action="handleAction"
       @replace="replaceProposal"
       @cancel="showDifferentProposals=false"
     >
@@ -495,7 +501,6 @@ import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import { camelize } from "@/utils/string.util";
-import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
