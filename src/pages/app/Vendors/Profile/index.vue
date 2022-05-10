@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <loader :active="loading" is-full-screen page="vendor" />
+    <loader :active="loading" page="vendor" />
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
       <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20">
       PROFILE & SETTINGS
@@ -150,9 +150,6 @@ export default {
     this.getPageName();
     this.$store.dispatch("common/fetchAllCategories");
     this.loading = false;
-    this.$root.$on("setLoading", (isLoading) => {
-      this.loading = isLoading;
-    });
   },
   methods: {
     setAvatar(avatar) {
