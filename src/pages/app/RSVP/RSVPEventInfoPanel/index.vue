@@ -96,7 +96,7 @@ export default {
   components: {
     vSelect,
     BlockTitle,
-    EditBtn : () => import("./EditBtn"),
+    EditBtn : () => import("@/components/Button/Edit.vue"),
     Controls: () => import("./Controls"),
   },
   props: {
