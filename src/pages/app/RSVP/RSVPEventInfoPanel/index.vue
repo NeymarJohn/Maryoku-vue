@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div v-if="!isVirtualEvent" class="event-info-item">
+    <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
           v-model="iconColors.locationColor"
@@ -42,25 +42,7 @@
         </Title>
       </div>
       <div class="event-info-item-content">
-        <span>{{ event.location }}</span>
-      </div>
-    </div>
-
-    <div v-else class="event-info-item">
-      <div class="event-info-item-title font-size-22 font-bold-extra">
-        <color-button
-          v-model="iconColors.locationColor"
-          class="event-info-item-icon"
-          :size="42"
-          :icon="`${$iconURL}Event%20Page/location-dark.svg`"
-          @closed="updateEvent"
-        />
-        <Title :editable="editable">
-          WHERE
-        </Title>
-      </div>
-      <div class="event-info-item-content">
-        <span>Zoom</span>
+        <span>{{ isVirtualEvent ? "Zoom" : event.location }}</span>
       </div>
     </div>
 
