@@ -9,26 +9,24 @@
           :icon="`${$iconURL}RSVP/Path+251.svg`"
           @closed="updateEvent"
         />
-        <Title :editable="editable">
-          WHEN
-        </Title>
+        <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content">
         <span>
           {{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
         </span>
+        <div v-if="!editingTimezone" class="timezone-wrapper">
+          <span>({{ timezone }})</span>
+          <EditBtn v-if="editable" v-model="editingTimezone" />
+        </div>
         <div v-if="editingTimezone" class="timezone-wrapper">
           <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
           <Controls @save="updateEvent" @cancel="editingTimezone = false" />
         </div>
-        <div v-else class="timezone-wrapper">
-          <span>({{ timezone }})</span>
-          <EditBtn v-if="editable" v-model="editingTimezone" />
-        </div>
       </div>
     </div>
 
-    <div class="event-info-item">
+    <div v-if="!isVirtualEvent" class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
           v-model="iconColors.locationColor"
@@ -37,12 +35,26 @@
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
           @closed="updateEvent"
         />
-        <Title :editable="editable">
-          WHERE
-        </Title>
+        <span :class="{ underline: !editable }">WHERE?</span>
       </div>
       <div class="event-info-item-content">
-        <span>{{ isVirtualEvent ? "Zoom" : event.location }}</span>
+        <span>{{ event.location }}</span>
+      </div>
+    </div>
+
+    <div v-else class="event-info-item">
+      <div class="event-info-item-title font-size-22 font-bold-extra">
+        <color-button
+          v-model="iconColors.locationColor"
+          class="event-info-item-icon"
+          :size="42"
+          :icon="`${$iconURL}Event%20Page/location-dark.svg`"
+          @closed="updateEvent"
+        />
+        <span :class="{ underline: !editable }">WHERE?</span>
+      </div>
+      <div class="event-info-item-content">
+        <span>Zoom</span>
       </div>
     </div>
 
@@ -55,11 +67,13 @@
           :icon="`${$iconURL}RSVP/Path+1383.svg`"
           @closed="updateEvent"
         />
-        <Title :editable="editable">
-          SOLO OR PLUS 1
-        </Title>
+        <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
       </div>
-      <div v-if="editingPlusOne" class="event-info-item-content d-flex align-center">
+      <div v-if="!editingPlusOne" class="event-info-item-content d-flex align-center">
+        <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
+        <EditBtn v-if="editable" v-model="editingPlusOne" />
+      </div>
+      <div v-else class="event-info-item-content d-flex align-center">
         <md-checkbox v-model="isPluseOne" :value="false">
           Solo
         </md-checkbox>
@@ -67,10 +81,6 @@
           +1
         </md-checkbox>
         <Controls @save="updateEvent" @cancel="editingPlusOne = false" />
-      </div>
-      <div v-else class="event-info-item-content d-flex align-center">
-        <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
-        <EditBtn v-if="editable" v-model="editingPlusOne" />
       </div>
     </div>
 
@@ -83,20 +93,18 @@
           :icon="`${$iconURL}RSVP/Group+1279.svg`"
           @closed="updateEvent"
         />
-        <Title :editable="editable">
-          ARRIVAL
-        </Title>
+        <span :class="{ underline: !editable }">ARRIVAL?</span>
       </div>
 
-      <div v-if="editingArrival" class="event-info-item-content d-flex align-center font-size-20">
-        <input v-model="eventArrival" type="text">
-        <Controls @save="updateEvent" @cancel="editingArrival = false" />
-      </div>
-      <div v-else class="event-info-item-content">
+      <div v-if="!editingArrival" class="event-info-item-content">
         <span>
           {{ event.arrival || "-" }}&emsp;
         </span>
         <EditBtn v-if="editable" v-model="editingArrival" />
+      </div>
+      <div v-else class="event-info-item-content d-flex align-center font-size-20">
+        <input v-model="eventArrival" type="text">
+        <Controls @save="updateEvent" @cancel="editingArrival = false" />
       </div>
     </div>
   </div>
@@ -108,15 +116,15 @@ import "vue-select/dist/vue-select.css";
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar      from "@/models/Calendar";
 import ColorButton   from "@/components/ColorButton";
-import Title         from "./Title";
+import Controls      from "./Controls";
+import EditBtn       from "./EditBtn";
 
 export default {
   components: {
     vSelect,
     ColorButton,
-    Title,
-    EditBtn : () => import("./EditBtn"),
-    Controls: () => import("./Controls"),
+    EditBtn,
+    Controls,
   },
   props: {
     event: {
@@ -166,16 +174,28 @@ export default {
     },
   },
   watch: {
-    async event(newValue, oldValue) {
+    event(newValue, oldValue) {
       if (!newValue.timezone) {
         console.log(newValue);
-        await this.updateTimeZone(newValue.locationId);
+        this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
+          const phrases = timezone.timeZoneName.split(" ");
+          const result = phrases.reduce((s, phrase) => {
+            return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+          }, "");
+          this.timezone = result;
+        });
       }
     },
   },
-  async created() {
+  created() {
     if (this.event.locationId && !this.event.timezone) {
-      await this.updateTimeZone(this.event.locationId);
+      this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
+        const phrases = timezone.timeZoneName.split(" ");
+        const result = phrases.reduce((s, phrase) => {
+          return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+        }, "");
+        this.timezone = result;
+      });
     } else {
       this.timezone = this.event.timezone;
     }
@@ -191,14 +211,6 @@ export default {
     console.log("iconColors", this.iconColors);
   },
   methods: {
-    async updateTimeZone (locationId) {
-      const timezone = await this.$dateUtil.getTimeZoneNameFromPlaceId(locationId);
-      const phrases  = timezone.timeZoneName.split(" ");
-      const result   = phrases.reduce((s, phrase) => {
-        return `${s}${phrase.substr(0, 1).toUpperCase()}`;
-      }, "");
-      this.timezone = result;
-    },
     updateEvent() {
       const { additionalData = {} } = this.event;
       additionalData.iconColors = this.iconColors;
@@ -259,6 +271,10 @@ export default {
       display: flex;
       align-items: center;
       // padding: 10px 24px;
+      span.underline {
+        border-bottom: solid 2px #ff7600;
+        vertical-align: middle;
+      }
     }
     &-content {
       font-size: 20px;
@@ -302,6 +318,12 @@ export default {
       }
       &-title {
         min-width: 110px;
+
+        span.underline {
+          border-bottom: solid 2px #ff7600;
+          vertical-align: middle;
+          font-size: 16px;
+        }
       }
       &-content {
         font-size: 14px;

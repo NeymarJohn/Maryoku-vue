@@ -217,4 +217,11 @@ $zoomOutEnd: 0.46;
     padding: 0px;
   }
 }
+@media screen and (min-width: 1500px) {
+  .page-header {
+    .container {
+      max-width: unset;
+    }
+  }
+}
 </style>

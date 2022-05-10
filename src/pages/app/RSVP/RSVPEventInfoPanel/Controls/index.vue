@@ -22,7 +22,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .controls {
-    border  : none;
-    display : flex;
+    border: none;
+    display: flex;
   }
 </style>
