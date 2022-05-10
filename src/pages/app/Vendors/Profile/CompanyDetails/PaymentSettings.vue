@@ -1,5 +1,6 @@
 <template>
   <div class="proposal-payment">
+    <Loader :active="isLoading" :is-full-screen="true" />
     <link
       href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
       rel="stylesheet"
@@ -218,16 +219,19 @@
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, numeric } from "@vuelidate/validators";
 import PincodeInput from "vue-pincode-input";
+import Loader from "../../../../../components/loader/Loader";
 import { mapActions } from "vuex";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
   components: {
     PincodeInput,
+    Loader,
     VueGoogleAutocomplete,
   },
   props: {},
   data: () => ({
+    isLoading: false,
     user: {},
     googleAddress: {},
     vendorId: "",
@@ -315,38 +319,38 @@ export default {
       this.googleAddress = addressData;
     },
     sendBankInfo() {
-      this.$root.$emit("setLoading", true);
+      this.isLoading = true;
       this.createDestinationAccount({
         "holderName": this.bankDetails.holderName,
         "routingNumber": this.bankDetails.routingNumber,
         "accountNumber": this.bankDetails.accountNumber,
-        "representative": {
-          "ssnLast4": this.bankDetails.ssnLast4 || "0000",
-          "idNumber": this.bankDetails.idNumber || "000000000",
-          "dob": {
-            "year": this.bankDetails.date.getFullYear(),
-            "month": this.bankDetails.date.getMonth() + 1,
-            "day": this.bankDetails.date.getDate(),
-          },
-          "address": {
-            "line1": this.googleAddress.route,
-            "line2": this.googleAddress.street_number || "",
-            "postalCode": this.googleAddress.postal_code,
-            "city": this.googleAddress.locality,
-            "state": this.googleAddress.administrative_area_level_1,
-          },
-        }
-      }).then(res => {
-        this.getProfile().then((res) => {
-          if (res.billingInformation[0] && res.billingInformation[0].representative) {
+          "representative": {
+            "ssnLast4": this.bankDetails.ssnLast4 || "0000",
+            "idNumber": this.bankDetails.idNumber || "000000000",
+            "dob": {
+              "year": this.bankDetails.date.getFullYear(),
+              "month": this.bankDetails.date.getMonth() + 1,
+              "day": this.bankDetails.date.getDate(),
+            },
+            "address": {
+              "line1": this.googleAddress.route,
+              "line2": this.googleAddress.street_number || "address_full_match",
+              "postalCode": this.googleAddress.postal_code,
+              "city": this.googleAddress.locality,
+              "state": this.googleAddress.administrative_area_level_1,
+            },
+          }
+        }).then(res => {
+        this.getProfile().then( (res) => {
+          if(res.billingInformation[0] && res.billingInformation[0].representative) {
             this.bankDetailsEditing = false;
           }
-          this.$root.$emit("setLoading", false);
+          this.isLoading = false;
         });
-      }).catch(error => {
-        this.bankDetailsEditing = true;
-        this.$root.$emit("setLoading", false);
-      });
+        }).catch(error => {
+          this.bankDetailsEditing = true;
+          this.isLoading = false;
+        });
     },
   },
 };
