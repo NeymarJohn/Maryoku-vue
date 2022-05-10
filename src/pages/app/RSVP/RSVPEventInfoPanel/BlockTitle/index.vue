@@ -13,8 +13,8 @@
   </div>
 </template>
 <script>
-import ColorButton from "@/components/ColorButton";
-import Title       from "../Title";
+import ColorButton from "@/components/ColorButton.vue";
+import Title       from "../Title/index.vue";
 export default {
   components: {
     Title,
@@ -43,8 +43,8 @@ export default {
       return this.$emit("input", target.value);
     },
     closed () {
-      return this.$emit("closed");
-    }
+      return this.$emit("closed", null);
+    },
   }
 };
 </script>

@@ -15,7 +15,7 @@
         </span>
         <div v-if="editingTimezone" class="timezone-wrapper">
           <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
-          <Controls @save="updateEvent" @cancel="editingTimezone = false" />
+          <SaveControls @save="updateEvent" @cancel="editingTimezone = false" />
         </div>
         <div v-else class="timezone-wrapper">
           <span>({{ timezone }})</span>
@@ -54,7 +54,7 @@
         <md-checkbox v-model="isPluseOne" :value="true">
           +1
         </md-checkbox>
-        <Controls @save="updateEvent" @cancel="editingPlusOne = false" />
+        <SaveControls @save="updateEvent" @cancel="editingPlusOne = false" />
       </div>
       <div v-else class="event-info-item-content d-flex align-center">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
@@ -73,7 +73,7 @@
       </BlockTitle>
       <div v-if="editingArrival" class="event-info-item-content d-flex align-center font-size-20">
         <input v-model="eventArrival" type="text">
-        <Controls @save="updateEvent" @cancel="editingArrival = false" />
+        <SaveControls @save="updateEvent" @cancel="editingArrival = false" />
       </div>
       <div v-else class="event-info-item-content">
         <span>
@@ -90,14 +90,14 @@ import "vue-select/dist/vue-select.css";
 
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar      from "@/models/Calendar";
-import BlockTitle    from "./BlockTitle";
+import BlockTitle    from "./BlockTitle/index.vue";
 
 export default {
   components: {
     vSelect,
     BlockTitle,
-    EditBtn : () => import("@/components/Button/Edit.vue"),
-    Controls: () => import("./Controls"),
+    EditBtn      : () => import("@/components/Button/Edit.vue"),
+    SaveControls : () => import("@/components/Controls/Save.vue"),
   },
   props: {
     event: {

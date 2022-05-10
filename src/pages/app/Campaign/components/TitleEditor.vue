@@ -10,18 +10,14 @@
       class=""
       :class="{ isEditing: isEditing }"
     >
-    <md-button class="md-simple maryoku-btn md-black" @click="cancel">
-      Cancel
-    </md-button>
-    <md-button id="TitleEditorBtnSave" class="maryoku-btn md-red" @click="changeText">
-      Save
-    </md-button>
+    <SaveControls @cancel="cancel" @save="changeText" />
   </div>
 </template>
 <script>
 export default {
   components: {
-    EditBtn : () => import("@/components/Button/Edit.vue"),
+    EditBtn      : () => import("@/components/Button/Edit.vue"),
+    SaveControls : () => import("@/components/Controls/Save.vue"),
   },
   props: {
     defaultValue: {
