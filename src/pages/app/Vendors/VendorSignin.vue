@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout vendor-signin">
     <Loader :active="loading" is-full-screen page="vendor" />
-    <div class="md-layout-item" >
+    <div class="md-layout-item">
       <signup-card>
         <div
           slot="content-left"
@@ -227,12 +227,6 @@ export default {
       align-items: stretch;
       justify-content: center;
     }
-  }
-}
-@media (min-width: 1500px) {
-  .vendor-signin {
-    max-width: unset;
-    width: unset;
   }
 }
 </style>

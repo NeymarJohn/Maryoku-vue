@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout sign-in-up-wrapper">
+  <div class="md-layout">
     <Loader :active="loading" is-full-screen />
     <div class="md-layout-item">
       <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign Up</h2> -->
@@ -28,7 +28,7 @@
         <div v-show="$router.currentRoute.path === '/signin'" slot="content-right" class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto" style="min-height: 626px; padding: 50px 66px 22px">
           <SignedIn />
         </div>
-        <div v-show="$router.currentRoute.path === '/signup'" slot="content-right" class=" sign-in-up-wrapper md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto">
+        <div v-show="$router.currentRoute.path === '/signup'" slot="content-right" class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto">
           <div class="social-line text-center">
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
               <img :src="`${$iconURL}Signup/google-icon.jpg`">
@@ -445,13 +445,6 @@ h4.info-title {
     .signup-title {
       font-size: 20px;
     }
-  }
-}
-@media screen and (min-width: 1500px) {
-  .sign-in-up-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
 }
 </style>
