@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sign-in-up-wrapper">
     <div class="social-line text-center">
       <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
         <img :src="`${$iconURL}Signup/google-icon.jpg`">
@@ -353,6 +353,13 @@ h4.info-title {
 @media screen and (max-width: 500px) {
   .signin-contain {
     padding: 20px 20px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .sign-in-up-wrapper {
+    display: flex;
+    flex-direction: column
   }
 }
 </style>

@@ -138,4 +138,9 @@ export default {
     font-size: 30px;
   }
 }
+//@media (max-width: 992px) {
+//  .vendor-signup-wrapper {
+//    padding: 0;
+//  }
+//}
 </style>

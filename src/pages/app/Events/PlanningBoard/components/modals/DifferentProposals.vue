@@ -113,7 +113,6 @@ export default {
       } else {
         this.step = 1;
       }
-      console.log('next', this.checked_better_options, this.essential);
     },
     backgroundImage(proposal) {
       if (proposal.coverImage && proposal.coverImage[0])

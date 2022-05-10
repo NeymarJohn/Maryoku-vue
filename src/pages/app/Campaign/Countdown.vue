@@ -80,10 +80,10 @@ import HideSwitch        from "@/components/HideSwitch";
 // local
 import CountdownTime from "./components/CountdownTime";
 import TitleEditor   from "./components/TitleEditor";
-import CampaignLogo  from "./components/CampaignLogo/index.vue";
 
 // pages
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel/index.vue";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
+import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";

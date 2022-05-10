@@ -1,7 +1,12 @@
 <template>
   <div v-if="!isEditing" class="d-flex campaign-title-editor">
     {{ content }}
-    <EditBtn v-model="isEditing" />
+    <md-button class="md-simple md-icon-button edit-btn ml-10" @click="isEditing = true">
+      <!-- <img :src="`${$iconURL}Campaign/edit-dark.svg`" style="width: 20px; margin-left: 20px" /> -->
+      <md-button class="edit-btn md-simple md-red">
+        Edit
+      </md-button>
+    </md-button>
   </div>
   <div v-else class="d-flex campaign-title-editor">
     <input
@@ -10,15 +15,16 @@
       class=""
       :class="{ isEditing: isEditing }"
     >
-    <SaveControls @cancel="cancel" @save="changeText" />
+    <md-button class="md-simple maryoku-btn md-black" @click="cancel">
+      Cancel
+    </md-button>
+    <md-button id="TitleEditorBtnSave" class="maryoku-btn md-red" @click="changeText">
+      Save
+    </md-button>
   </div>
 </template>
 <script>
 export default {
-  components: {
-    EditBtn      : () => import("@/components/Button/Edit.vue"),
-    SaveControls : () => import("@/components/Controls/Save.vue"),
-  },
   props: {
     defaultValue: {
       type: String,

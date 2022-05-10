@@ -65,11 +65,11 @@ import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
 import ChangeCoverButton from "@/components/Button/ChangeCover";
 import TitleEditor       from "./components/TitleEditor";
-import CampaignLogo      from "./components/CampaignLogo/index.vue";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
+import CampaignLogo  from "@/pages/app/Campaign/components/CampaignLogo";
 
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
