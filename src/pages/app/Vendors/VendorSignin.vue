@@ -161,13 +161,7 @@ export default {
               password: this.user.password,
             };
             this.$store.dispatch("auth/login", userData).then(
-              (e) => {
-                if (e.currentUserType === "planner"){
-                  this.loading = false;
-                  this.notFoundUser = true;
-                  this.error = "";
-                  return;
-                }
+              () => {
                 this.redirectPage();
               },
               (error) => {
