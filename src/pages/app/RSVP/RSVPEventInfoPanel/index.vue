@@ -204,13 +204,12 @@ export default {
 <style lang="scss" scoped>
 .rsvp-event-info {
   .event-info-item {
-    margin-bottom : 50px;
-    display       : flex;
-    align-items   : stretch;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: stretch;
     // flex-flow: wrap;
     .timezone-selector {
-      min-width: 5.75em;
-      margin-left: -1em;
+      min-width: 120px;
     }
     &-icon {
       position: relative;
@@ -237,30 +236,20 @@ export default {
       }
     }
     &-title {
-      min-width   : 250px;
-      display     : flex;
-      align-items : center;
-      min-width   : 260px;
+      min-width: 250px;
+      display: flex;
+      align-items: center;
       // padding: 10px 24px;
     }
     &-content {
-      font-size    : 20px;
-      padding-left : 10px;
-      word-break   : break-all;
-      display      : flex;
-      align-items  : center;
-      max-height   : 80px;
-      width        : 100%;
+      font-size: 20px;
+      padding-left: 10px;
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+      max-height: 40px;
       .maryoku-btn {
         margin: 0;
-      }
-      & > span {
-        display    : inline-flex;
-        align-items: center;
-        overflow-y : auto;
-        min-height : 48px;
-        max-height : 80px;
-        max-width  : calc(100% - 60px);
       }
     }
   }

@@ -279,8 +279,4 @@ export default {
     }
   }
 }
-
-.maryoku-textarea {
-
-}
 </style>
