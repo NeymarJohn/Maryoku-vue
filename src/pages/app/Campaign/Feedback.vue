@@ -239,10 +239,10 @@ import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
 import SharingButtonGroup    from "./components/SharingButtonGroup";
 import FeedbackQuestion      from "./components/FeedbackQuestion";
 import CustomTitleEditor     from "./components/CustomTitleEditor";
-import CampaignLogo          from "./components/CampaignLogo/index.vue";
 
 // pages
-import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal/index.vue";
+import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
+import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal";
 
 // dependencies
 import S3Service from "@/services/s3.service";
@@ -332,7 +332,6 @@ export default {
     },
   },
   created() {
-    console.log('created', this.campaignData);
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {

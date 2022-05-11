@@ -115,14 +115,13 @@
                 </button>
                 <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
                   <li v-for="action in functionActions" class="other-list" :key="action.label">
-                    <a class="other-item font-size-16" @click="handleAction(action.value)">
-                      <div class="other-name">
-                        <md-icon>{{ action.icon }}</md-icon>
-                        <span>
-                        {{ action.label }}
-                      </span>
-                      </div>
-                    </a>
+                    <md-button class="md-simple md-black-middle maryoku-btn"
+                               :disabled="(action.value === 'share' || action.value === 'compare' ||
+                                    action.value === 'something_different') && !categoryProposals.length"
+                               @click="handleAction(action.value)">
+                      <md-icon class="mr-10">{{ action.icon }}</md-icon>
+                      {{ action.label }}
+                    </md-button>
                   </li>
                 </ul>
               </drop-down>
@@ -262,8 +261,7 @@
                         category: selectedCategory,
                         services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
                       })
-                    "
-                >
+                    ">
                   Get Specific
                 </md-button>
               </div>
@@ -404,8 +402,14 @@
         </div>
       </template>
       <template v-else>
-        <div class="proposal-footer white-card d-flex justify-content-end">
-          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn" @click="findVendors()">
+        <div class="proposal-footer white-card d-flex">
+          <md-button
+            class="scroll-top md-button md-simple md-just-icon md-theme-default scroll-top-button"
+            @click="scrollToTop"
+          >
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17">
+          </md-button>
+          <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn ml-auto" @click="findVendors()">
             Find Vendors for this category
           </md-button>
           <md-menu
@@ -483,6 +487,7 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="categoryProposals.slice(0, 3)"
+      @action="handleAction"
       @replace="replaceProposal"
       @cancel="showDifferentProposals=false"
     >

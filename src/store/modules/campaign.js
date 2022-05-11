@@ -50,7 +50,7 @@ const defaultCampaignData = {
     ...defaultCampaignDataPartType,
     description :
       "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon",
-    coverImage : null,
+    coverImage : `${STORAGE_URL}Campaign+Headers/save-the-date${coverImgPrefix}.png`,
     visibleSettings: {
       showLogo : true
     }

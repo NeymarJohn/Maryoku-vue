@@ -131,7 +131,7 @@
         </div>
       </div>
     </div>
-    <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white" :styles="CustomerListStyles">
+    <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
       <template slot="body">
         <CustomerForm
           v-if="showNewCustomerModal"
@@ -199,9 +199,6 @@ export default {
     };
   },
   computed: {
-    CustomerListStyles() {
-      return  {modalMask: "z-index: 99;"};
-    },
     eventData(){
       return this.$store.state.proposalForNonMaryoku.eventData;
     },

@@ -9,7 +9,7 @@
     <div class="concept-image-block-wrapper">
       <change-cover-button v-show="showChangeCover" @click="handleChangeCoverImage" />
       <img v-if="coverImage" :src="coverImage" class="cover-image">
-      <div v-else-if="concept && concept.images" class="d-flex justify-content-center align-center">
+      <div v-else class="d-flex justify-content-center align-center">
         <concept-image-block
           class="change-cover-concept"
           :images="concept.images"
@@ -17,7 +17,6 @@
           border="no-border"
         />
       </div>
-      <img v-else :src="defaultCoverImage" class="cover-image">
     </div>
 
     <div class="concept p-50">
@@ -66,11 +65,11 @@ import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea   from "@/components/Inputs/MaryokuTextarea";
 import ChangeCoverButton from "@/components/Button/ChangeCover";
 import TitleEditor       from "./components/TitleEditor";
-import CampaignLogo      from "./components/CampaignLogo/index.vue";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";
 import CalendarEvent from "@/models/CalendarEvent";
+import CampaignLogo  from "@/pages/app/Campaign/components/CampaignLogo";
 
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
@@ -99,13 +98,11 @@ export default {
       default : () => ({}),
     },
   },
-  data (){
-    return{
-      logo                : null,
-      defaultCoverImage   : `${this.$storageURL}Campaign+Headers/save-the-date${Math.floor(Math.random() * 100) % 2}.png`,
-      placeHolder         : placeHolder,
-    };
-  },
+  data: () => ({
+    logo          : null,
+    logoImageData : "",
+    placeHolder   : placeHolder,
+  }),
   computed: {
     event() {
       return this.$store.state.event.eventData;
@@ -138,10 +135,6 @@ export default {
   },
   created () {
     console.log("save.data.created", this.campaignData);
-
-    if (!this.campaignData.coverImage && (!this.concept && !this.concept.images.length)) {
-      this.campaignSetAttribute({ name: "SAVING_DATE", key: "coverImage", value:  this.defaultCoverImage});
-    }
   },
   methods: {
     handleChangeCoverImage(event) {
@@ -152,6 +145,18 @@ export default {
     },
     campaignSetAttribute(atribute) {
       return this.$store.commit("campaign/setAttribute", atribute);
+    },
+    async setDefault() {
+      await Swal.fire({
+        title              : "Are you sure?",
+        text               : "You won't be able to revert this!",
+        showCancelButton   : true,
+        confirmButtonClass : "md-button md-success btn-fill",
+        cancelButtonClass  : "md-button md-danger btn-fill",
+        confirmButtonText  : "Yes, revert it!",
+        buttonsStyling     : false,
+      });
+      this.$store.dispatch("campaign/revertCampaign", "SAVING_DATE");
     },
     async handleChangeCampaignTitle(newTitle) {
       const setAttributeByName = name => this.campaignSetAttribute({ key: "title", value: newTitle, name });
