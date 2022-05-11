@@ -6,7 +6,7 @@
     >
       <div class="summary" @click="expand()">
         <div class="left">
-          <img v-if="itemType == 'price'" :src="getCategoryIcon()" style="filter: brightness(0) invert(0);">
+          <img v-if="itemType == 'price'" :src="getCategoryIcon()">
           <img v-if="itemType == 'bundle'" :src="`${iconUrl}Asset 577.svg`">
           <h3 v-if="itemType == 'price'">
             {{ getServiceCategory(category).title }}

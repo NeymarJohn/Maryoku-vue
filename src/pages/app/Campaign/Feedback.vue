@@ -241,7 +241,7 @@ import FeedbackQuestion      from "./components/FeedbackQuestion";
 import CustomTitleEditor     from "./components/CustomTitleEditor";
 
 // pages
-import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo";
+import CampaignLogo             from "@/pages/app/Campaign/components/CampaignLogo/index.vue";
 import FeedbackUploadFilesModal from "./FeedbackUploadFilesModal";
 
 // dependencies
@@ -332,6 +332,7 @@ export default {
     },
   },
   created() {
+    console.log('created', this.campaignData);
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {

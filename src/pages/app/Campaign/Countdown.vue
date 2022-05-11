@@ -83,7 +83,7 @@ import TitleEditor   from "./components/TitleEditor";
 
 // pages
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
-import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
+import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo/index.vue";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";

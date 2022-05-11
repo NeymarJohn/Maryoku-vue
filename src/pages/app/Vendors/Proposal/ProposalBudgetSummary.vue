@@ -57,7 +57,7 @@
                 :value="vendor.eventCategory.key"
               />
 
-              <img :src="`${iconUrl}venuerental.svg`" width="30px" class="mr-10" style="filter: brightness(0) invert(0);">
+              <img :src="`${iconUrl}venuerental.svg`" width="30px" class="mr-10">
               <div style="font-size: 16px; font-weight: 800">
                 {{ vendor.eventCategory.title }}
               </div>
@@ -128,7 +128,7 @@
             </h3>
             <div class="d-flex align-center">
               <md-checkbox v-if="isBundleDiscount" v-model="bundleDiscountServices" class="md-vendor" :value="a" />
-              <img :src="getIconUrlByCategory(a)" class="mr-5" style="filter: brightness(0) invert(0);">
+              <img :src="getIconUrlByCategory(a)" class="mr-5">
               <div style="font-size: 16px; font-weight: 800">
                 {{ getServiceCategory(a).title }}
               </div>

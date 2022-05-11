@@ -236,7 +236,7 @@ import TitleEditor       from "./components/TitleEditor";
 import RsvpVenueCarousel  from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 import RsvpTimelinePanel  from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo";
+import CampaignLogo       from "@/pages/app/Campaign/components/CampaignLogo/index.vue";
 
 // dependencies
 import { getBase64 } from "@/utils/file.util";
