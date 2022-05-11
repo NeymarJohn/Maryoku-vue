@@ -24,7 +24,8 @@ export default {
     };
   },
   created() {
-    this.zoomLevel = Math.round( JSON.parse(localStorage.getItem("zoomParams")).zoomScale * 100);
+    const savedZoom = JSON.parse(localStorage.getItem("zoomParams"));
+    this.zoomLevel = Math.round(savedZoom ? savedZoom.zoomScale * 100 : 100);
   },
   methods: {
     changeZoom(sign) {

@@ -35,9 +35,9 @@
           class="bundle-discount mt-20"
           @click="isBundleDiscount = !isBundleDiscount"
         >
-          <img class="vendor" src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Asset 579.svg" >
+          <img class="black" :src="`${iconUrl}giveaways.svg`">
           <span>
-                {{ bundleDiscount && bundleDiscount.percentage ? "Edit Bundle Discount" : "Add Bundle Discount" }}
+            Add Bundle Discount
             <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
             <md-icon v-else>keyboard_arrow_down</md-icon>
           </span>
@@ -68,7 +68,7 @@
                 <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
               </li>
               <li>
-                <span style="font-size: 14px">Your proposal</span>
+                <span>Your proposal</span>
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
               <li>
@@ -139,7 +139,7 @@
                 <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
               </li>
               <li>
-                <span style="font-size: 14px">Your proposal</span>
+                <span>Your proposal</span>
                 <span>${{ pricesByCategory[a] | withComma }}</span>
               </li>
               <li>
@@ -632,9 +632,6 @@ export default {
 				&.black {
 					filter: brightness(0) invert(0);
 				}
-        &.vendor{
-          filter: invert(5%) sepia(53%) saturate(451%) hue-rotate(327deg) brightness(54%) contrast(91%);
-        }
 			}
 			span {
 				font-size: 16px;
@@ -699,7 +696,7 @@ export default {
 							}
 						}
 						&:nth-child(2) {
-							font-size: 20px;
+							font-size: 22px;
 							font-weight: 800;
 						}
 						&:nth-child(3) {
@@ -805,7 +802,6 @@ export default {
 			display: flex;
 			margin-bottom: 20px;
 			flex-wrap: wrap;
-      flex-direction: column;
 			.no-margin {
 				margin: 0 10px 0 0 !important;
 			}

@@ -311,16 +311,19 @@ export default {
       }
 
       if (type === PROPOSAL_STATUS.PENDING) {
-        await this.setProposalLink();
+        try {
+          await this.setProposalLink();
+        }catch (e) {
+          this.isLoading  = false;
+          alert(e);
+        }
       } else {
-        await this.uploadProposal(type);
-
-        await Swal.fire({
-          title: "You saved the current proposal. You can edit anytime later!",
-          buttonsStyling: false,
-          type: "success",
-          confirmButtonClass: "md-button md-vendor",
-        });
+        try {
+          await this.uploadProposal(type);
+        } catch (e) {
+          this.isLoading  = false;
+          alert(e);
+        }
       }
     },
 
@@ -358,6 +361,12 @@ export default {
 
       this.isUpdating = false;
       this.isLoading  = false;
+      await Swal.fire({
+        title: "You saved the current proposal. You can edit anytime later!",
+        buttonsStyling: false,
+        type: "success",
+        confirmButtonClass: "md-button md-vendor",
+      });
     },
 
     async createEvent() {
@@ -422,7 +431,12 @@ export default {
 
     async setProposalLink() {
       this.showMissingModal = false;
-      await this.uploadProposal(PROPOSAL_STATUS.PENDING);
+      try {
+        await this.uploadProposal(PROPOSAL_STATUS.PENDING);
+      } catch (e) {
+        this.isLoading = false;
+        alert(e);
+      }
 
       this.showSendProposalModal = true;
     },
