@@ -131,11 +131,12 @@ export default {
   padding: 1em 20px 1em 50px;
 }
 .maryoku-textarea {
-  position: relative;
-  border: solid 1px #a0a0a0;
-  border-radius: 3px;
-  background: white;
-  display: flex;
+  position      : relative;
+  border        : solid 1px #a0a0a0;
+  border-radius : 3px;
+  background    : white;
+  display       : flex;
+  min-width     : 120px;
   &.disabled {
     opacity: 0.6;
   }

@@ -12,10 +12,10 @@
 export default {
   methods: {
     save () {
-      return this.$emit("save");
+      return this.$emit("save", null);
     },
     cancel () {
-      return this.$emit("cancel");
+      return this.$emit("cancel", null);
     }
   }
 };
@@ -25,15 +25,17 @@ export default {
     border      : none;
     display     : flex;
     align-items : center;
+    padding     : 0;
+    margin      : 0;
     button {
-      margin-left: 10px !important;
+      // margin-left: 10px !important;
       display: flex;
       justify-content: center;
     }
     .md-ripple {
-      width : auto;
-      height: auto;
-      text-align: center;
+      width      : auto;
+      height     : auto;
+      text-align : center;
     }
   }
 </style>
