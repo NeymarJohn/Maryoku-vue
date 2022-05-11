@@ -105,7 +105,7 @@
                 />
                 <ul>
                   <li>
-                    <img :src="getIconUrlByCategory(a)">
+                    <img :src="getIconUrlByCategory(a)" style="filter: brightness(0) invert(0);">
                     {{ getServiceCategory(a).title }}
                   </li>
                   <li>

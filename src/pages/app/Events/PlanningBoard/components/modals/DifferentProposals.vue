@@ -3,9 +3,9 @@
     <template slot="body">
       <div class="text-left px-50 pt-50">
         <h2 class="font-size-30 font-bold-extra my-10 mr-40">
-          {{ step === 1 ? 'Which proposals need to be changed?' : 'Help us find you something better' }}
+          {{ step === 1 ? 'Which of those proposals require changes?' : 'Help us find you something better' }}
         </h2>
-        <p class="font-size-16 p-0">{{ step === 1 ? "We'll be happy to improve them for you. You can also request new options." :
+        <p class="font-size-16 p-0">{{ step === 1 ? 'We wish to make those better for you. But you could also request for alternative proposals' :
           'Tell us what was wrong with our suggestions so that we cloud make the future suggestion better for you?' }}</p>
       </div>
       <md-button class="position-absolute md-simple md-just-icon md-round modal-default-button" @click="close">
@@ -25,10 +25,10 @@
               <div class="font-size-22 text-left font-bold-extra">${{ proposal.cost | withComma }}</div>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button v-if="!options[idx]" class="md-simple md-outlined md-red maryoku-btn" @click="replace">Give me a different option</md-button>
+              <md-button v-if="!options[idx]" class="md-simple md-outlined md-red maryoku-btn" @click="replace">Replace with alternative proposal</md-button>
               <div v-else class="d-flex align-center bg-light-green p-20" style="width: 330px">
                 <img :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`" width="28px"/>
-                <p class="font-size-14 mb-0 mx-1">We'll look for a better alternative</p>
+                <p class="font-size-14 mb-0 mx-1">We will start looking for something better instead</p>
                 <md-button class="md-simple md-black maryoku-btn">Undo</md-button>
               </div>
             </div>
@@ -66,8 +66,8 @@
       </div>
 
       <div class="text-center py-60" style="background: #ffedb7">
-        <p>If you can't find a suitable vendor, you can add your own:</p>
-        <md-button class="md-simple md-outlined md-red maryoku-btn" style="background-color: white!important;width: 300px" @click="uploadVendor">Upload New Vendor</md-button>
+        <p>You could always find a vendor on your own and go to:</p>
+        <md-button class="md-simple md-outlined md-red maryoku-btn" style="background-color: white!important;width: 300px">Full Vendors List</md-button>
       </div>
     </template>
   </modal>
@@ -123,14 +123,12 @@ export default {
         return proposal.vendor.images[0];
       if (proposal.vendor.vendorImages && proposal.vendor.vendorImages[0])
         return proposal.vendor.vendorImages[0];
+
       return "";
     },
     replace() {
       if (!this.checked_proposals.length) return;
       this.$emit('replace', this.checked_proposals)
-    },
-    uploadVendor(){
-      this.$emit('action', 'already_have_venue')
     }
   }
 };

@@ -29,9 +29,15 @@ export default {
     box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.13);
   }
   @media (min-width: 1500px) {
-    .md-layout {
+    .signup-card  .md-layout {
       width: 75vw;
       height: 70vh;
+    }
+  }
+  @media (max-height: 1000px) {
+    .signup-card .md-layout {
+      height: unset;
+
     }
   }
 </style>
