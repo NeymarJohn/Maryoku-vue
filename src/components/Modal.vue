@@ -1,7 +1,6 @@
 <template>
   <transition name="modal">
     <div
-      :style="styles.modalMask"
       class="modal-mask"
       @click="modalMaskClick"
       @dragstart="modalMaskClick"
@@ -38,7 +37,6 @@ export default {
           header:"",
           body:"",
           footer:"",
-          modalMask:"",
         };
       }
     },

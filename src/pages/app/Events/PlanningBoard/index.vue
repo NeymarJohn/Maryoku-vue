@@ -252,7 +252,7 @@
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
-                <img class="mr-10" :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
 
                 <md-button
@@ -495,6 +495,7 @@ import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import { camelize } from "@/utils/string.util";
+import CalendarEvent from "@/models/CalendarEvent";
 import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 

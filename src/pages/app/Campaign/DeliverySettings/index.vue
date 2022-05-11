@@ -373,11 +373,19 @@ export default {
     },
     emailInvitees() {
       const { guestEmails = [] } = this.selectedCampaign;
-      return guestEmails.length;
+      if (guestEmails) {
+        const { length = 0 } = guestEmails;
+        return length || 0;
+      }
+      return 0;
     },
     phoneInvitees () {
       const { guestSMS = [] } = this.selectedCampaign;
-      return guestSMS.length;
+      if (guestSMS) {
+        const { length = 0 } = guestSMS;
+        return length || 0;
+      }
+      return 0;
     },
     inviteesCount() {
       return this.emailInvitees + this.phoneInvitees;
