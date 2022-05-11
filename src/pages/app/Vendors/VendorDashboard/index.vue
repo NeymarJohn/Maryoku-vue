@@ -432,6 +432,7 @@ export default {
   .schedule-section {
   }
   .upcoming-events {
+    padding: 0 50px 50px;
     height: 100%;
   }
 }

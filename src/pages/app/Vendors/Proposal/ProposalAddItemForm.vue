@@ -455,10 +455,8 @@ export default {
       // this.suggestedItems.filter((item) => )
       if (price !== this.selectedItem.price && this.selectedItem.show === true) {
         this.showAskSaveChangeModal = true;
-      } else {
-        this.cancel();
       }
-
+      this.cancel();
       this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },
     async saveItems(serviceItem, size, qty, price) {
@@ -489,11 +487,10 @@ export default {
             value: null,
             xIncluded: true,
         };
-        this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
-
-        console.log("vendor", vendor);
-        await this.$store.dispatch("vendorProposal/saveVendor", vendor);
-        this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
+      this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
+      this.cancel();
+      await this.$store.dispatch("vendorProposal/saveVendor", vendor);
+      this.$emit("addItem", {serviceItem: editingService, option: this.savedUnitChange});
     },
     cancel() {
       this.selectedItem.price = null;

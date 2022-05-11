@@ -374,9 +374,8 @@ export default {
         };
         this.$set(vendor.services, this.camelize(this.serviceItem), newServiceItem);
         await this.$store.dispatch("proposalForNonMaryoku/saveVendor", vendor);
-      } else {
-        this.cancel();
       }
+      this.cancel();
       this.$emit("addItem", { serviceItem: editingService, option: this.savedUnitChange });
     },
     cancel() {

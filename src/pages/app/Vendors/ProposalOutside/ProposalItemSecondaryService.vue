@@ -2,8 +2,8 @@
   <div class="proposal-item-secondary-service">
     <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
       <div class="left-side">
-        <h3 class="title">
-          <img :src="img">
+        <h3 class="title service-title">
+          <img :src="img" style="filter: brightness(0) invert(0);">
           <span>{{ category }}</span>
         </h3>
       </div>
@@ -509,6 +509,14 @@ export default {
           img {
             width: 34px;
             height: 34px;
+          }
+        }
+        .service-title {
+          display: flex;
+          justify-content: left;
+          align-items: center;
+          * {
+            margin-right: 10px;
           }
         }
       }

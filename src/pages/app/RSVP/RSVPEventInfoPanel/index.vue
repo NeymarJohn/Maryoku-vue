@@ -1,110 +1,85 @@
 <template>
   <div class="rsvp-event-info">
     <div class="event-info-item">
-      <div class="event-info-item-title font-size-22 font-bold-extra">
-        <color-button
-          v-model="iconColors.timeColor"
-          class="event-info-item-icon"
-          :size="42"
-          :icon="`${$iconURL}RSVP/Path+251.svg`"
-          @closed="updateEvent"
-        />
-        <span :class="{ underline: !editable }">WHEN?</span>
-      </div>
+      <BlockTitle
+        v-model="iconColors.timeColor"
+        :icon="`${$iconURL}RSVP/Path+251.svg`"
+        :editable="editable"
+        @closed="updateEvent"
+      >
+        WHEN
+      </BlockTitle>
       <div class="event-info-item-content">
         <span>
           {{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
         </span>
-        <div v-if="!editingTimezone" class="timezone-wrapper">
+        <div v-if="editingTimezone" class="timezone-wrapper">
+          <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
+          <SaveControls @save="updateEvent" @cancel="editingTimezone = false" />
+        </div>
+        <div v-else class="timezone-wrapper">
           <span>({{ timezone }})</span>
           <EditBtn v-if="editable" v-model="editingTimezone" />
         </div>
-        <div v-if="editingTimezone" class="timezone-wrapper">
-          <v-select v-model="timezone" class="timezone-selector" :options="timezoneList" />
-          <Controls @save="updateEvent" @cancel="editingTimezone = false" />
-        </div>
+      </div>
+    </div>
+
+    <div class="event-info-item">
+      <BlockTitle
+        v-model="iconColors.locationColor"
+        :icon="`${$iconURL}Event%20Page/location-dark.svg`"
+        :editable="editable"
+        @closed="updateEvent"
+      >
+        WHERE
+      </BlockTitle>
+      <div class="event-info-item-content">
+        <span>{{ isVirtualEvent ? "Zoom" : event.location }}</span>
       </div>
     </div>
 
     <div v-if="!isVirtualEvent" class="event-info-item">
-      <div class="event-info-item-title font-size-22 font-bold-extra">
-        <color-button
-          v-model="iconColors.locationColor"
-          class="event-info-item-icon"
-          :size="42"
-          :icon="`${$iconURL}Event%20Page/location-dark.svg`"
-          @closed="updateEvent"
-        />
-        <span :class="{ underline: !editable }">WHERE?</span>
-      </div>
-      <div class="event-info-item-content">
-        <span>{{ event.location }}</span>
-      </div>
-    </div>
-
-    <div v-else class="event-info-item">
-      <div class="event-info-item-title font-size-22 font-bold-extra">
-        <color-button
-          v-model="iconColors.locationColor"
-          class="event-info-item-icon"
-          :size="42"
-          :icon="`${$iconURL}Event%20Page/location-dark.svg`"
-          @closed="updateEvent"
-        />
-        <span :class="{ underline: !editable }">WHERE?</span>
-      </div>
-      <div class="event-info-item-content">
-        <span>Zoom</span>
-      </div>
-    </div>
-
-    <div v-if="!isVirtualEvent" class="event-info-item">
-      <div class="event-info-item-title font-size-22 font-bold-extra">
-        <color-button
-          v-model="iconColors.soloColor"
-          class="event-info-item-icon"
-          :size="42"
-          :icon="`${$iconURL}RSVP/Path+1383.svg`"
-          @closed="updateEvent"
-        />
-        <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
-      </div>
-      <div v-if="!editingPlusOne" class="event-info-item-content d-flex align-center">
-        <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
-        <EditBtn v-if="editable" v-model="editingPlusOne" />
-      </div>
-      <div v-else class="event-info-item-content d-flex align-center">
+      <BlockTitle
+        v-model="iconColors.soloColor"
+        :icon="`${$iconURL}RSVP/Path+1383.svg`"
+        :editable="editable"
+        @closed="updateEvent"
+      >
+        SOLO OR PLUS 1
+      </BlockTitle>
+      <div v-if="editingPlusOne" class="event-info-item-content d-flex align-center">
         <md-checkbox v-model="isPluseOne" :value="false">
           Solo
         </md-checkbox>
         <md-checkbox v-model="isPluseOne" :value="true">
           +1
         </md-checkbox>
-        <Controls @save="updateEvent" @cancel="editingPlusOne = false" />
+        <SaveControls @save="updateEvent" @cancel="editingPlusOne = false" />
+      </div>
+      <div v-else class="event-info-item-content d-flex align-center">
+        <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
+        <EditBtn v-if="editable" v-model="editingPlusOne" />
       </div>
     </div>
 
     <div class="event-info-item">
-      <div class="event-info-item-title font-size-22 font-bold-extra">
-        <color-button
-          v-model="iconColors.arrivalColor"
-          class="event-info-item-icon"
-          :size="42"
-          :icon="`${$iconURL}RSVP/Group+1279.svg`"
-          @closed="updateEvent"
-        />
-        <span :class="{ underline: !editable }">ARRIVAL?</span>
+      <BlockTitle
+        v-model="iconColors.arrivalColor"
+        :icon="`${$iconURL}RSVP/Group+1279.svg`"
+        :editable="editable"
+        @closed="updateEvent"
+      >
+        ARRIVAL
+      </BlockTitle>
+      <div v-if="editingArrival" class="event-info-item-content d-flex align-center font-size-20">
+        <input v-model="eventArrival" type="text">
+        <SaveControls @save="updateEvent" @cancel="editingArrival = false" />
       </div>
-
-      <div v-if="!editingArrival" class="event-info-item-content">
+      <div v-else class="event-info-item-content">
         <span>
           {{ event.arrival || "-" }}&emsp;
         </span>
         <EditBtn v-if="editable" v-model="editingArrival" />
-      </div>
-      <div v-else class="event-info-item-content d-flex align-center font-size-20">
-        <input v-model="eventArrival" type="text">
-        <Controls @save="updateEvent" @cancel="editingArrival = false" />
       </div>
     </div>
   </div>
@@ -115,16 +90,14 @@ import "vue-select/dist/vue-select.css";
 
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar      from "@/models/Calendar";
-import ColorButton   from "@/components/ColorButton";
-import Controls      from "./Controls";
-import EditBtn       from "./EditBtn";
+import BlockTitle    from "./BlockTitle/index.vue";
 
 export default {
   components: {
     vSelect,
-    ColorButton,
-    EditBtn,
-    Controls,
+    BlockTitle,
+    EditBtn      : () => import("@/components/Button/Edit.vue"),
+    SaveControls : () => import("@/components/Controls/Save.vue"),
   },
   props: {
     event: {
@@ -174,28 +147,16 @@ export default {
     },
   },
   watch: {
-    event(newValue, oldValue) {
+    async event(newValue, oldValue) {
       if (!newValue.timezone) {
         console.log(newValue);
-        this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
-          const phrases = timezone.timeZoneName.split(" ");
-          const result = phrases.reduce((s, phrase) => {
-            return `${s}${phrase.substr(0, 1).toUpperCase()}`;
-          }, "");
-          this.timezone = result;
-        });
+        await this.updateTimeZone(newValue.locationId);
       }
     },
   },
-  created() {
+  async created() {
     if (this.event.locationId && !this.event.timezone) {
-      this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
-        const phrases = timezone.timeZoneName.split(" ");
-        const result = phrases.reduce((s, phrase) => {
-          return `${s}${phrase.substr(0, 1).toUpperCase()}`;
-        }, "");
-        this.timezone = result;
-      });
+      await this.updateTimeZone(this.event.locationId);
     } else {
       this.timezone = this.event.timezone;
     }
@@ -211,6 +172,14 @@ export default {
     console.log("iconColors", this.iconColors);
   },
   methods: {
+    async updateTimeZone (locationId) {
+      const timezone = await this.$dateUtil.getTimeZoneNameFromPlaceId(locationId);
+      const phrases  = timezone.timeZoneName.split(" ");
+      const result   = phrases.reduce((s, phrase) => {
+        return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+      }, "");
+      this.timezone = result;
+    },
     updateEvent() {
       const { additionalData = {} } = this.event;
       additionalData.iconColors = this.iconColors;
@@ -271,10 +240,6 @@ export default {
       display: flex;
       align-items: center;
       // padding: 10px 24px;
-      span.underline {
-        border-bottom: solid 2px #ff7600;
-        vertical-align: middle;
-      }
     }
     &-content {
       font-size: 20px;
@@ -297,34 +262,6 @@ export default {
   .rsvp-event-info {
     .event-info-item {
       margin-bottom: 20px;
-      &-icon {
-        width: 25px;
-        height: 25px;
-        border-radius: 21px;
-        padding: 8px;
-        margin-right: 5px;
-        &-background {
-          width: 25px;
-          height: 25px;
-          left: 0px;
-          top: 0px;
-        }
-        img {
-          width: 60%;
-          height: 25px;
-          left: 5px;
-          top: 0px;
-        }
-      }
-      &-title {
-        min-width: 110px;
-
-        span.underline {
-          border-bottom: solid 2px #ff7600;
-          vertical-align: middle;
-          font-size: 16px;
-        }
-      }
       &-content {
         font-size: 14px;
       }
