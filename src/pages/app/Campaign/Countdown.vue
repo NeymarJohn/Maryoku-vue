@@ -85,6 +85,7 @@ import CampaignLogo  from "./components/CampaignLogo/index.vue";
 // pages
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel/index.vue";
 
+
 // dependencies
 import { getBase64 } from "@/utils/file.util";
 

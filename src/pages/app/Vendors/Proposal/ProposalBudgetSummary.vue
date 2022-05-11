@@ -35,9 +35,9 @@
           class="bundle-discount mt-20"
           @click="isBundleDiscount = !isBundleDiscount"
         >
-          <img class="black" :src="`${iconUrl}giveaways.svg`">
+          <img class="vendor" src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Asset 579.svg" >
           <span>
-            Add Bundle Discount
+                {{ bundleDiscount && bundleDiscount.percentage ? "Edit Bundle Discount" : "Add Bundle Discount" }}
             <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
             <md-icon v-else>keyboard_arrow_down</md-icon>
           </span>
@@ -57,7 +57,7 @@
                 :value="vendor.eventCategory.key"
               />
 
-              <img :src="`${iconUrl}venuerental.svg`" width="30px" class="mr-10">
+              <img :src="`${iconUrl}venuerental.svg`" width="30px" class="mr-10" style="filter: brightness(0) invert(0);">
               <div style="font-size: 16px; font-weight: 800">
                 {{ vendor.eventCategory.title }}
               </div>
@@ -68,7 +68,7 @@
                 <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
               </li>
               <li>
-                <span>Your proposal</span>
+                <span style="font-size: 14px">Your proposal</span>
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
               <li>
@@ -128,7 +128,7 @@
             </h3>
             <div class="d-flex align-center">
               <md-checkbox v-if="isBundleDiscount" v-model="bundleDiscountServices" class="md-vendor" :value="a" />
-              <img :src="getIconUrlByCategory(a)" class="mr-5">
+              <img :src="getIconUrlByCategory(a)" class="mr-5" style="filter: brightness(0) invert(0);">
               <div style="font-size: 16px; font-weight: 800">
                 {{ getServiceCategory(a).title }}
               </div>
@@ -139,7 +139,7 @@
                 <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
               </li>
               <li>
-                <span>Your proposal</span>
+                <span style="font-size: 14px">Your proposal</span>
                 <span>${{ pricesByCategory[a] | withComma }}</span>
               </li>
               <li>
@@ -632,6 +632,9 @@ export default {
 				&.black {
 					filter: brightness(0) invert(0);
 				}
+        &.vendor{
+          filter: invert(5%) sepia(53%) saturate(451%) hue-rotate(327deg) brightness(54%) contrast(91%);
+        }
 			}
 			span {
 				font-size: 16px;
@@ -696,7 +699,7 @@ export default {
 							}
 						}
 						&:nth-child(2) {
-							font-size: 22px;
+							font-size: 20px;
 							font-weight: 800;
 						}
 						&:nth-child(3) {
@@ -802,6 +805,7 @@ export default {
 			display: flex;
 			margin-bottom: 20px;
 			flex-wrap: wrap;
+      flex-direction: column;
 			.no-margin {
 				margin: 0 10px 0 0 !important;
 			}

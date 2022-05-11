@@ -114,7 +114,7 @@
             >
               <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ phoneInvitees }})
+                  Sent to ({{ selectedCampaign.guestSMS ? selectedCampaign.guestSMS.length : 0 }})
                 </div>
                 <div class="d-flex align-start width-100">
                   {{ selectedCampaign.settings.phone.numberString }}
@@ -256,7 +256,7 @@
               </div>
               <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ emailInvitees }})
+                  Sent to ({{ selectedCampaign.guestEmails ? selectedCampaign.guestEmails.length : 0 }})
                 </div>
                 <div class="d-flex align-start width-100">
                   {{ selectedCampaign.settings.email.addressString }}
@@ -373,19 +373,11 @@ export default {
     },
     emailInvitees() {
       const { guestEmails = [] } = this.selectedCampaign;
-      if (guestEmails) {
-        const { length = 0 } = guestEmails;
-        return length || 0;
-      }
-      return 0;
+      return guestEmails.length;
     },
     phoneInvitees () {
       const { guestSMS = [] } = this.selectedCampaign;
-      if (guestSMS) {
-        const { length = 0 } = guestSMS;
-        return length || 0;
-      }
-      return 0;
+      return guestSMS.length;
     },
     inviteesCount() {
       return this.emailInvitees + this.phoneInvitees;

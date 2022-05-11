@@ -332,6 +332,7 @@ export default {
     },
   },
   created() {
+    console.log('created', this.campaignData);
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {
