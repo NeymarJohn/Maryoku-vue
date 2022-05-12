@@ -275,8 +275,9 @@ export default {
         const concept = await query.save();
         if (concept) {
           this.saveEventAction(new CalendarEvent({...this.event, concept}));
-          this.selectImage(images.length - 1);
-          setTimeout(() => this.carouselScrollingToIndex(images.length - 1), 0);
+          const imageLastIndex = images.length - 1;
+          this.selectImage(imageLastIndex);
+          setTimeout(this.carouselScrollingToIndex, 0, imageLastIndex);
         }
       } finally {
         this.loading = false;
