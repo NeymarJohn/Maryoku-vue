@@ -26,15 +26,15 @@ export default {
     display     : flex;
     align-items : center;
     padding     : 0;
+    margin      : 0;
     button {
-      margin-left: 10px !important;
-      display: flex;
-      justify-content: center;
+      display         : flex;
+      justify-content : center;
     }
     .md-ripple {
-      width : auto;
-      height: auto;
-      text-align: center;
+      width      : auto;
+      height     : auto;
+      text-align : center;
     }
   }
 </style>
