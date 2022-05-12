@@ -143,10 +143,10 @@ export default {
   data() {
     return {
       loading             : false,
-      selectedImage       : null,
-      selectedIndex       : 0,
-      canvaApi            : null,
       destroyDropzone     : false,
+      selectedImage       : null,
+      canvaApi            : null,
+      selectedIndex       : 0,
       carouselCurrentItem : 0,
       dropzoneOptions: {
         url                   : "https://httpbin.org/post",
