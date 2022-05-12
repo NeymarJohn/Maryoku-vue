@@ -25,6 +25,7 @@ export default {
     border      : none;
     display     : flex;
     align-items : center;
+    padding     : 0;
     button {
       margin-left: 10px !important;
       display: flex;
