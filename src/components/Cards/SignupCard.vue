@@ -3,7 +3,7 @@
     <slot name="title" />
 
     <md-card-content class="signup-card">
-      <div class="md-layout">
+      <div class="md-layout" :style="styles.mdLayout">
         <slot name="content-left" />
         <slot name="content-middle" />
         <slot name="content-right" />
@@ -18,7 +18,17 @@
 
 <script>
 export default {
-  name: "SignupCard"
+  name: "SignupCard",
+  props: {
+    styles: {
+      type: Object,
+      default: ()=>{
+        return{
+          mdLayout:""
+        }
+      }
+    }
+  }
 };
 </script>
 
@@ -30,7 +40,7 @@ export default {
   }
   @media (min-width: 1500px) {
     .signup-card  .md-layout {
-      width: 75vw;
+      width: 60vw;
       height: 70vh;
     }
   }

@@ -24,7 +24,7 @@
     <template slot="body">
       <div class="change-cover-image-modal-body">
         <div class="change-cover-image-modal-body-cover-image">
-          <img v-if="selectedImage" :src="selectedImage">
+          <img v-if="selectedImage" :src="selectedImage" />
         </div>
         <div class="change-cover-image-modal-body-carousel-image">
           <change-cover-image-carousel
@@ -58,7 +58,7 @@
           <div class="section-upload-cover-image">
             <div class="wrapper-btn-design-on-canva d-flex justify-content-center align-center">
               <md-button class="md-white btn-design-on-canva" @click="handleClickDesignOnCanva">
-                <img class="mr-10" src="static/icons/Group 18599.svg">
+                <img class="mr-10" src="static/icons/Group 18599.svg" />
                 <span class="text-design-on-canva">
                   Design on Canva
                 </span>
@@ -103,24 +103,23 @@
 <script>
 // core
 import { mapMutations, mapActions } from "vuex";
-import vue2Dropzone                 from "vue2-dropzone";
-import { v4 as uuidv4 }             from "uuid";
+import vue2Dropzone from "vue2-dropzone";
+import { v4 as uuidv4 } from "uuid";
 
 // components
 // gloabl
-import { Modal }         from "@/components";
+import { Modal } from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 //local
 import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
 
 // models
 import CalendarEvent from "@/models/CalendarEvent";
-import EventConcept  from "@/models/EventConcept";
+import EventConcept from "@/models/EventConcept";
 
 // dependencies
-import S3Service      from "@/services/s3.service";
-import loop           from "@/helpers/number/loop";
-import arrayIsNoEmpty from "@/helpers/array/is/noEmpty";
+import S3Service from "@/services/s3.service";
+import loop      from "@/helpers/number/loop";
 
 export default {
   name: "ChangeCoverImageModal",
@@ -142,21 +141,21 @@ export default {
   },
   data() {
     return {
-      loading             : false,
-      destroyDropzone     : false,
-      selectedImage       : null,
-      canvaApi            : null,
-      selectedIndex       : 0,
-      carouselCurrentItem : 0,
+      loading: false,
+      selectedImage: null,
+      selectedIndex: 0,
+      canvaApi: null,
+      destroyDropzone: false,
+      carouselCurrentItem: 0,
       dropzoneOptions: {
-        url                   : "https://httpbin.org/post",
-        acceptedFiles         : "image/*",
-        thumbnailWidth        : 60,
-        thumbnailHeight       : 60,
-        createImageThumbnails : false,
-        disablePreviews       : false,
-        uploadMultiple        : true,
-        headers               : { "My-Awesome-Header": "header value" },
+        url: "https://httpbin.org/post",
+        thumbnailWidth: 60,
+        thumbnailHeight: 60,
+        createImageThumbnails: false,
+        disablePreviews: false,
+        uploadMultiple: true,
+        acceptedFiles: "image/*",
+        headers: { "My-Awesome-Header": "header value" },
       }
     };
   },
@@ -174,33 +173,38 @@ export default {
       return this.eventConcept.colors || [];
     },
     showConcept() {
-      return this.eventConcept
-          && arrayIsNoEmpty(this.conceptImages)
-          && arrayIsNoEmpty(this.conceptColors);
+      return this.eventConcept && this.conceptImages && this.conceptImages.length && this.conceptColors && this.conceptColors.length;
     }
   },
-  async created() {
+  created() {
     if (this.coverImage) {
       this.selectedImage = this.coverImage;
       this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
     } else {
-      this.selectedImage = arrayIsNoEmpty(this.conceptImages) ? this.conceptImages[0].url : this.defaultCoverImage;
+      this.selectedImage = (this.conceptImages && this.conceptImages.length)
+        ? this.conceptImages[0].url : this.defaultCoverImage;
     }
 
-    if (window.Canva && window.Canva.DesignButton) this.canvaApi = await window.Canva.DesignButton.initialize({
-      apiKey: "no5x5PRx6hMNshFZIrRpevKJ",
-    });
+    (async () => {
+      if (!window.Canva || !window.Canva.DesignButton) {
+        return;
+      }
+
+      this.canvaApi = await window.Canva.DesignButton.initialize({
+        apiKey: "no5x5PRx6hMNshFZIrRpevKJ",
+      });
+    })();
   },
   methods: {
     ...mapMutations("event", ["setEventData"]),
-    ...mapActions  ("event", ["saveEventAction"]),
+    ...mapActions("event", ["saveEventAction"]),
     close(event) {
       this.$emit("close", event);
     },
     chooseImage() {
       this.$emit("choose-image", this.selectedImage);
     },
-    selectImage(index = 0) {
+    selectImage(index) {
       this.selectedIndex = index;
       this.selectedImage = this.conceptImages[index].url;
     },
@@ -228,10 +232,11 @@ export default {
             type: "Poster",
           },
           onDesignPublish: (opts) => {
+
             this.addNewImageConcept({
-              name       : opts.designId,
-              originName : opts.designTitle,
-              url        : opts.exportUrl
+              name: opts.designId,
+              originName: opts.designTitle,
+              url: opts.exportUrl
             });
           },
         });
@@ -240,47 +245,45 @@ export default {
     async uploadFileDropZone(file) {
       this.destroyDropzone = true;
       const dropZone = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-message");
-      if (dropZone && dropZone[0]) dropZone[0].style.display = "block";
+      if (dropZone && dropZone[0]) {
+        dropZone[0].style.display = "block";
+      }
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      if (preview) {
-        const lastIndexPreview = preview.length - 1;
-        if (preview[lastIndexPreview]) {
-          preview[lastIndexPreview].style.display = "none";
-          preview[lastIndexPreview].style.opacity = "0";
-        }
+      const lastIndexPreview = preview.length - 1;
+      if (preview && preview[lastIndexPreview]) {
+        preview[lastIndexPreview].style.display = "none";
+        preview[lastIndexPreview].style.opacity = "0";
       }
       const extension = file.type.split("/")[1];
-      const fileName  = uuidv4();
-      const url       = await S3Service.fileUpload(file, `${fileName}.${extension}`, "concepts");
-      this.addNewImageConcept({ thumb_url: url, url });
+      const fileName = uuidv4();
+      S3Service.fileUpload(file, `${fileName}.${extension}`, "concepts").then((url) => {
+        this.addNewImageConcept({ thumb_url: url, url });
+      });
     },
     async addNewImageConcept(newImage) {
-      this.loading = true;
-      const images = [newImage, ...this.conceptImages];
-      const data   = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
-        event        : new CalendarEvent({id: this.event.id}),
-        name         : "March Madness",
-        description  :
+
+      const images = [...this.conceptImages, newImage];
+      if (Object.keys(this.eventConcept).length) {
+
+      }
+      const data = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
+        event: new CalendarEvent({id: this.event.id}),
+        name: "March Madness",
+        description:
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-        fontFamily   : "Cooperative-Regular",
-        tags         : [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
-        colors       : [],
+        fontFamily: "Cooperative-Regular",
+        tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
         images,
+        colors: [],
       };
 
-      const query     = new EventConcept(data);
-      try {
-        const concept = await query.save();
-        if (concept) {
-          this.saveEventAction(new CalendarEvent({...this.event, concept}));
-          // const imageLastIndex = images.length - 1;
-          const selectNewIndex = 0;
-          this.selectImage(selectNewIndex);
-          setTimeout(this.carouselScrollingToIndex, 0, selectNewIndex);
-        }
-      } finally {
-        this.loading = false;
-      }
+      const query = new EventConcept(data);
+      const concept = await query.save();
+
+      this.saveEventAction(new CalendarEvent({...this.event, concept}));
+      this.selectImage(images.length - 1);
+      this.loading = false;
+      setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
     }
   }
 };
@@ -290,133 +293,133 @@ export default {
 .change-cover-image-modal-header {
 
   .change-cover-image-modal-header-title {
-    font-size      : 30px;
-    font-weight    : bold;
-    font-stretch   : normal;
-    font-style     : normal;
-    line-height    : 1.53;
-    letter-spacing : normal;
-    text-align     : left;
-    color          : #050505;
+    font-size: 30px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.53;
+    letter-spacing: normal;
+    text-align: left;
+    color: #050505;
   }
 
   .change-cover-image-modal-header-text {
-    max-width      : 544px;
-    font-size      : 16px;
-    font-weight    : normal;
-    font-stretch   : normal;
-    font-style     : normal;
-    line-height    : normal;
-    letter-spacing : normal;
-    text-align     : left;
-    color          : #050505;
+    max-width: 544px;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #050505;
   }
 
 }
 
 .change-cover-image-modal-body-cover-image {
-  width         : 950px;
-  height        : 430px;
-  margin-bottom : 20px;
+  width: 950px;
+  height: 430px;
+  margin-bottom: 20px;
 
   & img {
-    width      : 950px;
-    height     : 430px;
-    object-fit : cover;
+    width: 950px;
+    height: 430px;
+    object-fit: cover;
   }
 }
 
 .change-cover-image-modal-body-carousel-image {
-  width  : 950px;
-  height : 85px;
+  width: 950px;
+  height: 85px;
 }
 
 .change-cover-image-modal-footer {
   width: 100%;
 
   .sections-for-upload-cover-image {
-    width           : 100%;
-    display         : flex;
-    justify-content : space-between;
-    margin-bottom   : 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
 
     .section-upload-cover-image {
-      width  : 300px;
-      height : 100px;
-      border : dashed 1.5px #000;
+      width: 300px;
+      height: 100px;
+      border: dashed 1.5px #000;
 
       .wrapper-btn-design-on-canva {
-        width           : 100%;
-        height          : 100%;
-        display         : flex;
-        align-items     : center;
-        justify-content : center;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         .btn-design-on-canva {
-          border-radius : 3px;
-          border        : solid 1px #818080;
+          border-radius: 3px;
+          border: solid 1px #818080;
 
           .text-design-on-canva {
-            font-size      : 12px;
-            font-weight    : bold;
-            font-stretch   : normal;
-            font-style     : normal;
-            line-height    : normal;
-            letter-spacing : 0.25px;
-            text-align     : left;
-            color          : #000;
+            font-size: 12px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.25px;
+            text-align: left;
+            color: #000;
           }
         }
       }
 
       .section-upload-cover-image-drop-zone {
-        width           : 100%;
-        height          : 100%;
-        min-height      : 100%;
-        padding         : 0;
-        display         : flex;
-        align-items     : center;
-        justify-content : center;
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         .text-upload-photo {
-          font-size      : 12px;
-          font-weight    : bold;
-          font-stretch   : normal;
-          font-style     : normal;
-          line-height    : normal;
-          letter-spacing : 0.25px;
-          text-align     : left;
-          color          : #000;
+          font-size: 12px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.25px;
+          text-align: left;
+          color: #000;
         }
       }
     }
   }
 
   .change-cover-image-modal-footer-actions {
-    width           : 100%;
-    display         : flex;
-    justify-content : flex-end;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 
     .btn-upload-photo,
     .btn-cancel {
-      margin-right   : 10px;
-      font-size      : 16px;
-      font-weight    : bold;
-      font-stretch   : normal;
-      font-style     : normal;
-      line-height    : normal;
-      letter-spacing : 0.34px;
-      text-align     : center;
-      color          : #000 !important;
+      margin-right: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.34px;
+      text-align: center;
+      color: #000 !important;
 
       &:hover {
-        background-color : #ffffff !important
+        background-color: #ffffff !important
       }
     }
   }
 }
 
 #dropzone .dz-preview {
-  opacity : 0;
+  opacity: 0;
 }
 </style>
