@@ -12,10 +12,10 @@
 export default {
   methods: {
     save () {
-      return this.$emit("save");
+      return this.$emit("save", null);
     },
     cancel () {
-      return this.$emit("cancel");
+      return this.$emit("cancel", null);
     }
   }
 };
