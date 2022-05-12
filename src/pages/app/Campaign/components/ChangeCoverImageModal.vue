@@ -179,7 +179,7 @@ export default {
           && arrayIsNoEmpty(this.conceptColors);
     }
   },
-  created() {
+  async created() {
     if (this.coverImage) {
       this.selectedImage = this.coverImage;
       this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
@@ -187,15 +187,9 @@ export default {
       this.selectedImage = arrayIsNoEmpty(this.conceptImages) ? this.conceptImages[0].url : this.defaultCoverImage;
     }
 
-    (async () => {
-      if (!window.Canva || !window.Canva.DesignButton) {
-        return;
-      }
-
-      this.canvaApi = await window.Canva.DesignButton.initialize({
-        apiKey: "no5x5PRx6hMNshFZIrRpevKJ",
-      });
-    })();
+    if (window.Canva && window.Canva.DesignButton) this.canvaApi = await window.Canva.DesignButton.initialize({
+      apiKey: "no5x5PRx6hMNshFZIrRpevKJ",
+    });
   },
   methods: {
     ...mapMutations("event", ["setEventData"]),
