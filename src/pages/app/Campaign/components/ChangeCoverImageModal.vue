@@ -244,40 +244,42 @@ export default {
         dropZone[0].style.display = "block";
       }
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      const lastIndexPreview = preview.length - 1;
-      if (preview && preview[lastIndexPreview]) {
-        preview[lastIndexPreview].style.display = "none";
-        preview[lastIndexPreview].style.opacity = "0";
+      if (preview) {
+        const lastIndexPreview = preview.length - 1;
+        if (preview[lastIndexPreview]) {
+          preview[lastIndexPreview].style.display = "none";
+          preview[lastIndexPreview].style.opacity = "0";
+        }
       }
       const extension = file.type.split("/")[1];
-      const fileName = uuidv4();
-      S3Service.fileUpload(file, `${fileName}.${extension}`, "concepts").then((url) => {
-        this.addNewImageConcept({ thumb_url: url, url });
-      });
+      const fileName  = uuidv4();
+      const url       = await S3Service.fileUpload(file, `${fileName}.${extension}`, "concepts");
+      this.addNewImageConcept({ thumb_url: url, url });
     },
     async addNewImageConcept(newImage) {
       const images = [...this.conceptImages, newImage];
-      if (Object.keys(this.eventConcept).length) {
-
-      }
-      const data = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
-        event: new CalendarEvent({id: this.event.id}),
-        name: "March Madness",
-        description:
+      const data   = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
+        event        : new CalendarEvent({id: this.event.id}),
+        name         : "March Madness",
+        description  :
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-        fontFamily: "Cooperative-Regular",
-        tags: [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
+        fontFamily   : "Cooperative-Regular",
+        tags         : [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
+        colors       : [],
         images,
-        colors: [],
       };
 
-      const query   = new EventConcept(data);
-      const concept = await query.save();
-
-      this.saveEventAction(new CalendarEvent({...this.event, concept}));
-      this.selectImage(images.length - 1);
-      this.loading = false;
-      setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
+      const query     = new EventConcept(data);
+      try {
+        const concept = await query.save();
+        if (concept) {
+          this.saveEventAction(new CalendarEvent({...this.event, concept}));
+          this.selectImage(images.length - 1);
+          setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
+        }
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };
