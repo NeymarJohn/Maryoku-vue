@@ -200,7 +200,7 @@ export default {
     chooseImage() {
       this.$emit("choose-image", this.selectedImage);
     },
-    selectImage(index) {
+    selectImage(index = 0) {
       this.selectedIndex = index;
       this.selectedImage = this.conceptImages[index].url;
     },
@@ -240,9 +240,8 @@ export default {
     async uploadFileDropZone(file) {
       this.destroyDropzone = true;
       const dropZone = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-message");
-      if (dropZone && dropZone[0]) {
-        dropZone[0].style.display = "block";
-      }
+      if (dropZone && dropZone[0]) dropZone[0].style.display = "block";
+
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
       if (preview) {
         const lastIndexPreview = preview.length - 1;
