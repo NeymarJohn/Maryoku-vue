@@ -223,7 +223,6 @@ export default {
     position        : relative;
     margin-bottom   : 110px;
     min-height      : 240px;
-    background      : #F52474;
     img {
       max-height    : 500px;
       width         : 100%;
@@ -278,5 +277,9 @@ export default {
       max-width: 200px;
     }
   }
+}
+
+.maryoku-textarea {
+
 }
 </style>

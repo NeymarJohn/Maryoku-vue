@@ -23,9 +23,9 @@
               class="bundle-discount mt-20"
               @click="toggleBundleDiscount"
             >
-              <img class="black" :src="`${iconUrl}Asset 579.svg`">
+              <img class="vendor" :src="`${iconUrl}Asset 579.svg`" >
               <span>
-                Add Bundle Discount
+                {{ bundleDiscount && bundleDiscount.percentage ? "Edit Bundle Discount" : "Add Bundle Discount" }}
                 <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
                 <md-icon v-else>keyboard_arrow_down</md-icon>
               </span>
@@ -645,6 +645,9 @@ export default {
 
         &.black {
           filter: brightness(0) invert(0);
+        }
+        &.vendor {
+          filter: invert(5%) sepia(53%) saturate(451%) hue-rotate(327deg) brightness(54%) contrast(91%);
         }
       }
 

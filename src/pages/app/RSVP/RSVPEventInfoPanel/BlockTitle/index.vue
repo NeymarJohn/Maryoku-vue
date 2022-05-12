@@ -5,7 +5,7 @@
       class="event-info-item-icon"
       :size="size"
       :icon="icon"
-      @closed="updateEvent"
+      @closed="closed"
     />
     <Title :editable="editable">
       <slot />

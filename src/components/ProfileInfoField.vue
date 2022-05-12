@@ -42,7 +42,7 @@
         </div>
         <div class="sign-here">
           <img v-if="signatureData" :src="`${signatureData}`">
-          <vueSignature v-else ref="signature" :sig-option="option" :w="'100%'" :h="'100%'" />
+          <vueSignature v-else ref="signature" @click="signatureDeleted=false" :sig-option="option" :w="'100%'" :h="'100%'" />
           <md-button class="md-simple md-vendor edit-btn" @click="clear">
             Clear
           </md-button>
@@ -145,6 +145,7 @@ export default {
   data() {
     return {
       isEditing: false,
+      signatureDeleted: false,
       content: "",
       signatureData: "",
       passwordConfirm: "",
@@ -181,7 +182,7 @@ export default {
       this.isEditing = false;
       if (this.fieldName === "signature") {
         if (!this.signatureData) {
-          let jpeg = this.$refs.signature.save("image/jpeg");
+          let jpeg = !this.signatureDeleted? this.$refs.signature.save("image/jpeg"):null;
           this.content = jpeg;
           this.$emit("save", { name: this.fieldName, value: jpeg });
         } else {
@@ -200,8 +201,10 @@ export default {
     clear() {
       this.signatureData = "";
       this.$refs.signature.clear();
+      this.signatureDeleted = true;
     },
     async onSignatureFilePicked(e) {
+      this.signatureDeleted = false;
       const file = e.target.files[0];
       const extension = file.type.split("/")[1];
       const fileId = `${new Date().getTime()}`;

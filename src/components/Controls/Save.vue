@@ -28,8 +28,8 @@ export default {
     padding     : 0;
     margin      : 0;
     button {
-      display         : flex;
-      justify-content : center;
+      display: flex;
+      justify-content: center;
     }
     .md-ripple {
       width      : auto;

@@ -92,7 +92,7 @@
                   @show="show($event)"
                 />
                 <template v-else>
-                  <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`">
+                  <img class=" mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`">
                   <div class="mb-20 color-vendor font-bold font-size-14">
                     NO UPCOMING EVENTS
                   </div>
@@ -432,7 +432,7 @@ export default {
   .schedule-section {
   }
   .upcoming-events {
-    padding: 0 50px 50px;
+    padding: 0 50px 50px !important;
     height: 100%;
   }
 }
