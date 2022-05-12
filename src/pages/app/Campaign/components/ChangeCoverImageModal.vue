@@ -276,7 +276,7 @@ export default {
         if (concept) {
           this.saveEventAction(new CalendarEvent({...this.event, concept}));
           this.selectImage(images.length - 1);
-          setTimeout(() => this.carouselScrollingToIndex(images.length - 1));
+          setTimeout(() => this.carouselScrollingToIndex(images.length - 1), 0);
         }
       } finally {
         this.loading = false;
@@ -290,133 +290,133 @@ export default {
 .change-cover-image-modal-header {
 
   .change-cover-image-modal-header-title {
-    font-size: 30px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.53;
-    letter-spacing: normal;
-    text-align: left;
-    color: #050505;
+    font-size      : 30px;
+    font-weight    : bold;
+    font-stretch   : normal;
+    font-style     : normal;
+    line-height    : 1.53;
+    letter-spacing : normal;
+    text-align     : left;
+    color          : #050505;
   }
 
   .change-cover-image-modal-header-text {
-    max-width: 544px;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #050505;
+    max-width      : 544px;
+    font-size      : 16px;
+    font-weight    : normal;
+    font-stretch   : normal;
+    font-style     : normal;
+    line-height    : normal;
+    letter-spacing : normal;
+    text-align     : left;
+    color          : #050505;
   }
 
 }
 
 .change-cover-image-modal-body-cover-image {
-  width: 950px;
-  height: 430px;
-  margin-bottom: 20px;
+  width         : 950px;
+  height        : 430px;
+  margin-bottom : 20px;
 
   & img {
-    width: 950px;
-    height: 430px;
-    object-fit: cover;
+    width      : 950px;
+    height     : 430px;
+    object-fit : cover;
   }
 }
 
 .change-cover-image-modal-body-carousel-image {
-  width: 950px;
-  height: 85px;
+  width  : 950px;
+  height : 85px;
 }
 
 .change-cover-image-modal-footer {
   width: 100%;
 
   .sections-for-upload-cover-image {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 50px;
+    width           : 100%;
+    display         : flex;
+    justify-content : space-between;
+    margin-bottom   : 50px;
 
     .section-upload-cover-image {
-      width: 300px;
-      height: 100px;
-      border: dashed 1.5px #000;
+      width  : 300px;
+      height : 100px;
+      border : dashed 1.5px #000;
 
       .wrapper-btn-design-on-canva {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width           : 100%;
+        height          : 100%;
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
 
         .btn-design-on-canva {
-          border-radius: 3px;
-          border: solid 1px #818080;
+          border-radius : 3px;
+          border        : solid 1px #818080;
 
           .text-design-on-canva {
-            font-size: 12px;
-            font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: 0.25px;
-            text-align: left;
-            color: #000;
+            font-size      : 12px;
+            font-weight    : bold;
+            font-stretch   : normal;
+            font-style     : normal;
+            line-height    : normal;
+            letter-spacing : 0.25px;
+            text-align     : left;
+            color          : #000;
           }
         }
       }
 
       .section-upload-cover-image-drop-zone {
-        width: 100%;
-        height: 100%;
-        min-height: 100%;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width           : 100%;
+        height          : 100%;
+        min-height      : 100%;
+        padding         : 0;
+        display         : flex;
+        align-items     : center;
+        justify-content : center;
 
         .text-upload-photo {
-          font-size: 12px;
-          font-weight: bold;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.25px;
-          text-align: left;
-          color: #000;
+          font-size      : 12px;
+          font-weight    : bold;
+          font-stretch   : normal;
+          font-style     : normal;
+          line-height    : normal;
+          letter-spacing : 0.25px;
+          text-align     : left;
+          color          : #000;
         }
       }
     }
   }
 
   .change-cover-image-modal-footer-actions {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
+    width           : 100%;
+    display         : flex;
+    justify-content : flex-end;
 
     .btn-upload-photo,
     .btn-cancel {
-      margin-right: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.34px;
-      text-align: center;
-      color: #000 !important;
+      margin-right   : 10px;
+      font-size      : 16px;
+      font-weight    : bold;
+      font-stretch   : normal;
+      font-style     : normal;
+      line-height    : normal;
+      letter-spacing : 0.34px;
+      text-align     : center;
+      color          : #000 !important;
 
       &:hover {
-        background-color: #ffffff !important
+        background-color : #ffffff !important
       }
     }
   }
 }
 
 #dropzone .dz-preview {
-  opacity: 0;
+  opacity : 0;
 }
 </style>
