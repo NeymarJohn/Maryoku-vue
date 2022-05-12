@@ -231,8 +231,8 @@ export default {
     }
 
     .change-cover-concept {
-      width    : 1000px;
-      height   : 350px;
+      width  : 1000px;
+      height : 350px;
     }
 
     .countdown-time-panel {
@@ -272,14 +272,10 @@ export default {
   .logo-section {
     margin-left  : auto;
     margin-right : auto;
-
     img {
       max-width: 200px;
     }
   }
 }
 
-.maryoku-textarea {
-
-}
 </style>
