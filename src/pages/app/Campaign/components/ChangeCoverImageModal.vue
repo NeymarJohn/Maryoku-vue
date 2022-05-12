@@ -257,6 +257,7 @@ export default {
       this.addNewImageConcept({ thumb_url: url, url });
     },
     async addNewImageConcept(newImage) {
+      this.loading = true;
       const images = [...this.conceptImages, newImage];
       const data   = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
         event        : new CalendarEvent({id: this.event.id}),
