@@ -223,6 +223,7 @@ export default {
     position        : relative;
     margin-bottom   : 110px;
     min-height      : 240px;
+    background      : #F52474;
     img {
       max-height    : 500px;
       width         : 100%;
@@ -231,8 +232,8 @@ export default {
     }
 
     .change-cover-concept {
-      width  : 1000px;
-      height : 350px;
+      width    : 1000px;
+      height   : 350px;
     }
 
     .countdown-time-panel {
@@ -272,10 +273,14 @@ export default {
   .logo-section {
     margin-left  : auto;
     margin-right : auto;
+
     img {
       max-width: 200px;
     }
   }
 }
 
+.maryoku-textarea {
+
+}
 </style>

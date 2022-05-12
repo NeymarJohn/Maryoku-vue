@@ -28,6 +28,7 @@ export default {
     padding     : 0;
     margin      : 0;
     button {
+      // margin-left: 10px !important;
       display: flex;
       justify-content: center;
     }
