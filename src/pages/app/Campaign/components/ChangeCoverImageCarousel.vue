@@ -56,24 +56,24 @@ export default {
   },
   props: {
     showButtonActions: {
-      type: Boolean,
-      default: true,
+      type    : Boolean,
+      default : true,
     },
     disableFilter: {
-      type: Boolean,
-      default: false,
+      type    : Boolean,
+      default : false,
     },
     images: {
-      type: Array,
-      default: () => [],
+      type    : Array,
+      default : () => [],
     },
     classImage: {
-      type: String,
-      default: "",
+      type    : String,
+      default : "",
     },
     selectedIndex: {
-      type: Number,
-      default: 0,
+      type    : Number,
+      default : 0,
     },
   },
   methods: {

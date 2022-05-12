@@ -241,7 +241,6 @@ export default {
       this.destroyDropzone = true;
       const dropZone = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-message");
       if (dropZone && dropZone[0]) dropZone[0].style.display = "block";
-
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
       if (preview) {
         const lastIndexPreview = preview.length - 1;
