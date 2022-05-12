@@ -24,7 +24,7 @@
     <template slot="body">
       <div class="change-cover-image-modal-body">
         <div class="change-cover-image-modal-body-cover-image">
-          <img v-if="selectedImage" :src="selectedImage" />
+          <img v-if="selectedImage" :src="selectedImage">
         </div>
         <div class="change-cover-image-modal-body-carousel-image">
           <change-cover-image-carousel
@@ -58,7 +58,7 @@
           <div class="section-upload-cover-image">
             <div class="wrapper-btn-design-on-canva d-flex justify-content-center align-center">
               <md-button class="md-white btn-design-on-canva" @click="handleClickDesignOnCanva">
-                <img class="mr-10" src="static/icons/Group 18599.svg" />
+                <img class="mr-10" src="static/icons/Group 18599.svg">
                 <span class="text-design-on-canva">
                   Design on Canva
                 </span>
@@ -103,23 +103,24 @@
 <script>
 // core
 import { mapMutations, mapActions } from "vuex";
-import vue2Dropzone from "vue2-dropzone";
-import { v4 as uuidv4 } from "uuid";
+import vue2Dropzone                 from "vue2-dropzone";
+import { v4 as uuidv4 }             from "uuid";
 
 // components
 // gloabl
-import { Modal } from "@/components";
+import { Modal }         from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 //local
 import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
 
 // models
 import CalendarEvent from "@/models/CalendarEvent";
-import EventConcept from "@/models/EventConcept";
+import EventConcept  from "@/models/EventConcept";
 
 // dependencies
-import S3Service from "@/services/s3.service";
-import loop      from "@/helpers/number/loop";
+import S3Service      from "@/services/s3.service";
+import loop           from "@/helpers/number/loop";
+import arrayIsNoEmpty from "@/helpers/array/is/noEmpty";
 
 export default {
   name: "ChangeCoverImageModal",
@@ -141,21 +142,21 @@ export default {
   },
   data() {
     return {
-      loading: false,
-      selectedImage: null,
-      selectedIndex: 0,
-      canvaApi: null,
-      destroyDropzone: false,
-      carouselCurrentItem: 0,
+      loading             : false,
+      selectedImage       : null,
+      selectedIndex       : 0,
+      canvaApi            : null,
+      destroyDropzone     : false,
+      carouselCurrentItem : 0,
       dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 60,
-        thumbnailHeight: 60,
-        createImageThumbnails: false,
-        disablePreviews: false,
-        uploadMultiple: true,
-        acceptedFiles: "image/*",
-        headers: { "My-Awesome-Header": "header value" },
+        url                   : "https://httpbin.org/post",
+        acceptedFiles         : "image/*",
+        thumbnailWidth        : 60,
+        thumbnailHeight       : 60,
+        createImageThumbnails : false,
+        disablePreviews       : false,
+        uploadMultiple        : true,
+        headers               : { "My-Awesome-Header": "header value" },
       }
     };
   },
@@ -173,7 +174,9 @@ export default {
       return this.eventConcept.colors || [];
     },
     showConcept() {
-      return this.eventConcept && this.conceptImages && this.conceptImages.length && this.conceptColors && this.conceptColors.length;
+      return this.eventConcept
+          && arrayIsNoEmpty(this.conceptImages)
+          && arrayIsNoEmpty(this.conceptColors);
     }
   },
   created() {
@@ -181,8 +184,7 @@ export default {
       this.selectedImage = this.coverImage;
       this.selectedIndex = this.conceptImages.findIndex((item) => item.url === this.coverImage);
     } else {
-      this.selectedImage = (this.conceptImages && this.conceptImages.length)
-        ? this.conceptImages[0].url : this.defaultCoverImage;
+      this.selectedImage = arrayIsNoEmpty(this.conceptImages) ? this.conceptImages[0].url : this.defaultCoverImage;
     }
 
     (async () => {
@@ -197,7 +199,7 @@ export default {
   },
   methods: {
     ...mapMutations("event", ["setEventData"]),
-    ...mapActions("event", ["saveEventAction"]),
+    ...mapActions  ("event", ["saveEventAction"]),
     close(event) {
       this.$emit("close", event);
     },
@@ -232,11 +234,10 @@ export default {
             type: "Poster",
           },
           onDesignPublish: (opts) => {
-
             this.addNewImageConcept({
-              name: opts.designId,
-              originName: opts.designTitle,
-              url: opts.exportUrl
+              name       : opts.designId,
+              originName : opts.designTitle,
+              url        : opts.exportUrl
             });
           },
         });
@@ -261,7 +262,6 @@ export default {
       });
     },
     async addNewImageConcept(newImage) {
-
       const images = [...this.conceptImages, newImage];
       if (Object.keys(this.eventConcept).length) {
 
@@ -277,7 +277,7 @@ export default {
         colors: [],
       };
 
-      const query = new EventConcept(data);
+      const query   = new EventConcept(data);
       const concept = await query.save();
 
       this.saveEventAction(new CalendarEvent({...this.event, concept}));
