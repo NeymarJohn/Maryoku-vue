@@ -53,7 +53,6 @@ export default {
 <style lang="scss" scoped>
   .schedule-menu {
     position: relative;
-    z-index: 1000;
     &-btn {
       margin-top: 0px;
       height: 100%;
