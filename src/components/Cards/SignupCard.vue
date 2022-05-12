@@ -3,7 +3,7 @@
     <slot name="title" />
 
     <md-card-content class="signup-card">
-      <div class="md-layout" :style="styles.mdLayout">
+      <div class="md-layout">
         <slot name="content-left" />
         <slot name="content-middle" />
         <slot name="content-right" />
@@ -19,16 +19,6 @@
 <script>
 export default {
   name: "SignupCard",
-  props: {
-    styles: {
-      type: Object,
-      default: ()=>{
-        return{
-          mdLayout:""
-        }
-      }
-    }
-  }
 };
 </script>
 
