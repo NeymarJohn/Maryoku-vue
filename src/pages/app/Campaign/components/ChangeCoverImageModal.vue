@@ -257,7 +257,7 @@ export default {
     },
     async addNewImageConcept(newImage) {
       this.loading = true;
-      const images = [...this.conceptImages, newImage];
+      const images = [newImage, ...this.conceptImages];
       const data   = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
         event        : new CalendarEvent({id: this.event.id}),
         name         : "March Madness",
@@ -274,9 +274,10 @@ export default {
         const concept = await query.save();
         if (concept) {
           this.saveEventAction(new CalendarEvent({...this.event, concept}));
-          const imageLastIndex = images.length - 1;
-          this.selectImage(imageLastIndex);
-          setTimeout(this.carouselScrollingToIndex, 0, imageLastIndex);
+          // const imageLastIndex = images.length - 1;
+          const selectNewIndex = 0;
+          this.selectImage(selectNewIndex);
+          setTimeout(this.carouselScrollingToIndex, 0, selectNewIndex);
         }
       } finally {
         this.loading = false;
