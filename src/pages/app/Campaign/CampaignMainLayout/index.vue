@@ -344,7 +344,7 @@
               </md-button>
             </template>
             <template v-else>
-              <Scheduled :label="`Scheduled To ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'MMM DD, YYYY')}}`" />
+              <Scheduled :time="event.eventStartMillis" />
               <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
               <SendAgainBtn v-else @click="showScheduleModal = true">
                 Change Schedule
@@ -389,8 +389,7 @@
           class="d-flex align-center"
         >
           <template v-if="!canSchedule">
-            <Scheduled :label="`${selectedCampaign.campaignStatus === 'STARTED' ? 'Sent on' : 'Scheduled To'}
-            ${$dateUtil.formatScheduleDay(selectedCampaign.scheduleTime, 'MMM DD, YYYY')}`" />
+            <Scheduled :time="selectedCampaign.scheduleTime" />
             <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
             <SendAgainBtn v-else @click="showScheduleModal = true">
               Change Schedule
@@ -433,7 +432,7 @@ import Swal from "sweetalert2";
 // global
 import { Loader }            from "@/components";
 import HeaderActions         from "@/components/HeaderActions";
-import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal/index.vue";
+import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 
 // local
 import DeliverySettings    from "../DeliverySettings/index";
@@ -543,7 +542,6 @@ export default {
       return this.$store.state.auth.user;
     },
     selectedCampaign() {
-      console.log("selectedCampaign", this.selectedCampaignType);
       if (this.selectedCampaignType) {
         const campaign = this.$store.state.campaign[this.selectedCampaignType];
         if (campaign) return campaign || {};
@@ -556,12 +554,10 @@ export default {
       return "";
     },
     canSchedule() {
-      console.log("canSchedule", this.selectedCampaign);
       const { email = {}, phone = {}} = this.selectedCampaign.settings;
       return (email.selected && email.status !== "sent") || (phone.selected && phone.status !== "sent");
     },
     isScheduled() {
-      console.log("isScheduled", this.selectedCampaign);
       if (!this.selectedCampaign) return false;
 
       const { scheduleTime = 0 } = (this.selectedCampaign.scheduleSettings || { scheduleTime: 0});

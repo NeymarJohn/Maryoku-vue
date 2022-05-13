@@ -17,7 +17,7 @@
             Change Cover
           </md-button>
         </div>
-        <div class="view-event-photos">
+        <div class="view-event-photos" :style="previewBackgroundImage">
           <div class="wrapper-icon-play">
             <img class="icon-play" src="static/icons/play-black.svg">
           </div>
@@ -316,6 +316,9 @@ export default {
     campaignAttachments() {
       return this.campaignData.attachments || [];
     },
+    previewBackgroundImage(){
+      return this.campaignAttachments.length? `background-image: url(${this.campaignAttachments[0].url});`:"";
+    },
     additionalData() {
       const campaignAdditionalData = this.campaignData.additionalData || {};
       return {
@@ -332,7 +335,6 @@ export default {
     },
   },
   created() {
-    console.log('created', this.campaignData);
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {
@@ -488,7 +490,8 @@ export default {
     border-radius: 30px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     z-index: 13;
-
+    background-size: cover;
+    background-position: center;
     .wrapper-icon-play {
       width: 40%;
       display: flex;
