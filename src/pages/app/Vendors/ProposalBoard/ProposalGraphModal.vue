@@ -91,17 +91,20 @@ export default {
     };
   },
   async mounted () {
-    this.loading = true;
-    const { data } = await this.getEngagement();
-    const {
-      dates    = [],
-      proposal = [],
-      vendor   = [],
-      system   = []
-    } = data.data;
+    try {
+      this.loading = true;
+      const { data } = await this.getEngagement();
+      const {
+        dates    = [],
+        proposal = [],
+        vendor   = [],
+        system   = []
+      } = data.data;
 
-    this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
-    this.loading         = false;
+      this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
+    } finally {
+      this.loading         = false;
+    }
   },
   methods: {
     getEngagementById (proposalId) {
