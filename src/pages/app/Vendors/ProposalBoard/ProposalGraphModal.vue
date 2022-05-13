@@ -62,16 +62,18 @@
 </template>
 
 <script>
-import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
+import ProposalChart    from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
-const components = {
-  Modal: () => import("@/components/Modal.vue"),
-  Loader: () => import("@/components/loader/Loader.vue"),
-};
-import { getReq } from "@/utils/token";
+import { getReq }       from "@/utils/token";
+
 export default {
   name: "ProposalGraphModal",
-  components: {...components, ProposalChart, ProposalPieChart},
+  components: {
+    Modal  : () => import("@/components/Modal.vue"),
+    Loader : () => import("@/components/loader/Loader.vue"),
+    ProposalChart,
+    ProposalPieChart
+  },
   props: {
     proposal: {
       type    : Object,

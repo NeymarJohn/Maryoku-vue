@@ -204,7 +204,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .color-select-button {
-  box-sizing: border-box;
   position: relative;
   &-mask {
     position: fixed;
@@ -263,8 +262,6 @@ export default {
         margin-bottom: 0;
         text-align: left;
         padding-left: 6px;
-        font-size: 16px;
-        font-family: 'Manrope-Regular';
       }
       color: #a0a0a0;
       .colors-wrapper {
