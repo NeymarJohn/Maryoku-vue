@@ -90,22 +90,26 @@ export default {
       engageChartData: [],
     };
   },
-  mounted () {
-    console.log("mounted", this.proposal);
+  async mounted () {
+    this.loading = true;
+    const { data } = await this.getEngagement();
+    const {
+      dates    = [],
+      proposal = [],
+      vendor   = [],
+      system   = []
+    } = data.data;
 
-    getReq(`/1/proposals/${this.proposal.id}/engagement/summary`)
-      .then(res => {
-        if (res.data && res.data.success) {
-
-          const {dates, proposal, vendor, system} = res.data.data;
-          this.engageChartData = dates.map((it, idx) => {
-            return {label: it, value: proposal[idx], future: true};
-          });
-        }
-        this.loading = false;
-      });
+    this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
+    this.loading         = false;
   },
   methods: {
+    getEngagementById (proposalId) {
+      return getReq(`/1/proposals/${proposalId}/engagement/summary`);
+    },
+    getEngagement () {
+      return this.getEngagementById(this.proposal.id);
+    },
     close() {
       this.$emit("close");
     },
