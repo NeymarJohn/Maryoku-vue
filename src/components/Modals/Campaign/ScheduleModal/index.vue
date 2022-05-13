@@ -1,5 +1,5 @@
 <template>
-  <modal class="campaign-schedule-modal">
+  <modal class="campaign-schedule-modal" :styles="styles">
     <template slot="header">
       <div v-if="!showCalendar" class="add-category-model__header p-15">
         <div class="font-size-30 font-bold">
@@ -232,7 +232,13 @@ export default {
       };
 
       return tryCampaignScheduleTime(this.currentCampaignIndex);
-    }
+    },
+    styles(){
+      return {
+        modalWrapper: "max-height: unset;",
+        header:"justify-content: start;",
+      };
+    },
   },
   watch: {
     selectedOption (value) {

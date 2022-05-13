@@ -25,7 +25,7 @@
               <div class="font-size-22 text-left font-bold-extra">${{ proposal.cost | withComma }}</div>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button v-if="!options[idx]" class="md-simple md-outlined md-red maryoku-btn" @click="replace">Give me a different option</md-button>
+              <md-button v-if="!expired(proposal)" class="md-simple md-outlined md-red maryoku-btn" @click="replace">Give me a different option</md-button>
               <div v-else class="d-flex align-center bg-light-green p-20" style="width: 330px">
                 <img :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`" width="28px"/>
                 <p class="font-size-14 mb-0 mx-1">We'll look for a better alternative</p>
@@ -83,7 +83,8 @@ export default {
   },
   props: {
     proposals: {
-      type: Object,
+      type: Array,
+      default: () => [],
     }
   },
   data(){
@@ -91,7 +92,6 @@ export default {
       step: 1,
       checked_proposals: [],
       checked_better_options: [],
-      options: [0,1,1],
       essential: null,
       better_options : [
         {label: "Prices are higher than my expectations", value: 'price_higher'},
@@ -127,10 +127,15 @@ export default {
     },
     replace() {
       if (!this.checked_proposals.length) return;
-      this.$emit('replace', this.checked_proposals)
+      this.$emit('action', {name: 'alternative', proposals: this.checked_proposals})
     },
     uploadVendor(){
       this.$emit('action', 'already_have_venue')
+    },
+    expired(proposal) {
+      let today = new Date();
+      let expiredDate = new Date(proposal.expiredDate ? proposal.expiredDate : proposal.dateCreated);
+      return (expiredDate.getTime() - today.getTime()) < 0;
     }
   }
 };

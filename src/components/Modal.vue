@@ -9,7 +9,7 @@
       @dragover="modalMaskClick"
       @dragleave="modalMaskClick"
     >
-      <div class="modal-wrapper">
+      <div class="modal-wrapper"  :style="styles.modalWrapper">
         <div v-click-outside="closeModal" :class="containerClass">
           <div class="modal-header" :style="styles.header">
             <slot name="header" />
@@ -39,6 +39,7 @@ export default {
           body:"",
           footer:"",
           modalMask:"",
+          modalWrapper:"",
         };
       }
     },
