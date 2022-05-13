@@ -86,8 +86,8 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      engageChartData: [],
+      loading         : true,
+      engageChartData : [],
     };
   },
   async mounted () {
@@ -103,7 +103,7 @@ export default {
 
       this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
     } finally {
-      this.loading         = false;
+      this.loading = false;
     }
   },
   methods: {
