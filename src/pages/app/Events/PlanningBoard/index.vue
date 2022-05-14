@@ -488,6 +488,7 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="top3Proposals"
+      :somethingBetter="currentRequirement.somethingBetter"
       @action="handleAction"
       @cancel="showDifferentProposals=false"
     >
@@ -499,14 +500,18 @@ import moment from "moment";
 import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
+
 import { camelize } from "@/utils/string.util";
 import Proposal from "@/models/Proposal";
+import CalendarEvent from "@/models/Event";
+import ProposalEngagement from '@/models/ProposalEngagement';
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
+import ProposalRequestRequirement from '@/models/ProposalRequestRequirement';
+
 
 import { postReq, updateReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
-import ProposalEngagement from '@/models/ProposalEngagement'
 
 const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
@@ -1118,7 +1123,16 @@ export default {
           this.openNewTab(router.href)
 
         } else if (e.name === "something_different") {
-          this.showDifferentProposals = true;
+          if (!this.showDifferentProposals) {
+            this.showDifferentProposals = true;
+          } else {
+            this.showDifferentProposals = false;
+
+            const q = new ProposalRequestRequirement({...this.currentRequirement, somethingBetter: e.somethingBetter})
+                    .for(new CalendarEvent(this.event))
+            await q.save();
+          }
+
         } else if (e.name === "detail") {
           await this.$store.commit('planningBoard/setProposal', proposal);
           await this.$store.dispatch('planningBoard/selectVersion', proposal.selectedVersion);
@@ -1131,9 +1145,7 @@ export default {
             proposals: e.proposals,
             requirementId: this.currentRequirement.id,
           });
-
-          
-          console.log('ask.alternatives.res', res);
+          if (res.data.success) this.currentRequirement.top3 = res.data.data;
         }
     },
     openNewTab(link) {

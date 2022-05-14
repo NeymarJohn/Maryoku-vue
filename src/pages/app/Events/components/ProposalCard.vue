@@ -24,11 +24,10 @@
         >
           Awaiting reply
         </div>
-        <div class="color-white">{{proposal.id}}</div>
         <md-button v-if="isAlternative" class="md-simple md-white maryoku-btn mt-20" @click="action('alternative')">
           Show me an alternative offer
         </md-button>
-        <p v-else class="color-white">
+        <p v-else class="color-white text-center px-10">
           there are no other alternatives in queue right now, and make a new request for proposal for other vendors
         </p>
       </div>
