@@ -24,6 +24,7 @@
         >
           Awaiting reply
         </div>
+        <div class="color-white">{{proposal.id}}</div>
         <md-button v-if="isAlternative" class="md-simple md-white maryoku-btn mt-20" @click="action('alternative')">
           Show me an alternative offer
         </md-button>

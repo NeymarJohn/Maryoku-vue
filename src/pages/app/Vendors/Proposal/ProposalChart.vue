@@ -76,29 +76,34 @@
 </template>
 
 <script>
-import LineChart from "@/components/Chart/LineChart";
+import LineChart    from "@/components/Chart/LineChart";
+import arrayMaximum from "@/helpers/array/maximum";
 
 export default {
-  components: { LineChart },
+  name: "ProposalChart",
+  components: {
+    LineChart
+  },
   props: {
     chartData: {
-      type: Array,
-      default: () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      type    : Array,
+      default : () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     },
   },
   data() {
+    const defaultColor = "rgb(255,219,99)";
     return {
       lineChartData: {
-        labels: [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
-        datasets: [
+        labels   : [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
+        datasets : [
           {
-            label: "Industry Benchmark",
-            borderDashOffset: 0,
-            borderDash: [7, 2],
-            fill: false,
-            lineTension: 0,
-            backgroundColor: "rgb(255,219,99)",
-            borderColor: "rgb(255,219,99)",
+            label            : "Industry Benchmark",
+            borderDashOffset : 0,
+            borderDash       : [7, 2],
+            fill             : false,
+            lineTension      : 0,
+            backgroundColor  : defaultColor,
+            borderColor      : defaultColor,
             data: [
               {
                 x: 0,
@@ -127,13 +132,13 @@ export default {
             ],
           },
           {
-            label: "Average Of My Proposal",
-            borderDashOffset: 0,
-            borderDash: [7, 2],
-            fill: false,
-            lineTension: 0,
-            backgroundColor: "rgb(99,219,255)",
-            borderColor: "rgb(99,219,255)",
+            label            : "Average Of My Proposal",
+            borderDashOffset : 0,
+            borderDash       : [7, 2],
+            fill             : false,
+            lineTension      : 0,
+            backgroundColor  : "rgb(99,219,255)",
+            borderColor      : "rgb(99,219,255)",
             data: [
               {
                 x: 0,
@@ -164,14 +169,14 @@ export default {
         ]
       },
       lineChartOptions: {
-        maintainAspectRatio: false,
-        showLine: false,
-        showGaps: false,
+        maintainAspectRatio : false,
+        showLine            : false,
+        showGaps            : false,
         layout: {
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0
+          left   : 0,
+          right  : 0,
+          top    : 0,
+          bottom : 0
         },
         legend: {
           display: false,
@@ -191,32 +196,26 @@ export default {
           }]
         }
       },
-      endTooltip: null,
-      toolTipStatus: "hidden",
-      toolTip: {},
-      toolTipPosition: "left",
-      maxValue: 0,
-      x: 0,
-      y: 0,
+      endTooltip      : null,
+      toolTipStatus   : "hidden",
+      toolTipPosition : "left",
+      toolTip         : {},
+      maxValue        : 0,
+      x               : 0,
+      y               : 0,
     };
   },
   computed: {
     max() {
-      return this.chartData.reduce((s, item) => {
-        if (item.value > s) {
-          s = item.value;
-        }
-        return s;
-      }, 0);
+      return arrayMaximum((item) => item.value, this.chartData);
     },
   },
   methods: {
-    setTooltipPos: function (event, item) {
+    setTooltipPos (event, item) {
       let CTM = this.$refs.bar_chart.getScreenCTM();
-
       let mouseX = (event.clientX - CTM.e) / CTM.a;
-
       let mouseY = (event.clientY - CTM.f) / CTM.d;
+
       this.x = mouseX - 193 / CTM.a;
       this.y = mouseY - 40 / CTM.d;
       if (this.x < 0) {
@@ -238,16 +237,12 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-line-chart {
-  position: absolute;
-  bottom: 299px;
-  width: 885px;
-  height: 205px;
-  z-index: -1;
-  left: 135px;
+  position : absolute;
+  bottom   : 299px;
+  width    : 885px;
+  height   : 205px;
+  z-index  : -1;
+  left     : 135px;
 
-}
-</style>
-<style lang="scss" scoped>
-.bar {
 }
 </style>

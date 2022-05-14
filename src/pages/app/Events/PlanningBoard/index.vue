@@ -657,7 +657,6 @@ export default {
       return this.currentRequirement.top3.map(id => this.categoryProposals.find(p => p.id === id));
     },
     cart() {
-      return this.$store.state.planningBoard.cart;
     },
     proposalUnviewed() {
       if (this.proposals || !this.proposals.length) return false;
@@ -1127,7 +1126,14 @@ export default {
           this.showDetails = true;
           await this.updateProposalEngagement();
         } else if (e.name === "alternative") {
-          console.log('ask.alternatives', e.proposals);
+
+          const res = await postReq(`/1/proposals/replace`, {
+            proposals: e.proposals,
+            requirementId: this.currentRequirement.id,
+          });
+
+          
+          console.log('ask.alternatives.res', res);
         }
     },
     openNewTab(link) {
