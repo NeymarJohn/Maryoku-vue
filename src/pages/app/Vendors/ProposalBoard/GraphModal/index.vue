@@ -102,17 +102,20 @@ export default {
       const rawData =
         // data.data;
         mock;
-
-      console.log(Object.values(rawData).map(({ length }) => length));
-
-      const fomated = Array.from({ length: Math.max(...Object.values(rawData).map(({ length }) => length)) }, (value, index) => ({
+      const valuesRawData     = Object.values(rawData);
+      const lengthsValuesData = valuesRawData.map(({ length }) => length);
+      const lengthData        = Math.max.apply(null, lengthsValuesData);
+      const fomatedData       = Array.from({ length: lengthData }, (value, index) => ({
         date     : rawData.dates    [index],
         proposal : rawData.proposal [index] || 0,
         vendor   : rawData.vendor   [index] || 0,
         system   : rawData.system   [index] || 0,
       }));
 
-      console.dir({ fomated });
+      const sortFormatedData   = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
+      const sortedFormatedData = sortFormatedData(fomatedData);
+
+      console.dir({ sortedFormatedData });
 
       // const normilizeData = pipe(
       //   arraySort ((dateA = "", dateB = "") => new Date(dateA) - new Date(dateB)),
