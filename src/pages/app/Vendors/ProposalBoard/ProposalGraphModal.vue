@@ -77,19 +77,17 @@ export default {
   props: {
     proposal: {
       type    : Object,
-      default : () => {}
+      default : () => ({})
     },
     required: {
       type    : Boolean,
       default : true
     },
   },
-  data() {
-    return {
-      loading         : true,
-      engageChartData : [],
-    };
-  },
+  data: () => ({
+    loading         : true,
+    engageChartData : [],
+  }),
   async mounted () {
     try {
       this.loading = true;
@@ -101,7 +99,12 @@ export default {
         system   = []
       } = data.data;
 
-      this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
+      this.engageChartData = dates
+        .sort((dateA, dateB) => new Date(dateA) - new Date(dateB))
+        .map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
+
+      console.log(this.engageChartData, data.data);
+
     } finally {
       this.loading = false;
     }
