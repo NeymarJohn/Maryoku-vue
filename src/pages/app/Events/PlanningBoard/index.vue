@@ -118,7 +118,7 @@
                     <md-button class="md-simple md-black-middle maryoku-btn"
                                :disabled="(action.value === 'share' || action.value === 'compare' ||
                                     action.value === 'something_different') && !categoryProposals.length"
-                               @click="handleAction({name: action.value})">
+                               @click="handleAction(action.value)">
                       <md-icon class="mr-10">{{ action.icon }}</md-icon>
                       {{ action.label }}
                     </md-button>
@@ -159,16 +159,14 @@
             <template v-if="proposal">
               <div class="mt-30">
                 <div class="proposals-booking-items">
-                  <template v-for="(p, index) in top3Proposals">
+                  <div v-for="(p, index) in categoryProposals.slice(0, 3)" :key="index" class="">
                     <ProposalHeader
-                      v-if="p"
-                      :key="index"
                       :event="event"
-                      :proposal-selected="p.id === proposal.id"
+                      :proposal-selected="proposal && p.id === proposal.id"
                       :proposal-request="p"
                       @click.native="selectProposal(p)"
                     />
-                  </template>
+                  </div>
                 </div>
 
                 <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
@@ -233,18 +231,15 @@
               </div>
             </template>
             <div v-else class="proposal-card-items">
-              <template v-for="(p, index) in top3Proposals">
-                <ProposalCard
-                  v-if="p"
-                  :key="index"
-                  :proposal="p"
-                  :isAlternative="categoryProposals.length > 3"
-                  :component="selectedCategory"
-                  :is-collapsed="showDetails"
-                  :is-selected="proposal && proposal.id === p.id"
-                  @action="handleAction($event, p)"
-                />
-              </template>
+              <ProposalCard
+                v-for="(p, index) in categoryProposals.slice(0, 3)"
+                :key="index"
+                :proposal="p"
+                :component="selectedCategory"
+                :is-collapsed="showDetails"
+                :is-selected="proposal && proposal.id === p.id"
+                @goDetail="goDetailPage"
+              />
             </div>
           </div>
           <PendingForVendors v-else :expired-time="expireTime" />
@@ -372,7 +367,7 @@
               </button>
               <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
                 <li v-for="action in moreActions" class="other-list" :key="action.label">
-                  <a class="other-item font-size-16" @click="handleAction({name: action.value})">
+                  <a class="other-item font-size-16" @click="handleAction(action.value)">
                     <div class="other-name">
                       <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
                       {{ action.label }}
@@ -491,9 +486,9 @@
     />
     <DifferentProposalsModal
       v-if="showDifferentProposals"
-      :proposals="top3Proposals"
-      :somethingBetter="currentRequirement.somethingBetter"
+      :proposals="categoryProposals.slice(0, 3)"
       @action="handleAction"
+      @replace="replaceProposal"
       @cancel="showDifferentProposals=false"
     >
     </DifferentProposalsModal>
@@ -504,18 +499,14 @@ import moment from "moment";
 import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
-
 import { camelize } from "@/utils/string.util";
 import Proposal from "@/models/Proposal";
-import CalendarEvent from "@/models/Event";
-import ProposalEngagement from '@/models/ProposalEngagement';
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
-import ProposalRequestRequirement from '@/models/ProposalRequestRequirement';
-
 
 import { postReq, updateReq, getReq } from "@/utils/token";
 import { TimerMixins } from "@/mixins";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
+import ProposalEngagement from '@/models/ProposalEngagement'
 
 const components = {
   ActionModal: () => import("@/components/ActionModal.vue"),
@@ -661,11 +652,8 @@ export default {
 
       return this.proposals[this.selectedCategory.componentId];
     },
-    top3Proposals() {
-      if (!this.currentRequirement || !this.currentRequirement.top3 || !this.currentRequirement.top3.length || !this.categoryProposals.length) return []
-      return this.currentRequirement.top3.map(id => this.categoryProposals.find(p => p.id === id));
-    },
     cart() {
+      return this.$store.state.planningBoard.cart;
     },
     proposalUnviewed() {
       if (this.proposals || !this.proposals.length) return false;
@@ -924,6 +912,8 @@ export default {
       this.showMoreCats = false;
     },
     selectCategory(category) {
+      console.log("sel.category", category);
+
       if (category.key) {
         category["componentId"] = category.key;
       }
@@ -948,6 +938,7 @@ export default {
       if(this.showCommentPanel){
         this.toggleCommentMode();
       }
+      console.log("sel.cat", this.showMoreCats)
     },
     selectRemainingCategory(category, action) {
         if (action === "add") {
@@ -1004,6 +995,13 @@ export default {
       })
 
       this.currentRequirement = res.data;
+    },
+    async goDetailPage(proposal) {
+      await this.$store.commit('planningBoard/setProposal', proposal);
+      await this.$store.dispatch('planningBoard/selectVersion', proposal.selectedVersion);
+
+      this.showDetails = true;
+      await this.updateProposalEngagement();
     },
     async updateProposalEngagement() {
       const engagement = await getReq(`/1/proposals/${this.proposal.id}/engagement/proposal`);
@@ -1109,47 +1107,24 @@ export default {
       });
       return proposal;
     },
-    async handleAction(e, proposal = null) {
-
-        if (e.name === "download") {
+    handleAction(action) {
+        if (action === "download") {
           this.openNewTab(`${process.env.SERVER_URL}/1/proposal/${this.proposal.id}/download`);
 
-        } else if (e.name === "negotiate" || e.name === "share") {
+        } else if (action === "negotiate" || action === "share") {
           this.setProposal(this.proposal);
-          if (e.name === "negotiate") this.setOpen("NEGOTIATION");
+          if (action === "negotiate") this.setOpen("NEGOTIATION");
           else this.setOpen("SHARE");
 
-        } else if (e.name === "compare") {
+        } else if (action === "compare") {
           this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
 
-        } else if (e.name === "already_have_venue") {
+        } else if (action === "already_have_venue") {
           const router = this.$router.resolve({ name: "VendorSignup" });
           this.openNewTab(router.href)
 
-        } else if (e.name === "something_different") {
-          if (!this.showDifferentProposals) {
-            this.showDifferentProposals = true;
-          } else {
-            this.showDifferentProposals = false;
-
-            const q = new ProposalRequestRequirement({...this.currentRequirement, somethingBetter: e.somethingBetter})
-                    .for(new CalendarEvent(this.event))
-            await q.save();
-          }
-
-        } else if (e.name === "detail") {
-          await this.$store.commit('planningBoard/setProposal', proposal);
-          await this.$store.dispatch('planningBoard/selectVersion', proposal.selectedVersion);
-
-          this.showDetails = true;
-          await this.updateProposalEngagement();
-        } else if (e.name === "alternative") {
-
-          const res = await postReq(`/1/proposals/replace`, {
-            proposals: e.proposals,
-            requirementId: this.currentRequirement.id,
-          });
-          if (res.data.success) this.currentRequirement.top3 = res.data.data;
+        } else if (action === "something_different") {
+          this.showDifferentProposals = true;
         }
     },
     openNewTab(link) {
@@ -1158,10 +1133,10 @@ export default {
     async replaceProposal(proposals) {
       console.log('replaceProposal', proposals)
       this.showDifferentProposals = false;
-      await postReq(`/1/proposals/replace`, {
-        proposals,
-        requirementId: this.currentRequirement.id,
-      });
+      // await postReq(`/1/proposals/replace`, {
+      //   proposals,
+      //   requirementId: this.currentRequirement.id,
+      // });
     },
   },
   watch: {
@@ -1295,7 +1270,6 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1;
     width: 100%;
 
     button {

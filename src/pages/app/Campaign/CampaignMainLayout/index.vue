@@ -344,7 +344,7 @@
               </md-button>
             </template>
             <template v-else>
-              <Scheduled :label="`Scheduled To ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'MMM DD, YYYY')}}`" />
+              <Scheduled :label="`Scheduled To ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'MMM DD, YYYY')}`" />
               <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
               <SendAgainBtn v-else @click="showScheduleModal = true">
                 Change Schedule
@@ -543,7 +543,6 @@ export default {
       return this.$store.state.auth.user;
     },
     selectedCampaign() {
-      console.log("selectedCampaign", this.selectedCampaignType);
       if (this.selectedCampaignType) {
         const campaign = this.$store.state.campaign[this.selectedCampaignType];
         if (campaign) return campaign || {};
@@ -556,12 +555,10 @@ export default {
       return "";
     },
     canSchedule() {
-      console.log("canSchedule", this.selectedCampaign);
       const { email = {}, phone = {}} = this.selectedCampaign.settings;
       return (email.selected && email.status !== "sent") || (phone.selected && phone.status !== "sent");
     },
     isScheduled() {
-      console.log("isScheduled", this.selectedCampaign);
       if (!this.selectedCampaign) return false;
 
       const { scheduleTime = 0 } = (this.selectedCampaign.scheduleSettings || { scheduleTime: 0});
@@ -689,7 +686,7 @@ export default {
           ...this.deliverySettings,
           email: {
             ...(this.deliverySettings.email || {}),
-            status: "sent",
+            status: "ready",
           }
         };
       }
@@ -698,7 +695,7 @@ export default {
           ...this.deliverySettings,
           phone: {
             ...(this.deliverySettings.phone || {}),
-            status: "sent",
+            status: "ready",
           }
         };
       };
@@ -736,7 +733,7 @@ export default {
         scheduleOption      : selectedOption,
         scheduleOptionValue : scheduleSettings[selectedOption].value,
       };
-      this.setCampaignAttribute(this.campaignTabs[selectedCampaignIndex].name, "scheduleSettings", scheduleSettingsData);
+      this.setCampaignAttribute(this.selectedCampaignType, "scheduleSettings", scheduleSettingsData);
       this.scheduleCampaign();
     },
     revertSetting() {

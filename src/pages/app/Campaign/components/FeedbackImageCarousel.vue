@@ -18,9 +18,6 @@
         </md-button>
       </template>
       <div v-for="(item, index) in images" :key="index" class="carousel-item">
-        <div class="delete-image-icon">
-          <img  @click="deleteImage(index)" :src="`${$iconURL}Campaign/Group+3602.svg`">
-        </div>
         <img :src="item.src" class="carousel-image" :class="{ 'white-black': item.default }" @error="setAltImg($event, item)">
       </div>
       <template slot="next">
@@ -88,9 +85,6 @@ export default {
     };
   },
   methods: {
-    deleteImage(index) {
-      this.$emit("deleteImage", index);
-    },
     uploadImage() {
       document.getElementById("carousel-file").click();
     },
@@ -171,17 +165,6 @@ export default {
     overflow: hidden;
     position: relative;
     padding-top: 75%;
-    .delete-image-icon{
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 3;
-      width: 20px;
-      cursor: pointer;
-      background-color: #FFFFFF;
-      border-radius: 50%;
-      padding: 5px;
-    }
 
     .carousel-image {
       width: 100%;

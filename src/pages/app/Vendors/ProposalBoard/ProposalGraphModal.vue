@@ -62,18 +62,16 @@
 </template>
 
 <script>
-import ProposalChart    from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
+import ProposalChart from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
-import { getReq }       from "@/utils/token";
-
+const components = {
+  Modal: () => import("@/components/Modal.vue"),
+  Loader: () => import("@/components/loader/Loader.vue"),
+};
+import { getReq } from "@/utils/token";
 export default {
   name: "ProposalGraphModal",
-  components: {
-    Modal  : () => import("@/components/Modal.vue"),
-    Loader : () => import("@/components/loader/Loader.vue"),
-    ProposalChart,
-    ProposalPieChart
-  },
+  components: {...components, ProposalChart, ProposalPieChart},
   props: {
     proposal: {
       type    : Object,
@@ -86,33 +84,26 @@ export default {
   },
   data() {
     return {
-      loading         : true,
-      engageChartData : [],
+      loading: true,
+      engageChartData: [],
     };
   },
-  async mounted () {
-    try {
-      this.loading = true;
-      const { data } = await this.getEngagement();
-      const {
-        dates    = [],
-        proposal = [],
-        vendor   = [],
-        system   = []
-      } = data.data;
+  mounted () {
+    console.log("mounted", this.proposal);
 
-      this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
-    } finally {
-      this.loading = false;
-    }
+    getReq(`/1/proposals/${this.proposal.id}/engagement/summary`)
+      .then(res => {
+        if (res.data && res.data.success) {
+
+          const {dates, proposal, vendor, system} = res.data.data;
+          this.engageChartData = dates.map((it, idx) => {
+            return {label: it, value: proposal[idx], future: true};
+          });
+        }
+        this.loading = false;
+      });
   },
   methods: {
-    getEngagementById (proposalId) {
-      return getReq(`/1/proposals/${proposalId}/engagement/summary`);
-    },
-    getEngagement () {
-      return this.getEngagementById(this.proposal.id);
-    },
     close() {
       this.$emit("close");
     },
