@@ -94,34 +94,37 @@ export default {
     loading         : true,
     engageChartData : [],
   }),
-  async mounted () {
-    try {
-      this.loading = true;
-      const { data = {} } = await this.getEngagement();
-
-      const rawData =
-        data.data;
-        // mock;
-      const valuesRawData     = Object.values(rawData);
-      const lengthsValuesData = valuesRawData.map(({ length }) => length);
-      const lengthData        = Math.max.apply(null, lengthsValuesData);
-      const fomatedData       = Array.from({ length: lengthData }, (value, index) => ({
-        date     : rawData.dates    [index],
-        proposal : rawData.proposal [index] || 0,
-        vendor   : rawData.vendor   [index] || 0,
-        system   : rawData.system   [index] || 0,
-      }));
-
-      const sortFormatedData           = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
-      const sortedFormatedData         = sortFormatedData(fomatedData);
-      const mapFormatedDataToChartData = arrayMap(({ date, proposal, vendor, system }) => ({ label: date, value: proposal, future: true }));
-      const chartData                  = mapFormatedDataToChartData(sortedFormatedData);
-      this.engageChartData             = chartData;
-    } finally {
-      this.loading = false;
-    }
+  mounted () {
+    updateEngagementData();
   },
   methods: {
+    async updateEngagementData () {
+      try {
+        this.loading = true;
+        const { data = {} } = await this.getEngagement();
+
+        const rawData =
+          // data.data;
+          mock;
+        const valuesRawData     = Object.values(rawData);
+        const lengthsValuesData = valuesRawData.map(({ length }) => length);
+        const lengthData        = Math.max.apply(null, lengthsValuesData);
+        const fomatedData       = Array.from({ length: lengthData }, (_, index) => ({
+          date     : rawData.dates    [index],
+          proposal : rawData.proposal [index] || 0,
+          vendor   : rawData.vendor   [index] || 0,
+          system   : rawData.system   [index] || 0,
+        }));
+
+        const sortFormatedData           = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
+        const sortedFormatedData         = sortFormatedData(fomatedData);
+        const mapFormatedDataToChartData = arrayMap(({ date, proposal, vendor, system }) => ({ label: date, value: proposal, future: true }));
+        const chartData                  = mapFormatedDataToChartData(sortedFormatedData);
+        this.engageChartData             = chartData;
+      } finally {
+        this.loading = false;
+      }
+    },
     getEngagementById (proposalId) {
       return getReq(`/1/proposals/${proposalId}/engagement/summary`);
     },
