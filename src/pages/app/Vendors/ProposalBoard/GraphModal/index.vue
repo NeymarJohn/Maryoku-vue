@@ -112,17 +112,12 @@ export default {
         system   : rawData.system   [index] || 0,
       }));
 
-      const sortFormatedData   = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
-      const sortedFormatedData = sortFormatedData(fomatedData);
-
-      console.dir({ sortedFormatedData });
-
-      // const normilizeData = pipe(
-      //   arraySort ((dateA = "", dateB = "") => new Date(dateA) - new Date(dateB)),
-      //   arrayMap  ((date  = "", index)      => ({ label: date, value: proposal[index], future: true }))
-      // );
-
-      this.engageChartData = [];
+      const sortFormatedData           = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
+      const sortedFormatedData         = sortFormatedData(fomatedData);
+      const mapFormatedDataToChartData = arrayMap(({ date, proposal, vendor, system }) => ({ label: date, value: proposal, future: true }));
+      const chartData                  = mapFormatedDataToChartData(sortedFormatedData);
+      console.dir({ chartData });
+      this.engageChartData = chartData;
     } finally {
       this.loading = false;
     }
