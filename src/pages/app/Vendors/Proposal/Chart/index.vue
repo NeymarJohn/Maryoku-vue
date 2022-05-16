@@ -158,7 +158,10 @@ export default {
             label            : "Industry Benchmark",
             backgroundColor  : defaultColor[0],
             borderColor      : defaultColor[0],
-            data: [],
+            data: this.chartData.map(({ value }, index) => ({
+              x: index + 1,
+              y: value
+            })),
           },
           {
             ...defaultDataSetConfig,
