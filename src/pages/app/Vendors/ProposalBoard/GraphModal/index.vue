@@ -104,8 +104,8 @@ export default {
         const { data = {} } = await this.getEngagement();
 
         const rawData =
-          // data.data;
-          mock;
+          data.data;
+          // mock;
         const valuesRawData     = Object.values(rawData);
         const lengthsValuesData = valuesRawData.map(({ length }) => length);
         const lengthData        = Math.max.apply(null, lengthsValuesData);
@@ -116,11 +116,11 @@ export default {
           system   : rawData.system   [index] || 0,
         }));
 
+        console.log(rawData);
+
         const sortFormatedData           = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
         const sortedFormatedData         = sortFormatedData(fomatedData);
-        const mapFormatedDataToChartData = arrayMap(({ date, proposal, vendor, system }) => ({ label: date, value: proposal, future: true }));
-        const chartData                  = mapFormatedDataToChartData(sortedFormatedData);
-        this.engageChartData             = chartData;
+        this.engageChartData             = sortedFormatedData;
       } finally {
         this.loading = false;
       }

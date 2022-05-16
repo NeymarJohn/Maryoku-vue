@@ -22,11 +22,11 @@
           :x="45 + 80 * index"
           y="40"
           width="20"
-          :height="(chartDataItem.value / max) * 210"
+          :height="(chartDataItem.proposal / max) * 210"
           rx="8"
-          :style="`fill: ${chartDataItem.future ? '#641956' : 'white'}`"
+          style="fill: #641956"
         >
-          <title>{{ chartDataItem.value | withComma }}</title>
+          <title>{{ chartDataItem.proposal | withComma }}</title>
         </rect>
       </g>
       <g v-for="(chartDataItem, index) in chartData" :key="`chartItem-${index}`">
@@ -38,7 +38,7 @@
               }
               "
         >
-          {{ chartDataItem.label }}
+          {{ chartDataItem.date }}
         </text>
         <image v-if="index === chartData.length-1" href="/static/icons/vendor/proposalBoard/proposal-after.svg" :x="90 + 80 * index" y="265" />
       </g>
@@ -61,7 +61,7 @@
           y="30"
           style="fill: #050505; font-family: 'Manrope-Regular'; font-size: 16px; font-weight: 800"
         >
-          <tspan x="25" dy="1.3em" style="font-size: 16px; font-weight: 300">{{ toolTip.value }}</tspan>
+          <tspan x="25" dy="1.3em" style="font-size: 16px; font-weight: 300">{{ toolTip.proposal }}</tspan>
         </text>
       </g>
     </svg>
@@ -149,18 +149,17 @@ export default {
 
   computed: {
     lineChartData () {
-
       return ({
-        labels   : this.chartData.map(({ value }) => value),
+        labels   : this.chartData.map(({ system }) => system),
         datasets : [
           {
             ...defaultDataSetConfig,
             label            : "Industry Benchmark",
             backgroundColor  : defaultColor[0],
             borderColor      : defaultColor[0],
-            data: this.chartData.map(({ value }, index) => ({
+            data: this.chartData.map(({ proposal }, index) => ({
               x: index + 1,
-              y: value
+              y: proposal
             })),
           },
           {
@@ -183,7 +182,7 @@ export default {
       });
     },
     max() {
-      return arrayMaximum((item) => item.value, this.chartData);
+      return arrayMaximum(({ proposal }) => proposal, this.chartData);
     },
   },
   methods: {
