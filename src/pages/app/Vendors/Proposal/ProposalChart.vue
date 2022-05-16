@@ -92,16 +92,20 @@ export default {
   },
   data() {
     const defaultColor = ["rgb(255,219,99)", "rgb(99,219,255)"];
+    const defaultDataSetConfig = {
+      borderDashOffset : 0,
+      borderDash       : [7, 2],
+      lineTension      : 0,
+      fill             : false,
+    };
+
     return {
       lineChartData: {
         labels   : [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
         datasets : [
           {
+            ...defaultDataSetConfig,
             label            : "Industry Benchmark",
-            borderDashOffset : 0,
-            borderDash       : [7, 2],
-            fill             : false,
-            lineTension      : 0,
             backgroundColor  : defaultColor[0],
             borderColor      : defaultColor[0],
             data: [
@@ -132,11 +136,8 @@ export default {
             ],
           },
           {
+            ...defaultDataSetConfig,
             label            : "Average Of My Proposal",
-            borderDashOffset : 0,
-            borderDash       : [7, 2],
-            fill             : false,
-            lineTension      : 0,
             backgroundColor  : defaultColor[1],
             borderColor      : defaultColor[1],
             data: [
@@ -227,6 +228,7 @@ export default {
       this.toolTipStatus = "visible";
       this.toolTip = item;
     },
+
     hideToolTip() {
       this.toolTipStatus = "hidden";
     },
