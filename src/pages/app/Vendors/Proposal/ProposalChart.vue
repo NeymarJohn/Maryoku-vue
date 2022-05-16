@@ -22,23 +22,17 @@
           :x="45 + 80 * index"
           y="40"
           width="20"
-          :height="(chartDataItem.proposal / max) * 210"
+          :height="(chartDataItem.value / max) * 210"
           rx="8"
-          style="fill: #641956"
+          :style="`fill: ${chartDataItem.future ? '#641956' : 'white'}`"
         >
-          <title>{{ chartDataItem.proposal | withComma }}</title>
+          <title>{{ chartDataItem.value | withComma }}</title>
         </rect>
       </g>
       <g v-for="(chartDataItem, index) in chartData" :key="`chartItem-${index}`">
         <image v-if="index === 0" href="/static/icons/vendor/proposalBoard/proposal-before.svg" :x="25 + 80 * index" y="265" />
-        <text :x="45 + 80 * index" y="280" fill="#000000"
-              :class="{
-                'first_item': index === 0,
-                'last_item' : index === chartData.length - 1
-              }
-              "
-        >
-          {{ chartDataItem.date }}
+        <text :x="45 + 80 * index" y="280" fill="#000000" :class="{'first_item': index === 0,'last_item':index === chartData.length-1}">
+          {{ chartDataItem.label }}
         </text>
         <image v-if="index === chartData.length-1" href="/static/icons/vendor/proposalBoard/proposal-after.svg" :x="90 + 80 * index" y="265" />
       </g>
@@ -61,11 +55,10 @@
           y="30"
           style="fill: #050505; font-family: 'Manrope-Regular'; font-size: 16px; font-weight: 800"
         >
-          <tspan x="25" dy="1.3em" style="font-size: 16px; font-weight: 300">{{ toolTip.proposal }}</tspan>
+          <tspan x="25" dy="1.3em" style="font-size: 16px; font-weight: 300">{{ toolTip.value }}</tspan>
         </text>
       </g>
     </svg>
-
     <line-chart
       class="wrapper-line-chart"
       :chart-data="lineChartData"
@@ -75,40 +68,106 @@
       <span class="proposal-chart-legend-line" :style="`border-color:${item.backgroundColor}`" />{{ item.label }}
     </div>
     <div class="proposal-chart-divider" />
-    <Status />
+    <div class="proposal-status">
+      The proposal have
+      been updated
+    </div>
   </div>
 </template>
 
 <script>
-// components
-import LineChart from "@/components/Chart/LineChart";
-import Status    from "./Status/index.vue";
-
-// helpers
+import LineChart    from "@/components/Chart/LineChart";
 import arrayMaximum from "@/helpers/array/maximum";
-
-const defaultColor = ["rgb(255,219,99)", "rgb(99,219,255)"];
-const defaultDataSetConfig = {
-  borderDash       : [7, 2],
-  borderDashOffset : 0,
-  lineTension      : 0,
-  fill             : false,
-};
 
 export default {
   name: "ProposalChart",
   components: {
-    LineChart,
-    Status,
+    LineChart
   },
   props: {
     chartData: {
       type    : Array,
-      default : Array,
+      default : () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     },
   },
   data() {
+    const defaultColor = "rgb(255,219,99)";
     return {
+      lineChartData: {
+        labels   : [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
+        datasets : [
+          {
+            label            : "Industry Benchmark",
+            borderDashOffset : 0,
+            borderDash       : [7, 2],
+            fill             : false,
+            lineTension      : 0,
+            backgroundColor  : defaultColor,
+            borderColor      : defaultColor,
+            data: [
+              {
+                x: 0,
+                y: 70,
+              },
+              {
+                x: 546,
+                y: 10,
+              },
+              {
+                x: 728,
+                y: 60,
+              },
+              {
+                x: 819,
+                y: 45,
+              },
+              {
+                x: 910,
+                y: 30,
+              },
+              {
+                x: 1000,
+                y: 30,
+              },
+            ],
+          },
+          {
+            label            : "Average Of My Proposal",
+            borderDashOffset : 0,
+            borderDash       : [7, 2],
+            fill             : false,
+            lineTension      : 0,
+            backgroundColor  : "rgb(99,219,255)",
+            borderColor      : "rgb(99,219,255)",
+            data: [
+              {
+                x: 0,
+                y: 60,
+              },
+              {
+                x: 91,
+                y: 60,
+              },
+              {
+                x: 182,
+                y: 45,
+              },
+              {
+                x: 637,
+                y: 20,
+              },
+              {
+                x: 728,
+                y: 100,
+              },
+              {
+                x: 819,
+                y: 100,
+              },
+            ],
+          }
+        ]
+      },
       lineChartOptions: {
         maintainAspectRatio : false,
         showLine            : false,
@@ -146,43 +205,9 @@ export default {
       y               : 0,
     };
   },
-
   computed: {
-    lineChartData () {
-      return ({
-        labels   : this.chartData.map(({ system }) => system),
-        datasets : [
-          {
-            ...defaultDataSetConfig,
-            label            : "Industry Benchmark",
-            backgroundColor  : defaultColor[0],
-            borderColor      : defaultColor[0],
-            data: this.chartData.map(({ proposal }, index) => ({
-              x: index + 1,
-              y: proposal
-            })),
-          },
-          {
-            ...defaultDataSetConfig,
-            label            : "Average Of My Proposal",
-            backgroundColor  : defaultColor[1],
-            borderColor      : defaultColor[1],
-            // data: [
-            //   {
-            //     x: 0,
-            //     y: 60,
-            //   },
-            //   {
-            //     x: 91,
-            //     y: 60,
-            //   },
-            // ],
-          }
-        ]
-      });
-    },
     max() {
-      return arrayMaximum(({ proposal }) => proposal, this.chartData);
+      return arrayMaximum((item) => item.value, this.chartData);
     },
   },
   methods: {
@@ -202,7 +227,6 @@ export default {
       this.toolTipStatus = "visible";
       this.toolTip = item;
     },
-
     hideToolTip() {
       this.toolTipStatus = "hidden";
     },
@@ -219,10 +243,6 @@ export default {
   height   : 205px;
   z-index  : -1;
   left     : 135px;
-}
 
-#bar_chart {
-  width: 100%;
-  height: auto;
 }
 </style>

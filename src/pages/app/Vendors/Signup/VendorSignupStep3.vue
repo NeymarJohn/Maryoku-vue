@@ -111,17 +111,17 @@
             </div>
             <div class="checks-cont">
               <div class="check-item" @click="setDontAllowThirdParty(0)">
-                <img v-if="currentVendorData.notAllowedThirdParty == 0" :src="`${iconUrl}Group 5479 (2).svg`" />
+                <img v-if="currentVendorData.notAllowedThirdParty == 0" :src="`/static/icons/vendor/Icon_V.svg`" />
                 <span v-else class="unchecked" />
                 <span>Yes</span>
               </div>
               <div class="check-item" @click="setDontAllowThirdParty(1)">
-                <img v-if="currentVendorData.notAllowedThirdParty == 1" :src="`${iconUrl}Group 5479 (2).svg`" />
+                <img v-if="currentVendorData.notAllowedThirdParty == 1" :src="`/static/icons/vendor/Icon_V.svg`" />
                 <span v-else class="unchecked" />
                 <span>No</span>
               </div>
               <div class="check-item" @click="setDontAllowThirdParty(2)">
-                <img v-if="currentVendorData.notAllowedThirdParty == 2" :src="`${iconUrl}Group 5479 (2).svg`" />
+                <img v-if="currentVendorData.notAllowedThirdParty == 2" :src="`/static/icons/vendor/Icon_V.svg`" />
                 <span v-else class="unchecked" />
                 <span>Some</span>
               </div>
