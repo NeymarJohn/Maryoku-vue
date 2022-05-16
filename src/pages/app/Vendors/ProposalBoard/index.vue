@@ -309,7 +309,7 @@ import ProposalRequest from "@/models/ProposalRequest";
 
 // pages
 import ProposalRequestCard from "@/pages/app/Vendors/components/ProposalRequestCard.vue";
-import EmptyRequestCard from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
+import EmptyRequestCard    from "@/pages/app/Vendors/components/EmptyRequestCard.vue";
 
 // components
 import Header from "./Header";
