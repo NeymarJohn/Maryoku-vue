@@ -1,9 +1,8 @@
 <template>
   <div class="change-cover-images-carousel">
     <carousel
-      v-if="count"
-      :key="count"
-      :items="items"
+      v-if="images.length"
+      :items="5"
       :nav="false"
       :dots="false"
       :margin="22"
@@ -21,13 +20,13 @@
       </template>
       <div
         v-for="(item, index) in images"
-        :key="index + item.url"
+        :key="index"
         :class="{
           'carousel-item': true,
           'cursor-pointer': true,
+          'carousel-first-item': !index,
+          'carousel-last-item': index === (images.length - 1),
           'carousel-selected-item': index === selectedIndex,
-          'carousel-first-item': index === 0,
-          'carousel-last-item': index === (count - 1),
         }"
         @click="handleClickItem(index)"
       >
@@ -36,7 +35,7 @@
           :class="['carousel-item-image', 'md-image', classImage]"
         >
       </div>
-      <template v-if="showButtonActions && images.length > items" slot="next">
+      <template v-if="showButtonActions && images.length > 5" slot="next">
         <md-button id="carousel-btn-next" class="edit-btn carousel-btn-next nav-btn btn-just-icon nav-right md-round md-raised md-white">
           <md-icon class="btn-next-icon-arrow-right right">
             keyboard_arrow_right
@@ -56,35 +55,26 @@ export default {
     carousel,
   },
   props: {
-    items :{
-      type    : Number,
-      default : 5,
-    },
     showButtonActions: {
-      type    : Boolean,
-      default : true,
+      type: Boolean,
+      default: true,
     },
     disableFilter: {
-      type    : Boolean,
-      default : false,
+      type: Boolean,
+      default: false,
     },
     images: {
-      type    : Array,
-      default : () => [],
+      type: Array,
+      default: () => [],
     },
     classImage: {
-      type    : String,
-      default : "",
+      type: String,
+      default: "",
     },
     selectedIndex: {
-      type    : Number,
-      default : 0,
+      type: Number,
+      default: 0,
     },
-  },
-  computed: {
-    count () {
-      return this.images.length;
-    }
   },
   methods: {
     handleClickItem(index) {
@@ -116,9 +106,9 @@ export default {
   height: 85px;
 
   & .carousel-item {
-    width  : 174px;
-    height : 85px;
-    border : solid 5px #fff;
+    width: 174px;
+    height: 85px;
+    border: solid 5px #fff;
   }
 
   & .carousel-first-item {

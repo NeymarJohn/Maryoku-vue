@@ -25,11 +25,11 @@
               <div class="font-size-22 text-left font-bold-extra">${{ proposal.cost | withComma }}</div>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button v-if="!checked_proposals.includes(proposal.id)" class="md-simple md-outlined md-red maryoku-btn" @click="replace(proposal)">Give me a different option</md-button>
+              <md-button v-if="!options[idx]" class="md-simple md-outlined md-red maryoku-btn" @click="replace">Give me a different option</md-button>
               <div v-else class="d-flex align-center bg-light-green p-20" style="width: 330px">
                 <img :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`" width="28px"/>
                 <p class="font-size-14 mb-0 mx-1">We'll look for a better alternative</p>
-                <md-button class="md-simple md-black maryoku-btn" @click="replace(proposal)">Undo</md-button>
+                <md-button class="md-simple md-black maryoku-btn">Undo</md-button>
               </div>
             </div>
           </div>
@@ -83,8 +83,7 @@ export default {
   },
   props: {
     proposals: {
-      type: Array,
-      default: () => [],
+      type: Object,
     }
   },
   data(){
@@ -92,6 +91,7 @@ export default {
       step: 1,
       checked_proposals: [],
       checked_better_options: [],
+      options: [0,1,1],
       essential: null,
       better_options : [
         {label: "Prices are higher than my expectations", value: 'price_higher'},
@@ -111,16 +111,7 @@ export default {
       if (this.step === 1) {
         this.step = 2;
       } else {
-        console.log("different.save", this.checked_proposals, this.checked_better_options);
-
-        this.$emit('action', {
-          name: 'something_different',
-          somethingBetter: {
-            proposals: this.checked_proposals,
-            options: this.checked_better_options,
-            essential: this.essential,
-          }
-        })
+        this.step = 1;
       }
     },
     backgroundImage(proposal) {
@@ -134,17 +125,13 @@ export default {
         return proposal.vendor.vendorImages[0];
       return "";
     },
-    replace(proposal) {
-      const idx = this.checked_proposals.findIndex(id => id === proposal.id);
-      if (idx !== -1) {
-        this.checked_proposals.splice(idx, 1);
-      } else {
-        this.checked_proposals.push(proposal.id);
-      }
+    replace() {
+      if (!this.checked_proposals.length) return;
+      this.$emit('replace', this.checked_proposals)
     },
     uploadVendor(){
       this.$emit('action', 'already_have_venue')
-    },
+    }
   }
 };
 </script>
