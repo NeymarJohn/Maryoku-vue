@@ -94,8 +94,8 @@ export default {
     loading         : true,
     engageChartData : [],
   }),
-  mounted () {
-    updateEngagementData();
+  created () {
+    this.updateEngagementData();
   },
   methods: {
     async updateEngagementData () {
