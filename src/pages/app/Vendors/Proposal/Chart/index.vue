@@ -68,103 +68,77 @@
       <span class="proposal-chart-legend-line" :style="`border-color:${item.backgroundColor}`" />{{ item.label }}
     </div>
     <div class="proposal-chart-divider" />
-    <div class="proposal-status">
-      The proposal have
-      been updated
-    </div>
+    <Status />
   </div>
 </template>
 
 <script>
-import LineChart    from "@/components/Chart/LineChart";
+import LineChart from "@/components/Chart/LineChart";
+import Status    from "./Status/index.vue";
+
+// helpers
 import arrayMaximum from "@/helpers/array/maximum";
 
 export default {
   name: "ProposalChart",
   components: {
-    LineChart
+    LineChart,
+    Status,
   },
   props: {
     chartData: {
       type    : Array,
-      default : () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      default : Array,
     },
   },
   data() {
-    const defaultColor = "rgb(255,219,99)";
+    const defaultColor = ["rgb(255,219,99)", "rgb(99,219,255)"];
+    const defaultDataSetConfig = {
+      borderDash       : [7, 2],
+      borderDashOffset : 0,
+      lineTension      : 0,
+      fill             : false,
+    };
+
     return {
       lineChartData: {
-        labels   : [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
+        labels   : [],
         datasets : [
           {
+            ...defaultDataSetConfig,
             label            : "Industry Benchmark",
-            borderDashOffset : 0,
-            borderDash       : [7, 2],
-            fill             : false,
-            lineTension      : 0,
-            backgroundColor  : defaultColor,
-            borderColor      : defaultColor,
+            backgroundColor  : defaultColor[0],
+            borderColor      : defaultColor[0],
             data: [
               {
                 x: 0,
-                y: 70,
-              },
-              {
-                x: 546,
-                y: 10,
-              },
-              {
-                x: 728,
-                y: 60,
-              },
-              {
-                x: 819,
-                y: 45,
-              },
-              {
-                x: 910,
                 y: 30,
               },
               {
-                x: 1000,
-                y: 30,
+                x: 10,
+                y: 80,
+              },
+              {
+                x: 20,
+                y: 40,
               },
             ],
           },
           {
+            ...defaultDataSetConfig,
             label            : "Average Of My Proposal",
-            borderDashOffset : 0,
-            borderDash       : [7, 2],
-            fill             : false,
-            lineTension      : 0,
-            backgroundColor  : "rgb(99,219,255)",
-            borderColor      : "rgb(99,219,255)",
-            data: [
-              {
-                x: 0,
-                y: 60,
-              },
-              {
-                x: 91,
-                y: 60,
-              },
-              {
-                x: 182,
-                y: 45,
-              },
-              {
-                x: 637,
-                y: 20,
-              },
-              {
-                x: 728,
-                y: 100,
-              },
-              {
-                x: 819,
-                y: 100,
-              },
-            ],
+            backgroundColor  : defaultColor[1],
+            borderColor      : defaultColor[1],
+            // data: [
+            //   {
+            //     x: 0,
+            //     y: 60,
+            //   },
+            //   {
+            //     x: 91,
+            //     y: 60,
+            //   },
+            // ],
           }
         ]
       },
@@ -227,6 +201,7 @@ export default {
       this.toolTipStatus = "visible";
       this.toolTip = item;
     },
+
     hideToolTip() {
       this.toolTipStatus = "hidden";
     },
@@ -243,6 +218,5 @@ export default {
   height   : 205px;
   z-index  : -1;
   left     : 135px;
-
 }
 </style>

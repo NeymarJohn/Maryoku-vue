@@ -17,7 +17,7 @@
             Change Cover
           </md-button>
         </div>
-        <div class="view-event-photos" :style="previewBackgroundImage">
+        <div class="view-event-photos">
           <div class="wrapper-icon-play">
             <img class="icon-play" src="static/icons/play-black.svg">
           </div>
@@ -148,7 +148,6 @@
         :show-upload-file="true"
         :show-images-details="true"
         @addImage="addNewImage"
-        @deleteImage="handleDeleteImage"
       />
       <div v-else class="feedback-campaign-drop-zone-upload-images">
         <div class="wrapper-drop-zone">
@@ -317,9 +316,6 @@ export default {
     campaignAttachments() {
       return this.campaignData.attachments || [];
     },
-    previewBackgroundImage(){
-      return this.campaignAttachments.length? `background-image: url(${this.campaignAttachments[0].url});`:"";
-    },
     additionalData() {
       const campaignAdditionalData = this.campaignData.additionalData || {};
       return {
@@ -336,6 +332,7 @@ export default {
     },
   },
   created() {
+    console.log('created', this.campaignData);
     this.concept = this.event.concept;
     this.feedbackQuestions = [
       {
@@ -368,11 +365,6 @@ export default {
     ...mapActions("campaign", ["saveCampaign"]),
     setFeedbackAttribute (key, value) {
       return this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key, value });
-    },
-    handleDeleteImage(index){
-      const images = this.campaignData.images;
-      images.splice(index, 1);
-      this.setFeedbackAttribute("images", images);
     },
     addNewImage(image) {
       const images = this.campaignData.images;
@@ -496,8 +488,7 @@ export default {
     border-radius: 30px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     z-index: 13;
-    background-size: cover;
-    background-position: center;
+
     .wrapper-icon-play {
       width: 40%;
       display: flex;

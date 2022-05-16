@@ -13,7 +13,7 @@
     <template slot="body">
       <div class="md-layout">
         <div class="md-layout-item md-size-70">
-          <div v-if="filteredEventBlocks" class="form-group maryoku-field add-category-budget-modal">
+          <div v-if="filteredEventBlocks" class="form-group maryoku-field">
             <label class="font-size-16 font-bold-extra color-black">Category</label>
             <multiselect
               v-model="newBuildingBlock.category"
@@ -27,11 +27,11 @@
               :show-labels="false"
             >
               <template slot="singleLabel" slot-scope="props">
-                <img style="width: 20px; margin-right: 5px" :src="`${$iconURL}Budget Elements/${props.option.icon}`">
+                <img style="width: 20px" :src="`${$iconURL}Budget Elements/${props.option.icon}`">
                 <span>{{ props.option.title }}</span>
               </template>
               <template slot="option" slot-scope="props">
-                <img style="width: 20px; margin-right: 5px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
+                <img style="width: 20px" :src=" `${$iconURL}Budget Elements/${props.option.icon}`">
                 <span>{{ props.option.title }}</span>
               </template>
             </multiselect>

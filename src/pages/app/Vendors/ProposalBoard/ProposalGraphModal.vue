@@ -62,9 +62,13 @@
 </template>
 
 <script>
-import ProposalChart    from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
+import ProposalChart    from "@/pages/app/Vendors/Proposal/Chart/index.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 import { getReq }       from "@/utils/token";
+
+import arraySort from "@/helpers/array/sort";
+import arrayMap  from "@/helpers/array/map";
+import pipe      from "@/helpers/function/pipe";
 
 export default {
   name: "ProposalGraphModal",
@@ -77,19 +81,17 @@ export default {
   props: {
     proposal: {
       type    : Object,
-      default : () => {}
+      default : () => ({})
     },
     required: {
       type    : Boolean,
       default : true
     },
   },
-  data() {
-    return {
-      loading         : true,
-      engageChartData : [],
-    };
-  },
+  data: () => ({
+    loading         : true,
+    engageChartData : [],
+  }),
   async mounted () {
     try {
       this.loading = true;
@@ -101,7 +103,12 @@ export default {
         system   = []
       } = data.data;
 
-      this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
+      const normilizeData   = pipe(
+        arraySort ((dateA, dateB)     => new Date(dateA) - new Date(dateB)),
+        arrayMap  ((date = "", index) => ({ label: date, value: proposal[index], future: true }))
+      );
+
+      this.engageChartData = normilizeData(dates);
     } finally {
       this.loading = false;
     }
@@ -122,19 +129,18 @@ export default {
 
 <style lang="scss" scoped>
 
-.proposal-pointer{
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  transform-origin:15% 85%;
-  transform: rotate(23deg);
-}
-
-.proposal-pointer-wrapper{
-  position: relative;
-  width: 40px;
-  height: 40px;
-  left: 97px;
-  top: 50px;
+.proposal-pointer {
+  &-wrapper {
+    position : relative;
+    width    : 40px;
+    height   : 40px;
+    left     : 97px;
+    top      : 50px;
+  }
+  width            : 30px;
+  height           : 30px;
+  position         : absolute;
+  transform-origin : 15% 85%;
+  transform        : rotate(23deg);
 }
 </style>

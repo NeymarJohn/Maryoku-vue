@@ -45,7 +45,6 @@ export default {
       return this.$emit("start");
     },
     save () {
-      this.open = false;
       return this.$emit("save");
     }
   }
