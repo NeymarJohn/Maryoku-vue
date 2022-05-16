@@ -1,3 +1,11 @@
+/**
+ *
+ * @param {(value: Value, index: number, array: readonly Value[]) => NewValue} callback
+ * @param {readonly Value[]} array
+ * @returns {NewValue[]}
+ * @template Value
+ * @template NewValue
+ */
 const _arrayMap = (callback, array) => {
   const { length = 0 } = array;
   let index = 0;

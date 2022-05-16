@@ -70,6 +70,8 @@ import arraySort from "@/helpers/array/sort";
 import arrayMap  from "@/helpers/array/map";
 import pipe      from "@/helpers/function/pipe";
 
+import mock from "./mock.data.json";
+
 export default {
   name: "ProposalGraphModal",
   components: {
@@ -95,17 +97,20 @@ export default {
   async mounted () {
     try {
       this.loading = true;
-      const { data } = await this.getEngagement();
+      const { data = {} } = await this.getEngagement();
       const {
         dates    = [],
         proposal = [],
         vendor   = [],
         system   = []
-      } = data.data;
+      } =
+        // data.data
+        mock
+      ;
 
-      const normilizeData   = pipe(
-        arraySort ((dateA, dateB)     => new Date(dateA) - new Date(dateB)),
-        arrayMap  ((date = "", index) => ({ label: date, value: proposal[index], future: true }))
+      const normilizeData = pipe(
+        arraySort ((dateA = "", dateB = "") => new Date(dateA) - new Date(dateB)),
+        arrayMap  ((date  = "", index)      => ({ label: date, value: proposal[index], future: true }))
       );
 
       this.engageChartData = normilizeData(dates);
@@ -121,7 +126,7 @@ export default {
       return this.getEngagementById(this.proposal.id);
     },
     close() {
-      this.$emit("close");
+      return this.$emit("close");
     },
   },
 };

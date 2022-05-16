@@ -31,7 +31,13 @@
       </g>
       <g v-for="(chartDataItem, index) in chartData" :key="`chartItem-${index}`">
         <image v-if="index === 0" href="/static/icons/vendor/proposalBoard/proposal-before.svg" :x="25 + 80 * index" y="265" />
-        <text :x="45 + 80 * index" y="280" fill="#000000" :class="{'first_item': index === 0,'last_item':index === chartData.length-1}">
+        <text :x="45 + 80 * index" y="280" fill="#000000"
+              :class="{
+                'first_item': index === 0,
+                'last_item' : index === chartData.length - 1
+              }
+              "
+        >
           {{ chartDataItem.label }}
         </text>
         <image v-if="index === chartData.length-1" href="/static/icons/vendor/proposalBoard/proposal-after.svg" :x="90 + 80 * index" y="265" />
@@ -73,6 +79,7 @@
 </template>
 
 <script>
+// components
 import LineChart from "@/components/Chart/LineChart";
 import Status    from "./Status/index.vue";
 
@@ -102,7 +109,7 @@ export default {
 
     return {
       lineChartData: {
-        labels   : [],
+        labels   : [0, 20, 40],
         datasets : [
           {
             ...defaultDataSetConfig,

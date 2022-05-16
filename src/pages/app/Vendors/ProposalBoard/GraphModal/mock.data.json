@@ -1,0 +1,6 @@
+{
+  "dates"    : ["5 Apr", "4 Apr", "6 Apr", "8 Apr"],
+  "proposal" : [0, 0, 1, 10],
+  "system"   : [0, 0.5, 2, 10],
+  "vendor"   : [0, 2, 0, 20]
+}
