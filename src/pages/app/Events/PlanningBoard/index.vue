@@ -159,14 +159,16 @@
             <template v-if="proposal">
               <div class="mt-30">
                 <div class="proposals-booking-items">
-                  <div v-for="(p, index) in top3Proposals" :key="index" class="">
+                  <template v-for="(p, index) in top3Proposals">
                     <ProposalHeader
+                      v-if="p"
+                      :key="index"
                       :event="event"
-                      :proposal-selected="proposal && p.id === proposal.id"
+                      :proposal-selected="p.id === proposal.id"
                       :proposal-request="p"
                       @click.native="selectProposal(p)"
                     />
-                  </div>
+                  </template>
                 </div>
 
                 <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
@@ -231,16 +233,18 @@
               </div>
             </template>
             <div v-else class="proposal-card-items">
-              <ProposalCard
-                v-for="(p, index) in top3Proposals"
-                :key="index"
-                :proposal="p"
-                :isAlternative="categoryProposals.length > 3"
-                :component="selectedCategory"
-                :is-collapsed="showDetails"
-                :is-selected="proposal && proposal.id === p.id"
-                @action="handleAction($event, p)"
-              />
+              <template v-for="(p, index) in top3Proposals">
+                <ProposalCard
+                  v-if="p"
+                  :key="index"
+                  :proposal="p"
+                  :isAlternative="categoryProposals.length > 3"
+                  :component="selectedCategory"
+                  :is-collapsed="showDetails"
+                  :is-selected="proposal && proposal.id === p.id"
+                  @action="handleAction($event, p)"
+                />
+              </template>
             </div>
           </div>
           <PendingForVendors v-else :expired-time="expireTime" />
