@@ -103,15 +103,12 @@ export default {
         system   = []
       } = data.data;
 
-      const normilizeData = pipe(
-        arraySort((dateA, dateB) => new Date(dateA) - new Date(dateB)),
-        arrayMap((date = "", index) => ({ label: date, value: proposal[index], future: true }))
+      const normilizeData   = pipe(
+        arraySort ((dateA, dateB)     => new Date(dateA) - new Date(dateB)),
+        arrayMap  ((date = "", index) => ({ label: date, value: proposal[index], future: true }))
       );
 
       this.engageChartData = normilizeData(dates);
-
-      console.log({engageChartData: {...this.engageChartData}, data: data.data});
-
     } finally {
       this.loading = false;
     }
