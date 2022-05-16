@@ -3,7 +3,7 @@
     <template slot="header">
       <div class="delete-timeline-model__header">
         <h2>
-          Are you sure you want to say 
+          Are you sure you want to say
           goodbye to your changes?
         </h2>
         <div class="header-description">
@@ -60,7 +60,7 @@
               required
             />
           </div>
-        </div> 
+        </div>
         <div class="md-layout-item md-size-100 margin-bottom text-left">
           <label>Number Of Guests</label>
           <div class="form-group with-icon">

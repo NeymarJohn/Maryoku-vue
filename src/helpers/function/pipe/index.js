@@ -1,8 +1,8 @@
 /**
- * @param    {(...args: Args) => R1} f
- * @param    {(arg: R1) => R2} f2
- * @param    {FS} functions
- * @returns  {(...args: Args) => FS extends readonly [...any[], infer Last] ? ReturnType<Last> : R2}
+ * @param {(...args: Args) => R1} f
+ * @param {(arg: R1) => R2} f2
+ * @param  {FS} functions
+ * @returns {(...args: Args) => FS extends readonly [...any[], infer Last] ? ReturnType<Last> : R2}
  * @template {any[]} Args
  * @template R1
  * @template R2

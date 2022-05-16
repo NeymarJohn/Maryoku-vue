@@ -66,10 +66,6 @@ import ProposalChart    from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 import { getReq }       from "@/utils/token";
 
-import arraySort from "@/helpers/array/sort";
-import arrayMap  from "@/helpers/array/map";
-import pipe      from "@/helpers/function/pipe";
-
 export default {
   name: "ProposalGraphModal",
   components: {
@@ -81,17 +77,19 @@ export default {
   props: {
     proposal: {
       type    : Object,
-      default : () => ({})
+      default : () => {}
     },
     required: {
       type    : Boolean,
       default : true
     },
   },
-  data: () => ({
-    loading         : true,
-    engageChartData : [],
-  }),
+  data() {
+    return {
+      loading         : true,
+      engageChartData : [],
+    };
+  },
   async mounted () {
     try {
       this.loading = true;
@@ -103,12 +101,7 @@ export default {
         system   = []
       } = data.data;
 
-      const normilizeData   = pipe(
-        arraySort ((dateA, dateB)     => new Date(dateA) - new Date(dateB)),
-        arrayMap  ((date = "", index) => ({ label: date, value: proposal[index], future: true }))
-      );
-
-      this.engageChartData = normilizeData(dates);
+      this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
     } finally {
       this.loading = false;
     }

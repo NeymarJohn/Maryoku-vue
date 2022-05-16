@@ -87,27 +87,23 @@ export default {
   props: {
     chartData: {
       type    : Array,
-      default : () => [],
+      default : () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     },
   },
   data() {
-    const defaultColor = ["rgb(255,219,99)", "rgb(99,219,255)"];
-    const defaultDataSetConfig = {
-      borderDashOffset : 0,
-      borderDash       : [7, 2],
-      lineTension      : 0,
-      fill             : false,
-    };
-
+    const defaultColor = "rgb(255,219,99)";
     return {
       lineChartData: {
         labels   : [0, 91, 182, 273, 364, 455, 546, 637, 728, 819, 910, 1000],
         datasets : [
           {
-            ...defaultDataSetConfig,
             label            : "Industry Benchmark",
-            backgroundColor  : defaultColor[0],
-            borderColor      : defaultColor[0],
+            borderDashOffset : 0,
+            borderDash       : [7, 2],
+            fill             : false,
+            lineTension      : 0,
+            backgroundColor  : defaultColor,
+            borderColor      : defaultColor,
             data: [
               {
                 x: 0,
@@ -136,10 +132,13 @@ export default {
             ],
           },
           {
-            ...defaultDataSetConfig,
             label            : "Average Of My Proposal",
-            backgroundColor  : defaultColor[1],
-            borderColor      : defaultColor[1],
+            borderDashOffset : 0,
+            borderDash       : [7, 2],
+            fill             : false,
+            lineTension      : 0,
+            backgroundColor  : "rgb(99,219,255)",
+            borderColor      : "rgb(99,219,255)",
             data: [
               {
                 x: 0,
@@ -228,7 +227,6 @@ export default {
       this.toolTipStatus = "visible";
       this.toolTip = item;
     },
-
     hideToolTip() {
       this.toolTipStatus = "hidden";
     },
