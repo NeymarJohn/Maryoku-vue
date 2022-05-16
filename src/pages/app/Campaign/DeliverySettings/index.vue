@@ -18,57 +18,79 @@
                 <colaps-icon :is-selected="phoneCollapsed" />
               </md-button>
             </div>
-            <div
-              v-if="phoneCollapsed && selectedCampaignStatusIs('EDITING', 'TESTING', 'SAVED')"
-              class="mt-50"
-            >
-              <div class="font-bold">
-                To
+            <template v-if="phoneCollapsed">
+              <div
+                v-if="settingData.phone.selected && selectedCampaignStatusIs('STARTED', 'SCHEDULED')"
+                class="mt-50"
+              >
+                <div class="mt-50">
+                  <div class="font-bold mb-10 line-height-2">
+                    Sent to ({{ phoneInvitees }})
+                  </div>
+                  <div class="d-flex align-start width-100">
+                    {{ selectedCampaign.settings.phone.numberString }}
+                  </div>
+                  <div v-if="settingData.phone.smsOrWhatsapp" class="font-bold mb-10 line-height-2 mt-50">
+                    By {{ settingData.phone.smsOrWhatsapp }}
+                  </div>
+                  <div class="mt-20">
+                    <md-button class="md-simple md-red edit-btn" @click="downloadUsersPhone">
+                      <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10">Download Full Guests list
+                    </md-button>
+                  </div>
+                </div>
               </div>
-              <div class="d-flex align-start width-100">
-                <div class="flex-1 position-relative">
-                  <maryoku-textarea
-                    v-model="settingData.phone.numberString"
-                    type="phones"
-                    placeholder="Paste all phone numbers here…"
-                    hint="###-##-#######"
-                    input-style="phone"
-                    @change="handleInputEmails"
-                  />
-                  <invalid-address-panel
-                    v-if="invalidPastedPhones"
-                    type="phone"
-                    class="mt-30"
-                    :content="invalidPastedPhones"
-                  />
-                  <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
+              <div
+                v-else
+                class="mt-50"
+              >
+                <div class="font-bold">
+                  To
+                </div>
+                <div class="d-flex align-start width-100">
+                  <div class="flex-1 position-relative">
+                    <maryoku-textarea
+                      v-model="settingData.phone.numberString"
+                      type="phones"
+                      placeholder="Paste all phone numbers here…"
+                      hint="###-##-#######"
+                      input-style="phone"
+                      @change="handleInputEmails"
+                    />
+                    <invalid-address-panel
+                      v-if="invalidPastedPhones"
+                      type="phone"
+                      class="mt-30"
+                      :content="invalidPastedPhones"
+                    />
+                    <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                     <md-tooltip>
                       <div class="font-size-14 input-tooltip">###-##-#######</div>
                     </md-tooltip>
                   </span>
-                </div>
-                <span class="font-size-16" style="padding: 20px 40px">Or</span>
-                <md-button
-                  v-if="!settingData.phone.excelFileName"
-                  class="md-outlined md-simple maryoku-btn"
-                  @click="choosePhoneExcel"
-                >
-                  <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
-                  <span class="color-red">Upload Excel list file</span>
-                </md-button>
-                <div v-else class="uploadedFile border-gray-1">
-                  <div class="font-bold text-underline mb-10">
-                    {{ settingData.phone.excelFileName }}
                   </div>
-                  <md-button class="md-simple edit-btn" @click="choosePhoneExcel">
-                    <span class="color-red">change</span>
+                  <span class="font-size-16" style="padding: 20px 40px">Or</span>
+                  <md-button
+                    v-if="!settingData.phone.excelFileName"
+                    class="md-outlined md-simple maryoku-btn"
+                    @click="choosePhoneExcel"
+                  >
+                    <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
+                    <span class="color-red">Upload Excel list file</span>
                   </md-button>
-                  <md-button class="md-simple edit-btn" @click="removeExcel('phone')">
-                    <span class="color-red">remove</span>
-                  </md-button>
-                </div>
-                <span class="ml-20 mt-10">
+                  <div v-else class="uploadedFile border-gray-1">
+                    <div class="font-bold text-underline mb-10">
+                      {{ settingData.phone.excelFileName }}
+                    </div>
+                    <md-button class="md-simple edit-btn" @click="choosePhoneExcel">
+                      <span class="color-red">change</span>
+                    </md-button>
+                    <md-button class="md-simple edit-btn" @click="removeExcel('phone')">
+                      <span class="color-red">remove</span>
+                    </md-button>
+                  </div>
+                  <span class="ml-20 mt-10">
                   <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                   <md-tooltip>
                     <div class="font-size-14 input-tooltip">
@@ -76,59 +98,39 @@
                     </div>
                   </md-tooltip>
                 </span>
-              </div>
-              <div class="mt-50 font-bold">
-                How would you like to send your text?
-              </div>
-              <div class="mt-10">
-                <md-checkbox
-                  v-model="settingData.phone.smsOrWhatsapp"
-                  class="md-checkbox-circle md-red mr-50"
-                  value="sms"
-                >
+                </div>
+                <div class="mt-50 font-bold">
+                  How would you like to send your text?
+                </div>
+                <div class="mt-10">
+                  <md-checkbox
+                    v-model="settingData.phone.smsOrWhatsapp"
+                    class="md-checkbox-circle md-red mr-50"
+                    value="sms"
+                  >
                   <span
                     :class="{
                       'font-bold': settingData.phone.smsOrWhatsapp === 'sms',
                     }"
                     class="p-5"
                   >By SMS</span>
-                </md-checkbox>
-                <md-checkbox
-                  v-model="settingData.phone.smsOrWhatsapp"
-                  class="md-checkbox-circle md-red ml-50"
-                  value="whatsapp"
-                  disabled
-                >
-                  <img :src="`${$iconURL}Campaign/Image+74.png`">
-                  <span
-                    :class="{
+                  </md-checkbox>
+                  <md-checkbox
+                    v-model="settingData.phone.smsOrWhatsapp"
+                    class="md-checkbox-circle md-red ml-50"
+                    value="whatsapp"
+                    disabled
+                  >
+                    <img :src="`${$iconURL}Campaign/Image+74.png`">
+                    <span
+                      :class="{
                       'font-bold': settingData.phone.smsOrWhatsapp === 'whatsapp',
                     }"
-                  >By WhatsApp</span>
-                </md-checkbox>
-              </div>
-            </div>
-            <div
-              v-if="phoneCollapsed && selectedCampaignStatusIs('STARTED', 'SCHEDULED')"
-              class="mt-50"
-            >
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ phoneInvitees }})
-                </div>
-                <div class="d-flex align-start width-100">
-                  {{ selectedCampaign.settings.phone.numberString }}
-                </div>
-                <div v-if="settingData.phone.smsOrWhatsapp" class="font-bold mb-10 line-height-2 mt-50">
-                  By {{ settingData.phone.smsOrWhatsapp }}
-                </div>
-                <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadUsersPhone">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10">Download Full Guests list
-                  </md-button>
+                    >By WhatsApp</span>
+                  </md-checkbox>
                 </div>
               </div>
-            </div>
+            </template>
           </div>
 
           <div class="setting-item">
@@ -144,89 +146,121 @@
                 <colaps-icon :is-selected="emailCollapsed" />
               </md-button>
             </div>
-            <div
-              v-if="emailCollapsed && selectedCampaignStatusIs('EDITING', 'TESTING', 'SAVED')"
-              class="d-flex"
-            >
-              <div class="setting-item-fields">
+            <template v-if="emailCollapsed">
+              <div v-if="settingData.email.selected && selectedCampaignStatusIs('STARTED', 'SCHEDULED')">
                 <div class="mt-50">
-                  <label class="font-bold mb-10 line-height-2">Subject</label>
-                  <div class="width-100 position-relative">
-                    <maryoku-input
-                      v-model="settingData.email.subject"
-                      placeholder="Type your email subject here…"
-                    />
+                  <div class="font-bold mb-10 line-height-2">
+                    Subject
+                  </div>
+                  <div class="width-60 position-relative">
+                    {{ settingData.email.subject }}
                   </div>
                 </div>
                 <div class="mt-50">
-                  <label class="font-bold mb-10 line-height-2">From</label>
-                  <div class="width-100 position-relative">
-                    <maryoku-input v-model="settingData.email.from" placeholder="Your email address…" />
-                    <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
+                  <div class="font-bold mb-10 line-height-2">
+                    From
+                  </div>
+                  <div class="width-60 position-relative">
+                    {{ settingData.email.from }}
+                  </div>
+                </div>
+                <div class="mt-50">
+                  <div class="font-bold mb-10 line-height-2">
+                    Sent to ({{ emailInvitees }})
+                  </div>
+                  <div class="d-flex align-start width-100">
+                    {{ selectedCampaign.settings.email.addressString }}
+                  </div>
+                  <div class="mt-20">
+                    <md-button class="md-simple md-red edit-btn" @click="downloadUsersEmailList">
+                      <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10">Download Full Guests list
+                    </md-button>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-else
+                class="d-flex"
+              >
+                <div class="setting-item-fields">
+                  <div class="mt-50">
+                    <label class="font-bold mb-10 line-height-2">Subject</label>
+                    <div class="width-100 position-relative">
+                      <maryoku-input
+                        v-model="settingData.email.subject"
+                        placeholder="Type your email subject here…"
+                      />
+                    </div>
+                  </div>
+                  <div class="mt-50">
+                    <label class="font-bold mb-10 line-height-2">From</label>
+                    <div class="width-100 position-relative">
+                      <maryoku-input v-model="settingData.email.from" placeholder="Your email address…" />
+                      <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                       <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                       <md-tooltip class="emailTooltip">
                         Pick the email from which you wish the guests to get this mail
                       </md-tooltip>
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div class="mt-50 font-size-14">
-                  <label class="mb-10 line-height-2">
-                    <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each
-                    address
-                  </label>
-                  <div class="d-flex align-center width-100">
-                    <div class="width-100 position-relative">
-                      <maryoku-textarea
-                        v-model="settingData.email.addressString"
-                        placeholder="Paste all emails here…"
-                        type="input"
-                        input-style="emails"
-                        hint="example : example@mail.com"
-                        @change="handleInputEmails"
-                      />
-                      <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
+                  <div class="mt-50 font-size-14">
+                    <label class="mb-10 line-height-2">
+                      <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each
+                      address
+                    </label>
+                    <div class="d-flex align-center width-100">
+                      <div class="width-100 position-relative">
+                        <maryoku-textarea
+                          v-model="settingData.email.addressString"
+                          placeholder="Paste all emails here…"
+                          type="input"
+                          input-style="emails"
+                          hint="example : example@mail.com"
+                          @change="handleInputEmails"
+                        />
+                        <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                         <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                         <md-tooltip>
                           <div class="font-size-14 input-tooltip">example : example@mail.com</div>
                         </md-tooltip>
                       </span>
-                      <invalid-address-panel
-                        v-if="invalidPastedEmails"
-                        type="email"
-                        class="mt-30"
-                        :content="invalidPastedEmails"
-                      />
+                        <invalid-address-panel
+                          v-if="invalidPastedEmails"
+                          type="email"
+                          class="mt-30"
+                          :content="invalidPastedEmails"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="d-flex align-end setting-item-upload-field">
-                <div class="d-flex align-center">
-                  <span class="font-size-16" style="padding: 18px 30px">Or</span>
+                <div class="d-flex align-end setting-item-upload-field">
+                  <div class="d-flex align-center">
+                    <span class="font-size-16" style="padding: 18px 30px">Or</span>
 
-                  <!-- Emails Excel File Upload  -->
-                  <md-button
-                    v-if="!settingData.email.excelFileName"
-                    class="md-outlined md-simple maryoku-btn"
-                    @click="chooseEmailExcel"
-                  >
-                    <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
-                    <span class="color-red">Upload Excel list file</span>
-                  </md-button>
-                  <div v-else class="uploadedFile border-gray-1">
-                    <div class="font-bold text-underline mb-10">
-                      {{ settingData.email.excelFileName }}
+                    <!-- Emails Excel File Upload  -->
+                    <md-button
+                      v-if="!settingData.email.excelFileName"
+                      class="md-outlined md-simple maryoku-btn"
+                      @click="chooseEmailExcel"
+                    >
+                      <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
+                      <span class="color-red">Upload Excel list file</span>
+                    </md-button>
+                    <div v-else class="uploadedFile border-gray-1">
+                      <div class="font-bold text-underline mb-10">
+                        {{ settingData.email.excelFileName }}
+                      </div>
+                      <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
+                        <span class="color-red">change</span>
+                      </md-button>
+                      <span class="ml-10 mr-10" />
+                      <md-button class="md-simple edit-btn ml-10" @click="removeExcel('email')">
+                        <span class="color-red">remove</span>
+                      </md-button>
                     </div>
-                    <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
-                      <span class="color-red">change</span>
-                    </md-button>
-                    <span class="ml-10 mr-10" />
-                    <md-button class="md-simple edit-btn ml-10" @click="removeExcel('email')">
-                      <span class="color-red">remove</span>
-                    </md-button>
-                  </div>
-                  <span class="ml-20">
+                    <span class="ml-20">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                     <md-tooltip>
                       <div class="font-size-14 input-tooltip">
@@ -234,40 +268,10 @@
                       </div>
                     </md-tooltip>
                   </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-if="emailCollapsed && selectedCampaignStatusIs('STARTED', 'SCHEDULED')">
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  Subject
-                </div>
-                <div class="width-60 position-relative">
-                  {{ settingData.email.subject }}
-                </div>
-              </div>
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  From
-                </div>
-                <div class="width-60 position-relative">
-                  {{ settingData.email.from }}
-                </div>
-              </div>
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ emailInvitees }})
-                </div>
-                <div class="d-flex align-start width-100">
-                  {{ selectedCampaign.settings.email.addressString }}
-                </div>
-                <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadUsersEmailList">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10">Download Full Guests list
-                  </md-button>
-                </div>
-              </div>
-            </div>
+            </template>
           </div>
 
           <input

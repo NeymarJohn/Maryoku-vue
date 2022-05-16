@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "SignupCard"
+  name: "SignupCard",
 };
 </script>
 
@@ -30,7 +30,7 @@ export default {
   }
   @media (min-width: 1500px) {
     .signup-card  .md-layout {
-      width: 75vw;
+      width: 60vw;
       height: 70vh;
     }
   }
