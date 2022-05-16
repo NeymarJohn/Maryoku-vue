@@ -70,7 +70,7 @@ import arraySort from "@/helpers/array/sort";
 import arrayMap  from "@/helpers/array/map";
 import pipe      from "@/helpers/function/pipe";
 
-import mock from "./mock.data.json";
+import mock      from "./mock.data.js";
 
 export default {
   name: "ProposalGraphModal",
@@ -98,22 +98,28 @@ export default {
     try {
       this.loading = true;
       const { data = {} } = await this.getEngagement();
-      const {
-        dates    = [],
-        proposal = [],
-        vendor   = [],
-        system   = []
-      } =
-        // data.data
-        mock
-      ;
 
-      const normilizeData = pipe(
-        arraySort ((dateA = "", dateB = "") => new Date(dateA) - new Date(dateB)),
-        arrayMap  ((date  = "", index)      => ({ label: date, value: proposal[index], future: true }))
-      );
+      const rawData =
+        // data.data;
+        mock;
 
-      this.engageChartData = normilizeData(dates);
+      console.log(Object.values(rawData).map(({ length }) => length));
+
+      const fomated = Array.from({ length: Math.max(...Object.values(rawData).map(({ length }) => length)) }, (value, index) => ({
+        date     : rawData.dates    [index],
+        proposal : rawData.proposal [index] || 0,
+        vendor   : rawData.vendor   [index] || 0,
+        system   : rawData.system   [index] || 0,
+      }));
+
+      console.dir({ fomated });
+
+      // const normilizeData = pipe(
+      //   arraySort ((dateA = "", dateB = "") => new Date(dateA) - new Date(dateB)),
+      //   arrayMap  ((date  = "", index)      => ({ label: date, value: proposal[index], future: true }))
+      // );
+
+      this.engageChartData = [];
     } finally {
       this.loading = false;
     }
