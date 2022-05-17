@@ -50,14 +50,9 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    let vendor;
-      try{
-        vendor = await this.$store.dispatch("vendor/getProfile");
-        await this.$store.dispatch("vendorDashboard/getProposalRequests", vendor.id);
-        await this.$store.dispatch("comment/getCommentsProposalsByVendor", vendor.id);
-      } catch(e) {
-        window.location.replace("#/vendor/signin");
-      }
+    let vendor = await this.$store.dispatch("vendor/getProfile");
+    await this.$store.dispatch("vendorDashboard/getProposalRequests", vendor.id);
+    await this.$store.dispatch("comment/getCommentsProposalsByVendor", vendor.id);
     this.loading = false;
   },
   methods: {
