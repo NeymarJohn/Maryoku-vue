@@ -182,7 +182,7 @@ export default {
       });
     },
     max() {
-      return arrayMaximum.of(this.chartData);
+      return arrayMaximum(({ proposal }) => proposal, this.chartData);
     },
   },
   methods: {

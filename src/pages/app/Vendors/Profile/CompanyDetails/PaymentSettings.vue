@@ -156,15 +156,15 @@
                   </span>
                 </div>
                 <div id="bankDetailsDateWrapper" class="date-wrapper">
-                  <md-datepicker
-                    ref="datePicker"
-                    v-model="bankDetails.date"
-                    :md-model-type="String"
-                    name="todo-date"
-                  >
-                    <label v-if="!bankDetails.date">MM/DD/YYYY</label>
-                  </md-datepicker>
-                  <img class="calendar-icon" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
+                  <maryoku-input
+                    :value="formattedDate"
+                    class="form-input"
+                    placeholder="MM/DD/YYYY"
+                    input-style="date"
+                    theme="purple"
+                    date-format="MM/DD/YYYY"
+                    @input="setDate"
+                  />
                 </div>
               </div>
               <md-button class="md-vendor md-vendor-review" style="margin: 20px 15px" @click="sendBankInfo">
@@ -220,11 +220,14 @@ import { required, minLength, numeric } from "@vuelidate/validators";
 import PincodeInput from "vue-pincode-input";
 import { mapActions } from "vuex";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
+import { MaryokuInput } from "@/components";
+import moment from "moment";
 
 export default {
   components: {
     PincodeInput,
     VueGoogleAutocomplete,
+    MaryokuInput,
   },
   props: {},
   data: () => ({
@@ -286,6 +289,12 @@ export default {
       hiddenAccount.fill("X", 2, hiddenAccount.length - 3);
       return hiddenAccount.join("");
     },
+    formattedDate() {
+      if (!this.bankDetails.date) {
+        return null;
+      }
+      return moment(new Date(this.bankDetails.date)).format("MM/DD/YYYY");
+    },
   },
   mounted() {
     this.$material.locale.dateFormat = "MM/DD/YYYY";
@@ -307,6 +316,9 @@ export default {
   methods: {
     ...mapActions("vendor", ["getProfile"]),
     ...mapActions("stripe", ["createDestinationAccount", "createStripeAccount"]),
+    setDate(date){
+      this.bankDetails.date = date;
+    },
     setEditing() {
       this.bankDetailsEditing = true;
     },

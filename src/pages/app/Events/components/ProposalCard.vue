@@ -24,8 +24,11 @@
         >
           Awaiting reply
         </div>
-        <p class="color-white mt-20">
+        <md-button v-if="isAlternative" class="md-simple md-white maryoku-btn mt-20" @click="action('alternative')">
           Show me an alternative offer
+        </md-button>
+        <p v-else class="color-white text-center px-10">
+          there are no other alternatives in queue right now, and make a new request for proposal for other vendors
         </p>
       </div>
     </template>
@@ -97,7 +100,7 @@
           </template>
           <!-- <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p> -->
           <div class="item-actions text-right mt-30">
-            <md-button class="md-red maryoku-btn" @click="proposalDetails">
+            <md-button class="md-red maryoku-btn" @click="action('detail')">
               Details & Booking
             </md-button>
           </div>
@@ -136,6 +139,10 @@ export default {
     component: {
       type: Object,
       default: () => {},
+    },
+    isAlternative: {
+      type: Boolean,
+      default: false,
     },
     isCollapsed: {
       type: Boolean,
@@ -210,8 +217,8 @@ export default {
       });
       return serviceNames.join(" + ");
     },
-    proposalDetails() {
-      this.$emit("goDetail", this.proposal);
+    action(name) {
+      this.$emit("action", {name, proposals: [this.proposal.id]});
     },
     getDiffDaysFromOriginal() {
       const suggestionDate = this.proposal.suggestionDate;

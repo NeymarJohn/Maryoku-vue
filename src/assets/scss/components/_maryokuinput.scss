@@ -335,6 +335,12 @@
 
   }
 }
+#bankDetailsDateWrapper {
+  .maryoku.picker-panel {
+    top: unset;
+    bottom: 0;
+  }
+}
 .btn-group {
   text-align: right;
 }

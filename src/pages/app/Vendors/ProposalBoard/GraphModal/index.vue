@@ -66,22 +66,11 @@ import ProposalChart    from "@/pages/app/Vendors/Proposal/Chart/index.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 import { getReq }       from "@/utils/token";
 
-// helpers
-import arraySort    from "@/helpers/array/sort";
-import arrayMap     from "@/helpers/array/map";
-import arraySize    from "@/helpers/array/size";
-import arrayMaximum from "@/helpers/array/maximum";
-import pipe         from "@/helpers/function/pipe";
-import maximum      from "@/helpers/number/maximum";
+import arraySort from "@/helpers/array/sort";
+import arrayMap  from "@/helpers/array/map";
+import pipe      from "@/helpers/function/pipe";
 
-// import mock      from "./mock.data.js";
-
-const maxLengthFromProperties = pipe(
-  Object.values,
-  arrayMap(arraySize),
-  arrayMaximum.of,
-  maximum(0),
-);
+import mock      from "./mock.data.js";
 
 export default {
   name: "ProposalGraphModal",
@@ -117,13 +106,17 @@ export default {
         const rawData =
           data.data;
           // mock;
-
-        const fomatedData = Array.from({ length: maxLengthFromProperties(rawData) }, (_, index) => ({
+        const valuesRawData     = Object.values(rawData);
+        const lengthsValuesData = valuesRawData.map(({ length }) => length);
+        const lengthData        = Math.max.apply(null, lengthsValuesData);
+        const fomatedData       = Array.from({ length: lengthData }, (_, index) => ({
           date     : rawData.dates    [index],
           proposal : rawData.proposal [index] || 0,
           vendor   : rawData.vendor   [index] || 0,
           system   : rawData.system   [index] || 0,
         }));
+
+        console.log(rawData);
 
         const sortFormatedData           = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
         const sortedFormatedData         = sortFormatedData(fomatedData);

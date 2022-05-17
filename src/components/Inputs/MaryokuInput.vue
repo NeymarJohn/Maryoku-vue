@@ -52,7 +52,7 @@
     <div v-if="showDatePicker" ref="datePicker">
       <div ref="timePickerPanel" class="date-picker maryoku picker-panel" style="z-index: 200 !important">
         <div class="d-flex pl-10">
-          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px">
+          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" style=" width: 23px">
           <span class="p-5">{{ getFormattedDate }}</span>
         </div>
 
@@ -147,6 +147,10 @@ export default {
       required: false,
       default: "input",
     },
+    dateFormat:{
+      type: String,
+      default: "DD.MM.YYYY",
+    }
   },
   data() {
     return {
@@ -244,7 +248,7 @@ export default {
       this.showDatePicker = false;
     },
     setDate() {
-      this.content = moment(new Date(this.dateData.selectedDate)).format("DD.MM.YYYY");
+      this.content = moment(new Date(this.dateData.selectedDate)).format(this.dateFormat);
       this.showDatePicker = false;
       this.$emit("input", this.content);
     },

@@ -1,9 +1,4 @@
 // @ts-check
-
-import curry from "../../function/curry";
-import arrayMaximumOf from "./of";
-import arrayMaximumCore from "./core";
-
 /**
  * @param {Executor} executor
  * @param {Value[]} array
@@ -11,10 +6,20 @@ import arrayMaximumCore from "./core";
  * @template Value
  * @template {(value: Value) => number} Executor
  */
-const arrayMaximumDef  = curry(arrayMaximumCore);
-const arrayMaximum     = Object.assign(arrayMaximumDef, {
-  of   : arrayMaximumOf,
-  core : arrayMaximumCore
-});
+const arrayMaximum = (executor, array) => {
+  const { length } = array;
+  if (length > 0) {
+    let maximum = executor(array[0]);
+    let index = 1;
+    while (index < length) {
+      const value = executor(array[index]);
+      if (value > maximum) maximum = value;
+      index++;
+    }
+    return maximum;
+  }
+
+  return -Infinity;
+};
 
 export default arrayMaximum;
