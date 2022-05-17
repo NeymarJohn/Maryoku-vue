@@ -121,7 +121,7 @@ import EventConcept  from "@/models/EventConcept";
 import S3Service       from "@/services/s3.service";
 
 // helpers
-import loop            from "@/helpers/number/loop";
+import loop            from "@/helpers/function/loop";
 import arrayIsNoEmpty  from "@/helpers/array/is/noEmpty";
 import lastIndex       from "@/helpers/array/last/index";
 import objectIsNoEmpty from "@/helpers/object/is/noEmpty";
@@ -187,7 +187,10 @@ export default {
     selectedIndex () {
       const lastIndexConcept = lastIndex(this.conceptImages);
       const lastIndexColor   = lastIndex(this.conceptColors);
-      const lastIndexSelect  = lastIndexConcept + lastIndexColor;
+      const lastIndexSelect  = lastIndexConcept > -1
+        ? lastIndexConcept + lastIndexColor > -1 ? lastIndexColor : 0
+        : lastIndexColor;
+
       if      (this.selectedIndex > lastIndexSelect)           this.selectedIndex = lastIndexSelect;
       else if (this.selectedIndex < 0 && lastIndexSelect > -1) this.selectedIndex = 0;
     }
