@@ -62,9 +62,25 @@
 </template>
 
 <script>
-import ProposalChart    from "@/pages/app/Vendors/Proposal/ProposalChart.vue";
+import ProposalChart    from "@/pages/app/Vendors/Proposal/Chart/index.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 import { getReq }       from "@/utils/token";
+
+import arraySort    from "@/helpers/array/sort";
+import arrayMap     from "@/helpers/array/map";
+import arraySize    from "@/helpers/array/size";
+import arrayMaximum from "@/helpers/array/maximum";
+import pipe         from "@/helpers/function/pipe";
+import maximum      from "@/helpers/number/maximum";
+
+import mock      from "./mock.data.js";
+
+const maxLengthFromProperties = pipe(
+  Object.values,
+  arrayMap(arraySize),
+  arrayMaximum.of,
+  maximum(0),
+);
 
 export default {
   name: "ProposalGraphModal",
@@ -77,36 +93,44 @@ export default {
   props: {
     proposal: {
       type    : Object,
-      default : () => {}
+      default : () => ({})
     },
     required: {
       type    : Boolean,
       default : true
     },
   },
-  data() {
-    return {
-      loading         : true,
-      engageChartData : [],
-    };
-  },
-  async mounted () {
-    try {
-      this.loading = true;
-      const { data } = await this.getEngagement();
-      const {
-        dates    = [],
-        proposal = [],
-        vendor   = [],
-        system   = []
-      } = data.data;
-
-      this.engageChartData = dates.map((date = "", index) => ({ label: date, value: proposal[index], future: true }));
-    } finally {
-      this.loading = false;
-    }
+  data: () => ({
+    loading         : true,
+    engageChartData : [],
+  }),
+  created () {
+    this.updateEngagementData();
   },
   methods: {
+    async updateEngagementData () {
+      try {
+        this.loading = true;
+        const { data = {} } = await this.getEngagement();
+
+        const rawData =
+          data.data;
+          // mock;
+
+        const fomatedData = Array.from({ length: maxLengthFromProperties(rawData) }, (_, index) => ({
+          date     : rawData.dates    [index],
+          proposal : rawData.proposal [index] || 0,
+          vendor   : rawData.vendor   [index] || 0,
+          system   : rawData.system   [index] || 0,
+        }));
+
+        const sortFormatedData           = arraySort((x1, x2) => new Date(x1.date) - new Date(x2.date));
+        const sortedFormatedData         = sortFormatedData(fomatedData);
+        this.engageChartData             = sortedFormatedData;
+      } finally {
+        this.loading = false;
+      }
+    },
     getEngagementById (proposalId) {
       return getReq(`/1/proposals/${proposalId}/engagement/summary`);
     },
@@ -114,7 +138,7 @@ export default {
       return this.getEngagementById(this.proposal.id);
     },
     close() {
-      this.$emit("close");
+      return this.$emit("close");
     },
   },
 };
@@ -122,19 +146,18 @@ export default {
 
 <style lang="scss" scoped>
 
-.proposal-pointer{
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  transform-origin:15% 85%;
-  transform: rotate(23deg);
-}
-
-.proposal-pointer-wrapper{
-  position: relative;
-  width: 40px;
-  height: 40px;
-  left: 97px;
-  top: 50px;
+.proposal-pointer {
+  &-wrapper {
+    position : relative;
+    width    : 40px;
+    height   : 40px;
+    left     : 97px;
+    top      : 50px;
+  }
+  width            : 30px;
+  height           : 30px;
+  position         : absolute;
+  transform-origin : 15% 85%;
+  transform        : rotate(23deg);
 }
 </style>

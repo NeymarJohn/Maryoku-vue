@@ -340,7 +340,7 @@ export default {
     Insight              : () => import("@/pages/app/Vendors/ProposalBoard/insight.vue"),
     ShareProposal        : () => import("@/pages/app/Vendors/ProposalBoard/ShareProposal.vue"),
     ResendProposalResult : () => import("@/pages/app/Vendors/ProposalBoard/ResendProposalResult.vue"),
-    ProposalGraphModal   : () => import("@/pages/app/Vendors/ProposalBoard/ProposalGraphModal.vue"),
+    ProposalGraphModal   : () => import("@/pages/app/Vendors/ProposalBoard/GraphModal/index.vue"),
     ProposalRequestCard,
     EmptyRequestCard,
     NoInsight,

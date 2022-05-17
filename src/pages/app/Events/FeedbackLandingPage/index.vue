@@ -339,11 +339,11 @@ export default {
           this.feedbackQuestions[index].errors.rank = null;
         }
 
-        // if (!item.comment) {
-        //   this.feedbackQuestions[index].errors.comment = `Please write comment for the question ${item.question}`;
-        // } else if (item.errors.comment) {
-        //   this.feedbackQuestions[index].errors.comment = null;
-        // }
+        if (!item.comment) {
+          this.feedbackQuestions[index].errors.comment = `Please write comment for the question ${item.question}`;
+        } else if (item.errors.comment) {
+          this.feedbackQuestions[index].errors.comment = null;
+        }
       });
       const isHasErrorQuestion   = (question) => question.errors.rank || question.errors.comment;
       const someQuestionHasError = this.feedbackQuestions.some(isHasErrorQuestion);

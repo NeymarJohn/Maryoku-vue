@@ -344,7 +344,7 @@
               </md-button>
             </template>
             <template v-else>
-              <Scheduled :label="`Scheduled To ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'MMM DD, YYYY')}`" />
+              <Scheduled :time="event.eventStartMillis" />
               <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
               <SendAgainBtn v-else @click="showScheduleModal = true">
                 Change Schedule
@@ -389,8 +389,7 @@
           class="d-flex align-center"
         >
           <template v-if="!canSchedule">
-            <Scheduled :label="`${selectedCampaign.campaignStatus === 'STARTED' ? 'Sent on' : 'Scheduled To'}
-            ${$dateUtil.formatScheduleDay(selectedCampaign.scheduleTime, 'MMM DD, YYYY')}`" />
+            <Scheduled :time="selectedCampaign.scheduleTime" />
             <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
             <SendAgainBtn v-else @click="showScheduleModal = true">
               Change Schedule
@@ -433,7 +432,7 @@ import Swal from "sweetalert2";
 // global
 import { Loader }            from "@/components";
 import HeaderActions         from "@/components/HeaderActions";
-import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal/index.vue";
+import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 
 // local
 import DeliverySettings    from "../DeliverySettings/index";
@@ -638,32 +637,21 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
-    chooseImage(url) {
-      this.setAttribute({
-        name  : this.selectedCampaignType,
-        key   : "coverImage",
-        value : url
+    startCampaign() {
+      const swapTitle = (title = "") => Swal.fire({
+        buttonsStyling     : false,
+        icon               : "warning",
+        confirmButtonClass : "md-button md-success",
+        title,
       });
-      this.close();
-      this.saveDraftCampaign();
-    },
-    async changeCampaignLogo(file) {
 
-      let logoUrl = null;
-      if (file) {
-        const extension = file.type.split("/")[1];
-        const fileName  = uuidv4();
-        logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
-
-      } else {
-        // await S3Service.deleteFile(this.selectedCampaign.logoUrl);
+      if (this.deliverySettings) {
+        const { email = {}, phone = {} } = this.deliverySettings;
+        if (!this.selectedCampaign || (!email.selected && !phone.selected))
+          return swapTitle("Please select email or phone or both.");
       }
-      Object.keys(this.campaignTabs).forEach(key => {
-        this.setAttribute({name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl});
-        this.callSaveCampaign(
-          this.campaignTabs[key].name,
-          this.campaigns[this.campaignTabs[key].name].campaignStatus);
-      });
+
+      this.saveDraftCampaign("STARTED");
     },
     cancelSchedule() {
       this.setCurrentAttribute("scheduleSettings", null);
@@ -678,6 +666,9 @@ export default {
     changeSettings(data) {
       if (data && objectIsNoEmpty(data)) this.deliverySettings = data;
       else this.deliverySettings = defaultSettings;
+    },
+    saveDraftCampaign(campaignStatus = "SAVED") {
+      return this.callSaveCampaign(this.selectedCampaignType, campaignStatus);
     },
     async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
       this.isLoading = true;
@@ -694,7 +685,7 @@ export default {
           ...this.deliverySettings,
           email: {
             ...(this.deliverySettings.email || {}),
-            status: "ready",
+            status: "sent",
           }
         };
       }
@@ -703,7 +694,7 @@ export default {
           ...this.deliverySettings,
           phone: {
             ...(this.deliverySettings.phone || {}),
-            status: "ready",
+            status: "sent",
           }
         };
       };
@@ -741,42 +732,8 @@ export default {
         scheduleOption      : selectedOption,
         scheduleOptionValue : scheduleSettings[selectedOption].value,
       };
-      this.setCampaignAttribute(this.selectedCampaignType, "scheduleSettings", scheduleSettingsData);
+      this.setCampaignAttribute(this.campaignTabs[selectedCampaignIndex].name, "scheduleSettings", scheduleSettingsData);
       this.scheduleCampaign();
-    },
-    startCampaign() {
-      const swapTitle = (title = "") => Swal.fire({
-        buttonsStyling     : false,
-        icon               : "warning",
-        confirmButtonClass : "md-button md-success",
-        title,
-      });
-
-      if (this.deliverySettings) {
-        const { email = {}, phone = {} } = this.deliverySettings;
-        if (!this.selectedCampaign || (!email.selected && !phone.selected))
-          return swapTitle("Please select email or phone or both.");
-      }
-
-      // this.saveDraftCampaign("STARTED");
-      this.$notify({
-        message: {
-          title: "3...2...1… Liftoff! Your campaign has officially launched!",
-          content: `That’s right, your campaign has been sent successfully to your guests.
-           So give yourself a pat on the back and get ready for the next stage!`,
-        },
-        icon            : `${this.$iconURL}messages/info.svg`,
-        horizontalAlign : "right",
-        verticalAlign   : "top",
-        type            : "info",
-        cancelBtn       : false,
-        sendBtn         : false,
-        closeBtn        : true,
-        timeout         : 5000,
-      });
-    },
-    saveDraftCampaign(campaignStatus = "SAVED") {
-      return this.callSaveCampaign(this.selectedCampaignType, campaignStatus);
     },
     revertSetting() {
       this.deliverySettings = defaultSettings;
@@ -806,7 +763,33 @@ export default {
         timeout         : 5000,
       });
     },
+    chooseImage(url) {
+      this.setAttribute({
+        name  : this.selectedCampaignType,
+        key   : "coverImage",
+        value : url
+      });
+      this.close();
+      this.saveDraftCampaign();
+    },
+    async changeCampaignLogo(file) {
 
+      let logoUrl = null;
+      if (file) {
+        const extension = file.type.split("/")[1];
+        const fileName  = uuidv4();
+        logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+
+      } else {
+        // await S3Service.deleteFile(this.selectedCampaign.logoUrl);
+      }
+      Object.keys(this.campaignTabs).forEach(key => {
+        this.setAttribute({name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl});
+        this.callSaveCampaign(
+          this.campaignTabs[key].name,
+          this.campaigns[this.campaignTabs[key].name].campaignStatus);
+      });
+    }
   },
 };
 </script>
