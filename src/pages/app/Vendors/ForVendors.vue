@@ -334,18 +334,22 @@
           <div class="left-side" />
           <div class="right-side">
             <template>
-              <div class="calendar-wrapper vendor-calendar-wrapper">
+              <div class="calendar-wrapper">
                 <div class="calendar-title">
                   Date Range Picker
                 </div>
                 <functional-calendar
+                  :key="componentKey"
+                  ref="calendar"
                   v-model="suggestedDates"
-                  :is-date-picker="true"
+                  :change-month-function="true"
+                  :change-year-function="true"
+                  :is-multiple-date-picker="true"
+                  :min-sel-days="1"
                   :sunday-start="true"
                   :arrow-position="`space-between`"
                   :limits="limitDateRange"
-                  :new-current-date="eventStartDate"
-                  :marked-dates="selectedDate"
+                  :marked-dates="markedDataRange"
                 />
               </div>
             </template>
@@ -470,12 +474,6 @@ export default {
     timelineDates() {
       return this.$store.state.vendorProposal.timelineDates;
     },
-    eventStartDate() {
-     return new Date(this.proposalRequest.eventData.eventStartMillis);
-    },
-    selectedDate(){
-      return [{date: moment(this.eventStartDate).format("DD/M/YYYY"), class: "marked-class"}] ;
-    },
     eventDate() {
       if (!this.proposalRequest) return "-";
 
@@ -497,6 +495,7 @@ export default {
           date: "",
         };
       }
+      // let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "All Day" : "Not planned yet";
       let serviceTimeString = "";
       let serviceDate = "";
       this.timelineDates.forEach((td) => {
@@ -573,11 +572,11 @@ export default {
   mounted() {
     this.today = moment(new Date());
     this.limitDateRange = {
-      min: moment(new Date(this.eventStartDate)).add(-3, "days").format("DD/MM/YYYY"),
-      max: moment(new Date(this.eventStartDate)).add(3, "days").format("DD/MM/YYYY"),
+      min: moment(new Date()).add(-3, "days").format("DD/MM/YYYY"),
+      max: moment(new Date()).add(3, "days").format("DD/MM/YYYY"),
     };
-    // this.markedDataRange.push({ date: moment(new Date(this.eventStartDate)).add(-4, "days").format("DD/MM/YYYY"), class: "marked_end" });
-    // this.markedDataRange.push({ date: moment(new Date(this.eventStartDate)).add(4, "days").format("DD/MM/YYYY"), class: "marked_start" });
+    this.markedDataRange.push({ date: moment(new Date()).add(-4, "days").format("DD/MM/YYYY"), class: "marked_end" });
+    this.markedDataRange.push({ date: moment(new Date()).add(4, "days").format("DD/MM/YYYY"), class: "marked_start" });
 
     console.log("markedDateRange", this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
@@ -1290,7 +1289,7 @@ export default {
       }
     }
     &__body {
-      padding: 0 40px;
+      padding: 36px 40px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1321,7 +1320,7 @@ export default {
         }
         /deep/ .vfc-main-container {
           max-width: 370px;
-          padding-top: 2rem;
+          padding-top: 4rem;
         }
         /deep/ .vfc-top-date {
           margin-top: 2rem;

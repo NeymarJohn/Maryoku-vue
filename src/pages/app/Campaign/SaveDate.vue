@@ -137,8 +137,6 @@ export default {
     },
   },
   created () {
-    console.log("save.data.created", this.campaignData);
-
     if (!this.campaignData.coverImage && (!this.concept && !this.concept.images.length)) {
       this.campaignSetAttribute({ name: "SAVING_DATE", key: "coverImage", value:  this.defaultCoverImage});
     }

@@ -648,22 +648,26 @@ export default {
       this.saveDraftCampaign();
     },
     async changeCampaignLogo(file) {
+      try {
+        this.isLoading = true;
+        let logoUrl = null;
+        if (file) {
+          const extension = file.type.split("/")[1];
+          const fileName  = uuidv4();
+          logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
+        }
+        const promises = Object.keys(this.campaignTabs).map(key => {
+          this.setAttribute({ name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl });
+          return this.callSaveCampaign(
+            this.campaignTabs[key].name,
+            this.campaigns[this.campaignTabs[key].name].campaignStatus
+          );
+        });
 
-      let logoUrl = null;
-      if (file) {
-        const extension = file.type.split("/")[1];
-        const fileName  = uuidv4();
-        logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
-
-      } else {
-        // await S3Service.deleteFile(this.selectedCampaign.logoUrl);
+        await Promise.all(promises);
+      } finally {
+        this.isLoading = false;
       }
-      Object.keys(this.campaignTabs).forEach(key => {
-        this.setAttribute({name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl});
-        this.callSaveCampaign(
-          this.campaignTabs[key].name,
-          this.campaigns[this.campaignTabs[key].name].campaignStatus);
-      });
     },
     cancelSchedule() {
       this.setCurrentAttribute("scheduleSettings", null);
@@ -680,7 +684,7 @@ export default {
       else this.deliverySettings = defaultSettings;
     },
     async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
-      this.isLoading = true;
+      this.isLoading     = true;
       const campaignData = this.$store.state.campaign[campaignType];
 
       let referenceUrl = "";
