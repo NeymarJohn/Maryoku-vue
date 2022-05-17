@@ -181,6 +181,13 @@ export default {
           && arrayIsNoEmpty(this.conceptColors);
     }
   },
+  watch: {
+    selectedIndex () {
+      const lastIndex = lastIndex(this.conceptImages);
+      if      (this.selectedIndex > lastIndex)           this.selectedIndex = lastIndex;
+      else if (this.selectedIndex < 0 && lastIndex > -1) this.selectedIndex = 0;
+    }
+  },
   async created() {
     if (this.coverImage) {
       this.selectedImage = this.coverImage;
@@ -242,11 +249,11 @@ export default {
     async uploadFileDropZone(file) {
       this.destroyDropzone = true;
       const dropZone = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-message");
-      if (dropZone && dropZone[0]) dropZone[0].style.display = "block";
+      if (arrayIsNoEmpty(dropZone)) dropZone[0].style.display = "block";
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      if (preview) {
+      if (arrayIsNoEmpty(preview)) {
         const lastIndexPreview = lastIndex(preview);
-        if (preview[lastIndexPreview]) {
+        if (lastIndexPreview > -1 && preview[lastIndexPreview]) {
           preview[lastIndexPreview].style.display = "none";
           preview[lastIndexPreview].style.opacity = "0";
         }
@@ -257,26 +264,24 @@ export default {
       this.addNewImageConcept({ thumb_url: url, url });
     },
     async addNewImageConcept(newImage) {
-      this.loading = true;
-      const images = [newImage, ...this.conceptImages];
-      const data   = objectIsNoEmpty(this.eventConcept) ? { ...this.eventConcept, images } : {
-        event        : new CalendarEvent({id: this.event.id}),
-        name         : "March Madness",
-        description  :
-          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-        fontFamily   : "Cooperative-Regular",
-        tags         : [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
-        colors       : [],
-        images,
-      };
-
-      const query     = new EventConcept(data);
       try {
+        this.loading = true;
+        const images = [newImage, ...this.conceptImages];
+        const data   = objectIsNoEmpty(this.eventConcept) ? { ...this.eventConcept, images } : {
+          event        : new CalendarEvent({ id: this.event.id }),
+          name         : "March Madness",
+          description  :
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
+          fontFamily   : "Cooperative-Regular",
+          tags         : [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
+          colors       : [],
+          images,
+        };
+        const query   = new EventConcept(data);
         const concept = await query.save();
         if (concept) {
-          this.saveEventAction(new CalendarEvent({...this.event, concept}));
-          const selectNewIndex = 0;
-          this.selectImage(selectNewIndex);
+          this.saveEventAction(new CalendarEvent({ ...this.event, concept }));
+          this.selectImage();
         }
       } finally {
         this.loading = false;
