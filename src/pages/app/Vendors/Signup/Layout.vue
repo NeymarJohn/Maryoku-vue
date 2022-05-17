@@ -225,7 +225,7 @@ export default {
           Swal.fire({
             title,
             buttonsStyling: false,
-            confirmButtonClass: "md-button md-success",
+            confirmButtonClass: "md-button md-vendor",
           }).then(() => {});
         })
         .catch(error => {});
@@ -267,7 +267,7 @@ export default {
       Swal.fire({
         title,
         buttonsStyling: false,
-        confirmButtonClass: "md-button md-success",
+        confirmButtonClass: "md-button md-vendor",
       }).then(() => {
         const proposalRequest = this.$route.query.proposalRequest;
         if (this.step === 6) {

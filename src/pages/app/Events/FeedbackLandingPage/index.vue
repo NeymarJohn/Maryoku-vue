@@ -178,7 +178,7 @@ import Message                      from "./Message";
 
 // pages
 import ViewPresentation      from "@/pages/app/Campaign/components/ViewPresentation";
-import CampaignLogo          from "@/pages/app/Campaign/components/CampaignLogo/index.vue";
+import CampaignLogo          from "@/pages/app/Campaign/components/CampaignLogo";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
 import SharingButtonGroup    from "@/pages/app/Campaign/components/SharingButtonGroup";
 import FeedbackQuestion      from "@/pages/app/Campaign/components/FeedbackQuestion";

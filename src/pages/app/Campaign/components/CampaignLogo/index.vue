@@ -90,11 +90,7 @@ export default {
   },
   watch: {
     logoUrl() {
-      console.log({
-        img: this.imgURL,
-        logo: this.logoUrl,
-      });
-      if (!this.imgURL && this.logoUrl && this.logoUrl !== this.imgURL) this.imgURL = this.logoUrl;
+      if (this.logoUrl && !this.imgURL && this.logoUrl !== this.imgURL) this.imgURL = this.logoUrl;
     }
   },
   methods: {
