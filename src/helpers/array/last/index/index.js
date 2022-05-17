@@ -3,5 +3,5 @@
  * @returns {number}
  */
 
-const lastIndex = (array) => array.length - 1;
-export default lastIndex;
+const arrayLastIndex = (array) => array.length - 1;
+export default arrayLastIndex;

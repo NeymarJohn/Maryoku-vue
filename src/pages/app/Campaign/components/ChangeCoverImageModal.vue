@@ -119,6 +119,8 @@ import EventConcept  from "@/models/EventConcept";
 
 // dependencies
 import S3Service       from "@/services/s3.service";
+
+// helpers
 import loop            from "@/helpers/number/loop";
 import arrayIsNoEmpty  from "@/helpers/array/is/noEmpty";
 import lastIndex       from "@/helpers/array/last/index";
@@ -176,16 +178,18 @@ export default {
       return this.eventConcept.colors || [];
     },
     showConcept() {
-      return this.eventConcept
-          && arrayIsNoEmpty(this.conceptImages)
-          && arrayIsNoEmpty(this.conceptColors);
+      return objectIsNoEmpty(this.eventConcept)
+          && arrayIsNoEmpty (this.conceptImages)
+          && arrayIsNoEmpty (this.conceptColors);
     }
   },
   watch: {
     selectedIndex () {
-      const lastIndex = lastIndex(this.conceptImages);
-      if      (this.selectedIndex > lastIndex)           this.selectedIndex = lastIndex;
-      else if (this.selectedIndex < 0 && lastIndex > -1) this.selectedIndex = 0;
+      const lastIndexConcept = lastIndex(this.conceptImages);
+      const lastIndexColor   = lastIndex(this.conceptColors);
+      const lastIndexSelect  = lastIndexConcept + lastIndexColor;
+      if      (this.selectedIndex > lastIndexSelect)           this.selectedIndex = lastIndexSelect;
+      else if (this.selectedIndex < 0 && lastIndexSelect > -1) this.selectedIndex = 0;
     }
   },
   async created() {
@@ -210,8 +214,14 @@ export default {
       this.$emit("choose-image", this.selectedImage);
     },
     selectImage(index = 0) {
-      this.selectedIndex = index;
-      this.selectedImage = this.conceptImages[index].url;
+      const correctIndex          = +index || 0;
+      const minAcceptIndex        = Math.max(correctIndex, 0);
+      const lastIndexAcceptSelect = lastIndex(this.conceptImages);
+      const currentIndex          = Math.min(lastIndexAcceptSelect, minAcceptIndex);
+      if (currentIndex !== this.selectedIndex) {
+        this.selectedIndex = currentIndex;
+        this.selectedImage = this.conceptImages[currentIndex].url;
+      }
     },
     changedCarouselCurrentItem({ item }) {
       this.carouselCurrentItem = item.index;
