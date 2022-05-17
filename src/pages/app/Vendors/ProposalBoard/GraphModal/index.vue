@@ -66,6 +66,7 @@ import ProposalChart    from "@/pages/app/Vendors/Proposal/Chart/index.vue";
 import ProposalPieChart from "@/components/Chart/ProposalPieChart.vue";
 import { getReq }       from "@/utils/token";
 
+// helpers
 import arraySort    from "@/helpers/array/sort";
 import arrayMap     from "@/helpers/array/map";
 import arraySize    from "@/helpers/array/size";
@@ -73,7 +74,7 @@ import arrayMaximum from "@/helpers/array/maximum";
 import pipe         from "@/helpers/function/pipe";
 import maximum      from "@/helpers/number/maximum";
 
-import mock      from "./mock.data.js";
+// import mock      from "./mock.data.js";
 
 const maxLengthFromProperties = pipe(
   Object.values,
