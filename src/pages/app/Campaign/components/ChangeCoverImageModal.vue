@@ -29,7 +29,7 @@
         </div>
         <div class="change-cover-image-modal-body-carousel-image">
           <change-cover-image-carousel
-            v-if="!loading"
+            v-if="!loading && conceptImages.length > 0"
             :images="conceptImages"
             :selected-index="selectedIndex"
             @changed="changedCarouselCurrentItem"
@@ -111,7 +111,7 @@ import { v4 as uuidv4 }             from "uuid";
 // gloabl
 import { Modal }         from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
-import Loader            from "@/components/loader/Loader.vue"
+import Loader            from "@/components/loader/Loader.vue";
 //local
 import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
 
@@ -214,10 +214,10 @@ export default {
     ...mapMutations("event", ["setEventData"]),
     ...mapActions  ("event", ["saveEventAction"]),
     close(event) {
-      this.$emit("close", event);
+      return this.$emit("close", event);
     },
     chooseImage() {
-      this.$emit("choose-image", this.selectedImage);
+      return this.$emit("choose-image", this.selectedImage);
     },
     selectImage(index = 0) {
       const correctIndex          = +index || 0;
@@ -230,10 +230,10 @@ export default {
       }
     },
     changedCarouselCurrentItem({ item }) {
-      this.carouselCurrentItem = item.index;
+      return this.carouselCurrentItem = item.index;
     },
     selectConceptImages() {
-      this.$emit("choose-image", null);
+      return this.$emit("choose-image", null);
     },
     carouselScrollingToIndex() {
       const countImages = this.conceptImages.length;
@@ -263,6 +263,7 @@ export default {
       }
     },
     async uploadFileDropZone(file) {
+      this.loading = true;
       this.destroyDropzone = true;
       const dropZone = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-message");
       if (arrayIsNoEmpty(dropZone)) dropZone[0].style.display = "block";
