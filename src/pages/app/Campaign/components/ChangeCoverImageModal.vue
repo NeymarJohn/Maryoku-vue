@@ -22,6 +22,7 @@
       </div>
     </template>
     <template slot="body">
+      <Loader :active="loading" :is-full-screen="true" page="vendor" />
       <div class="change-cover-image-modal-body">
         <div class="change-cover-image-modal-body-cover-image">
           <img v-if="selectedImage" :src="selectedImage">
@@ -110,6 +111,7 @@ import { v4 as uuidv4 }             from "uuid";
 // gloabl
 import { Modal }         from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
+import Loader            from "@/components/loader/Loader.vue"
 //local
 import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
 
@@ -133,6 +135,7 @@ export default {
     ChangeCoverImageCarousel,
     ConceptImageBlock,
     Modal,
+    Loader,
   },
   props: {
     coverImage: {
@@ -188,7 +191,7 @@ export default {
       const lastIndexConcept = lastIndex(this.conceptImages);
       const lastIndexColor   = lastIndex(this.conceptColors);
       const lastIndexSelect  = lastIndexConcept > -1
-        ? lastIndexConcept + lastIndexColor > -1 ? lastIndexColor : 0
+        ? lastIndexConcept + (lastIndexColor > -1 ? lastIndexColor : 0)
         : lastIndexColor;
 
       if      (this.selectedIndex > lastIndexSelect)           this.selectedIndex = lastIndexSelect;
@@ -266,7 +269,7 @@ export default {
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
       if (arrayIsNoEmpty(preview)) {
         const lastIndexPreview = lastIndex(preview);
-        if (lastIndexPreview > -1 && preview[lastIndexPreview]) {
+        if (preview[lastIndexPreview]) {
           preview[lastIndexPreview].style.display = "none";
           preview[lastIndexPreview].style.opacity = "0";
         }
@@ -286,7 +289,7 @@ export default {
           description  :
             "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
           fontFamily   : "Cooperative-Regular",
-          tags         : [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
+          tags         : ["Fun", "Diy", "Sporting", "Light"].map(name => ({ name })),
           colors       : [],
           images,
         };

@@ -3,5 +3,7 @@
  * @returns {number}
  */
 
-const arrayLastIndex = (array) => array.length - 1;
+import arrayIsNoEmpty from "../../is/noEmpty";
+
+const arrayLastIndex = (array) => arrayIsNoEmpty(array) ? array.length - 1 : -1;
 export default arrayLastIndex;
