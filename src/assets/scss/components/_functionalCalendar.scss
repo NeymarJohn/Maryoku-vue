@@ -22,6 +22,11 @@
 .vfc-week .vfc-day span.vfc-span-day {
   font-family: "Manrope-Regular";
   font-size: 14px;
+  &.marked-class{
+    background-color: #d7c4d4;
+    color: #641856;
+    font-weight: bold;
+  }
 }
 
 .vfc-week .vfc-day span.vfc-span-day.vfc-today {
@@ -50,7 +55,7 @@
   max-width: 100%;
   .vfc-content {
     max-width: 100%;
-    margin-bottom: 0px;
+    margin-bottom: 0 !important;
   }
   .vfc-arrow-left,
   .vfc-arrow-right {
@@ -89,7 +94,7 @@
   border-radius: 1px;
 }
 span.vfc-span-day {
-  color: #43425d !important;
+  color: #43425d ;
   width: 40px !important;
   line-height: 40px !important;
   &.vfc-today {
@@ -107,6 +112,15 @@ span.vfc-span-day.vfc-marked,
   &:not(.vfc-start-marked):not(.vfc-end-marked):before {
     background-color: #f51355 !important;
     border-radius: unset;
+  }
+}
+.vendor-calendar-wrapper{
+  span.vfc-span-day.vfc-marked,
+  .vfc-today.vfc-marked {
+    &:not(.vfc-start-marked):not(.vfc-end-marked):before {
+      background-color: #58154b !important;
+      border-radius: 50%;
+    }
   }
 }
 span.vfc-span-day.vfc-hide {
