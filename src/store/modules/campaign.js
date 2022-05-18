@@ -190,7 +190,7 @@ const mutations = {
 
 const getters = {
   campaignIssued(state) {
-    const checkStartedByKey = key => state[key] && state[key].campaignStatus === "ISSUED";
+    const checkStartedByKey = key => state[key] && state[key].campaignStatus === "STARTED";
     return {
       SAVING_DATE : checkStartedByKey("SAVING_DATE"),
       RSVP        : checkStartedByKey("RSVP"),
