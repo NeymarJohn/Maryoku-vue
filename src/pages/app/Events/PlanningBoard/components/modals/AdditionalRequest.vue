@@ -20,10 +20,6 @@
           :style="{flex: `0 1 ${100 / serviceCards.length}%`}"
           @click="selectCard(card.value)"
         >
-          <!--          <img-->
-          <!--            :src="`${$iconURL}Budget Elements/foodandbeverage.svg`"-->
-          <!--            class="page-icon mr-10"-->
-          <!--          >-->
           {{ card.label }}
         </div>
       </div>
@@ -385,9 +381,9 @@ export default {
       this.selectedCard = this.serviceCards[0].value;
     }
 
-    this.specialTags = this.specialTags.filter(
-      (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
-    );
+    // this.specialTags = this.specialTags.filter(
+    //   (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
+    // );
     this.anythingElse = this.defaultData.mainRequirement ? this.defaultData.mainRequirement.additionalRequest : null;
   },
   methods: {

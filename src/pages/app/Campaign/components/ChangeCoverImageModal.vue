@@ -22,13 +22,14 @@
       </div>
     </template>
     <template slot="body">
+      <Loader :active="loading" :is-full-screen="true" page="vendor" />
       <div class="change-cover-image-modal-body">
         <div class="change-cover-image-modal-body-cover-image">
           <img v-if="selectedImage" :src="selectedImage">
         </div>
         <div class="change-cover-image-modal-body-carousel-image">
           <change-cover-image-carousel
-            v-if="!loading"
+            v-if="!loading && conceptImages.length > 0"
             :images="conceptImages"
             :selected-index="selectedIndex"
             @changed="changedCarouselCurrentItem"
@@ -110,6 +111,7 @@ import { v4 as uuidv4 }             from "uuid";
 // gloabl
 import { Modal }         from "@/components";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
+import Loader            from "@/components/loader/Loader.vue";
 //local
 import ChangeCoverImageCarousel from "./ChangeCoverImageCarousel";
 
@@ -118,9 +120,13 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventConcept  from "@/models/EventConcept";
 
 // dependencies
-import S3Service      from "@/services/s3.service";
-import loop           from "@/helpers/number/loop";
-import arrayIsNoEmpty from "@/helpers/array/is/noEmpty";
+import S3Service       from "@/services/s3.service";
+
+// helpers
+import loop            from "@/helpers/function/loop";
+import arrayIsNoEmpty  from "@/helpers/array/is/noEmpty";
+import lastIndex       from "@/helpers/array/last/index";
+import objectIsNoEmpty from "@/helpers/object/is/noEmpty";
 
 export default {
   name: "ChangeCoverImageModal",
@@ -129,6 +135,7 @@ export default {
     ChangeCoverImageCarousel,
     ConceptImageBlock,
     Modal,
+    Loader,
   },
   props: {
     coverImage: {
@@ -174,9 +181,21 @@ export default {
       return this.eventConcept.colors || [];
     },
     showConcept() {
-      return this.eventConcept
-          && arrayIsNoEmpty(this.conceptImages)
-          && arrayIsNoEmpty(this.conceptColors);
+      return objectIsNoEmpty(this.eventConcept)
+          && arrayIsNoEmpty (this.conceptImages)
+          && arrayIsNoEmpty (this.conceptColors);
+    }
+  },
+  watch: {
+    selectedIndex () {
+      const lastIndexConcept = lastIndex(this.conceptImages);
+      const lastIndexColor   = lastIndex(this.conceptColors);
+      const lastIndexSelect  = lastIndexConcept > -1
+        ? lastIndexConcept + (lastIndexColor > -1 ? lastIndexColor : 0)
+        : lastIndexColor;
+
+      if      (this.selectedIndex > lastIndexSelect)           this.selectedIndex = lastIndexSelect;
+      else if (this.selectedIndex < 0 && lastIndexSelect > -1) this.selectedIndex = 0;
     }
   },
   async created() {
@@ -195,20 +214,26 @@ export default {
     ...mapMutations("event", ["setEventData"]),
     ...mapActions  ("event", ["saveEventAction"]),
     close(event) {
-      this.$emit("close", event);
+      return this.$emit("close", event);
     },
     chooseImage() {
-      this.$emit("choose-image", this.selectedImage);
+      return this.$emit("choose-image", this.selectedImage);
     },
     selectImage(index = 0) {
-      this.selectedIndex = index;
-      this.selectedImage = this.conceptImages[index].url;
+      const correctIndex          = +index || 0;
+      const minAcceptIndex        = Math.max(correctIndex, 0);
+      const lastIndexAcceptSelect = lastIndex(this.conceptImages);
+      const currentIndex          = Math.min(lastIndexAcceptSelect, minAcceptIndex);
+      if (currentIndex !== this.selectedIndex) {
+        this.selectedIndex = currentIndex;
+        this.selectedImage = this.conceptImages[currentIndex].url;
+      }
     },
     changedCarouselCurrentItem({ item }) {
-      this.carouselCurrentItem = item.index;
+      return this.carouselCurrentItem = item.index;
     },
     selectConceptImages() {
-      this.$emit("choose-image", null);
+      return this.$emit("choose-image", null);
     },
     carouselScrollingToIndex() {
       const countImages = this.conceptImages.length;
@@ -238,12 +263,13 @@ export default {
       }
     },
     async uploadFileDropZone(file) {
+      this.loading = true;
       this.destroyDropzone = true;
       const dropZone = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-message");
-      if (dropZone && dropZone[0]) dropZone[0].style.display = "block";
+      if (arrayIsNoEmpty(dropZone)) dropZone[0].style.display = "block";
       const preview = this.$refs.myVueDropzone.$el.getElementsByClassName("dz-preview");
-      if (preview) {
-        const lastIndexPreview = preview.length - 1;
+      if (arrayIsNoEmpty(preview)) {
+        const lastIndexPreview = lastIndex(preview);
         if (preview[lastIndexPreview]) {
           preview[lastIndexPreview].style.display = "none";
           preview[lastIndexPreview].style.opacity = "0";
@@ -255,28 +281,24 @@ export default {
       this.addNewImageConcept({ thumb_url: url, url });
     },
     async addNewImageConcept(newImage) {
-      this.loading = true;
-      const images = [newImage, ...this.conceptImages];
-      const data   = Object.keys(this.eventConcept).length ? { ...this.eventConcept, images } : {
-        event        : new CalendarEvent({id: this.event.id}),
-        name         : "March Madness",
-        description  :
-          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
-        fontFamily   : "Cooperative-Regular",
-        tags         : [{ name: "Fun" }, { name: "Diy" }, { name: "Sporting" }, { name: "Light" }],
-        colors       : [],
-        images,
-      };
-
-      const query     = new EventConcept(data);
       try {
+        this.loading = true;
+        const images = [newImage, ...this.conceptImages];
+        const data   = objectIsNoEmpty(this.eventConcept) ? { ...this.eventConcept, images } : {
+          event        : new CalendarEvent({ id: this.event.id }),
+          name         : "March Madness",
+          description  :
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est",
+          fontFamily   : "Cooperative-Regular",
+          tags         : ["Fun", "Diy", "Sporting", "Light"].map(name => ({ name })),
+          colors       : [],
+          images,
+        };
+        const query   = new EventConcept(data);
         const concept = await query.save();
         if (concept) {
-          this.saveEventAction(new CalendarEvent({...this.event, concept}));
-          // const imageLastIndex = images.length - 1;
-          const selectNewIndex = 0;
-          this.selectImage(selectNewIndex);
-          // setTimeout(this.carouselScrollingToIndex, 0, selectNewIndex);
+          this.saveEventAction(new CalendarEvent({ ...this.event, concept }));
+          this.selectImage();
         }
       } finally {
         this.loading = false;

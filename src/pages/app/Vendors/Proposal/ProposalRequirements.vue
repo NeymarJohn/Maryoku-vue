@@ -170,6 +170,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .collapse-panel {
+  margin-top: 20px;
   background-color: white;
   hr {
     background-color: #dddddd;

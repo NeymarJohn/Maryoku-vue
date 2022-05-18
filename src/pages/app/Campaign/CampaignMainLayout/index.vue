@@ -344,7 +344,7 @@
               </md-button>
             </template>
             <template v-else>
-              <Scheduled :label="`Scheduled To ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'MMM DD, YYYY')}`" />
+              <Scheduled :label="`Scheduled To ${$dateUtil.formatScheduleDay(event.scheduleTime, 'MMM DD, YYYY')}`" />
               <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
               <SendAgainBtn v-else @click="showScheduleModal = true">
                 Change Schedule
@@ -388,28 +388,13 @@
           v-else
           class="d-flex align-center"
         >
-          <template v-if="!canSchedule">
-            <Scheduled :label="`${selectedCampaign.campaignStatus === 'STARTED' ? 'Sent on' : 'Scheduled To'}
-            ${$dateUtil.formatScheduleDay(selectedCampaign.scheduleTime, 'MMM DD, YYYY')}`" />
-            <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
-            <SendAgainBtn v-else @click="showScheduleModal = true">
-              Change Schedule
-            </SendAgainBtn>
-          </template>
-          <div
-            v-else
-            class="schedule-btn d-flex"
-          >
-            <md-button
-              class="md-button md-red maryoku-btn schedule-campaign-btn"
-              @click="showScheduleModal = true"
-            >
-              <Icon src="Campaign/Path 4377.svg">
-                Schedule Campaign
-              </Icon>
-            </md-button>
-            <ContextMenu @start="startCampaign" @save="saveDraftCampaign" />
-          </div>
+
+          <Scheduled :label="`'Sent on ${$dateUtil.formatScheduleDay(selectedCampaign.scheduleTime, 'MMM DD, YYYY')}`" />
+          <SendAgainBtn v-if="selectedTab !== 3" @click="startCampaign" />
+          <SendAgainBtn v-else @click="showScheduleModal = true">
+            Change Schedule
+          </SendAgainBtn>
+
         </div>
       </div>
     </div>
@@ -657,11 +642,10 @@ export default {
           logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
         }
         const promises = Object.keys(this.campaignTabs).map(key => {
-          const { name } = this.campaignTabs[key];
-          this.setAttribute({ name, key: "logoUrl", value: logoUrl });
+          this.setAttribute({ name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl });
           return this.callSaveCampaign(
-            name,
-            this.campaigns[name].campaignStatus
+            this.campaignTabs[key].name,
+            this.campaigns[this.campaignTabs[key].name].campaignStatus
           );
         });
 
@@ -688,6 +672,7 @@ export default {
       this.isLoading     = true;
       const campaignData = this.$store.state.campaign[campaignType];
 
+      const originUrl = document.location.origin;
       let referenceUrl = "";
       const makeUrl = path => `${document.location.origin}/#/${path}/${this.event.id}`;
 
@@ -718,6 +703,7 @@ export default {
         ...campaignData,
         campaignStatus,
         referenceUrl,
+        originUrl,
         isPreview,
         event        : new CalendarEvent({ id: this.event.id }),
         scheduleTime : Date.now(),
@@ -795,10 +781,12 @@ export default {
 
     sendPreviewEmail() {
       this.callSaveCampaign(this.selectedCampaignType, this.selectedCampaign.campaignStatus || "TESTING", true).then((res) => {});
+
+      const method = this.deliverySettings.email.selected ? "email" : "message";
       this.$notify({
         message: {
-          title: "Your preview email is on the way!",
-          content: `The preview email for ${ this.tabName }
+          title: `Your preview ${method} is on the way!`,
+          content: `The preview ${method} for ${ this.tabName }
             has been sent to ${ this.event.owner ? this.event.owner.name : ""}.You should receive it shortly.`,
         },
         icon            : `${this.$iconURL}messages/info.svg`,

@@ -110,27 +110,6 @@
           <span>Total</span>
           <span>${{ getTotalPrice(category) | withComma }}</span>
         </div>
-
-        <proposal-requirements
-          key="included"
-          class="additional-service white-card"
-          table-category="included"
-          label="What Do We Include In This Proposal?"
-          icon="includedPrice.png"
-          description=""
-          :can-add="false"
-          :vendor-category="category"
-        />
-        <proposal-requirements
-          key="extra"
-          class="additional-service white-card"
-          table-category="extra"
-          label="Extras"
-          icon="cost-requirements.png"
-          description="(Asking the client) Wold you like to upgrade & add one of those?"
-          :can-add="false"
-          :vendor-category="category"
-        />
         <div v-if="proposalAttachments[category]" class="attachments-cont">
           <h4>Attachments</h4>
           <div class="files-cont">
@@ -141,6 +120,28 @@
         </div>
       </div>
     </div>
+    <proposal-requirements
+      v-if="isExpanded"
+      key="included"
+      class="additional-service white-card"
+      table-category="included"
+      label="What Do We Include In This Proposal?"
+      icon="includedPrice.png"
+      description=""
+      :can-add="false"
+      :vendor-category="category"
+    />
+    <proposal-requirements
+      v-if="isExpanded"
+      key="extra"
+      class="additional-service white-card"
+      table-category="extra"
+      label="Extras"
+      icon="cost-requirements.png"
+      description="(Asking the client) Wold you like to upgrade & add one of those?"
+      :can-add="false"
+      :vendor-category="category"
+    />
   </div>
 </template>
 <script>
