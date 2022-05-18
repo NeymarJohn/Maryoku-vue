@@ -229,7 +229,7 @@ export default {
     },
   },
   async created() {
-    console.log("proposal.layout", this.$route.query.version);
+    console.log("proposal.layout");
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -271,8 +271,7 @@ export default {
     }
 
     if (this.$route.query.version) {
-      let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version);
-      console.log("proposal.layout", index);
+      let index = this.$store.state.vendorProposal.versions.findIndex(v => v.id ===  this.$route.query.version.id);
       this.$store.commit("vendorProposal/selectVersion", index);
     }
     this.isLoading = false;

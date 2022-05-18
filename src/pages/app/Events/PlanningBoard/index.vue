@@ -18,20 +18,19 @@
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
                 icon-style="opacity:0.8"
-                :proposalCategory="true"
+                :proposal-category="true"
                 @click="selectCategory(component)"
               />
-              <drop-down class="d-inline-block"  @close="closeMoreCategories">
+              <drop-down class="d-inline-block" @close="closeMoreCategories">
                 <ResizableToggleButton
                   class="mr-20 mb-10"
                   data-toggle="dropdown"
                   :icon="`${$iconURL}Services /more.svg`"
                   :selected-icon="`${$iconURL}Services /more-white.svg`"
                   :default-status="showMoreCats === true"
-                  :proposalCategory="false"
+                  :proposal-category="false"
                   @click="showMoreCategories"
-                >
-                </ResizableToggleButton>
+                />
                 <ul class="dropdown-width dropdown-menu dropdown-color">
                   <li
                     v-for="(remainingCategory, i) in remainingCategories"
@@ -114,12 +113,15 @@
                   </md-icon>
                 </button>
                 <ul class="dropdown-width dropdown-menu dropdown-other dropdown-menu-right ">
-                  <li v-for="action in functionActions" class="other-list" :key="action.label">
+                  <li v-for="action in functionActions" :key="action.label" class="other-list">
                     <md-button class="md-simple md-black-middle maryoku-btn"
                                :disabled="(action.value === 'share' || action.value === 'compare' ||
-                                    action.value === 'something_different') && !categoryProposals.length"
-                               @click="handleAction({name: action.value})">
-                      <md-icon class="mr-10">{{ action.icon }}</md-icon>
+                                 action.value === 'something_different') && !categoryProposals.length"
+                               @click="handleAction({name: action.value})"
+                    >
+                      <md-icon class="mr-10">
+                        {{ action.icon }}
+                      </md-icon>
                       {{ action.label }}
                     </md-button>
                   </li>
@@ -133,16 +135,16 @@
           <div v-if="proposals[selectedCategory.componentId].length > 0">
             <div>
               <div class="font-size-30 font-bold-extra d-flex align-center category-title mt-30 mb-30">
-                <img class="mr-10" :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                <img :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
                 <md-button
                   class="md-simple md-red maryoku-btn"
                   @click="
-                      getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })
-                    "
+                    getSpecification({
+                      category: selectedCategory,
+                      services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                    })
+                  "
                 >
                   Update Specific
                 </md-button>
@@ -159,16 +161,14 @@
             <template v-if="proposal">
               <div class="mt-30">
                 <div class="proposals-booking-items">
-                  <template v-for="(p, index) in top3Proposals">
+                  <div v-for="(p, index) in top3Proposals" :key="index" class="">
                     <ProposalHeader
-                      v-if="p"
-                      :key="index"
                       :event="event"
-                      :proposal-selected="p.id === proposal.id"
+                      :proposal-selected="proposal && p.id === proposal.id"
                       :proposal-request="p"
                       @click.native="selectProposal(p)"
                     />
-                  </template>
+                  </div>
                 </div>
 
                 <div class="bg-white proposalHeader proposalTitle d-flex justify-content-between align-center">
@@ -233,18 +233,16 @@
               </div>
             </template>
             <div v-else class="proposal-card-items">
-              <template v-for="(p, index) in top3Proposals">
-                <ProposalCard
-                  v-if="p"
-                  :key="index"
-                  :proposal="p"
-                  :isAlternative="categoryProposals.length > 3"
-                  :component="selectedCategory"
-                  :is-collapsed="showDetails"
-                  :is-selected="proposal && proposal.id === p.id"
-                  @action="handleAction($event, p)"
-                />
-              </template>
+              <ProposalCard
+                v-for="(p, index) in top3Proposals"
+                :key="index"
+                :proposal="p"
+                :is-alternative="categoryProposals.length > 3"
+                :component="selectedCategory"
+                :is-collapsed="showDetails"
+                :is-selected="proposal && proposal.id === p.id"
+                @action="handleAction($event, p)"
+              />
             </div>
           </div>
           <PendingForVendors v-else :expired-time="expireTime" />
@@ -262,11 +260,12 @@
                 <md-button
                   class="md-simple md-red maryoku-btn"
                   @click="
-                      getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })
-                    ">
+                    getSpecification({
+                      category: selectedCategory,
+                      services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+                    })
+                  "
+                >
                   Get Specific
                 </md-button>
               </div>
@@ -363,15 +362,15 @@
             </md-button>
             <drop-down class="d-inline-block">
               <button class="more-button cursor-pointer" data-toggle="dropdown" :disabled="proposal === null">
-              <span class="more-actions font-size-16 ml-20">
-                {{ "More actions" }}
-              </span>
-              <md-icon class="more-actions font-size-22">
-                keyboard_arrow_up
-              </md-icon>
+                <span class="more-actions font-size-16 ml-20">
+                  {{ "More actions" }}
+                </span>
+                <md-icon class="more-actions font-size-22">
+                  keyboard_arrow_up
+                </md-icon>
               </button>
               <ul class="dropdown-width-2 dropdown-menu dropdown-other dropdown-menu-upright ">
-                <li v-for="action in moreActions" class="other-list" :key="action.label">
+                <li v-for="action in moreActions" :key="action.label" class="other-list">
                   <a class="other-item font-size-16" @click="handleAction({name: action.value})">
                     <div class="other-name">
                       <img :src="`${$iconURL}${action.icon}`" width="20px" class="mr-10">
@@ -395,9 +394,10 @@
         </div>
         <div v-else class="proposal-footer white-card d-flex align-center">
           <md-button class="md-simple ml-auto md-black maryoku-btn py-0 border-right" @click="getSpecification({
-                        category: selectedCategory,
-                        services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
-                      })">
+            category: selectedCategory,
+            services: getDefaultTypes(selectedCategory.componentId, selectedCategory.title),
+          })"
+          >
             Change Requirements
           </md-button>
 
@@ -434,8 +434,8 @@
             <md-menu-content>
               <md-menu-item
                 class="text-center"
-                @click="findVendors(true)"
                 style="min-width: 400px"
+                @click="findVendors(true)"
               >
                 <span class="font-size-16 font-bold-extra">
                   <img :src="`${$iconURL}Requirements/search.svg`" class="mr-10">
@@ -492,11 +492,10 @@
     <DifferentProposalsModal
       v-if="showDifferentProposals"
       :proposals="top3Proposals"
-      :somethingBetter="currentRequirement.somethingBetter"
+      :something-better="currentRequirement.somethingBetter"
       @action="handleAction"
       @cancel="showDifferentProposals=false"
-    >
-    </DifferentProposalsModal>
+    />
   </div>
 </template>
 <script>
@@ -508,9 +507,9 @@ import _ from "underscore";
 import { camelize } from "@/utils/string.util";
 import Proposal from "@/models/Proposal";
 import CalendarEvent from "@/models/Event";
-import ProposalEngagement from '@/models/ProposalEngagement';
+import ProposalEngagement from "@/models/ProposalEngagement";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
-import ProposalRequestRequirement from '@/models/ProposalRequestRequirement';
+import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
 
 import { postReq, updateReq, getReq } from "@/utils/token";
@@ -657,12 +656,12 @@ export default {
       return this.$store.state.planningBoard.proposal;
     },
     categoryProposals() {
-      if (!this.proposals || !this.proposals[this.selectedCategory.componentId] || !this.proposals[this.selectedCategory.componentId].length) return []
+      if (!this.proposals || !this.proposals[this.selectedCategory.componentId] || !this.proposals[this.selectedCategory.componentId].length) return [];
 
       return this.proposals[this.selectedCategory.componentId];
     },
     top3Proposals() {
-      if (!this.currentRequirement || !this.currentRequirement.top3 || !this.currentRequirement.top3.length || !this.categoryProposals.length) return []
+      if (!this.currentRequirement || !this.currentRequirement.top3 || !this.currentRequirement.top3.length || !this.categoryProposals.length) return [];
       return this.currentRequirement.top3.map(id => this.categoryProposals.find(p => p.id === id));
     },
     cart() {
@@ -782,11 +781,10 @@ export default {
     ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements", "getCartItems", "updateCartItem", "getProposals", "updateProposal"]),
     scrollToTop() {
       window.scrollTo(0, 0);
-      console.log('scrollToTop');
     },
     findVendors(type = false) {
-      console.log('find.vendors', type);
-      this.findAllCategory = type
+      console.log("find.vendors", type);
+      this.findAllCategory = type;
       this.isOpenedFinalModal = true;
     },
     async saveSpecialRequirements(data) {
@@ -802,7 +800,7 @@ export default {
         const res = await postReq(`/1/events/${this.event.id}/find-vendors`, {
           issuedTime: new Date().getTime(),
           expiredBusinessTime: this.expiredTime,
-        })
+        });
 
         if (res.data.success && res.data.data.length) {
           for (let i = 0; i < res.data.data.length; i ++) {
@@ -819,7 +817,7 @@ export default {
         const res = await postReq(`/1/requirements/${this.requirements[this.selectedCategory.componentId].id}/find-vendors`, {
           issuedTime: new Date().getTime(),
           expiredBusinessTime: this.expiredTime,
-        })
+        });
         if (res.data.success) {
           await this.$store.commit("planningBoard/setCategoryRequirements", {
             category: res.data.data.category,
@@ -900,7 +898,7 @@ export default {
       this.selectedCategory = this.$store.state.common.serviceCategories.find(item => item.key === category);
     },
     getRequirements(category) {
-      console.log("getRequirements", category, this.$store.state.planningBoard.requirements[category])
+      console.log("getRequirements", category, this.$store.state.planningBoard.requirements[category]);
       if (!this.$store.state.planningBoard.requirements[category]) return null;
       return this.$store.state.planningBoard.requirements[category];
     },
@@ -1002,7 +1000,7 @@ export default {
       let res = await updateReq(`/1/events/${this.event.id}/requirements/${this.currentRequirement.id}`, {
         id: this.currentRequirement.id,
         expiredBusinessTime: moment(this.currentRequirement.expiredBusinessTime).subtract(1, "days").valueOf(),
-      })
+      });
 
       this.currentRequirement = res.data;
     },
@@ -1125,7 +1123,7 @@ export default {
 
         } else if (e.name === "already_have_venue") {
           const router = this.$router.resolve({ name: "VendorSignup" });
-          this.openNewTab(router.href)
+          this.openNewTab(router.href);
 
         } else if (e.name === "something_different") {
           if (!this.showDifferentProposals) {
@@ -1134,19 +1132,19 @@ export default {
             this.showDifferentProposals = false;
 
             const q = new ProposalRequestRequirement({...this.currentRequirement, somethingBetter: e.somethingBetter})
-                    .for(new CalendarEvent(this.event))
+                    .for(new CalendarEvent(this.event));
             await q.save();
           }
 
         } else if (e.name === "detail") {
-          await this.$store.commit('planningBoard/setProposal', proposal);
-          await this.$store.dispatch('planningBoard/selectVersion', proposal.selectedVersion);
+          await this.$store.commit("planningBoard/setProposal", proposal);
+          await this.$store.dispatch("planningBoard/selectVersion", proposal.selectedVersion);
 
           this.showDetails = true;
           await this.updateProposalEngagement();
         } else if (e.name === "alternative") {
 
-          const res = await postReq(`/1/proposals/replace`, {
+          const res = await postReq("/1/proposals/replace", {
             proposals: e.proposals,
             requirementId: this.currentRequirement.id,
           });
@@ -1157,9 +1155,9 @@ export default {
       window.open(link, "_blank");
     },
     async replaceProposal(proposals) {
-      console.log('replaceProposal', proposals)
+      console.log("replaceProposal", proposals);
       this.showDifferentProposals = false;
-      await postReq(`/1/proposals/replace`, {
+      await postReq("/1/proposals/replace", {
         proposals,
         requirementId: this.currentRequirement.id,
       });
@@ -1174,7 +1172,7 @@ export default {
     negotiationProposals(newVal){
 
       const processFn = (id) => () => {
-        console.log('processFn', id)
+        console.log("processFn", id);
         const proposal = this.negotiationProposals.find(p => p.id === id);
         let { negotiations } = proposal;
         negotiations.map(it => it.status = 3);
@@ -1182,7 +1180,7 @@ export default {
           category: proposal.vendor.vendorCategory,
           proposal: {...proposal, negotiations}
         });
-      }
+      };
 
       if(newVal.length) {
         newVal.forEach(p => {
@@ -1198,7 +1196,7 @@ export default {
             verticalAlign: "top",
             timeout: 5000,
           });
-        })
+        });
       }
     },
   },

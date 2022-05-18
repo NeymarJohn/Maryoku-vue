@@ -220,12 +220,19 @@
 </template>
 
 <script>
-import VendorDetailReviews from "./components/VendorDetailReviews";
-import { capitalize } from "@/utils/string.util";
-import carousel from "vue-owl-carousel";
-import VendorStartingFeeItem from "./components/VendorStartingFeeItem.vue";
-import VendorExtraPayItem from "./components/VendorExtraPayItem.vue";
-import _ from "underscore";
+// core
+import carousel               from "vue-owl-carousel";
+import _                      from "underscore";
+
+// helpers
+import { capitalize }         from "@/utils/string.util";
+
+// components
+import VendorDetailReviews    from "./components/VendorDetailReviews";
+import VendorStartingFeeItem  from "./components/VendorStartingFeeItem.vue";
+import VendorExtraPayItem     from "./components/VendorExtraPayItem.vue";
+
+
 export default {
   name: "VendorSignupStep4",
   components: {
