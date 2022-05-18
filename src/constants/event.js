@@ -276,7 +276,7 @@ export const ServiceCards = [
       ],
       imageTitles: [
         "American Food",
-        "Argentine Food",
+        "Argentinian Food",
         "Chinese Food",
         "Colombian Food",
         "Cuban Food",

@@ -642,10 +642,11 @@ export default {
           logoUrl = await S3Service.fileUpload(file, `${fileName}.${extension}`, `campaigns/RSVP/${this.event.id}`);
         }
         const promises = Object.keys(this.campaignTabs).map(key => {
-          this.setAttribute({ name: this.campaignTabs[key].name, key: "logoUrl", value: logoUrl });
+          const { name } = this.campaignTabs[key];
+          this.setAttribute({ name, key: "logoUrl", value: logoUrl });
           return this.callSaveCampaign(
-            this.campaignTabs[key].name,
-            this.campaigns[this.campaignTabs[key].name].campaignStatus
+            name,
+            this.campaigns[name].campaignStatus
           );
         });
 
