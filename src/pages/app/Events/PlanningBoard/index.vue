@@ -11,24 +11,24 @@
               <ResizableToggleButton
                 v-for="(component, index) in topCategories"
                 :key="index"
-                class="mr-20 mb-10"
                 :label="component.eventCategory ? component.eventCategory.fullTitle : component.fullTitle"
                 :icon="`${$iconURL}Services /${component.eventCategory ? component.eventCategory.icon : ''}`"
                 :selected-icon="`${$iconURL}Services /${component.componentId}.svg`"
                 :default-status="selectedCategory && component.id === selectedCategory.id"
                 :has-badge="hasBadge(component)"
-                icon-style="opacity:0.8"
                 :proposal-category="true"
+                class="mr-20 mb-10"
+                icon-style="opacity:0.8"
                 @click="selectCategory(component)"
               />
               <drop-down class="d-inline-block" @close="closeMoreCategories">
                 <ResizableToggleButton
-                  class="mr-20 mb-10"
-                  data-toggle="dropdown"
                   :icon="`${$iconURL}Services /more.svg`"
                   :selected-icon="`${$iconURL}Services /more-white.svg`"
                   :default-status="showMoreCats === true"
                   :proposal-category="false"
+                  class="mr-20 mb-10"
+                  data-toggle="dropdown"
                   @click="showMoreCategories"
                 />
                 <ul class="dropdown-width dropdown-menu dropdown-color">
@@ -70,6 +70,7 @@
                 </ul>
               </drop-down>
             </div>
+
             <div class="functional-bar">
               <div class="header-actions">
                 <ul class="d-flex list-style-none">
@@ -130,7 +131,6 @@
             </div>
           </div>
         </div>
-
         <template v-if="requirements[selectedCategory.componentId] && requirements[selectedCategory.componentId].isIssued">
           <div v-if="proposals[selectedCategory.componentId].length > 0">
             <div>
@@ -254,9 +254,8 @@
                 <md-tooltip class="custom-tooltip-1" md-direction="top">
                   Here’s where you can set your expectations and requirements for your event
                 </md-tooltip>
-                <img class="mr-10" :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
+                <img style="margin-right: 12px;" :src="`${$iconURL}Budget+Elements/${selectedCategory.icon}`">
                 {{ selectedCategory.fullTitle }}
-
                 <md-button
                   class="md-simple md-red maryoku-btn"
                   @click="
@@ -500,46 +499,50 @@
 </template>
 <script>
 import moment from "moment";
-import { serviceCategoryImages, ServiceCards } from "@/constants/event.js";
 import { mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 
-import { camelize } from "@/utils/string.util";
-import Proposal from "@/models/Proposal";
-import CalendarEvent from "@/models/Event";
-import ProposalEngagement from "@/models/ProposalEngagement";
+
+// helpers
+import { camelize }                   from "@/utils/string.util";
+import { postReq, updateReq, getReq } from "@/utils/token";
+
+// models
+import Proposal                   from "@/models/Proposal";
+import CalendarEvent              from "@/models/Event";
+import ProposalEngagement         from "@/models/ProposalEngagement";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
-
-import { postReq, updateReq, getReq } from "@/utils/token";
-import { TimerMixins } from "@/mixins";
+// dependencies
+import { TimerMixins }                                          from "@/mixins";
+import { serviceCategoryImages, ServiceCards }                  from "@/constants/event.js";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 
 const components = {
-  ActionModal: () => import("@/components/ActionModal.vue"),
-  ServiceCategoryCard: () => import("./components/ServiceCategoryCard"),
-  ProgressRadialBar: () => import("./components/ProgressRadialBar.vue"),
-  AdditionalRequestModal: () => import("./components/modals/AdditionalRequest.vue"),
-  SpecialRequirementModal: () => import("./components/modals/SpecialRequirement.vue"),
-  PendingForVendors: () => import("../components/PendingForVendors.vue"),
-  Loader: () => import("@/components/loader/Loader.vue"),
-  RequirementsCart: () => import("./RequirementsCart.vue"),
+  ActionModal              : () => import("@/components/ActionModal.vue"),
+  Loader                   : () => import("@/components/loader/Loader.vue"),
+  ServiceCategoryCard      : () => import("./components/ServiceCategoryCard"),
+  ProgressRadialBar        : () => import("./components/ProgressRadialBar.vue"),
+  AdditionalRequestModal   : () => import("./components/modals/AdditionalRequest.vue"),
+  SpecialRequirementModal  : () => import("./components/modals/SpecialRequirement.vue"),
+  PendingForVendors        : () => import("../components/PendingForVendors.vue"),
+  RequirementsCart         : () => import("./RequirementsCart.vue"),
 
-  ResizableToggleButton: () => import("@/components/Button/ResizableToggleButton.vue"),
-  AddBudgetModal: () => import("./components/modals/AddBudget.vue"),
-  DifferentProposalsModal: () => import("./components/modals/DifferentProposals"),
-  AddBudgetConfirmModal: () => import("./components/modals/AddBudgetConfirm.vue"),
+  ResizableToggleButton    : () => import("@/components/Button/ResizableToggleButton.vue"),
+  AddBudgetModal           : () => import("./components/modals/AddBudget.vue"),
+  DifferentProposalsModal  : () => import("./components/modals/DifferentProposals"),
+  AddBudgetConfirmModal    : () => import("./components/modals/AddBudgetConfirm.vue"),
 
-  ProposalCard: () => import("../components/ProposalCard"),
-  EventProposalDetails: () => import("../Proposal/EventProposalDetails.vue"),
-  HeaderActions: () => import("@/components/HeaderActions"),
-  ServicesCart: () => import("./ServicesCart.vue"),
-  ProposalHeader: () => import("./ProposalHeader.vue"),
-  ProposalVersionsDropdown: () => import("../components/ProposalVersionsDropdown.vue"),
-  CommentSidebar: () => import("../components/CommentSidebar.vue"),
-  TimerPanel: () => import("@/pages/app/Events/components/TimerPanel.vue"),
-  ClickOutside: () => import("vue-click-outside"),
+  ClickOutside             : () => import("vue-click-outside"),
+  HeaderActions            : () => import("@/components/HeaderActions"),
+  TimerPanel               : () => import("@/pages/app/Events/components/TimerPanel.vue"),
+  ProposalCard             : () => import("../components/ProposalCard"),
+  EventProposalDetails     : () => import("../Proposal/EventProposalDetails.vue"),
+  ServicesCart             : () => import("./ServicesCart.vue"),
+  ProposalHeader           : () => import("./ProposalHeader.vue"),
+  ProposalVersionsDropdown : () => import("../components/ProposalVersionsDropdown.vue"),
+  CommentSidebar           : () => import("../components/CommentSidebar.vue"),
 };
 
 export default {
@@ -547,32 +550,32 @@ export default {
   mixins: [ TimerMixins ],
   data() {
     return {
-      showChoice: false,
-      showCart: false,
-      showMoreCats: true,
-      allRequirements: null,
-      subCategory: null,
-      serviceCards: ServiceCards,
-      isOpenedAdditionalModal: false,
-      isOpenedFinalModal: false,
-      selectedCategory: null,
-      additionalCategory: null,
-      isLoading: true,
-      showCounterPage: false,
-      expiredTime: 0,
-      currentRequirement: null,
+      serviceCards            : ServiceCards,
+      showChoice              : false,
+      showCart                : false,
+      showCounterPage         : false,
+      isOpenedAdditionalModal : false,
+      isOpenedFinalModal      : false,
+      showMoreCats            : true,
+      isLoading               : true,
+      allRequirements         : null,
+      subCategory             : null,
+      selectedCategory        : null,
+      additionalCategory      : null,
+      currentRequirement      : null,
+      expiredTime             : 0,
 
-      findAllCategory: false,
-      requirementSection: true,
-      proposalsByCategory: {},
-      showAddNewCategory: false,
-      showAddBudgetConfirm: false,
-      booked: false,
+      findAllCategory      : false,
+      requirementSection   : true,
+      proposalsByCategory  : {},
+      showAddNewCategory   : false,
+      showAddBudgetConfirm : false,
+      booked               : false,
 
-      showDifferentProposals: false,
-      showDetails: false,
-      proposalRequest: null,
-      originalProposal: {},
+      showDifferentProposals : false,
+      showDetails            : false,
+      proposalRequest        : null,
+      originalProposal       : {},
 
       functionActions: [
           {label: "Share proposals", value: "share", icon: "share"},
@@ -673,13 +676,11 @@ export default {
     },
     isAnyLiked() {
       let category = this.selectedCategory;
-      if (category == null) {
-        return false;
-      }
-
+      if (category == null) return false;
       if (this.requirements[category.componentId]) {
         let types = this.requirements[category.componentId].types;
         if(types){
+            // ???
             for (let type of Object.keys(types)) {
               return types[type].length > 0;
             }
