@@ -55,13 +55,13 @@ export default {
        this.$router.currentRoute.path.includes("signup") ||
        this.$router.currentRoute.path.includes("signin")
      );
-     this.zoomScale = 1 / (1770 / this.windowWidth);
-     const savedZoom = localStorage.zoomParams ? JSON.parse(localStorage.zoomParams) : {};
-     if (this.isLoginPage) {
-       document.body.style.zoom = savedZoom.zoomScale || this.zoomScale;
-       this.windowWidthChanged = false;
-     }
    }, 1);
+    this.zoomScale = 1 / (1770 / this.windowWidth);
+    const savedZoom = localStorage.zoomParams ? JSON.parse(localStorage.zoomParams) : {};
+    if (this.windowWidth === savedZoom.windowWidth) {
+      document.body.style.zoom = savedZoom.zoomScale || this.zoomScale;
+      this.windowWidthChanged = false;
+    }
   },
   created() {
     setTimeout( ()=> {

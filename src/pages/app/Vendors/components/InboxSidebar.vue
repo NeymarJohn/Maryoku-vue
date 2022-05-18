@@ -193,7 +193,7 @@
                 <Avartar v-if="proposal.nonMaryoku" :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" />
                 <Avartar v-else :name="proposal.nonMaryokuName" :color="proposal.avatar_color" />
                 <!-- <Avartar :name="proposal.eventData.customer.companyName" :color="proposal.avatar_color" /> -->
-                <div class="sidebar__item__details d-flex flex-column">
+                <div class="sidebar__item__details d-flex flex-column" :class="[proposal.unread_count == 0 && proposal.commentComponent.length ? 'showEllipsis' : '']">
                   <span v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer" class="productLaunchParty">
                     {{ proposal.eventData.customer.companyName }}
                   </span>
@@ -206,7 +206,10 @@
               </div>
             </div>
             <div style="margin-top: 15px;">
-              <span v-if="proposal.unread_count == 0 && proposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(proposal,true)" /> </span>
+              <!-- <span v-if="proposal.unread_count == 0 && proposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(proposal,true)" /> </span> -->
+              <button v-if="proposal.unread_count == 0 && proposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(proposal,true)">
+                Full Discussion
+              </button>
             </div>
           </div>
         </div>
@@ -220,7 +223,7 @@
               <div class="d-flex">
                 <div class="sidebar__bar"></div>
                 <div class="sidebar__item__details d-flex sub_item_box" :class="{'active':(selectedProposal && selectedProposal.id == subProposal.id)}" style="justify-content: space-between;">
-                  <div>
+                  <div :class="[subProposal.unread_count == 0 && subProposal.commentComponent.length ? 'showEllipsis' : '']">
                     <span v-if="subProposal.nonMaryoku && proposal.eventData && subProposal.eventData.customer" class="productLaunchParty">
                       {{ subProposal.eventData.customer.companyName }}
                     </span>
@@ -234,7 +237,10 @@
                   </button> -->
                   <span v-if="!subProposal.viewed && subProposal.unread_count" class="unread-count">{{ subProposal.unread_count }}</span>
                   <div>
-                    <span v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(subProposal,true)" /> </span>
+                    <!-- <span v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length"> <i class="fas fa-chevron-right my-chevron" @click.stop="changeProposal(subProposal,true)" /> </span> -->
+                    <button v-if="subProposal.unread_count == 0 && subProposal.commentComponent.length" class="md-button md-vendor md-theme-default sidebar__item__btn" @click.stop="changeProposal(subProposal,true)">
+                      Full Discussion
+                    </button>
                   </div>
                 </div>
               </div>
@@ -801,7 +807,7 @@ export default {
   border-right: 0px;
   margin-top: -34px;
   height: 40px;
-  padding-top: 70px;
+  padding-top: 77px;
 }
 
 .sub_item_box {
@@ -877,6 +883,14 @@ export default {
             font-weight: bold;
         }
     }
+}
+
+.showEllipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  inline-size: 100px; 
+  white-space: nowrap; 
+  padding-top: 10px;
 }
 
 .mr-1 {
