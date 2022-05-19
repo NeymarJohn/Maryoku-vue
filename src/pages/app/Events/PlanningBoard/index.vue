@@ -420,33 +420,7 @@
           <md-button class="md-simple md-outlined md-red maryoku-btn find-vendor-btn ml-auto" @click="findVendors()">
             Find Vendors for this category
           </md-button>
-          <md-menu
-            md-size="auto"
-            md-align-trigger
-            md-direction="top-end"
-            :md-offset-y="20"
-          >
-            <md-button
-              md-menu-trigger
-              class="md-icon-button find-vendor-menu-btn"
-            >
-              <md-icon class="find-vendor-menu-btn-icon">
-                keyboard_arrow_up
-              </md-icon>
-            </md-button>
-            <md-menu-content>
-              <md-menu-item
-                class="text-center"
-                style="min-width: 400px"
-                @click="findVendors(true)"
-              >
-                <span class="font-size-16 font-bold-extra">
-                  <img :src="`${$iconURL}Requirements/search.svg`" class="mr-10">
-                  Find Vendors For All Categories
-                </span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+          <ContextMenu @findVendors="findVendors(true)" />
         </div>
       </template>
     </template>
@@ -523,7 +497,10 @@ import { TimerMixins }                                          from "@/mixins";
 import { serviceCategoryImages, ServiceCards }                  from "@/constants/event.js";
 import { NEGOTIATION_REQUEST_TYPE, NEGOTIATION_REQUEST_STATUS } from "@/constants/status";
 
+import ContextMenu from "./Menu/index.vue";
+
 const components = {
+  ContextMenu,
   ActionModal              : () => import("@/components/ActionModal.vue"),
   Loader                   : () => import("@/components/loader/Loader.vue"),
   ServiceCategoryCard      : () => import("./components/ServiceCategoryCard"),
